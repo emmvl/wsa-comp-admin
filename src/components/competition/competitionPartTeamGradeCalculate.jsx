@@ -8,6 +8,7 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from "../../store/actions/appAction";
+import history from "../../util/history";
 import {
     getTeamGradingSummaryAction,
     saveUpdatedGradeTeamSummaryAction,
@@ -93,7 +94,8 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     // sorter: (a, b) => tableSort(a, b, "finalGradeOrganisationCount")
 
                 },
-            ]
+            ],
+            nextButtonClicked: false
         };
         // this.props.clearYearCompetitionAction()
         this.props.clearTeamGradingReducerDataAction("ownTeamGradingSummaryGetData")
@@ -135,6 +137,12 @@ class CompetitionPartTeamGradeCalculate extends Component {
             })
 
         }
+        if (this.props.ownTeamGradingState.onLoad === false && this.state.nextButtonClicked === true) {
+            this.setState({
+                nextButtonClicked: false
+            })
+            history.push('/competitionCourtAndTimesAssign')
+        }
     }
 
     componentDidMount() {
@@ -167,9 +175,17 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
     }
 
-    ////publish the team grading summary data
-    publishtApiCall = () => {
-        this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId)
+    ////publish the team grading summmary data
+    publishtApiCall = (key) => {
+        if (key == "next") {
+            this.setState({
+                nextButtonClicked: true
+            })
+            this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId)
+        }
+        else {
+            this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId)
+        }
     }
 
 
@@ -320,8 +336,9 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     <div className="row" >
                         <div className="col-sm-3" >
                             <div className="com-year-select-heading-view pb-3" >
-                                <span id={AppUniqueId.teamGradingYear_dpdn} className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
+                                    id={AppUniqueId.teamGradingYear_dpdn}
                                     name={"yearRefId"}
                                     style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
@@ -344,8 +361,9 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50
                             }} >
-                                <span id={AppUniqueId.teamGradingYCompetition_dpdn} className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
+                                    id={AppUniqueId.teamGradingYCompetition_dpdn}
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
@@ -466,7 +484,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     <div className="col-sm">
                         <div className="comp-buttons-view">
                             <Tooltip
-                                key={AppUniqueId.teamGrading_PublishBtn}
+
                                 style={{ height: '100%' }}
                                 onMouseEnter={() =>
                                     this.setState({
@@ -480,17 +498,21 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 title={AppConstants.statusPublishHover}
                             >
                                 <Button
+                                    id={AppUniqueId.teamGrading_PublishBtn}
                                     className="publish-button save-draft-text"
                                     disabled={isPublished}
                                     style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }}
                                     type="primary"
-                                    onClick={() => this.publishtApiCall()}
+                                    onClick={() => this.publishtApiCall("submit")}
                                 >{AppConstants.save}
                                 </Button>
                             </Tooltip>
-                            <NavLink id={AppUniqueId.teamGrading_NextBtn} to="/competitionCourtAndTimesAssign">
-                                <Button disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
-                            </NavLink>
+                            {/* <NavLink id={AppUniqueId.teamGrading_NextBtn} to="/competitionCourtAndTimesAssign"> */}
+                            <Button
+                                id={AppUniqueId.teamGrading_NextBtn}
+                                onClick={() => this.publishtApiCall("next")}
+                                disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                            {/* </NavLink> */}
                         </div>
                     </div>
                     {/* <div className="col-sm-1">

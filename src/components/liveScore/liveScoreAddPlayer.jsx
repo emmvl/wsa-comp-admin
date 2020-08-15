@@ -171,8 +171,7 @@ class LiveScoreAddPlayer extends Component {
                                     required={"required-field pb-0"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.enterFirstName}
-                                    name={'firstName'}
-                                    onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(firstName.target.value), firstName.target.name)}
+                                    onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(firstName.target.value), 'firstName')}
                                     onBlur={(i) => this.props.form.setFieldsValue({
                                         'firstName': captializedString(i.target.value)
                                     })}
@@ -192,8 +191,7 @@ class LiveScoreAddPlayer extends Component {
                                     required={"required-field pb-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.enterLastName}
-                                    name={'lastName'}
-                                    onChange={(lastName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(lastName.target.value), lastName.target.name)}
+                                    onChange={(lastName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(lastName.target.value), 'lastName')}
                                     onBlur={(i) => this.props.form.setFieldsValue({
                                         'lastName': captializedString(i.target.value)
                                     })}
@@ -225,7 +223,6 @@ class LiveScoreAddPlayer extends Component {
                             auto_Complete='new-contact'
                             heading={AppConstants.contactNO}
                             placeholder={AppConstants.enterContactNo}
-                            name={'contactNo'}
                             maxLength={10}
                             onChange={(phoneNumber) => this.props.liveScoreUpdatePlayerDataAction(phoneNumber.target.value, 'phoneNumber')}
                             value={playerData.phoneNumber}
@@ -240,7 +237,6 @@ class LiveScoreAddPlayer extends Component {
                             auto_Complete='new-mnbId'
                             heading={AppConstants.playerId}
                             placeholder={AppConstants.enterPlayerID}
-                            name={'playerId'}
                             onChange={(mnbPlayerId) => this.props.liveScoreUpdatePlayerDataAction(mnbPlayerId.target.value, 'mnbPlayerId')}
                             value={playerData.mnbPlayerId}
                         />
@@ -327,7 +323,7 @@ class LiveScoreAddPlayer extends Component {
             photoUrl } = this.props.liveScorePlayerState.playerData
 
 
-        let playerId = this.state.playerData ? this.state.playerData.playerId : ''
+        let playerId = this.state.playerData ? this.state.playerData.playerId ? this.state.playerData.playerId : this.state.playerData.id ? this.state.playerData.id : '' : ''
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {

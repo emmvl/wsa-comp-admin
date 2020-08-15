@@ -39,7 +39,7 @@ function* errorSaga(error) {
 //////get the membership fee list in registration
 export function* regDashboardListSaga(action) {
     try {
-        const result = yield call(AxiosApi.registrationDashboardList, action.offset, action.yearRefId);
+        const result = yield call(AxiosApi.registrationDashboardList, action.offset, action.yearRefId, action.sortBy, action.sortOrder);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_REG_DASHBOARD_LIST_SUCCESS,
@@ -76,7 +76,7 @@ export function* getCompetitionSaga(action) {
 ///////////////////registration main dashboard listing owned and participate registration
 export function* registrationMainDashboardListSaga(action) {
     try {
-        const result = yield call(AxiosApi.registrationMainDashboardList, action.yearRefId);
+        const result = yield call(AxiosApi.registrationMainDashboardList, action.yearRefId, action.sortBy, action.sortOrder);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_SUCCESS,

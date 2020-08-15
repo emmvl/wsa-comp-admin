@@ -7,7 +7,7 @@ import AxiosApi from "../../http/shopHttp/shopAxios";
 
 function* failSaga(result) {
   yield put({
-    type: ApiConstants.API_SHOP_ORDER_SUMMARY_FAIL,
+    type: ApiConstants.API_SHOP_ORDER_STATUS_FAIL,
     error: result,
     status: result.status
   });
@@ -23,7 +23,7 @@ function* failSaga(result) {
 
 function* errorSaga(error) {
   yield put({
-    type: ApiConstants.API_SHOP_ORDER_SUMMARY_ERROR,
+    type: ApiConstants.API_SHOP_ORDER_STATUS_ERROR,
     error: error,
     status: error.status
   });
@@ -37,14 +37,14 @@ function* errorSaga(error) {
   }, 800);
 }
 
-// Shop order summary listing get API
-function* getOrderSummaryListingSaga(action) {
+// //order status status listing get API 
+function* getOrderStatusListingSaga(action) {
   try {
-    const result = yield call(AxiosApi.getOrderSummaryListing, action.params);
+    const result = yield call(AxiosApi.getOrderStatusListing, action.params);
 
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.API_GET_SHOP_ORDER_SUMMARY_LISTING_SUCCESS,
+        type: ApiConstants.API_GET_ORDER_STATUS_LISTING_SUCCESS,
         result: result.result.data,
         status: result.status
       });
@@ -56,14 +56,14 @@ function* getOrderSummaryListingSaga(action) {
   }
 }
 
-// //// //////export order summary  API 
-function* exportOrderSummarySaga(action) {
+// ////////update order status API  
+function* updateOrderStatusSaga(action) {
   try {
-    const result = yield call(AxiosApi.exportOrderSummary, action.params);
+    const result = yield call(AxiosApi.updateOrderStatus, action.payload);
 
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.API_GET_EXPORT_ORDER_SUMMARY_SUCCESS,
+        type: ApiConstants.API_UPDATE_ORDER_STATUS_SUCCESS,
         result: result.result.data,
         status: result.status
       });
@@ -74,7 +74,8 @@ function* exportOrderSummarySaga(action) {
     yield call(errorSaga, error)
   }
 }
-export default function* rootShopOrderSummarySaga() {
-  yield takeEvery(ApiConstants.API_GET_SHOP_ORDER_SUMMARY_LISTING_LOAD, getOrderSummaryListingSaga);
-  yield takeEvery(ApiConstants.API_GET_EXPORT_ORDER_SUMMARY_LOAD, exportOrderSummarySaga);
+
+export default function* rootShopOrderStatusSaga() {
+  yield takeEvery(ApiConstants.API_GET_ORDER_STATUS_LISTING_LOAD, getOrderStatusListingSaga);
+  yield takeEvery(ApiConstants.API_UPDATE_ORDER_STATUS_LOAD, updateOrderStatusSaga);
 }

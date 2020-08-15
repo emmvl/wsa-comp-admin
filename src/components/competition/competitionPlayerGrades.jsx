@@ -175,7 +175,7 @@ class CompetitionPlayerGrades extends Component {
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
                                     <Dropdown disabled={this.state.competitionStatus == 1 ? true : false} overlay={menu} placement="bottomLeft">
-                                        <Button id={AppUniqueId.PlayerGrading_ImportBtn} className="primary-add-comp-form" type="primary">
+                                        <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
                                                     <img src={AppImages.import} alt="" className="export-image" />
@@ -193,7 +193,7 @@ class CompetitionPlayerGrades extends Component {
                                             pathname: `/competitionPlayerImport`,
                                             state: { divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId, screenNavigationKey: 'PlayerGrading' }
                                         }}>
-                                            <Button id={AppUniqueId.PlayerGrading_ImportTeamBtn} disabled={this.state.competitionStatus == 1 ? true : false} className="primary-add-comp-form" type="primary">
+                                            <Button id={AppUniqueId.PlayerGrading_ImportBtn} disabled={this.state.competitionStatus == 1 ? true : false} className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
                                                         <img
@@ -215,10 +215,11 @@ class CompetitionPlayerGrades extends Component {
                                             pathname: `/competitionTeamsImport`,
                                             state: { competitionId: this.state.firstTimeCompId, screenNavigationKey: 'PlayerGrading' }
                                         }}>
-                                            <Button disabled={this.state.competitionStatus == 1 ? true : false} className="primary-add-comp-form" type="primary">
+                                            <Button id={AppUniqueId.PlayerGrading_ImportTeamBtn} disabled={this.state.competitionStatus == 1 ? true : false} className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
                                                         <img
+                                                            id={AppUniqueId.PlayerGradingDivisionName_dpdn}
                                                             src={AppImages.import}
                                                             alt=""
                                                             className="export-image"
@@ -424,8 +425,9 @@ class CompetitionPlayerGrades extends Component {
                     <div className="row" >
                         <div className="col-sm" >
                             <div className="com-year-select-heading-view pb-3" >
-                                <span id={AppUniqueId.PlayerGradingYear_dpdn} className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
+                                    id={AppUniqueId.PlayerGradingYear_dpdn}
                                     name={"yearRefId"}
                                     style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
@@ -448,9 +450,9 @@ class CompetitionPlayerGrades extends Component {
                                 flexDirection: "row",
                                 alignItems: "center",
                             }} >
-                                <span id={AppUniqueId.PlayerGradingCompetition_dpdn} className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-
+                                    id={AppUniqueId.PlayerGradingCompetition_dpdn}
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
@@ -473,8 +475,9 @@ class CompetitionPlayerGrades extends Component {
                                     flexDirection: "row",
                                     alignItems: "center"
                                 }} >
-                                    <span id={AppUniqueId.PlayerGradingDivisionName_dpdn} className='year-select-heading'>{AppConstants.division}:</span>
+                                    <span className='year-select-heading'>{AppConstants.division}:</span>
                                     <Select
+                                        id={AppUniqueId.PlayerGradingDivisionName_dpdn}
                                         disabled={this.state.competitionStatus == 1 ? true : false}
                                         style={{ minWidth: 120, marginRight: 65 }}
                                         className="year-select reg-filter-select1 ml-2"

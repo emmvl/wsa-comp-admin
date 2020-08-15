@@ -121,7 +121,7 @@ class LiveScoreTeamView extends Component {
     }
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreTeamState != this.props.liveScoreTeamState) {
-            console.log('$$$$$', this.props.liveScoreTeamState)
+
         }
     }
     ////view for profile image
@@ -131,7 +131,6 @@ class LiveScoreTeamView extends Component {
         const { teamData, managerData, managerList } = this.props.liveScoreTeamState
         const { name, logoUrl } = teamData ? teamData : ''
         const { mobileNumber, email } = managerData ? managerData : ''
-        console.log('76', data)
 
         let managerDataList = isArrayNotEmpty(managerList) ? managerList : []
         let coachData = isArrayNotEmpty(data && data.coaches) ? data.coaches : []
@@ -353,7 +352,6 @@ class LiveScoreTeamView extends Component {
     //////// tableView 
     tableView = () => {
         const { playerList } = this.props.liveScoreTeamState
-        console.log("playerList", playerList)
         return (
             <div >
                 <div className="inside-table-view mt-4" >
@@ -375,7 +373,7 @@ class LiveScoreTeamView extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'fromMatchList' ? '2' : this.state.screenName == 'liveScoreDashboard' ? "1" : '3'} />
+                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName === 'fromMatchList' ? '2' : this.state.screenName === 'liveScoreDashboard' ? "1" : this.state.screenName === 'fromPlayerList' ? '7' : '3'} />
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">

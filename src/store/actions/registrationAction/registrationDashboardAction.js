@@ -3,11 +3,12 @@ import ApiConstants from "../../../themes/apiConstants";
 
 
 //////get the membership fee list in registration
-function regDashboardListAction(offset, yearRefId) {
+function regDashboardListAction(offset, yearRefId, sortBy, sortOrder) {
     const action = {
         type: ApiConstants.API_REG_DASHBOARD_LIST_LOAD,
         offset: offset,
         yearRefId: yearRefId,
+        sortBy, sortOrder
     };
     return action;
 }
@@ -21,10 +22,11 @@ function getAllCompetitionAction(yearRefId) {
 }
 
 ///////registration main dashboard listing owned and participate registration
-function registrationMainDashboardListAction(yearRefId) {
+function registrationMainDashboardListAction(yearRefId, sortBy, sortOrder) {
     const action = {
         type: ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD,
-        yearRefId
+        yearRefId,
+        sortBy, sortOrder
     }
     return action
 }

@@ -36,7 +36,7 @@ import AppImages from "../../themes/appImages";
 import { bindActionCreators } from "redux";
 import moment from "moment";
 import ValidationConstants from "../../themes/validationConstant";
-import { isArrayNotEmpty,regexNumberExpression } from "../../util/helpers";
+import { isArrayNotEmpty, regexNumberExpression } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -239,7 +239,7 @@ class RegistrationForm extends Component {
         this.props.form.setFieldsValue({
             registrationOpenDate: registrationFormData.registrationOpenDate !== '' ? moment(registrationFormData.registrationOpenDate, "YYYY-MM-DD") : null,
             registrationCloseDate: registrationFormData.registrationCloseDate !== '' ? moment(registrationFormData.registrationCloseDate, "YYYY-MM-DD") : null,
-            email:registrationFormData.replyEmail !==''?registrationFormData.replyEmail:""
+            email: registrationFormData.replyEmail !== '' ? registrationFormData.replyEmail : ""
         });
         disclaimerData.map((item, index) => {
             let disclaimerText = `disclaimerText${index}`
@@ -307,7 +307,7 @@ class RegistrationForm extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 if (SelectedProduct.membershipProductTypes.length > 0) {
-                    let phone_number =SelectedProduct["replyPhone"].length >0? regexNumberExpression(SelectedProduct["replyPhone"]):""
+                    let phone_number = SelectedProduct["replyPhone"].length > 0 ? regexNumberExpression(SelectedProduct["replyPhone"]) : ""
                     SelectedProduct['competitionUniqueKeyId'] = this.state.firstTimeCompId
                     SelectedProduct['yearRefId'] = this.state.yearRefId
                     SelectedProduct["statusRefId"] = this.state.statusRefId
@@ -327,7 +327,7 @@ class RegistrationForm extends Component {
                     SelectedProduct['registrationSettings'] = registration_settings
                     SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
 
-                    console.log(this.state.orgRegId, "SelectedProduct",SelectedProduct)
+                    console.log(this.state.orgRegId, "SelectedProduct", SelectedProduct)
 
                     //console.log("Final Data" + JSON.stringify(SelectedProduct));
 
@@ -789,7 +789,7 @@ class RegistrationForm extends Component {
     ) => {
         let defaultChecked = this.props.registrationState.defaultChecked
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
-        
+
         return (
             <div className="fees-view">
                 <div className='row ml-1' style={{ display: 'flex', alignItems: 'center' }}>
@@ -827,7 +827,6 @@ class RegistrationForm extends Component {
                                         <InputWithHead
                                             auto_Complete="new-name"
                                             placeholder={"Name"}
-                                            name={"replyName"}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyName")}
                                             value={formDataValue ? formDataValue.replyName : ''}
 
@@ -855,7 +854,6 @@ class RegistrationForm extends Component {
                                         <InputWithHead
                                             auto_Complete="new-role"
                                             placeholder={AppConstants.role}
-                                            name={"replyRole"}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyRole")}
                                             value={formDataValue ? formDataValue.replyRole : ''}
 
@@ -892,7 +890,6 @@ class RegistrationForm extends Component {
                                                 <InputWithHead
                                                     auto_Complete="new-email"
                                                     placeholder={AppConstants.email}
-                                                    name={"replyEmail"}
                                                     onChange={e =>
                                                         this.props.updateRegistrationForm(e.target.value, "replyEmail")
                                                     }
@@ -922,7 +919,6 @@ class RegistrationForm extends Component {
                                         <InputWithHead
                                             auto_Complete="new-phoneNo"
                                             placeholder={AppConstants.phone}
-                                            name={"replyPhone"}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyPhone")}
                                             value={formDataValue ? formDataValue.replyPhone : ''}
                                         />
@@ -1470,7 +1466,7 @@ class RegistrationForm extends Component {
                                     </Button>
                                 </Tooltip>
 
-                                <Button className="save-draft-text" type="save-draft-text">
+                                <Button className="save-draft-text" type="save-draft-text"  onClick={()=>this.navigateToEndUserRegistration(registrationData.userRegistrationUrl)}>
                                     {AppConstants.preview}
                                 </Button>
                                 {/* <Tooltip style={{ height: "100%" }}
@@ -1498,8 +1494,10 @@ class RegistrationForm extends Component {
         );
     };
 
-    navigateToExternalUrl = (url) =>
-        window.open(url, "_blank");
+    navigateToEndUserRegistration = (url) =>{
+        let regUrl= url+"&sourceSystem=WebAdmin" 
+        window.open(regUrl, "_blank");
+    }
 
     userRegisrationLinkView = () => {
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ?

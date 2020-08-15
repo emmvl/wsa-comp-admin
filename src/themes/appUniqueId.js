@@ -57,6 +57,8 @@ const AppUniqueId = {
     teamGrading_ExportPlayer: "teamgrad_exportplayer_bn",
     teamGrading_PublishBtn: "teamgrad_publish_bn",
     teamGrading_NextBtn: "teamgrad_Next_bn",
+    finalteamgrad_save_bn: "finalteamgrad_save_bn",
+    finalteamgrad_submit_bn: "finalteamgrad_submit_bn",
 
     //// Unique Ids for PlayerGrading ////////
 

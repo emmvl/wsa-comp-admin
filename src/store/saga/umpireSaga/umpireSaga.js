@@ -67,7 +67,7 @@ export function* addEditUmpireSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
-            message.success('Add Umpire - Successfully Added')
+            message.success(action.extraData.isEdit ? 'Edit Umpire - Successfully Edited' : 'Add Umpire - Successfully Added')
             history.push(action.extraData.screenName == 'umpireDashboard' ? '/umpireDashboard' : '/umpire')
 
         } else {

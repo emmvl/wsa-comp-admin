@@ -48,6 +48,14 @@ let userHttpApi = {
     return Method.dataGet(url, token);
   },
 
+  async impersonation(payload) {
+    const userId = await getUserId();
+    const {orgId, access} = payload;
+    const url = `/ure/impersonation?userId=${userId}&organisationUniqueKey=${orgId}&access=${access}`;
+
+    return Method.dataPost(url, token);
+  },
+
   async saveAffiliate(payload) {
     let userId = await getUserId()
     const url = `api/affiliates/save?userId=${userId}`;
@@ -60,9 +68,15 @@ let userHttpApi = {
     return Method.dataGet(url, token);
   },
 
-  async affiliatesListing(payload) {
+  async affiliatesListing(payload, sortBy, sortOrder) {
     let userId = await getUserId()
-    const url = `api/affiliateslisting?userId=${userId}`;
+    let url
+    if (sortBy && sortOrder) {
+      url = `api/affiliateslisting?userId=${userId}&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+    }
+    else {
+      url = `api/affiliateslisting?userId=${userId}`
+    }
     return Method.dataPost(url, token, payload);
   },
 
@@ -107,8 +121,15 @@ let userHttpApi = {
     return Method.dataGet(url, Auth_token)
   },
 
-  getUserDashboardTextualListing(payload) {
-    const url = `api/user/dashboard/textual`;
+  getUserDashboardTextualListing(payload, sortBy, sortOrder) {
+    let url
+    if (sortBy && sortOrder) {
+      url = `api/user/dashboard/textual?sortBy=${sortBy}&sortOrder=${sortOrder}`
+    }
+    else {
+      url = `api/user/dashboard/textual`
+    }
+
     return Method.dataPost(url, token, payload);
   },
 
@@ -168,31 +189,43 @@ let userHttpApi = {
     }
   },
 
-  getUserFriendList(payload) {
-    const url = `users/dashboard/friend`;
+  getUserFriendList(payload, sortBy, sortOrder) {
+    let url
+    if (sortBy && sortOrder) {
+      url = `users/dashboard/friend?sortBy=${sortBy}&sortOrder=${sortOrder}`
+    }
+    else {
+      url = `users/dashboard/friend`
+    }
     return Method.dataPost(url, token, payload);
   },
 
-  getUserReferFriendList(payload) {
-    const url = `users/dashboard/referfriend`;
+  getUserReferFriendList(payload, sortBy, sortOrder) {
+    let url
+    if (sortBy && sortOrder) {
+      url = `users/dashboard/referfriend?sortBy=${sortBy}&sortOrder=${sortOrder}`
+    }
+    else {
+      url = `users/dashboard/referfriend`;
+    }
     return Method.dataPost(url, token, payload);
   },
 
   async getOrgPhotosList(payload) {
     // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
-    const url = `api/organisationphoto/list?organisationUniqueKey=${payload.organisationId}`;
+    const url = `api / organisationphoto / list ? organisationUniqueKey = ${payload.organisationId} `;
     return Method.dataGet(url, token, payload);
   },
 
   saveOrgPhoto(payload) {
     // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
-    const url = `api/organisationphoto/save`;
+    const url = `api / organisationphoto / save`;
     return Method.dataPost(url, token, payload);
   },
 
   deleteOrgPhoto(payload) {
     // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
-    const url = `api/organisationphoto/delete/${payload.id}`;
+    const url = `api / organisationphoto / delete /${payload.id}`;
     return Method.dataDelete(url, token);
   },
 
@@ -224,13 +257,20 @@ let userHttpApi = {
     return Method.dataPostDownload(url, token, payload, "RegistrationQuestions");
   },
 
-  async affiliateDirectory(payload) {
-    const url = `api/affiliatedirectory`;
+  async affiliateDirectory(payload, sortBy, sortOrder) {
+    let url
+
+    if (sortBy && sortOrder) {
+      url = `api/affiliatedirectory?sortBy=${sortBy}&sortOrder=${sortOrder}`;
+    }
+    else {
+      url = `api/affiliatedirectory`
+    }
     return Method.dataPost(url, token, payload);
   },
 
   exportAffiliateDirectory(payload) {
-    const url = `api/export/affiliatedirectory`;
+    const url = `api /export/affiliatedirectory`;
     return Method.dataPostDownload(url, token, payload, "AffiliateDirectory");
   },
 
@@ -288,6 +328,11 @@ let userHttpApi = {
 
   updateTermsAndConditions(payload) {
     const url = `api/termsandcondition/update`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  deleteUserById(payload) {
+    const url = `api/user/delete`;
     return Method.dataPost(url, token, payload);
   },
 }

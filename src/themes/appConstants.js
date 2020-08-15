@@ -94,8 +94,8 @@ const AppConstants = {
   OtherInfoReqd: 'Other information required',
   yourSupportImportant:
     'Your Support is important for the continued success of our Club. Can you help?',
-  childrenCheckNumber: 'Working with Children Check Number',
   childrenNumber: 'Children Check Number',
+  checkExpiryDate: "Check Expiry Date",
   childrenCheckNumberInfo:
     'Working with Children Check Number (You are required to have a working with Children Number. If you don’t have one you will need to apply.)',
   childCountry: 'Which country were you born',
@@ -1298,7 +1298,7 @@ const AppConstants = {
   addOrder: "Add Order",
   paymentStatus: "Payment Status",
 
-  fullFillmentStatus: "Fullfilment Status",
+  fulfilmentStatus: "Fulfilment Status",
   attendence_Recording_Time: "Attendance Recording Time",
   lineupSelection: "Lineup Selection",
   _days: "Days",
@@ -1480,6 +1480,7 @@ const AppConstants = {
   registrations_label: "registrations_label",
   user_profile_icon: "user_profile_icon",
   log_out: "log_out",
+  impersonation: "Impersonation",
   acct_settings_label: "acct_settings_label",
   help_support_label: "help&support_label",
   home_table_view: "home_table_view",
@@ -1515,12 +1516,27 @@ const AppConstants = {
   publishModalInfo: "You have changed the grade of the following teams:",
   publishModalConfirmationMsg: "Would you like to adjust their ladder points?",
   videoSizeMessage: "The maximum file size can be 2 MB",
-  childrenCheckNumber:"Requires Working with Children Check",
-  regenerateDrawTitle:"Regenerate draw from which Round?",										 
+  childrenCheckNumber: "Requires Working with Children Check",
+  regenerateDrawTitle: "Regenerate draw from which Round?",
+  impersonationOrgSelect: "Choose an organization to access",
   numberOfOrders: "Number of Orders",
-
   teamRegistrations: "Team Registrations",
   regenerateDrawTitle: "Regenerate draw from which Round?",
+
+  umpirePayments: "Umpire Payments",
+  bulkPayment: "Bulk Payment",
+  whoPayUmpire: "Who pays Umpires",
+  umpireRate: "Umpire Rate",
+  umpireResRate: "Ump. Reserve Rate",
+  umpireCoachrate: "Ump. Coach Rate",
+  addAnotherGroup: "Add Another Group",
+  umpirePaymentSetting: "Umpire Payment Settings",
+  refundFullAmount: "Refund Full Amount",
+  refundPartialAmount: "Refund Partial Amount",
+  pickedUp: "Picked up",
+  shipped: "Shipped",
+  extraTime: "Extra Time",
+  compDeleteConfirm: 'Are you sure you want to delete this competition?',
 };
 
 export default AppConstants;

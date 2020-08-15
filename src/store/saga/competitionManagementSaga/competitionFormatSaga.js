@@ -3,7 +3,11 @@ import ApiConstants from "../../../themes/apiConstants";
 import CompManagementAxiosApi from "../../http/competitionManagementHttp/competitionManagementAxiosApi";
 
 function* failSaga(result) {
-    yield put({ type: ApiConstants.API_COMPETITION_FORMAT_FAIL });
+    yield put({
+        type: ApiConstants.API_COMPETITION_FORMAT_FAIL,
+        error: result,
+        status: result.status
+    });
     setTimeout(() => {
         alert(result.message);
     }, 800);

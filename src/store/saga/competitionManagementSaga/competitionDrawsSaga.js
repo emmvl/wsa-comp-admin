@@ -8,7 +8,11 @@ import AppConstants from "../../../themes/appConstants";
 
 function* failSaga(result) {
     console.log("failSaga", result.message)
-    yield put({ type: ApiConstants.API_COMPETITION_DRAWS_FAIL });
+    yield put({
+        type: ApiConstants.API_COMPETITION_DRAWS_FAIL,
+        error: result,
+        status: result.status
+    });
     setTimeout(() => {
         message.config({
             duration: 1.5,

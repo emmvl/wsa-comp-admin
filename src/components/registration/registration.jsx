@@ -26,12 +26,34 @@ const { Option } = Select;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
 
+let this_Obj = null
+/////function to sort table column
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.props.endUserRegDashboardListAction(this_Obj.state.filter, sortBy, sortOrder);
+}
+
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+
 const columns = [
     {
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => a.name.localeCompare(b.name),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (name, record) =>
             <NavLink to={{
                 pathname: `/userPersonal`,
@@ -44,7 +66,8 @@ const columns = [
         title: 'Registration date',
         dataIndex: 'registrationDate',
         key: 'registrationDate',
-        sorter: (a, b) => a.registrationDate.localeCompare(b.registrationDate),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (registrationDate, record, index) => {
             return (
                 <div>
@@ -57,19 +80,22 @@ const columns = [
         title: 'Affiliate',
         dataIndex: 'affiliate',
         key: 'affiliate',
-        sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Registration Divisions',
         dataIndex: 'divisionName',
         key: 'divisionName',
-        sorter: (a, b) => a.divisionName.localeCompare(b.divisionName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("registrationDivisions"),
     },
     {
         title: 'DOB',
         dataIndex: 'dateOfBirth',
         key: 'dateOfBirth',
-        sorter: (a, b) => a.dateOfBirth.localeCompare(b.dateOfBirth),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("dob"),
         render: (dateOfBirth, record, index) => {
             return (
                 <div>
@@ -82,7 +108,8 @@ const columns = [
         title: 'Fee (incl. GST)',
         dataIndex: 'fee',
         key: 'fee',
-        sorter: (a, b) => a.fee.localeCompare(b.fee),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (fee, record, index) => {
             return (
                 <div>
@@ -126,7 +153,6 @@ const columns = [
             </Menu>
         )
     }
-
 ];
 
 class Registration extends Component {
@@ -160,8 +186,9 @@ class Registration extends Component {
             paymentStatusRefId: -1,
             searchText: '',
             regFrom: '-1',
-            regTo: '-1'
+            regTo: '-1',
         }
+        this_Obj = this
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
@@ -193,7 +220,11 @@ class Registration extends Component {
                 offset: (page ? (10 * (page - 1)) : 0)
             }
         }
+
         this.props.endUserRegDashboardListAction(filter);
+        this.setState({
+            filter
+        })
     }
 
     referenceCalls = (organisationId) => {
@@ -282,23 +313,22 @@ class Registration extends Component {
         }
     }
 
-    onKeyEnterSearchText = async(e) =>{
+    onKeyEnterSearchText = async (e) => {
         var code = e.keyCode || e.which;
-        if(code === 13) { //13 is the enter keycode
+        if (code === 13) { //13 is the enter keycode
             this.handleRegTableList(1);
-        } 
-    }
-
-    onChangeSearchText = async(e) =>{
-        let value = e.target.value;
-        await this.setState({searchText: e.target.value})
-        if(value == null || value == "")
-        {
-            this.handleRegTableList(1); 
         }
     }
 
-    onClickSearchIcon = async() =>{
+    onChangeSearchText = async (e) => {
+        let value = e.target.value;
+        await this.setState({ searchText: e.target.value })
+        if (value == null || value == "") {
+            this.handleRegTableList(1);
+        }
+    }
+
+    onClickSearchIcon = async () => {
         this.handleRegTableList(1);
     }
 
@@ -306,10 +336,10 @@ class Registration extends Component {
 
     ///////view for breadcrumb
     headerView = () => {
-		const { paymentStatus } = this.props.commonReducerState;
+        const { paymentStatus } = this.props.commonReducerState;
         return (
-            <div className="comp-player-grades-header-view-design" style={{marginBottom:-10}}>
-                <div className="row" style={{marginRight: 42}}>
+            <div className="comp-player-grades-header-view-design" style={{ marginBottom: -10 }}>
+                <div className="row" style={{ marginRight: 42 }}>
                     <div className="col-lg-4 col-md-12 d-flex align-items-center" >
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.Registrations}</Breadcrumb.Item>
@@ -336,17 +366,17 @@ class Registration extends Component {
 
 
     ////status and search view
-     statusView = () => {
-		const { paymentStatus } = this.props.commonReducerState;
+    statusView = () => {
+        const { paymentStatus } = this.props.commonReducerState;
         return (
-            <div className="comp-player-grades-header-view-design" style={{marginBottom:-10}}>
-                <div className="row" style={{marginRight: 42}}>
-                       <div className="col-sm-9 padding-right-reg-dropdown-zero"> 
+            <div className="comp-player-grades-header-view-design" style={{ marginBottom: -10 }}>
+                <div className="row" style={{ marginRight: 42 }}>
+                    <div className="col-sm-9 padding-right-reg-dropdown-zero">
                         <div className="reg-filter-col-cont status-dropdown d-flex align-items-center justify-content-end pr-2" >
-                            <div className='year-select-heading' style={{width: 90}}>{AppConstants.status}</div>
+                            <div className='year-select-heading' style={{ width: 90 }}>{AppConstants.status}</div>
                             <Select
                                 className="year-select reg-filter-select"
-                                style={{ maxWidth:200 }}
+                                style={{ maxWidth: 200 }}
                                 onChange={(e) => this.onChangeDropDownValue(e, 'paymentStatusRefId')}
                                 value={this.state.paymentStatusRefId}>
                                 <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -355,11 +385,11 @@ class Registration extends Component {
                                 ))}
                             </Select>
                         </div>
-                    </div>						  
-                    <div className="col-sm-3 d-flex align-items-center justify-content-end margin-top-24-mobile"> 
+                    </div>
+                    <div className="col-sm-3 d-flex align-items-center justify-content-end margin-top-24-mobile">
                         <div className="comp-product-search-inp-width" >
                             <Input className="product-reg-search-input"
-                                 onChange={(e) => this.onChangeSearchText(e)}
+                                onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
                                 onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                 prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
@@ -395,7 +425,7 @@ class Registration extends Component {
         const { competitions, membershipProductTypes, membershipProducts, postalCodes } = this.props.userRegistrationState;
         return (
             <div className="comp-player-grades-header-view-design">
-                <div className="fluid-width" style={{ marginRight: 55}} >
+                <div className="fluid-width" style={{ marginRight: 55 }} >
                     <div className="row reg-filter-row" >
                         <div className="reg-col col-lg-3 col-md-5" >
                             <div className="reg-filter-col-cont">
@@ -545,14 +575,14 @@ class Registration extends Component {
                         </div>
                         <div className="reg-col col-lg-3 col-md-7">
                             <div className="reg-filter-col-cont" >
-                                <div className='year-select-heading'  style={{ width:95}}>{AppConstants.postCode}</div>
-								<div style={{width:'76%'}}>
-									<InputWithHead
-										placeholder={AppConstants.postCode}
-										onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
-										value={this.state.postalCode}
-									/>
-								</div>
+                                <div className='year-select-heading' style={{ width: 95 }}>{AppConstants.postCode}</div>
+                                <div style={{ width: '76%' }}>
+                                    <InputWithHead
+                                        placeholder={AppConstants.postCode}
+                                        onChange={(e) => this.onChangeDropDownValue(e.target.value, 'postalCode')}
+                                        value={this.state.postalCode}
+                                    />
+                                </div>
                             </div>
                         </div>
                         <div className="reg-col col-lg-3 col-md-5">
@@ -576,14 +606,14 @@ class Registration extends Component {
                                     size="large"
                                     placeholder={"dd-mm-yyyy"}
                                     className="year-select reg-filter-select"
-															 
+
                                     onChange={e => this.onChangeDropDownValue(e, 'regTo')}
                                     //onChange={e => this.setState({dobTo: moment(e, "YYYY-MM-DD")})}
                                     format={"DD-MM-YYYY"}
                                     showTime={false}
                                     name={'regTo'}
                                 />
-										 
+
                             </div>
                         </div>
                     </div>

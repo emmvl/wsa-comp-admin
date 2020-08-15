@@ -264,8 +264,10 @@ class HomeDashboard extends Component {
             userCountLoading: false,
             organisationId: null,
             updateActionBoxLoad: false,
-            actions: null
+            actions: null,
+            orgChange: this.props.location.state ? this.props.location.state.orgChange : null
         }
+
         this_Obj = this;
 
     }
@@ -275,7 +277,13 @@ class HomeDashboard extends Component {
         console.log("componentDidMount" + this.state.organisationId)
         this.props.getRoleAction()
         this.props.getUreAction()
-
+        console.log(this.state.orgChange, this.props.location)
+        if (this.state.orgChange) {
+            window.history.pushState(null, document.title, window.location.href);
+            window.addEventListener('popstate', function (event) {
+                window.history.pushState(null, document.title, window.location.href);
+            });
+        }
         // this.props.getOnlyYearListAction(this.props.appState.yearList)
         // this.props.getUserCount(1)
     }
@@ -367,7 +375,8 @@ class HomeDashboard extends Component {
         console.log("updateActionBox::" + JSON.stringify(e));
         let obj = {
             actionsId: e.actionsId,
-            actionMasterId: e.actionMasterId
+            actionMasterId: e.actionMasterId,
+            userId: e.userId
         }
         // console.log("********" + JSON.stringify(obj));
         this.props.updateActionBoxAction(obj);

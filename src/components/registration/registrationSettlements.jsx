@@ -33,7 +33,7 @@ const columns = [
         title: "Transaction Id",
         dataIndex: 'balance_transaction',
         key: 'balance_transaction',
-        sorter: (a, b) => tableSort(a, b, "balance_transaction"),
+        sorter: false,
         render: (balance_transaction, record) => (
             <NavLink to={{ pathname: `/registrationPayoutTransaction`, state: { id: record.id } }} >
                 <span style={{ color: "#ff8237" }} >{balance_transaction}</span>
@@ -44,7 +44,7 @@ const columns = [
         title: "Description",
         dataIndex: 'description',
         key: 'description',
-        sorter: (a, b) => tableSort(a, b, "description"),
+        sorter: false,
         render: description => (
             <span >{description ? description : "N/A"}</span>
         )
@@ -53,7 +53,7 @@ const columns = [
         title: "Date",
         dataIndex: 'created',
         key: 'created',
-        sorter: (a, b) => tableSort(a, b, "created"),
+        sorter: false,
         render: created => {
             var date = new Date(created * 1000);
             let finalDate = liveScore_formateDate(date)
@@ -66,16 +66,17 @@ const columns = [
         title: 'Amount',
         dataIndex: 'amount',
         key: 'amount',
+        sorter: false,
         render: amount => (
             <span>{currencyFormat(amount)}</span>
         ),
-        sorter: (a, b) => tableSort(a, b, "amount")
+
     },
     {
         title: "Status",
         dataIndex: 'status',
         key: 'status',
-        sorter: (a, b) => tableSort(a, b, "status")
+        sorter: false,
     },
     // {
     //     title: 'Action',

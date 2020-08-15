@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import { isArrayNotEmpty } from "../../util/helpers";
-import { getOrderSummaryListingAction } from "../../store/actions/shopAction/orderSummaryAction";
+import { getOrderSummaryListingAction, exportOrderSummaryAction } from "../../store/actions/shopAction/orderSummaryAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import moment from "moment";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
@@ -22,11 +22,39 @@ import InputWithHead from "../../customComponents/InputWithHead";
 const { Content } = Layout
 const { SubMenu } = Menu
 const { Option } = Select
+let this_obj = null;
 
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_obj.state.sortBy !== key) {
+        sortOrder = 'asc';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'asc') {
+        sortOrder = 'desc';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'desc') {
+        sortBy = sortOrder = null;
+    }
+    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this_obj.state
+    let page = this_obj.props.shopOrderSummaryState.orderSummaryCurrentPage
+    let params =
+    {
+        limit: 10,
+        offset: (page ? (10 * (page - 1)) : 0),
+        search: searchText,
+        year: yearRefId,
+        postcode: postcode,
+        affiliate: affiliateOrgId,
+        paymentMethod: paymentMethod,
+        order: sortOrder ? sortOrder : "",
+        sorterBy: sortBy ? sortBy : ""
+    }
+    this_obj.props.getOrderSummaryListingAction(params)
 }
 
 const columns = [
@@ -34,8 +62,8 @@ const columns = [
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
-        width: 140,
-        sorter: (a, b) => tableSort(a, b, "date"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("createdOn"),
         render: (date) => {
             return (
                 <span>{date ? moment(date).format("DD-MM-YYYY") : "N/A"}</span>
@@ -46,31 +74,50 @@ const columns = [
         title: 'Name',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => tableSort(a, b, "name"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (name, record) =>
+            // <NavLink to={{
+            //     pathname: `/userPersonal`,
+            //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
+            // }}>
+            <span className="input-heading-add-another pt-0" >{name}</span>
+        // </NavLink>
     },
     {
         title: 'Affiliate',
         dataIndex: 'affiliate',
         key: 'affiliate',
-        sorter: (a, b) => tableSort(a, b, "affiliate"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("organisationId"),
     },
     {
         title: 'Postcode',
         dataIndex: 'postcode',
         key: 'postcode',
-        sorter: (a, b) => tableSort(a, b, "postcode"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Order ID',
         dataIndex: 'id',
         key: 'id',
-        sorter: (a, b) => tableSort(a, b, "id"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (id, record) =>
+            // <NavLink to={{
+            //     pathname: `/userPersonal`,
+            //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
+            // }}>
+            <span className="input-heading-add-another pt-0" >{id}</span>
+        // </NavLink>
     },
     {
         title: 'Paid',
         dataIndex: 'paid',
         key: 'paid',
-        sorter: (a, b) => tableSort(a, b, "paid"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: paid => (
             <span>{currencyFormat(paid)}</span>
         )
@@ -79,7 +126,8 @@ const columns = [
         title: 'Net Profit',
         dataIndex: 'netProfit',
         key: 'netProfit',
-        sorter: (a, b) => tableSort(a, b, "netProfit"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: netProfit => (
             <span>{currencyFormat(netProfit)}</span>
         )
@@ -88,7 +136,8 @@ const columns = [
         title: 'Payment Method',
         dataIndex: 'paymentMethod',
         key: 'paymentMethod',
-        sorter: (a, b) => tableSort(a, b, "paymentMethod"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
 
 ]
@@ -103,25 +152,13 @@ class OrderSummary extends Component {
             searchText: "",
             paymentMethod: -1
         }
+        this_obj = this
     }
 
 
     componentDidMount() {
         this.referenceCalls()
-        let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this.state
-        let params =
-        {
-            limit: 10,
-            offset: 0,
-            search: searchText,
-            year: yearRefId,
-            postcode: postcode,
-            organisationId: affiliateOrgId,
-            paymentMethod: paymentMethod,
-            order: "",
-            sorterBy: ""
-        }
-        this.props.getOrderSummaryListingAction(params)
+        this.handleTableList(1);
     }
 
     referenceCalls = () => {
@@ -139,13 +176,14 @@ class OrderSummary extends Component {
             search: searchText,
             year: yearRefId,
             postcode: postcode,
-            organisationId: affiliateOrgId,
+            affiliate: affiliateOrgId,
             paymentMethod: paymentMethod,
             order: "",
             sorterBy: ""
         }
         this.props.getOrderSummaryListingAction(params)
     }
+
 
     onChangeDropDownValue = async (value, key) => {
         if (key == "yearRefId") {
@@ -177,10 +215,6 @@ class OrderSummary extends Component {
                 this.handleTableList(1);
             }
         }
-        else if (key == "searchText") {
-            await this.setState({ searchText: value });
-            this.handleTableList(1);
-        }
         else if (key == "paymentMethod") {
             await this.setState({ paymentMethod: value });
             this.handleTableList(1);
@@ -188,9 +222,10 @@ class OrderSummary extends Component {
     }
 
     // on change search text
-    onChangeSearchText = (e) => {
-        this.setState({ searchText: e.target.value })
-        if (e.target.value === null || e.target.value === "") {
+    onChangeSearchText = async (e) => {
+        let value = e.target.value;
+        await this.setState({ searchText: e.target.value })
+        if (value == null || value == "") {
             this.handleTableList(1);
         }
     }
@@ -210,6 +245,25 @@ class OrderSummary extends Component {
         else {
             this.handleTableList(1);
         }
+    }
+
+    ///////export button on click
+    onExport = () => {
+        let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this.state
+        let { orderSummaryCurrentPage } = this.props.shopOrderSummaryState
+        let params =
+        {
+            limit: 10,
+            offset: (orderSummaryCurrentPage ? (10 * (orderSummaryCurrentPage - 1)) : 0),
+            search: searchText,
+            year: yearRefId,
+            postcode: postcode,
+            affiliate: affiliateOrgId,
+            paymentMethod: paymentMethod,
+            order: "",
+            sorterBy: ""
+        }
+        this.props.exportOrderSummaryAction(params)
     }
 
     headerView = () => {
@@ -250,7 +304,7 @@ class OrderSummary extends Component {
                                         justifyContent: "flex-end"
                                     }}
                                 >
-                                    <Button className="primary-add-comp-form" type="primary">
+                                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.onExport()}>
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -287,8 +341,8 @@ class OrderSummary extends Component {
         }
         let paymentData = [
             { name: "Cash", value: "cash" },
-            { name: "Direct Debit", value: "credit card" },
-            { name: "Credit Card", value: "direct debit" }
+            { name: "Direct Debit", value: "direct debit" },
+            { name: "Credit Card", value: "credit card" }
         ]
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view">
@@ -415,7 +469,8 @@ class OrderSummary extends Component {
                         onChange={(page) => this.handleTableList(page)}
                     />
                 </div>
-            </div>)
+            </div>
+        )
 
     }
 
@@ -442,6 +497,7 @@ function mapDispatchToProps(dispatch) {
         getOrderSummaryListingAction,
         getOnlyYearListAction,
         getAffiliateToOrganisationAction,
+        exportOrderSummaryAction,
     }, dispatch)
 }
 

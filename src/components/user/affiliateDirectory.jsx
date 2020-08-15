@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal, Input,Icon } from "antd";
+import { Layout, Breadcrumb, Button, Table, Select, Menu, Pagination, Modal, Input, Icon } from "antd";
 import './user.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { NavLink } from "react-router-dom";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
-import { getAffiliateDirectoryAction, exportAffiliateDirectoryAction} from "../../store/actions/userAction/userAction";
+import { getAffiliateDirectoryAction, exportAffiliateDirectoryAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { bindActionCreators } from "redux";
 import AppImages from "../../themes/appImages";
@@ -18,32 +18,66 @@ const { Option } = Select;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
 let this_Obj = null;
-const columns = [
 
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+/////function to sort table column
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+
+    let filterData = {
+        organisationUniqueKey: this_Obj.state.organisationId,
+        yearRefId: this_Obj.state.yearRefId,
+        organisationTypeRefId: this_Obj.state.organisationTypeRefId,
+        searchText: this_Obj.state.searchText,
+        paging: {
+            limit: 10,
+            offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0)
+        }
+    }
+
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.props.getAffiliateDirectoryAction(filterData, sortBy, sortOrder);
+}
+const columns = [
     {
         title: 'Affiliate Name',
         dataIndex: 'affiliateName',
         key: 'affiliateName',
-        sorter: (a, b) => a.affiliateName.localeCompare(b.affiliateName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
 
     },
     {
         title: 'Organisation Type',
         dataIndex: 'organisationTypeName',
         key: 'organisationTypeName',
-        sorter: (a, b) => a.organisationTypeName.localeCompare(b.organisationTypeName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("organisationType"),
     },
     {
         title: 'Affiliated To',
         dataIndex: 'affiliatedToName',
         key: 'affiliatedToName',
-        sorter: (a, b) => a.affiliatedToName.localeCompare(b.affiliatedToName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("affiliatedTo"),
     },
     {
         title: 'Competition',
         dataIndex: 'competitions',
         key: 'competitions',
-        sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("competition"),
         render: (competition, record, index) => {
             return (
                 <div>
@@ -58,13 +92,15 @@ const columns = [
         title: 'Suburb',
         dataIndex: 'suburb',
         key: 'suburb',
-        sorter: (a, b) => a.suburb.localeCompare(b.suburb),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Postcode',
         dataIndex: 'postalCode',
         key: 'postalCode',
-        sorter: (a, b) => a.postalCode.localeCompare(b.postalCode),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("postcode"),
     },
     {
         title: "Action",
@@ -74,8 +110,8 @@ const columns = [
             <Menu className="action-triple-dot-submenu" theme="light" mode="horizontal"
                 style={{ lineHeight: "25px" }}>
                 <SubMenu key="sub1"
-                    title={ <img className="dot-image" src={AppImages.moreTripleDot}
-                            alt="" width="16" height="16" />
+                    title={<img className="dot-image" src={AppImages.moreTripleDot}
+                        alt="" width="16" height="16" />
                     }>
                     <Menu.Item key="1">
                         <NavLink to={{ pathname: `/userOurOrganisation`, state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId, isEditable: (e.isEditable == 1 ? true : false), sourcePage: "DIR", organisationTypeRefId: e.organisationTypeRefId } }} >
@@ -96,7 +132,8 @@ class AffiliateDirectory extends Component {
             organisationId: getOrganisationData().organisationUniqueKey,
             organisationTypeRefId: -1,
             deleteLoading: false,
-            searchText: ''
+            searchText: '',
+            pageNo: 1
         }
         this_Obj = this;
         // this.props.getUreAction();
@@ -125,6 +162,9 @@ class AffiliateDirectory extends Component {
     }
 
     handleAffiliateTableList = (page) => {
+        this.setState({
+            pageNo: page
+        })
         let filter =
         {
             organisationUniqueKey: this.state.organisationId,
@@ -144,36 +184,35 @@ class AffiliateDirectory extends Component {
     }
 
     onChangeDropDownValue = async (value, key) => {
-        if(key == "yearRefId"){
-          await this.setState({yearRefId: value});
-          this.handleAffiliateTableList(1);
-        }
-        else if (key == "organisationTypeRefId"){
-            await   this.setState({organisationTypeRefId: value});
+        if (key == "yearRefId") {
+            await this.setState({ yearRefId: value });
             this.handleAffiliateTableList(1);
         }
-        else if (key == "searchText"){
-            await this.setState({searchText: value});
-            if(value == null || value== "")
-            {
-                this.handleAffiliateTableList(1); 
+        else if (key == "organisationTypeRefId") {
+            await this.setState({ organisationTypeRefId: value });
+            this.handleAffiliateTableList(1);
+        }
+        else if (key == "searchText") {
+            await this.setState({ searchText: value });
+            if (value == null || value == "") {
+                this.handleAffiliateTableList(1);
             }
         }
     }
 
-    onKeyEnterSearchText = (e) =>{
+    onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
-        if(code === 13) { //13 is the enter keycode
+        if (code === 13) { //13 is the enter keycode
             this.handleAffiliateTableList(1);
-        } 
+        }
     }
 
-    onClickSearchIcon = () =>{
+    onClickSearchIcon = () => {
         this.handleAffiliateTableList(1);
     }
 
     exportAffiliateDirectory = () => {
-        let filter = 
+        let filter =
         {
             organisationUniqueKey: this.state.organisationId,
             yearRefId: this.state.yearRefId,
@@ -196,22 +235,22 @@ class AffiliateDirectory extends Component {
                     </div>
                     <div className="col-sm" style={{
                         display: "flex", flexDirection: 'row', alignItems: "center",
-                        justifyContent: "flex-end", width: "100%", marginRight:'3.0%'
+                        justifyContent: "flex-end", width: "100%", marginRight: '3.0%'
                     }}>
                         <div className="row">
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
-                                    <Button className="primary-add-comp-form" type="primary" onClick={()=> this.exportAffiliateDirectory()}>
-                                            <div className="row">
-                                                <div className="col-sm">
-                                                    <img
-                                                        src={AppImages.export}
-                                                        alt=""
-                                                        className="export-image"
-                                                    />
-                                                    {AppConstants.export}
-                                                </div>
+                                    <Button className="primary-add-comp-form" type="primary" onClick={() => this.exportAffiliateDirectory()}>
+                                        <div className="row">
+                                            <div className="col-sm">
+                                                <img
+                                                    src={AppImages.export}
+                                                    alt=""
+                                                    className="export-image"
+                                                />
+                                                {AppConstants.export}
                                             </div>
+                                        </div>
                                     </Button>
                                 </div>
                             </div>
@@ -224,7 +263,7 @@ class AffiliateDirectory extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-        let {organisationTypes} = this.props.userState;
+        let { organisationTypes } = this.props.userState;
 
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
@@ -232,13 +271,13 @@ class AffiliateDirectory extends Component {
                     <div className="row user-filter-row" >
                         <div className="user-col" >
                             <div className="user-filter-col-cont">
-                                <div className='year-select-heading' style={{width:'65px'}}>{AppConstants.year}</div>
+                                <div className='year-select-heading' style={{ width: '65px' }}>{AppConstants.year}</div>
                                 <Select
                                     name={"yearRefId"}
-                                    className="year-select user-filter-select" 
+                                    className="year-select user-filter-select"
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                                     value={this.state.yearRefId}>
-                                        <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {this.props.appState.yearList.map(item => {
                                         return (
                                             <Option key={"yearRefId" + item.id} value={item.id}>
@@ -251,11 +290,11 @@ class AffiliateDirectory extends Component {
                         </div>
                         <div className="user-col" >
                             <div className="user-filter-col-cont" >
-                                <div className='year-select-heading' style={{width:'150px'}}>{AppConstants.organisationType}</div>
+                                <div className='year-select-heading' style={{ width: '150px' }}>{AppConstants.organisationType}</div>
                                 <Select
-                                   name={"organisationTypeRefId"}
+                                    name={"organisationTypeRefId"}
                                     className="year-select user-filter-select"
-                                    onChange={(e) => this.onChangeDropDownValue(e,"organisationTypeRefId")}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "organisationTypeRefId")}
                                     value={this.state.organisationTypeRefId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(organisationTypes || []).map((org, index) => (
@@ -268,15 +307,15 @@ class AffiliateDirectory extends Component {
                             <div>
                                 <button className="dashboard-lay-search-button"
                                     onClick={() => this.onClickSearchIcon()}>
-                                <img src={AppImages.searchIcon} height="15" width="15" alt="" />
+                                    <img src={AppImages.searchIcon} height="15" width="15" alt="" />
                                 </button>
                                 <div className="reg-product-search-inp-width">
-                                    <Input className="product-reg-search-input" 
+                                    <Input className="product-reg-search-input"
                                         onChange={(e) => this.onChangeDropDownValue(e.target.value, "searchText")}
                                         placeholder="Search..." onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                        prefix={ <Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16}}
-                                    />
-                                    }
+                                        prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                        />
+                                        }
                                     />
                                 </div>
                             </div>
@@ -314,7 +353,7 @@ class AffiliateDirectory extends Component {
         )
     }
 
-   
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >

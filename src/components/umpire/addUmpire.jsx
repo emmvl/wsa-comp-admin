@@ -461,11 +461,8 @@ class AddUmpire extends Component {
                             "affiliates": umpireData.affiliates
                         }
                     }
-                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName })
+                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName, isEdit: this.state.isEdit })
                 } else if (umpireRadioBtn === 'existing') {
-
-
-
                     body = {
                         "id": exsitingUmpireId,
                         "affiliates": umpireData.affiliates

@@ -29,8 +29,10 @@ let AxiosApi = {
     },
 
     ////////get reference type in the add product screen
-    getTypesOfProduct() {
-        var url = `/type/list`;
+    async getTypesOfProduct() {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        var url = `/type/list?organisationUniqueKey=${organisationUniqueKey}`;
         return Method.dataGet(url, token);
     },
 
@@ -47,9 +49,12 @@ let AxiosApi = {
     },
 
     //////add type in the typelist array in from the API
-    addNewType(typeName) {
+    async addNewType(typeName) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
         let body = {
-            "typeName": typeName
+            "typeName": typeName,
+            "organisationUniqueKey": organisationUniqueKey,
         }
         var url = `/type`;
         return Method.dataPost(url, token, body);
@@ -77,15 +82,40 @@ let AxiosApi = {
     },
 
     ///////////shop order summary listing get API
-    getOrderSummaryListing(params) {
-        let { limit, offset, search, year, postcode, organisationId, paymentMethod, order, sorterBy } = params
-        var url = `/order/summary?limit=${limit}&offset=${offset}&search=${search}&year=${year}
-        &postcode=${postcode}&organisationId=${organisationId}&paymentMethod=${paymentMethod}&order=${order}
-        &sorterBy=${sorterBy}`;
-        // var url = `/order/summary`
+    async getOrderSummaryListing(params) {
+        console.log("params", params)
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        let { limit, offset, search, year, postcode, affiliate, paymentMethod, order, sorterBy } = params
+        var url = `/order/summary?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&affiliate=${affiliate}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
         return Method.dataGet(url, token);
-    }
+    },
 
+    // //// //////export order summary  API
+    async exportOrderSummary(params) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        let { limit, offset, search, year, postcode, affiliate, paymentMethod, order, sorterBy } = params
+        var url = `/order/export/summary?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&affiliate=${affiliate}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
+        return Method.dataGetDownload(url, token, "orderSummary");
+    },
+
+    /////// //order status status listing get API 
+    async getOrderStatusListing(params) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem.organisationUniqueKey
+        let { limit, offset, search, year, paymentStatus, fulfilmentStatus, product,order,sorterBy } = params
+        var url = `/order/statusList?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&paymentStatus=${paymentStatus}&fulfilmentStatus=${fulfilmentStatus}&product=${product}&order=${order}&sorterBy=${sorterBy}`;
+        return Method.dataGet(url, token);
+    },
+
+    ///////////update order status API 
+    updateOrderStatus(payload){
+        let body = payload
+        var url = `/order`;
+        return Method.dataPut(url, token, body);
+    },
+    
 };
 
 const Method = {
@@ -378,6 +408,83 @@ const Method = {
                 });
         });
     },
+    async dataGetDownload(newurl, authorization, fileName) {
+        const url = newurl;
+        return await new Promise((resolve, reject) => {
+            http
+                .get(url, {
+                    responseType: 'arraybuffer',
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/csv",
+                        Authorization: "BWSA " + authorization,
+                        "Access-Control-Allow-Origin": "*",
+                        "SourceSystem": "WebAdmin"
+                    }
+                })
+
+                .then(result => {
+                    if (result.status === 200) {
+                        const url = window.URL.createObjectURL(new Blob([result.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', fileName + '.csv'); //or any other extension
+                        document.body.appendChild(link);
+                        link.click();
+                        return resolve({
+                            status: 1,
+                            result: result
+                        });
+                    }
+                    else if (result.status == 212) {
+                        return resolve({
+                            status: 4,
+                            result: result
+                        });
+                    }
+                    else {
+                        if (result) {
+                            return reject({
+                                status: 3,
+                                error: result.data.message,
+                            });
+                        } else {
+                            return reject({
+                                status: 4,
+                                error: "Something went wrong."
+                            });
+                        }
+                    }
+                })
+                .catch(err => {
+                    if (err.response) {
+                        if (err.response.status !== null && err.response.status !== undefined) {
+                            if (err.response.status == 401) {
+                                let unauthorizedStatus = err.response.status
+                                if (unauthorizedStatus == 401) {
+                                    logout()
+                                    message.error(ValidationConstants.messageStatus401)
+                                }
+                            }
+                            else {
+                                return reject({
+                                    status: 5,
+                                    error: err
+                                })
+
+                            }
+                        }
+                    }
+                    else {
+                        return reject({
+                            status: 5,
+                            error: err
+                        });
+
+                    }
+                });
+        });
+    }
 };
 
 

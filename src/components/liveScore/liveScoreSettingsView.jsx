@@ -422,7 +422,6 @@ class LiveScoreSettingsView extends Component {
                             required={"required-field pb-0"}
                             heading={AppConstants.short_Name}
                             placeholder={AppConstants.short_Name}
-                            name="shortName"
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.shortNameMsg}
                             marginTop={10}
@@ -1253,10 +1252,10 @@ class LiveScoreSettingsView extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form
-        let local_Id = getLiveScoreCompetiton()
+        let local_Id = this.state.screenName === 'umpireDashboard' ? null : getLiveScoreCompetiton()
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={this.state.screenName === 'umpireDashboard' ? AppConstants.umpires : AppConstants.liveScores} menuName={this.state.screenName === 'umpireDashboard' ? AppConstants.umpires : AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 {local_Id &&
                     <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"18"} />
                 }

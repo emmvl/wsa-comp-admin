@@ -155,6 +155,10 @@ import TeamRegistrations from "../components/registration/teamRegistrations"
 
 import lazyLoad from "../components/lazyLoad";
 
+import UmpirePayment from "../components/umpire/umpirePayments"
+import UmpirePaymentSetting from "../components/umpire/umpirePaymentSettings"
+import UmpirePayout from "../components/umpire/umpirePayout"
+
 class Routes extends React.Component {
   render() {
     return (
@@ -789,6 +793,22 @@ class Routes extends React.Component {
         <PrivateRoute path="/support" component={lazyLoad(HelpAndSupport)} />
         <PrivateRoute path="/registrationChangeReview" component={lazyLoad(RegistrationChangeReview)} />
         <PrivateRoute path='/teamRegistrations' component={lazyLoad(TeamRegistrations)} />
+
+        <PrivateRoute
+          path="/umpirePayment"
+          component={lazyLoad(UmpirePayment)}
+        />
+
+        <PrivateRoute
+          path="/umpirePaymentSetting"
+          component={lazyLoad(UmpirePaymentSetting)}
+        />
+
+        <PrivateRoute
+          path="/umpirePayout"
+          component={lazyLoad(UmpirePayout)}
+        />
+
 
         <Route path="/" component={lazyLoad(NotFound)} />
 

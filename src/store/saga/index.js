@@ -89,7 +89,7 @@ import * as competitionFinalSaga from '../saga/competitionManagementSaga/competi
 import * as ladderFormatSaga from '../saga/competitionManagementSaga/ladderFormatSaga';
 import { competitonWithTimeSlots, competitonWithTimeSlotsPostApi } from './competitionManagementSaga/competitionTimeAndSlotSaga';
 
-import { fixtureTemplateSaga } from './competitionManagementSaga/competitionManagementSaga';
+import { fixtureTemplateSaga, competitionDashboardDeleteSaga } from './competitionManagementSaga/competitionManagementSaga';
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
 import {
@@ -169,6 +169,7 @@ import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSag
 import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizontalSaga'
 
 import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga'
+import shopOrderStatusSaga from "./shopSaga/shopOrderStatusSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -183,7 +184,8 @@ export default function* rootSaga() {
     fork(shopOrderSummarySaga),
     fork(shopProductSaga),
     fork(shopSettingSaga),
-
+    fork(shopOrderStatusSaga),
+    
     // Support
     fork(supportSaga),
   ]);
@@ -594,4 +596,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_POSITION_TRACKING_LOAD, liveScorePositionTrackSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD, liveScoreMainDivisionListsaga)
+  ////Competition Delete 
+  yield takeEvery(ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD, competitionDashboardDeleteSaga)
+
 }

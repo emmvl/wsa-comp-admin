@@ -13,12 +13,12 @@ function saveEndUserRegistrationAction(payload) {
 // Update End user registration
 function updateEndUserRegisrationAction(data, key) {
     const action = {
-      type: ApiConstants.UPDATE_END_USER_REGISTRATION,
-      updatedData: data,
-      key: key
+        type: ApiConstants.UPDATE_END_USER_REGISTRATION,
+        updatedData: data,
+        key: key
     };
     return action;
-  }
+}
 
 /////Organisation Registration Registration Settings
 function orgRegistrationRegSettingsEndUserRegAction(payload) {
@@ -39,10 +39,11 @@ function membershipProductEndUserRegistrationAction(payload) {
 }
 
 /////end user registration Dashboard List
-function endUserRegDashboardListAction(payload) {
+function endUserRegDashboardListAction(payload, sortBy, sortOrder) {
     const action = {
         type: ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD,
-        payload: payload
+        payload: payload,
+        sortBy, sortOrder
     };
     return action;
 }

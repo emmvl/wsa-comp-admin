@@ -121,6 +121,7 @@ flex-direction: row;
     opacity: 1;
     filter: alpha(opacity=100);
     background-color: var(--app-color);
+    outline: none;
 }
   
 .carousel .control-dots {
@@ -139,6 +140,19 @@ flex-direction: row;
     text-align: center;
     background: transparent !important;
     background-color: transparent!important; 
+}
+
+
+.carousel .control-next.control-arrow:before {
+    border-left: 8px solid var(--app-color) !important;
+}
+
+.carousel .control-prev.control-arrow:before {
+    border-right: 8px solid var(--app-color) !important;
+}
+
+.carousel .control-arrow, .carousel.carousel-slider .control-arrow {
+    opacity: 9 !important;
 }
 
 @media (max-width: 1199px) {

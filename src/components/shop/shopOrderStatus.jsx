@@ -1,20 +1,53 @@
 import React, { Component } from "react";
-import { Input, Layout, Button, Table, Select, Menu, Icon, DatePicker } from 'antd';
+import { Input, Layout, Button, Table, Select, Menu, Icon, DatePicker, Pagination } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { data } from "jquery";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { getOnlyYearListAction } from '../../store/actions/appAction';
+import { getOrderStatusListingAction, updateOrderStatusAction } from '../../store/actions/shopAction/orderStatusAction';
+import { currencyFormat } from "../../util/currencyFormat";
+import moment from "moment";
 
 const { Content } = Layout
 const { SubMenu } = Menu
 const { Option } = Select
+let this_obj = null;
 
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_obj.state.sortBy !== key) {
+        sortOrder = 'asc';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'asc') {
+        sortOrder = 'desc';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'desc') {
+        sortBy = sortOrder = null;
+    }
+    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    let { yearRefId, searchText, paymentStatus, fulfilmentStatus, product } = this_obj.state
+    let page = this_obj.props.shopOrderStatusState.orderStatusCurrentPage
+    let params =
+    {
+        limit: 10,
+        offset: (page ? (10 * (page - 1)) : 0),
+        search: searchText,
+        year: yearRefId,
+        paymentStatus: paymentStatus,
+        fulfilmentStatus: fulfilmentStatus,
+        product: product,
+        order: sortOrder ? sortOrder : "",
+        sorterBy: sortBy ? sortBy : ""
+    }
+    this_obj.props.getOrderStatusListingAction(params)
 }
 
 const columns = [
@@ -22,44 +55,73 @@ const columns = [
         title: 'Order ID',
         dataIndex: 'orderId',
         key: 'orderId',
-        sorter: (a, b) => tableSort(a, b, "orderId"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("id"),
+        render: (orderId, record) =>
+            // <NavLink to={{
+            //     pathname: `/userPersonal`,
+            //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
+            // }}>
+            <span className="input-heading-add-another pt-0" >{orderId}</span>
+        // </NavLink>
     },
     {
         title: 'Date',
         dataIndex: 'date',
         key: 'date',
-        sorter: (a, b) => tableSort(a, b, "date"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("createdOn"),
+        render: (date) => {
+            return (
+                <span>{date ? moment(date).format("DD-MM-YYYY") : "N/A"}</span>
+            )
+        },
     },
     {
         title: 'Customer',
         dataIndex: 'customer',
         key: 'customer',
-        sorter: (a, b) => tableSort(a, b, "customer"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (customer, record) =>
+            // <NavLink to={{
+            //     pathname: `/userPersonal`,
+            //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
+            // }}>
+            <span className="input-heading-add-another pt-0" >{customer}</span>
+        // </NavLink>
     },
 
     {
         title: 'Products',
         dataIndex: 'products',
         key: 'products',
-        sorter: (a, b) => tableSort(a, b, "products"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Payment Status',
         dataIndex: 'paymentStatus',
         key: 'paymentStatus',
-        sorter: (a, b) => tableSort(a, b, "paymentStatus"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Fulfilment Status',
         dataIndex: 'fulfilmentStatus',
         key: 'fulfilmentStatus',
-        sorter: (a, b) => tableSort(a, b, "fulfilmentStatus"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Total',
         dataIndex: 'total',
         key: 'total',
-        sorter: (a, b) => tableSort(a, b, "total"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: total => (
+            <span>{currencyFormat(total)}</span>
+        )
     },
     {
         title: "Action",
@@ -78,97 +140,29 @@ const columns = [
                         <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                     }>
 
-                    <Menu.Item key="1">
-                        {/* <NavLink to={{
-                            pathname: "/liveScoreAddDivision",
-                            // state: { isEdit: true, tableRecord: record }
-                        }}> */}
-                        <span >Paid</span>
-                        {/* </NavLink> */}
+                    <Menu.Item key="1" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.paid)}>
+                        <span >{AppConstants.paid}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="2" >
-                        <span >Refunf Full Amount</span>
+                    <Menu.Item key="2" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.refundFullAmount)}>
+                        <span >{AppConstants.refundFullAmount}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="3" >
-                        <span >Refunf Partial Amount</span>
+                    <Menu.Item key="3" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.refundPartialAmount)}>
+                        <span >{AppConstants.refundPartialAmount}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="4" >
-                        <span >Picked Up</span>
+                    <Menu.Item key="4" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.pickedUp)}>
+                        <span >{AppConstants.pickedUp}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="5" >
-                        <span >Shipped</span>
+                    <Menu.Item key="5" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.shipped)}>
+                        <span >{AppConstants.shipped}</span>
                     </Menu.Item>
                 </SubMenu>
 
             </Menu>
     }
-]
-
-const dataSource = [
-    {
-        orderId: "123",
-        date: "17/06/2020",
-        customer: "Fran Look",
-        products: "25",
-        paymentStatus: "Paid",
-        fulfilmentStatus: "To Be Sent",
-        total: "$400"
-
-    },
-    {
-        orderId: "123",
-        date: "17/06/2020",
-        customer: "Fran Look",
-        products: "25",
-        paymentStatus: "Paid",
-        fulfilmentStatus: "To Be Sent",
-        total: "$400"
-
-    },
-    {
-        orderId: "123",
-        date: "17/06/2020",
-        customer: "Fran Look",
-        products: "25",
-        paymentStatus: "Not Paid",
-        fulfilmentStatus: "To Be Sent",
-        total: "$400"
-
-    },
-    {
-        orderId: "123",
-        date: "17/06/2020",
-        customer: "Fran Look",
-        products: "25",
-        paymentStatus: "Paid",
-        fulfilmentStatus: "To Be Sent",
-        total: "$400"
-
-    },
-    {
-        orderId: "123",
-        date: "17/06/2020",
-        customer: "Fran Look",
-        products: "25",
-        paymentStatus: "Not Paid",
-        fulfilmentStatus: "In Transit",
-        total: "$400"
-
-    },
-    {
-        orderId: "123",
-        date: "17/06/2020",
-        customer: "Fran Look",
-        products: "25",
-        paymentStatus: "Paid",
-        fulfilmentStatus: "Awaiting Pickup",
-        total: "$400"
-
-    },
 ]
 
 class ShopOrderStatus extends Component {
@@ -177,9 +171,106 @@ class ShopOrderStatus extends Component {
         super(props)
 
         this.state = {
-            year: "2020",
-            paymentStatus: "All",
-            fulfilStatus: "All"
+            yearRefId: -1,
+            paymentStatus: -1,
+            fulfilmentStatus: -1,
+            product: -1,
+            searchText: "",
+        }
+        this_obj = this
+    }
+
+    componentDidMount() {
+        this.referenceCalls()
+        let { yearRefId, searchText, paymentStatus, fulfilmentStatus, product } = this.state
+        let params =
+        {
+            limit: 10,
+            offset: 0,
+            search: searchText,
+            year: yearRefId,
+            paymentStatus: paymentStatus,
+            fulfilmentStatus: fulfilmentStatus,
+            product: product,
+            order: "",
+            sorterBy: ""
+        }
+        this.props.getOrderStatusListingAction(params)
+    }
+
+    referenceCalls = () => {
+        this.props.getOnlyYearListAction();
+    }
+
+    handleTableList = (page) => {
+        let { yearRefId, searchText, paymentStatus, fulfilmentStatus, product } = this.state
+        let params =
+        {
+            limit: 10,
+            offset: (page ? (10 * (page - 1)) : 0),
+            search: searchText,
+            year: yearRefId,
+            paymentStatus: paymentStatus,
+            fulfilmentStatus: fulfilmentStatus,
+            product: product,
+            order: "",
+            sorterBy: ""
+        }
+        this.props.getOrderStatusListingAction(params)
+    }
+
+    ////update order status api call
+    updateOrderStatusApi = (record, actionValue) => {
+        let payload = {
+            orderId: record.orderId,
+            action: actionValue,
+            amount: record.total
+        }
+        this.props.updateOrderStatusAction(payload)
+    }
+
+    onChangeDropDownValue = async (value, key) => {
+        if (key == "yearRefId") {
+            await this.setState({ yearRefId: value });
+            this.handleTableList(1);
+        }
+        else if (key == "product") {
+            await this.setState({ product: value });
+            this.handleTableList(1);
+        }
+        else if (key == "paymentStatus") {
+            await this.setState({ paymentStatus: value });
+            this.handleTableList(1);
+        }
+        else if (key == "fulfilmentStatus") {
+            await this.setState({ fulfilmentStatus: value });
+            this.handleTableList(1);
+        }
+    }
+
+    // on change search text
+    onChangeSearchText = async (e) => {
+        let value = e.target.value;
+        await this.setState({ searchText: e.target.value })
+        if (value == null || value == "") {
+            this.handleTableList(1);
+        }
+    }
+
+    // search key 
+    onKeyEnterSearchText = (e) => {
+        var code = e.keyCode || e.which;
+        if (code === 13) { //13 is the enter keycode
+            this.handleTableList(1);
+        }
+    }
+
+    // on click of search icon
+    onClickSearchIcon = () => {
+        if (this.state.searchText === null || this.state.searchText === "") {
+        }
+        else {
+            this.handleTableList(1);
         }
     }
 
@@ -198,12 +289,13 @@ class ShopOrderStatus extends Component {
                                 <div style={{ display: "flex", justifyContent: 'flex-end' }} >
                                     <div className="comp-product-search-inp-width" >
                                         <Input className="product-reg-search-input"
-                                            //   onChange={(e) => this.onChangeSearchText(e)}
+                                            onChange={(e) => this.onChangeSearchText(e)}
                                             placeholder="Search..."
-                                            //   onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                            // onClick={() => this.onClickSearchIcon()}
+                                                onClick={() => this.onClickSearchIcon()}
                                             />}
+                                            allowClear
                                         />
                                     </div>
                                 </div>
@@ -242,56 +334,102 @@ class ShopOrderStatus extends Component {
         this.setState({ paymentStatus: data.paymentStatus })
     }
 
-    onChangefullFillmentStatus(data) {
-        this.setState({ fulfilStatus: data.fulfilStatus })
+    onChangefulfilmentStatus(data) {
+        this.setState({ fulfilmentStatus: data.fulfilmentStatus })
     }
 
     dropdownView = () => {
+        let paymentStatusData = [
+            { name: "Not Paid", value: "not paid" },
+            { name: "Paid", value: "paid" },
+            { name: "Refunded", value: "refunded" },
+            { name: "Partially refunded", value: "partially refunded" }
+        ]
+        let fulfilmentStatusData = [
+            { name: "To Be Sent", value: "to be sent" },
+            { name: "Awaiting Pickup", value: "awaiting pickup" },
+            { name: "In Transit", value: "in transit" },
+            { name: "Completed", value: "completed" }
+        ]
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view">
                 <div className="fluid-width" >
                     <div className="row reg-filter-row" >
 
-                        <div className="reg-col col-md-4 col-sm-6" >
+                        <div className="reg-col col-md-6 col-sm-6" >
                             <div className="reg-filter-col-cont">
-                                <div style={{width:120}}  className='year-select-heading'>{AppConstants.year} :</div>
+                                <div style={{ width: 180 }} className='year-select-heading'>{AppConstants.year} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
-                                    onChange={(year) => this.onChangeYear({ year })}
-                                    value={this.state.year}
+                                    onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
+                                    value={this.state.yearRefId}
                                     className="year-select reg-filter-select mr-3" >
-                                    <Option key={"year"} value="year">{"2020"}</Option>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {this.props.appState.yearList.map(item => {
+                                        return (
+                                            <Option key={"yearRefId" + item.id} value={item.id}>
+                                                {item.description}
+                                            </Option>
+                                        );
+                                    })}
 
                                 </Select>
                             </div>
                         </div>
 
-                        <div className="reg-col col-md-4 col-sm-6" >
+                        <div className="reg-col col-md-6 col-sm-6" >
                             <div className="reg-filter-col-cont">
-                                <div style={{width:180}} className='year-select-heading'>{AppConstants.paymentStatus} :</div>
+                                <div style={{ width: 180 }} className='year-select-heading'>{AppConstants.product} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
-                                    onChange={(paymentStatus) => this.onChangePaymentStatus({ paymentStatus })}
+                                    onChange={(product) => this.onChangeDropDownValue(product, "product")}
+                                    value={this.state.product}
+                                    className="year-select reg-filter-select mr-3" >
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    <Option key={AppConstants.direct} value={AppConstants.direct}>{AppConstants.direct}</Option>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="reg-col col-md-6 col-sm-6" >
+                            <div className="reg-filter-col-cont">
+                                <div style={{ width: 180 }} className='year-select-heading'>{AppConstants.paymentStatus} :</div>
+                                <Select
+                                    style={{ minWidth: 160 }}
+                                    onChange={(paymentStatus) => this.onChangeDropDownValue(paymentStatus, "paymentStatus")}
                                     value={this.state.paymentStatus}
                                     className="year-select reg-filter-select mr-3" >
-                                    <Option key={"all"} value="all">{"All"}</Option>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {paymentStatusData.map(item => {
+                                        return (
+                                            <Option key={"paymentStatus" + item.name} value={item.value}>
+                                                {item.name}
+                                            </Option>
+                                        );
+                                    })}
 
                                 </Select>
                             </div>
                         </div>
 
-
-
-                        <div className="reg-col col-md-4 col-sm-6" >
+                        <div className="reg-col col-md-6 col-sm-6" >
                             <div className="reg-filter-col-cont" >
-                                <div style={{width:180}} className='year-select-heading'>{AppConstants.fullFillmentStatus} :</div>
+                                <div style={{ width: 180 }} className='year-select-heading'>{AppConstants.fulfilmentStatus} :</div>
                                 <Select
                                     //  mode="multiple"
                                     className="year-select reg-filter-select mr-3"
                                     style={{ minWidth: 160 }}
-                                    onChange={(fulfilStatus) => this.onChangefullFillmentStatus({ fulfilStatus })}
-                                    value={this.state.fulfilStatus}>
-                                    <Option key={"all"} value="all">{"All"}</Option>
+                                    onChange={(fulfilmentStatus) => this.onChangeDropDownValue(fulfilmentStatus, "fulfilmentStatus")}
+                                    value={this.state.fulfilmentStatus}>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {fulfilmentStatusData.map(item => {
+                                        return (
+                                            <Option key={"fulfilmentStatus" + item.name} value={item.value}>
+                                                {item.name}
+                                            </Option>
+                                        );
+                                    })}
+
                                 </Select>
                             </div>
                         </div>
@@ -304,21 +442,28 @@ class ShopOrderStatus extends Component {
     }
 
     contentView = () => {
-        return (<div className="comp-dash-table-view mt-2">
-            <div className="d-flex flex-row justify-content-between">
-                {/* {this.noOfUmpires()} */}
+        let { onLoad, orderStatusListingData, orderStatusTotalCount, orderStatusCurrentPage } = this.props.shopOrderStatusState
+        return (
+            <div className="comp-dash-table-view mt-2">
+                <div className="table-responsive home-dash-table-view">
+                    <Table
+                        loading={onLoad}
+                        className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={orderStatusListingData}
+                        pagination={false} />
 
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={orderStatusCurrentPage}
+                        total={orderStatusTotalCount}
+                        onChange={(page) => this.handleTableList(page)}
+                    />
+                </div>
             </div>
-            <div className="table-responsive home-dash-table-view">
-                <Table
-                    // loading={this.props.umpireDashboardState.onLoad}
-                    className="home-dashboard-table"
-                    columns={columns}
-                    dataSource={dataSource}
-                    pagination={false} />
-
-            </div>
-        </div>)
+        )
     }
 
     render() {
@@ -339,4 +484,18 @@ class ShopOrderStatus extends Component {
 
 }
 
-export default ShopOrderStatus
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        getOnlyYearListAction,
+        getOrderStatusListingAction,
+        updateOrderStatusAction,
+    }, dispatch)
+}
+
+function mapStatetoProps(state) {
+    return {
+        shopOrderStatusState: state.ShopOrderStatusState,
+        appState: state.AppState,
+    }
+}
+export default connect(mapStatetoProps, mapDispatchToProps)((ShopOrderStatus));

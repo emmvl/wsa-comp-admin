@@ -11,3 +11,43 @@
     display: flex;
     align-items: center
 }
+
+.umpire-delete-image-view {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-top: 3%;
+    padding-left: 5%;
+    cursor: pointer;
+  }
+
+  .umpire-form-view{
+      min-width: 330px;
+  }
+
+  .single-checkbox-width{
+      min-width: 140px;
+  }
+
+  .umpire-btn-width{
+      min-width: 145px;
+  }
+
+@media (max-width: 767px) {
+    
+    .input-width{
+        min-width: fit-content
+    }
+    .single-checkbox-width{
+        min-width: 0px;
+    }
+}
+
+@media (max-width: 1024px) {
+    
+    .single-checkbox-width{
+        min-width: 0px;
+    }
+}
+

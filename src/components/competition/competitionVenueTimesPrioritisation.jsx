@@ -71,7 +71,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
             currentModal: "",
             competitionStatus: 0,
             tooltipVisibleDelete: false,
-            isQuickCompetition: false
+            isQuickCompetition: false,
+            onNextClicked: false
         };
         // this.props.clearYearCompetitionAction()
         // this.props.getCommonRefData()
@@ -184,7 +185,27 @@ class CompetitionVenueTimesPrioritisation extends Component {
             }
         }
 
+        if (this.props.venueTimeState.onLoad === false && this.state.saveContraintLoad === true) {
+            if (!this.props.venueTimeState.error) {
+                if (this.state.onNextClicked === true) {
+                    this.setState({
+                        onNextClicked: false,
+                        saveContraintLoad: false
+                    })
+                    history.push('/competitionFormat')
+                } else {
+                    this.setState({ saveContraintLoad: false });
+                }
+            }
 
+            else {
+                this.setState({
+                    onNextClicked: false,
+                    saveContraintLoad: false
+                })
+            }
+
+        }
 
     }
 
@@ -1329,9 +1350,11 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     {AppConstants.save}
                                 </Button>
                             </Tooltip>
-                            <NavLink to="/competitionFormat">
-                                <Button disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
-                            </NavLink>
+                            {/* <NavLink to="/competitionFormat"> */}
+                            <Button onClick={() => this.setState({
+                                onNextClicked: true
+                            })} htmlType='submit' disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                            {/* </NavLink> */}
                         </div>
                     </div>
                 </div>

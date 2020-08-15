@@ -22,19 +22,35 @@ const { Footer, Content } = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
 
+let this_Obj = null
+
 /////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.props.regDashboardListAction(this_Obj.state.offset, this_Obj.state.yearRefId, sortBy, sortOrder)
 }
+
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
 const columns = [
 
     {
         title: 'Competition Name',
         dataIndex: 'competitionName',
         key: 'competitionName',
-        sorter: (a, b) => tableSort(a, b, "competitionName")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Registration Open',
@@ -45,7 +61,8 @@ const columns = [
                 <span>{registrationOpenDate ? moment(registrationOpenDate).format("DD-MM-YYYY") : null}</span>
             )
         },
-        sorter: (a, b) => tableSort(a, b, "registrationOpenDate")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("registrationOpen"),
 
     },
     {
@@ -57,7 +74,8 @@ const columns = [
                 <span>{registrationCloseDate ? moment(registrationCloseDate).format("DD-MM-YYYY") : null}</span>
             )
         },
-        sorter: (a, b) => tableSort(a, b, "registrationCloseDate")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("registrationClose"),
 
     },
 
@@ -65,7 +83,8 @@ const columns = [
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        sorter: (a, b) => tableSort(a, b, "status")
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
 
     },
     {
@@ -120,7 +139,9 @@ class RegistrationFormList extends Component {
         super(props);
         this.state = {
             yearRefId: 1,
+            offset: 0
         }
+        this_Obj = this
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
@@ -131,6 +152,9 @@ class RegistrationFormList extends Component {
 
     handleMembershipTableList = (page, yearRefId) => {
         let offset = page ? 10 * (page - 1) : 0;
+        this.setState({
+            offset
+        })
         this.props.regDashboardListAction(offset, yearRefId)
     };
 

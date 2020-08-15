@@ -1,6 +1,8 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Select, Form, Modal, 
-    Checkbox, message, Tabs, Table, Radio, Input} from 'antd';
+import {
+    Layout, Breadcrumb, Button, Select, Form, Modal,
+    Checkbox, message, Tabs, Table, Radio, Input
+} from 'antd';
 import './user.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -94,9 +96,11 @@ class UserOurOragnization extends Component {
             let affiliateOrgId = this.props.location.state.affiliateOrgId;
             let sourcePage = this.props.location.state.sourcePage;
             let organisationTypeRefId = this.props.location.state.organisationTypeRefId;
-            await this.setState({ organisationId: affiliateOrgId, 
-                isEditable: isEditable, sourcePage: sourcePage, 
-                organisationTypeRefId: organisationTypeRefId })
+            await this.setState({
+                organisationId: affiliateOrgId,
+                isEditable: isEditable, sourcePage: sourcePage,
+                organisationTypeRefId: organisationTypeRefId
+            })
         }
 
         this.referenceCalls(this.state.organisationId);
@@ -191,7 +195,7 @@ class UserOurOragnization extends Component {
             suburb: affiliate.suburb,
             stateRefId: affiliate.stateRefId,
             postcode: affiliate.postalCode,
-            orgEmail:affiliate.email
+            orgEmail: affiliate.email
         })
 
         let contacts = affiliate.contacts;
@@ -328,7 +332,7 @@ class UserOurOragnization extends Component {
         this.props.updateOrgAffiliateAction(contacts, "contacts");
     };
 
-   
+
     setImage = (data) => {
         if (data.files[0] !== undefined) {
             console.log("*****" + JSON.stringify(data.files[0]));
@@ -784,7 +788,10 @@ class UserOurOragnization extends Component {
                     )}
                 </Form.Item>
 
-                <InputWithHead heading={AppConstants.phoneNumber} placeholder={AppConstants.phoneNumber}
+                <InputWithHead
+                    auto_Complete='new-phone'
+                    heading={AppConstants.phoneNumber}
+                    placeholder={AppConstants.phoneNumber}
                     onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
                     value={affiliate.phoneNo}
                     disabled={!this.state.isEditable}
