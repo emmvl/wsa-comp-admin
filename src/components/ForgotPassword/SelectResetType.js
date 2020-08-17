@@ -6,8 +6,8 @@ import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 
 function SelectResetType(props) {
-  const { submitType } = props;
-  const [resetType, setResetType] = useState('email');
+  const { source, submitType } = props;
+  const [resetType, setResetType] = useState("email");
 
   const onChangeType = useCallback((e) => {
     setResetType(e.target.value);
@@ -35,7 +35,7 @@ function SelectResetType(props) {
               type="radio"
               name="resetType"
               value="email"
-              checked={resetType === 'email'}
+              checked={resetType === "email"}
               onChange={onChangeType}
             />
             <label className="ml-3" htmlFor="email">Email</label>
@@ -47,21 +47,23 @@ function SelectResetType(props) {
               type="radio"
               name="resetType"
               value="sms"
-              checked={resetType === 'sms'}
+              checked={resetType === "sms"}
               onChange={onChangeType}
             />
             <label className="ml-3" htmlFor="sms">SMS</label>
           </div>
         </div>
 
-        <div className="comp-finals-button-view d-flex justify-content-between mt-4">
-          <div className="pr-5">
-            <NavLink to={{ pathname: '/login' }}>
-              <Button className="open-reg-button" type="primary">
-                {AppConstants.returnToLogin}
-              </Button>
-            </NavLink>
-          </div>
+        <div className={`comp-finals-button-view d-flex justify-content-${source !== "mobile" ? "between" : "center"} mt-4`}>
+          {source !== "mobile" && (
+            <div className="pr-5">
+              <NavLink to={{ pathname: "/login" }}>
+                <Button className="open-reg-button" type="primary">
+                  {AppConstants.returnToLogin}
+                </Button>
+              </NavLink>
+            </div>
+          )}
 
           <Button
             className="open-reg-button"

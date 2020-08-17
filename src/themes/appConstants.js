@@ -1521,8 +1521,6 @@ const AppConstants = {
   impersonationOrgSelect: "Choose an organization to access",
   numberOfOrders: "Number of Orders",
   teamRegistrations: "Team Registrations",
-  childrenCheckNumber: "Requires Working with Children Check",
-  regenerateDrawTitle: "Regenerate draw from which Round?",
 
   umpirePayments: "Umpire Payments",
   bulkPayment: "Bulk Payment",

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Layout, Form } from 'antd';
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Layout, Form } from "antd";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
@@ -15,14 +15,19 @@ import "./style.scss";
 
 const { Content } = Layout;
 const loginFormSchema = Yup.object().shape({
-  userName: Yup.string().min(2, 'Username must be at least 2 characters').required('Username is required'),
+  userName: Yup.string().min(2, "Username must be at least 2 characters").required("Username is required"),
 });
 
 function ForgotPassword(props) {
   const { loginState, location, forgotPasswordAction } = props;
 
+  let source;
+  if (location.search) {
+    source = new URLSearchParams(location.search).get('source');
+  }
+
   const [step, setStep] = useState(1);
-  const [resetType, setResetType] = useState('email');
+  const [resetType, setResetType] = useState("email");
 
   const onSubmitType = (type) => {
     setResetType(type);
@@ -36,7 +41,7 @@ function ForgotPassword(props) {
       <Layout>
         <Content className="container" style={{ zIndex: 15 }}>
           {step === 1 && (
-            <SelectResetType submitType={onSubmitType} />
+            <SelectResetType source={source} submitType={onSubmitType} />
           )}
 
           {step === 2 && (
@@ -59,7 +64,7 @@ function ForgotPassword(props) {
                   handleChange,
                   handleBlur,
                   handleSubmit,
-                  isSubmitting,
+                  // isSubmitting,
                   setFieldValue
                 }) => (
                 <Form onSubmit={handleSubmit}>
@@ -68,6 +73,7 @@ function ForgotPassword(props) {
                       values={values}
                       errors={errors}
                       touched={touched}
+                      source={source}
                       loginState={loginState}
                       resetType={resetType}
                       setFieldValue={setFieldValue}
