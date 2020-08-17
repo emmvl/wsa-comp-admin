@@ -5000,7 +5000,7 @@ class RegistrationCompetitionFee extends Component {
               style={{ flexDirection: 'column' }}
               className="tree-government-rebate tree-selection-icon"
               checkable
-              expandedKeys={['1', '5', '7']}
+              expandedKeys={['1', '5', '7', 'isSeasonalUponReg']}
               //defaultCheckedKeys={[]}
               checkedKeys={selectedSeasonalFeeKey}
               onCheck={(e, info) => this.onChangeSeasonalFee(e)}
