@@ -17,7 +17,12 @@ import Password from "./Password";
 const { Header, Footer, Content } = Layout;
 
 function Account(props) {
-  const { location: { pathname }, appState, userState, getUserProfileAction } = props;
+  const {
+    location: { pathname },
+    appState,
+    userState,
+    getUserProfileAction,
+  } = props;
 
   useEffect(() => {
     if (!userState.isProfileLoaded) {
@@ -53,8 +58,15 @@ function Account(props) {
                 >
                   <Breadcrumb separator=" > ">
                     <NavLink to={pathname}>
+<<<<<<< HEAD:src/pages/Account/index.js
                       <div className="breadcrumb-add">
                         {pathname === "/account/profile" ? AppConstants.profileHeader : AppConstants.passwordHeader}
+=======
+                      <div className="breadcrumb-product">
+                        {pathname === "/account/profile"
+                          ? AppConstants.profileHeader
+                          : AppConstants.passwordHeader}
+>>>>>>> CM-1200:src/pages/Account/index.js
                       </div>
                     </NavLink>
                   </Breadcrumb>
@@ -63,8 +75,16 @@ function Account(props) {
             </div>
 
             <Switch>
-              <PrivateRoute exact path="/account/profile" component={lazyLoad(Profile)} />
-              <PrivateRoute exact path="/account/password" component={lazyLoad(Password)} />
+              <PrivateRoute
+                exact
+                path="/account/profile"
+                component={lazyLoad(Profile)}
+              />
+              <PrivateRoute
+                exact
+                path="/account/password"
+                component={lazyLoad(Password)}
+              />
 
               <Redirect to="/account/profile" />
             </Switch>
@@ -80,9 +100,12 @@ function Account(props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    getUserProfileAction,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      getUserProfileAction,
+    },
+    dispatch
+  );
 }
 
 function mapStateToProps(state) {
