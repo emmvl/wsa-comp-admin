@@ -2153,6 +2153,7 @@ class RegistrationCompetitionFee extends Component {
     let filterOrgPostDiscountData = finalOrgPostDiscountData.filter(
       (x) => x.organisationId == currentOrganisationId
     );
+
     let discountBody = {
       competitionId: competitionId,
       statusRefId: this.state.statusRefId,
@@ -2166,25 +2167,47 @@ class RegistrationCompetitionFee extends Component {
     let compFeesState = this.props.competitionFeesState;
     let fee_data = compFeesState.competitionFeesData;
     let divisionArrayData = compFeesState.competitionDivisionsData;
-    if (this.state.statusRefId == 1) {
-      this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId, this.state.affiliateOrgId);
-      this.setState({ loading: true });
+
+    let discountDuplicateError = false;
+    let discountMap = new Map();
+    for(let x of filterOrgPostDiscountData){
+      if(x.competitionTypeDiscountTypeRefId == 3){
+        if(discountMap.get(x.competitionMembershipProductTypeId) == undefined){
+          discountMap.set(x.competitionMembershipProductTypeId, 1);
+        }
+        else{
+          discountDuplicateError = true;
+          break;
+        }
+      }
     }
-    if (this.state.statusRefId == 2 || this.state.statusRefId == 3) {
-      if (divisionArrayData.length > 0 && this.checkDivisionEmpty(divisionArrayData) == false && fee_data.length > 0) {
+
+    if(discountDuplicateError){
+      message.config({ duration: 0.9, maxCount: 1 })
+      message.error(ValidationConstants.duplicateDiscountError);
+    }
+    else{
+      if (this.state.statusRefId == 1) {
         this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId, this.state.affiliateOrgId);
         this.setState({ loading: true });
       }
-      else {
-        if (this.checkDivisionEmpty(divisionArrayData) == true) {
-          message.config({ duration: 0.9, maxCount: 1 })
-          message.error(ValidationConstants.pleaseFillDivisionBeforePublishing);
+      if (this.state.statusRefId == 2 || this.state.statusRefId == 3) {
+        if (divisionArrayData.length > 0 && this.checkDivisionEmpty(divisionArrayData) == false && fee_data.length > 0) {
+          this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId, this.state.affiliateOrgId);
+          this.setState({ loading: true });
         }
-        else if (fee_data.length == 0) {
-          message.error(ValidationConstants.pleaseFillFeesBeforePublishing);
+        else {
+          if (this.checkDivisionEmpty(divisionArrayData) == true) {
+            message.config({ duration: 0.9, maxCount: 1 })
+            message.error(ValidationConstants.pleaseFillDivisionBeforePublishing);
+          }
+          else if (fee_data.length == 0) {
+            message.error(ValidationConstants.pleaseFillFeesBeforePublishing);
+          }
         }
       }
     }
+    
   };
 
   setDetailsFieldValue() {
