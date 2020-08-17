@@ -58,15 +58,10 @@ function Account(props) {
                 >
                   <Breadcrumb separator=" > ">
                     <NavLink to={pathname}>
-<<<<<<< HEAD:src/pages/Account/index.js
-                      <div className="breadcrumb-add">
-                        {pathname === "/account/profile" ? AppConstants.profileHeader : AppConstants.passwordHeader}
-=======
                       <div className="breadcrumb-product">
                         {pathname === "/account/profile"
                           ? AppConstants.profileHeader
                           : AppConstants.passwordHeader}
->>>>>>> CM-1200:src/pages/Account/index.js
                       </div>
                     </NavLink>
                   </Breadcrumb>
