@@ -53,7 +53,7 @@ function Account(props) {
                 >
                   <Breadcrumb separator=" > ">
                     <NavLink to={pathname}>
-                      <div className="breadcrumb-product">
+                      <div className="breadcrumb-add">
                         {pathname === "/account/profile" ? AppConstants.profileHeader : AppConstants.passwordHeader}
                       </div>
                     </NavLink>
