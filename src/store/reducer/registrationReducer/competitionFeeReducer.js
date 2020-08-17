@@ -2234,7 +2234,7 @@ function competitionFees(state = initialState, action) {
 
         // get default charity and govt voucher
         case ApiConstants.API_REG_COMPETITION_FEE_DEFAULT_CHARITY_SUCCESS:
-            console.log(")))))))))))))))))))))))");
+           // console.log(")))))))))))))))))))))))");
             let charityData = getCharityResult(action.charityResult)
             let govtVocuherData = getCharityResult(action.govtVoucherResult)
             state.charityRoundUp = charityData
@@ -2559,6 +2559,7 @@ function competitionFees(state = initialState, action) {
             };
 
         case ApiConstants.UPDATE_INSTALMENT_DATE:
+            console.log("UPDATE_INSTALMENT_DATE" + action.key +"%%%" + action.value);
             if(action.key == "instalmentAddDate"){
                 addInstalmentDate(action.value)
             }
@@ -2576,6 +2577,9 @@ function competitionFees(state = initialState, action) {
             }
             if(action.key == "seasonalTeaminstalmentDateupdate"){
                 updateSeasonalTeamInstalmentDate(action.value)            
+            }
+            if(action.key == "isSeasonalUponReg" || action.key == "isTeamSeasonalUponReg"){
+                state.competitionDetailData[action.key] = action.value;
             }
             return { ...state,  };    
 

@@ -6,47 +6,71 @@ import moment from "moment";
 
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { userPhotoUpdateAction, userDetailUpdateAction } from "../../store/actions/userAction/userAction";
+import {
+  userPhotoUpdateAction,
+  userDetailUpdateAction,
+} from "../../store/actions/userAction/userAction";
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 
 function Profile(props) {
-  const { userState, form, userPhotoUpdateAction, userDetailUpdateAction } = props;
+  const {
+    userState,
+    form,
+    userPhotoUpdateAction,
+    userDetailUpdateAction,
+  } = props;
 
   const [user, setUser] = useState(userState.userProfile);
 
-  const onChangeField = useCallback((e) => {
-    setUser({
-      ...user,
-      [e.currentTarget.name]: e.currentTarget.value,
-    });
-  }, [user, setUser]);
+  const onChangeField = useCallback(
+    (e) => {
+      setUser({
+        ...user,
+        [e.currentTarget.name]: e.currentTarget.value,
+      });
+    },
+    [user, setUser]
+  );
 
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault();
+  const handleSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
 
-    form.validateFields((err) => {
-      if (!err) {
-        const { photo, photoUrl, ...restUserProperty } = user;
+      form.validateFields((err) => {
+        if (!err) {
+          const { photo, photoUrl, ...restUserProperty } = user;
 
-        const isChangedData = user.firstName !== userState.userProfile.firstName
-          || user.lastName !== userState.userProfile.lastName
-          || user.mobileNumber !== userState.userProfile.mobileNumber
-          || user.email !== userState.userProfile.email;
+          const isChangedData =
+            user.firstName !== userState.userProfile.firstName ||
+            user.lastName !== userState.userProfile.lastName ||
+            user.mobileNumber !== userState.userProfile.mobileNumber ||
+            user.email !== userState.userProfile.email;
 
-        if (photo && photoUrl) {
-          let formData = new FormData();
-          formData.append("profile_photo", photo);
-          userPhotoUpdateAction(formData, isChangedData ? restUserProperty : null);
-        } else if (isChangedData) {
-          userDetailUpdateAction(restUserProperty);
+          if (photo && photoUrl) {
+            let formData = new FormData();
+            formData.append("profile_photo", photo);
+            userPhotoUpdateAction(
+              formData,
+              isChangedData ? restUserProperty : null
+            );
+          } else if (isChangedData) {
+            userDetailUpdateAction(restUserProperty);
+          }
         }
-      }
-    });
-  }, [form, user, userState.userProfile, userPhotoUpdateAction, userDetailUpdateAction]);
+      });
+    },
+    [
+      form,
+      user,
+      userState.userProfile,
+      userPhotoUpdateAction,
+      userDetailUpdateAction,
+    ]
+  );
 
   const selectImage = useCallback(() => {
-    const fileInput = document.getElementById('user-pic');
+    const fileInput = document.getElementById("user-pic");
     fileInput.setAttribute("type", "file");
     fileInput.setAttribute("accept", "image/*");
     if (!!fileInput) {
@@ -54,27 +78,30 @@ function Profile(props) {
     }
   }, []);
 
-  const setImage = useCallback((data) => {
-    if (data.files[0] !== undefined) {
-      let files_ = data.files[0].type.split("image/")
-      let fileType = files_[1]
+  const setImage = useCallback(
+    (data) => {
+      if (data.files[0] !== undefined) {
+        let files_ = data.files[0].type.split("image/");
+        let fileType = files_[1];
 
-      if (data.files[0].size > AppConstants.logo_size) {
-        message.error(AppConstants.logoImageSize);
-        return;
-      }
+        if (data.files[0].size > AppConstants.logo_size) {
+          message.error(AppConstants.logoImageSize);
+          return;
+        }
 
-      if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
-        setUser({
-          ...user,
-          photoUrl: URL.createObjectURL(data.files[0]),
-          photo: data.files[0],
-        });
-      } else {
-        message.error(AppConstants.logoType);
+        if (fileType === `jpeg` || fileType === `png` || fileType === `gif`) {
+          setUser({
+            ...user,
+            photoUrl: URL.createObjectURL(data.files[0]),
+            photo: data.files[0],
+          });
+        } else {
+          message.error(AppConstants.logoType);
+        }
       }
-    }
-  }, [user, setUser]);
+    },
+    [user, setUser]
+  );
 
   return (
     <div className="inside-table-view">
@@ -89,7 +116,7 @@ function Profile(props) {
                   height="120"
                   width="120"
                   style={{ borderRadius: 60 }}
-                  onError={ev => {
+                  onError={(ev) => {
                     ev.target.src = AppImages.circleImage;
                   }}
                 />
@@ -98,7 +125,7 @@ function Profile(props) {
             <input
               type="file"
               id="user-pic"
-              style={{ display: 'none' }}
+              style={{ display: "none" }}
               onChange={(evt) => setImage(evt.target)}
             />
           </div>
@@ -124,7 +151,11 @@ function Profile(props) {
             heading={AppConstants.dateOfBirth}
             placeholder={AppConstants.enterDateOfBirth}
             readOnly
-            value={user.dateOfBirth ? moment(user.dateOfBirth).format("DD-MM-YYYY") : ""}
+            value={
+              user.dateOfBirth
+                ? moment(user.dateOfBirth).format("DD-MM-YYYY")
+                : ""
+            }
           />
 
           <InputWithHead
@@ -147,7 +178,9 @@ function Profile(props) {
             onChange={onChangeField}
           />
           {userState.userProfile.email !== user.email && (
-            <div className="form-field-error">{AppConstants.emailChangedWarning}</div>
+            <div className="form-field-error">
+              {AppConstants.emailChangedWarning}
+            </div>
           )}
 
           <div className="d-flex justify-content-end mt-4">
@@ -163,16 +196,21 @@ function Profile(props) {
         </div>
       </Form>
 
-      <Loader visible={userState.userDetailUpdate || userState.userPhotoUpdate} />
+      <Loader
+        visible={userState.userDetailUpdate || userState.userPhotoUpdate}
+      />
     </div>
   );
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    userPhotoUpdateAction,
-    userDetailUpdateAction,
-  }, dispatch);
+  return bindActionCreators(
+    {
+      userPhotoUpdateAction,
+      userDetailUpdateAction,
+    },
+    dispatch
+  );
 }
 
 function mapStateToProps(state) {
@@ -182,4 +220,7 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(Profile));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Form.create()(Profile));
