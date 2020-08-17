@@ -264,30 +264,30 @@ let AxiosApi = {
     },
 
     ////get the competition fees all the data in one API
-    async getAllCompetitionFeesDeatils(competitionId, sourceModule) {
+    async getAllCompetitionFeesDeatils(competitionId, sourceModule, affiliateOrgId) {
         let userId = await getUserId()
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         // if (userId !== user_Id) {
         //     history.push("/")
         // }
-        var url = `/api/competitionfee/competitiondetails?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}`;
+        var url = `/api/competitionfee/competitiondetails?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}&affiliateOrgId=${affiliateOrgId}`;
         return Method.dataGet(url, token);
     },
 
     ///////////save the competition fees deatils 
-    async saveCompetitionFeesDetails(payload, sourceModule) {
+    async saveCompetitionFeesDetails(payload, sourceModule, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/detail?organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}`;
+        var url = `/api/competitionfee/detail?organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}&affiliateOrgId=${affiliateOrgId}`;
         return Method.dataPost(url, token, payload);
     },
 
     /////save the competition membership tab details
-    async saveCompetitionFeesMembershipTab(payload, competitionId) {
+    async saveCompetitionFeesMembershipTab(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `api/competitionfee/membership?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
+        var url = `api/competitionfee/membership?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&affiliateOrgId=${affiliateOrgId}`;
         return Method.dataPost(url, token, payload);
     },
 
@@ -300,11 +300,12 @@ let AxiosApi = {
     },
 
     /////save the division table data  in the competition fees section
-    async saveCompetitionFeesDivisionAction(payload, competitionId) {
+    async saveCompetitionFeesDivisionAction(payload, competitionId,affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let sourceModule = payload.sourceModule != undefined ? payload.sourceModule : "REG";
-        var url = `/api/competitionfee/division?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}`;
+        var url = `/api/competitionfee/division?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}
+                        &affiliateOrgId=${affiliateOrgId}`;
         return Method.dataPost(url, token, payload);
     },
     //casual PaymentOption
@@ -320,26 +321,29 @@ let AxiosApi = {
     },
 
     //post payment
-    async postCompetitionPayment(payload, competitionId, organisationKey) {
+    async postCompetitionPayment(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/paymentoption?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`
+        var url = `/api/competitionfee/paymentoption?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}
+                    &affiliateOrgId=${affiliateOrgId}`
         return Method.dataPost(url, token, payload)
     },
 
 
     // Post competition fee section
-    async postCompetitionFeeSection(payload, competitionId, organisationKey) {
+    async postCompetitionFeeSection(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/fees?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`
+        var url = `/api/competitionfee/fees?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}
+                            affiliateOrgId=${affiliateOrgId} `
         return Method.dataPost(url, token, payload)
     },
     //post competition fee discount 
-    async postCompetitonFeeDiscount(payload, competitionId, organisationKey) {
+    async postCompetitonFeeDiscount(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/discount?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`
+        var url = `/api/competitionfee/discount?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}
+                        &affiliateOrgId=${affiliateOrgId}`
         return Method.dataPost(url, token, payload)
     },
 

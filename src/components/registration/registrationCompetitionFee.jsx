@@ -1843,13 +1843,12 @@ class RegistrationCompetitionFee extends Component {
         },
       ],
       divisionState: false,
+      affiliateOrgId: null
     };
 
     this_Obj = this;
     let competitionId = null;
-    competitionId = this.props.location.state
-      ? this.props.location.state.id
-      : null;
+    competitionId = this.props.location.state ? this.props.location.state.id : null;
     competitionId !== null && this.props.clearCompReducerDataAction('all');
   }
 
@@ -2027,12 +2026,13 @@ class RegistrationCompetitionFee extends Component {
 
   componentDidMount() {
     let orgData = getOrganisationData();
-    this.setState({ organisationTypeRefId: orgData.organisationTypeRefId });
+    
     let competitionId = null;
-    competitionId = this.props.location.state
-      ? this.props.location.state.id
-      : null;
-    this.apiCalls(competitionId, orgData.organisationUniqueKey);
+    let affiliateOrgId = null;
+    competitionId = this.props.location.state ? this.props.location.state.id : null;
+    affiliateOrgId = this.props.location.state ? this.props.location.state.affiliateOrgId: null;
+    this.setState({ organisationTypeRefId: orgData.organisationTypeRefId, affiliateOrgId: affiliateOrgId });
+    this.apiCalls(competitionId, orgData.organisationUniqueKey, affiliateOrgId);
     this.setDetailsFieldValue();
     let checkVenueScreen = this.props.location.state
       ? this.props.location.state.venueScreen
@@ -2043,7 +2043,7 @@ class RegistrationCompetitionFee extends Component {
   }
 
   ////alll the api calls
-  apiCalls = (competitionId, organisationId) => {
+  apiCalls = (competitionId, organisationId, affiliateOrgId) => {
     // this.props.getAffiliateToOrganisationAction(organisationId);
     this.props.getOnlyYearListAction(this.props.appState.yearList);
     this.props.getDefaultCompFeesLogoAction();
@@ -2059,7 +2059,9 @@ class RegistrationCompetitionFee extends Component {
       let hasRegistration = 1;
       this.props.getAllCompetitionFeesDeatilsAction(
         competitionId,
-        hasRegistration
+        hasRegistration,
+        "REG",
+        affiliateOrgId
       );
       this.setState({ getDataLoading: true });
     } else {
@@ -2096,7 +2098,7 @@ class RegistrationCompetitionFee extends Component {
     let isTeamSeasonalUponReg = this.props.competitionFeesState.competitionDetailData["isTeamSeasonalUponReg"];
     paymentDataArr["isSeasonalUponReg"] = isSeasonalUponReg!= undefined ? isSeasonalUponReg : false;
     paymentDataArr["isTeamSeasonalUponReg"] = isTeamSeasonalUponReg!= undefined? isTeamSeasonalUponReg: false;
-    this.props.competitionPaymentApi(paymentDataArr, competitionId);
+    this.props.competitionPaymentApi(paymentDataArr, competitionId, this.state.affiliateOrgId);
   };
 
   ////check the division objects does not contain empty division array
@@ -2165,12 +2167,12 @@ class RegistrationCompetitionFee extends Component {
     let fee_data = compFeesState.competitionFeesData;
     let divisionArrayData = compFeesState.competitionDivisionsData;
     if (this.state.statusRefId == 1) {
-      this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId);
+      this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId, this.state.affiliateOrgId);
       this.setState({ loading: true });
     }
     if (this.state.statusRefId == 2 || this.state.statusRefId == 3) {
       if (divisionArrayData.length > 0 && this.checkDivisionEmpty(divisionArrayData) == false && fee_data.length > 0) {
-        this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId);
+        this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId, this.state.affiliateOrgId);
         this.setState({ loading: true });
       }
       else {
@@ -2573,7 +2575,7 @@ class RegistrationCompetitionFee extends Component {
         // console.log("finalpostarray"+ JSON.stringify(finalpostarray));
 
         if (finalpostarray.length > 0) {
-          this.props.saveCompetitionFeeSection(finalpostarray, competitionId);
+          this.props.saveCompetitionFeeSection(finalpostarray, competitionId, this.state.affiliateOrgId);
           this.setState({ loading: true });
         } else {
           message.error(ValidationConstants.feesCannotBeEmpty);
@@ -2695,7 +2697,9 @@ class RegistrationCompetitionFee extends Component {
             formData.append('logoIsDefault', postData.logoIsDefault);
             this.props.saveCompetitionFeesDetailsAction(
               formData,
-              compFeesState.defaultCompFeesOrgLogoData.id
+              compFeesState.defaultCompFeesOrgLogoData.id,
+              AppConstants.Reg,
+              this.state.affiliateOrgId
             );
             this.setState({ loading: true });
           } else {
@@ -2736,7 +2740,8 @@ class RegistrationCompetitionFee extends Component {
           };
           this.props.saveCompetitionFeesMembershipTabAction(
             payload,
-            competitionId
+            competitionId,
+            this.state.affiliateOrgId
           );
           this.setState({ loading: true, divisionState: true });
         } else if (tabKey == '3') {
@@ -2766,7 +2771,8 @@ class RegistrationCompetitionFee extends Component {
           } else {
             this.props.saveCompetitionFeesDivisionAction(
               finalDivisionPayload,
-              competitionId
+              competitionId,
+              this.state.affiliateOrgId
             );
             this.setState({ loading: true });
           }

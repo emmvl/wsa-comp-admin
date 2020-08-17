@@ -1538,7 +1538,8 @@ const AppConstants = {
   shipped: "Shipped",
   extraTime: "Extra Time",
   compDeleteConfirm: 'Are you sure you want to delete this competition?',
-  uponRegistration: "Upon Registration"
+  uponRegistration: "Upon Registration",
+  reg: "REG"
 };
 
 export default AppConstants;
