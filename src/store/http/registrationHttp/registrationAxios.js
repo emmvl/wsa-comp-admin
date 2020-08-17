@@ -335,7 +335,7 @@ let AxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         var url = `/api/competitionfee/fees?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}
-                            affiliateOrgId=${affiliateOrgId} `
+                            &affiliateOrgId=${affiliateOrgId} `
         return Method.dataPost(url, token, payload)
     },
     //post competition fee discount 
