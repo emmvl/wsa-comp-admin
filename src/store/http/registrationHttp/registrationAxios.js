@@ -483,7 +483,12 @@ let AxiosApi = {
         let body = payload
         var url = `/api/competitionfee/status/update`;
         return Method.dataPost(url, token, body);
-    }
+    },
+	getTeamRegistrations(payload) {
+        let body = payload
+        var url = `/api/teamregistration/dashboard`;
+        return Method.dataPost(url, token ,body);
+    },
 };
 
 const Method = {

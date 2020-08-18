@@ -13,11 +13,12 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { endUserRegDashboardListAction } from
     "../../store/actions/registrationAction/endUserRegistrationAction";
-import { getCommonRefData, getGenderAction, registrationPaymentStatusAction } from
+import { getCommonRefData, getGenderAction, registrationPaymentStatusAction} from
     '../../store/actions/commonAction/commonAction';
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
-import { getOnlyYearListAction, } from '../../store/actions/appAction'
+import { getOnlyYearListAction } from '../../store/actions/appAction'
+import {getTeamRegistrationsAction} from '../../store/actions/registrationAction/registration'
 import { isEmptyArray } from "formik";
 import { currencyFormat } from "../../util/currencyFormat";
 
@@ -40,14 +41,14 @@ const columns = [
     },
     {
         title: 'Organisation',
-        dataIndex: 'organisation',
-        key: 'organisation',
+        dataIndex: 'organisationName',
+        key: 'organisationName',
         sorter: (a, b) => a.organisation.localeCompare(b.organisation),
     },
     {
         title: 'Team',
-        dataIndex: 'team',
-        key: 'team',
+        dataIndex: 'teamName',
+        key: 'teamName',
         sorter: (a, b) => a.team.localeCompare(b.team),
     },
     {
@@ -71,8 +72,8 @@ const columns = [
     },
     {
         title: 'Status',
-        dataIndex: 'status',
-        key: 'status',
+        dataIndex: 'statusRefId',
+        key: 'statusRefId',
         sorter: (a, b) => a.status.localeCompare(b.status),
     },
 
@@ -94,11 +95,26 @@ class TeamRegistrations extends Component {
 
     componentDidMount() {
         this.referenceCalls(this.state.organisationId);
+        this.setState({
+            searchText: ''
+        })
         this.handleRegTableList(1);
     }
 
     handleRegTableList = (page) => {
-        console.log(page)
+        let obj = {
+            organisationUniqueKey: this.state.organisationId,
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.competitionUniqueKey,
+            filterOrganisation: this.state.affiliate,
+            searchText: this.state.searchText,
+            statusRefId: -1,
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0)
+            }
+        }
+        this.props.getTeamRegistrationsAction(obj);
     }
 
     referenceCalls = (organisationId) => {
@@ -129,16 +145,21 @@ class TeamRegistrations extends Component {
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             //called api
+            this.handleRegTableList(1);
         }
     }
 
     onChangeSearchText = async (e) => {
-        console.log(e)
+        let value = e.target.value;
+        await this.setState({ searchText: e.target.value })
+        if (value == null || value == "") {
+            this.handleRegTableList(1);
+        }
     }
 
     onClickSearchIcon = async () => {
-        console.log("called")
-        // this.handleRegTableList(1);
+							 
+        this.handleRegTableList(1);
     }
 
     ///////view for breadcrumb
@@ -332,42 +353,23 @@ class TeamRegistrations extends Component {
 
     ////////form content view
     contentView = () => {
-        let userRegistrationState = this.props.userRegistrationState;
-        let userRegDashboardList = [{
-            "firstName": "Marissa",
-            "lastName": "Cooper",
-            "organisation": "Netball Queensland",
-            "team": "Firebirds",
-            "userRegTeam": "Sam Obrien",
-            "userRole": "Manager",
-            teamRegType: "Individuals to Pay",
-            status: "Not Registered"
-        }, {
-            "firstName": "Samir",
-            "lastName": "singh",
-            "organisation": "Netball Queensland",
-            "team": "Firebirds",
-            "userRegTeam": "Sam Obrien",
-            "userRole": "Manager",
-            teamRegType: "User Registering Paid",
-            status: "Registered"
-        }]
-        let total = userRegistrationState.userRegDashboardListTotalCount;
+        let teamRegDashboardList = this.props.registrationState.teamRegistrationTableData;
+       
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
                         columns={columns}
-                        dataSource={userRegDashboardList}
+                        dataSource={teamRegDashboardList.teamRegistrations}
                         pagination={false}
-                        loading={userRegistrationState.onUserRegDashboardLoad === true && true}
+                        loading={this.props.registrationState.onLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userRegistrationState.userRegDashboardListPage}
-                        total={total}
+                        current={teamRegDashboardList.page.currentPage}
+                        total={teamRegDashboardList.page.totalCount}
                         onChange={(page) => this.handleRegTableList(page)}
                     />
                 </div>
@@ -401,7 +403,8 @@ function mapDispatchToProps(dispatch) {
         getGenderAction,
         getOnlyYearListAction,
         getAllCompetitionAction,
-        registrationPaymentStatusAction
+        registrationPaymentStatusAction,
+        getTeamRegistrationsAction
     }, dispatch);
 }
 
@@ -411,7 +414,8 @@ function mapStatetoProps(state) {
         userState: state.UserState,
         commonReducerState: state.CommonReducerState,
         appState: state.AppState,
-        registrationDashboardState: state.RegistrationDashboardState
+        registrationDashboardState: state.RegistrationDashboardState,
+        registrationState:state.RegistrationState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)((TeamRegistrations));

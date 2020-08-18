@@ -32,7 +32,8 @@ import {
   membershipProductDiscountTypeSaga,
   regSaveRegistrationForm,
   getMembershipproduct,
-  getDivisionsListSaga
+  getDivisionsListSaga,
+  getTeamRegistrationsSaga
 } from "./registrationSaga/registrationSaga";
 
 import {
@@ -520,4 +521,6 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_MERGE_COMPETITION_PROCESS_LOAD, competitionQuickSaga.mergeCompetitionProceedSaga)
   ////Competition Delete 
   yield takeEvery(ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD, competitionDashboardDeleteSaga)
+  
+  yield takeEvery(ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD, getTeamRegistrationsSaga);
 }
