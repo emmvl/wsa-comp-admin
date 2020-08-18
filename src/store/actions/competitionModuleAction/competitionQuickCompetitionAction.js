@@ -132,6 +132,26 @@ function quickCompetitionAddVenue(payload) {
     return action
 }
 
+function getMergeCompetitionAction() {
+    return {
+        type: ApiConstants.API_GET_MERGE_COMPETITION_LOAD,
+    }
+}
+
+function validateMergeCompetitionaction(payload) {
+    return {
+        type: ApiConstants.API_VALIDATE_MERGE_COMPETITION_LOAD,
+        payload: payload
+    }
+}
+
+function mergeCompetitionProceed(payload) {
+    return {
+        type: ApiConstants.API_MERGE_COMPETITION_PROCESS_LOAD,
+        payload: payload
+    }
+}
+
 export {
     updateQuickCompetitionData,
     updateTimeSlot,
@@ -147,5 +167,8 @@ export {
     updateSelectedTeamPlayer,
     quickCompImportDataCleanUpAction,
     quickCompetitionPlayerImportAction,
-    quickCompetitionAddVenue
+    quickCompetitionAddVenue,
+    getMergeCompetitionAction,
+    validateMergeCompetitionaction,
+    mergeCompetitionProceed
 }

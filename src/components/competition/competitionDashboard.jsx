@@ -369,6 +369,7 @@ class CompetitionDashboard extends Component {
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',
+
             onOk() {
                 // [
                 // <NavLink 

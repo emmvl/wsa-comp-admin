@@ -175,6 +175,7 @@ export default function* rootSaga() {
     fork(shopOrderSummarySaga),
     fork(shopProductSaga),
     fork(shopSettingSaga),
+    fork(shopOrderStatusSaga),
 
     // Stripe
     fork(stripeSaga),
@@ -511,6 +512,14 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_QUICK_COMPETITION_ADDVENUE_LOAD, competitionQuickSaga.quickCompetitionAddVenueSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_POSITION_TRACKING_LOAD, liveScorePositionTrackSaga)
-  ////Competition Delete
+
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD, liveScoreMainDivisionListsaga)
+
+  yield takeEvery(ApiConstants.API_GET_MERGE_COMPETITION_LOAD, competitionQuickSaga.getMergeCompetitionSaga)
+
+  yield takeEvery(ApiConstants.API_VALIDATE_MERGE_COMPETITION_LOAD, competitionQuickSaga.validateMergeCompetitionSaga)
+
+  yield takeEvery(ApiConstants.API_MERGE_COMPETITION_PROCESS_LOAD, competitionQuickSaga.mergeCompetitionProceedSaga)
+  ////Competition Delete 
   yield takeEvery(ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD, competitionDashboardDeleteSaga)
 }

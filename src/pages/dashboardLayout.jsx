@@ -228,7 +228,7 @@ class DashboardLayout extends React.Component {
     setOrganisationData(organisationData)
     this.props.clearHomeDashboardData("user")
     clearUmpireStorage()
-    history.push("./homeDashboard", { orgChange: "true" })
+    history.push("./homeDashboard", { orgChange: "changeOrg" })
     window.location.reload();
   }
 
