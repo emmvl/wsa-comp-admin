@@ -224,6 +224,7 @@ class LiveScoreAddScorer extends Component {
                             })(
                                 <InputWithHead
                                     auto_Complete='new-firstName'
+                                    type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
                                     onChange={(firstName) => this.props.liveScoreScorerUpdate(captializedString(firstName.target.value), "firstName")}
@@ -241,7 +242,7 @@ class LiveScoreAddScorer extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-lastName'
+                                    // auto_Complete='new-lastName'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
@@ -273,6 +274,7 @@ class LiveScoreAddScorer extends Component {
                             })(
                                 <InputWithHead
                                     auto_Complete='new-email'
+                                    type='email'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
@@ -289,6 +291,7 @@ class LiveScoreAddScorer extends Component {
                             })(
                                 <InputWithHead
                                     auto_Complete='new-contact'
+                                    type='number'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}

@@ -116,10 +116,12 @@ function clearFilter() {
 }
 
 ////Venue List for User Module
-function venuesListAction(payload) {
+function venuesListAction(payload, sortBy, sortOrder) {
     const action = {
         type: ApiConstants.API_VENUES_LIST_LOAD,
-        data: payload
+        data: payload,
+        sortBy,
+        sortOrder
     };
 
     return action;

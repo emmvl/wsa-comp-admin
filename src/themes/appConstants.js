@@ -1333,7 +1333,7 @@ const AppConstants = {
   backToUmpire: 'Back to all Umpires',
   assignMatch: 'Assign Match',
   generateRoster: 'Generate Roster',
-  howUmpiresAllocated: 'How Umpires Allocated',
+  howUmpiresAllocated: 'How will Umpires be Allocated?',
   umpirePrefences: "Umpire Preferences:",
   noOfMatches: 'Number of Matches they can ',
   timeBetweenUmpireMatch: 'Time between Umpiring Matches',
@@ -1536,6 +1536,9 @@ const AppConstants = {
   shipped: "Shipped",
   extraTime: "Extra Time",
   compDeleteConfirm: 'Are you sure you want to delete this competition?',
+  createRoster: "Create Roster",
+  addliveStream: 'Add Live-Stream',
+  liveStreamlink: "Live-Stream Link",
   uponRegistration: "Upon Registration",
   reg: "REG"
 };

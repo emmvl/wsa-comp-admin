@@ -14,16 +14,207 @@ import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { isArrayNotEmpty } from '../../util/helpers'
 
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
-}
 
 
 const { Content } = Layout;
 const { Option } = Select;
+
+var this_obj = null
+
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+
+    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+
+    let offset = 0
+    this_obj.props.liveScoreGoalListAction(this_obj.state.competitionId, this_obj.state.filter, this_obj.state.searchText, offset, sortBy, sortOrder)
+}
+
+const columns1 = [
+
+    {
+        title: 'Match Id',
+        dataIndex: 'matchId',
+        key: 'matchId',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+
+
+    },
+    {
+        title: 'Date',
+        dataIndex: 'startTime',
+        key: 'startTime',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('date'),
+        // render: (startTime) => <span  >{liveScore_formateDateTime(startTime)}</span>
+
+    },
+    {
+        title: 'Team',
+        dataIndex: 'teamName',
+        key: 'teamName',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('team'),
+    },
+    {
+        title: 'First Name',
+        dataIndex: 'firstName',
+        key: 'firstName',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (firstName, record) =>
+            <NavLink to={{
+                pathname: '/liveScorePlayerView',
+                state: { tableRecord: record }
+            }}>
+                <span className="input-heading-add-another pt-0" >{firstName}</span>
+            </NavLink>
+    },
+    {
+        title: 'Last Name',
+        dataIndex: 'lastName',
+        key: 'lastName',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (lastName, record) =>
+            <NavLink to={{
+                pathname: '/liveScorePlayerView',
+                state: { tableRecord: record }
+            }}>
+                <span className="input-heading-add-another pt-0" >{lastName}</span>
+            </NavLink>
+    },
+    {
+        title: 'Position',
+        dataIndex: 'gamePositionName',
+        key: 'gamePositionName',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('position'),
+
+    },
+    {
+        title: 'Misses',
+        dataIndex: 'miss',
+        key: 'miss',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('misses'),
+    },
+
+    {
+        title: 'Goals',
+        dataIndex: 'goal',
+        key: 'goal',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('goals'),
+
+    },
+    {
+        title: 'Attempts',
+        dataIndex: 'attempts',
+        key: 'attempts',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    },
+    {
+        title: 'Goals%',
+        dataIndex: 'goal_percent',
+        key: 'goal_percent',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('goalPercent'),
+    },
+]
+
+const columns2 = [
+    {
+        title: 'Team',
+        dataIndex: 'teamName',
+        key: 'teamName1',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('team'),
+    },
+    {
+        title: 'First Name',
+        dataIndex: 'firstName',
+        key: 'firstName1',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (firstName, record) => {
+            console.log(record, 'recordCheck')
+
+            return (
+                <NavLink to={{
+                    pathname: '/liveScorePlayerView',
+                    state: { tableRecord: record }
+                }}>
+                    <span className="input-heading-add-another pt-0" >{firstName}</span>
+                </NavLink>
+            )
+        }
+    },
+    {
+        title: 'Last Name',
+        dataIndex: 'lastName',
+        key: 'lastName1',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (lastName, record) =>
+            <NavLink to={{
+                pathname: '/liveScorePlayerView',
+                state: { tableRecord: record }
+            }}>
+                <span className="input-heading-add-another pt-0" >{lastName}</span>
+            </NavLink>
+    },
+    {
+        title: 'Position',
+        dataIndex: 'gamePositionName',
+        key: 'gamePositionName1',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('position'),
+    },
+    {
+        title: 'Misses',
+        dataIndex: 'miss',
+        key: 'miss1',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('misses'),
+    },
+    {
+        title: 'Goals',
+        dataIndex: 'goal',
+        key: 'goal1',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('goals'),
+    },
+    {
+        title: 'Attempts',
+        dataIndex: 'attempts',
+        key: 'attempts1',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('attempts'),
+    },
+    {
+        title: 'Goals%',
+        dataIndex: 'goal_percent',
+        key: 'goal_percent1',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('goalPercent'),
+    },
+]
 
 
 class LiveScoreGoalList extends Component {
@@ -34,164 +225,10 @@ class LiveScoreGoalList extends Component {
             teamSelection: "WSA 1",
             selectStatus: "Select Status",
             filter: "By Match",
-
-            columns1: [
-
-                {
-                    title: 'Match Id',
-                    dataIndex: 'matchId',
-                    key: 'matchId',
-                    sorter: (a, b) => tableSort(a, b, "matchId"),
-
-
-                },
-                {
-                    title: 'Date',
-                    dataIndex: 'startTime',
-                    key: 'startTime',
-                    sorter: (a, b) => tableSort(a, b, "startTime"),
-                    // render: (startTime) => <span  >{liveScore_formateDateTime(startTime)}</span>
-
-                },
-                {
-                    title: 'Team',
-                    dataIndex: 'teamName',
-                    key: 'teamName',
-                    sorter: (a, b) => tableSort(a, b, "teamName"),
-                },
-                {
-                    title: 'First Name',
-                    dataIndex: 'firstName',
-                    key: 'firstName',
-                    sorter: (a, b) => tableSort(a, b, "firstName"),
-                    render: (firstName, record) =>
-                        <NavLink to={{
-                            pathname: '/liveScorePlayerView',
-                            state: { tableRecord: record }
-                        }}>
-                            <span className="input-heading-add-another pt-0" >{firstName}</span>
-                        </NavLink>
-                },
-                {
-                    title: 'Last Name',
-                    dataIndex: 'lastName',
-                    key: 'lastName',
-                    sorter: (a, b) => tableSort(a, b, 'lastName'),
-                    render: (lastName, record) =>
-                        <NavLink to={{
-                            pathname: '/liveScorePlayerView',
-                            state: { tableRecord: record }
-                        }}>
-                            <span className="input-heading-add-another pt-0" >{lastName}</span>
-                        </NavLink>
-                },
-                {
-                    title: 'Position',
-                    dataIndex: 'gamePositionName',
-                    key: 'gamePositionName',
-                    sorter: (a, b) => tableSort(a, b, "gamePositionName"),
-
-                },
-                {
-                    title: 'Misses',
-                    dataIndex: 'miss',
-                    key: 'miss',
-                    sorter: (a, b) => tableSort(a, b, "miss"),
-                },
-
-                {
-                    title: 'Goals',
-                    dataIndex: 'goal',
-                    key: 'goal',
-                    sorter: (a, b) => tableSort(a, b, "goal"),
-
-                },
-                {
-                    title: 'Attempts',
-                    dataIndex: 'attempts',
-                    key: 'attempts',
-                    sorter: (a, b) => tableSort(a, b, "attempts"),
-                },
-                {
-                    title: 'Goals%',
-                    dataIndex: 'goal_percent',
-                    key: 'goal_percent',
-                    sorter: (a, b) => tableSort(a, b, "goal_percent"),
-                },
-            ],
-            columns2: [
-                {
-                    title: 'Team',
-                    dataIndex: 'teamName',
-                    key: 'teamName1',
-                    sorter: (a, b) => tableSort(a, b, "teamName"),
-                },
-                {
-                    title: 'First Name',
-                    dataIndex: 'firstName',
-                    key: 'firstName1',
-                    sorter: (a, b) => tableSort(a, b, "firstName"),
-                    render: (firstName, record) =>
-                   {
-                    console.log(record,'recordCheck')
-                        
-                       return(
-                        <NavLink to={{
-                            pathname: '/liveScorePlayerView',
-                            state: { tableRecord: record }
-                        }}>
-                            <span className="input-heading-add-another pt-0" >{firstName}</span>
-                        </NavLink>
-                       )
-                   }
-                },
-                {
-                    title: 'Last Name',
-                    dataIndex: 'lastName',
-                    key: 'lastName1',
-                    sorter: (a, b) => tableSort(a, b, 'lastName'),
-                    render: (lastName, record) =>
-                        <NavLink to={{
-                            pathname: '/liveScorePlayerView',
-                            state: { tableRecord: record }
-                        }}>
-                            <span className="input-heading-add-another pt-0" >{lastName}</span>
-                        </NavLink>
-                },
-                {
-                    title: 'Position',
-                    dataIndex: 'gamePositionName',
-                    key: 'gamePositionName1',
-                    sorter: (a, b) => tableSort(a, b, "gamePositionName"),
-                },
-                {
-                    title: 'Misses',
-                    dataIndex: 'miss',
-                    key: 'miss1',
-                    sorter: (a, b) => tableSort(a, b, "miss"),
-                },
-                {
-                    title: 'Goals',
-                    dataIndex: 'goal',
-                    key: 'goal1',
-                    sorter: (a, b) => tableSort(a, b, "goal"),
-                },
-                {
-                    title: 'Attempts',
-                    dataIndex: 'attempts',
-                    key: 'attempts1',
-                    sorter: (a, b) => tableSort(a, b, "attempts"),
-                },
-                {
-                    title: 'Goals%',
-                    dataIndex: 'goal_percent',
-                    key: 'goal_percent1',
-                    sorter: (a, b) => tableSort(a, b, "goal_percent"),
-                },
-            ],
             competitionId: null,
             searchText: "",
         }
+        this_obj = this
     }
 
     componentDidMount() {
@@ -332,7 +369,7 @@ class LiveScoreGoalList extends Component {
 
     ////////form content view
     contentView = () => {
-        const { result, totalCount,currentPage } = this.props.liveScoreGoalState;
+        const { result, totalCount, currentPage } = this.props.liveScoreGoalState;
         let goalList = isArrayNotEmpty(result) ? result : [];
 
         return (
@@ -340,8 +377,8 @@ class LiveScoreGoalList extends Component {
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.liveScoreGoalState.onLoad === true && true}
-                        className="home-dashboard-table" 
-                        columns={this.state.filter === "By Match" ? this.state.columns1 : this.state.columns2}
+                        className="home-dashboard-table"
+                        columns={this.state.filter === "By Match" ? columns1 : columns2}
                         dataSource={goalList}
                         pagination={false}
                         rowKey={(record, index) => 'goalList' + index}

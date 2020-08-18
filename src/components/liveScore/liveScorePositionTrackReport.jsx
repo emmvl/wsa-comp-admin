@@ -13,47 +13,73 @@ import { isArrayNotEmpty } from "../../util/helpers";
 
 const { Content } = Layout;
 const { Option } = Select;
+var this_obj = null
 
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+
+    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+
+    const body =
+    {
+        "paging": {
+            "limit": 10,
+            "offset": this_obj.state.offset
+        }
+    }
+
+    this_obj.props.liveScorePositionTrackingAction({ compId: this_obj.state.competitionId, aggregate: this_obj.state.aggregate, reporting: this_obj.state.reporting, pagination: body, search: this_obj.state.searchText, sortBy: sortBy, sortOrder: sortOrder })
 }
-
-var _this = null
 
 const columns_1 = [
     {
         title: 'Match Id',
         dataIndex: 'matchId',
         key: 'matchId',
-        sorter: (a, b) => tableSort(a, b, "teamName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('matchId'),
     },
     {
         title: 'Team',
         dataIndex: 'teamName',
         key: 'teamName',
-        sorter: (a, b) => tableSort(a, b, "teamName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('team'),
     },
     {
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => tableSort(a, b, "firstName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('firstName'),
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => tableSort(a, b, "lastName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('lastName'),
 
     },
     {
         title: 'GS',
         dataIndex: 'gs',
         key: 'gs',
-        sorter: (a, b) => tableSort(a, b, "gs"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('gs'),
         render: (gs, records) =>
             <span nowrap className="column-width-style" >{gs} </span>
     },
@@ -61,7 +87,8 @@ const columns_1 = [
         title: 'GA',
         dataIndex: 'ga',
         key: 'ga',
-        sorter: (a, b) => tableSort(a, b, "ga"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('ga'),
         render: (ga, records) =>
             <span nowrap className="column-width-style" >{ga} </span>
     },
@@ -69,7 +96,8 @@ const columns_1 = [
         title: 'WA',
         dataIndex: 'wa',
         key: 'wa',
-        sorter: (a, b) => tableSort(a, b, "wa"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('wa'),
         render: (wa, records) =>
             <span nowrap className="column-width-style" >{wa} </span>
     },
@@ -77,7 +105,8 @@ const columns_1 = [
         title: 'C',
         dataIndex: 'c',
         key: 'c',
-        sorter: (a, b) => tableSort(a, b, "c"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('c'),
         render: (c, records) =>
             <span nowrap className="column-width-style" >{c} </span>
     },
@@ -85,7 +114,8 @@ const columns_1 = [
         title: 'WD',
         dataIndex: 'wd',
         key: 'wd',
-        sorter: (a, b) => tableSort(a, b, "wd"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('wd'),
         render: (wd, records) =>
             <span nowrap className="column-width-style" >{wd} </span>
     },
@@ -93,7 +123,8 @@ const columns_1 = [
         title: 'GD',
         dataIndex: 'gd',
         key: 'gd',
-        sorter: (a, b) => tableSort(a, b, "gd"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('gd'),
         render: (gd, records) =>
             <span nowrap className="column-width-style" >{gd} </span>
     },
@@ -101,7 +132,8 @@ const columns_1 = [
         title: 'GK',
         dataIndex: 'gk',
         key: 'gk',
-        sorter: (a, b) => tableSort(a, b, "gk"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('gk'),
         render: (gk, records) =>
             <span nowrap className="column-width-style" >{gk} </span>
     },
@@ -109,7 +141,8 @@ const columns_1 = [
         title: "Played",
         dataIndex: 'played',
         key: 'played',
-        sorter: (a, b) => tableSort(a, b, "played"),
+        sorter: false,
+        // onHeaderCell: ({ dataIndex }) => listeners('played'),
         render(played, record) {
             return {
                 props: {
@@ -123,7 +156,8 @@ const columns_1 = [
         title: "Bench",
         dataIndex: 'bench',
         key: 'bench',
-        sorter: (a, b) => tableSort(a, b, "bench"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('bench'),
         render(bench, record) {
             return {
                 props: {
@@ -137,7 +171,8 @@ const columns_1 = [
         title: "No Play",
         dataIndex: 'noPlay',
         key: 'noPlay',
-        sorter: (a, b) => tableSort(a, b, "noPlay"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('noPlay'),
         render(noPlay, record) {
             return {
                 props: {
@@ -154,26 +189,30 @@ const columns_2 = [
         title: 'Team',
         dataIndex: 'teamName',
         key: 'teamName',
-        sorter: (a, b) => tableSort(a, b, "teamName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('team'),
     },
     {
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => tableSort(a, b, "firstName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('firstName'),
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => tableSort(a, b, "lastName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('lastName'),
 
     },
     {
         title: 'GS',
         dataIndex: 'gs',
         key: 'gs',
-        sorter: (a, b) => tableSort(a, b, "gs"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('gs'),
         render: (gs, records) =>
             <span nowrap className="column-width-style" >{gs} </span>
     },
@@ -181,7 +220,8 @@ const columns_2 = [
         title: 'GA',
         dataIndex: 'ga',
         key: 'ga',
-        sorter: (a, b) => tableSort(a, b, "ga"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('ga'),
         render: (ga, records) =>
             <span nowrap className="column-width-style" >{ga} </span>
     },
@@ -189,7 +229,8 @@ const columns_2 = [
         title: 'WA',
         dataIndex: 'wa',
         key: 'wa',
-        sorter: (a, b) => tableSort(a, b, "wa"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('wa'),
         render: (wa, records) =>
             <span nowrap className="column-width-style" >{wa} </span>
     },
@@ -197,7 +238,8 @@ const columns_2 = [
         title: 'C',
         dataIndex: 'c',
         key: 'c',
-        sorter: (a, b) => tableSort(a, b, "c"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('c'),
         render: (c, records) =>
             <span nowrap className="column-width-style" >{c} </span>
     },
@@ -205,7 +247,8 @@ const columns_2 = [
         title: 'WD',
         dataIndex: 'wd',
         key: 'wd',
-        sorter: (a, b) => tableSort(a, b, "wd"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('wd'),
         render: (wd, records) =>
             <span nowrap className="column-width-style" >{wd} </span>
     },
@@ -213,7 +256,8 @@ const columns_2 = [
         title: 'GD',
         dataIndex: 'gd',
         key: 'gd',
-        sorter: (a, b) => tableSort(a, b, "gd"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('gd'),
         render: (gd, records) =>
             <span nowrap className="column-width-style" >{gd} </span>
     },
@@ -221,7 +265,8 @@ const columns_2 = [
         title: 'GK',
         dataIndex: 'gk',
         key: 'gk',
-        sorter: (a, b) => tableSort(a, b, "gk"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('gk'),
         render: (gk, records) =>
             <span nowrap className="column-width-style" >{gk} </span>
     },
@@ -229,11 +274,12 @@ const columns_2 = [
         title: "Played",
         dataIndex: 'played',
         key: 'played',
-        sorter: (a, b) => tableSort(a, b, "played"),
+        sorter: false,
+        // onHeaderCell: ({ dataIndex }) => listeners('played'),
         render(played, record) {
             return {
                 props: {
-                    style: { backgroundColor: "rgb(248, 225, 209)" }
+                    style: { background: "rgb(248, 225, 209)" }
                 },
                 children: <div>{played}</div>
             };
@@ -243,27 +289,14 @@ const columns_2 = [
         title: "Bench",
         dataIndex: 'bench',
         key: 'bench',
-        sorter: (a, b) => tableSort(a, b, "bench"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('bench'),
         render(bench, record) {
             return {
                 props: {
-                    style: { backgroundColor: "rgb(248, 225, 209)", }
+                    style: { background: "rgb(248, 225, 209)" }
                 },
                 children: <div>{bench}</div>
-            };
-        }
-    },
-    {
-        title: "No Play",
-        dataIndex: 'noPlay',
-        key: 'noPlay',
-        sorter: (a, b) => tableSort(a, b, "noPlay"),
-        render(noPlay, record) {
-            return {
-                props: {
-                    style: { backgroundColor: "rgb(248, 225, 209)" }
-                },
-                children: <div>{noPlay}</div>
             };
         }
     },
@@ -276,9 +309,10 @@ class LiveScorePositionTrackReport extends Component {
             competitionId: null,
             searchText: "",
             reporting: 'PERIOD',
-            aggregate: 'MATCH'
+            aggregate: 'MATCH',
+            offset: 0
         }
-        _this = this
+        this_obj = this
     }
 
     componentDidMount() {
@@ -356,6 +390,7 @@ class LiveScorePositionTrackReport extends Component {
                 "offset": offset
             }
         }
+        this.setState({ offset: offset })
         this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
 
 

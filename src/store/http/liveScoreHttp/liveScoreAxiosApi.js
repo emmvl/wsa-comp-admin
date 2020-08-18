@@ -108,7 +108,8 @@ let LiveScoreAxiosApi = {
         return Method.dataDelete(url, localStorage.token)
     },
 
-    liveScoreCompetition(data, year, orgKey, recordUmpireTypes) {
+    liveScoreCompetition(data, year, orgKey, recordUmpireTypes, sortBy, sortOrder) {
+        console.log(data, year, orgKey, recordUmpireTypes, sortBy, sortOrder)
         let url = null;
         if (orgKey) {
             if (recordUmpireTypes) {
@@ -118,6 +119,10 @@ let LiveScoreAxiosApi = {
             }
         } else {
             url = `/competitions/admin`;
+        }
+
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
 
         if (data) {
@@ -416,12 +421,16 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreGoalList(compId, goaltype, search, offset) {
+    liveScoreGoalList(compId, goaltype, search, offset, sortBy, sortOrder) {
         let url = null
         if (goaltype === "By Match") {
             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}`
         } else if (goaltype === "Total") {
             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}`
+        }
+
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
 
         return Method.dataGet(url, token)
@@ -619,7 +628,7 @@ let LiveScoreAxiosApi = {
     },
 
     /// get Game Time statistics api
-    gameTimeStatistics(competitionId, aggregate, offset, searchText) {
+    gameTimeStatistics(competitionId, aggregate, offset, searchText, sortBy, sortOrder) {
         let Body = {
             "paging": {
                 "limit": 10,
@@ -632,6 +641,10 @@ let LiveScoreAxiosApi = {
             url = `/stats/gametime?competitionId=${competitionId}&aggregate=${aggregate.toUpperCase()}`;
         } else {
             url = `/stats/gametime?competitionId=${competitionId}&aggregate=""`;
+        }
+
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
         return Method.dataPost(url, localStorage.token, Body)
     },
@@ -809,12 +822,16 @@ let LiveScoreAxiosApi = {
     },
 
     // Get Teams with pagination
-    getTeamWithPagging(competitionID, offset, limit, search) {
+    getTeamWithPagging(competitionID, offset, limit, search, sortBy, sortOrder) {
         let url = null
         if (search && search.length > 0) {
             url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
         } else {
             url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
+        }
+
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         }
 
         return Method.dataGet(url, localStorage.token)
@@ -1100,11 +1117,21 @@ let LiveScoreAxiosApi = {
             url = `/stats/positionTracking?aggregate=${data.aggregate}&reporting=${data.reporting}&competitionId=${data.compId}&search=${data.search}`;
         }
 
+        if (data.sortBy && data.sortOrder) {
+            url += `&sortBy=${data.sortBy}&sortOrder=${data.sortOrder}`;
+        }
+
         return Method.dataPost(url, token, body)
     },
-    liveScoreGetMainDivisionList(compId, offset) {
+    liveScoreGetMainDivisionList(compId, offset, sortBy, sortOrder) {
 
-        let url = `/division?competitionId=${compId}&offset=${offset}&limit=${10}`
+        let url
+
+        url = `/division?competitionId=${compId}&offset=${offset}&limit=${10}`
+
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
 
         return Method.dataGet(url, null)
     },
