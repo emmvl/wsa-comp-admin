@@ -390,7 +390,7 @@ const AppConstants = {
   dayOfTheWeek: 'Day of the week',
   startTime: 'Start Time',
   endTime: 'End Time',
-  addAnotherDay: 'Add another day',
+  addAnotherDay: 'Add day',
   courts: 'Courts',
   lesHughesSportingComplex: 'Les Hughes Sporting Complex',
   applyTo: 'Apply to',
