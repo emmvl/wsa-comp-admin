@@ -1450,7 +1450,7 @@ const AppConstants = {
   allOrganisation: 'All Organisations',
   indivisualOrgnisation: 'Individual Organisations',
   firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
-  secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/School",
+  secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/ School",
   teamSeasonalFee: 'Team Seasonal Fee',
   instalmentDate: "Instalment Date",
   addInstalmentDate: "+ Add Instalment date",
@@ -1534,13 +1534,19 @@ const AppConstants = {
   refundPartialAmount: "Refund Partial Amount",
   pickedUp: "Picked up",
   shipped: "Shipped",
+  orderDetails: 'Order Details',
+  order: "Order",
+  shippingAndBillingAddress: "Shipping and Billing Address",
+  orderFulfilment: "Order Fulfilment",
+  capturePayment: "Capture Payment",
+  receiptUrl:"Receipt Url",
   extraTime: "Extra Time",
   compDeleteConfirm: 'Are you sure you want to delete this competition?',
   createRoster: "Create Roster",
   addliveStream: 'Add Live-Stream',
   liveStreamlink: "Live-Stream Link",
   uponRegistration: "Upon Registration",
-  reg: "REG"
+  reg: "REG",
 };
 
 export default AppConstants;

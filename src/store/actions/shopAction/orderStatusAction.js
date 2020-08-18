@@ -18,9 +18,19 @@ function updateOrderStatusAction(payload) {
     return action;
 }
 
+///order details get API 
+function getOrderDetailsAction(id) {
+    const action = {
+        type: ApiConstants.API_GET_ORDER_DETAILS_LOAD,
+        id
+    };
+    return action;
+}
+
 export {
     getOrderStatusListingAction,
     updateOrderStatusAction,
+    getOrderDetailsAction,
 }
 
 

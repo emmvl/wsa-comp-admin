@@ -618,9 +618,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         }, 300)
     }
 
-    getCourtRotationId(data, key) {
-
-
+    getCourtRotationId=(data, key)=> {
         switch (key) {
 
             case "timeSlotPref":
@@ -1058,6 +1056,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         < Select
                             mode='multiple'
                             disabled={disabledStatus}
+                            id={AppUniqueId.timeRotation_matchDuration_AdddivisionTimeslotOrderTextField}                                                    
                             // className="pt-3"
                             placeholder="Select"
                             // value={item.timeSlotEntityManualkeyArr}

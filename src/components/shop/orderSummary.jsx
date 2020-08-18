@@ -105,12 +105,12 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (id, record) =>
-            // <NavLink to={{
-            //     pathname: `/userPersonal`,
-            //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
-            // }}>
-            <span className="input-heading-add-another pt-0" >{id}</span>
-        // </NavLink>
+            <NavLink to={{
+                pathname: `/orderStatus`,
+                state: { orderId: id }
+            }}>
+                <span className="input-heading-add-another pt-0" >{id}</span>
+            </NavLink>
     },
     {
         title: 'Paid',
