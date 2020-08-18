@@ -1,6 +1,9 @@
 @import "../themes/colorVariables.css";
 /* antd input overrided styles */
-
+.ant-btn-danger{
+  background-color:var(--app-color) !important;
+  border-color: var(--app-color) !important;
+}
 .ant-input-affix-wrapper:hover .ant-input:not(.ant-input-disabled) {
   border-color: var(--app-color);
   border-right-width: 1px !important;

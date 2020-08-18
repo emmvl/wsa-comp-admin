@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Radio, Select } from 'antd';
+import { Layout, Breadcrumb, Button, Radio, Select, message, Modal } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -8,11 +8,13 @@ import history from "../../util/history";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import Loader from "../../customComponents/loader";
-import { updateSelectedTeamPlayer, getYearAndQuickCompetitionAction } from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction"
+import { updateSelectedTeamPlayer, getMergeCompetitionAction, quickCompImportDataCleanUpAction, validateMergeCompetitionaction, mergeCompetitionProceed } from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction"
 import ImportTeamPlayerModal from "../../customComponents/importTeamPlayerModal"
 import { getYearAndCompetitionOwnAction } from '../../store/actions/appAction'
+import ValidationConstants from "../../themes/validationConstant";
 const { Option } = Select;
 const { Header, Footer, Content } = Layout;
+const { confirm } = Modal
 
 class QuickCompetitionInvitations extends Component {
     constructor(props) {
@@ -22,17 +24,21 @@ class QuickCompetitionInvitations extends Component {
             importModalVisible: false,
             yearRefId: 1,
             competitionId: null,
-            importPlayer: 0
-
+            importPlayer: 0,
+            selectedMergeComptition: null,
+            invitationLoad: false,
+            mergeValidateVisible: false,
+            onProcessMergeCompetition: false
         }
     }
 
     componentDidMount() {
+        this.props.quickCompImportDataCleanUpAction("all")
         let competitionId = this.props.location.state ? this.props.location.state.competitionUniqueKey : null
         let year = this.props.location.state && this.props.location.state.year
         let importPlayerValue = this.props.location.state && this.props.location.state.importPlayer
         if (competitionId && importPlayerValue) {
-            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, year, "own_competition")
+            this.props.getMergeCompetitionAction()
             this.setState({
                 competitionId: competitionId,
                 yearRefId: year,
@@ -45,6 +51,58 @@ class QuickCompetitionInvitations extends Component {
 
     }
 
+    componentDidUpdate(nextprops) {
+        let mergeValidateState = this.props.quickCompetitionState.mergeValidate
+        if (this.props.quickCompetitionState.onInvitationLoad == false && this.state.invitationLoad == true) {
+            if (nextprops.mergeValidateState != this.props.quickCompetitionState.mergeValidate) {
+                this.setState({
+                    mergeValidateVisible: mergeValidateState
+                })
+                this.showPropsConfirm()
+            }
+            this.setState({
+                invitationLoad: false
+            })
+        }
+        if (this.props.quickCompetitionState.onInvitationLoad == false && this.state.onProcessMergeCompetition == true) {
+            this.setState({
+                onProcessMergeCompetition: false
+            })
+            history.push("/quickCompetitionMatchFormat", { competitionUniqueKey: this.props.quickCompetitionState.newSelectedCompetition, year: this.state.yearRefId })
+        }
+    }
+
+    showPropsConfirm = () => {
+        console.log(this.props.quickCompetitionState)
+        let this_ = this
+        confirm({
+            title: 'do you want to merge with the selected competition?',
+            okText: 'Proceed',
+            okType: 'danger',
+            cancelText: 'cancel',
+            mask: true,
+            maskClosable: true,
+            onOk() {
+                this_.ValidateProceed()
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
+
+
+    ValidateProceed = () => {
+        let payload = {
+            "registrationCompetitionId": this.state.selectedMergeComptition,
+            "quickCompetitionId": this.state.competitionId
+        }
+
+        this.props.mergeCompetitionProceed(payload)
+        this.setState({
+            onProcessMergeCompetition: true
+        })
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -63,27 +121,20 @@ class QuickCompetitionInvitations extends Component {
 
     //merge with exsiting competition
     mergeExistingCompetition = (subItem, seletedOption) => {
-        const { own_CompetitionArr, } = this.props.appState
+        const { mergeCompetitionList } = this.props.quickCompetitionState
         if (subItem.id == 2 && seletedOption == 2) {
             return (
-                <div>
+                <div className="pt-4 pl-4">
                     <Select
                         style={{ width: '100%', paddingRight: 1, minWidth: 182, maxWidth: 300 }}
-                        //   onChange={(associationAffilite) => {
-                        //     this.props.add_editcompetitionFeeDeatils(
-                        //       associationAffilite,
-                        //       'associationAffilite'
-                        //     );
-                        //   }}
-                        // value={associationLeague}
+                        onChange={selectedMergeComptition => this.setState({
+                            selectedMergeComptition
+                        })
+                        }
+                        value={this.state.selectedMergeComptition}
                         placeholder={AppConstants.selectComptition}
-                        filterOption={false}
-                        //   onSearch={(value) => {
-                        //     this.onInviteeSearch(value, 3);
-                        //   }}
-                        showSearch={true}
                     >
-                        {own_CompetitionArr.length > 0 && own_CompetitionArr.map((item, index) => {
+                        {mergeCompetitionList.length > 0 && mergeCompetitionList.map((item, index) => {
                             return (
                                 <Option key={index + item.competitionId} value={item.competitionId}>
                                     {item.competitionName}
@@ -91,8 +142,11 @@ class QuickCompetitionInvitations extends Component {
                             );
                         })}
                     </Select>
-                </div>
+                </div >
             )
+
+        }
+        else {
 
         }
     }
@@ -101,7 +155,7 @@ class QuickCompetitionInvitations extends Component {
 
     ////////form content view
     contentView = () => {
-        const { teamPlayerArray, SelectedTeamPlayer, importModalVisible, importPlayer } = this.props.quickCompetitionState
+        const { teamPlayerArray, selectedTeamPlayer, importModalVisible, importPlayer } = this.props.quickCompetitionState
         return (
             <div className="content-view pt-5 mt-0 ">
                 <span className='form-heading'>{AppConstants.how_Add_teams_players}</span>
@@ -110,10 +164,10 @@ class QuickCompetitionInvitations extends Component {
                     onChange={(e) =>
                         this.props.updateSelectedTeamPlayer(
                             e.target.value,
-                            'SelectedTeamPlayer'
+                            'selectedTeamPlayer'
                         )
                     }
-                    value={SelectedTeamPlayer}
+                    value={selectedTeamPlayer}
                 >
                     {(teamPlayerArray || []).map(
                         (item, index) => {
@@ -122,7 +176,7 @@ class QuickCompetitionInvitations extends Component {
                                     <Radio disabled={item.id == 1 && this.state.importPlayer == 1 ? true : false} value={item.id}>{item.value}</Radio>
                                     {this.mergeExistingCompetition(
                                         item,
-                                        SelectedTeamPlayer
+                                        selectedTeamPlayer
                                     )}
                                 </div>
                             )
@@ -170,12 +224,45 @@ class QuickCompetitionInvitations extends Component {
     }
 
     onCompFormatPress() {
-        history.push("/quickCompetitionMatchFormat", { competitionUniqueKey: this.state.competitionId, year: this.state.yearRefId })
+        const { selectedTeamPlayer, } = this.props.quickCompetitionState
+        console.log(selectedTeamPlayer, this.state.importPlayer)
+        if (selectedTeamPlayer !== 0 || this.state.importPlayer == 1) {
+            if (this.state.selectedMergeComptition !== null && selectedTeamPlayer == 2) {
+                let payload = {
+                    registrationCompetitionId: this.state.selectedMergeComptition,
+                    quickCompetitionId: this.state.competitionId
+                }
+                this.props.validateMergeCompetitionaction(payload)
+                this.setState({
+                    invitationLoad: true,
+                    mergeValidateVisible: false
+                })
+            }
+            else if (selectedTeamPlayer == 2 && this.state.selectedMergeComptition == null) {
+                message.config({
+                    maxCount: 1,
+                    duration: 0.9
+                })
+                message.warn(ValidationConstants.pleaseSelectCompetition)
+            }
+            else if (selectedTeamPlayer == 1) {
+                history.push("/quickCompetitionMatchFormat", { competitionUniqueKey: this.state.competitionId, year: this.state.yearRefId })
+
+            }
+        }
+        else {
+            message.config({
+                maxCount: 1,
+                duration: 0.9
+            })
+            message.warn(ValidationConstants.pleaseSelectOneOption)
+        }
     }
 
 
 
     render() {
+        console.log(this.state.mergeValidateVisible)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
@@ -199,7 +286,10 @@ class QuickCompetitionInvitations extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateSelectedTeamPlayer,
-        getYearAndCompetitionOwnAction
+        getMergeCompetitionAction,
+        quickCompImportDataCleanUpAction,
+        validateMergeCompetitionaction,
+        mergeCompetitionProceed
     }, dispatch)
 }
 

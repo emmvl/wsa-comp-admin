@@ -310,3 +310,59 @@ export function* quickCompetitionAddVenueSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+//competition get merge quick competition
+export function* getMergeCompetitionSaga(action) {
+    try {
+        const result = yield call(AxiosApi.getMergeCompetitionApi);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_MERGE_COMPETITION_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+//competition validate merge quick competition
+export function* validateMergeCompetitionSaga(action) {
+    try {
+        const result = yield call(AxiosApi.validateMergeCompetitionApi, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_VALIDATE_MERGE_COMPETITION_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                validateSuccess: true,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+//competition validate merge quick competition
+export function* mergeCompetitionProceedSaga(action) {
+    try {
+        const result = yield call(AxiosApi.mergeCompetitionProceedApi, action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_MERGE_COMPETITION_PROCESS_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                selectedCompetitionId: action.payload.registrationCompetitionId,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

@@ -270,7 +270,7 @@ function getTimeSlotEntity(data, id) {
 
 
 // time Slot entity key 
-function getTimeSlotEntityObj(selectedEntityArray, value, mainId, index, ) {
+function getTimeSlotEntityObj(selectedEntityArray, value, mainId, index,) {
     let modifiedEntityKeyArray = []
     let modifiedEntityArray = []
     for (let j in value) {
@@ -285,11 +285,11 @@ function getTimeSlotEntityObj(selectedEntityArray, value, mainId, index, ) {
         }
         else {
             timeSlotEntityObject =
-                {
-                    "competitionVenueTimeslotEntityId": 0,
-                    "venuePreferenceTypeRefId": mainId == 4 ? 1 : 2,
-                    "venuePreferenceEntityId": value[j]
-                }
+            {
+                "competitionVenueTimeslotEntityId": 0,
+                "venuePreferenceTypeRefId": mainId == 4 ? 1 : 2,
+                "venuePreferenceEntityId": value[j]
+            }
         }
         modifiedEntityArray.push(timeSlotEntityObject)
     }
@@ -591,6 +591,7 @@ function CompetitionTimeSlots(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+                onGetTimeSlotLoad: false,
                 error: action.error,
                 status: action.status
             };
@@ -599,6 +600,7 @@ function CompetitionTimeSlots(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+                onGetTimeSlotLoad: false,
                 error: action.error,
                 status: action.status
             };
