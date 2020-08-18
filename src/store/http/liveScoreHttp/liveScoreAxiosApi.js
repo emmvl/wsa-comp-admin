@@ -208,7 +208,7 @@ let LiveScoreAxiosApi = {
         if (divisionId) {
             url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
         } else {
-            url = `/round?competitionId=${competitionID}&divisionId=${divisionId}`;
+            url = `/round?competitionId=${competitionID}`;
         }
 
         return Method.dataGet(url, localStorage.token)

@@ -15,6 +15,12 @@ const { Content } = Layout;
 const { Option } = Select;
 var this_obj = null
 
+function sorting(a, b, key) {
+    let stringA = JSON.stringify(a[key])
+    let stringB = JSON.stringify(b[key])
+    return stringA.localeCompare(stringB)
+}
+
 //listeners for sorting
 const listeners = (key) => ({
     onClick: () => tableSort(key),
@@ -141,8 +147,8 @@ const columns_1 = [
         title: "Played",
         dataIndex: 'played',
         key: 'played',
-        sorter: false,
-        // onHeaderCell: ({ dataIndex }) => listeners('played'),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('played'),
         render(played, record) {
             return {
                 props: {
@@ -274,8 +280,8 @@ const columns_2 = [
         title: "Played",
         dataIndex: 'played',
         key: 'played',
-        sorter: false,
-        // onHeaderCell: ({ dataIndex }) => listeners('played'),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('played'),
         render(played, record) {
             return {
                 props: {
@@ -301,6 +307,146 @@ const columns_2 = [
         }
     },
 ];
+
+const percentColumn = [
+    {
+        title: 'Match Id',
+        dataIndex: 'matchId',
+        key: 'matchId',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('matchId'),
+    },
+    {
+        title: 'Team',
+        dataIndex: 'teamName',
+        key: 'teamName',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('team'),
+    },
+    {
+        title: 'First Name',
+        dataIndex: 'firstName',
+        key: 'firstName',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('firstName'),
+    },
+    {
+        title: 'Last Name',
+        dataIndex: 'lastName',
+        key: 'lastName',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('lastName'),
+
+    },
+    {
+        title: 'GS',
+        dataIndex: 'gs',
+        key: 'gs',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('gs'),
+        render: (gs, records) =>
+            <span nowrap className="column-width-style" >{gs} </span>
+    },
+    {
+        title: 'GA',
+        dataIndex: 'ga',
+        key: 'ga',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('ga'),
+        render: (ga, records) =>
+            <span nowrap className="column-width-style" >{ga} </span>
+    },
+    {
+        title: 'WA',
+        dataIndex: 'wa',
+        key: 'wa',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('wa'),
+        render: (wa, records) =>
+            <span nowrap className="column-width-style" >{wa} </span>
+    },
+    {
+        title: 'C',
+        dataIndex: 'c',
+        key: 'c',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('c'),
+        render: (c, records) =>
+            <span nowrap className="column-width-style" >{c} </span>
+    },
+    {
+        title: 'WD',
+        dataIndex: 'wd',
+        key: 'wd',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('wd'),
+        render: (wd, records) =>
+            <span nowrap className="column-width-style" >{wd} </span>
+    },
+    {
+        title: 'GD',
+        dataIndex: 'gd',
+        key: 'gd',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('gd'),
+        render: (gd, records) =>
+            <span nowrap className="column-width-style" >{gd} </span>
+    },
+    {
+        title: 'GK',
+        dataIndex: 'gk',
+        key: 'gk',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('gk'),
+        render: (gk, records) =>
+            <span nowrap className="column-width-style" >{gk} </span>
+    },
+    {
+        title: "Played",
+        dataIndex: 'played',
+        key: 'played',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('played'),
+        render(played, record) {
+            return {
+                props: {
+                    style: { background: "rgb(248, 225, 209)" }
+                },
+                children: <div>{played}</div>
+            };
+        }
+    },
+    {
+        title: "Bench",
+        dataIndex: 'bench',
+        key: 'bench',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('bench'),
+        render(bench, record) {
+            return {
+                props: {
+                    style: { background: "rgb(248, 225, 209)" }
+                },
+                children: <div>{bench}</div>
+            };
+        }
+    },
+    {
+        title: "No Play",
+        dataIndex: 'noPlay',
+        key: 'noPlay',
+        sorter: (a, b) => sorting(a, b, "noPlay"),
+        render(noPlay, record) {
+            return {
+                props: {
+                    style: { background: "rgb(248, 225, 209)" }
+                },
+                children: <div>{noPlay}</div>
+            };
+        }
+    },
+];
+
 
 class LiveScorePositionTrackReport extends Component {
     constructor(props) {
@@ -408,7 +554,7 @@ class LiveScorePositionTrackReport extends Component {
                     <Table
                         loading={this.props.liveScorePositionTrackState.onLoad}
                         className={"home-dashboard-table"}
-                        columns={this.state.aggregate == 'MATCH' ? columns_1 : columns_2}
+                        columns={(this.state.aggregate == 'MATCH' && this.state.reporting === 'PERCENT') ? percentColumn : this.state.aggregate == 'MATCH' ? columns_1 : columns_2}
                         dataSource={positionTrackData}
                         pagination={false}
                         rowKey={(index) => 'positionTrackReport' + index}
