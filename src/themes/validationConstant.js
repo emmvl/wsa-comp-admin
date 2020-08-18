@@ -202,6 +202,7 @@ const ValidationConstants = {
     mnbMatchId: 'mnbMatchId is required',
     pleaseSelectOneOption: "Please select any option.",
     duplicateDiscountError: "Family discount is duplicated",
+	pleaseProvideInstalmentDate:"Please provide an instalment date",
 };
 
 export default ValidationConstants;

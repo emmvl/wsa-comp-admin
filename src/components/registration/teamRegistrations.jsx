@@ -32,12 +32,20 @@ const columns = [
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: (a, b) => a.firstName.localeCompare(b.firstName),
+        render: (firstName, record) =>
+        <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
+            <span className="input-heading-add-another pt-0" >{firstName}</span>
+        </NavLink>
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: (a, b) => a.lastName.localeCompare(b.lastName),
+        render: (lastName, record) =>
+        <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
+            <span className="input-heading-add-another pt-0" >{lastName}</span>
+        </NavLink>
     },
     {
         title: 'Organisation',

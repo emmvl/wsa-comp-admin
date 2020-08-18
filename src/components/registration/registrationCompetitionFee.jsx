@@ -15,6 +15,7 @@ import {
   Modal,
   message,
   Tooltip,
+  Switch		
 } from 'antd';
 import InputWithHead from '../../customComponents/InputWithHead';
 import { captializedString } from "../../util/helpers"
@@ -2098,7 +2099,43 @@ class RegistrationCompetitionFee extends Component {
     let isTeamSeasonalUponReg = this.props.competitionFeesState.competitionDetailData["isTeamSeasonalUponReg"];
     paymentDataArr["isSeasonalUponReg"] = isSeasonalUponReg!= undefined ? isSeasonalUponReg : false;
     paymentDataArr["isTeamSeasonalUponReg"] = isTeamSeasonalUponReg!= undefined? isTeamSeasonalUponReg: false;
-    this.props.competitionPaymentApi(paymentDataArr, competitionId, this.state.affiliateOrgId);
+	let selectedSeasonalFeeKey =  this.props.competitionFeesState.SelectedSeasonalFeeKey;
+    let selectedSeasonalTeamFeeKey =  this.props.competitionFeesState.selectedSeasonalTeamFeeKey;   
+    
+    // selectedSeasonalFeeKey
+
+    if( selectedSeasonalFeeKey.includes("6") || selectedSeasonalFeeKey.includes(6) || selectedSeasonalFeeKey.includes("7") || selectedSeasonalFeeKey.includes(7)){     
+        if(selectedSeasonalInstalmentDates.length == 0){
+          message.error(ValidationConstants.pleaseProvideInstalmentDate);  
+          return;         
+        }
+        else if(selectedSeasonalInstalmentDates.length > 0) {
+           let instalmentDate =  selectedSeasonalInstalmentDates.find(x=>x.instalmentDate == "")
+            if(instalmentDate){              
+              message.error(ValidationConstants.pleaseProvideInstalmentDate);  
+              return;
+            }              
+        }                
+    }
+
+    // selectedSeasonalTeamFeeKey
+
+   if (selectedSeasonalTeamFeeKey.includes("6") || selectedSeasonalTeamFeeKey.includes(6) || selectedSeasonalTeamFeeKey.includes("7") || selectedSeasonalTeamFeeKey.includes(7))
+    {
+      if(selectedTeamSeasonalInstalmentDates.length == 0){
+        message.error(ValidationConstants.pleaseProvideInstalmentDate);  
+        return;        
+      }
+      else if(selectedTeamSeasonalInstalmentDates.length > 0) {
+         let instalmentDate =  selectedTeamSeasonalInstalmentDates.find(x=>x.instalmentDate == "")
+          if(instalmentDate){              
+            message.error(ValidationConstants.pleaseProvideInstalmentDate);  
+            return;
+          }        
+      }   
+    }  
+    this.setState({ loading: true });								 
+	this.props.competitionPaymentApi(paymentDataArr, competitionId, this.state.affiliateOrgId);
   };
 
   ////check the division objects does not contain empty division array
@@ -2949,7 +2986,6 @@ class RegistrationCompetitionFee extends Component {
 
   instalmentUponReg(key, value) {
     const { TreeNode } = Tree;
-    console.log("Value" + value);
     return (
       <TreeNode title={ this.uponRegCheckBox(value, key)}
         checkable={false}
@@ -2961,13 +2997,8 @@ class RegistrationCompetitionFee extends Component {
   uponRegCheckBox(value, key){
     return (
       <div>
-          <Checkbox
-              checked={value}
-              className="single-checkbox mt-1 d-flex justify-content-center"
-              style={{alignItems: 'center'}}
-              onChange={(e) =>  this.props.instalmentDateAction(e.target.checked, key)}>
-            {AppConstants.uponRegistration}
-          </Checkbox>
+		<Switch  onChange={(e) =>  this.props.instalmentDateAction(e, key)} checked={value} style={{marginRight:10}} /> 
+        {AppConstants.uponRegistration}
       </div>
     )
   }
@@ -5663,7 +5694,9 @@ class RegistrationCompetitionFee extends Component {
     }
     this.props.updatedDiscountDataAction(discountData);
     if (keyWord == 'delete') {
-      this.setDetailsFieldValue();
+       setTimeout(() =>{
+		  this.setDetailsFieldValue();       
+	  }, 500)     
     }
   };
 
