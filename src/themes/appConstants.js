@@ -390,7 +390,7 @@ const AppConstants = {
   dayOfTheWeek: 'Day of the week',
   startTime: 'Start Time',
   endTime: 'End Time',
-  addAnotherDay: 'Add another day',
+  addAnotherDay: 'Add day',
   courts: 'Courts',
   lesHughesSportingComplex: 'Les Hughes Sporting Complex',
   applyTo: 'Apply to',
@@ -1521,8 +1521,6 @@ const AppConstants = {
   impersonationOrgSelect: "Choose an organization to access",
   numberOfOrders: "Number of Orders",
   teamRegistrations: "Team Registrations",
-  childrenCheckNumber: "Requires Working with Children Check",
-  regenerateDrawTitle: "Regenerate draw from which Round?",
 
   umpirePayments: "Umpire Payments",
   bulkPayment: "Bulk Payment",
@@ -1538,6 +1536,8 @@ const AppConstants = {
   shipped: "Shipped",
   extraTime: "Extra Time",
   compDeleteConfirm: 'Are you sure you want to delete this competition?',
+  uponRegistration: "Upon Registration",
+  reg: "REG"
 };
 
 export default AppConstants;

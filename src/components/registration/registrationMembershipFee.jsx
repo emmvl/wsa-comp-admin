@@ -265,7 +265,19 @@ class RegistrationMembershipFee extends Component {
                 }
                 else if (this.state.membershipTabKey == "3") {
                     let discountData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductDiscountData.membershipProductDiscounts[0].discounts))
+
+                    console.log("discountData", discountData);
+                    let disMap = new Map();
+                    let discountDuplicateError = false;
                     discountData.map((item) => {
+                        if(item.membershipPrdTypeDiscountTypeRefId == 3){
+                            if(disMap.get(item.membershipProductTypeMappingId) == undefined){
+                                disMap.set(item.membershipProductTypeMappingId, 1);
+                            }
+                            else{
+                                discountDuplicateError = true;
+                            }
+                        }
                         if (item.childDiscounts) {
                             if (item.childDiscounts.length == 0) {
                                 item.childDiscounts = null
@@ -298,8 +310,15 @@ class RegistrationMembershipFee extends Component {
                             }
                         ]
                     }
-                    this.props.regSaveMembershipProductDiscountAction(discountBody)
-                    this.setState({ loading: true })
+                    if(discountDuplicateError){
+                        message.config({ duration: 0.9, maxCount: 1 })
+                        message.error(ValidationConstants.duplicateDiscountError);
+                    }
+                    else{
+                        this.props.regSaveMembershipProductDiscountAction(discountBody)
+                        this.setState({ loading: true })
+                    }
+                   
                 }
             }
         });

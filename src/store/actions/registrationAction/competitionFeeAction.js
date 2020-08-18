@@ -23,12 +23,13 @@ function regCompetitionListDeleteAction(competitionId) {
 }
 
 /////get the competition fees all the data in one API
-function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sourceModule) {
+function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sourceModule, affiliateOrgId) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_FEES_DETAILS_LOAD,
         competitionId: competitionId,
         hasRegistration,
-        sourceModule: sourceModule
+        sourceModule: sourceModule,
+        affiliateOrgId: affiliateOrgId
     };
     return action;
 }
@@ -36,22 +37,24 @@ function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sour
 
 
 /////save the competition fees deatils 
-function saveCompetitionFeesDetailsAction(payload, logoOrgId, sourceModule) {
+function saveCompetitionFeesDetailsAction(payload, logoOrgId, sourceModule, affiliateOrgId) {
     const action = {
         type: ApiConstants.API_SAVE_COMPETITION_FEES_DETAILS_LOAD,
         payload: payload,
         logoOrgId,
-        sourceModule: sourceModule
+        sourceModule: sourceModule,
+        affiliateOrgId: affiliateOrgId
     };
     return action;
 }
 
 ////save the competition membership tab details
-function saveCompetitionFeesMembershipTabAction(payload, competitionId) {
+function saveCompetitionFeesMembershipTabAction(payload, competitionId, affiliateOrgId) {
     const action = {
         type: ApiConstants.API_SAVE_COMPETITION_FEES_MEMBERHSIP_TAB_LOAD,
         payload: payload,
-        competitionId: competitionId
+        competitionId: competitionId,
+        affiliateOrgId: affiliateOrgId
     };
     return action;
 }
@@ -88,11 +91,12 @@ function membershipTypeSelectedAction(checked, membershipIndex, typeIndex) {
 }
 
 /////save the division table data  in the competition fees section
-function saveCompetitionFeesDivisionAction(payload, competitionId) {
+function saveCompetitionFeesDivisionAction(payload, competitionId, affiliateOrgId) {
     const action = {
         type: ApiConstants.API_SAVE_COMPETITION_FEES_DIVISION_TAB_LOAD,
         payload: payload,
-        competitionId: competitionId
+        competitionId: competitionId,
+        affiliateOrgId: affiliateOrgId
     };
     return action;
 }
@@ -166,11 +170,12 @@ function paymentSeasonalFee() {
     return action
 }
 
-function competitionPaymentApi(value, competitionId) {
+function competitionPaymentApi(value, competitionId,affiliateOrgId) {
     const action = {
         type: ApiConstants.API_POST_COMPETITION_FEE_PAYMENT_LOAD,
         value: value,
         competitionId: competitionId,
+        affiliateOrgId: affiliateOrgId
     }
     return action
 }
@@ -217,11 +222,12 @@ function updatedDiscountMemberPrd(value, discountData, index) {
 }
 
 ////save competition fees discount
-function regSaveCompetitionFeeDiscountAction(payload, competitionId) {
+function regSaveCompetitionFeeDiscountAction(payload, competitionId, affiliateOrgId) {
     const action = {
         type: ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_LOAD,
         payload: payload,
         competitionId: competitionId,
+        affiliateOrgId: affiliateOrgId
     }
     return action
 }
@@ -248,11 +254,12 @@ function checkUncheckcompetitionFeeSction(data, parentIndex, key) {
 
 
 /// save competition fee section 
-function saveCompetitionFeeSection(data, competitionId) {
+function saveCompetitionFeeSection(data, competitionId, affiliateOrgId) {
     const action = {
         type: ApiConstants.API_SAVE_COMPETITION_FEES_SECTION_LOAD,
         data: data,
         competitionId: competitionId,
+        affiliateOrgId: affiliateOrgId
     }
     return action
 }

@@ -375,7 +375,8 @@ class HomeDashboard extends Component {
         console.log("updateActionBox::" + JSON.stringify(e));
         let obj = {
             actionsId: e.actionsId,
-            actionMasterId: e.actionMasterId
+            actionMasterId: e.actionMasterId,
+            userId: e.userId
         }
         // console.log("********" + JSON.stringify(obj));
         this.props.updateActionBoxAction(obj);

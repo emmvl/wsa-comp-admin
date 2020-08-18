@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Button, Input, Icon, DatePicker } from 'antd';
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Button, Input, Icon, DatePicker, Modal } from 'antd';
 import './user.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import { getOrganisationData } from "../../util/sessionStorage";
-import { getUserDashboardTextualAction, exportOrgRegQuestionAction } from "../../store/actions/userAction/userAction";
+import { getUserDashboardTextualAction, exportOrgRegQuestionAction, userDeleteAction } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { getGenderAction } from '../../store/actions/commonAction/commonAction';
 import moment from 'moment';
@@ -20,6 +20,7 @@ const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { SubMenu } = Menu;
 let this_Obj = null;
+const { confirm } = Modal;						  
 
 const listeners = (key) => ({
     onClick: () => tableSort(key),
@@ -152,9 +153,11 @@ const columns = [
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
-                    <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e.id)}>
+                    {e.role.find(x=>x.role == "Admin")!= undefined ? 
+                    <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e)}>
                         <span>Delete</span>
                     </Menu.Item>
+                     : null}
                 </SubMenu>
             </Menu> : null
         )
@@ -186,8 +189,15 @@ class UserTextualDashboard extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        console.log("Component componentDidUpdate");
         let userState = this.props.userState;
+		if (userState.onLoad === false && this.state.deleteLoading === true) {
+            this.setState({
+                deleteLoading: false,
+                searchText: ''
+            })
+
+            this.handleTextualTableList(1);
+        }
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
                 this.setState({
@@ -201,7 +211,40 @@ class UserTextualDashboard extends Component {
         this.props.getGenderAction();
         this.props.getOnlyYearListAction();
     }
+    showDeleteConfirm = (user) => {
+        let this_ = this
+        let name = user.name
+        confirm({
+            title: 'Do you really want to delete the user '+'"'+name+ '"'+'?',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            className:"user-delete-text",
+            onOk() {
+                this_.deleteUserId(user)
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
 
+    deleteUserId = (user) => {
+        let linkedList =  user.linked;
+        let  organisations =  [];
+        linkedList.map((item)=>{
+            let obj ={
+                linkedEntityId:item.linkedEntityId
+            }
+            organisations.push(obj);
+        })
+        let obj = {
+            userId: user.userId,
+            organisations: organisations
+        }
+        this.props.userDeleteAction(obj)
+        this.setState({ deleteLoading: true })
+    }
     onChangeDropDownValue = async (value, key) => {
         if (key == "yearRefId") {
             await this.setState({ yearRefId: value });
@@ -597,7 +640,8 @@ function mapDispatchToProps(dispatch) {
         getUserDashboardTextualAction,
         getOnlyYearListAction,
         getGenderAction,
-        exportOrgRegQuestionAction
+        exportOrgRegQuestionAction,
+		userDeleteAction					
     }, dispatch);
 
 }

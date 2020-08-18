@@ -198,7 +198,7 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/registrationCompetitionFee`, state: { id: record.competitionUniqueKey } }} >
+                        <NavLink to={{ pathname: `/registrationCompetitionFee`, state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId } }} >
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>

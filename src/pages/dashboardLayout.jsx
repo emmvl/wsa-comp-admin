@@ -83,7 +83,6 @@ class DashboardLayout extends React.Component {
       ) {
         if (this.state.logout) {
           await localStorage.clear();
-          history.push("/");
           window.location.reload();
         } else if (!this.state.dataOnload) {
           this.props.getUserOrganisationAction();
@@ -165,7 +164,6 @@ class DashboardLayout extends React.Component {
       this.setState({logout: true})
     } else {
       await localStorage.clear();
-      history.push("/");
       window.location.reload();
     }
   };
@@ -177,7 +175,7 @@ class DashboardLayout extends React.Component {
       default:
         return AppConstants.home_icon;
     }
-  }
+  };
 
   menuImageChange = menuName => {
     switch (menuName) {
