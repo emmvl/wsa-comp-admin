@@ -513,8 +513,6 @@ export default function* rootSaga() {
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_POSITION_TRACKING_LOAD, liveScorePositionTrackSaga)
 
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD, liveScoreMainDivisionListsaga)
-
   yield takeEvery(ApiConstants.API_GET_MERGE_COMPETITION_LOAD, competitionQuickSaga.getMergeCompetitionSaga)
 
   yield takeEvery(ApiConstants.API_VALIDATE_MERGE_COMPETITION_LOAD, competitionQuickSaga.validateMergeCompetitionSaga)
