@@ -12,7 +12,7 @@ const initialState = {
     teamAttendanceTotalCount: "",
     divisionList: [],
     highestSequence: null,
-    rounLoad: false,
+    roundLoad: false,
     roundList: [],
     onDivisionLoad: false
 }
@@ -89,7 +89,7 @@ function liveScoreTeamAttendanceState(state = initialState, action) {
                 };
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD:
-            return { ...state, rounLoad: true };
+            return { ...state, roundLoad: true };
 
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_SUCCESS:
@@ -102,7 +102,7 @@ function liveScoreTeamAttendanceState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                rounLoad: false
+                roundLoad: false
             };
 
 

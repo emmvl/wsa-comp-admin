@@ -83,6 +83,7 @@ export function* liveScoreMatchSheetPrintSaga(action) {
             action.divisionId,
             action.teamId,
             action.templateType,
+            action.roundId,
         );
 
         if (result.status === 1) {
