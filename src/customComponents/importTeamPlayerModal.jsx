@@ -72,7 +72,7 @@ class ImportTeamPlayerModal extends React.Component {
     }
 
     componentDidMount() {
-        this.props.quickCompImportDataCleanUpAction("team");
+        // this.props.quickCompImportDataCleanUpAction("team");
     }
 
     componentDidUpdate(nextProps) {

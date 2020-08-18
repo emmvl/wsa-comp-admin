@@ -36,7 +36,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
-    this_Obj.props.getLiveScoreDivisionList(id, undefined, sortBy, sortOrder);
+    this_Obj.props.getMainDivisionListAction(id, this_Obj.state.offset, sortBy, sortOrder);
 }
 
 const listeners = (key) => ({
@@ -108,7 +108,8 @@ class LiveScoreDivisionList extends Component {
         super(props);
         this.state = {
             year: "2020",
-            competitionId: null
+            competitionId: null,
+            offset:0
         }
 
         this_Obj = this;
@@ -123,6 +124,7 @@ class LiveScoreDivisionList extends Component {
 
     onPageChange(page) {
         let offset = page ? 10 * (page - 1) : 0;
+        this.setState({offset:offset})
         this.props.getMainDivisionListAction(this.state.competitionId, offset)
     }
 
@@ -270,7 +272,7 @@ class LiveScoreDivisionList extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"9"}/>
+                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"9"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

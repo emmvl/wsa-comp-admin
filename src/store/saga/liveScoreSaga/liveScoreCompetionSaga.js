@@ -4,10 +4,10 @@ import ApiConstants from "../../../themes/apiConstants";
 import AppConstants from "../../../themes/appConstants";
 import LiveScoreAxiosApi from '../../http/liveScoreHttp/liveScoreAxiosApi';
 
-export function* liveScoreCompetitionSaga({ payload, year, orgKey }) {
+export function* liveScoreCompetitionSaga({ payload, year, orgKey, recordUmpires, sortBy, sortOrder }) {
     // yield console.log('%%%%', action)
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreCompetition, payload, year, orgKey)
+        const result = yield call(LiveScoreAxiosApi.liveScoreCompetition, payload, year, orgKey, recordUmpires, sortBy, sortOrder)
         if (result.status === 1) {
             yield put({ type: ApiConstants.API_LIVESCORE_COMPETITION_SUCCESS, payload: result.result.data })
         } else {

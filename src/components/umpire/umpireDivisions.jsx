@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
+import { NavLink } from "react-router-dom";
 
 const { Header, Footer, } = Layout
 const { Option } = Select
@@ -323,35 +324,38 @@ class UmpireDivisions extends Component {
     }
 
 
-    //////footer view containing all the buttons like save and cancel
-    footerView = (isSubmitting) => {
-
+    //////footer view containing all the buttons like submit and cancel
+    footerView = () => {
 
         return (
             <div className="fluid-width">
-                {!this.state.membershipIsUsed &&
-                    <div className="footer-view">
-                        <div className="row">
-                            <div className="col-sm">
-                                <div className="reg-add-save-button">
-                                    <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
 
-                                </div>
+                <div className="footer-view">
+                    <div className="row">
+                        <div className="col-sm">
+                            <div className="reg-add-save-button">
+                                <NavLink to='/umpirePoolAllocation'>
+                                    <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                                </NavLink>
                             </div>
-                            <div className="col-sm">
-                                <div className="comp-buttons-view">
-                                    <Button
-                                        className="publish-button save-draft-text" type="primary" htmlType="submit" >
-                                        {AppConstants.save}
-                                    </Button>
-                                </div>
+                        </div>
+                        <div className="col-sm">
+                            <div className="comp-buttons-view">
+                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
+                                    {/* {AppConstants.generateRoster} */}
+                                    {AppConstants.save}
+                                </Button>
+                                <Button className="open-reg-button" type="primary" htmlType="submit" >
+                                    {AppConstants.createRoster}
+                                </Button>
                             </div>
                         </div>
                     </div>
-                }
+                </div>
             </div>
-        )
-    };
+        );
+
+    }
 
     render = () => {
         // const { getFieldDecorator } = this.props.form;

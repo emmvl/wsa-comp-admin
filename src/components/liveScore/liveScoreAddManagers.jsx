@@ -247,7 +247,8 @@ class LiveScoreAddManager extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-firstName'
+                                    auto_Complete='new-password'
+                                    type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
@@ -267,7 +268,8 @@ class LiveScoreAddManager extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-lastName'
+                                    // auto_Complete='new-password'
+                                    // type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
@@ -300,6 +302,7 @@ class LiveScoreAddManager extends Component {
                             })(
                                 <InputWithHead
                                     auto_Complete='new-email'
+                                    type='email'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
@@ -318,6 +321,7 @@ class LiveScoreAddManager extends Component {
                             })(
                                 <InputWithHead
                                     auto_Complete='new-contact'
+                                    type='number'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}

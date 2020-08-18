@@ -529,7 +529,7 @@ let CompetitionAxiosApi = {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         let body = {
             "competitionUniqueKey": competitionUniqueKey,
-            "organisationUniqueKey": "b540171a-27b3-4c69-991f-b4bf0be28159",
+            "organisationUniqueKey": organisationId,
             "divisions": divisions
         }
         var url = `/api/quickcompetition/division`
@@ -602,7 +602,26 @@ let CompetitionAxiosApi = {
     async addVenueQuickCompetition(payload) {
         var url = `/api/quickcompetitions/venues`
         return Method.dataPost(url, token, payload);
+    },
+
+    async getMergeCompetitionApi() {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        var url = `/api/merge/competitions?organisationId=${organisationUniqueKey}`
+        return Method.dataGet(url, token);
+    },
+
+    async validateMergeCompetitionApi(payload) {
+        var url = `/api/quickcompetitions/merge/validate`
+        return Method.dataPost(url, token, payload);
+    },
+
+    async mergeCompetitionProceedApi(payload) {
+        var url = `/api/quickcompetitions/merge`
+        return Method.dataPost(url, token, payload)
     }
+
+
 
 };
 

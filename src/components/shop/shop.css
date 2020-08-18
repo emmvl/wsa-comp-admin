@@ -112,6 +112,27 @@
     color: #000;
 }
 
+.order-details-desc-text{
+    font-size: 13px;
+    color: var(--app-4c4c6d);
+    font-weight: 500;
+    font-family: inter-medium;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 2.54;
+    letter-spacing: normal;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+}
+
+.order-details-product-image{
+    height: 120px;
+    width: 120px;
+    object-fit: contain;
+}
+
+
 @media (max-width: 767px) {
     .shop-product-content-div{
         justify-content: center;
@@ -121,6 +142,10 @@
     }
     .remove-cross-img-div{
         padding-bottom: 21px;
+    }
+    .order-details-product-image{
+        height: 70px;
+        width: 70px;
     }
 
 }

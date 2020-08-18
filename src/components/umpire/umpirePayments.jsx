@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Input, Pagination, Icon, Checkbox } from 'antd';
+import { Layout, Button, Table, Select, Input, Modal, Icon, Checkbox } from 'antd';
 import './umpire.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -17,6 +17,7 @@ import history from "../../util/history";
 
 const { Content, Footer } = Layout;
 const { Option } = Select;
+const { confirm } = Modal
 let this_obj = null;
 
 /////function to sort table column
@@ -33,6 +34,8 @@ const columns = [
         dataIndex: 'firstName',
         key: 'First Name',
         sorter: (a, b) => tableSort(a, b, 'firstName'),
+        render: (firstName) => <span className="input-heading-add-another pt-0" >{firstName}</span>
+
 
     },
     {
@@ -40,13 +43,8 @@ const columns = [
         dataIndex: 'lastName',
         key: 'Last Name',
         sorter: (a, b) => tableSort(a, b, "lastName"),
+        render: (lastName) => <span className="input-heading-add-another pt-0" >{lastName}</span>
 
-    },
-    {
-        title: 'Umpire ID',
-        dataIndex: 'umpireId',
-        key: 'umpireId',
-        sorter: (a, b) => tableSort(a, b, "umpireId"),
 
     },
     {
@@ -54,6 +52,7 @@ const columns = [
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: (a, b) => tableSort(a, b, "matchId"),
+        render: (matchId) => <span className="input-heading-add-another pt-0" >{matchId}</span>
 
     },
     {
@@ -63,10 +62,10 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "verifiedBy"),
     },
     {
-        title: 'Status',
-        dataIndex: 'status',
-        key: 'status',
-        sorter: (a, b) => tableSort(a, b, "status"),
+        title: 'Make Payment',
+        dataIndex: 'makePayment',
+        key: 'makePayment',
+        sorter: (a, b) => tableSort(a, b, "makePayment"),
     },
     {
         title: "Action",
@@ -91,7 +90,7 @@ const data = [
         "umpireId": "1342",
         "matchId": "2006",
         "verifiedBy": "",
-        "status": "Paid",
+        "makePayment": "Paid",
     },
     {
         "firstName": "Umpire",
@@ -99,7 +98,7 @@ const data = [
         "umpireId": "1553",
         "matchId": "2020",
         "verifiedBy": "",
-        "status": "Unpaid",
+        "makePayment": "Unpaid",
     }
 ]
 
@@ -165,6 +164,23 @@ class umpirePayments extends Component {
 
         this.setState({ selectedComp })
 
+    }
+
+    showConfirm = (record) => {
+        confirm({
+            title: 'Are you sure you want to make payments?',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            mask: true,
+            maskClosable: true,
+            onOk() {
+
+            },
+            onCancel() {
+
+            },
+        });
     }
 
 
@@ -265,11 +281,11 @@ class umpirePayments extends Component {
                                     justifyContent: "flex-end",
                                 }}
                             >
-                                <Button
+                                {/* <Button
                                     type="primary"
                                     className="primary-add-comp-form umpire-btn-width"
                                 >{AppConstants.bulkPayment}
-                                </Button>
+                                </Button> */}
 
                                 <div className='single-checkbox-width'>
                                     <Checkbox
@@ -311,7 +327,7 @@ class umpirePayments extends Component {
                             >{AppConstants.save}
                             </Button>
                             {/* <NavLink to="/competitionCourtAndTimesAssign"> */}
-                            <Button className="publish-button margin-top-disabled-button" type="primary">{AppConstants.submit}</Button>
+                            <Button onClick={() => this.showConfirm()} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.submit}</Button>
                             {/* </NavLink> */}
                         </div>
                     </div>

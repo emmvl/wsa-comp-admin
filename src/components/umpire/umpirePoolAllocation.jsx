@@ -540,6 +540,38 @@ class UmpirePoolAllocation extends Component {
         )
     }
 
+    //////footer view containing all the buttons like submit and cancel
+    footerView = () => {
+        return (
+            <div className="fluid-width paddingBottom56px" >
+                <div className="row" >
+                    <div className="col-sm-3 mt-3" >
+                        <div className="reg-add-save-button">
+                            <NavLink to='/umpireSetting'>
+                                <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                            </NavLink>
+                        </div>
+                    </div>
+                    <div className="col-sm mt-3" >
+
+                        <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+                            <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
+                                {AppConstants.save}
+                            </Button>
+                            <NavLink to='/umpireDivisions'>
+                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
+                                    {AppConstants.next}
+                                </Button>
+                            </NavLink>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            // </div >
+        )
+    }
+
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
@@ -552,6 +584,7 @@ class UmpirePoolAllocation extends Component {
                     <Content>
                         {this.contentView()}
                     </Content>
+                    <Footer>{this.footerView()}</Footer>
                 </Layout>
             </div>
 

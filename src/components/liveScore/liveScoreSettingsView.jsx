@@ -422,6 +422,7 @@ class LiveScoreSettingsView extends Component {
                             required={"required-field pb-0"}
                             heading={AppConstants.short_Name}
                             placeholder={AppConstants.short_Name}
+                            name='shortName'
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.shortNameMsg}
                             marginTop={10}
@@ -967,81 +968,74 @@ class LiveScoreSettingsView extends Component {
         this.props.onInviteesSearchAction(value, inviteesType)
     }
     ////////reg invitees search view for any organisation
-    affiliatesSearchInvitee = (subItem, seletedInvitee) => {
+    associationSearchInvitee = () => {
         let detailsData = this.props.competitionFeesState
-        // let seletedInvitee = detailsData.selectedInvitees.find(x => x);
         let associationAffilites = detailsData.associationAffilites
-        let clubAffilites = detailsData.clubAffilites
-        const { associationLeague, clubSchool } = this.props.liveScoreSetting
-        // let regInviteesDisable = this.state.permissionState.regInviteesDisable
-        if (subItem.id == 7 && seletedInvitee == 7) {
-            return (
-                < div >
-                    <Select
-                        mode="multiple"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={associationAffilite => {
-                            this.props.onChangeSettingForm({ key: "associationAffilite", data: associationAffilite })
-                        }}
-                        value={associationLeague}
-                        placeholder={AppConstants.selectOrganisation}
-                        filterOption={false}
-                        onSearch={(value) => { this.onInviteeSearch(value, 3) }}
-                        // disabled={regInviteesDisable}
-                        showSearch={true}
-                        onBlur={() => this.onInviteeSearch("", 3)}
-                    // loading={detailsData.searchLoad}
-                    >
-                        {associationAffilites.map((item) => {
-                            return (
-                                <Option
-                                    key={item.id}
-                                    value={item.id}>
-                                    {item.name}</Option>
-                            )
-                        })}
-                    </Select>
-                </div>
-            )
-        }
-        else if (subItem.id == 8 && seletedInvitee == 8) {
-
-            return (
-
-                < div >
-                    <Select
-                        mode="multiple"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={clubAffilite => {
-                            // this.onSelectValues(venueSelection, detailsData)
-                            this.props.onChangeSettingForm({ key: "clubAffilite", data: clubAffilite })
-                        }}
-
-                        value={clubSchool}
-                        placeholder={AppConstants.selectOrganisation}
-                        filterOption={false}
-                        onSearch={(value) => { this.onInviteeSearch(value, 4) }}
-                        // disabled={regInviteesDisable}
-                        onBlur={() => this.onInviteeSearch("", 4)}
-                    // loading={detailsData.searchLoad}
-                    >
-                        {clubAffilites.map((item) => {
-                            return (
-                                <Option
-                                    key={item.id}
-                                    value={item.id}>
-                                    {item.name}</Option>
-                            )
-                        })}
-                    </Select>
-                </div>
-            )
-        }
+        const { associationLeague } = this.props.liveScoreSetting
+        return (
+            < div className='col-sm ml-3'>
+                <Select
+                    mode="multiple"
+                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    onChange={associationAffilite => {
+                        this.props.onChangeSettingForm({ key: "associationAffilite", data: associationAffilite })
+                    }}
+                    value={associationLeague}
+                    placeholder={AppConstants.selectOrganisation}
+                    filterOption={false}
+                    onSearch={(value) => { this.onInviteeSearch(value, 3) }}
+                    showSearch={true}
+                    onBlur={() => this.onInviteeSearch("", 3)}
+                >
+                    {associationAffilites.map((item) => {
+                        return (
+                            <Option
+                                key={item.id}
+                                value={item.id}>
+                                {item.name}</Option>
+                        )
+                    })}
+                </Select>
+            </div>
+        )
 
     }
 
+    ////////reg invitees search view for any organisation
+    clubSearchInvitee = () => {
+        let detailsData = this.props.competitionFeesState
+        let clubAffilites = detailsData.clubAffilites
+        const { clubSchool } = this.props.liveScoreSetting
+        return (
+            < div className='col-sm ml-3'>
+                <Select
+                    mode="multiple"
+                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    onChange={clubAffilite => {
+                        this.props.onChangeSettingForm({ key: "clubAffilite", data: clubAffilite })
+                    }}
+
+                    value={clubSchool}
+                    placeholder={AppConstants.selectOrganisation}
+                    filterOption={false}
+                    onSearch={(value) => { this.onInviteeSearch(value, 4) }}
+                    onBlur={() => this.onInviteeSearch("", 4)}
+                >
+                    {clubAffilites.map((item) => {
+                        return (
+                            <Option
+                                key={item.id}
+                                value={item.id}>
+                                {item.name}</Option>
+                        )
+                    })}
+                </Select>
+            </div>
+        )
+    }
+
     regInviteesView = () => {
-        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected, registrationInvitees } = this.props.liveScoreSetting
+        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected, registrationInvitees, associationChecked, clubChecked } = this.props.liveScoreSetting
         let invitees = isArrayNotEmpty(registrationInvitees) ? registrationInvitees : [];
         return (
             <div >
@@ -1068,17 +1062,7 @@ class LiveScoreSettingsView extends Component {
                                                             <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
                                                         </div>
 
-                                                        {/* {
-                                                        affiliateSelected == 3
-                                                        &&
-                                                        <div style={{ marginLeft: '20px' }}>
-                                                            <Radio.Group >
-                                                                <div style={{ marginLeft: '20px' }}>
-                                                                    <Radio value={'None'}>{'None'}</Radio>
-                                                                </div>
-                                                            </Radio.Group>
-                                                        </div>
-                                                    } */}
+
                                                     </>
                                                     :
                                                     <>
@@ -1086,21 +1070,7 @@ class LiveScoreSettingsView extends Component {
                                                             <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
                                                         </div>
 
-                                                        {/* {
-                                                            affiliateSelected == 3
-                                                            &&
-                                                            <div style={{ marginLeft: '20px' }}>
-                                                                <Radio.Group
-                                                                // onChange={(e) => this.props.onChangeSettingForm({ key: "nonSelected", data: e.target.value })}
-                                                                // value={nonSelected}
-                                                                >
-                                                                    <div style={{ marginLeft: '20px' }}>
-                                                                        <Radio key={4} value={4}>{'None'}</Radio>
-                                                                    </div>
-                                                                </Radio.Group>
 
-                                                            </div>
-                                                        } */}
 
                                                         <div style={{ marginLeft: 20 }}>
                                                             <Radio.Group
@@ -1137,12 +1107,42 @@ class LiveScoreSettingsView extends Component {
                                         <Radio value={item.id}>{item.description}</Radio>
                                         : <div>
                                             <div class="applicable-to-heading invitees-main">{item.description}</div>
-                                            {(item.subReferences).map((subItem, subIndex) => (
+                                            {/* {(item.subReferences).map((subItem, subIndex) => (
                                                 <div style={{ marginLeft: '20px' }}>
                                                     <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                    <Checkbox
+                                                        className="single-checkbox"
+                                                        checked={this.props.liveScoreSetting.checkBoxSelection}
+                                                        onChange={e => this.props.onChangeSettingForm({ key: 'anyOrgCheckBox', data: e.target.checked, subItem: subItem })}
+                                                    >
+                                                        {subItem.description}
+                                                    </Checkbox>
+
                                                     {this.affiliatesSearchInvitee(subItem, anyOrgSelected)}
+
                                                 </div>
-                                            ))}
+
+
+                                            ))} */}
+
+                                            <div style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                paddingLeft: 13
+                                            }}>
+
+                                                <Checkbox style={{ paddingLeft: 7, paddingTop: 8 }} checked={associationChecked} onChange={e => this.props.onChangeSettingForm({ key: 'associationChecked', data: e.target.checked })}>{item.subReferences[0].description}</Checkbox>
+
+                                                {associationChecked && this.associationSearchInvitee()}
+
+                                                <Checkbox style={{ paddingTop: 15, paddingLeft: associationChecked ? 5 : 0 }} checked={clubChecked} onChange={e => this.props.onChangeSettingForm({ key: 'clubChecked', data: e.target.checked })}>{item.subReferences[1].description}</Checkbox>
+
+                                                {clubChecked && this.clubSearchInvitee()}
+
+
+                                            </div>
+
+
                                             <div style={{ marginLeft: 20 }}>
                                                 <Radio.Group
                                                     onChange={(e) => this.props.onChangeSettingForm({ key: "anyOrgNonSelected", data: e.target.value })}
