@@ -446,7 +446,7 @@ class LiveScoreMatchDetails extends Component {
                         {UmpireData.map((item) => (
                             // <span className="inbox-name-text pt-2" >{item.name}</span>
                             <>
-                                {isArrayNotEmpty(item.competitionOrganisations) && item.competitionOrganisations.map((item) => (
+                                {isArrayNotEmpty(item.organisations) && item.organisations.map((item) => (
                                     <span className="inbox-name-text pt-2" >{item.name}</span>
                                 ))
                                 }

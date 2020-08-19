@@ -272,6 +272,14 @@ function getDivisionsListAction(yearRefId, competitionId, sourceModule) {
 }
 
 
+function getTeamRegistrationsAction(payload) {
+  const action = {
+      type: ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD,
+      payload: payload
+  };
+  return action;
+}
+
 export {
   regMembershipListAction,
   regMembershipListDeleteAction,
@@ -300,5 +308,6 @@ export {
   updateDisclamerText,
   isCheckedVisible,
   isReplyCheckVisible,
-  getDivisionsListAction
+  getDivisionsListAction,
+  getTeamRegistrationsAction
 };

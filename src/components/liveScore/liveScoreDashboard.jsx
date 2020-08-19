@@ -88,8 +88,8 @@ function getTeamName(data) {
 function getAssociationName(data) {
     if (data.player) {
         if (data.player.team) {
-            if (data.player.team.competitionOrganisation) {
-                return data.player.team.competitionOrganisation.name
+            if (data.player.team.organisation) {
+                return data.player.team.organisation.name
 
             } else {
 
