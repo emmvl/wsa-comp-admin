@@ -539,12 +539,13 @@ class CompetitionPartTeamGradeCalculate extends Component {
                             {/* </NavLink> */}
                         </div>
 						<Modal
+                            title={AppConstants.finalGrading}
                             className="add-membership-type-modal"
                             visible={this.state.showPublishToLivescore}
                             onOk={() => this.handlePublishToLivescore("yes")}
                             onCancel={() => this.handlePublishToLivescore("no")}
-                            okText={"Yes"}
-                            cancelText={"No"}>
+                            okText={AppConstants.yes}
+                            cancelText={AppConstants.no}>
                             <div>{AppConstants.publishToLivescore}</div>
                         </Modal>
                     </div>
