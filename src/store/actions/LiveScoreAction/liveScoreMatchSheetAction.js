@@ -1,13 +1,13 @@
 import ApiConstants from '../../../themes/apiConstants';
 
-const liveScoreMatchSheetPrintAction = (competitionId, divisionId, teamId, templateType, roundId) => {
+const liveScoreMatchSheetPrintAction = (competitionId, divisionId, teamId, templateType, roundName) => {
     const action = {
         type: ApiConstants.API_MATCH_SHEET_PRINT_LOAD,
         competitionId,
         divisionId,
         teamId,
         templateType,
-        roundId,
+        roundName,
     };
 
     return action

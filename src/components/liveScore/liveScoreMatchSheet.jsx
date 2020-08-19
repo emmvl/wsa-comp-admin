@@ -95,7 +95,7 @@ class LiveScoreMatchSheet extends Component {
                  if (this.props.liveScoreMatchState.liveScoreMatchList.length > 0) {
                      const rounds = [];
                      this.props.liveScoreMatchState.liveScoreMatchList.forEach((match) => {
-                         if (rounds.findIndex((round) => round.id === match.round.id) < 0) {
+                         if (rounds.findIndex((round) => round.name === match.round.name) < 0) {
                              rounds.push(match.round);
                          }
                      });
@@ -135,7 +135,8 @@ class LiveScoreMatchSheet extends Component {
             filteredMatches = filteredMatches.filter((match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
         }
         if (this.state.selectedRound !== null) {
-            filteredMatches = filteredMatches.filter((match) => match.round.id === this.state.selectedRound)
+            const selectedRound = this.state.rounds.find((round) => round.id === this.state.selectedRound);
+            filteredMatches = filteredMatches.filter((match) => match.round.name === selectedRound.name);
         }
 
         if (this.state.selectedTemplateId !== null  && filteredMatches.length > 0) {
@@ -144,7 +145,9 @@ class LiveScoreMatchSheet extends Component {
                 this.state.division === 'All' ? null : this.state.division,
                 this.state.selectedTeam === 'All' ? null : this.state.selectedTeam,
                 this.state.templateType,
-                this.state.selectedRound === 'All' ? null : this.state.selectedRound,
+                this.state.selectedRound
+                  ? this.state.rounds.find((round) => round.id === this.state.selectedRound).name
+                  : null,
             );
         } else if (filteredMatches.length === 0) {
             message.error(AppConstants.matchSheetsNoPrintError);
@@ -270,7 +273,8 @@ class LiveScoreMatchSheet extends Component {
             filteredMatches = filteredMatches.filter((match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
         }
         if (this.state.selectedRound !== null) {
-            filteredMatches = filteredMatches.filter((match) => match.round.id === this.state.selectedRound)
+            const selectedRound = this.state.rounds.find((round) => round.id === this.state.selectedRound);
+            filteredMatches = filteredMatches.filter((match) => match.round.name === selectedRound.name);
         }
 
         return (
