@@ -5252,7 +5252,7 @@ class RegistrationCompetitionFee extends Component {
     this.props.addRemoveCompFeeDiscountAction(keyAction, index);
     setTimeout(() =>{
       this.setDetailsFieldValue();
-    },500);
+    },300);
   };
 
   //On change membership product discount type
@@ -5681,14 +5681,19 @@ class RegistrationCompetitionFee extends Component {
     }
   };
   addRemoveChildDiscount = (index, keyWord, childindex) => {
-    let discountData = this.props.competitionFeesState.competionDiscountValue
-      .competitionDiscounts[0].discounts;
+    let discountData = this.props.competitionFeesState.competionDiscountValue.competitionDiscounts[0].discounts;
+
     let childDisObject = {
       membershipFeesChildDiscountId: 0,
       percentageValue: '',
     };
-    if (keyWord == 'add') {
-      discountData[index].childDiscounts.push(childDisObject);
+
+    
+    if(keyWord == 'add') {
+      if(discountData[index].childDiscounts == null) {
+        discountData[index].childDiscounts = []
+      }
+       discountData[index].childDiscounts.push(childDisObject);
     } else if (keyWord == 'delete') {
       discountData[index].childDiscounts.splice(childindex, 1);
     }
@@ -5696,7 +5701,7 @@ class RegistrationCompetitionFee extends Component {
     if (keyWord == 'delete') {
        setTimeout(() =>{
 		  this.setDetailsFieldValue();       
-	  }, 500)     
+	  }, 300)     
     }
   };
 
