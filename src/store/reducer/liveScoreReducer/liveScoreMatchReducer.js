@@ -174,7 +174,7 @@ const initialState = {
     roundList: [],
     clubListData: [],
     courList: [],
-    rounLoad: false,
+    roundLoad: false,
     matchResult: [],
     forfietedTeam: undefined,
     abandoneReason: undefined,
@@ -511,7 +511,7 @@ function liveScoreMatchReducer(state = initialState, action) {
 
             return {
                 ...state,
-                rounLoad: true,
+                roundLoad: true,
             }
 
         case ApiConstants.API_LIVE_SCORE_CREATE_ROUND_SUCCESS:
@@ -522,7 +522,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             state.highestSequence = action.result.sequence
             return {
                 ...state,
-                rounLoad: false,
+                roundLoad: false,
 
             };
 
@@ -677,7 +677,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD:
-            return { ...state, rounLoad: true };
+            return { ...state, roundLoad: true };
 
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_SUCCESS:
@@ -690,7 +690,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                rounLoad: false
+                roundLoad: false
             };
 
         case ApiConstants.API_LIVE_SCORE_CLUB_LIST_LOAD:

@@ -393,7 +393,7 @@ class LiveScoreSeasonFixture extends Component {
                         dataSource={newArray}
                         size="small"
                         pagination={false}
-                        loading={this.props.liveScoreMatchState.rounLoad}
+                        loading={this.props.liveScoreMatchState.roundLoad}
                     />
 
                 </div>
