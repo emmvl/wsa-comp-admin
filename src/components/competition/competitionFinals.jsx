@@ -616,8 +616,9 @@ class CompetitionFinals extends Component {
         let detailsData = this.props.competitionFeesState
         return (
             <div>
+				{(finalsList || []).map((data, index) => (										  
                 <div className="compitition-finals-division">
-                    {(finalsList || []).map((data, index) => (
+                    
                         <div className="inside-container-view pt-2" >
                             <div>
                                 <InputWithHead heading={AppConstants.extraTime} style={{ paddingTop: 0 }} />
@@ -753,14 +754,15 @@ class CompetitionFinals extends Component {
                             </div>
 
                         </div>
-                    ))}
+                   
 
-                    {(finalsList == null || finalsList.length == 0) &&
+                    {/* {(finalsList == null || finalsList.length == 0) &&
                         <div className="comp-warning-info">
                             {AppConstants.finalsMessage}
                         </div>
-                    }
+                    } */}
                 </div>
+                 ))}
             </div>
         )
     }

@@ -1547,6 +1547,8 @@ const AppConstants = {
   liveStreamlink: "Live-Stream Link",
   uponRegistration: "Upon Registration",
   reg: "REG",
+  publishToLivescore:"Do you want to publish to live scores?",
+  finalGrading: "Final Grading"														 
 };
 
 export default AppConstants;
