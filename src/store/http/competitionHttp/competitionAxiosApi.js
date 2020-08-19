@@ -209,14 +209,15 @@ let CompetitionAxiosApi = {
     },
 
     ////////team grading summary publish
-    async publishGradeTeamSummary(yearRefId, competitionId) {
+    async publishGradeTeamSummary(yearRefId, competitionId,publishToLivescore) {
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let payload = {
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey,
-            yearRefId: yearRefId
+            yearRefId: yearRefId,
+            publishToLivescore: publishToLivescore
         }
         var url = `/api/teamgrading/summary/publish?userId=${userId}`;
         return Method.dataPost(url, token, payload);

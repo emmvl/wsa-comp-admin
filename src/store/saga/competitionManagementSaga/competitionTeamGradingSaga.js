@@ -156,7 +156,7 @@ export function* saveUpdatedGradeTeamSummarySaga(action) {
 export function* publishGradeTeamSummarySaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.publishGradeTeamSummary,
-            action.yearRefId, action.competitionId);
+        action.yearRefId, action.competitionId , action.publishToLivescore);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_PUBLISH_TEAM_GRADING_SUMMARY_SUCCESS,

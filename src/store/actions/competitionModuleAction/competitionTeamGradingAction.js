@@ -93,13 +93,14 @@ function saveUpdatedGradeTeamSummaryAction(payload) {
 
 
 ///////team grading summary publish
-function publishGradeTeamSummaryAction(yearRefId, competitionId) {
+function publishGradeTeamSummaryAction(yearRefId, competitionId,publishToLivescore) {
     const action = {
         type: ApiConstants.API_PUBLISH_TEAM_GRADING_SUMMARY_LOAD,
-        yearRefId, competitionId
+        yearRefId, competitionId, publishToLivescore
     }
     return action;
 }
+
 
 //////team grading summary on Change table data
 function onchangeTeamGradingSummaryData(value, index, key) {
