@@ -71,7 +71,7 @@ export function* fixtureTemplateSaga() {
 
 export function* competitionDashboardDeleteSaga(action) {
     try {
-        const result = yield call(CompManagementAxiosApi.competitionDashboardDelete,action.competitionId);
+        const result = yield call(CompManagementAxiosApi.competitionDashboardDelete,action.competitionId,action.targetValue);
         if (result.status === 1) {
             
             yield put({
