@@ -74,7 +74,9 @@ class LiveScoreAddTeam extends Component {
     }
 
     componentDidMount() {
+
         if (this.state.isEdit == true) {
+
             this.props.liveScoreGetTeamDataAction(this.state.teamId)
             this.setState({ load: true })
         }
@@ -112,7 +114,7 @@ class LiveScoreAddTeam extends Component {
             'teamName': data.name,
             'teamAlias': data.alias,
             'division': data.divisionId,
-            'affiliate': data.organisation ? data.organisation.name : "",
+            'affiliate': data.competitionOrganisation ? data.competitionOrganisation.name : "",
             'managerId': selectedManager
 
         })
@@ -305,26 +307,6 @@ if(x[0].charCodeAt()>=97)
                         {getFieldDecorator('affiliate', {
                             rules: [{ required: true, message: ValidationConstants.affiliateField }],
                         })(
-                            // <AutoComplete
-                            //     style={{ width: "100%", height: '56px' }}
-                            //     placeholder="Select User"
-                            //     onSelect={(item, option) => {
-                            //         console.log(item, 'dfdsfsdfdsf', option)
-                            //         const ManagerId = JSON.parse(option.key)
-                            //         this.props.liveScoreAddTeamform({ key: 'organisationId', data: ManagerId })
-                            //     }}
-                            //     // onSelect={(affilateId) => this.props.liveScoreAddTeamform({ key: 'organisationId', data: affilateId })}
-                            //     // onSearch={(value) => { this.props.liveScoreGetaffilate({ id: this.state.loaclCompetitionID, name: value }) }}
-                            //     value={teamManagerData.organisationId}
-                            // >
-                            //     {affilateList.map((item) => {
-                            //         console.log(item)
-                            //         return <Option key={item.id} value={item.name}>
-                            //             {item.name}
-                            //         </Option>
-                            //     })}
-
-                            // </AutoComplete>
 
                             <Select
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -422,7 +404,7 @@ if(x[0].charCodeAt()>=97)
                             //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
                             //         return data.firstName.indexOf(value) > -1
                             //     })
-                            //     console.log(filteredData)
+                            //     
                             //     this.props.liveScoreManagerFilter(filteredData)
 
                             // }}

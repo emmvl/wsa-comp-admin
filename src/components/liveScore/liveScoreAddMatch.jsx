@@ -168,7 +168,7 @@ class LiveScoreAddMatch extends Component {
         }
 
         if (nextProps.liveScoreMatchState !== this.props.liveScoreMatchState) {
-            if (this.props.liveScoreMatchState.roundLoad == false && this.state.roundLoad == true) {
+            if (this.props.liveScoreMatchState.rounLoad == false && this.state.roundLoad == true) {
                 this.setState({ roundLoad: false })
                 let addedRound = this.props.liveScoreMatchState.addEditMatch.roundId
                 this.props.form.setFieldsValue({

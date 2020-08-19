@@ -23,6 +23,8 @@ import {liveScore_MatchFormate} from '../../themes/dateformate';
 import {getLiveScoreCompetiton} from "../../util/sessionStorage";
 
 import './liveScore.css';
+import Tooltip from "react-png-tooltip";
+import {NavLink} from "react-router-dom";
 
 const {Header, Content} = Layout;
 const {Option} = Select;
@@ -41,7 +43,6 @@ class LiveScoreMatchSheet extends Component {
             competitionId: null,
             division: null,
             selectedTeam: null,
-            selectedRound: null,
             onDivisionLoad: false,
             onTeamLoad: false,
             onMatchLoad: false,
@@ -51,7 +52,6 @@ class LiveScoreMatchSheet extends Component {
             selectedMatch: null,
             selectedTemplateId: null,
             templateType: null,
-            rounds: [],
         };
     }
 
@@ -89,22 +89,6 @@ class LiveScoreMatchSheet extends Component {
                 this.fetchMatchList(this.state.division, null);
             }
         }
-
-        if (this.props.liveScoreMatchState !== nextProps.liveScoreMatchState) {
-            if (this.props.liveScoreMatchState.isFetchingMatchList === false) {
-                 if (this.props.liveScoreMatchState.liveScoreMatchList.length > 0) {
-                     const rounds = [];
-                     this.props.liveScoreMatchState.liveScoreMatchList.forEach((match) => {
-                         if (rounds.findIndex((round) => round.name === match.round.name) < 0) {
-                             rounds.push(match.round);
-                         }
-                     });
-                     this.setState({
-                         rounds,
-                     });
-                 }
-            }
-        }
     }
 
     onClickPreview = (matchId) => {
@@ -130,29 +114,21 @@ class LiveScoreMatchSheet extends Component {
     };
 
     printAll = () => {
-        let filteredMatches = this.props.liveScoreMatchState ? this.props.liveScoreMatchState.liveScoreMatchList : [];
-        if (this.state.selectedTeam !== null) {
-            filteredMatches = filteredMatches.filter((match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
-        }
-        if (this.state.selectedRound !== null) {
-            const selectedRound = this.state.rounds.find((round) => round.id === this.state.selectedRound);
-            filteredMatches = filteredMatches.filter((match) => match.round.name === selectedRound.name);
-        }
-
-        if (this.state.selectedTemplateId !== null  && filteredMatches.length > 0) {
+        const filteredMatchesByTeam = this.state.selectedTeam !== null
+            ? this.props.liveScoreMatchState.liveScoreMatchList.filter(
+                (match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
+            : this.props.liveScoreMatchState.liveScoreMatchList;
+        if (this.state.selectedTemplateId !== null  && filteredMatchesByTeam.length > 0) {
             this.props.liveScoreMatchSheetPrintAction (
                 this.state.competitionId,
                 this.state.division === 'All' ? null : this.state.division,
                 this.state.selectedTeam === 'All' ? null : this.state.selectedTeam,
                 this.state.templateType,
-                this.state.selectedRound
-                  ? this.state.rounds.find((round) => round.id === this.state.selectedRound).name
-                  : null,
             );
-        } else if (filteredMatches.length === 0) {
-            message.error(AppConstants.matchSheetsNoPrintError);
+        } else if (this.props.liveScoreMatchState.liveScoreMatchList.length === 0) {
+            message.error(AppConstants.matchSheetsNoPrintError)
         } else {
-            message.error(AppConstants.selectTemplateTypeError);
+            message.error(AppConstants.selectTemplateTypeError)
         }
     };
 
@@ -181,10 +157,6 @@ class LiveScoreMatchSheet extends Component {
 
     onChangeTeam(selectedTeam) {
         this.setState({selectedTeam});
-    }
-
-    onChangeRound(selectedRound) {
-        this.setState({selectedRound});
     }
 
     fetchMatchList(divisionId, teamId) {
@@ -268,14 +240,10 @@ class LiveScoreMatchSheet extends Component {
     // Match sheet table
     sheetTableView = () => {
         const { liveScoreMatchState } = this.props;
-        let filteredMatches = liveScoreMatchState ? liveScoreMatchState.liveScoreMatchList : [];
-        if (this.state.selectedTeam !== null) {
-            filteredMatches = filteredMatches.filter((match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
-        }
-        if (this.state.selectedRound !== null) {
-            const selectedRound = this.state.rounds.find((round) => round.id === this.state.selectedRound);
-            filteredMatches = filteredMatches.filter((match) => match.round.name === selectedRound.name);
-        }
+        let DATA = liveScoreMatchState ? liveScoreMatchState.liveScoreMatchList : [];
+        const filteredMatchesByTeam = this.state.selectedTeam !== null
+            ? DATA.filter((match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
+            : DATA;
 
         return (
             <div className="formView mt-4" style={{marginBottom: 20}}>
@@ -284,7 +252,7 @@ class LiveScoreMatchSheet extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={this.columns}
-                        dataSource={filteredMatches}
+                        dataSource={filteredMatchesByTeam}
                         rowKey={(record) => record.id}
                     />
                 </div>
@@ -292,7 +260,7 @@ class LiveScoreMatchSheet extends Component {
         )
     };
 
-    downloadTableColumns = [
+    dropdownTableColumns = [
         {
             title: AppConstants.tableSheetID,
             dataIndex: 'id',
@@ -325,7 +293,7 @@ class LiveScoreMatchSheet extends Component {
     ];
 
 
-    downloadTableHeading = () => {
+    dropdownTableHeading = () => {
         return (
           <div className="pt-4 pb-4 d-flex align-items-center">
               <div className="col-sm d-flex align-items-center">
@@ -345,16 +313,16 @@ class LiveScoreMatchSheet extends Component {
     };
 
     // Match sheet table
-    downloadTableView = () => {
+    dropdownTableView = () => {
         let DATA = this.props.liveScoreMatchSheetState.matchSheetDownloads;
 
         return (
             <div className="formView mt-4 mb-4">
-                {this.downloadTableHeading()}
+                {this.dropdownTableHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
-                        columns={this.downloadTableColumns}
+                        columns={this.dropdownTableColumns}
                         dataSource={DATA}
                         rowKey={(record) => record.id}
                     />
@@ -434,25 +402,6 @@ class LiveScoreMatchSheet extends Component {
                         </div>
                     </div>
                 </div>
-
-                <div className="fluid-width" style={{marginTop: 15}}>
-                    <div className="row">
-                        <div className="col-sm">
-                            <InputWithHead heading={AppConstants.round}/>
-                        </div>
-                        <div className="col-sm">
-                            <Select
-                              style={{width: '100%', paddingRight: 1, minWidth: 182}}
-                              onChange={(selectedRoundId) => this.onChangeRound(selectedRoundId)}
-                              value={this.state.selectedRound ?? AppConstants.selectRound}
-                              placeholder={AppConstants.selectTemplateType}
-                            >
-                                {this.state.rounds.length > 0 && this.state.rounds.map(
-                                  (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
-                            </Select>
-                        </div>
-                    </div>
-                </div>
                 <div className="fluid-width d-flex justify-content-end" style={{marginTop: 25}}>
                     <Button
                       className="open-reg-button"
@@ -504,7 +453,7 @@ class LiveScoreMatchSheet extends Component {
                         <div className="formView">
                             {this.contentView()}
                         </div>
-                        {this.downloadTableView()}
+                        {this.dropdownTableView()}
                         {this.sheetTableView()}
                     </Content>
                 </Layout>

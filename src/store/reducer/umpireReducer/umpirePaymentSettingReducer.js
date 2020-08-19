@@ -19,7 +19,7 @@ const initialState = {
     selectAllDiv: false,
     paidByAffiliateDivision: [],
     affiliateDiv: affiliateDivObj,
-    compOrgDiv: compOrgDivObj
+    compOrgDiv: compOrgDivObj,
 };
 
 function getSelectedValue(divId, allArray) {
@@ -31,8 +31,6 @@ function getSelectedValue(divId, allArray) {
             if (divId[j] === allArray[i].id) {
                 allArray[i].disabled = true
 
-            } else {
-                allArray[i].disabled = false
             }
         }
     }
@@ -64,26 +62,20 @@ function umpirePaymentSetting(state = initialState, action) {
 
             if (key === 'paidByComp') {
                 state.paidByCompOrg = data
-                // state.paidByAffiliate = false
-                // state.byBadgeDivision = []
-                // state.inputFieldArray = []
 
             } else if (key === 'paidByAffilate') {
                 state.paidByAffiliate = data
-                // state.paidByCompOrg = false
-                // state.paidByCompOrgDivision = []
 
             } else if (key === 'selectAllDiv') {
                 state[key] = data
 
             } else if (key === 'paidByCompOrgDivision' || key === 'paidByAffiliateDivision') {
-                if (key === 'paidByCompOrgDivision') {
-                    state.affiliateDiv = getSelectedValue(data, state.affiliateDiv)
-                }
-                if (key === 'paidByAffiliateDivision') {
-                    state.compOrgDiv = getSelectedValue(data, state.compOrgDiv)
-                }
-                console.log(state.compOrgDiv, 'disableSelectedValue', state.affiliateDiv)
+                // if (key === 'paidByCompOrgDivision') {
+                //     state.affiliateDiv = getSelectedValue(data, state.affiliateDiv)
+                // }
+                // if (key === 'paidByAffiliateDivision') {
+                //     state.compOrgDiv = getSelectedValue(data, state.compOrgDiv)
+                // }
                 state[key] = data
 
             } else if (key === 'byBadge') {

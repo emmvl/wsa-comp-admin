@@ -13,12 +13,11 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { endUserRegDashboardListAction } from
     "../../store/actions/registrationAction/endUserRegistrationAction";
-import { getCommonRefData, getGenderAction, registrationPaymentStatusAction} from
+import { getCommonRefData, getGenderAction, registrationPaymentStatusAction } from
     '../../store/actions/commonAction/commonAction';
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
-import { getOnlyYearListAction } from '../../store/actions/appAction'
-import {getTeamRegistrationsAction} from '../../store/actions/registrationAction/registration'
+import { getOnlyYearListAction, } from '../../store/actions/appAction'
 import { isEmptyArray } from "formik";
 import { currencyFormat } from "../../util/currencyFormat";
 
@@ -32,31 +31,23 @@ const columns = [
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: (a, b) => a.firstName.localeCompare(b.firstName),
-        render: (firstName, record) =>
-        <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
-            <span className="input-heading-add-another pt-0" >{firstName}</span>
-        </NavLink>
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: (a, b) => a.lastName.localeCompare(b.lastName),
-        render: (lastName, record) =>
-        <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
-            <span className="input-heading-add-another pt-0" >{lastName}</span>
-        </NavLink>
     },
     {
         title: 'Organisation',
-        dataIndex: 'organisationName',
-        key: 'organisationName',
+        dataIndex: 'organisation',
+        key: 'organisation',
         sorter: (a, b) => a.organisation.localeCompare(b.organisation),
     },
     {
         title: 'Team',
-        dataIndex: 'teamName',
-        key: 'teamName',
+        dataIndex: 'team',
+        key: 'team',
         sorter: (a, b) => a.team.localeCompare(b.team),
     },
     {
@@ -80,8 +71,8 @@ const columns = [
     },
     {
         title: 'Status',
-        dataIndex: 'statusRefId',
-        key: 'statusRefId',
+        dataIndex: 'status',
+        key: 'status',
         sorter: (a, b) => a.status.localeCompare(b.status),
     },
 
@@ -103,26 +94,11 @@ class TeamRegistrations extends Component {
 
     componentDidMount() {
         this.referenceCalls(this.state.organisationId);
-        this.setState({
-            searchText: ''
-        })
         this.handleRegTableList(1);
     }
 
     handleRegTableList = (page) => {
-        let obj = {
-            organisationUniqueKey: this.state.organisationId,
-            yearRefId: this.state.yearRefId,
-            competitionUniqueKey: this.state.competitionUniqueKey,
-            filterOrganisation: this.state.affiliate,
-            searchText: this.state.searchText,
-            statusRefId: -1,
-            paging: {
-                limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0)
-            }
-        }
-        this.props.getTeamRegistrationsAction(obj);
+        console.log(page)
     }
 
     referenceCalls = (organisationId) => {
@@ -153,21 +129,16 @@ class TeamRegistrations extends Component {
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             //called api
-            this.handleRegTableList(1);
         }
     }
 
     onChangeSearchText = async (e) => {
-        let value = e.target.value;
-        await this.setState({ searchText: e.target.value })
-        if (value == null || value == "") {
-            this.handleRegTableList(1);
-        }
+        console.log(e)
     }
 
     onClickSearchIcon = async () => {
-							 
-        this.handleRegTableList(1);
+        console.log("called")
+        // this.handleRegTableList(1);
     }
 
     ///////view for breadcrumb
@@ -361,23 +332,42 @@ class TeamRegistrations extends Component {
 
     ////////form content view
     contentView = () => {
-        let teamRegDashboardList = this.props.registrationState.teamRegistrationTableData;
-       
+        let userRegistrationState = this.props.userRegistrationState;
+        let userRegDashboardList = [{
+            "firstName": "Marissa",
+            "lastName": "Cooper",
+            "organisation": "Netball Queensland",
+            "team": "Firebirds",
+            "userRegTeam": "Sam Obrien",
+            "userRole": "Manager",
+            teamRegType: "Individuals to Pay",
+            status: "Not Registered"
+        }, {
+            "firstName": "Samir",
+            "lastName": "singh",
+            "organisation": "Netball Queensland",
+            "team": "Firebirds",
+            "userRegTeam": "Sam Obrien",
+            "userRole": "Manager",
+            teamRegType: "User Registering Paid",
+            status: "Registered"
+        }]
+        let total = userRegistrationState.userRegDashboardListTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table className="home-dashboard-table"
                         columns={columns}
-                        dataSource={teamRegDashboardList.teamRegistrations}
+                        dataSource={userRegDashboardList}
                         pagination={false}
-                        loading={this.props.registrationState.onLoad === true && true}
+                        loading={userRegistrationState.onUserRegDashboardLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={teamRegDashboardList.page.currentPage}
-                        total={teamRegDashboardList.page.totalCount}
+                        current={userRegistrationState.userRegDashboardListPage}
+                        total={total}
                         onChange={(page) => this.handleRegTableList(page)}
                     />
                 </div>
@@ -411,8 +401,7 @@ function mapDispatchToProps(dispatch) {
         getGenderAction,
         getOnlyYearListAction,
         getAllCompetitionAction,
-        registrationPaymentStatusAction,
-        getTeamRegistrationsAction
+        registrationPaymentStatusAction
     }, dispatch);
 }
 
@@ -422,8 +411,7 @@ function mapStatetoProps(state) {
         userState: state.UserState,
         commonReducerState: state.CommonReducerState,
         appState: state.AppState,
-        registrationDashboardState: state.RegistrationDashboardState,
-        registrationState:state.RegistrationState
+        registrationDashboardState: state.RegistrationDashboardState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)((TeamRegistrations));

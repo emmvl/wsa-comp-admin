@@ -415,7 +415,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD:
-            return { ...state, roundLoad: true };
+            return { ...state, rounLoad: true };
 
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_SUCCESS:
@@ -426,7 +426,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                roundLoad: false
+                rounLoad: false
             };
         default:
             return state;

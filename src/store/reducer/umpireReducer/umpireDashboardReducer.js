@@ -106,7 +106,7 @@ function umpireDashboardState(state = initialState, action) {
             };
 
         case ApiConstants.API_UMPIRE_ROUND_LIST_LOAD:
-            return { ...state, roundLoad: true };
+            return { ...state, rounLoad: true };
 
 
         case ApiConstants.API_UMPIRE_ROUND_LIST_SUCCESS:
@@ -120,7 +120,7 @@ function umpireDashboardState(state = initialState, action) {
                 onLoad: false,
                 status: action.status,
                 allRoundList: action.result,
-                roundLoad: false
+                rounLoad: false
             };
 
         case ApiConstants.UPDATE_UMPIRE_DASHBOARD:

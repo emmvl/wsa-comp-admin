@@ -1068,8 +1068,8 @@ let LiveScoreAxiosApi = {
         }
     },
 
-    liveScoreMatchSheetPrint(competitionId, divisionId, teamId, templateType, roundName) {
-        const url = `/matches/print?competitionId=${competitionId}&divisionIds=${divisionId}&teamIds=${teamId}&templateType=${templateType}&roundName=${roundName}`;
+    liveScoreMatchSheetPrint(competitionId, divisionId, teamId, templateType) {
+        const url = `/matches/print?competitionId=${competitionId}&divisionIds=${divisionId}&teamIds=${teamId}&templateType=${templateType}`;
         return Method.dataGet(url, token)
     },
 
