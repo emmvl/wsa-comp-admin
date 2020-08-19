@@ -642,11 +642,11 @@ class CompetitionQuickCompetition extends Component {
                                 )}
                         </Form.Item>
                     </div>
-                    <div className="col-sm mt-2  quick-comp-btn-view">
+                    <div className="col-sm mt-2  quick-comp-btn-view button-space">
                         <Button className="open-reg-button save-draft-text" onClick={() => this.setState({ venueModalVisible: true })} type="primary">+ {AppConstants.addVenue}</Button>
                         <Button className="open-reg-button" onClick={() => this.visibleTimeModal()} type="primary">+ {AppConstants.add_TimeSlot}</Button>
                     </div>
-                    <div className="col-sm-2.5 mt-2  quick-comp-btn-view paddingview">
+                    <div className="col-sm-2.5 mt-2  quick-comp-btn-view paddingview button-space">
                         <Button id={AppUniqueId.add_Div_Grade_Btn} className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
                     </div>
 

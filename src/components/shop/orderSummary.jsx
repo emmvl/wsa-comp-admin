@@ -268,7 +268,7 @@ class OrderSummary extends Component {
 
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-4 pt-2">
+            <div className="comp-player-grades-header-drop-down-view mt-4 pt-2 orderSpace">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
@@ -345,7 +345,7 @@ class OrderSummary extends Component {
             { name: "Credit Card", value: "credit card" }
         ]
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view">
+            <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view orderSpace">
                 <div className="fluid-width" >
                     <div className="row reg-filter-row" >
 
@@ -401,7 +401,7 @@ class OrderSummary extends Component {
                             </div>
                         </div>
 
-                        <div className="reg-col col-md-3 col-sm-6" >
+                        <div className="reg-col col-md-3 col-sm-6 no-padding-right" >
                             <div className="reg-filter-col-cont" >
                                 <div className='year-select-heading'>{AppConstants.payment} :</div>
                                 <Select
@@ -426,7 +426,7 @@ class OrderSummary extends Component {
     noOfRegisteredUmpires() {
         let { numberOfOrders, valueOfOrders } = this.props.shopOrderSummaryState
         return (
-            <div className="comp-dash-table-view mt-2">
+            <div className="comp-dash-table-view">
                 <div>
                     <div className="row">
                         <div className="col-sm-6" >

@@ -1278,7 +1278,7 @@ const AppConstants = {
   enableInventoryTracking: 'Enable inventory tracking',
   StockKeepingUnit: 'Stock keeping unit',
   skuHeader: 'SKU(stock keeping unit)',
-  barcodeHeading: 'Barcode(ISBN,UPC,GTIN,etc)',
+  barcodeHeading: 'Barcode(ISBN, UPC, GTIN etc)',
   barcode: 'Barcode',
   quantity: 'Quantity',
   allowCustToPurchase:

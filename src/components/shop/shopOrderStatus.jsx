@@ -276,7 +276,7 @@ class ShopOrderStatus extends Component {
 
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-4 pt-2">
+            <div className="comp-player-grades-header-drop-down-view mt-4 pt-2 orderSpace">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>

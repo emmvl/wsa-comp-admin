@@ -61,13 +61,14 @@ class UmpireDivisions extends Component {
     headerView = () => {
 
         return (
-            <div className="header-view">
+            <div className="header-view divisions">
                 <Header
                     className="form-header-view"
                     style={{
                         backgroundColor: "transparent",
                         display: "flex",
                         alignItems: "center"
+
                     }}
                 >
                     <Breadcrumb separator=">">
@@ -94,7 +95,7 @@ class UmpireDivisions extends Component {
     dropdownView = (getFieldDecorator) => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
-            <div className="comp-venue-courts-dropdown-view mt-0">
+            <div className="comp-venue-courts-dropdown-view mt-0 ">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -104,6 +105,7 @@ class UmpireDivisions extends Component {
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
+                                    marginBottom:"12px"
                                 }}
                             >
                                 <span className="year-select-heading ">
@@ -115,6 +117,7 @@ class UmpireDivisions extends Component {
                                     style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
+                                    
                                 >
                                     {
                                         competition.map((item, index) => {
@@ -141,7 +144,7 @@ class UmpireDivisions extends Component {
     contentView = () => {
         return (
             <div className="content-view pt-4">
-                <span className="applicable-to-heading ">{AppConstants.allocatePools}</span>
+                <span className="text-heading-large">{AppConstants.allocatePools}</span>
                 <Radio.Group
                     className="reg-competition-radio"
                 // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}

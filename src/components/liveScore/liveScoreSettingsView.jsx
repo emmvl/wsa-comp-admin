@@ -425,7 +425,7 @@ class LiveScoreSettingsView extends Component {
                             name='shortName'
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.shortNameMsg}
-                            marginTop={10}
+                            marginTop={15}
                             onChange={(e) => {
                                 this.props.onChangeSettingForm({ key: e.target.name, data: e.target.value })
                             }}

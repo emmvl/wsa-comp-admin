@@ -181,7 +181,7 @@ class UmpireSetting extends Component {
 
         return (
             <div>
-                <span className='text-heading-large pt-2' >{AppConstants.howUmpiresAllocated}</span>
+                <span className='text-heading-large pt-2 pb-2' >{AppConstants.howUmpiresAllocated}</span>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <Radio
                         onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "allocateViaPool" })}
@@ -219,11 +219,11 @@ class UmpireSetting extends Component {
     contentView = () => {
         let defaultChecked = this.props.umpireSettingState.defaultChecked
         return (
-            <div className="content-view pt-4">
+            <div className="content-view pt-4 mt-5">
 
                 {this.umpireAllocationRadioView()}
 
-                <span className='text-heading-large pt-5' >{AppConstants.umpirePrefences}</span>
+                <span className='text-heading-large pt-5 pb-4' >{AppConstants.umpirePrefences}</span>
 
 
                 <div className="row" >

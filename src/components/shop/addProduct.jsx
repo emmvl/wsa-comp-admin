@@ -571,7 +571,7 @@ class AddProduct extends Component {
                 />
                 {this.editorView()}
 
-                <InputWithHead required="pt-5" heading={AppConstants.type} />
+                <InputWithHead required="pt-4" heading={AppConstants.type}  />
                 <Select
                     className="shop-type-select"
                     onChange={(value) =>
