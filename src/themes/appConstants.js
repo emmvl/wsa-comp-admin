@@ -1551,7 +1551,8 @@ const AppConstants = {
   finalGrading: "Final Grading",
   onlyCompMngmt: "Only Competition Management",													 
   deletePublishToLsMsg:"Are you sure you want to Delete this Competition? This Competition has also been pushed to Live Scores. Would you like to Delete",
-  deleteCompetition:"Delete Competition"												   
+  deleteCompetition:"Delete Competition",
+  enterCode:"Registration Code",  
 };
 
 export default AppConstants;
