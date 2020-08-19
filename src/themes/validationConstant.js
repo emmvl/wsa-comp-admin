@@ -198,10 +198,11 @@ const ValidationConstants = {
     venueAddressRequiredError: "Venue address is required",
     venueAddressDetailsError: "Please input venue address in details",
     duplicatedVenueAddressError: "Venue address is duplicated, please select other address",
-    duplicateDiscountError: "Discount's cannot be duplicated",
+    duplicateDiscountError: "Please remove the duplicate entry of Discount Code.",
     mnbMatchId: 'mnbMatchId is required',
     pleaseSelectOneOption: "Please select any option.",
-	pleaseProvideInstalmentDate:"Please provide an instalment date",
+    pleaseProvideInstalmentDate:"Please provide an instalment date",
+    duplicateFamilyDiscountError: "Please remove the duplicate entry of Family Discount for the same Membership Product.",
 };
 
 export default ValidationConstants;

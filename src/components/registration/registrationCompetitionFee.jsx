@@ -2206,6 +2206,7 @@ class RegistrationCompetitionFee extends Component {
     let divisionArrayData = compFeesState.competitionDivisionsData;
 
     let discountDuplicateError = false;
+    let errMsg = null;
     let discountMap = new Map();
     for(let x of filterOrgPostDiscountData){
       //if(x.competitionTypeDiscountTypeRefId == 3){
@@ -2214,6 +2215,11 @@ class RegistrationCompetitionFee extends Component {
           discountMap.set(key, 1);
         }
         else{
+          if(x.competitionTypeDiscountTypeRefId == 3)
+              errMsg = ValidationConstants.duplicateFamilyDiscountError;
+          else
+            errMsg = ValidationConstants.duplicateFamilyDiscountError;
+
           discountDuplicateError = true;
           break;
         }
@@ -2222,7 +2228,7 @@ class RegistrationCompetitionFee extends Component {
 
     if(discountDuplicateError){
       message.config({ duration: 0.9, maxCount: 1 })
-      message.error(ValidationConstants.duplicateDiscountError);
+      message.error(errMsg);
     }
     else{
       if (this.state.statusRefId == 1) {
@@ -2841,7 +2847,7 @@ class RegistrationCompetitionFee extends Component {
           this.saveCompFeesApiCall(e);
         } else if (tabKey == '5') {
           this.paymentApiCall(competitionId);
-          this.setState({ loading: true });
+          //this.setState({ loading: true });
         } else if (tabKey == '6') {
           this.discountApiCall(competitionId);
         }
