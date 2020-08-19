@@ -194,7 +194,7 @@ function* liveScoreGetTeamSaga(action) {
 // Team list with paging
 function* liveScoreTeamPagingSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.getTeamWithPagging, action.competitionID, action.offset, action.limit, action.search);
+    const result = yield call(LiveScoreAxiosApi.getTeamWithPagging, action.competitionID, action.offset, action.limit, action.search, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
       yield put({

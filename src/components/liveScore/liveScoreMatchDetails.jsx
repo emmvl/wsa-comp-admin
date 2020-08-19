@@ -14,6 +14,7 @@ import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
 import history from "../../util/history";
 import ValidationConstants from '../../themes/validationConstant';
+import InputWithHead from "../../customComponents/InputWithHead";
 
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -183,7 +184,9 @@ class LiveScoreMatchDetails extends Component {
             isLineUp: 0,
             toolTipVisible: false,
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
-            competitionId: null
+            competitionId: null,
+            visible: false,
+            liveStreamLink: null
         }
         this.umpireScore_View = this.umpireScore_View.bind(this)
         this.team_View = this.team_View.bind(this)
@@ -249,6 +252,28 @@ class LiveScoreMatchDetails extends Component {
         });
     }
 
+    ////method to show modal view after click
+    showModal = (data, isVideo) => {
+        this.setState({
+            visible: true,
+        });
+    };
+
+    ////method to hide modal view after ok click
+    handleOk = e => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+    ////method to hide modal view after click on cancle button
+    handleCancel = e => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+
     ///////view for breadcrumb
     headerView = () => {
         // const { match } = this.props.liveScoreMatchState.matchDetails
@@ -272,6 +297,26 @@ class LiveScoreMatchDetails extends Component {
                     </div>
                     <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
+
+                            <div className="col-sm">
+                                <div
+                                    className="comp-dashboard-botton-view-mobile"
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "flex-end"
+                                    }}
+                                >
+
+                                    <Button onClick={() => this.showModal()} className="primary-add-comp-form" type="primary">
+                                        + {AppConstants.addliveStream}
+                                    </Button>
+
+                                </div>
+                            </div>
+
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
@@ -500,6 +545,43 @@ class LiveScoreMatchDetails extends Component {
         //    return record ?  record.team1ResultId == null ?   "abc" : record.team1ResultId === 4 || 5 || 6 ? "def" : record.matchStatus : record.matchStatus
     }
 
+    ////modal view
+    ModalView() {
+        return (
+            <Modal
+                // title="WSA 1"
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                cancelButtonProps={{ style: { display: 'none' } }}
+                okButtonProps={{ style: { display: 'none' } }}
+                centered={true}
+                footer={null}
+            >
+                <InputWithHead
+                    // auto_Complete='new-LiveStreamLink'
+                    heading={AppConstants.liveStreamlink}
+                    placeholder={AppConstants.liveStreamlink}
+                    value={this.state.liveStreamLink}
+                    onChange={(e) => this.setState({ liveStreamLink: e.target.value })}
+                />
+                <div
+                    className="comp-dashboard-botton-view-mobile mt-3"
+                    style={{
+                        display: "flex",
+                        justifyContent: "flex-end"
+                    }}
+                >
+
+                    <Button onClick={() => this.showModal()} className="primary-add-comp-form" type="primary">
+                        {AppConstants.save}
+                    </Button>
+
+                </div>
+            </Modal>
+        )
+    }
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
@@ -524,6 +606,7 @@ class LiveScoreMatchDetails extends Component {
                     <Content>
                         {this.umpireScore_View()}
                         {this.team_View()}
+                        {this.ModalView()}
                     </Content>
                 </Layout>
             </div >

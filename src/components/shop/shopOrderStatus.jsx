@@ -58,12 +58,12 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("id"),
         render: (orderId, record) =>
-            // <NavLink to={{
-            //     pathname: `/userPersonal`,
-            //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
-            // }}>
-            <span className="input-heading-add-another pt-0" >{orderId}</span>
-        // </NavLink>
+            <NavLink to={{
+                pathname: `/orderDetails`,
+                state: { orderId: orderId }
+            }}>
+                <span className="input-heading-add-another pt-0" >{orderId}</span>
+            </NavLink>
     },
     {
         title: 'Date',
@@ -175,7 +175,7 @@ class ShopOrderStatus extends Component {
             paymentStatus: -1,
             fulfilmentStatus: -1,
             product: -1,
-            searchText: "",
+            searchText: props.location.state ? props.location.state.orderId : "",
         }
         this_obj = this
     }
@@ -289,6 +289,7 @@ class ShopOrderStatus extends Component {
                                 <div style={{ display: "flex", justifyContent: 'flex-end' }} >
                                     <div className="comp-product-search-inp-width" >
                                         <Input className="product-reg-search-input"
+                                            value={this.state.searchText}
                                             onChange={(e) => this.onChangeSearchText(e)}
                                             placeholder="Search..."
                                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}

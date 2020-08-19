@@ -49,11 +49,13 @@ function liveScoreDivisionImportAction(payload) {
 }
 
 //Division action
-function getMainDivisionListAction(competitionID,offset) {
+function getMainDivisionListAction(competitionID, offset, sortBy, sortOrder) {
     return {
         type: ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD,
         competitionID,
-        offset
+        offset,
+        sortBy,
+        sortOrder
     };
 }
 

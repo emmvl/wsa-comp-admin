@@ -10,13 +10,31 @@ const initialState = {
     error: null,
     result: [],
     status: 0,
-    defaultChecked: settingsChecked
+    defaultChecked: settingsChecked,
+    allocateViaPool: false,
+    umpireYourOwn: false,
 };
 function umpireSettingState(state = initialState, action) {
 
     switch (action.type) {
         case ApiConstants.API_UMPIRE_SETTINGS_DATA_UPDATE:
-            state.defaultChecked[action.key] = action.data
+
+            let data = action.data.data
+            let key = action.data.key
+
+            if (key === 'allocateViaPool' || key === 'umpireYourOwn') {
+
+                if (key === 'allocateViaPool') {
+                    state[key] = data
+                    state['umpireYourOwn'] = false
+
+                } else if (key === 'umpireYourOwn') {
+                    state[key] = data
+                    state['allocateViaPool'] = false
+                }
+            } else {
+                state.defaultChecked[key] = data
+            }
             return {
                 ...state,
                 onLoad: false,

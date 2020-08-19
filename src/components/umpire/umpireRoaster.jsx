@@ -87,7 +87,7 @@ const columns = [
             return (
                 <div>
                     {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item, index) => (
-                        <span key={`organisationName` + index} className='multi-column-text-aligned'>{item.organisation.name}</span>
+                        <span key={`organisationName` + index} className='multi-column-text-aligned'>{item.competitionOrganisation.name}</span>
                     ))
                     }
                 </div>)

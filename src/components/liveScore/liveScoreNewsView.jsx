@@ -225,6 +225,7 @@ class LiveScoreNewsView extends Component {
                 cancelButtonProps={{ style: { display: 'none' } }}
                 okButtonProps={{ style: { display: 'none' } }}
                 centered={true}
+                footer={null}
             >
                 {this.innerViewOfModal()}
             </Modal>

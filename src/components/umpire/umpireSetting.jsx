@@ -136,85 +136,84 @@ class UmpireSetting extends Component {
         );
     };
 
-    //////footer view containing all the buttons like save and cancel
-    footerView = (isSubmitting) => {
+    //////footer view containing all the buttons like submit and cancel
+    footerView = () => {
+
         return (
-            <div className="flud-widtih">
+            <div className="fluid-width">
+
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm-3">
+                        <div className="col-sm">
                             <div className="reg-add-save-button">
-                                {/* <NavLink to='/umpire'> */}
-                                <Button type="cancel-button">{AppConstants.cancel}</Button>
-                                {/* </NavLink> */}
+                                <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="open-reg-button" type="primary" htmlType="submit" disabled={isSubmitting}>
-                                    {AppConstants.generateRoster}
+                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
+                                    {/* {AppConstants.generateRoster} */}
+                                    {AppConstants.save}
                                 </Button>
+                                <NavLink to='/umpirePoolAllocation'>
+                                    <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
+                                        {AppConstants.next}
+                                    </Button>
+                                </NavLink>
+
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         );
+
     };
 
     umpireAllocationRadioView() {
-        const arr = [
-            { id: 1, name: 'Allocate via pools' },
-            { id: 2, name: 'Umpires linked to a team' }
-        ]
+
+        const { allocateViaPool, umpireYourOwn } = this.props.umpireSettingState
 
         const umpireLinkTeamArr = [
-            { id: 1, name: 'Umpire your own' },
-            { id: 2, name: 'Umpire same Timeslot as their Team' },
-            { id: 3, name: 'Umpire same grade as their Team' }
+            { id: 3, name: 'Link to a team' },
+            { id: 4, name: 'No preference' },
         ]
 
         return (
             <div>
                 <span className='text-heading-large pt-2' >{AppConstants.howUmpiresAllocated}</span>
-                <Radio.Group
-                    className="reg-competition-radio"
-                // onChange={(e) => { this.setState({ evenRotationFlag: false }); this.props.updateVenueConstraintsData(e.target.value, null, "courtPreferences", "courtParentSelection") }}
-                // value={selectedRadioBtn}
-                >
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <Radio
+                        onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "allocateViaPool" })}
+                        checked={allocateViaPool}>
+                        {'Allocate via pools'}
+                    </Radio>
 
-                    {arr.length > 0 && arr.map((item, index) => {
-                        return (
-                            <div key={`name${index}` + item.id}>
-                                <div className='contextualHelp-RowDirection' >
-                                    <Radio value={item.id}>{item.name}</Radio>
+                    <Radio
+                        // className={paidByCompOrg ? 'pt-5' : 'pt-4'}
+                        onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "umpireYourOwn" })}
+                        checked={umpireYourOwn}>
+                        {'Umpire your own'}
+                    </Radio>
 
-                                </div>
-                                {item.id == 2 &&
-                                    <div className="ml-5" >
-                                        <Radio.Group
-                                            className="reg-competition-radio"
-                                        // onChange={(e) => this.props.updateVenueConstraintsData(e.target.value, null, "", "evenRotationValue", index)}
-                                        // value={evenRotation}
-                                        >
-                                            {umpireLinkTeamArr.length > 0 && umpireLinkTeamArr.map((item, index) => {
-                                                return (
-                                                    <Radio key={`name` + index} value={item.id}>{item.name}</Radio>
-                                                )
-                                            }
-                                            )}
+                    {umpireYourOwn &&
+                        <Radio.Group
+                            className="reg-competition-radio ml-5"
+                        >
+                            {umpireLinkTeamArr.length > 0 && umpireLinkTeamArr.map((item, index) => {
+                                return (
+                                    <Radio key={`name` + index} value={item.id}>{item.name}</Radio>
+                                )
+                            }
+                            )}
 
-                                        </Radio.Group>
-                                    </div>
-                                }
-                            </div>
-                        )
+                        </Radio.Group>
                     }
-                    )}
-                </Radio.Group>
+                </div>
             </div>
         )
     }
+
 
     ////////form content view
     contentView = () => {
@@ -260,7 +259,8 @@ class UmpireSetting extends Component {
                 <Checkbox
                     className="single-checkbox pt-2"
                     checked={defaultChecked.reserveChecked}
-                    onChange={(e) => this.props.updateUmpireDataAction(e.target.checked, "reserveChecked")}
+                    onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "reserveChecked" })}
+
                 >
                     {AppConstants.activeUmpireReserves}
                 </Checkbox>
@@ -298,7 +298,7 @@ class UmpireSetting extends Component {
                 <Checkbox
                     className="single-checkbox pt-2"
                     checked={defaultChecked.coachChecked}
-                    onChange={(e) => this.props.updateUmpireDataAction(e.target.checked, "coachChecked")}
+                    onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "coachChecked" })}
                 >
                     {AppConstants.activeUmpireCoach}
                 </Checkbox>
@@ -340,7 +340,7 @@ class UmpireSetting extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-
+        const { allocateViaPool } = this.props.umpireSettingState
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
@@ -357,7 +357,7 @@ class UmpireSetting extends Component {
                             <div className="formView">{this.contentView()}</div>
 
                         </Content>
-                        <Footer>{this.footerView()}</Footer>
+                        <Footer>{allocateViaPool && this.footerView()}</Footer>
                     </Form>
                 </Layout>
             </div>

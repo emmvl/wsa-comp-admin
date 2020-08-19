@@ -90,7 +90,11 @@ const initialState = {
   reg_settings: [],
   reg_demoSetting: [],
   reg_NetballSetting: [],
-  reg_QuestionsSetting: []
+  reg_QuestionsSetting: [],
+  teamRegistrationTableData:{
+    page:{},
+    teamRegistrations:[]
+  },
 };
 
 
@@ -1169,7 +1173,19 @@ function registration(state = initialState, action) {
         status: action.status, error: null
       };
 
+      case ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD:
+        return {
+            ...state,
+            onLoad: true
+        }
 
+    case ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_SUCCESS:
+        return {
+            ...state,
+            onLoad: false,
+            teamRegistrationTableData: action.result,
+            status: action.status
+        }	 
 
     default:
       return state;

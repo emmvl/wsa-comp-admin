@@ -41,9 +41,9 @@ const columns = [
         key: 'name',
         sorter: (a, b) => tableSort(a, b, "name"),
         render: (data, record) => (
-            record.hasAdjustments ? 
-            <span className="required-field">{data}</span>
-            :  <span>{data}</span>
+            record.hasAdjustments ?
+                <span className="required-field">{data}</span>
+                : <span>{data}</span>
         )
     },
 
@@ -73,6 +73,14 @@ const columns = [
         dataIndex: 'D',
         key: 'D',
         sorter: (a, b) => tableSort(a, b, "D"),
+
+
+    },
+    {
+        title: 'B',
+        dataIndex: 'B',
+        key: 'B',
+        sorter: (a, b) => tableSort(a, b, "B"),
 
 
     },
@@ -297,12 +305,12 @@ class LiveScoreLadderList extends Component {
                     // onChange={this.handleTableChange}
                     />
                 </div> */}
-                <div  className="comp-dash-table-view mt-4 ml-1">
+                <div className="comp-dash-table-view mt-4 ml-1">
                     <div className="ladder-list-adjustment">
                         {
-                            (adjData || []).map((x,index) =>(
-                                <div key ={index} style={{marginBottom: '10px'}}>
-                                    <li className="required-field">{x.teamName + ' deducted ' + x.points + ' points for ' + x.adjustmentReason   }</li>
+                            (adjData || []).map((x, index) => (
+                                <div key={index} style={{ marginBottom: '10px' }}>
+                                    <li className="required-field">{x.teamName + ' deducted ' + x.points + ' points for ' + x.adjustmentReason}</li>
                                 </div>
                             ))
                         }

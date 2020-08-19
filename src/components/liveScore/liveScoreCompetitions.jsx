@@ -21,13 +21,31 @@ const { Option } = Select;
 const { confirm } = Modal
 let this_Obj = null
 
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
 
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
 
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+
+    const body = {
+        "paging": {
+            "limit": 10,
+            "offset": this_Obj.state.offsetData
+        }
+    }
+    this_Obj.props.liveScoreCompetionActioninitiate(body, null, this_Obj.state.orgKey, null, sortBy, sortOrder)
 }
 
 
@@ -36,9 +54,8 @@ const columnsOwned = [
         title: "Name",
         dataIndex: "longName",
         key: "longName",
-        // sorter: (a, b) => a.longName - b.longName,
-        sorter: (a, b) => tableSort(a, b, "longName"),
-
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('name'),
         render: (longName, record) => {
             return (
 
@@ -54,8 +71,8 @@ const columnsOwned = [
         title: "Divisions/Age",
         dataIndex: "divisions",
         key: "divisions",
-        // sorter: (a, b) => a.divisions - b.divisions,
-        sorter: (a, b) => tableSort(a, b, "divisions"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('divisions'),
         render: divisions => {
             if (divisions != null) {
                 var divisionArray = divisions.split(",")
@@ -86,11 +103,10 @@ const columnsOwned = [
 
     {
         title: "Teams",
-        dataIndex: "teamCount",
+        dataIndex: "teams",
         key: "teamCount",
-        // sorter: (a, b) => a.teams - b.teams,
-        sorter: (a, b) => tableSort(a, b, "teamCount"),
-
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('teams'),
         render: (teams, record) =>
             <span style={{ cursor: "pointer" }} onClick={() => {
                 this_Obj.setCompetitionID(record)
@@ -99,10 +115,10 @@ const columnsOwned = [
     },
     {
         title: "Players",
-        dataIndex: "playerCount",
+        dataIndex: "players",
         key: "playerCount",
-        // sorter: (a, b) => a.players - b.players,
-        sorter: (a, b) => tableSort(a, b, "playerCount"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('players'),
         render: (players, record) =>
             <span style={{ cursor: "pointer" }} onClick={() => {
                 this_Obj.setCompetitionID(record)
@@ -113,8 +129,8 @@ const columnsOwned = [
         title: "Status",
         dataIndex: "status",
         key: "status",
-        // sorter: (a, b) => a.status - b.status,
-        sorter: (a, b) => tableSort(a, b, "status"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('status'),
         render: (status, record) =>
             <span style={{ cursor: "pointer" }} onClick={() => {
                 this_Obj.setCompetitionID(record)
@@ -157,6 +173,7 @@ class LiveScoreCompetitions extends Component {
             onLoad: false,
             orgKey: getOrganisationData() ? getOrganisationData().organisationId : null,
             orgLevel: AppConstants.state,
+            offsetData: 0
         }
         this_Obj = this
 
@@ -231,7 +248,11 @@ class LiveScoreCompetitions extends Component {
 
     /// Handle Pagination 
     handlePaggination(page) {
+
         let offset = page ? 10 * (page - 1) : 0;
+        this.setState({
+            offsetData: offset
+        })
         const body = {
             "paging": {
                 "limit": 10,

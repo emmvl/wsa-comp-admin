@@ -289,3 +289,20 @@ export function* getDivisionsListSaga(action) {
     yield call(errorSaga, error)
   }
 }
+
+export function* getTeamRegistrationsSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getTeamRegistrations,action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}

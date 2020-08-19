@@ -67,6 +67,19 @@ function shopOrderStatusState(state = initialState, action) {
                 error: null
             };
 
+        //// //////order details get API
+        case ApiConstants.API_GET_ORDER_DETAILS_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_ORDER_DETAILS_SUCCESS:
+            let orderDetails = action.result
+            console.log("orderDetails", orderDetails)
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
         default:
             return state;
     }

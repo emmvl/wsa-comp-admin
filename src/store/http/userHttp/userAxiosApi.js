@@ -50,7 +50,7 @@ let userHttpApi = {
 
   async impersonation(payload) {
     const userId = await getUserId();
-    const {orgId, access} = payload;
+    const { orgId, access } = payload;
     const url = `/ure/impersonation?userId=${userId}&organisationUniqueKey=${orgId}&access=${access}`;
 
     return Method.dataPost(url, token);
@@ -94,10 +94,11 @@ let userHttpApi = {
 
   liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder) {
     let url = ''
+    let offsetValue = offset ? offset : 0
     if (searchText) {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}&offset=${offset}&limit=${10}`;
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}&offset=${offsetValue}&limit=${10}`;
     } else {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&offset=${offset}&limit=${10}`;
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&offset=${offsetValue}&limit=${10}`;
     }
 
     if (sortBy && sortOrder) {

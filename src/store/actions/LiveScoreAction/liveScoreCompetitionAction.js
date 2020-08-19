@@ -1,11 +1,12 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-export const liveScoreCompetionActioninitiate = (data, year , orgKey) => {
+export const liveScoreCompetionActioninitiate = (data, year, orgKey, recordUmpires, sortBy, sortOrder) => {
     return {
         type: ApiConstants.API_LIVESCORE_COMPETITION_INITATE,
         payload: data,
-        year : year,
-        orgKey :orgKey
+        year: year,
+        orgKey: orgKey,
+        sortBy, sortOrder
     }
 }
 export const liveScoreCompetionActionSuccess = (data) => {

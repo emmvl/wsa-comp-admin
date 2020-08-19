@@ -976,6 +976,9 @@ input[type="number"] {
 .upon-reg{
   margin-top: 0px !important;
 }
+.ant-switch-checked {
+  background-color:var(--app-color);
+}
 
 @media (max-width: 767px) {
   .auth-form {

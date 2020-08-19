@@ -309,7 +309,7 @@ function* playerPositionReferenceSaga(/* action */) {
 // Get the Venues list for User Module
 function* venuesListSaga(action) {
   try {
-    const result = yield call(CommonAxiosApi.getVenuesList, action.data);
+    const result = yield call(CommonAxiosApi.getVenuesList, action.data,action.sortBy,action.sortOrder);
 
     if (result.status === 1) {
       yield put({
