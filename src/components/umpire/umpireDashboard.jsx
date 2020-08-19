@@ -928,7 +928,7 @@ class UmpireDashboard extends Component {
 
                         <div className="reg-col" >
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.competition}</div>
+                                <div className='year-select-heading' style={{width:"150px"}}>{AppConstants.competition}</div>
                                 <Select
                                     // showSearch
                                     // optionFilterProp="children"
@@ -970,7 +970,7 @@ class UmpireDashboard extends Component {
 
                         <div className="reg-col1 ml-5" >
                             <div className="reg-filter-col-cont" >
-                                <div className='year-select-heading'>{AppConstants.division}</div>
+                                <div className='year-select-heading' style={{width:"138px"}}>{AppConstants.division}</div>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     onChange={(divisionId) => this.onDivisionChange(divisionId)}

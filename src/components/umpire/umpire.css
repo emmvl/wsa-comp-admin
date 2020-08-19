@@ -33,6 +33,17 @@
   .umpire-btn-width{
       min-width: 145px;
   }
+  .ant-select-selection--multiple .ant-select-selection__rendered{
+    width: 100%;
+    min-width: 100%;
+    overflow: hidden;
+    padding-right: 8px;
+
+  }
+  .header-view.divisions {
+    margin-top: 0.5%;
+    margin-bottom: 0.5%;
+}
 
 @media (max-width: 767px) {
     

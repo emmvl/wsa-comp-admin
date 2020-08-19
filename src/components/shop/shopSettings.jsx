@@ -265,6 +265,7 @@ class ShopSettings extends Component {
                                 'postcode'
                             )}
                             type="number"
+                            min={0}
                         />
                     )}
                 </Form.Item>

@@ -833,3 +833,6 @@ a.collapsed i {
 {
   font-size: 18px;
 }
+.button-space .ant-btn-primary {
+  padding-right: 21px;
+}

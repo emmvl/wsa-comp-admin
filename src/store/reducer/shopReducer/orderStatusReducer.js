@@ -1,6 +1,12 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty } from "../../../util/helpers";
 
+// dummy object of product detail
+const defaultAddProductObject = {
+    id: "",
+
+}
+
 const initialState = {
     onLoad: false,
     error: null,
@@ -10,6 +16,13 @@ const initialState = {
     orderStatusTotalCount: 1,
     orderStatusCurrentPage: 1,
 };
+
+////making the object data for order detail 
+function makeOrderDetailObject(data) {
+    let objectDetailData = {}
+    objectDetailData['id'] = data.id
+    return objectDetailData
+}
 
 function shopOrderStatusState(state = initialState, action) {
     switch (action.type) {
@@ -72,7 +85,7 @@ function shopOrderStatusState(state = initialState, action) {
             return { ...state, onLoad: true, error: null };
 
         case ApiConstants.API_GET_ORDER_DETAILS_SUCCESS:
-            let orderDetails = action.result
+            let orderDetails = makeOrderDetailObject(action.result)
             console.log("orderDetails", orderDetails)
             return {
                 ...state,
