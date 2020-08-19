@@ -68,12 +68,14 @@ function liveScoreMatchSheetState(state = initialState, action) {
                 onLoad: false,
                 error: action.error,
                 status: action.status,
+                printLoad: false,
             };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_SHEET_ERROR:
             return {
                 ...state,
                 onLoad: false,
+                printLoad: false,
             };
 
         case ApiConstants.API_MATCH_SHEET_PRINT_LOAD:
