@@ -304,8 +304,7 @@ let AxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let sourceModule = payload.sourceModule != undefined ? payload.sourceModule : "REG";
-        var url = `/api/competitionfee/division?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}
-                        &affiliateOrgId=${affiliateOrgId}`;
+        var url = `/api/competitionfee/division?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}&affiliateOrgId=${affiliateOrgId}`;
         return Method.dataPost(url, token, payload);
     },
     //casual PaymentOption
