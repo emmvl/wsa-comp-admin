@@ -12,7 +12,7 @@ import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
-import { getOrderDetailsAction } from '../../store/actions/shopAction/orderStatusAction';
+import { getOrderDetailsAction, clearOrderStatusReducer } from '../../store/actions/shopAction/orderStatusAction';
 import { currencyFormat } from "../../util/currencyFormat";
 
 const { Header, Footer, Content } = Layout;
@@ -32,6 +32,7 @@ class OrderDetails extends Component {
         this.state = {
 
         }
+        props.clearOrderStatusReducer("orderDetails")
     }
 
 
@@ -69,17 +70,21 @@ class OrderDetails extends Component {
 
     ////////form content view
     contentView = (getFieldDecorator) => {
-        let dataDummy = [1, 2]
+        let { orderDetails } = this.props.shopOrderStatusState
+        console.log("orderDetails", orderDetails)
         return (
             <div className="content-view pt-4">
-                <span className="form-heading">{AppConstants.order + " # " + "12311"}</span>
+                <div className="d-flex row align-items-center">
+                    <span className="form-heading pb-0">{AppConstants.order}</span>
+                    <span className="product-price-text-style ml-2" style={{ fontSize: 22 }}>{" # " + orderDetails.id}</span>
+                </div>
                 {
-                    dataDummy.map((item) => {
+                    isArrayNotEmpty(orderDetails.sellProducts) && orderDetails.sellProducts.map((item, index) => {
                         return (
-                            <div className="row mt-4">
-                                <div className="col-sm d-flex justify-content-center align-items-center w-25">
+                            <div className="row mt-4" key={"sellProducts" + index}>
+                                <div className="w-25 d-flex justify-content-center align-items-center ">
                                     <img
-                                        src={AppImages.squareImage}
+                                        src={isArrayNotEmpty(item.product.images) ? item.product.images[0].url : AppImages.squareImage}
                                         className="order-details-product-image"
                                         name={'image'}
                                         onError={ev => {
@@ -87,15 +92,16 @@ class OrderDetails extends Component {
                                         }}
                                     />
                                 </div>
-                                <div className="col-sm d-flex justify-content-start align-items-center w-55">
+                                <div className="w-50 d-flex align-items-center order-detail-prd-name-view">
                                     <div style={{ flexDirection: "column" }}>
-                                        <span className="order-details-desc-text" style={{ lineHeight: 1.54 }}>{"Firebirds Jumper - Small"}</span>
-                                        <span className="order-details-desc-text" style={{ lineHeight: 1.54 }}>{"SKU: " + "188988"}</span>
+                                        <span className="order-details-desc-text" style={{ lineHeight: 1.54 }}>{item.product.productName}</span>
+                                        <span className="order-details-desc-text" style={{ lineHeight: 1.54 }}>{"SKU: " + (item.SKU ? item.SKU.id : 0)}</span>
                                     </div>
                                 </div>
-                                <div className="col-sm d-flex justify-content-center align-items-center w-20">
-                                    <span className="order-details-desc-text">{"1" + "x"}</span>
-                                    <span className="order-details-desc-text">{currencyFormat("25")}</span>
+                                <div className="w-25 d-flex justify-content-center align-items-center">
+                                    <span className="order-details-desc-text">{(item.SKU ? item.SKU.quantity : 0)}</span>
+                                    <span className="order-details-desc-text ml-2">{"x"}</span>
+                                    <span className="order-details-desc-text ml-2">{currencyFormat(item.SKU ? item.SKU.price : 0)}</span>
                                 </div>
                             </div>
                         )
@@ -107,6 +113,7 @@ class OrderDetails extends Component {
 
     ////////billing and address view
     addressView = (getFieldDecorator) => {
+        let { orderDetails } = this.props.shopOrderStatusState
         return (
             <div className="fees-view pt-4">
                 <div className="row">
@@ -121,10 +128,16 @@ class OrderDetails extends Component {
                 </div>
                 <div className="row">
                     <div className="col-sm">
-                        <span className="order-details-desc-text">{"Sam Obrien"}</span>
-                        <span className="order-details-desc-text">{"Unit 6/5 livingstone place"}</span>
-                        <span className="order-details-desc-text">{"Newport 2106"}</span>
-                        <span className="order-details-desc-text">{"NSW"}</span>
+                        {orderDetails.user &&
+                            <div className="live-score-title-icon-view">
+                                {orderDetails.user.firstName && <span className="order-details-desc-text">{orderDetails.user.firstName}</span>}
+                                {orderDetails.user.middleName && <span className="order-details-desc-text ml-2">{orderDetails.user.middleName}</span>}
+                                {orderDetails.user.lastName && <span className="order-details-desc-text ml-2">{orderDetails.user.lastName}</span>}
+                            </div>
+                        }
+                        <span className="order-details-desc-text">{orderDetails.address}</span>
+                        <span className="order-details-desc-text">{orderDetails.suburb + " " + orderDetails.postcode}</span>
+                        <span className="order-details-desc-text">{orderDetails.state}</span>
                         <div className="live-score-title-icon-view">
                             <div className="order-details-desc-text">
                                 <span>{AppConstants.receiptUrl + ":"}</span>
@@ -137,13 +150,13 @@ class OrderDetails extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.callAnswer} alt="" height="16" width="16" />
                             </div>
-                            <span className='order-details-desc-text ml-3'>{"+61 401379517"}</span>
+                            <span className='order-details-desc-text ml-3'>{orderDetails.user ? orderDetails.user.mobileNumber : "N/A"}</span>
                         </div>
                         <div className="live-score-title-icon-view">
                             <div className="live-score-icon-view">
                                 <img src={AppImages.email} alt="" height="16" width="16" />
                             </div>
-                            <span className='order-details-desc-text ml-3'>{"sam@worldsportaction.com"}</span>
+                            <span className='order-details-desc-text ml-3'>{orderDetails.user ? orderDetails.user.email : "N/A"}</span>
                         </div>
                     </div>
                 </div>
@@ -183,7 +196,7 @@ class OrderDetails extends Component {
     //////footer view containing all the buttons 
     footerView = () => {
         return (
-            <div className="footer-view">
+            <div className="footer-view order-detail-button-view">
                 <div className="row">
                     <div className="col-sm">
                         <div className="reg-add-save-button">
@@ -224,8 +237,8 @@ class OrderDetails extends Component {
                             <div className="formView">{this.fulfilmentView(getFieldDecorator)}</div>
                         </Content>
 
-                        {/* <Loader
-                            visible={this.props.shopOrderStatusState.onLoad} /> */}
+                        <Loader
+                            visible={this.props.shopOrderStatusState.onLoad} />
                         <Footer>{this.footerView()}</Footer>
                     </Form>
                 </Layout>
@@ -236,7 +249,8 @@ class OrderDetails extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getOrderDetailsAction
+        getOrderDetailsAction,
+        clearOrderStatusReducer,
     }, dispatch)
 }
 

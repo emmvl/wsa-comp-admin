@@ -186,7 +186,7 @@ const columns_Invite = [
                                 <span>{''}</span>
                             :
                             <span>{''}</span>} */}
-                    {isArrayNotEmpty(umpire1.organisations) && umpire1.organisations.map((item, index) => (
+                    {isArrayNotEmpty(umpire1.competitionOrganisations) && umpire1.competitionOrganisations.map((item, index) => (
                         <span style={{ color: validateColor(umpire1) }} className='multi-column-text-aligned' >{item.name}</span>
                     ))}
 
@@ -236,7 +236,7 @@ const columns_Invite = [
                                 <span>{''}</span>
                             :
                             <span>{''}</span>} */}
-                    {isArrayNotEmpty(umpire2.organisations) && umpire2.organisations.map((item, index) => (
+                    {isArrayNotEmpty(umpire2.competitionOrganisations) && umpire2.competitionOrganisations.map((item, index) => (
                         <span style={{ color: validateColor(umpire2) }} key={index} className='multi-column-text-aligned' >{item.name}</span>
                     ))}
 
@@ -413,7 +413,7 @@ const columns = [
                                 <span>{''}</span>
                             :
                             <span>{''}</span>} */}
-                    {isArrayNotEmpty(umpire1.organisations) && umpire1.organisations.map((item, index) => (
+                    {isArrayNotEmpty(umpire1.competitionOrganisations) && umpire1.competitionOrganisations.map((item, index) => (
                         <span style={{ color: validateColor(umpire1) }} className='multi-column-text-aligned' >{item.name}</span>
                     ))}
 
@@ -467,7 +467,7 @@ const columns = [
                                 <span>{''}</span>
                             :
                             <span>{''}</span>} */}
-                    {isArrayNotEmpty(umpire2.organisations) && umpire2.organisations.map((item, index) => (
+                    {isArrayNotEmpty(umpire2.competitionOrganisations) && umpire2.competitionOrganisations.map((item, index) => (
                         <span style={{ color: validateColor(umpire2) }} className='multi-column-text-aligned' >{item.name}</span>
                     ))}
 
