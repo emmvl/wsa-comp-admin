@@ -55,7 +55,7 @@ let CompManagementAxiosApi = {
   },
    async competitionDashboardDelete(competitionId,targetValue)
   {
-    var url = `/api/competition/delete?competitionId=${competitionId}?deleteOptionId=${targetValue}`;
+    var url = `/api/competition/delete?competitionId=${competitionId}&deleteOptionId=${targetValue}`;
     return Method.dataDelete(url, token);
   }
 };
