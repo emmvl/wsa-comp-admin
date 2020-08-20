@@ -63,7 +63,7 @@ function LiveScorePlayerState(state = initialState, action) {
                     var editPlayerObj = {
                         firstName: action.data.firstName,
                         lastName: action.data.lastName,
-                        dateOfBirth: moment(action.data.dob).format('DD-MM-YYYY'),
+                        dateOfBirth: action.data.dob ? moment(action.data.dob).format('DD-MM-YYYY') : null,
                         phoneNumber: action.data.phoneNumber,
                         mnbPlayerId: action.data.mnbPlayerId,
                         teamId: action.data.team ? action.data.team.id : action.data.teamId,

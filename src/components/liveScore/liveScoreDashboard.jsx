@@ -472,9 +472,8 @@ const columnsTodaysIncient = [
         key: 'Last Name',
         sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
         render: (incidentPlayers, record) =>
-
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
-                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.gotoUmpire(item)} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(item)} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
             ))
     },
     {

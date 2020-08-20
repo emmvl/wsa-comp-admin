@@ -343,7 +343,7 @@ const percentColumn = [
         dataIndex: 'gs',
         key: 'gs',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('gs'),
+        sorter: (a, b) => sorting(a, b, "gs"),
         render: (gs, records) =>
             <span nowrap className="column-width-style" >{gs} </span>
     },
@@ -352,7 +352,7 @@ const percentColumn = [
         dataIndex: 'ga',
         key: 'ga',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('ga'),
+        sorter: (a, b) => sorting(a, b, "ga"),
         render: (ga, records) =>
             <span nowrap className="column-width-style" >{ga} </span>
     },
@@ -361,7 +361,7 @@ const percentColumn = [
         dataIndex: 'wa',
         key: 'wa',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('wa'),
+        sorter: (a, b) => sorting(a, b, "wa"),
         render: (wa, records) =>
             <span nowrap className="column-width-style" >{wa} </span>
     },
@@ -370,7 +370,7 @@ const percentColumn = [
         dataIndex: 'c',
         key: 'c',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('c'),
+        sorter: (a, b) => sorting(a, b, "c"),
         render: (c, records) =>
             <span nowrap className="column-width-style" >{c} </span>
     },
@@ -379,7 +379,7 @@ const percentColumn = [
         dataIndex: 'wd',
         key: 'wd',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('wd'),
+        sorter: (a, b) => sorting(a, b, "wd"),
         render: (wd, records) =>
             <span nowrap className="column-width-style" >{wd} </span>
     },
@@ -388,7 +388,7 @@ const percentColumn = [
         dataIndex: 'gd',
         key: 'gd',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('gd'),
+        sorter: (a, b) => sorting(a, b, "gd"),
         render: (gd, records) =>
             <span nowrap className="column-width-style" >{gd} </span>
     },
@@ -397,7 +397,7 @@ const percentColumn = [
         dataIndex: 'gk',
         key: 'gk',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('gk'),
+        sorter: (a, b) => sorting(a, b, "gk"),
         render: (gk, records) =>
             <span nowrap className="column-width-style" >{gk} </span>
     },
@@ -406,7 +406,7 @@ const percentColumn = [
         dataIndex: 'played',
         key: 'played',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('played'),
+        sorter: (a, b) => sorting(a, b, "played"),
         render(played, record) {
             return {
                 props: {
@@ -421,7 +421,7 @@ const percentColumn = [
         dataIndex: 'bench',
         key: 'bench',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('bench'),
+        sorter: (a, b) => sorting(a, b, "bench"),
         render(bench, record) {
             return {
                 props: {
