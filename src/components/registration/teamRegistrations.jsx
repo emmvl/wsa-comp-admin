@@ -278,7 +278,7 @@ class TeamRegistrations extends Component {
                 uniqueValues = [...uniqueValues, ...arr];
             }
         }
-        const { competitions } = this.props.userRegistrationState;
+        let competitions = this.props.registrationState.teamRegistrationTableData.competitionList;
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="fluid-width" style={{ marginRight: 55 }} >
@@ -315,7 +315,7 @@ class TeamRegistrations extends Component {
                                     {(competitions || []).map(item => {
                                         return (
                                             <Option key={"competition" + item.competitionUniqueKey} value={item.competitionUniqueKey}>
-                                                {item.competitionName}
+                                                {item.name}
                                             </Option>
                                         );
                                     })}

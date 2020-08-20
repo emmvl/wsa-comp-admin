@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Tag, Modal, Menu } from "antd";
+import { Layout, Button, Table, Select, Tag, Modal, Menu, Radio } from "antd";
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -209,7 +209,7 @@ const columnsOwned = [
                         }
                     >
                         <Menu.Item key="1"
-                            onClick={() => this_Obj.deleteCompetition("show" , record.competitionId)}
+                            onClick={() => this_Obj.deleteCompetition("show" , record)}
                         >
                             <span>{AppConstants.delete}</span>
                         </Menu.Item>
@@ -228,7 +228,9 @@ class CompetitionDashboard extends Component {
             year: "2019",
             loading: false,
 			modalVisible: false,
-            competitionId: ""		 
+            competitionId: "",
+            statusRefId: null,
+            onDeleteTargetValue: null	   
         };
         this.props.CLEAR_OWN_COMPETITION_DATA("participate_CompetitionArr")
         this_Obj = this
@@ -281,18 +283,18 @@ class CompetitionDashboard extends Component {
         }
         this.props.updateCompetitionStatus(payload, selectedYearId)
     }
-	deleteCompetition = (key, competitionId) => {
-        console.log("competitionId"+ competitionId)
+	deleteCompetition = (key, record) => {
         if(key == "show")
         {
             this.setState({
                 modalVisible:true,
-                competitionId: competitionId
+                competitionId: record.competitionId,
+                statusRefId:record.statusRefId
             })
         }
         else if(key == "ok")
         {
-            this.props.deleteCompetitionAction(competitionId)
+            this.props.deleteCompetitionAction(this.state.competitionId, this.state.onDeleteTargetValue)
             this.setState({
                 modalVisible:false,
                 loading: true
@@ -518,6 +520,11 @@ class CompetitionDashboard extends Component {
         );
     };
 
+	onChangeSetValue = (targetValue) => {
+        this.setState({
+            onDeleteTargetValue:targetValue
+        })
+    }
     ////////ownedView view for competition
     ownedView = () => {
         return (
@@ -538,13 +545,28 @@ class CompetitionDashboard extends Component {
                 </div>
 				<Modal
                     className="add-membership-type-modal"
-                    title={AppConstants.delete}
+                    title={AppConstants.deleteCompetition}
                     visible={this.state.modalVisible}
                     onOk={() => this.deleteCompetition("ok" , this.state.competitionId)}
-                    onCancel={() => this.deleteCompetition("cancel" , this.state.competitionId)}>
-                    <p>{AppConstants.compDeleteConfirm}</p>
+                    onCancel={() => this.deleteCompetition("cancel" , this.state.competitionId)}
+                    okText={AppConstants.yes}
+                    cancelText={AppConstants.no}>
+                    {this.state.statusRefId == 0 ?
+                        <p>{AppConstants.compDeleteConfirm}</p>
+                        :
+                        <div>
+                            <p>{AppConstants.deletePublishToLsMsg}</p>
+                            <Radio.Group
+                            className="reg-competition-radio"
+                            onChange={(e) => this.onChangeSetValue(e.target.value)}
+                            >
+                                <Radio value={1}>{AppConstants.both}</Radio>
+                                <Radio value={2}>{AppConstants.onlyCompMngmt}</Radio>
+                            </Radio.Group>
+                        </div>
+                    }
                 </Modal>
-            </div >
+            </div>
         );
     };
 

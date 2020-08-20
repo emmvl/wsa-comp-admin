@@ -979,6 +979,15 @@ input[type="number"] {
 .ant-switch-checked {
   background-color:var(--app-color);
 }
+.tree-node-parent-description{
+  margin-top:5px;
+}
+.tree-node-parent-description:last-child {
+ margin-top: 80px!important;
+}
+.registrationcode-input{
+  margin-left: 21px!important;  
+}
 
 @media (max-width: 767px) {
   .auth-form {

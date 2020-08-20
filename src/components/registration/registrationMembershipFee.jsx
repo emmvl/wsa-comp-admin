@@ -1201,9 +1201,14 @@ class RegistrationMembershipFee extends Component {
     }
 
     ////add  or remove  discount in discount section
-    addRemoveDiscount = (keyAction, index) => {
+     addRemoveDiscount = (keyAction, index) => {
         this.props.addRemoveDiscountAction(keyAction, index)
-    }
+        if(keyAction == "remove"){
+            setTimeout(() =>{
+                this.setFieldDecoratorValues();
+              },300);            
+        }        
+    };  
 
     //On change membership product discount type
     onChangeMembershipProductDisType = (discountType, index) => {

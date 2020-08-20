@@ -25,10 +25,11 @@ function updateCompetitionStatus(payload, yearId) {
     return action
 }
 
-function deleteCompetitionAction(competitionId) {
+function deleteCompetitionAction(competitionId,targetValue) {
     const action = {
         type: ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD,
-        competitionId: competitionId
+        competitionId: competitionId,
+        targetValue:targetValue
     };
     return action;
 }

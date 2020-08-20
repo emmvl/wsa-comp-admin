@@ -2581,6 +2581,9 @@ function competitionFees(state = initialState, action) {
             if(action.key == "isSeasonalUponReg" || action.key == "isTeamSeasonalUponReg"){
                 state.competitionDetailData[action.key] = action.value;
             }
+			if(action.key == "seasonalSchoolRegCode" || action.key == "teamSeasonalSchoolRegCode"){
+                state.competitionDetailData[action.key] = action.value;
+            }
             return { ...state,  };    
 
         default:
