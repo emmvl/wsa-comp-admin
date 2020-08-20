@@ -1547,12 +1547,13 @@ const AppConstants = {
   liveStreamlink: "Live-Stream Link",
   uponRegistration: "Upon Registration",
   reg: "REG",
-  publishToLivescore:"Do you want to publish to live scores?",
+  dateRange: "Date Range",
+  publishToLivescore: "Do you want to publish to live scores?",
   finalGrading: "Final Grading",
-  onlyCompMngmt: "Only Competition Management",													 
-  deletePublishToLsMsg:"Are you sure you want to Delete this Competition? This Competition has also been pushed to Live Scores. Would you like to Delete",
-  deleteCompetition:"Delete Competition",
-  enterCode:"Registration Code",  
+  onlyCompMngmt: "Only Competition Management",
+  deletePublishToLsMsg: "Are you sure you want to Delete this Competition? This Competition has also been pushed to Live Scores. Would you like to Delete",
+  deleteCompetition: "Delete Competition",
+  enterCode: "Registration Code",
 };
 
 export default AppConstants;

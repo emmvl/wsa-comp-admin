@@ -375,9 +375,18 @@ let AxiosApi = {
     },
 
     ///// Get Competition Venue 
-    getCompetitionVenue(competitionId) {
-        var url = `/api/competitionfee/getVenues/${competitionId}`;
-        return Method.dataGet(url, token);
+    async getCompetitionVenue(competitionId, startDate, endDate) {
+        console.log(competitionId, startDate, endDate)
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let payload = {
+            competitionUniqueKey: competitionId,
+            organisationUniqueKey: organisationUniqueKey,
+            startDate: startDate,
+            endDate: endDate
+        }
+        var url = `/api/competitionfee/getVenues`;
+        return Method.dataPost(url, token, payload);
     },
     // save end user registration
     saveEndUserRegistration(payload) {
