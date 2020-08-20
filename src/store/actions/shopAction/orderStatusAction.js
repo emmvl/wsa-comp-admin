@@ -27,10 +27,20 @@ function getOrderDetailsAction(id) {
     return action;
 }
 
+//////clearing particular reducer data
+function clearOrderStatusReducer(dataName) {
+    const action = {
+        type: ApiConstants.SHOP_ORDER_STATUS_CLEARING_REDUCER_DATA,
+        dataName
+    };
+    return action;
+}
+
 export {
     getOrderStatusListingAction,
     updateOrderStatusAction,
     getOrderDetailsAction,
+    clearOrderStatusReducer,
 }
 
 

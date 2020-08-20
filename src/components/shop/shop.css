@@ -140,6 +140,10 @@
     object-fit: contain;
 }
 
+.order-detail-prd-name-view{
+    justify-content: start;
+}
+
 
 @media (max-width: 767px) {
     .shop-product-content-div{
@@ -157,6 +161,13 @@
     }
     .no-padding-right {
         padding-right: 15px;
+    }
+    .order-detail-button-view{
+        display: flex;
+        justify-content: center;
+    }
+    .order-detail-prd-name-view{
+        justify-content: center;
     }
 
 }
