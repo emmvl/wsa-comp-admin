@@ -541,7 +541,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             console.log(umpires_1, 'umpires_1~~~~', umpires_1)
 
             if (umpires_1) {
-                state.umpire1Orag = isArrayNotEmpty(umpires_1.organisations) ? umpires_1.organisations[0].id : []
+                state.umpire1Orag = isArrayNotEmpty(umpires_1.competitionOrganisations) ? umpires_1.competitionOrganisations[0].id : []
                 state.umpire1Name = umpires_1.userId
                 state.umpire1TextField = umpires_1.umpireName
                 state.matchUmpireId_1 = umpires_1.matchUmpiresId
@@ -556,7 +556,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             }
 
             if (umpires_2) {
-                state.umpire2Orag = isArrayNotEmpty(umpires_2.organisations) ? umpires_2.organisations[0].id : []
+                state.umpire2Orag = isArrayNotEmpty(umpires_2.competitionOrganisations) ? umpires_2.competitionOrganisations[0].id : []
                 state.umpire2Name = umpires_2.userId
                 state.umpire2TextField = umpires_2.umpireName
                 state.matchUmpireId_2 = umpires_2.matchUmpiresId
