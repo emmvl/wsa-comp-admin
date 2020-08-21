@@ -307,7 +307,8 @@ class CompetitionDashboard extends Component {
         else if(key == "cancel")
         {
             this.setState({
-                modalVisible:false
+                modalVisible:false,
+                onDeleteTargetValue: 2
             })
         }
     }
@@ -564,6 +565,7 @@ class CompetitionDashboard extends Component {
                             <Radio.Group
                             className="reg-competition-radio  customize-radio-text"
                             onChange={(e) => this.onChangeSetValue(e.target.value)}
+                            value={this.state.onDeleteTargetValue}
                             >
                                 <Radio value={1}>{AppConstants.both}</Radio>
                                 <Radio value={2}>{AppConstants.onlyCompMngmt}</Radio>
