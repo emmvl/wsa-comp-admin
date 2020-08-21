@@ -188,7 +188,7 @@ const columnsOwned = [
                                 <span>{AppConstants.editRegrade}</span>
                             </Menu.Item>
                             <Menu.Item key="2"
-                                onClick={() => this_Obj.deleteCompetition("show" , record.competitionId)}
+                                onClick={() => this_Obj.deleteCompetition("show" , record)}
                             >
                                 <span>{AppConstants.delete}</span>
                             </Menu.Item>
