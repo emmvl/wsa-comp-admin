@@ -1551,7 +1551,7 @@ const AppConstants = {
   publishToLivescore: "Do you want to publish to live scores?",
   finalGrading: "Final Grading",
   onlyCompMngmt: "Only Competition Management",													 
-  deletePublishToLsMsg:"Are you sure you want to delete (COMP_NAME)?. (COMP_NAME) has also been published to Live Scores. Would you like to Delete?",
+  deletePublishToLsMsg:"Are you sure you want to delete (COMP_NAME)? (COMP_NAME) has also been published to Live Scores. Would you like to Delete?",
   deleteCompetition:"Delete Competition",
   enterCode:"Registration Code",  
   finalExtraTime: "Final Extra Time",
