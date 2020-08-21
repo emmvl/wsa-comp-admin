@@ -10,7 +10,8 @@ const initialState = {
     status: 0,
     ownedCompetitions: [],
     participatingInComptitions: [],
-    updateLoad: false
+    updateLoad: false,
+    deleteCompLoad: false
 };
 
 
@@ -86,6 +87,18 @@ function CompetitionDashboardState(state = initialState, action) {
                 ownedCompetitions: ownCompetionArray,
                 participatingInComptitions: participatingComptitions,
                 status: action.status
+            };
+        
+        case ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD:
+            return { ...state, deleteCompLoad: true };
+
+        case ApiConstants.API_COMPETITION_DASHBOARD_DELETE_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                result: action.result,
+                status: action.status,
+                deleteCompLoad: false 
             };
 
         case ApiConstants.API_COMPETITION_STATUS_UPDATE_LOAD:

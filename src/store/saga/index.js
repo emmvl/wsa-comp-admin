@@ -79,7 +79,7 @@ import * as competitionFinalSaga from '../saga/competitionManagementSaga/competi
 import * as ladderFormatSaga from '../saga/competitionManagementSaga/ladderFormatSaga';
 import { competitonWithTimeSlots, competitonWithTimeSlotsPostApi } from './competitionManagementSaga/competitionTimeAndSlotSaga';
 
-import { fixtureTemplateSaga, competitionDashboardDeleteSaga } from './competitionManagementSaga/competitionManagementSaga';
+import { fixtureTemplateSaga } from './competitionManagementSaga/competitionManagementSaga';
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
 import {
@@ -127,7 +127,7 @@ import {
 
 import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
 ////Competition Dashboard Saga
-import { competitionDashboardSaga, updateCompetitionStatusSaga } from './competitionManagementSaga/competitionDashboardSaga';
+import { competitionDashboardSaga, updateCompetitionStatusSaga, competitionDashboardDeleteSaga } from './competitionManagementSaga/competitionDashboardSaga';
 
 // EndUserRegistrationSaga
 import * as endUserRegSaga from '../saga/registrationSaga/endUserRegistrationSaga';
@@ -524,3 +524,4 @@ export default function* rootSaga() {
   
   yield takeEvery(ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD, getTeamRegistrationsSaga);
 }
+

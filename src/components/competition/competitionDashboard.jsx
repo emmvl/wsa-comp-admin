@@ -231,7 +231,8 @@ class CompetitionDashboard extends Component {
             competitionId: "",
             competitionName: "",
             statusRefId: null,
-            onDeleteTargetValue: null	   
+            onDeleteTargetValue: null,	 
+            deleteCompLoad: false  
         };
         this.props.CLEAR_OWN_COMPETITION_DATA("participate_CompetitionArr")
         this_Obj = this
@@ -253,12 +254,13 @@ class CompetitionDashboard extends Component {
             }
         }
 
-        if(this.state.loading == true && this.props.competitionDashboardState.onDeleteOwnedComp == false){
-            this.setState({ loading: false });
+        if(this.state.deleteCompLoad == true && this.props.competitionDashboardState.deleteCompLoad == false){
+            this.setState({ deleteCompLoad: false });
             if (yearList.length > 0) {
                 let yearRefId = this.getYearRefId();
-                this.props.competitionDashboardAction(yearRefId)
-                this.setState({ loading: false })
+                window.location.reload();
+                // this.props.competitionDashboardAction(yearRefId)
+                // this.setState({ loading: false })
             }
         }
     }
@@ -299,7 +301,7 @@ class CompetitionDashboard extends Component {
             this.props.deleteCompetitionAction(this.state.competitionId, this.state.onDeleteTargetValue)
             this.setState({
                 modalVisible:false,
-                loading: true
+                deleteCompLoad: true
             })
         }
         else if(key == "cancel")
