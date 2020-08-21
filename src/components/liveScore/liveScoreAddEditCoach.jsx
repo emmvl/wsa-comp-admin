@@ -223,12 +223,12 @@ class LiveScoreAddEditCoach extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    // auto_Complete='new-lastName'
+                                    auto_Complete='off'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
                                     onChange={(lastName) => this.props.liveScoreUpdateCoach(captializedString(lastName.target.value), 'lastName')}
-                                    value={coachdata.lastName}
+                                    // value={coachdata.lastName}
                                     onBlur={(i) => this.props.form.setFieldsValue({
                                         'Last Name': captializedString(i.target.value)
                                     })}

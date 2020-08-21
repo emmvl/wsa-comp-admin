@@ -610,13 +610,13 @@ class LiveScoreDashboard extends Component {
             message.warn(ValidationConstants.playerMessage)
         }
         else {
-            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/userPersonal" })
+            history.push("/userPersonal", { userId: record.player.userId, screenKey: "livescore", screen: "/liveScoreDashboard" })
         }
     }
 
     umpireName(item) {
         if (item.userId) {
-            history.push("/userPersonal", { userId: item.userId, screenKey: "livescore", screen: "/userPersonal" })
+            history.push("/userPersonal", { userId: item.userId, screenKey: "livescore", screen: "/liveScoreDashboard" })
         } else {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
@@ -780,7 +780,7 @@ class LiveScoreDashboard extends Component {
                     </Tooltip>
                 </div>
 
-                <div className="col-sm text-right" >
+                {/* <div className="col-sm text-right" >
                     <NavLink to={{
                         pathname: './liveScoreAddIncident',
                         state: { key: 'dashboard' }
@@ -789,7 +789,7 @@ class LiveScoreDashboard extends Component {
                             + {AppConstants.addNew}
                         </Button>
                     </NavLink>
-                </div>
+                </div> */}
             </div>
         )
     }

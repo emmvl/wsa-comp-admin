@@ -297,7 +297,9 @@ class LiveScoreSettingsView extends Component {
 
 
                 if (this.state.isEdit == 'add') {
-                    formData.append('invitedTo', JSON.stringify(invitedTo))
+                    console.log(invitedTo, 'invitedTo', JSON.stringify(invitedTo))
+                    let invitedToArr = invitedTo[0] === 6 ? [] : invitedTo
+                    formData.append('invitedTo', JSON.stringify(invitedToArr))
                     formData.append('invitedOrganisation', JSON.stringify(invitedOrganisation))
                 }
 

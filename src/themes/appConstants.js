@@ -1540,7 +1540,7 @@ const AppConstants = {
   orderFulfilment: "Order Fulfilment",
   capturePayment: "Capture Payment",
   receiptUrl: "Receipt Url",
-  extraTime: "Extra Time",
+  extraTime: "Extra Extra Time",
   compDeleteConfirm: 'Are you sure you want to delete this competition?',
   createRoster: "Create Roster",
   addliveStream: 'Add Live-Stream',
@@ -1554,6 +1554,7 @@ const AppConstants = {
   deletePublishToLsMsg: "Are you sure you want to Delete this Competition? This Competition has also been pushed to Live Scores. Would you like to Delete",
   deleteCompetition: "Delete Competition",
   enterCode: "Registration Code",
+  finalExtraTime: "Final Extra Time",
 };
 
 export default AppConstants;
