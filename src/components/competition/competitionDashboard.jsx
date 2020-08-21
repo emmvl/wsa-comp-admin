@@ -231,7 +231,7 @@ class CompetitionDashboard extends Component {
             competitionId: "",
             competitionName: "",
             statusRefId: null,
-            onDeleteTargetValue: null,	 
+            onDeleteTargetValue: 2,	 
             deleteCompLoad: false  
         };
         this.props.CLEAR_OWN_COMPETITION_DATA("participate_CompetitionArr")
