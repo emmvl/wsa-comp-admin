@@ -1541,7 +1541,7 @@ const AppConstants = {
   capturePayment: "Capture Payment",
   receiptUrl: "Receipt Url",
   extraTime: "Extra Time",
-  compDeleteConfirm: 'Are you sure you want to delete this competition?',
+  compDeleteConfirm: 'Are you sure you want to delete (COMP_NAME)?',
   createRoster: "Create Roster",
   addliveStream: 'Add Live-Stream',
   liveStreamlink: "Live-Stream Link",
@@ -1550,7 +1550,7 @@ const AppConstants = {
   publishToLivescore:"Do you want to publish to live scores?",
   finalGrading: "Final Grading",
   onlyCompMngmt: "Only Competition Management",													 
-  deletePublishToLsMsg:"Are you sure you want to Delete this Competition? This Competition has also been pushed to Live Scores. Would you like to Delete",
+  deletePublishToLsMsg:"Are you sure you want to Delete this (COMP_NAME)?. (COMP_NAME) has also been pushed to Live Scores. Would you like to Delete",
   deleteCompetition:"Delete Competition",
   enterCode:"Registration Code",  
 };

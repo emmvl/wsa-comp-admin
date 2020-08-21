@@ -229,6 +229,7 @@ class CompetitionDashboard extends Component {
             loading: false,
 			modalVisible: false,
             competitionId: "",
+            competitionName: "",
             statusRefId: null,
             onDeleteTargetValue: null	   
         };
@@ -289,6 +290,7 @@ class CompetitionDashboard extends Component {
             this.setState({
                 modalVisible:true,
                 competitionId: record.competitionId,
+                competitionName: record.competitionName,
                 statusRefId:record.statusRefId
             })
         }
@@ -552,10 +554,11 @@ class CompetitionDashboard extends Component {
                     okText={AppConstants.yes}
                     cancelText={AppConstants.no}>
                     {this.state.statusRefId == 0 ?
-                        <p>{AppConstants.compDeleteConfirm}</p>
+                        <p>{AppConstants.compDeleteConfirm.replace("(COMP_NAME)", this.state.competitionName)}</p>
                         :
                         <div>
-                            <p>{AppConstants.deletePublishToLsMsg}</p>
+                            <p>{AppConstants.deletePublishToLsMsg.replace("(COMP_NAME)", this.state.competitionName)
+                                        .replace("(COMP_NAME)", this.state.competitionName)}</p>
                             <Radio.Group
                             className="reg-competition-radio"
                             onChange={(e) => this.onChangeSetValue(e.target.value)}
