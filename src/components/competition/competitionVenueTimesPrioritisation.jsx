@@ -329,11 +329,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm-3">
-                            <div id-={AppUniqueId.compYear_dpdnVenues} className="com-year-select-heading-view pb-3">
+                            <div className="com-year-select-heading-view pb-3">
                                 <span className="year-select-heading">
                                     {AppConstants.year}:
                                     </span>
                                 <Select
+                                    id={AppUniqueId.compYear_dpdnVenues}
                                     className="year-select reg-filter-select-year ml-2"
                                     style={{ width: 90 }}
                                     onChange={year => this.onYearClick(year)}
@@ -347,7 +348,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             </div>
                         </div>
                         <div className="col-sm-3 pb-3">
-                            <div id-={AppUniqueId.CompetitionName_dpdnVenues}
+                            <div
                                 style={{
                                     width: "fit-content",
                                     display: "flex",
@@ -360,6 +361,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     {AppConstants.competition}:
                                 </span>
                                 <Select
+                                    id={AppUniqueId.CompetitionName_dpdnVenues}
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionClick(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
@@ -469,7 +471,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
             <div className="fluid-width">
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={'Court'} />
+                        <InputWithHead heading={'Court'}  headingId={AppUniqueId.CourtPreferences_AllocSameCourt_CourtID}/>
                         <Form.Item>
                             {getFieldDecorator(`courtIDS${index}`,
                                 {
@@ -477,7 +479,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 })(
                                     <Select
                                         disabled={disabledStatus}
-                                        id={AppUniqueId.CourtPreferences_AllocSameCourt_CourtID}
                                         style={{ width: "100%", minWidth: 182 }}
                                         placeholder={'Select Court'}
                                         onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "venueCourtId", "courtPreferences")}
@@ -492,7 +493,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         </Form.Item>
                     </div>
                     {entityType == "6" ? <div className="col-sm">
-                        <InputWithHead heading={'Division'} />
+                        <InputWithHead heading={'Division'} headingId={AppUniqueId.CourtPreferences_AllocSameCourt_AddAnotherCourt_DivisionID}/>
                         <Form.Item>
                             {getFieldDecorator(`entitiesDivisionId${index}`,
                                 {
@@ -500,7 +501,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 })(
                                     <Select
                                         disabled={disabledStatus}
-                                        id={AppUniqueId.CourtPreferences_AllocSameCourt_AddAnotherCourt_DivisionID}
                                         mode={'multiple'}
                                         style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
                                         placeholder={'Select Division'}

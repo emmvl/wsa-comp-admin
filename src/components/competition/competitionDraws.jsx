@@ -723,7 +723,7 @@ class CompetitionDraws extends Component {
               // marginRight: 50
             }}
           >
-            <span className="year-select-heading">
+            <span id={AppUniqueId.division_dpdn} className="year-select-heading">
               {AppConstants.division}:
             </span>
             <Select
@@ -765,7 +765,7 @@ class CompetitionDraws extends Component {
               // marginRight: 50
             }}
           >
-            <span className="year-select-heading">
+            <span id={AppUniqueId.organisation_dpdn} className="year-select-heading">
               {AppConstants.organisation}:
             </span>
             <Select
@@ -1256,7 +1256,7 @@ class CompetitionDraws extends Component {
       : [];
     return (
       <div>
-        <div id={AppUniqueId.main_draws_round_tableview} className="scroll-bar pb-4">
+        <div className="scroll-bar pb-4">
           <div className="table-head-wrap">
             {/* Day name list */}
             <div className="tablehead-row">
@@ -1305,7 +1305,7 @@ class CompetitionDraws extends Component {
             </div>
           </div>
         </div>
-        <div className="main-canvas Draws">
+        <div className="main-canvas Draws" id={AppUniqueId.main_draws_round_tableview}>
           {dateItem.draws.map((courtData, index) => {
             let leftMargin = 25;
             if (index !== 0) {

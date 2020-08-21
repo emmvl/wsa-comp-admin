@@ -464,12 +464,13 @@ class CompetitionFinals extends Component {
                                     : <span>{AppConstants.allDivisions}</span>
                                 }
                                 <div className="row">
-                                    <div id={AppUniqueId.final_StartDate} className="col-sm-6">
+                                    <div className="col-sm-6">
                                         <InputWithHead heading={AppConstants.finalsStartDate} required={"required-field"} />
                                         <Form.Item >
                                             {getFieldDecorator(`finalsStartDate${index}`,
                                                 { rules: [{ required: true, message: ValidationConstants.finalsStartDateRequired }] })(
                                                     <DatePicker
+                                                        id={AppUniqueId.final_StartDate}
                                                         disabled={disabledStatus}
                                                         size="large"
                                                         placeholder={"dd-mm-yyyy"}
@@ -484,7 +485,7 @@ class CompetitionFinals extends Component {
                                         </Form.Item>
                                     </div>
                                 </div>
-                                <InputWithHead heading={AppConstants.finalFixtures} required={"required-field"} />
+                                <InputWithHead headingId={AppUniqueId.final_FixtureTemplate_radioBtn} heading={AppConstants.finalFixtures} required={"required-field"} />
                                 <Form.Item >
                                     {getFieldDecorator(`finalsFixtureTemplateRefId${index}`, {
                                         rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
