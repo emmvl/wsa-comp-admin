@@ -562,7 +562,7 @@ class CompetitionDashboard extends Component {
                             <p>{AppConstants.deletePublishToLsMsg.replace("(COMP_NAME)", this.state.competitionName)
                                         .replace("(COMP_NAME)", this.state.competitionName)}</p>
                             <Radio.Group
-                            className="reg-competition-radio"
+                            className="reg-competition-radio  customize-radio-text"
                             onChange={(e) => this.onChangeSetValue(e.target.value)}
                             >
                                 <Radio value={1}>{AppConstants.both}</Radio>
