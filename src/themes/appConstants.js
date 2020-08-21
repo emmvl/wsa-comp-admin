@@ -1540,19 +1540,21 @@ const AppConstants = {
   orderFulfilment: "Order Fulfilment",
   capturePayment: "Capture Payment",
   receiptUrl: "Receipt Url",
-  extraTime: "Extra Time",
+  extraTime: "Extra Extra Time",
   compDeleteConfirm: 'Are you sure you want to delete (COMP_NAME)?',
   createRoster: "Create Roster",
   addliveStream: 'Add Live-Stream',
   liveStreamlink: "Live-Stream Link",
   uponRegistration: "Upon Registration",
   reg: "REG",
-  publishToLivescore:"Do you want to publish to live scores?",
+  dateRange: "Date Range",
+  publishToLivescore: "Do you want to publish to live scores?",
   finalGrading: "Final Grading",
   onlyCompMngmt: "Only Competition Management",													 
   deletePublishToLsMsg:"Are you sure you want to Delete this (COMP_NAME)?. (COMP_NAME) has also been pushed to Live Scores. Would you like to Delete",
   deleteCompetition:"Delete Competition",
   enterCode:"Registration Code",  
+  finalExtraTime: "Final Extra Time",
 };
 
 export default AppConstants;

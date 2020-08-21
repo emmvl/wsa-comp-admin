@@ -201,8 +201,9 @@ const ValidationConstants = {
     duplicateDiscountError: "Please remove the duplicate entry of Discount Code.",
     mnbMatchId: 'mnbMatchId is required',
     pleaseSelectOneOption: "Please select any option.",
-    pleaseProvideInstalmentDate:"Please provide an instalment date",
+    pleaseProvideInstalmentDate: "Please provide an instalment date",
     duplicateFamilyDiscountError: "Please remove the duplicate entry of Family Discount for the same Membership Product.",
+    mobileLength: "Contact number must be 10 digits"
 };
 
 export default ValidationConstants;

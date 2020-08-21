@@ -668,7 +668,7 @@ class CompetitionFormat extends Component {
                                 width: "fit-content", display: "flex", flexDirection: "row",
                                 alignItems: "center"
                             }}  >
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span id={AppUniqueId.compYear_DrpDwn} className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     id={AppUniqueId.compYear_DrpDwn}
                                     name={"yearRefId"}
@@ -693,7 +693,7 @@ class CompetitionFormat extends Component {
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50,
                             }} >
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span id={AppUniqueId.compName_DrpDwn} className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
                                     id={AppUniqueId.compName_DrpDwn}
                                     name={"competition"}
@@ -732,7 +732,7 @@ class CompetitionFormat extends Component {
                 <InputWithHead disabled={disabledStatus} heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
                     value={data.competitionName} onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}  ></InputWithHead>
                 <div style={{ marginTop: 15 }}>
-                    <InputWithHead id={AppUniqueId.comp_Format_Type} heading={AppConstants.competitionFormat} required={"required-field"} />
+                    <InputWithHead headingId={AppUniqueId.comp_Format_Type} heading={AppConstants.competitionFormat} required={"required-field"} />
                     <Form.Item >
                         {getFieldDecorator('competitionFormatRefId', {
                             rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }],
@@ -768,7 +768,7 @@ class CompetitionFormat extends Component {
                     ))}
                 </Select> */}
 
-                <InputWithHead heading={AppConstants.matchType} required={"required-field"} />
+                <InputWithHead heading={AppConstants.matchType} required={"required-field"} headingId={AppUniqueId.matchType_Selection_dpdn} />
                 <Form.Item >
                     {getFieldDecorator('matchTypeRefId', {
                         rules: [{ required: true, message: ValidationConstants.matchTypeRequired }],
@@ -811,8 +811,8 @@ class CompetitionFormat extends Component {
                     </div> : null
                 }
 
-                <span id={AppUniqueId.competition_Frequency} className="applicable-to-heading">{AppConstants.frequency}</span>
-                <Radio.Group disabled={disabledStatus} className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionTypeRefId')} value={data.competitionTypeRefId} >
+                <span className="applicable-to-heading">{AppConstants.frequency}</span>
+                <Radio.Group id={AppUniqueId.competition_Frequency} disabled={disabledStatus} className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionTypeRefId')} value={data.competitionTypeRefId} >
                     <div className="fluid-width" >
                         <div className="row" >
                             {(appState.typesOfCompetition || []).map((item, index) => (
@@ -964,7 +964,7 @@ class CompetitionFormat extends Component {
                                             })(
                                                 <InputWithHead
                                                     auto_Complete="new-timeBetweenGames"
-                                                    id={AppUniqueId.timeBetween_Matches}
+                                                    headingId={AppUniqueId.timeBetween_Matches}
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins}
                                                     required={"required-field"}

@@ -22,7 +22,7 @@ import {
 } from '../../store/actions/LiveScoreAction/liveScoreCoachAction'
 
 import { liveScoreManagerSearch } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
-
+import ApiConstants from "../../themes/apiConstants";
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
 
@@ -37,7 +37,7 @@ class LiveScoreAddEditCoach extends Component {
             loader: false,
             tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
-            teamLoad: false
+            teamLoad: false,
         }
 
     }
@@ -66,8 +66,6 @@ class LiveScoreAddEditCoach extends Component {
             this.setInitalFiledValue()
             this.setState({ loader: false })
         }
-
-
         if (this.props.liveScoreCoachState !== nextProps.liveScoreCoachState) {
 
             if (this.state.teamLoad == true) {
@@ -76,6 +74,9 @@ class LiveScoreAddEditCoach extends Component {
                 this.setSelectedTeamValue(teamId)
 
                 this.setState({ teamLoad: false })
+            }
+            if (this.props.liveScoreCoachState.coachdata !== nextProps.liveScoreCoachState.coachdata) {
+                this.setInitalFiledValue()
             }
         }
     }
@@ -97,6 +98,22 @@ class LiveScoreAddEditCoach extends Component {
         this.props.form.setFieldsValue({
             'coachTeamName': teamId
         })
+    }
+
+    getNumber = (number) => {
+        if (number.length == 10) {
+            this.setState({
+                hasError: false
+            })
+            this.props.liveScoreUpdateCoach(regexNumberExpression(number), 'mobileNumber')
+        }
+        else if (number.length < 10) {
+            this.props.liveScoreUpdateCoach(regexNumberExpression(number), 'mobileNumber')
+            this.setState({
+                hasError: true
+            })
+        }
+
     }
 
 
@@ -173,11 +190,9 @@ class LiveScoreAddEditCoach extends Component {
     }
 
     coachNewRadioBtnView(getFieldDecorator) {
-
+        let hasError = this.state.hasError == true ? true : false
         const { coachdata, teamId, teamResult } = this.props.liveScoreCoachState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
-
-
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -208,12 +223,12 @@ class LiveScoreAddEditCoach extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    // auto_Complete='new-lastName'
+                                    auto_Complete='off'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
                                     onChange={(lastName) => this.props.liveScoreUpdateCoach(captializedString(lastName.target.value), 'lastName')}
-                                    value={coachdata.lastName}
+                                    // value={coachdata.lastName}
                                     onBlur={(i) => this.props.form.setFieldsValue({
                                         'Last Name': captializedString(i.target.value)
                                     })}
@@ -254,19 +269,25 @@ class LiveScoreAddEditCoach extends Component {
 
                     </div>
                     <div className="col-sm" >
-                        <Form.Item>
+                        <Form.Item
+                            help={hasError && ValidationConstants.mobileLength}
+                            validateStatus={hasError ? "error" : 'validating'}
+                        >
                             {getFieldDecorator(AppConstants.contactNO, {
-                                rules: [{ required: true, message: ValidationConstants.contactField }]
+                                rules: [{
+                                    required: true,
+                                    message: ValidationConstants.contactField,
+                                },
+                                ]
                             })(
                                 <InputWithHead
                                     auto_Complete='new-contact'
-                                    type='number'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
+                                    setFieldsValue={AppConstants.contactNO}
                                     maxLength={10}
-                                    onChange={(mobileNumber) => this.props.liveScoreUpdateCoach(mobileNumber.target.value, 'mobileNumber')}
-                                    value={coachdata.mobileNumber}
+                                    onChange={(mobileNumber) => this.getNumber(mobileNumber.target.value)}
                                 />
                             )}
                         </Form.Item>
@@ -425,40 +446,46 @@ class LiveScoreAddEditCoach extends Component {
 
         const { coachdata, teamId, coachRadioBtn, exsitingManagerId } = this.props.liveScoreCoachState
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            let body = ''
-            if (!err) {
-                if (coachRadioBtn == 'new') {
-                    if (this.state.isEdit == true) {
-                        body = {
-                            "id": coachdata.id,
-                            "firstName": coachdata.firstName,
-                            "lastName": coachdata.lastName,
-                            "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
-                            "email": coachdata.email,
-                            "teams": coachdata.teams
-                        }
-                    } else {
+        if (coachdata.mobileNumber.length !== 10) {
+            this.setState({
+                hasError: true
+            })
+        } else {
+            this.props.form.validateFields((err, values) => {
+                let body = ''
+                if (!err) {
+                    if (coachRadioBtn == 'new') {
+                        if (this.state.isEdit == true) {
+                            body = {
+                                "id": coachdata.id,
+                                "firstName": coachdata.firstName,
+                                "lastName": coachdata.lastName,
+                                "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
+                                "email": coachdata.email,
+                                "teams": coachdata.teams
+                            }
+                        } else {
 
+                            body = {
+                                "firstName": coachdata.firstName,
+                                "lastName": coachdata.lastName,
+                                "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
+                                "email": coachdata.email,
+                                "teams": coachdata.teams
+                            }
+                        }
+                        this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+                    } else if (coachRadioBtn == 'existing') {
                         body = {
-                            "firstName": coachdata.firstName,
-                            "lastName": coachdata.lastName,
-                            "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
-                            "email": coachdata.email,
+                            "id": exsitingManagerId,
                             "teams": coachdata.teams
                         }
+                        this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
                     }
-                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
-                } else if (coachRadioBtn == 'existing') {
-                    body = {
-                        "id": exsitingManagerId,
-                        "teams": coachdata.teams
-                    }
-                    this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+
                 }
-
-            }
-        });
+            });
+        }
     };
 
     /////// render function 

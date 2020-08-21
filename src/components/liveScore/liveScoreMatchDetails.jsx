@@ -306,6 +306,28 @@ class LiveScoreMatchDetails extends Component {
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
+                                        justifyContent: "flex-end",
+                                    }}
+                                >
+                                    <NavLink to={{
+                                        pathname: '/liveScoreAddIncident',
+                                        state: { matchId: this.state.matchId }
+                                    }}>
+                                        <Button className="primary-add-comp-form" type="primary">
+                                            + {AppConstants.addIncident}
+                                        </Button>
+                                    </NavLink>
+                                </div>
+                            </div>
+
+                            <div className="col-sm">
+                                <div
+                                    className="comp-dashboard-botton-view-mobile"
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
                                         justifyContent: "flex-end"
                                     }}
                                 >

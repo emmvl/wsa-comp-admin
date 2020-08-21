@@ -50,7 +50,8 @@ class LiveScoreAddIncident extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit ? this.props.location.state.isEdit : false : false,
             tableRecord: this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : false : false,
             load: false,
-            incidentId: null
+            incidentId: null,
+            matchId: this.props.location.state ? this.props.location.state.matchId : null,
         }
     }
 
@@ -195,21 +196,22 @@ class LiveScoreAddIncident extends Component {
                     <div className="col-sm" >
 
 
-                        <Form.Item className="slct-in-add-manager-livescore">
+                        {/* <Form.Item className="slct-in-add-manager-livescore">
 
                             {getFieldDecorator("mnbMatchId", {
                                 rules: [{ required: true, message: ValidationConstants.mnbMatchId }],
-                            })(
+                            })( */}
 
-                                <InputWithHead
-                                    auto_Complete='new-mnbId'
-                                    required={"required-field"}
-                                    heading={AppConstants.matchID}
-                                    placeholder={AppConstants.matchID}
-                                    onChange={(event) => this.props.liveScoreUpdateIncidentData(event.target.value, "mnbMatchId")}
-                                />
-                            )}
-                        </Form.Item>
+                        <InputWithHead
+                            auto_Complete='new-mnbId'
+                            // required={"required-field"}
+                            heading={AppConstants.matchID}
+                            placeholder={AppConstants.matchID}
+                            value={this.state.matchId ? this.state.matchId : incidentData.mnbMatchId}
+                            onChange={(event) => this.props.liveScoreUpdateIncidentData(event.target.value, "mnbMatchId")}
+                        />
+                        {/* )}
+                        </Form.Item> */}
 
                     </div>
                     <div className="col-sm" >
@@ -447,7 +449,8 @@ class LiveScoreAddIncident extends Component {
                     };
                 } else {
                     body = {
-                        matchId: incidentData.mnbMatchId,
+                        // matchId: incidentData.mnbMatchId,
+                        matchId: this.state.matchId,
                         teamId: incidentData.teamId,
                         competitionId: id,
                         incidentTime: formatDateTime,

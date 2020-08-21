@@ -12,21 +12,21 @@ function getCompetitionVenue(competitionId) {
 
 
 /////get competition draws
-function getCompetitionDrawsAction(yearRefId, competitionId, venueId, roundId,orgId ) {
+function getCompetitionDrawsAction(yearRefId, competitionId, venueId, roundId, orgId, startDate, endDate) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_DRAWS_LOAD,
         yearRefId, competitionId, venueId, roundId,
-        orgId
+        orgId, startDate, endDate
     };
     return action;
 }
 
 
 ///get rounds in the competition draws
-function getDrawsRoundsAction(yearRefId, competitionId) {
+function getDrawsRoundsAction(yearRefId, competitionId, key) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_LOAD,
-        yearRefId, competitionId
+        yearRefId, competitionId, key
     };
     return action;
 }
