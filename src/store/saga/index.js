@@ -122,7 +122,7 @@ import {
   getCompetitionVenues, updateCourtTimingsDrawsAction,
   getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga,
   getDivisionSaga, competitionFixtureSaga, updateCompetitionFixtures, updateDrawsLock,
-  getActiveDrawsRoundsSaga
+  getActiveDrawsRoundsSaga, getVenueAndDivisionSaga
 } from './competitionManagementSaga/competitionDrawsSaga';
 
 import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
@@ -521,7 +521,9 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_MERGE_COMPETITION_PROCESS_LOAD, competitionQuickSaga.mergeCompetitionProceedSaga)
   ////Competition Delete 
   yield takeEvery(ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD, competitionDashboardDeleteSaga)
-  
+
   yield takeEvery(ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD, getTeamRegistrationsSaga);
+
+  yield takeEvery(ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_LOAD, getVenueAndDivisionSaga)
 }
 

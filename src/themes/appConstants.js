@@ -1555,6 +1555,7 @@ const AppConstants = {
   deleteCompetition:"Delete Competition",
   enterCode:"Registration Code",  
   finalExtraTime: "Final Extra Time",
+  telExp: "^[0-9]{10}$",
 };
 
 export default AppConstants;

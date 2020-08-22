@@ -31,7 +31,8 @@ import {
   publishDraws,
   matchesListDrawsAction,
   unlockDrawsAction,
-  getActiveRoundsAction
+  getActiveRoundsAction,
+  changeDrawsDateRangeAction
 } from '../../store/actions/competitionModuleAction/competitionDrawsAction';
 import Swappable from '../../customComponents/SwappableComponent';
 import { getDayName, getTime } from '../../themes/dateformate';
@@ -106,7 +107,8 @@ class CompetitionDraws extends Component {
       publishModalVisible: false,
       selectedDateRange: null,
       startDate: null,
-      endDate: null
+      endDate: null,
+      changeDateLoad: false
     };
 
   }
@@ -174,21 +176,34 @@ class CompetitionDraws extends Component {
               });
             }
           }
-          else if (this.props.drawsState.allcompetitionDateRange.length > 0) {
-            let dateRangeData = this.props.drawsState.allcompetitionDateRange
-            let selectedDateRange = dateRangeData[0].displayRange
-            let startDate = dateRangeData[0].startDate
-            let endDate = dateRangeData[0].endDate
-            this.setState({
-              selectedDateRange: selectedDateRange,
-              startDate, endDate, venueId
-            })
+          else if (this.state.changeDateLoad == false) {
+            if (this.props.drawsState.allcompetitionDateRange.length > 0) {
+              let dateRangeData = this.props.drawsState.allcompetitionDateRange
+              let selectedDateRange = dateRangeData[0].displayRange
+              let startDate = dateRangeData[0].startDate
+              let endDate = dateRangeData[0].endDate
+              this.setState({
+                selectedDateRange: selectedDateRange,
+                startDate, endDate, venueId
+              })
 
+              this.props.getCompetitionDrawsAction(
+                this.state.yearRefId,
+                this.state.firstTimeCompId,
+                venueId,
+                0, null, startDate, endDate
+              );
+            }
+          }
+          else {
+            this.setState({
+              venueId, changeDateLoad: false
+            })
             this.props.getCompetitionDrawsAction(
               this.state.yearRefId,
               this.state.firstTimeCompId,
               venueId,
-              0, null, startDate, endDate
+              0, null, this.state.startDate, this.state.endDate
             );
           }
         }
@@ -978,15 +993,18 @@ class CompetitionDraws extends Component {
     let selectedRangeIndex = dateData[0]
     let startDate = allRangeData[selectedRangeIndex].startDate
     let endDate = allRangeData[selectedRangeIndex].endDate
-    this.props.getCompetitionDrawsAction(
-      this.state.yearRefId,
-      this.state.firstTimeCompId,
-      this.state.venueId,
-      0, null, startDate, endDate
-    );
+    this.props.clearDraws()
+    this.props.changeDrawsDateRangeAction(this.state.yearRefId,
+      this.state.firstTimeCompId, startDate, endDate)
     this.setState({
       selectedDateRange: date,
-      startDate, endDate
+      startDate, endDate,
+      roundId: 0,
+      venueId: null,
+      roundTime: null,
+      venueLoad: true,
+      competitionDivisionGradeId: null,
+      changeDateLoad: true
     })
   }
 
@@ -1646,7 +1664,8 @@ function mapDispatchToProps(dispatch) {
       matchesListDrawsAction,
       generateDrawAction,
       unlockDrawsAction,
-      getActiveRoundsAction
+      getActiveRoundsAction,
+      changeDrawsDateRangeAction
     },
     dispatch
   );

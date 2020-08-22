@@ -75,9 +75,9 @@ class LiveScoreAddEditCoach extends Component {
 
                 this.setState({ teamLoad: false })
             }
-            if (this.props.liveScoreCoachState.coachdata !== nextProps.liveScoreCoachState.coachdata) {
-                this.setInitalFiledValue()
-            }
+
+
+
         }
     }
 
@@ -113,6 +113,9 @@ class LiveScoreAddEditCoach extends Component {
                 hasError: true
             })
         }
+        setTimeout(() => {
+            this.setInitalFiledValue()
+        }, 300);
 
     }
 

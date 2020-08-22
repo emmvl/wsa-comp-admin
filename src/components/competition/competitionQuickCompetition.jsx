@@ -559,6 +559,7 @@ class CompetitionQuickCompetition extends Component {
             <TimeSlotModal
                 visible={this.state.timeSlotVisible}
                 onCancel={() => this.handleCancel("cancel")}
+                onTimeslotLoad={this.state.timeslotModalLoad}
                 timeSlotOK={() => this.closeTimeSlotModal("save")}
                 handleTimeslotNext={() => this.closeTimeSlotModal("next")}
                 onTimslotBack={() => this.handleCancel("back")}
@@ -626,7 +627,7 @@ class CompetitionQuickCompetition extends Component {
                         <Form.Item >
                             {getFieldDecorator('competition_name',
                                 {
-                                    rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }, ]
+                                    rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired },]
                                 })(
                                     <InputWithHead
                                         auto_Complete="new-compName"
