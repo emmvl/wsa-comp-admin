@@ -8,7 +8,7 @@ import AppImages from "../../themes/appImages";
 import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate, changePlayerLineUpAction } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
+import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate, changePlayerLineUpAction, liveScoreAddLiveStreamAction } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
 import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
@@ -567,6 +567,24 @@ class LiveScoreMatchDetails extends Component {
         //    return record ?  record.team1ResultId == null ?   "abc" : record.team1ResultId === 4 || 5 || 6 ? "def" : record.matchStatus : record.matchStatus
     }
 
+    onClickFunc() {
+
+        if (this.state.liveStreamLink) {
+
+            let body = {
+                "id": this.state.matchId,
+
+                "competitionId": this.state.competitionId,
+
+                "livestreamURL": this.state.liveStreamLink
+            }
+
+            this.props.liveScoreAddLiveStreamAction({ body: body })
+        }
+
+        this.setState({ visible: false })
+    }
+
     ////modal view
     ModalView() {
         return (
@@ -581,7 +599,7 @@ class LiveScoreMatchDetails extends Component {
                 footer={null}
             >
                 <InputWithHead
-                    // auto_Complete='new-LiveStreamLink'
+                    auto_Complete='off'
                     heading={AppConstants.liveStreamlink}
                     placeholder={AppConstants.liveStreamlink}
                     value={this.state.liveStreamLink}
@@ -595,7 +613,7 @@ class LiveScoreMatchDetails extends Component {
                     }}
                 >
 
-                    <Button onClick={() => this.showModal()} className="primary-add-comp-form" type="primary">
+                    <Button onClick={() => this.onClickFunc()} className="primary-add-comp-form" type="primary">
                         {AppConstants.save}
                     </Button>
 
@@ -640,7 +658,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScoreDeleteMatch,
         liveScoreGetMatchDetailInitiate,
-        changePlayerLineUpAction
+        changePlayerLineUpAction,
+        liveScoreAddLiveStreamAction
     }, dispatch)
 }
 

@@ -274,6 +274,24 @@ function* bulkScoreChangeSaga(action) {
   }
 }
 
+function* liveScoreAddLiveStreamSaga(action) {
+  try {
+    const result = yield call(LiveScoreAxiosApi.liveScoreAddLiveStream, action.data);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_ADD_LIVE_STREM_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      })
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 export default function* rootLiveScoreMatchSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_MATCH_LIST_LOAD, liveScoreMatchListSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_MATCH_LOAD, liveScoreAddMatchSaga);
@@ -285,4 +303,5 @@ export default function* rootLiveScoreMatchSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_CLUB_LIST_LOAD, liveScoreClubListSaga);
   yield takeEvery(ApiConstants.CHANGE_PLAYER_LINEUP_LOAD, playerLineUpStatusChangeSaga);
   yield takeEvery(ApiConstants.BULK_SCORE_UPDATE_LOAD, bulkScoreChangeSaga);
+  yield takeEvery(ApiConstants.API_ADD_LIVE_STREM_LOAD, liveScoreAddLiveStreamSaga);
 }

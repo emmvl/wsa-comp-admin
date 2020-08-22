@@ -800,7 +800,15 @@ function liveScoreMatchReducer(state = initialState, action) {
                 onLoad: false
             }
 
+        case ApiConstants.API_ADD_LIVE_STREM_LOAD:
+            return { ...state, onLoad: true, };
 
+        case ApiConstants.API_ADD_LIVE_STREM_SUCCESS:
+
+            return {
+                ...state,
+                onLoad: false,
+            };
     };
 
 }

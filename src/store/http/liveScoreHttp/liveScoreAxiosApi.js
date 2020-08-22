@@ -1136,6 +1136,14 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, null)
     },
 
+    liveScoreAddLiveStream(data) {
+        let body = data.body
+        let url = `/matches/livestream`;
+
+
+        return Method.dataPost(url, token, body)
+    },
+
 };
 
 const Method = {

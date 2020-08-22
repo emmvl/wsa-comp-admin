@@ -157,6 +157,17 @@ function onCancelBulkScoreUpdate() {
     return action
 }
 
+
+function liveScoreAddLiveStreamAction(data) {
+    const action = {
+        type: ApiConstants.API_ADD_LIVE_STREM_LOAD,
+        data: data
+    }
+
+    return action
+
+}
+
 export {
     liveScoreMatchListAction,
     liveScoreAddEditMatchAction,
@@ -173,5 +184,6 @@ export {
     changePlayerLineUpAction,
     changeMatchBulkScore,
     bulkScoreUpdate,
-    onCancelBulkScoreUpdate
+    onCancelBulkScoreUpdate,
+    liveScoreAddLiveStreamAction
 };
