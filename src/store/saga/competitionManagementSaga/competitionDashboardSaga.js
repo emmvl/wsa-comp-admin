@@ -75,3 +75,21 @@ export function* updateCompetitionStatusSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* competitionDashboardDeleteSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.competitionDashboardDelete,action.competitionId,action.targetValue);
+        if (result.status === 1) {
+            
+            yield put({
+                type: ApiConstants.API_COMPETITION_DASHBOARD_DELETE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

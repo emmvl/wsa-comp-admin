@@ -638,10 +638,12 @@ let CompetitionAxiosApi = {
     async mergeCompetitionProceedApi(payload) {
         var url = `/api/quickcompetitions/merge`
         return Method.dataPost(url, token, payload)
+    },
+    async competitionDashboardDelete(competitionId,targetValue)
+    {
+      var url = `/api/competition/delete?competitionId=${competitionId}&deleteOptionId=${targetValue}`;
+      return Method.dataDelete(url, token);
     }
-
-
-
 };
 
 const Method = {

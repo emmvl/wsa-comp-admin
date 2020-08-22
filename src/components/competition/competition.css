@@ -836,3 +836,7 @@ a.collapsed i {
 .button-space .ant-btn-primary {
   padding-right: 21px;
 }
+.customize-radio-text .ant-radio-wrapper {
+  font-size: 13px;
+  color:inherit;
+}

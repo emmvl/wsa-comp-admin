@@ -5,8 +5,7 @@ const initialState = {
     error: null,
     result: [],
     status: 0,
-    fixtureTemplate:[],	 
-    onDeleteOwnedComp: true	 
+    fixtureTemplate:[]	 
 };
 function CompetitionManagementState(state = initialState, action) {
 
@@ -23,17 +22,6 @@ function CompetitionManagementState(state = initialState, action) {
                 status: action.status
             };
 
-        case ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD:
-            return { ...state, onLoad: true };
-
-        case ApiConstants.API_COMPETITION_DASHBOARD_DELETE_SUCCESS:
-            return {
-                ...state,
-                onLoad: false,
-                result: action.result,
-                status: action.status,
-                onDeleteOwnedComp: false 
-            };
         case ApiConstants.API_COMPETITION_DASHBOARD_FAIL:
             return {
                 ...state,

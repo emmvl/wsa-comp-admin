@@ -188,7 +188,7 @@ const columnsOwned = [
                                 <span>{AppConstants.editRegrade}</span>
                             </Menu.Item>
                             <Menu.Item key="2"
-                                onClick={() => this_Obj.deleteCompetition("show" , record.competitionId)}
+                                onClick={() => this_Obj.deleteCompetition("show" , record)}
                             >
                                 <span>{AppConstants.delete}</span>
                             </Menu.Item>
@@ -229,8 +229,10 @@ class CompetitionDashboard extends Component {
             loading: false,
 			modalVisible: false,
             competitionId: "",
+            competitionName: "",
             statusRefId: null,
-            onDeleteTargetValue: null	   
+            onDeleteTargetValue: 2,	 
+            deleteCompLoad: false  
         };
         this.props.CLEAR_OWN_COMPETITION_DATA("participate_CompetitionArr")
         this_Obj = this
@@ -252,12 +254,13 @@ class CompetitionDashboard extends Component {
             }
         }
 
-        if(this.state.loading == true && this.props.competitionDashboardState.onDeleteOwnedComp == false){
-            this.setState({ loading: false });
+        if(this.state.deleteCompLoad == true && this.props.competitionDashboardState.deleteCompLoad == false){
+            this.setState({ deleteCompLoad: false });
             if (yearList.length > 0) {
                 let yearRefId = this.getYearRefId();
-                this.props.competitionDashboardAction(yearRefId)
-                this.setState({ loading: false })
+                window.location.reload();
+                // this.props.competitionDashboardAction(yearRefId)
+                // this.setState({ loading: false })
             }
         }
     }
@@ -289,6 +292,7 @@ class CompetitionDashboard extends Component {
             this.setState({
                 modalVisible:true,
                 competitionId: record.competitionId,
+                competitionName: record.competitionName,
                 statusRefId:record.statusRefId
             })
         }
@@ -297,13 +301,14 @@ class CompetitionDashboard extends Component {
             this.props.deleteCompetitionAction(this.state.competitionId, this.state.onDeleteTargetValue)
             this.setState({
                 modalVisible:false,
-                loading: true
+                deleteCompLoad: true
             })
         }
         else if(key == "cancel")
         {
             this.setState({
-                modalVisible:false
+                modalVisible:false,
+                onDeleteTargetValue: 2
             })
         }
     }
@@ -552,13 +557,15 @@ class CompetitionDashboard extends Component {
                     okText={AppConstants.yes}
                     cancelText={AppConstants.no}>
                     {this.state.statusRefId == 0 ?
-                        <p>{AppConstants.compDeleteConfirm}</p>
+                        <p>{AppConstants.compDeleteConfirm.replace("(COMP_NAME)", this.state.competitionName)}</p>
                         :
                         <div>
-                            <p>{AppConstants.deletePublishToLsMsg}</p>
+                            <p>{AppConstants.deletePublishToLsMsg.replace("(COMP_NAME)", this.state.competitionName)
+                                        .replace("(COMP_NAME)", this.state.competitionName)}</p>
                             <Radio.Group
-                            className="reg-competition-radio"
+                            className="reg-competition-radio  customize-radio-text"
                             onChange={(e) => this.onChangeSetValue(e.target.value)}
+                            value={this.state.onDeleteTargetValue}
                             >
                                 <Radio value={1}>{AppConstants.both}</Radio>
                                 <Radio value={2}>{AppConstants.onlyCompMngmt}</Radio>
