@@ -985,8 +985,12 @@ input[type="number"] {
 .tree-node-parent-description:last-child {
  margin-top: 80px!important;
 }
+.tree-node-parent-description-seasonal:last-child {
+  margin-top: 0px!important;
+}
 .registrationcode-input{
   margin-left: 21px!important;  
+  margin-top: -25px !important;
 }
 
 @media (max-width: 767px) {
