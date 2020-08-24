@@ -1552,9 +1552,9 @@ function checkDiscountProduct(discountStateData, selectedDiscount) {
 
 function getSeasonaltreeData (datalist)
 {
-    let seasonalPaymentDefault = datalist;   
+    let seasonalPaymentDefaultTemp = datalist.filter(x => x.id != 8);  
     let instalmentDates = [];       
-    seasonalPaymentDefault.map((item) => {        
+    seasonalPaymentDefaultTemp.map((item) => {         
         let subReferences = item.subReferences
         if(subReferences.length > 0){
             for(let i = 0;i<subReferences.length;i++){
@@ -1562,7 +1562,7 @@ function getSeasonaltreeData (datalist)
             }
         }       
     })  
-    return seasonalPaymentDefault;
+    return seasonalPaymentDefaultTemp;
 }
 
 function addInstalmentDate(selectedSeasonalInstalmentDatesArray){
@@ -2159,6 +2159,9 @@ function competitionFees(state = initialState, action) {
                 let updatedTeamSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalTeamFeeArr, state.defaultSelectedSeasonalTeamFee, 3,state.selectedTeamSeasonalInstalmentDates)
                 state.selectedSeasonalTeamFee = updatedTeamSeasonal.getUpdatedCasualFeeArr;
                 state.selectedTeamSeasonalInstalmentDates = updatedTeamSeasonal.instalmentDates;
+				if(!state.selectedSeasonalTeamFeeKey.includes("8")|| !state.selectedSeasonalTeamFeeKey.includes(8)){
+                    state.competitionDetailData.teamSeasonalSchoolRegCode = ""
+                }
             }
             return { ...state }
 
@@ -2581,7 +2584,7 @@ function competitionFees(state = initialState, action) {
             if(action.key == "isSeasonalUponReg" || action.key == "isTeamSeasonalUponReg"){
                 state.competitionDetailData[action.key] = action.value;
             }
-			if(action.key == "seasonalSchoolRegCode" || action.key == "teamSeasonalSchoolRegCode"){
+			if(action.key == "teamSeasonalSchoolRegCode"){
                 state.competitionDetailData[action.key] = action.value;
             }
             return { ...state,  };    

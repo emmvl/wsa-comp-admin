@@ -203,7 +203,8 @@ const ValidationConstants = {
     pleaseSelectOneOption: "Please select any option.",
     pleaseProvideInstalmentDate: "Please provide an instalment date",
     duplicateFamilyDiscountError: "Please remove the duplicate entry of Family Discount for the same Membership Product.",
-    mobileLength: "Contact number must be 10 digits"
+    mobileLength: "Contact number must be 10 digits",
+	pleaseFillRegistration: 'Please fill the Registration Code',															
 };
 
 export default ValidationConstants;
