@@ -1556,6 +1556,7 @@ const AppConstants = {
   enterCode:"Registration Code",  
   finalExtraTime: "Final Extra Time",
   telExp: "^[0-9]{10}$",
+  update:"Update"
 };
 
 export default AppConstants;
