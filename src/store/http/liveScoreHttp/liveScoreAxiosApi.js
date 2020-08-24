@@ -1138,7 +1138,7 @@ let LiveScoreAxiosApi = {
 
     liveScoreAddLiveStream(data) {
         let body = data.body
-        let url = `/matches/livestream`;
+        let url = `/matches/livestreamURL`;
 
 
         return Method.dataPost(url, token, body)

@@ -1550,11 +1550,15 @@ const AppConstants = {
   dateRange: "Date Range",
   publishToLivescore: "Do you want to publish to live scores?",
   finalGrading: "Final Grading",
-  onlyCompMngmt: "Only Competition Management",													 
-  deletePublishToLsMsg:"Are you sure you want to delete (COMP_NAME)? (COMP_NAME) has also been published to Live Scores. Would you like to Delete?",
-  deleteCompetition:"Delete Competition",
-  enterCode:"Registration Code",  
+  onlyCompMngmt: "Only Competition Management",
+  deletePublishToLsMsg: "Are you sure you want to delete (COMP_NAME)? (COMP_NAME) has also been published to Live Scores. Would you like to Delete?",
+  deleteCompetition: "Delete Competition",
+  enterCode: "Registration Code",
   finalExtraTime: "Final Extra Time",
+  statusContextMsg: `“Pending Membership” (when the membership fee hasn’t been paid by the individual)\n\n
+  “Pending Registration Fee” (when the individual fee is pending)\n\n 
+  “Registered” (when all fees have been paid)`,
+  totalFeeMsg: "Pay as you go fee",
   telExp: "^[0-9]{10}$",
 };
 

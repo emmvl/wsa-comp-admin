@@ -231,6 +231,12 @@ function liveScoreIncidentState(state = initialState, action) {
                 state.incidentData = []
                 state.incidentMediaIds = []
 
+            } else if (action.key === "incidentImage") {
+                state.incidentData['addImages'] = null
+
+            } else if (action.key === "incidentVideo") {
+                state.incidentData['addVideo'] = null
+
             } else {
                 state.incidentData[action.key] = action.data
             }

@@ -862,9 +862,9 @@ class CompetitionVenueAndTimesAdd extends Component {
                 </div>
 
                 <div className="inside-container-view">
-                    <div className="contextual-table-responsive">
+                    <div className="contextual-table-responsive content-responsive">
                         <Table
-                            className="fees-table overflow-auto"
+                            className="fees-table"
                             columns={this.state.courtColumns}
                             dataSource={venueCourts}
                             pagination={false}

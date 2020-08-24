@@ -279,6 +279,8 @@ class LiveScoreMatchDetails extends Component {
         // const { match } = this.props.liveScoreMatchState.matchDetails
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : []
 
+        const matchDetails = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails : []
+
         const length = match ? match.length : 0
         let isMatchStatus = length > 0 ? match[0].matchStatus === "ENDED" ? true : false : false
 
@@ -311,7 +313,7 @@ class LiveScoreMatchDetails extends Component {
                                 >
                                     <NavLink to={{
                                         pathname: '/liveScoreAddIncident',
-                                        state: { matchId: this.state.matchId }
+                                        state: { matchId: this.state.matchId, matchDetails: matchDetails }
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addIncident}
@@ -582,7 +584,7 @@ class LiveScoreMatchDetails extends Component {
             this.props.liveScoreAddLiveStreamAction({ body: body })
         }
 
-        this.setState({ visible: false })
+        this.setState({ visible: false, liveStreamLink: '' })
     }
 
     ////modal view

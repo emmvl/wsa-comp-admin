@@ -562,6 +562,11 @@ a.collapsed i {
   margin-top: 4px
 }
 
+.table-responsive.table-competition{
+  overflow: visible !important;
+
+}
+
 .ant-table-thead > tr > th .anticon-filter, .ant-table-thead > tr > th .ant-table-filter-icon {
   width: 0;
 }
@@ -840,3 +845,17 @@ a.collapsed i {
   font-size: 13px;
   color:inherit;
 }
+
+@media(max-width:1200px){
+  .table-responsive.table-competition {
+    max-width: 1200px;
+    width: 100%;
+    overflow: auto!important;
+}
+}
+
+@media (max-width:767px){
+  .contextual-table-responsive.content-responsive {
+    overflow: auto;
+  }
+ }

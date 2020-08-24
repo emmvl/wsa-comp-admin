@@ -1871,7 +1871,7 @@ class CompetitionOpenRegForm extends Component {
                             </span>
                             {item.isPlayingStatus == true ? (
                                 <div>
-                                    <div className="table-responsive">
+                                    <div className="table-responsive content-responsive">
                                         <Table
                                             className="fees-table"
                                             columns={this.state.divisionTable}
