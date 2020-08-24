@@ -802,6 +802,7 @@ class LiveScoreDashboard extends Component {
                     <Tooltip background='#ff8237'>
                         <span>{AppConstants.activeNewsMsg}</span>
                     </Tooltip>
+
                 </div>
                 <div className="col-sm text-right" >
                     <NavLink to={{

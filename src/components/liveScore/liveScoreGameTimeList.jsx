@@ -281,7 +281,7 @@ class LiveScoreGameTimeList extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view ">
+            <div className="comp-player-grades-header-drop-down-view mt-4 ">
                 < div className="row" >
                     <div className="col-sm" style={{ alignSelf: 'center' }} >
                         <Breadcrumb separator=" > ">

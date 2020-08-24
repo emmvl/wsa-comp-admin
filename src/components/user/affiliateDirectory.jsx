@@ -278,7 +278,7 @@ class AffiliateDirectory extends Component {
               <Breadcrumb.Item className="breadcrumb-add">
                 {AppConstants.affiliateDirectory}
               </Breadcrumb.Item>
-              <h1>hello</h1>
+
             </Breadcrumb>
           </div>
           <div
