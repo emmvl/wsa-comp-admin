@@ -1,21 +1,21 @@
 import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 
-import AppConstants from "../../../themes/appConstants";
-import ApiConstants from "../../../themes/apiConstants";
-import history from "../../../util/history";
-import { receiptImportResult } from "../../../util/showMsgOfImportRes";
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
-import CommonAxiosApi from "../../http/commonHttp/commonAxios";
+import AppConstants from "themes/appConstants";
+import ApiConstants from "themes/apiConstants";
+import history from "util/history";
+import { receiptImportResult } from "util/showImportResult";
+import LiveScoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
+import CommonAxiosApi from "store/http/commonHttp/commonAxios";
 
 function* failSaga(result) {
   yield put({
     type: ApiConstants.API_LIVE_SCORE_CREATE_MATCH_FAIL,
     error: result,
-    status: result.status
+    status: result.status,
   });
 
-  let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+  let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
   message.config({
     duration: 1.5,
     maxCount: 1,
@@ -27,7 +27,7 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_LIVE_SCORE_CREATE_MATCH_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
 
   if (error.status === 400) {
@@ -109,7 +109,7 @@ function* liveScoreCreateMatchSaga(action) {
       action.endTime,
       action.umpireArr,
       action.scorerData,
-      action.recordUmpireType
+      action.recordUmpireType,
     );
 
     if (result.status === 1) {
@@ -120,14 +120,12 @@ function* liveScoreCreateMatchSaga(action) {
       });
 
       if (action.umpireKey) {
-        history.push({
-          pathname: '/umpireDashboard'
-        });
+        history.push({ pathname: "/umpireDashboard" });
       } else {
-        history.push(action.key === 'dashboard' ? 'liveScoreDashboard' : action.key === 'umpireRoaster' ? 'umpireRoaster' : '/liveScoreMatches');
+        history.push(action.key === "dashboard" ? "liveScoreDashboard" : action.key === "umpireRoaster" ? "umpireRoaster" : "/liveScoreMatches");
       }
 
-      message.success(action.data.id === 0 ? 'Match has been created Successfully.' : 'Match has been updated Successfully.');
+      message.success(action.data.id === 0 ? "Match has been created Successfully." : "Match has been updated Successfully.");
     } else {
       yield call(failSaga, result);
     }
@@ -147,9 +145,9 @@ function* liveScoreDeleteMatchSaga(action) {
         status: result.status,
       });
 
-      history.push('/liveScoreMatches');
+      history.push("/liveScoreMatches");
 
-      message.success('Match Deleted Successfully.');
+      message.success("Match Deleted Successfully.");
     } else {
       yield call(failSaga, result);
     }
@@ -168,7 +166,7 @@ function* liveScoreCompetitionVenuesListSaga(action) {
         type: ApiConstants.API_LIVE_SCORE_COMPETITION_VENUES_LIST_SUCCESS,
         status: result.status,
         venues: result.result.data,
-        payload: result.result.data
+        payload: result.result.data,
       });
     } else {
       yield call(failSaga, result);
@@ -186,13 +184,13 @@ function* liveScoreMatchImportSaga(action) {
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_SUCCESS,
+          result: result.result.data,
       });
 
-      history.push('/liveScoreMatches');
+      // history.push("/liveScoreMatches");
+      // message.success("Match Imported Successfully.");
 
       receiptImportResult(result.result);
-
-      message.success('Match Imported Successfully.');
     } else {
       yield call(failSaga, result);
     }
@@ -208,7 +206,7 @@ function* liveScoreMatchSaga({ payload, isLineup }) {
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_SUCCESS,
-        payload: result.result.data
+        payload: result.result.data,
       });
     } else {
       yield call(failSaga, result);
@@ -264,8 +262,8 @@ function* bulkScoreChangeSaga(action) {
       yield put({
         type: ApiConstants.BULK_SCORE_UPDATE_SUCCESS,
         result: result.result.data,
-        status: result.status
-      })
+        status: result.status,
+      });
     } else {
       yield call(failSaga, result);
     }
@@ -282,9 +280,10 @@ function* liveScoreAddLiveStreamSaga(action) {
       yield put({
         type: ApiConstants.API_ADD_LIVE_STREM_SUCCESS,
         result: result.result.data,
-        status: result.status
-      })
-      message.success('Live stream link added successfully.');
+        status: result.status,
+      });
+
+      message.success("Live stream link added successfully.");
     } else {
       yield call(failSaga, result);
     }

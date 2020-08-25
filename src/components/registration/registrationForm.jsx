@@ -653,7 +653,7 @@ class RegistrationForm extends Component {
                     </Checkbox>
                     <div style={{ marginTop: 15, marginLeft: -8 }}>
                         <CustomTooltip background='#ff8237'>
-                            <span>{AppConstants.regFormTraningMsg}</span>
+                            <span>{AppConstants.regFormTrainingMsg}</span>
                         </CustomTooltip>
                     </div>
 

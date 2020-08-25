@@ -1,10 +1,10 @@
 import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 
-import AppConstants from "../../themes/appConstants";
-import ApiConstants from "../../themes/apiConstants";
-import AxiosApi from "../http/registrationHttp/registrationAxios";
-import CommonAxiosApi from "../http/commonHttp/commonAxios";
+import AppConstants from "themes/appConstants";
+import ApiConstants from "themes/apiConstants";
+import RegistrationAxiosApi from "store/http/registrationHttp/registrationAxiosApi";
+import CommonAxiosApi from "store/http/commonHttp/commonAxios";
 
 function* failSaga(result) {
   yield put({
@@ -45,7 +45,7 @@ function* errorSaga(error) {
 // Get the membership fee list in registration
 function* homeDashboardSaga(action) {
   try {
-    const result = yield call(AxiosApi.homeDashboardApi, action.year);
+    const result = yield call(RegistrationAxiosApi.homeDashboardApi, action.year);
 
     if (result.status === 1) {
       yield put({

@@ -144,7 +144,7 @@ class CompetitionDraws extends Component {
                                         alignItems: "center",
                                         width: "100%",
                                     }}>
-                                        <span className='year-select-heading pt-2'>{AppConstants.statringSaturday}</span>
+                                        <span className='year-select-heading pt-2'>{AppConstants.startingSaturday}</span>
                                     </div>
                                 </div>
                             </div>

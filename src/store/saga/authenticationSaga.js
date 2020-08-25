@@ -1,13 +1,13 @@
 import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 
-import ApiConstants from "../../themes/apiConstants";
-import AppConstants from "../../themes/appConstants";
-import userAxiosApi from "../http/userHttp/userAxiosApi";
+import ApiConstants from "themes/apiConstants";
+import AppConstants from "themes/appConstants";
+import UserAxiosApi from "store/http/userHttp/userAxiosApi";
 
 function* loginApiSaga(action) {
   try {
-    const result = yield call(userAxiosApi.Login, action.payload);
+    const result = yield call(UserAxiosApi.Login, action.payload);
 
     if (result.status === 1) {
       yield put({
@@ -48,7 +48,7 @@ function* loginApiSaga(action) {
 
 function* qrApiSaga(action) {
   try {
-    const result = yield call(userAxiosApi.QrCode, action.payload);
+    const result = yield call(UserAxiosApi.QrCode, action.payload);
 
     if (result.status === 1) {
       yield put({
@@ -90,7 +90,7 @@ function* qrApiSaga(action) {
 // Forgot password
 function* forgotPasswordSaga(action) {
   try {
-    const result = yield call(userAxiosApi.forgotPassword, action.email, action.resetType);
+    const result = yield call(UserAxiosApi.forgotPassword, action.email, action.resetType);
 
     if (result.status === 1) {
       yield put({

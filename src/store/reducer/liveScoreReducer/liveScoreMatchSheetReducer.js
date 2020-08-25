@@ -103,4 +103,5 @@ function liveScoreMatchSheetState(state = initialState, action) {
             return state;
     }
 }
-export default liveScoreMatchSheetState;  
+
+export default liveScoreMatchSheetState;

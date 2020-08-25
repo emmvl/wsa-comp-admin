@@ -1,6 +1,6 @@
 import { all, fork, takeEvery } from "redux-saga/effects";
 
-import ApiConstants from "../../themes/apiConstants";
+import ApiConstants from "themes/apiConstants";
 import appSaga from "./appSaga";
 import authenticationSaga from "./authenticationSaga";
 import commonSaga from "./commonSaga";
@@ -58,7 +58,7 @@ import {
 
 
 ////**************************Live Score***************************Start
-import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga, ladderAdjustmentPostSaga, ladderAdjustmentGetSaga } from './liveScoreSaga/liveScoreLadderSaga';
+import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga, ladderAdjustmentPostSaga, ladderAdjustmentGetSaga, liveScoreResetLadderSaga } from './liveScoreSaga/liveScoreLadderSaga';
 import { liveScoreIncidentListSaga, liveScoreAddEditIncidentSaga, liveScoreIncidentTypeSaga } from './liveScoreSaga/liveScoreIncidentSaga';
 import { liveScoreRoundSaga, liveScoreRoundListSaga } from './liveScoreSaga/liveScoreRoundSaga';
 import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationSaga, liveScoreNewsDeleteSaga } from './liveScoreSaga/liveScoreNewsSaga';
@@ -193,7 +193,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD, regMembershipFeeListSaga);
   yield takeEvery(ApiConstants.API_REG_COMPETITION_LIST_DELETE_LOAD, regCompetitionFeeListDeleteSaga);
   yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_DELETE_LOAD, regMembershipFeeListDeleteSaga);
-  yield takeEvery(ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT__LOAD, regGetMembershipProductDetailSaga);
+  yield takeEvery(ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT_LOAD, regGetMembershipProductDetailSaga);
   yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT__LOAD, regSaveMembershipProductDetailSaga);
   yield takeEvery(ApiConstants.API_REG_GET_DEFAULT_MEMBERSHIP_PRODUCT_TYPES__LOAD, regDefaultMembershipProductTypesSaga)
   yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT_FEES__LOAD, regSaveMembershipProductFeeSaga);
@@ -525,5 +525,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD, getTeamRegistrationsSaga);
 
   yield takeEvery(ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_LOAD, getVenueAndDivisionSaga)
+
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_RESET_LADDER_LOAD, liveScoreResetLadderSaga);
 }
 

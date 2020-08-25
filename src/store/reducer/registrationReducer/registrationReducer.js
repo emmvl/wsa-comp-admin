@@ -672,7 +672,7 @@ function registration(state = initialState, action) {
       };
 
     //////get the membership  product details
-    case ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT__LOAD:
+    case ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT_LOAD:
       return { ...state, onLoad: true, error: null };
 
     case ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT_SUCCESS:

@@ -696,7 +696,7 @@ class LiveScoreAddNews extends Component {
                         onChange={(e) => this.props.liveScoreUpdateNewsAction(e.target.checked, "indivisualOrg")}
                         value={indivisualOrg}
                     >
-                        {AppConstants.indivisualOrgnisation}
+                        {AppConstants.individualOrganisation}
                     </Checkbox>
                 </div>
 

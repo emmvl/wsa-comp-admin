@@ -879,7 +879,7 @@ class AddProduct extends Component {
                             }
                             disabled={this.state.allDisabled}
                         >
-                            {AppConstants.allowCustToPurchase}
+                            {AppConstants.allowCustomerToPurchase}
                         </Checkbox>
                     </div>
 
@@ -1025,7 +1025,7 @@ class AddProduct extends Component {
                         ))}
                         <span className="input-heading-add-another"
                             onClick={() => this.state.allDisabled === false ? this.addVariantOption(0, -1, "add") : null}>
-                            +{AppConstants.addvariantoption}
+                            +{AppConstants.addVariantOption}
                         </span>
                     </>}
                 </div>
