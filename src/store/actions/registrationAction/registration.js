@@ -26,7 +26,7 @@ function regMembershipListDeleteAction(productId) {
 //////get the membership  product details
 function regGetMembershipProductDetailsAction(productId) {
   const action = {
-    type: ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT__LOAD,
+    type: ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT_LOAD,
     productId: productId
   };
   return action;

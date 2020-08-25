@@ -625,7 +625,7 @@ const AppConstants = {
   umpireList: 'Umpire List',
   filterByDivision: 'Filter By Division',
   competitionladders: 'Competition Ladders',
-  palyerList: 'Player List',
+  playerList: 'Player List',
   importPlayer: 'Import Player',
   addPlayer: 'Add Player',
   editPlayer: 'Edit Player',
@@ -686,7 +686,7 @@ const AppConstants = {
   goalState: 'Goal Statistics',
   bulkMatchChange: 'Bulk Match Change',
   whatDoWantDO: 'What do you want to do?',
-  slectOption: 'Select Option',
+  selectOption: 'Select Option',
   whichMatchChange: 'Which matches do you want to change?',
   matchOnDate: 'Matches on this date',
   forTimeRange: 'For this time range',
@@ -722,7 +722,6 @@ const AppConstants = {
   // exportUrl: 'http://world-sport-action-socket.appspot.com/players/csv?competitionId=',
   exportUrl: '/players/csv?',
 
-  ////Registartion
   membershipTypeName: 'Membership Type Name',
   pleaseEnterMembershipTypeName: 'Please Enter Membership Type Name',
 
@@ -730,20 +729,17 @@ const AppConstants = {
   evenRotation: 'Even rotation',
   allocateToSameCourt: 'Allocate to same court',
   noPreference: 'No Preference',
-  statringSaturday: 'Starting Sat 08/02',
-  anyGradePreference2:
-    'Do you have any court preferences for divisions or grades?',
+  startingSaturday: 'Starting Sat 08/02',
+  anyGradePreference2: 'Do you have any court preferences for divisions or grades?',
   timeSlotRotation: 'TimeSlot rotation',
   proceedLowerGrade: 'Precede lower grades with higher grades',
 
   saveAsDefault: 'Save as Default',
 
   //time slot constants
-  anyTimePreference:
-    'Do you have any timeslot preferences for divisions or grades?',
+  anyTimePreference: 'Do you have any timeslot preferences for divisions or grades?',
   none: 'None',
-  timeslotsAllocatedBasedOnMatchs:
-    'Timeslots allocated based on match duration',
+  timeslotsAllocatedBasedOnMatchs: 'Timeslots allocated based on match duration',
   enterTimeMatchesEachDay: 'Enter time matches should run each day',
   allocateToSametimeslot: 'Allocate to same time slot',
   newCompetition: 'New Competition',
@@ -913,7 +909,7 @@ const AppConstants = {
 
   goalExport: '/stats/export/scoringByPlayer?competitionId=',
   gameTimeExport: '/stats/export/gametime?competitionId=',
-  teamAttendaneExport: '/players/export/teamattendance?competitionId=',
+  teamAttendanceExport: '/players/export/teamattendance?competitionId=',
   proceed: 'Skip and Proceed',
   invalidPlayers: 'Invalid Records',
   matchExport: `/matches/export?competitionId=`,
@@ -1172,7 +1168,7 @@ const AppConstants = {
     'List the date you want Registrations to close. Please note registrations can still be taken after this date if required.',
   regLockMsg:
     'Registration Lock immediately closes registration for those divisions it is applied to.',
-  regFormTraningMsg: 'Show users training details like Date, Time and Venue.',
+  regFormTrainingMsg: 'Show users training details like Date, Time and Venue.',
   regFormSpecialNoteMsg:
     'Detail any special notes you would like to include on the Registration Form.',
   regFormPhotoMsg:
@@ -1180,10 +1176,9 @@ const AppConstants = {
   replyContactDetailMsg:
     'Let Users know who to contact if they have any questions. You can choose to list their Name, Role, Email and or Phone number.',
   howUserRegisterMsg: 'Define how Users can Register for your Competition.',
-  additionQuesMsg:
-    'Click on the Questions you would like to ask Users who are Registering to your Competition.',
+  additionQuesMsg: 'Click on the Questions you would like to ask Users who are Registering to your Competition.',
   allDivisionsMsg: 'All Divisions are changed the same Fees.',
-  perDivisionMsg: 'Each Dvision can be charged a different Fee. ',
+  perDivisionMsg: 'Each Division can be charged a different Fee. ',
   paymentSeasonalFeeMsg:
     'Choose the payment options you would like to offer users to pay their Registration Fees with.You can choose multiple.',
   paymentCausalFeeMsg:
@@ -1191,11 +1186,11 @@ const AppConstants = {
   charityRoundUpMsg:
     'Add the ability for users Registering to round up their registration to the nearest $1, $5 or $10 to support the pre-defined charity.',
   discountMsg:
-    'Choose the discount you would like to apply to your Compettion Fee. Please note, this discount only applies to your orgaisations Competition Fee. You can choose which membership Product and Type this fee is applied to.',
+    'Choose the discount you would like to apply to your Competition Fee. Please note, this discount only applies to your organisations Competition Fee. You can choose which membership Product and Type this fee is applied to.',
   discountTypeMsg:
-    'Currently the only choices are -  Discount Code or Family. You can offer both discounts for the one competitiion but Family will be applied first. ',
+    'Currently the only choices are - Discount Code or Family. You can offer both discounts for the one competition but Family will be applied first. ',
 
-  ////Registration Memership Fee
+  ////Registration Membership Fee
 
   membershipProductNameMsg:
     'Add a name that your affiliated organisations can resonate with e.g. Annual Membership Fee',
@@ -1209,13 +1204,11 @@ const AppConstants = {
     'Fee charged to the User for the first competition they join in the defined period (whether it be calendar year or 12 months from date of registration). It will not be charged if they join another competition in that defined period.',
   allCompRegMsg:
     'Fee charged to the User every time they join a competition in the defined period (whether it be calendar year or 12 months from date of registration).',
-  membershipDiscountMsg:
-    'Discounts applied here apply to Player Membership Fees only.',
+  membershipDiscountMsg: 'Discounts applied here apply to Player Membership Fees only.',
 
   ////For Users Module
-  orgTypeMsg:
-    'Detail the type of organisation being added. State Organisations can add Associations/ Leagues and Clubs/ Schools, Associations can only add Clubs/ Schools.',
-  addAfiliatePermisionLevelMsg: `Choose the permission level for each contact.\n\n
+  orgTypeMsg: 'Detail the type of organisation being added. State Organisations can add Associations/ Leagues and Clubs/ Schools, Associations can only add Clubs/ Schools.',
+  addAffiliatePermissionLevelMsg: `Choose the permission level for each contact.\n\n
   Admin - can access all areas in the platform.\n\n
   Communications Admin - can access the advertising platform and the Home Screen for News and Notifications.\n\n
   Umpires Admin - can access the Umpires platform.\n\n
@@ -1253,8 +1246,7 @@ const AppConstants = {
   addUmpire: 'Add Umpire',
   editUmpire: 'Edit Umpire',
   umpireSearch: 'Umpire Search',
-  nonPlayerDivisionMessage:
-    'Divisions are not required for your selected membership type.',
+  nonPlayerDivisionMessage: 'Divisions are not required for your selected membership type.',
   drawsLink: 'Draws Link',
   public_draws_Url: `https://netball-registration-dev.worldsportaction.com/livescoreSeasonFixture?`,
   finalsMessage: 'Finals has not been enabled for this Competition',
@@ -1281,8 +1273,7 @@ const AppConstants = {
   barcodeHeading: 'Barcode(ISBN, UPC, GTIN etc)',
   barcode: 'Barcode',
   quantity: 'Quantity',
-  allowCustToPurchase:
-    "Allow customers to purchase this product when it's out of stock",
+  allowCustomerToPurchase: "Allow customers to purchase this product when it's out of stock",
   variants: 'Variants',
   enableVariants: 'Enable Variants',
   variantName: 'Variant Name',
@@ -1299,7 +1290,7 @@ const AppConstants = {
   paymentStatus: "Payment Status",
 
   fulfilmentStatus: "Fulfilment Status",
-  attendence_Recording_Time: "Attendance Recording Time",
+  attendanceRecordingTime: "Attendance Recording Time",
   lineupSelection: "Lineup Selection",
   _days: "Days",
   _hours: "Hours",
@@ -1324,7 +1315,7 @@ const AppConstants = {
   size: "Size",
   sku: "SKU",
   option: "Option",
-  addvariantoption: "Add variant option",
+  addVariantOption: "Add variant option",
   deleteProduct: "Delete Product",
   deleteProductDescription: "Please confirm you want to delete this product?",
   umpireDashboardExport: "/matchUmpire/dashboard/export?",
@@ -1334,7 +1325,7 @@ const AppConstants = {
   assignMatch: 'Assign Match',
   generateRoster: 'Generate Roster',
   howUmpiresAllocated: 'How will Umpires be Allocated?',
-  umpirePrefences: "Umpire Preferences:",
+  umpirePreferences: "Umpire Preferences:",
   noOfMatches: 'Number of Matches they can ',
   timeBetweenUmpireMatch: 'Time between Umpiring Matches',
   umpireReservePref: 'Umpire Reserve',
@@ -1430,7 +1421,7 @@ const AppConstants = {
   confirmPassword: "Confirm password",
   enterConfirmPassword: "Enter confirm password",
   userIsRegisteredTo: "User is registered to",
-  competitionAdimistrator: 'Competition Adimistrator',
+  competitionAdministrator: 'Competition Administrator',
   regChangeDetail: 'REGISTRATION CHANGE DETAILS',
   dateRegChange: 'Date Registration Change',
   dateCompStart: 'Date Competition Start',
@@ -1438,7 +1429,7 @@ const AppConstants = {
   generateFixtures: "Generate Fixtures",
   doTheySayForGame: 'Do they say they have taken the court for training, grading or a competition game?',
   reasonToDeRegister: 'Reasons why they would like to de-register?',
-  overCommited: `I am over commited with other activities and can't fit in time for netball`,
+  overCommited: `I am over committed with other activities and can't fit in time for netball`,
   injuredOrHealthReason: 'I have been injured or health reason (not netball related)',
   decideNotToParticipate: 'Decided not to participate in netball',
   moveToDiffGeographicalArea: 'Moving to different geographical area',
@@ -1448,7 +1439,7 @@ const AppConstants = {
   decline: 'DECLINE',
   stateWideMsg: 'State-wide messages',
   allOrganisation: 'All Organisations',
-  indivisualOrgnisation: 'Individual Organisations',
+  individualOrganisation: 'Individual Organisations',
   firstLevelAffiliatesAssociationLeague: "1st Level Affiliates - Association/ League",
   secondLevelAffiliatesClubSchool: "2nd Level Affiliates - Club/ School",
   teamSeasonalFee: 'Team Seasonal Fee',
@@ -1488,7 +1479,7 @@ const AppConstants = {
 
   editRegrade: "Edit/Regrade",
   fullCompetition: "Full Competition",
-  competitionstartDate: "Competition Start Date",
+  competitionStartDate: "Competition Start Date",
   statusPublishHover: "This competition needs to be unlocked using the Edit / Regrade option on the competition dashboard in order to be edited",
 
   venueAddressDetailsError: "Please input venue address in details",
@@ -1550,17 +1541,18 @@ const AppConstants = {
   dateRange: "Date Range",
   publishToLivescore: "Do you want to publish teams and players to live scores so managers and coaches can communicate with their teams (prior to the draw being finalised)?",
   finalGrading: "Publish - Final Grading",
-  onlyCompMngmt: "Only Competition Management",													 
-  deletePublishToLsMsg:"Are you sure you want to delete (COMP_NAME)? (COMP_NAME) has also been published to Live Scores. Would you like to Delete?",
-  deleteCompetition:"Delete Competition",
-  enterCode:"Registration Code",  
+  onlyCompMngmt: "Only Competition Management",
+  deletePublishToLsMsg: "Are you sure you want to delete (COMP_NAME)? (COMP_NAME) has also been published to Live Scores. Would you like to Delete?",
+  deleteCompetition: "Delete Competition",
+  enterCode: "Registration Code",
   finalExtraTime: "Final Extra Time",
   statusContextMsg: `“Pending Membership” (when the membership fee hasn’t been paid by the individual)\n\n
   “Pending Registration Fee” (when the individual fee is pending)\n\n 
   “Registered” (when all fees have been paid)`,
   totalFeeMsg: "Pay as you go fee",
   telExp: "^[0-9]{10}$",
-  update:"Update",
+  update: "Update",
+  invalidRecords: "Invalid Records",
 };
 
 export default AppConstants;

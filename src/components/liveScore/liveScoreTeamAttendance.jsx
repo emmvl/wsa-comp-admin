@@ -203,9 +203,9 @@ class LiveScoreTeamAttendance extends Component {
 
         let url
         if (this.state.selectStatus === 'All') {
-            url = AppConstants.teamAttendaneExport + this.state.competitionId
+            url = AppConstants.teamAttendanceExport + this.state.competitionId
         } else {
-            url = AppConstants.teamAttendaneExport + this.state.competitionId + `&status=${this.state.selectStatus}`
+            url = AppConstants.teamAttendanceExport + this.state.competitionId + `&status=${this.state.selectStatus}`
         }
 
         this.props.exportFilesAction(url)

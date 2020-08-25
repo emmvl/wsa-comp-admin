@@ -8,11 +8,11 @@ import LiveScorePlayerState from "./liveScoreReducer/liveScorePlayerReducer";
 import LiveScoreMatchState from "./liveScoreReducer/liveScoreMatchReducer";
 import LiveScoreLadderState from './liveScoreReducer/liveScoreLadderReducer'
 import LiveScoreState from './liveScoreReducer/liveScoreReducer';
-import LiveScoreTeamState from './liveScoreReducer/liveScoreTeamreducer';
+import LiveScoreTeamState from './liveScoreReducer/liveScoreTeamReducer';
 import LiveScoreIncidentState from './liveScoreReducer/liveScoreIncidentReducer';
 import LiveScoreNewsState from './liveScoreReducer/liveScoreNewsReducer';
 import LiveScoreBannerState from './liveScoreReducer/liveScoreBannerReducer';
-import LiveScoreRoundState from './liveScoreReducer/liveScoreRound';
+import LiveScoreRoundState from './liveScoreReducer/liveScoreRoundReducer';
 import CompetitionFeesState from './registrationReducer/competitionFeeReducer';
 import LiveScoreGoalState from './liveScoreReducer/liveScoreGoalReducer'
 import LiveScoreBulkMatchState from './liveScoreReducer/liveScoreBulkMatchReducer'
@@ -55,7 +55,7 @@ import QuickCompetitionState from "./competitionManagementReducer/competitionQui
 
 import LiveScoreCoachState from "./liveScoreReducer/liveScoreCoachReducer"
 
-import LiveScoreMatchSheetState from "./liveScoreReducer/liveScoreMatchSheet"
+import LiveScoreMatchSheetState from "./liveScoreReducer/liveScoreMatchSheetReducer"
 import ShopProductState from "./shopReducer/productReducer"
 
 //// Umpire Module

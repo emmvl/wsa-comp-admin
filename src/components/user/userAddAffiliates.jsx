@@ -644,7 +644,7 @@ class UserAddAffiliates extends Component {
             <InputWithHead
               heading={AppConstants.permissionLevel}
               conceptulHelp
-              conceptulHelpMsg={AppConstants.addAfiliatePermisionLevelMsg}
+              conceptulHelpMsg={AppConstants.addAffiliatePermissionLevelMsg}
               marginTop={5}
             />
             <Form.Item>

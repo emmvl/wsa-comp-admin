@@ -294,7 +294,7 @@ class LiveScorePlayerList extends Component {
                     <div className="row">
                         <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
                             <span className="form-heading">
-                                {AppConstants.palyerList}
+                                {AppConstants.playerList}
                             </span>
                         </div>
 

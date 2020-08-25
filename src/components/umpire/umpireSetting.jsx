@@ -223,7 +223,7 @@ class UmpireSetting extends Component {
 
                 {this.umpireAllocationRadioView()}
 
-                <span className='text-heading-large pt-5 pb-4' >{AppConstants.umpirePrefences}</span>
+                <span className='text-heading-large pt-5 pb-4' >{AppConstants.umpirePreferences}</span>
 
 
                 <div className="row" >
