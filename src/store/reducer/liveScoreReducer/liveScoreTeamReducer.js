@@ -1,30 +1,30 @@
-import ApiConstants from "../../../themes/apiConstants";
-import liveScoreTeamModal from '../../objectModel/liveScoreTeamModal'
+import ApiConstants from "themes/apiConstants";
+// import liveScoreTeamModal from "store/objectModel/liveScoreTeamModal";
 
-var teamManagerObj = {
+const teamManagerObj = {
     name: "",
     alias: "",
     logoUrl: null,
     divisionId: null,
     organisationId: null,
     userIds: [],
-    firstName: '',
-    lastName: '',
+    firstName: "",
+    lastName: "",
     mobileNumber: "",
-    email: '',
-}
+    email: "",
+};
 
-var teamNewObj = {
+const teamNewObj = {
     name: "",
     alias: "",
     logoUrl: null,
     divisionId: null,
     organisationId: null,
-    firstName: '',
-    lastName: '',
+    firstName: "",
+    lastName: "",
     mobileNumber: "",
-    email: '',
-}
+    email: "",
+};
 
 const initialState = {
     onLoad: false,
@@ -35,20 +35,20 @@ const initialState = {
     playerList: [],
     onLoad_2: false,
     form: {
-        name: '',
-        alias: '',
-        logoUrl: '',
-        teamLogo: '',
-        divisionId: '',
-        affiliate: '',
-        managerType: '',
-        managerContactNo: '',
-        managerEmailAddress: '',
-        managerLastName: '',
-        managerFirstName: '',
-        existingManager: '',
+        name: "",
+        alias: "",
+        logoUrl: "",
+        teamLogo: "",
+        divisionId: "",
+        affiliate: "",
+        managerType: "",
+        managerContactNo: "",
+        managerEmailAddress: "",
+        managerLastName: "",
+        managerFirstName: "",
+        existingManager: "",
         division: [],
-        AffilateList: []
+        AffilateList: [],
     },
     allData: null,
     teamData: null,
@@ -62,30 +62,24 @@ const initialState = {
     teamLogo: null,
     managerList: [],
     isCheked: false,
-    totalTeams: null
+    totalTeams: null,
 };
 
 function getManagerId(managerData) {
-    let managerIds = []
-
+    let managerIds = [];
     for (let i in managerData) {
-        managerIds.push(JSON.stringify(managerData[i].userId))
+        managerIds.push(JSON.stringify(managerData[i].userId));
     }
-    return managerIds
-
+    return managerIds;
 }
 
 function LiveScoreTeamState(state = initialState, action) {
-
     switch (action.type) {
-        ////Team reducers
-
         case ApiConstants.API_GET_TEAM_VIEW_PLAYER_LIST_LOAD:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_GET_TEAM_VIEW_PLAYER_LIST_SUCCESS:
-
-            // let playerData = liveScoreTeamModal.getTeamViewPlayerListData(action.result.players)
+            // let playerData = liveScoreTeamModal.getTeamViewPlayerListData(action.result.players);
             return {
                 ...state,
                 onLoad: false,
@@ -93,40 +87,32 @@ function LiveScoreTeamState(state = initialState, action) {
                 allData: action.result,
                 teamData: action.result.team[0],
                 managerData: action.result.managers[0],
-                managerList: action.result.managers
-
+                managerList: action.result.managers,
             };
 
         case ApiConstants.API_LIVE_SCORE_DELETE_TEAM_LOAD:
             return { ...state, onLoad_2: true };
 
         case ApiConstants.API_LIVE_SCORE_DELETE_TEAM_SUCCESS:
-            return {
-                ...state,
-                onLoad_2: false,
-            };
+            return { ...state, onLoad_2: false };
 
         // case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
         //     return { ...state, onLoad: true };
 
         // case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
-
-        //     const result = action.result
-
         //     return {
         //         ...state,
         //         onLoad: false,
-        //         teamResult: result,
-        //         status: action.status
-
-        //     }
+        //         teamResult: action.result,
+        //         status: action.status,
+        //     };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_FAIL:
             return {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
             };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_ERROR:
@@ -134,118 +120,102 @@ function LiveScoreTeamState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
             };
+
         case ApiConstants.LIVE_SCORE_TEAM_EDIT:
             const { key } = action.payload;
             const { data } = action.payload
-
-            if (key == 'managerType') {
-                state[key] = data
-
-            }
-            else if (key == 'teamLogo') {
-                state[key] = data
-            } else if (key == 'checkBox') {
-                state.isCheked = data
-
+            if (key === "managerType") {
+                state[key] = data;
+            } else if (key === "teamLogo") {
+                state[key] = data;
+            } else if (key === "checkBox") {
+                state.isCheked = data;
                 if (data == true) {
-                    state.teamManagerData['logoUrl'] = null
-                    state.teamLogo = null
+                    state.teamManagerData["logoUrl"] = null;
+                    state.teamLogo = null;
                 }
-
-            } else if (key == 'addTeam') {
-                state.teamManagerData['logoUrl'] = null
-                state.teamLogo = null
-                state.managerType = null
-                state.teamManagerData['alias'] = ""
-
-                let obj = {
+            } else if (key === "addTeam") {
+                state.teamManagerData["logoUrl"] = null;
+                state.teamLogo = null;
+                state.managerType = null;
+                state.teamManagerData = {
                     name: "",
                     alias: "",
                     logoUrl: null,
                     divisionId: null,
                     organisationId: null,
                     userIds: [],
-                    firstName: '',
-                    lastName: '',
+                    firstName: "",
+                    lastName: "",
                     mobileNumber: "",
-                    email: '',
+                    email: "",
+                };
+            } else if (key === "logoUrl") {
+                state.teamManagerData["logoUrl"] = data;
+                state.isCheked = false;
+            } else {
+                state.teamManagerData[key] = data;
+                if (key === "userIds") {
+                    state.selectedManager = data;
                 }
-
-                state.teamManagerData = obj
-            } else if (key == "logoUrl") {
-
-                state.teamManagerData['logoUrl'] = data
-                state.isCheked = false
-            }
-            else {
-                state.teamManagerData[key] = data
-                if (key == "userIds") {
-                    state.selectedManager = data
-                }
-
             }
             return {
                 ...state,
                 // form: {
                 //     ...state.form,
-                //     [key]: data
-                // }
-            }
-        case ApiConstants.GET_DIVISION_TEAM:
-            return {
-                ...state,
-                onLoad: true
-            }
-        case ApiConstants.GET_AFFILATE_TEAM:
-            return {
-                ...state,
+                //     [key]: data,
+                // },
+            };
 
-            }
+        case ApiConstants.GET_DIVISION_TEAM:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.GET_AFFILATE_TEAM:
+            return { ...state };
+
         case ApiConstants.GET_DIVISION_SUCCESS:
             return {
                 ...state,
                 onLoad: false,
                 // form: {
                 //     ...state.form,
-                //     division: action.payload
-                // }
-                divisionList: action.payload
-            }
+                //     division: action.payload,
+                // },
+                divisionList: action.payload,
+            };
+
         case ApiConstants.GET_DIVISION_ERROR:
             return {
                 ...state,
                 onLoad: false,
                 form: {
                     ...state.form,
-                    DivisionListError: action.payload
-                }
+                    DivisionListError: action.payload,
+                },
+            };
 
-            }
         case ApiConstants.GET_AFFILATE_SUCCESS:
             return {
                 ...state,
                 onLoad: false,
                 // form: {
                 //     ...state.form,
-                //     AffilateList: action.payload
-                // }
-                affilateList: action.payload
+                //     AffilateList: action.payload,
+                // },
+                affilateList: action.payload,
+            };
 
-            }
         case ApiConstants.GET_AFFILATE_ERROR:
             return {
                 ...state,
                 onLoad: false,
                 form: {
                     ...state.form,
-                    AffilateListError: action.payload
-                }
-
-            }
-
-        ////Import Team
+                    AffilateListError: action.payload,
+                },
+            };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_IMPORT_LOAD:
             return { ...state, onLoad: true };
@@ -254,53 +224,40 @@ function LiveScoreTeamState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+                importResult: action.result,
             }
 
-        //// Add Team
         case ApiConstants.API_LIVE_SCORE_ADD_TEAM_LOAD:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_ADD_TEAM_SUCCESS:
-            return {
-                ...state,
-                onLoad: false,
-            }
+            return { ...state, onLoad: false };
 
-        //// Get Team Data
         case ApiConstants.API_LIVE_SCORE_GET_TEAM_LOAD:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_GET_TEAM_SUCCESS:
-
-
-            state.teamManagerData = action.result.team[0]
-
-            state.teamLogo = action.result.team[0].logoUrl
-            let managerId = getManagerId(action.result.managers)
-
-            state.teamManagerData['userIds'] = managerId
-
-            state.selectedManager = managerId
-            state.managerType = action.result.managers.length > 0 ? 'existing' : null
-            return {
-                ...state,
-                onLoad: false,
-            }
+            state.teamManagerData = action.result.team[0];
+            state.teamLogo = action.result.team[0].logoUrl;
+            let managerId = getManagerId(action.result.managers);
+            state.teamManagerData["userIds"] = managerId;
+            state.selectedManager = managerId;
+            state.managerType = action.result.managers.length > 0 ? "existing" : null;
+            return { ...state, onLoad: false };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_SUCCESS:
-
-            const result = action.result.teams
-            state.totalTeams = action.result.page.page.totalCount
+            const result = action.result.teams;
+            state.totalTeams = action.result.page.page.totalCount;
             return {
                 ...state,
                 onLoad: false,
                 teamResult: result,
-                status: action.status
+                status: action.status,
+            };
 
-            }
         default:
             return state;
     }

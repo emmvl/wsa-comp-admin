@@ -52,6 +52,9 @@ class LiveScoreAddIncident extends Component {
             load: false,
             incidentId: null,
             matchId: this.props.location.state ? this.props.location.state.matchId : null,
+            matchDetails: this.props.location.state ? this.props.location.state.matchDetails : null,
+            crossImageIcon: false,
+            crossVideoIcon: false
         }
     }
 
@@ -156,9 +159,24 @@ class LiveScoreAddIncident extends Component {
         // return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    deleteImage() {
+        this.setState({ image: null, imageSelection: AppImages.circleImage, crossImageIcon: false })
+        this.props.liveScoreUpdateIncidentData(null, "incidentImage")
+    }
+
+    deleteVideo() {
+        this.setState({ video: null, videoSelection: '', crossVideoIcon: false })
+        this.props.liveScoreUpdateIncidentData(null, "incidentVideo")
+    }
+
     //// Form View
     contentView = (getFieldDecorator) => {
         const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds } = this.props.liveScoreIncidentState
+        console.log(this.state.matchDetails, 'matchDetails')
+        let team_1 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.name : null : null
+        let team1_Id = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.id : null : null
+        let team_2 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team2.name : null : null
+        let team2_Id = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team2.id : null : null
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -224,21 +242,33 @@ class LiveScoreAddIncident extends Component {
                                 rules: [{ required: true, message: ValidationConstants.teamName }],
                             })(
 
-                                <Select
-                                    // showSearch
-                                    // mode="multiple"
-                                    className="reg-form-multiple-select"
-                                    placeholder='Select Home Team'
-                                    style={{ width: "100%" }}
-                                    onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
-                                    // value={incidentData.teamId ? incidentData.teamId : ''}
+                                this.state.isEdit ?
+                                    <Select
+                                        className="reg-form-multiple-select"
+                                        placeholder='Select Home Team'
+                                        style={{ width: "100%" }}
+                                        onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
+                                        // value={incidentData.teamId ? incidentData.teamId : ''}
 
-                                    optionFilterProp="children"
-                                >
-                                    {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
-                                        < Option value={item.id} > {item.name}</Option>
-                                    ))}
-                                </Select>
+                                        optionFilterProp="children"
+                                    >
+                                        {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
+                                            < Option value={item.id} > {item.name}</Option>
+                                        ))}
+                                    </Select>
+                                    :
+                                    <Select
+                                        className="reg-form-multiple-select"
+                                        placeholder='Select Home Team'
+                                        style={{ width: "100%" }}
+                                        onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
+                                        // value={incidentData.teamId ? incidentData.teamId : ''}
+
+                                        optionFilterProp="children"
+                                    >
+                                        < Option value={team1_Id} > {team_1}</Option>
+                                        < Option value={team2_Id} > {team_2}</Option>
+                                    </Select>
                             )}
                         </Form.Item>
                     </div>
@@ -338,12 +368,29 @@ class LiveScoreAddIncident extends Component {
                             style={{ display: 'none' }}
                             onChange={(event) => {
                                 this.setImage(event.target, 'evt.target')
-                                this.setState({ imageTimeout: 2000 })
+                                this.setState({ imageTimeout: 2000, crossImageIcon: false })
                                 setTimeout(() => {
-                                    this.setState({ imageTimeout: null })
+                                    this.setState({ imageTimeout: null, crossImageIcon: true })
                                 }, 2000);
                             }}
                         />
+
+                        <div style={{ position: 'absolute', bottom: 40, left: 150 }}>
+                            {(this.state.crossImageIcon || incidentData.addImages) &&
+                                <span className='user-remove-btn pl-2'
+                                    style={{ cursor: 'pointer' }}>
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.redCross}
+                                        alt=""
+                                        width="16"
+                                        height="16"
+                                        onClick={() => this.deleteImage()}
+                                    />
+                                </span>
+                            }
+                        </div>
+
                     </div>
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.addVideos} />
@@ -362,12 +409,28 @@ class LiveScoreAddIncident extends Component {
                             style={{ display: 'none' }}
                             onChange={(event) => {
                                 this.setVideo(event.target, "evt.target")
-                                this.setState({ videoTimeout: 2000 })
+                                this.setState({ videoTimeout: 2000, crossVideoIcon: false })
                                 setTimeout(() => {
-                                    this.setState({ videoTimeout: null })
+                                    this.setState({ videoTimeout: null, crossVideoIcon: true })
                                 }, 2000);
                             }}
                         />
+
+                        <div style={{ position: 'absolute', bottom: 40, left: 150 }}>
+                            {(this.state.crossVideoIcon || incidentData.addVideo) &&
+                                <span className='user-remove-btn pl-2'
+                                    style={{ cursor: 'pointer' }}>
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.redCross}
+                                        alt=""
+                                        width="16"
+                                        height="16"
+                                        onClick={() => this.deleteVideo()}
+                                    />
+                                </span>
+                            }
+                        </div>
                     </div>
                 </div>
 

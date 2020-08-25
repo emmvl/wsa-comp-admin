@@ -1,7 +1,7 @@
 import { put, call } from 'redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
-import RegistrationAxiosApi from "../../http/registrationHttp/registrationAxios"
+import RegistrationAxiosApi from "../../http/registrationHttp/registrationAxiosApi"
 import { message } from "antd";
 import AppConstants from "../../../themes/appConstants";
 function* failSaga(result) {

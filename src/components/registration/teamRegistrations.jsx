@@ -13,14 +13,15 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import { getOrganisationData } from "../../util/sessionStorage";
 import { endUserRegDashboardListAction } from
     "../../store/actions/registrationAction/endUserRegistrationAction";
-import { getCommonRefData, getGenderAction, registrationPaymentStatusAction} from
+import { getCommonRefData, getGenderAction, registrationPaymentStatusAction } from
     '../../store/actions/commonAction/commonAction';
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
 import { getOnlyYearListAction } from '../../store/actions/appAction'
-import {getTeamRegistrationsAction} from '../../store/actions/registrationAction/registration'
+import { getTeamRegistrationsAction } from '../../store/actions/registrationAction/registration'
 import { isEmptyArray } from "formik";
 import { currencyFormat } from "../../util/currencyFormat";
+import Tooltip from 'react-png-tooltip'
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -33,9 +34,9 @@ const columns = [
         key: 'firstName',
         sorter: (a, b) => a.firstName.localeCompare(b.firstName),
         render: (firstName, record) =>
-        <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
-            <span className="input-heading-add-another pt-0" >{firstName}</span>
-        </NavLink>
+            <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
+                <span className="input-heading-add-another pt-0" >{firstName}</span>
+            </NavLink>
     },
     {
         title: 'Last Name',
@@ -43,9 +44,9 @@ const columns = [
         key: 'lastName',
         sorter: (a, b) => a.lastName.localeCompare(b.lastName),
         render: (lastName, record) =>
-        <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
-            <span className="input-heading-add-another pt-0" >{lastName}</span>
-        </NavLink>
+            <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
+                <span className="input-heading-add-another pt-0" >{lastName}</span>
+            </NavLink>
     },
     {
         title: 'Organisation',
@@ -82,6 +83,16 @@ const columns = [
         title: 'Status',
         dataIndex: 'statusRefId',
         key: 'statusRefId',
+        filterDropdown: true,
+        filterIcon: () => {
+            return (
+
+                <Tooltip background='#ff8237'>
+                    <span>{AppConstants.statusContextMsg}</span>
+                </Tooltip>
+
+            );
+        },
         sorter: (a, b) => a.status.localeCompare(b.status),
     },
 
@@ -166,7 +177,7 @@ class TeamRegistrations extends Component {
     }
 
     onClickSearchIcon = async () => {
-							 
+
         this.handleRegTableList(1);
     }
 
@@ -362,10 +373,10 @@ class TeamRegistrations extends Component {
     ////////form content view
     contentView = () => {
         let teamRegDashboardList = this.props.registrationState.teamRegistrationTableData;
-       
+
         return (
             <div className="comp-dash-table-view mt-2">
-                <div className="table-responsive home-dash-table-view">
+                <div className="table-responsive home-dash-table-view table-competition">
                     <Table className="home-dashboard-table"
                         columns={columns}
                         dataSource={teamRegDashboardList.teamRegistrations}
@@ -423,7 +434,7 @@ function mapStatetoProps(state) {
         commonReducerState: state.CommonReducerState,
         appState: state.AppState,
         registrationDashboardState: state.RegistrationDashboardState,
-        registrationState:state.RegistrationState
+        registrationState: state.RegistrationState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)((TeamRegistrations));

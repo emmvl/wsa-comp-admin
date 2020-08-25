@@ -654,8 +654,8 @@ class LiveScoreSettingsView extends Component {
 
 
                 {/*Attendance Recording Time*/}
-                <InputWithHead heading={AppConstants.attendence_Recording_Time} />
-                {/* <span className='text-heading-large pt-5' >{AppConstants.attendence_Recording_Time}</span> */}
+                <InputWithHead heading={AppConstants.attendanceRecordingTime} />
+                {/* <span className='text-heading-large pt-5' >{AppConstants.attendanceRecordingTime}</span> */}
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead

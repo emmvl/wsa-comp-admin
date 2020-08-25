@@ -1,4 +1,4 @@
-import React from "react";
+import React , { useEffect } from "react";
 import {
   // MemoryRouter,
   Router,
@@ -23,9 +23,15 @@ const tagManagerArgs = {
   gtmId: process.env.REACT_APP_GTM_ID
 }
 
+const tawkTo = require("tawkto-react");
+
+const tawkToPropertyId = '5ef6f3ca4a7c6258179b6f5c'
 
 TagManager.initialize(tagManagerArgs)
 function App() {
+  useEffect(() => {
+    localStorage.token && tawkTo(tawkToPropertyId) 
+  }, [])
   return (
     <div className="App">
       {/* <FullStory org={ORG_ID} /> */}

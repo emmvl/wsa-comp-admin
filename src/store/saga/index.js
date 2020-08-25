@@ -1,6 +1,6 @@
 import { all, fork, takeEvery } from "redux-saga/effects";
 
-import ApiConstants from "../../themes/apiConstants";
+import ApiConstants from "themes/apiConstants";
 import appSaga from "./appSaga";
 import authenticationSaga from "./authenticationSaga";
 import commonSaga from "./commonSaga";
@@ -193,7 +193,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD, regMembershipFeeListSaga);
   yield takeEvery(ApiConstants.API_REG_COMPETITION_LIST_DELETE_LOAD, regCompetitionFeeListDeleteSaga);
   yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_DELETE_LOAD, regMembershipFeeListDeleteSaga);
-  yield takeEvery(ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT__LOAD, regGetMembershipProductDetailSaga);
+  yield takeEvery(ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT_LOAD, regGetMembershipProductDetailSaga);
   yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT__LOAD, regSaveMembershipProductDetailSaga);
   yield takeEvery(ApiConstants.API_REG_GET_DEFAULT_MEMBERSHIP_PRODUCT_TYPES__LOAD, regDefaultMembershipProductTypesSaga)
   yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT_FEES__LOAD, regSaveMembershipProductFeeSaga);

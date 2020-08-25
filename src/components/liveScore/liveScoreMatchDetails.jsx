@@ -256,6 +256,7 @@ class LiveScoreMatchDetails extends Component {
     showModal = (data, isVideo) => {
         this.setState({
             visible: true,
+            liveStreamLink:null
         });
     };
 
@@ -278,6 +279,8 @@ class LiveScoreMatchDetails extends Component {
     headerView = () => {
         // const { match } = this.props.liveScoreMatchState.matchDetails
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : []
+
+        const matchDetails = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails : []
 
         const length = match ? match.length : 0
         let isMatchStatus = length > 0 ? match[0].matchStatus === "ENDED" ? true : false : false
@@ -311,7 +314,7 @@ class LiveScoreMatchDetails extends Component {
                                 >
                                     <NavLink to={{
                                         pathname: '/liveScoreAddIncident',
-                                        state: { matchId: this.state.matchId }
+                                        state: { matchId: this.state.matchId, matchDetails: matchDetails }
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addIncident}
@@ -582,14 +585,14 @@ class LiveScoreMatchDetails extends Component {
             this.props.liveScoreAddLiveStreamAction({ body: body })
         }
 
-        this.setState({ visible: false })
+        this.setState({ visible: false, liveStreamLink: '' })
     }
 
     ////modal view
     ModalView() {
         return (
             <Modal
-                // title="WSA 1"
+                title={AppConstants.liveStreamlink}
                 visible={this.state.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
@@ -600,16 +603,17 @@ class LiveScoreMatchDetails extends Component {
             >
                 <InputWithHead
                     auto_Complete='off'
-                    heading={AppConstants.liveStreamlink}
+                    // heading={AppConstants.liveStreamlink}
                     placeholder={AppConstants.liveStreamlink}
                     value={this.state.liveStreamLink}
                     onChange={(e) => this.setState({ liveStreamLink: e.target.value })}
                 />
                 <div
-                    className="comp-dashboard-botton-view-mobile mt-3"
+                    className="comp-dashboard-botton-view-mobile "
                     style={{
                         display: "flex",
-                        justifyContent: "flex-end"
+                        justifyContent: "flex-end",
+                        paddingTop:24
                     }}
                 >
 

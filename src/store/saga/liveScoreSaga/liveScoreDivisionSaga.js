@@ -1,20 +1,20 @@
 import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 
-import AppConstants from "../../../themes/appConstants";
-import ApiConstants from "../../../themes/apiConstants";
-import history from "../../../util/history";
-import { receiptImportResult } from "../../../util/showMsgOfImportRes";
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
+import AppConstants from "themes/appConstants";
+import ApiConstants from "themes/apiConstants";
+import history from "util/history";
+import { receiptImportResult } from "util/showImportResult";
+import LiveScoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
 
 function* failSaga(result) {
   yield put({
     type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_FAIL,
     error: result,
-    status: result.status
+    status: result.status,
   });
 
-  let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+  let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
   message.config({
     duration: 1.5,
     maxCount: 1,
@@ -26,7 +26,7 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
 
   message.config({
@@ -94,9 +94,9 @@ function* liveScoreDeleteDivisionSaga(action) {
         status: result.status,
       });
 
-      history.push('/liveScoreDivisionList');
+      history.push("/liveScoreDivisionList");
 
-      message.success('Division Deleted Successfully.');
+      message.success("Division Deleted Successfully.");
     } else {
       yield call(failSaga, result);
     }
@@ -111,14 +111,14 @@ function* liveScoreDivisionImportSaga(action) {
     const result = yield call(LiveScoreAxiosApi.liveScoreDivisionImport, action.payload)
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_SUCCESS
+        type: ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_SUCCESS,
+        result: result.result.data,
       });
 
-      history.push('/liveScoreDivisionList');
+      // history.push("/liveScoreDivisionList");
+      // message.success("Division Imported Successfully.");
 
       receiptImportResult(result.result);
-
-      message.success('Division Imported Successfully.');
     } else {
       yield call(failSaga, result);
     }
