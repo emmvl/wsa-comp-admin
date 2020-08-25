@@ -256,6 +256,7 @@ class LiveScoreMatchDetails extends Component {
     showModal = (data, isVideo) => {
         this.setState({
             visible: true,
+            liveStreamLink:null
         });
     };
 
@@ -591,7 +592,7 @@ class LiveScoreMatchDetails extends Component {
     ModalView() {
         return (
             <Modal
-                // title="WSA 1"
+                title={AppConstants.liveStreamlink}
                 visible={this.state.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
@@ -602,16 +603,17 @@ class LiveScoreMatchDetails extends Component {
             >
                 <InputWithHead
                     auto_Complete='off'
-                    heading={AppConstants.liveStreamlink}
+                    // heading={AppConstants.liveStreamlink}
                     placeholder={AppConstants.liveStreamlink}
                     value={this.state.liveStreamLink}
                     onChange={(e) => this.setState({ liveStreamLink: e.target.value })}
                 />
                 <div
-                    className="comp-dashboard-botton-view-mobile mt-3"
+                    className="comp-dashboard-botton-view-mobile "
                     style={{
                         display: "flex",
-                        justifyContent: "flex-end"
+                        justifyContent: "flex-end",
+                        paddingTop:24
                     }}
                 >
 

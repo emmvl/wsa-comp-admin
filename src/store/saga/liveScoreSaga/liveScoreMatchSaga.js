@@ -282,6 +282,8 @@ function* liveScoreAddLiveStreamSaga(action) {
         result: result.result.data,
         status: result.status,
       });
+
+      message.success("Live stream link added successfully.");
     } else {
       yield call(failSaga, result);
     }
