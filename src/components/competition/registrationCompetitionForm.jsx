@@ -1213,7 +1213,7 @@ class RegistrationCompetitionForm extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
-                            auto_Complete="new-name"
+                            auto_complete="new-name"
                             placeholder={AppConstants.name}
                             value={item.name}
                             onChange={(e) => this.updateNonPlayingNames(e.target.value, index, "name")}
@@ -1397,7 +1397,7 @@ class RegistrationCompetitionForm extends Component {
                     {getFieldDecorator('competition_name',
                         { rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }] })(
                             <InputWithHead
-                                auto_Complete="new-compName"
+                                auto_complete="new-compName"
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.competition_name}
                                 placeholder={AppConstants.competition_name}
@@ -1635,7 +1635,7 @@ class RegistrationCompetitionForm extends Component {
                     <div className="row">
                         <div id={AppUniqueId.time_rounds_days} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
-                                auto_Complete="new-days"
+                                auto_complete="new-days"
                                 placeholder={AppConstants.days}
                                 value={detailsData.competitionDetailData.roundInDays}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInDays")}
@@ -1645,7 +1645,7 @@ class RegistrationCompetitionForm extends Component {
                         </div>
                         <div id={AppUniqueId.time_rounds_hrs} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
-                                auto_Complete="new-hours"
+                                auto_complete="new-hours"
                                 placeholder={AppConstants.hours}
                                 value={detailsData.competitionDetailData.roundInHours}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInHours")}
@@ -1655,7 +1655,7 @@ class RegistrationCompetitionForm extends Component {
                         </div>
                         <div id={AppUniqueId.time_rounds_mins} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
-                                auto_Complete="new-mins"
+                                auto_complete="new-mins"
                                 placeholder={AppConstants.mins}
                                 value={detailsData.competitionDetailData.roundInMins}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "roundInMins")}
@@ -1692,7 +1692,7 @@ class RegistrationCompetitionForm extends Component {
                     <div className="row">
                         <div id={AppUniqueId.team_min_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
-                                auto_Complete="new-minNumber"
+                                auto_complete="new-minNumber"
                                 placeholder={AppConstants.minNumber}
                                 value={detailsData.competitionDetailData.minimunPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "minimunPlayers")}
@@ -1702,7 +1702,7 @@ class RegistrationCompetitionForm extends Component {
                         </div>
                         <div id={AppUniqueId.team_max_players} className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead
-                                auto_Complete="new-maxNumber"
+                                auto_complete="new-maxNumber"
                                 placeholder={AppConstants.maxNumber}
                                 value={detailsData.competitionDetailData.maximumPlayers}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e.target.value, "maximumPlayers")}

@@ -222,7 +222,7 @@ class LiveScoreLadderAdjustment extends Component {
                                         rules: [{ required: true, message: ValidationConstants.point }],
                                     })(
                                         <InputWithHead
-                                            auto_Complete='new-points'
+                                            auto_complete='off'
                                             placeholder={AppConstants.points}
                                             onChange={(e) => this.props.updateLadderSetting({ data: e.target.value, index: index, key: 'points' })}
                                         // value={ladderData[index] && ladderData[index].points}
@@ -243,7 +243,7 @@ class LiveScoreLadderAdjustment extends Component {
                                         rules: [{ required: true, message: ValidationConstants.reasonChange }],
                                     })(
                                         <InputWithHead
-                                            auto_Complete='new-reason'
+                                            auto_complete='off'
                                             placeholder={AppConstants.reasonForChange}
                                             onChange={(e) => this.props.updateLadderSetting({ data: e.target.value, index: index, key: 'adjustmentReason' })}
                                         // value={ladderData[index] && ladderData[index].reasonforChange}

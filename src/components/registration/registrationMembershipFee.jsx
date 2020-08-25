@@ -702,7 +702,7 @@ class RegistrationMembershipFee extends Component {
                     onCancel={this.handleCancel}
                 >
                     <InputWithHead
-                        auto_Complete="new-membershipTypeName"
+                        auto_complete="new-membershipTypeName"
                         required={"pt-0 mt-0"}
                         heading={AppConstants.membershipTypeName}
                         placeholder={AppConstants.pleaseEnterMembershipTypeName}
@@ -731,7 +731,7 @@ class RegistrationMembershipFee extends Component {
                     {getFieldDecorator('membershipProductName',
                         { rules: [{ required: true, message: ValidationConstants.membershipProductIsRequired }] })(
                             <InputWithHead
-                                auto_Complete="new-membershipProductName"
+                                auto_complete="new-membershipProductName"
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.membershipProductName}
                                 placeholder={AppConstants.membershipProductName}
@@ -860,7 +860,7 @@ class RegistrationMembershipFee extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-number"
+                                auto_complete="new-number"
                                 heading={AppConstants.percentageOff_FixedAmount}
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
@@ -872,7 +872,7 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-gernalDiscount"
+                                auto_complete="new-gernalDiscount"
                                 heading={AppConstants.description}
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -935,7 +935,7 @@ class RegistrationMembershipFee extends Component {
                         })}
                     </Select>
                     <InputWithHead
-                        auto_Complete="new-code"
+                        auto_complete="new-code"
                         heading={AppConstants.code}
                         placeholder={AppConstants.code}
                         onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
@@ -945,7 +945,7 @@ class RegistrationMembershipFee extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-number"
+                                auto_complete="new-number"
                                 heading={AppConstants.percentageOff_FixedAmount}
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
@@ -957,7 +957,7 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-gernalDiscount"
+                                auto_complete="new-gernalDiscount"
                                 heading={AppConstants.description}
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -1058,7 +1058,7 @@ class RegistrationMembershipFee extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-number"
+                                auto_complete="new-number"
                                 heading={AppConstants.percentageOff_FixedAmount}
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
@@ -1069,7 +1069,7 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-gernalDiscount"
+                                auto_complete="new-gernalDiscount"
                                 heading={AppConstants.description}
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -1117,7 +1117,7 @@ class RegistrationMembershipFee extends Component {
             case 5:
                 return <div>
                     <InputWithHead
-                        auto_Complete="new-description"
+                        auto_complete="new-description"
                         heading={AppConstants.description}
                         placeholder={AppConstants.description}
                         onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -1125,7 +1125,7 @@ class RegistrationMembershipFee extends Component {
                         disabled={this.state.membershipIsUsed}
                     />
                     <InputWithHead
-                        auto_Complete="new-question"
+                        auto_complete="new-question"
                         heading={AppConstants.question}
                         placeholder={AppConstants.question}
                         onChange={(e) => this.onChangeQuestion(e.target.value, index)}

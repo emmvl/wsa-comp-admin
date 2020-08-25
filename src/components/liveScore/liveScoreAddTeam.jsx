@@ -190,7 +190,7 @@ class LiveScoreAddTeam extends Component {
                         rules: [{ required: true, message: ValidationConstants.teamName }],
                     })(
                         <InputWithHead
-                            auto_Complete='new-teamName'
+                            auto_complete='off'
                             required={"required-field pb-0"}
                             heading={AppConstants.teamName}
                             placeholder={AppConstants.enterTeamName}
@@ -215,7 +215,7 @@ if(x[0].charCodeAt()>=97)
                         rules: [{ required: true, message: "Team Alias is required" }],
                     })( */}
                 <InputWithHead
-                    auto_Complete='new-alias'
+                    auto_complete='off'
                     heading={"Team Alias"}
                     placeholder={"Team Alias"}
                     conceptulHelp
@@ -440,7 +440,7 @@ if(x[0].charCodeAt()>=97)
                             {getFieldDecorator('firstName', {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(<InputWithHead
-                                auto_Complete='new-firstName'
+                                auto_complete='new-password'
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.enterFirstName}
@@ -463,7 +463,7 @@ if(x[0].charCodeAt()>=97)
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-lastName'
+                                    auto_complete='off'
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.enterLastName}
@@ -500,7 +500,7 @@ if(x[0].charCodeAt()>=97)
                                 ],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-email'
+                                    auto_complete='new-email'
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
@@ -519,7 +519,7 @@ if(x[0].charCodeAt()>=97)
                             {getFieldDecorator("contactNo", {
                                 rules: [{ required: true, message: ValidationConstants.contactField }]
                             })(<InputWithHead
-                                auto_Complete='new-contact'
+                                auto_complete='new-contact'
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.contactNO}
                                 placeholder={AppConstants.enterContactNo}

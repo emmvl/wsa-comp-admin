@@ -160,7 +160,7 @@ class LiveScoreAddIncident extends Component {
     }
 
     deleteImage() {
-        this.setState({ image: null, imageSelection: AppImages.circleImage, crossImageIcon: false })
+        this.setState({ image: null, imageSelection: '', crossImageIcon: false })
         this.props.liveScoreUpdateIncidentData(null, "incidentImage")
     }
 
@@ -177,6 +177,10 @@ class LiveScoreAddIncident extends Component {
         let team1_Id = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.id : null : null
         let team_2 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team2.name : null : null
         let team2_Id = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team2.id : null : null
+        let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("DD-MM-YYYY") : null
+        let startDate = date ? moment(date, 'DD-MM-YYYY') : null
+        let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
+        let startTime = time_formate ? moment(time_formate, "HH:mm") : null
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -191,7 +195,7 @@ class LiveScoreAddIncident extends Component {
                             showTime={false}
                             name={'registrationOepn'}
                             placeholder={"dd-mm-yyyy"}
-                            value={incidentData ? incidentData.date ? moment(incidentData.date) : '' : ''}
+                            value={incidentData ? incidentData.date ? moment(incidentData.date) : startDate : startDate}
                         />
                     </div>
                     <div className="col-sm">
@@ -205,7 +209,7 @@ class LiveScoreAddIncident extends Component {
                             placeholder='Select Time'
                             defaultOpenValue={moment("00:00", "HH:mm")}
                             use12Hours={false}
-                            value={incidentData ? incidentData.time ? moment(incidentData.time) : '' : ''}
+                            value={incidentData ? incidentData.time ? moment(incidentData.time) : startTime : startTime}
                         />
                     </div>
                 </div>
@@ -221,7 +225,7 @@ class LiveScoreAddIncident extends Component {
                             })( */}
 
                         <InputWithHead
-                            auto_Complete='new-mnbId'
+                            auto_complete='new-mnbId'
                             // required={"required-field"}
                             heading={AppConstants.matchID}
                             placeholder={AppConstants.matchID}
@@ -473,13 +477,20 @@ class LiveScoreAddIncident extends Component {
         e.preventDefault();
 
         const { incidentData, incidentId, incidentMediaIds } = this.props.liveScoreIncidentState;
+        console.log(incidentMediaIds, 'incidentMediaIds')
+
+
+        // let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("DD-MM-YYYY") : null
+        // let startDate = date ? moment(date, 'DD-MM-YYYY') : null
+        // let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
+        // let startTime = time_formate ? moment(time_formate, "HH:mm") : null
 
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { id } = JSON.parse(getLiveScoreCompetiton());
 
-                let date = moment(incidentData.date).format("YYYY-MMM-DD");
-                let time = moment(incidentData.time).format("HH:mm");
+                let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("YYYY-MMM-DD") : moment(incidentData.date).format("YYYY-MMM-DD");
+                let time = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : moment(incidentData.time).format("HH:mm");
                 let startDateTime = moment(date + " " + time);
                 let formatDateTime = new Date(startDateTime).toISOString();
                 let mediaArry;

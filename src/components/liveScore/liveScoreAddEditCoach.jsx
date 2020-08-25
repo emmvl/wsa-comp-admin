@@ -75,9 +75,9 @@ class LiveScoreAddEditCoach extends Component {
 
                 this.setState({ teamLoad: false })
             }
-
-
-
+            if (this.props.liveScoreCoachState.coachdata !== nextProps.liveScoreCoachState.coachdata) {
+                this.setInitalFiledValue()
+            }
         }
     }
 
@@ -113,9 +113,6 @@ class LiveScoreAddEditCoach extends Component {
                 hasError: true
             })
         }
-        setTimeout(() => {
-            this.setInitalFiledValue()
-        }, 300);
 
     }
 
@@ -205,7 +202,7 @@ class LiveScoreAddEditCoach extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-password'
+                                    auto_complete='new-password'
                                     type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
@@ -226,7 +223,7 @@ class LiveScoreAddEditCoach extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='off'
+                                    auto_complete='off'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
@@ -258,7 +255,7 @@ class LiveScoreAddEditCoach extends Component {
                                 ]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-email'
+                                    auto_complete='new-email'
                                     type='email'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
@@ -284,7 +281,7 @@ class LiveScoreAddEditCoach extends Component {
                                 ]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-contact'
+                                    auto_complete='new-contact'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}

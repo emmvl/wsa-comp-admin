@@ -413,14 +413,15 @@ class Umpire extends Component {
                     <div className="mt-5" style={{ display: "flex", justifyContent: 'space-between', }} >
                         {/* <div className="mt-5" > */}
                         <div style={{
-                            width: "100%", display: "flex",
+                            width: "fit-content", display: "flex",
                             flexDirection: "row",
                             alignItems: "center", marginRight: 50,
                         }} >
                             <span className='year-select-heading'>{AppConstants.competition}:</span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"
-                                style={{ minWidth: 200, maxWidth: 250 }}
+                                // style={{ minWidth: 200, maxWidth: 300 }}
+                                style={{ minWidth: 200 }}
                                 onChange={(comp) => this.onChangeComp({ comp })}
                                 value={this.state.selectedComp}
                             >
