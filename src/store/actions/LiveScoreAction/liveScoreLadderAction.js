@@ -44,9 +44,17 @@ function ladderAdjustmentGetData(data) {
     return action;
 }
 
+function resetLadderAction(payload) {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_RESET_LADDER_LOAD,
+        payload:payload
+    }
+}
+
 export {
     liveScoreLaddersListAction,
     updateLadderSetting,
     ladderAdjustmentPostData,
-    ladderAdjustmentGetData
+    ladderAdjustmentGetData,
+    resetLadderAction
 }

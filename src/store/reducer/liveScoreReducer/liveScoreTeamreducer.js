@@ -301,7 +301,6 @@ function LiveScoreTeamState(state = initialState, action) {
                 status: action.status
 
             }
-
         default:
             return state;
     }

@@ -1556,7 +1556,11 @@ const AppConstants = {
   enterCode:"Registration Code",  
   finalExtraTime: "Final Extra Time",
   telExp: "^[0-9]{10}$",
-  update:"Update"
+  update:"Update",
+  resetLadder: "Reset Ladder",
+  resetLadderConformation: "Please select one of the following to Reset Ladder",
+  selectedDivision:"Selected Division",
+  fullReset:"Full Reset"		
 };
 
 export default AppConstants;

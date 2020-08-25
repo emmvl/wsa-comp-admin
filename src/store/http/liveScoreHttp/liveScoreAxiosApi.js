@@ -1143,6 +1143,10 @@ let LiveScoreAxiosApi = {
 
         return Method.dataPost(url, token, body)
     },
+	resetLadderPoints(payload) {
+        const url = `/teams/ladder/reset`
+        return Method.dataPost(url, token, payload)
+    },
 
 };
 
