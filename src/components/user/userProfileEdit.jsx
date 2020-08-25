@@ -227,7 +227,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.firstName }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-firstName'
+                                    auto_complete='new-firstName'
                                     required={"required-field"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
@@ -244,7 +244,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: false }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-lastName'
+                                    auto_complete='new-lastName'
                                     required={"required-field"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
@@ -260,7 +260,7 @@ class UserProfileEdit extends Component {
                 <div className="row" style={{ paddingTop: "11px" }}>
                     <div className="col-sm" >
                         <InputWithHead
-                            auto_Complete='new-middleName'
+                            auto_complete='new-middleName'
                             style={{ marginTop: "9px" }}
                             heading={AppConstants.middleName}
                             placeholder={AppConstants.middleName}
@@ -294,7 +294,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.contactField }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-mobileNumber"
+                                    auto_complete="new-mobileNumber"
                                     required={"required-field"}
                                     heading={AppConstants.contactMobile}
                                     placeholder={AppConstants.contactMobile}
@@ -321,7 +321,7 @@ class UserProfileEdit extends Component {
                                 ],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-email"
+                                    auto_complete="new-email"
                                     required={"required-field"}
                                     heading={AppConstants.contactEmail}
                                     placeholder={AppConstants.contactEmail}
@@ -340,7 +340,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.street1 }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-addressOne"
+                                    auto_complete="new-addressOne"
                                     required={"required-field"}
                                     heading={AppConstants.addressOne}
                                     placeholder={AppConstants.addressOne}
@@ -353,7 +353,7 @@ class UserProfileEdit extends Component {
                     </div>
                     <div className="col-sm" style={{ paddingTop: "11px" }}>
                         <InputWithHead
-                            auto_Complete="new-addressTwo"
+                            auto_complete="new-addressTwo"
                             style={{ marginTop: '9px' }}
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
@@ -371,7 +371,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.suburbField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-suburb"
+                                    auto_complete="new-suburb"
                                     required={"required-field"}
                                     heading={AppConstants.suburb}
                                     placeholder={AppConstants.suburb}
@@ -413,7 +413,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.postCodeField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-postalCode"
+                                    auto_complete="new-postalCode"
                                     required={"required-field"}
                                     heading={AppConstants.postCode}
                                     placeholder={AppConstants.postCode}
@@ -445,7 +445,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.firstName }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-firstName"
+                                    auto_complete="new-firstName"
                                     required={"required-field"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
@@ -462,7 +462,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: false }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-lastName"
+                                    auto_complete="new-lastName"
                                     required={"required-field"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
@@ -482,7 +482,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.street1 }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-street1"
+                                    auto_complete="new-street1"
                                     required={"required-field"}
                                     heading={AppConstants.addressOne}
                                     placeholder={AppConstants.addressOne}
@@ -495,7 +495,7 @@ class UserProfileEdit extends Component {
                     </div>
                     <div className="col-sm" style={{ paddingTop: "11px" }}>
                         <InputWithHead
-                            auto_Complete="new-street2"
+                            auto_complete="new-street2"
                             style={{ marginTop: "9px" }}
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
@@ -513,7 +513,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.suburbField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-suburb"
+                                    auto_complete="new-suburb"
                                     required={"required-field"}
                                     heading={AppConstants.suburb}
                                     placeholder={AppConstants.suburb}
@@ -560,7 +560,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.postCodeField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-postCode"
+                                    auto_complete="new-postCode"
                                     heading={AppConstants.postCode}
                                     placeholder={AppConstants.enterPostCode}
                                     name={'postalCode'}
@@ -577,7 +577,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.emailField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-email"
+                                    auto_complete="new-email"
                                     heading={AppConstants.contactEmail}
                                     placeholder={AppConstants.contactEmail}
                                     name={'email'}
@@ -597,7 +597,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.contactField }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-mobileNumber"
+                                    auto_complete="new-mobileNumber"
                                     heading={AppConstants.contactMobile}
                                     placeholder={AppConstants.contactMobile}
                                     name={'mobileNumber'}
@@ -628,7 +628,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.emergencyContactName[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-emergencyContactName"
+                                    auto_complete="new-emergencyContactName"
                                     required={"required-field "}
                                     heading={AppConstants.emergencyContactName}
                                     placeholder={AppConstants.emergencyContactName}
@@ -646,7 +646,7 @@ class UserProfileEdit extends Component {
                                 rules: [{ required: true, message: ValidationConstants.emergencyContactNumber[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete="new-emergencyContactName"
+                                    auto_complete="new-emergencyContactName"
                                     required={"required-field"}
                                     heading={AppConstants.emergencyContactMobile}
                                     placeholder={AppConstants.emergencyContactMobile}
@@ -801,7 +801,7 @@ class UserProfileEdit extends Component {
                         {userData.isDisability == 1 ?
                             <div style={{ marginLeft: '25px' }}>
                                 <InputWithHead
-                                    auto_Complete='new-disabilityCareNumber'
+                                    auto_complete='new-disabilityCareNumber'
                                     heading={AppConstants.disabilityCareNumber} placeholder={AppConstants.disabilityCareNumber}
                                     onChange={(e) => this.onChangeSetValue(e.target.value, "disabilityCareNumber")}
                                     value={userData.disabilityCareNumber} />

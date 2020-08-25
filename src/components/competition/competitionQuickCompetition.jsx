@@ -630,7 +630,7 @@ class CompetitionQuickCompetition extends Component {
                                     rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired },]
                                 })(
                                     <InputWithHead
-                                        auto_Complete="new-compName"
+                                        auto_complete="new-compName"
                                         required={"required-field pb-0 pt-0"}
                                         placeholder={AppConstants.competition_name}
                                         onChange={(e) => this.props.updateQuickCompetitionData(

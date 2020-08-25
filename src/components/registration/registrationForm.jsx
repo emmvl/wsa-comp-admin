@@ -674,7 +674,7 @@ class RegistrationForm extends Component {
                                 {defaultChecked.daysVisible === true && (
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_Complete="new-trainingDay"
+                                            auto_complete="new-trainingDay"
                                             placeholder={AppConstants.trainingDaysAndTimes}
                                             value={formDataValue ? formDataValue.trainingDaysAndTimes : ""}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "trainingDaysAndTimes")}
@@ -854,7 +854,7 @@ class RegistrationForm extends Component {
                                 {defaultChecked.replyName === true && (
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_Complete="new-name"
+                                            auto_complete="new-name"
                                             placeholder={"Name"}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyName")}
                                             value={formDataValue ? formDataValue.replyName : ''}
@@ -882,7 +882,7 @@ class RegistrationForm extends Component {
 
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_Complete="new-role"
+                                            auto_complete="new-role"
                                             placeholder={AppConstants.role}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyRole")}
                                             value={formDataValue ? formDataValue.replyRole : ''}
@@ -918,7 +918,7 @@ class RegistrationForm extends Component {
                                                 ],
                                             })(
                                                 <InputWithHead
-                                                    auto_Complete="new-email"
+                                                    auto_complete="new-email"
                                                     placeholder={AppConstants.email}
                                                     onChange={e =>
                                                         this.props.updateRegistrationForm(e.target.value, "replyEmail")
@@ -953,7 +953,7 @@ class RegistrationForm extends Component {
                                             {(
                                                 <InputWithHead
                                                     // type="number"
-                                                    auto_Complete="new-phoneNo"
+                                                    auto_complete="new-phoneNo"
                                                     maxLength={10}
                                                     placeholder={AppConstants.phone}
                                                     onChange={(e) => this.changeNumber(e.target.value)}

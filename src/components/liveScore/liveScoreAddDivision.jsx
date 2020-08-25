@@ -89,7 +89,8 @@ class LiveScoreAddDivision extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameisrequired }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-name'
+                                    auto_complete='off'
+                                    type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.name}
                                     placeholder={AppConstants.name}
@@ -111,7 +112,8 @@ class LiveScoreAddDivision extends Component {
                                 rules: [{ required: true, message: ValidationConstants.divisionNameisrequired }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-divisionName'
+                                    auto_complete='off'
+                                    type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.divisionName}
                                     placeholder={AppConstants.divisionName}
@@ -133,7 +135,8 @@ class LiveScoreAddDivision extends Component {
                                 rules: [{ required: true, message: ValidationConstants.gradeisrequired }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-gradeName'
+                                    auto_complete='off'
+                                    type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.gradeName}
                                     placeholder={AppConstants.gradeName}

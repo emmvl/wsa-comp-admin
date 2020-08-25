@@ -391,7 +391,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules: [{ required: true, message: ValidationConstant.nameField[2] }]
                                 })(
                                     <InputWithHead
-                                        auto_Complete="new-name"
+                                        auto_complete="new-name"
                                         placeholder={AppConstants.name}
                                         onChange={name => {
                                             this.props.updateVenueConstraintsData(name.target.value, index, 'name', 'nonPlayingDates')

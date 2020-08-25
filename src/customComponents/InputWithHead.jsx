@@ -19,7 +19,7 @@ function InputWithHead(props) {
     tooltiprequired,
     id,
     headingId,
-    auto_Complete,
+    auto_complete,
   } = props;
 
   return (
@@ -42,7 +42,7 @@ function InputWithHead(props) {
 
       {placeholder && (
         <Input
-          autoComplete={auto_Complete}
+          autoComplete={auto_complete}
           id={id}
           className="input"
           placeholder={placeholder}

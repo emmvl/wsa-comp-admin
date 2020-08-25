@@ -247,7 +247,7 @@ class LiveScoreAddManager extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-password'
+                                    auto_complete='new-password'
                                     type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
@@ -268,7 +268,7 @@ class LiveScoreAddManager extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    // auto_Complete='new-password'
+                                    auto_complete='off'
                                     // type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
@@ -301,7 +301,7 @@ class LiveScoreAddManager extends Component {
                                 ]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-email'
+                                    auto_complete='new-email'
                                     type='email'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
@@ -320,8 +320,8 @@ class LiveScoreAddManager extends Component {
                                 rules: [{ required: true, message: ValidationConstants.contactField }]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-contact'
-                                    type='number'
+                                    auto_complete='new-contact'
+                                    // type='number'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}

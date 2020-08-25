@@ -31,7 +31,8 @@ const initialState = {
     successResult: [],
     success: false,
     incidentId: null,
-    incidentMediaIds: []
+    incidentMediaIds: [],
+    incidentMediaList: null
 
 }
 
@@ -106,30 +107,48 @@ function removeMediaId(mediaArr, mediaType) {
         ids = mediaArr[index].id
     }
 
-
-    // for (let i in mediaArr) {
-
-    //     if (mediaType == mediaArr[i].mediaType) {
-    //         ids = mediaArr[i].id
-    //         index = JSON.parse(i)
-    //     }
-    // }
-
     return { ids: ids, index: index }
 }
 
 function getMediaUrl(mediaArray, mediaType) {
 
+
+
     let url
 
     for (let i in mediaArray) {
+        var str = mediaArray[i].mediaType;
+        var res = str.split("/", 1);
 
-        if (mediaType == mediaArray[i].mediaType) {
+        if (mediaType == res[0]) {
             url = mediaArray[i].mediaUrl
         }
 
     }
     return url
+
+}
+
+function deleteSelectedMedia(mediaArray, mediaType) {
+    console.log(mediaArray, 'mediaArray~~~~~', mediaType)
+    let media = []
+
+    for (let i in mediaArray) {
+
+        var str = mediaArray[i].mediaType;
+        var res = str.split("/", 1);
+        console.log(res, 'mediaArray____3333')
+
+        if (mediaType == res[0]) {
+            console.log(mediaArray[i], 'mediaArray____3333_____44444')
+            // media.push(mediaArray[i].id)
+            mediaArray.splice(mediaArray[i], 1)
+        }
+    }
+
+    console.log(mediaArray, 'mediaArray')
+
+    return mediaArray
 
 }
 
@@ -181,7 +200,7 @@ function liveScoreIncidentState(state = initialState, action) {
             } else if (action.key === "isEdit") {
                 let data = action.data
 
-
+                state.incidentMediaList = data.incidentMediaList
                 state.mediaData = action.data
 
                 state.incidentData['date'] = data.incidentTime
@@ -191,8 +210,8 @@ function liveScoreIncidentState(state = initialState, action) {
                 state.incidentData['injury'] = data.incidentType.id
                 state.incidentData['description'] = data.description
                 state.incidentData['playerIds'] = getPlayerId(data.incidentPlayers)
-                state.incidentData['addImages'] = isArrayNotEmpty(data.incidentMediaList) ? getMediaUrl(data.incidentMediaList, "image/png") : null
-                state.incidentData['addVideo'] = isArrayNotEmpty(data.incidentMediaList) ? getMediaUrl(data.incidentMediaList, "video/mp4") : null
+                state.incidentData['addImages'] = isArrayNotEmpty(data.incidentMediaList) ? getMediaUrl(data.incidentMediaList, "image") : null
+                state.incidentData['addVideo'] = isArrayNotEmpty(data.incidentMediaList) ? getMediaUrl(data.incidentMediaList, "video") : null
                 state.playerIds = getPlayerId(data.incidentPlayers)
                 state.incidentMediaIds = getMediaIds(data.incidentMediaList)
                 state.incidentId = data.id
@@ -233,9 +252,12 @@ function liveScoreIncidentState(state = initialState, action) {
 
             } else if (action.key === "incidentImage") {
                 state.incidentData['addImages'] = null
+                console.log(state.incidentMediaList, 'mediaArray@!@@!!!@')
+                state.incidentMediaList = deleteSelectedMedia(state.incidentMediaList, 'image')
 
             } else if (action.key === "incidentVideo") {
                 state.incidentData['addVideo'] = null
+                state.incidentMediaList = deleteSelectedMedia(state.incidentMediaList, 'video')
 
             } else {
                 state.incidentData[action.key] = action.data

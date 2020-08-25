@@ -3159,39 +3159,39 @@ class RegistrationCompetitionFee extends Component {
     );
   }
 
-  teamSeasonalRegistrationcode(seasonalPaymentDefaultArrayItem,selectedSeasonalTeamFeeKey,teamSeasonalSchoolRegCode) {
-    if(selectedSeasonalTeamFeeKey.includes("8") || selectedSeasonalTeamFeeKey.includes(8)){      
+  teamSeasonalRegistrationcode(seasonalPaymentDefaultArrayItem, selectedSeasonalTeamFeeKey, teamSeasonalSchoolRegCode) {
+    if (selectedSeasonalTeamFeeKey.includes("8") || selectedSeasonalTeamFeeKey.includes(8)) {
       const { TreeNode } = Tree;
-    return (
-      <TreeNode
-        title={this.teamSeasonalRegistrationTitle(teamSeasonalSchoolRegCode)}   key={"teamSeasonalSchoolRegCode"} checkable={false}
-        className={"registrationcode-input"}
+      return (
+        <TreeNode
+          title={this.teamSeasonalRegistrationTitle(teamSeasonalSchoolRegCode)} key={"teamSeasonalSchoolRegCode"} checkable={false}
+          className={"registrationcode-input"}
         >
-      </TreeNode>
-    );   
+        </TreeNode>
+      );
     }
-   
+
   }
-  teamSeasonalRegistrationTitle(teamSeasonalSchoolRegCode){
-    return(
+  teamSeasonalRegistrationTitle(teamSeasonalSchoolRegCode) {
+    return (
       <div className={"input-reg-text"}>
         <InputWithHead
-          auto_Complete="new-membershipTypeName"
+          auto_complete="new-membershipTypeName"
           // required={"pt-0 mt-0"}
           heading={AppConstants.enterCode}
           placeholder={AppConstants.enterCode}
-          style={{ width: "100%",background:"white",height: 48}}
-          onChange={(e) =>  this.regCodeChange(e.target.value, "teamSeasonalSchoolRegCode")} 
+          style={{ width: "100%", background: "white", height: 48 }}
+          onChange={(e) => this.regCodeChange(e.target.value, "teamSeasonalSchoolRegCode")}
           value={teamSeasonalSchoolRegCode}
         />
       </div>
     )
   }
 
-  regCodeChange = (value, key) =>{
+  regCodeChange = (value, key) => {
     this.props.instalmentDateAction(value, key);
   }
- 
+
   seasonalTeamaddButton(selectedSeasonalTeamInstalmentDatesArray) {
     const { TreeNode } = Tree;
     return (
@@ -3392,7 +3392,7 @@ class RegistrationCompetitionFee extends Component {
         <div className="row">
           <div className="col-sm">
             <InputWithHead
-              auto_Complete={`new-name${index}`}
+              auto_complete={`new-name${index}`}
               placeholder={AppConstants.name}
               value={item.name}
               onChange={(e) =>
@@ -3530,7 +3530,7 @@ class RegistrationCompetitionFee extends Component {
             ],
           })(
             <InputWithHead
-              auto_Complete="new-competitionName"
+              auto_complete="off"
               required={'required-field pb-0 '}
               heading={AppConstants.competition_name}
               placeholder={AppConstants.competition_name}
@@ -3899,7 +3899,7 @@ class RegistrationCompetitionFee extends Component {
           <div className="row">
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
-                auto_Complete="new-days"
+                auto_complete="off"
                 placeholder={AppConstants.days}
                 value={detailsData.competitionDetailData.roundInDays}
                 onChange={(e) =>
@@ -3913,7 +3913,7 @@ class RegistrationCompetitionFee extends Component {
             </div>
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
-                auto_Complete="new-hours"
+                auto_complete="off"
                 placeholder={AppConstants.hours}
                 value={detailsData.competitionDetailData.roundInHours}
                 onChange={(e) =>
@@ -3927,7 +3927,7 @@ class RegistrationCompetitionFee extends Component {
             </div>
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
-                auto_Complete="new-mins"
+                auto_complete="off"
                 placeholder={AppConstants.mins}
                 value={detailsData.competitionDetailData.roundInMins}
                 onChange={(e) =>
@@ -3991,7 +3991,7 @@ class RegistrationCompetitionFee extends Component {
           <div className="row">
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
-                auto_Complete="new-minNumber"
+                auto_complete="off"
                 placeholder={AppConstants.minNumber}
                 value={detailsData.competitionDetailData.minimunPlayers}
                 onChange={(e) =>
@@ -4005,7 +4005,7 @@ class RegistrationCompetitionFee extends Component {
             </div>
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
-                auto_Complete="new-maxNumber"
+                auto_complete="off"
                 placeholder={AppConstants.maxNumber}
                 value={detailsData.competitionDetailData.maximumPlayers}
                 onChange={(e) =>
@@ -5208,7 +5208,7 @@ class RegistrationCompetitionFee extends Component {
                 ],
               })(
                 <InputWithHead
-                  auto_Complete="new-title"
+                  auto_complete="new-title"
                   heading={AppConstants.title}
                   placeholder={AppConstants.title}
                   // value={charityTitle}
@@ -5309,9 +5309,9 @@ class RegistrationCompetitionFee extends Component {
   ////add  or remove  discount in discount section
   addRemoveDiscount = (keyAction, index) => {
     this.props.addRemoveCompFeeDiscountAction(keyAction, index);
-    setTimeout(() =>{
+    setTimeout(() => {
       this.setDetailsFieldValue();
-    },300);
+    }, 300);
   };
 
   //On change membership product discount type
@@ -5358,7 +5358,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="row">
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-number"
+                  auto_complete="new-number"
                   heading={AppConstants.percentageOff_FixedAmount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
                   onChange={(e) =>
@@ -5374,7 +5374,7 @@ class RegistrationCompetitionFee extends Component {
               </div>
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-description"
+                  auto_complete="new-description"
                   heading={AppConstants.description}
                   placeholder={AppConstants.gernalDiscount}
                   onChange={(e) =>
@@ -5450,7 +5450,7 @@ class RegistrationCompetitionFee extends Component {
               })}
             </Select>
             <InputWithHead
-              auto_Complete="new-code"
+              auto_complete="new-code"
               heading={AppConstants.code}
               placeholder={AppConstants.code}
               onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
@@ -5460,7 +5460,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="row">
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-number"
+                  auto_complete="new-number"
                   heading={AppConstants.percentageOff_FixedAmount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
                   onChange={(e) =>
@@ -5476,7 +5476,7 @@ class RegistrationCompetitionFee extends Component {
               </div>
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-description"
+                  auto_complete="new-description"
                   heading={AppConstants.description}
                   placeholder={AppConstants.gernalDiscount}
                   onChange={(e) =>
@@ -5555,7 +5555,7 @@ class RegistrationCompetitionFee extends Component {
                       }
                     )(
                       <InputWithHead
-                        auto_Complete="new-child"
+                        auto_complete="new-child"
                         heading={`Child ${childindex + 1}%`}
                         placeholder={`Child ${childindex + 1}%`}
                         onChange={(e) =>
@@ -5635,7 +5635,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="row">
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-percentageOff"
+                  auto_complete="new-percentageOff"
                   heading={AppConstants.percentageOff_FixedAmount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
                   onChange={(e) =>
@@ -5647,7 +5647,7 @@ class RegistrationCompetitionFee extends Component {
               </div>
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-gernalDiscount"
+                  auto_complete="new-gernalDiscount"
                   heading={AppConstants.description}
                   placeholder={AppConstants.gernalDiscount}
                   onChange={(e) =>
@@ -5706,7 +5706,7 @@ class RegistrationCompetitionFee extends Component {
         return (
           <div>
             <InputWithHead
-              auto_Complete="new-description"
+              auto_complete="new-description"
               heading={AppConstants.description}
               placeholder={AppConstants.description}
               onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -5714,7 +5714,7 @@ class RegistrationCompetitionFee extends Component {
               disabled={this.checkDiscountDisable(item.organisationId)}
             />
             <InputWithHead
-              auto_Complete="new-question"
+              auto_complete="new-question"
               heading={AppConstants.question}
               placeholder={AppConstants.question}
               onChange={(e) => this.onChangeQuestion(e.target.value, index)}
