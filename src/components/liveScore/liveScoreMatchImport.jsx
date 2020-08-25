@@ -200,6 +200,7 @@ class LiveScoreMatchImport extends Component {
 
     render() {
         const { liveScoreMatchListState: { importResult, onLoad } } = this.props;
+        console.log(importResult);
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout

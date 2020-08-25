@@ -1,13 +1,13 @@
 /* Styling for fees table inside the forms*/
 
 .fees-table .ant-table-tbody > tr > td {
-  border-bottom: 0px;
+  border-bottom: 0;
   padding: 6px 6px;
   overflow-wrap: break-word;
 }
 
 .fees-table .ant-table-thead > tr > th {
-  border-bottom: 0px;
+  border-bottom: 0;
   font-weight: 500;
   font-family: inter-medium;
   font-size: 13px;
@@ -118,13 +118,13 @@
 /*time slot table in venue and times table*/
 
 .time-slot-table .ant-table-tbody > tr > td {
-  border-bottom: 0px;
+  border-bottom: 0;
   padding: 6px 6px;
   overflow-wrap: break-word;
 }
 
 .time-slot-table .ant-table-thead > tr > th {
-  border-bottom: 0px;
+  border-bottom: 0;
   font-weight: 500;
   font-family: inter-medium;
   font-size: 13px;
@@ -157,7 +157,7 @@
 .comp-draws-header-view.ant-layout-header {
   background-color: transparent;
   margin-top: 3%;
-  padding: 0 0px;
+  padding: 0;
   display: flex;
   align-content: flex-end;
 }
@@ -168,7 +168,7 @@
 
 .comp-draw-content-view {
   border-radius: 10px;
-  box-shadow: 0px 8px 16px 0 rgba(27, 27, 52, 0.06);
+  box-shadow: 0 8px 16px 0 rgba(27, 27, 52, 0.06);
   background-color: var(--app-white);
   margin-top: 5%;
 }
@@ -195,7 +195,7 @@
   display: flex;
   align-items: center;
   background-color: transparent;
-  border: 0px;
+  border: 0;
 }
 
 .year-select .ant-select-arrow svg {
@@ -231,9 +231,13 @@
   width: 16px;
 }
 
+.error-message-column {
+  min-width: 400px;
+}
+
 @media (max-width: 767px) {
   .form-header-view.ant-layout-header {
-    padding: 0 0px;
+    padding: 0;
   }
 
   .comp-draw-head-content-view {
@@ -245,5 +249,4 @@
     padding-top: 10px;
     align-items: center
   }
-
 }
