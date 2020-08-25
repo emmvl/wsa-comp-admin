@@ -77,6 +77,7 @@ function liveScoreGetTeamDataAction(teamId) {
 }
 
 
+
 /// Team list with paggination
 
 function getTeamsWithPagging(competitionID, offset, limit, search, sortBy, sortOrder) {

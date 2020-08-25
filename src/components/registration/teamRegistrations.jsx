@@ -69,9 +69,18 @@ const columns = [
     },
     {
         title: 'User Role',
-        dataIndex: 'userRole',
-        key: 'userRole',
+        dataIndex: 'roles',
+        key: 'roles',
         sorter: (a, b) => a.userRole.localeCompare(b.userRole),
+        render: (roles, record) =>{
+            return (
+                <div>
+                    {(roles || []).map((item) =>(
+                    <div key={item.roleDesc}>{item.roleDesc}</div>
+                    ))}
+                </div>
+            )
+        }
     },
     {
         title: 'Team Reg. Type',
@@ -81,8 +90,8 @@ const columns = [
     },
     {
         title: 'Status',
-        dataIndex: 'statusRefId',
-        key: 'statusRefId',
+        dataIndex: 'status',
+        key: 'status',
         filterDropdown: true,
         filterIcon: () => {
             return (
@@ -127,7 +136,7 @@ class TeamRegistrations extends Component {
             competitionUniqueKey: this.state.competitionUniqueKey,
             filterOrganisation: this.state.affiliate,
             searchText: this.state.searchText,
-            statusRefId: -1,
+            statusRefId: this.state.paymentStatusRefId,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)

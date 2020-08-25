@@ -14,7 +14,8 @@ const initialState = {
     divisionList: [],
     divisionId: null,
     ladderDivisionList: [],
-    onLoading: false
+    onLoading: false,
+    onResetLoad: false
 };
 
 function createLadderRank(array) {
@@ -171,6 +172,16 @@ function liveScoreLaddersReducer(state = initialState, action) {
 
             };
 
+        case ApiConstants.API_LIVE_SCORE_RESET_LADDER_LOAD:
+                return { ...state, onResetLoad: true };
+    
+		case ApiConstants.API_LIVE_SCORE_RESET_LADDER_SUCCESS:
+			return {
+				...state,
+				onResetLoad: false,
+				status: action.status
+
+			}
 
         default:
             return state;

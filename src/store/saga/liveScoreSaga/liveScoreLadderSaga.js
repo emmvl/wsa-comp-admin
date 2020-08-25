@@ -136,3 +136,21 @@ export function* ladderAdjustmentGetSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* liveScoreResetLadderSaga(action) {
+    try {
+      const result = yield call(LiveScoreAxiosApi.resetLadderPoints, action.payload);
+  
+      if (result.status === 1) {
+        yield put({
+          type: ApiConstants.API_LIVE_SCORE_RESET_LADDER_SUCCESS,
+          result: result.result.data,
+          status: result.status,
+        });
+      } else {
+        yield call(failSaga, result);
+      }
+    } catch (error) {
+      yield call(errorSaga, error);
+    }
+  }

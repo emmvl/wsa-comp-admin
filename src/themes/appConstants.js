@@ -1553,6 +1553,10 @@ const AppConstants = {
   telExp: "^[0-9]{10}$",
   update: "Update",
   invalidRecords: "Invalid Records",
+  resetLadder: "Reset Ladder",
+  resetLadderConformation: "Please select one of the following to Reset Ladder",
+  selectedDivision:"Selected Division",
+  fullReset:"Full Reset"		
 };
 
 export default AppConstants;

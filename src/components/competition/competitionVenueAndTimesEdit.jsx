@@ -491,7 +491,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         rules: [{ required: true, message: ValidationConstants.nameField[2] }],
                     })(
                         <InputWithHead
-                            auto_Complete="new-name"
+                            auto_complete="new-name"
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.name}
                             disabled={this.state.isUsed}
@@ -506,7 +506,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         rules: [{ required: true, message: ValidationConstants.nameField[3] }],
                     })(
                         <InputWithHead
-                            auto_Complete="new-shortName"
+                            auto_complete="new-shortName"
                             required={"required-field"}
                             heading={AppConstants.short_Name}
                             disabled={this.state.isUsed}
@@ -536,7 +536,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <Form.Item >
                     {getFieldDecorator('addressOne')(
                         <InputWithHead
-                            auto_Complete="new-addressOne"
+                            auto_complete="new-addressOne"
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
@@ -549,7 +549,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
 
                 <InputWithHead
-                    auto_Complete="new-addressTwo"
+                    auto_complete="new-addressTwo"
                     heading={AppConstants.addressTwo}
                     placeholder={AppConstants.addressTwo}
                     onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
@@ -561,7 +561,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <Form.Item >
                     {getFieldDecorator('suburb')(
                         <InputWithHead
-                            auto_Complete="new-suburb"
+                            auto_complete="new-suburb"
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
@@ -599,7 +599,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <Form.Item >
                     {getFieldDecorator('postcode')(
                         <InputWithHead
-                            auto_Complete="new-postcode"
+                            auto_complete="new-postcode"
                             required={"required-field"}
                             heading={AppConstants.postcode}
                             placeholder={AppConstants.postcode}
@@ -612,7 +612,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 </Form.Item>
 
                 <InputWithHead
-                    auto_Complete="new-contactNumber"
+                    auto_complete="new-contactNumber"
                     heading={AppConstants.contactNumber}
                     placeholder={AppConstants.contactNumber}
                     onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(contactNumber.target.value, 'Venue', 'contactNumber')}

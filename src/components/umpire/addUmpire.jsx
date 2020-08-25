@@ -232,7 +232,7 @@ class AddUmpire extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-firstName'
+                                    auto_complete='new-firstName'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
@@ -251,7 +251,7 @@ class AddUmpire extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-lastName'
+                                    auto_complete='off'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
@@ -282,7 +282,7 @@ class AddUmpire extends Component {
                                 ]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-email'
+                                    auto_complete='new-email'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
@@ -300,7 +300,7 @@ class AddUmpire extends Component {
                                 rules: [{ required: true, message: ValidationConstants.contactField }]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-contact'
+                                    auto_complete='new-contact'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}

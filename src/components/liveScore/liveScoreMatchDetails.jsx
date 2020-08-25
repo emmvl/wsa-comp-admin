@@ -602,14 +602,14 @@ class LiveScoreMatchDetails extends Component {
                 footer={null}
             >
                 <InputWithHead
-                    auto_Complete='off'
+                    auto_complete='off'
                     // heading={AppConstants.liveStreamlink}
                     placeholder={AppConstants.liveStreamlink}
                     value={this.state.liveStreamLink}
                     onChange={(e) => this.setState({ liveStreamLink: e.target.value })}
                 />
                 <div
-                    className="comp-dashboard-botton-view-mobile "
+                    className="comp-dashboard-botton-view-mobile"
                     style={{
                         display: "flex",
                         justifyContent: "flex-end",

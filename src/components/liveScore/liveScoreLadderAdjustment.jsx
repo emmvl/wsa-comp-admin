@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Button, Select, Breadcrumb, Form } from 'antd';
+import { Layout, Button, Select, Breadcrumb, Form,Modal,Radio } from 'antd';
 import './liveScore.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -8,13 +8,14 @@ import AppConstants from "../../themes/appConstants";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateLadderSetting, ladderAdjustmentPostData, ladderAdjustmentGetData } from '../../store/actions/LiveScoreAction/liveScoreLadderAction'
+import { updateLadderSetting, ladderAdjustmentPostData, ladderAdjustmentGetData, resetLadderAction } from '../../store/actions/LiveScoreAction/liveScoreLadderAction'
 import { isArrayNotEmpty } from "../../util/helpers";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 import Loader from '../../customComponents/loader'
 import ValidationConstants from "../../themes/validationConstant";
+import history from "../../util/history";
 
 const { Header, Footer } = Layout
 const { Option } = Select;
@@ -27,7 +28,10 @@ class LiveScoreLadderAdjustment extends Component {
             loadding: true,
             divisionId: props.location ? props.location.state ? props.location.state.divisionId ? props.location.state.divisionId : null : null : null,
             compUniqueKey: null,
-            getLoad: false
+            getLoad: false,
+            modalVisible: false,
+            resetOptionId:1,
+            resetLoad: false
         }
     }
 
@@ -61,6 +65,11 @@ class LiveScoreLadderAdjustment extends Component {
             console.log("colled")
             this.setInitalFiledValue()
             this.setState({ getLoad: false })
+        }
+
+        if(this.state.resetLoad == true && this.props.liveScoreLadderState.onResetLoad == false){
+            this.setState({resetLoad: false});
+            history.push("/liveScoreLadderList")
         }
     }
 
@@ -156,6 +165,47 @@ class LiveScoreLadderAdjustment extends Component {
 
     }
 
+    confirmationModal(key , compUniqueKey , resetOptionId)
+    {
+        if (key=="show")
+        {
+            this.setState({
+                modalVisible:true,
+            })
+        }
+        else if(key == "ok")
+        {
+            let divisionId = null;
+            if(this.state.resetOptionId == 1 ){
+                divisionId = this.state.divisionId
+            }
+
+            let obj = {
+                competitionUniqueKey: compUniqueKey,
+                resetOptionId: resetOptionId,
+                divisionId: divisionId
+            }
+            this.props.resetLadderAction(obj)
+            this.setState({
+                modalVisible:false,
+                compUniqueKey: compUniqueKey,
+                resetLoad: true
+            })
+            
+        }
+        else if(key == "cancel")
+        {
+            this.setState({
+                modalVisible:false,
+                resetOptionId:1
+            })
+        }
+    }
+    onChangeSetValue = (targetValue) => {
+        this.setState({
+            resetOptionId:targetValue
+        })
+    }
     ////////form content view
     contentView = (getFieldDecorator) => {
 
@@ -222,7 +272,7 @@ class LiveScoreLadderAdjustment extends Component {
                                         rules: [{ required: true, message: ValidationConstants.point }],
                                     })(
                                         <InputWithHead
-                                            auto_Complete='new-points'
+                                            auto_complete='off'
                                             placeholder={AppConstants.points}
                                             onChange={(e) => this.props.updateLadderSetting({ data: e.target.value, index: index, key: 'points' })}
                                         // value={ladderData[index] && ladderData[index].points}
@@ -243,7 +293,7 @@ class LiveScoreLadderAdjustment extends Component {
                                         rules: [{ required: true, message: ValidationConstants.reasonChange }],
                                     })(
                                         <InputWithHead
-                                            auto_Complete='new-reason'
+                                            auto_complete='off'
                                             placeholder={AppConstants.reasonForChange}
                                             onChange={(e) => this.props.updateLadderSetting({ data: e.target.value, index: index, key: 'adjustmentReason' })}
                                         // value={ladderData[index] && ladderData[index].reasonforChange}
@@ -258,10 +308,30 @@ class LiveScoreLadderAdjustment extends Component {
 
 
 
-                <div  >
+                <div>
                     <span onClick={() => this.props.updateLadderSetting({ data: null, key: 'addLadderAdjustment' })} className='input-heading-add-another pointer'>+ {AppConstants.addNewAdjustment}</span>
                 </div>
+                <div>
+                    <span onClick={() => this.confirmationModal("show", null)} className='input-heading-add-another pointer reset-ladder-font'>{AppConstants.resetLadder}</span>
+                </div>
 
+                <Modal 
+                    className="add-membership-type-modal"
+                    title={AppConstants.resetLadder}
+                    visible={this.state.modalVisible}
+                    onOk={() => this.confirmationModal("ok" , this.state.compUniqueKey, this.state.resetOptionId)}
+                    onCancel={() => this.confirmationModal("cancel" , null)}>
+                        <div>
+                            <p>{AppConstants.resetLadderConformation}</p>
+                            <Radio.Group
+                            className="reg-competition-radio  customize-radio-text"
+                            onChange={(e) => this.onChangeSetValue(e.target.value)}
+                            value={this.state.resetOptionId}>
+                                <Radio value={1}>{AppConstants.selectedDivision}</Radio>
+                                <Radio value={2}>{AppConstants.fullReset}</Radio>
+                            </Radio.Group>
+                        </div>                
+                </Modal>	
             </div>
         )
     };
@@ -324,7 +394,8 @@ class LiveScoreLadderAdjustment extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"11"} />
-                <Loader visible={this.props.liveScoreLadderState.onLoading} />
+                <Loader visible={this.props.liveScoreLadderState.onLoading || 
+                    this.props.liveScoreLadderState.onResetLoad} />
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
@@ -346,7 +417,8 @@ function mapDispatchToProps(dispatch) {
         getliveScoreTeams,
         getLiveScoreDivisionList,
         ladderAdjustmentPostData,
-        ladderAdjustmentGetData
+        ladderAdjustmentGetData,
+        resetLadderAction
     }, dispatch)
 }
 

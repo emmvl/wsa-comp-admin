@@ -167,7 +167,8 @@ class LiveScoreAddPlayer extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-firstName'
+                                    auto_complete='new-password'
+                                    type='text'
                                     required={"required-field pb-0"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.enterFirstName}
@@ -187,7 +188,7 @@ class LiveScoreAddPlayer extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-lastName'
+                                    auto_complete='off'
                                     required={"required-field pb-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.enterLastName}
@@ -220,7 +221,7 @@ class LiveScoreAddPlayer extends Component {
                     </div>
                     <div className="col-sm" >
                         <InputWithHead
-                            auto_Complete='new-contact'
+                            auto_complete='new-contact'
                             heading={AppConstants.contactNO}
                             placeholder={AppConstants.enterContactNo}
                             maxLength={10}
@@ -234,7 +235,7 @@ class LiveScoreAddPlayer extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead
-                            auto_Complete='new-mnbId'
+                            auto_complete='new-mnbId'
                             heading={AppConstants.playerId}
                             placeholder={AppConstants.enterPlayerID}
                             onChange={(mnbPlayerId) => this.props.liveScoreUpdatePlayerDataAction(mnbPlayerId.target.value, 'mnbPlayerId')}

@@ -531,7 +531,7 @@ class CompetitionFinals extends Component {
                                                     ]
                                                 })(
                                                     <InputWithHead
-                                                        auto_Complete='new-matchDuration'
+                                                        auto_complete='new-matchDuration'
                                                         disabled={disabledStatus}
                                                         heading={AppConstants.matchDuration} required={"required-field"}
                                                         placeholder={AppConstants.mins} setFieldsValue={data.matchDuration}
@@ -546,7 +546,7 @@ class CompetitionFinals extends Component {
                                                         rules: [{ required: true, message: ValidationConstants.mainBreak },]
                                                     })(
                                                         <InputWithHead
-                                                            auto_Complete="new-mainBreak"
+                                                            auto_complete="new-mainBreak"
                                                             disabled={disabledStatus}
                                                             heading={AppConstants.mainBreak} required={"required-field"}
                                                             placeholder={AppConstants.mins} setFieldsValue={data.mainBreak}
@@ -562,7 +562,7 @@ class CompetitionFinals extends Component {
                                                         rules: [{ required: true, message: ValidationConstants.qtrBreak },]
                                                     })(
                                                         <InputWithHead
-                                                            auto_Complete="new-qtrBreak"
+                                                            auto_complete="new-qtrBreak"
                                                             disabled={disabledStatus}
                                                             heading={AppConstants.qtrBreak} required={"required-field"}
                                                             placeholder={AppConstants.mins} setFieldsValue={data.qtrBreak}
@@ -578,7 +578,7 @@ class CompetitionFinals extends Component {
                                                         rules: [{ required: true, message: ValidationConstants.timeBetweenGames },]
                                                     })(
                                                         <InputWithHead
-                                                            auto_Complete='new-timeBetweenGames'
+                                                            auto_complete='new-timeBetweenGames'
                                                             disabled={disabledStatus}
                                                             heading={AppConstants.betweenGames} required={"required-field"}
                                                             placeholder={AppConstants.mins} setFieldsValue={data.timeBetweenGames}
@@ -668,7 +668,7 @@ class CompetitionFinals extends Component {
                                             ]
                                         })(
                                             <InputWithHead
-                                                auto_Complete='new-extraTimeDuration'
+                                                auto_complete='new-extraTimeDuration'
                                                 disabled={disabledStatus}
                                                 heading={AppConstants.extraTimeDuration} required={"required-field"}
                                                 placeholder={AppConstants.mins}
@@ -686,7 +686,7 @@ class CompetitionFinals extends Component {
                                                 ]
                                             })(
                                                 <InputWithHead
-                                                    auto_Complete='new-extraTimeMainBreak'
+                                                    auto_complete='new-extraTimeMainBreak'
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.extraTimeMainBreak} required={"required-field"}
                                                     placeholder={AppConstants.mins}
@@ -704,7 +704,7 @@ class CompetitionFinals extends Component {
                                                 ]
                                             })(
                                                 <InputWithHead
-                                                    auto_Complete='new-extraTimeBreak'
+                                                    auto_complete='new-extraTimeBreak'
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.extraTimeBreak} placeholder={AppConstants.mins}
                                                     setFieldsValue={data.extraTimeBreak} required={"required-field"}
@@ -721,7 +721,7 @@ class CompetitionFinals extends Component {
                                                 ]
                                             })(
                                                 <InputWithHead
-                                                    auto_Complete='new-beforeExtraTime'
+                                                    auto_complete='new-beforeExtraTime'
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.beaforeExtraTime} placeholder={AppConstants.mins}
                                                     setFieldsValue={data.beforeExtraTime} required={"required-field"}
