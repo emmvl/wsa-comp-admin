@@ -136,7 +136,7 @@ class TeamRegistrations extends Component {
             competitionUniqueKey: this.state.competitionUniqueKey,
             filterOrganisation: this.state.affiliate,
             searchText: this.state.searchText,
-            statusRefId: -1,
+            statusRefId: this.state.paymentStatusRefId,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
