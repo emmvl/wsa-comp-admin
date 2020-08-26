@@ -46,6 +46,17 @@ const listeners = (key) => ({
     onClick: () => tableSort(key),
 });
 
+const payments = [
+    {
+        "paymentType": "Credit Card",
+        "paymentTypeId": 1
+    },
+    {
+        "paymentType": "Direct Debit",
+        "paymentTypeId": 2
+    }
+];
+
 
 const columns = [
     {
@@ -551,6 +562,9 @@ class Registration extends Component {
                                     onChange={(e) => this.onChangeDropDownValue(e, 'paymentId')}
                                     value={this.state.paymentId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
+									{(payments || []).map((payment,index) => (
+                                        <Option key={payment.paymentTypeId} value={payment.paymentTypeId}>{payment.paymentType}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
