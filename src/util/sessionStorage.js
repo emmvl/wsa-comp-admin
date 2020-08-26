@@ -1,12 +1,11 @@
 // set competition id
 const setCompetitionID = competitionId => {
   localStorage.setItem("competitionId", competitionId);
-
 }
 
 // get competition id
-const getCompetitonId = key => {
-  return localStorage.competitionId
+const getCompetitonId = () => {
+  return localStorage.competitionId;
 }
 
 const getLiveScoreCompetiton = () => {
@@ -193,8 +192,8 @@ const setImpersonationAffiliate = (impersonationOrgData) => {
   localStorage.setItem('impersonation', data);
 };
 
-const getImpersonationAffiliate = async () => {
-  const dataStr = await localStorage.getItem('impersonation');
+const getImpersonationAffiliate = () => {
+  const dataStr = localStorage.getItem('impersonation');
 
   if (dataStr !== 'undefined') {
     return JSON.parse(dataStr);

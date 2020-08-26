@@ -65,14 +65,15 @@ export const showInvalidData = (cols, importResult) => {
             title: "Error Message",
             dataIndex: "message",
             key: "message",
+            className: "error-message-column",
+            align: "center",
             render: (mes) => (
                 <>
                     {mes.map((m, index) => (
                         <p
                             key={`message_${index}`}
                             style={{
-                                fontSize: "0.7em",
-                                lineHeight: "1",
+                                marginBottom: 0,
                                 color: "red",
                             }}
                         >
@@ -108,9 +109,9 @@ export const showInvalidData = (cols, importResult) => {
                         dataSource={Object.keys(errorMes).map(key => {
                             const rowNum = key.split(" ")[1];
                             return {
-                                ...importRes[rowNum - 1],
+                                ...importRes[rowNum - 2],
                                 index: rowNum,
-                                message: errorMes[key],
+                                message: errorMes[key].message,
                             };
                         })}
                         rowKey={(record) => record.index}

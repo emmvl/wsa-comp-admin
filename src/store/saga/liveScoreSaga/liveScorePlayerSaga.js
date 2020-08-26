@@ -98,7 +98,7 @@ function* liveScorePlayerImportSaga(action) {
 
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_SUCCESS,
+        type: ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_SUCCESS,
         result: result.result.data,
       });
 

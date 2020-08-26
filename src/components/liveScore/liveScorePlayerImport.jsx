@@ -167,7 +167,6 @@ class LiveScorerPlayerImport extends Component {
 
     render() {
         const { liveScorePlayerState: { importResult, onLoad } } = this.props;
-
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout
