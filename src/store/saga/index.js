@@ -67,7 +67,7 @@ import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
 import { liveScoreScorerListSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga, liveScoreScorerSearchSaga } from './liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
-import { liveScoreCompetitionSaga, liveScoreCompetitionDelete } from './liveScoreSaga/liveScoreCompetionSaga'
+import { liveScoreCompetitionSaga, liveScoreCompetitionDelete, liveScoreOwnPartCompetitionListSaga } from './liveScoreSaga/liveScoreCompetionSaga'
 
 ////*******************Live Score********************************************End
 
@@ -523,6 +523,8 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD, competitionDashboardDeleteSaga)
 
   yield takeEvery(ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD, getTeamRegistrationsSaga);
+  /////livescore own part competition listing
+  yield takeEvery(ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_LOAD, liveScoreOwnPartCompetitionListSaga);
 
   yield takeEvery(ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_LOAD, getVenueAndDivisionSaga)
 

@@ -1135,6 +1135,23 @@ let LiveScoreAxiosApi = {
 
         return Method.dataGet(url, null)
     },
+    /////livescore own part competition listing
+    liveScoreOwnPartCompetitionList(data, orgKey, sortBy, sortOrder) {
+        let url = null;
+        if (orgKey) {
+            url = `/competitions/adminDashboard?organisationId=${orgKey}`;
+        } else {
+            url = `/competitions/adminDashboard`;
+        }
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
+        if (data) {
+            return Method.dataPost(url, null, data)
+        } else {
+            return Method.dataPost(url, null)
+        }
+    },
 
     liveScoreAddLiveStream(data) {
         let body = data.body

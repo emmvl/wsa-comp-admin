@@ -452,7 +452,9 @@ class ShopOrderStatus extends Component {
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={orderStatusListingData}
-                        pagination={false} />
+                        pagination={false}
+                        rowKey={(record, index) => "orderStatusListingData" + record.orderId + index}
+                    />
 
                 </div>
                 <div className="d-flex justify-content-end">

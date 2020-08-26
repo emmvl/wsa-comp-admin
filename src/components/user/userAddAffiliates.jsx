@@ -496,6 +496,7 @@ class UserAddAffiliates extends Component {
         </Form.Item>
 
         <InputWithHead
+          maxLength={10}
           heading={AppConstants.phoneNumber}
           placeholder={AppConstants.phoneNumber}
           onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
@@ -621,7 +622,6 @@ class UserAddAffiliates extends Component {
                   onChange={(e) =>
                     this.onChangeContactSetValue(e.target.value, "email", index)
                   }
-                  //value={item.email}
                   setFieldsValue={item.email}
                 />
               )}
@@ -629,6 +629,7 @@ class UserAddAffiliates extends Component {
 
             <InputWithHead
               heading={AppConstants.phoneNumber}
+              maxLength={10}
               placeholder={AppConstants.phoneNumber}
               onChange={(e) =>
                 this.onChangeContactSetValue(

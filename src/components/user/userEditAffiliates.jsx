@@ -615,6 +615,7 @@ class UserEditAffiliates extends Component {
         </Form.Item>
 
         <InputWithHead
+          maxLength={10}
           heading={AppConstants.phoneNumber}
           placeholder={AppConstants.phoneNumber}
           onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
@@ -753,6 +754,7 @@ class UserEditAffiliates extends Component {
             <InputWithHead
               auto_complete="new-mobileNumber"
               heading={AppConstants.phoneNumber}
+              maxLength={10}
               placeholder={AppConstants.phoneNumber}
               onChange={(e) =>
                 this.onChangeContactSetValue(

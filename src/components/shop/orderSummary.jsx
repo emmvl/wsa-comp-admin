@@ -458,7 +458,9 @@ class OrderSummary extends Component {
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={orderSummaryListingData}
-                        pagination={false} />
+                        pagination={false}
+                        rowKey={(record, index) => "orderSummaryListingData" + record.id + index}
+                    />
 
                 </div>
                 <div className="d-flex justify-content-end">

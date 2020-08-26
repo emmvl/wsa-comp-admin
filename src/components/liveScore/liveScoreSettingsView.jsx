@@ -12,6 +12,7 @@ import {
     Input,
     Icon
 } from "antd";
+import { NavLink } from "react-router-dom";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -85,7 +86,6 @@ class LiveScoreSettingsView extends Component {
 
         } else {
             let comp_id = getLiveScoreCompetiton()
-
             this.props.settingRegInvitees()
             if (comp_id) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -332,7 +332,6 @@ class LiveScoreSettingsView extends Component {
     };
 
     handleSearch = (value, data) => {
-
         const filteredData = data.filter(memo => {
             return memo.venueName.toLowerCase().indexOf(value.toLowerCase()) > -1
         })
@@ -535,8 +534,16 @@ class LiveScoreSettingsView extends Component {
 
                 {/* match settings check boxes */}
                 {/* <InputWithHead heading={AppConstants.matchSettings} /> */}
-                <span className='text-heading-large pt-5' >{AppConstants.wouldLikeRecord}</span>
-                {/* <span className="applicable-to-heading"> {AppConstants.wouldLikeRecord}</span> */}
+                <span className='text-heading-large pt-5 mb-0' >{AppConstants.wouldLikeRecord}</span>
+                {/* <NavLink
+                    to={{
+                        pathname: `/liveScoreDivisionList`,
+                    }}
+                >
+                    <span className="input-heading-add-another pt-3 pb-3">
+                        +{AppConstants.divisionSettings}
+                    </span>
+                </NavLink> */}
                 <div className="fluid-width" style={{ marginTop: -10 }}>
                     <div className="row">
                         <div className="col-sm">
@@ -1261,7 +1268,12 @@ class LiveScoreSettingsView extends Component {
                 {local_Id &&
                     <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"18"} />
                 }
-                <Loader visible={this.props.liveScoreSetting.loader} />
+                {
+                    this.state.isEdit ?
+                        <Loader visible={this.props.liveScoreSetting.editLoader} />
+                        :
+                        <Loader visible={this.props.liveScoreSetting.loader} />
+                }
                 <Layout>
                     {this.headerView()}
                     {/* <Content> */}

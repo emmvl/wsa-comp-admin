@@ -1066,7 +1066,7 @@ const AppConstants = {
   gameTimeTrackMsg:
     'If selected it portrays the Game Time played by the team and players of that team in the Game Day App.',
   positionTrackMsg: 'If Selected allows tracking of team positions by player.',
-  recordGoalAtteptMsg:
+  recordGoalAttemptMsg:
     'If selected allows for the recording of Goal Attempts, Misses and Penalty Misses by player.',
   centerPassEnableMsg: 'Enable Centre Pass display. ',
   incidentEnableMsg:
@@ -1549,14 +1549,15 @@ const AppConstants = {
   statusContextMsg: `“Pending Membership” (when the membership fee hasn’t been paid by the individual)\n\n
   “Pending Registration Fee” (when the individual fee is pending)\n\n 
   “Registered” (when all fees have been paid)`,
-  totalFeeMsg: "Pay as you go fee",
+  totalFeeMsg: "A fee charged to a player each time they take the court (where the seasonal fee is not being charged).",
   telExp: "^[0-9]{10}$",
   update: "Update",
   invalidRecords: "Invalid Records",
   resetLadder: "Reset Ladder",
   resetLadderConformation: "Please select one of the following to Reset Ladder",
-  selectedDivision:"Selected Division",
-  fullReset:"Full Reset"		
+  selectedDivision: "Selected Division",
+  fullReset: "Full Reset",
+  divisionSettings: "Division settings",
 };
 
 export default AppConstants;

@@ -22,10 +22,11 @@ export const liveScoreCompetionActionError = (data) => {
     }
 }
 
-export const liveScoreCompetitionDeleteInitate = (data) => {
+export const liveScoreCompetitionDeleteInitate = (data, key) => {
     return {
         type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_INITIATE,
-        payload: data
+        payload: data,
+        key
     }
 }
 export const liveScoreCompetitionDeleteSuccess = (data) => {
@@ -38,5 +39,17 @@ export const liveScoreCompetitionDeleteError = (data) => {
     return {
         type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_ERROR,
         payload: data
+    }
+}
+
+/////livescore own part competition listing
+export const liveScoreOwnPartCompetitionList = (data, orgKey, sortBy, sortOrder, key) => {
+    return {
+        type: ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_LOAD,
+        payload: data,
+        orgKey,
+        sortBy,
+        sortOrder,
+        key
     }
 }

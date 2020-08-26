@@ -57,7 +57,8 @@ const initialState = {
     associationChecked: false,
     clubChecked: false,
     associationOrg: [],
-    clubOrg: []
+    clubOrg: [],
+    editLoader: false
 }
 
 
@@ -104,7 +105,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
         case ApiConstants.LiveScore_SETTING_VIEW_INITITAE:
             return {
                 ...state,
-                loader: true
+                editLoader: true
             }
         case ApiConstants.LiveScore_SETTING_VIEW_SUCCESS:
 
@@ -146,7 +147,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
             return {
                 ...state,
-                loader: false,
+                editLoader: false,
                 form: {
                     ...state.form,
                     id: payload.id,

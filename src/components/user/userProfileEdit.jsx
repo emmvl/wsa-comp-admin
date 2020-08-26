@@ -298,9 +298,9 @@ class UserProfileEdit extends Component {
                                     required={"required-field"}
                                     heading={AppConstants.contactMobile}
                                     placeholder={AppConstants.contactMobile}
-                                    name={'mobileNumber'}
                                     setFieldsValue={userData.mobileNumber}
                                     onChange={(e) => this.onChangeSetValue(e.target.value, "mobileNumber")}
+                                    maxLength={10}
 
                                 />
                             )}
@@ -651,6 +651,7 @@ class UserProfileEdit extends Component {
                                     heading={AppConstants.emergencyContactMobile}
                                     placeholder={AppConstants.emergencyContactMobile}
                                     name={'emergencyContactNumber'}
+                                    maxLength={10}
                                     setFieldsValue={userData.emergencyContactNumber}
                                     onChange={(e) => this.onChangeSetValue(e.target.value, "emergencyContactNumber")}
 

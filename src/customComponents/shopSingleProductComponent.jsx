@@ -89,7 +89,7 @@ class ShopSingleProductComponent extends React.Component {
                             {isArrayNotEmpty(productItem.images) && productItem.images.map(
                                 (item, index) => {
                                     return (
-                                        <div className="carousel-div">
+                                        <div className="carousel-div" key={item + index}>
                                             <img src={item.url} className="carousel-img" />
                                         </div>
                                     );

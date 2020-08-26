@@ -790,6 +790,7 @@ class UserOurOragnization extends Component {
 
                 <InputWithHead
                     auto_complete='new-phone'
+                    maxLength={10}
                     heading={AppConstants.phoneNumber}
                     placeholder={AppConstants.phoneNumber}
                     onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
@@ -919,6 +920,7 @@ class UserOurOragnization extends Component {
                             placeholder={AppConstants.phoneNumber}
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "mobileNumber", index)}
                             value={item.mobileNumber}
+                            maxLength={10}
                             disabled={!this.state.isEditable}
                             auto_complete='new-phoneNumber'
                         />
