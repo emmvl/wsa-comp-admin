@@ -423,11 +423,51 @@ class LiveScoreAddEditCoach extends Component {
 
         const { coachdata, teamId, coachRadioBtn, exsitingManagerId } = this.props.liveScoreCoachState
         e.preventDefault();
-        if (coachdata.mobileNumber.length !== 10) {
-            this.setState({
-                hasError: true
-            })
-        } else {
+        if (coachRadioBtn == 'new') {
+
+            if (coachdata.mobileNumber.length !== 10) {
+                this.setState({
+                    hasError: true
+                })
+            } else {
+                this.props.form.validateFields((err, values) => {
+                    let body = ''
+                    if (!err) {
+                        if (coachRadioBtn == 'new') {
+                            if (this.state.isEdit == true) {
+                                body = {
+                                    "id": coachdata.id,
+                                    "firstName": coachdata.firstName,
+                                    "lastName": coachdata.lastName,
+                                    "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
+                                    "email": coachdata.email,
+                                    "teams": coachdata.teams
+                                }
+                            } else {
+
+                                body = {
+                                    "firstName": coachdata.firstName,
+                                    "lastName": coachdata.lastName,
+                                    "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
+                                    "email": coachdata.email,
+                                    "teams": coachdata.teams
+                                }
+                            }
+                            this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+                        } else if (coachRadioBtn == 'existing') {
+                            body = {
+                                "id": exsitingManagerId,
+                                "teams": coachdata.teams
+                            }
+                            this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+                        }
+
+                    }
+                });
+
+            }
+        }
+        else {
             this.props.form.validateFields((err, values) => {
                 let body = ''
                 if (!err) {

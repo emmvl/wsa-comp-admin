@@ -148,7 +148,11 @@ const initialState = {
     createVenue: null,
     selectedTeamSeasonalInstalmentDates:[],
     selectedSeasonalInstalmentDates:[],	
-    orgRegistrationId: null,		   
+    orgRegistrationId: null,
+    associationChecked: false,
+    clubChecked: false,
+    anyOrgAssociationArr: [],
+    anyOrgClubArr: [],		   
 };
 
 /////function to append isselected values in default membership types array
@@ -923,7 +927,7 @@ function createInviteesOrgArray(selectedInvitees, orgKeys) {
         "competitionInviteesOrgId": 0,
         "organisationUniqueKey": null
     }
-    let orgArray = isArrayNotEmpty(selectedInvitees) ? selectedInvitees[0].inviteesOrg : []
+    let orgArray = isArrayNotEmpty(selectedInvitees) ? selectedInvitees : []
     for (let i in orgKeys) {
         let details = checkOrgKeysSelection(orgKeys[i], orgArray)
         if (details.status == true) {
@@ -1731,7 +1735,7 @@ function competitionFees(state = initialState, action) {
                         /// any-org association
                         let affiliateOrgSelectedArr = getAffiliateOrgSelectedArr(allData.competitiondetail.invitees, selectedInvitees[o])
                         state.associationLeague = affiliateOrgSelectedArr.slectedAffilitesArray
-                        state.any_club_Org_AffiliateArr = affiliateOrgSelectedArr.selecetdOrgArray
+                        state.any_club_Org_AffiliateArr = [...state.any_club_Org_AffiliateArr, ...affiliateOrgSelectedArr.selecetdOrgArray]
                         affiliateObject = {
                             "inviteesId": allData.competitiondetail.invitees[o].inviteesId,
                             "registrationInviteesRefId": selectedInvitees[o],
@@ -1739,18 +1743,22 @@ function competitionFees(state = initialState, action) {
                         }
                         state.anyOrgAffiliateArr = [affiliateObject]
                         //state.anyOrgNonSelected = null
+                        state.associationChecked = true
+                        state.anyOrgAssociationArr = [affiliateObject]
                     }
                     else {
                         // club
                         let affiliate_Org_SelectedArr = getAffiliateOrgSelectedArr(allData.competitiondetail.invitees, selectedInvitees[o])
                         state.clubSchool = affiliate_Org_SelectedArr.slectedAffilitesArray
-                        state.any_club_Org_AffiliateArr = affiliate_Org_SelectedArr.selecetdOrgArray
+                        state.any_club_Org_AffiliateArr = [...state.any_club_Org_AffiliateArr, ...affiliate_Org_SelectedArr.selecetdOrgArray]
                         affiliateObject = {
                             "inviteesId": allData.competitiondetail.invitees[o].inviteesId,
                             "registrationInviteesRefId": selectedInvitees[o],
                             "inviteesOrg": affiliate_Org_SelectedArr.selecetdOrgArray
                         }
                         state.anyOrgAffiliateArr = [affiliateObject]
+                        state.clubChecked = true
+                        state.anyOrgClubArr = [affiliateObject]
                     }
 
                     state.anyOrgNonSelected = null
@@ -2070,6 +2078,10 @@ function competitionFees(state = initialState, action) {
                     state.anyOrgAffiliateArr = []
                     state.affiliateArray = []
                     state.affiliateArray = createInviteesPostArray(action.data, state.competitionDetailData.invitees)
+                    state.associationChecked = false
+                    state.clubChecked = false
+                    state.anyOrgAssociationArr = []
+                    state.anyOrgClubArr = []
                 }
                 if (action.key == 'affiliateNonSelected') {
                     state.invitedTo = []
@@ -2085,18 +2097,37 @@ function competitionFees(state = initialState, action) {
                     state.anyOrgNonSelected = action.data
                     state.anyOrgAffiliateArr = []
                     state.affiliateArray = removeDirect(state.affiliateArray)
+                    state.associationChecked = false
+                    state.clubChecked = false
+                    state.anyOrgAssociationArr = []
+                    state.anyOrgClubArr = []
                 }
-            } else if (action.key == 'associationAffilite' || action.key == 'clubAffilite') {
+            } else if (action.key == "associationChecked") {
+                state.associationChecked = action.data
+                state.anyOrgNonSelected = null
+                state.anyOrgSelected = 7
+                state.anyOrgAssociationArr = createInviteesPostArray(7, state.competitionDetailData.invitees)
+                state.otherSelected = null
+                state.affiliateArray = removeDirect(state.affiliateArray)
+            }
+            else if (action.key == "clubChecked") {
+                state.clubChecked = action.data
+                state.anyOrgNonSelected = null
+                state.anyOrgClubArr =  createInviteesPostArray(8, state.competitionDetailData.invitees)
+                state.otherSelected = null
+                state.affiliateArray = removeDirect(state.affiliateArray)
+            }
+            else if (action.key == 'associationAffilite' || action.key == 'clubAffilite') {
                 if (action.key == 'associationAffilite') {
                     state.associationLeague = action.data
                     let orgInviteesArray = createInviteesOrgArray(state.any_club_Org_AffiliateArr, action.data)
-                    state.anyOrgAffiliateArr[0]["inviteesOrg"] = orgInviteesArray
+                    state.anyOrgAssociationArr[0]["inviteesOrg"] = orgInviteesArray
                 }
 
                 if (action.key == 'clubAffilite') {
                     state.clubSchool = action.data
                     let orgInviteesArray = createInviteesOrgArray(state.any_club_Org_AffiliateArr, action.data)
-                    state.anyOrgAffiliateArr[0]["inviteesOrg"] = orgInviteesArray
+                    state.anyOrgClubArr[0]["inviteesOrg"] = orgInviteesArray
                 }
             }
             else {
@@ -2106,7 +2137,6 @@ function competitionFees(state = initialState, action) {
                 ...state,
                 error: null
             }
-
 
         //update charity round and update dicount govt voucher
         case ApiConstants.UPDATE_PAYMENTS_COMPETITION_FEES:
@@ -2461,7 +2491,11 @@ function competitionFees(state = initialState, action) {
                 state.anyOrgAffiliateArr = []
                 state.any_club_Org_AffiliateArr = []
                 state.selectedTeamSeasonalInstalmentDates = []
-                state.selectedSeasonalInstalmentDates = []								  
+                state.selectedSeasonalInstalmentDates = []	
+                state.associationChecked = false
+                state.clubChecked = false
+                state.anyOrgAssociationArr = []
+                state.anyOrgClubArr = []							  
             }
             return {
                 ...state, error: null

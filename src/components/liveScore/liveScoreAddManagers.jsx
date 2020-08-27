@@ -350,7 +350,7 @@ class LiveScoreAddManager extends Component {
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
                                     maxLength={10}
-                                    onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value,)}
+                                    onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
                                     value={managerData.mobileNumber} />
                             )}
                         </Form.Item>
@@ -481,13 +481,49 @@ class LiveScoreAddManager extends Component {
 
     onSaveClick = e => {
         const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreMangerState
+        console.log(managerData, 'managerData')
         e.preventDefault();
-        if (managerData.mobileNumber.length !== 10) {
-            this.props.form.validateFields((err, values) => {
-            })
-            this.setState({
-                hasError: true
-            })
+        if (managerRadioBtn === 'new') {
+            if (managerData.mobileNumber.length !== 10) {
+                this.props.form.validateFields((err, values) => {
+                })
+                this.setState({
+                    hasError: true
+                })
+            } else {
+                this.props.form.validateFields((err, values) => {
+                    let body = ''
+                    if (!err) {
+                        if (managerRadioBtn === 'new') {
+                            if (this.state.isEdit === true) {
+                                body = {
+                                    "id": managerData.id,
+                                    "firstName": managerData.firstName,
+                                    "lastName": managerData.lastName,
+                                    "mobileNumber": regexNumberExpression(managerData.mobileNumber),
+                                    "email": managerData.email,
+                                    "teams": managerData.teams
+                                }
+                            } else {
+                                body = {
+                                    "firstName": managerData.firstName,
+                                    "lastName": managerData.lastName,
+                                    "mobileNumber": regexNumberExpression(managerData.mobileNumber),
+                                    "email": managerData.email,
+                                    "teams": managerData.teams
+                                }
+                            }
+                            this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                        } else if (managerRadioBtn === 'existing') {
+                            body = {
+                                "id": exsitingManagerId,
+                                "teams": managerData.teams
+                            }
+                            this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                        }
+                    }
+                });
+            }
         }
         else {
             this.props.form.validateFields((err, values) => {

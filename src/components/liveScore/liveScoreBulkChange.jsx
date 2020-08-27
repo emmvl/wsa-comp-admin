@@ -1225,7 +1225,7 @@ class LiveScoreBulkChange extends Component {
                                 } */}
 
                                 <Option value={'8'}>{'Incomplete'}</Option>
-                                <Option value={'7'}>{'Not Played'}</Option>
+                                <Option value={'9'}>{'Not Played'}</Option>
 
                             </Select>
                         )}

@@ -1943,12 +1943,12 @@ class RegistrationCompetitionFee extends Component {
   }
 
   callAnyorgSearchApi = (registrationInviteesRefId) => {
-    if (registrationInviteesRefId == 7) {
-      this.props.onInviteesSearchAction('', 3);
-    }
-    if (registrationInviteesRefId == 8) {
-      this.props.onInviteesSearchAction('', 4);
-    }
+    // if (registrationInviteesRefId == 7) {
+    this.props.onInviteesSearchAction('', 3);
+    // }
+    // if (registrationInviteesRefId == 8) {
+    this.props.onInviteesSearchAction('', 4);
+    // }
   };
 
   /////navigate to RegistrationForm  after publishing the competition
@@ -2673,13 +2673,20 @@ class RegistrationCompetitionFee extends Component {
         let venue = JSON.stringify(compFeesState.postVenues);
         // let invitees = compFeesState.postInvitees
         let invitees = [];
+        let anyOrgAffiliateArr = []
+        if (compFeesState.associationChecked == true && compFeesState.anyOrgAssociationArr[0].inviteesOrg.length > 0) {
+          anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgAssociationArr)
+        }
+        if (compFeesState.clubChecked == true && compFeesState.anyOrgClubArr[0].inviteesOrg.length > 0) {
+          anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgClubArr)
+        }
         if (compFeesState.affiliateArray != null && compFeesState.affiliateArray.length > 0) {
           invitees = compFeesState.affiliateArray.concat(
-            compFeesState.anyOrgAffiliateArr
+            anyOrgAffiliateArr
           );
         }
-        else if (compFeesState.anyOrgAffiliateArr != null && compFeesState.anyOrgAffiliateArr.length > 0) {
-          invitees = compFeesState.anyOrgAffiliateArr
+        else if (anyOrgAffiliateArr != null && anyOrgAffiliateArr.length > 0) {
+          invitees = anyOrgAffiliateArr
         }
 
         if (tabKey == '1') {
@@ -4679,9 +4686,9 @@ class RegistrationCompetitionFee extends Component {
     let detailsData = this.props.competitionFeesState;
     let associationAffilites = detailsData.associationAffilites;
     let clubAffilites = detailsData.clubAffilites;
-    const { associationLeague, clubSchool } = this.props.competitionFeesState;
+    const { associationLeague, clubSchool, associationChecked, clubChecked } = this.props.competitionFeesState;
     let regInviteesDisable = this.state.permissionState.regInviteesDisable;
-    if (subItem.id == 7 && seletedInvitee == 7) {
+    if (subItem.id == 7 && associationChecked == true) {
       return (
         <div>
           <Select
@@ -4714,7 +4721,7 @@ class RegistrationCompetitionFee extends Component {
             loading={detailsData.searchLoad}
           >
             {associationAffilites.map((item) => {
-              console.log(item, 'associationAffilites');
+              // console.log(item, 'associationAffilites');
               return (
                 <Option key={item.organisationId} value={item.organisationId}>
                   {item.name}
@@ -4724,7 +4731,7 @@ class RegistrationCompetitionFee extends Component {
           </Select>
         </div>
       );
-    } else if (subItem.id == 8 && seletedInvitee == 8) {
+    } else if (subItem.id == 8 && clubChecked == true) {
       return (
         <div>
           <Select
@@ -4782,8 +4789,9 @@ class RegistrationCompetitionFee extends Component {
       nonSelected,
       affiliateNonSelected,
       anyOrgNonSelected,
+      associationChecked,
+      clubChecked
     } = this.props.competitionFeesState;
-    // console.log(invitees, 'invitees');
     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
     let regInviteesDisable = this.state.permissionState.regInviteesDisable;
     return (
@@ -4901,7 +4909,7 @@ class RegistrationCompetitionFee extends Component {
                               </CustumToolTip>
                             </div>
                           </div>
-                          {item.subReferences.map((subItem, subIndex) => (
+                          {/* {item.subReferences.map((subItem, subIndex) => (
                             <div style={{ marginLeft: '20px' }}>
                               <Radio key={subItem.id} value={subItem.id}>
                                 {subItem.description}
@@ -4911,7 +4919,42 @@ class RegistrationCompetitionFee extends Component {
                                 anyOrgSelected
                               )}
                             </div>
-                          ))}
+                          ))} */}
+                          <div style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            paddingLeft: 20
+                          }}>
+
+                            <Checkbox
+                              className="single-checkbox-radio-style"
+                              style={{ paddingTop: 8 }}
+                              checked={associationChecked}
+                              onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}>
+                              {item.subReferences[0].description}
+                            </Checkbox>
+
+                            {this.affiliatesSearchInvitee(
+                              item.subReferences[0],
+                              anyOrgSelected
+                            )}
+
+                            <Checkbox
+                              className="single-checkbox-radio-style"
+                              style={{ paddingTop: 13, marginLeft: 0 }}
+                              checked={clubChecked}
+                              onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "clubChecked")}>
+                              {item.subReferences[1].description}
+                            </Checkbox>
+
+                            {this.affiliatesSearchInvitee(
+                              item.subReferences[1],
+                              anyOrgSelected
+                            )}
+
+
+                          </div>
+
                           <div style={{ marginLeft: 20 }}>
                             <Radio.Group
                               onChange={(e) =>
@@ -4991,6 +5034,7 @@ class RegistrationCompetitionFee extends Component {
       </div>
     );
   };
+
 
   //on change of casual fee payment option
   onChangeCasualFee(itemValue, paymentData) {

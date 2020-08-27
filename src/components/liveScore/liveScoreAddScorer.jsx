@@ -316,7 +316,7 @@ class LiveScoreAddScorer extends Component {
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
-                                    onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value,)}
+                                    onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
                                     maxLength={10} />
                             )}
                         </Form.Item>
@@ -477,12 +477,25 @@ class LiveScoreAddScorer extends Component {
         const { scorerData, scorerRadioBtn, existingScorerId } = this.props.liveScoreScorerState
         e.preventDefault();
         let mobileCheck = scorerData.id ? scorerData.mobileNumber : scorerData.contactNo
-        if (mobileCheck.length !== 10) {
-            this.props.form.validateFields((err, values) => {
-            })
-            this.setState({
-                hasError: true
-            })
+        if (scorerRadioBtn === 'new') {
+
+            if (mobileCheck.length !== 10) {
+                this.props.form.validateFields((err, values) => {
+                })
+                this.setState({
+                    hasError: true
+                })
+            } else {
+                this.props.form.validateFields((err, values) => {
+                    if (!err) {
+                        if (scorerRadioBtn === 'new') {
+                            this.props.liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn, this.state.isEdit)
+                        } if (scorerRadioBtn === 'existing') {
+                            this.props.liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn)
+                        }
+                    }
+                });
+            }
         }
         else {
             this.props.form.validateFields((err, values) => {
