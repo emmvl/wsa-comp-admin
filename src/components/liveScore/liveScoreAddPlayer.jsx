@@ -329,7 +329,7 @@ class LiveScoreAddPlayer extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
 
-                let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+                let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
 
                 let selectedTeamId = teamId ? teamId : this.state.teamId ? this.state.teamId : this.props.location.state ? this.props.location.state.teamId : null
 

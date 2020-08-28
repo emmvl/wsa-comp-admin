@@ -37,7 +37,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_obj.setState({ sortBy, sortOrder });
 
     const body =
     {
@@ -47,7 +47,7 @@ function tableSort(key) {
         }
     }
 
-    this_obj.props.liveScorePositionTrackingAction({ compId: this_obj.state.competitionId, aggregate: this_obj.state.aggregate, reporting: this_obj.state.reporting, pagination: body, search: this_obj.state.searchText, sortBy: sortBy, sortOrder: sortOrder })
+    this_obj.props.liveScorePositionTrackingAction({ compId: this_obj.state.competitionId, aggregate: this_obj.state.aggregate, reporting: this_obj.state.reporting, pagination: body, search: this_obj.state.searchText, sortBy, sortOrder })
 }
 
 const columns_1 = [

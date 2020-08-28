@@ -86,7 +86,7 @@ class InnerHorizontalMenu extends React.Component {
                 break;
             }
         }
-        localStorage.setItem("LiveScoreCompetiton", JSON.stringify(compObj))
+        localStorage.setItem("LiveScoreCompetition", JSON.stringify(compObj))
         history.push("/liveScoreDashboard")
     }
 

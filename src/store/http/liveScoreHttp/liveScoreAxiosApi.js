@@ -348,13 +348,13 @@ let LiveScoreAxiosApi = {
     liveScoreBannerList(competitionID) {
         // var url = `/banners?&competitionIds=${competitionID}&pageType=${1}`;
         // let competitionId = localStorage.getItem("competitionId");
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `/banners?competitionIds=${id}`;
         return Method.dataGet(url, token)
     },
 
     liveScoreAddBanner(competitionID, bannerImage, showOnHome, showOnDraws, showOnLadder, showOnNews, showOnChat, format, bannerLink, bannerId) {
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         let body = new FormData();
         if (bannerImage !== null) {
             body.append("bannerImage", bannerImage)
@@ -437,14 +437,14 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreManagerList(roleId, entityTypeId, entityId) {
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${id}`;
         return Method.dataGet(url, token)
     },
 
     liveScoreScorerList(comID, roleId, body, search, sortBy, sortOrder) {
         let competitionID = localStorage.getItem("competitionId");
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
 
         let url = `/roster/admin?competitionId=${id}&roleId=${roleId}`;
         if (sortBy && sortOrder) {
@@ -457,7 +457,7 @@ let LiveScoreAxiosApi = {
     bulkMatchPushBack(data, startTime, endTime, bulkRadioBtn, formatedNewDate) {
         let url = ''
         let competitionID = localStorage.getItem("competitionId");
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
 
         let extendParam = checkVenueCourdId(data)
 
@@ -481,7 +481,7 @@ let LiveScoreAxiosApi = {
 
     liveScoreBringForward(competition_ID, data, startDate, endDate, bulkRadioBtn, formatedNewDate) {
         let url = ''
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         let extendParam = checkVenueCourdId(data)
 
         if (bulkRadioBtn === 'specificTime') {
@@ -503,7 +503,7 @@ let LiveScoreAxiosApi = {
 
     liveScoreEndMatches(data, startTime, endTime) {
         let competitionID = localStorage.getItem("competitionId");
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
 
         let extendParam = checkVenueCourdId(data)
 
@@ -518,14 +518,14 @@ let LiveScoreAxiosApi = {
 
     liveScoreDoubleHeader(data) {
         let competitionID = localStorage.getItem("competitionId");
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `/matches/bulk/doubleheader?competitionId=${id}&round1=${data.round_1}&round2=${data.round_2}`
         return Method.dataPost(url, token)
     },
 
     liveScoreAddEditPlayer(data, playerId, playerImage) {
         // let competitionID = localStorage.getItem("competitionId");
-        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         // let body = new FormData();
         // body.append('id', playerId ? playerId : 0)
         // body.append('firstName', data.firstName)
@@ -551,16 +551,16 @@ let LiveScoreAxiosApi = {
     async liveScoreAddEditManager(data, teamId, existingManagerId) {
         let body = data
         let userId = await getUserId()
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `/users/manager?userId=${userId}&competitionId=${id}`;
         return Method.dataPost(url, token, body)
 
         // if (existingManagerId) {
-        //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         //     const url = `/users/manager?userId=${existingManagerId}&competitionId=${id}`;
         //     return Method.dataPost(url, token)
         // } else {
-        //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        //     let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         //     const url = `/users/manager?userId=${userId}&competitionId=${id}`;
         //     return Method.dataPost(url, token, body)
         // }
@@ -663,7 +663,7 @@ let LiveScoreAxiosApi = {
 
     liveScoreAbandonMatch(data, startTime, endTime) {
         let extendParam = checkVenueCourdId(data)
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'));
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
         let url;
         if (extendParam) {
             url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&resultTypeId=${data.resultType}` + extendParam;
@@ -678,14 +678,14 @@ let LiveScoreAxiosApi = {
         // body.append('file', new File([csvFile], { type: 'text/csv' }));
         body.append("file", csvFile, csvFile.name);
 
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `/matches/import?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
 
     getLiveScoreScorerList(comID, roleId, body) {
         // let competitionID = localStorage.getItem("competitionId");
-        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `/roster/users?competitionId=${comID}&roleId=${roleId}`;
         return Method.dataGet(url, token, body)
     },
@@ -695,7 +695,7 @@ let LiveScoreAxiosApi = {
         // body.append('file', new File([data.csvFile], { type: 'text/csv' }));
         body.append("file", data.csvFile, data.csvFile.name);
 
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `/teams/import?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
@@ -704,7 +704,7 @@ let LiveScoreAxiosApi = {
         let body = new FormData();
         body.append("file", data.csvFile, data.csvFile.name);
 
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `/division/import?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
@@ -728,13 +728,13 @@ let LiveScoreAxiosApi = {
         let body = new FormData();
         body.append("file", csvFile, csvFile.name);
 
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `/players/import?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
 
     liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn) {
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
 
         let body = null
         if (scorerRadioBtn === "new") {
@@ -808,13 +808,13 @@ let LiveScoreAxiosApi = {
     },
 
     laddersSettingGetData(competitionId) {
-        let { uniqueKey } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { uniqueKey } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `/competitions/ladderSettings?competitionId=${uniqueKey}`
         return Method.dataGet(url, token)
     },
 
     laddersSettingPostData(data) {
-        let { uniqueKey } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { uniqueKey } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         let body = data
 
         const url = `/competitions/ladderSettings?competitionId=${uniqueKey}`
@@ -874,7 +874,7 @@ let LiveScoreAxiosApi = {
 
     liveScoreAddCoach(data, teamId, exsitingManagerId) {
         let body = data
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `/users/coach?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
@@ -891,7 +891,7 @@ let LiveScoreAxiosApi = {
         // body.append('file', new File([data.csvFile], { type: 'text/csv' }));
         body.append("file", data.csvFile, data.csvFile.name);
 
-        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
         const url = `users/importCoach?competitionId=${id}`;
         return Method.dataPost(url, token, body)
     },
@@ -928,9 +928,9 @@ let LiveScoreAxiosApi = {
         let url
         if (data.roundId) {
             const round = JSON.stringify(data.roundId)
-            url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}&roundIds=${round}`;
+            url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionId}&venueId=${data.venueId}&organisationId=${data.orgId}&roundIds=${round}`;
         } else {
-            url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionid}&venueId=${data.venueId}&organisationId=${data.orgId}`;
+            url = `/matchUmpire/dashboard?competitionId=${data.compId}&divisionId=${data.divisionId}&venueId=${data.venueId}&organisationId=${data.orgId}`;
         }
         if (data.sortBy && data.sortOrder) {
             url += `&sortBy=${data.sortBy}&sortOrder=${data.sortOrder}`;
