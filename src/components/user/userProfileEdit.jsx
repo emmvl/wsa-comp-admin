@@ -8,7 +8,8 @@ import {
     DatePicker,
     Input,
     Radio,
-    Form
+    Form,
+    message
 } from "antd";
 import moment from 'moment';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -125,7 +126,13 @@ class UserProfileEdit extends Component {
         let userState  = this.props.userState;
         if(userState.onUpUpdateLoad == false && this.state.saveLoad == true){
             this.setState({saveLoad: false})
-            history.push({pathname:'/userPersonal', state: {tabKey: this.state.tabKey, userId: this.state.userData.userId}});
+            if(userState.status == 1){
+                history.push({pathname:'/userPersonal', state: {tabKey: this.state.tabKey, userId: this.state.userData.userId}});
+            }
+            else if(userState.status == 4){
+                message.config({duration: 1.5,maxCount: 1,});
+                message.error(userState.userProfileUpdate);
+            }
         }
     }
 

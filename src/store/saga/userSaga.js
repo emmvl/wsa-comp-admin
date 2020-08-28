@@ -599,10 +599,10 @@ function* updateUserProfileSaga(action) {
   try {
     const result = yield call(UserAxiosApi.updateUserProfile, action.data);
 
-    if (result.status === 1) {
+    if (result.status === 1 || result.status === 4) {
       yield put({
         type: ApiConstants.API_USER_PROFILE_UPDATE_SUCCESS,
-        result: result.result.data,
+        result: result.status == 1 ? result.result.data : result.result.data.message,
         status: result.status,
       });
     } else {
