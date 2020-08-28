@@ -101,10 +101,12 @@ function* liveScoreCoachImportSaga(action) {
         result: result.result.data,
       });
 
-      // history.push("/LiveScoreCoaches");
-      // message.success("Coach Imported Successfully.");
-
-      receiptImportResult(result.result);
+      if (Object.keys(result.result.data.error).length === 0) {
+        history.push("/liveScoreCoaches");
+        message.success("Coach Imported Successfully.");
+      } else {
+        receiptImportResult(result.result);
+      }
     } else {
       yield call(failSaga, result);
     }

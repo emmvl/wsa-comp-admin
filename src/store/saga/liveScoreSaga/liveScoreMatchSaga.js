@@ -184,13 +184,15 @@ function* liveScoreMatchImportSaga(action) {
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_SUCCESS,
-          result: result.result.data,
+        result: result.result.data,
       });
 
-      // history.push("/liveScoreMatches");
-      // message.success("Match Imported Successfully.");
-
-      receiptImportResult(result.result);
+      if (Object.keys(result.result.data.error).length === 0) {
+        history.push("/liveScoreMatches");
+        message.success("Match Imported Successfully.");
+      } else {
+        receiptImportResult(result.result);
+      }
     } else {
       yield call(failSaga, result);
     }

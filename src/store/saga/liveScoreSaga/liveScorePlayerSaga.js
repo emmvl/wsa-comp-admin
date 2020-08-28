@@ -102,10 +102,12 @@ function* liveScorePlayerImportSaga(action) {
         result: result.result.data,
       });
 
-      // history.push("/liveScorePlayerList");
-      // message.success("Player Imported Successfully.");
-
-      receiptImportResult(result.result);
+      if (Object.keys(result.result.data.error).length === 0) {
+        history.push("/liveScorePlayerList");
+        message.success("Player Imported Successfully.");
+      } else {
+        receiptImportResult(result.result);
+      }
     } else {
       yield call(failSaga, result);
     }

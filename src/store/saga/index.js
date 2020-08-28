@@ -12,6 +12,7 @@ import liveScoreManagerSaga from "./liveScoreSaga/liveScoreManagerSaga";
 import liveScoreMatchSaga from "./liveScoreSaga/liveScoreMatchSaga";
 import liveScorePlayerSaga from "./liveScoreSaga/liveScorePlayerSaga";
 import liveScoreTeamSaga from "./liveScoreSaga/liveScoreTeamSaga";
+import liveScoreUmpiresSaga from "./liveScoreSaga/liveScoreUmpiresSaga";
 import shopOrderStatusSaga from "./shopSaga/shopOrderStatusSaga";
 import shopOrderSummarySaga from "./shopSaga/shopOrderSummarySaga";
 import shopProductSaga from "./shopSaga/shopProductSaga";
@@ -134,7 +135,6 @@ import * as endUserRegSaga from '../saga/registrationSaga/endUserRegistrationSag
 
 import { liveScoreGameTimeStatisticsSaga } from './liveScoreSaga/liveScoreGameTimeStatisticsSaga'
 import { liveScoreSettingSaga, liveScorePostSaga, settingRegInviteesSaga } from './liveScoreSaga/liveScoreSettingSaga'
-import { liveScoreUmpiresSaga, liveScoreUmpiresImportSaga } from './liveScoreSaga/liveScoreUmpiresSaga'
 
 import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAttendanceSaga'
 
@@ -170,6 +170,7 @@ export default function* rootSaga() {
     fork(liveScoreMatchSaga),
     fork(liveScorePlayerSaga),
     fork(liveScoreTeamSaga),
+    fork(liveScoreUmpiresSaga),
 
     // Shop
     fork(shopOrderStatusSaga),
@@ -368,9 +369,6 @@ export default function* rootSaga() {
 
   yield takeEvery(ApiConstants.API_MATCH_RESULT_LOAD, liveScoreMatchResult)
 
-  //umpires saga
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_LIST_LOAD, liveScoreUmpiresSaga)
-
   //// Bulk Abandon Match Saga
   yield takeEvery(ApiConstants.API_LIVE_SCORE_BULK_ABANDON_MATCH_LOAD, liveScoreAbandonMatchSaga)
 
@@ -466,7 +464,6 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_ASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.assignUmpireSaga)
   /////unassign umpire from the match(delete)
   yield takeEvery(ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.unassignUmpireSaga)
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD, liveScoreUmpiresImportSaga)
   //////////////////////registration main dashboard listing owned and participate registration
   yield takeEvery(ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD, registrationMainDashboardListSaga)
   yield takeEvery(ApiConstants.API_YEAR_AND_QUICK_COMPETITION_LOAD, competitionQuickSaga.getquickYearAndCompetitionListSaga)

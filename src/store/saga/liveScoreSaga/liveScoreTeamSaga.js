@@ -161,10 +161,12 @@ function* liveScoreTeamImportSaga(action) {
         result: result.result.data,
       });
 
-      // history.push("/liveScoreTeam");
-      // message.success("Team Imported Successfully.");
-
-      receiptImportResult(result.result);
+      if (Object.keys(result.result.data.error).length === 0) {
+        history.push("/liveScoreTeam");
+        message.success("Team Imported Successfully.");
+      } else {
+        receiptImportResult(result.result);
+      }
     } else {
       yield call(failSaga, result);
     }

@@ -88,7 +88,7 @@ class LiveScoreAddTeam extends Component {
 
         // this.props.getliveScoreDivisions(1)
         this.props.liveScoreGetDivision(id)
-        this.props.liveScoreGetaffilate({ id: id, name: '' })
+        this.props.liveScoreGetaffilate({ id, name: '' })
         this.props.liveScoreManagerListAction(5, 1, id)
     }
     componentDidUpdate(nextProps) {
