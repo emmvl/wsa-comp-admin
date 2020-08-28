@@ -2218,17 +2218,27 @@ class RegistrationCompetitionFee extends Component {
     let errMsg = null;
     let discountMap = new Map();
     for(let x of filterOrgPostDiscountData){
+      let key = null;
+      if(x.competitionTypeDiscountTypeRefId == 2){
+        key= x.competitionMembershipProductTypeId + "#" + x.competitionTypeDiscountTypeRefId + "#" + x.discountCode;
+      }
+      else if(x.competitionTypeDiscountTypeRefId == 3){
+        key = x.competitionMembershipProductTypeId + "#" + x.competitionTypeDiscountTypeRefId;
+      }
       //if(x.competitionTypeDiscountTypeRefId == 3){
-        let key = x.competitionMembershipProductTypeId + "#" + x.competitionTypeDiscountTypeRefId;
+																								  
         if(discountMap.get(key) == undefined){
           discountMap.set(key, 1);
         }
         else{
-          if(x.competitionTypeDiscountTypeRefId == 3)
-              errMsg = ValidationConstants.duplicateFamilyDiscountError;
-          else
+          if(x.competitionTypeDiscountTypeRefId == 3){
+																		
+			  
             errMsg = ValidationConstants.duplicateFamilyDiscountError;
-
+          }         
+          else{
+            errMsg = ValidationConstants.duplicateDiscountError;
+          }
           discountDuplicateError = true;
           break;
         }
