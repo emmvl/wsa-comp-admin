@@ -125,8 +125,8 @@ class UserEditAffiliates extends Component {
     }
   }
 
-  logout = async () => {
-    await localStorage.clear();
+  logout = () => {
+    localStorage.clear();
     history.push("/login");
   };
 

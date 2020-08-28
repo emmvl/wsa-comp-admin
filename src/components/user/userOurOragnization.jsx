@@ -172,9 +172,9 @@ class UserOurOragnization extends Component {
 
     }
 
-    logout = async () => {
+    logout = () => {
         try {
-            await localStorage.clear();
+            localStorage.clear();
             history.push("/login");
         } catch (error) {
            console.log("Error" + error); 
