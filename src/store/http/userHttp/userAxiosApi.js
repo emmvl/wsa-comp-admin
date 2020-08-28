@@ -289,7 +289,7 @@ let userHttpApi = {
   },
 
   updateUserProfile(payload) {
-    const url = `api/userprofile/update?section=${payload.section}`;
+    const url = `api/userprofile/update?section=${payload.section}&organisationId=${payload.organisationId}`;
     return Method.dataPost(url, token, payload);
   },
 

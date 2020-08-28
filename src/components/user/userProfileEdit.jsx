@@ -26,6 +26,7 @@ import { bindActionCreators } from 'redux';
 import history from '../../util/history'
 import { isArrayNotEmpty, isNullOrEmptyString, captializedString } from '../../util/helpers';
 import Loader from '../../customComponents/loader';
+import { getOrganisationData } from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -42,6 +43,7 @@ class UserProfileEdit extends Component {
             loadValue: false,
             saveLoad: false,
             tabKey: "3",
+            organisationId: getOrganisationData().organisationUniqueKey,
             userData: {genderRefId: 0,firstName: "",lastName:"",mobileNumber:"",email: "",middleName: "",
                 dateOfBirth: "",street1:"",street2:"",suburb:"",stateRefId: 1,postalCode: "",statusRefId: 0,
                 emergencyContactName: "",emergencyContactNumber: "", existingMedicalCondition: "",regularMedication: "",
@@ -862,6 +864,7 @@ class UserProfileEdit extends Component {
                 let userState = this.props.userState;
                 let data = this.state.userData;
                 data["section"] = this.state.section;
+                data["organisationId"] = this.state.organisationId;
                 console.log("obj" + JSON.stringify(data))
                 this.props.userProfileUpdateAction(data);
                 this.setState({ saveLoad: true });
