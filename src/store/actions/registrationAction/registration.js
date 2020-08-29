@@ -282,6 +282,14 @@ function getTeamRegistrationsAction(payload, sortBy, sortOrder) {
   return action;
 }
 
+function exportTeamRegistrationAction(payload) {
+  console.log("rdu"+JSON.stringify(payload))
+  const action = {
+      type: ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_LOAD,
+      payload: payload
+  };
+  return action;
+}
 export {
   regMembershipListAction,
   regMembershipListDeleteAction,
@@ -311,5 +319,6 @@ export {
   isCheckedVisible,
   isReplyCheckVisible,
   getDivisionsListAction,
-  getTeamRegistrationsAction
+  getTeamRegistrationsAction,
+  exportTeamRegistrationAction
 };

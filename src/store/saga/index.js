@@ -34,7 +34,8 @@ import {
   regSaveRegistrationForm,
   getMembershipproduct,
   getDivisionsListSaga,
-  getTeamRegistrationsSaga
+  getTeamRegistrationsSaga,
+  exportTeamRegistrationsSaga 
 } from "./registrationSaga/registrationSaga";
 
 import {
@@ -526,5 +527,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_LOAD, getVenueAndDivisionSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_RESET_LADDER_LOAD, liveScoreResetLadderSaga);
+  
+  yield takeEvery(ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_LOAD, exportTeamRegistrationsSaga);
 }
 

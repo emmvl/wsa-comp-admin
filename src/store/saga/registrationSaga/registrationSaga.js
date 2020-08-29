@@ -306,3 +306,20 @@ export function* getTeamRegistrationsSaga(action) {
     yield call(errorSaga, error)
   }
 }
+
+export function* exportTeamRegistrationsSaga(action) {
+  try {
+    const result = yield call(AxiosApi.exportTeamRegistrations,action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}

@@ -18,7 +18,7 @@ import { getCommonRefData, getGenderAction, registrationPaymentStatusAction } fr
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
 import { getOnlyYearListAction } from '../../store/actions/appAction'
-import { getTeamRegistrationsAction } from '../../store/actions/registrationAction/registration'
+import { getTeamRegistrationsAction, exportTeamRegistrationAction } from '../../store/actions/registrationAction/registration'
 import { isEmptyArray } from "formik";
 import { currencyFormat } from "../../util/currencyFormat";
 import Tooltip from 'react-png-tooltip'
@@ -187,6 +187,24 @@ class TeamRegistrations extends Component {
         }
         this.props.getTeamRegistrationsAction(filter);
         this.setState({ filter });
+	}
+
+    exportTeamRegistration = () => {
+        let obj =
+        {
+            organisationUniqueKey: this.state.organisationUniqueKey,
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.competitionUniqueKey,
+            filterOrganisation: this.state.filterOrganisation,
+            searchText: this.state.searchText,
+            statusRefId: this.state.statusRefId,
+        }
+
+        this.props.exportTeamRegistrationAction(obj);
+        this.setState({
+            load:true
+        })
+        this.handleRegTableList(1);
     }
 
     referenceCalls = (organisationId) => {
@@ -301,7 +319,7 @@ class TeamRegistrations extends Component {
                         <div style={{ marginRight: '1%', display: "flex", alignItems: 'center' }}>
                             <div className="d-flex flex-row-reverse button-with-search pb-3"
                             >
-                                <Button className="primary-add-comp-form" style={{ marginRight: 20 }} type="primary">
+                                <Button className="primary-add-comp-form" style={{ marginRight: 20 }} type="primary"  onClick={() => this.exportTeamRegistration()}>
                                     <div className="row">
                                         <div className="col-sm">
                                             <img
@@ -477,7 +495,8 @@ function mapDispatchToProps(dispatch) {
         getOnlyYearListAction,
         getAllCompetitionAction,
         registrationPaymentStatusAction,
-        getTeamRegistrationsAction
+        getTeamRegistrationsAction,
+        exportTeamRegistrationAction
     }, dispatch);
 }
 
