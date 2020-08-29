@@ -963,10 +963,10 @@ class UserOurOragnization extends Component {
                         </span>
                     </div>
                 }
-                {
+                {/* {
                     (userState.error && userState.status == 4) ?
                         <div style={{ color: 'red' }}>{userState.error.result.data.message}</div> : null
-                }
+                } */}
             </div >
         )
     }

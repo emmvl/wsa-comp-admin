@@ -27,12 +27,36 @@ const { Footer, Content } = Layout;
 const { Option } = Select;
 
 
+let this_Obj = null;
+
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = "ASC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "ASC") {
+        sortOrder = "DESC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "DESC") {
+        sortBy = sortOrder = null;
+    }
+
+    this_Obj.setState({ sortBy, sortOrder });
+    this_Obj.props.getTeamRegistrationsAction(this_Obj.state.filter, sortBy, sortOrder);
+}
+
+
 const columns = [
     {
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => a.firstName.localeCompare(b.firstName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (firstName, record) =>
             <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
                 <span className="input-heading-add-another pt-0" >{firstName}</span>
@@ -42,7 +66,8 @@ const columns = [
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => a.lastName.localeCompare(b.lastName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (lastName, record) =>
             <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
                 <span className="input-heading-add-another pt-0" >{lastName}</span>
@@ -52,26 +77,30 @@ const columns = [
         title: 'Organisation',
         dataIndex: 'organisationName',
         key: 'organisationName',
-        sorter: (a, b) => a.organisation.localeCompare(b.organisation),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Team',
         dataIndex: 'teamName',
         key: 'teamName',
-        sorter: (a, b) => a.team.localeCompare(b.team),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'User Reg.Team',
         dataIndex: 'userRegTeam',
         key: 'userRegTeam',
-        sorter: (a, b) => a.userRegTeam.localeCompare(b.userRegTeam),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
 
     },
     {
         title: 'User Role',
         dataIndex: 'roles',
         key: 'roles',
-        sorter: (a, b) => a.userRole.localeCompare(b.userRole),
+        sorter: false,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (roles, record) =>{
             return (
                 <div>
@@ -86,7 +115,8 @@ const columns = [
         title: 'Team Reg. Type',
         dataIndex: 'teamRegType',
         key: 'teamRegType',
-        sorter: (a, b) => a.teamRegType.localeCompare(b.teamRegType),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Status',
@@ -102,7 +132,8 @@ const columns = [
 
             );
         },
-        sorter: (a, b) => a.status.localeCompare(b.status),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
 
 ];
@@ -111,18 +142,21 @@ class TeamRegistrations extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationUniqueKey: getOrganisationData().organisationUniqueKey,
             yearRefId: -1,
             competitionUniqueKey: '-1',
-            affiliate: -1,
+            filterOrganisation: -1,
             competitionId: "",
-            paymentStatusRefId: -1,
+            statusRefId: -1,
             searchText: '',
         }
+
+        
+        this_Obj = this;
     }
 
     componentDidMount() {
-        this.referenceCalls(this.state.organisationId);
+        this.referenceCalls(this.state.organisationUniqueKey);
         this.setState({
             searchText: ''
         })
@@ -130,19 +164,29 @@ class TeamRegistrations extends Component {
     }
 
     handleRegTableList = (page) => {
-        let obj = {
-            organisationUniqueKey: this.state.organisationId,
-            yearRefId: this.state.yearRefId,
-            competitionUniqueKey: this.state.competitionUniqueKey,
-            filterOrganisation: this.state.affiliate,
-            searchText: this.state.searchText,
-            statusRefId: this.state.paymentStatusRefId,
+        const {
+            organisationUniqueKey,
+            yearRefId,
+            competitionUniqueKey,
+            filterOrganisation,
+            searchText,
+            statusRefId
+        } = this.state;
+
+        let filter = {
+            organisationUniqueKey,
+            yearRefId,
+            competitionUniqueKey,
+            filterOrganisation,
+            searchText,
+            statusRefId,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
             }
         }
-        this.props.getTeamRegistrationsAction(obj);
+        this.props.getTeamRegistrationsAction(filter);
+        this.setState({ filter });
     }
 
     referenceCalls = (organisationId) => {
@@ -159,12 +203,12 @@ class TeamRegistrations extends Component {
             await this.setState({ competitionUniqueKey: value });
             this.handleRegTableList(1);
         }
-        else if (key == "affiliate") {
-            await this.setState({ affiliate: value });
+        else if (key == "filterOrganisation") {
+            await this.setState({ filterOrganisation: value });
             this.handleRegTableList(1);
         }
-        else if (key == "paymentStatusRefId") {
-            await this.setState({ paymentStatusRefId: value });
+        else if (key == "statusRefId") {
+            await this.setState({ statusRefId: value });
             this.handleRegTableList(1);
         }
     }
@@ -349,8 +393,8 @@ class TeamRegistrations extends Component {
                                     showSearch
                                     optionFilterProp="children"
                                     className="year-select reg-filter-select"
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'affiliate')}
-                                    value={this.state.affiliate}>
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'filterOrganisation')}
+                                    value={this.state.filterOrganisation}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(uniqueValues || []).map((org, index) => (
                                         <Option key={org.organisationId} value={org.organisationId}>{org.name}</Option>
@@ -363,8 +407,8 @@ class TeamRegistrations extends Component {
                                 <div className='year-select-heading'>{AppConstants.status}</div>
                                 <Select
                                     className="year-select reg-filter-select"
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'paymentStatusRefId')}
-                                    value={this.state.paymentStatusRefId}>
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'statusRefId')}
+                                    value={this.state.statusRefId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(paymentStatus || []).map((g, index) => (
                                         <Option key={g.id} value={g.id}>{g.description}</Option>

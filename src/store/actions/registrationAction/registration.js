@@ -272,10 +272,12 @@ function getDivisionsListAction(yearRefId, competitionId, sourceModule) {
 }
 
 
-function getTeamRegistrationsAction(payload) {
+function getTeamRegistrationsAction(payload, sortBy, sortOrder) {
   const action = {
       type: ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD,
-      payload: payload
+      payload: payload,
+      sortBy,
+      sortOrder
   };
   return action;
 }

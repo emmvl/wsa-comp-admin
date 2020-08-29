@@ -492,9 +492,15 @@ let AxiosApi = {
         var url = `/api/competitionfee/status/update`;
         return Method.dataPost(url, token, body);
     },
-	getTeamRegistrations(payload) {
-        let body = payload
-        var url = `/api/teamregistration/dashboard`;
+	getTeamRegistrations(payload, sortBy, sortOrder) {
+        let url;
+        if (sortBy && sortOrder) {
+            url = `/api/teamregistration/dashboard?sortBy=${sortBy}&sortOrder=${sortOrder}`
+        }
+        else {
+            url = `/api/teamregistration/dashboard`;
+        }
+        let body = payload;
         return Method.dataPost(url, token ,body);
     },
 };

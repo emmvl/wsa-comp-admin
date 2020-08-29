@@ -292,7 +292,7 @@ export function* getDivisionsListSaga(action) {
 
 export function* getTeamRegistrationsSaga(action) {
   try {
-    const result = yield call(AxiosApi.getTeamRegistrations,action.payload);
+    const result = yield call(AxiosApi.getTeamRegistrations,action.payload, action.sortBy, action.sortOrder);
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_SUCCESS,
