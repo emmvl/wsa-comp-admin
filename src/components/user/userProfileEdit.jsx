@@ -210,7 +210,7 @@ class UserProfileEdit extends Component {
         else if (key == "dateOfBirth"){
             value = (moment(value).format("YYYY-MM-DD"))
         }
-        else if (key == "email") {
+        else if (key == "email" && this.state.section == "address") {
             if(data.userId == getUserId()){
                 this.setState({isSameUserEmailChanged: true});
             }else{
