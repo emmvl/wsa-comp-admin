@@ -1,23 +1,23 @@
 import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 
-import ApiConstants from "../../themes/apiConstants";
-import { setAuthToken } from "../../util/sessionStorage";
-import userHttpApi from "../http/userHttp/userAxiosApi";
-import commonAxiosApi from "../http/axiosApi";
+import ApiConstants from "themes/apiConstants";
+import { setAuthToken } from "util/sessionStorage";
+import UserAxiosApi from "store/http/userHttp/userAxiosApi";
+import CommonAxiosApi from "store/http/axiosApi";
 
 function* failSaga(result) {
   yield put({
     type: ApiConstants.API_USER_FAIL,
     error: result,
-    status: result.status
+    status: result.status,
   });
 
   setTimeout(() => {
     message.config({
       duration: 1.5,
-      maxCount: 1
-    })
+      maxCount: 1,
+    });
     message.error(result.result.data.message);
   }, 800);
 }
@@ -26,27 +26,27 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_USER_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
 
   setTimeout(() => {
     message.config({
       duration: 1.5,
-      maxCount: 1
-    })
+      maxCount: 1,
+    });
     message.error("Something went wrong.");
   }, 800);
 }
 
 function* getRoleSaga(action) {
   try {
-    const result = yield call(userHttpApi.role, action);
+    const result = yield call(UserAxiosApi.role, action);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_ROLE_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -59,20 +59,20 @@ function* getRoleSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
 
 function* getUreSaga(action) {
   try {
-    const result = yield call(userHttpApi.ure, action);
+    const result = yield call(UserAxiosApi.ure, action);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_URE_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield put({ type: ApiConstants.API_APP_FAIL });
@@ -85,7 +85,7 @@ function* getUreSaga(action) {
     yield put({
       type: ApiConstants.API_APP_ERROR,
       error: error,
-      status: error.status
+      status: error.status,
     });
   }
 }
@@ -93,13 +93,13 @@ function* getUreSaga(action) {
 // Get the Affiliates Listing
 function* getAffiliatesListingSaga(action) {
   try {
-    const result = yield call(userHttpApi.affiliatesListing, action.payload, action.sortBy, action.sortOrder);
+    const result = yield call(UserAxiosApi.affiliatesListing, action.payload, action.sortBy, action.sortOrder);
     console.log(result)
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_AFFILIATES_LISTING_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -112,13 +112,13 @@ function* getAffiliatesListingSaga(action) {
 // Save the Affiliate Saga
 function* saveAffiliateSaga(action) {
   try {
-    const result = yield call(userHttpApi.saveAffiliate, action.payload);
+    const result = yield call(UserAxiosApi.saveAffiliate, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_SAVE_AFFILIATE_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -131,13 +131,13 @@ function* saveAffiliateSaga(action) {
 // Get the Affiliate by Organisation Id 
 function* getAffiliateByOrganisationIdSaga(action) {
   try {
-    const result = yield call(userHttpApi.affiliateByOrganisationId, action.payload);
+    const result = yield call(UserAxiosApi.affiliateByOrganisationId, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_AFFILIATE_BY_ORGANISATION_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -150,17 +150,17 @@ function* getAffiliateByOrganisationIdSaga(action) {
 // Get the Affiliate Our Organisation Id 
 function* getAffiliateOurOrganisationIdSaga(action) {
   try {
-    const resultcharity = yield call(commonAxiosApi.getCharityRoundUp, action);
+    const resultcharity = yield call(CommonAxiosApi.getCharityRoundUp, action);
 
     if (resultcharity.status === 1) {
-      const result = yield call(userHttpApi.affiliateByOrganisationId, action.payload);
+      const result = yield call(UserAxiosApi.affiliateByOrganisationId, action.payload);
 
       if (result.status === 1) {
         yield put({
           type: ApiConstants.API_AFFILIATE_OUR_ORGANISATION_SUCCESS,
           result: result.result.data,
           charityResult: resultcharity.result.data,
-          status: result.status
+          status: result.status,
         });
       } else {
         yield call(failSaga, result);
@@ -175,13 +175,13 @@ function* getAffiliateOurOrganisationIdSaga(action) {
 // Get affiliated to organisation
 function* getAffiliatedToOrganisationSaga(action) {
   try {
-    const result = yield call(userHttpApi.affiliateToOrganisation, action.payload);
+    const result = yield call(UserAxiosApi.affiliateToOrganisation, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_AFFILIATE_TO_ORGANISATION_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -194,13 +194,13 @@ function* getAffiliatedToOrganisationSaga(action) {
 // Get Organisation for Venue
 function* getOrganisationForVenueSaga(action) {
   try {
-    const result = yield call(userHttpApi.getVenueOrganisation);
+    const result = yield call(UserAxiosApi.getVenueOrganisation);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_ORGANISATION_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -213,13 +213,13 @@ function* getOrganisationForVenueSaga(action) {
 // Delete Affiliate 
 function* deleteAffiliateSaga(action) {
   try {
-    const result = yield call(userHttpApi.affiliateDelete, action.payload);
+    const result = yield call(UserAxiosApi.affiliateDelete, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_AFFILIATE_DELETE_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -232,13 +232,13 @@ function* deleteAffiliateSaga(action) {
 // Get particular user organisation
 function* getUserOrganisationSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserOrganisation);
+    const result = yield call(UserAxiosApi.getUserOrganisation);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_USER_ORGANISATION_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -251,13 +251,13 @@ function* getUserOrganisationSaga(action) {
 // Get the User Dashboard Textual Listing 
 function* getUserDashboardTextualListingSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserDashboardTextualListing, action.payload, action.sortBy, action.sortOrder);
+    const result = yield call(UserAxiosApi.getUserDashboardTextualListing, action.payload, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_DASHBOARD_TEXTUAL_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -270,13 +270,13 @@ function* getUserDashboardTextualListingSaga(action) {
 // Get the User Module Personal Data
 function* getUserModulePersonalDataSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserModulePersonalData, action.payload);
+    const result = yield call(UserAxiosApi.getUserModulePersonalData, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_MODULE_PERSONAL_DETAIL_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -289,12 +289,12 @@ function* getUserModulePersonalDataSaga(action) {
 // Get the User Module Personal by Competition Data
 function* getUserModulePersonalByCompDataSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserModulePersonalByCompData, action.payload);
+    const result = yield call(UserAxiosApi.getUserModulePersonalByCompData, action.payload);
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -307,13 +307,13 @@ function* getUserModulePersonalByCompDataSaga(action) {
 // Get the User Module Medical Info
 function* getUserModuleMedicalInfoSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserModuleMedicalInfo, action.payload);
+    const result = yield call(UserAxiosApi.getUserModuleMedicalInfo, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_MODULE_MEDICAL_INFO_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -326,13 +326,13 @@ function* getUserModuleMedicalInfoSaga(action) {
 // Get the User Module Registration by Competition Data
 function* getUserModuleRegistrationDataSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserModuleRegistrationData, action.payload);
+    const result = yield call(UserAxiosApi.getUserModuleRegistrationData, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_MODULE_REGISTRATION_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -345,13 +345,13 @@ function* getUserModuleRegistrationDataSaga(action) {
 // Get the User Module Activity Player
 function* getUserModuleActivityPlayerSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserModuleActivityPlayer, action.payload);
+    const result = yield call(UserAxiosApi.getUserModuleActivityPlayer, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_MODULE_ACTIVITY_PLAYER_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -364,13 +364,13 @@ function* getUserModuleActivityPlayerSaga(action) {
 // Get the User Module Activity Parent
 function* getUserModuleActivityParentSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserModuleActivityParent, action.payload);
+    const result = yield call(UserAxiosApi.getUserModuleActivityParent, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_MODULE_ACTIVITY_PARENT_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -383,13 +383,13 @@ function* getUserModuleActivityParentSaga(action) {
 // Get the User Module Activity Scorer
 function* getUserModuleActivityScorerSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserModuleActivityScorer, action.payload);
+    const result = yield call(UserAxiosApi.getUserModuleActivityScorer, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_MODULE_ACTIVITY_SCORER_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -402,13 +402,13 @@ function* getUserModuleActivityScorerSaga(action) {
 // Get the User Module Activity Manager
 function* getUserModuleActivityManagerSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserModuleActivityManager, action.payload);
+    const result = yield call(UserAxiosApi.getUserModuleActivityManager, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_MODULE_ACTIVITY_MANAGER_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -421,13 +421,13 @@ function* getUserModuleActivityManagerSaga(action) {
 // Get the User  Friend List
 function* getUserFriendListSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserFriendList, action.payload, action.sortBy, action.sortOrder);
+    const result = yield call(UserAxiosApi.getUserFriendList, action.payload, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_FRIEND_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -440,14 +440,14 @@ function* getUserFriendListSaga(action) {
 // Get the User Refer Friend List 
 function* getUserReferFriendListSaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserReferFriendList, action.payload, action.sortBy,
+    const result = yield call(UserAxiosApi.getUserReferFriendList, action.payload, action.sortBy,
       action.sortOrder);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_REFER_FRIEND_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -460,13 +460,13 @@ function* getUserReferFriendListSaga(action) {
 // Get the Org Photos List 
 function* getOrgPhotosListSaga(action) {
   try {
-    const result = yield call(userHttpApi.getOrgPhotosList, action.payload);
+    const result = yield call(UserAxiosApi.getOrgPhotosList, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_ORG_PHOTO_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -479,13 +479,13 @@ function* getOrgPhotosListSaga(action) {
 // Save the Org Photos  
 function* saveOrgPhotosSaga(action) {
   try {
-    const result = yield call(userHttpApi.saveOrgPhoto, action.payload);
+    const result = yield call(UserAxiosApi.saveOrgPhoto, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_SAVE_ORG_PHOTO_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -498,13 +498,13 @@ function* saveOrgPhotosSaga(action) {
 // Delete the Org Photos  
 function* deleteOrgPhotosSaga(action) {
   try {
-    const result = yield call(userHttpApi.deleteOrgPhoto, action.payload);
+    const result = yield call(UserAxiosApi.deleteOrgPhoto, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_DELETE_ORG_PHOTO_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -517,13 +517,13 @@ function* deleteOrgPhotosSaga(action) {
 // Delete Org Contact  
 function* deleteOrgContactSaga(action) {
   try {
-    const result = yield call(userHttpApi.deleteOrgContact, action.payload);
+    const result = yield call(UserAxiosApi.deleteOrgContact, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_DELETE_ORG_CONTACT_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
 
       message.success(result.result.data.message);
@@ -538,13 +538,13 @@ function* deleteOrgContactSaga(action) {
 // Export Organisation Registration Questions
 function* exportOrgRegQuestionsSaga(action) {
   try {
-    const result = yield call(userHttpApi.exportOrgRegQuestions, action.payload);
+    const result = yield call(UserAxiosApi.exportOrgRegQuestions, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
 
       //  message.success(result.result.data.message);
@@ -559,13 +559,13 @@ function* exportOrgRegQuestionsSaga(action) {
 // Get the Affiliate Directory 
 function* getAffiliateDirectorySaga(action) {
   try {
-    const result = yield call(userHttpApi.affiliateDirectory, action.payload, action.sortBy, action.sortOrder);
+    const result = yield call(UserAxiosApi.affiliateDirectory, action.payload, action.sortBy, action.sortOrder);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_AFFILIATE_DIRECTORY_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -577,13 +577,13 @@ function* getAffiliateDirectorySaga(action) {
 
 function* exportAffiliateDirectorySaga(action) {
   try {
-    const result = yield call(userHttpApi.exportAffiliateDirectory, action.payload);
+    const result = yield call(UserAxiosApi.exportAffiliateDirectory, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
 
       // message.success(result.result.data.message);
@@ -597,13 +597,13 @@ function* exportAffiliateDirectorySaga(action) {
 
 function* updateUserProfileSaga(action) {
   try {
-    const result = yield call(userHttpApi.updateUserProfile, action.data);
+    const result = yield call(UserAxiosApi.updateUserProfile, action.data);
 
-    if (result.status === 1) {
+    if (result.status === 1 || result.status === 4) {
       yield put({
         type: ApiConstants.API_USER_PROFILE_UPDATE_SUCCESS,
-        result: result.result.data,
-        status: result.status
+        result: result.status == 1 ? result.result.data : result.result.data.message,
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -616,13 +616,13 @@ function* updateUserProfileSaga(action) {
 // Get the User History
 function* getUserHistorySaga(action) {
   try {
-    const result = yield call(userHttpApi.getUserHistory, action.payload);
+    const result = yield call(UserAxiosApi.getUserHistory, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_MODULE_HISTORY_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -635,7 +635,7 @@ function* getUserHistorySaga(action) {
 // Save the User Photo
 function* saveUserPhotosSaga(action) {
   try {
-    const result = yield call(userHttpApi.saveUserPhoto, action.payload);
+    const result = yield call(UserAxiosApi.saveUserPhoto, action.payload);
 
     if (result.status === 1) {
       if (action.userDetail) {
@@ -647,7 +647,7 @@ function* saveUserPhotosSaga(action) {
       yield put({
         type: ApiConstants.API_USER_PHOTO_UPDATE_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -660,13 +660,13 @@ function* saveUserPhotosSaga(action) {
 // Get the User Detail
 function* getUserDetailSaga() {
   try {
-    const result = yield call(userHttpApi.getUserDetail);
+    const result = yield call(UserAxiosApi.getUserDetail);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_DETAIL_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -679,7 +679,7 @@ function* getUserDetailSaga() {
 // Save User Detail
 function* saveUserDetailSaga(action) {
   try {
-    const result = yield call(userHttpApi.saveUserDetail, action.payload);
+    const result = yield call(UserAxiosApi.saveUserDetail, action.payload);
 
     if (result.status === 1) {
       setAuthToken(result.result.data.authToken);
@@ -687,7 +687,7 @@ function* saveUserDetailSaga(action) {
       yield put({
         type: ApiConstants.API_USER_DETAIL_UPDATE_SUCCESS,
         result: result.result.data.user,
-        status: result.status
+        status: result.status,
       });
 
       message.success('Profile is updated successfully.');
@@ -702,7 +702,7 @@ function* saveUserDetailSaga(action) {
 // Update User Password
 function* updateUserPasswordSaga(action) {
   try {
-    const result = yield call(userHttpApi.updateUserPassword, action.payload);
+    const result = yield call(UserAxiosApi.updateUserPassword, action.payload);
 
     if (result.status === 1) {
       setAuthToken(result.result.data.authToken);
@@ -710,7 +710,7 @@ function* updateUserPasswordSaga(action) {
       yield put({
         type: ApiConstants.API_USER_PASSWORD_UPDATE_SUCCESS,
         result: result.result.data.user,
-        status: result.status
+        status: result.status,
       });
 
       message.success('Password is updated successfully.');
@@ -724,13 +724,13 @@ function* updateUserPasswordSaga(action) {
 
 function* updateCharitySaga(action) {
   try {
-    const result = yield call(userHttpApi.updateCharity, action.payload);
+    const result = yield call(UserAxiosApi.updateCharity, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_UPDATE_CHARITY_ROUND_UP_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
 
       message.success('Charity updated successfully');
@@ -744,13 +744,13 @@ function* updateCharitySaga(action) {
 
 function* updateTermsAndConditionsSaga(action) {
   try {
-    const result = yield call(userHttpApi.updateTermsAndConditions, action.payload);
+    const result = yield call(UserAxiosApi.updateTermsAndConditions, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_UPDATE_TERMS_AND_CONDITION_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
 
       message.success('Terms and Conditions updated successfully');
@@ -764,29 +764,29 @@ function* updateTermsAndConditionsSaga(action) {
 
 export function* impersonationSaga(action) {
   try {
-    const result = yield call(userHttpApi.impersonation, action.payload);
+    const result = yield call(UserAxiosApi.impersonation, action.payload);
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_IMPERSONATION_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
-      yield call(failSaga, result)
+      yield call(failSaga, result);
     }
   } catch (error) {
-    yield call(errorSaga, error)
+    yield call(errorSaga, error);
   }
 }
 
 function* userDeleteSaga(action) {
   try {
-    const result = yield call(userHttpApi.deleteUserById, action.payload);
+    const result = yield call(UserAxiosApi.deleteUserById, action.payload);
     if (result.status === 1) {      
       yield put({
         type: ApiConstants.API_USER_DELETE_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);

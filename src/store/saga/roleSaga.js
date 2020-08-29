@@ -1,7 +1,7 @@
 import { put, call } from "redux-saga/effects";
 
-import ApiConstants from "../../themes/apiConstants";
-import AxiosApi from "../http/axiosApi";
+import ApiConstants from "themes/apiConstants";
+import AxiosApi from "store/http/axiosApi";
 
 function* roleSaga(action) {
   try {

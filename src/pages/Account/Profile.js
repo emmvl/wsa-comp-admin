@@ -165,6 +165,7 @@ function Profile(props) {
             name="mobileNumber"
             placeholder={AppConstants.enterPhoneNumber}
             value={user.mobileNumber}
+            maxlength={10}
             onChange={onChangeField}
           />
 

@@ -175,7 +175,7 @@ let userHttpApi = {
   },
 
   liveScoreSearchManager(data, competition_Id) {
-    // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+    // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
     if (data) {
       const url = `users/byRole?roleId=5&entityTypeId=1&entityId=${competition_Id}&userName=${data}`;
       return Method.dataGet(url, token);
@@ -239,7 +239,7 @@ let userHttpApi = {
 
   //liveScore coaches list
   liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder) {
-    let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+    let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
     let url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${id}&userName=${search}&offset=${offset}&limit=${10}`
     if (sortBy && sortOrder) {
       url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -289,7 +289,7 @@ let userHttpApi = {
   },
 
   updateUserProfile(payload) {
-    const url = `api/userprofile/update?section=${payload.section}`;
+    const url = `api/userprofile/update?section=${payload.section}&organisationId=${payload.organisationId}`;
     return Method.dataPost(url, token, payload);
   },
 

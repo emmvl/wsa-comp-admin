@@ -124,6 +124,27 @@ class LiveScoreAddManager extends Component {
     }
 
 
+    onChangeNumber = (number) => {
+        if (number.length == 10) {
+            this.setState({
+                hasError: false
+            })
+            this.props.liveScoreUpdateManagerDataAction(regexNumberExpression(number), 'mobileNumber')
+        }
+
+        else if (number.length < 10) {
+            this.props.liveScoreUpdateManagerDataAction(regexNumberExpression(number), 'mobileNumber')
+            this.setState({
+                hasError: true
+            })
+        }
+        setTimeout(() => {
+            this.setInitalFiledValue()
+        }, 300);
+
+    }
+
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -238,6 +259,7 @@ class LiveScoreAddManager extends Component {
     managerNewRadioBtnView(getFieldDecorator) {
         const { managerData, teamId, teamResult } = this.props.liveScoreMangerState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
+        let hasError = this.state.hasError == true ? true : false
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -247,7 +269,7 @@ class LiveScoreAddManager extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-password'
+                                    auto_complete='new-password'
                                     type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
@@ -268,7 +290,7 @@ class LiveScoreAddManager extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    // auto_Complete='new-password'
+                                    auto_complete='off'
                                     // type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
@@ -301,7 +323,7 @@ class LiveScoreAddManager extends Component {
                                 ]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-email'
+                                    auto_complete='new-email'
                                     type='email'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
@@ -312,27 +334,28 @@ class LiveScoreAddManager extends Component {
                                 />
                             )}
                         </Form.Item>
-
                     </div>
                     <div className="col-sm" >
-                        <Form.Item>
+                        <Form.Item
+                            help={hasError && ValidationConstants.mobileLength}
+                            validateStatus={hasError ? "error" : 'validating'}
+                        >
                             {getFieldDecorator(AppConstants.contactNO, {
                                 rules: [{ required: true, message: ValidationConstants.contactField }]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-contact'
-                                    type='number'
+                                    auto_complete='new-contact'
+                                    // type='number'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
                                     maxLength={10}
-                                    onChange={(mobileNumber) => this.props.liveScoreUpdateManagerDataAction(mobileNumber.target.value, 'mobileNumber')}
+                                    onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
                                     value={managerData.mobileNumber} />
                             )}
                         </Form.Item>
                     </div>
                 </div>
-
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.team}
@@ -350,7 +373,6 @@ class LiveScoreAddManager extends Component {
                                     value={teamId}
                                     showSearch
                                     optionFilterProp="children"
-
                                 >
                                     {teamData.map((item) => (
                                         < Option value={item.id} > {item.name}</Option>
@@ -386,7 +408,6 @@ class LiveScoreAddManager extends Component {
                         <Radio value={"existing"}>{AppConstants.existing} </Radio>
                     </div> */}
                     <div className="row ml-2" style={{ marginTop: 18 }} >
-
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>{AppConstants.new}</Radio>
                             <div style={{ marginLeft: -10, width: 50 }}>
@@ -395,7 +416,6 @@ class LiveScoreAddManager extends Component {
                                 </Tooltip>
                             </div>
                         </div>
-
                         <div style={{ display: 'flex', alignItems: 'center', marginLeft: -10 }}>
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>{AppConstants.existing} </Radio>
                             <div style={{ marginLeft: -10 }}>
@@ -405,9 +425,7 @@ class LiveScoreAddManager extends Component {
                             </div>
                         </div>
                     </div>
-
                 </Radio.Group>
-
             </div>
         )
     }
@@ -418,13 +436,11 @@ class LiveScoreAddManager extends Component {
         const { managerRadioBtn } = this.props.liveScoreMangerState
         return (
             <div >
-
                 {this.radioBtnContainer()}
                 {managerRadioBtn === 'new' ?
                     this.managerNewRadioBtnView(getFieldDecorator)
                     :
                     this.managerExistingRadioButton(getFieldDecorator)}
-
             </div>
         )
     }
@@ -433,10 +449,10 @@ class LiveScoreAddManager extends Component {
         return (
             <div >
                 {this.managerNewRadioBtnView(getFieldDecorator)}
-
             </div>
         )
     }
+
     //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
         return (
@@ -465,49 +481,89 @@ class LiveScoreAddManager extends Component {
 
     onSaveClick = e => {
         const { managerData, teamId, managerRadioBtn, exsitingManagerId } = this.props.liveScoreMangerState
-
-
-
+        console.log(managerData, 'managerData')
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            let body = ''
-            if (!err) {
-                if (managerRadioBtn === 'new') {
-                    if (this.state.isEdit === true) {
-                        body = {
-                            "id": managerData.id,
-                            "firstName": managerData.firstName,
-                            "lastName": managerData.lastName,
-                            "mobileNumber": regexNumberExpression(managerData.mobileNumber),
-                            "email": managerData.email,
-                            "teams": managerData.teams
-                        }
-                    } else {
-                        body = {
-                            "firstName": managerData.firstName,
-                            "lastName": managerData.lastName,
-                            "mobileNumber": regexNumberExpression(managerData.mobileNumber),
-                            "email": managerData.email,
-                            "teams": managerData.teams
+        if (managerRadioBtn === 'new') {
+            if (managerData.mobileNumber.length !== 10) {
+                this.props.form.validateFields((err, values) => {
+                })
+                this.setState({
+                    hasError: true
+                })
+            } else {
+                this.props.form.validateFields((err, values) => {
+                    let body = ''
+                    if (!err) {
+                        if (managerRadioBtn === 'new') {
+                            if (this.state.isEdit === true) {
+                                body = {
+                                    "id": managerData.id,
+                                    "firstName": managerData.firstName,
+                                    "lastName": managerData.lastName,
+                                    "mobileNumber": regexNumberExpression(managerData.mobileNumber),
+                                    "email": managerData.email,
+                                    "teams": managerData.teams
+                                }
+                            } else {
+                                body = {
+                                    "firstName": managerData.firstName,
+                                    "lastName": managerData.lastName,
+                                    "mobileNumber": regexNumberExpression(managerData.mobileNumber),
+                                    "email": managerData.email,
+                                    "teams": managerData.teams
+                                }
+                            }
+                            this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                        } else if (managerRadioBtn === 'existing') {
+                            body = {
+                                "id": exsitingManagerId,
+                                "teams": managerData.teams
+                            }
+                            this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
                         }
                     }
-                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
-                } else if (managerRadioBtn === 'existing') {
-                    body = {
-                        "id": exsitingManagerId,
-                        "teams": managerData.teams
-                    }
-                    this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
-                }
-
+                });
             }
-        });
+        }
+        else {
+            this.props.form.validateFields((err, values) => {
+                let body = ''
+                if (!err) {
+                    if (managerRadioBtn === 'new') {
+                        if (this.state.isEdit === true) {
+                            body = {
+                                "id": managerData.id,
+                                "firstName": managerData.firstName,
+                                "lastName": managerData.lastName,
+                                "mobileNumber": regexNumberExpression(managerData.mobileNumber),
+                                "email": managerData.email,
+                                "teams": managerData.teams
+                            }
+                        } else {
+                            body = {
+                                "firstName": managerData.firstName,
+                                "lastName": managerData.lastName,
+                                "mobileNumber": regexNumberExpression(managerData.mobileNumber),
+                                "email": managerData.email,
+                                "teams": managerData.teams
+                            }
+                        }
+                        this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                    } else if (managerRadioBtn === 'existing') {
+                        body = {
+                            "id": exsitingManagerId,
+                            "teams": managerData.teams
+                        }
+                        this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
+                    }
+                }
+            });
+        }
     };
 
     /////// render function 
     render() {
         const { getFieldDecorator } = this.props.form
-
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
@@ -525,12 +581,12 @@ class LiveScoreAddManager extends Component {
                             {this.footerView()}
                         </Footer>
                     </Form>
-
                 </Layout>
             </div>
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getliveScoreDivisions,
@@ -551,4 +607,5 @@ function mapStatetoProps(state) {
         liveScoreScorerState: state.LiveScoreScorerState
     }
 }
+
 export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreAddManager));

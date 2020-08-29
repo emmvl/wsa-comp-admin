@@ -1,16 +1,15 @@
 // set competition id
 const setCompetitionID = competitionId => {
   localStorage.setItem("competitionId", competitionId);
-
 }
 
 // get competition id
-const getCompetitonId = key => {
-  return localStorage.competitionId
+const getCompetitonId = () => {
+  return localStorage.competitionId;
 }
 
 const getLiveScoreCompetiton = () => {
-  return localStorage.LiveScoreCompetiton
+  return localStorage.LiveScoreCompetition
 }
 
 // Set Auth Token
@@ -179,13 +178,12 @@ const getLiveScoreUmpireCompition = () => {
   return localStorage.liveScoreUmpireCompetitionId
 }
 
-const setKeyForStateWideMessage = stateWideMessege => {
-  localStorage.setItem("stateWideMessege", stateWideMessege)
-  console.log(stateWideMessege, 'stateWideMessege')
+const setKeyForStateWideMessage = stateWideMessage => {
+  localStorage.setItem("stateWideMessage", stateWideMessage);
 }
 
 const getKeyForStateWideMessage = () => {
-  return localStorage.stateWideMessege
+  return localStorage.stateWideMessage
 }
 
 const setImpersonationAffiliate = (impersonationOrgData) => {
@@ -201,6 +199,15 @@ const getImpersonationAffiliate = () => {
   }
 
   return null;
+};
+
+const setPrevUrl = (url) => {
+  let data = JSON.stringify(url);
+  localStorage.setItem("prevUrl", data);
+};
+
+const getPrevUrl = () => {
+  return localStorage.prevUrl ? JSON.parse(localStorage.prevUrl) : null;
 };
 
 export {
@@ -248,4 +255,6 @@ export {
   setParticipating_competitionStatus,
   setImpersonationAffiliate,
   getImpersonationAffiliate,
+  setPrevUrl,
+  getPrevUrl,
 }

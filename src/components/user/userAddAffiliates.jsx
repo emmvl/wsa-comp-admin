@@ -338,7 +338,7 @@ class UserAddAffiliates extends Component {
               style={{ display: "flex", alignItems: "center" }}
             >
               <InputWithHead
-                auto_Complete="new-organisationName"
+                auto_complete="new-organisationName"
                 heading={affiliateToData.organisationName}
                 onChange={(e) =>
                   this.onChangeSetValue(e, AppConstants.organisationTypeRefId)
@@ -393,7 +393,7 @@ class UserAddAffiliates extends Component {
             ],
           })(
             <InputWithHead
-              auto_Complete="new-name"
+              auto_complete="new-name"
               required={"required-field pt-0 pb-0"}
               heading={AppConstants.name}
               placeholder={AppConstants.name}
@@ -411,7 +411,7 @@ class UserAddAffiliates extends Component {
           })(
             <InputWithHead
               required={"required-field pt-0 pb-0"}
-              auto_Complete="new-address"
+              auto_complete="new-address"
               heading={AppConstants.addressOne}
               placeholder={AppConstants.addressOne}
               name={AppConstants.addressOne}
@@ -423,7 +423,7 @@ class UserAddAffiliates extends Component {
         </Form.Item>
 
         <InputWithHead
-          auto_Complete="new-addressTwo"
+          auto_complete="new-addressTwo"
           heading={AppConstants.addressTwo}
           placeholder={AppConstants.addressTwo}
           onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
@@ -437,7 +437,7 @@ class UserAddAffiliates extends Component {
             ],
           })(
             <InputWithHead
-              auto_Complete="new-suburb"
+              auto_complete="new-suburb"
               required={"required-field pt-3 pb-0"}
               heading={AppConstants.suburb}
               placeholder={AppConstants.suburb}
@@ -481,7 +481,7 @@ class UserAddAffiliates extends Component {
             ],
           })(
             <InputWithHead
-              auto_Complete="new-postCode"
+              auto_complete="new-postCode"
               required={"required-field"}
               heading={AppConstants.postcode}
               placeholder={AppConstants.postcode}
@@ -496,11 +496,12 @@ class UserAddAffiliates extends Component {
         </Form.Item>
 
         <InputWithHead
+          maxLength={10}
           heading={AppConstants.phoneNumber}
           placeholder={AppConstants.phoneNumber}
           onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
           value={affiliate.phoneNo}
-          auto_Complete="new-phoneNumber"
+          auto_complete="new-phoneNumber"
         />
       </div>
     );
@@ -545,7 +546,7 @@ class UserAddAffiliates extends Component {
                 ],
               })(
                 <InputWithHead
-                  auto_Complete="new-firstName"
+                  auto_complete="new-firstName"
                   required={"required-field pt-0 pb-0"}
                   heading={AppConstants.firstName}
                   placeholder={AppConstants.firstName}
@@ -573,7 +574,7 @@ class UserAddAffiliates extends Component {
                 )
               }
               value={item.middleName}
-              auto_Complete="new-middleName"
+              auto_complete="new-middleName"
             />
 
             <Form.Item>
@@ -594,7 +595,7 @@ class UserAddAffiliates extends Component {
                     )
                   }
                   setFieldsValue={item.lastName}
-                  auto_Complete="new-lastName"
+                  auto_complete="new-lastName"
                 />
               )}
             </Form.Item>
@@ -614,14 +615,13 @@ class UserAddAffiliates extends Component {
                 ],
               })(
                 <InputWithHead
-                  auto_Complete="new-email"
+                  auto_complete="new-email"
                   required={"required-field pt-0 pb-0"}
                   heading={AppConstants.email}
                   placeholder={AppConstants.email}
                   onChange={(e) =>
                     this.onChangeContactSetValue(e.target.value, "email", index)
                   }
-                  //value={item.email}
                   setFieldsValue={item.email}
                 />
               )}
@@ -629,6 +629,7 @@ class UserAddAffiliates extends Component {
 
             <InputWithHead
               heading={AppConstants.phoneNumber}
+              maxLength={10}
               placeholder={AppConstants.phoneNumber}
               onChange={(e) =>
                 this.onChangeContactSetValue(
@@ -638,13 +639,13 @@ class UserAddAffiliates extends Component {
                 )
               }
               value={item.mobileNumber}
-              auto_Complete="new-phoneNumber"
+              auto_complete="new-phoneNumber"
             />
 
             <InputWithHead
               heading={AppConstants.permissionLevel}
               conceptulHelp
-              conceptulHelpMsg={AppConstants.addAfiliatePermisionLevelMsg}
+              conceptulHelpMsg={AppConstants.addAffiliatePermissionLevelMsg}
               marginTop={5}
             />
             <Form.Item>

@@ -172,6 +172,15 @@ function getActiveRoundsAction(yearRefId, competitionId) {
     };
     return action;
 }
+
+//change range of date
+function changeDrawsDateRangeAction(yearRefId, competitionId, startDate, endDate) {
+    return {
+        type: ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_LOAD,
+        yearRefId, competitionId, startDate, endDate
+    }
+
+}
 export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
@@ -189,5 +198,6 @@ export {
     clearFixtureData,
     updateCompetitionFixtures,
     unlockDrawsAction,
-    getActiveRoundsAction
+    getActiveRoundsAction,
+    changeDrawsDateRangeAction
 }

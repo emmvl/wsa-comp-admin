@@ -174,7 +174,7 @@ class ShopSettings extends Component {
                         }
                     )(
                         <InputWithHead
-                            auto_Complete='new-address'
+                            auto_complete='new-address'
                             required={"required-field pb-0"}
                             heading={AppConstants.address}
                             placeholder={AppConstants.address}
@@ -199,7 +199,7 @@ class ShopSettings extends Component {
                         }
                     )(
                         <InputWithHead
-                            auto_Complete='new-suburb'
+                            auto_complete='new-suburb'
                             required={"required-field pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
@@ -256,7 +256,7 @@ class ShopSettings extends Component {
                         }
                     )(
                         <InputWithHead
-                            auto_Complete='new-postCode'
+                            auto_complete='new-postCode'
                             required={"required-field pb-0"}
                             heading={AppConstants.postCode}
                             placeholder={AppConstants.postcode}
@@ -283,7 +283,7 @@ class ShopSettings extends Component {
                     <div className="row mt-4" key={"settingDetailsData" + index}>
                         <div className=" col-sm">
                             <InputWithHead
-                                auto_Complete='new-productType'
+                                auto_complete='new-productType'
                                 required={"required-field "}
                                 placeholder={AppConstants.productTypes}
                                 onChange={(e) => this.props.onChangeSettingsData(

@@ -985,8 +985,19 @@ input[type="number"] {
 .tree-node-parent-description:last-child {
  margin-top: 80px!important;
 }
+.tree-node-parent-description-seasonal:last-child {
+  margin-top: 0px!important;
+}
 .registrationcode-input{
   margin-left: 21px!important;  
+  margin-top: -25px !important;
+}
+.single-checkbox-radio-style {
+  color: var(--app-1b1b34);
+  font-size: 15px;
+  margin-right: 8px;
+  font-family: inter;
+  font-weight: normal;
 }
 
 @media (max-width: 767px) {

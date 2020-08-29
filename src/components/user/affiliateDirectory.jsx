@@ -66,7 +66,7 @@ function tableSort(key) {
     },
   };
 
-  this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+  this_Obj.setState({ sortBy, sortOrder });
   this_Obj.props.getAffiliateDirectoryAction(filterData, sortBy, sortOrder);
 }
 const columns = [
@@ -278,7 +278,7 @@ class AffiliateDirectory extends Component {
               <Breadcrumb.Item className="breadcrumb-add">
                 {AppConstants.affiliateDirectory}
               </Breadcrumb.Item>
-              <h1>hello</h1>
+
             </Breadcrumb>
           </div>
           <div

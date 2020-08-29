@@ -353,7 +353,7 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_Complete='new-name'
+                            auto_complete='new-name'
                             heading={AppConstants.name}
                             placeholder={"Name"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'name' })}
@@ -362,7 +362,7 @@ class UmpirePaymentSetting extends Component {
                     </div>
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_Complete='new-umpireRate'
+                            auto_complete='new-umpireRate'
                             heading={AppConstants.umpireRate}
                             placeholder={"Umpire Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpireRate' })}
@@ -372,7 +372,7 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_Complete='new-umpireResRate'
+                            auto_complete='new-umpireResRate'
                             heading={AppConstants.umpireResRate}
                             placeholder={"Umpire Reserve Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpReserveRate' })}
@@ -382,7 +382,7 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_Complete='new-umpireRate'
+                            auto_complete='new-umpireRate'
                             heading={AppConstants.umpireCoachrate}
                             placeholder={"Umpire Coach Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpCoachRate' })}
@@ -406,7 +406,7 @@ class UmpirePaymentSetting extends Component {
 
                 {this.umpireAllocationRadioView()}
 
-                <span className='text-heading-large pt-5' >{AppConstants.umpirePrefences}</span>
+                <span className='text-heading-large pt-5' >{AppConstants.umpirePreferences}</span>
 
 
                 <div className="row" >

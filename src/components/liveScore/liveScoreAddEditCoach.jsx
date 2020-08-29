@@ -20,7 +20,6 @@ import {
     liveScoreCoachListAction,
     liveScoreClear
 } from '../../store/actions/LiveScoreAction/liveScoreCoachAction'
-
 import { liveScoreManagerSearch } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import ApiConstants from "../../themes/apiConstants";
 const { Footer, Content, Header } = Layout;
@@ -39,7 +38,6 @@ class LiveScoreAddEditCoach extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             teamLoad: false,
         }
-
     }
 
     componentDidMount() {
@@ -48,14 +46,12 @@ class LiveScoreAddEditCoach extends Component {
         if (id !== null) {
             this.props.getliveScoreTeams(id)
         }
-
         if (this.state.isEdit === true) {
             this.props.liveScoreUpdateCoach(this.state.tableRecord, 'isEditCoach')
             this.setState({ loader: true })
         } else {
             this.props.liveScoreUpdateCoach('', 'isAddCoach')
         }
-
         if (this.state.isEdit === true) {
             this.setInitalFiledValue()
         }
@@ -67,16 +63,10 @@ class LiveScoreAddEditCoach extends Component {
             this.setState({ loader: false })
         }
         if (this.props.liveScoreCoachState !== nextProps.liveScoreCoachState) {
-
             if (this.state.teamLoad == true) {
-
                 const { teamId } = this.props.liveScoreCoachState
                 this.setSelectedTeamValue(teamId)
-
                 this.setState({ teamLoad: false })
-            }
-            if (this.props.liveScoreCoachState.coachdata !== nextProps.liveScoreCoachState.coachdata) {
-                this.setInitalFiledValue()
             }
         }
     }
@@ -94,7 +84,6 @@ class LiveScoreAddEditCoach extends Component {
     }
 
     setSelectedTeamValue(teamId) {
-
         this.props.form.setFieldsValue({
             'coachTeamName': teamId
         })
@@ -113,10 +102,10 @@ class LiveScoreAddEditCoach extends Component {
                 hasError: true
             })
         }
-
+        setTimeout(() => {
+            this.setInitalFiledValue()
+        }, 300);
     }
-
-
 
     ///////view for breadcrumb
     headerView = () => {
@@ -145,13 +134,11 @@ class LiveScoreAddEditCoach extends Component {
         const { coachRadioBtn } = this.props.liveScoreCoachState
         return (
             <div >
-
                 {this.radioBtnContainer()}
                 {coachRadioBtn == 'new' ?
                     this.coachNewRadioBtnView(getFieldDecorator)
                     :
                     this.coachExistingRadioButton(getFieldDecorator)}
-
             </div>
         )
     }
@@ -202,7 +189,7 @@ class LiveScoreAddEditCoach extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-password'
+                                    auto_complete='new-password'
                                     type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
@@ -223,12 +210,12 @@ class LiveScoreAddEditCoach extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    // auto_Complete='new-lastName'
+                                    auto_complete='off'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
                                     onChange={(lastName) => this.props.liveScoreUpdateCoach(captializedString(lastName.target.value), 'lastName')}
-                                    value={coachdata.lastName}
+                                    // value={coachdata.lastName}
                                     onBlur={(i) => this.props.form.setFieldsValue({
                                         'Last Name': captializedString(i.target.value)
                                     })}
@@ -255,7 +242,7 @@ class LiveScoreAddEditCoach extends Component {
                                 ]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-email'
+                                    auto_complete='new-email'
                                     type='email'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
@@ -281,7 +268,7 @@ class LiveScoreAddEditCoach extends Component {
                                 ]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-contact'
+                                    auto_complete='new-contact'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
@@ -331,7 +318,6 @@ class LiveScoreAddEditCoach extends Component {
         const { coachdata, teamId, teamResult, coachesResult, onLoadSearch } = this.props.liveScoreCoachState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
         let coachList = isArrayNotEmpty(coachesResult) ? coachesResult : []
-
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -356,17 +342,12 @@ class LiveScoreAddEditCoach extends Component {
 
                                     }}
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
-
                                     onSearch={(value) => {
-
                                         value ?
                                             this.props.liveScoreManagerSearch(value, this.state.conpetitionId)
                                             :
                                             this.props.liveScoreCoachListAction(3, 1, this.state.conpetitionId)
-
                                     }}
-
-
                                 >
                                     {coachList.map((item) => {
                                         return <Option key={item.id} value={item.firstName + " " + item.lastName}>
@@ -375,11 +356,8 @@ class LiveScoreAddEditCoach extends Component {
                                     })}
                                 </AutoComplete>
                             )}
-
                         </Form.Item>
                     </div>
-
-
                 </div>
                 <div className="row" >
                     <div className="col-sm" >
@@ -390,7 +368,6 @@ class LiveScoreAddEditCoach extends Component {
                             {getFieldDecorator("coachTeamName", {
                                 rules: [{ required: true, message: ValidationConstants.teamName }],
                             })(
-
                                 <Select
                                     // loading={this.props.liveScoreState.onLoad == true && true}
                                     mode="multiple"
@@ -446,11 +423,51 @@ class LiveScoreAddEditCoach extends Component {
 
         const { coachdata, teamId, coachRadioBtn, exsitingManagerId } = this.props.liveScoreCoachState
         e.preventDefault();
-        if (coachdata.mobileNumber.length !== 10) {
-            this.setState({
-                hasError: true
-            })
-        } else {
+        if (coachRadioBtn == 'new') {
+
+            if (coachdata.mobileNumber.length !== 10) {
+                this.setState({
+                    hasError: true
+                })
+            } else {
+                this.props.form.validateFields((err, values) => {
+                    let body = ''
+                    if (!err) {
+                        if (coachRadioBtn == 'new') {
+                            if (this.state.isEdit == true) {
+                                body = {
+                                    "id": coachdata.id,
+                                    "firstName": coachdata.firstName,
+                                    "lastName": coachdata.lastName,
+                                    "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
+                                    "email": coachdata.email,
+                                    "teams": coachdata.teams
+                                }
+                            } else {
+
+                                body = {
+                                    "firstName": coachdata.firstName,
+                                    "lastName": coachdata.lastName,
+                                    "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
+                                    "email": coachdata.email,
+                                    "teams": coachdata.teams
+                                }
+                            }
+                            this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+                        } else if (coachRadioBtn == 'existing') {
+                            body = {
+                                "id": exsitingManagerId,
+                                "teams": coachdata.teams
+                            }
+                            this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
+                        }
+
+                    }
+                });
+
+            }
+        }
+        else {
             this.props.form.validateFields((err, values) => {
                 let body = ''
                 if (!err) {
@@ -485,7 +502,9 @@ class LiveScoreAddEditCoach extends Component {
 
                 }
             });
+
         }
+
     };
 
     /////// render function 

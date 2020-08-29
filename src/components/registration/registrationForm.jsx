@@ -149,7 +149,7 @@ class RegistrationForm extends Component {
             compCloseDate: null,
             compName: "",
             allYearRefId: -1,
-            allCompetition: null
+            allCompetition: null,
         };
         this_Obj = this;
         this.props.clearReducerDataAction("getRegistrationFormDetails")
@@ -304,40 +304,48 @@ class RegistrationForm extends Component {
         let SelectedProduct = JSON.parse(JSON.stringify(this.props.registrationState.registrationFormData.length !== 0 ? this.props.registrationState.registrationFormData[0] : []));
         const { reg_settings, reg_demoSetting, reg_NetballSetting, reg_QuestionsSetting } = JSON.parse(JSON.stringify(this.props.registrationState))
         let registration_settings = []
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                if (SelectedProduct.membershipProductTypes.length > 0) {
-                    let phone_number = SelectedProduct["replyPhone"].length > 0 ? regexNumberExpression(SelectedProduct["replyPhone"]) : ""
-                    SelectedProduct['competitionUniqueKeyId'] = this.state.firstTimeCompId
-                    SelectedProduct['yearRefId'] = this.state.yearRefId
-                    SelectedProduct["statusRefId"] = this.state.statusRefId
-                    SelectedProduct["replyPhone"] = phone_number
-                    for (let i in reg_settings) {
-                        registration_settings.push(reg_settings[i])
-                    }
-                    for (let i in reg_demoSetting) {
-                        registration_settings.push(reg_demoSetting[i])
-                    }
-                    for (let i in reg_NetballSetting) {
-                        registration_settings.push(reg_NetballSetting[i])
-                    }
-                    for (let i in reg_QuestionsSetting) {
-                        registration_settings.push(reg_QuestionsSetting[i])
-                    }
-                    SelectedProduct['registrationSettings'] = registration_settings
-                    SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
+        if (SelectedProduct.replyPhone.length > 0 && SelectedProduct.replyPhone.length !== 10) {
+            this.setState({
+                hasError: true
+            })
+        }
+        else {
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    if (SelectedProduct.membershipProductTypes.length > 0) {
+                        let phone_number = SelectedProduct["replyPhone"].length > 0 ? regexNumberExpression(SelectedProduct["replyPhone"]) : ""
+                        SelectedProduct['competitionUniqueKeyId'] = this.state.firstTimeCompId
+                        SelectedProduct['yearRefId'] = this.state.yearRefId
+                        SelectedProduct["statusRefId"] = this.state.statusRefId
+                        SelectedProduct["replyPhone"] = phone_number
+                        for (let i in reg_settings) {
+                            registration_settings.push(reg_settings[i])
+                        }
+                        for (let i in reg_demoSetting) {
+                            registration_settings.push(reg_demoSetting[i])
+                        }
+                        for (let i in reg_NetballSetting) {
+                            registration_settings.push(reg_NetballSetting[i])
+                        }
+                        for (let i in reg_QuestionsSetting) {
+                            registration_settings.push(reg_QuestionsSetting[i])
+                        }
+                        SelectedProduct['registrationSettings'] = registration_settings
+                        SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
 
-                    console.log(this.state.orgRegId, "SelectedProduct", SelectedProduct)
+                        console.log(this.state.orgRegId, "SelectedProduct", SelectedProduct)
 
-                    //console.log("Final Data" + JSON.stringify(SelectedProduct));
+                        //console.log("Final Data" + JSON.stringify(SelectedProduct));
 
-                    this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId)
+                        this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId)
+                    }
+                    else {
+                        message.error(ValidationConstants.pleaseSelectMembershipProduct)
+                    }
                 }
-                else {
-                    message.error(ValidationConstants.pleaseSelectMembershipProduct)
-                }
-            }
-        })
+
+            })
+        }
     };
 
     ///for change table productType and Division selection 
@@ -645,7 +653,7 @@ class RegistrationForm extends Component {
                     </Checkbox>
                     <div style={{ marginTop: 15, marginLeft: -8 }}>
                         <CustomTooltip background='#ff8237'>
-                            <span>{AppConstants.regFormTraningMsg}</span>
+                            <span>{AppConstants.regFormTrainingMsg}</span>
                         </CustomTooltip>
                     </div>
 
@@ -666,7 +674,7 @@ class RegistrationForm extends Component {
                                 {defaultChecked.daysVisible === true && (
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_Complete="new-trainingDay"
+                                            auto_complete="new-trainingDay"
                                             placeholder={AppConstants.trainingDaysAndTimes}
                                             value={formDataValue ? formDataValue.trainingDaysAndTimes : ""}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "trainingDaysAndTimes")}
@@ -782,6 +790,27 @@ class RegistrationForm extends Component {
         this.props.isReplyCheckVisible(checked, key)
     }
 
+    // change number
+    changeNumber = (number) => {
+        if (number.length == 10) {
+            this.setState({
+                hasError: false
+            })
+            this.props.updateRegistrationForm(regexNumberExpression(number), "replyPhone")
+
+        }
+        else if (number.length < 10) {
+            this.props.updateRegistrationForm(regexNumberExpression(number), "replyPhone")
+            this.setState({
+                hasError: true
+            })
+        }
+        setTimeout(() => {
+            this.setFieldDecoratorValues()
+        }, 500);
+
+    }
+
 
     ///reply to contact details view
     replyContactDetailsView = (
@@ -789,7 +818,7 @@ class RegistrationForm extends Component {
     ) => {
         let defaultChecked = this.props.registrationState.defaultChecked
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
-
+        let hasError = this.state.hasError == true ? true : false
         return (
             <div className="fees-view">
                 <div className='row ml-1' style={{ display: 'flex', alignItems: 'center' }}>
@@ -825,7 +854,7 @@ class RegistrationForm extends Component {
                                 {defaultChecked.replyName === true && (
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_Complete="new-name"
+                                            auto_complete="new-name"
                                             placeholder={"Name"}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyName")}
                                             value={formDataValue ? formDataValue.replyName : ''}
@@ -850,9 +879,10 @@ class RegistrationForm extends Component {
                                     </Checkbox>
                                 </div>
                                 {defaultChecked.replyRole === true && (
+
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_Complete="new-role"
+                                            auto_complete="new-role"
                                             placeholder={AppConstants.role}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyRole")}
                                             value={formDataValue ? formDataValue.replyRole : ''}
@@ -888,7 +918,7 @@ class RegistrationForm extends Component {
                                                 ],
                                             })(
                                                 <InputWithHead
-                                                    auto_Complete="new-email"
+                                                    auto_complete="new-email"
                                                     placeholder={AppConstants.email}
                                                     onChange={e =>
                                                         this.props.updateRegistrationForm(e.target.value, "replyEmail")
@@ -916,12 +946,21 @@ class RegistrationForm extends Component {
                                 </div>
                                 {defaultChecked.replyPhone === true && (
                                     <div className="col-sm">
-                                        <InputWithHead
-                                            auto_Complete="new-phoneNo"
-                                            placeholder={AppConstants.phone}
-                                            onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyPhone")}
-                                            value={formDataValue ? formDataValue.replyPhone : ''}
-                                        />
+                                        <Form.Item
+                                            help={hasError && ValidationConstants.mobileLength}
+                                            validateStatus={hasError ? "error" : 'validating'}
+                                        >
+                                            {(
+                                                <InputWithHead
+                                                    // type="number"
+                                                    auto_complete="new-phoneNo"
+                                                    maxLength={10}
+                                                    placeholder={AppConstants.phone}
+                                                    onChange={(e) => this.changeNumber(e.target.value)}
+                                                    value={formDataValue ? formDataValue.replyPhone : ''}
+                                                />
+                                            )}
+                                        </Form.Item>
                                     </div>
                                 )}
                             </div>
@@ -1483,7 +1522,7 @@ class RegistrationForm extends Component {
                                 // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
                                 // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
                                 >
-                                    {statusRefId == 2 ? AppConstants.publish : AppConstants.openRegistrations}
+                                    {statusRefId == 2 ? AppConstants.update : AppConstants.openRegistrations}
                                 </Button>
                                 {/* </Tooltip> */}
                             </div>

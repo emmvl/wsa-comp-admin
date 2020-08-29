@@ -41,7 +41,7 @@ function tableSort(key) {
             "offset": this_obj.state.offsetData
         }
     }
-    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_obj.setState({ sortBy, sortOrder });
     this_obj.props.umpireRoasterListAction(this_obj.state.selectedComp, this_obj.state.status, refRoleTypes('umpire'), body, sortBy, sortOrder)
 }
 /////function to sort table column

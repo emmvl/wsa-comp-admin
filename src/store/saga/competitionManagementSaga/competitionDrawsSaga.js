@@ -1,7 +1,7 @@
 import { put, call } from 'redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
-import RegstrartionAxiosApi from "../../http/registrationHttp/registrationAxios";
+import RegstrartionAxiosApi from "../../http/registrationHttp/registrationAxiosApi";
 import { message } from "antd";
 import history from "../../../util/history";
 import AppConstants from "../../../themes/appConstants";
@@ -364,6 +364,37 @@ export function* getActiveDrawsRoundsSaga(action) {
             });
         } else {
             yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* getVenueAndDivisionSaga(action) {
+    try {
+        const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId, action.startDate, action.endDate);
+        if (VenueResult.status === 1) {
+            console.log(VenueResult)
+            const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, action.startDate, action.endDate);
+            if (division_Result.status === 1) {
+                console.log(division_Result)
+                yield put({
+                    type: ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_SUCCESS,
+                    Venue_Result: VenueResult.result.data,
+                    division_Result: division_Result.result.data,
+                    status: division_Result.status,
+                });
+            }
+            else {
+                yield put({
+                    type: ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_SUCCESS,
+                    Venue_Result: VenueResult.result.data,
+                    division_Result: [],
+                    status: VenueResult.status,
+                });
+            }
+        } else {
+            yield call(failSaga, VenueResult)
         }
     } catch (error) {
         yield call(errorSaga, error)

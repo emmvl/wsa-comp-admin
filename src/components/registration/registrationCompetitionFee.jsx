@@ -1943,12 +1943,12 @@ class RegistrationCompetitionFee extends Component {
   }
 
   callAnyorgSearchApi = (registrationInviteesRefId) => {
-    if (registrationInviteesRefId == 7) {
-      this.props.onInviteesSearchAction('', 3);
-    }
-    if (registrationInviteesRefId == 8) {
-      this.props.onInviteesSearchAction('', 4);
-    }
+    // if (registrationInviteesRefId == 7) {
+    this.props.onInviteesSearchAction('', 3);
+    // }
+    // if (registrationInviteesRefId == 8) {
+    this.props.onInviteesSearchAction('', 4);
+    // }
   };
 
   /////navigate to RegistrationForm  after publishing the competition
@@ -2097,11 +2097,9 @@ class RegistrationCompetitionFee extends Component {
     paymentDataArr.instalmentDates = selectedSeasonalInstalmentDates.concat(selectedTeamSeasonalInstalmentDates);
     let isSeasonalUponReg = this.props.competitionFeesState.competitionDetailData["isSeasonalUponReg"];
     let isTeamSeasonalUponReg = this.props.competitionFeesState.competitionDetailData["isTeamSeasonalUponReg"];
-    let seasonalSchoolRegCode = this.props.competitionFeesState.competitionDetailData["seasonalSchoolRegCode"];
     let teamSeasonalSchoolRegCode = this.props.competitionFeesState.competitionDetailData["teamSeasonalSchoolRegCode"];																												   
     paymentDataArr["isSeasonalUponReg"] = isSeasonalUponReg!= undefined ? isSeasonalUponReg : false;
     paymentDataArr["isTeamSeasonalUponReg"] = isTeamSeasonalUponReg!= undefined? isTeamSeasonalUponReg: false;
-    paymentDataArr["seasonalSchoolRegCode"] = seasonalSchoolRegCode!= undefined ? seasonalSchoolRegCode : null;
     paymentDataArr["teamSeasonalSchoolRegCode"] = teamSeasonalSchoolRegCode!= undefined? teamSeasonalSchoolRegCode: null;																												 
 	let selectedSeasonalFeeKey =  this.props.competitionFeesState.SelectedSeasonalFeeKey;
     let selectedSeasonalTeamFeeKey =  this.props.competitionFeesState.selectedSeasonalTeamFeeKey;   
@@ -2138,6 +2136,13 @@ class RegistrationCompetitionFee extends Component {
           }        
       }   
     }  
+	if(selectedSeasonalTeamFeeKey.includes("8") || selectedSeasonalTeamFeeKey.includes(8)){     
+      if(paymentDataArr.teamSeasonalSchoolRegCode.length==0){
+        message.error(ValidationConstants.pleaseFillRegistration); 
+        this.setState({ loading: false }); 
+        return;
+      }    
+    }
     this.setState({ loading: true });								 
 	this.props.competitionPaymentApi(paymentDataArr, competitionId, this.state.affiliateOrgId);
   };
@@ -2213,17 +2218,27 @@ class RegistrationCompetitionFee extends Component {
     let errMsg = null;
     let discountMap = new Map();
     for(let x of filterOrgPostDiscountData){
+      let key = null;
+      if(x.competitionTypeDiscountTypeRefId == 2){
+        key= x.competitionMembershipProductTypeId + "#" + x.competitionTypeDiscountTypeRefId + "#" + x.discountCode;
+      }
+      else if(x.competitionTypeDiscountTypeRefId == 3){
+        key = x.competitionMembershipProductTypeId + "#" + x.competitionTypeDiscountTypeRefId;
+      }
       //if(x.competitionTypeDiscountTypeRefId == 3){
-        let key = x.competitionMembershipProductTypeId + "#" + x.competitionTypeDiscountTypeRefId;
+																								  
         if(discountMap.get(key) == undefined){
           discountMap.set(key, 1);
         }
         else{
-          if(x.competitionTypeDiscountTypeRefId == 3)
-              errMsg = ValidationConstants.duplicateFamilyDiscountError;
-          else
+          if(x.competitionTypeDiscountTypeRefId == 3){
+																		
+			  
             errMsg = ValidationConstants.duplicateFamilyDiscountError;
-
+          }         
+          else{
+            errMsg = ValidationConstants.duplicateDiscountError;
+          }
           discountDuplicateError = true;
           break;
         }
@@ -2668,13 +2683,20 @@ class RegistrationCompetitionFee extends Component {
         let venue = JSON.stringify(compFeesState.postVenues);
         // let invitees = compFeesState.postInvitees
         let invitees = [];
+        let anyOrgAffiliateArr = []
+        if (compFeesState.associationChecked == true && compFeesState.anyOrgAssociationArr[0].inviteesOrg.length > 0) {
+          anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgAssociationArr)
+        }
+        if (compFeesState.clubChecked == true && compFeesState.anyOrgClubArr[0].inviteesOrg.length > 0) {
+          anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgClubArr)
+        }
         if (compFeesState.affiliateArray != null && compFeesState.affiliateArray.length > 0) {
           invitees = compFeesState.affiliateArray.concat(
-            compFeesState.anyOrgAffiliateArr
+            anyOrgAffiliateArr
           );
         }
-        else if (compFeesState.anyOrgAffiliateArr != null && compFeesState.anyOrgAffiliateArr.length > 0) {
-          invitees = compFeesState.anyOrgAffiliateArr
+        else if (anyOrgAffiliateArr != null && anyOrgAffiliateArr.length > 0) {
+          invitees = anyOrgAffiliateArr
         }
 
         if (tabKey == '1') {
@@ -2959,24 +2981,25 @@ class RegistrationCompetitionFee extends Component {
 
   // for creation seasonal fee tree parent data
   seasonalDataTree = (seasonalPaymentDefaultArray, selectedSeasonalInstalmentDatesArray, selectedSeasonalFeeKey, uponRegKey,
-                      isSeasonalUponReg,seasonalSchoolRegCode) => {
+                      isSeasonalUponReg) => {
     const { TreeNode } = Tree;
     return seasonalPaymentDefaultArray.map((seasonalPaymentDefaultArrayItem) => {
       return (
-        <TreeNode 
-        className={selectedSeasonalFeeKey.includes("8") || selectedSeasonalFeeKey.includes(8) ? "tree-node-parent-description" :null}
-        title={this.SeasonsalDataNode(seasonalPaymentDefaultArrayItem.description)} 
-        key={seasonalPaymentDefaultArrayItem.id}>
-          {seasonalPaymentDefaultArrayItem.id != 8 ? this.SeasonalDataAdvancedNode(seasonalPaymentDefaultArrayItem, selectedSeasonalInstalmentDatesArray, selectedSeasonalFeeKey, uponRegKey,
-            isSeasonalUponReg):null}
-          {seasonalPaymentDefaultArrayItem.id == 8  ? this.seasonalRegistrationcode(seasonalPaymentDefaultArrayItem,selectedSeasonalFeeKey,seasonalSchoolRegCode):null}
+         <TreeNode 
+        className={"tree-node-parent-description-seasonal"}
+        title={this.SeasonsalDataNode(seasonalPaymentDefaultArrayItem)} 
+        key={seasonalPaymentDefaultArrayItem.id}
+        >
+          {this.SeasonalDataAdvancedNode(seasonalPaymentDefaultArrayItem, selectedSeasonalInstalmentDatesArray, selectedSeasonalFeeKey, uponRegKey,
+            isSeasonalUponReg)}
+																																									   
         </TreeNode>
       );
     });
   };
   // for getting seasonal fee tree parent name
-  SeasonsalDataNode = (description) => {
-    return <span>{description}</span>;
+  SeasonsalDataNode = (seasonalPaymentDefaultArrayItem) => {
+      return <span>{seasonalPaymentDefaultArrayItem.description}</span>;
   };
   // / for creation seasonal fee tree child data
   SeasonalDataAdvancedNode(seasonalPaymentDefaultArrayItem, selectedSeasonalInstalmentDatesArray, selectedSeasonalFeeKey, uponRegKey,
@@ -3152,75 +3175,40 @@ class RegistrationCompetitionFee extends Component {
       </TreeNode>
     );
   }
-  seasonalRegistrationcode(seasonalPaymentDefaultArrayItem,selectedSeasonalFeeKey,seasonalSchoolRegCode) {
-    if(selectedSeasonalFeeKey.includes("8") || selectedSeasonalFeeKey.includes(8)){
-      console.log("seasonalPaymentDefaultArray"+JSON.stringify(seasonalPaymentDefaultArrayItem))
-       const { TreeNode } = Tree;
-    return (
-      <TreeNode
-        title={this.SeasonalRegistrationTitle(seasonalSchoolRegCode)}   key={"seasonalSchoolRegCode"} checkable={false}
-        className={"registrationcode-input"}
-        >
-      </TreeNode>
-    ); 
-    }
-    
-   
-  }
-  teamSeasonalRegistrationcode(seasonalPaymentDefaultArrayItem,selectedSeasonalTeamFeeKey,teamSeasonalSchoolRegCode) {
-    if(selectedSeasonalTeamFeeKey.includes("8") || selectedSeasonalTeamFeeKey.includes(8)){
-      console.log("seasonalPaymentDefaultArray"+JSON.stringify(seasonalPaymentDefaultArrayItem))
+
+  teamSeasonalRegistrationcode(seasonalPaymentDefaultArrayItem, selectedSeasonalTeamFeeKey, teamSeasonalSchoolRegCode) {
+    if (selectedSeasonalTeamFeeKey.includes("8") || selectedSeasonalTeamFeeKey.includes(8)) {
       const { TreeNode } = Tree;
-    return (
-      <TreeNode
-        title={this.teamSeasonalRegistrationTitle(teamSeasonalSchoolRegCode)}   key={"teamSeasonalSchoolRegCode"} checkable={false}
-        className={"registrationcode-input"}
+      return (
+        <TreeNode
+          title={this.teamSeasonalRegistrationTitle(teamSeasonalSchoolRegCode)} key={"teamSeasonalSchoolRegCode"} checkable={false}
+          className={"registrationcode-input"}
         >
-      </TreeNode>
-    );   
+        </TreeNode>
+      );
     }
-   
+
   }
-  teamSeasonalRegistrationTitle(teamSeasonalSchoolRegCode){
-    return(
+  teamSeasonalRegistrationTitle(teamSeasonalSchoolRegCode) {
+    return (
       <div className={"input-reg-text"}>
         <InputWithHead
-          auto_Complete="new-membershipTypeName"
+          auto_complete="new-membershipTypeName"
           // required={"pt-0 mt-0"}
           heading={AppConstants.enterCode}
           placeholder={AppConstants.enterCode}
-          style={{ width: "100%",background:"white",height: 48}}
-          onChange={(e) =>  this.regCodeChange(e.target.value, "teamSeasonalSchoolRegCode")} 
+          style={{ width: "100%", background: "white", height: 48 }}
+          onChange={(e) => this.regCodeChange(e.target.value, "teamSeasonalSchoolRegCode")}
           value={teamSeasonalSchoolRegCode}
         />
       </div>
     )
   }
-  SeasonalRegistrationTitle(seasonalSchoolRegCode){
-    return(
-      <div className={"input-reg-text"}>
-        <InputWithHead
-          // auto_Complete="new-membershipTypeName"
-          // required={"pt-0 mt-0"}
-          heading={AppConstants.enterCode}
-          placeholder={AppConstants.enterCode}
-          style={{ width: "100%",background:"white",height: 48}}
-          onChange={(e) =>  this.regCodeChange(e.target.value, "seasonalSchoolRegCode")} 
-          // checked={value} 
-          value={seasonalSchoolRegCode}
-        />
-      </div>
-    )
+
+  regCodeChange = (value, key) => {
+    this.props.instalmentDateAction(value, key);
   }
-  regCodeChange = (value, key) =>{
-    if( key == "seasonalSchoolRegCode"){
-      this.props.instalmentDateAction(value, key);
-    }
-    if( key == "teamSeasonalSchoolRegCode"){
-      this.props.instalmentDateAction(value, key);
-    }
-  }
- 
+
   seasonalTeamaddButton(selectedSeasonalTeamInstalmentDatesArray) {
     const { TreeNode } = Tree;
     return (
@@ -3421,7 +3409,7 @@ class RegistrationCompetitionFee extends Component {
         <div className="row">
           <div className="col-sm">
             <InputWithHead
-              auto_Complete={`new-name${index}`}
+              auto_complete={`new-name${index}`}
               placeholder={AppConstants.name}
               value={item.name}
               onChange={(e) =>
@@ -3559,7 +3547,7 @@ class RegistrationCompetitionFee extends Component {
             ],
           })(
             <InputWithHead
-              auto_Complete="new-competitionName"
+              auto_complete="off"
               required={'required-field pb-0 '}
               heading={AppConstants.competition_name}
               placeholder={AppConstants.competition_name}
@@ -3928,7 +3916,7 @@ class RegistrationCompetitionFee extends Component {
           <div className="row">
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
-                auto_Complete="new-days"
+                auto_complete="off"
                 placeholder={AppConstants.days}
                 value={detailsData.competitionDetailData.roundInDays}
                 onChange={(e) =>
@@ -3942,7 +3930,7 @@ class RegistrationCompetitionFee extends Component {
             </div>
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
-                auto_Complete="new-hours"
+                auto_complete="off"
                 placeholder={AppConstants.hours}
                 value={detailsData.competitionDetailData.roundInHours}
                 onChange={(e) =>
@@ -3956,7 +3944,7 @@ class RegistrationCompetitionFee extends Component {
             </div>
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
-                auto_Complete="new-mins"
+                auto_complete="off"
                 placeholder={AppConstants.mins}
                 value={detailsData.competitionDetailData.roundInMins}
                 onChange={(e) =>
@@ -4020,7 +4008,7 @@ class RegistrationCompetitionFee extends Component {
           <div className="row">
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
-                auto_Complete="new-minNumber"
+                auto_complete="off"
                 placeholder={AppConstants.minNumber}
                 value={detailsData.competitionDetailData.minimunPlayers}
                 onChange={(e) =>
@@ -4034,7 +4022,7 @@ class RegistrationCompetitionFee extends Component {
             </div>
             <div className="col-sm" style={{ marginTop: 5 }}>
               <InputWithHead
-                auto_Complete="new-maxNumber"
+                auto_complete="off"
                 placeholder={AppConstants.maxNumber}
                 value={detailsData.competitionDetailData.maximumPlayers}
                 onChange={(e) =>
@@ -4708,9 +4696,9 @@ class RegistrationCompetitionFee extends Component {
     let detailsData = this.props.competitionFeesState;
     let associationAffilites = detailsData.associationAffilites;
     let clubAffilites = detailsData.clubAffilites;
-    const { associationLeague, clubSchool } = this.props.competitionFeesState;
+    const { associationLeague, clubSchool, associationChecked, clubChecked } = this.props.competitionFeesState;
     let regInviteesDisable = this.state.permissionState.regInviteesDisable;
-    if (subItem.id == 7 && seletedInvitee == 7) {
+    if (subItem.id == 7 && associationChecked == true) {
       return (
         <div>
           <Select
@@ -4743,7 +4731,7 @@ class RegistrationCompetitionFee extends Component {
             loading={detailsData.searchLoad}
           >
             {associationAffilites.map((item) => {
-              console.log(item, 'associationAffilites');
+              // console.log(item, 'associationAffilites');
               return (
                 <Option key={item.organisationId} value={item.organisationId}>
                   {item.name}
@@ -4753,7 +4741,7 @@ class RegistrationCompetitionFee extends Component {
           </Select>
         </div>
       );
-    } else if (subItem.id == 8 && seletedInvitee == 8) {
+    } else if (subItem.id == 8 && clubChecked == true) {
       return (
         <div>
           <Select
@@ -4811,8 +4799,9 @@ class RegistrationCompetitionFee extends Component {
       nonSelected,
       affiliateNonSelected,
       anyOrgNonSelected,
+      associationChecked,
+      clubChecked
     } = this.props.competitionFeesState;
-    // console.log(invitees, 'invitees');
     let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
     let regInviteesDisable = this.state.permissionState.regInviteesDisable;
     return (
@@ -4930,7 +4919,7 @@ class RegistrationCompetitionFee extends Component {
                               </CustumToolTip>
                             </div>
                           </div>
-                          {item.subReferences.map((subItem, subIndex) => (
+                          {/* {item.subReferences.map((subItem, subIndex) => (
                             <div style={{ marginLeft: '20px' }}>
                               <Radio key={subItem.id} value={subItem.id}>
                                 {subItem.description}
@@ -4940,7 +4929,42 @@ class RegistrationCompetitionFee extends Component {
                                 anyOrgSelected
                               )}
                             </div>
-                          ))}
+                          ))} */}
+                          <div style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            paddingLeft: 20
+                          }}>
+
+                            <Checkbox
+                              className="single-checkbox-radio-style"
+                              style={{ paddingTop: 8 }}
+                              checked={associationChecked}
+                              onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}>
+                              {item.subReferences[0].description}
+                            </Checkbox>
+
+                            {this.affiliatesSearchInvitee(
+                              item.subReferences[0],
+                              anyOrgSelected
+                            )}
+
+                            <Checkbox
+                              className="single-checkbox-radio-style"
+                              style={{ paddingTop: 13, marginLeft: 0 }}
+                              checked={clubChecked}
+                              onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "clubChecked")}>
+                              {item.subReferences[1].description}
+                            </Checkbox>
+
+                            {this.affiliatesSearchInvitee(
+                              item.subReferences[1],
+                              anyOrgSelected
+                            )}
+
+
+                          </div>
+
                           <div style={{ marginLeft: 20 }}>
                             <Radio.Group
                               onChange={(e) =>
@@ -5021,6 +5045,7 @@ class RegistrationCompetitionFee extends Component {
     );
   };
 
+
   //on change of casual fee payment option
   onChangeCasualFee(itemValue, paymentData) {
     //console.log("itemValue", itemValue);
@@ -5089,8 +5114,7 @@ class RegistrationCompetitionFee extends Component {
     let selectedCasualFeeKey = this.props.competitionFeesState.selectedCasualFeeKey;
     let selectedSeasonalTeamFeeKey = this.props.competitionFeesState.selectedSeasonalTeamFeeKey;
     let isSeasonalUponReg = competitionDetailData.isSeasonalUponReg!= undefined ? competitionDetailData.isSeasonalUponReg: false;
-    let isTeamSeasonalUponReg = competitionDetailData.isTeamSeasonalUponReg!= undefined ? competitionDetailData.isTeamSeasonalUponReg: false;
-    let seasonalSchoolRegCode = competitionDetailData.seasonalSchoolRegCode!= undefined ? competitionDetailData.seasonalSchoolRegCode: null;
+    let isTeamSeasonalUponReg = competitionDetailData.isTeamSeasonalUponReg!= undefined ? competitionDetailData.isTeamSeasonalUponReg: false;  
     let teamSeasonalSchoolRegCode = competitionDetailData.teamSeasonalSchoolRegCode!= undefined ? competitionDetailData.teamSeasonalSchoolRegCode: null;
 
 
@@ -5127,7 +5151,7 @@ class RegistrationCompetitionFee extends Component {
               onCheck={(e, info) => this.onChangeSeasonalFee(e)}
               disabled={paymentsDisable}
             >
-              {this.seasonalDataTree(seasonalPayment, selectedSeasonalInstalmentDates, selectedSeasonalFeeKey, "isSeasonalUponReg", isSeasonalUponReg,seasonalSchoolRegCode)}
+              {this.seasonalDataTree(seasonalPayment, selectedSeasonalInstalmentDates, selectedSeasonalFeeKey, "isSeasonalUponReg", isSeasonalUponReg)}
             </Tree>
           </div>
         )}
@@ -5238,7 +5262,7 @@ class RegistrationCompetitionFee extends Component {
                 ],
               })(
                 <InputWithHead
-                  auto_Complete="new-title"
+                  auto_complete="new-title"
                   heading={AppConstants.title}
                   placeholder={AppConstants.title}
                   // value={charityTitle}
@@ -5339,9 +5363,9 @@ class RegistrationCompetitionFee extends Component {
   ////add  or remove  discount in discount section
   addRemoveDiscount = (keyAction, index) => {
     this.props.addRemoveCompFeeDiscountAction(keyAction, index);
-    setTimeout(() =>{
+    setTimeout(() => {
       this.setDetailsFieldValue();
-    },300);
+    }, 300);
   };
 
   //On change membership product discount type
@@ -5388,7 +5412,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="row">
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-number"
+                  auto_complete="new-number"
                   heading={AppConstants.percentageOff_FixedAmount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
                   onChange={(e) =>
@@ -5404,7 +5428,7 @@ class RegistrationCompetitionFee extends Component {
               </div>
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-description"
+                  auto_complete="new-description"
                   heading={AppConstants.description}
                   placeholder={AppConstants.gernalDiscount}
                   onChange={(e) =>
@@ -5480,7 +5504,7 @@ class RegistrationCompetitionFee extends Component {
               })}
             </Select>
             <InputWithHead
-              auto_Complete="new-code"
+              auto_complete="new-code"
               heading={AppConstants.code}
               placeholder={AppConstants.code}
               onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
@@ -5490,7 +5514,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="row">
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-number"
+                  auto_complete="new-number"
                   heading={AppConstants.percentageOff_FixedAmount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
                   onChange={(e) =>
@@ -5506,7 +5530,7 @@ class RegistrationCompetitionFee extends Component {
               </div>
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-description"
+                  auto_complete="new-description"
                   heading={AppConstants.description}
                   placeholder={AppConstants.gernalDiscount}
                   onChange={(e) =>
@@ -5585,7 +5609,7 @@ class RegistrationCompetitionFee extends Component {
                       }
                     )(
                       <InputWithHead
-                        auto_Complete="new-child"
+                        auto_complete="new-child"
                         heading={`Child ${childindex + 1}%`}
                         placeholder={`Child ${childindex + 1}%`}
                         onChange={(e) =>
@@ -5665,7 +5689,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="row">
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-percentageOff"
+                  auto_complete="new-percentageOff"
                   heading={AppConstants.percentageOff_FixedAmount}
                   placeholder={AppConstants.percentageOff_FixedAmount}
                   onChange={(e) =>
@@ -5677,7 +5701,7 @@ class RegistrationCompetitionFee extends Component {
               </div>
               <div className="col-sm">
                 <InputWithHead
-                  auto_Complete="new-gernalDiscount"
+                  auto_complete="new-gernalDiscount"
                   heading={AppConstants.description}
                   placeholder={AppConstants.gernalDiscount}
                   onChange={(e) =>
@@ -5736,7 +5760,7 @@ class RegistrationCompetitionFee extends Component {
         return (
           <div>
             <InputWithHead
-              auto_Complete="new-description"
+              auto_complete="new-description"
               heading={AppConstants.description}
               placeholder={AppConstants.description}
               onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -5744,7 +5768,7 @@ class RegistrationCompetitionFee extends Component {
               disabled={this.checkDiscountDisable(item.organisationId)}
             />
             <InputWithHead
-              auto_Complete="new-question"
+              auto_complete="new-question"
               heading={AppConstants.question}
               placeholder={AppConstants.question}
               onChange={(e) => this.onChangeQuestion(e.target.value, index)}

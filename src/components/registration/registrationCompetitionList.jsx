@@ -13,6 +13,7 @@ import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/a
 import { checkUserRole } from "../../util/permissions";
 import { currencyFormat } from "../../util/currencyFormat";
 import { stringTONumber } from "../../util/helpers"
+import Tooltip from 'react-png-tooltip'
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -32,7 +33,7 @@ function tableSort(key) {
     } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.setState({ sortBy, sortOrder });
     this_Obj.props.regCompetitionListAction(this_Obj.state.offset, this_Obj.state.yearRefId, this_Obj.state.searchText, sortBy, sortOrder);
 }
 
@@ -166,11 +167,24 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners("totalSeasonalFee"),
     },
     {
-        title: "Total Fee - Casual (inc GST)",
+        title: "Total Fee - PAYG (inc GST)",
         dataIndex: "casualFees",
         key: "casualFees",
         render: (casualFees, record) => totalCasualFees(casualFees, record),
         sorter: true,
+        filterDropdown: true,
+        filterIcon: () => {
+            return (
+
+                <div style={{ width: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
+                    <Tooltip placement="bottom" background='#ff8237'>
+                        <span>{AppConstants.totalFeeMsg}</span>
+                    </Tooltip>
+                </div>
+
+
+            );
+        },
         onHeaderCell: ({ dataIndex }) => listeners("totalCasualFee"),
     },
     {
@@ -393,7 +407,7 @@ class RegistrationCompetitionList extends Component {
         let total = competitionFeesState.regCompetitonFeeListTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
-                <div className="table-responsive home-dash-table-view">
+                <div className="table-responsive home-dash-table-view table-competition">
                     <Table
                         className="home-dashboard-table"
                         columns={columns}

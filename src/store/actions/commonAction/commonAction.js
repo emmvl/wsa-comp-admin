@@ -152,9 +152,6 @@ function getPhotoTypeAction() {
     return action
 }
 
-
-
-
 function getApplyToAction() {
     const action = {
         type: ApiConstants.API_GET_APPY_TO_LOAD,

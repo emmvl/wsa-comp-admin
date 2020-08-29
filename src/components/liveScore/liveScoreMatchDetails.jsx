@@ -8,7 +8,7 @@ import AppImages from "../../themes/appImages";
 import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate, changePlayerLineUpAction } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
+import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate, changePlayerLineUpAction, liveScoreAddLiveStreamAction } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
 import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
@@ -256,6 +256,7 @@ class LiveScoreMatchDetails extends Component {
     showModal = (data, isVideo) => {
         this.setState({
             visible: true,
+            liveStreamLink:null
         });
     };
 
@@ -279,6 +280,8 @@ class LiveScoreMatchDetails extends Component {
         // const { match } = this.props.liveScoreMatchState.matchDetails
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : []
 
+        const matchDetails = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails : []
+
         const length = match ? match.length : 0
         let isMatchStatus = length > 0 ? match[0].matchStatus === "ENDED" ? true : false : false
 
@@ -297,6 +300,28 @@ class LiveScoreMatchDetails extends Component {
                     </div>
                     <div className="col-sm-12 col-md-6 col-lg-6" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
+
+                            <div className="col-sm">
+                                <div
+                                    className="comp-dashboard-botton-view-mobile"
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "flex-end",
+                                    }}
+                                >
+                                    <NavLink to={{
+                                        pathname: '/liveScoreAddIncident',
+                                        state: { matchId: this.state.matchId, matchDetails: matchDetails }
+                                    }}>
+                                        <Button className="primary-add-comp-form" type="primary">
+                                            + {AppConstants.addIncident}
+                                        </Button>
+                                    </NavLink>
+                                </div>
+                            </div>
 
                             <div className="col-sm">
                                 <div
@@ -776,11 +801,29 @@ class LiveScoreMatchDetails extends Component {
         //    return record ?  record.team1ResultId == null ?   "abc" : record.team1ResultId === 4 || 5 || 6 ? "def" : record.matchStatus : record.matchStatus
     }
 
+    onClickFunc() {
+
+        if (this.state.liveStreamLink) {
+
+            let body = {
+                "id": this.state.matchId,
+
+                "competitionId": this.state.competitionId,
+
+                "livestreamURL": this.state.liveStreamLink
+            }
+
+            this.props.liveScoreAddLiveStreamAction({ body: body })
+        }
+
+        this.setState({ visible: false, liveStreamLink: '' })
+    }
+
     ////modal view
     ModalView() {
         return (
             <Modal
-                // title="WSA 1"
+                title={AppConstants.liveStreamlink}
                 visible={this.state.visible}
                 onOk={this.handleOk}
                 onCancel={this.handleCancel}
@@ -790,21 +833,22 @@ class LiveScoreMatchDetails extends Component {
                 footer={null}
             >
                 <InputWithHead
-                    // auto_Complete='new-LiveStreamLink'
-                    heading={AppConstants.liveStreamlink}
+                    auto_complete='off'
+                    // heading={AppConstants.liveStreamlink}
                     placeholder={AppConstants.liveStreamlink}
                     value={this.state.liveStreamLink}
                     onChange={(e) => this.setState({ liveStreamLink: e.target.value })}
                 />
                 <div
-                    className="comp-dashboard-botton-view-mobile mt-3"
+                    className="comp-dashboard-botton-view-mobile"
                     style={{
                         display: "flex",
-                        justifyContent: "flex-end"
+                        justifyContent: "flex-end",
+                        paddingTop:24
                     }}
                 >
 
-                    <Button onClick={() => this.showModal()} className="primary-add-comp-form" type="primary">
+                    <Button onClick={() => this.onClickFunc()} className="primary-add-comp-form" type="primary">
                         {AppConstants.save}
                     </Button>
 
@@ -849,7 +893,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScoreDeleteMatch,
         liveScoreGetMatchDetailInitiate,
-        changePlayerLineUpAction
+        changePlayerLineUpAction,
+        liveScoreAddLiveStreamAction
     }, dispatch)
 }
 

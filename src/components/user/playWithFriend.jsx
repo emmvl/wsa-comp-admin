@@ -45,7 +45,7 @@ function tableSort(key) {
         }
     }
 
-    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.setState({ sortBy, sortOrder });
     this_Obj.props.getUserFriendAction(filterData, sortBy, sortOrder);
 }
 const columns = [

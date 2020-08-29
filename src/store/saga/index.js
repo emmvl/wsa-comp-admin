@@ -1,6 +1,6 @@
 import { all, fork, takeEvery } from "redux-saga/effects";
 
-import ApiConstants from "../../themes/apiConstants";
+import ApiConstants from "themes/apiConstants";
 import appSaga from "./appSaga";
 import authenticationSaga from "./authenticationSaga";
 import commonSaga from "./commonSaga";
@@ -12,6 +12,7 @@ import liveScoreManagerSaga from "./liveScoreSaga/liveScoreManagerSaga";
 import liveScoreMatchSaga from "./liveScoreSaga/liveScoreMatchSaga";
 import liveScorePlayerSaga from "./liveScoreSaga/liveScorePlayerSaga";
 import liveScoreTeamSaga from "./liveScoreSaga/liveScoreTeamSaga";
+import liveScoreUmpiresSaga from "./liveScoreSaga/liveScoreUmpiresSaga";
 import shopOrderStatusSaga from "./shopSaga/shopOrderStatusSaga";
 import shopOrderSummarySaga from "./shopSaga/shopOrderSummarySaga";
 import shopProductSaga from "./shopSaga/shopProductSaga";
@@ -33,7 +34,8 @@ import {
   regSaveRegistrationForm,
   getMembershipproduct,
   getDivisionsListSaga,
-  getTeamRegistrationsSaga
+  getTeamRegistrationsSaga,
+  exportTeamRegistrationsSaga
 } from "./registrationSaga/registrationSaga";
 
 import {
@@ -58,7 +60,7 @@ import {
 
 
 ////**************************Live Score***************************Start
-import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga, ladderAdjustmentPostSaga, ladderAdjustmentGetSaga } from './liveScoreSaga/liveScoreLadderSaga';
+import { liveScoreLaddersDivisionsaga, liveScoreLaddersListSaga, ladderAdjustmentPostSaga, ladderAdjustmentGetSaga, liveScoreResetLadderSaga } from './liveScoreSaga/liveScoreLadderSaga';
 import { liveScoreIncidentListSaga, liveScoreAddEditIncidentSaga, liveScoreIncidentTypeSaga } from './liveScoreSaga/liveScoreIncidentSaga';
 import { liveScoreRoundSaga, liveScoreRoundListSaga } from './liveScoreSaga/liveScoreRoundSaga';
 import { liveScoreNewsListSaga, liveScoreAddNewsSaga, liveScoreNewsNotificationSaga, liveScoreNewsDeleteSaga } from './liveScoreSaga/liveScoreNewsSaga';
@@ -67,7 +69,7 @@ import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
 import { liveScoreScorerListSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga, liveScoreScorerSearchSaga } from './liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
-import { liveScoreCompetitionSaga, liveScoreCompetitionDelete } from './liveScoreSaga/liveScoreCompetionSaga';
+import { liveScoreCompetitionSaga, liveScoreCompetitionDelete, liveScoreOwnPartCompetitionListSaga } from './liveScoreSaga/liveScoreCompetionSaga';
 import { liveScoreGamePositionSaga } from './liveScoreSaga/liveScoreGamePositionSaga';
 
 ////*******************Live Score********************************************End
@@ -80,7 +82,7 @@ import * as competitionFinalSaga from '../saga/competitionManagementSaga/competi
 import * as ladderFormatSaga from '../saga/competitionManagementSaga/ladderFormatSaga';
 import { competitonWithTimeSlots, competitonWithTimeSlotsPostApi } from './competitionManagementSaga/competitionTimeAndSlotSaga';
 
-import { fixtureTemplateSaga, competitionDashboardDeleteSaga } from './competitionManagementSaga/competitionManagementSaga';
+import { fixtureTemplateSaga } from './competitionManagementSaga/competitionManagementSaga';
 ////Venue constraints
 import { venueTimeSaga, venueConstraintPostSaga } from './competitionManagementSaga/venueTimeSaga'
 import {
@@ -123,19 +125,18 @@ import {
   getCompetitionVenues, updateCourtTimingsDrawsAction,
   getDivisionGradeNameListSaga, publishDraws, drawsMatchesListExportSaga,
   getDivisionSaga, competitionFixtureSaga, updateCompetitionFixtures, updateDrawsLock,
-  getActiveDrawsRoundsSaga
+  getActiveDrawsRoundsSaga, getVenueAndDivisionSaga
 } from './competitionManagementSaga/competitionDrawsSaga';
 
 import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
 ////Competition Dashboard Saga
-import { competitionDashboardSaga, updateCompetitionStatusSaga } from './competitionManagementSaga/competitionDashboardSaga';
+import { competitionDashboardSaga, updateCompetitionStatusSaga, competitionDashboardDeleteSaga } from './competitionManagementSaga/competitionDashboardSaga';
 
 // EndUserRegistrationSaga
 import * as endUserRegSaga from '../saga/registrationSaga/endUserRegistrationSaga';
 
 import { liveScoreGameTimeStatisticsSaga } from './liveScoreSaga/liveScoreGameTimeStatisticsSaga'
 import { liveScoreSettingSaga, liveScorePostSaga, settingRegInviteesSaga } from './liveScoreSaga/liveScoreSettingSaga'
-import { liveScoreUmpiresSaga, liveScoreUmpiresImportSaga } from './liveScoreSaga/liveScoreUmpiresSaga'
 
 import { liveScoreTeamAttendanceListSaga } from './liveScoreSaga/liveScoreTeamAttendanceSaga'
 
@@ -171,6 +172,7 @@ export default function* rootSaga() {
     fork(liveScoreMatchSaga),
     fork(liveScorePlayerSaga),
     fork(liveScoreTeamSaga),
+    fork(liveScoreUmpiresSaga),
 
     // Shop
     fork(shopOrderStatusSaga),
@@ -194,7 +196,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD, regMembershipFeeListSaga);
   yield takeEvery(ApiConstants.API_REG_COMPETITION_LIST_DELETE_LOAD, regCompetitionFeeListDeleteSaga);
   yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_DELETE_LOAD, regMembershipFeeListDeleteSaga);
-  yield takeEvery(ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT__LOAD, regGetMembershipProductDetailSaga);
+  yield takeEvery(ApiConstants.API_REG_GET_MEMBERSHIP_PRODUCT_LOAD, regGetMembershipProductDetailSaga);
   yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT__LOAD, regSaveMembershipProductDetailSaga);
   yield takeEvery(ApiConstants.API_REG_GET_DEFAULT_MEMBERSHIP_PRODUCT_TYPES__LOAD, regDefaultMembershipProductTypesSaga)
   yield takeEvery(ApiConstants.API_REG_SAVE_MEMBERSHIP_PRODUCT_FEES__LOAD, regSaveMembershipProductFeeSaga);
@@ -370,9 +372,6 @@ export default function* rootSaga() {
 
   yield takeEvery(ApiConstants.API_MATCH_RESULT_LOAD, liveScoreMatchResult)
 
-  //umpires saga
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_LIST_LOAD, liveScoreUmpiresSaga)
-
   //// Bulk Abandon Match Saga
   yield takeEvery(ApiConstants.API_LIVE_SCORE_BULK_ABANDON_MATCH_LOAD, liveScoreAbandonMatchSaga)
 
@@ -468,7 +467,6 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_ASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.assignUmpireSaga)
   /////unassign umpire from the match(delete)
   yield takeEvery(ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_LOAD, assignUmpireSaga.unassignUmpireSaga)
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_LOAD, liveScoreUmpiresImportSaga)
   //////////////////////registration main dashboard listing owned and participate registration
   yield takeEvery(ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD, registrationMainDashboardListSaga)
   yield takeEvery(ApiConstants.API_YEAR_AND_QUICK_COMPETITION_LOAD, competitionQuickSaga.getquickYearAndCompetitionListSaga)
@@ -523,6 +521,14 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_MERGE_COMPETITION_PROCESS_LOAD, competitionQuickSaga.mergeCompetitionProceedSaga)
   ////Competition Delete 
   yield takeEvery(ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD, competitionDashboardDeleteSaga)
-  
+
   yield takeEvery(ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD, getTeamRegistrationsSaga);
+  /////livescore own part competition listing
+  yield takeEvery(ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_LOAD, liveScoreOwnPartCompetitionListSaga);
+
+  yield takeEvery(ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_LOAD, getVenueAndDivisionSaga)
+
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_RESET_LADDER_LOAD, liveScoreResetLadderSaga);
+
+  yield takeEvery(ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_LOAD, exportTeamRegistrationsSaga);
 }

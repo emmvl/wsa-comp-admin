@@ -1,12 +1,12 @@
 import { put, call, takeEvery } from "redux-saga/effects"
 import { message } from "antd";
 
-import AppConstants from "../../../themes/appConstants";
-import ApiConstants from "../../../themes/apiConstants";
-import history from "../../../util/history";
-import { receiptImportResult } from "../../../util/showMsgOfImportRes";
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
-import UserAxiosApi from "../../http/userHttp/userAxiosApi";
+import AppConstants from "themes/appConstants";
+import ApiConstants from "themes/apiConstants";
+import history from "util/history";
+import { receiptImportResult } from "util/showImportResult";
+import LiveScoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
+import UserAxiosApi from "store/http/userHttp/userAxiosApi";
 
 function* failSaga(result) {
   yield put({ type: ApiConstants.API_LIVE_SCORE_COACH_FAIL });
@@ -23,7 +23,7 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_LIVE_SCORE_COACH_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
 
   if (error.status === 400) {
@@ -59,7 +59,7 @@ function* liveScoreCoachSaga(action) {
         type: ApiConstants.API_LIVE_SCORE_COACH_LIST_SUCCESS,
         result: result.result.data,
         status: result.status,
-        navigation: action.navigation
+        navigation: action.navigation,
       });
     } else {
       yield call(failSaga, result);
@@ -80,9 +80,9 @@ function* liveScoreAddCoachSaga(action) {
         status: result.status,
       });
 
-      message.success('Add Coach - Successfully Added');
+      message.success("Add Coach - Successfully Added");
 
-      history.push('/LiveScoreCoaches');
+      history.push("/LiveScoreCoaches");
     } else {
       yield call(failSaga, result);
     }
@@ -97,14 +97,16 @@ function* liveScoreCoachImportSaga(action) {
 
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.API_LIVE_SCORE_COACH_IMPORT_SUCCESS
+        type: ApiConstants.API_LIVE_SCORE_COACH_IMPORT_SUCCESS,
+        result: result.result.data,
       });
 
-      history.push('/LiveScoreCoaches');
-
-      receiptImportResult(result.result);
-
-      message.success('Coach Imported Successfully.');
+      if (Object.keys(result.result.data.error).length === 0) {
+        history.push("/liveScoreCoaches");
+        message.success("Coach Imported Successfully.");
+      } else {
+        receiptImportResult(result.result);
+      }
     } else {
       yield call(failSaga, result);
     }

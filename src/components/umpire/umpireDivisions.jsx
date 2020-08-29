@@ -282,7 +282,7 @@ class UmpireDivisions extends Component {
                     </div>
                     <div className='col-sm-3 '>
                         <InputWithHead
-                            auto_Complete='new-umpireReserve'
+                            auto_complete='new-umpireReserve'
                             heading={AppConstants.umpireReserve}
                             placeholder={"Umpire Reserve"}
                             onChange={(e) => this.setState({ umpireReserve: e.target.value })}
@@ -291,7 +291,7 @@ class UmpireDivisions extends Component {
                     </div>
                     <div className='col-sm-3 '>
                         <InputWithHead
-                            auto_Complete='new-umpireCoach'
+                            auto_complete='new-umpireCoach'
                             heading={AppConstants.umpireCoach}
                             placeholder={"Umpire Coach"}
                             onChange={(e) => this.setState({ umpireCoach: e.target.value })}
@@ -306,7 +306,7 @@ class UmpireDivisions extends Component {
                     </div>
                     <div className='col-sm-3 '>
                         <InputWithHead
-                            auto_Complete='new-umpireReserve'
+                            auto_complete='new-umpireReserve'
                             placeholder={"Umpire Reserve"}
                             onChange={(e) => this.setState({ umpireReserve2: e.target.value })}
                             value={this.state.umpireReserve2}
@@ -314,7 +314,7 @@ class UmpireDivisions extends Component {
                     </div>
                     <div className='col-sm-3 '>
                         <InputWithHead
-                            auto_Complete='new-umpireCoach'
+                            auto_complete='new-umpireCoach'
                             placeholder={"Umpire Coach"}
                             onChange={(e) => this.setState({ umpireCoach2: e.target.value })}
                             value={this.state.umpireCoach2}

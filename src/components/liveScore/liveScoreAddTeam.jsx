@@ -88,7 +88,7 @@ class LiveScoreAddTeam extends Component {
 
         // this.props.getliveScoreDivisions(1)
         this.props.liveScoreGetDivision(id)
-        this.props.liveScoreGetaffilate({ id: id, name: '' })
+        this.props.liveScoreGetaffilate({ id, name: '' })
         this.props.liveScoreManagerListAction(5, 1, id)
     }
     componentDidUpdate(nextProps) {
@@ -190,7 +190,7 @@ class LiveScoreAddTeam extends Component {
                         rules: [{ required: true, message: ValidationConstants.teamName }],
                     })(
                         <InputWithHead
-                            auto_Complete='new-teamName'
+                            auto_complete='off'
                             required={"required-field pb-0"}
                             heading={AppConstants.teamName}
                             placeholder={AppConstants.enterTeamName}
@@ -215,7 +215,7 @@ if(x[0].charCodeAt()>=97)
                         rules: [{ required: true, message: "Team Alias is required" }],
                     })( */}
                 <InputWithHead
-                    auto_Complete='new-alias'
+                    auto_complete='off'
                     heading={"Team Alias"}
                     placeholder={"Team Alias"}
                     conceptulHelp
@@ -429,9 +429,33 @@ if(x[0].charCodeAt()>=97)
         )
     }
 
+    onChangeNumber = (number) => {
+        const { selectedManager, teamManagerData } = this.props.liveScoreTeamState
+        if (number.length == 10) {
+            this.setState({
+                hasError: false
+            })
+            this.props.liveScoreAddTeamform({ key: 'mobileNumber', data: regexNumberExpression(number) })
+        }
+
+        else if (number.length < 10) {
+            this.props.liveScoreAddTeamform({ key: 'mobileNumber', data: regexNumberExpression(number) })
+            this.setState({
+                hasError: true
+            })
+        }
+        setTimeout(() => {
+            this.props.form.setFieldsValue({
+                'contactNo': teamManagerData.mobileNumber,
+            })
+        }, 500);
+    }
+
+
+
     managerNewRadioBtnView(getFieldDecorator) {
         const { teamManagerData } = this.props.liveScoreTeamState
-
+        let hasError = this.state.hasError == true ? true : false
         return (
             <div>
                 <div className="row" >
@@ -440,7 +464,7 @@ if(x[0].charCodeAt()>=97)
                             {getFieldDecorator('firstName', {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(<InputWithHead
-                                auto_Complete='new-firstName'
+                                auto_complete='new-password'
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.enterFirstName}
@@ -463,7 +487,7 @@ if(x[0].charCodeAt()>=97)
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-lastName'
+                                    auto_complete='off'
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.enterLastName}
@@ -500,7 +524,7 @@ if(x[0].charCodeAt()>=97)
                                 ],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-email'
+                                    auto_complete='new-email'
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
@@ -515,18 +539,19 @@ if(x[0].charCodeAt()>=97)
                         <span className="form-err">{this.state.emailAddressError}</span>
                     </div>
                     <div className="col-sm" >
-                        <Form.Item>
+                        <Form.Item
+                            help={hasError && ValidationConstants.mobileLength}
+                            validateStatus={hasError ? "error" : 'validating'}
+                        >
                             {getFieldDecorator("contactNo", {
                                 rules: [{ required: true, message: ValidationConstants.contactField }]
                             })(<InputWithHead
-                                auto_Complete='new-contact'
+                                auto_complete='new-contact'
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.contactNO}
                                 placeholder={AppConstants.enterContactNo}
                                 maxLength={10}
-                                onChange={(event) => {
-                                    this.props.liveScoreAddTeamform({ key: 'mobileNumber', data: event.target.value })
-                                }}
+                                onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value,)}
                             // value={teamManagerData.mobileNumber}
                             />)}
                         </Form.Item>
@@ -565,120 +590,118 @@ if(x[0].charCodeAt()>=97)
 
     handleSubmit = e => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        const {
+            mobileNumber,
+        } = this.props.liveScoreTeamState.teamManagerData
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                const {
-                    name,
-                    alias,
-                    logoUrl,
-                    teamLogo,
-                    divisionId,
-                    organisationId,
-                    userIds,
-                    firstName,
-                    lastName,
-                    mobileNumber,
-                    email,
-                } = this.props.liveScoreTeamState.teamManagerData
-                let isCheked = this.props.liveScoreTeamState
+        if (this.props.liveScoreTeamState.managerType === 'new' && mobileNumber.length !== 10) {
+            this.props.form.validateFields((err, values) => {
+            })
+            this.setState({
+                hasError: true
+            })
+        } else {
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    const {
+                        name,
+                        alias,
+                        logoUrl,
+                        teamLogo,
+                        divisionId,
+                        organisationId,
+                        userIds,
+                        firstName,
+                        lastName,
+                        mobileNumber,
+                        email,
+                    } = this.props.liveScoreTeamState.teamManagerData
+                    let isCheked = this.props.liveScoreTeamState
+                    let usersArray = JSON.stringify(userIds)
+                    if (this.props.liveScoreTeamState.managerType === 'existing') {
+                        const formData = new FormData();
 
-                let usersArray = JSON.stringify(userIds)
+                        if (this.state.teamId !== null) {
+                            formData.append('id', this.state.teamId)
+                        }
 
-                if (this.props.liveScoreTeamState.managerType === 'existing') {
-                    const formData = new FormData();
+                        formData.append('name', captializedString(name))
 
-                    if (this.state.teamId !== null) {
-                        formData.append('id', this.state.teamId)
+                        if (alias) {
+                            formData.append('alias', captializedString(alias))
+                        }
+
+                        if (this.state.image) {
+                            formData.append('logo', this.state.image)
+                        } else if (this.props.liveScoreTeamState.teamLogo) {
+                            formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                        }
+
+                        formData.append('competitionId', id)
+                        formData.append('organisationId', organisationId)
+                        formData.append('divisionId', divisionId)
+                        formData.append('userIds', usersArray)
+
+                        if (firstName && lastName && mobileNumber && email) {
+                            formData.append('firstName', firstName)
+                            formData.append('lastName', lastName)
+                            formData.append('mobileNumber', regexNumberExpression(mobileNumber))
+                            formData.append('email', email)
+                        }
+                        this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
+
                     }
-
-                    formData.append('name', captializedString(name))
-
-                    if (alias) {
-                        formData.append('alias', captializedString(alias))
-                    }
-
-                    if (this.state.image) {
-                        formData.append('logo', this.state.image)
-                    } else if (this.props.liveScoreTeamState.teamLogo) {
-                        formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
-                    }
-
-                    formData.append('competitionId', id)
-                    formData.append('organisationId', organisationId)
-                    formData.append('divisionId', divisionId)
-                    formData.append('userIds', usersArray)
-
-                    if (firstName && lastName && mobileNumber && email) {
+                    else if (this.props.liveScoreTeamState.managerType === 'new') {
+                        const formData = new FormData();
+                        if (this.state.teamId) {
+                            formData.append('id', this.state.teamId)
+                        }
+                        formData.append('name', name)
+                        if (alias) {
+                            formData.append('alias', alias)
+                        }
+                        if (this.state.image) {
+                            formData.append('logo', this.state.image)
+                        } else if (this.props.liveScoreTeamState.teamLogo) {
+                            formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                        }
+                        formData.append('competitionId', id)
+                        formData.append('organisationId', organisationId)
+                        formData.append('divisionId', divisionId)
                         formData.append('firstName', firstName)
                         formData.append('lastName', lastName)
                         formData.append('mobileNumber', regexNumberExpression(mobileNumber))
                         formData.append('email', email)
+                        if (userIds.length > 0) {
+                            formData.append('userIds', usersArray)
+                        }
 
+                        this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
                     }
-
-                    this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
+                    else {
+                        // message.config({ duration: 0.9, maxCount: 1 })
+                        // message.error('Please select manager section.')
+                        const formData = new FormData();
+                        if (this.state.teamId) {
+                            formData.append('id', this.state.teamId)
+                        }
+                        formData.append('name', name)
+                        if (alias) {
+                            formData.append('alias', alias)
+                        }
+                        if (this.state.image) {
+                            formData.append('logo', this.state.image)
+                        } else if (this.props.liveScoreTeamState.teamLogo) {
+                            formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                        }
+                        formData.append('competitionId', id)
+                        formData.append('organisationId', organisationId)
+                        formData.append('divisionId', divisionId)
+                        this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
+                    }
                 }
-                else if (this.props.liveScoreTeamState.managerType === 'new') {
-                    const formData = new FormData();
-
-                    if (this.state.teamId) {
-                        formData.append('id', this.state.teamId)
-                    }
-
-                    formData.append('name', name)
-
-                    if (alias) {
-                        formData.append('alias', alias)
-                    }
-
-                    if (this.state.image) {
-                        formData.append('logo', this.state.image)
-                    } else if (this.props.liveScoreTeamState.teamLogo) {
-                        formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
-                    }
-
-                    formData.append('competitionId', id)
-                    formData.append('organisationId', organisationId)
-                    formData.append('divisionId', divisionId)
-                    formData.append('firstName', firstName)
-                    formData.append('lastName', lastName)
-                    formData.append('mobileNumber', regexNumberExpression(mobileNumber))
-                    formData.append('email', email)
-                    if (userIds.length > 0) {
-                        formData.append('userIds', usersArray)
-                    }
-
-                    this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
-                }
-                else {
-                    // message.config({ duration: 0.9, maxCount: 1 })
-                    // message.error('Please select manager section.')
-                    const formData = new FormData();
-
-                    if (this.state.teamId) {
-                        formData.append('id', this.state.teamId)
-                    }
-
-                    formData.append('name', name)
-                    if (alias) {
-                        formData.append('alias', alias)
-                    }
-
-                    if (this.state.image) {
-                        formData.append('logo', this.state.image)
-                    } else if (this.props.liveScoreTeamState.teamLogo) {
-                        formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
-                    }
-
-                    formData.append('competitionId', id)
-                    formData.append('organisationId', organisationId)
-                    formData.append('divisionId', divisionId)
-
-                    this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
-                }
-            }
-        });
+            });
+        }
     }
 
     /////main render method

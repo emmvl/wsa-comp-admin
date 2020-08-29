@@ -490,6 +490,11 @@ class CompetitionPartTeamGradeCalculate extends Component {
           let publishToLivescore = 0
           this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId, publishToLivescore)
           this.setState({showPublishToLivescore: false});
+		  if(this.state.showButton == "next"){
+            this.setState({
+                nextButtonClicked: true
+            })
+          }
         }
     }
     //////footer view containing all the buttons like submit and cancel

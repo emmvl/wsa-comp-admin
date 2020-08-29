@@ -1,13 +1,13 @@
-import ApiConstants from '../../../themes/apiConstants'
+import ApiConstants from "themes/apiConstants";
 
-var managerObj = {
+const managerObj = {
     id: null,
     firstName: "",
     lastName: "",
     mobileNumber: "",
     email: "",
-    teams: null
-}
+    teams: null,
+};
 
 const initialState = {
     onLoad: false,
@@ -24,77 +24,66 @@ const initialState = {
     onLoadSearch: false,
     managerSearchResult: [],
     loading: false,
-}
+};
 
-/////get manager List Object on index basis
-function getManagerListObject(managerListArray, key) {
-    let obj = null
-    let index = managerListArray.findIndex(x => x.id == key)
-    // let index = managerListArray.findIndex(x => x.firstName + " " + x.lastName == key)
-    if (index > -1) {
-        obj = managerListArray[index]
-    }
-    return obj
-}
+// function getManagerListObject(managerListArray, key) {
+//     let obj = null;
+//     let index = managerListArray.findIndex(x => x.id === key);
+//     // let index = managerListArray.findIndex(x => x.firstName + " " + x.lastName === key);
+//     if (index > -1) {
+//         obj = managerListArray[index];
+//     }
+//     return obj;
+// }
 
-function genrateTeamId(teamIdArr) {
-
-    let teamId = []
+function generateTeamId(teamIdArr) {
+    let teamId = [];
     for (let i in teamIdArr) {
-        teamId.push(teamIdArr[i].entityId)
+        teamId.push(teamIdArr[i].entityId);
     }
-
-    return teamId
-
+    return teamId;
 }
 
 function getTeamObj(teamSelectId, teamArr) {
-
-    let teamObj = []
-    let obj = ''
+    let teamObj = [];
     for (let i in teamArr) {
-
         for (let j in teamSelectId) {
-            if (teamSelectId[j] == teamArr[i].id) {
-                obj = {
-                    "name": teamArr[i].name,
-                    "id": teamArr[i].id
-                }
-                teamObj.push(obj)
+            if (teamSelectId[j] === teamArr[i].id) {
+                teamObj.push({
+                    name: teamArr[i].name,
+                    id: teamArr[i].id,
+                });
                 break;
             }
-
         }
-
     }
     return teamObj;
-
 }
 
 function getSelectedTeam(managerSelectedId, managerArr) {
-    let teamObjArr
+    let teamObjArr;
     for (let i in managerArr) {
-        if (managerSelectedId == managerArr[i].id) {
-            teamObjArr = managerArr[i].linkedEntity
-            return teamObjArr
+        if (managerSelectedId === managerArr[i].id) {
+            teamObjArr = managerArr[i].linkedEntity;
+            return teamObjArr;
         }
+    }
+}
 
-    }
-}
-function genrateSelectedTeamId(linkedEntityArr, teamArray) {
-    let teamIds = []
-    for (let i in teamArray) {
-        for (let j in linkedEntityArr) {
-            if (linkedEntityArr[j].entityId == teamArray[i].id) {
-                teamIds.push(linkedEntityArr[j].entityId)
-            }
-        }
-    }
-    return teamIds
-}
+// function generateSelectedTeamId(linkedEntityArr, teamArray) {
+//     let teamIds = [];
+//     for (let i in teamArray) {
+//         for (let j in linkedEntityArr) {
+//             if (linkedEntityArr[j].entityId === teamArray[i].id) {
+//                 teamIds.push(linkedEntityArr[j].entityId);
+//             }
+//         }
+//     }
+//     return teamIds;
+// }
+
 function liveScoreMangerState(state = initialState, action) {
     switch (action.type) {
-        //// Manager List
         case ApiConstants.API_LIVE_SCORE_MANAGER_LIST_LOAD:
             return { ...state, onLoad: true };
 
@@ -105,85 +94,57 @@ function liveScoreMangerState(state = initialState, action) {
                 MainManagerListResult: action.result,
                 managerListResult: action.result,
                 status: action.status,
-                managerSearchResult: action.result
-            }
+                managerSearchResult: action.result,
+            };
 
-        //// Add Edit Manager
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_LOAD:
             return { ...state, loading: true };
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-            }
+            return { ...state, loading: false };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
-            // let playerData = liveScoreTeamModal.getTeamViewPlayerListData(action.result.players)
+            // let playerData = liveScoreTeamModal.getTeamViewPlayerListData(action.result.players);
             return {
                 ...state,
                 teamResult: action.result,
-
             };
 
-        ////Update Manager Data
         case ApiConstants.API_LIVE_SCORE_UPDATE_MANAGER_DATA:
-
-
-            if (action.key == 'teamId') {
-
-                let teamObj = getTeamObj(action.data, state.teamResult)
-                state.managerData['teams'] = teamObj
-                state.teamId = action.data
-
-            } else if (action.key == 'managerRadioBtn') {
-                state[action.key] = action.data
-                state.exsitingManagerId = null
-
-            } else if (action.key == "managerSearch") {
-
-                state.exsitingManagerId = action.data
-                state.selectedTeam = getSelectedTeam(action.data, state.managerListResult)
-
-                // let getTeamId = genrateSelectedTeamId( state.selectedTeam, state.teamResult)
-                // state.teamId = getTeamId
-
-                // let managerTeamObj = getTeamObj(state.teamId, state.teamResult)
-                // // let managerTeamObj1 = getSelectedTeamObj(state.getSelectedTeam)
-                //  state.managerData['teams'] = managerTeamObj
-
-            } else if (action.key == 'isEditManager') {
-                state.managerData.id = action.data.id
-                state.managerData.firstName = action.data.firstName
-                state.managerData.lastName = action.data.lastName
-                state.managerData.mobileNumber = action.data.mobileNumber
-                state.managerData.email = action.data.email
-                let getTeamId = genrateTeamId(action.data.linkedEntity)
-                state.teamId = getTeamId
-
-                let managerTeamObj = getTeamObj(state.teamId, state.teamResult)
-                state.managerData['teams'] = managerTeamObj
-
-                state.managerRadioBtn = 'new'
-
-            } else if (action.key == 'isAddManager') {
-                state.managerData = managerObj
-                state.managerData.id = null
-                state.teamId = []
-                state.managerRadioBtn = 'new'
-
+            if (action.key === "teamId") {
+                state.managerData["teams"] = getTeamObj(action.data, state.teamResult);
+                state.teamId = action.data;
+            } else if (action.key === "managerRadioBtn") {
+                state[action.key] = action.data;
+                state.exsitingManagerId = null;
+            } else if (action.key === "managerSearch") {
+                state.exsitingManagerId = action.data;
+                state.selectedTeam = getSelectedTeam(action.data, state.managerListResult);
+                // state.teamId = generateSelectedTeamId( state.selectedTeam, state.teamResult);
+                // let managerTeamObj = getTeamObj(state.teamId, state.teamResult);
+                // let managerTeamObj = getSelectedTeamObj(state.getSelectedTeam);
+                // state.managerData["teams"] = managerTeamObj;
+            } else if (action.key === "isEditManager") {
+                state.managerData.id = action.data.id;
+                state.managerData.firstName = action.data.firstName;
+                state.managerData.lastName = action.data.lastName;
+                state.managerData.mobileNumber = action.data.mobileNumber;
+                state.managerData.email = action.data.email;
+                state.teamId = generateTeamId(action.data.linkedEntity);
+                state.managerData["teams"] = getTeamObj(state.teamId, state.teamResult);
+                state.managerRadioBtn = "new";
+            } else if (action.key === "isAddManager") {
+                state.managerData = managerObj;
+                state.managerData.id = null;
+                state.teamId = [];
+                state.managerRadioBtn = "new";
             } else {
-                state.managerData[action.key] = action.data
+                state.managerData[action.key] = action.data;
             }
-            return {
-                ...state,
-
-            }
-
-        ///******fail and error handling */
+            return { ...state };
 
         case ApiConstants.API_LIVE_SCORE_MANAGER_FAIL:
             return {
@@ -191,54 +152,52 @@ function liveScoreMangerState(state = initialState, action) {
                 onLoad: false,
                 loading: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
             };
+
         case ApiConstants.API_LIVE_SCORE_MANAGER_ERROR:
             return {
                 ...state,
                 onLoad: false,
                 loading: false,
                 error: action.error,
-                status: action.status
+                status: action.status,
             };
 
         case ApiConstants.API_LIVESCORE_MANAGER_FILTER:
-
             return {
                 ...state,
-                managerListResult: action.payload
-            }
-        case ApiConstants.CLEAR_LIVESCORE_MANAGER:
+                managerListResult: action.payload,
+            };
 
+        case ApiConstants.CLEAR_LIVESCORE_MANAGER:
             return {
                 ...state,
                 managerListResult: state.MainManagerListResult
             }
 
-        ////Manager Search
         case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD:
             return { ...state, onLoadSearch: true };
 
         case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS:
-            // state.managerListResult = action.result ? action.result : state.managerSearchResult
+            // state.managerListResult = action.result ? action.result : state.managerSearchResult;
             return {
                 ...state,
                 onLoadSearch: false,
                 // managerSearchResult: action.result,
                 managerListResult: action.result,
                 status: action.status,
-            }
+            };
 
         case ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_LOAD:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_SUCCESS:
-
             return {
                 ...state,
                 onLoad: false,
+                importResult: action.result,
             };
-
 
         default:
             return state;

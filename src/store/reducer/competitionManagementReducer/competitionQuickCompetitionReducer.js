@@ -554,7 +554,7 @@ function QuickCompetitionState(state = initialState, action) {
                 state.timeSlot.splice(action.index, 1)
             }
             if (action.key == "removeStartTime") {
-                state.timeSlot[action.index].startTime.splice(action.timeIndex, 1)
+                state.timeSlot[action.index].startTime.splice(action.timeindex, 1)
             }
             if (action.key == "changeTime") {
                 state.timeSlot[action.index].startTime[action.timeindex].startTime = action.value

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Modal, TimePicker, Select, Button } from 'antd';
+import { Input, Modal, TimePicker, Select, Button, Spin } from 'antd';
 import Loader from "./loader"
 import InputWithHead from "./InputWithHead"
 import moment from 'moment'
@@ -9,7 +9,7 @@ const { TextArea } = Input;
 const { Option } = Select
 class TimeSlotModal extends React.Component {
     render() {
-        const { weekDays, timeslots, modalTitle, timeSlotOK, onCancel, addTimeSlot, addStartTime, removetimeSlotDay, changeDay, removeStartTime, UpdateTimeSlotsDataManual, handleTimeslotNext, onTimslotBack } = this.props
+        const { weekDays, timeslots, modalTitle, timeSlotOK, onCancel, addTimeSlot, addStartTime, removetimeSlotDay, changeDay, removeStartTime, UpdateTimeSlotsDataManual, handleTimeslotNext, onTimslotBack, onTimeslotLoad } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal
@@ -26,6 +26,7 @@ class TimeSlotModal extends React.Component {
                     }
                 >
                     <div className="inside-container-view">
+                        <Loader visible={onTimeslotLoad} />
                         {timeslots.length > 0 && timeslots.map((item, index) => {
                             return (
                                 < div className="row " key={"timevalue" + index} >

@@ -100,7 +100,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_obj.setState({ sortBy, sortOrder });
 
 
     this_obj.props.gameTimeStatisticsListAction(this_obj.state.competitionId, this_obj.state.filter === 'All' ? "" : this_obj.state.filter, this_obj.state.offset, this_obj.state.searchText, sortBy, sortOrder)
@@ -281,7 +281,7 @@ class LiveScoreGameTimeList extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view ">
+            <div className="comp-player-grades-header-drop-down-view mt-4 ">
                 < div className="row" >
                     <div className="col-sm" style={{ alignSelf: 'center' }} >
                         <Breadcrumb separator=" > ">

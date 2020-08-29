@@ -1095,8 +1095,8 @@ function CompetitionDraws(state = initialState, action) {
       legendsArray = [];
       state.getRoundsDrawsdata = []
       state.drawOrganisations = []
-      state.allcompetitionDateRange = []
       if (action.key == 'rounds') {
+        state.allcompetitionDateRange = []
         state.competitionVenues = [];
         state.getDrawsRoundsData = [];
         state.divisionGradeNameList = [];
@@ -1254,6 +1254,36 @@ function CompetitionDraws(state = initialState, action) {
         activeDrawsRoundsData: activeDrawsRoundsData,
         error: null,
       };
+
+    case ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_LOAD:
+      return {
+        ...state,
+        onLoad: true,
+        updateLoad: true, error: null, drawOrganisations: []
+      }
+
+    case ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_SUCCESS:
+      console.log(action)
+      state.competitionVenues = JSON.parse(JSON.stringify(action.Venue_Result))
+      state.divisionGradeNameList = JSON.parse(JSON.stringify(action.division_Result))
+      let venueObjectNew = {
+        name: "All Venues",
+        id: 0
+      }
+      let divisionNameObjectNew = {
+        name: "All Division",
+        competitionDivisionGradeId: 0
+      }
+      state.competitionVenues.unshift(venueObjectNew)
+      state.divisionGradeNameList.unshift(divisionNameObjectNew)
+      state.updateLoad = false;
+      return {
+        ...state,
+        onLoad: false,
+        getDrawsRoundsData: [],
+        error: null,
+      };
+
     default:
       return state;
   }

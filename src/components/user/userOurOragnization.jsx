@@ -120,6 +120,7 @@ class UserOurOragnization extends Component {
                 })
             }
             if (userState.status == 1 && this.state.buttonPressed == "save") {
+                console.log("&&&&&&&&&&&&&&&&&&&&&&&&" + userState.status + "&&&&&" + this.state.isSameUserEmailChanged)
                 if (this.state.isSameUserEmailChanged) {
                     this.logout();
                 }
@@ -171,9 +172,14 @@ class UserOurOragnization extends Component {
 
     }
 
-    logout = async () => {
-        await localStorage.clear();
-        history.push("/");
+    logout = () => {
+        try {
+            localStorage.clear();
+            history.push("/login");
+        } catch (error) {
+           console.log("Error" + error); 
+        }
+       
     };
 
     referenceCalls = (organisationId) => {
@@ -614,7 +620,7 @@ class UserOurOragnization extends Component {
                         rules: [{ required: true, message: ValidationConstants.nameField[2] }],
                     })(
                         <InputWithHead
-                            auto_Complete='new-name'
+                            auto_complete='new-name'
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.organisationName}
                             placeholder={AppConstants.organisationName}
@@ -705,7 +711,7 @@ class UserOurOragnization extends Component {
                         rules: [{ required: true, message: ValidationConstants.addressField[2] }],
                     })(
                         <InputWithHead required={"required-field pt-0 pb-0"}
-                            auto_Complete='new-addressOne'
+                            auto_complete='new-addressOne'
                             heading={AppConstants.addressOne}
                             placeholder={AppConstants.addressOne}
                             name={AppConstants.addressOne}
@@ -718,7 +724,7 @@ class UserOurOragnization extends Component {
                 </Form.Item>
 
                 <InputWithHead
-                    auto_Complete='new-addressTwo'
+                    auto_complete='new-addressTwo'
                     heading={AppConstants.addressTwo}
                     placeholder={AppConstants.addressTwo}
                     onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
@@ -731,7 +737,7 @@ class UserOurOragnization extends Component {
                         rules: [{ required: true, message: ValidationConstants.suburbField[0] }],
                     })(
                         <InputWithHead
-                            auto_Complete='new-suburb'
+                            auto_complete='new-suburb'
                             required={"required-field pt-3 pb-0"}
                             heading={AppConstants.suburb}
                             placeholder={AppConstants.suburb}
@@ -775,7 +781,7 @@ class UserOurOragnization extends Component {
                         rules: [{ required: true, message: ValidationConstants.postCodeField[0] }],
                     })(
                         <InputWithHead
-                            auto_Complete='new-postalCode'
+                            auto_complete='new-postalCode'
                             required={"required-field"}
                             heading={AppConstants.postcode}
                             placeholder={AppConstants.postcode}
@@ -789,7 +795,8 @@ class UserOurOragnization extends Component {
                 </Form.Item>
 
                 <InputWithHead
-                    auto_Complete='new-phone'
+                    auto_complete='new-phone'
+                    maxLength={10}
                     heading={AppConstants.phoneNumber}
                     placeholder={AppConstants.phoneNumber}
                     onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
@@ -810,7 +817,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
                             value={affiliate.email}
                             disabled={!this.state.isEditable}
-                            auto_Complete='new-email'
+                            auto_complete='new-email'
                         />
                     )}
                 </Form.Item>
@@ -846,7 +853,7 @@ class UserOurOragnization extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-firstName'
+                                    auto_complete='new-firstName'
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
@@ -863,7 +870,7 @@ class UserOurOragnization extends Component {
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "middleName", index)}
                             value={item.middleName}
                             disabled={!this.state.isEditable}
-                            auto_Complete='new-middleName'
+                            auto_complete='new-middleName'
                         />
 
 
@@ -876,7 +883,7 @@ class UserOurOragnization extends Component {
                                     onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index)}
                                     setFieldsValue={item.lastName}
                                     disabled={!this.state.isEditable}
-                                    auto_Complete='new-lastName'
+                                    auto_complete='new-lastName'
                                 />
                             )}
                         </Form.Item>
@@ -896,7 +903,7 @@ class UserOurOragnization extends Component {
                                 ],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-email'
+                                    auto_complete='new-email'
                                     required={"required-field pt-0 pb-0"}
                                     heading={AppConstants.email}
                                     placeholder={AppConstants.email}
@@ -919,8 +926,9 @@ class UserOurOragnization extends Component {
                             placeholder={AppConstants.phoneNumber}
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "mobileNumber", index)}
                             value={item.mobileNumber}
+                            maxLength={10}
                             disabled={!this.state.isEditable}
-                            auto_Complete='new-phoneNumber'
+                            auto_complete='new-phoneNumber'
                         />
                         {this.state.isEditable &&
                             <div>
@@ -955,10 +963,10 @@ class UserOurOragnization extends Component {
                         </span>
                     </div>
                 }
-                {
+                {/* {
                     (userState.error && userState.status == 4) ?
                         <div style={{ color: 'red' }}>{userState.error.result.data.message}</div> : null
-                }
+                } */}
             </div >
         )
     }
@@ -1008,7 +1016,7 @@ class UserOurOragnization extends Component {
                     {affiliate.termsAndConditionsRefId == 1 &&
                         <div className=" pl-5 pb-5">
                             <InputWithHead
-                                auto_Complete='new-termsAndConditions'
+                                auto_complete='new-termsAndConditions'
                                 placeholder={AppConstants.termsAndConditions}
                                 value={affiliate.termsAndConditionsLink}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
@@ -1286,7 +1294,7 @@ class UserOurOragnization extends Component {
                     ],
                 })( */}
                         <InputWithHead
-                            auto_Complete='new-title'
+                            auto_complete='new-title'
                             heading={AppConstants.title}
                             placeholder={AppConstants.title}
                             value={item.name}

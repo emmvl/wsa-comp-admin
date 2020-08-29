@@ -1,20 +1,20 @@
-import { put, call, takeEvery } from "redux-saga/effects"
+import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 
-import AppConstants from "../../../themes/appConstants";
-import ApiConstants from "../../../themes/apiConstants";
-import history from "../../../util/history";
-import { receiptImportResult } from "../../../util/showMsgOfImportRes";
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
+import AppConstants from "themes/appConstants";
+import ApiConstants from "themes/apiConstants";
+import history from "util/history";
+import { receiptImportResult } from "util/showImportResult";
+import LiveScoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
 
 function* failSaga(result) {
   yield put({
     type: ApiConstants.API_LIVE_SCORE_TEAM_FAIL,
     error: result,
-    status: result.status
+    status: result.status,
   });
 
-  let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+  let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
   message.config({
     duration: 1.5,
     maxCount: 1,
@@ -26,7 +26,7 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_LIVE_SCORE_TEAM_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
 
   if (error.status === 400) {
@@ -92,9 +92,9 @@ function* liveScoreDeleteTeamSaga(action) {
         status: result.status,
       });
 
-      history.push('/liveScoreTeam');
+      history.push("/liveScoreTeam");
 
-      message.success('Team Deleted Successfully.');
+      message.success("Team Deleted Successfully.");
     } else {
       yield call(failSaga, result);
     }
@@ -140,9 +140,9 @@ function* addTeamLiveScoreSaga(action) {
         type: ApiConstants.API_LIVE_SCORE_ADD_TEAM_SUCCESS,
       });
 
-      message.success(action.teamId ? 'Team has been updated Successfully' : 'Team has been created Successfully.');
+      message.success(action.teamId ? "Team has been updated Successfully" : "Team has been created Successfully.");
 
-      history.push(action.key ? 'liveScoreDashboard' : '/liveScoreTeam');
+      history.push(action.key ? "liveScoreDashboard" : "/liveScoreTeam");
     } else {
       yield call(failSaga, result);
     }
@@ -157,14 +157,16 @@ function* liveScoreTeamImportSaga(action) {
 
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.API_LIVE_SCORE_TEAM_IMPORT_SUCCESS
+        type: ApiConstants.API_LIVE_SCORE_TEAM_IMPORT_SUCCESS,
+        result: result.result.data,
       });
 
-      history.push('/liveScoreTeam');
-
-      receiptImportResult(result.result);
-
-      message.success('Team Imported Successfully.');
+      if (Object.keys(result.result.data.error).length === 0) {
+        history.push("/liveScoreTeam");
+        message.success("Team Imported Successfully.");
+      } else {
+        receiptImportResult(result.result);
+      }
     } else {
       yield call(failSaga, result);
     }

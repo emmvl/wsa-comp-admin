@@ -36,7 +36,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.setState({ sortBy, sortOrder });
     this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder);
 }
 

@@ -93,7 +93,7 @@ class CompetitionModal extends React.Component {
                             <div className="col-sm pl-0 pb-2">
                                 <InputWithHead
                                     required={"required-field"}
-                                    heading={AppConstants.competitionstartDate}
+                                    heading={AppConstants.competitionStartDate}
                                 />
                                 <Form.Item
                                 >

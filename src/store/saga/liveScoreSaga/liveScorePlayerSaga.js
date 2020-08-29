@@ -1,20 +1,20 @@
 import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 
-import AppConstants from "../../../themes/appConstants";
-import ApiConstants from "../../../themes/apiConstants";
-import history from "../../../util/history";
-import { receiptImportResult } from "../../../util/showMsgOfImportRes";
-import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
+import AppConstants from "themes/appConstants";
+import ApiConstants from "themes/apiConstants";
+import history from "util/history";
+import { receiptImportResult } from "util/showImportResult";
+import LiveScoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
 
 function* failSaga(result) {
   yield put({
     type: ApiConstants.API_LIVE_SCORE_PLAYER_FAIL,
     error: result,
-    status: result.status
+    status: result.status,
   });
 
-  let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+  let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
   message.config({
     duration: 1.5,
     maxCount: 1,
@@ -26,7 +26,7 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_LIVE_SCORE_PLAYER_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
 
   if (error.status === 400) {
@@ -79,10 +79,10 @@ function* liveScoreAddEditPlayerSaga(action) {
         duration: 1.5,
         maxCount: 1,
       });
-      message.success(action.playerId ? 'Player Edited Successfully.' : 'Player Added Successfully.');
+      message.success(action.playerId ? "Player Edited Successfully." : "Player Added Successfully.");
 
-      // history.push(action.temaViewPlayer ? '/liveScoreTeamView' : '/liveScorePlayerList', { tableRecord: action.data.teamId });
-      history.push(action.propsData.screenName === 'fromMatchList' || action.propsData.screenName === 'fromTeamList' ? '/liveScoreTeamView' : '/liveScorePlayerList', { ...action.propsData });
+      // history.push(action.temaViewPlayer ? "/liveScoreTeamView" : "/liveScorePlayerList", { tableRecord: action.data.teamId });
+      history.push(action.propsData.screenName === "fromMatchList" || action.propsData.screenName === "fromTeamList" ? "/liveScoreTeamView" : "/liveScorePlayerList", { ...action.propsData });
     } else {
       yield call(failSaga, result);
     }
@@ -98,14 +98,16 @@ function* liveScorePlayerImportSaga(action) {
 
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_SUCCESS,
+        type: ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_SUCCESS,
+        result: result.result.data,
       });
 
-      history.push('/liveScorePlayerList');
-
-      receiptImportResult(result.result);
-
-      message.success('Player Imported Successfully.');
+      if (Object.keys(result.result.data.error).length === 0) {
+        history.push("/liveScorePlayerList");
+        message.success("Player Imported Successfully.");
+      } else {
+        receiptImportResult(result.result);
+      }
     } else {
       yield call(failSaga, result);
     }

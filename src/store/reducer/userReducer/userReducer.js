@@ -119,6 +119,7 @@ const initialState = {
   impersonationLoad: false,
   impersonation: false,
   userRoleEntity: [],
+  userProfileUpdate: null
 };
 
 function userReducer(state = initialState, action) {
@@ -584,6 +585,8 @@ function userReducer(state = initialState, action) {
       return {
         ...state,
         onUpUpdateLoad: false,
+        userProfileUpdate: action.result,
+        status: action.status
       };
 
     case ApiConstants.API_USER_MODULE_HISTORY_LOAD:

@@ -70,7 +70,7 @@ class LiveScoreBulkChange extends Component {
 
     componentDidUpdate() {
         if (this.state.loading == true && this.props.liveScoreBulkMatchState.onLoad == false) {
-            this.props.liveScoreUpdateBulkAction(AppConstants.slectOption, 'refreshPage')
+            this.props.liveScoreUpdateBulkAction(AppConstants.selectOption, 'refreshPage')
             this.setInitalFiledValue()
             this.setState({ loading: false })
         }
@@ -214,7 +214,7 @@ class LiveScoreBulkChange extends Component {
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={(selectedOption) => this.props.liveScoreUpdateBulkAction(selectedOption, "selectedOption")}
                             // value={selectedOption}
-                            placeholder={AppConstants.slectOption}
+                            placeholder={AppConstants.selectOption}
                         >
                             <Option value={"pushBack"}>{'Push Back'}</Option>
                             <Option value={"bringForward"}>{'Bring Forward'}</Option>
@@ -1225,7 +1225,7 @@ class LiveScoreBulkChange extends Component {
                                 } */}
 
                                 <Option value={'8'}>{'Incomplete'}</Option>
-                                <Option value={'7'}>{'Not Played'}</Option>
+                                <Option value={'9'}>{'Not Played'}</Option>
 
                             </Select>
                         )}
