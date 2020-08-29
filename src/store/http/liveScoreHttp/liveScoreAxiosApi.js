@@ -1039,6 +1039,11 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token)
     },
 
+    liveScoreGamePositions() {
+        const url = `/ref/gamePositions`;
+        return Method.dataGet(url, token)
+    },
+
     liveScoreAddEditIncidentMedia(data, incidentId) {
         let media = data.mediaArry
         let body = new FormData()

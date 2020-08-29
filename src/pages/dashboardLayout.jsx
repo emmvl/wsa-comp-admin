@@ -112,7 +112,8 @@ class DashboardLayout extends React.Component {
 
   async getPresetOrganisation() {
     const userOrganisationData = this.props.userState.getUserOrganisation;
-    const impersonationAffiliate = await getImpersonationAffiliate();
+    const impersonationAffiliate = getImpersonationAffiliate();
+    console.log('impersonationAffiliate', impersonationAffiliate);
 
     if (!impersonationAffiliate) {
       if (this.state.impersonationAffiliateOrgId) {
@@ -138,7 +139,8 @@ class DashboardLayout extends React.Component {
   }
 
   endImpersonation = async () => {
-    const impersonationAffiliate = await getImpersonationAffiliate();
+    const impersonationAffiliate = getImpersonationAffiliate();
+    console.log('impersonationAffiliate', impersonationAffiliate);
 
     if (impersonationAffiliate) {
       this.props.impersonationAction({
@@ -154,7 +156,7 @@ class DashboardLayout extends React.Component {
   };
 
   logout = async () => {
-    const impersonationOrg = await getImpersonationAffiliate();
+    const impersonationOrg = getImpersonationAffiliate();
     if (impersonationOrg) {
       this.props.impersonationAction({
         orgId: impersonationOrg.affiliateOrgId,
@@ -163,7 +165,7 @@ class DashboardLayout extends React.Component {
 
       this.setState({logout: true})
     } else {
-      await localStorage.clear();
+      localStorage.clear();
       window.location.reload();
     }
   };

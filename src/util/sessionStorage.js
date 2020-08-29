@@ -193,8 +193,8 @@ const setImpersonationAffiliate = (impersonationOrgData) => {
   localStorage.setItem('impersonation', data);
 };
 
-const getImpersonationAffiliate = async () => {
-  const dataStr = await localStorage.getItem('impersonation');
+const getImpersonationAffiliate = () => {
+  const dataStr = localStorage.getItem('impersonation');
 
   if (dataStr !== 'undefined') {
     return JSON.parse(dataStr);

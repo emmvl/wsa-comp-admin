@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Modal, Checkbox, Tooltip } from 'antd';
+import { Layout, Button, Table, Modal, Checkbox, Tooltip, Popover, Select, Input } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -285,7 +285,7 @@ class LiveScoreMatchDetails extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mb-5">
                 <div className="row">
-                    <div>
+                    <div className="col-sm-12 col-md-6 col-lg-6">
                         <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                             <span className="form-heading pb-0" >{length >= 1 ? match ? match[0].team1.name : '' : ''}</span>
                             <span class="input-heading-add-another pt-2 pl-1 pr-1" > vs </span>
@@ -295,7 +295,7 @@ class LiveScoreMatchDetails extends Component {
                             <span className='year-select-heading' >{'#' + this.state.matchId}</span>
                         </div>
                     </div>
-                    <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                    <div className="col-sm-12 col-md-6 col-lg-6" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
 
                             <div className="col-sm">
@@ -417,17 +417,15 @@ class LiveScoreMatchDetails extends Component {
 
         return (
 
-            <div className="comp-dash-table-view row mt-5">
-                <div className="col-sm">
+            <div className="comp-dash-table-view row mt-4">
+                <div className="col-sm-12 col-md-6 col-lg-3 mt-3">
                     <div className="match-score-detail">
                         <span className="event-time-start-text" >{AppConstants.umpireName}</span>
                     </div>
-                    <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }} >
+                    <div style={{ display:  "flex", alignContent: "center", flexDirection: 'column' }} >
                         {UmpireData.map((item, index) => (
                             <span className="desc-text-style side-bar-profile-data pt-2" >{`U${index + 1}`}: {item.umpireName}</span>
-                        ))
-                        }
-
+                        ))}
                     </div>
 
                     {/* <div style={{ display: "flex", alignContent: "center" }} >
@@ -438,7 +436,7 @@ class LiveScoreMatchDetails extends Component {
                     </div> */}
 
                 </div>
-                <div className="col-sm">
+                <div className="col-sm-12 col-md-6 col-lg-3 mt-3">
                     <div className="match-score-detail">
                         <span className="event-time-start-text" >{AppConstants.umpireClubName}</span>
                     </div>
@@ -461,7 +459,7 @@ class LiveScoreMatchDetails extends Component {
                         }
                     </div>
                 </div>
-                <div className="col-sm">
+                <div className="col-sm-12 col-md-6 col-lg-3 mt-3">
                     <div className="match-score-detail">
                         <span className="event-time-start-text" >{AppConstants.scorerName}</span>
                     </div>
@@ -472,7 +470,7 @@ class LiveScoreMatchDetails extends Component {
                         <span className="inbox-name-text pt-2" >S2: {length >= 1 ? match ? match[0].scorer2 ? match[0].scorer2.firstName + ' ' + match[0].scorer2.lastName : '' : '' : ''}</span>
                     </div>}
                 </div>
-                <div className="col-sm">
+                <div className="col-sm-12 col-md-6 col-lg-3 mt-3">
                     <div className="match-score-detail">
                         <span className="event-time-start-text" >{AppConstants.score}</span>
                     </div>
@@ -486,42 +484,275 @@ class LiveScoreMatchDetails extends Component {
         )
     }
 
+    teamPlayersStatus = (data) => {
+        const columns = [
+            {
+                title: 'Name',
+                dataIndex: 'name',
+                key: 'name',
+                width: 120,
+            },
+            {
+                title: 'Period 1',
+                children: [
+                    {
+                        title: 'Position',
+                        key: 'position1',
+                        width: 80,
+                        render: () => (
+                          <Select className="table-cell-select" size="small" style={{width: '100%'}}>
+                          </Select>
+                        )
+                    },
+                    {
+                        title: 'Goals',
+                        key: 'goals1',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss1',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss1',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Secs',
+                        key: 'sec1',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                ],
+            },
+            {
+                title: 'Period 2',
+                children: [
+                    {
+                        title: 'Position',
+                        key: 'position2',
+                        width: 80,
+                        render: () => (
+                          <Select className="table-cell-select" size="small" style={{width: '100%'}}>
+                          </Select>
+                        )
+                    },
+                    {
+                        title: 'Goals',
+                        key: 'goals2',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss2',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss2',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Secs',
+                        key: 'sec2',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                ],
+            },
+            {
+                title: 'Period 3',
+                children: [
+                    {
+                        title: 'Position',
+                        key: 'position3',
+                        width: 80,
+                        render: () => (
+                          <Select className="table-cell-select" size="small" style={{width: '100%', minHeight: 0}}>
+                          </Select>
+                        )
+                    },
+                    {
+                        title: 'Goals',
+                        key: 'goals3',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number"/>
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss3',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number"/>
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss3',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number"/>
+                        )
+                    },
+                    {
+                        title: 'Secs',
+                        key: 'sec3',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number"/>
+                        )
+                    },
+                ],
+            },
+            {
+                title: 'Period 4',
+                children: [
+                    {
+                        title: 'Position',
+                        key: 'position4',
+                        width: 80,
+                        render: () => (
+                          <Select className="table-cell-select" size="small" style={{width: '100%'}}>
+                          </Select>
+                        )
+                    },
+                    {
+                        title: 'Goals',
+                        key: 'goals4',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss4',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss4',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Secs',
+                        key: 'sec4',
+                        width: 60,
+                        render: () => (
+                          <Input size="small" type="number" />
+                        )
+                    },
+                ],
+            },
+        ];
 
-    //// Team details 
+        return (
+          <Table
+            className="home-dashboard-table"
+            columns={columns}
+            dataSource={data}
+            size="small"
+            scroll={{x: '100%'}}
+            pagination={false}
+            rowKey={(record) => record.id}
+          />
+        )
+    }
+
+    //// Team details
     team_View = () => {
         // const { match, umpires } = this.props.liveScoreMatchState.matchDetails
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : []
         const { team1Players, team2Players } = this.props.liveScoreMatchState
+        console.log('team1Players', team1Players)
+        console.log('team2Players', team2Players)
         const length = match ? match.length : 0
         return (
             <div className="match-details-rl-padding row mt-5">
-                <div className="col-sm" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: 'center' }}>
+                <div className="col-12" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
+                    <div className="" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: 'center' }}>
                         <img className="user-image" src={length >= 1 ? match ? match[0].team1.logoUrl : '' : ''} alt="" height="80" width="80" />
-                        <span className="live-score-profile-user-name">{length >= 1 ? match ? match[0].team1.name : '' : ''}</span>
+                        <span className="live-score-profile-user-name match-details-team-name">
+                            {length >= 1 ? match ? match[0].team1.name : '' : ''}
+                        </span>
                         <span className='year-select-heading' >{AppConstants.homeTeam}</span>
                     </div>
 
                     <div className="comp-dash-table-view mt-2">
-                        <span className="live-score-profile-user-name">{AppConstants.players}</span>
+                        <span className="live-score-profile-user-name ml-4">{AppConstants.players}</span>
                         <div>
+                            <div className="col-sm-12 col-md-12 col-lg-6">
+                                {this.teamPlayersStatus(team1Players)}
+                            </div>
                             {/* <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team1players ? team1players : data} pagination={false}/> */}
-                            <Table className="home-dashboard-table pt-2" columns={this.state.isLineUp === 1 ? columnsTeam1 : columns} dataSource={team1Players} pagination={false} />
+                            <div className="col-sm-12 col-md-12 col-lg-6">
+                                <Table
+                                  className="home-dashboard-table pt-2"
+                                  columns={this.state.isLineUp === 1 ? columnsTeam1 : columns}
+                                  dataSource={team1Players}
+                                  pagination={false}
+                                  scroll={{x: '100%'}}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className="col-sm" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: 'center' }}>
+                <div className="col-12" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
+                    <div className="" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: 'center' }}>
                         <img className="user-image" src={length >= 1 ? match ? match[0].team2.logoUrl : '' : ''} alt="" height="80" width="80" />
-                        <span className="live-score-profile-user-name">{length >= 1 ? match ? match[0].team2.name : '' : ''}</span>
+                        <span className="live-score-profile-user-name match-details-team-name">
+                            {length >= 1 ? match ? match[0].team2.name : '' : ''}
+                        </span>
                         <span className='year-select-heading' >{AppConstants.awayTeam}</span>
                     </div>
 
                     <div className="comp-dash-table-view mt-2">
-                        <span className="live-score-profile-user-name">{AppConstants.players}</span>
+                        <span className="live-score-profile-user-name ml-4">{AppConstants.players}</span>
                         <div>
-                            <Table className="home-dashboard-table pt-2" columns={this.state.isLineUp === 1 ? columnsTeam2 : columns} dataSource={team2Players} pagination={false}
-                            />
+                            <div className="col-sm-12 col-md-12 col-lg-6">
+                                {this.teamPlayersStatus(team2Players)}
+                            </div>
+                            <div className="col-sm-12 col-md-12 col-lg-6">
+                                <Table
+                                  className="home-dashboard-table pt-2"
+                                  columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
+                                  dataSource={team2Players}
+                                  pagination={false}
+                                  scroll={{x: '100%'}}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>

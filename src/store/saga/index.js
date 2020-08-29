@@ -67,7 +67,8 @@ import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
 import { liveScoreScorerListSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga, liveScoreScorerSearchSaga } from './liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
-import { liveScoreCompetitionSaga, liveScoreCompetitionDelete } from './liveScoreSaga/liveScoreCompetionSaga'
+import { liveScoreCompetitionSaga, liveScoreCompetitionDelete } from './liveScoreSaga/liveScoreCompetionSaga';
+import { liveScoreGamePositionSaga } from './liveScoreSaga/liveScoreGamePositionSaga';
 
 ////*******************Live Score********************************************End
 
@@ -243,6 +244,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_LIVESCORE_COMPETION_DELETE_INITIATE, liveScoreCompetitionDelete)
   yield takeEvery(ApiConstants.LiveScore_SETTING_VIEW_INITITAE, liveScoreSettingSaga)
   yield takeEvery(ApiConstants.LiveScore_SETTING_DATA_POST_INITATE, liveScorePostSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_GAME_POSITION_LIST_LOAD, liveScoreGamePositionSaga)
 
   // ****************************Live Score Saga**************************************End
 
