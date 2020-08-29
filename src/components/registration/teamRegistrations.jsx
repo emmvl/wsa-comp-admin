@@ -327,8 +327,9 @@ class TeamRegistrations extends Component {
         let affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
         let paymentStatus = [
-            { id: 1, description: "Not Registered" },
-            { id: 2, description: "Registered" }
+            { id: 1, description: "Pending Membership" },
+            { id: 2, description: "Pending Registration Fee" },
+            { id: 3, description: "Registered" }
         ]
 
         if (affiliateToData.affiliatedTo != undefined) {
