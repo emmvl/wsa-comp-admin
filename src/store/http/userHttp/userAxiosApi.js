@@ -214,19 +214,19 @@ let userHttpApi = {
 
   async getOrgPhotosList(payload) {
     // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
-    const url = `api / organisationphoto / list ? organisationUniqueKey = ${payload.organisationId} `;
+    const url = `api/organisationphoto/list?organisationUniqueKey=${payload.organisationId} `;
     return Method.dataGet(url, token, payload);
   },
 
   saveOrgPhoto(payload) {
     // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
-    const url = `api / organisationphoto / save`;
+    const url = `api/organisationphoto/save`;
     return Method.dataPost(url, token, payload);
   },
 
   deleteOrgPhoto(payload) {
     // let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
-    const url = `api / organisationphoto / delete /${payload.id}`;
+    const url = `api/organisationphoto/delete/${payload.id}`;
     return Method.dataDelete(url, token);
   },
 
