@@ -79,6 +79,7 @@ const columns = [
         render: (playerHistory, record, key) => (
             <span>
                 {playerHistory.map((item, index) => (
+                    (item.divisionGrade != null && item.divisionGrade != "") ? 
                     <Tooltip
                         className="comp-player-table-tag2"
                         style={{ height: "100%" }}
@@ -101,7 +102,7 @@ const columns = [
                                     {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
                             </Tag>
                         }
-                    </Tooltip>
+                    </Tooltip> : null
                 ))}
             </span>
         ),
