@@ -16,12 +16,27 @@ import { exportFilesAction } from "../../store/actions/appAction"
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
 const { Content } = Layout;
 
+let this_Obj = null
 
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+
+    this_Obj.setState({ sortBy, sortOrder });
+
+    this_Obj.props.getTeamsWithPagging(this_Obj.state.conpetitionId, this_Obj.state.offset, 10, this_Obj.state.searchText, sortBy, sortOrder)
 }
 ////columens data
 const columns = [
@@ -29,14 +44,15 @@ const columns = [
         title: 'Logo',
         dataIndex: 'logoUrl',
         key: 'logoUrl',
-        sorter: (a, b) => tableSort(a, b, "logoUrl"),
+        sorter: false,
         render: (logoUrl) => logoUrl ? <img style={{ height: 60, width: 80 }} src={logoUrl} /> : <span>{AppConstants.noImage}</span>,
     },
     {
         title: 'Team Name',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => tableSort(a, b, "name"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('teamName'),
         render: (name, record) => teamListData(record.id) ?
 
             <NavLink to={{
@@ -51,15 +67,17 @@ const columns = [
         title: 'Team Alias Name',
         dataIndex: 'alias',
         key: 'alias',
-        sorter: (a, b) => tableSort(a, b, "alias"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('teamAliasName'),
         render: (alias) => <span>{alias}</span>
     },
     {
         title: 'Affiliate',
-        dataIndex: 'organisation',
+        dataIndex: 'competitionOrganisation',
         key: 'organisation',
-        sorter: (a, b) => tableSort(a, b, "organisation"),
-        render: (organisation) => <span>{organisation ? organisation.name : ""}</span>
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('affiliate'),
+        render: (competitionOrganisation) => <span>{competitionOrganisation ? competitionOrganisation.name : ""}</span>
     },
 
     // Affiliate
@@ -67,21 +85,24 @@ const columns = [
         title: 'Division',
         dataIndex: 'division',
         key: 'division',
-        sorter: (a, b) => tableSort(a, b, "division"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('division'),
         render: (division) => <span>{division ? division.name : ""}</span>
     },
     {
         title: '#Players',
         dataIndex: 'playersCount',
         key: 'playersCount',
-        sorter: (a, b) => tableSort(a, b, "playersCount"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('players'),
         render: (playersCount) => <span>{playersCount}</span>
     },
     {
         title: 'Manager',
         dataIndex: 'managers',
         key: 'managers_1',
-        sorter: (a, b) => tableSort(a, b, "managers"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('manager'),
         render: (managers, record) => <div>
             {isArrayNotEmpty(managers) && managers.map((item, i) => (
                 <span key={`managerName${i}` + item.id} className="desc-text-style side-bar-profile-data" >{item.name}</span>
@@ -93,7 +114,8 @@ const columns = [
         title: 'Contact',
         dataIndex: 'managers',
         key: 'managers_2',
-        sorter: (a, b) => tableSort(a, b, "managers"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('contact'),
 
         render: (managers, record) => <div>
             {isArrayNotEmpty(managers) && managers.map((item, i) => (
@@ -107,7 +129,8 @@ const columns = [
         title: 'Email',
         dataIndex: 'managers',
         key: 'managers_3',
-        sorter: (a, b) => tableSort(a, b, "managers"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('email'),
         render: (managers, record) => <div>
             {isArrayNotEmpty(managers) && managers.map((item, index) => (
                 <span key={`managerEmail${index}` + item.id} className="desc-text-style side-bar-profile-data" >{item.email}</span>
@@ -126,6 +149,7 @@ class LiveScoreTeam extends Component {
             searchText: "",
             offset: 0
         };
+        this_Obj = this
     }
 
     componentDidMount() {

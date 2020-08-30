@@ -559,6 +559,7 @@ class CompetitionQuickCompetition extends Component {
             <TimeSlotModal
                 visible={this.state.timeSlotVisible}
                 onCancel={() => this.handleCancel("cancel")}
+                onTimeslotLoad={this.state.timeslotModalLoad}
                 timeSlotOK={() => this.closeTimeSlotModal("save")}
                 handleTimeslotNext={() => this.closeTimeSlotModal("next")}
                 onTimslotBack={() => this.handleCancel("back")}
@@ -626,10 +627,10 @@ class CompetitionQuickCompetition extends Component {
                         <Form.Item >
                             {getFieldDecorator('competition_name',
                                 {
-                                    rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }, ]
+                                    rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired },]
                                 })(
                                     <InputWithHead
-                                        auto_Complete="new-compName"
+                                        auto_complete="new-compName"
                                         required={"required-field pb-0 pt-0"}
                                         placeholder={AppConstants.competition_name}
                                         onChange={(e) => this.props.updateQuickCompetitionData(
@@ -642,11 +643,11 @@ class CompetitionQuickCompetition extends Component {
                                 )}
                         </Form.Item>
                     </div>
-                    <div className="col-sm mt-2  quick-comp-btn-view">
+                    <div className="col-sm mt-2  quick-comp-btn-view button-space">
                         <Button className="open-reg-button save-draft-text" onClick={() => this.setState({ venueModalVisible: true })} type="primary">+ {AppConstants.addVenue}</Button>
                         <Button className="open-reg-button" onClick={() => this.visibleTimeModal()} type="primary">+ {AppConstants.add_TimeSlot}</Button>
                     </div>
-                    <div className="col-sm-2.5 mt-2  quick-comp-btn-view paddingview">
+                    <div className="col-sm-2.5 mt-2  quick-comp-btn-view paddingview button-space">
                         <Button id={AppUniqueId.add_Div_Grade_Btn} className="open-reg-button" type="primary" onClick={() => this.visibleDivisonModal()}>+ {AppConstants.addDivisionsAndGrades}</Button>
                     </div>
 

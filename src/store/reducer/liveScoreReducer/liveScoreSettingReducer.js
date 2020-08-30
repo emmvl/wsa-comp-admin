@@ -50,7 +50,15 @@ const initialState = {
     borrowedPlayer: 'GAMES',
     gamesBorrowedThreshold: null,
     linkedCompetitionId: null,
-    inputNumberValue: null
+    inputNumberValue: null,
+    anyOrgId: null,
+    checkBoxSelection: [],
+    viewSelection: null,
+    associationChecked: false,
+    clubChecked: false,
+    associationOrg: [],
+    clubOrg: [],
+    editLoader: false
 }
 
 
@@ -97,7 +105,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
         case ApiConstants.LiveScore_SETTING_VIEW_INITITAE:
             return {
                 ...state,
-                loader: true
+                editLoader: true
             }
         case ApiConstants.LiveScore_SETTING_VIEW_SUCCESS:
 
@@ -139,7 +147,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
             return {
                 ...state,
-                loader: false,
+                editLoader: false,
                 form: {
                     ...state.form,
                     id: payload.id,
@@ -194,6 +202,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             const keys = payload.key
             const Data = payload.data
 
+            console.log(payload, 'payload')
+
             if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection" || keys == 'premierCompLink') {
                 state[keys] = Data
 
@@ -245,6 +255,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.anyOrgNonSelected = null
                     state.invitedTo = []
                     state.invitedTo.push(Data)
+                    state.associationChecked = false
+                    state.clubChecked = false
                 }
                 if (keys == 'affiliateNonSelected') {
                     state.invitedTo = []
@@ -260,6 +272,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     // state.affiliateSelected = []
                     state.anyOrgSelected = []
                     state.otherSelected = null
+                    state.associationChecked = false
+                    state.clubChecked = false
                     // state.affiliateNonSelected = null
                     state.anyOrgNonSelected = Data
 
@@ -279,7 +293,12 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
                     }
 
-                    state.invitedOrganisation = inviteeArray
+
+
+
+                    state.associationOrg = inviteeArray
+                    state.invitedOrganisation = [...state.associationOrg, ...state.clubOrg]
+
 
                 }
 
@@ -294,7 +313,10 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
                     }
 
-                    state.invitedOrganisation = inviteeArray
+                    // state.invitedOrganisation = inviteeArray
+                    state.clubOrg = inviteeArray
+                    state.invitedOrganisation = [...state.associationOrg, ...state.clubOrg]
+
                 }
 
             } else if (keys == 'record1') {
@@ -315,9 +337,20 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.form.lineupSelectionHours = null
                     state.form.lineupSelectionMins = null
                 }
+            } else if (keys == 'associationChecked' || keys == 'clubChecked') {
+                state.anyOrgNonSelected = null
+                state[keys] = payload.data
+                state.otherSelected = null
 
+                if (keys == 'associationChecked' && payload.data === false) {
+                    state.associationLeague = []
 
+                }
 
+                if (keys == 'clubChecked' && payload.data === false) {
+                    state.clubSchool = []
+
+                }
             }
             return {
                 ...state,
@@ -363,6 +396,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             state.anyOrgSelected = null
             state.otherSelected = null
             state.nonSelected = null
+            state.associationChecked = false
+            state.clubChecked = false
             state.borrowedPlayer = 'GAMES'
             return {
                 ...state,

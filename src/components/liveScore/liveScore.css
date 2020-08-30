@@ -401,7 +401,23 @@
     font-weight: 500;
     color: var(--app-f5222d);
   }
+  .ant-select-selection--multiple .ant-select-selection__choice__remove{
+    right: 8px;
+
+  }
+  .ant-select-selection--multiple .ant-select-selection__choice{
+    padding: 0 25px 0 10px;
+
+  }
   
+  .reset-ladder-font
+  {
+    padding-top: 10px !important;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 16px !important;
+    text-decoration: underline;
+  }
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {
         display: flex;

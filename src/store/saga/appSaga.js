@@ -1,13 +1,13 @@
 import { put, call, takeEvery } from "redux-saga/effects";
 
-import AppConstants from "../../themes/appConstants";
-import ApiConstants from "../../themes/apiConstants";
-import { isArrayNotEmpty } from "../../util/helpers";
-import AxiosApi from "../http/axiosApi";
-import LiveScoreApi from "../http/liveScoreHttp/liveScoreAxiosApi";
-import RegistrationAxiosApi from "../http/registrationHttp/registrationAxios";
-import CommonAxiosApi from "../http/commonHttp/commonAxios";
-import UserAxiosApi from "../http/userHttp/userAxiosApi.js";
+import AppConstants from "themes/appConstants";
+import ApiConstants from "themes/apiConstants";
+import { isArrayNotEmpty } from "util/helpers";
+import AxiosApi from "store/http/axiosApi";
+import LiveScoreApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
+import RegistrationAxiosApi from "store/http/registrationHttp/registrationAxiosApi";
+import CommonAxiosApi from "store/http/commonHttp/commonAxios";
+import UserAxiosApi from "store/http/userHttp/userAxiosApi.js";
 
 // Get the common year list reference
 function* getOnlyYearListSaga(action) {

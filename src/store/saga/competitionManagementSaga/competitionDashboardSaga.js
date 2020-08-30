@@ -1,7 +1,7 @@
 import { put, call } from 'redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
-import RegistrationAxiosApi from "../../http/registrationHttp/registrationAxios"
+import RegistrationAxiosApi from "../../http/registrationHttp/registrationAxiosApi"
 import { message } from "antd";
 import AppConstants from "../../../themes/appConstants";
 function* failSaga(result) {
@@ -68,6 +68,24 @@ export function* updateCompetitionStatusSaga(action) {
                     status: result.status,
                 });
             }
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* competitionDashboardDeleteSaga(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.competitionDashboardDelete,action.competitionId,action.targetValue);
+        if (result.status === 1) {
+            
+            yield put({
+                type: ApiConstants.API_COMPETITION_DASHBOARD_DELETE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
         } else {
             yield call(failSaga, result)
         }

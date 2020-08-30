@@ -201,13 +201,12 @@ class LiveScoreIncidentList extends Component {
     }
 
     checkUserId(record) {
-
         if (record.player.userId == null) {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
         }
         else {
-            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/userPersonal" })
+            history.push("/userPersonal", { userId: record.player.userId, screenKey: "livescore", screen: "/liveScoreIncidentList" })
         }
     }
 
@@ -256,7 +255,7 @@ class LiveScoreIncidentList extends Component {
                         <div className="row">
 
 
-                            <div className="col-sm">
+                            {/* <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
@@ -273,7 +272,7 @@ class LiveScoreIncidentList extends Component {
                                         </Button>
                                     </NavLink>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"

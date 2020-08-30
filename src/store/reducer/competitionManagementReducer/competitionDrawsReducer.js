@@ -31,7 +31,8 @@ const initialState = {
   activeDrawsRoundsData: [],
   onActRndLoad: false,
   teamNames: null,
-  liveScoreCompetiton: null
+  liveScoreCompetiton: null,
+  allcompetitionDateRange: []
 
 };
 var gradeColorArray = [];
@@ -957,6 +958,7 @@ function CompetitionDraws(state = initialState, action) {
       state.competitionVenues.unshift(venueObject)
       state.divisionGradeNameList.unshift(divisionNameObject)
       DrawsRoundsData.unshift(roundNameObject)
+      state.allcompetitionDateRange = JSON.parse(JSON.stringify(action.dateRangeResult))
       state.updateLoad = false;
       return {
         ...state,
@@ -1093,13 +1095,13 @@ function CompetitionDraws(state = initialState, action) {
       legendsArray = [];
       state.getRoundsDrawsdata = []
       state.drawOrganisations = []
-      if (action.key == 'round') {
+      if (action.key == 'rounds') {
+        state.allcompetitionDateRange = []
         state.competitionVenues = [];
         state.getDrawsRoundsData = [];
         state.divisionGradeNameList = [];
         state.legendsArray = [];
         legendsArray = []
-
       }
       return { ...state };
 
@@ -1240,7 +1242,7 @@ function CompetitionDraws(state = initialState, action) {
         updateLoad: false
       }
 
-       /////get rounds in the competition draws
+    /////get rounds in the competition draws
     case ApiConstants.API_GET_DRAWS_ACTIVE_ROUNDS_LOAD:
       return { ...state, onActRndLoad: true, error: null };
 
@@ -1252,6 +1254,36 @@ function CompetitionDraws(state = initialState, action) {
         activeDrawsRoundsData: activeDrawsRoundsData,
         error: null,
       };
+
+    case ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_LOAD:
+      return {
+        ...state,
+        onLoad: true,
+        updateLoad: true, error: null, drawOrganisations: []
+      }
+
+    case ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_SUCCESS:
+      console.log(action)
+      state.competitionVenues = JSON.parse(JSON.stringify(action.Venue_Result))
+      state.divisionGradeNameList = JSON.parse(JSON.stringify(action.division_Result))
+      let venueObjectNew = {
+        name: "All Venues",
+        id: 0
+      }
+      let divisionNameObjectNew = {
+        name: "All Division",
+        competitionDivisionGradeId: 0
+      }
+      state.competitionVenues.unshift(venueObjectNew)
+      state.divisionGradeNameList.unshift(divisionNameObjectNew)
+      state.updateLoad = false;
+      return {
+        ...state,
+        onLoad: false,
+        getDrawsRoundsData: [],
+        error: null,
+      };
+
     default:
       return state;
   }

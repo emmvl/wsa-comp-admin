@@ -1,10 +1,10 @@
 import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 
-import AppConstants from "../../themes/appConstants";
-import ApiConstants from "../../themes/apiConstants";
-import ValidationConstants from "../../themes/validationConstant";
-import CommonAxiosApi from "../http/commonHttp/commonAxios";
+import AppConstants from "themes/appConstants";
+import ApiConstants from "themes/apiConstants";
+import ValidationConstants from "themes/validationConstant";
+import CommonAxiosApi from "store/http/commonHttp/commonAxios";
 
 function* failSaga(result) {
   yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -309,7 +309,7 @@ function* playerPositionReferenceSaga(/* action */) {
 // Get the Venues list for User Module
 function* venuesListSaga(action) {
   try {
-    const result = yield call(CommonAxiosApi.getVenuesList, action.data);
+    const result = yield call(CommonAxiosApi.getVenuesList, action.data,action.sortBy,action.sortOrder);
 
     if (result.status === 1) {
       yield put({

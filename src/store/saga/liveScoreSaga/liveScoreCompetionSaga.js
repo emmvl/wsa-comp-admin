@@ -4,10 +4,10 @@ import ApiConstants from "../../../themes/apiConstants";
 import AppConstants from "../../../themes/appConstants";
 import LiveScoreAxiosApi from '../../http/liveScoreHttp/liveScoreAxiosApi';
 
-export function* liveScoreCompetitionSaga({ payload, year, orgKey }) {
+export function* liveScoreCompetitionSaga({ payload, year, orgKey, recordUmpires, sortBy, sortOrder }) {
     // yield console.log('%%%%', action)
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreCompetition, payload, year, orgKey)
+        const result = yield call(LiveScoreAxiosApi.liveScoreCompetition, payload, year, orgKey, recordUmpires, sortBy, sortOrder)
         if (result.status === 1) {
             yield put({ type: ApiConstants.API_LIVESCORE_COMPETITION_SUCCESS, payload: result.result.data })
         } else {
@@ -30,14 +30,14 @@ export function* liveScoreCompetitionSaga({ payload, year, orgKey }) {
 
 }
 
-export function* liveScoreCompetitionDelete({ payload }) {
+export function* liveScoreCompetitionDelete({ payload, key }) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreCompetitionDelete, payload)
 
 
         if (result.status == 1) {
 
-            yield put({ type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_SUCCESS, payload: { id: payload } })
+            yield put({ type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_SUCCESS, payload: { id: payload }, key: key })
             message.success('Deleted Sucessfully')
         } else {
 
@@ -55,6 +55,32 @@ export function* liveScoreCompetitionDelete({ payload }) {
         }, 800);
     }
 
+
+
+}
+
+/////livescore own part competition listing
+export function* liveScoreOwnPartCompetitionListSaga({ payload, orgKey, sortBy, sortOrder, key }) {
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScoreOwnPartCompetitionList, payload, orgKey, sortBy, sortOrder)
+        if (result.status === 1) {
+            yield put({ type: ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_SUCCESS, payload: result.result.data, key: key })
+        } else {
+            let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
+            message.config({
+                duration: 1.5,
+                maxCount: 1,
+            });
+            message.error(msg);
+        }
+    } catch (error) {
+        yield put({ type: ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_ERROR, payload: error })
+        message.config({
+            duration: 1.5,
+            maxCount: 1,
+        });
+        message.error(AppConstants.somethingWentWrong);
+    }
 
 
 }

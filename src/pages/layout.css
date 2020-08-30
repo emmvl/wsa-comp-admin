@@ -295,3 +295,11 @@
   margin-left: 24px;
   text-decoration: underline;
 }
+
+
+@media (max-width: 1024px) {
+.innerSelect-value
+.ant-select-selection-selected-value{
+  max-width: 120px !important;
+}
+}

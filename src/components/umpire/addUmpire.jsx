@@ -113,6 +113,28 @@ class AddUmpire extends Component {
         }
     }
 
+    ///change mobile number
+    onChangeNumber = (number) => {
+        if (number.length == 10) {
+            this.setState({
+                hasError: false
+            })
+            this.props.updateAddUmpireData(regexNumberExpression(number), 'mobileNumber')
+        }
+
+        else if (number.length < 10) {
+            this.props.updateAddUmpireData(regexNumberExpression(number), 'mobileNumber')
+            this.setState({
+                hasError: true
+            })
+        }
+        setTimeout(() => {
+            this.setInitalFiledValue()
+        }, 300);
+
+    }
+
+
     ///////view for breadcrumb
     headerView = () => {
         let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
@@ -212,7 +234,6 @@ class AddUmpire extends Component {
                                     }
                                 </Select>
                             )}
-
                         </Form.Item>
                     </div>
                 </div>
@@ -223,6 +244,7 @@ class AddUmpire extends Component {
     umpireNewRadioBtnView(getFieldDecorator) {
         const { affilateList, umpireData } = this.props.umpireState
         let affiliateListResult = isArrayNotEmpty(affilateList) ? affilateList : []
+        let hasError = this.state.hasError == true ? true : false
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -232,7 +254,7 @@ class AddUmpire extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-firstName'
+                                    auto_complete='new-firstName'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
@@ -251,7 +273,7 @@ class AddUmpire extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-lastName'
+                                    auto_complete='off'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
@@ -282,7 +304,7 @@ class AddUmpire extends Component {
                                 ]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-email'
+                                    auto_complete='new-email'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
@@ -295,18 +317,20 @@ class AddUmpire extends Component {
 
                     </div>
                     <div className="col-sm" >
-                        <Form.Item>
+                        <Form.Item
+                            help={hasError && ValidationConstants.mobileLength}
+                            validateStatus={hasError ? "error" : 'validating'}
+                        >
                             {getFieldDecorator(AppConstants.contactNO, {
                                 rules: [{ required: true, message: ValidationConstants.contactField }]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-contact'
+                                    auto_complete='new-contact'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
                                     maxLength={10}
-                                    onChange={(mobileNumber) => this.props.updateAddUmpireData(mobileNumber.target.value, 'mobileNumber')}
-                                // value={umpireData.mobileNumber}
+                                    onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value,)}
                                 />
                             )}
                         </Form.Item>
@@ -439,45 +463,54 @@ class AddUmpire extends Component {
 
 
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            let body = ''
-            if (!err) {
-                if (umpireRadioBtn === 'new') {
-                    if (this.state.isEdit === true) {
+        if (umpireData.mobileNumber.length !== 10) {
+            console.log("called")
+            this.props.form.validateFields((err, values) => { })
+            this.setState({
+                hasError: true
+            })
+        }
+        else {
+            this.props.form.validateFields((err, values) => {
+                let body = ''
+                if (!err) {
+                    if (umpireRadioBtn === 'new') {
+                        if (this.state.isEdit === true) {
+                            body = {
+                                "id": umpireData.id,
+                                "firstName": umpireData.firstName,
+                                "lastName": umpireData.lastName,
+                                "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
+                                "email": umpireData.email,
+                                "affiliates": umpireData.affiliates
+                            }
+                        } else {
+                            body = {
+                                "firstName": umpireData.firstName,
+                                "lastName": umpireData.lastName,
+                                "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
+                                "email": umpireData.email,
+                                "affiliates": umpireData.affiliates
+                            }
+                        }
+                        this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName, isEdit: this.state.isEdit })
+                    } else if (umpireRadioBtn === 'existing') {
                         body = {
-                            "id": umpireData.id,
-                            "firstName": umpireData.firstName,
-                            "lastName": umpireData.lastName,
-                            "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
-                            "email": umpireData.email,
+                            "id": exsitingUmpireId,
                             "affiliates": umpireData.affiliates
                         }
-                    } else {
-                        body = {
-                            "firstName": umpireData.firstName,
-                            "lastName": umpireData.lastName,
-                            "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
-                            "email": umpireData.email,
-                            "affiliates": umpireData.affiliates
+
+                        if (umpireList.length === 0) {
+                            this.setState({ isUserNotFound: true })
+                        } else {
+                            this.setState({ isUserNotFound: false })
+                            this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName })
                         }
-                    }
-                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName, isEdit: this.state.isEdit })
-                } else if (umpireRadioBtn === 'existing') {
-                    body = {
-                        "id": exsitingUmpireId,
-                        "affiliates": umpireData.affiliates
                     }
 
-                    if (umpireList.length === 0) {
-                        this.setState({ isUserNotFound: true })
-                    } else {
-                        this.setState({ isUserNotFound: false })
-                        this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName })
-                    }
                 }
-
-            }
-        });
+            });
+        }
     };
 
     /////// render function 

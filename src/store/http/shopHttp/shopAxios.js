@@ -87,7 +87,7 @@ let AxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
         let { limit, offset, search, year, postcode, affiliate, paymentMethod, order, sorterBy } = params
-        var url = `/order/summary?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&affiliate=${affiliate}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
+        var url = `/order/summary?organisationUniqueKey=${affiliate}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
         return Method.dataGet(url, token);
     },
 
@@ -96,7 +96,7 @@ let AxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
         let { limit, offset, search, year, postcode, affiliate, paymentMethod, order, sorterBy } = params
-        var url = `/order/export/summary?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&affiliate=${affiliate}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
+        var url = `/order/export/summary?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
         return Method.dataGetDownload(url, token, "orderSummary");
     },
 
@@ -104,18 +104,23 @@ let AxiosApi = {
     async getOrderStatusListing(params) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
-        let { limit, offset, search, year, paymentStatus, fulfilmentStatus, product,order,sorterBy } = params
+        let { limit, offset, search, year, paymentStatus, fulfilmentStatus, product, order, sorterBy } = params
         var url = `/order/statusList?organisationUniqueKey=${organisationUniqueKey}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&paymentStatus=${paymentStatus}&fulfilmentStatus=${fulfilmentStatus}&product=${product}&order=${order}&sorterBy=${sorterBy}`;
         return Method.dataGet(url, token);
     },
 
     ///////////update order status API 
-    updateOrderStatus(payload){
+    updateOrderStatus(payload) {
         let body = payload
         var url = `/order`;
         return Method.dataPut(url, token, body);
     },
-    
+
+    ///////////update order status API 
+    getOrderDetails(id) {
+        var url = `/order?id=${id}`;
+        return Method.dataGet(url, token);
+    },
 };
 
 const Method = {

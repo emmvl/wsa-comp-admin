@@ -1,7 +1,7 @@
 import { put, call } from 'redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
-import RegstrartionAxiosApi from "../../http/registrationHttp/registrationAxios";
+import RegstrartionAxiosApi from "../../http/registrationHttp/registrationAxiosApi";
 import { message } from "antd";
 import history from "../../../util/history";
 import AppConstants from "../../../themes/appConstants";
@@ -42,7 +42,7 @@ function* errorSaga(error) {
 export function* getCompetitionDrawsSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.getCompetitionDraws,
-            action.yearRefId, action.competitionId, action.venueId, action.roundId, action.orgId);
+            action.yearRefId, action.competitionId, action.venueId, action.roundId, action.orgId, action.startDate, action.endDate);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS,
@@ -60,16 +60,19 @@ export function* getCompetitionDrawsSaga(action) {
 ////get rounds in the competition draws
 export function* getDrawsRoundsSaga(action) {
     try {
-        const result = yield call(CompetitionAxiosApi.getDrawsRounds,
-            action.yearRefId, action.competitionId);
+        const result = action.competitionId != "-1" ? yield call(CompetitionAxiosApi.getDrawsRounds,
+            action.yearRefId, action.competitionId) : yield call(CompetitionAxiosApi.getDateRange)
         if (result.status === 1) {
-            const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId);
+            const startDate = action.competitionId != "-1" ? null : result.result.data[0].startDate
+            const endDate = action.competitionId != "-1" ? null : result.result.data[0].endDate
+            const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId, startDate, endDate);
             if (VenueResult.status === 1) {
-                const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId);
+                const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, startDate, endDate);
                 if (division_Result.status === 1) {
                     yield put({
                         type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
-                        result: result.result.data,
+                        result: action.competitionId != "-1" ? result.result.data : [],
+                        dateRangeResult: action.competitionId != "-1" ? [] : result.result.data,
                         Venue_Result: VenueResult.result.data,
                         division_Result: division_Result.result.data,
                         status: result.status,
@@ -77,7 +80,8 @@ export function* getDrawsRoundsSaga(action) {
                 } else {
                     yield put({
                         type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
-                        result: result.result.data,
+                        result: action.competitionId != "-1" ? result.result.data : [],
+                        dateRangeResult: action.competitionId != "-1" ? [] : result.result.data,
                         Venue_Result: VenueResult.result.data,
                         division_Result: [],
                         status: result.status,
@@ -87,7 +91,8 @@ export function* getDrawsRoundsSaga(action) {
             else {
                 yield put({
                     type: ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_SUCCESS,
-                    result: result.result.data,
+                    result: action.competitionId != "-1" ? result.result.data : [],
+                    dateRangeResult: action.competitionId != "-1" ? [] : result.result.data,
                     Venue_Result: [],
                     division_Result: [],
                     status: result.status,
@@ -359,6 +364,37 @@ export function* getActiveDrawsRoundsSaga(action) {
             });
         } else {
             yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* getVenueAndDivisionSaga(action) {
+    try {
+        const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId, action.startDate, action.endDate);
+        if (VenueResult.status === 1) {
+            console.log(VenueResult)
+            const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, action.startDate, action.endDate);
+            if (division_Result.status === 1) {
+                console.log(division_Result)
+                yield put({
+                    type: ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_SUCCESS,
+                    Venue_Result: VenueResult.result.data,
+                    division_Result: division_Result.result.data,
+                    status: division_Result.status,
+                });
+            }
+            else {
+                yield put({
+                    type: ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_SUCCESS,
+                    Venue_Result: VenueResult.result.data,
+                    division_Result: [],
+                    status: VenueResult.status,
+                });
+            }
+        } else {
+            yield call(failSaga, VenueResult)
         }
     } catch (error) {
         yield call(errorSaga, error)

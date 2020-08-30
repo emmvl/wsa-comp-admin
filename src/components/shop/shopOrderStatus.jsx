@@ -32,7 +32,7 @@ function tableSort(key) {
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'desc') {
         sortBy = sortOrder = null;
     }
-    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_obj.setState({ sortBy, sortOrder });
     let { yearRefId, searchText, paymentStatus, fulfilmentStatus, product } = this_obj.state
     let page = this_obj.props.shopOrderStatusState.orderStatusCurrentPage
     let params =
@@ -58,12 +58,12 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("id"),
         render: (orderId, record) =>
-            // <NavLink to={{
-            //     pathname: `/userPersonal`,
-            //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
-            // }}>
-            <span className="input-heading-add-another pt-0" >{orderId}</span>
-        // </NavLink>
+            <NavLink to={{
+                pathname: `/orderDetails`,
+                state: { orderId: orderId }
+            }}>
+                <span className="input-heading-add-another pt-0" >{orderId}</span>
+            </NavLink>
     },
     {
         title: 'Date',
@@ -175,7 +175,7 @@ class ShopOrderStatus extends Component {
             paymentStatus: -1,
             fulfilmentStatus: -1,
             product: -1,
-            searchText: "",
+            searchText: props.location.state ? props.location.state.orderId : "",
         }
         this_obj = this
     }
@@ -276,7 +276,7 @@ class ShopOrderStatus extends Component {
 
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-4 pt-2">
+            <div className="comp-player-grades-header-drop-down-view mt-4 pt-2 orderSpace">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
@@ -289,6 +289,7 @@ class ShopOrderStatus extends Component {
                                 <div style={{ display: "flex", justifyContent: 'flex-end' }} >
                                     <div className="comp-product-search-inp-width" >
                                         <Input className="product-reg-search-input"
+                                            value={this.state.searchText}
                                             onChange={(e) => this.onChangeSearchText(e)}
                                             placeholder="Search..."
                                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}
@@ -451,7 +452,9 @@ class ShopOrderStatus extends Component {
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={orderStatusListingData}
-                        pagination={false} />
+                        pagination={false}
+                        rowKey={(record, index) => "orderStatusListingData" + record.orderId + index}
+                    />
 
                 </div>
                 <div className="d-flex justify-content-end">

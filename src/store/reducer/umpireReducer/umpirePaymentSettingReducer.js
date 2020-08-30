@@ -1,19 +1,43 @@
 import ApiConstants from "../../../themes/apiConstants";
 
+var affiliateDivObj = [{ id: 1, name: 'OpenA', disabled: false }, { id: 2, name: 'OpenB', disabled: false }, { id: 3, name: 'OpenC', disabled: false }]
+var compOrgDivObj = [{ id: 1, name: 'OpenA', disabled: false }, { id: 2, name: 'OpenB', disabled: false }, { id: 3, name: 'OpenC', disabled: false }]
+
 const initialState = {
     onLoad: false,
     error: null,
     result: [],
     status: 0,
     umpireComptitionList: [],
-    paidByCompOrg: true,
+    paidByCompOrg: false,
     paidByAffiliate: false,
     byBadgeBtn: false,
     byPoolBtn: false,
     inputFieldArray: [],
     paidByCompOrgDivision: [],
     byBadgeDivision: [],
+    selectAllDiv: false,
+    paidByAffiliateDivision: [],
+    affiliateDiv: affiliateDivObj,
+    compOrgDiv: compOrgDivObj,
 };
+
+function getSelectedValue(divId, allArray) {
+    console.log(divId, 'getSelectedValue', allArray)
+    for (let i in allArray) {
+
+        for (let j in divId) {
+
+            if (divId[j] === allArray[i].id) {
+                allArray[i].disabled = true
+
+            }
+        }
+    }
+
+    return allArray
+}
+
 function umpirePaymentSetting(state = initialState, action) {
 
     switch (action.type) {
@@ -38,14 +62,21 @@ function umpirePaymentSetting(state = initialState, action) {
 
             if (key === 'paidByComp') {
                 state.paidByCompOrg = data
-                state.paidByAffiliate = false
-                state.byBadgeDivision = []
-                state.inputFieldArray = []
 
             } else if (key === 'paidByAffilate') {
                 state.paidByAffiliate = data
-                state.paidByCompOrg = false
-                state.paidByCompOrgDivision = []
+
+            } else if (key === 'selectAllDiv') {
+                state[key] = data
+
+            } else if (key === 'paidByCompOrgDivision' || key === 'paidByAffiliateDivision') {
+                // if (key === 'paidByCompOrgDivision') {
+                //     state.affiliateDiv = getSelectedValue(data, state.affiliateDiv)
+                // }
+                // if (key === 'paidByAffiliateDivision') {
+                //     state.compOrgDiv = getSelectedValue(data, state.compOrgDiv)
+                // }
+                state[key] = data
 
             } else if (key === 'byBadge') {
                 state.byBadgeBtn = data

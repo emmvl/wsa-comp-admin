@@ -78,6 +78,8 @@ class CompetitionPartTeamGradeCalculate extends Component {
             updateGradeOnLoad: false,
             competitionStatus: 0,
             tooltipVisibleDelete: false,
+			showPublishToLivescore : false,
+            showButton:null,		
             columns: [
                 {
                     title: 'Divisions',
@@ -179,12 +181,15 @@ class CompetitionPartTeamGradeCalculate extends Component {
     publishtApiCall = (key) => {
         if (key == "next") {
             this.setState({
-                nextButtonClicked: true
+				showPublishToLivescore:true,
+                showButton:key
             })
-            this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId)
         }
         else {
-            this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId)
+            this.setState({
+                showPublishToLivescore:true,
+                showButton:key
+            })
         }
     }
 
@@ -468,6 +473,30 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
 
 
+	handlePublishToLivescore =  (key) =>{
+        if(key == "yes"){
+            if(this.state.showButton == "next"){
+                this.setState({
+                    nextButtonClicked: true
+                })
+            }
+            this.setState({
+                showPublishToLivescore:false
+            })
+            let publishToLivescore = 1
+            this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId, publishToLivescore)
+        }
+        else{
+          let publishToLivescore = 0
+          this.props.publishGradeTeamSummaryAction(this.state.yearRefId, this.state.firstTimeCompId, publishToLivescore)
+          this.setState({showPublishToLivescore: false});
+		  if(this.state.showButton == "next"){
+            this.setState({
+                nextButtonClicked: true
+            })
+          }
+        }
+    }
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         let isPublished = this.state.competitionStatus == 1 ? true : false
@@ -514,6 +543,16 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             {/* </NavLink> */}
                         </div>
+						<Modal
+                            title={AppConstants.finalGrading}
+                            className="add-membership-type-modal"
+                            visible={this.state.showPublishToLivescore}
+                            onOk={() => this.handlePublishToLivescore("yes")}
+                            onCancel={() => this.handlePublishToLivescore("no")}
+                            okText={AppConstants.yes}
+                            cancelText={AppConstants.no}>
+                            <div>{AppConstants.publishToLivescore}</div>
+                        </Modal>
                     </div>
                     {/* <div className="col-sm-1">
                         <div className="comp-buttons-view">

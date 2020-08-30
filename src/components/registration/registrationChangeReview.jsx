@@ -192,8 +192,8 @@ class RegistrationChangeReview extends Component {
 
                     <div className="col-sm">
                         <InputWithHead
-                            heading={AppConstants.competitionAdimistrator}
-                            placeholder={AppConstants.competitionAdimistrator}
+                            heading={AppConstants.competitionAdministrator}
+                            placeholder={AppConstants.competitionAdministrator}
                             value={detailsData.competitionAdministrator}
                             onChange={(e) => this.props.updateRegistrationReviewAction({ data: captializedString(e.target.value), key: 'competitionAdministrator' })}
                         // onBlur={(i) => this.props.form.setFieldsValue({

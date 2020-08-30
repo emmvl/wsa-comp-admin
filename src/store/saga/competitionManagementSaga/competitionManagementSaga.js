@@ -68,21 +68,3 @@ export function* fixtureTemplateSaga() {
         yield call(errorSaga, error)
     }
 } 
-
-export function* competitionDashboardDeleteSaga(action) {
-    try {
-        const result = yield call(CompManagementAxiosApi.competitionDashboardDelete,action.competitionId);
-        if (result.status === 1) {
-            
-            yield put({
-                type: ApiConstants.API_COMPETITION_DASHBOARD_DELETE_SUCCESS,
-                result: result.result.data,
-                status: result.status,
-            });
-        } else {
-            yield call(failSaga, result)
-        }
-    } catch (error) {
-        yield call(errorSaga, error)
-    }
-}

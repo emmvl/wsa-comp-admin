@@ -42,6 +42,7 @@ class LiveScoreIncidentView extends Component {
     handleOk = e => {
         this.setState({
             visible: false,
+            modaldata: ''
         });
     };
 
@@ -49,6 +50,7 @@ class LiveScoreIncidentView extends Component {
     handleCancel = e => {
         this.setState({
             visible: false,
+            modaldata: ''
         });
     };
 
@@ -189,9 +191,11 @@ class LiveScoreIncidentView extends Component {
                     <div className="col-sm-10" >
                         <div className="row pl-3">
                             {mediaPlayer.map((item) => {
+                                var str = item.mediaType;
+                                var res = str.split("/", 1);
                                 return <div className="side-bar-profile-data">
                                     {
-                                        item.mediaType == "video/mp4" ?
+                                        res == "video" ?
                                             <video className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl} height='70' width='70' />
                                             :
                                             <img className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl} height='70' width='70' />

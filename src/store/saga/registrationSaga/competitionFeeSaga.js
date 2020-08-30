@@ -1,6 +1,6 @@
 import { put, call } from "redux-saga/effects";
 import ApiConstants from "../../../themes/apiConstants";
-import AxiosApi from "../../http/registrationHttp/registrationAxios";
+import AxiosApi from "../../http/registrationHttp/registrationAxiosApi";
 import commonAxiosApi from "../../http/axiosApi";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 import { message } from "antd";
@@ -104,7 +104,8 @@ export function* getAllCompetitionFeesDeatilsSaga(action) {
                 const result = yield call(
                     AxiosApi.getAllCompetitionFeesDeatils,
                     action.competitionId,
-                    action.sourceModule
+                    action.sourceModule,
+                    action.affiliateOrgId
                 );
                 if (result.status === 1) {
                     yield put({
@@ -155,7 +156,8 @@ export function* saveCompetitionFeesDetailsSaga(action) {
         const result = yield call(
             AxiosApi.saveCompetitionFeesDetails,
             action.payload,
-            action.sourceModule
+            action.sourceModule,
+            action.affiliateOrgId
         );
         if (result.status === 1) {
             yield put({
@@ -178,7 +180,8 @@ export function* saveCompetitionFeesMembershipTabSaga(action) {
         const result = yield call(
             AxiosApi.saveCompetitionFeesMembershipTab,
             action.payload,
-            action.competitionId
+            action.competitionId,
+            action.affiliateOrgId
         );
         if (result.status === 1) {
             yield put({
@@ -204,7 +207,8 @@ export function* saveCompetitionFeesDivisionSaga(action) {
         const result = yield call(
             AxiosApi.saveCompetitionFeesDivisionAction,
             action.payload,
-            action.competitionId
+            action.competitionId,
+            action.affiliateOrgId
         );
         if (result.status === 1) {
             yield put({
@@ -282,7 +286,8 @@ export function* postPaymentOptionSaga(action) {
 //// Save Competition fee - section
 export function* saveCompetitionFeesSection(action) {
     try {
-        const result = yield call(AxiosApi.postCompetitionFeeSection, action.data, action.competitionId)
+        const result = yield call(AxiosApi.postCompetitionFeeSection, action.data, action.competitionId,
+                                        action.affiliateOrgId)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_SAVE_COMPETITION_FEES_SECTION_SUCCESS,
@@ -300,7 +305,8 @@ export function* saveCompetitionFeesSection(action) {
 
 export function* postCompetitonDiscountSaga(action) {
     try {
-        const result = yield call(AxiosApi.postCompetitonFeeDiscount, action.payload, action.competitionId)
+        const result = yield call(AxiosApi.postCompetitonFeeDiscount, action.payload, action.competitionId,
+                                action.affiliateOrgId)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_SUCCESS,

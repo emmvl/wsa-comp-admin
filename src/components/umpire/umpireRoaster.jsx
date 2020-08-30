@@ -41,7 +41,7 @@ function tableSort(key) {
             "offset": this_obj.state.offsetData
         }
     }
-    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_obj.setState({ sortBy, sortOrder });
     this_obj.props.umpireRoasterListAction(this_obj.state.selectedComp, this_obj.state.status, refRoleTypes('umpire'), body, sortBy, sortOrder)
 }
 /////function to sort table column
@@ -87,7 +87,7 @@ const columns = [
             return (
                 <div>
                     {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item, index) => (
-                        <span key={`organisationName` + index} className='multi-column-text-aligned'>{item.organisation.name}</span>
+                        <span key={`organisationName` + index} className='multi-column-text-aligned'>{item.competitionOrganisation.name}</span>
                     ))
                     }
                 </div>)

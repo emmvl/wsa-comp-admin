@@ -50,7 +50,11 @@ class LiveScoreAddIncident extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit ? this.props.location.state.isEdit : false : false,
             tableRecord: this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : false : false,
             load: false,
-            incidentId: null
+            incidentId: null,
+            matchId: this.props.location.state ? this.props.location.state.matchId : null,
+            matchDetails: this.props.location.state ? this.props.location.state.matchDetails : null,
+            crossImageIcon: false,
+            crossVideoIcon: false
         }
     }
 
@@ -80,6 +84,7 @@ class LiveScoreAddIncident extends Component {
             'incidentTeamName': incidentData.teamId,
             'incidentPlayerName': incidentData.playerIds,
             'incidentName': incidentData.injury,
+            'mnbMatchId': incidentData.mnbMatchId
         });
     }
 
@@ -154,9 +159,28 @@ class LiveScoreAddIncident extends Component {
         // return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    deleteImage() {
+        this.setState({ image: null, imageSelection: '', crossImageIcon: false })
+        this.props.liveScoreUpdateIncidentData(null, "incidentImage")
+    }
+
+    deleteVideo() {
+        this.setState({ video: null, videoSelection: '', crossVideoIcon: false })
+        this.props.liveScoreUpdateIncidentData(null, "incidentVideo")
+    }
+
     //// Form View
     contentView = (getFieldDecorator) => {
         const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds } = this.props.liveScoreIncidentState
+        console.log(this.state.matchDetails, 'matchDetails')
+        let team_1 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.name : null : null
+        let team1_Id = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.id : null : null
+        let team_2 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team2.name : null : null
+        let team2_Id = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team2.id : null : null
+        let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("DD-MM-YYYY") : null
+        let startDate = date ? moment(date, 'DD-MM-YYYY') : null
+        let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
+        let startTime = time_formate ? moment(time_formate, "HH:mm") : null
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -171,7 +195,7 @@ class LiveScoreAddIncident extends Component {
                             showTime={false}
                             name={'registrationOepn'}
                             placeholder={"dd-mm-yyyy"}
-                            value={incidentData ? incidentData.date ? moment(incidentData.date) : '' : ''}
+                            value={incidentData ? incidentData.date ? moment(incidentData.date) : startDate : startDate}
                         />
                     </div>
                     <div className="col-sm">
@@ -185,20 +209,32 @@ class LiveScoreAddIncident extends Component {
                             placeholder='Select Time'
                             defaultOpenValue={moment("00:00", "HH:mm")}
                             use12Hours={false}
-                            value={incidentData ? incidentData.time ? moment(incidentData.time) : '' : ''}
+                            value={incidentData ? incidentData.time ? moment(incidentData.time) : startTime : startTime}
                         />
                     </div>
                 </div>
 
                 <div className="row" >
                     <div className="col-sm" >
+
+
+                        {/* <Form.Item className="slct-in-add-manager-livescore">
+
+                            {getFieldDecorator("mnbMatchId", {
+                                rules: [{ required: true, message: ValidationConstants.mnbMatchId }],
+                            })( */}
+
                         <InputWithHead
-                            auto_Complete='new-mnbId'
+                            auto_complete='new-mnbId'
+                            // required={"required-field"}
                             heading={AppConstants.matchID}
                             placeholder={AppConstants.matchID}
+                            value={this.state.matchId ? this.state.matchId : incidentData.mnbMatchId}
                             onChange={(event) => this.props.liveScoreUpdateIncidentData(event.target.value, "mnbMatchId")}
-                            value={incidentData ? incidentData.mnbMatchId : ''}
                         />
+                        {/* )}
+                        </Form.Item> */}
+
                     </div>
                     <div className="col-sm" >
                         <Form.Item className="slct-in-add-manager-livescore">
@@ -210,21 +246,33 @@ class LiveScoreAddIncident extends Component {
                                 rules: [{ required: true, message: ValidationConstants.teamName }],
                             })(
 
-                                <Select
-                                    // showSearch
-                                    // mode="multiple"
-                                    className="reg-form-multiple-select"
-                                    placeholder='Select Home Team'
-                                    style={{ width: "100%" }}
-                                    onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
-                                    // value={incidentData.teamId ? incidentData.teamId : ''}
+                                this.state.isEdit ?
+                                    <Select
+                                        className="reg-form-multiple-select"
+                                        placeholder='Select Home Team'
+                                        style={{ width: "100%" }}
+                                        onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
+                                        // value={incidentData.teamId ? incidentData.teamId : ''}
 
-                                    optionFilterProp="children"
-                                >
-                                    {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
-                                        < Option value={item.id} > {item.name}</Option>
-                                    ))}
-                                </Select>
+                                        optionFilterProp="children"
+                                    >
+                                        {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
+                                            < Option value={item.id} > {item.name}</Option>
+                                        ))}
+                                    </Select>
+                                    :
+                                    <Select
+                                        className="reg-form-multiple-select"
+                                        placeholder='Select Home Team'
+                                        style={{ width: "100%" }}
+                                        onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
+                                        // value={incidentData.teamId ? incidentData.teamId : ''}
+
+                                        optionFilterProp="children"
+                                    >
+                                        < Option value={team1_Id} > {team_1}</Option>
+                                        < Option value={team2_Id} > {team_2}</Option>
+                                    </Select>
                             )}
                         </Form.Item>
                     </div>
@@ -324,12 +372,29 @@ class LiveScoreAddIncident extends Component {
                             style={{ display: 'none' }}
                             onChange={(event) => {
                                 this.setImage(event.target, 'evt.target')
-                                this.setState({ imageTimeout: 2000 })
+                                this.setState({ imageTimeout: 2000, crossImageIcon: false })
                                 setTimeout(() => {
-                                    this.setState({ imageTimeout: null })
+                                    this.setState({ imageTimeout: null, crossImageIcon: true })
                                 }, 2000);
                             }}
                         />
+
+                        <div style={{ position: 'absolute', bottom: 40, left: 150 }}>
+                            {(this.state.crossImageIcon || incidentData.addImages) &&
+                                <span className='user-remove-btn pl-2'
+                                    style={{ cursor: 'pointer' }}>
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.redCross}
+                                        alt=""
+                                        width="16"
+                                        height="16"
+                                        onClick={() => this.deleteImage()}
+                                    />
+                                </span>
+                            }
+                        </div>
+
                     </div>
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.addVideos} />
@@ -348,12 +413,28 @@ class LiveScoreAddIncident extends Component {
                             style={{ display: 'none' }}
                             onChange={(event) => {
                                 this.setVideo(event.target, "evt.target")
-                                this.setState({ videoTimeout: 2000 })
+                                this.setState({ videoTimeout: 2000, crossVideoIcon: false })
                                 setTimeout(() => {
-                                    this.setState({ videoTimeout: null })
+                                    this.setState({ videoTimeout: null, crossVideoIcon: true })
                                 }, 2000);
                             }}
                         />
+
+                        <div style={{ position: 'absolute', bottom: 40, left: 150 }}>
+                            {(this.state.crossVideoIcon || incidentData.addVideo) &&
+                                <span className='user-remove-btn pl-2'
+                                    style={{ cursor: 'pointer' }}>
+                                    <img
+                                        className="dot-image"
+                                        src={AppImages.redCross}
+                                        alt=""
+                                        width="16"
+                                        height="16"
+                                        onClick={() => this.deleteVideo()}
+                                    />
+                                </span>
+                            }
+                        </div>
                     </div>
                 </div>
 
@@ -396,13 +477,20 @@ class LiveScoreAddIncident extends Component {
         e.preventDefault();
 
         const { incidentData, incidentId, incidentMediaIds } = this.props.liveScoreIncidentState;
+        console.log(incidentMediaIds, 'incidentMediaIds')
+
+
+        // let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("DD-MM-YYYY") : null
+        // let startDate = date ? moment(date, 'DD-MM-YYYY') : null
+        // let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
+        // let startTime = time_formate ? moment(time_formate, "HH:mm") : null
 
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { id } = JSON.parse(getLiveScoreCompetiton());
 
-                let date = moment(incidentData.date).format("YYYY-MMM-DD");
-                let time = moment(incidentData.time).format("HH:mm");
+                let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("YYYY-MMM-DD") : moment(incidentData.date).format("YYYY-MMM-DD");
+                let time = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : moment(incidentData.time).format("HH:mm");
                 let startDateTime = moment(date + " " + time);
                 let formatDateTime = new Date(startDateTime).toISOString();
                 let mediaArry;
@@ -435,7 +523,8 @@ class LiveScoreAddIncident extends Component {
                     };
                 } else {
                     body = {
-                        matchId: incidentData.mnbMatchId,
+                        // matchId: incidentData.mnbMatchId,
+                        matchId: this.state.matchId,
                         teamId: incidentData.teamId,
                         competitionId: id,
                         incidentTime: formatDateTime,

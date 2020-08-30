@@ -37,7 +37,7 @@ function tableSort(key) {
     } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.setState({ sortBy, sortOrder });
     this_Obj.props.registrationMainDashboardListAction(this_Obj.state.year, sortBy, sortOrder);
 }
 

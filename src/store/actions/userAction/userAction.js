@@ -27,8 +27,8 @@ function getAffiliatesListingAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_AFFILIATES_LISTING_LOAD,
     payload: payload,
-    sortBy: sortBy,
-    sortOrder: sortOrder
+    sortBy,
+    sortOrder
   }
 }
 
@@ -126,8 +126,8 @@ function getUserDashboardTextualAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD,
     payload: payload,
-    sortBy: sortBy,
-    sortOrder: sortOrder
+    sortBy,
+    sortOrder
   };
 }
 
@@ -191,8 +191,8 @@ function getUserFriendAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_USER_FRIEND_LOAD,
     payload: payload,
-    sortBy: sortBy,
-    sortOrder: sortOrder
+    sortBy,
+    sortOrder
   };
 }
 
@@ -200,8 +200,8 @@ function getUserReferFriendAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_USER_REFER_FRIEND_LOAD,
     payload: payload,
-    sortBy: sortBy,
-    sortOrder: sortOrder
+    sortBy,
+    sortOrder
   };
 }
 
@@ -247,8 +247,8 @@ function getAffiliateDirectoryAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_AFFILIATE_DIRECTORY_LOAD,
     payload: payload,
-    sortBy: sortBy,
-    sortOrder: sortOrder
+    sortBy,
+    sortOrder
   };
 }
 

@@ -264,8 +264,34 @@ class RegistrationMembershipFee extends Component {
                     this.setState({ loading: true })
                 }
                 else if (this.state.membershipTabKey == "3") {
+                     let errMsg = null;
                     let discountData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductDiscountData.membershipProductDiscounts[0].discounts))
-                    discountData.map((item) => {
+
+                    
+                    let disMap = new Map();
+                    let discountDuplicateError = false;
+                    for(let item of discountData){
+                        let key = null;
+                        if(item.membershipPrdTypeDiscountTypeRefId == 2){
+                            key= item.membershipProductTypeMappingId + "#" + item.membershipPrdTypeDiscountTypeRefId + "#" + item.discountCode;
+                            console.log("key value"+JSON.stringify(key));
+                          }
+                        else if(item.membershipPrdTypeDiscountTypeRefId == 3){
+                            key= item.membershipProductTypeMappingId + "#" + item.membershipPrdTypeDiscountTypeRefId + "#" + item.discountCode;
+                        }
+                        if(disMap.get(key) == undefined){
+                            disMap.set(key, 1);
+                        }
+                        else{
+                            if(item.membershipPrdTypeDiscountTypeRefId == 3){
+                                errMsg = ValidationConstants.membershipDuplicateFamilyDiscountError;
+                            }         
+                            else{
+                                errMsg = ValidationConstants.duplicateDiscountError;
+                            }
+                            discountDuplicateError = true;
+                            break;
+                        }
                         if (item.childDiscounts) {
                             if (item.childDiscounts.length == 0) {
                                 item.childDiscounts = null
@@ -286,8 +312,8 @@ class RegistrationMembershipFee extends Component {
                         else {
                             item['amount'] = null
                         }
-                        return item
-                    })
+                                   // return item
+                    }
                     let discountBody =
                     {
                         "membershipProductId": productId,
@@ -298,8 +324,15 @@ class RegistrationMembershipFee extends Component {
                             }
                         ]
                     }
-                    this.props.regSaveMembershipProductDiscountAction(discountBody)
-                    this.setState({ loading: true })
+                    if(discountDuplicateError){
+                        message.config({ duration: 0.9, maxCount: 1 })
+                        message.error(errMsg);
+                    }
+                    else{
+                        this.props.regSaveMembershipProductDiscountAction(discountBody)
+                        this.setState({ loading: true })
+                    }
+                   
                 }
             }
         });
@@ -683,7 +716,7 @@ class RegistrationMembershipFee extends Component {
                     onCancel={this.handleCancel}
                 >
                     <InputWithHead
-                        auto_Complete="new-membershipTypeName"
+                        auto_complete="new-membershipTypeName"
                         required={"pt-0 mt-0"}
                         heading={AppConstants.membershipTypeName}
                         placeholder={AppConstants.pleaseEnterMembershipTypeName}
@@ -712,7 +745,7 @@ class RegistrationMembershipFee extends Component {
                     {getFieldDecorator('membershipProductName',
                         { rules: [{ required: true, message: ValidationConstants.membershipProductIsRequired }] })(
                             <InputWithHead
-                                auto_Complete="new-membershipProductName"
+                                auto_complete="new-membershipProductName"
                                 required={"required-field pb-0 "}
                                 heading={AppConstants.membershipProductName}
                                 placeholder={AppConstants.membershipProductName}
@@ -841,7 +874,7 @@ class RegistrationMembershipFee extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-number"
+                                auto_complete="new-number"
                                 heading={AppConstants.percentageOff_FixedAmount}
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
@@ -853,7 +886,7 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-gernalDiscount"
+                                auto_complete="new-gernalDiscount"
                                 heading={AppConstants.description}
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -916,7 +949,7 @@ class RegistrationMembershipFee extends Component {
                         })}
                     </Select>
                     <InputWithHead
-                        auto_Complete="new-code"
+                        auto_complete="new-code"
                         heading={AppConstants.code}
                         placeholder={AppConstants.code}
                         onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
@@ -926,7 +959,7 @@ class RegistrationMembershipFee extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-number"
+                                auto_complete="new-number"
                                 heading={AppConstants.percentageOff_FixedAmount}
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
@@ -938,7 +971,7 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-gernalDiscount"
+                                auto_complete="new-gernalDiscount"
                                 heading={AppConstants.description}
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -1039,7 +1072,7 @@ class RegistrationMembershipFee extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-number"
+                                auto_complete="new-number"
                                 heading={AppConstants.percentageOff_FixedAmount}
                                 placeholder={AppConstants.percentageOff_FixedAmount}
                                 onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
@@ -1050,7 +1083,7 @@ class RegistrationMembershipFee extends Component {
                         </div>
                         <div className="col-sm">
                             <InputWithHead
-                                auto_Complete="new-gernalDiscount"
+                                auto_complete="new-gernalDiscount"
                                 heading={AppConstants.description}
                                 placeholder={AppConstants.gernalDiscount}
                                 onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -1098,7 +1131,7 @@ class RegistrationMembershipFee extends Component {
             case 5:
                 return <div>
                     <InputWithHead
-                        auto_Complete="new-description"
+                        auto_complete="new-description"
                         heading={AppConstants.description}
                         placeholder={AppConstants.description}
                         onChange={(e) => this.onChangeDescription(e.target.value, index)}
@@ -1106,7 +1139,7 @@ class RegistrationMembershipFee extends Component {
                         disabled={this.state.membershipIsUsed}
                     />
                     <InputWithHead
-                        auto_Complete="new-question"
+                        auto_complete="new-question"
                         heading={AppConstants.question}
                         placeholder={AppConstants.question}
                         onChange={(e) => this.onChangeQuestion(e.target.value, index)}
@@ -1182,9 +1215,14 @@ class RegistrationMembershipFee extends Component {
     }
 
     ////add  or remove  discount in discount section
-    addRemoveDiscount = (keyAction, index) => {
+     addRemoveDiscount = (keyAction, index) => {
         this.props.addRemoveDiscountAction(keyAction, index)
-    }
+        if(keyAction == "remove"){
+            setTimeout(() =>{
+                this.setFieldDecoratorValues();
+              },300);            
+        }        
+    };  
 
     //On change membership product discount type
     onChangeMembershipProductDisType = (discountType, index) => {

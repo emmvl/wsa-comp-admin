@@ -14,7 +14,7 @@ import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScore
 import { NavLink } from 'react-router-dom';
 import { liveScoreScorerUpdate, liveScoreAddEditScorer, liveScoreScorerSearch } from '../../store/actions/LiveScoreAction/liveScoreScorerAction'
 import Loader from '../../customComponents/loader'
-import { isArrayNotEmpty, captializedString } from "../../util/helpers";
+import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../../util/helpers";
 import { liveScoreManagerSearch, liveScoreClear, liveScoreManagerListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveScoreActions'
 import Tooltip from 'react-png-tooltip'
@@ -80,14 +80,11 @@ class LiveScoreAddScorer extends Component {
     }
 
     setInitalFiledValue(scorerData) {
-
         let teamsArray = []
         for (let i in scorerData.teams) {
             teamsArray.push(scorerData.teams[i].id)
         }
-
         this.props.form.setFieldsValue({
-
             'First Name': scorerData.firstName,
             'Last Name': scorerData.lastName,
             'Email Address': scorerData.email,
@@ -211,9 +208,32 @@ class LiveScoreAddScorer extends Component {
 
     }
 
+    onChangeNumber = (number) => {
+        const { scorerData, scorerRadioBtn, existingScorerId } = this.props.liveScoreScorerState
+        let key = scorerData.id ? "mobileNumber" : "contactNo"
+        console.log(scorerData)
+        if (number.length == 10) {
+            this.setState({
+                hasError: false
+            })
+            this.props.liveScoreScorerUpdate(regexNumberExpression(number), key)
+        }
+        else if (number.length < 10) {
+            this.props.liveScoreScorerUpdate(regexNumberExpression(number), key)
+            this.setState({
+                hasError: true
+            })
+        }
+        setTimeout(() => {
+            this.props.form.setFieldsValue({
+                'Contact no': scorerData.id ? scorerData.mobileNumber : scorerData.contactNo,
+            })
+        }, 500);
+
+    }
+
     scorerNewRadioBtnView(getFieldDecorator) {
-
-
+        let hasError = this.state.hasError == true ? true : false
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -223,7 +243,8 @@ class LiveScoreAddScorer extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[0] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-firstName'
+                                    auto_complete='new-password'
+                                    type='text'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.firstName}
                                     onChange={(firstName) => this.props.liveScoreScorerUpdate(captializedString(firstName.target.value), "firstName")}
@@ -232,7 +253,6 @@ class LiveScoreAddScorer extends Component {
                                         'First Name': captializedString(i.target.value)
                                     })} />
                             )}
-
                         </Form.Item>
                     </div>
                     <div className="col-sm" >
@@ -241,7 +261,7 @@ class LiveScoreAddScorer extends Component {
                                 rules: [{ required: true, message: ValidationConstants.nameField[1] }],
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-lastName'
+                                    auto_complete='off'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
@@ -254,7 +274,6 @@ class LiveScoreAddScorer extends Component {
                         </Form.Item>
                     </div>
                 </div>
-
                 <div className="row" >
                     <div className="col-sm" >
                         <Form.Item>
@@ -272,7 +291,8 @@ class LiveScoreAddScorer extends Component {
                                 ]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-email'
+                                    auto_complete='new-email'
+                                    type='email'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
@@ -283,16 +303,20 @@ class LiveScoreAddScorer extends Component {
                         </Form.Item>
                     </div>
                     <div className="col-sm" >
-                        <Form.Item>
+                        <Form.Item
+                            help={hasError && ValidationConstants.mobileLength}
+                            validateStatus={hasError ? "error" : 'validating'}
+                        >
                             {getFieldDecorator(AppConstants.contactNO, {
                                 rules: [{ required: true, message: ValidationConstants.contactField }]
                             })(
                                 <InputWithHead
-                                    auto_Complete='new-contact'
+                                    auto_complete='new-contact'
+                                    // type='number'
                                     required={"required-field pb-0 pt-0"}
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
-                                    onChange={(contactNo) => this.props.liveScoreScorerUpdate(contactNo.target.value, "contactNo")}
+                                    onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
                                     maxLength={10} />
                             )}
                         </Form.Item>
@@ -452,15 +476,38 @@ class LiveScoreAddScorer extends Component {
     onSaveClick = e => {
         const { scorerData, scorerRadioBtn, existingScorerId } = this.props.liveScoreScorerState
         e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                if (scorerRadioBtn === 'new') {
-                    this.props.liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn, this.state.isEdit)
-                } if (scorerRadioBtn === 'existing') {
-                    this.props.liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn)
-                }
+        let mobileCheck = scorerData.id ? scorerData.mobileNumber : scorerData.contactNo
+        if (scorerRadioBtn === 'new') {
+
+            if (mobileCheck.length !== 10) {
+                this.props.form.validateFields((err, values) => {
+                })
+                this.setState({
+                    hasError: true
+                })
+            } else {
+                this.props.form.validateFields((err, values) => {
+                    if (!err) {
+                        if (scorerRadioBtn === 'new') {
+                            this.props.liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn, this.state.isEdit)
+                        } if (scorerRadioBtn === 'existing') {
+                            this.props.liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn)
+                        }
+                    }
+                });
             }
-        });
+        }
+        else {
+            this.props.form.validateFields((err, values) => {
+                if (!err) {
+                    if (scorerRadioBtn === 'new') {
+                        this.props.liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn, this.state.isEdit)
+                    } if (scorerRadioBtn === 'existing') {
+                        this.props.liveScoreAddEditScorer(scorerData, existingScorerId, scorerRadioBtn)
+                    }
+                }
+            });
+        }
     };
     /////// render function 
     render() {

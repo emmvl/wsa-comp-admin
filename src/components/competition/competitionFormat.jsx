@@ -565,7 +565,7 @@ class CompetitionFormat extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
-                            // auto_Complete='beforeExtraTime'
+                            // auto_complete='beforeExtraTime'
                             placeholder={AppConstants.name}
                             value={item.name}
                             onChange={(e) => this.updateNonPlayingNames(e.target.value, index, "name")}
@@ -668,7 +668,7 @@ class CompetitionFormat extends Component {
                                 width: "fit-content", display: "flex", flexDirection: "row",
                                 alignItems: "center"
                             }}  >
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span id={AppUniqueId.compYear_DrpDwn} className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     id={AppUniqueId.compYear_DrpDwn}
                                     name={"yearRefId"}
@@ -693,7 +693,7 @@ class CompetitionFormat extends Component {
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50,
                             }} >
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span id={AppUniqueId.compName_DrpDwn} className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
                                     id={AppUniqueId.compName_DrpDwn}
                                     name={"competition"}
@@ -732,7 +732,7 @@ class CompetitionFormat extends Component {
                 <InputWithHead disabled={disabledStatus} heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
                     value={data.competitionName} onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}  ></InputWithHead>
                 <div style={{ marginTop: 15 }}>
-                    <InputWithHead id={AppUniqueId.comp_Format_Type} heading={AppConstants.competitionFormat} required={"required-field"} />
+                    <InputWithHead headingId={AppUniqueId.comp_Format_Type} heading={AppConstants.competitionFormat} required={"required-field"} />
                     <Form.Item >
                         {getFieldDecorator('competitionFormatRefId', {
                             rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }],
@@ -768,7 +768,7 @@ class CompetitionFormat extends Component {
                     ))}
                 </Select> */}
 
-                <InputWithHead heading={AppConstants.matchType} required={"required-field"} />
+                <InputWithHead heading={AppConstants.matchType} required={"required-field"} headingId={AppUniqueId.matchType_Selection_dpdn} />
                 <Form.Item >
                     {getFieldDecorator('matchTypeRefId', {
                         rules: [{ required: true, message: ValidationConstants.matchTypeRequired }],
@@ -811,8 +811,8 @@ class CompetitionFormat extends Component {
                     </div> : null
                 }
 
-                <span id={AppUniqueId.competition_Frequency} className="applicable-to-heading">{AppConstants.frequency}</span>
-                <Radio.Group disabled={disabledStatus} className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionTypeRefId')} value={data.competitionTypeRefId} >
+                <span className="applicable-to-heading">{AppConstants.frequency}</span>
+                <Radio.Group id={AppUniqueId.competition_Frequency} disabled={disabledStatus} className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionTypeRefId')} value={data.competitionTypeRefId} >
                     <div className="fluid-width" >
                         <div className="row" >
                             {(appState.typesOfCompetition || []).map((item, index) => (
@@ -828,16 +828,16 @@ class CompetitionFormat extends Component {
                 <div className="fluid-width">
                     <div className="row" >
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead auto_Complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.days} value={data.roundInDays}
+                            <InputWithHead auto_complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.days} value={data.roundInDays}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInDays')}></InputWithHead>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead auto_Complete="new-roundInHours" disabled={disabledStatus} placeholder={AppConstants.hours} value={data.roundInHours}
+                            <InputWithHead auto_complete="new-roundInHours" disabled={disabledStatus} placeholder={AppConstants.hours} value={data.roundInHours}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInHours')}></InputWithHead>
 
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead auto_Complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.mins} value={data.roundInMins}
+                            <InputWithHead auto_complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.mins} value={data.roundInMins}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInMins')}></InputWithHead>
                         </div>
                     </div>
@@ -845,7 +845,7 @@ class CompetitionFormat extends Component {
                 {data.IsQuickCompetition == 1 ?
                     <div className="inside-container-view pt-4">
                         <InputWithHead
-                            auto_Complete="new-nonPlayingDate"
+                            auto_complete="new-nonPlayingDate"
                             heading={AppConstants.nonPlayingDates} />
                         {nonPlayingDates.length > 0 ? nonPlayingDates.map((item, index) =>
                             this.nonPlayingDateView(item, index))
@@ -906,7 +906,7 @@ class CompetitionFormat extends Component {
                                             }]
                                         })(
                                             <InputWithHead
-                                                auto_Complete="new-matchDuration"
+                                                auto_complete="new-matchDuration"
                                                 id={AppUniqueId.match_Duration}
                                                 heading={AppConstants.matchDuration}
                                                 disabled={disabledStatus}
@@ -925,7 +925,7 @@ class CompetitionFormat extends Component {
                                                 rules: [{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }]
                                             })(
                                                 <InputWithHead
-                                                    auto_Complete="new-mainBreak"
+                                                    auto_complete="new-mainBreak"
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.mainBreak}
                                                     required={(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? "required-field" : null}
@@ -945,7 +945,7 @@ class CompetitionFormat extends Component {
                                                 rules: [{ required: (data.matchTypeRefId == 3 ? true : false), message: ValidationConstants.qtrBreak }]
                                             })(
                                                 <InputWithHead
-                                                    auto_Complete="new-qtrBreak"
+                                                    auto_complete="new-qtrBreak"
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.qtrBreak} placeholder={AppConstants.mins}
                                                     required={(data.matchTypeRefId == 3) ? "required-field" : null}
@@ -963,8 +963,8 @@ class CompetitionFormat extends Component {
                                                 rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
                                             })(
                                                 <InputWithHead
-                                                    auto_Complete="new-timeBetweenGames"
-                                                    id={AppUniqueId.timeBetween_Matches}
+                                                    auto_complete="new-timeBetweenGames"
+                                                    headingId={AppUniqueId.timeBetween_Matches}
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins}
                                                     required={"required-field"}

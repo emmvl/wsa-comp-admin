@@ -17,12 +17,37 @@ import { getCommonRefData, getGenderAction, registrationPaymentStatusAction } fr
     '../../store/actions/commonAction/commonAction';
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 import { getAllCompetitionAction } from "../../store/actions/registrationAction/registrationDashboardAction"
-import { getOnlyYearListAction, } from '../../store/actions/appAction'
+import { getOnlyYearListAction } from '../../store/actions/appAction'
+import { getTeamRegistrationsAction, exportTeamRegistrationAction } from '../../store/actions/registrationAction/registration'
 import { isEmptyArray } from "formik";
 import { currencyFormat } from "../../util/currencyFormat";
+import Tooltip from 'react-png-tooltip'
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
+
+
+let this_Obj = null;
+
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = "ASC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "ASC") {
+        sortOrder = "DESC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "DESC") {
+        sortBy = sortOrder = null;
+    }
+
+    this_Obj.setState({ sortBy, sortOrder });
+    this_Obj.props.getTeamRegistrationsAction(this_Obj.state.filter, sortBy, sortOrder);
+}
 
 
 const columns = [
@@ -30,50 +55,85 @@ const columns = [
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => a.firstName.localeCompare(b.firstName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (firstName, record) =>
+            <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
+                <span className="input-heading-add-another pt-0" >{firstName}</span>
+            </NavLink>
     },
     {
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => a.lastName.localeCompare(b.lastName),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (lastName, record) =>
+            <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
+                <span className="input-heading-add-another pt-0" >{lastName}</span>
+            </NavLink>
     },
     {
         title: 'Organisation',
-        dataIndex: 'organisation',
-        key: 'organisation',
-        sorter: (a, b) => a.organisation.localeCompare(b.organisation),
+        dataIndex: 'organisationName',
+        key: 'organisationName',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Team',
-        dataIndex: 'team',
-        key: 'team',
-        sorter: (a, b) => a.team.localeCompare(b.team),
+        dataIndex: 'teamName',
+        key: 'teamName',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'User Reg.Team',
         dataIndex: 'userRegTeam',
         key: 'userRegTeam',
-        sorter: (a, b) => a.userRegTeam.localeCompare(b.userRegTeam),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
 
     },
     {
         title: 'User Role',
-        dataIndex: 'userRole',
-        key: 'userRole',
-        sorter: (a, b) => a.userRole.localeCompare(b.userRole),
+        dataIndex: 'roles',
+        key: 'roles',
+        sorter: false,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (roles, record) =>{
+            return (
+                <div>
+                    {(roles || []).map((item) =>(
+                    <div key={item.roleDesc}>{item.roleDesc}</div>
+                    ))}
+                </div>
+            )
+        }
     },
     {
         title: 'Team Reg. Type',
         dataIndex: 'teamRegType',
         key: 'teamRegType',
-        sorter: (a, b) => a.teamRegType.localeCompare(b.teamRegType),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        sorter: (a, b) => a.status.localeCompare(b.status),
+        filterDropdown: true,
+        filterIcon: () => {
+            return (
+
+                <Tooltip background='#ff8237'>
+                    <span>{AppConstants.statusContextMsg}</span>
+                </Tooltip>
+
+            );
+        },
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
 
 ];
@@ -82,23 +142,69 @@ class TeamRegistrations extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            organisationId: getOrganisationData().organisationUniqueKey,
+            organisationUniqueKey: getOrganisationData().organisationUniqueKey,
             yearRefId: -1,
             competitionUniqueKey: '-1',
-            affiliate: -1,
+            filterOrganisation: -1,
             competitionId: "",
-            paymentStatusRefId: -1,
+            statusRefId: -1,
             searchText: '',
         }
+
+        
+        this_Obj = this;
     }
 
     componentDidMount() {
-        this.referenceCalls(this.state.organisationId);
+        this.referenceCalls(this.state.organisationUniqueKey);
+        this.setState({
+            searchText: ''
+        })
         this.handleRegTableList(1);
     }
 
     handleRegTableList = (page) => {
-        console.log(page)
+        const {
+            organisationUniqueKey,
+            yearRefId,
+            competitionUniqueKey,
+            filterOrganisation,
+            searchText,
+            statusRefId
+        } = this.state;
+
+        let filter = {
+            organisationUniqueKey,
+            yearRefId,
+            competitionUniqueKey,
+            filterOrganisation,
+            searchText,
+            statusRefId,
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0)
+            }
+        }
+        this.props.getTeamRegistrationsAction(filter);
+        this.setState({ filter });
+	}
+
+    exportTeamRegistration = () => {
+        let obj =
+        {
+            organisationUniqueKey: this.state.organisationUniqueKey,
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.competitionUniqueKey,
+            filterOrganisation: this.state.filterOrganisation,
+            searchText: this.state.searchText,
+            statusRefId: this.state.statusRefId,
+        }
+
+        this.props.exportTeamRegistrationAction(obj);
+        this.setState({
+            load:true
+        })
+        this.handleRegTableList(1);
     }
 
     referenceCalls = (organisationId) => {
@@ -115,12 +221,12 @@ class TeamRegistrations extends Component {
             await this.setState({ competitionUniqueKey: value });
             this.handleRegTableList(1);
         }
-        else if (key == "affiliate") {
-            await this.setState({ affiliate: value });
+        else if (key == "filterOrganisation") {
+            await this.setState({ filterOrganisation: value });
             this.handleRegTableList(1);
         }
-        else if (key == "paymentStatusRefId") {
-            await this.setState({ paymentStatusRefId: value });
+        else if (key == "statusRefId") {
+            await this.setState({ statusRefId: value });
             this.handleRegTableList(1);
         }
     }
@@ -129,16 +235,21 @@ class TeamRegistrations extends Component {
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             //called api
+            this.handleRegTableList(1);
         }
     }
 
     onChangeSearchText = async (e) => {
-        console.log(e)
+        let value = e.target.value;
+        await this.setState({ searchText: e.target.value })
+        if (value == null || value == "") {
+            this.handleRegTableList(1);
+        }
     }
 
     onClickSearchIcon = async () => {
-        console.log("called")
-        // this.handleRegTableList(1);
+
+        this.handleRegTableList(1);
     }
 
     ///////view for breadcrumb
@@ -208,7 +319,7 @@ class TeamRegistrations extends Component {
                         <div style={{ marginRight: '1%', display: "flex", alignItems: 'center' }}>
                             <div className="d-flex flex-row-reverse button-with-search pb-3"
                             >
-                                <Button className="primary-add-comp-form" style={{ marginRight: 20 }} type="primary">
+                                <Button className="primary-add-comp-form" style={{ marginRight: 20 }} type="primary"  onClick={() => this.exportTeamRegistration()}>
                                     <div className="row">
                                         <div className="col-sm">
                                             <img
@@ -234,8 +345,9 @@ class TeamRegistrations extends Component {
         let affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
         let paymentStatus = [
-            { id: 1, description: "Not Registered" },
-            { id: 2, description: "Registered" }
+            { id: 1, description: "Pending Membership" },
+            { id: 2, description: "Pending Registration Fee" },
+            { id: 3, description: "Registered" }
         ]
 
         if (affiliateToData.affiliatedTo != undefined) {
@@ -249,7 +361,7 @@ class TeamRegistrations extends Component {
                 uniqueValues = [...uniqueValues, ...arr];
             }
         }
-        const { competitions } = this.props.userRegistrationState;
+        let competitions = this.props.registrationState.teamRegistrationTableData.competitionList;
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="fluid-width" style={{ marginRight: 55 }} >
@@ -286,7 +398,7 @@ class TeamRegistrations extends Component {
                                     {(competitions || []).map(item => {
                                         return (
                                             <Option key={"competition" + item.competitionUniqueKey} value={item.competitionUniqueKey}>
-                                                {item.competitionName}
+                                                {item.name}
                                             </Option>
                                         );
                                     })}
@@ -300,8 +412,8 @@ class TeamRegistrations extends Component {
                                     showSearch
                                     optionFilterProp="children"
                                     className="year-select reg-filter-select"
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'affiliate')}
-                                    value={this.state.affiliate}>
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'filterOrganisation')}
+                                    value={this.state.filterOrganisation}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(uniqueValues || []).map((org, index) => (
                                         <Option key={org.organisationId} value={org.organisationId}>{org.name}</Option>
@@ -314,8 +426,8 @@ class TeamRegistrations extends Component {
                                 <div className='year-select-heading'>{AppConstants.status}</div>
                                 <Select
                                     className="year-select reg-filter-select"
-                                    onChange={(e) => this.onChangeDropDownValue(e, 'paymentStatusRefId')}
-                                    value={this.state.paymentStatusRefId}>
+                                    onChange={(e) => this.onChangeDropDownValue(e, 'statusRefId')}
+                                    value={this.state.statusRefId}>
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(paymentStatus || []).map((g, index) => (
                                         <Option key={g.id} value={g.id}>{g.description}</Option>
@@ -332,42 +444,23 @@ class TeamRegistrations extends Component {
 
     ////////form content view
     contentView = () => {
-        let userRegistrationState = this.props.userRegistrationState;
-        let userRegDashboardList = [{
-            "firstName": "Marissa",
-            "lastName": "Cooper",
-            "organisation": "Netball Queensland",
-            "team": "Firebirds",
-            "userRegTeam": "Sam Obrien",
-            "userRole": "Manager",
-            teamRegType: "Individuals to Pay",
-            status: "Not Registered"
-        }, {
-            "firstName": "Samir",
-            "lastName": "singh",
-            "organisation": "Netball Queensland",
-            "team": "Firebirds",
-            "userRegTeam": "Sam Obrien",
-            "userRole": "Manager",
-            teamRegType: "User Registering Paid",
-            status: "Registered"
-        }]
-        let total = userRegistrationState.userRegDashboardListTotalCount;
+        let teamRegDashboardList = this.props.registrationState.teamRegistrationTableData;
+
         return (
             <div className="comp-dash-table-view mt-2">
-                <div className="table-responsive home-dash-table-view">
+                <div className="table-responsive home-dash-table-view table-competition">
                     <Table className="home-dashboard-table"
                         columns={columns}
-                        dataSource={userRegDashboardList}
+                        dataSource={teamRegDashboardList.teamRegistrations}
                         pagination={false}
-                        loading={userRegistrationState.onUserRegDashboardLoad === true && true}
+                        loading={this.props.registrationState.onLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        current={userRegistrationState.userRegDashboardListPage}
-                        total={total}
+                        current={teamRegDashboardList.page.currentPage}
+                        total={teamRegDashboardList.page.totalCount}
                         onChange={(page) => this.handleRegTableList(page)}
                     />
                 </div>
@@ -401,7 +494,9 @@ function mapDispatchToProps(dispatch) {
         getGenderAction,
         getOnlyYearListAction,
         getAllCompetitionAction,
-        registrationPaymentStatusAction
+        registrationPaymentStatusAction,
+        getTeamRegistrationsAction,
+        exportTeamRegistrationAction
     }, dispatch);
 }
 
@@ -411,7 +506,8 @@ function mapStatetoProps(state) {
         userState: state.UserState,
         commonReducerState: state.CommonReducerState,
         appState: state.AppState,
-        registrationDashboardState: state.RegistrationDashboardState
+        registrationDashboardState: state.RegistrationDashboardState,
+        registrationState: state.RegistrationState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)((TeamRegistrations));

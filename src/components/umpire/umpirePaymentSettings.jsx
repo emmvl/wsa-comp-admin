@@ -171,11 +171,12 @@ class UmpirePaymentSetting extends Component {
                 <span className='text-heading-large pt-2' >{AppConstants.whoPayUmpire}</span>
 
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <Radio
+                    <Checkbox
+                        className="single-checkbox"
                         onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.checked, key: 'paidByComp' })}
                         checked={paidByCompOrg}>
                         {'Paid by Competition Organiser'}
-                    </Radio>
+                    </Checkbox>
 
 
                     {paidByCompOrg &&
@@ -184,47 +185,89 @@ class UmpirePaymentSetting extends Component {
                         </div>
                     }
 
-                    <Radio
-                        className={paidByCompOrg ? 'pt-5' : 'pt-4'}
+                    <Checkbox
+                        className="single-checkbox ml-0"
                         onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.checked, key: 'paidByAffilate' })}
                         checked={paidByAffiliate}>
                         {'Paid by Affiliate'}
-                    </Radio>
+                    </Checkbox>
 
                     {paidByAffiliate &&
                         <div className="inside-container-view"  >
                             {this.paidByAffiliateView()}
                         </div>
                     }
+
+                    <div className="inside-container-view"  >
+                        {this.feesView()}
+                    </div>
                 </div>
             </div>
         )
     }
 
     paidByCompOrgView() {
-        const { paidByCompOrgDivision } = this.props.umpirePaymentSettingState
+        const { paidByCompOrgDivision, selectAllDiv, compOrgDiv } = this.props.umpirePaymentSettingState
         return (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <Checkbox defaultChecked={true}>
+                <Checkbox
+                    onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.checked, key: 'selectAllDiv' })}
+                    checked={selectAllDiv}
+
+                >
                     {AppConstants.allDivisions}
                 </Checkbox>
-                <Select
-                    mode='multiple'
-                    placeholder={'Select'}
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                    onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({ value: divisionId, key: 'paidByCompOrgDivision' })}
-                    value={paidByCompOrgDivision}
-                >
+                {
+                    selectAllDiv === false &&
+                    <Select
+                        mode='multiple'
+                        placeholder={'Select'}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                        onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({ value: divisionId, key: 'paidByCompOrgDivision' })}
+                        value={paidByCompOrgDivision}
+                    >
 
-                    <Option value={"openA"}>{'OpenA'}</Option>
-                    <Option value={"openB"}>{'OpenB'}</Option>
-                    <Option value={"openC"}>{'OpenC'}</Option>
-                </Select>
+                        {compOrgDiv.map((item) => (
+                            <Option disabled={item.disabled} value={item.id}>{item.name}</Option>
+                        ))}
+
+                    </Select>
+                }
             </div>
         )
     }
 
     paidByAffiliateView() {
+        const { paidByAffiliateDivision, selectAllDiv, affiliateDiv } = this.props.umpirePaymentSettingState
+        return (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Checkbox
+                    onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.checked, key: 'selectAllDiv' })}
+                    checked={selectAllDiv}
+
+                >
+                    {AppConstants.allDivisions}
+                </Checkbox>
+                {
+                    selectAllDiv === false &&
+                    <Select
+                        mode='multiple'
+                        placeholder={'Select'}
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                        onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({ value: divisionId, key: 'paidByAffiliateDivision' })}
+                        value={paidByAffiliateDivision}
+                    >
+
+                        {affiliateDiv.map((item) => (
+                            <Option disabled={item.disabled} value={item.id}>{item.name}</Option>
+                        ))}
+                    </Select>
+                }
+            </div>
+        )
+    }
+
+    feesView() {
         const { byBadgeBtn, byPoolBtn } = this.props.umpirePaymentSettingState
 
         return (
@@ -310,7 +353,7 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_Complete='new-name'
+                            auto_complete='new-name'
                             heading={AppConstants.name}
                             placeholder={"Name"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'name' })}
@@ -319,7 +362,7 @@ class UmpirePaymentSetting extends Component {
                     </div>
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_Complete='new-umpireRate'
+                            auto_complete='new-umpireRate'
                             heading={AppConstants.umpireRate}
                             placeholder={"Umpire Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpireRate' })}
@@ -329,7 +372,7 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_Complete='new-umpireResRate'
+                            auto_complete='new-umpireResRate'
                             heading={AppConstants.umpireResRate}
                             placeholder={"Umpire Reserve Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpReserveRate' })}
@@ -339,7 +382,7 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_Complete='new-umpireRate'
+                            auto_complete='new-umpireRate'
                             heading={AppConstants.umpireCoachrate}
                             placeholder={"Umpire Coach Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpCoachRate' })}
@@ -363,7 +406,7 @@ class UmpirePaymentSetting extends Component {
 
                 {this.umpireAllocationRadioView()}
 
-                <span className='text-heading-large pt-5' >{AppConstants.umpirePrefences}</span>
+                <span className='text-heading-large pt-5' >{AppConstants.umpirePreferences}</span>
 
 
                 <div className="row" >

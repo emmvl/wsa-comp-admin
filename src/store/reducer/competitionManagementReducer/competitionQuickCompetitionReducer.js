@@ -56,12 +56,17 @@ const initialState = {
     teamPlayerArray: [
         { id: 1, value: "Import" }, { id: 2, value: "Merge with an Existing Competition" }
     ],
-    SelectedTeamPlayer: 0,
+    selectedTeamPlayer: 0,
     importModalVisible: false,
     teamsImportData: [],
     isTeamNotInDraws: 0,
     importPlayer: false,
-    postSelectedVenues: []
+    postSelectedVenues: [],
+    mergeCompetitionList: [],
+    onInvitationLoad: false,
+    mergeValidate: false,
+    validateMessage: "",
+    newSelectedCompetition: ""
 };
 var gradeColorArray = [];
 const lightGray = '#999999';
@@ -210,6 +215,7 @@ function setupDateObjectArray(dateArray, drawObject) {
 
     return tempDateArray;
 }
+
 function checkVenueCourtNumber(mainCourtNumberArray, object) {
     for (let i in mainCourtNumberArray) {
         if (mainCourtNumberArray[i].venueCourtId === object.venueCourtId) {
@@ -247,6 +253,7 @@ function sortCourtArray(mainCourtNumberArray) {
     isSortedArray = mainCourtNumberArray.sort(sortAlphaNum)
     return isSortedArray
 }
+
 // function for draw structure
 function drawsDataStructure(drawsData) {
     let mainCourtNumberArray = [];
@@ -290,6 +297,7 @@ function drawsDataStructure(drawsData) {
     console.log(mainCourtNumberArray, sortedDateArray)
     return { mainCourtNumberArray, sortedDateArray };
 }
+
 function getGradeColor(gradeId) {
     let gradeColorTempArray = JSON.parse(JSON.stringify(gradeColorArray));
     let index = gradeColorTempArray.findIndex((x) => x.gradeId === gradeId);
@@ -546,7 +554,7 @@ function QuickCompetitionState(state = initialState, action) {
                 state.timeSlot.splice(action.index, 1)
             }
             if (action.key == "removeStartTime") {
-                state.timeSlot[action.index].startTime.splice(action.timeIndex, 1)
+                state.timeSlot[action.index].startTime.splice(action.timeindex, 1)
             }
             if (action.key == "changeTime") {
                 state.timeSlot[action.index].startTime[action.timeindex].startTime = action.value
@@ -790,8 +798,8 @@ function QuickCompetitionState(state = initialState, action) {
             }
 
         case ApiConstants.API_UPDATE_QUICKCOMPETITION_INVITATIONS:
-            if (action.key == "SelectedTeamPlayer") {
-                state.SelectedTeamPlayer = action.value
+            if (action.key == "selectedTeamPlayer") {
+                state.selectedTeamPlayer = action.value
                 if (action.value == 1) {
                     state.importModalVisible = true
 
@@ -808,7 +816,13 @@ function QuickCompetitionState(state = initialState, action) {
                 ...state,
             }
 
-        case ApiConstants.quickComp_IMPORT_DATA_CLEAN:
+        case ApiConstants.QUICKCOMP_IMPORT_DATA_CLEAN:
+            if (action.key == "all") {
+                state.selectedTeamPlayer = 0
+                state.mergeValidate = false
+                state.teamsImportData = []
+
+            }
             return {
                 ...state
             }
@@ -846,6 +860,65 @@ function QuickCompetitionState(state = initialState, action) {
                 onLoad: false,
                 onQuickCompLoad: false,
                 status: action.status,
+            }
+
+        case ApiConstants.API_GET_MERGE_COMPETITION_LOAD:
+            return {
+                ...state,
+                status: action.status,
+            }
+
+        case ApiConstants.API_GET_MERGE_COMPETITION_SUCCESS:
+            return {
+                ...state,
+                status: action.status,
+                mergeCompetitionList: action.result
+            }
+
+        case ApiConstants.API_VALIDATE_MERGE_COMPETITION_LOAD:
+            return {
+                ...state,
+                onInvitationLoad: true,
+                error: null,
+                mergeValidate: false
+            }
+        case ApiConstants.API_VALIDATE_MERGE_COMPETITION_SUCCESS:
+            console.log(action)
+            return {
+                ...state,
+                onInvitationLoad: false,
+                error: null,
+                mergeValidate: action.validateSuccess,
+                validateMessage: action.result.message
+            }
+
+        case ApiConstants.API_MERGE_COMPETITION_PROCESS_LOAD:
+            return {
+                ...state,
+                onInvitationLoad: true,
+                error: null,
+                status: 0,
+                newSelectedCompetition: ''
+            }
+
+        case ApiConstants.API_MERGE_COMPETITION_PROCESS_SUCCESS:
+            let selectedCompetitionId = action.result.competitionId
+            let selectedCompetitionName = action.result.competitionName
+            let matchSelectedCompetitionIndex = state.quick_CompetitionArr.findIndex((x) => x.competitionId == selectedCompetitionId)
+            if (matchSelectedCompetitionIndex == -1) {
+                let competitionUniquekey = {
+                    competitionId: selectedCompetitionId,
+                    competitionName: selectedCompetitionName
+                }
+                state.quick_CompetitionArr.push(competitionUniquekey)
+            }
+            state.newSelectedCompetition = action.result.competitionId
+            return {
+                ...state,
+                onInvitationLoad: false,
+                error: null,
+                status: 0,
+
             }
 
         default:

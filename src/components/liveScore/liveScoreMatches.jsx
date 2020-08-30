@@ -32,8 +32,8 @@ function tableSort(key) {
     } else if (_this.state.sortBy === key && _this.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    _this.setState({ sortBy: sortBy, sortOrder: sortOrder });
-    _this.props.liveScoreMatchListAction(_this.state.competitionId, 1, 0, _this.state.searchText, _this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, _this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, sortBy, sortOrder);
+    _this.setState({ sortBy, sortOrder });
+    _this.props.liveScoreMatchListAction(_this.state.competitionId, 1, 0, _this.state.searchText, _this.state.selectedDivision === 'All' ? null : _this.state.selectedDivision, _this.state.selectedRound === 'All' ? null : _this.state.selectedRound, undefined, sortBy, sortOrder);
 }
 
 var _this = null

@@ -18,14 +18,6 @@ const { Option } = Select;
 
 var this_obj = null
 
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
-}
-
-
 
 /// Check play percentage value
 function checkPlay(record) {
@@ -92,6 +84,28 @@ function checkPlayerId(player) {
     }
 }
 
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+
+    this_obj.setState({ sortBy, sortOrder });
+
+
+    this_obj.props.gameTimeStatisticsListAction(this_obj.state.competitionId, this_obj.state.filter === 'All' ? "" : this_obj.state.filter, this_obj.state.offset, this_obj.state.searchText, sortBy, sortOrder)
+}
+
 ////columens data
 const columns = [
 
@@ -99,29 +113,22 @@ const columns = [
         title: 'Player Id',
         dataIndex: 'player',
         key: 'player',
-        sorter: (a, b) => tableSort(a, b, "player"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('playerId'),
 
         render: (player, record) => <NavLink to={{
             pathname: '/liveScorePlayerView',
             state: { tableRecord: record }
         }} >
             <span className="input-heading-add-another pt-0" >{checkPlayerId(player)}</span>
-            {/* <span className="input-heading-add-another pt-0" >{player.mnbPlayerId ? player.mnbPlayerId : player.id}</span> */}
         </NavLink>
-
-        // sorter: (a, b) => tableSort(a, b, "id"),
-        // render: (id) => <NavLink to={{
-        //     pathname: '/liveScoreMatchDetails',
-        //     state: { matchId: id }
-        // }} >
-        //     <span class="input-heading-add-another pt-0" >{id}</span>
-        // </NavLink>
     },
     {
         title: 'First name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => tableSort(a, b, "firstName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('firstName'),
 
         render: (firstName, player) => <NavLink to={{
             pathname: '/liveScorePlayerView',
@@ -134,7 +141,8 @@ const columns = [
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => tableSort(a, b, "lastName"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('lastName'),
 
         render: (lastName, player) => <NavLink to={{
             pathname: '/liveScorePlayerView',
@@ -147,7 +155,8 @@ const columns = [
         title: 'Team',
         dataIndex: 'team',
         key: 'team',
-        sorter: (a, b) => tableSort(a, b, "team"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('team'),
         render: (team) => teamListData(team.id) ?
             <NavLink to={{
                 pathname: '/liveScoreTeamView',
@@ -160,7 +169,8 @@ const columns = [
         title: 'DIV',
         dataIndex: 'division',
         key: 'division',
-        sorter: (a, b) => tableSort(a, b, "division"),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('div'),
         render: (division) =>
             <span >{division ? division.name : ""}</span>
     },
@@ -168,7 +178,8 @@ const columns = [
         title: 'Play Time',
         dataIndex: 'playTime',
         key: 'playTime',
-        // sorter: (a, b) => tableSort(a,b,"playTime"),
+        sorter: false,
+        // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (playTime, record) =>
             <span >{checkPlayTime(record)}</span>
     },
@@ -176,7 +187,8 @@ const columns = [
         title: 'Play %',
         dataIndex: 'playPercent',
         key: 'playPercent',
-        // sorter: (a, b) => a.playPercent.length - b.playPercent.length,
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('playPercent'),
         render: (playTime, record) =>
             <span  >{checkPlay(record)}</span>
     },
@@ -200,14 +212,15 @@ class LiveScoreGameTimeList extends Component {
             selectStatus: "Select Status",
             filter: '',
             competitionId: null,
-            searchText: ''
+            searchText: '',
+            offset: 0
         };
         this_obj = this
     }
 
     componentDidMount() {
-        const { id,attendanceRecordingPeriod } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id ,filter:attendanceRecordingPeriod})
+        const { id, attendanceRecordingPeriod } = JSON.parse(getLiveScoreCompetiton())
+        this.setState({ competitionId: id, filter: attendanceRecordingPeriod })
         if (id !== null) {
             this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
         } else {
@@ -217,6 +230,7 @@ class LiveScoreGameTimeList extends Component {
 
     handleGameTimeTableList(page, competitionId, aggergate) {
         let offset = page ? 10 * (page - 1) : 0
+        this.setState({ offset: offset })
 
         this.props.gameTimeStatisticsListAction(competitionId, aggergate === 'All' ? "" : aggergate, offset, this.state.searchText)
 
@@ -267,7 +281,7 @@ class LiveScoreGameTimeList extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view ">
+            <div className="comp-player-grades-header-drop-down-view mt-4 ">
                 < div className="row" >
                     <div className="col-sm" style={{ alignSelf: 'center' }} >
                         <Breadcrumb separator=" > ">

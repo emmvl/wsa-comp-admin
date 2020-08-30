@@ -146,7 +146,7 @@ let CompetitionAxiosApi = {
     },
 
     ////competition draws get 
-    async getCompetitionDraws(yearRefId, competitionId, venueId, roundId, orgId) {
+    async getCompetitionDraws(yearRefId, competitionId, venueId, roundId, orgId, startDate, endDate) {
 
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
@@ -155,7 +155,9 @@ let CompetitionAxiosApi = {
             yearRefId: yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey,
-            // filterOrganisationId: orgId != null ? orgId : -1,
+            filterOrganisationId: orgId != null ? orgId : -1,
+            startDate: startDate,
+            endDate: endDate,
             // organisationId: "sd-gdf45df-09486-sdg5sfd-546sdf",
             venueId: venueId,
             roundId: roundId
@@ -176,6 +178,17 @@ let CompetitionAxiosApi = {
             // organisationId: "sd-gdf45df-09486-sdg5sfd-546sdf"
         };
         var url = `/api/rounds?userId=${userId}`
+        return Method.dataPost(url, token, body);
+    },
+
+    //get date range
+    async getDateRange() {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            organisationId: organisationUniqueKey
+        };
+        var url = `/api/draws/daterange`
         return Method.dataPost(url, token, body);
     },
 
@@ -209,14 +222,15 @@ let CompetitionAxiosApi = {
     },
 
     ////////team grading summary publish
-    async publishGradeTeamSummary(yearRefId, competitionId) {
+    async publishGradeTeamSummary(yearRefId, competitionId,publishToLivescore) {
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let payload = {
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey,
-            yearRefId: yearRefId
+            yearRefId: yearRefId,
+            publishToLivescore: publishToLivescore
         }
         var url = `/api/teamgrading/summary/publish?userId=${userId}`;
         return Method.dataPost(url, token, payload);
@@ -405,10 +419,15 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    async getDivisionGradeNameList(competitionId) {
+    async getDivisionGradeNameList(competitionId, startDate, endDate) {
         let userId = await getUserId()
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
             competitionUniqueKey: competitionId,
+            organisationUniqueKey: organisationUniqueKey,
+            startDate: startDate,
+            endDate: endDate
         };
         var url = `/api/division/grades?userId=${userId}`
         return Method.dataPost(url, token, body);
@@ -529,7 +548,7 @@ let CompetitionAxiosApi = {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         let body = {
             "competitionUniqueKey": competitionUniqueKey,
-            "organisationUniqueKey": "b540171a-27b3-4c69-991f-b4bf0be28159",
+            "organisationUniqueKey": organisationId,
             "divisions": divisions
         }
         var url = `/api/quickcompetition/division`
@@ -602,8 +621,29 @@ let CompetitionAxiosApi = {
     async addVenueQuickCompetition(payload) {
         var url = `/api/quickcompetitions/venues`
         return Method.dataPost(url, token, payload);
-    }
+    },
 
+    async getMergeCompetitionApi() {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        var url = `/api/merge/competitions?organisationId=${organisationUniqueKey}`
+        return Method.dataGet(url, token);
+    },
+
+    async validateMergeCompetitionApi(payload) {
+        var url = `/api/quickcompetitions/merge/validate`
+        return Method.dataPost(url, token, payload);
+    },
+
+    async mergeCompetitionProceedApi(payload) {
+        var url = `/api/quickcompetitions/merge`
+        return Method.dataPost(url, token, payload)
+    },
+    async competitionDashboardDelete(competitionId,targetValue)
+    {
+      var url = `/api/competition/delete?competitionId=${competitionId}&deleteOptionId=${targetValue}`;
+      return Method.dataDelete(url, token);
+    }
 };
 
 const Method = {

@@ -33,7 +33,7 @@ function tableSort(key) {
     } else if (_this.state.sortBy === key && _this.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    _this.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    _this.setState({ sortBy, sortOrder });
     if (_this.state.competitionId) {
         _this.props.playerListWithPagginationAction(_this.state.competitionId, 0, 10, undefined, sortBy, sortOrder);
     }
@@ -294,7 +294,7 @@ class LiveScorePlayerList extends Component {
                     <div className="row">
                         <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
                             <span className="form-heading">
-                                {AppConstants.palyerList}
+                                {AppConstants.playerList}
                             </span>
                         </div>
 

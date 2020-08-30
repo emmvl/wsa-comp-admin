@@ -1,22 +1,22 @@
 import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
 
-import AppConstants from "../../themes/appConstants";
-import ApiConstants from "../../themes/apiConstants";
-import AxiosApi from "../http/stripeHttp/stripeAxios";
+import AppConstants from "themes/appConstants";
+import ApiConstants from "themes/apiConstants";
+import AxiosApi from "store/http/stripeHttp/stripeAxios";
 
 function* failSaga(result) {
   yield put({
     type: ApiConstants.API_STRIPE_API_FAIL,
     error: result,
-    status: result.status
+    status: result.status,
   });
 
   setTimeout(() => {
     message.config({
       duration: 1.5,
-      maxCount: 1
-    })
+      maxCount: 1,
+    });
     message.error(result.result.data.message);
   }, 800);
 }
@@ -25,14 +25,14 @@ function* errorSaga(error) {
   yield put({
     type: ApiConstants.API_STRIPE_API_ERROR,
     error: error,
-    status: error.status
+    status: error.status,
   });
 
   setTimeout(() => {
     message.config({
       duration: 1.5,
-      maxCount: 1
-    })
+      maxCount: 1,
+    });
     message.error(AppConstants.somethingWentWrong);
   }, 800);
 }
@@ -46,7 +46,7 @@ function* accountBalanceSaga(action) {
       yield put({
         type: ApiConstants.API_STRIPE_ACCOUNT_BALANCE_API_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -65,7 +65,7 @@ function* chargingPaymentSaga(action) {
       yield put({
         type: ApiConstants.API_STRIPE_CHARGING_PAYMENT_API_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -84,7 +84,7 @@ function* saveStripeAccountSaga(action) {
       yield put({
         type: ApiConstants.API_SAVE_STRIPE_ACCOUNT_API_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -103,7 +103,7 @@ function* getStripeLoginLinkSaga(action) {
       yield put({
         type: ApiConstants.API_GET_STRIPE_LOGIN_LINK_API_SUCCESS,
         result: result.result.data,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -123,7 +123,7 @@ function* getStripeTransferListSaga(action) {
         type: ApiConstants.API_GET_STRIPE_PAYMENTS_TRANSFER_LIST_API_SUCCESS,
         result: result.result.data,
         page: action.page,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -143,7 +143,7 @@ function* getStripePayoutListSaga(action) {
         type: ApiConstants.API_GET_STRIPE_PAYOUT_LIST_API_SUCCESS,
         result: result.result.data,
         page: action.page,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -163,7 +163,7 @@ function* getTransactionPayoutListSaga(action) {
         type: ApiConstants.API_GET_STRIPE_TRANSACTION_PAYOUT_LIST_API_SUCCESS,
         result: result.result.data,
         page: action.page,
-        status: result.status
+        status: result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -182,7 +182,7 @@ function* getInvoiceSaga(action) {
       yield put({
         type: ApiConstants.API_GET_INVOICE_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -201,7 +201,7 @@ function* getPaymentListSaga(action) {
       yield put({
         type: ApiConstants.API_PAYMENT_TYPE_LIST_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield call(failSaga, result);
@@ -220,7 +220,7 @@ function* exportPaymentSaga(action) {
       yield put({
         type: ApiConstants.API_PAYMENT_DASHBOARD_EXPORT_SUCCESS,
         result: result.result.data,
-        status: result.result.status
+        status: result.result.status,
       });
     } else {
       yield call(failSaga, result);

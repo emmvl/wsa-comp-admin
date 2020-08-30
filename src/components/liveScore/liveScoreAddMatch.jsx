@@ -168,7 +168,7 @@ class LiveScoreAddMatch extends Component {
         }
 
         if (nextProps.liveScoreMatchState !== this.props.liveScoreMatchState) {
-            if (this.props.liveScoreMatchState.rounLoad == false && this.state.roundLoad == true) {
+            if (this.props.liveScoreMatchState.roundLoad == false && this.state.roundLoad == true) {
                 this.setState({ roundLoad: false })
                 let addedRound = this.props.liveScoreMatchState.addEditMatch.roundId
                 this.props.form.setFieldsValue({
@@ -279,9 +279,9 @@ class LiveScoreAddMatch extends Component {
         let formatEndMatchDate = new Date(endMatchDateTime).toISOString()
         let matchStatus = 'ENDED'
 
-        let match_date_ = moment(start_date, "DD-MM-YYYY")
-        let startDate = moment(match_date_).format("YYYY-MMM-DD")
-        let start = moment(start_time).format("HH:mm")
+        let match_date_ = start_date ? moment(start_date, "DD-MM-YYYY") : null
+        let startDate = match_date_ ? moment(match_date_).format("YYYY-MMM-DD") : null
+        let start = start_time ? moment(start_time).format("HH:mm") : null
 
 
         let datetimeA = moment(startDate + " " + start);
@@ -372,9 +372,9 @@ class LiveScoreAddMatch extends Component {
         let formatEndMatchDate = new Date(endMatchDateTime).toISOString()
         let matchStatus = 'ENDED'
 
-        let match_date_ = moment(start_date, "DD-MM-YYYY")
-        let startDate = moment(match_date_).format("YYYY-MMM-DD")
-        let start = moment(start_time).format("HH:mm")
+        let match_date_ = start_date ? moment(start_date, "DD-MM-YYYY") : null
+        let startDate = match_date_ ? moment(match_date_).format("YYYY-MMM-DD") : null
+        let start = start_time ? moment(start_time).format("HH:mm") : null
 
 
         let datetimeA = moment(startDate + " " + start);
@@ -1034,9 +1034,12 @@ class LiveScoreAddMatch extends Component {
         let formatEndMatchDate = new Date(endMatchDateTime).toISOString()
         let matchStatus = 'ENDED'
 
-        let match_date_ = moment(start_date, "DD-MM-YYYY")
-        let startDate = moment(match_date_).format("YYYY-MMM-DD")
-        let start = moment(start_time).format("HH:mm")
+
+
+        let match_date_ = start_date ? moment(start_date, "DD-MM-YYYY") : null
+        let startDate = match_date_ ? moment(match_date_).format("YYYY-MMM-DD") : null
+        let start = start_time ? moment(start_time).format("HH:mm") : null
+
 
 
         let datetimeA = moment(startDate + " " + start);
@@ -1446,7 +1449,7 @@ class LiveScoreAddMatch extends Component {
 
                 // console.log("matchData::" ,matchData);
                 // console.log("addEditMatch", addEditMatch)
-                
+
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
             }
         });

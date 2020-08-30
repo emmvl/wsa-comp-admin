@@ -8,12 +8,13 @@ import AppImages from "../../themes/appImages";
 import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate, changePlayerLineUpAction } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
+import { liveScoreDeleteMatch, liveScoreGetMatchDetailInitiate, changePlayerLineUpAction, liveScoreAddLiveStreamAction } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
 import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
 import history from "../../util/history";
 import ValidationConstants from '../../themes/validationConstant';
+import InputWithHead from "../../customComponents/InputWithHead";
 
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -183,7 +184,9 @@ class LiveScoreMatchDetails extends Component {
             isLineUp: 0,
             toolTipVisible: false,
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
-            competitionId: null
+            competitionId: null,
+            visible: false,
+            liveStreamLink: null
         }
         this.umpireScore_View = this.umpireScore_View.bind(this)
         this.team_View = this.team_View.bind(this)
@@ -249,10 +252,35 @@ class LiveScoreMatchDetails extends Component {
         });
     }
 
+    ////method to show modal view after click
+    showModal = (data, isVideo) => {
+        this.setState({
+            visible: true,
+            liveStreamLink:null
+        });
+    };
+
+    ////method to hide modal view after ok click
+    handleOk = e => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+    ////method to hide modal view after click on cancle button
+    handleCancel = e => {
+        this.setState({
+            visible: false,
+        });
+    };
+
+
     ///////view for breadcrumb
     headerView = () => {
         // const { match } = this.props.liveScoreMatchState.matchDetails
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : []
+
+        const matchDetails = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails : []
 
         const length = match ? match.length : 0
         let isMatchStatus = length > 0 ? match[0].matchStatus === "ENDED" ? true : false : false
@@ -272,6 +300,48 @@ class LiveScoreMatchDetails extends Component {
                     </div>
                     <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
+
+                            <div className="col-sm">
+                                <div
+                                    className="comp-dashboard-botton-view-mobile"
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "flex-end",
+                                    }}
+                                >
+                                    <NavLink to={{
+                                        pathname: '/liveScoreAddIncident',
+                                        state: { matchId: this.state.matchId, matchDetails: matchDetails }
+                                    }}>
+                                        <Button className="primary-add-comp-form" type="primary">
+                                            + {AppConstants.addIncident}
+                                        </Button>
+                                    </NavLink>
+                                </div>
+                            </div>
+
+                            <div className="col-sm">
+                                <div
+                                    className="comp-dashboard-botton-view-mobile"
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "flex-end"
+                                    }}
+                                >
+
+                                    <Button onClick={() => this.showModal()} className="primary-add-comp-form" type="primary">
+                                        + {AppConstants.addliveStream}
+                                    </Button>
+
+                                </div>
+                            </div>
+
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
@@ -401,7 +471,7 @@ class LiveScoreMatchDetails extends Component {
                         {UmpireData.map((item) => (
                             // <span className="inbox-name-text pt-2" >{item.name}</span>
                             <>
-                                {isArrayNotEmpty(item.organisations) && item.organisations.map((item) => (
+                                {isArrayNotEmpty(item.competitionOrganisations) && item.competitionOrganisations.map((item) => (
                                     <span className="inbox-name-text pt-2" >{item.name}</span>
                                 ))
                                 }
@@ -500,6 +570,62 @@ class LiveScoreMatchDetails extends Component {
         //    return record ?  record.team1ResultId == null ?   "abc" : record.team1ResultId === 4 || 5 || 6 ? "def" : record.matchStatus : record.matchStatus
     }
 
+    onClickFunc() {
+
+        if (this.state.liveStreamLink) {
+
+            let body = {
+                "id": this.state.matchId,
+
+                "competitionId": this.state.competitionId,
+
+                "livestreamURL": this.state.liveStreamLink
+            }
+
+            this.props.liveScoreAddLiveStreamAction({ body: body })
+        }
+
+        this.setState({ visible: false, liveStreamLink: '' })
+    }
+
+    ////modal view
+    ModalView() {
+        return (
+            <Modal
+                title={AppConstants.liveStreamlink}
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                cancelButtonProps={{ style: { display: 'none' } }}
+                okButtonProps={{ style: { display: 'none' } }}
+                centered={true}
+                footer={null}
+            >
+                <InputWithHead
+                    auto_complete='off'
+                    // heading={AppConstants.liveStreamlink}
+                    placeholder={AppConstants.liveStreamlink}
+                    value={this.state.liveStreamLink}
+                    onChange={(e) => this.setState({ liveStreamLink: e.target.value })}
+                />
+                <div
+                    className="comp-dashboard-botton-view-mobile"
+                    style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        paddingTop:24
+                    }}
+                >
+
+                    <Button onClick={() => this.onClickFunc()} className="primary-add-comp-form" type="primary">
+                        {AppConstants.save}
+                    </Button>
+
+                </div>
+            </Modal>
+        )
+    }
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
@@ -524,6 +650,7 @@ class LiveScoreMatchDetails extends Component {
                     <Content>
                         {this.umpireScore_View()}
                         {this.team_View()}
+                        {this.ModalView()}
                     </Content>
                 </Layout>
             </div >
@@ -535,7 +662,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScoreDeleteMatch,
         liveScoreGetMatchDetailInitiate,
-        changePlayerLineUpAction
+        changePlayerLineUpAction,
+        liveScoreAddLiveStreamAction
     }, dispatch)
 }
 

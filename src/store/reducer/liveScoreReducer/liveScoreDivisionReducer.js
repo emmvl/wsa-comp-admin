@@ -1,9 +1,9 @@
-import ApiConstants from '../../../themes/apiConstants'
+import ApiConstants from "themes/apiConstants";
 
-var divisionObj = {
+const divisionObj = {
     divisionName: "",
-    gradeName: ""
-}
+    gradeName: "",
+};
 
 const initialState = {
     onLoad: false,
@@ -17,14 +17,11 @@ const initialState = {
     divisionData: divisionObj,
     mainDivisionList: [],
     totalCount: null,
-    currentPage: null
+    currentPage: null,
 };
 
 function liveScoreDivisionState(state = initialState, action) {
-
     switch (action.type) {
-
-        //LIVESCORE DIVISION LIST
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_LOAD:
             return { ...state, onLoad: true };
 
@@ -33,88 +30,83 @@ function liveScoreDivisionState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 liveScoreDivisionList: action.result,
-                status: action.status
+                status: action.status,
             };
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_DIVISION:
-            if (action.key == "divisionName") {
+            if (action.key === "divisionName") {
                 state.divisionName = action.data;
-            } else if (action.key == "gradeName") {
-                state.gradeName = action.data
-            } else if (action.key == "name") {
-                state.name = action.data
-            }
-            else if (action.key == "isEditDivision") {
-                state.divisionName = action.data.divisionName
-                state.gradeName = action.data.grade
-                state.name = action.data.name
-            } else if (action.key == "isAddDivision") {
-                state.divisionData = divisionObj
+            } else if (action.key === "gradeName") {
+                state.gradeName = action.data;
+            } else if (action.key === "name") {
+                state.name = action.data;
+            } else if (action.key === "isEditDivision") {
+                state.divisionName = action.data.divisionName;
+                state.gradeName = action.data.grade;
+                state.name = action.data.name;
+            } else if (action.key === "isAddDivision") {
+                state.divisionData = divisionObj;
             }
             return {
                 ...state,
                 onLoad: false,
-                state: action.status
-            }
+                state: action.status,
+            };
+
         case ApiConstants.API_LIVE_SCORE_CREATE_DIVISION_LOAD:
-            return { ...state, onLoad: true }
+            return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_CREATE_DIVISION_SUCCESS:
             return {
                 ...state,
                 onLoad: false,
-                status: action.status
-            }
-        case ApiConstants.API_LIVE_SCORE_DELETE_DIVISION_LOAD:
-            return {
-                ...state,
-                onLoad: true
-            }
-
-        case ApiConstants.API_LIVE_SCORE_DELETE_DIVISION_SUCCESS:
-            return {
-                ...state,
-                onLoad: false,
+                status: action.status,
             };
 
+        case ApiConstants.API_LIVE_SCORE_DELETE_DIVISION_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_DELETE_DIVISION_SUCCESS:
+            return { ...state, onLoad: false };
+
         case ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_LOAD:
-            return { ...state, onLoad: true }
+            return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_SUCCESS:
             return {
                 ...state,
                 onLoad: false,
-                status: action.status
-            }
+                status: action.status,
+                importResult: action.result,
+            };
 
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_FAIL:
-            return { ...state, onLoad: false, printLoad: false }
+            return { ...state, onLoad: false, printLoad: false };
 
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_ERROR:
             return {
                 ...state,
                 onLoad: false,
                 printLoad: false,
-                status: action.status
-            }
+                status: action.status,
+            };
 
         case ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD:
             return { ...state, onLoad: true };
-        case ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_SUCCESS:
 
+        case ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_SUCCESS:
             return {
                 ...state,
                 onLoad: false,
                 mainDivisionList: action.result.divisions,
                 totalCount: action.result.page.totalCount,
                 currentPage: action.result.page.currentPage,
-                status: action.status
+                status: action.status,
             };
 
         default:
             return state;
-    };
-
+    }
 }
 
-export default liveScoreDivisionState;  
+export default liveScoreDivisionState;

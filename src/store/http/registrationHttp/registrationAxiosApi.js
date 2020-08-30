@@ -264,30 +264,30 @@ let AxiosApi = {
     },
 
     ////get the competition fees all the data in one API
-    async getAllCompetitionFeesDeatils(competitionId, sourceModule) {
+    async getAllCompetitionFeesDeatils(competitionId, sourceModule, affiliateOrgId) {
         let userId = await getUserId()
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         // if (userId !== user_Id) {
         //     history.push("/")
         // }
-        var url = `/api/competitionfee/competitiondetails?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}`;
+        var url = `/api/competitionfee/competitiondetails?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}&affiliateOrgId=${affiliateOrgId}`;
         return Method.dataGet(url, token);
     },
 
     ///////////save the competition fees deatils 
-    async saveCompetitionFeesDetails(payload, sourceModule) {
+    async saveCompetitionFeesDetails(payload, sourceModule, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/detail?organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}`;
+        var url = `/api/competitionfee/detail?organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}&affiliateOrgId=${affiliateOrgId}`;
         return Method.dataPost(url, token, payload);
     },
 
     /////save the competition membership tab details
-    async saveCompetitionFeesMembershipTab(payload, competitionId) {
+    async saveCompetitionFeesMembershipTab(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `api/competitionfee/membership?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`;
+        var url = `api/competitionfee/membership?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&affiliateOrgId=${affiliateOrgId}`;
         return Method.dataPost(url, token, payload);
     },
 
@@ -300,11 +300,11 @@ let AxiosApi = {
     },
 
     /////save the division table data  in the competition fees section
-    async saveCompetitionFeesDivisionAction(payload, competitionId) {
+    async saveCompetitionFeesDivisionAction(payload, competitionId,affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let sourceModule = payload.sourceModule != undefined ? payload.sourceModule : "REG";
-        var url = `/api/competitionfee/division?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}`;
+        var url = `/api/competitionfee/division?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&sourceModule=${sourceModule}&affiliateOrgId=${affiliateOrgId}`;
         return Method.dataPost(url, token, payload);
     },
     //casual PaymentOption
@@ -320,26 +320,29 @@ let AxiosApi = {
     },
 
     //post payment
-    async postCompetitionPayment(payload, competitionId, organisationKey) {
+    async postCompetitionPayment(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/paymentoption?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`
+        var url = `/api/competitionfee/paymentoption?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}
+                    &affiliateOrgId=${affiliateOrgId}`
         return Method.dataPost(url, token, payload)
     },
 
 
     // Post competition fee section
-    async postCompetitionFeeSection(payload, competitionId, organisationKey) {
+    async postCompetitionFeeSection(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/fees?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`
+        var url = `/api/competitionfee/fees?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}
+                            &affiliateOrgId=${affiliateOrgId} `
         return Method.dataPost(url, token, payload)
     },
     //post competition fee discount 
-    async postCompetitonFeeDiscount(payload, competitionId, organisationKey) {
+    async postCompetitonFeeDiscount(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/discount?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`
+        var url = `/api/competitionfee/discount?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}
+                        &affiliateOrgId=${affiliateOrgId}`
         return Method.dataPost(url, token, payload)
     },
 
@@ -371,9 +374,18 @@ let AxiosApi = {
     },
 
     ///// Get Competition Venue 
-    getCompetitionVenue(competitionId) {
-        var url = `/api/competitionfee/getVenues/${competitionId}`;
-        return Method.dataGet(url, token);
+    async getCompetitionVenue(competitionId, startDate, endDate) {
+        console.log(competitionId, startDate, endDate)
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let payload = {
+            competitionUniqueKey: competitionId,
+            organisationUniqueKey: organisationUniqueKey,
+            startDate: startDate,
+            endDate: endDate
+        }
+        var url = `/api/competitionfee/getVenues`;
+        return Method.dataPost(url, token, payload);
     },
     // save end user registration
     saveEndUserRegistration(payload) {
@@ -479,7 +491,23 @@ let AxiosApi = {
         let body = payload
         var url = `/api/competitionfee/status/update`;
         return Method.dataPost(url, token, body);
-    }
+    },
+	getTeamRegistrations(payload, sortBy, sortOrder) {
+        let url;
+        if (sortBy && sortOrder) {
+            url = `/api/teamregistration/dashboard?sortBy=${sortBy}&sortOrder=${sortOrder}`
+        }
+        else {
+            url = `/api/teamregistration/dashboard`;
+        }
+        let body = payload;
+        return Method.dataPost(url, token ,body);
+    },
+	exportTeamRegistrations(payload) {
+        let body = payload
+        var url = `/api/teamregistration/export`;
+        return Method.dataPostDownload(url, token ,body ,"TeamRegistration" );
+    },
 };
 
 const Method = {
@@ -697,7 +725,78 @@ const Method = {
                     }
                 });
         });
-    }
+    },
+    async dataPostDownload(newUrl, authorization, body, fileName) {
+        const url = newUrl;
+        return await new Promise((resolve, reject) => {
+            http
+            .post(url, body, {
+              responseType: 'arraybuffer',
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+                Accept: "application/csv",
+                Authorization: "BWSA " + authorization,
+                "SourceSystem": "WebAdmin"
+              }
+            })
+            .then(result => {
+              if (result.status === 200) {
+                console.log("*************" + JSON.stringify(result.data));
+                const url = window.URL.createObjectURL(new Blob([result.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', fileName + '.csv'); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+                return resolve({
+                  status: 1,
+                  result: result
+                });
+              } else if (result.status === 212) {
+                return resolve({
+                  status: 4,
+                  result: result
+                });
+              } else {
+                if (result) {
+                  return reject({
+                    status: 3,
+                    error: result.data.message,
+                  });
+                } else {
+                  return reject({
+                    status: 4,
+                    error: "Something went wrong."
+                  });
+                }
+              }
+            })
+            .catch(err => {
+              if (err.response) {
+                if (err.response.status !== null && err.response.status !== undefined) {
+                  if (err.response.status === 401) {
+                    let unauthorizedStatus = err.response.status
+                    if (unauthorizedStatus === 401) {
+                      logout()
+                      message.error(ValidationConstants.messageStatus401)
+                    }
+                  } else {
+                    return reject({
+                      status: 5,
+                      error: err
+                    })
+                  }
+                }
+              } else {
+                return reject({
+                  status: 5,
+                  error: err
+                });
+              }
+            });
+        });
+      }   
 };
 
 

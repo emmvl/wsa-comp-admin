@@ -88,8 +88,8 @@ function getTeamName(data) {
 function getAssociationName(data) {
     if (data.player) {
         if (data.player.team) {
-            if (data.player.team.organisation) {
-                return data.player.team.organisation.name
+            if (data.player.team.competitionOrganisation) {
+                return data.player.team.competitionOrganisation.name
 
             } else {
 
@@ -472,9 +472,8 @@ const columnsTodaysIncient = [
         key: 'Last Name',
         sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
         render: (incidentPlayers, record) =>
-
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
-                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.gotoUmpire(item)} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.checkUserId(item)} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
             ))
     },
     {
@@ -611,13 +610,13 @@ class LiveScoreDashboard extends Component {
             message.warn(ValidationConstants.playerMessage)
         }
         else {
-            history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/userPersonal" })
+            history.push("/userPersonal", { userId: record.player.userId, screenKey: "livescore", screen: "/liveScoreDashboard" })
         }
     }
 
     umpireName(item) {
         if (item.userId) {
-            history.push("/userPersonal", { userId: item.userId, screenKey: "livescore", screen: "/userPersonal" })
+            history.push("/userPersonal", { userId: item.userId, screenKey: "livescore", screen: "/liveScoreDashboard" })
         } else {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
@@ -781,7 +780,7 @@ class LiveScoreDashboard extends Component {
                     </Tooltip>
                 </div>
 
-                <div className="col-sm text-right" >
+                {/* <div className="col-sm text-right" >
                     <NavLink to={{
                         pathname: './liveScoreAddIncident',
                         state: { key: 'dashboard' }
@@ -790,7 +789,7 @@ class LiveScoreDashboard extends Component {
                             + {AppConstants.addNew}
                         </Button>
                     </NavLink>
-                </div>
+                </div> */}
             </div>
         )
     }
@@ -803,6 +802,7 @@ class LiveScoreDashboard extends Component {
                     <Tooltip background='#ff8237'>
                         <span>{AppConstants.activeNewsMsg}</span>
                     </Tooltip>
+
                 </div>
                 <div className="col-sm text-right" >
                     <NavLink to={{

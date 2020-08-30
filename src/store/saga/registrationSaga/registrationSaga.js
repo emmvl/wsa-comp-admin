@@ -1,6 +1,6 @@
 import { put, call } from "redux-saga/effects";
 import ApiConstants from "../../../themes/apiConstants";
-import AxiosApi from "../../http/registrationHttp/registrationAxios";
+import AxiosApi from "../../http/registrationHttp/registrationAxiosApi";
 import { message } from "antd";
 import history from "../../../util/history";
 import AppConstants from "../../../themes/appConstants";
@@ -279,6 +279,40 @@ export function* getDivisionsListSaga(action) {
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_DIVISIONS_LIST_ON_YEAR_AND_COMPETITION_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
+
+export function* getTeamRegistrationsSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getTeamRegistrations,action.payload, action.sortBy, action.sortOrder);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
+
+export function* exportTeamRegistrationsSaga(action) {
+  try {
+    const result = yield call(AxiosApi.exportTeamRegistrations,action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_SUCCESS,
         result: result.result.data,
         status: result.status
       });

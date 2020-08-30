@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Input,Icon, Menu, Pagination, Modal } from "antd";
+import { Layout, Breadcrumb, Button, Table, Input, Icon, Menu, Pagination, Modal } from "antd";
 import './user.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { NavLink } from "react-router-dom";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
-import {venuesListAction, venueDeleteAction } from 
-                "../../store/actions/commonAction/commonAction";
+import { venuesListAction, venueDeleteAction } from
+    "../../store/actions/commonAction/commonAction";
 import { clearVenueDataAction } from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { bindActionCreators } from "redux";
 import AppImages from "../../themes/appImages";
@@ -19,55 +19,95 @@ const { confirm } = Modal;
 const { SubMenu } = Menu;
 let this_Obj = null;
 
+//listeners for sorting
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortBy = sortOrder = null;
+    }
+
+    this_Obj.setState({ sortBy, sortOrder });
+
+    let filter =
+    {
+        searchText: this_Obj.state.searchText,
+        organisationId: getOrganisationData().organisationUniqueKey,
+        paging: {
+            limit: 10,
+            offset: this_Obj.state.offset
+        }
+    }
+
+    this_Obj.props.venuesListAction(filter, sortBy, sortOrder);
+}
+
+
 const columns = [
 
     {
         title: 'Venue Name',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => a.name.localeCompare(b.name),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('venueName'),
     },
     {
         title: 'Address1',
         dataIndex: 'street1',
         key: 'street1',
-        sorter: (a, b) => a.street1.localeCompare(b.street1),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('address1'),
     },
     {
         title: 'Address2',
         dataIndex: 'street2',
         key: 'street2',
-        sorter: (a, b) => a.street2.localeCompare(b.street2),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('address2'),
     },
     {
         title: 'Suburb',
         dataIndex: 'suburb',
         key: 'suburb',
-        sorter: (a, b) => a.suburb.localeCompare(b.suburb),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('suburb'),
     },
     {
         title: 'State',
         dataIndex: 'state',
         key: 'state',
-        sorter: (a, b) => a.state.localeCompare(b.state),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('state'),
     },
     {
         title: 'Postal Code',
         dataIndex: 'postalCode',
         key: 'postalCode',
-        sorter: (a, b) => a.postalCode.localeCompare(b.postalCode),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('postalCode'),
     },
     {
         title: 'Contact Number',
         dataIndex: 'contactNumber',
         key: 'contactNumber',
-        sorter: (a, b) => a.contactNumber.localeCompare(b.contactNumber),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('contactNumber'),
     },
     {
         title: '# of Courts',
         dataIndex: 'noOfCourts',
         key: 'noOfCourts',
-        sorter: (a, b) => a.noOfCourts.localeCompare(b.noOfCourts),
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners('noOfCourts'),
     },
     {
         title: "Action",
@@ -82,10 +122,10 @@ const columns = [
             >
                 <SubMenu
                     key="sub1"
-                    title={ <img className="dot-image" src={AppImages.moreTripleDot}
-                            alt="" width="16" height="16" /> }>
+                    title={<img className="dot-image" src={AppImages.moreTripleDot}
+                        alt="" width="16" height="16" />}>
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/competitionVenueAndTimesEdit`, state: {venueId: e.id, key: AppConstants.venuesList, isUsed: isUsed} }} >
+                        <NavLink to={{ pathname: `/competitionVenueAndTimesEdit`, state: { venueId: e.id, key: AppConstants.venuesList, isUsed: isUsed } }} >
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -104,18 +144,21 @@ class VenuesList extends Component {
         this.state = {
             searchText: '',
             deleteLoading: false,
+            filter: null,
+            organisationId: null,
+            offset: 0
         }
         this_Obj = this;
         this.handleVenuesTableList(1, "");
     }
 
-    componentDidMount(){
+    componentDidMount() {
         console.log("Component Did mount");
     }
 
-    componentDidUpdate(nextProps){
+    componentDidUpdate(nextProps) {
         console.log("Component componentDidUpdate");
-       let commonReducerState = this.props.commonReducerState;
+        let commonReducerState = this.props.commonReducerState;
         if (commonReducerState.onLoad === false && this.state.loading === true) {
             if (!commonReducerState.error) {
                 this.setState({
@@ -135,39 +178,42 @@ class VenuesList extends Component {
     }
 
     handleVenuesTableList = (page, searchText) => {
-        let filter = 
+
+        let offset = (page ? (10 * (page - 1)) : 0)
+        let filter =
         {
             searchText: searchText,
             organisationId: getOrganisationData().organisationUniqueKey,
-            paging : {
-                limit : 10,
-                offset: (page ? (10 * (page -1)) : 0)
+            paging: {
+                limit: 10,
+                offset: offset
             }
         }
+
+        this.setState({ searchText: searchText, organisationId: getOrganisationData().organisationUniqueKey, offset: offset })
         this.props.venuesListAction(filter);
     };
 
     naviageToVenue = (e) => {
         this.props.clearVenueDataAction();
-        this.props.history.push("/venueEdit", {venueId: e.id})
+        this.props.history.push("/venueEdit", { venueId: e.id })
     }
 
-    onKeyEnterSearchText = (e) =>{
+    onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
-        if(code === 13) { //13 is the enter keycode
+        if (code === 13) { //13 is the enter keycode
             this.handleVenuesTableList(1, this.state.searchText);
-        } 
-    }
-
-    onChangeSearchText = (e) =>{
-        this.setState({searchText: e.target.value})
-        if(e.target.value == null || e.target.value== "")
-        {
-            this.handleVenuesTableList(1, e.target.value); 
         }
     }
 
-    onClickSearchIcon = () =>{
+    onChangeSearchText = (e) => {
+        this.setState({ searchText: e.target.value })
+        if (e.target.value == null || e.target.value == "") {
+            this.handleVenuesTableList(1, e.target.value);
+        }
+    }
+
+    onClickSearchIcon = () => {
         this.handleVenuesTableList(1, this.state.searchText);
     }
 
@@ -208,21 +254,21 @@ class VenuesList extends Component {
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.venuesList}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                   
-                    <div style={{marginRight: "25px", }} >
+
+                    <div style={{ marginRight: "25px", }} >
                         <div className="reg-product-search-inp-width">
-                            <Input className="product-reg-search-input" 
+                            <Input className="product-reg-search-input"
                                 onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..." onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                prefix={ <Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16}}
+                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                     onClick={() => this.onClickSearchIcon()} />}
                                 allowClear
                             />
                         </div>
                     </div>
-                    <div style={{marginRight: '4.2%'}}>
-                        <div className="d-flex flex-row-reverse" onClick={() => this.props.clearVenueDataAction("venue") }>
-                            <NavLink to={{pathname:`/competitionVenueAndTimesAdd` , state: { key: AppConstants.venuesList }}}>
+                    <div style={{ marginRight: '4.2%' }}>
+                        <div className="d-flex flex-row-reverse" onClick={() => this.props.clearVenueDataAction("venue")}>
+                            <NavLink to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.venuesList } }}>
                                 <Button className='primary-add-product' type='primary'>+ {AppConstants.addVenue}</Button>
                             </NavLink>
                         </div>
@@ -253,23 +299,23 @@ class VenuesList extends Component {
     ///dropdown view containing all the dropdown of header
     searchView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-1" style={{display:'flex',justifyContent:'flex-end', paddingRight: '4.3%'}}>
+            <div className="comp-player-grades-header-drop-down-view mt-1" style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: '4.3%' }}>
                 <div className="fluid-width" >
                     <div className="row" >
                         <div>
-                            <div style={{width: "100%", display: "flex",flexDirection: "row",alignItems: "center" }} >
+                            <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
                                 <button className="dashboard-lay-search-button"
                                     onClick={() => this.onClickSearchIcon()}>
-                                <img src={AppImages.searchIcon} height="15" width="15" alt="" />
+                                    <img src={AppImages.searchIcon} height="15" width="15" alt="" />
                                 </button>
                                 {/* <form className="search-form"> */}
                                 <div className="reg-product-search-inp-width">
-                                    <Input className="product-reg-search-input" 
+                                    <Input className="product-reg-search-input"
                                         onChange={(e) => this.onChangeSearchText(e.target.value)}
                                         placeholder="Search..." onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                        prefix={ <Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16}}
-                                    />
-                                    }
+                                        prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                        />
+                                        }
                                     />
                                 </div>
                                 {/* </form> */}
@@ -290,11 +336,11 @@ class VenuesList extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                     <Table className="home-dashboard-table" 
-                     columns={columns}
-                      dataSource={venuesList} 
-                      pagination={false}
-                      loading={this.props.commonReducerState.onLoad == true && true}
+                    <Table className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={venuesList}
+                        pagination={false}
+                        loading={this.props.commonReducerState.onLoad == true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -331,8 +377,7 @@ class VenuesList extends Component {
 }
 
 
-function mapDispatchToProps(dispatch)
-{
+function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         venuesListAction,
         venueDeleteAction,
@@ -341,11 +386,11 @@ function mapDispatchToProps(dispatch)
 
 }
 
-function mapStatetoProps(state){
+function mapStatetoProps(state) {
     return {
         commonReducerState: state.CommonReducerState,
         venueTimeState: state.VenueTimeState,
     }
 }
 
-export default connect(mapStatetoProps,mapDispatchToProps)((VenuesList));
+export default connect(mapStatetoProps, mapDispatchToProps)((VenuesList));

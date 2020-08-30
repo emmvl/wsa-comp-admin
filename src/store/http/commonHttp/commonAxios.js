@@ -58,7 +58,7 @@ let AxiosApi = {
     async getVenue(action) {
         console.log("action.key" + action.key);
         let organisationId = await getOrganisationData().organisationUniqueKey;
-        if(action.key == "all"){
+        if (action.key == "all") {
             organisationId = '';
         }
         var url = `/api/venue/all?organisationUniqueKey=${organisationId}`;
@@ -194,9 +194,15 @@ let AxiosApi = {
     },
 
     /// All Venues Listing 
-    async  getVenuesList(payload) {
+    async  getVenuesList(payload, sortBy, sortOrder) {
         let userId = await getUserId()
-        let url = `/api/venue/list?userId=${userId}`;
+        let url
+        url = `/api/venue/list?userId=${userId}`;
+
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
+
         return Method.dataPost(url, token, payload);
     },
     /// Get Venue by Id 

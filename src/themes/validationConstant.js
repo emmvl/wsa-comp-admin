@@ -180,7 +180,7 @@ const ValidationConstants = {
     reasonChange: "Reason is required.",
     userName: 'User name is required.',
     userRegister: 'User register is required',
-    competitionAdimistrator: 'Competition adimistrator is required',
+    competitionAdministrator: 'Competition administrator is required',
     regChangeDate: 'Registration change date is required',
     compStartDate: 'Competition start date is required',
     pleaseEnterQuantity: "Please enter quantity.",
@@ -198,6 +198,14 @@ const ValidationConstants = {
     venueAddressRequiredError: "Venue address is required",
     venueAddressDetailsError: "Please input venue address in details",
     duplicatedVenueAddressError: "Venue address is duplicated, please select other address",
+    duplicateDiscountError:"Please remove the duplicate entry of Discount Code.",
+    mnbMatchId: 'mnbMatchId is required',
+    pleaseSelectOneOption: "Please select any option.",
+    pleaseProvideInstalmentDate: "Please provide an instalment date",
+    duplicateFamilyDiscountError:"Only one Family Discount Code for your organisation is permitted. Please remove the duplicate entry.",
+    membershipDuplicateFamilyDiscountError:"Only one Family Discount Code for Membership Fee is permitted. Please remove the duplicate entry.",																																   
+    mobileLength: "Contact number must be 10 digits",
+	pleaseFillRegistration: 'Please fill the Registration Code',															
 };
 
 export default ValidationConstants;

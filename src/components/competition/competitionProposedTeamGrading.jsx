@@ -34,6 +34,8 @@ import {
     clearReducerCompPartPlayerGradingAction,
     commentListingAction,
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
+import AppUniqueId from "../../themes/appUniqueId";
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 let this_obj = null;
@@ -785,7 +787,9 @@ class CompetitionProposedTeamGrading extends Component {
                     <div className="col-sm" >
                         {this.state.divisionId != null &&
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text"
+                                <Button
+                                    id={AppUniqueId.finalteamgrad_save_bn}
+                                    className="publish-button save-draft-text"
                                     disabled={isPublished}
                                     onClick={() => this.submitApiCall("save")}
                                     type="primary">{AppConstants.save}
@@ -803,9 +807,11 @@ class CompetitionProposedTeamGrading extends Component {
                                     visible={this.state.tooltipVisibleDelete}
                                     title={AppConstants.statusPublishHover}
                                 >
-                                    <Button className="publish-button margin-top-disabled-button"
+                                    <Button
+                                        id={AppUniqueId.finalteamgrad_submit_bn}
+                                        className="publish-button margin-top-disabled-button"
                                         disabled={isPublished}
-                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 6 }}
+                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: "inherit" }}
                                         onClick={() => this.submitApiCall("submit")}
                                         type="primary">{AppConstants.submit}
                                     </Button>

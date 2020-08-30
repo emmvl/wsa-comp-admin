@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
+import { NavLink } from "react-router-dom";
 
 const { Header, Footer, } = Layout
 const { Option } = Select
@@ -60,13 +61,14 @@ class UmpireDivisions extends Component {
     headerView = () => {
 
         return (
-            <div className="header-view">
+            <div className="header-view divisions">
                 <Header
                     className="form-header-view"
                     style={{
                         backgroundColor: "transparent",
                         display: "flex",
                         alignItems: "center"
+
                     }}
                 >
                     <Breadcrumb separator=">">
@@ -93,7 +95,7 @@ class UmpireDivisions extends Component {
     dropdownView = (getFieldDecorator) => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
-            <div className="comp-venue-courts-dropdown-view mt-0">
+            <div className="comp-venue-courts-dropdown-view mt-0 ">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -103,6 +105,7 @@ class UmpireDivisions extends Component {
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
+                                    marginBottom:"12px"
                                 }}
                             >
                                 <span className="year-select-heading ">
@@ -114,6 +117,7 @@ class UmpireDivisions extends Component {
                                     style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
+                                    
                                 >
                                     {
                                         competition.map((item, index) => {
@@ -140,7 +144,7 @@ class UmpireDivisions extends Component {
     contentView = () => {
         return (
             <div className="content-view pt-4">
-                <span className="applicable-to-heading ">{AppConstants.allocatePools}</span>
+                <span className="text-heading-large">{AppConstants.allocatePools}</span>
                 <Radio.Group
                     className="reg-competition-radio"
                 // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
@@ -278,7 +282,7 @@ class UmpireDivisions extends Component {
                     </div>
                     <div className='col-sm-3 '>
                         <InputWithHead
-                            auto_Complete='new-umpireReserve'
+                            auto_complete='new-umpireReserve'
                             heading={AppConstants.umpireReserve}
                             placeholder={"Umpire Reserve"}
                             onChange={(e) => this.setState({ umpireReserve: e.target.value })}
@@ -287,7 +291,7 @@ class UmpireDivisions extends Component {
                     </div>
                     <div className='col-sm-3 '>
                         <InputWithHead
-                            auto_Complete='new-umpireCoach'
+                            auto_complete='new-umpireCoach'
                             heading={AppConstants.umpireCoach}
                             placeholder={"Umpire Coach"}
                             onChange={(e) => this.setState({ umpireCoach: e.target.value })}
@@ -302,7 +306,7 @@ class UmpireDivisions extends Component {
                     </div>
                     <div className='col-sm-3 '>
                         <InputWithHead
-                            auto_Complete='new-umpireReserve'
+                            auto_complete='new-umpireReserve'
                             placeholder={"Umpire Reserve"}
                             onChange={(e) => this.setState({ umpireReserve2: e.target.value })}
                             value={this.state.umpireReserve2}
@@ -310,7 +314,7 @@ class UmpireDivisions extends Component {
                     </div>
                     <div className='col-sm-3 '>
                         <InputWithHead
-                            auto_Complete='new-umpireCoach'
+                            auto_complete='new-umpireCoach'
                             placeholder={"Umpire Coach"}
                             onChange={(e) => this.setState({ umpireCoach2: e.target.value })}
                             value={this.state.umpireCoach2}
@@ -323,35 +327,38 @@ class UmpireDivisions extends Component {
     }
 
 
-    //////footer view containing all the buttons like save and cancel
-    footerView = (isSubmitting) => {
-
+    //////footer view containing all the buttons like submit and cancel
+    footerView = () => {
 
         return (
             <div className="fluid-width">
-                {!this.state.membershipIsUsed &&
-                    <div className="footer-view">
-                        <div className="row">
-                            <div className="col-sm">
-                                <div className="reg-add-save-button">
-                                    <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
 
-                                </div>
+                <div className="footer-view">
+                    <div className="row">
+                        <div className="col-sm">
+                            <div className="reg-add-save-button">
+                                <NavLink to='/umpirePoolAllocation'>
+                                    <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                                </NavLink>
                             </div>
-                            <div className="col-sm">
-                                <div className="comp-buttons-view">
-                                    <Button
-                                        className="publish-button save-draft-text" type="primary" htmlType="submit" >
-                                        {AppConstants.save}
-                                    </Button>
-                                </div>
+                        </div>
+                        <div className="col-sm">
+                            <div className="comp-buttons-view">
+                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
+                                    {/* {AppConstants.generateRoster} */}
+                                    {AppConstants.save}
+                                </Button>
+                                <Button className="open-reg-button" type="primary" htmlType="submit" >
+                                    {AppConstants.createRoster}
+                                </Button>
                             </div>
                         </div>
                     </div>
-                }
+                </div>
             </div>
-        )
-    };
+        );
+
+    }
 
     render = () => {
         // const { getFieldDecorator } = this.props.form;
