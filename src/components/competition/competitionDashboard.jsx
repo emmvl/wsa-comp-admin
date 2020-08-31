@@ -329,7 +329,7 @@ class CompetitionDashboard extends Component {
             >
                 <div className="row">
                     <div className="col-sm-8">
-                        <div className="year-select-heading-view">
+                        <div className="year-select-heading-view pb-3">
                             <span className="year-select-heading">{AppConstants.year}:</span>
 
                             <Select
