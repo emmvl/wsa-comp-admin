@@ -1562,6 +1562,11 @@ const AppConstants = {
   recordGoalAttempt: "Record goal attempt",
   positionTracking: "Position tracking",
   addAnotherPool: "Add Pool",
+  mergeCompetition: "Merge Competition",
+  differencesBetween:"There are some differences between",
+  oneHasPreference:"Which one has preference:",
+  divisioAndGrades:"Division and Grades",
+  combine:"Combine",
 };
 
 export default AppConstants;
