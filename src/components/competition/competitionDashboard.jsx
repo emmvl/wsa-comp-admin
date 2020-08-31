@@ -362,7 +362,7 @@ class CompetitionDashboard extends Component {
                             </span>
                             <div style={{ marginTop: -10 }}>
                                 <Tooltip placement="top" background="#ff8237">
-                                    <span>{AppConstants.participateCompMsg}</span>
+                                    <span>{AppConstants.ownedCompetitionMsg}</span>
                                 </Tooltip>
                             </div>
                         </div>
@@ -502,7 +502,7 @@ class CompetitionDashboard extends Component {
                             </span>
                             <div style={{ marginTop: -10 }}>
                                 <Tooltip placement="top" background="#ff8237">
-                                    <span>{AppConstants.participateInComp}</span>
+                                    <span>{AppConstants.participateCompMsg}</span>
                                 </Tooltip>
                             </div>
                         </div>

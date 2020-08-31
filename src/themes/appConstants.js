@@ -1088,9 +1088,9 @@ const AppConstants = {
   newsPublishNotifyMsg:
     'Publish the news/ message to the App and notify App users.',
   participateCompMsg:
-    'A list of all Competitions your Organisations is Competing In.',
+    'A list of all Competitions your Organisation is competing in.',
   ownedCompetitionMsg:
-    'A List of all Competitions your Organisation is responsible for.',
+    '	A List of all Competitions your Organisation is responsible for.',
   compDetailsMsg:
     'If you have opened Registrations for this Competition than Competition Details fields will be pre-populated but you can change key details as appropriate. If you have not opened Registrations for this competition, then you need to complete these screens.',
   knockOutMsg:
