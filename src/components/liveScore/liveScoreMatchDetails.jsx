@@ -264,14 +264,14 @@ class LiveScoreMatchDetails extends Component {
         });
     }
 
-    ////method to show modal view after click
-    showModal = (data, isVideo) => {
+    ///method to show modal view after click
+    showModal = (livestreamURL,) => {
+        console.log(livestreamURL)
         this.setState({
             visible: true,
-            liveStreamLink:null
+            liveStreamLink: livestreamURL
         });
     };
-
     ////method to hide modal view after ok click
     handleOk = e => {
         this.setState({
@@ -347,7 +347,7 @@ class LiveScoreMatchDetails extends Component {
                                     }}
                                 >
 
-                                    <Button onClick={() => this.showModal()} className="primary-add-comp-form" type="primary">
+                                    <Button onClick={() => this.showModal(match[0].livestreamURL)} className="primary-add-comp-form" type="primary">
                                         + {AppConstants.addliveStream}
                                     </Button>
 
@@ -922,7 +922,7 @@ class LiveScoreMatchDetails extends Component {
                     style={{
                         display: "flex",
                         justifyContent: "flex-end",
-                        paddingTop:24
+                        paddingTop: 24
                     }}
                 >
 

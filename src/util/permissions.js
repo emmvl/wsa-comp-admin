@@ -1,4 +1,4 @@
-import { getOrganisationData } from "./sessionStorage";
+import { getOrganisationData, getLiveScoreCompetiton } from "./sessionStorage";
 import AppConstants from "../themes/appConstants";
 import history from "../util/history";
 
@@ -68,5 +68,16 @@ function checkRegistrationType(registrationInviteesRefId) {
     return registrationType
 }
 
+async function checkLivScoreCompIsParent() {
+    let orgItem = await getOrganisationData()
+    let liveScoreCompetition = await getLiveScoreCompetiton()
+    let organisationId = orgItem ? orgItem.organisationId : 0
+    let liveScoreCompetitionOrgId = JSON.parse(liveScoreCompetition).organisationId
+    if (liveScoreCompetitionOrgId === organisationId) {
+        return true
+    } else {
+        return false
+    }
+}
 
-export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel, checkRegistrationType }
+export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel, checkRegistrationType, checkLivScoreCompIsParent }

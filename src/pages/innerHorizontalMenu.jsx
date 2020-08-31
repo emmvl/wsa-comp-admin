@@ -3,7 +3,7 @@ import { Menu, Select } from "antd";
 import { NavLink } from "react-router-dom";
 
 import AppConstants from "../themes/appConstants";
-import { checkOrganisationLevel } from "../util/permissions";
+import { checkOrganisationLevel, checkLivScoreCompIsParent } from "../util/permissions";
 import AccountMenu from "./InnerHorizontalMenu/AccountMenu";
 import "./layout.css";
 import AppUniqueId from "../themes/appUniqueId";
@@ -26,7 +26,8 @@ class InnerHorizontalMenu extends React.Component {
             selectedComp: null,
             loading: false,
             orgId: null,
-            orgState: false
+            orgState: false,
+            liveScoreCompIsParent: false,
         };
     }
 
@@ -34,7 +35,9 @@ class InnerHorizontalMenu extends React.Component {
         checkOrganisationLevel().then((value) => (
             this.setState({ organisationLevel: value, orgState: true })
         ));
-
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
 
         if (this.props) {
             if (this.props.compSelectedKey !== "18") {
@@ -95,6 +98,7 @@ class InnerHorizontalMenu extends React.Component {
         const { menu, selectedKey } = this.props;
         const { competitionList } = this.props.innerHorizontalState
         let compList = isArrayNotEmpty(competitionList) ? competitionList : []
+        let { liveScoreCompIsParent } = this.state
         return (
             <div>
                 {menu === "competition" && <Menu
@@ -390,16 +394,16 @@ class InnerHorizontalMenu extends React.Component {
                                         <span>Match Day</span>
                                     }
                                 >
-                                    <Menu.Item key="12">
+                                    {liveScoreCompIsParent && <Menu.Item key="12">
                                         <NavLink to="/liveScoreBulkChange">
                                             <span>Bulk Match Change</span>
                                         </NavLink>
-                                    </Menu.Item>
-                                    <Menu.Item key="13">
+                                    </Menu.Item>}
+                                    {liveScoreCompIsParent && <Menu.Item key="13">
                                         <NavLink to="liveScoreVenueChange">
                                             <span>Court Change</span>
                                         </NavLink>
-                                    </Menu.Item>
+                                    </Menu.Item>}
                                     <Menu.Item key="14">
                                         <NavLink to="/liveScoreTeamAttendance">
                                             <span>Team Attendance</span>
@@ -438,7 +442,7 @@ class InnerHorizontalMenu extends React.Component {
                                         </NavLink>
                                     </Menu.Item>
                                 </SubMenu>
-                                <SubMenu
+                                {liveScoreCompIsParent && <SubMenu
                                     key="sub4"
                                     title={
                                         <span>Settings</span>
@@ -467,12 +471,12 @@ class InnerHorizontalMenu extends React.Component {
                                             <span>Match Sheets</span>
                                         </NavLink>
                                     </Menu.Item>
-                                </SubMenu>
-                                <Menu.Item key="21">
+                                </SubMenu>}
+                                {liveScoreCompIsParent && <Menu.Item key="21">
                                     <NavLink to="/liveScoreNewsList">
                                         <span>News & Messages</span>
                                     </NavLink>
-                                </Menu.Item>
+                                </Menu.Item>}
                             </Menu>
 
 

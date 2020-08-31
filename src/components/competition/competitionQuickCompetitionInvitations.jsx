@@ -28,7 +28,12 @@ class QuickCompetitionInvitations extends Component {
             selectedMergeComptition: null,
             invitationLoad: false,
             mergeValidateVisible: false,
-            onProcessMergeCompetition: false
+            onProcessMergeCompetition: false,
+            modalVisible:false,
+            teamOptionId: 1,
+            playerOptionId: 1,
+            divisionGradeOptionId: 1,
+            venueOptionId: 1
         }
     }
 
@@ -58,7 +63,7 @@ class QuickCompetitionInvitations extends Component {
                 this.setState({
                     mergeValidateVisible: mergeValidateState
                 })
-                this.showPropsConfirm()
+                 this.showPropsConfirm(null)
             }
             this.setState({
                 invitationLoad: false
@@ -72,37 +77,59 @@ class QuickCompetitionInvitations extends Component {
         }
     }
 
-    showPropsConfirm = () => {
-        console.log(this.props.quickCompetitionState)
-        let this_ = this
-        confirm({
-            title: 'do you want to merge with the selected competition?',
-            okText: 'Proceed',
-            okType: 'danger',
-            cancelText: 'cancel',
-            mask: true,
-            maskClosable: true,
-            onOk() {
-                this_.ValidateProceed()
-            },
-            onCancel() {
-                console.log('Cancel');
-            },
-        });
+    showPropsConfirm = (key) => {
+        if(key == "cancel")
+            this.setState({modalVisible:false}); 
+        else
+            this.setState({modalVisible:true}); 
+							  
+							 
+								 
+					   
+							   
+					
+									   
+			  
+						
+									  
+			  
+		   
     }
 
 
     ValidateProceed = () => {
+        const {mergeCompetitionTypeSelection} = this.props.quickCompetitionState
+        const typeSelection = mergeCompetitionTypeSelection == null ? " " :mergeCompetitionTypeSelection;     
+        
         let payload = {
             "registrationCompetitionId": this.state.selectedMergeComptition,
-            "quickCompetitionId": this.state.competitionId
+            "quickCompetitionId": this.state.competitionId,
+            "teamOptionId": typeSelection.teamMismatch == 0 ? null :this.state.teamOptionId,
+            "playerOptionId": typeSelection.playerMismatch == 0 ? null :this.state.playerOptionId,
+            "divisionGradeOptionId": typeSelection.divisionGradesMismatch == 0 ? null : this.state.divisionGradeOptionId,
+            "venueOptionId": typeSelection.venueMismatch == 0 ? null :this.state.venueOptionId,
         }
 
         this.props.mergeCompetitionProceed(payload)
         this.setState({
-            onProcessMergeCompetition: true
+            onProcessMergeCompetition: true,
+            modalVisible:false
         })
     }
+    competitionTypeSelection = (value,key) =>{
+        if(key == "divisioAndGrades"){
+            this.setState({divisionGradeOptionId:value});
+        }
+        else if(key == "teams"){
+            this.setState({teamOptionId:value});
+        }
+        else if(key == "players"){
+            this.setState({playerOptionId:value});
+        }
+        else if(key == "venues"){
+            this.setState({venueOptionId:value});
+        }
+    } 
 
     ///////view for breadcrumb
     headerView = () => {
@@ -121,28 +148,129 @@ class QuickCompetitionInvitations extends Component {
 
     //merge with exsiting competition
     mergeExistingCompetition = (subItem, seletedOption) => {
-        const { mergeCompetitionList } = this.props.quickCompetitionState
+        const { mergeCompetitionList,mergeCompetitionTypeSelection } = this.props.quickCompetitionState
+        const mergeCompetitionSelection = mergeCompetitionTypeSelection == null ? "" : mergeCompetitionTypeSelection
+       
         if (subItem.id == 2 && seletedOption == 2) {
             return (
-                <div className="pt-4 pl-4">
-                    <Select
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182, maxWidth: 300 }}
-                        onChange={selectedMergeComptition => this.setState({
-                            selectedMergeComptition
-                        })
-                        }
-                        value={this.state.selectedMergeComptition}
-                        placeholder={AppConstants.selectComptition}
+                <div>                   
+                    <div className="pt-4 pl-4">
+                        <Select
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182, maxWidth: 300 }}
+                            onChange={selectedMergeComptition => this.setState({
+                                selectedMergeComptition
+                            })
+                            }
+                            value={this.state.selectedMergeComptition}
+                            placeholder={AppConstants.selectComptition}
+                        >
+                            {mergeCompetitionList.length > 0 && mergeCompetitionList.map((item, index) => {
+                                return (
+                                    <Option key={index + item.competitionId} value={item.competitionId}>
+                                        {item.competitionName}
+                                    </Option>
+                                );
+                            })}
+                        </Select> 
+                    </div>
+                    <Modal
+                        className="add-membership-type-modal"
+                        width={672}
+                        title={AppConstants.mergeCompetition}
+                        visible={this.state.modalVisible}
+                        okText = 'Proceed'
+                        onOk={(e)=>this.ValidateProceed()}
+                        onCancel={(e)=>this.showPropsConfirm("cancel")}
                     >
-                        {mergeCompetitionList.length > 0 && mergeCompetitionList.map((item, index) => {
-                            return (
-                                <Option key={index + item.competitionId} value={item.competitionId}>
-                                    {item.competitionName}
-                                </Option>
-                            );
-                        })}
-                    </Select>
-                </div >
+                        <div>
+                            <div style={{fontWeight: 500}}>
+                                <div>
+                                    {AppConstants.differencesBetween +" "}
+                                    {mergeCompetitionSelection.quickCompetition + " "+"and" +" "}
+                                    {mergeCompetitionSelection.registrationCompetition + '.'} {AppConstants.oneHasPreference}
+                                </div>                               
+                            </div>
+                            {mergeCompetitionSelection.divisionGradesMismatch == 1 &&
+                                <div>
+                                    <div  className='popup-text-color'>
+                                        {AppConstants.divisioAndGrades}
+                                    </div>
+                                    <Radio.Group
+                                        className="reg-competition-radio"
+                                        onChange={(e) =>
+                                            this.competitionTypeSelection(
+                                                e.target.value,
+                                                'divisioAndGrades'
+                                            )}
+                                    value={this.state.divisionGradeOptionId}
+                                    >                                   
+                                        <Radio  value ={1} >{mergeCompetitionSelection.quickCompetition}</Radio> 
+                                        <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>                          
+                                    </Radio.Group>
+                                </div>
+                            }
+                            {mergeCompetitionSelection.teamMismatch == 1 &&
+                                <div>
+                                    <div  className='popup-text-color'>
+                                        {AppConstants.teams}
+                                    </div>
+                                    <Radio.Group
+                                        className="reg-competition-radio"
+                                        onChange={(e) =>
+                                            this.competitionTypeSelection(
+                                                e.target.value,
+                                                'teams'
+                                            )}
+                                        value={this.state.teamOptionId}
+                                    >                                   
+                                        <Radio  value ={1} >{mergeCompetitionSelection.quickCompetition}</Radio> 
+                                        <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>                    
+                                    </Radio.Group>
+                                </div>
+                            }
+                            {mergeCompetitionSelection.playerMismatch == 1 &&
+                                <div>
+                                    <div  className='popup-text-color'>
+                                        {AppConstants.players}
+                                    </div>
+                                    <Radio.Group
+                                        className="reg-competition-radio"
+                                        onChange={(e) =>
+                                            this.competitionTypeSelection(
+                                                e.target.value,
+                                                'players'
+                                            )}
+                                        value={this.state.playerOptionId}
+                                    >                                   
+                                        <Radio  value ={1} >{mergeCompetitionSelection.quickCompetition}</Radio> 
+                                        <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>
+                                        <Radio  value ={3} >{AppConstants.combine}</Radio>
+                                    </Radio.Group>
+                                </div>
+                            }
+                            {mergeCompetitionSelection.venueMismatch == 1 &&
+                                <div>
+                                    <div  className='popup-text-color'>
+                                        {AppConstants.venues}
+                                    </div>
+                                    <Radio.Group
+                                        className="reg-competition-radio"
+                                        onChange={(e) =>
+                                            this.competitionTypeSelection(
+                                                e.target.value,
+                                                'venues'
+                                            )}
+                                        value={this.state.venueOptionId}                                        
+                                    >                                   
+                                        <Radio  value ={1} >{mergeCompetitionSelection.quickCompetition}</Radio> 
+                                        <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>
+                                    </Radio.Group>
+                                </div>   
+                            }                          
+                        </div>
+                    </Modal>
+                </div>
+               
             )
 
         }

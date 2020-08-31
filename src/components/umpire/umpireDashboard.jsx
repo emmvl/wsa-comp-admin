@@ -76,7 +76,7 @@ function tableSort(key) {
         divisionId: this_obj.state.division === "All" ? "" : this_obj.state.division,
         venueId: this_obj.state.venue === "All" ? "" : this_obj.state.venue,
         orgId: this_obj.state.orgId,
-        roundId: this_obj.state.round === "All" ? "" : this_obj.state.round,
+        roundId: this_obj.state.round === "All" ? "" : [this_obj.state.round],
         pageData: body,
         sortBy,
         sortOrder,
@@ -250,6 +250,24 @@ const columnsInvite = [
                 {isArrayNotEmpty(record.umpires) ? record.umpires[0].verifiedBy : ""}
             </span>
         ),
+    },
+    {
+        title: 'Umpire Reserve',
+        dataIndex: 'umpireReserve',
+        key: 'umpireReserve',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpireReserve"),
+        render: (umpireReserve, record) =>
+            <span >{umpireReserve}</span>
+    },
+    {
+        title: 'Umpire Coach',
+        dataIndex: 'umpireCoach',
+        key: 'umpireCoach',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpireCoach"),
+        render: (umpireCoach, record) =>
+            <span >{umpireCoach}</span>
     },
     {
         title: "Action",
@@ -463,6 +481,24 @@ const columns = [
         ),
     },
     {
+        title: 'Umpire Reserve',
+        dataIndex: 'umpireReserve',
+        key: 'umpireReserve',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpireReserve"),
+        render: (umpireReserve, record) =>
+            <span >{umpireReserve}</span>
+    },
+    {
+        title: 'Umpire Coach',
+        dataIndex: 'umpireCoach',
+        key: 'umpireCoach',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpireCoach"),
+        render: (umpireCoach, record) =>
+            <span >{umpireCoach}</span>
+    },
+    {
         title: "Action",
         dataIndex: "action",
         key: "_action",
@@ -633,7 +669,7 @@ class UmpireDashboard extends Component {
                     divisionId: this.state.division === "All" ? "" : this.state.division,
                     venueId: this.state.venue === "All" ? "" : this.state.venue,
                     orgId: this.state.orgId,
-                    roundId: this.state.round === "All" ? "" : this.state.round,
+                    roundId: this.state.round === "All" ? "" : [this.state.round],
                     pageData: body,
                 });
 
@@ -677,15 +713,15 @@ class UmpireDashboard extends Component {
             divisionId: this.state.division === "All" ? "" : this.state.division,
             venueId: this.state.venue === "All" ? "" : this.state.venue,
             orgId: this.state.orgId,
-            roundId: this.state.round === "All" ? "" : this.state.round,
+            roundId: this.state.round === "All" ? "" : [this.state.round],
             pageData: body,
         });
     };
 
     contentView = () => {
-        const { umpireDashboardList, totalPages } = this.props.umpireDashboardState;
-        let umpireListResult = isArrayNotEmpty(umpireDashboardList) ? umpireDashboardList : [];
-        let umpireType = this.state.competitionObj ? this.state.competitionObj.recordUmpireType : "";
+        const { umpireDashboardList, totalPages, currentPage } = this.props.umpireDashboardState
+        let umpireListResult = isArrayNotEmpty(umpireDashboardList) ? umpireDashboardList : []
+        let umpireType = this.state.compititionObj ? this.state.compititionObj.recordUmpireType : ""
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -718,6 +754,7 @@ class UmpireDashboard extends Component {
                             total={totalPages}
                             defaultPageSize={10}
                             onChange={this.handlePageChange}
+                            current={currentPage}
                         />
                     </div>
                 </div>
@@ -771,7 +808,7 @@ class UmpireDashboard extends Component {
             divisionId: this.state.division === "All" ? "" : this.state.division,
             venueId: venueId === "All" ? "" : venueId,
             orgId: this.state.orgId,
-            roundId: this.state.round === "All" ? "" : this.state.round,
+            roundId: this.state.round === "All" ? "" : [this.state.round],
             pageData: body,
         });
 
@@ -794,7 +831,7 @@ class UmpireDashboard extends Component {
                 divisionId: divisionId === "All" ? "" : divisionId,
                 venueId: this.state.venue === "All" ? "" : this.state.venue,
                 orgId: this.state.orgId,
-                roundId: this.state.round === "All" ? "" : this.state.round,
+                roundId: this.state.round === "All" ? "" : [this.state.round],
                 pageData: body,
             });
         }, 100);

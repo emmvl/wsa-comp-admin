@@ -18,6 +18,8 @@ const initialState = {
     mainDivisionList: [],
     totalCount: null,
     currentPage: null,
+    positionTracking: "null",
+    recordGoalAttempts: "null"
 };
 
 function liveScoreDivisionState(state = initialState, action) {
@@ -44,8 +46,17 @@ function liveScoreDivisionState(state = initialState, action) {
                 state.divisionName = action.data.divisionName;
                 state.gradeName = action.data.grade;
                 state.name = action.data.name;
+                state.positionTracking = action.data.positionTracking
+                state.recordGoalAttempts = action.data.recordGoalAttempts
+
             } else if (action.key === "isAddDivision") {
                 state.divisionData = divisionObj;
+            }
+            else if (action.key == "positionTracking") {
+                state.positionTracking = action.data
+            }
+            else if (action.key == "recordGoalAttempts") {
+                state.recordGoalAttempts = action.data
             }
             return {
                 ...state,

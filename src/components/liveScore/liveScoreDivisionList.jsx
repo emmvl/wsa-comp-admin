@@ -16,6 +16,7 @@ import {
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from "../../util/history";
+import { checkLivScoreCompIsParent } from "../../util/permissions";
 
 const { Content } = Layout;
 const { SubMenu } = Menu;
@@ -67,6 +68,33 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
+        title: 'Position Tracking',
+        dataIndex: 'positionTracking',
+        key: 'positionTracking',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (recordGoalAttempts, record) => {
+            return (
+                <span>{this_Obj.checkValue(recordGoalAttempts)}</span>
+            )
+
+        }
+
+    },
+    {
+        title: 'Goal Attempts',
+        dataIndex: 'recordGoalAttempts',
+        key: 'recordGoalAttempts',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (recordGoalAttempts, record) => {
+            return (
+                <span>{this_Obj.checkValue(recordGoalAttempts)}</span>
+            )
+
+        },
+    },
+    {
         title: 'Action',
         dataIndex: 'isUsed',
         key: 'isUsed',
@@ -109,7 +137,8 @@ class LiveScoreDivisionList extends Component {
         this.state = {
             year: "2020",
             competitionId: null,
-            offset:0
+            offset: 0,
+            liveScoreCompIsParent: false,
         }
 
         this_Obj = this;
@@ -118,16 +147,31 @@ class LiveScoreDivisionList extends Component {
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ competitionId: id })
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
         let offset = 0
         this.props.getMainDivisionListAction(id, offset)
     }
 
     onPageChange(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        this.setState({offset:offset})
+        this.setState({ offset: offset })
         this.props.getMainDivisionListAction(this.state.competitionId, offset)
     }
 
+    checkValue = (data) => {
+        if (data == true) {
+            return "Yes"
+        }
+        else if (data == false) {
+            return "No"
+        }
+        else {
+            return "As per competition"
+        }
+    }
+    
     ////////form content view
     contentView = () => {
         const { mainDivisionList, totalCount, currentPage } = this.props.liveScoreDivisionState;
@@ -170,6 +214,7 @@ class LiveScoreDivisionList extends Component {
 
     ///////view for breadcrumb
     headerView = () => {
+        let { liveScoreCompIsParent } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -201,11 +246,11 @@ class LiveScoreDivisionList extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <NavLink to={`/liveScoreAddDivision`} className="text-decoration-none">
+                                        {liveScoreCompIsParent && <NavLink to={`/liveScoreAddDivision`} className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addDivision}
                                             </Button>
-                                        </NavLink>
+                                        </NavLink>}
                                     </div>
                                 </div>
 

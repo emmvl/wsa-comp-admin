@@ -12,6 +12,7 @@ import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStora
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreDivisionList, liveScoreDeleteDivision } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction'
 import { NavLink } from 'react-router-dom';
+import { checkLivScoreCompIsParent } from "../../util/permissions";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -134,12 +135,14 @@ class LiveScoreLadderList extends Component {
         this.state = {
             division: "11A",
             loadding: false,
-            divisionId: null
+            divisionId: null,
+            liveScoreCompIsParent: false,
         }
     }
 
     ///////view for breadcrumb
     headerView = () => {
+        let { liveScoreCompIsParent } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 < div className="row" >
@@ -149,7 +152,7 @@ class LiveScoreLadderList extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm" style={{
+                    {liveScoreCompIsParent && <div className="col-sm" style={{
 
                         display: "flex",
                         flexDirection: 'row',
@@ -178,7 +181,7 @@ class LiveScoreLadderList extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>}
 
                 </div >
             </div >
@@ -188,7 +191,9 @@ class LiveScoreLadderList extends Component {
     componentDidMount() {
         // let competitionID = getCompetitonId()
         const { id } = JSON.parse(getLiveScoreCompetiton())
-
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
         if (id !== null) {
             // this.props.getliveScoreDivisions(competitionID);
             // this.props.getliveScoreDivisions(id);

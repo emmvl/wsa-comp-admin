@@ -2822,14 +2822,15 @@ class RegistrationCompetitionFee extends Component {
               (data) => data.isTypeSelected === true
             );
             finalmembershipProductTypes[i].membershipProductTypes = filterArray;
-            if (
+           /* if (
               finalmembershipProductTypes[i].membershipProductTypes.length == 0
             ) {
               finalmembershipProductTypes.splice(i, 1);
-            }
+            }*/
           }
+		  let arrayList =  finalmembershipProductTypes.filter(x=>x.membershipProductTypes.length > 0);																						  
           let payload = {
-            membershipProducts: finalmembershipProductTypes,
+            membershipProducts: arrayList,
           };
           this.props.saveCompetitionFeesMembershipTabAction(
             payload,

@@ -205,7 +205,9 @@ const ValidationConstants = {
     duplicateFamilyDiscountError:"Only one Family Discount Code for your organisation is permitted. Please remove the duplicate entry.",
     membershipDuplicateFamilyDiscountError:"Only one Family Discount Code for Membership Fee is permitted. Please remove the duplicate entry.",																																   
     mobileLength: "Contact number must be 10 digits",
-	pleaseFillRegistration: 'Please fill the Registration Code',															
+    pleaseFillRegistration: 'Please fill the Registration Code',
+    positionTrackingIsRequired: "Position tracking is required",
+    RecordGoalAttemptsIsRequired: "Record goal attempts is required"
 };
 
 export default ValidationConstants;
