@@ -272,14 +272,24 @@ function getDivisionsListAction(yearRefId, competitionId, sourceModule) {
 }
 
 
-function getTeamRegistrationsAction(payload) {
+function getTeamRegistrationsAction(payload, sortBy, sortOrder) {
   const action = {
       type: ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD,
-      payload: payload
+      payload: payload,
+      sortBy,
+      sortOrder
   };
   return action;
 }
 
+function exportTeamRegistrationAction(payload) {
+  console.log("rdu"+JSON.stringify(payload))
+  const action = {
+      type: ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_LOAD,
+      payload: payload
+  };
+  return action;
+}
 export {
   regMembershipListAction,
   regMembershipListDeleteAction,
@@ -309,5 +319,6 @@ export {
   isCheckedVisible,
   isReplyCheckVisible,
   getDivisionsListAction,
-  getTeamRegistrationsAction
+  getTeamRegistrationsAction,
+  exportTeamRegistrationAction
 };

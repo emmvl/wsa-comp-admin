@@ -125,9 +125,9 @@ class UserEditAffiliates extends Component {
     }
   }
 
-  logout = async () => {
-    await localStorage.clear();
-    history.push("/");
+  logout = () => {
+    localStorage.clear();
+    history.push("/login");
   };
 
   referenceCalls = (organisationId) => {

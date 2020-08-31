@@ -120,6 +120,7 @@ class UserOurOragnization extends Component {
                 })
             }
             if (userState.status == 1 && this.state.buttonPressed == "save") {
+                console.log("&&&&&&&&&&&&&&&&&&&&&&&&" + userState.status + "&&&&&" + this.state.isSameUserEmailChanged)
                 if (this.state.isSameUserEmailChanged) {
                     this.logout();
                 }
@@ -171,9 +172,14 @@ class UserOurOragnization extends Component {
 
     }
 
-    logout = async () => {
-        await localStorage.clear();
-        history.push("/");
+    logout = () => {
+        try {
+            localStorage.clear();
+            history.push("/login");
+        } catch (error) {
+           console.log("Error" + error); 
+        }
+       
     };
 
     referenceCalls = (organisationId) => {
@@ -957,10 +963,10 @@ class UserOurOragnization extends Component {
                         </span>
                     </div>
                 }
-                {
+                {/* {
                     (userState.error && userState.status == 4) ?
                         <div style={{ color: 'red' }}>{userState.error.result.data.message}</div> : null
-                }
+                } */}
             </div >
         )
     }

@@ -35,7 +35,7 @@ export function* liveScorePostSaga({ payload }) {
         if (payload.screenName === 'umpireDashboard') {
             setUmpireCompitionData(JSON.stringify(result.result.data))
         } else {
-            localStorage.setItem("LiveScoreCompetiton", JSON.stringify(result.result.data))
+            localStorage.setItem("LiveScoreCompetition", JSON.stringify(result.result.data))
             const { id } = JSON.parse(getLiveScoreUmpireCompitionData())
             if (payload.competitionId === id) {
                 setUmpireCompitionData(JSON.stringify(result.result.data))

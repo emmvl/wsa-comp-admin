@@ -32,7 +32,7 @@ function tableSort(key) {
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'desc') {
         sortBy = sortOrder = null;
     }
-    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_obj.setState({ sortBy, sortOrder });
     let { yearRefId, searchText, paymentStatus, fulfilmentStatus, product } = this_obj.state
     let page = this_obj.props.shopOrderStatusState.orderStatusCurrentPage
     let params =

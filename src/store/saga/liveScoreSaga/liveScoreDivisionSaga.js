@@ -117,10 +117,12 @@ function* liveScoreDivisionImportSaga(action) {
         result: result.result.data,
       });
 
-      // history.push("/liveScoreDivisionList");
-      // message.success("Division Imported Successfully.");
-
-      receiptImportResult(result.result);
+      if (Object.keys(result.result.data.error).length === 0) {
+        history.push("/liveScoreDivisionList");
+        message.success("Division Imported Successfully.");
+      } else {
+        receiptImportResult(result.result);
+      }
     } else {
       yield call(failSaga, result);
     }

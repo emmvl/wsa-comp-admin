@@ -23,33 +23,30 @@ function addRemoveTimeSlot(index, item, key, parentIndex) {
     }
     return action
 }
-// update time slot data 
-function UpdateTimeSlotsData(value, key, contentType, Index, mainId, id) {
-    const action = {
-        type: ApiConstants.UPDATE_POST_DATA_TIME_SLOTS_COMPETITION,
-        value: value,
-        key: key,
-        contentType: contentType,
-        index: Index,
-        mainId: mainId,
-        id: id,
 
-    }
-    return action
+function UpdateTimeSlotsData(value, key, contentType, index, mainId, id) {
+    return {
+        type: ApiConstants.UPDATE_POST_DATA_TIME_SLOTS_COMPETITION,
+        value,
+        key,
+        contentType,
+        index,
+        mainId,
+        id,
+    };
 }
-//update time slot data manaual
-function UpdateTimeSlotsDataManual(value, key, contentType, Index, mainId, id, parentIndex) {
-    const action = {
+
+function UpdateTimeSlotsDataManual(value, key, contentType, index, mainId, id, parentIndex) {
+    return {
         type: ApiConstants.UPDATE_POST_DATA_TIME_SLOTS_MANUAL_COMPETITION,
-        value: value,
-        key: key,
-        contentType: contentType,
-        index: Index,
-        mainId: mainId,
-        id: id,
-        parentIndex: parentIndex
-    }
-    return action
+        value,
+        key,
+        contentType,
+        index,
+        mainId,
+        id,
+        parentIndex,
+    };
 }
 
 // post time slot Data 

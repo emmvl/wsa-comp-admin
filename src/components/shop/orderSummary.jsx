@@ -39,7 +39,7 @@ function tableSort(key) {
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'desc') {
         sortBy = sortOrder = null;
     }
-    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_obj.setState({ sortBy, sortOrder });
     let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this_obj.state
     let page = this_obj.props.shopOrderSummaryState.orderSummaryCurrentPage
     let params =

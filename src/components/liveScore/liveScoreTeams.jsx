@@ -34,7 +34,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.setState({ sortBy, sortOrder });
 
     this_Obj.props.getTeamsWithPagging(this_Obj.state.conpetitionId, this_Obj.state.offset, 10, this_Obj.state.searchText, sortBy, sortOrder)
 }

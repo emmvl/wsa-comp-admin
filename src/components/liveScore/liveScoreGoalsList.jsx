@@ -37,7 +37,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_obj.setState({ sortBy, sortOrder });
 
     let offset = 0
     this_obj.props.liveScoreGoalListAction(this_obj.state.competitionId, this_obj.state.filter, this_obj.state.searchText, offset, sortBy, sortOrder)

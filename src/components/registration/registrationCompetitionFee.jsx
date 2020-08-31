@@ -2218,17 +2218,27 @@ class RegistrationCompetitionFee extends Component {
     let errMsg = null;
     let discountMap = new Map();
     for(let x of filterOrgPostDiscountData){
+      let key = null;
+      if(x.competitionTypeDiscountTypeRefId == 2){
+        key= x.competitionMembershipProductTypeId + "#" + x.competitionTypeDiscountTypeRefId + "#" + x.discountCode;
+      }
+      else if(x.competitionTypeDiscountTypeRefId == 3){
+        key = x.competitionMembershipProductTypeId + "#" + x.competitionTypeDiscountTypeRefId;
+      }
       //if(x.competitionTypeDiscountTypeRefId == 3){
-        let key = x.competitionMembershipProductTypeId + "#" + x.competitionTypeDiscountTypeRefId;
+																								  
         if(discountMap.get(key) == undefined){
           discountMap.set(key, 1);
         }
         else{
-          if(x.competitionTypeDiscountTypeRefId == 3)
-              errMsg = ValidationConstants.duplicateFamilyDiscountError;
-          else
+          if(x.competitionTypeDiscountTypeRefId == 3){
+																		
+			  
             errMsg = ValidationConstants.duplicateFamilyDiscountError;
-
+          }         
+          else{
+            errMsg = ValidationConstants.duplicateDiscountError;
+          }
           discountDuplicateError = true;
           break;
         }
@@ -2812,14 +2822,15 @@ class RegistrationCompetitionFee extends Component {
               (data) => data.isTypeSelected === true
             );
             finalmembershipProductTypes[i].membershipProductTypes = filterArray;
-            if (
+           /* if (
               finalmembershipProductTypes[i].membershipProductTypes.length == 0
             ) {
               finalmembershipProductTypes.splice(i, 1);
-            }
+            }*/
           }
+		  let arrayList =  finalmembershipProductTypes.filter(x=>x.membershipProductTypes.length > 0);																						  
           let payload = {
-            membershipProducts: finalmembershipProductTypes,
+            membershipProducts: arrayList,
           };
           this.props.saveCompetitionFeesMembershipTabAction(
             payload,

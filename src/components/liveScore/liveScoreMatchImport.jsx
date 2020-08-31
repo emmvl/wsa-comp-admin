@@ -17,7 +17,9 @@ import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
 
 import "./liveScore.css";
+
 const { Content, Header, Footer } = Layout;
+
 const columns = [
     {
         title: "Date",

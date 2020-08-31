@@ -39,8 +39,8 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
-    this_obj.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: this_obj.state.selectedComp, offset: this_obj.state.offsetData, sortBy: sortBy, sortOrder: sortOrder })
+    this_obj.setState({ sortBy, sortOrder });
+    this_obj.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: this_obj.state.selectedComp, offset: this_obj.state.offsetData, sortBy, sortOrder })
 }
 
 const columns = [

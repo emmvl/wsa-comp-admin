@@ -43,7 +43,7 @@ function tableSort(key) {
             offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0)
         }
     }
-    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.setState({ sortBy, sortOrder });
     this_Obj.props.getAffiliatesListingAction(filterData, sortBy, sortOrder);
 }
 const listeners = (key) => ({

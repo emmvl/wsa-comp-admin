@@ -33,7 +33,7 @@ function tableSort(key) {
     } else if (_this.state.sortBy === key && _this.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    _this.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    _this.setState({ sortBy, sortOrder });
     if (_this.state.competitionId) {
         _this.props.playerListWithPagginationAction(_this.state.competitionId, 0, 10, undefined, sortBy, sortOrder);
     }

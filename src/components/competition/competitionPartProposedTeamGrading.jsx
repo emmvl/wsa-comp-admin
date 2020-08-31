@@ -79,6 +79,7 @@ const columns = [
         render: (playerHistory, record, key) => (
             <span>
                 {playerHistory.map((item, index) => (
+                    (item.divisionGrade != null && item.divisionGrade != "") ? 
                     <Tooltip
                         className="comp-player-table-tag2"
                         style={{ height: "100%" }}
@@ -92,16 +93,16 @@ const columns = [
                                 state: { userId: item.userId, screenKey: 'competitionPartProposedTeamGrading', screen: "/competitionPartProposedTeamGrading" }
                             }}
                             >
-                                <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item}>
-                                    {item.teamText}
+                                <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
+                                    {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
                                 </Tag>
                             </NavLink>
                             :
-                            <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item}>
-                                {item.teamText}
+                            <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
+                                    {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
                             </Tag>
                         }
-                    </Tooltip>
+                    </Tooltip> : null
                 ))}
             </span>
         ),

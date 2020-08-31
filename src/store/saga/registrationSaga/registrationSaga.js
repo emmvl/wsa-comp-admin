@@ -292,10 +292,27 @@ export function* getDivisionsListSaga(action) {
 
 export function* getTeamRegistrationsSaga(action) {
   try {
-    const result = yield call(AxiosApi.getTeamRegistrations,action.payload);
+    const result = yield call(AxiosApi.getTeamRegistrations,action.payload, action.sortBy, action.sortOrder);
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
+
+export function* exportTeamRegistrationsSaga(action) {
+  try {
+    const result = yield call(AxiosApi.exportTeamRegistrations,action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_SUCCESS,
         result: result.result.data,
         status: result.status
       });

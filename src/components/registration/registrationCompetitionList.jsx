@@ -33,7 +33,7 @@ function tableSort(key) {
     } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.setState({ sortBy, sortOrder });
     this_Obj.props.regCompetitionListAction(this_Obj.state.offset, this_Obj.state.yearRefId, this_Obj.state.searchText, sortBy, sortOrder);
 }
 

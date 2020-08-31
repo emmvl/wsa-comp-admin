@@ -896,8 +896,8 @@ class CompetitionDraws extends Component {
   handlePublishModal = (key) => {
     if (key == "ok") {
       let competitiondata = this.props.drawsState.liveScoreCompetiton
-      localStorage.setItem("LiveScoreCompetiton", JSON.stringify(competitiondata))
-      localStorage.removeItem('stateWideMessege')
+      localStorage.setItem("LiveScoreCompetition", JSON.stringify(competitiondata))
+      localStorage.removeItem('stateWideMessage')
       setLiveScoreUmpireCompition(competitiondata.id)
       setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
       history.push('/liveScoreLadderList')

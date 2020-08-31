@@ -21,19 +21,14 @@ const { Content, Header, Footer } = Layout;
 
 const columns = [
     {
-        title: "Logo",
-        dataIndex: "logo",
-        key: "logo",
-    },
-    {
         title: "Team Name",
-        dataIndex: "Team_Name",
-        key: "Team_Name",
+        dataIndex: "Team Name",
+        key: "Team Name",
     },
     {
-        title: "Grade",
-        dataIndex: "Grade",
-        key: "Grade",
+        title: "Division Grade",
+        dataIndex: "Division Grade",
+        key: "Division Grade",
     },
     {
         title: "Organisation",

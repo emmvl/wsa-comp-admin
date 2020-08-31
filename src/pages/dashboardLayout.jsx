@@ -1,34 +1,38 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import { Modal, Select } from "antd";
-import "./layout.css";
-import history from "../util/history";
-import AppConstants from "../themes/appConstants";
-import AppImages from "../themes/appImages";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import {
-  getAffiliatesListingAction,
-  getOrganisationAction,
-  getUserOrganisationAction,
-  impersonationAction,
-  onOrganisationChangeAction
-} from "../store/actions/userAction/userAction";
+
+import AppConstants from "themes/appConstants";
+import AppImages from "themes/appImages";
+import history from "util/history";
 import {
   setOrganisationData,
   getOrganisationData,
   clearUmpireStorage,
   setImpersonationAffiliate,
   getImpersonationAffiliate,
-} from "../util/sessionStorage";
-import { clearHomeDashboardData, } from "../store/actions/homeAction/homeAction";
-import Loader from "../customComponents/loader";
+  setPrevUrl,
+} from "util/sessionStorage";
+import { clearHomeDashboardData } from "store/actions/homeAction/homeAction";
+import {
+  getAffiliatesListingAction,
+  getOrganisationAction,
+  getUserOrganisationAction,
+  impersonationAction,
+  onOrganisationChangeAction,
+} from "store/actions/userAction/userAction";
+import Loader from "customComponents/loader";
+
+import "./layout.css";
 
 const { Option } = Select;
 
 class DashboardLayout extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       windowMobile: false,
       dataOnload: false,
@@ -59,16 +63,14 @@ class DashboardLayout extends React.Component {
 
           this.setState({
             dataOnload: false,
-            impersonationOrgData: isImpersonation ? orgData : null
+            impersonationOrgData: isImpersonation ? orgData : null,
           });
         }
 
-        if (this.props.userState.impersonation
-          && !this.state.impersonationLoad
-        ) {
+        if (this.props.userState.impersonation && !this.state.impersonationLoad) {
           const impersonationAffiliate = this.state.impersonationAffiliateOrgId
             ? this.props.userState.affiliateList
-              .find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId)
+                  .find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId)
             : null;
           await setImpersonationAffiliate(impersonationAffiliate);
 
@@ -89,7 +91,7 @@ class DashboardLayout extends React.Component {
           this.props.getUserOrganisationAction();
           this.setState({
             dataOnload: true,
-            impersonationLoad: false
+            impersonationLoad: false,
           });
         }
       }
@@ -111,7 +113,7 @@ class DashboardLayout extends React.Component {
     this.setOrganisationKey();
   }
 
-  async getPresetOrganisation() {
+  getPresetOrganisation = async () => {
     const userOrganisationData = this.props.userState.getUserOrganisation;
     const impersonationAffiliate = await getImpersonationAffiliate();
 
@@ -126,7 +128,7 @@ class DashboardLayout extends React.Component {
     return userOrganisationData.find((org) => org.organisationUniqueKey === impersonationAffiliate.affiliateOrgId);
   }
 
-  setOrganisationKey() {
+  setOrganisationKey = () => {
     let organisationData = getOrganisationData();
     if (!organisationData) {
       this.props.userState.getUserOrganisation.length === 0 && this.props.getUserOrganisationAction();
@@ -218,30 +220,30 @@ class DashboardLayout extends React.Component {
     }
   };
 
-  ////search view input on width<767px
   searchView = () => {
     this.setState({ windowMobile: !this.state.windowMobile });
   };
 
   onOrganisationChange = async (organisationData) => {
-    this.props.onOrganisationChangeAction(organisationData, "organisationChange")
-    this.setFullStory(organisationData)
-    setOrganisationData(organisationData)
-    this.props.clearHomeDashboardData("user")
-    clearUmpireStorage()
-    history.push("./homeDashboard", { orgChange: "changeOrg" })
+    this.props.onOrganisationChangeAction(organisationData, "organisationChange");
+    this.setFullStory(organisationData);
+    setOrganisationData(organisationData);
+    this.props.clearHomeDashboardData("user");
+    clearUmpireStorage();
+    setPrevUrl(history.location);
+    history.push("./homeDashboard", { orgChange: "changeOrg" });
     window.location.reload();
   }
 
   setFullStory = (organisationData) => {
-    // if(organisationData!= null ){
+    // if (organisationData != null) {
     //   let exOrgData = getOrganisationData();
-    //   if(exOrgData == null || organisationData.organisationUniqueKey!= exOrgData.organisationUniqueKey){
+    //   if (exOrgData == null || organisationData.organisationUniqueKey !== exOrgData.organisationUniqueKey) {
     //     setUserVars({
-    //       "displayName" : organisationData.firstName + " " + organisationData.lastName,
-    //       "email" : organisationData.userEmail,
-    //       "organisation" : organisationData.name
-    //      });
+    //       displayName: organisationData.firstName + " " + organisationData.lastName,
+    //       email: organisationData.userEmail,
+    //       organisation: organisationData.name,
+    //     });
     //   }
     // }
   };
@@ -253,13 +255,13 @@ class DashboardLayout extends React.Component {
       affiliatedToOrgId: -1,
       organisationTypeRefId: -1,
       statusRefId: -1,
-      paging: { limit: -1, offset: 0 }
+      paging: { limit: -1, offset: 0 },
     });
     this.setState({ openImpersonationModal: true });
   };
 
   handleImpersonationModal = (button) => {
-    if (button === 'ok') {
+    if (button === "ok") {
       this.setState({ openImpersonationModal: false });
       const orgData = this.props.userState.affiliateList.find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId);
       if (orgData) {
@@ -277,8 +279,7 @@ class DashboardLayout extends React.Component {
     this.setState({ impersonationAffiliateOrgId: e });
   };
 
-  // user profile dropdown
-  userProfileDropdown() {
+  userProfileDropdown = () => {
     const { menuName } = this.props;
     let userData = this.props.userState.getUserOrganisation;
     let selectedOrgData = getOrganisationData();
@@ -301,7 +302,7 @@ class DashboardLayout extends React.Component {
             <div className="media">
               <div className="media-left">
                 <figure className="user-img-wrap">
-                  <img src={userImage} alt=""/>
+                  <img src={userImage} alt="" />
                 </figure>
               </div>
 
@@ -325,15 +326,13 @@ class DashboardLayout extends React.Component {
 
           {userData.length > 0 && (
             <div className="acc-help-support-list-view">
-              {userData.map((item, index) => {
-                return (
-                  <li key={"user" + index}>
-                    <a onClick={() => this.onOrganisationChange(item)}>
-                      <span style={{ textTransform: "capitalize" }}>{item.name + "(" + item.userRole + ")"}</span>
-                    </a>
-                  </li>
-                )
-              })}
+              {userData.map((item, index) => (
+                <li key={"user" + index}>
+                  <a onClick={() => this.onOrganisationChange(item)}>
+                    <span style={{ textTransform: "capitalize" }}>{item.name + "(" + item.userRole + ")"}</span>
+                  </a>
+                </li>
+              ))}
             </div>
           )}
 
@@ -359,7 +358,7 @@ class DashboardLayout extends React.Component {
         </ul>
       </div>
     );
-  }
+  };
 
   render() {
     let menuName = this.props.menuName;
@@ -372,11 +371,14 @@ class DashboardLayout extends React.Component {
             <a onClick={this.endImpersonation}>End access</a>
           </div>
         )}
-        <header className={`site-header ${
-          this.state.impersonationLoad && this.state.impersonationOrgData
-            ? 'impersonation-site-header'
-            : ''
-        }`}>
+
+        <header
+          className={`site-header ${
+            this.state.impersonationLoad && this.state.impersonationOrgData
+              ? "impersonation-site-header"
+              : ""
+          }`}
+        >
           <div className="header-wrap">
             <div className="row m-0-res">
               <div className="col-sm-12 d-flex">
@@ -427,7 +429,7 @@ class DashboardLayout extends React.Component {
                             <li className={menuName === AppConstants.registration ? "active" : ""}>
                               <div id={AppConstants.registration_icon} className="registration-menu menu-wrap">
                                 <NavLink to="/registrationDashboard">
-                                  <span id={AppConstants.registrations_label} className="icon"/>
+                                  <span id={AppConstants.registrations_label} className="icon" />
                                   {AppConstants.registration}
                                 </NavLink>
                               </div>
@@ -435,7 +437,7 @@ class DashboardLayout extends React.Component {
                             <li className={menuName === AppConstants.competitions ? "active" : ""}>
                               <div id={AppConstants.competition_icon} className="competitions-menu menu-wrap">
                                 <NavLink to="/competitionDashboard">
-                                  <span id={AppConstants.competitions_label} className="icon"/>
+                                  <span id={AppConstants.competitions_label} className="icon" />
                                   {AppConstants.competitions}
                                 </NavLink>
                               </div>
@@ -505,7 +507,7 @@ class DashboardLayout extends React.Component {
           >
             <Select
               className="w-100 reg-filter-select-competition"
-              onChange={(e) => this.handleImpersonationOrg(e)}
+              onChange={this.handleImpersonationOrg}
               placeholder="Organisation"
               showSearch
               filterOption={(input, option) =>

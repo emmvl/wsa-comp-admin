@@ -37,7 +37,7 @@ function tableSort(key) {
     } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    this_Obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    this_Obj.setState({ sortBy, sortOrder });
     this_Obj.props.registrationMainDashboardListAction(this_Obj.state.year, sortBy, sortOrder);
 }
 
@@ -297,42 +297,73 @@ class RegistrationMainDashboard extends Component {
                 className="comp-player-grades-header-drop-down-view"
                 style={{ marginTop: 15 }}
             >
+                <div className="row">
+                    <div className="col-sm-2">
+                        <div className="year-select-heading-view pb-3">
+                            <div className="reg-filter-col-cont"  >
+                                <span className="year-select-heading">
+                                    {AppConstants.year}:</span>
+                                <Select
+                                    className="year-select reg-filter-select-year ml-2"
+                                    style={{ width: 90 }}
+                                    onChange={yearId => this.onYearClick(yearId)}
+                                    value={this.state.year}
+                                >
+                                    {yearList.length > 0 && yearList.map((item, yearIndex) => (
+                                        < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
+                                    ))
+                                    }
+                                </Select>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-sm pb-3" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }} >
+                        <Button
+                            className="open-reg-button"
+                            type="primary"
+                            onClick={() => this.openwizardmodel()}
+                        >
+                            {AppConstants.registrationWizard}
+                        </Button>
+                    </div>
+
+                </div>
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm-6" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             <span className="form-heading">
-                                {AppConstants.participateInCompReg}
+                                {AppConstants.ownedCompetitionsReg}
                             </span>
                         </div>
-                        <div className="col-sm-2">
-                            <div className="year-select-heading-view pb-3">
-                                <div className="reg-filter-col-cont"  >
-                                    <span className="year-select-heading">
-                                        {AppConstants.year}:</span>
-                                    <Select
-                                        className="year-select reg-filter-select-year ml-2"
-                                        style={{ width: 90 }}
-                                        onChange={yearId => this.onYearClick(yearId)}
-                                        value={this.state.year}
+                        <div className="col-sm">
+                            <div className="row">
+                                <div className="col-sm">
+                                    <div
+                                        className="comp-dashboard-botton-view-mobile"
+                                        style={{
+                                            width: "100%",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "flex-end"
+                                        }}
+                                        onClick={() => this.props.clearCompReducerDataAction("all")}
                                     >
-                                        {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                            < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
-                                        ))
-                                        }
-                                    </Select>
+                                        <NavLink
+                                            to={{ pathname: `/registrationCompetitionFee`, state: { id: null } }}
+                                            className="text-decoration-none"
+                                        >
+                                            <Button className="primary-add-comp-form" type="primary"
+                                            >
+                                                + {AppConstants.newCompetitionReg}
+                                            </Button>
+                                        </NavLink>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm-2"></div>
-                        <div className="col-sm pb-3" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }} >
-                            <Button
-                                className="open-reg-button"
-                                type="primary"
-                                onClick={() => this.openwizardmodel()}
-                            >
-                                {AppConstants.registrationWizard}
-                            </Button>
-                        </div>
+
+
                     </div>
                 </div>
                 <WizardModel
@@ -434,7 +465,8 @@ class RegistrationMainDashboard extends Component {
                     <div className="row">
                         <div className="col-sm-4" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                             <span className="form-heading">
-                                {AppConstants.ownedCompetitionsReg}
+                                {AppConstants.participateInCompReg}
+
                             </span>
                             {/* <div style={{ marginTop: -10 }}>
                                 <Tooltip placement="top" background='#ff8237'>
@@ -442,33 +474,7 @@ class RegistrationMainDashboard extends Component {
                                 </Tooltip>
                             </div> */}
                         </div>
-                        <div className="col-sm">
-                            <div className="row">
-                                <div className="col-sm">
-                                    <div
-                                        className="comp-dashboard-botton-view-mobile"
-                                        style={{
-                                            width: "100%",
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            alignItems: "center",
-                                            justifyContent: "flex-end"
-                                        }}
-                                        onClick={() => this.props.clearCompReducerDataAction("all")}
-                                    >
-                                        <NavLink
-                                            to={{ pathname: `/registrationCompetitionFee`, state: { id: null } }}
-                                            className="text-decoration-none"
-                                        >
-                                            <Button className="primary-add-comp-form" type="primary"
-                                            >
-                                                + {AppConstants.newCompetitionReg}
-                                            </Button>
-                                        </NavLink>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

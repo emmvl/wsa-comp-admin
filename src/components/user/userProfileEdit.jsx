@@ -8,7 +8,8 @@ import {
     DatePicker,
     Input,
     Radio,
-    Form
+    Form,
+    message
 } from "antd";
 import moment from 'moment';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -26,6 +27,7 @@ import { bindActionCreators } from 'redux';
 import history from '../../util/history'
 import { isArrayNotEmpty, isNullOrEmptyString, captializedString } from '../../util/helpers';
 import Loader from '../../customComponents/loader';
+import { getOrganisationData,getUserId } from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -42,6 +44,7 @@ class UserProfileEdit extends Component {
             loadValue: false,
             saveLoad: false,
             tabKey: "3",
+            organisationId: getOrganisationData().organisationUniqueKey,
             userData: {genderRefId: 0,firstName: "",lastName:"",mobileNumber:"",email: "",middleName: "",
                 dateOfBirth: "",street1:"",street2:"",suburb:"",stateRefId: 1,postalCode: "",statusRefId: 0,
                 emergencyContactName: "",emergencyContactNumber: "", existingMedicalCondition: "",regularMedication: "",
@@ -49,7 +52,8 @@ class UserProfileEdit extends Component {
                 disabilityTypeRefId: 0,  countryRefId: null, nationalityRefId: null,languages: "",childrenCheckNumber: "",childrenCheckExpiryDate: ""
             },
             titleLabel:"",
-            section: ""
+            section: "",
+            isSameUserEmailChanged: false
         }
         this.props.getCommonRefData();
         this.props.countryReferenceAction();
@@ -123,9 +127,29 @@ class UserProfileEdit extends Component {
         let userState  = this.props.userState;
         if(userState.onUpUpdateLoad == false && this.state.saveLoad == true){
             this.setState({saveLoad: false})
-            history.push({pathname:'/userPersonal', state: {tabKey: this.state.tabKey, userId: this.state.userData.userId}});
+            if(userState.status == 1){
+                if (this.state.isSameUserEmailChanged) {
+                    this.logout();
+                }else{
+                    history.push({pathname:'/userPersonal', state: {tabKey: this.state.tabKey, userId: this.state.userData.userId}});
+                }
+            }
+            else if(userState.status == 4){
+                message.config({duration: 1.5,maxCount: 1,});
+                message.error(userState.userProfileUpdate);
+            }
         }
     }
+
+    logout = () => {
+        try {
+            localStorage.clear();
+            history.push("/login");
+        } catch (error) {
+           console.log("Error" + error); 
+        }
+       
+    };
 
     setAddressFormFields = () => {
         let userData  = this.state.userData;
@@ -185,6 +209,13 @@ class UserProfileEdit extends Component {
         }
         else if (key == "dateOfBirth"){
             value = (moment(value).format("YYYY-MM-DD"))
+        }
+        else if (key == "email" && this.state.section == "address") {
+            if(data.userId == getUserId()){
+                this.setState({isSameUserEmailChanged: true});
+            }else{
+                this.setState({isSameUserEmailChanged: false});
+            }
         }
         data[key] = value;
       
@@ -331,6 +362,11 @@ class UserProfileEdit extends Component {
                                 />
                             )}
                         </Form.Item>
+                        {(userData.userId == getUserId() && this.state.isSameUserEmailChanged) ?
+                            <div className="same-user-validation">
+                                {ValidationConstants.emailField[2]}
+                            </div>
+                            : null}
                     </div>
                 </div>
                 <div className='row'>
@@ -862,6 +898,7 @@ class UserProfileEdit extends Component {
                 let userState = this.props.userState;
                 let data = this.state.userData;
                 data["section"] = this.state.section;
+                data["organisationId"] = this.state.organisationId;
                 console.log("obj" + JSON.stringify(data))
                 this.props.userProfileUpdateAction(data);
                 this.setState({ saveLoad: true });
