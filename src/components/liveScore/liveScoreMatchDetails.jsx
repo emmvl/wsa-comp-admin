@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Layout, Button, Table, Modal, Checkbox, Tooltip , Select, Input } from 'antd';
+import {Layout, Button, Table, Modal, Checkbox, Tooltip, Select, Input, Spin, AutoComplete} from 'antd';
 
 import {
     liveScoreDeleteMatch,
@@ -10,6 +10,9 @@ import {
     changePlayerLineUpAction,
     liveScoreAddLiveStreamAction,
 } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
+import {
+    liveScorePlayerListSearchAction
+} from "../../store/actions/LiveScoreAction/liveScorePlayerAction"
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
 import {
@@ -197,7 +200,8 @@ class LiveScoreMatchDetails extends Component {
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
             competitionId: null,
             visible: false,
-            liveStreamLink: null
+            liveStreamLink: null,
+            addPlayerModal: '',
         }
         this.umpireScore_View = this.umpireScore_View.bind(this)
         this.team_View = this.team_View.bind(this)
@@ -303,7 +307,7 @@ class LiveScoreMatchDetails extends Component {
                     <div className="col-sm-12 col-md-6 col-lg-6">
                         <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                             <span className="form-heading pb-0" >{length >= 1 ? match ? match[0].team1.name : '' : ''}</span>
-                            <span class="input-heading-add-another pt-2 pl-1 pr-1" > vs </span>
+                            <span className="input-heading-add-another pt-2 pl-1 pr-1" > vs </span>
                             <span className="form-heading pb-0" > {length >= 1 ? match ? match[0].team2.name : '' : ''}</span>
                         </div>
                         <div className="col-sm-2" >
@@ -521,8 +525,6 @@ class LiveScoreMatchDetails extends Component {
     }
 
     teamPlayersStatus = (data) => {
-        console.log('data', data);
-        console.log('liveScoreGamePositionState', this.props.liveScoreGamePositionState.positionList);
         const competition =  JSON.parse(getLiveScoreCompetiton());
 
         const columns = [
@@ -778,11 +780,8 @@ class LiveScoreMatchDetails extends Component {
 
     //// Team details
     team_View = () => {
-        // const { match, umpires } = this.props.liveScoreMatchState.matchDetails
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : []
         const { team1Players, team2Players } = this.props.liveScoreMatchState
-        console.log('team1Players', team1Players)
-        console.log('team2Players', team2Players)
         const length = match ? match.length : 0
         return (
             <div className="match-details-rl-padding row mt-5">
@@ -801,17 +800,21 @@ class LiveScoreMatchDetails extends Component {
                                 <span className='home-dash-left-text'>{AppConstants.players}</span>
                             </div>
                             <div className="col-sm text-right" >
-                                <Button className="primary-add-comp-form" type="primary">
+                                <Button
+                                  className="primary-add-comp-form"
+                                  type="primary"
+                                  onClick={() => this.handleAddPlayerModal(length >= 1 && match[0].team1.id)}
+                                >
                                     + {AppConstants.addNew}
                                 </Button>
                             </div>
                         </div>
                         <div>
-                            <div className="col-sm-12 col-md-12 col-lg-6">
+                            <div className="col-12">
                                 {this.teamPlayersStatus(team1Players)}
                             </div>
                             {/* <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team1players ? team1players : data} pagination={false}/> */}
-                            <div className="col-sm-12 col-md-12 col-lg-6">
+                            <div className="col-12">
                                 <Table
                                   className="home-dashboard-table pt-2"
                                   columns={this.state.isLineUp === 1 ? columnsTeam1 : columns}
@@ -838,16 +841,20 @@ class LiveScoreMatchDetails extends Component {
                                 <span className='home-dash-left-text'>{AppConstants.players}</span>
                             </div>
                             <div className="col-sm text-right" >
-                                <Button className="primary-add-comp-form" type="primary">
+                                <Button
+                                  className="primary-add-comp-form"
+                                  type="primary"
+                                  onClick={() => this.handleAddPlayerModal(length >= 1 && match[0].team2.id)}
+                                >
                                     + {AppConstants.addNew}
                                 </Button>
                             </div>
                         </div>
                         <div>
-                            <div className="col-sm-12 col-md-12 col-lg-6">
+                            <div className="col-12">
                                 {this.teamPlayersStatus(team2Players)}
                             </div>
-                            <div className="col-sm-12 col-md-12 col-lg-6">
+                            <div className="col-12">
                                 <Table
                                   className="home-dashboard-table pt-2"
                                   columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
@@ -935,6 +942,74 @@ class LiveScoreMatchDetails extends Component {
         )
     }
 
+    handleAddPlayerModal = (teamId) => {
+        this.setState({addPlayerModal: teamId})
+    };
+
+    handleAddPlayerCancel = () => {
+        this.setState({addPlayerModal: ''})
+    };
+
+    handleAddPlayerOk = () => {
+        this.setState({addPlayerModal: ''})
+    };
+
+    handleAddPlayer = (playerId) => {
+        console.log('handleAddPlayer', playerId);
+    };
+
+    AddPlayerModalView() {
+        let playerId = null;
+        const { id: competitionId, organisationId } = JSON.parse(getLiveScoreCompetiton())
+        const { onLoadSearch, searchResult } = this.props.liveScorePlayerState;
+
+        return (
+          <Modal
+            title={AppConstants.addPlayer}
+            visible={!!this.state.addPlayerModal}
+            onOk={this.handleAddPlayerOk}
+            onCancel={this.handleAddPlayerCancel}
+            cancelButtonProps={{ style: { display: 'none' } }}
+            okButtonProps={{ style: { display: 'none' } }}
+            centered={true}
+            footer={null}
+          >
+              <AutoComplete
+                loading={true}
+                style={{ width: "100%", height: '56px' }}
+                placeholder="Add Player"
+                onSelect={(item, option) => {
+                    playerId = JSON.parse(option.key)
+                }}
+                notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
+                onSearch={(value) => {
+                    if (value) {
+                        this.props.liveScorePlayerListSearchAction(competitionId, organisationId, value)
+                    }
+                }}
+              >
+                  {searchResult.length > 0 && searchResult.map((item) => {
+                      return <Option key={item.playerId} value={item.playerId.toString()}>
+                          {item.firstName + " " + item.lastName}
+                      </Option>
+                  })}
+              </AutoComplete>
+              <div
+                className="comp-dashboard-botton-view-mobile"
+                style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    paddingTop: 24
+                }}
+              >
+                  <Button onClick={() => this.handleAddPlayer(playerId)} className="primary-add-comp-form" type="primary">
+                      {AppConstants.save}
+                  </Button>
+              </div>
+          </Modal>
+        )
+    }
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
@@ -960,6 +1035,7 @@ class LiveScoreMatchDetails extends Component {
                         {this.umpireScore_View()}
                         {this.team_View()}
                         {this.ModalView()}
+                        {this.AddPlayerModalView()}
                     </Content>
                 </Layout>
             </div >
@@ -973,7 +1049,8 @@ function mapDispatchToProps(dispatch) {
         liveScoreGetMatchDetailInitiate,
         changePlayerLineUpAction,
         liveScoreAddLiveStreamAction,
-        getLiveScoreGamePositionsList
+        getLiveScoreGamePositionsList,
+        liveScorePlayerListSearchAction,
     }, dispatch)
 }
 
@@ -981,6 +1058,7 @@ function mapStateToProps(state) {
     return {
         liveScoreMatchState: state.LiveScoreMatchState,
         liveScoreGamePositionState: state.liveScoreGamePositionState,
+        liveScorePlayerState: state.LiveScorePlayerState,
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreMatchDetails);

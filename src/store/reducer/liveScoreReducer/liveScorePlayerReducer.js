@@ -16,27 +16,28 @@ const playerObj = {
 
 const initialState = {
     onLoad: false,
+    onSearchLoad: false,
     error: null,
     result: [],
     status: 0,
     playerData: playerObj,
     playerDataArr: [],
     totalCount: null,
+    searchResult: [],
 };
 
 function LiveScorePlayerState(state = initialState, action) {
     switch (action.type) {
-        // case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD:
-        //     return { ...state, onLoad: true };
+        case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SEARCH_LOAD:
+            return { ...state, onSearchLoad: true };
 
-        // case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SUCCESS:
-        //     const playerListResult = liveScoreModal.getPlayerListData(action.result);
-        //     return {
-        //         ...state,
-        //         onLoad: false,
-        //         result: playerListResult,
-        //         status: action.status,
-        //     };
+        case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SEARCH_SUCCESS:
+            return {
+                ...state,
+                onSearchLoad: false,
+                searchResult: liveScoreModal.getPlayerListData(action.result),
+                status: action.status,
+            };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
             return {
@@ -91,6 +92,7 @@ function LiveScorePlayerState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+                onSearchLoad: false,
                 error: action.error,
                 status: action.status,
             };
@@ -99,6 +101,7 @@ function LiveScorePlayerState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
+                onSearchLoad: false,
                 error: action.error,
                 status: action.status,
             };

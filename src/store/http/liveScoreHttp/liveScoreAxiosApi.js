@@ -132,8 +132,13 @@ let LiveScoreAxiosApi = {
         }
     },
 
-    liveScorePlayerList(competitionID) {
-        const url = `/players?competitionId=${competitionID}`;
+    liveScorePlayerList(competitionId, organisationId, name) {
+        let url = `/players?competitionId=${competitionId}`;
+
+        if (!!name && !!organisationId) {
+            url = `/players?competitionId=${competitionId}&organisationId=${organisationId}&name=${name}&includeLinkedCompetition=true`;
+        }
+
         return Method.dataGet(url, localStorage.token);
     },
 
