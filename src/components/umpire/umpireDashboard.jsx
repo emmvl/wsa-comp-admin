@@ -61,16 +61,6 @@ function tableSort(key) {
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === "DESC") {
         sortBy = sortOrder = null;
     }
-    const body =
-    {
-        "paging": {
-            "limit": 10,
-            "offset": this_obj.state.offsetData
-        }
-    }
-    this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
-    this_obj.props.getUmpireDashboardList({ compId: this_obj.state.selectedComp, divisionid: this_obj.state.division == 'All' ? "" : this_obj.state.division, venueId: this_obj.state.venue == 'All' ? "" : this_obj.state.venue, orgId: this_obj.state.orgId, roundId: this_obj.state.round == 'All' ? "" : [this_obj.state.round], pageData: body, sortBy: sortBy, sortOrder: sortOrder })
-}
 
     const body = {
         paging: {
@@ -86,7 +76,7 @@ function tableSort(key) {
         divisionId: this_obj.state.division === "All" ? "" : this_obj.state.division,
         venueId: this_obj.state.venue === "All" ? "" : this_obj.state.venue,
         orgId: this_obj.state.orgId,
-        roundId: this_obj.state.round === "All" ? "" : this_obj.state.round,
+        roundId: this_obj.state.round === "All" ? "" : [this_obj.state.round],
         pageData: body,
         sortBy,
         sortOrder,
@@ -841,7 +831,7 @@ class UmpireDashboard extends Component {
                 divisionId: divisionId === "All" ? "" : divisionId,
                 venueId: this.state.venue === "All" ? "" : this.state.venue,
                 orgId: this.state.orgId,
-                roundId: this.state.round === "All" ? "" : this.state.round,
+                roundId: this.state.round === "All" ? "" : [this.state.round],
                 pageData: body,
             });
         }, 100);
