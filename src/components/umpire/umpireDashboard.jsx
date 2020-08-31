@@ -54,7 +54,7 @@ function tableSort(key, key2) {
         }
     }
     this_obj.setState({ sortBy: sortBy, sortOrder: sortOrder });
-    this_obj.props.getUmpireDashboardList({ compId: this_obj.state.selectedComp, divisionid: this_obj.state.division == 'All' ? "" : this_obj.state.division, venueId: this_obj.state.venue == 'All' ? "" : this_obj.state.venue, orgId: this_obj.state.orgId, roundId: this_obj.state.round == 'All' ? "" : this_obj.state.round, pageData: body, sortBy: sortBy, sortOrder: sortOrder })
+    this_obj.props.getUmpireDashboardList({ compId: this_obj.state.selectedComp, divisionid: this_obj.state.division == 'All' ? "" : this_obj.state.division, venueId: this_obj.state.venue == 'All' ? "" : this_obj.state.venue, orgId: this_obj.state.orgId, roundId: this_obj.state.round == 'All' ? "" : [this_obj.state.round], pageData: body, sortBy: sortBy, sortOrder: sortOrder })
 }
 
 
@@ -251,6 +251,24 @@ const columns_Invite = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("verifiedBy"),
         render: (umpires, record) => <span className='multi-column-text-aligned'>{isArrayNotEmpty(record.umpires) ? record.umpires[0].verifiedBy : ""}</span>
+    },
+    {
+        title: 'Umpire Reserve',
+        dataIndex: 'umpireReserve',
+        key: 'umpireReserve',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpireReserve"),
+        render: (umpireReserve, record) =>
+            <span >{umpireReserve}</span>
+    },
+    {
+        title: 'Umpire Coach',
+        dataIndex: 'umpireCoach',
+        key: 'umpireCoach',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpireCoach"),
+        render: (umpireCoach, record) =>
+            <span >{umpireCoach}</span>
     },
     {
         title: "Action",
@@ -484,6 +502,24 @@ const columns = [
         render: (umpires, record) => <span className='multi-column-text-aligned'>{isArrayNotEmpty(record.umpires) ? record.umpires[0].verifiedBy : ""}</span>
     },
     {
+        title: 'Umpire Reserve',
+        dataIndex: 'umpireReserve',
+        key: 'umpireReserve',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpireReserve"),
+        render: (umpireReserve, record) =>
+            <span >{umpireReserve}</span>
+    },
+    {
+        title: 'Umpire Coach',
+        dataIndex: 'umpireCoach',
+        key: 'umpireCoach',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpireCoach"),
+        render: (umpireCoach, record) =>
+            <span >{umpireCoach}</span>
+    },
+    {
         title: "Action",
         dataIndex: 'action',
         key: '_action',
@@ -648,7 +684,7 @@ class UmpireDashboard extends Component {
                     }
                 }
                 this.setState({ divisionLoad: false })
-                this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
+                this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : [this.state.round], pageData: body })
                 this.props.umpireRoundListAction(this.state.selectedComp, this.state.division == 'All' ? "" : this.state.division)
 
             }
@@ -684,13 +720,13 @@ class UmpireDashboard extends Component {
             }
         }
 
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: this.state.venue == 'All' ? "" : this.state.venue, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : [this.state.round], pageData: body })
 
     }
 
     ////////form content view
     contentView = () => {
-        const { umpireDashboardList, totalPages } = this.props.umpireDashboardState
+        const { umpireDashboardList, totalPages, currentPage } = this.props.umpireDashboardState
         let umpireListResult = isArrayNotEmpty(umpireDashboardList) ? umpireDashboardList : []
 
         let umpireType = this.state.compititionObj ? this.state.compititionObj.recordUmpireType : ""
@@ -724,6 +760,7 @@ class UmpireDashboard extends Component {
                             total={totalPages}
                             defaultPageSize={10}
                             onChange={(page) => this.handlePageChnage(page)}
+                            current={currentPage}
                         />
                     </div>
                 </div>
@@ -763,7 +800,7 @@ class UmpireDashboard extends Component {
             }
         }
 
-        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: venueId == 'All' ? "" : venueId, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : this.state.round, pageData: body })
+        this.props.getUmpireDashboardList({ compId: this.state.selectedComp, divisionid: this.state.division == 'All' ? "" : this.state.division, venueId: venueId == 'All' ? "" : venueId, orgId: this.state.orgId, roundId: this.state.round == 'All' ? "" : [this.state.round], pageData: body })
         this.setState({ venue: venueId })
 
     }
@@ -928,7 +965,7 @@ class UmpireDashboard extends Component {
 
                         <div className="reg-col" >
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading' style={{width:"150px"}}>{AppConstants.competition}</div>
+                                <div className='year-select-heading' style={{ width: "150px" }}>{AppConstants.competition}</div>
                                 <Select
                                     // showSearch
                                     // optionFilterProp="children"
@@ -970,7 +1007,7 @@ class UmpireDashboard extends Component {
 
                         <div className="reg-col1 ml-5" >
                             <div className="reg-filter-col-cont" >
-                                <div className='year-select-heading' style={{width:"138px"}}>{AppConstants.division}</div>
+                                <div className='year-select-heading' style={{ width: "138px" }}>{AppConstants.division}</div>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     onChange={(divisionId) => this.onDivisionChange(divisionId)}

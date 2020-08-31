@@ -15,6 +15,7 @@ import { getCompetitonId, getLiveScoreCompetiton } from '../../util/sessionStora
 import Loader from '../../customComponents/loader'
 import { captializedString } from "../../util/helpers"
 const { Footer, Content, Header } = Layout;
+const { Option } = Select
 
 class LiveScoreAddDivision extends Component {
     constructor(props) {
@@ -23,6 +24,8 @@ class LiveScoreAddDivision extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit : false,
             tableData: this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : null : null,
             loader: false,
+            recordGoalAttemptArray: [{ id: null, value: "As per competiion" }, { id: true, value: "Yes" }, { id: false, value: "No" }],
+            positionTrackingArray: [{ id: null, value: "As per competiion" }, { id: true, value: "Yes" }, { id: false, value: "No" }],
         }
 
     }
@@ -55,6 +58,7 @@ class LiveScoreAddDivision extends Component {
             this.setInitalFiledValue()
         } else {
             this.props.liveScoreUpdateDivisionAction("", 'isAddDivision')
+            this.setInitalValue()
         }
     }
 
@@ -68,13 +72,23 @@ class LiveScoreAddDivision extends Component {
     }
 
     setInitalFiledValue() {
-        const { name, divisionName, gradeName } = this.props.liveScoreDivisionState
+        const { name, divisionName, gradeName, positionTracking, recordGoalAttempts } = this.props.liveScoreDivisionState
         this.props.form.setFieldsValue({
             'name': name,
             'divisionName': divisionName,
             'gradeName': gradeName,
+            "positionTracking": positionTracking,
+            "recordGoalAttempts": recordGoalAttempts
 
         })
+    }
+
+    setInitalValue() {
+        this.props.form.setFieldsValue({
+            "positionTracking": null,
+            "recordGoalAttempts": null
+        })
+
     }
 
     ////form view
@@ -146,7 +160,46 @@ class LiveScoreAddDivision extends Component {
                                         'gradeName': captializedString(i.target.value)
                                     })} />
                             )}
-
+                        </Form.Item>
+                    </div>
+                </div>
+                <div className="row" >
+                    <div className="col-sm" >
+                        <InputWithHead heading={AppConstants.positionTracking} />
+                        <Form.Item>
+                            {getFieldDecorator("positionTracking",)(
+                                <Select
+                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                    onChange={(value) => this.props.liveScoreUpdateDivisionAction(value, "positionTracking")}
+                                    placeholder={AppConstants.positionTracking}
+                                >
+                                    {this.state.positionTrackingArray.map((item, index) => {
+                                        return (
+                                            <Option key={index + "goal"} value={item.id}> {item.value}</Option>
+                                        )
+                                    })}
+                                </Select>
+                            )}
+                        </Form.Item>
+                    </div>
+                </div>
+                <div className="row" >
+                    <div className="col-sm" >
+                        <InputWithHead heading={AppConstants.recordGoalAttempt} />
+                        <Form.Item>
+                            {getFieldDecorator("recordGoalAttempts")(
+                                <Select
+                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                    onChange={(value) => this.props.liveScoreUpdateDivisionAction(value, "recordGoalAttempts")}
+                                    placeholder={AppConstants.recordGoalAttempt}
+                                >
+                                    {this.state.recordGoalAttemptArray.map((item, index) => {
+                                        return (
+                                            <Option key={index + "record"} value={item.id}> {item.value}</Option>
+                                        )
+                                    })}
+                                </Select>
+                            )}
                         </Form.Item>
                     </div>
                 </div>

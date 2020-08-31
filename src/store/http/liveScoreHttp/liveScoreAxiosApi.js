@@ -609,13 +609,15 @@ let LiveScoreAxiosApi = {
     },
 
     //create/edit division
-    liveScoreCreateDivision(name, divisionName, gradeName, competitionId, divisionId) {
+    liveScoreCreateDivision(name, divisionName, gradeName, competitionId, divisionId, positionTracking, recordGoalAttempts) {
         const body = {
             "name": name,
             "divisionName": divisionName,
             "grade": gradeName,
             "competitionId": competitionId,
             "id": divisionId,
+            "positionTracking": positionTracking == "null" ? null : positionTracking,
+            "recordGoalAttempts": recordGoalAttempts == "null" ? null : recordGoalAttempts
         }
         const url = `/division`
         return Method.dataPost(url, token, body)
@@ -1158,7 +1160,7 @@ let LiveScoreAxiosApi = {
         let url = `/matches/livestreamURL`;
         return Method.dataPost(url, token, body)
     },
-	resetLadderPoints(payload) {
+    resetLadderPoints(payload) {
         const url = `/teams/ladder/reset`
         return Method.dataPost(url, token, payload)
     },

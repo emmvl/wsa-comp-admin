@@ -1558,6 +1558,10 @@ const AppConstants = {
   selectedDivision: "Selected Division",
   fullReset: "Full Reset",
   divisionSettings: "Division settings",
+  alsoAssignAsUmpireCoach: "Also assign as Umpire Coach",
+  recordGoalAttempt: "Record goal attempt",
+  positionTracking: "Position tracking",
+  addAnotherPool: "Add Pool",
 };
 
 export default AppConstants;

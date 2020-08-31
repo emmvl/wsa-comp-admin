@@ -22,7 +22,7 @@ function liveScoreUpdateDivisionAction(data, key, contentType) {
 }
 
 //createDivisionAction
-function createDivisionAction(name, divisionName, gradeName, competitionId, divisionId) {
+function createDivisionAction(name, divisionName, gradeName, competitionId, divisionId, positionTracking, recordGoalAttempts) {
     return {
         type: ApiConstants.API_LIVE_SCORE_CREATE_DIVISION_LOAD,
         name,
@@ -30,6 +30,8 @@ function createDivisionAction(name, divisionName, gradeName, competitionId, divi
         gradeName,
         competitionId,
         divisionId,
+        positionTracking,
+        recordGoalAttempts
     };
 }
 

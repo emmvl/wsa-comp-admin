@@ -204,7 +204,9 @@ const ValidationConstants = {
     pleaseProvideInstalmentDate: "Please provide an instalment date",
     duplicateFamilyDiscountError: "Please remove the duplicate entry of Family Discount for the same Membership Product.",
     mobileLength: "Contact number must be 10 digits",
-	pleaseFillRegistration: 'Please fill the Registration Code',															
+    pleaseFillRegistration: 'Please fill the Registration Code',
+    positionTrackingIsRequired: "Position tracking is required",
+    RecordGoalAttemptsIsRequired: "Record goal attempts is required"
 };
 
 export default ValidationConstants;

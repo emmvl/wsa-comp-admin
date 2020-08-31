@@ -127,7 +127,6 @@ class UmpirePaymentSetting extends Component {
                                             return <Option key={`longName${index}` + item.id} value={item.id}>{item.longName}</Option>
                                         })
                                     }
-
                                 </Select>
                             </div>
                         </div>
@@ -164,7 +163,6 @@ class UmpirePaymentSetting extends Component {
     };
 
     contentView() {
-
         const { paidByCompOrg, paidByAffiliate } = this.props.umpirePaymentSettingState
         return (
             <div className='pt-4' style={{ padding: '3%', minWidth: 240 }}>
@@ -177,11 +175,10 @@ class UmpirePaymentSetting extends Component {
                         checked={paidByCompOrg}>
                         {'Paid by Competition Organiser'}
                     </Checkbox>
-
-
                     {paidByCompOrg &&
                         <div className="inside-container-view" >
                             {this.paidByCompOrgView()}
+                            {this.feesView()}
                         </div>
                     }
 
@@ -195,12 +192,11 @@ class UmpirePaymentSetting extends Component {
                     {paidByAffiliate &&
                         <div className="inside-container-view"  >
                             {this.paidByAffiliateView()}
+                            {this.paidByAffiliateFeesView()}
                         </div>
                     }
 
-                    <div className="inside-container-view"  >
-                        {this.feesView()}
-                    </div>
+
                 </div>
             </div>
         )
@@ -233,6 +229,8 @@ class UmpirePaymentSetting extends Component {
 
                     </Select>
                 }
+
+
             </div>
         )
     }
@@ -244,7 +242,6 @@ class UmpirePaymentSetting extends Component {
                 <Checkbox
                     onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.checked, key: 'selectAllDiv' })}
                     checked={selectAllDiv}
-
                 >
                     {AppConstants.allDivisions}
                 </Checkbox>
@@ -257,7 +254,6 @@ class UmpirePaymentSetting extends Component {
                         onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({ value: divisionId, key: 'paidByAffiliateDivision' })}
                         value={paidByAffiliateDivision}
                     >
-
                         {affiliateDiv.map((item) => (
                             <Option disabled={item.disabled} value={item.id}>{item.name}</Option>
                         ))}
@@ -269,18 +265,15 @@ class UmpirePaymentSetting extends Component {
 
     feesView() {
         const { byBadgeBtn, byPoolBtn } = this.props.umpirePaymentSettingState
-
         return (
             <div >
-                <span className='text-heading-large pt-2' >{AppConstants.fees}</span>
+                <span className='text-heading-large pt-3' >{AppConstants.fees}</span>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <Radio
                         onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.checked, key: 'byBadge' })}
                         checked={byBadgeBtn}>
                         {'By Badge'}
                     </Radio>
-
-
                     {byBadgeBtn &&
                         <div  >
                             {this.byBadgeView()}
@@ -292,6 +285,45 @@ class UmpirePaymentSetting extends Component {
                         checked={byPoolBtn}>
                         {'By Pool'}
                     </Radio>
+                    {byPoolBtn &&
+                        <div  >
+                            {this.byPoolView()}
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        )
+    }
+
+    paidByAffiliateFeesView() {
+        const { byBadgeBtnAffiliate, byPoolBtnAffiliate } = this.props.umpirePaymentSettingState
+        return (
+            <div >
+                <span className='text-heading-large pt-3' >{AppConstants.fees}</span>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <Radio
+                        onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.checked, key: 'byBadgeBtnAffiliate' })}
+                        checked={byBadgeBtnAffiliate}>
+                        {'By Badge'}
+                    </Radio>
+
+                    {byBadgeBtnAffiliate &&
+                        <div  >
+                            {this.byBadgeViewAffiliate()}
+                        </div>
+                    }
+                    <Radio
+                        onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.checked, key: 'byPoolBtnAffiliate' })}
+                        checked={byPoolBtnAffiliate}>
+                        {'By Pool'}
+                    </Radio>
+                    {byPoolBtnAffiliate &&
+                        <div  >
+                            {this.byPoolViewAffiliate()}
+                        </div>
+                    }
 
                 </div>
 
@@ -300,29 +332,27 @@ class UmpirePaymentSetting extends Component {
     }
 
     byBadgeView() {
-        const { inputFieldArray, byBadgeDivision } = this.props.umpirePaymentSettingState
+        const { inputFieldArray, byBadgeDivision, allDivisionBadge } = this.props.umpirePaymentSettingState
         return (
             <div>
                 <div style={{ display: 'flex', flexDirection: 'column', marginTop: 20 }}>
-                    <Checkbox defaultChecked={true}>
+                    <Checkbox checked={allDivisionBadge} onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.checked, key: 'allDivisionBadge' })}>
                         {AppConstants.allDivisions}
                     </Checkbox>
-                    <Select
-                        mode='multiple'
-                        placeholder={'Select'}
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                        onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({ value: divisionId, key: 'byBadgeDivision' })}
-                        value={byBadgeDivision}
-                    >
-
-                        <Option value={"openA"}>{'OpenA'}</Option>
-                        <Option value={"openB"}>{'OpenB'}</Option>
-                        <Option value={"openC"}>{'OpenC'}</Option>
-                    </Select>
-
-
+                    {allDivisionBadge == false &&
+                        <Select
+                            mode='multiple'
+                            placeholder={'Select'}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                            onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({ value: divisionId, key: 'byBadgeDivision' })}
+                            value={byBadgeDivision}
+                        >
+                            <Option value={"openA"}>{'OpenA'}</Option>
+                            <Option value={"openB"}>{'OpenB'}</Option>
+                            <Option value={"openC"}>{'OpenC'}</Option>
+                        </Select>
+                    }
                 </div>
-
                 {/* <div > */}
                 {inputFieldArray.length > 0 && inputFieldArray.map((item, index) => {
                     return (
@@ -330,17 +360,112 @@ class UmpirePaymentSetting extends Component {
                             {this.inputFields(item, index)}
                         </div>
                     )
-                }
-                )}
-
-
+                })}
                 {/* <div style={{ marginTop: inputFieldArray.length === 0 ? null : -35 }} > */}
                 <div  >
                     <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'addAnotherGroup' })} className={'input-heading-add-another pointer pt-0 mt-3'}>+ {AppConstants.addAnotherGroup}</span>
                 </div>
                 {/* </div> */}
+            </div >
+        )
+    }
+
+    byBadgeViewAffiliate() {
+        const { inputFieldArrayAffiliate, byBadgeDivisionAffiliate, allDivisionBadgeAffiliate } = this.props.umpirePaymentSettingState
+        return (
+            <div>
+                <div style={{ display: 'flex', flexDirection: 'column', marginTop: 20 }}>
+                    <Checkbox checked={allDivisionBadgeAffiliate} onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.checked, key: 'allDivisionBadgeAffiliate' })}>
+                        {AppConstants.allDivisions}
+                    </Checkbox>
+                    {allDivisionBadgeAffiliate == false &&
+                        <Select
+                            mode='multiple'
+                            placeholder={'Select'}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                            onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({ value: divisionId, key: 'byBadgeDivisionAffiliate' })}
+                            value={byBadgeDivisionAffiliate}
+                        >
+                            <Option value={"openA"}>{'OpenA'}</Option>
+                            <Option value={"openB"}>{'OpenB'}</Option>
+                            <Option value={"openC"}>{'OpenC'}</Option>
+                        </Select>
+                    }
+                </div>
+                {/* <div > */}
+                {
+                    inputFieldArrayAffiliate.length > 0 && inputFieldArrayAffiliate.map((item, index) => {
+                        return (
+                            <div >
+                                {this.inputFieldsAffiliate(item, index)}
+                            </div>
+                        )
+                    })}
+                {/* <div style={{ marginTop: inputFieldArray.length === 0 ? null : -35 }} > */}
+                <div  >
+                    <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'addAnotherGroupAffiliate' })} className={'input-heading-add-another pointer pt-0 mt-3'}>+ {AppConstants.addAnotherGroup}</span>
+                </div>
+                {/* </div> */}
 
 
+            </div >
+        )
+    }
+
+    byPoolView() {
+        const { poolViewArray } = this.props.umpirePaymentSettingState
+        return (
+            <div>
+                {poolViewArray.length > 0 && poolViewArray.map((item, index) => {
+                    return (
+                        <div className='row'>
+                            <div className='col-sm-2 pt-5'>
+                                <InputWithHead heading={"Pool Name"} />
+                            </div>
+                            <div className='col-sm-4 pt-5'>
+                                <InputWithHead
+                                    auto_complete='off'
+                                    type='number'
+                                    onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'fee', subkey: "feeField" })}
+                                    prefix="$" value={item.fee} placeholder={"Fee"} />
+                            </div>
+                            <div className="col-sm-1 umpire-delete-image-view" >
+                                <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItemPool', index: index })} className="user-remove-btn mt-3" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
+                            </div>
+                        </div>)
+                })}
+                <div>
+                    <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'addPoolFee' })} className={'input-heading-add-another pointer pt-0 mt-3'}>+ {AppConstants.addAnotherPool}</span>
+                </div>
+            </div>
+        )
+    }
+
+    byPoolViewAffiliate() {
+        const { poolViewArrayAffiliate } = this.props.umpirePaymentSettingState
+        return (
+            <div>
+                {poolViewArrayAffiliate.length > 0 && poolViewArrayAffiliate.map((item, index) => {
+                    return (
+                        <div className='row'>
+                            <div className='col-sm-2 pt-5'>
+                                <InputWithHead heading={"Pool Name"} />
+                            </div>
+                            <div className='col-sm-4 pt-5'>
+                                <InputWithHead
+                                    auto_complete='off'
+                                    type='number'
+                                    onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'fee', subkey: "feeFieldAffiliae" })}
+                                    prefix="$" value={item.fee} placeholder={"Fee"} />
+                            </div>
+                            <div className="col-sm-1 umpire-delete-image-view" >
+                                <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItemPoolAffiliate', index: index })} className="user-remove-btn mt-3" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
+                            </div>
+                        </div>)
+                })}
+                <div>
+                    <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'addPoolFeeAffiliate' })} className={'input-heading-add-another pointer pt-0 mt-3'}>+ {AppConstants.addAnotherPool}</span>
+                </div>
             </div>
         )
     }
@@ -350,10 +475,9 @@ class UmpirePaymentSetting extends Component {
         return (
             <div>
                 <div className="row pt-3" >
-
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='new-name'
+                            auto_complete='new-password'
                             heading={AppConstants.name}
                             placeholder={"Name"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'name' })}
@@ -362,7 +486,7 @@ class UmpirePaymentSetting extends Component {
                     </div>
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='new-umpireRate'
+                            auto_complete='off'
                             heading={AppConstants.umpireRate}
                             placeholder={"Umpire Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpireRate' })}
@@ -372,7 +496,7 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='new-umpireResRate'
+                            auto_complete='off'
                             heading={AppConstants.umpireResRate}
                             placeholder={"Umpire Reserve Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpReserveRate' })}
@@ -382,7 +506,7 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='new-umpireRate'
+                            auto_complete='off'
                             heading={AppConstants.umpireCoachrate}
                             placeholder={"Umpire Coach Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpCoachRate' })}
@@ -394,6 +518,59 @@ class UmpirePaymentSetting extends Component {
                         <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItem', index: index })} className="user-remove-btn mt-3" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
                     </div>
                 </div>
+            </div >
+        )
+    }
+
+    inputFieldsAffiliate(item, index) {
+        const { inputFieldArrayAffiliate } = this.props.umpirePaymentSettingState
+        return (
+            <div>
+                <div className="row pt-3" >
+
+                    <div className='col-sm input-width'>
+                        <InputWithHead
+                            auto_complete='new-password'
+                            heading={AppConstants.name}
+                            placeholder={"Name"}
+                            onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'name', subkey: "inputFieldAffiliate" })}
+                            value={inputFieldArrayAffiliate[index].name}
+                        />
+                    </div>
+                    <div className='col-sm input-width'>
+                        <InputWithHead
+                            auto_complete='off'
+                            heading={AppConstants.umpireRate}
+                            placeholder={"Umpire Rate"}
+                            onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpireRate', subkey: "inputFieldAffiliate" })}
+                            value={inputFieldArrayAffiliate[index].umpireRate}
+                        />
+                    </div>
+
+                    <div className='col-sm input-width'>
+                        <InputWithHead
+                            auto_complete='off'
+                            heading={AppConstants.umpireResRate}
+                            placeholder={"Umpire Reserve Rate"}
+                            onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpReserveRate', subkey: "inputFieldAffiliate" })}
+                            value={inputFieldArrayAffiliate[index].umpReserveRate}
+                        />
+                    </div>
+
+                    <div className='col-sm input-width'>
+                        <InputWithHead
+                            auto_complete='off'
+                            heading={AppConstants.umpireCoachrate}
+                            placeholder={"Umpire Coach Rate"}
+                            onChange={(e) => this.props.umpirePaymentSettingUpdate({ value: e.target.value, index: index, key: 'umpCoachRate', subkey: "inputFieldAffiliate" })}
+                            value={inputFieldArrayAffiliate[index].umpCoachRate}
+                        />
+                    </div>
+
+                    <div className="col-sm-1 umpire-delete-image-view" >
+                        <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItemAffiliate', index: index })} className="user-remove-btn mt-3" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
+                    </div>
+                </div>
             </div>
         )
     }
@@ -403,12 +580,8 @@ class UmpirePaymentSetting extends Component {
         let defaultChecked = this.props.umpireSettingState.defaultChecked
         return (
             <div className="content-view pt-4">
-
                 {this.umpireAllocationRadioView()}
-
                 <span className='text-heading-large pt-5' >{AppConstants.umpirePreferences}</span>
-
-
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead required={"pt-0"} heading={AppConstants.noOfMatches + 'Umpire/day'} />
@@ -416,7 +589,6 @@ class UmpirePaymentSetting extends Component {
                             placeholder={'Select'}
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         >
-
                             <Option value={"11111"}>{'1'}</Option>
                             <Option value={"22222"}>{'2'}</Option>
                             <Option value={"33333"}>{'3'}</Option>
@@ -430,15 +602,10 @@ class UmpirePaymentSetting extends Component {
                             defaultOpenValue={moment("00:00", "HH:mm")}
                             defaultValue={moment()}
                             format={"HH:mm"}
-
                         />
-
                     </div>
                 </div>
-
-
                 <span className='text-heading-large pt-5' >{AppConstants.umpireReservePref}</span>
-
                 <Checkbox
                     className="single-checkbox pt-2"
                     checked={defaultChecked.reserveChecked}
@@ -486,7 +653,6 @@ class UmpirePaymentSetting extends Component {
                 </Checkbox>
                 {defaultChecked.coachChecked == true &&
                     <div className='row'>
-
                         <div className="col-sm" >
                             <InputWithHead required={"pt-5"} heading={AppConstants.noOfMatches + 'Coach/day'} />
                             <Select
@@ -495,7 +661,6 @@ class UmpirePaymentSetting extends Component {
                             >
                             </Select>
                         </div>
-
                         <div className="col-sm" >
                             <InputWithHead required={"pt-5"} heading={'Number of Matches an Umpire coach can perform in a row'} />
                             <Select
@@ -510,15 +675,12 @@ class UmpirePaymentSetting extends Component {
 
                     </div>
                 }
-
-
             </div >
         );
     };
 
     render() {
         const { getFieldDecorator } = this.props.form;
-
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
@@ -531,9 +693,7 @@ class UmpirePaymentSetting extends Component {
                         {this.headerView()}
                         {this.dropdownView()}
                         <Content>
-
                             <div className="formView umpire-form-view">{this.contentView()}</div>
-
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>

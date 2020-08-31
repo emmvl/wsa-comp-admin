@@ -13,7 +13,8 @@ const initialState = {
     totalPages: null,
     umpireRoundList: [],
     allRoundList: [],
-    allRoundIds: null
+    allRoundIds: null,
+    currentPage: 1,
 };
 
 function getHighestSequence(roundArr) {
@@ -59,6 +60,7 @@ function umpireDashboardState(state = initialState, action) {
                 onLoad: false,
                 umpireDashboardList: action.result.results,
                 totalPages: action.result.page.totalCount,
+                currentPage: action.result.page.currentPage,
                 status: action.status
             };
         //// Venue List

@@ -67,6 +67,33 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
+        title: 'Position Tracking',
+        dataIndex: 'positionTracking',
+        key: 'positionTracking',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (recordGoalAttempts, record) => {
+            return (
+                <span>{this_Obj.checkValue(recordGoalAttempts)}</span>
+            )
+
+        }
+
+    },
+    {
+        title: 'Goal Attempts',
+        dataIndex: 'recordGoalAttempts',
+        key: 'recordGoalAttempts',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (recordGoalAttempts, record) => {
+            return (
+                <span>{this_Obj.checkValue(recordGoalAttempts)}</span>
+            )
+
+        },
+    },
+    {
         title: 'Action',
         dataIndex: 'isUsed',
         key: 'isUsed',
@@ -109,7 +136,7 @@ class LiveScoreDivisionList extends Component {
         this.state = {
             year: "2020",
             competitionId: null,
-            offset:0
+            offset: 0
         }
 
         this_Obj = this;
@@ -124,7 +151,7 @@ class LiveScoreDivisionList extends Component {
 
     onPageChange(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        this.setState({offset:offset})
+        this.setState({ offset: offset })
         this.props.getMainDivisionListAction(this.state.competitionId, offset)
     }
 

@@ -104,6 +104,15 @@ const columns = [
         },
     },
     {
+        title: 'Umpire Coach',
+        dataIndex: 'umpireCoach',
+        key: 'umpireCoach',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners("umpireCoach"),
+        render: (umpireCoach, record) =>
+            <span >{umpireCoach}</span>
+    },
+    {
         title: "Action",
         dataIndex: 'action',
         key: 'action',

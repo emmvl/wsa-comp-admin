@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Form, Select, Radio, Spin, AutoComplete } from 'antd';
+import { Layout, Breadcrumb, Button, Form, Select, Radio, Spin, AutoComplete, Checkbox } from 'antd';
 import './umpire.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { NavLink } from 'react-router-dom';
@@ -237,6 +237,13 @@ class AddUmpire extends Component {
                         </Form.Item>
                     </div>
                 </div>
+                <Checkbox
+                    className="single-checkbox pt-3"
+                    checked={this.state.alsoAssignAsUmpireCoach}
+                    onChange={(e) => this.setState({ alsoAssignAsUmpireCoach: e.target.checked })}
+                >
+                    {AppConstants.alsoAssignAsUmpireCoach}
+                </Checkbox>
             </div >
         )
     }
@@ -330,7 +337,7 @@ class AddUmpire extends Component {
                                     heading={AppConstants.contactNO}
                                     placeholder={AppConstants.enterContactNo}
                                     maxLength={10}
-                                    onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value,)}
+                                    onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
                                 />
                             )}
                         </Form.Item>
@@ -369,6 +376,13 @@ class AddUmpire extends Component {
                         </Form.Item>
                     </div>
                 </div>
+                <Checkbox
+                    className="single-checkbox pt-3"
+                    checked={this.state.alsoAssignAsUmpireCoach}
+                    onChange={(e) => this.setState({ alsoAssignAsUmpireCoach: e.target.checked })}
+                >
+                    {AppConstants.alsoAssignAsUmpireCoach}
+                </Checkbox>
 
             </div>
         )

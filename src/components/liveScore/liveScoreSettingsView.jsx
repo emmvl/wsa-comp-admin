@@ -534,16 +534,18 @@ class LiveScoreSettingsView extends Component {
 
                 {/* match settings check boxes */}
                 {/* <InputWithHead heading={AppConstants.matchSettings} /> */}
-                <span className='text-heading-large pt-5 mb-0' >{AppConstants.wouldLikeRecord}</span>
-                {/* <NavLink
-                    to={{
-                        pathname: `/liveScoreDivisionList`,
-                    }}
-                >
-                    <span className="input-heading-add-another pt-3 pb-3">
-                        +{AppConstants.divisionSettings}
-                    </span>
-                </NavLink> */}
+                <span className='text-heading-large pt-5' style={{ marginBottom: this.state.isEdit == "add" ? 10 : 0 }} >{AppConstants.wouldLikeRecord}</span>
+                {this.state.isEdit != "add" &&
+                    <NavLink
+                        to={{
+                            pathname: `/liveScoreDivisionList`,
+                        }}
+                    >
+                        <span className="input-heading-add-another pt-3 pb-3">
+                            +{AppConstants.DivisionSettings}
+                        </span>
+                    </NavLink>
+                }
                 <div className="fluid-width" style={{ marginTop: -10 }}>
                     <div className="row">
                         <div className="col-sm">

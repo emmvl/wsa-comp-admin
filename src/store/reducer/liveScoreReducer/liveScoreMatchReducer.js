@@ -697,6 +697,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_ADD_LIVE_STREM_SUCCESS:
+            state.matchDetails.match[0].livestreamURL = action.result.livestreamURL
             return { ...state, onLoad: false };
 
         default:
