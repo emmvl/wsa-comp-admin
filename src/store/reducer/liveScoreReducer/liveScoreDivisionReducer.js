@@ -43,7 +43,6 @@ function liveScoreDivisionState(state = initialState, action) {
             } else if (action.key === "name") {
                 state.name = action.data;
             } else if (action.key === "isEditDivision") {
-                console.log(action)
                 state.divisionName = action.data.divisionName;
                 state.gradeName = action.data.grade;
                 state.name = action.data.name;
@@ -56,7 +55,7 @@ function liveScoreDivisionState(state = initialState, action) {
             else if (action.key == "positionTracking") {
                 state.positionTracking = action.data
             }
-            else if (action.data == "recordGoalAttempts") {
+            else if (action.key == "recordGoalAttempts") {
                 state.recordGoalAttempts = action.data
             }
             return {

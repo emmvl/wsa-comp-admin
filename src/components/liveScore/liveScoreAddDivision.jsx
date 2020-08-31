@@ -207,16 +207,14 @@ class LiveScoreAddDivision extends Component {
         )
     }
     onSaveClick = e => {
-        let divisionData = this.props.liveScoreDivisionState
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                const { name, divisionName, gradeName } = this.props.liveScoreDivisionState
+                const { name, divisionName, gradeName, positionTracking, recordGoalAttempts } = this.props.liveScoreDivisionState
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 let divisionId = this.state.tableData ? this.state.tableData.id : 0;
-                console.log(divisionId, "tabledata")
-                this.props.createDivisionAction(name, divisionName, gradeName, id, divisionId)
-            }
+                this.props.createDivisionAction(name, divisionName, gradeName, id, divisionId, positionTracking, recordGoalAttempts)
+                }
         });
     };
     //////footer view containing all the buttons like save and cancel

@@ -542,7 +542,7 @@ class LiveScoreSettingsView extends Component {
                         }}
                     >
                         <span className="input-heading-add-another pt-3 pb-3">
-                            +{AppConstants.DivisionSettings}
+                            +{AppConstants.divisionSettings}
                         </span>
                     </NavLink>
                 }
