@@ -175,7 +175,7 @@ const columnsOwned = [
                         <SubMenu
                             key="sub1"
                             title={
-                                <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16"/>
+                                <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                             }
                         >
                             <Menu.Item key="1" onClick={() => this_Obj.updateCompetitionStatus(record)}>
@@ -188,26 +188,26 @@ const columnsOwned = [
                     </Menu>
                 </div>
             ) : (
-                <div onClick={(e) => e.stopPropagation()}>
-                    <Menu
-                        className="action-triple-dot-submenu"
-                        theme="light"
-                        mode="horizontal"
-                        style={{ lineHeight: '25px' }}
-                    >
-                        <SubMenu
-                            key="sub1"
-                            title={
-                                <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16"/>
-                            }
+                    <div onClick={(e) => e.stopPropagation()}>
+                        <Menu
+                            className="action-triple-dot-submenu"
+                            theme="light"
+                            mode="horizontal"
+                            style={{ lineHeight: '25px' }}
                         >
-                            <Menu.Item key="1" onClick={() => this_Obj.deleteCompetition("show", record)}>
-                                <span>{AppConstants.delete}</span>
-                            </Menu.Item>
-                        </SubMenu>
-                    </Menu>
-                </div>
-            )
+                            <SubMenu
+                                key="sub1"
+                                title={
+                                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                                }
+                            >
+                                <Menu.Item key="1" onClick={() => this_Obj.deleteCompetition("show", record)}>
+                                    <span>{AppConstants.delete}</span>
+                                </Menu.Item>
+                            </SubMenu>
+                        </Menu>
+                    </div>
+                )
         ),
     },
 ];
@@ -327,6 +327,26 @@ class CompetitionDashboard extends Component {
                 className="comp-player-grades-header-drop-down-view"
                 style={{ marginTop: 15 }}
             >
+                <div className="row">
+                    <div className="col-sm-8">
+                        <div className="year-select-heading-view">
+                            <span className="year-select-heading">{AppConstants.year}:</span>
+
+                            <Select
+                                className="year-select reg-filter-select-year ml-2"
+                                style={{ width: 90 }}
+                                onChange={this.onYearClick}
+                                value={selectedYearId}
+                            >
+                                {yearList.length > 0 && yearList.map((item, yearIndex) => (
+                                    <Option key={"yearlist" + yearIndex} value={item.id}>
+                                        {item.name}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </div>
+                    </div>
+                </div>
                 <div className="fluid-width">
                     <div className="row">
                         <div
@@ -338,93 +358,11 @@ class CompetitionDashboard extends Component {
                             }}
                         >
                             <span className="form-heading">
-                                {AppConstants.participateInComp}
-                            </span>
-                            <div style={{ marginTop: -10 }}>
-                                <Tooltip placement="top" background="#ff8237">
-                                    <span>{AppConstants.participateCompMsg}</span>
-                                </Tooltip>
-                            </div>
-                        </div>
-
-                        <div className="col-sm-8">
-                            <div className="year-select-heading-view">
-                                <span className="year-select-heading">{AppConstants.year}:</span>
-
-                                <Select
-                                    className="year-select reg-filter-select-year ml-2"
-                                    style={{ width: 90 }}
-                                    onChange={this.onYearClick}
-                                    value={selectedYearId}
-                                >
-                                    {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                        <Option key={"yearlist" + yearIndex} value={item.id}>
-                                            {item.name}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
-    openModel = (props) => {
-        let competitionId = this.props.competitionFeesState.competitionId;
-        let this_ = this;
-        confirm({
-            title: 'Do you want to add registration?',
-            // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'danger',
-            cancelText: 'No',
-            onOk() {
-                // [
-                // <NavLink 
-                //     // onClick={() => this.props.clearCompReducerDataAction("all")}
-                //     to={{ pathname: `/registrationCompetitionForm`, state: { id: null } }}
-                // />
-                // ]
-                this_.onRegistrationCompScreen();
-            },
-            onCancel() {
-                this_.onCompetitionScreen();
-            },
-        });
-    };
-
-    onCompetitionScreen = () => {
-        this.props.clearCompReducerDataAction("all");
-        history.push("/registrationCompetitionForm", { id: null });
-    };
-
-    onRegistrationCompScreen = () => {
-        this.props.clearCompReducerDataAction("all");
-        history.push("/registrationCompetitionFee", { id: null });
-    };
-
-    dropdownButtonView = () => {
-        const { yearList, selectedYear } = this.props.appState;
-        return (
-            <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width">
-                    <div className="row">
-                        <div
-                            className="col-sm"
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <span id={AppUniqueId.ownedCompetition_column_headers_table} className="form-heading">
                                 {AppConstants.ownedCompetitions}
                             </span>
                             <div style={{ marginTop: -10 }}>
                                 <Tooltip placement="top" background="#ff8237">
-                                    <span>{AppConstants.ownedCompetitionMsg}</span>
+                                    <span>{AppConstants.participateCompMsg}</span>
                                 </Tooltip>
                             </div>
                         </div>
@@ -504,6 +442,71 @@ class CompetitionDashboard extends Component {
                                 </div>
                             </div>
                         </div>
+
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    openModel = (props) => {
+        let competitionId = this.props.competitionFeesState.competitionId;
+        let this_ = this;
+        confirm({
+            title: 'Do you want to add registration?',
+            // content: 'Some descriptions',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+                // [
+                // <NavLink 
+                //     // onClick={() => this.props.clearCompReducerDataAction("all")}
+                //     to={{ pathname: `/registrationCompetitionForm`, state: { id: null } }}
+                // />
+                // ]
+                this_.onRegistrationCompScreen();
+            },
+            onCancel() {
+                this_.onCompetitionScreen();
+            },
+        });
+    };
+
+    onCompetitionScreen = () => {
+        this.props.clearCompReducerDataAction("all");
+        history.push("/registrationCompetitionForm", { id: null });
+    };
+
+    onRegistrationCompScreen = () => {
+        this.props.clearCompReducerDataAction("all");
+        history.push("/registrationCompetitionFee", { id: null });
+    };
+
+    dropdownButtonView = () => {
+        const { yearList, selectedYear } = this.props.appState;
+        return (
+            <div className="comp-player-grades-header-drop-down-view">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div
+                            className="col-sm"
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <span id={AppUniqueId.ownedCompetition_column_headers_table} className="form-heading">
+                                {AppConstants.participateInComp}
+                            </span>
+                            <div style={{ marginTop: -10 }}>
+                                <Tooltip placement="top" background="#ff8237">
+                                    <span>{AppConstants.participateInComp}</span>
+                                </Tooltip>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -571,21 +574,21 @@ class CompetitionDashboard extends Component {
                 {this.state.statusRefId === 0 ? (
                     <p>{AppConstants.compDeleteConfirm.replace("(COMP_NAME)", this.state.competitionName)}</p>
                 ) : (
-                    <div>
-                        <p>
-                            {AppConstants.deletePublishToLsMsg.replace("(COMP_NAME)", this.state.competitionName)
-                                .replace("(COMP_NAME)", this.state.competitionName)}
-                        </p>
-                        <Radio.Group
-                            className="reg-competition-radio customize-radio-text"
-                            onChange={(e) => this.onChangeSetValue(e.target.value)}
-                            value={this.state.onDeleteTargetValue}
-                        >
-                            <Radio value={1}>{AppConstants.both}</Radio>
-                            <Radio value={2}>{AppConstants.onlyCompMngmt}</Radio>
-                        </Radio.Group>
-                    </div>
-                )}
+                        <div>
+                            <p>
+                                {AppConstants.deletePublishToLsMsg.replace("(COMP_NAME)", this.state.competitionName)
+                                    .replace("(COMP_NAME)", this.state.competitionName)}
+                            </p>
+                            <Radio.Group
+                                className="reg-competition-radio customize-radio-text"
+                                onChange={(e) => this.onChangeSetValue(e.target.value)}
+                                value={this.state.onDeleteTargetValue}
+                            >
+                                <Radio value={1}>{AppConstants.both}</Radio>
+                                <Radio value={2}>{AppConstants.onlyCompMngmt}</Radio>
+                            </Radio.Group>
+                        </div>
+                    )}
             </Modal>
         </div>
     );
