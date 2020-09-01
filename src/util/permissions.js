@@ -69,16 +69,15 @@ function checkRegistrationType(registrationInviteesRefId) {
 }
 
 async function checkLivScoreCompIsParent() {
-    // let orgItem = await getOrganisationData()
-    // let liveScoreCompetition = await getLiveScoreCompetiton()
-    // let organisationId = orgItem ? orgItem.organisationId : 0
-    // let liveScoreCompetitionOrgId = JSON.parse(liveScoreCompetition).organisationId
-    // if (liveScoreCompetitionOrgId === organisationId) {
-    //     return true
-    // } else {
-    //     return true
-    // }
-    return true
+    let orgItem = await getOrganisationData()
+    let liveScoreCompetition = await getLiveScoreCompetiton()
+    let organisationId = orgItem ? orgItem.organisationId : 0
+    let liveScoreCompetitionOrgId = liveScoreCompetition ? JSON.parse(liveScoreCompetition).organisationId : 0
+    if (liveScoreCompetitionOrgId === organisationId) {
+        return true
+    } else {
+        return false
+    }
 }
 
 export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel, checkRegistrationType, checkLivScoreCompIsParent }
