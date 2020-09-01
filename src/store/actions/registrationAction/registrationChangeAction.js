@@ -8,10 +8,10 @@ function updateRegistrationReviewAction(data) {
     return action;
 }
 
-function getDeRegisterDataAction(userId){
+function saveDeRegisterDataAction(payload){
     const action = {
-        type: ApiConstants.API_GET_DE_REGISTRATION_LOAD,
-        userId
+        type: ApiConstants.API_SAVE_DE_REGISTRATION_LOAD,
+        payload
     };
     return action;
 }
@@ -25,6 +25,6 @@ function updateDeregistrationData(value, key, subKey) {
 }
 export {
     updateRegistrationReviewAction,
-    getDeRegisterDataAction,
+    saveDeRegisterDataAction,
     updateDeregistrationData
 };

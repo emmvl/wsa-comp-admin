@@ -46,11 +46,6 @@ const initialState = {
     ],
     reloadFormData:0,
     saveData : {
-        userId: 0,
-        competitionId: null,
-        organisationId: null,
-        membershipMappingId: null,
-        teamId: null,
         regChangeTypeRefId: 0,         // DeRegister/ Transfer
         deRegistrationOptionId: 0,   /// Yes/No
         reasonTypeRefId: 0,      
@@ -78,18 +73,6 @@ function regChangeReducer(state = initialState, action) {
                 ...state,
 
             };
-
-           case ApiConstants.API_GET_DE_REGISTRATION_LOAD:
-                return {...state, onDeRegisterLoad: true}
-    
-            case ApiConstants.API_GET_DE_REGISTRATION_SUCCESS:
-                let deRegisterData = action.result;
-    
-            return {
-                ...state,
-                onDeRegisterLoad: false,
-                status: action.status
-            }
 
             case ApiConstants.API_SAVE_DE_REGISTRATION_LOAD:
             return {...state, onSaveLoad: true}
