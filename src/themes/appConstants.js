@@ -1567,6 +1567,7 @@ const AppConstants = {
   oneHasPreference:"Which one has preference:",
   divisioAndGrades:"Division and Grades",
   combine:"Combine",
+   whatRegistrationChange: "what registration change do you",
 };
 
 export default AppConstants;

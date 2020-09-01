@@ -116,6 +116,9 @@ const columns = [
           <Menu.Item key="1" onClick={() => this_Obj.viewRegForm(e)}>
             <span>View</span>
           </Menu.Item>
+		 <Menu.Item key="2" onClick={() => history.push("\deregistration")}>
+            <span>De-registration</span>
+          </Menu.Item>	  
         </SubMenu>
       </Menu>
     ),

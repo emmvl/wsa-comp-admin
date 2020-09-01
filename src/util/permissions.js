@@ -72,7 +72,7 @@ async function checkLivScoreCompIsParent() {
     let orgItem = await getOrganisationData()
     let liveScoreCompetition = await getLiveScoreCompetiton()
     let organisationId = orgItem ? orgItem.organisationId : 0
-    let liveScoreCompetitionOrgId = JSON.parse(liveScoreCompetition).organisationId
+    let liveScoreCompetitionOrgId = liveScoreCompetition ? JSON.parse(liveScoreCompetition).organisationId : null;
     if (liveScoreCompetitionOrgId === organisationId) {
         return true
     } else {

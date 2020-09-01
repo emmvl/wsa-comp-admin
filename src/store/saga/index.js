@@ -98,6 +98,9 @@ import {
   playerChangeDivisionSaga,
   playerCommentList
 } from './competitionManagementSaga/competitionPartPlayerGradingSaga';
+
+import * as regChangeSaga from '../saga/registrationSaga/registrationChangeSaga';
+
 import {
   getCompOwnProposedTeamGradingSaga,
   saveOwnFinalTeamGradingDataSaga,
@@ -529,5 +532,9 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_RESET_LADDER_LOAD, liveScoreResetLadderSaga);
   
   yield takeEvery(ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_LOAD, exportTeamRegistrationsSaga);
+
+  //Save DeRegister
+  yield takeEvery(ApiConstants.API_SAVE_DE_REGISTRATION_LOAD, regChangeSaga.saveDeRegisterSaga)
+ 
 }
 
