@@ -307,12 +307,12 @@ class CompetitionOpenRegForm extends Component {
                     },
                     render: (genderRestriction, record, index) => (
                         <div>
-                        <Checkbox
-                            className="single-checkbox mt-1"
-                            disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
-                            checked={genderRestriction}
-                            onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "genderRestriction")}
-                        ></Checkbox>
+                            <Checkbox
+                                className="single-checkbox mt-1"
+                                disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
+                                checked={genderRestriction}
+                                onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "genderRestriction")}
+                            ></Checkbox>
                         </div>
                     )
                 },
@@ -366,12 +366,12 @@ class CompetitionOpenRegForm extends Component {
                     },
                     render: (ageRestriction, record, index) => (
                         <div>
-                        <Checkbox
-                            className="single-checkbox mt-1"
-                            checked={ageRestriction}
-                            onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
-                            disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
-                        ></Checkbox>
+                            <Checkbox
+                                className="single-checkbox mt-1"
+                                checked={ageRestriction}
+                                onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
+                                disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
+                            ></Checkbox>
                         </div>
                     )
                 },
@@ -1815,11 +1815,10 @@ class CompetitionOpenRegForm extends Component {
             if (keyword == "add") {
                 this.props.addRemoveDivisionAction(index, item, keyword);
             }
-           else if(item.competitionDivisionId != 0) {
+            else if (item.competitionDivisionId != 0) {
                 this.setState({ deleteDivModalVisible: true, divisionIndex: index, competitionDivision: item })
             }
-            else
-            {
+            else {
                 this.props.addRemoveDivisionAction(index, this.state.competitionDivision, "removeDivision");
                 this.setDivisionFormFields();
 

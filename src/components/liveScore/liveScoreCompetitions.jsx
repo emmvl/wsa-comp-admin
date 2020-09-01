@@ -102,14 +102,14 @@ const columnsOwned = [
                                         </Tag>
                                     )
                                 ) : (
-                                    <Tag
-                                        className="comp-dashboard-table-tag"
-                                        color="#c2c2c2"
-                                        key={data}
-                                    >
-                                        {data}
-                                    </Tag>
-                                )
+                                        <Tag
+                                            className="comp-dashboard-table-tag"
+                                            color="#c2c2c2"
+                                            key={data}
+                                        >
+                                            {data}
+                                        </Tag>
+                                    )
                             ))
                         )}
                     </span>
@@ -259,14 +259,14 @@ const columnsParticipate = [
                                         </Tag>
                                     )
                                 ) : (
-                                    <Tag
-                                        className="comp-dashboard-table-tag"
-                                        color="#c2c2c2"
-                                        key={data}
-                                    >
-                                        {data}
-                                    </Tag>
-                                )
+                                        <Tag
+                                            className="comp-dashboard-table-tag"
+                                            color="#c2c2c2"
+                                            key={data}
+                                        >
+                                            {data}
+                                        </Tag>
+                                    )
                             ))
                         )}
                     </span>
@@ -570,76 +570,76 @@ class LiveScoreCompetitions extends Component {
 
     partHeaderView = () => {
         return (
-          <div className="comp-player-grades-header-drop-down-view">
-              <div className="fluid-width">
-                  <div className="row">
-                      <div className="col-sm-4" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+            <div className="comp-player-grades-header-drop-down-view">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm-4" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                             <span className="form-heading">
                                 {AppConstants.participateInComp}
                             </span>
-                          <div style={{ marginTop: -10 }}>
-                              <Tooltip placement="top" background="#ff8237">
-                                  <span>{AppConstants.participateCompMsg}</span>
-                              </Tooltip>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div >
+                            <div style={{ marginTop: -10 }}>
+                                <Tooltip placement="top" background="#ff8237">
+                                    <span>{AppConstants.participateCompMsg}</span>
+                                </Tooltip>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div >
         );
     };
 
     participatedView = () => {
         let { participatingInComptitions, participateTotalCount, participateCurrentPage, partLoad } = this.props.liveScoreCompetition;
         return (
-          <div className="comp-dash-table-view">
-              <div className="table-responsive home-dash-table-view">
-                  <Table
-                    className="home-dashboard-table"
-                    columns={columnsParticipate}
-                    dataSource={participatingInComptitions}
-                    pagination={false}
-                    loading={partLoad}
-                    rowKey={(record, index) => "participatingInComptitions" + record.id + index}
-                  />
-              </div>
+            <div className="comp-dash-table-view">
+                <div className="table-responsive home-dash-table-view">
+                    <Table
+                        className="home-dashboard-table"
+                        columns={columnsParticipate}
+                        dataSource={participatingInComptitions}
+                        pagination={false}
+                        loading={partLoad}
+                        rowKey={(record, index) => "participatingInComptitions" + record.id + index}
+                    />
+                </div>
 
-              <div className="d-flex justify-content-end">
-                  <Pagination
-                    className="antd-pagination pb-0"
-                    current={participateCurrentPage}
-                    total={participateTotalCount}
-                    onChange={(page) => this.handlePagination(page, "part")}
-                  />
-              </div>
-          </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination pb-0"
+                        current={participateCurrentPage}
+                        total={participateTotalCount}
+                        onChange={(page) => this.handlePagination(page, "part")}
+                    />
+                </div>
+            </div>
         );
     };
 
     ownedView = () => {
         let { ownedCompetitions, ownedTotalCount, ownedCurrentPage, ownedLoad } = this.props.liveScoreCompetition;
         return (
-          <div className="comp-dash-table-view mt-4">
-              <div className="table-responsive home-dash-table-view">
-                  <Table
-                    className="home-dashboard-table"
-                    columns={columnsOwned}
-                    dataSource={ownedCompetitions}
-                    pagination={false}
-                    loading={ownedLoad}
-                    rowKey={(record, index) => "ownedCompetitions" + record.id + index}
-                  />
-              </div>
+            <div className="comp-dash-table-view mt-4">
+                <div className="table-responsive home-dash-table-view">
+                    <Table
+                        className="home-dashboard-table"
+                        columns={columnsOwned}
+                        dataSource={ownedCompetitions}
+                        pagination={false}
+                        loading={ownedLoad}
+                        rowKey={(record, index) => "ownedCompetitions" + record.id + index}
+                    />
+                </div>
 
-              <div className="d-flex justify-content-end">
-                  <Pagination
-                    className="antd-pagination"
-                    current={ownedCurrentPage}
-                    total={ownedTotalCount}
-                    onChange={(page) => this.handlePagination(page, "own")}
-                  />
-              </div>
-          </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={ownedCurrentPage}
+                        total={ownedTotalCount}
+                        onChange={(page) => this.handlePagination(page, "own")}
+                    />
+                </div>
+            </div>
         );
     };
 

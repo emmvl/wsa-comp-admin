@@ -83,7 +83,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Casual Fee (inc GST)',
+        title: 'Single Game (PAYG) Fee (inc GST)',
         dataIndex: 'casualFee',
         key: 'casualFee',
         render: (casualFee, record) => {
