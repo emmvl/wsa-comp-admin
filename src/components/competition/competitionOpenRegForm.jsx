@@ -884,7 +884,7 @@ class CompetitionOpenRegForm extends Component {
                     }
                     let payload = finalDivisionArray
                     let finalDivisionPayload = {
-                        statusRefId: this.state.statusRefId,
+                        statusRefId: this.state.isPublished ? 2 : this.state.statusRefId,
                         divisions: payload,
                         sourceModule: this.state.sourceModule
                     }

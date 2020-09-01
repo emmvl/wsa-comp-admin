@@ -82,18 +82,7 @@ class QuickCompetitionInvitations extends Component {
             this.setState({modalVisible:false}); 
         else
             this.setState({modalVisible:true}); 
-							  
-							 
-								 
-					   
-							   
-					
-									   
-			  
-						
-									  
-			  
-		   
+	   
     }
 
 
