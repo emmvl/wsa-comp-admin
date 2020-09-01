@@ -102,14 +102,14 @@ const columnsOwned = [
                                         </Tag>
                                     )
                                 ) : (
-                                    <Tag
-                                        className="comp-dashboard-table-tag"
-                                        color="#c2c2c2"
-                                        key={data}
-                                    >
-                                        {data}
-                                    </Tag>
-                                )
+                                        <Tag
+                                            className="comp-dashboard-table-tag"
+                                            color="#c2c2c2"
+                                            key={data}
+                                        >
+                                            {data}
+                                        </Tag>
+                                    )
                             ))
                         )}
                     </span>
@@ -259,14 +259,14 @@ const columnsParticipate = [
                                         </Tag>
                                     )
                                 ) : (
-                                    <Tag
-                                        className="comp-dashboard-table-tag"
-                                        color="#c2c2c2"
-                                        key={data}
-                                    >
-                                        {data}
-                                    </Tag>
-                                )
+                                        <Tag
+                                            className="comp-dashboard-table-tag"
+                                            color="#c2c2c2"
+                                            key={data}
+                                        >
+                                            {data}
+                                        </Tag>
+                                    )
                             ))
                         )}
                     </span>
@@ -474,7 +474,7 @@ class LiveScoreCompetitions extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div
-                    className="fluid-width"
+                    className="row fluid-width"
                     style={{
                         maxWidth: "99%",
                         display: "flex",
@@ -492,7 +492,7 @@ class LiveScoreCompetitions extends Component {
                         </div>
                     </div>
 
-                    <div className="row">
+                    <div className="row fluid-width">
                         {this.state.orgLevel === "state" && (
                             <div className="col-sm">
                                 <div
@@ -557,7 +557,8 @@ class LiveScoreCompetitions extends Component {
                                     justifyContent: "flex-end",
                                 }}
                             >
-                                <Button className="primary-add-comp-form" type="primary">
+                                <Button className="primary-add-comp-form" type="primary"
+                                >
                                     + {AppConstants.replicateCompetition}
                                 </Button>
                             </div>
@@ -570,49 +571,49 @@ class LiveScoreCompetitions extends Component {
 
     partHeaderView = () => {
         return (
-          <div className="comp-player-grades-header-drop-down-view">
-              <div className="fluid-width">
-                  <div className="row">
-                      <div className="col-sm-4" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+            <div className="comp-player-grades-header-drop-down-view">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm-4" style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
                             <span className="form-heading">
                                 {AppConstants.participateInComp}
                             </span>
-                          <div style={{ marginTop: -10 }}>
-                              <Tooltip placement="top" background="#ff8237">
-                                  <span>{AppConstants.participateCompMsg}</span>
-                              </Tooltip>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div >
+                            <div style={{ marginTop: -10 }}>
+                                <Tooltip placement="top" background="#ff8237">
+                                    <span>{AppConstants.participateCompMsg}</span>
+                                </Tooltip>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div >
         );
     };
 
     participatedView = () => {
         let { participatingInComptitions, participateTotalCount, participateCurrentPage, partLoad } = this.props.liveScoreCompetition;
         return (
-          <div className="comp-dash-table-view">
-              <div className="table-responsive home-dash-table-view">
-                  <Table
-                    className="home-dashboard-table"
-                    columns={columnsParticipate}
-                    dataSource={participatingInComptitions}
-                    pagination={false}
-                    loading={partLoad}
-                    rowKey={(record, index) => "participatingInComptitions" + record.id + index}
-                  />
-              </div>
+            <div className="comp-dash-table-view">
+                <div className="table-responsive home-dash-table-view">
+                    <Table
+                        className="home-dashboard-table"
+                        columns={columnsParticipate}
+                        dataSource={participatingInComptitions}
+                        pagination={false}
+                        loading={partLoad}
+                        rowKey={(record, index) => "participatingInComptitions" + record.id + index}
+                    />
+                </div>
 
-              <div className="d-flex justify-content-end">
-                  <Pagination
-                    className="antd-pagination pb-0"
-                    current={participateCurrentPage}
-                    total={participateTotalCount}
-                    onChange={(page) => this.handlePagination(page, "part")}
-                  />
-              </div>
-          </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination pb-0"
+                        current={participateCurrentPage}
+                        total={participateTotalCount}
+                        onChange={(page) => this.handlePagination(page, "part")}
+                    />
+                </div>
+            </div>
         );
     };
 
@@ -630,10 +631,9 @@ class LiveScoreCompetitions extends Component {
                     rowKey={(record, index) => "ownedCompetitions" + record.id + index}
                   />
               </div>
-
               <div className="d-flex justify-content-end">
                   <Pagination
-                    className="antd-pagination"
+                    className="antd-pagination pb-0"
                     current={ownedCurrentPage}
                     total={ownedTotalCount}
                     onChange={(page) => this.handlePagination(page, "own")}
@@ -650,10 +650,11 @@ class LiveScoreCompetitions extends Component {
 
                 {/* <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" /> */}
 
-                {this.partHeaderView()}
-                {this.participatedView()}
+                
                 {this.dropdownButtonView()}
                 {this.ownedView()}
+                {this.partHeaderView()}
+                {this.participatedView()}
             </div >
         );
     }

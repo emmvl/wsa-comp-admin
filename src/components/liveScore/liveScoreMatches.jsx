@@ -117,8 +117,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team1.name}</span>
             </NavLink>
         ) : (
-            <span>{team1.name}</span>
-        )
+                <span>{team1.name}</span>
+            )
     },
     {
         title: 'Away',
@@ -136,8 +136,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team2.name}</span>
             </NavLink>
         ) : (
-            <span>{team2.name}</span>
-        )
+                <span>{team2.name}</span>
+            )
     },
     {
         title: 'Venue',
@@ -658,18 +658,18 @@ class LiveScoreMatchesList extends Component {
                 {this.state.umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                    <DashboardLayout
-                        menuHeading={AppConstants.liveScores}
-                        menuName={AppConstants.liveScores}
-                        onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                    />
-                )}
+                        <DashboardLayout
+                            menuHeading={AppConstants.liveScores}
+                            menuName={AppConstants.liveScores}
+                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                        />
+                    )}
 
                 {this.state.umpireKey ? (
                     <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"1"} />
                 ) : (
-                    <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
-                )}
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
+                    )}
 
                 <Layout>
                     {this.headerView()}

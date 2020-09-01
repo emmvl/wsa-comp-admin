@@ -508,6 +508,10 @@ let AxiosApi = {
         var url = `/api/teamregistration/export`;
         return Method.dataPostDownload(url, token ,body ,"TeamRegistration" );
     },
+    saveDeRegister(payload){
+        var url = `/api/deregister`;
+        return Method.dataPost(url, token, payload);
+    }
 };
 
 const Method = {

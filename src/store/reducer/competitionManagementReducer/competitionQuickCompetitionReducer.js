@@ -66,7 +66,8 @@ const initialState = {
     onInvitationLoad: false,
     mergeValidate: false,
     validateMessage: "",
-    newSelectedCompetition: ""
+    newSelectedCompetition: "",
+    mergeCompetitionTypeSelection:null				  
 };
 var gradeColorArray = [];
 const lightGray = '#999999';
@@ -888,6 +889,7 @@ function QuickCompetitionState(state = initialState, action) {
                 ...state,
                 onInvitationLoad: false,
                 error: null,
+				mergeCompetitionTypeSelection:action.result,		
                 mergeValidate: action.validateSuccess,
                 validateMessage: action.result.message
             }

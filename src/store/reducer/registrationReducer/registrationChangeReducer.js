@@ -19,7 +19,50 @@ const initialState = {
     error: null,
     result: null,
     status: 0,
-    detailsData: obj
+    detailsData: obj,
+    onDeRegisterLoad: false,
+    onSaveLoad: false,
+
+    registrationSelection: [
+        { id: 1, value: "De-register", helpMsg: "What is de-registration? I am leaving netball and no longer want to participate in Netball.I have not taken the court in training, grading or competition games." },
+        { id: 2, value: "Transfer", helpMsg: "What is a transfer? I am wanting to move to another Netball Club or Association for the upcoming season." }
+    ],
+    DeRegistionMainOption: [
+        { id: 1, value: "Yes" },
+        { id: 2, value: "No" }
+    ],
+    deRegistionOption: [
+        { id: 1, value: "I am over committed with other activities and can't fit in time for netball" },
+        { id: 2, value: "I have been injured or health reason(not netball related" },
+        { id: 3, value: "Decided not to participant in netball" },
+        { id: 4, value: "Moving to a different geographical area" },
+        { id: 5, value: "Other" },
+    ],
+    transferOption: [
+        { id: 1, value: "Moving to another Netball Club or Association for the upcoming season" },
+        { id: 2, value: "No team available in current Club or Association" },
+        { id: 3, value: "Other" },
+
+    ],
+    reloadFormData:0,
+    saveData : {
+        userId: 0,
+        competitionId: null,
+        organisationId: null,
+        membershipMappingId: null,
+        teamId: null,
+        regChangeTypeRefId: 0,         // DeRegister/ Transfer
+        deRegistrationOptionId: 0,   /// Yes/No
+        reasonTypeRefId: 0,      
+        deRegisterOther: null,
+        transfer: {
+            transferOther: null,
+            reasonTypeRefId: 0, 
+            organisationId: null,
+            competitionId: null
+        }
+        
+    }
 }
 
 
@@ -36,6 +79,49 @@ function regChangeReducer(state = initialState, action) {
 
             };
 
+           case ApiConstants.API_GET_DE_REGISTRATION_LOAD:
+                return {...state, onDeRegisterLoad: true}
+    
+            case ApiConstants.API_GET_DE_REGISTRATION_SUCCESS:
+                let deRegisterData = action.result;
+    
+            return {
+                ...state,
+                onDeRegisterLoad: false,
+                status: action.status
+            }
+
+            case ApiConstants.API_SAVE_DE_REGISTRATION_LOAD:
+            return {...state, onSaveLoad: true}
+
+            case ApiConstants.API_SAVE_DE_REGISTRATION_SUCCESS:
+            return {
+                ...state,
+                onSaveLoad: false,
+                status: action.status,
+            }
+
+            case ApiConstants.API_UPDATE_DE_REGISTRATION:
+            if(action.subKey == "deRegister"){
+                if(action.key == "regChangeTypeRefId"){
+                    state.saveData[action.key] = action.value;
+                    state.saveData["deRegistrationOptionId"] = 1;
+                }
+                else {
+                    state.saveData[action.key] = action.value;
+                }
+            }
+            else if(action.subKey == "transfer"){
+                state.saveData.transfer[action.key] = action.value;
+            }
+            else{
+                state.reloadFormData = 0;
+            }
+            
+            return {
+                ...state,
+                onLoad: false,
+            }		 
 
         default:
             return state;
