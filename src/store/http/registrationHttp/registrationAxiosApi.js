@@ -511,6 +511,10 @@ let AxiosApi = {
     saveDeRegister(payload){
         var url = `/api/deregister`;
         return Method.dataPost(url, token, payload);
+    },
+    getRegistrationChangeDashboard(payload){
+        var url = `/api/registrationchange/dashboard`;
+        return Method.dataPost(url, token, payload);
     }
 };
 
