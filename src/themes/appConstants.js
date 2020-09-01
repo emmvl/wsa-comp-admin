@@ -183,7 +183,7 @@ const AppConstants = {
   addMembershipType: 'Add Membership Type',
   membershipFees: 'Membership Fees',
   applyMembershipFee: 'Apply Seasonal Membership Fees to',
-  casualFee: 'Casual Fee',
+  casualFee: 'Single Game (PAYG) Fee (inc GST)',
   gst: 'GST',
   seasonalFee: 'Seasonal fee',
   type: 'Type',
@@ -1563,10 +1563,10 @@ const AppConstants = {
   positionTracking: "Position tracking",
   addAnotherPool: "Add Pool",
   mergeCompetition: "Merge Competition",
-  differencesBetween:"There are some differences between",
-  oneHasPreference:"Which one has preference:",
-  divisioAndGrades:"Division and Grades",
-  combine:"Combine",
+  differencesBetween: "There are some differences between",
+  oneHasPreference: "Which one has preference:",
+  divisioAndGrades: "Division and Grades",
+  combine: "Combine",
    whatRegistrationChange: "what registration change do you",
 };
 

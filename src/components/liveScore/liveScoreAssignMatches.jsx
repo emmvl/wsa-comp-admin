@@ -151,12 +151,12 @@ const columns2 = [
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
                         {this_obj.state.scoring_Type !== "SINGLE" ?
-                        <span class="pt-0" >{records.team2.name} ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassigned"})</span>
-                        :
-                        <span class="pt-0" >{records.team2.name}</span>
+                            <span class="pt-0" >{records.team2.name} ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassigned"})</span>
+                            :
+                            <span class="pt-0" >{records.team2.name}</span>
 
                         }
-                        </div>
+                    </div>
                     {this_obj.state.scoring_Type !== "SINGLE" ? <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }} >
                         <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2", records.scorer2)} class="input-heading-add-another pt-0" >{checkScorerMatch(records.scorer2)}</span>
                     </div> : null}
@@ -331,6 +331,7 @@ class LiveScoreAssignMatch extends Component {
                         dataSource={matcheList.assignMatches}
                         pagination={false}
                     />
+
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
                     <div
