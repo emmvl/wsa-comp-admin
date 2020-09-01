@@ -50,7 +50,13 @@ function liveScoreUmpiresState(state = initialState, action) {
                 onLoad: false,
                 importResult: action.result,
                 status: action.status,
-            }
+            };
+
+        case ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_RESET:
+            return {
+                onLoad: false,
+                importResult: null,
+            };
 
         default:
             return state;

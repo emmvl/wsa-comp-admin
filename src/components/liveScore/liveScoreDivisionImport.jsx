@@ -10,7 +10,7 @@ import ValidationConstants from "themes/validationConstant";
 import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
-import { liveScoreDivisionImportAction } from "store/actions/LiveScoreAction/liveScoreDivisionAction";
+import { liveScoreDivisionImportAction, liveScoreDivisionResetImportResultAction } from "store/actions/LiveScoreAction/liveScoreDivisionAction";
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -44,6 +44,10 @@ class LiveScoreDivisionImport extends Component {
         this.state = {
             csvData: null,
         };
+    }
+
+    componentDidMount() {
+        this.props.liveScoreDivisionResetImportResultAction();
     }
 
     headerView = () => (
@@ -159,7 +163,10 @@ class LiveScoreDivisionImport extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreDivisionImportAction }, dispatch);
+    return bindActionCreators({
+        liveScoreDivisionImportAction,
+        liveScoreDivisionResetImportResultAction,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {

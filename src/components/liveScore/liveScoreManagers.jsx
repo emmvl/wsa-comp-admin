@@ -382,7 +382,7 @@ class LiveScoreManagerList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value === "") {
-            // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, e.target.value)
+            // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value)
 
             this.props.liveScoreManagerListAction(3, 1, id, e.target.value)
         }
@@ -393,7 +393,7 @@ class LiveScoreManagerList extends Component {
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
-            // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
+            // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
             this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText)
         }
     }
@@ -403,7 +403,7 @@ class LiveScoreManagerList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
-            // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
+            // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
             this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText)
         }
     }

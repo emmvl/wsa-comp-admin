@@ -199,6 +199,12 @@ function liveScoreMangerState(state = initialState, action) {
                 importResult: action.result,
             };
 
+        case ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_RESET:
+            return {
+                ...state,
+                importResult: null,
+            };
+
         default:
             return state;
     }

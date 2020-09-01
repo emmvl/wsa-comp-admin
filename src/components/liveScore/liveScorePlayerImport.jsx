@@ -10,7 +10,7 @@ import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
 import { exportFilesAction } from "store/actions/appAction";
-import { liveScorePlayerImportAction } from "store/actions/LiveScoreAction/liveScorePlayerAction";
+import { liveScorePlayerImportAction, liveScorePlayerResetImportResultAction } from "store/actions/LiveScoreAction/liveScorePlayerAction";
 import Loader from "customComponents/loader";
 import DashboardLayout from "pages/dashboardLayout";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
@@ -21,14 +21,14 @@ const { Content, Header, Footer } = Layout;
 
 const columns = [
     {
-        title: "First name",
-        dataIndex: "first name",
-        key: "first name",
+        title: "First Name",
+        dataIndex: "First Name",
+        key: "First Name",
     },
     {
-        title: "Last name",
-        dataIndex: "last name",
-        key: "last name",
+        title: "Last Name",
+        dataIndex: "Last Name",
+        key: "Last Name",
     },
     {
         title: "DOB",
@@ -42,18 +42,18 @@ const columns = [
     },
     {
         title: "Team",
-        dataIndex: "team",
-        key: "team",
+        dataIndex: "Team",
+        key: "Team",
     },
     {
-        title: "Grade",
-        dataIndex: "grade",
-        key: "grade",
+        title: "Division Grade",
+        dataIndex: "Division Grade",
+        key: "Division Grade",
     },
     {
-        title: "Contact no",
-        dataIndex: "contact no",
-        key: "contact no",
+        title: "Contact No",
+        dataIndex: "Contact No",
+        key: "Contact No",
     },
 ];
 
@@ -70,6 +70,8 @@ class LiveScorerPlayerImport extends Component {
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton());
         this.setState({ competitionId: id });
+
+        this.props.liveScorePlayerResetImportResultAction();
     }
 
     headerView = () => (
@@ -198,7 +200,11 @@ class LiveScorerPlayerImport extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScorePlayerImportAction, exportFilesAction }, dispatch);
+    return bindActionCreators({
+        liveScorePlayerImportAction,
+        liveScorePlayerResetImportResultAction,
+        exportFilesAction,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {

@@ -165,10 +165,10 @@ function liveScoreCoachState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_SUCCESS:
             return { ...state, loading: false };
 
-        case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD:
+        case ApiConstants.API_LIVESCORE_COACH_SEARCH_LOAD:
             return { ...state, onLoadSearch: true };
 
-        case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS:
+        case ApiConstants.API_LIVESCORE_COACH_SEARCH_SUCCESS:
             return {
                 ...state,
                 onLoadSearch: false,
@@ -190,6 +190,12 @@ function liveScoreCoachState(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 importResult: action.result,
+            };
+
+        case ApiConstants.API_LIVE_SCORE_COACH_IMPORT_RESET:
+            return {
+                ...state,
+                importResult: null,
             };
 
         default:

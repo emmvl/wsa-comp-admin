@@ -1,4 +1,4 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from "themes/apiConstants";
 
 function liveScorePlayerListAction(competitionID) {
     return {
@@ -32,8 +32,14 @@ function liveScorePlayerImportAction(competitionID, csvFile) {
     };
 }
 
-/// Player list with pagination 
-function playerListWithPagginationAction(competitionID, offset, limit, search, sortBy, sortOrder) {
+function liveScorePlayerResetImportResultAction() {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_RESET,
+    };
+}
+
+// Player list with pagination
+function playerListWithPaginationAction(competitionID, offset, limit, search, sortBy, sortOrder) {
     return {
         type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD,
         competitionID,
@@ -50,5 +56,6 @@ export {
     liveScoreAddEditPlayerAction,
     liveScoreUpdatePlayerDataAction,
     liveScorePlayerImportAction,
-    playerListWithPagginationAction,
+    liveScorePlayerResetImportResultAction,
+    playerListWithPaginationAction,
 };
