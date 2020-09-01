@@ -539,5 +539,11 @@ export default function* rootSaga() {
   //Get Registration Change Dashboard
   yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD, regChangeSaga.getRegistrationChangeDashboardSaga)
  
+  //Get Registration Change Dashboard
+ yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_LOAD, regChangeSaga.getRegistrationChangeReviewSaga)
+ 
+  //Save Registration Change Dashboard
+  yield takeEvery(ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_LOAD, regChangeSaga.saveRegistrationChangeReviewSaga)
+ 
 }
 

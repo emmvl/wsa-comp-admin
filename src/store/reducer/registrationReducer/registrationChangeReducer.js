@@ -1,25 +1,12 @@
 import ApiConstants from "../../../themes/apiConstants";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
-let obj = {
-    userName: null,
-    userRegister: null,
-    competitionName: null,
-    competitionAdministrator: null,
-    regDate: null,
-    compDate: null,
-    regChangeType: null,
-    courtGame: null,
-    reasonToDeRegister: null
-}
-
 
 const initialState = {
     onLoad: false,
     error: null,
     result: null,
     status: 0,
-    detailsData: obj,
     onDeRegisterLoad: false,
     onSaveLoad: false,
 
@@ -60,18 +47,47 @@ const initialState = {
     regChangeDashboardListData: [], ////////registration change Dashboard list
     regChangeDashboardListPage: 1,
     regChangeDashboardListTotalCount: 1,
-    regChangeCompetitions: []
+    regChangeCompetitions: [],
+    regChangeReviewData: {
+        approvals: null,
+        competitionName: null,
+        competitionOrgName: null,
+        createdOn: null,
+        fullAmount: null,
+        membershipTypeName: null,
+        reasonTypeRefId: null,
+        regChangeType: null,
+        regChangeTypeRefId: null,
+        startDate: null,
+        userName: null,
+        userRegisteredTo: null
+    },
+    reviewSaveData: {
+        refundAmount: null,
+        refundTypeRefId:null,
+        declineReasonRefId:null,
+        otherInfo:null
+    }
 }
 
 
 function regChangeReducer(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_UPDATE_REG_REVIEW:
-
-            let key = action.data.key
-            let data = action.data.data
-
-            state.detailsData[key] = data
+            let key = action.key
+            let data = action.value
+            if(key == "declineReasonRefId"){
+                state.reviewSaveData["refundAmount"] = null;
+                state.reviewSaveData["refundTypeRefId"] = null;
+            }
+            else if(key == "refundTypeRefId"){
+                state.reviewSaveData["declineReasonRefId"] = null;
+                state.reviewSaveData["otherInfo"] = null;
+                if(data == 1){
+                    state.reviewSaveData["refundAmount"] = null;
+                }
+            }
+            state.reviewSaveData[key] = data
             return {
                 ...state,
 
@@ -125,6 +141,27 @@ function regChangeReducer(state = initialState, action) {
                     regChangeCompetitions: dashboardListData.competitions ? dashboardListData.competitions : [],
                 status: action.status,
                 error: null
+            }
+        case ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_LOAD:
+            return {...state, onLoad: true}
+
+        case ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_SUCCESS:
+            let regChangeReviewData = action.result;
+            return {
+                ...state,
+                onLoad: false,
+                regChangeReviewData: regChangeReviewData,
+                status: action.status,
+                error: null
+            }
+        case ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_SUCCESS:
+            return {...state, onSaveLoad: true}
+
+        case ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_SUCCESS:
+            return {
+                ...state,
+                onSaveLoad: false,
+                status: action.status,
             }
 
         default:

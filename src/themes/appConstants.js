@@ -1572,7 +1572,9 @@ const AppConstants = {
   divisioAndGrades: "Division and Grades",
   combine: "Combine",
   whatRegistrationChange: "what registration change do you",
-   registrationChangeRef: "RegistrationChange",
+  registrationChangeRef: "RegistrationChange",
+  reasonWhyYourAreDecline: "Reason why you are declining the request for de-registration?",
+
 };
 
 export default AppConstants;

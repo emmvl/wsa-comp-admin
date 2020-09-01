@@ -147,7 +147,7 @@ const columns = [
                     >
                         <Menu.Item key={'1'}>
                             <NavLink to={{
-                                pathname: '/registrationChangeReview',
+                                pathname: '/registrationChangeReview',deRegisterId: record.id
                             }}><span >Review</span></NavLink>
                         </Menu.Item>
                     </Menu.SubMenu>

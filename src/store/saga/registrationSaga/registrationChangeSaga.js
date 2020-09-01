@@ -62,4 +62,41 @@ export function* saveDeRegisterSaga(action) {
     }
 }
 
+////// Get Registration Change Review
+export function* getRegistrationChangeReviewSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getRegistrationChangeReview, action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
+
+
+////// Save Registration Change Review
+export function* saveRegistrationChangeReviewSaga(action) {
+  try {
+    const result = yield call(AxiosApi.saveRegistrationChangeReview, action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
+
   
