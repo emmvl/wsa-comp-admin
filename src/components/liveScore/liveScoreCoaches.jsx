@@ -41,9 +41,9 @@ function tableSort(key) {
   } else if (_this.state.sortBy === key && _this.state.sortOrder === 'DESC') {
     sortBy = sortOrder = null;
   }
-  _this.setState({ sortBy, sortOrder });
-
-  _this.props.liveScoreCoachListAction(17, 1, _this.state.competitionId, _this.state.searchText, sortBy, sortOrder);
+  _this.setState({ sortBy: sortBy, sortOrder: sortOrder });
+  let offset = 0
+  _this.props.liveScoreCoachListAction(17, 1, _this.state.competitionId, _this.state.searchText, offset, sortBy, sortOrder);
 }
 
 const listeners = (key) => ({
@@ -119,8 +119,8 @@ const columns = [
               </NavLink>
             </div>
           ) : (
-            <span>{item.name}</span>
-          )
+              <span>{item.name}</span>
+            )
         ))}
       </div>
     ),
@@ -139,7 +139,7 @@ const columns = [
         <SubMenu
           key="sub1"
           title={
-            <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16"/>
+            <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
           }
         >
           <Menu.Item key="1">
@@ -173,8 +173,8 @@ class LiveScoreCoaches extends Component {
   componentDidMount() {
     const { id } = JSON.parse(getLiveScoreCompetiton())
     this.setState({ competitionId: id })
-    let offset=0
-    this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText,offset)
+    let offset = 0
+    this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText, offset)
 
     if (id !== null) {
       this.props.getliveScoreTeams(id)

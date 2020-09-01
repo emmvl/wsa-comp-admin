@@ -8,7 +8,9 @@ import {
     TimePicker,
     Select,
     InputNumber,
-    Modal
+    Modal,
+    Checkbox,
+    Radio
 } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -183,8 +185,6 @@ class LiveScoreAddMatch extends Component {
         let formated_date = moment(start_date).format("DD-MM-YYYY")
         let time_formate = moment(displayTime).format("HH:mm");
 
-        console.log(data, 'data~~~~')
-
         this.props.form.setFieldsValue({
             'date': moment(start_date, "DD-MM-YYYY"),
             'time': moment(time_formate, "HH:mm"),
@@ -197,7 +197,11 @@ class LiveScoreAddMatch extends Component {
             'matchDuration': data.matchDuration,
             'mainBreak': data.type == 'FOUR_QUARTERS' ? data.mainBreakDuration : data.breakDuration,
             'qtrBreak': data.breakDuration,
-            'addRound': ''
+            'addRound': '',
+            'extraTimeType': data.extraTimeType,
+            'extraTimeDuration': data.extraTimeDuration,
+            'extraTimeMainBreak': data.extraTimeType === 'FOUR_QUARTERS' ? data.extraTimeMainBreak : data.extraTimeBreak,
+            'extraTimeqtrBreak': data.extraTimeType === 'FOUR_QUARTERS' ? data.extraTimeBreak : null,
         })
 
     }
@@ -821,6 +825,8 @@ class LiveScoreAddMatch extends Component {
                 </div>
                 {this.duration_break(getFieldDecorator)}
 
+                {this.finalFieldsView(getFieldDecorator)}
+
                 {/* Umpire */}
 
                 {
@@ -1020,6 +1026,127 @@ class LiveScoreAddMatch extends Component {
 
             </div >
         )
+    }
+
+
+    finalFieldsView(getFieldDecorator) {
+        const { addEditMatch } = this.props.liveScoreMatchState
+        return (
+            <div >
+
+                <Checkbox style={{
+                    display: "-ms-flexbox",
+                    flexDirection: "column",
+                    justifyContent: "center"
+                }}
+                    className="single-checkbox mt-5"
+                    onChange={(e) => this.props.liveScoreUpdateMatchAction(e.target.checked, 'isFinals')}
+                    checked={addEditMatch.isFinals}
+                >
+                    {AppConstants.finalMatch}
+                </Checkbox>
+
+                <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }} >{AppConstants.extra_Time}</span>
+
+
+                <div className="row" >
+                    <div className="col-sm" >
+                        <InputWithHead heading={AppConstants.extraTimeType} />
+                        {/* <Form.Item>
+                            {getFieldDecorator('extraTimeType', {
+                                rules: [{ required: true, message: ValidationConstants.extraTimeType }]
+                            })( */}
+                        <Select
+                            showSearch
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            placeholder={'Select Type'}
+                            optionFilterProp="children"
+                            onChange={(id) => this.props.liveScoreUpdateMatchAction(id, "extraTimeType")}
+                            value={addEditMatch.extraTimeType ? addEditMatch.extraTimeType : undefined}
+                        >
+                            <Option key={'SINGLE_PERIOD'} value={'SINGLE_PERIOD'} > {'Single Period'}</Option>
+                            <Option key={'TWO_HALVES'} value={'TWO_HALVES'} > {'Halves'}</Option>
+                            <Option key={'FOUR_QUARTERS'} value={'FOUR_QUARTERS'} > {'Quarters'}</Option>
+                        </Select>
+
+                        {/* )}
+                        </Form.Item> */}
+
+                    </div>
+
+                    <div className="col-sm" >
+                        <InputWithHead heading={AppConstants.extraTimeDuration} />
+
+                        {/* <Form.Item>
+                            {getFieldDecorator('extraTimeDuration', {
+                                rules: [{ required: true, message: ValidationConstants.durationField }]
+                            })( */}
+                        <InputNumber
+                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                            placeholder={'0'}
+                            onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeDuration")}
+                            value={addEditMatch.extraTimeDuration}
+                        />
+                        {/* )}
+                        </Form.Item> */}
+
+                    </div>
+
+                    <div className="col-sm" >
+                        <InputWithHead heading={AppConstants.extraTimeMainBreak} />
+                        {/* <Form.Item>
+                            {getFieldDecorator('extraTimeMainBreak', {
+                                rules: [{ required: true, message: ValidationConstants.durationField }]
+                            })( */}
+                        <InputNumber
+                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                            placeholder={'0'}
+                            onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeMainBreak")}
+                            value={addEditMatch.extraTimeMainBreak}
+                        />
+                        {/* )}
+                        </Form.Item> */}
+
+
+                    </div>
+
+                    {
+                        addEditMatch.extraTimeType === 'FOUR_QUARTERS' &&
+                        <div className="col-sm" >
+                            <InputWithHead heading={AppConstants.extraTimeqtrBreak} />
+                            <InputNumber
+                                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                placeholder={'0'}
+                                onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeqtrBreak")}
+                                value={addEditMatch.extraTimeqtrBreak}
+                            />
+
+                        </div>
+                    }
+                </div>
+
+                <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }} >{AppConstants.extraTime}</span>
+
+                <InputWithHead heading={AppConstants.extraTimeIfDraw2} />
+
+                <Radio.Group
+                    className="reg-competition-radio"
+
+                    onChange={(e) => this.props.liveScoreUpdateMatchAction(e.target.value, 'extraTimeWinByGoals')}
+                    value={addEditMatch.extraTimeWinByGoals}
+                >
+
+                    <Radio key={1} value={1}>{'1st Goal Wins'}</Radio>
+                    <Radio key={2} value={2}>{'2nd Goal Wins'}</Radio>
+                    <Radio key={0} value={0}>{'None'}</Radio>
+
+                </Radio.Group>
+
+            </div>
+        );
     }
 
     endMatchResult() {
@@ -1446,9 +1573,6 @@ class LiveScoreAddMatch extends Component {
                     matchStatus = addEditMatch.matchStatus === "0" ? null : addEditMatch.matchStatus;
                     matchData["resultStatus"] = addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus
                 }
-
-                // console.log("matchData::" ,matchData);
-                // console.log("addEditMatch", addEditMatch)
 
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
             }

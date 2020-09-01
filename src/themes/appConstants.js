@@ -1558,6 +1558,10 @@ const AppConstants = {
   selectedDivision: "Selected Division",
   fullReset: "Full Reset",
   divisionSettings: "Division settings",
+  finalMatch: "Finals Match",
+  extra_Time: "Extra Time",
+  extraTimeType: "Extra Time Type",
+  extraTimeqtrBreak: "Extra Time Quarter Break",
   alsoAssignAsUmpireCoach: "Also assign as Umpire Coach",
   recordGoalAttempt: "Record goal attempt",
   positionTracking: "Position tracking",
@@ -1567,7 +1571,7 @@ const AppConstants = {
   oneHasPreference: "Which one has preference:",
   divisioAndGrades: "Division and Grades",
   combine: "Combine",
-   whatRegistrationChange: "what registration change do you",
+  whatRegistrationChange: "what registration change do you",
    registrationChangeRef: "RegistrationChange",
 };
 
