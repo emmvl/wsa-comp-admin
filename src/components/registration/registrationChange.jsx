@@ -11,6 +11,7 @@ import { regCompetitionListAction, clearCompReducerDataAction, regCompetitionLis
 import { getRegistrationChangeDashboard } from "../../store/actions/registrationAction/registrationChangeAction";
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
+import { getOrganisationData } from "util/sessionStorage";
 
 const { confirm } = Modal;
 const { Content } = Layout;
