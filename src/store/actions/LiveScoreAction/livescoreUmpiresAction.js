@@ -15,7 +15,14 @@ function liveScoreUmpireImportAction(payload) {
     };
 }
 
+function liveScoreUmpireResetImportResultAction() {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_RESET,
+    };
+}
+
 export {
     liveScoreUmpiresListAction,
     liveScoreUmpireImportAction,
+    liveScoreUmpireResetImportResultAction,
 };

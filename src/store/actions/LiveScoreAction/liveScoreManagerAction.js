@@ -1,12 +1,12 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from "themes/apiConstants";
 
-// Devision action
-function liveScoreAddEditManager(data, teamId, exsitingManagerId) {
+// Division action
+function liveScoreAddEditManager(data, teamId, existingManagerId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_LOAD,
         data,
         teamId,
-        exsitingManagerId
+        existingManagerId,
     };
 }
 
@@ -42,22 +42,28 @@ function liveScoreManagerFilter(payload) {
 
 function liveScoreClear() {
     return {
-        type: ApiConstants.CLEAR_LIVESCORE_MANAGER
+        type: ApiConstants.CLEAR_LIVESCORE_MANAGER,
     };
 }
 
-function liveScoreManagerSearch(data, competition_Id) {
+function liveScoreManagerSearch(data, competitionId) {
     return {
         type: ApiConstants.API_LIVESCORE_MANAGER_SEARCH_LOAD,
         data,
-        competition_Id
+        competitionId,
     };
 }
 
 function liveScoreManagerImportAction(payload) {
     return {
         type: ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_LOAD,
-        payload
+        payload,
+    };
+}
+
+function liveScoreManagerResetImportResultAction() {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_RESET,
     };
 }
 
@@ -69,4 +75,5 @@ export {
     liveScoreClear,
     liveScoreManagerSearch,
     liveScoreManagerImportAction,
+    liveScoreManagerResetImportResultAction,
 };

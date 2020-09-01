@@ -91,6 +91,12 @@ function liveScoreDivisionState(state = initialState, action) {
                 importResult: action.result,
             };
 
+        case ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_RESET:
+            return {
+                ...state,
+                importResult: null,
+            };
+
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_FAIL:
             return { ...state, onLoad: false, printLoad: false };
 

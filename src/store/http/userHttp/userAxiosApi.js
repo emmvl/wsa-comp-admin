@@ -174,10 +174,10 @@ let userHttpApi = {
     return Method.dataPost(url, token, payload);
   },
 
-  liveScoreSearchManager(data, competition_Id) {
+  liveScoreSearchManager(data, competitionId) {
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
     if (data) {
-      const url = `users/byRole?roleId=5&entityTypeId=1&entityId=${competition_Id}&userName=${data}`;
+      const url = `users/byRole?roleId=5&entityTypeId=1&entityId=${competitionId}&userName=${data}`;
       return Method.dataGet(url, token);
     }
   },

@@ -10,7 +10,7 @@ import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
 import { userExportFilesAction } from "store/actions/appAction";
-import { liveScoreManagerImportAction } from "store/actions/LiveScoreAction/liveScoreManagerAction";
+import { liveScoreManagerImportAction, liveScoreManagerResetImportResultAction } from "store/actions/LiveScoreAction/liveScoreManagerAction";
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -46,9 +46,9 @@ const columns = [
         key: "Team",
     },
     {
-        title: "Grade",
-        dataIndex: "Grade",
-        key: "Grade",
+        title: "Division Grade",
+        dataIndex: "Division Grade",
+        key: "Division Grade",
     },
 ];
 
@@ -65,6 +65,8 @@ class LiveScoreManagerImport extends Component {
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton());
         this.setState({ competitionId: id });
+
+        this.props.liveScoreManagerResetImportResultAction();
     }
 
     headerView = () => (
@@ -182,8 +184,13 @@ class LiveScoreManagerImport extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreManagerImportAction, userExportFilesAction }, dispatch);
+    return bindActionCreators({
+        liveScoreManagerImportAction,
+        liveScoreManagerResetImportResultAction,
+        userExportFilesAction,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {

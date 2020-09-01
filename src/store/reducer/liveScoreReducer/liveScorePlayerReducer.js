@@ -87,6 +87,12 @@ function LiveScorePlayerState(state = initialState, action) {
                 importResult: action.result,
             };
 
+        case ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_RESET:
+            return {
+                ...state,
+                importResult: null,
+            };
+
         case ApiConstants.API_LIVE_SCORE_PLAYER_FAIL:
             return {
                 ...state,

@@ -10,7 +10,7 @@ import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
 import { exportFilesAction } from "store/actions/appAction";
-import { liveScoreTeamImportAction } from "store/actions/LiveScoreAction/liveScoreTeamAction";
+import { liveScoreTeamImportAction, liveScoreTeamResetImportResultAction } from "store/actions/LiveScoreAction/liveScoreTeamAction";
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -51,6 +51,8 @@ class LiveScoreTeamImport extends Component {
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton());
         this.setState({ competitionId: id });
+
+        this.props.liveScoreTeamResetImportResultAction();
     }
 
     headerView = () => (
@@ -172,7 +174,11 @@ class LiveScoreTeamImport extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreTeamImportAction, exportFilesAction }, dispatch);
+    return bindActionCreators({
+        liveScoreTeamImportAction,
+        liveScoreTeamResetImportResultAction,
+        exportFilesAction,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {

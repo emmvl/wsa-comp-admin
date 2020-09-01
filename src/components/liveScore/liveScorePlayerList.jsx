@@ -9,7 +9,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { playerListWithPagginationAction } from "../../store/actions/LiveScoreAction/liveScorePlayerAction";
+import { playerListWithPaginationAction } from "../../store/actions/LiveScoreAction/liveScorePlayerAction";
 import { liveScore_formateDate } from "../../themes/dateformate";
 import history from "../../util/history";
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
@@ -35,7 +35,7 @@ function tableSort(key) {
     }
     _this.setState({ sortBy, sortOrder });
     if (_this.state.competitionId) {
-        _this.props.playerListWithPagginationAction(_this.state.competitionId, 0, 10, undefined, sortBy, sortOrder);
+        _this.props.playerListWithPaginationAction(_this.state.competitionId, 0, 10, undefined, sortBy, sortOrder);
     }
 }
 
@@ -190,7 +190,7 @@ class LiveScorePlayerList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ competitionId: id })
         if (id !== null) {
-            this.props.playerListWithPagginationAction(id, 0, 10)
+            this.props.playerListWithPaginationAction(id, 0, 10)
         } else {
             history.push('/')
         }
@@ -199,7 +199,7 @@ class LiveScorePlayerList extends Component {
     /// Handle Page change
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        this.props.playerListWithPagginationAction(this.state.competitionId, offset, 10)
+        this.props.playerListWithPaginationAction(this.state.competitionId, offset, 10)
     }
 
     ////////form content view
@@ -247,7 +247,7 @@ class LiveScorePlayerList extends Component {
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value === "") {
-            this.props.playerListWithPagginationAction(this.state.competitionId, 0, 10, e.target.value)
+            this.props.playerListWithPaginationAction(this.state.competitionId, 0, 10, e.target.value)
         }
     }
 
@@ -255,7 +255,7 @@ class LiveScorePlayerList extends Component {
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
-            this.props.playerListWithPagginationAction(this.state.competitionId, 0, 10, this.state.searchText)
+            this.props.playerListWithPaginationAction(this.state.competitionId, 0, 10, this.state.searchText)
         }
     }
 
@@ -263,7 +263,7 @@ class LiveScorePlayerList extends Component {
     onClickSearchIcon = () => {
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
-            this.props.playerListWithPagginationAction(this.state.competitionId, 0, 10, this.state.searchText)
+            this.props.playerListWithPaginationAction(this.state.competitionId, 0, 10, this.state.searchText)
         }
     }
 
@@ -438,7 +438,7 @@ class LiveScorePlayerList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ playerListWithPagginationAction, exportFilesAction }, dispatch)
+    return bindActionCreators({ playerListWithPaginationAction, exportFilesAction }, dispatch)
 }
 
 function mapStateToProps(state) {

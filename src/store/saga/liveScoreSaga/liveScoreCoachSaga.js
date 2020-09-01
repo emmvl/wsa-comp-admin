@@ -71,7 +71,7 @@ function* liveScoreCoachSaga(action) {
 
 function* liveScoreAddCoachSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreAddCoach, action.data, action.teamId, action.exsitingManagerId);
+    const result = yield call(LiveScoreAxiosApi.liveScoreAddCoach, action.data, action.teamId, action.existingManagerId);
 
     if (result.status === 1) {
       yield put({
@@ -82,7 +82,7 @@ function* liveScoreAddCoachSaga(action) {
 
       message.success("Add Coach - Successfully Added");
 
-      history.push("/LiveScoreCoaches");
+      history.push("/liveScoreCoaches");
     } else {
       yield call(failSaga, result);
     }

@@ -77,7 +77,7 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, null)
     },
 
-    liveScoreGetAffilate(data) {
+    liveScoreGetAffiliate(data) {
         let url = ''
         if (data.name) {
             url = `organisation/name=${data.name}&competitionId=${data.id}`

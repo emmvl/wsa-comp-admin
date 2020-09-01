@@ -11,7 +11,7 @@ import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
 import { exportFilesAction } from "store/actions/appAction";
-import { liveScoreMatchImportAction } from "store/actions/LiveScoreAction/liveScoreMatchAction";
+import { liveScoreMatchImportAction, liveScoreMatchResetImportResultAction } from "store/actions/LiveScoreAction/liveScoreMatchAction";
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -32,9 +32,9 @@ const columns = [
         key: "Time",
     },
     {
-        title: "Grade",
-        dataIndex: "Grade",
-        key: "Grade",
+        title: "Division Grade",
+        dataIndex: "Division Grade",
+        key: "Division Grade",
     },
     {
         title: "Home Team",
@@ -42,19 +42,9 @@ const columns = [
         key: "Home Team",
     },
     {
-        title: "Home Team Score",
-        dataIndex: "Home Team Score",
-        key: "Home Team Score",
-    },
-    {
         title: "Away Team",
         dataIndex: "Away Team",
         key: "Away Team",
-    },
-    {
-        title: "Away Team Score",
-        dataIndex: "Away Team Score",
-        key: "Away Team Score",
     },
     {
         title: "Venue",
@@ -62,29 +52,24 @@ const columns = [
         key: "Venue",
     },
     {
-        title: "type",
-        dataIndex: "type",
-        key: "type",
+        title: "Type",
+        dataIndex: "Type",
+        key: "Type",
     },
     {
-        title: "matchDuration",
-        dataIndex: "matchDuration",
-        key: "matchDuration",
+        title: "Match Duration",
+        dataIndex: "Match Duration",
+        key: "Match Duration",
     },
     {
-        title: "breakDuration",
-        dataIndex: "breakDuration",
-        key: "breakDuration",
+        title: "Break Duration",
+        dataIndex: "Break Duration",
+        key: "Break Duration",
     },
     {
-        title: "mnbMatchId",
-        dataIndex: "mnbMatchId",
-        key: "mnbMatchId",
-    },
-    {
-        title: "mainBreakDuration",
-        dataIndex: "mainBreakDuration",
-        key: "mainBreakDuration",
+        title: "Main Break Duration",
+        dataIndex: "Main Break Duration",
+        key: "Main Break Duration",
     },
     {
         title: "Timezone GMT",
@@ -95,6 +80,11 @@ const columns = [
         title: "Round",
         dataIndex: "Round",
         key: "Round",
+    },
+    {
+        title: "mnbMatchId",
+        dataIndex: "mnbMatchId",
+        key: "mnbMatchId",
     },
 ];
 
@@ -111,6 +101,8 @@ class LiveScoreMatchImport extends Component {
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton());
         this.setState({ competitionId: id });
+
+        this.props.liveScoreMatchResetImportResultAction();
     }
 
     headerView = () => (
@@ -233,7 +225,11 @@ class LiveScoreMatchImport extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreMatchImportAction, exportFilesAction }, dispatch);
+    return bindActionCreators({
+        liveScoreMatchImportAction,
+        liveScoreMatchResetImportResultAction,
+        exportFilesAction,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {

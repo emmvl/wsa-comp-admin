@@ -556,6 +556,12 @@ function liveScoreMatchReducer(state = initialState, action) {
                 importResult: action.result,
             };
 
+        case ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_RESET:
+            return {
+                ...state,
+                importResult: null,
+            };
+
         case ApiConstants.API_LIVE_SCORE_CREATE_MATCH_FAIL:
             return {
                 ...state,
