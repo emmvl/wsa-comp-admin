@@ -31,8 +31,9 @@ function tableSort(key) {
     } else if (_this.state.sortBy === key && _this.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    _this.setState({ sortBy, sortOrder });
-    _this.props.liveScoreManagerListAction(3, 1, _this.state.competitionId, _this.state.searchText, sortBy, sortOrder);
+    _this.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    let offset = 0
+    _this.props.liveScoreManagerListAction(3, 1, _this.state.competitionId, _this.state.searchText, offset, sortBy, sortOrder);
 }
 
 const listeners = (key) => ({
@@ -119,8 +120,8 @@ const columns = [
                             </NavLink>
                         </div>
                     ) : (
-                        <span key={`managerName${i}` + item.entityId}>{item.name}</span>
-                    )
+                            <span key={`managerName${i}` + item.entityId}>{item.name}</span>
+                        )
                 ))}
             </div>
         ),
@@ -204,8 +205,8 @@ class LiveScoreManagerList extends Component {
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ competitionId: id })
-        let offset=0
-        this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText,offset)
+        let offset = 0
+        this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, offset)
     }
 
     ////////form content view

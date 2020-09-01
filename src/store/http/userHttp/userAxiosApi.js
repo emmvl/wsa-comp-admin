@@ -239,8 +239,9 @@ let userHttpApi = {
 
   //liveScore coaches list
   liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder) {
-    let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
-    let url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${id}&userName=${search}&offset=${offset}&limit=${10}`
+    let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+    let url
+    url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${id}&userName=${search}&offset=${offset}&limit=${10}`
     if (sortBy && sortOrder) {
       url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
     }

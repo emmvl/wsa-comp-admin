@@ -475,7 +475,7 @@ class LiveScoreMatchesList extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreMatchListState.onLoad == true && true}
+                        loading={this.props.liveScoreMatchListState.onLoadMatch}
                         className="home-dashboard-table" columns={columns}
                         dataSource={DATA}
                         pagination={false}

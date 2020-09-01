@@ -8,6 +8,7 @@ import {
     TimePicker,
     Select,
     Input,
+    message
 } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -115,17 +116,24 @@ class LiveScoreAddIncident extends Component {
             }
             this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]) })
         }
-        this.props.liveScoreUpdateIncidentData(null, "clearImage")
+        // this.props.liveScoreUpdateIncidentData(null, "clearImage")
     };
 
     ////method to setVideo
     setVideo = (data) => {
         if (data.files[0] !== undefined) {
-            if (this.state.isEdit === true) {
-                // this.setState({ incidentVideo = '' })
+            if (data.files[0].size > AppConstants.video_size) {
+                message.error(AppConstants.videoSize)
+                // return;
+            } else {
+                this.setState({ videoTimeout: 2000, crossVideoIcon: false, video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
+                setTimeout(() => {
+                    this.setState({ videoTimeout: null, crossVideoIcon: true })
+                }, 2000);
             }
-            this.setState({ video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
-            this.props.liveScoreUpdateIncidentData(null, "clearVideo")
+            // this.setState({ video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
+
+            // this.props.liveScoreUpdateIncidentData(null, "clearVideo")
         }
     };
 
@@ -160,19 +168,26 @@ class LiveScoreAddIncident extends Component {
     }
 
     deleteImage() {
+        const { incidentMediaList } = this.props.liveScoreIncidentState
         this.setState({ image: null, imageSelection: '', crossImageIcon: false })
-        this.props.liveScoreUpdateIncidentData(null, "incidentImage")
+        if (incidentMediaList) {
+            this.props.liveScoreUpdateIncidentData(null, "incidentImage")
+        }
+
     }
 
     deleteVideo() {
+        const { incidentMediaList } = this.props.liveScoreIncidentState
         this.setState({ video: null, videoSelection: '', crossVideoIcon: false })
-        this.props.liveScoreUpdateIncidentData(null, "incidentVideo")
+        if (incidentMediaList) {
+            this.props.liveScoreUpdateIncidentData(null, "incidentVideo")
+        }
+
     }
 
     //// Form View
     contentView = (getFieldDecorator) => {
-        const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds } = this.props.liveScoreIncidentState
-        console.log(this.state.matchDetails, 'matchDetails')
+        const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds, team1_Name, team2_Name, team1Id, team2Id } = this.props.liveScoreIncidentState
         let team_1 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.name : null : null
         let team1_Id = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.id : null : null
         let team_2 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team2.name : null : null
@@ -256,9 +271,11 @@ class LiveScoreAddIncident extends Component {
 
                                         optionFilterProp="children"
                                     >
-                                        {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
+                                        {/* {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
                                             < Option value={item.id} > {item.name}</Option>
-                                        ))}
+                                        ))} */}
+                                        < Option value={team1Id} > {team1_Name}</Option>
+                                        < Option value={team2Id} > {team2_Name}</Option>
                                     </Select>
                                     :
                                     <Select
@@ -377,9 +394,12 @@ class LiveScoreAddIncident extends Component {
                                     this.setState({ imageTimeout: null, crossImageIcon: true })
                                 }, 2000);
                             }}
+                            onClick={(event) => {
+                                event.target.value = null
+                            }}
                         />
 
-                        <div style={{ position: 'absolute', bottom: 40, left: 150 }}>
+                        <div style={{ position: 'absolute', bottom: 71, left: 150 }}>
                             {(this.state.crossImageIcon || incidentData.addImages) &&
                                 <span className='user-remove-btn pl-2'
                                     style={{ cursor: 'pointer' }}>
@@ -390,6 +410,7 @@ class LiveScoreAddIncident extends Component {
                                         width="16"
                                         height="16"
                                         onClick={() => this.deleteImage()}
+
                                     />
                                 </span>
                             }
@@ -413,14 +434,17 @@ class LiveScoreAddIncident extends Component {
                             style={{ display: 'none' }}
                             onChange={(event) => {
                                 this.setVideo(event.target, "evt.target")
-                                this.setState({ videoTimeout: 2000, crossVideoIcon: false })
-                                setTimeout(() => {
-                                    this.setState({ videoTimeout: null, crossVideoIcon: true })
-                                }, 2000);
+                                // this.setState({ videoTimeout: 2000, crossVideoIcon: false })
+                                // setTimeout(() => {
+                                //     this.setState({ videoTimeout: null, crossVideoIcon: true })
+                                // }, 2000);
+                            }}
+                            onClick={(event) => {
+                                event.target.value = null
                             }}
                         />
 
-                        <div style={{ position: 'absolute', bottom: 40, left: 150 }}>
+                        <div style={{ position: 'absolute', bottom: 71, left: 150 }}>
                             {(this.state.crossVideoIcon || incidentData.addVideo) &&
                                 <span className='user-remove-btn pl-2'
                                     style={{ cursor: 'pointer' }}>
@@ -435,6 +459,7 @@ class LiveScoreAddIncident extends Component {
                                 </span>
                             }
                         </div>
+                        <span className="video_Message">{AppConstants.videoSizeMessage}</span>
                     </div>
                 </div>
 
@@ -477,7 +502,7 @@ class LiveScoreAddIncident extends Component {
         e.preventDefault();
 
         const { incidentData, incidentId, incidentMediaIds } = this.props.liveScoreIncidentState;
-        console.log(incidentMediaIds, 'incidentMediaIds')
+        console.log(incidentMediaIds, 'incidentMediaIds', this.state.image, this.state.video)
 
 
         // let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("DD-MM-YYYY") : null
@@ -547,6 +572,9 @@ class LiveScoreAddIncident extends Component {
                         body,
                         playerIds: incidentData.playerIds,
                         isEdit: this.state.isEdit,
+                        mediaArry: mediaArry,
+                        key: 'media',
+                        incidentMediaIds,
                     });
                 }
             }

@@ -32,7 +32,11 @@ const initialState = {
     success: false,
     incidentId: null,
     incidentMediaIds: [],
-    incidentMediaList: null
+    incidentMediaList: null,
+    team1_Name: null,
+    team2_Name: null,
+    team1Id: null,
+    team2Id: null,
 
 }
 
@@ -87,6 +91,7 @@ function getPlayerId(playerArr) {
 }
 
 function getMediaIds(mediaArray) {
+    console.log(mediaArray, 'mediaArray')
 
     let media = []
 
@@ -130,23 +135,17 @@ function getMediaUrl(mediaArray, mediaType) {
 }
 
 function deleteSelectedMedia(mediaArray, mediaType) {
-    console.log(mediaArray, 'mediaArray~~~~~', mediaType)
-    let media = []
 
     for (let i in mediaArray) {
 
-        var str = mediaArray[i].mediaType;
-        var res = str.split("/", 1);
-        console.log(res, 'mediaArray____3333')
+        let str = mediaArray[i].mediaType;
+        let res = str.split("/", 1);
 
         if (mediaType == res[0]) {
-            console.log(mediaArray[i], 'mediaArray____3333_____44444')
-            // media.push(mediaArray[i].id)
-            mediaArray.splice(mediaArray[i], 1)
+            mediaArray.splice(i, 1)
+            break;
         }
     }
-
-    console.log(mediaArray, 'mediaArray')
 
     return mediaArray
 
@@ -200,6 +199,7 @@ function liveScoreIncidentState(state = initialState, action) {
             } else if (action.key === "isEdit") {
                 let data = action.data
 
+                console.log(data, 'checkingData')
                 state.incidentMediaList = data.incidentMediaList
                 state.mediaData = action.data
 
@@ -216,6 +216,10 @@ function liveScoreIncidentState(state = initialState, action) {
                 state.incidentMediaIds = getMediaIds(data.incidentMediaList)
                 state.incidentId = data.id
 
+                state.team1_Name = data.match.team1.name
+                state.team1Id = data.match.team1.id
+                state.team2_Name = data.match.team2.name
+                state.team2Id = data.match.team2.id
 
 
             } else if (action.key === "clearImage") {
@@ -251,13 +255,19 @@ function liveScoreIncidentState(state = initialState, action) {
                 state.incidentMediaIds = []
 
             } else if (action.key === "incidentImage") {
+                let array_Media_img = [...state.incidentMediaList]
+
                 state.incidentData['addImages'] = null
-                console.log(state.incidentMediaList, 'mediaArray@!@@!!!@')
-                state.incidentMediaList = deleteSelectedMedia(state.incidentMediaList, 'image')
+                let imageMedia = deleteSelectedMedia(array_Media_img, 'image')
+                state.incidentMediaList = imageMedia
+                state.incidentMediaIds = getMediaIds(state.incidentMediaList)
 
             } else if (action.key === "incidentVideo") {
+                let array_Media_vid = [...state.incidentMediaList]
                 state.incidentData['addVideo'] = null
-                state.incidentMediaList = deleteSelectedMedia(state.incidentMediaList, 'video')
+                let videoMedia = deleteSelectedMedia(array_Media_vid, 'video')
+                state.incidentMediaList = videoMedia
+                state.incidentMediaIds = getMediaIds(state.incidentMediaList)
 
             } else {
                 state.incidentData[action.key] = action.data

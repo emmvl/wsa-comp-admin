@@ -61,41 +61,42 @@ export function* liveScoreIncidentListSaga(action) {
 
 export function* liveScoreAddEditIncidentSaga(action) {
     try {
-        if (action.data.key === 'media') {
+        // if (action.data.key === 'media') {
 
-            const result = yield call(LiveScoreAxiosApi.liveScoreAddEditIncident, action.data);
-            if (result.status === 1) {
-                const mediaResult = yield call(LiveScoreAxiosApi.liveScoreAddEditIncidentMedia, action.data, result.result.data.incidentId);
-                if (mediaResult.status === 1) {
-                    yield put({
-                        type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS,
-                        result: mediaResult.result.data,
-                        status: mediaResult.status,
-                    });
-                    history.push('/liveScoreIncidentList')
-                    message.success('Add Incident - Added Successfully')
-                }
-                else {
-                    yield call(failSaga, result)
-                }
-            } else {
-                yield call(failSaga, result)
-            }
-
-        } else {
-            const result = yield call(LiveScoreAxiosApi.liveScoreAddEditIncident, action.data);
-            if (result.status === 1) {
+        const result = yield call(LiveScoreAxiosApi.liveScoreAddEditIncident, action.data);
+        if (result.status === 1) {
+            const mediaResult = yield call(LiveScoreAxiosApi.liveScoreAddEditIncidentMedia, action.data, result.result.data.incidentId);
+            if (mediaResult.status === 1) {
                 yield put({
                     type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS,
-                    result: result.result.data,
-                    status: result.status,
+                    result: mediaResult.result.data,
+                    status: mediaResult.status,
                 });
                 history.push('/liveScoreIncidentList')
                 message.success('Add Incident - Added Successfully')
-            } else {
+            }
+            else {
                 yield call(failSaga, result)
             }
+        } else {
+            yield call(failSaga, result)
         }
+        // } 
+
+        // else {
+        //     const result = yield call(LiveScoreAxiosApi.liveScoreAddEditIncident, action.data);
+        //     if (result.status === 1) {
+        //         yield put({
+        //             type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS,
+        //             result: result.result.data,
+        //             status: result.status,
+        //         });
+        //         history.push('/liveScoreIncidentList')
+        //         message.success('Add Incident - Added Successfully')
+        //     } else {
+        //         yield call(failSaga, result)
+        //     }
+        // }
 
     } catch (error) {
         yield call(errorSaga, error)
