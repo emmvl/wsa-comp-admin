@@ -533,9 +533,9 @@ class RegistrationMainDashboard extends Component {
                 <Layout>
                     <Content>
                         {this.dropdownView()}
-                        {this.participatedView()}
-                        {this.dropdownButtonView()}
                         {this.ownedView()}
+                        {this.dropdownButtonView()}
+                        {this.participatedView()}
                     </Content>
                 </Layout>
             </div>
