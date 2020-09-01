@@ -151,11 +151,11 @@ class CompetitionPlayerImport extends Component {
                             ref={(input) => { this.filesInput = input }}
                             name="file"
                             id="playerImport"
-                            icon='file text outline'
-                            iconPosition='left'
-                            label='Upload CSV'
-                            labelPosition='right'
-                            placeholder='UploadCSV...'
+                            // icon="file text outline"
+                            // iconPosition="left"
+                            // label="Upload CSV"
+                            // labelPosition="right"
+                            placeholder="UploadCSV..."
                             onChange={this.handleForce}
                             accept=".csv"
                         />

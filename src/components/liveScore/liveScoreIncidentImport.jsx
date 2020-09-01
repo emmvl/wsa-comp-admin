@@ -64,11 +64,11 @@ class LiveScoreIncidentImport extends Component {
                             type="file"
                             ref={(input) => { this.filesInput = input }}
                             name="file"
-                            icon='file text outline'
-                            iconPosition='left'
-                            label='Upload CSV'
-                            labelPosition='right'
-                            placeholder='UploadCSV...'
+                            // icon="file text outline"
+                            // iconPosition="left"
+                            // label="Upload CSV"
+                            // labelPosition="right"
+                            placeholder="UploadCSV..."
                             onChange={this.handleForce}
                             accept=".csv"
                         />

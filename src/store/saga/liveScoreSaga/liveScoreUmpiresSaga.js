@@ -68,8 +68,8 @@ function* liveScoreUmpiresImportSaga(action) {
                 type: ApiConstants.API_LIVE_SCORE_UMPIRES_IMPORT_SUCCESS,
                 result: result.result.data,
                 status: result.status,
-                // navigation: action.navigation
-            })
+                // navigation: action.navigation,
+            });
 
             if (Object.keys(result.result.data.error).length === 0) {
                 history.push("/liveScoreUmpireList");

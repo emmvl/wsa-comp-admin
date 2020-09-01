@@ -1,52 +1,52 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from "themes/apiConstants";
 
 function getUmpireDashboardList(data) {
-    const action = {
+    return {
         type: ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_LOAD,
-        data
+        data,
     };
-    return action;
 }
 
 function getUmpireDashboardVenueList(compId) {
-    const action = {
+    return {
         type: ApiConstants.API_GET_UMPIRE_DASHBOARD_VENUE_LIST_LOAD,
-        compId
+        compId,
     };
-    return action;
 }
 
 function getUmpireDashboardDivisionList(competitionID) {
-    const action = {
+    return {
         type: ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_LOAD,
-        competitionID
+        competitionID,
     };
-    return action;
 }
 
 function umpireDashboardImportAction(data) {
-    const action = {
+    return {
         type: ApiConstants.API_UMPIRE_IMPORT_LOAD,
-        data
-    }
-    return action
+        data,
+    };
+}
+
+function umpireDashboardResetImportResultAction() {
+    return {
+        type: ApiConstants.API_UMPIRE_IMPORT_RESET,
+    };
 }
 
 function umpireRoundListAction(competitionID, divisionId) {
-    const action = {
+    return {
         type: ApiConstants.API_UMPIRE_ROUND_LIST_LOAD,
         competitionID,
-        divisionId
+        divisionId,
     };
-    return action;
 }
 
 function umpireDashboardUpdate(data) {
-    const action = {
+    return {
         type: ApiConstants.UPDATE_UMPIRE_DASHBOARD,
-        data
-    }
-    return action
+        data,
+    };
 }
 
 export {
@@ -54,6 +54,7 @@ export {
     getUmpireDashboardVenueList,
     getUmpireDashboardDivisionList,
     umpireDashboardImportAction,
+    umpireDashboardResetImportResultAction,
     umpireRoundListAction,
-    umpireDashboardUpdate
-} 
+    umpireDashboardUpdate,
+}

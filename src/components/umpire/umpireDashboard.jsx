@@ -256,18 +256,16 @@ const columnsInvite = [
         dataIndex: 'umpireReserve',
         key: 'umpireReserve',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("umpireReserve"),
-        render: (umpireReserve, record) =>
-            <span >{umpireReserve}</span>
+        onHeaderCell: () => listeners("umpireReserve"),
+        render: (umpireReserve) => <span>{umpireReserve}</span>,
     },
     {
         title: 'Umpire Coach',
         dataIndex: 'umpireCoach',
         key: 'umpireCoach',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("umpireCoach"),
-        render: (umpireCoach, record) =>
-            <span >{umpireCoach}</span>
+        onHeaderCell: () => listeners("umpireCoach"),
+        render: (umpireCoach) => <span >{umpireCoach}</span>,
     },
     {
         title: "Action",
@@ -485,18 +483,16 @@ const columns = [
         dataIndex: 'umpireReserve',
         key: 'umpireReserve',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("umpireReserve"),
-        render: (umpireReserve, record) =>
-            <span >{umpireReserve}</span>
+        onHeaderCell: () => listeners("umpireReserve"),
+        render: (umpireReserve) => <span >{umpireReserve}</span>,
     },
     {
         title: 'Umpire Coach',
         dataIndex: 'umpireCoach',
         key: 'umpireCoach',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("umpireCoach"),
-        render: (umpireCoach, record) =>
-            <span >{umpireCoach}</span>
+        onHeaderCell: () => listeners("umpireCoach"),
+        render: (umpireCoach) => <span >{umpireCoach}</span>,
     },
     {
         title: "Action",
