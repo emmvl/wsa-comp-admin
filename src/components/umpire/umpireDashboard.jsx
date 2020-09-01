@@ -998,8 +998,8 @@ class UmpireDashboard extends Component {
                     <div className="row reg-filter-row">
                         <div className="reg-col">
                             <div className="reg-filter-col-cont">
-                                <div className="year-select-heading" style={{ width: "150px" }}>
-                                    {AppConstants.competition}
+                                <div className="year-select-heading" style={{ width: "157px" }}>
+                                    {AppConstants.competition} :
                                 </div>
 
                                 <Select
@@ -1019,7 +1019,7 @@ class UmpireDashboard extends Component {
 
                         <div className="reg-col1 ml-5">
                             <div className="reg-filter-col-cont">
-                                <div className="year-select-heading">{AppConstants.venue}</div>
+                                <div className="year-select-heading" style={{ width: "147px" }}>{AppConstants.venue} :</div>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     onChange={this.onVenueChange}
@@ -1035,8 +1035,8 @@ class UmpireDashboard extends Component {
 
                         <div className="reg-col1 ml-5">
                             <div className="reg-filter-col-cont">
-                                <div className="year-select-heading" style={{ width: "138px" }}>
-                                    {AppConstants.division}
+                                <div className="year-select-heading" style={{ width: "147px" }}>
+                                    {AppConstants.division} :
                                 </div>
                                 <Select
                                     className="year-select reg-filter-select1"
@@ -1053,7 +1053,7 @@ class UmpireDashboard extends Component {
 
                         <div className="reg-col1 ml-5">
                             <div className="reg-filter-col-cont">
-                                <div className="year-select-heading">{AppConstants.round}</div>
+                                <div className="year-select-heading">{AppConstants.round} :</div>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     onChange={this.onRoundChange}

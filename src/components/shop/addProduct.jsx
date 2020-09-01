@@ -550,7 +550,7 @@ class AddProduct extends Component {
                     )(
                         <InputWithHead
                             auto_complete='off'
-                            required={"required-field pb-0"}
+                            required={"required-field pb-0 pt-3"}
                             heading={AppConstants.title}
                             placeholder={AppConstants.enterTitle}
                             onChange={(e) =>

@@ -283,7 +283,7 @@ class UmpireRoaster extends Component {
         const { umpireRoasterList, umpireTotalCount } = this.props.umpireRoasterdState
         let umpireListResult = isArrayNotEmpty(umpireRoasterList) ? umpireRoasterList : []
         return (
-            <div className="comp-dash-table-view mt-4">
+            <div className="comp-dash-table-view mt-0">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         loading={this.props.umpireRoasterdState.onLoad}
@@ -496,7 +496,7 @@ class UmpireRoaster extends Component {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
 
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-1">
+            <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width" >
                     <div className="row reg-filter-row" >
 
@@ -504,7 +504,7 @@ class UmpireRoaster extends Component {
 
                         <div className="reg-col" >
                             <div className="reg-filter-col-cont">
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className='year-select-heading' style={{width:'135px'}}>{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ minWidth: 200 }}
@@ -523,7 +523,7 @@ class UmpireRoaster extends Component {
 
                         {/* Venue List */}
                         <div className="reg-col1 ml-0" >
-                            <div className="reg-filter-col-cont ml-3" >
+                            <div className="reg-filter-col-cont ml-5" >
                                 <span className='year-select-heading'>{AppConstants.status}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
