@@ -55,6 +55,7 @@ const initialState = {
     paymentStatus: [],
     matchPrintTemplateType: [],
     venueAddressDuplication: false,
+    regChangeTypes: []
 };
 
 
@@ -449,6 +450,18 @@ function commonReducerState(state = initialState, action) {
                 onLoad: false,
                 venueAddressDuplication: action.result.duplicated,
                 status: action.status
+            };
+        ///////get the  Reg Change Types
+        case ApiConstants.API_REGISTRATION_CHANGE_TYPE_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_REGISTRATION_CHANGE_TYPE_SUCCESS:
+            return {
+                ...state,
+                status: action.status,
+                regChangeTypes: isArrayNotEmpty(action.result) ? action.result : [],
+                onLoad: false,
+                error: null
             };
 
         default:

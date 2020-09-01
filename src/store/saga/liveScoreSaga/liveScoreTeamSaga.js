@@ -119,7 +119,7 @@ function* liveScoreTeamDivisionSaga(action) {
 
 function* liveScoreAffiliateSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreGetAffilate, action.payload);
+    const result = yield call(LiveScoreAxiosApi.liveScoreGetAffiliate, action.payload);
 
     if (result.status === 1) {
       yield put({ type: ApiConstants.GET_AFFILATE_SUCCESS, payload: result.result.data });

@@ -367,7 +367,7 @@ class LiveScoreCoaches extends Component {
     const { id } = JSON.parse(getLiveScoreCompetiton())
     if (this.state.searchText == null || this.state.searchText === "") {
     } else {
-      // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
+      // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
       this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText)
     }
   }

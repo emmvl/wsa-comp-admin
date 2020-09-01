@@ -31,10 +31,7 @@ import {
 } from '../../store/actions/LiveScoreAction/LiveScoreSettingAction'
 import Loader from '../../customComponents/loader';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
-import {
-
-    getCompetitonVenuesList
-} from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
+import { getCompetitionVenuesList } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import history from "../../util/history";
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
@@ -77,10 +74,10 @@ class LiveScoreSettingsView extends Component {
             if (this.state.selectedComp !== null) {
                 if (this.state.edit === 'edit' || this.state.selectedComp) {
                     this.props.getLiveScoreSettingInitiate(this.state.selectedComp)
-                    this.props.getCompetitonVenuesList()
+                    this.props.getCompetitionVenuesList()
                 } else {
                     this.props.clearLiveScoreSetting()
-                    this.props.getCompetitonVenuesList()
+                    this.props.getCompetitionVenuesList()
                 }
             }
 
@@ -91,18 +88,18 @@ class LiveScoreSettingsView extends Component {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 if (this.props.location.state === 'edit' || id) {
                     this.props.getLiveScoreSettingInitiate(id)
-                    this.props.getCompetitonVenuesList()
+                    this.props.getCompetitionVenuesList()
                     this.setState({ competitionId: id })
                 } else {
                     this.props.clearLiveScoreSetting()
-                    this.props.getCompetitonVenuesList()
+                    this.props.getCompetitionVenuesList()
                 }
             }
         }
 
         if (this.props.location.state === 'add') {
             this.props.clearLiveScoreSetting()
-            this.props.getCompetitonVenuesList()
+            this.props.getCompetitionVenuesList()
 
             this.props.form.setFieldsValue({
                 "recordumpire": undefined
@@ -1303,7 +1300,7 @@ export default connect(mapStatetoProps, {
     clearLiveScoreSetting,
     getLiveScoreSettingInitiate,
     onChangeSettingForm,
-    getCompetitonVenuesList,
+    getCompetitionVenuesList,
     settingDataPostInititae,
     searchVenueList,
     clearFilter,

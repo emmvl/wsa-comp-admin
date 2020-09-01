@@ -8,7 +8,7 @@ import ValidationConstants from "themes/validationConstant";
 import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
-import { liveScoreUmpireImportAction } from "store/actions/LiveScoreAction/livescoreUmpiresAction";
+import { liveScoreUmpireImportAction, liveScoreUmpireResetImportResultAction } from "store/actions/LiveScoreAction/livescoreUmpiresAction";
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -53,6 +53,10 @@ class LiveScoreUmpireImport extends Component {
             csvData: null,
             screenName: (props.location && props.location.state && props.location.state.screenName) ? props.location.state.screenName : null,
         };
+    }
+
+    componentDidMount() {
+        this.props.liveScoreUmpireResetImportResultAction();
     }
 
     headerView = () => (
@@ -170,7 +174,10 @@ class LiveScoreUmpireImport extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreUmpireImportAction }, dispatch);
+    return bindActionCreators({
+        liveScoreUmpireImportAction,
+        liveScoreUmpireResetImportResultAction,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {

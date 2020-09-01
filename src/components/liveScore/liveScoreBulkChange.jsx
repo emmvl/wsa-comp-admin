@@ -32,7 +32,7 @@ import {
     searchCourtList,
     clearFilter
 } from '../../store/actions/LiveScoreAction/liveScoreBulkMatchAction';
-import { getCompetitonVenuesList, } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
+import { getCompetitionVenuesList } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveScoreActions'
 import Loader from '../../customComponents/loader'
 import history from '../../util/history'
@@ -59,7 +59,7 @@ class LiveScoreBulkChange extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.props.liveScoreBulkMatchAction()
         if (id !== null) {
-            this.props.getCompetitonVenuesList(id, this.state.search);
+            this.props.getCompetitionVenuesList(id, this.state.search);
             this.props.liveScoreRoundListAction(id)
             // this.props.getliveScoreDivisions(id)
         } else {
@@ -364,7 +364,7 @@ class LiveScoreBulkChange extends Component {
 
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ search: searchValue })
-        this.props.getCompetitonVenuesList(id, searchValue);
+        this.props.getCompetitionVenuesList(id, searchValue);
     }
 
     ////this method called after slecting Push Back option from drop down
@@ -1435,7 +1435,7 @@ function mapDispatchToProps(dispatch) {
         liveScoreBulkMatchAction,
         liveScoreUpdateBulkAction,
         liveScoreDoubleHeaderAction,
-        getCompetitonVenuesList,
+        getCompetitionVenuesList,
         getliveScoreDivisions,
         liveScoreAbandonMatchAction,
         matchResult,

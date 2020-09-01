@@ -28,7 +28,7 @@ import {
     liveScoreUpdateMatchAction,
     liveScoreCreateMatchAction,
     clearMatchAction,
-    getCompetitonVenuesList,
+    getCompetitionVenuesList,
     liveScoreClubListAction,
     searchFilterAction
 } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
@@ -89,7 +89,7 @@ class LiveScoreAddMatch extends Component {
             this.setState({ compId: id, scoringType: scoringType })
 
             if (id !== null) {
-                this.props.getCompetitonVenuesList(id, "");
+                this.props.getCompetitionVenuesList(id, "");
                 this.props.getLiveScoreDivisionList(id)
                 this.props.getliveScoreScorerList(id, 4)
                 // this.props.liveScoreRoundListAction(id)
@@ -106,7 +106,7 @@ class LiveScoreAddMatch extends Component {
             this.setState({ compId: id, scoringType: scoringType })
 
             if (id !== null) {
-                this.props.getCompetitonVenuesList(id, "");
+                this.props.getCompetitionVenuesList(id, "");
                 this.props.getLiveScoreDivisionList(id)
                 this.props.getliveScoreScorerList(id, 4)
                 // this.props.liveScoreRoundListAction(id)
@@ -1666,7 +1666,7 @@ function mapDispatchToProps(dispatch) {
         getVenuesTypeAction,
         liveScoreScorerListAction,
         clearMatchAction,
-        getCompetitonVenuesList,
+        getCompetitionVenuesList,
         getliveScoreScorerList,
         getLiveScoreDivisionList,
         liveScoreRoundListAction,

@@ -27,7 +27,7 @@ import {
 import {
     liveScoreAddTeamform,
     liveScoreGetDivision,
-    liveScoreGetaffilate,
+    liveScoreGetAffiliate,
     liveAddNewTeam,
     liveScoreGetTeamDataAction
 } from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
@@ -88,7 +88,7 @@ class LiveScoreAddTeam extends Component {
 
         // this.props.getliveScoreDivisions(1)
         this.props.liveScoreGetDivision(id)
-        this.props.liveScoreGetaffilate({ id, name: '' })
+        this.props.liveScoreGetAffiliate({ id, name: '' })
         this.props.liveScoreManagerListAction(5, 1, id)
     }
     componentDidUpdate(nextProps) {
@@ -745,7 +745,7 @@ function mapDispatchToProps(dispatch) {
         getliveScoreDivisions,
         liveScoreAddTeamform,
         liveScoreGetDivision,
-        liveScoreGetaffilate,
+        liveScoreGetAffiliate,
         liveAddNewTeam,
         liveScoreManagerListAction,
         liveScoreGetTeamDataAction,

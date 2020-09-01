@@ -1,98 +1,90 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from "themes/apiConstants";
 
 function getliveScoreTeams(competitionID, divisionId) {
-
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_TEAM_LOAD,
         competitionID,
-        divisionId
+        divisionId,
     };
-
-    return action;
 }
 
 // Team View action
 function getTeamViewPlayerList(teamId) {
-
-    const action = {
+    return  {
         type: ApiConstants.API_GET_TEAM_VIEW_PLAYER_LIST_LOAD,
-        teamId
+        teamId,
     };
-
-    return action;
 }
 
-// Team View action
+// Team Delete action
 function liveScoreDeleteTeam(teamId) {
-
-    const action = {
+    return {
         type: ApiConstants.API_LIVE_SCORE_DELETE_TEAM_LOAD,
-        teamId
+        teamId,
     };
-
-    return action;
 }
-function liveScoreAddTeamform(data) {
 
+function liveScoreAddTeamform(payload) {
     return {
         type: ApiConstants.LIVE_SCORE_TEAM_EDIT,
-        payload: data
-    }
-
-
+        payload,
+    };
 }
-function liveScoreGetDivision(data) {
+
+function liveScoreGetDivision(payload) {
     return {
         type: ApiConstants.GET_DIVISION_TEAM,
-        payload: data
-    }
+        payload,
+    };
 }
-function liveScoreGetaffilate(data) {
+
+function liveScoreGetAffiliate(payload) {
     return {
         type: ApiConstants.GET_AFFILATE_TEAM,
-        payload: data
-    }
+        payload,
+    };
 }
+
 function liveAddNewTeam(data, teamId, key) {
     return {
         type: ApiConstants.API_LIVE_SCORE_ADD_TEAM_LOAD,
         payload: data,
         teamId,
-        key
-    }
+        key,
+    };
 }
 
-function liveScoreTeamImportAction(data) {
+function liveScoreTeamImportAction(payload) {
     return {
         type: ApiConstants.API_LIVE_SCORE_TEAM_IMPORT_LOAD,
-        payload: data
-    }
+        payload,
+    };
+}
+
+function liveScoreTeamResetImportResultAction() {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_TEAM_IMPORT_RESET,
+    };
 }
 
 function liveScoreGetTeamDataAction(teamId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_GET_TEAM_LOAD,
-        teamId
-    }
+        teamId,
+    };
 }
 
-
-
-/// Team list with paggination
-
-function getTeamsWithPagging(competitionID, offset, limit, search, sortBy, sortOrder) {
-
-    const action = {
+// Team list with pagination
+function getTeamsWithPagination(competitionID, offset, limit, search, sortBy, sortOrder) {
+    return {
         type: ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD,
         competitionID,
         offset,
         limit,
         search,
         sortBy,
-        sortOrder
+        sortOrder,
     };
-
-    return action;
 }
 
 export {
@@ -101,9 +93,10 @@ export {
     liveScoreDeleteTeam,
     liveScoreAddTeamform,
     liveScoreGetDivision,
-    liveScoreGetaffilate,
+    liveScoreGetAffiliate,
     liveAddNewTeam,
     liveScoreTeamImportAction,
+    liveScoreTeamResetImportResultAction,
     liveScoreGetTeamDataAction,
-    getTeamsWithPagging
+    getTeamsWithPagination,
 };

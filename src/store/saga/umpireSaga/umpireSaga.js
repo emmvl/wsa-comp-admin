@@ -80,7 +80,7 @@ export function* addEditUmpireSaga(action) {
 
 export function* getAffiliateSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreGetAffilate, action.data);
+        const result = yield call(LiveScoreAxiosApi.liveScoreGetAffiliate, action.data);
         if (result.status === 1) {
 
             yield put({

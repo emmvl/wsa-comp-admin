@@ -1,4 +1,4 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from "themes/apiConstants";
 
 // Division action
 function getLiveScoreDivisionList(competitionID, compKey, sortBy, sortOrder) {
@@ -50,6 +50,12 @@ function liveScoreDivisionImportAction(payload) {
     };
 }
 
+function liveScoreDivisionResetImportResultAction() {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_RESET,
+    };
+}
+
 //Division action
 function getMainDivisionListAction(competitionID, offset, sortBy, sortOrder) {
     return {
@@ -67,5 +73,6 @@ export {
     createDivisionAction,
     liveScoreDeleteDivision,
     liveScoreDivisionImportAction,
+    liveScoreDivisionResetImportResultAction,
     getMainDivisionListAction,
 };

@@ -112,16 +112,17 @@ function regChangeReducer(state = initialState, action) {
         case ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD:
             return {...state, onLoad: true}
 
-        case ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD:
+        case ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_SUCCESS:
             let dashboardListData = action.result;
             return {
                 ...state,
                 onLoad: false,
-                regChangeDashboardListData: dashboardListData.orgReg,
+                regChangeDashboardListData: dashboardListData.registrationChanges,
                 regChangeDashboardListTotalCount: dashboardListData.page.totalCount,
                 regChangeDashboardListPage: dashboardListData.page
                     ? dashboardListData.page.currentPage
                     : 1,
+                    regChangeCompetitions: dashboardListData.competitions ? dashboardListData.competitions : [],
                 status: action.status,
                 error: null
             }

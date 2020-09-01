@@ -1572,6 +1572,7 @@ const AppConstants = {
   divisioAndGrades: "Division and Grades",
   combine: "Combine",
   whatRegistrationChange: "what registration change do you",
+   registrationChangeRef: "RegistrationChange",
 };
 
 export default AppConstants;
