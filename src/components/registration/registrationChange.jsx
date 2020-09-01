@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { regCompetitionListAction, clearCompReducerDataAction, regCompetitionListDeleteAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import { getRegistrationChangeDashboard } from "../../store/actions/registrationAction/registrationChangeAction";
+import { registrationChangeType } from "../../store/actions/commonAction/commonAction";
+
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
 import { getOrganisationData } from "util/sessionStorage";
@@ -226,6 +228,7 @@ class RegistrationChange extends Component {
     }
 
     componentDidMount(){
+        this.props.registrationChangeType();
         this.handleRegChangeList(1);
     }
 
@@ -448,7 +451,8 @@ function mapDispatchToProps(dispatch) {
         regCompetitionListAction, getOnlyYearListAction,
         clearCompReducerDataAction, regCompetitionListDeleteAction,
         CLEAR_OWN_COMPETITION_DATA,
-        getRegistrationChangeDashboard
+        getRegistrationChangeDashboard,
+        registrationChangeType
     }, dispatch)
 }
 
