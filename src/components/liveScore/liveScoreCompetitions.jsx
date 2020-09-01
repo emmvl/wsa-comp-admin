@@ -474,7 +474,7 @@ class LiveScoreCompetitions extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div
-                    className="fluid-width"
+                    className="row fluid-width"
                     style={{
                         maxWidth: "99%",
                         display: "flex",
@@ -492,7 +492,7 @@ class LiveScoreCompetitions extends Component {
                         </div>
                     </div>
 
-                    <div className="row">
+                    <div className="row fluid-width">
                         {this.state.orgLevel === "state" && (
                             <div className="col-sm">
                                 <div
@@ -557,7 +557,8 @@ class LiveScoreCompetitions extends Component {
                                     justifyContent: "flex-end",
                                 }}
                             >
-                                <Button className="primary-add-comp-form" type="primary">
+                                <Button className="primary-add-comp-form" type="primary"
+                                >
                                     + {AppConstants.replicateCompetition}
                                 </Button>
                             </div>
@@ -619,27 +620,26 @@ class LiveScoreCompetitions extends Component {
     ownedView = () => {
         let { ownedCompetitions, ownedTotalCount, ownedCurrentPage, ownedLoad } = this.props.liveScoreCompetition;
         return (
-            <div className="comp-dash-table-view mt-4">
-                <div className="table-responsive home-dash-table-view">
-                    <Table
-                        className="home-dashboard-table"
-                        columns={columnsOwned}
-                        dataSource={ownedCompetitions}
-                        pagination={false}
-                        loading={ownedLoad}
-                        rowKey={(record, index) => "ownedCompetitions" + record.id + index}
-                    />
-                </div>
-
-                <div className="d-flex justify-content-end">
-                    <Pagination
-                        className="antd-pagination"
-                        current={ownedCurrentPage}
-                        total={ownedTotalCount}
-                        onChange={(page) => this.handlePagination(page, "own")}
-                    />
-                </div>
-            </div>
+          <div className="comp-dash-table-view mt-4">
+              <div className="table-responsive home-dash-table-view">
+                  <Table
+                    className="home-dashboard-table"
+                    columns={columnsOwned}
+                    dataSource={ownedCompetitions}
+                    pagination={false}
+                    loading={ownedLoad}
+                    rowKey={(record, index) => "ownedCompetitions" + record.id + index}
+                  />
+              </div>
+              <div className="d-flex justify-content-end">
+                  <Pagination
+                    className="antd-pagination pb-0"
+                    current={ownedCurrentPage}
+                    total={ownedTotalCount}
+                    onChange={(page) => this.handlePagination(page, "own")}
+                  />
+              </div>
+          </div>
         );
     };
 
@@ -650,10 +650,11 @@ class LiveScoreCompetitions extends Component {
 
                 {/* <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" /> */}
 
-                {this.partHeaderView()}
-                {this.participatedView()}
+                
                 {this.dropdownButtonView()}
                 {this.ownedView()}
+                {this.partHeaderView()}
+                {this.participatedView()}
             </div >
         );
     }
