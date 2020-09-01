@@ -606,12 +606,10 @@ class CompetitionDashboard extends Component {
                 <Layout>
                     <Content>
                         {this.dropdownView()}
-
                         <Loader visible={this.props.competitionDashboardState.updateLoad} />
-
-                        {this.participatedView()}
-                        {this.dropdownButtonView()}
                         {this.ownedView()}
+                        {this.dropdownButtonView()}
+                        {this.participatedView()}
                     </Content>
                 </Layout>
             </div>
