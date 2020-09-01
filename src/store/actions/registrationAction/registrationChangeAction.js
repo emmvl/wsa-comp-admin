@@ -23,8 +23,18 @@ function updateDeregistrationData(value, key, subKey) {
     };
     return action;
 }
+
+function getRegistrationChangeDashboard(payload){
+    const action = {
+        type: ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD,
+        payload
+    }
+
+    return action;
+}
 export {
     updateRegistrationReviewAction,
     saveDeRegisterDataAction,
-    updateDeregistrationData
+    updateDeregistrationData,
+    getRegistrationChangeDashboard
 };

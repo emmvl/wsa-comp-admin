@@ -180,9 +180,10 @@ class LiveScoreAddTeam extends Component {
 
     ////////form content view
     contentView = (getFieldDecorator) => {
-        const { teamManagerData, affilateList, divisionList, managerType } = this.props.liveScoreTeamState
+        const { teamManagerData, affilateList, divisionList, managerType, logoUrl } = this.props.liveScoreTeamState
         let name = teamManagerData.name
         let alias = teamManagerData.alias
+        console.log(teamManagerData.logoUrl, 'logoUrl')
         return (
             <div className="content-view pt-4">
                 <Form.Item>
@@ -551,7 +552,7 @@ if(x[0].charCodeAt()>=97)
                                 heading={AppConstants.contactNO}
                                 placeholder={AppConstants.enterContactNo}
                                 maxLength={10}
-                                onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value,)}
+                                onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
                             // value={teamManagerData.mobileNumber}
                             />)}
                         </Form.Item>
@@ -633,6 +634,9 @@ if(x[0].charCodeAt()>=97)
 
                         if (this.state.image) {
                             formData.append('logo', this.state.image)
+                            if (this.props.liveScoreTeamState.teamLogo) {
+                                formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                            }
                         } else if (this.props.liveScoreTeamState.teamLogo) {
                             formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                         }
@@ -662,6 +666,9 @@ if(x[0].charCodeAt()>=97)
                         }
                         if (this.state.image) {
                             formData.append('logo', this.state.image)
+                            if (this.props.liveScoreTeamState.teamLogo) {
+                                formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                            }
                         } else if (this.props.liveScoreTeamState.teamLogo) {
                             formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                         }
@@ -691,6 +698,9 @@ if(x[0].charCodeAt()>=97)
                         }
                         if (this.state.image) {
                             formData.append('logo', this.state.image)
+                            if (this.props.liveScoreTeamState.teamLogo) {
+                                formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                            }
                         } else if (this.props.liveScoreTeamState.teamLogo) {
                             formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                         }

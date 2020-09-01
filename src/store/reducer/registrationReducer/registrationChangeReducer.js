@@ -56,8 +56,11 @@ const initialState = {
             organisationId: null,
             competitionId: null
         }
-        
-    }
+    },
+    regChangeDashboardListData: [], ////////registration change Dashboard list
+    regChangeDashboardListPage: 1,
+    regChangeDashboardListTotalCount: 1,
+    regChangeCompetitions: []
 }
 
 
@@ -74,17 +77,17 @@ function regChangeReducer(state = initialState, action) {
 
             };
 
-            case ApiConstants.API_SAVE_DE_REGISTRATION_LOAD:
+        case ApiConstants.API_SAVE_DE_REGISTRATION_LOAD:
             return {...state, onSaveLoad: true}
 
-            case ApiConstants.API_SAVE_DE_REGISTRATION_SUCCESS:
+        case ApiConstants.API_SAVE_DE_REGISTRATION_SUCCESS:
             return {
                 ...state,
                 onSaveLoad: false,
                 status: action.status,
             }
 
-            case ApiConstants.API_UPDATE_DE_REGISTRATION:
+        case ApiConstants.API_UPDATE_DE_REGISTRATION:
             if(action.subKey == "deRegister"){
                 if(action.key == "regChangeTypeRefId"){
                     state.saveData[action.key] = action.value;
@@ -104,7 +107,25 @@ function regChangeReducer(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-            }		 
+            }
+        
+        case ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD:
+            return {...state, onLoad: true}
+
+        case ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_SUCCESS:
+            let dashboardListData = action.result;
+            return {
+                ...state,
+                onLoad: false,
+                regChangeDashboardListData: dashboardListData.registrationChanges,
+                regChangeDashboardListTotalCount: dashboardListData.page.totalCount,
+                regChangeDashboardListPage: dashboardListData.page
+                    ? dashboardListData.page.currentPage
+                    : 1,
+                    regChangeCompetitions: dashboardListData.competitions ? dashboardListData.competitions : [],
+                status: action.status,
+                error: null
+            }
 
         default:
             return state;

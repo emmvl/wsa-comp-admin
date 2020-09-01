@@ -92,7 +92,7 @@ const columns = [
         title: 'First Name',
         dataIndex: 'incidentPlayers',
         key: 'Incident Players First Name',
-        sorter: (a, b) => a.incidentPlayers.player.firstName.length - b.incidentPlayers.player.firstName.length,
+        // sorter: (a, b) => a.incidentPlayers.player.firstName.length - b.incidentPlayers.player.firstName.length,
         // render: (incidentPlayers, record) =>
         //     <NavLink to={{
         //         pathname: '/liveScorePlayerView',
