@@ -27,24 +27,6 @@ function* failSaga(result) {
   }
 
   
-  ////// Get DeRegister Data
-export function* getDeRegisterSaga(action) {
-    try {
-      const result = yield call(AxiosApi.getDeRegisterData, action.userId);
-      if (result.status === 1) {
-        yield put({
-          type: ApiConstants.API_GET_DE_REGISTRATION_SUCCESS,
-          result: result.result.data,
-          status: result.status
-        });
-      } else {
-        yield call(failSaga, result)
-      }
-    } catch (error) {
-      yield call(errorSaga, error)
-    }
-  }
-   
   ////// Save DeRegister Data
 export function* saveDeRegisterSaga(action) {
     try {
@@ -62,5 +44,22 @@ export function* saveDeRegisterSaga(action) {
       yield call(errorSaga, error)
     }
   }
+ ////// Get Registration Change Dashboard
+ export function* getRegistrationChangeDashboardSaga(action) {
+    try {
+      const result = yield call(AxiosApi.getRegistrationChangeDashboard, action.payload);
+      if (result.status === 1) {
+        yield put({
+          type: ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_SUCCESS,
+          result: result.result.data,
+          status: result.status
+        });
+      } else {
+        yield call(failSaga, result)
+      }
+    } catch (error) {
+      yield call(errorSaga, error)
+    }
+}
 
   

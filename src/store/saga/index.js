@@ -536,5 +536,8 @@ export default function* rootSaga() {
   //Save DeRegister
   yield takeEvery(ApiConstants.API_SAVE_DE_REGISTRATION_LOAD, regChangeSaga.saveDeRegisterSaga)
  
+  //Get Registration Change Dashboard
+  yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD, regChangeSaga.getRegistrationChangeDashboardSaga)
+ 
 }
 

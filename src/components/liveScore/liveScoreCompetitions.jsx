@@ -332,43 +332,6 @@ const columnsParticipate = [
                 {status}
             </span>
         ),
-    },
-    {
-        title: "Action",
-        render: (data, record) => (
-            <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: "25px" }}
-            >
-                <Menu.SubMenu
-                    key="sub1"
-                    title={
-                        <img className="dot-image" src={AppImages.moreTripleDot} width="16" height="16" alt="" />
-                    }
-                >
-                    <Menu.Item
-                        key="1"
-                        onClick={() => {
-                            this_Obj.setCompetitionID(record);
-                        }}
-                    >
-                        <NavLink to={{ pathname: "/liveScoreSettingsView", state: "edit" }}>
-                            <span>Edit</span>
-                        </NavLink>
-                    </Menu.Item>
-                    <Menu.Item
-                        key="2"
-                        onClick={() => {
-                            this_Obj.showDeleteConfirm(record, "part");
-                        }}
-                    >
-                        <span>Delete</span>
-                    </Menu.Item>
-                </Menu.SubMenu>
-            </Menu>
-        ),
     }
 ];
 

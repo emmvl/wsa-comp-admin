@@ -46,11 +46,6 @@ const initialState = {
     ],
     reloadFormData:0,
     saveData : {
-        userId: 0,
-        competitionId: null,
-        organisationId: null,
-        membershipMappingId: null,
-        teamId: null,
         regChangeTypeRefId: 0,         // DeRegister/ Transfer
         deRegistrationOptionId: 0,   /// Yes/No
         reasonTypeRefId: 0,      
@@ -61,8 +56,11 @@ const initialState = {
             organisationId: null,
             competitionId: null
         }
-        
-    }
+    },
+    regChangeDashboardListData: [], ////////registration change Dashboard list
+    regChangeDashboardListPage: 1,
+    regChangeDashboardListTotalCount: 1,
+    regChangeCompetitions: []
 }
 
 
@@ -79,29 +77,17 @@ function regChangeReducer(state = initialState, action) {
 
             };
 
-           case ApiConstants.API_GET_DE_REGISTRATION_LOAD:
-                return {...state, onDeRegisterLoad: true}
-    
-            case ApiConstants.API_GET_DE_REGISTRATION_SUCCESS:
-                let deRegisterData = action.result;
-    
-            return {
-                ...state,
-                onDeRegisterLoad: false,
-                status: action.status
-            }
-
-            case ApiConstants.API_SAVE_DE_REGISTRATION_LOAD:
+        case ApiConstants.API_SAVE_DE_REGISTRATION_LOAD:
             return {...state, onSaveLoad: true}
 
-            case ApiConstants.API_SAVE_DE_REGISTRATION_SUCCESS:
+        case ApiConstants.API_SAVE_DE_REGISTRATION_SUCCESS:
             return {
                 ...state,
                 onSaveLoad: false,
                 status: action.status,
             }
 
-            case ApiConstants.API_UPDATE_DE_REGISTRATION:
+        case ApiConstants.API_UPDATE_DE_REGISTRATION:
             if(action.subKey == "deRegister"){
                 if(action.key == "regChangeTypeRefId"){
                     state.saveData[action.key] = action.value;
@@ -121,7 +107,24 @@ function regChangeReducer(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-            }		 
+            }
+        
+        case ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD:
+            return {...state, onLoad: true}
+
+        case ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD:
+            let dashboardListData = action.result;
+            return {
+                ...state,
+                onLoad: false,
+                regChangeDashboardListData: dashboardListData.orgReg,
+                regChangeDashboardListTotalCount: dashboardListData.page.totalCount,
+                regChangeDashboardListPage: dashboardListData.page
+                    ? dashboardListData.page.currentPage
+                    : 1,
+                status: action.status,
+                error: null
+            }
 
         default:
             return state;

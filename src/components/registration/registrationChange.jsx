@@ -8,8 +8,10 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { regCompetitionListAction, clearCompReducerDataAction, regCompetitionListDeleteAction } from "../../store/actions/registrationAction/competitionFeeAction";
+import { getRegistrationChangeDashboard } from "../../store/actions/registrationAction/registrationChangeAction";
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
+import { getOrganisationData } from "util/sessionStorage";
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -208,17 +210,45 @@ class RegistrationChange extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
             deleteLoading: false,
             userRole: "",
             searchText: '',
             competition: 'All',
-            type: 'All'
+            type: 'All',
+            yearRefId: -1,
+            competitionId: "-1",
+            organisationId: getOrganisationData().organisationUniqueKey,
+            regChangeTypeRefId: -1,
+
         };
         this_Obj = this;
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
+    handleRegChangeList = (page) =>{
+        const {
+            yearRefId,
+            competitionId,
+            organisationId,
+            regChangeTypeRefId
+        } = this.state;
+
+        let filter = {
+            organisationId,
+            yearRefId,
+            competitionId,
+            regChangeTypeRefId,
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0),
+            },
+        };
+
+        this.props.getRegistrationChangeDashboard(filter);
+
+        this.setState({ filter });
+
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -240,12 +270,14 @@ class RegistrationChange extends Component {
         );
     };
 
-    //////year change onchange
-    yearChange = (yearRefId) => {
-        this.setState({ yearRefId })
-        // this.handleCompetitionTableList(1, yearRefId, this.state.searchText)
-    }
-    // on change search text
+    onChangeDropDownValue = async (value, key) => {
+        await this.setState({
+            [key]: value,
+        });
+
+        this.handleRegChangeList(1);
+    };
+    
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
@@ -260,8 +292,9 @@ class RegistrationChange extends Component {
                                     className="year-select reg-filter-select1 ml-2"
                                     // style={{ width: 90 }}
                                     value={this.state.yearRefId}
-                                    onChange={(e) => this.yearChange(e)}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "yearRefId")}
                                 >
+                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {this.props.appState.yearList.map(item => {
                                         return (
                                             <Option key={"yearRefId" + item.id} value={item.id}>
@@ -280,7 +313,7 @@ class RegistrationChange extends Component {
                                     className="year-select reg-filter-select-competition ml-2"
                                     // style={{ minWidth: 200 }}
                                     value={this.state.competition}
-                                // onChange={(e) => this.yearChange(e)}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "competitionId")}
                                 >
                                     <Option value={'All'}>{'All'}</Option>
                                 </Select>
@@ -342,24 +375,24 @@ class RegistrationChange extends Component {
 
     ////////form content view
     contentView = () => {
-
+        const {regChangeDashboardListData,regChangeDashboardListPage,regChangeDashboardListTotalCount} = this.props.regChangeState;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={Data}
+                        dataSource={regChangeDashboardListData}
                         pagination={false}
-                    // loading={this.props.competitionFeesState.onLoad == true && true}
+                     loading={this.props.regChangeState.onLoad == true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                    // current={competitionFeesState.regCompetitonFeeListPage}
-                    // total={total}
-                    // onChange={(page) => this.handleCompetitionTableList(page, this.state.yearRefId, this.state.searchText)}
+                        current={regChangeDashboardListPage}
+                        total={regChangeDashboardListTotalCount}
+                        onChange={(page) => this.handleRegChangeList(page)}
                     />
                 </div>
             </div>
@@ -389,13 +422,15 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         regCompetitionListAction, getOnlyYearListAction,
         clearCompReducerDataAction, regCompetitionListDeleteAction,
-        CLEAR_OWN_COMPETITION_DATA
+        CLEAR_OWN_COMPETITION_DATA,
+        getRegistrationChangeDashboard
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
         competitionFeesState: state.CompetitionFeesState,
+        regChangeState: state.RegistrationChangeState,
         appState: state.AppState,
     }
 }
