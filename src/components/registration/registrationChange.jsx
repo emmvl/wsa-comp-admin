@@ -40,21 +40,21 @@ const columns = [
             },
             {
                 title: '1st Affiliate',
-                dataIndex: 'currentAffiliate_1',
-                key: 'currentAffiliate_1',
-                sorter: (a, b) => tableSort(a, b, "currentAffiliate_1")
+                dataIndex: 'affiliate1Name',
+                key: 'affiliate1Name',
+                sorter: (a, b) => tableSort(a, b, "affiliate1Name")
             },
             {
                 title: '2nd Affiliate',
-                dataIndex: 'currentAffiliate_2',
-                key: 'currentAffiliate_2',
-                sorter: (a, b) => tableSort(a, b, "currentAffiliate_2")
+                dataIndex: 'affiliate2Name',
+                key: 'affiliate2Name',
+                sorter: (a, b) => tableSort(a, b, "affiliate2Name")
             },
             {
                 title: 'Competition',
-                dataIndex: 'currentCompetition',
-                key: 'currentCompetition',
-                sorter: (a, b) => tableSort(a, b, "currentCompetition")
+                dataIndex: 'competitionName',
+                key: 'competitionName',
+                sorter: (a, b) => tableSort(a, b, "competitionName")
             },
         ]
     },
@@ -86,9 +86,9 @@ const columns = [
         children: [
             {
                 title: 'Membership Type',
-                dataIndex: 'membershipType',
-                key: 'membershipType',
-                sorter: (a, b) => tableSort(a, b, "membershipType")
+                dataIndex: 'membershipTypeName',
+                key: 'membershipTypeName',
+                sorter: (a, b) => tableSort(a, b, "membershipTypeName")
             },
             {
                 title: 'Paid',
@@ -98,33 +98,33 @@ const columns = [
             },
             {
                 title: 'Type',
-                dataIndex: 'type',
-                key: 'type',
-                sorter: (a, b) => tableSort(a, b, "type")
+                dataIndex: 'regChangeType',
+                key: 'regChangeType',
+                sorter: (a, b) => tableSort(a, b, "regChangeType")
             },
             {
                 title: '1st Affiliate',
-                dataIndex: 'approvalAffiliate_1',
-                key: 'approvalAffiliate_1',
-                sorter: (a, b) => tableSort(a, b, "approvalAffiliate_1")
+                dataIndex: 'affiliate1Approved',
+                key: 'affiliate1Approved',
+                sorter: (a, b) => tableSort(a, b, "affiliate1Approved")
             },
             {
                 title: '2nd Affiliate',
-                dataIndex: 'approvalAffiliate_2',
-                key: 'approvalAffiliate_2',
-                sorter: (a, b) => tableSort(a, b, "approvalAffiliate_2")
+                dataIndex: 'affiliate2Approved',
+                key: 'affiliate2Approved',
+                sorter: (a, b) => tableSort(a, b, "affiliate2Approved")
             },
             {
                 title: 'State',
-                dataIndex: 'state',
-                key: 'state',
-                sorter: (a, b) => tableSort(a, b, "state")
+                dataIndex: 'stateApproved',
+                key: 'stateApproved',
+                sorter: (a, b) => tableSort(a, b, "stateApproved")
             },
             {
                 title: 'Status',
-                dataIndex: 'status',
-                key: 'status',
-                sorter: (a, b) => tableSort(a, b, "status")
+                dataIndex: 'approvedStatus',
+                key: 'approvedStatus',
+                sorter: (a, b) => tableSort(a, b, "approvedStatus")
             },
             {
                 title: "Action",
@@ -225,6 +225,10 @@ class RegistrationChange extends Component {
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
+    componentDidMount(){
+        this.handleRegChangeList(1);
+    }
+
     handleRegChangeList = (page) =>{
         const {
             yearRefId,
@@ -281,6 +285,16 @@ class RegistrationChange extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
+        console.log("this.props.regChangeState", this.props.regChangeState);
+        const {regChangeCompetitions} = this.props.regChangeState;
+        const {regChangeTypes} = this.props.commonReducerState;
+        let competitionList;
+        if (this.state.yearRefId !== -1) {
+            competitionList = regChangeCompetitions.filter(x => x.yearRefId === this.state.yearRefId);
+        } else {
+            competitionList = regChangeCompetitions;
+        }
+
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
@@ -312,10 +326,18 @@ class RegistrationChange extends Component {
                                 <Select
                                     className="year-select reg-filter-select-competition ml-2"
                                     // style={{ minWidth: 200 }}
-                                    value={this.state.competition}
+                                    value={this.state.competitionId}
                                     onChange={(e) => this.onChangeDropDownValue(e, "competitionId")}
                                 >
-                                    <Option value={'All'}>{'All'}</Option>
+                                   <Option key={-1} value="-1">{AppConstants.all}</Option>
+                                    {(competitionList || []).map((item, cIndex) => (
+                                        <Option
+                                            key={"competition" + item.competitionId + cIndex}
+                                            value={item.competitionId}
+                                        >
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -326,10 +348,13 @@ class RegistrationChange extends Component {
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}
-                                    value={this.state.type}
-                                // onChange={(e) => this.yearChange(e)}
+                                    value={this.state.regChangeTypeRefId}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "regChangeTypeRefId")}
                                 >
-                                    <Option value={'All'}>{'All'}</Option>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {(regChangeTypes || []).map((g, index) => (
+                                        <Option key={g.id} value={g.id}>{g.description}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -432,6 +457,7 @@ function mapStatetoProps(state) {
         competitionFeesState: state.CompetitionFeesState,
         regChangeState: state.RegistrationChangeState,
         appState: state.AppState,
+        commonReducerState: state.CommonReducerState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)((RegistrationChange));

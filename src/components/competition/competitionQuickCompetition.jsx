@@ -56,7 +56,7 @@ class CompetitionQuickCompetition extends Component {
             venueButtonClicked: ""
         }
         this.props.updateCompetition("", "allData")
-        this.props.getVenuesTypeAction()
+        this.props.getVenuesTypeAction('all')
         this.props.getYearAndQuickCompetitionAction(
             this.props.quickCompetitionState.quick_CompetitionYearArr,
             null,
