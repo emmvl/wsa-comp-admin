@@ -232,8 +232,8 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    liveScoreIncidentList(competitionID, search) {
-        const url = `/incident?competitionId=${competitionID}&search=${search}`;
+    liveScoreIncidentList(competitionID, search, limit, offset, sortBy, sortOrder) {
+        const url = `/incident?competitionId=${competitionID}&search=${search}&limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         return Method.dataGet(url, token)
     },
 
@@ -861,12 +861,19 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreAttendanceList(competitionId, body, select_status) {
+    liveScoreAttendanceList(competitionId, payload, select_status) {
         let url
+        const body =
+        {
+            "paging": payload.paging,
+            "search": payload.search,
+        }
+        let sortBy = payload.sortBy ? payload.sortBy : null
+        let sortOrder = payload.sortOrder ? payload.sortOrder : null
         if (select_status === 'All') {
-            url = `/players/activity?competitionId=${competitionId}&status=${""}`
+            url = `/players/activity?competitionId=${competitionId}&status=${""}&sortBy=${sortBy}&sortOrder=${sortOrder}`
         } else {
-            url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
+            url = `/players/activity?competitionId=${competitionId}&status=${select_status}&sortBy=${sortBy}&sortOrder=${sortOrder}`
         }
         return Method.dataPost(url, token, body)
     },

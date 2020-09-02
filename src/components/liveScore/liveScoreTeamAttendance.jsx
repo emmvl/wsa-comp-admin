@@ -16,22 +16,48 @@ import { exportFilesAction } from "../../store/actions/appAction"
 import { getLiveScoreDivisionList } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
 import { liveScoreRoundListAction } from "../../store/actions/LiveScoreAction/liveScoreRoundAction";
 
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
-}
-
 const { Content } = Layout;
 const { Option } = Select;
+let this_Obj = null;
+
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = "ASC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "ASC") {
+        sortOrder = "DESC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "DESC") {
+        sortBy = sortOrder = null;
+    }
+
+    this_Obj.setState({ sortBy, sortOrder });
+    let { limit, offset, competitionId, searchText, selectStatus } = this_Obj.state
+    const body =
+    {
+        "paging": {
+            "limit": limit,
+            "offset": offset
+        },
+        "search": searchText,
+        "sortBy": sortBy,
+        "sortOrder": sortOrder
+    }
+    this_Obj.props.liveScoreTeamAttendanceListAction(competitionId, body, selectStatus)
+}
+
 const columns = [
 
     {
         title: 'Match id',
         dataIndex: 'matchId',
         key: 'matchId',
-        sorter: (a, b) => tableSort(a, b, "matchId"),
+        sorter: true,
+        onHeaderCell: () => listeners("matchId"),
         render: (matchId) =>
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
@@ -45,7 +71,8 @@ const columns = [
         title: 'Start Time',
         dataIndex: 'startTime',
         key: 'startTime',
-        sorter: (a, b) => tableSort(a, b, 'startTime'),
+        sorter: true,
+        onHeaderCell: () => listeners("startTime"),
         render: (teamName) =>
             <span >{liveScore_formateDateTime(teamName)}</span>
     },
@@ -53,7 +80,8 @@ const columns = [
         title: 'Team',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => tableSort(a, b, 'name'),
+        sorter: true,
+        onHeaderCell: () => listeners("team"),
         render: (name) =>
             <span >{name}</span>
 
@@ -71,13 +99,15 @@ const columns = [
         title: 'Player Id',
         dataIndex: 'playerId',
         key: 'playerId',
-        sorter: (a, b) => tableSort(a, b, 'playerId'),
+        sorter: true,
+        onHeaderCell: () => listeners("playerId"),
     },
     {
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => tableSort(a, b, 'firstName'),
+        sorter: true,
+        onHeaderCell: () => listeners("firstName"),
         render: (firstName) =>
             <span className="input-heading-add-another pt-0">{firstName}</span>
 
@@ -86,7 +116,8 @@ const columns = [
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => tableSort(a, b, 'lastName'),
+        sorter: true,
+        onHeaderCell: () => listeners("lastName"),
         render: (lastName) =>
 
             <span className="input-heading-add-another pt-0">{lastName}</span>
@@ -96,19 +127,22 @@ const columns = [
         title: 'Division',
         dataIndex: 'divisionName',
         key: 'divisionName',
-        sorter: (a, b) => tableSort(a, b, 'divisionName'),
+        sorter: true,
+        onHeaderCell: () => listeners("division"),
     },
     {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        sorter: (a, b) => tableSort(a, b, 'status'),
+        sorter: true,
+        onHeaderCell: () => listeners("status"),
     },
     {
         title: 'Position',
         dataIndex: 'positionName',
         key: 'positionName',
-        sorter: (a, b) => tableSort(a, b, 'positionName'),
+        sorter: true,
+        onHeaderCell: () => listeners("position"),
     },
 ];
 
@@ -124,8 +158,11 @@ class LiveScoreTeamAttendance extends Component {
             searchText: "",
             selectedDivision: "All",
             selectedRound: "All",
-            divisionLoad: false
+            divisionLoad: false,
+            offset: 0,
+            limit: 10,
         }
+        this_Obj = this
     }
 
 
@@ -162,7 +199,7 @@ class LiveScoreTeamAttendance extends Component {
 
     handleTablePagination(page) {
         let offset = page ? 10 * (page - 1) : 0;
-
+        this.setState({ offset })
         const paginationBody = {
             "paging": {
                 "limit": 10,
