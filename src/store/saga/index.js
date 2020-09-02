@@ -19,6 +19,7 @@ import shopProductSaga from "./shopSaga/shopProductSaga";
 import shopSettingSaga from "./shopSaga/shopSettingSaga";
 import stripeSaga from "./stripeSaga";
 import supportSaga from "./supportSaga";
+import umpireDashboardSaga from "./umpireSaga/umpireDashboardSaga";
 import userSaga from "./userSaga";
 
 import {
@@ -147,7 +148,6 @@ import { laddersSettingGetMatchResult, laddersSettingGetData, laddersSettingPost
 import { liveScoreChangeVenueSaga } from "./liveScoreSaga/liveScoreVenueChangeSaga"
 import { getLiveScoreFixtureCompSaga } from "./liveScoreSaga/liveScoreFixtureCompSaga";
 
-import * as umpireDashboardSaga from "../saga/umpireSaga/umpireDashboardSaga"
 import * as umpireCompSaga from "../saga/umpireSaga/umpireCompetitionSaga"
 import * as umpireRoasterSaga from "../saga/umpireSaga/umpireRoasterSaga"
 import * as umpireSaga from "../saga/umpireSaga/umpireSaga"
@@ -188,6 +188,9 @@ export default function* rootSaga() {
 
     // Support
     fork(supportSaga),
+
+    // Umpire
+    fork(umpireDashboardSaga),
 
     // User
     fork(userSaga),
@@ -456,12 +459,8 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_GET_ALL_COMPETITION_LOAD, getCompetitionSaga)
   yield takeEvery(ApiConstants.API_FIXTURE_TEMPLATE_ROUNDS_LOAD, fixtureTemplateSaga)
   yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_LIST_LOAD, umpireRoasterSaga.umpireRoasterListSaga)
-  yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_VENUE_LIST_LOAD, umpireDashboardSaga.umpireVenueListSaga)
   yield takeEvery(ApiConstants.API_UMPIRE_ROASTER_ACTION_CLICK_LOAD, umpireRoasterSaga.umpireActionPerofomSaga)
-  yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_DIVISION_LIST_LOAD, umpireDashboardSaga.umpireDivisionListSaga)
-  yield takeEvery(ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_LOAD, umpireDashboardSaga.umpireListDashboardSaga)
-  ///Update Action Box
-  yield takeEvery(ApiConstants.API_UMPIRE_IMPORT_LOAD, umpireDashboardSaga.umpireImportSaga)
+
   //////assign umpire get list
   yield takeEvery(ApiConstants.API_GET_ASSIGN_UMPIRE_LIST_LOAD, assignUmpireSaga.getAssignUmpireListSaga)
   //////assign umpire get list
@@ -506,8 +505,6 @@ export default function* rootSaga() {
   // Check venue address duplication
   // yield takeEvery(ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD, checkVenueAddressDuplicationSaga);
 
-  // Umpire Round Saga
-  yield takeEvery(ApiConstants.API_UMPIRE_ROUND_LIST_LOAD, umpireDashboardSaga.umpireRoundListSaga)
   yield takeEvery(ApiConstants.API_INNER_HORIZONTAL_COMPETITION_LIST_LOAD, getInnerHorizontalCompSaga)
 
   // Add quick competition venue

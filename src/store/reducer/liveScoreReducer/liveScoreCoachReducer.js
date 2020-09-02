@@ -183,7 +183,11 @@ function liveScoreCoachState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_COACH_IMPORT_LOAD:
-            return { ...state, onLoad: true };
+            return {
+                ...state,
+                onLoad: true,
+                importResult: null,
+            };
 
         case ApiConstants.API_LIVE_SCORE_COACH_IMPORT_SUCCESS:
             return {
