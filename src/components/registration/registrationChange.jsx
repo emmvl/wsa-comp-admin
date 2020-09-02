@@ -41,16 +41,16 @@ const columns = [
                 sorter: (a, b) => tableSort(a, b, "userName")
             },
             {
-                title: '1st Affiliate',
-                dataIndex: 'affiliate1Name',
-                key: 'affiliate1Name',
-                sorter: (a, b) => tableSort(a, b, "affiliate1Name")
+                title: 'Comp Organiser',
+                dataIndex: 'compOrganiserName',
+                key: 'compOrganiserName',
+                sorter: (a, b) => tableSort(a, b, "compOrganiserName")
             },
             {
-                title: '2nd Affiliate',
-                dataIndex: 'affiliate2Name',
-                key: 'affiliate2Name',
-                sorter: (a, b) => tableSort(a, b, "affiliate2Name")
+                title: 'Affiliate',
+                dataIndex: 'affiliateName',
+                key: 'affiliateName',
+                sorter: (a, b) => tableSort(a, b, "affiliateName")
             },
             {
                 title: 'Competition',
@@ -105,16 +105,16 @@ const columns = [
                 sorter: (a, b) => tableSort(a, b, "regChangeType")
             },
             {
-                title: '1st Affiliate',
-                dataIndex: 'affiliate1Approved',
-                key: 'affiliate1Approved',
-                sorter: (a, b) => tableSort(a, b, "affiliate1Approved")
+                title: 'Comp Organiser',
+                dataIndex: 'compOrganiserApproved',
+                key: 'compOrganiserApproved',
+                sorter: (a, b) => tableSort(a, b, "compOrganiserApproved")
             },
             {
-                title: '2nd Affiliate',
-                dataIndex: 'affiliate2Approved',
-                key: 'affiliate2Approved',
-                sorter: (a, b) => tableSort(a, b, "affiliate2Approved")
+                title: 'Affiliate',
+                dataIndex: 'affiliateApproved',
+                key: 'affiliateApproved',
+                sorter: (a, b) => tableSort(a, b, "affiliateApproved")
             },
             {
                 title: 'State',
