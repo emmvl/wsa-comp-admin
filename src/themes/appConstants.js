@@ -1564,7 +1564,6 @@ const AppConstants = {
   extraTimeqtrBreak: "Extra Time Quarter Break",
   alsoAssignAsUmpireCoach: "Also assign as Umpire Coach",
   recordGoalAttempt: "Record goal attempt",
-  positionTracking: "Position tracking",
   addAnotherPool: "Add Pool",
   mergeCompetition: "Merge Competition",
   differencesBetween: "There are some differences between",
@@ -1572,7 +1571,8 @@ const AppConstants = {
   divisioAndGrades: "Division and Grades",
   combine: "Combine",
   whatRegistrationChange: "what registration change do you",
-   registrationChangeRef: "RegistrationChange",
+  registrationChangeRef: "RegistrationChange",
+  reasonWhyYourAreDecline: "Reason why you are declining the request for de-registration?",
 };
 
 export default AppConstants;

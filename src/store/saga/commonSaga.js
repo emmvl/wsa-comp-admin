@@ -4,7 +4,7 @@ import { message } from "antd";
 import AppConstants from "themes/appConstants";
 import ApiConstants from "themes/apiConstants";
 import ValidationConstants from "themes/validationConstant";
-import CommonAxiosApi from "store/http/commonHttp/commonAxios";
+import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
 
 function* failSaga(result) {
   yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });

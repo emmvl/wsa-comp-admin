@@ -1,9 +1,9 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function updateRegistrationReviewAction(data) {
+function updateRegistrationReviewAction(value, key) {
     const action = {
         type: ApiConstants.API_UPDATE_REG_REVIEW,
-        data
+        value, key
     };
     return action;
 }
@@ -32,9 +32,29 @@ function getRegistrationChangeDashboard(payload){
 
     return action;
 }
+
+function getRegistrationChangeReview(payload){
+    const action = {
+        type: ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_LOAD,
+        payload
+    }
+
+    return action;
+}
+
+function saveRegistrationChangeReview(payload){
+    const action = {
+        type: ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_LOAD,
+        payload
+    }
+
+    return action;
+}
 export {
     updateRegistrationReviewAction,
     saveDeRegisterDataAction,
     updateDeregistrationData,
-    getRegistrationChangeDashboard
+    getRegistrationChangeDashboard,
+    getRegistrationChangeReview,
+    saveRegistrationChangeReview
 };

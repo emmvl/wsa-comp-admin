@@ -190,7 +190,11 @@ function liveScoreMangerState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_LOAD:
-            return { ...state, onLoad: true };
+            return {
+                ...state,
+                onLoad: true,
+                importResult: null,
+            };
 
         case ApiConstants.API_LIVE_SCORE_MANAGER_IMPORT_SUCCESS:
             return {

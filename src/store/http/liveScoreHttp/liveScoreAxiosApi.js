@@ -109,7 +109,6 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreCompetition(data, year, orgKey, recordUmpireTypes, sortBy, sortOrder) {
-        console.log(data, year, orgKey, recordUmpireTypes, sortBy, sortOrder)
         let url = null;
         if (orgKey) {
             if (recordUmpireTypes) {

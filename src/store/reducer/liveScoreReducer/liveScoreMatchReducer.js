@@ -43,7 +43,6 @@ const object = {
     abandoneReason: null,
     isFinals: false,
     extraTimeType: null,
-    extraTimeDuration: null,
     extraTimeMainBreak: null,
     extraTimeqtrBreak: null,
     extraTimeWinByGoals: null,
@@ -579,7 +578,11 @@ function liveScoreMatchReducer(state = initialState, action) {
             return { ...state, onLoad: false };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_LOAD:
-            return { ...state, onLoad: true };
+            return {
+                ...state,
+                onLoad: true,
+                importResult: null,
+            };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_SUCCESS:
             return {

@@ -20,17 +20,15 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ValidationConstants from "../../themes/validationConstant";
 import { isArrayNotEmpty } from '../../util/helpers';
-import { updateRegistrationReviewAction } from '../../store/actions/registrationAction/registrationChangeAction'
+import { updateRegistrationReviewAction, getRegistrationChangeReview, saveRegistrationChangeReview } 
+        from '../../store/actions/registrationAction/registrationChangeAction'
 import { captializedString } from "../../util/helpers"
 import moment, { utc } from "moment";
-
-
+import { getOrganisationData } from "util/sessionStorage";
+import history from '../../util/history'
+import Loader from '../../customComponents/loader';
 
 const { Header, Footer, Content } = Layout;
-const { Option } = Select;
-const { TextArea } = Input;
-
-
 
 let this_Obj = null;
 
@@ -38,20 +36,160 @@ class RegistrationChangeReview extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: false
+            acceptVisible: false,
+            declineVisible: false,
+            deRegisterId: null,
+            organisationId: getOrganisationData().organisationUniqueKey,
+            loading: false
         };
         this_Obj = this;
-
-
     }
 
     componentDidMount() {
-
-        // this.props.getYearAndCompetitionAction(this.props.appState.yearList, null)
-
-
+        let deRegisterId = this.props.location? this.props.location.deRegisterId ?  this.props.location.deRegisterId: null:  null;
+        console.log("deRegisterId::" + deRegisterId)
+        this.setState({deRegisterId});
+        this.apiCall(deRegisterId);
     }
 
+    componentDidUpdate(nextProps){
+        let regChangeState = this.props.registrationChangeState;
+        if(this.state.loading == true && regChangeState.onSaveLoad == false){
+            this.goBack();
+        }
+    }
+
+    apiCall = (deRegisterId) =>{
+        let payload = {
+            deRegisterId : deRegisterId,
+            organisationId: this.state.organisationId
+        }
+
+        this.props.getRegistrationChangeReview(payload);
+    }
+
+    acceptModal = (key) => {
+        if(key == "show"){
+            this.setState({acceptVisible: true });
+        }
+        else if(key == "ok"){
+            console.log("^^^^^^^^^^^")
+            this.setState({acceptVisible: false });
+            this.saveReview();
+        }
+        else {
+            this.setState({acceptVisible: false });
+        }
+       
+    };
+
+    declineModal = (key) => {
+        if(key == "show"){
+            this.setState({declineVisible: true });
+        }
+        else if(key == "ok"){
+            this.setState({declineVisible: false });
+        }
+        else {
+            this.setState({declineVisible: false });
+        }
+       
+    };
+
+    goBack = () =>{
+        history.push({pathname:'/registrationChange'});
+    }
+
+    updateRegistrationReview = (value, key) =>{
+        this.props.updateRegistrationReviewAction(value,key);
+    }
+
+    saveReview = () =>{
+        console.log("$$$$$$$$$$$$$$44")
+        let reviewSaveData = this.props.registrationChangeState.reviewSaveData;
+        let regChangeReviewData = this.props.registrationChangeState.regChangeReviewData;
+        if(reviewSaveData.refundTypeRefId!= null){
+            if(reviewSaveData.refundTypeRefId == 1){
+                reviewSaveData.refundAmount = regChangeReviewData.fullAmount;
+            }
+        }else{
+            reviewSaveData.refundAmount = regChangeReviewData.fullAmount;
+        }
+        reviewSaveData["organisationId"] = this.state.organisationId;
+        reviewSaveData["deRegisterId"] = this.state.deRegisterId;
+        this.props.saveRegistrationChangeReview(reviewSaveData);
+        this.setState({loading: true});
+    }
+
+    onSaveClick = (e) => {
+        console.log("************")
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                
+            }
+        });
+    }
+        
+
+
+    ////modal view
+    acceptModalView(getFieldDecorator) {
+        const {reviewSaveData} = this.props.registrationChangeState;
+        return (
+            <Modal
+                title={"Refund"}
+                visible={this.state.acceptVisible}
+                onCancel={ () => this.acceptModal("cancel")}
+                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
+                okText={'Save'}
+                onOk = { () => this.acceptModal("ok")}
+                centered={true}>
+                <Radio.Group className="reg-competition-radio"
+                    value={reviewSaveData.refundTypeRefId}
+                    onChange={(e) => this.updateRegistrationReview(e.target.value,"refundTypeRefId")}>
+                    <Radio  value={1}>{'Refund full amount'}</Radio>
+                    <Radio  value={2}>{'Refund partial payment'}</Radio>
+                    {reviewSaveData.refundTypeRefId == 2 ? 
+                    <InputWithHead
+                            value={reviewSaveData.refundAmount}
+                            onChange={(e) => this.updateRegistrationReview(e.target.value,"refundAmount")}
+                        />
+                        : null }
+                </Radio.Group>
+            </Modal>
+        )
+    }
+
+    declineModalView(getFieldDecorator) {
+        const {reviewSaveData} = this.props.registrationChangeState;
+        return (
+            <Modal
+                title={"Decline"}
+                visible={this.state.declineVisible}
+                onCancel={ () => this.declineModal("cancel")}
+                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
+                okText={'Save'}
+                onOk = { () => this.declineModal("ok")}
+                centered={true}>
+                <InputWithHead heading={AppConstants.reasonWhyYourAreDecline} />
+                <Radio.Group className="reg-competition-radio"
+                    value={reviewSaveData.declineReasonRefId}
+                    onChange={(e) => this.updateRegistrationReview(e.target.value,"declineReasonRefId")}>
+                    <Radio value={1}>{'They have already taken the court for training, grading or a competition game'}</Radio>
+                    <Radio value={2}>{'They owe monies'}</Radio>
+                    <Radio value={3}>{'Other'}</Radio>
+                    {reviewSaveData.declineReasonRefId == 3 ? 
+                    <InputWithHead
+                            value={reviewSaveData.otherInfo}
+                            onChange={(e) => this.updateRegistrationReview(e.target.value,"otherInfo")}
+                        />
+                     : null}
+                </Radio.Group>
+
+            </Modal>
+        )
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -82,96 +220,29 @@ class RegistrationChangeReview extends Component {
         );
     }
 
-    ////method to show modal view after click
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    };
-
-    ////method to hide modal view after ok click
-    handleOk = e => {
-        this.setState({
-            visible: false,
-        });
-    };
-
-    ////method to hide modal view after click on cancle button
-    handleCancel = e => {
-        this.setState({
-            visible: false,
-        });
-    };
-
-    ////modal view
-    ModalView(getFieldDecorator) {
-        return (
-            <Modal
-                visible={this.state.visible}
-                // onOk={this.state.createRound.length == 0 ? this.handleSubmit : this.onCreateRound}
-                onCancel={this.handleCancel}
-                // onChange={(createRound) => this.props.liveScoreUpdateMatchAction(createRound, "")}
-                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
-                okText={'Save'}
-                centered={true}
-            >
-                <Radio.Group
-                    className="reg-competition-radio"
-                >
-
-                    <Radio value={'Refund full amount'}>{'Refund full amount'}</Radio>
-                    <Radio value={'Refund partial payment'}>{'Refund partial payment'}</Radio>
-
-                </Radio.Group>
-
-            </Modal>
-        )
-    }
-
-
-
-
     ////////form content view
     contentView = (getFieldDecorator) => {
 
-        const { detailsData } = this.props.registrationChangeState
-        console.log(detailsData, 'detailsData')
-
-        const reasonToDeRegisterArr = [
-            { id: AppConstants.overCommited, name: AppConstants.overCommited },
-            { id: AppConstants.injuredOrHealthReason, name: AppConstants.injuredOrHealthReason },
-            { id: AppConstants.decideNotToParticipate, name: AppConstants.decideNotToParticipate },
-            { id: AppConstants.moveToDiffGeographicalArea, name: AppConstants.moveToDiffGeographicalArea },
-            { id: AppConstants.otherReason, name: AppConstants.otherReason },
-        ]
+        const { regChangeReviewData, deRegistionOption, reviewSaveData } = this.props.registrationChangeState
+        console.log(reviewSaveData, 'reviewSaveData')
 
         return (
             <div className="content-view pt-4">
                 <div className="row">
                     <div className="col-sm">
-
                         <InputWithHead
+                            disabled={true}
                             heading={AppConstants.username}
                             placeholder={AppConstants.username}
-                            value={detailsData.userName}
-                            onChange={(e) => this.props.updateRegistrationReviewAction({ data: captializedString(e.target.value), key: 'userName' })}
-                        // onBlur={(i) => this.props.form.setFieldsValue({
-                        //     'userName': captializedString(i.target.value)
-                        // })}
+                            value={regChangeReviewData ? regChangeReviewData.userName : null}
                         />
-
-
                     </div>
                     <div className="col-sm">
-
                         <InputWithHead
+                            disabled={true}
                             heading={AppConstants.userIsRegisteredTo}
                             placeholder={AppConstants.userIsRegisteredTo}
-                            value={detailsData.userRegister}
-                            onChange={(e) => this.props.updateRegistrationReviewAction({ data: captializedString(e.target.value), key: 'userRegister' })}
-                        // onBlur={(i) => this.props.form.setFieldsValue({
-                        //     'userRegister': captializedString(i.target.value)
-                        // })}
+                            value={regChangeReviewData ? regChangeReviewData.userRegisteredTo : null}
                         />
 
                     </div>
@@ -179,26 +250,20 @@ class RegistrationChangeReview extends Component {
 
                 <div className="row">
                     <div className='col-sm'>
-                        <InputWithHead heading={AppConstants.competition_name} />
-                        <Select
-                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                            placeholder={AppConstants.competition}
-                            filterOption={false}
-                            value={detailsData.competitionName ? detailsData.competitionName : undefined}
-                            onChange={(compId) => this.props.updateRegistrationReviewAction({ data: compId, key: 'competitionName' })}
-                        >
-                        </Select>
+                        <InputWithHead
+                            disabled={true}
+                            heading={AppConstants.competition_name}
+                            placeholder={AppConstants.competition_name}
+                            value={regChangeReviewData ? regChangeReviewData.competitionName : null}
+                        />
                     </div>
 
                     <div className="col-sm">
                         <InputWithHead
+                            disabled={true}
                             heading={AppConstants.competitionAdministrator}
                             placeholder={AppConstants.competitionAdministrator}
-                            value={detailsData.competitionAdministrator}
-                            onChange={(e) => this.props.updateRegistrationReviewAction({ data: captializedString(e.target.value), key: 'competitionAdministrator' })}
-                        // onBlur={(i) => this.props.form.setFieldsValue({
-                        //     'competitionAdministrator': captializedString(i.target.value)
-                        // })}
+                            value={regChangeReviewData ?  regChangeReviewData.competitionOrgName : null}
                         />
                     </div>
                 </div>
@@ -209,74 +274,70 @@ class RegistrationChangeReview extends Component {
                     <div className='col-sm'>
                         <InputWithHead heading={AppConstants.dateRegChange} />
                         <DatePicker
+                            disabled={true}
                             size="large"
                             style={{ width: "100%" }}
                             format={"DD-MM-YYYY"}
                             showTime={false}
-                            name={'registrationChange'}
+                            name={'createdOn'}
                             placeholder={"dd-mm-yyyy"}
-                            onChange={(date) => this.props.updateRegistrationReviewAction({ data: moment(date, 'YYYY-MM-DD'), key: 'regDate' })}
-                            value={detailsData.regDate}
+                            value={regChangeReviewData.createdOn!= null && moment(regChangeReviewData.createdOn) }
                         />
                     </div>
 
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.dateCompStart} />
                         <DatePicker
+                            disabled={true}
                             size="large"
                             style={{ width: "100%" }}
                             format={"DD-MM-YYYY"}
                             showTime={false}
-                            name={'competitionStart'}
+                            name={'startDate'}
                             placeholder={"dd-mm-yyyy"}
-                            onChange={(date) => this.props.updateRegistrationReviewAction({ data: moment(date, 'YYYY-MM-DD'), key: 'compDate' })}
-                            value={detailsData.compDate}
+                            value={regChangeReviewData.startDate !== null && moment(regChangeReviewData.startDate)}
                         />
                     </div>
                 </div>
 
 
                 <div >
-                    <InputWithHead heading={AppConstants.regChangeType} />
-                    <Select
-                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                        placeholder={AppConstants.regChangeType}
-                        filterOption={false}
-                        onChange={(id) => this.props.updateRegistrationReviewAction({ data: id, key: 'regChangeType' })}
-                        value={detailsData.regChangeType ? detailsData.regChangeType : undefined}
-                    >
-                        <Option value={'De-Register'} > {'De-Register'}</Option>
-                    </Select>
+                    <InputWithHead
+                            disabled={true}
+                            heading={AppConstants.regChangeType}
+                            placeholder={AppConstants.regChangeType}
+                            value={regChangeReviewData ?  regChangeReviewData.regChangeType : null}
+                        />
                 </div>
 
                 <div>
                     <InputWithHead heading={AppConstants.doTheySayForGame} />
                     <Radio.Group
+                        disabled={true}
                         className="reg-competition-radio"
-                        value={detailsData.courtGame}
-                        onChange={(e) => this.props.updateRegistrationReviewAction({ data: e.target.value, key: 'courtGame' })}
+                        value={regChangeReviewData ?  (regChangeReviewData.reasonTypeRefId!= null ? 2 : 1)  : null}
                     >
-                        <Radio value={'Yes'}>{'Yes'}</Radio>
-                        <Radio value={'No'}>{'No'}</Radio>
-
+                        <Radio value={1}>{'Yes'}</Radio>
+                        <Radio value={2}>{'No'}</Radio>
                     </Radio.Group>
                 </div>
-
+                {regChangeReviewData.reasonTypeRefId!= null ?
                 <div>
                     <InputWithHead heading={AppConstants.reasonToDeRegister} />
                     <Radio.Group
+                        disabled={true}
                         className="reg-competition-radio"
-                        value={detailsData.reasonToDeRegister}
-                        onChange={(e) => this.props.updateRegistrationReviewAction({ data: e.target.value, key: 'reasonToDeRegister' })}
+                        value={regChangeReviewData ?  regChangeReviewData.reasonTypeRefId : null}
                     >
-                        {isArrayNotEmpty(reasonToDeRegisterArr) && reasonToDeRegisterArr.map((item) => (
-                            <Radio value={item.id}>{item.name}</Radio>
+                        {isArrayNotEmpty(deRegistionOption) && deRegistionOption.map((item) => (
+                            <Radio key={item.id} value={item.id}>{item.value}</Radio>
                         ))
                         }
                         {
-                            detailsData.reasonToDeRegister == 'Other' &&
+                            (regChangeReviewData.reasonTypeRefId == 5) &&
                             <div>
                                 <InputWithHead
+                                    disabled={true}
                                     className='ml-5'
                                     placeholder='Other'
                                     style={{ maxWidth: '50%', minHeight: 60 }} />
@@ -285,22 +346,22 @@ class RegistrationChangeReview extends Component {
                         }
 
                     </Radio.Group>
-                </div>
+                </div> : null }
 
                 <div>
                     <InputWithHead heading={AppConstants.approvals} />
-
-                    <Radio.Group
-                        className="reg-competition-radio"
-                    >
-
-                        <Radio value={'2nd Level Affiliate Name'}>{'2nd Level Affiliate Name'}</Radio>
-                        <Radio value={'1st Level Affiliate Name'}>{'1st Level Affiliate Name'}</Radio>
-
-                    </Radio.Group>
+                    {(regChangeReviewData.approvals || []).map((item, index) =>(
+                        <div>
+                            <div style={{display: 'flex'}}>
+                                <div>{item.payingOrgName}</div>
+                                {item.refundTypeRefId != null  ? 
+                                    <div style={{paddingLeft:'10px'}}> Accepted</div> : 
+                                    <div style={{paddingLeft:'10px'}}> Declined</div>
+                                }
+                            </div>
+                        </div>
+                    ))}
                 </div>
-
-
             </div>
         );
     }
@@ -314,18 +375,18 @@ class RegistrationChangeReview extends Component {
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
                                 {/* <NavLink to='/liveScorerList'> */}
-                                <Button type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button type="cancel-button" onClick = {() => this.goBack()} >{AppConstants.cancel}</Button>
                                 {/* </NavLink> */}
                             </div>
                         </div>
 
                         <div className="col-sm" >
                             <div className="comp-buttons-view">
-                                <Button onClick={() => this.showModal()} className="user-approval-button mr-3" type="primary" htmlType="submit" >
+                                <Button onClick={() => this.acceptModal("show")} className="user-approval-button mr-3" type="primary" htmlType="submit" >
                                     {AppConstants.approve}
                                 </Button>
 
-                                <Button className="user-approval-button" type="primary" htmlType="submit" >
+                                <Button onClick={() => this.declineModal("show")}  className="user-approval-button" type="primary" htmlType="submit" >
                                     {AppConstants.decline}
                                 </Button>
                             </div>
@@ -335,17 +396,6 @@ class RegistrationChangeReview extends Component {
             </div>
         );
     };
-
-    ////create match post method
-    onSaveClick = (e) => {
-
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-            }
-        });
-    }
-
 
 
     render() {
@@ -359,12 +409,15 @@ class RegistrationChangeReview extends Component {
                 <InnerHorizontalMenu menu={"registration"} regSelectedKey={"9"} />
                 <Layout>
                     {this.headerView()}
-                    <Form onSubmit={this.onSaveClick}
+                    <Form
                         noValidate="noValidate" >
                         <Content>
+                            <Loader visible={this.props.registrationChangeState.onLoad || 
+                                this.props.registrationChangeState.onSaveLoad} />
                             <div className="formView">
                                 {this.contentView(getFieldDecorator)}
-                                {this.ModalView(getFieldDecorator)}
+                                {this.acceptModalView(getFieldDecorator)}
+                                {this.declineModalView(getFieldDecorator)}
                             </div>
                         </Content>
                         <Footer>
@@ -380,7 +433,9 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
             getYearAndCompetitionAction,
-            updateRegistrationReviewAction
+            updateRegistrationReviewAction,
+            getRegistrationChangeReview,
+            saveRegistrationChangeReview
         },
         dispatch
     );

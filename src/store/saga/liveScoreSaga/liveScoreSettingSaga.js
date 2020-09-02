@@ -3,7 +3,7 @@ import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import ApiConstants from '../../../themes/apiConstants';
 import { message } from "antd";
 import history from "../../../util/history";
-import CommonAxiosApi from "../../http/commonHttp/commonAxios";
+import CommonAxiosApi from "../../http/commonHttp/commonAxiosApi";
 import { setUmpireCompitionData, getLiveScoreUmpireCompitionData } from '../../../util/sessionStorage'
 
 export function* liveScoreSettingSaga({ payload }) {
