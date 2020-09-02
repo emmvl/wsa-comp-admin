@@ -14,6 +14,10 @@ import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
 import ValidationConstants from "../../themes/validationConstant";
 
+
+const { Content } = Layout;
+let this_Obj = null;
+
 function getIncidentPlayer(incidentPlayers) {
     let playerId = incidentPlayers.length > 0 ? incidentPlayers[0].playerId : ""
     return playerId
@@ -29,15 +33,27 @@ function getLastName(incidentPlayers) {
     return lastName
 }
 
-function checkSorting(a, b, key) {
-    if (a[key] && b[key]) {
-        return a[key].length - b[key].length
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = "ASC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "ASC") {
+        sortOrder = "DESC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "DESC") {
+        sortBy = sortOrder = null;
     }
+
+    this_Obj.setState({ sortBy, sortOrder });
+    const { id } = JSON.parse(getLiveScoreCompetiton())
+    let { searchText, limit, offset } = this_Obj.state
+    this_Obj.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder);
 }
 
-
-const { Content } = Layout;
-let this_obj = null;
 ////columens data
 const columns = [
 
@@ -45,7 +61,8 @@ const columns = [
         title: 'Date',
         dataIndex: 'incidentTime',
         key: 'incidentTime',
-        sorter: (a, b) => checkSorting(a, b, 'matchId'),
+        sorter: true,
+        onHeaderCell: () => listeners("date"),
         render: (incidentTime, record) =>
             <NavLink to={{
                 pathname: "/liveScoreIncidentView",
@@ -58,7 +75,8 @@ const columns = [
         title: 'Match ID',
         dataIndex: 'matchId',
         key: 'matchId',
-        sorter: (a, b) => checkSorting(a, b, 'matchId'),
+        sorter: true,
+        onHeaderCell: () => listeners("matchId"),
         render: (matchId, record) =>
             <NavLink to={{
                 pathname: "/liveScoreMatchDetails",
@@ -71,20 +89,10 @@ const columns = [
         title: 'Player ID',
         dataIndex: 'incidentPlayers',
         key: 'incident Players',
-        // render: (incidentPlayers, record) => {
-        //     isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
-        //         <span onClick={() => this_obj.checkUserId(record)} className="input-heading-add-another pt-0">{item.playerId}</span>
-        //     ))
-        // },
         render: (incidentPlayers, record) =>
 
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item, index) => (
-                // <NavLink to={{
-                //     pathname: '/liveScorePlayerView',
-                //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
-                // }}>
-                <span onClick={() => this_obj.checkUserId(item)} key={`playerId${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.playerId}</span>
-                // </NavLink>
+                <span onClick={() => this_Obj.checkUserId(item)} key={`playerId${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.playerId}</span>
             ))
 
     },
@@ -92,27 +100,11 @@ const columns = [
         title: 'First Name',
         dataIndex: 'incidentPlayers',
         key: 'Incident Players First Name',
-        // sorter: (a, b) => a.incidentPlayers.player.firstName.length - b.incidentPlayers.player.firstName.length,
-        // render: (incidentPlayers, record) =>
-        //     <NavLink to={{
-        //         pathname: '/liveScorePlayerView',
-        //         state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null }
-        //     }}>
-        //         <span className="input-heading-add-another pt-0">{getFirstName(incidentPlayers)}</span>
-        //     </NavLink>
-
+        sorter: true,
+        onHeaderCell: () => listeners("firstName"),
         render: (incidentPlayers, record) =>
-
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item, index) => (
-
-
-                // <NavLink to={{
-                //     pathname: '/liveScorePlayerView',
-                //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
-                // }}>
-                <span onClick={() => this_obj.checkUserId(item)} key={`playerFirstName${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
-                // </NavLink>
-
+                <span onClick={() => this_Obj.checkUserId(item)} key={`playerFirstName${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.firstName}</span>
             ))
 
 
@@ -121,26 +113,12 @@ const columns = [
         title: 'Last Name',
         dataIndex: 'incidentPlayers',
         key: 'Incident Players Last Name',
-        // sorter: (a, b) => a.lastName.length - b.lastName.length,
-        // render: (incidentPlayers, record) =>
-        //     <NavLink to={{
-        //         pathname: '/liveScorePlayerView',
-        //         state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null }
-        //     }}>
-        //         <span className="input-heading-add-another pt-0">{getLastName(incidentPlayers)}</span>
-        //     </NavLink>
+        sorter: true,
+        onHeaderCell: () => listeners("lastName"),
         render: (incidentPlayers, record) =>
-
             isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item, index) => (
-
-                // <NavLink to={{
-                //     pathname: '/liveScorePlayerView',
-                //     state: { tableRecord: incidentPlayers ? incidentPlayers[0].player : null, screenName: 'incident' }
-                // }}>
-                <span onClick={() => this_obj.checkUserId(item)} key={`playerLastName${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
-                // </NavLink>
+                <span onClick={() => this_Obj.checkUserId(item)} key={`playerLastName${index}` + item.playerId} style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{item.player.lastName}</span>
             ))
-
 
     },
     {
@@ -149,35 +127,10 @@ const columns = [
         key: 'incidentType',
         render: (incidentType, record) =>
             <span >{incidentType.name}</span>,
-        sorter: (a, b) => checkSorting(a, b, 'incidentType')
+        sorter: true,
+        onHeaderCell: () => listeners("type"),
 
     },
-    // {
-    //     title: "Action",
-    //     dataIndex: 'action',
-    //     key: 'action',
-    //     render: (data, record) => <Menu
-    //         className="action-triple-dot-submenu"
-    //         theme="light"
-    //         mode="horizontal"
-    //         style={{ lineHeight: '25px' }}
-    //     >
-    //         <Menu.SubMenu
-    //             key="sub1"
-    //             style={{ borderBottomStyle: "solid", borderBottom: 0 }}
-    //             title={
-    //                 <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
-    //             }
-    //         >
-    //             <Menu.Item key={'1'}>
-    //                 <NavLink to={{
-    //                     pathname: '/liveScoreAddIncident',
-    //                     state: { isEdit: true, tableRecord: record }
-    //                 }}><span >Edit</span></NavLink>
-    //             </Menu.Item>
-    //         </Menu.SubMenu>
-    //     </Menu>
-    // }
 ];
 
 
@@ -185,16 +138,20 @@ class LiveScoreIncidentList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            searchText: ""
+            searchText: "",
+            offset: 0,
+            limit: 10,
+            sortBy: null,
+            sortOrder: null,
         };
-        this_obj = this
+        this_Obj = this
     }
 
     componentDidMount() {
-
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            this.props.liveScoreIncidentList(id, this.state.searchText);
+            let { searchText, limit, offset } = this.state
+            this.props.liveScoreIncidentList(id, searchText, limit, offset);
         } else {
             history.push('/')
         }
@@ -214,9 +171,9 @@ class LiveScoreIncidentList extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ searchText: e.target.value })
+        this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
-            this.props.liveScoreIncidentList(id, e.target.value);
+            this.props.liveScoreIncidentList(id, e.target.value, this.state.limit, 0);
         }
     }
 
@@ -225,7 +182,7 @@ class LiveScoreIncidentList extends Component {
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
-            this.props.liveScoreIncidentList(id, e.target.value);
+            this.props.liveScoreIncidentList(id, e.target.value, this.state.limit, 0);
         }
     }
 
@@ -235,10 +192,17 @@ class LiveScoreIncidentList extends Component {
         if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
-            this.props.liveScoreIncidentList(id, this.state.searchText);
+            this.props.liveScoreIncidentList(id, this.state.searchText, this.state.limit, 0);
         }
     }
 
+    handleTableChange(page) {
+        let offset = page ? 10 * (page - 1) : 0;
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        let { searchText, limit } = this.state
+        this.setState({ offset: offset })
+        this.props.liveScoreIncidentList(id, searchText, limit, offset);
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -352,17 +316,15 @@ class LiveScoreIncidentList extends Component {
 
     ////////tableView view for Umpire list
     tableView = () => {
-        const { liveScoreIncidentState } = this.props;
-        const DATA = liveScoreIncidentState.liveScoreIncidentResult;
-
+        const { onLoad, liveScoreIncidentResult, liveScoreIncidentTotalCount, liveScoreIncidentCurrentPage } = this.props.liveScoreIncidentState;
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreIncidentState.onLoad === true ? true : false}
+                        loading={onLoad === true ? true : false}
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={DATA}
+                        dataSource={liveScoreIncidentResult}
                         pagination={false}
                         rowKey={(record, index) => "incident" + record.id + index}
                     />
@@ -382,9 +344,9 @@ class LiveScoreIncidentList extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
-                            defaultCurrent={1}
-                            total={8}
-                        // onChange={this.handleTableChange}
+                            current={liveScoreIncidentCurrentPage}
+                            total={liveScoreIncidentTotalCount}
+                            onChange={(page) => this.handleTableChange(page)}
                         />
                     </div>
                 </div>

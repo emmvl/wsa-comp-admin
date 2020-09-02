@@ -131,6 +131,59 @@ const columns = [
     },
 ];
 
+const participateColumns = [
+    {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    },
+
+    {
+        title: 'Division',
+        dataIndex: 'divisionName',
+        key: 'divisionName',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    },
+    {
+        title: 'Grade',
+        dataIndex: 'grade',
+        key: 'grade',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    },
+    {
+        title: 'Position Tracking',
+        dataIndex: 'positionTracking',
+        key: 'positionTracking',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (recordGoalAttempts, record) => {
+            return (
+                <span>{this_Obj.checkValue(recordGoalAttempts)}</span>
+            )
+
+        }
+
+    },
+    {
+        title: 'Goal Attempts',
+        dataIndex: 'recordGoalAttempts',
+        key: 'recordGoalAttempts',
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (recordGoalAttempts, record) => {
+            return (
+                <span>{this_Obj.checkValue(recordGoalAttempts)}</span>
+            )
+
+        },
+    },
+
+];
+
 class LiveScoreDivisionList extends Component {
     constructor(props) {
         super(props);
@@ -171,18 +224,18 @@ class LiveScoreDivisionList extends Component {
             return "As per competition"
         }
     }
-    
+
     ////////form content view
     contentView = () => {
         const { mainDivisionList, totalCount, currentPage } = this.props.liveScoreDivisionState;
         let divisionList = isArrayNotEmpty(mainDivisionList) ? mainDivisionList : [];
-
+        let { liveScoreCompIsParent } = this.state
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
-                        columns={columns}
+                        columns={liveScoreCompIsParent == true ? columns : participateColumns}
                         dataSource={divisionList}
                         pagination={false}
                         loading={this.props.liveScoreDivisionState.onLoad === true && true}

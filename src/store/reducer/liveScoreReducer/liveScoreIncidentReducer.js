@@ -22,6 +22,8 @@ const initialState = {
     error: null,
     result: null,
     liveScoreIncidentResult: [],
+    liveScoreIncidentTotalCount: 1,
+    liveScoreIncidentCurrentPage: 1,
     incidentData: incidentObj,
     teamResult: [],
     playerResult: [],
@@ -158,12 +160,13 @@ function liveScoreIncidentState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_INCIDENT_LIST_SUCCESS:
             const result = action.result
-
             return {
 
                 ...state,
                 onLoad: false,
-                liveScoreIncidentResult: result,
+                liveScoreIncidentResult: isArrayNotEmpty(result.incidents) ? result.incidents : [],
+                liveScoreIncidentTotalCount: result.page ? result.page.totalCount : 1,
+                liveScoreIncidentCurrentPage: result.page ? result.page.currentPage : 1,
                 status: action.status
             }
 
