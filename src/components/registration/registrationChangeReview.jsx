@@ -26,6 +26,7 @@ import { captializedString } from "../../util/helpers"
 import moment, { utc } from "moment";
 import { getOrganisationData } from "util/sessionStorage";
 import history from '../../util/history'
+import Loader from '../../customComponents/loader';
 
 const { Header, Footer, Content } = Layout;
 
@@ -39,6 +40,7 @@ class RegistrationChangeReview extends Component {
             declineVisible: false,
             deRegisterId: null,
             organisationId: getOrganisationData().organisationUniqueKey,
+            loading: false
         };
         this_Obj = this;
     }
@@ -48,6 +50,13 @@ class RegistrationChangeReview extends Component {
         console.log("deRegisterId::" + deRegisterId)
         this.setState({deRegisterId});
         this.apiCall(deRegisterId);
+    }
+
+    componentDidUpdate(nextProps){
+        let regChangeState = this.props.registrationChangeState;
+        if(this.state.loading == true && regChangeState.onSaveLoad == false){
+            this.goBack();
+        }
     }
 
     apiCall = (deRegisterId) =>{
@@ -64,7 +73,9 @@ class RegistrationChangeReview extends Component {
             this.setState({acceptVisible: true });
         }
         else if(key == "ok"){
+            console.log("^^^^^^^^^^^")
             this.setState({acceptVisible: false });
+            this.saveReview();
         }
         else {
             this.setState({acceptVisible: false });
@@ -93,22 +104,29 @@ class RegistrationChangeReview extends Component {
         this.props.updateRegistrationReviewAction(value,key);
     }
 
-    onSaveClick = (e) => {
+    saveReview = () =>{
+        console.log("$$$$$$$$$$$$$$44")
+        let reviewSaveData = this.props.registrationChangeState.reviewSaveData;
+        let regChangeReviewData = this.props.registrationChangeState.regChangeReviewData;
+        if(reviewSaveData.refundTypeRefId!= null){
+            if(reviewSaveData.refundTypeRefId == 1){
+                reviewSaveData.refundAmount = regChangeReviewData.fullAmount;
+            }
+        }else{
+            reviewSaveData.refundAmount = regChangeReviewData.fullAmount;
+        }
+        reviewSaveData["organisationId"] = this.state.organisationId;
+        reviewSaveData["deRegisterId"] = this.state.deRegisterId;
+        this.props.saveRegistrationChangeReview(reviewSaveData);
+        this.setState({loading: true});
+    }
 
+    onSaveClick = (e) => {
+        console.log("************")
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let reviewSaveData = this.props.registrationChangeState.reviewSaveData;
-                let regChangeReviewData = this.props.registrationChangeState.regChangeReviewData;
-                if(reviewSaveData.refundTypeRefId!= null){
-                    if(reviewSaveData.refundTypeRefId == 1){
-                        reviewSaveData.refundAmount = regChangeReviewData.fullAmount;
-                    }
-                }else{
-                    reviewSaveData.refundAmount = regChangeReviewData.fullAmount;
-                }
-                reviewSaveData["organisationId"] = this.state.organisationId;
-                this.props.saveRegistrationChangeReview(reviewSaveData)
+                
             }
         });
     }
@@ -337,8 +355,8 @@ class RegistrationChangeReview extends Component {
                             <div style={{display: 'flex'}}>
                                 <div>{item.payingOrgName}</div>
                                 {item.refundTypeRefId != null  ? 
-                                    <div> AAAA</div> : 
-                                    <div> BBBB</div>
+                                    <div style={{paddingLeft:'10px'}}> Accepted</div> : 
+                                    <div style={{paddingLeft:'10px'}}> Declined</div>
                                 }
                             </div>
                         </div>
@@ -391,9 +409,11 @@ class RegistrationChangeReview extends Component {
                 <InnerHorizontalMenu menu={"registration"} regSelectedKey={"9"} />
                 <Layout>
                     {this.headerView()}
-                    <Form onSubmit={this.onSaveClick}
+                    <Form
                         noValidate="noValidate" >
                         <Content>
+                            <Loader visible={this.props.registrationChangeState.onLoad || 
+                                this.props.registrationChangeState.onSaveLoad} />
                             <div className="formView">
                                 {this.contentView(getFieldDecorator)}
                                 {this.acceptModalView(getFieldDecorator)}
