@@ -58,7 +58,8 @@ const initialState = {
     clubChecked: false,
     associationOrg: [],
     clubOrg: [],
-    editLoader: false
+    editLoader: false,
+    yearRefId: null
 }
 
 
@@ -108,7 +109,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 editLoader: true
             }
         case ApiConstants.LiveScore_SETTING_VIEW_SUCCESS:
-
+            console.log(payload, 'payload')
             const arraymaped = [{ ...payload }]
             const record1 = arraymaped.reduce((memo, data) => {
                 if (data.recordUmpire === 1) {
@@ -143,6 +144,10 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 state.premierCompLink = true
             } else {
                 state.premierCompLink = false
+            }
+
+            if (payload.yearRefId) {
+                state.yearRefId = payload.yearRefId
             }
 
             return {
@@ -180,7 +185,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 borrowedPlayer: payload.playerBorrowingType,
                 gamesBorrowedThreshold: payload.gamesBorrowedThreshold,
                 linkedCompetitionId: payload.linkedCompetitionId,
-                inputNumberValue: payload.gamesBorrowedThreshold
+                inputNumberValue: payload.gamesBorrowedThreshold,
+
 
             }
         case ApiConstants.LiveScore_SETTING_VIEW_ERROR:
@@ -202,8 +208,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             const keys = payload.key
             const Data = payload.data
 
-            console.log(payload, 'payload')
-
             if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection" || keys == 'premierCompLink') {
                 state[keys] = Data
 
@@ -221,6 +225,9 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
             } else if (keys == 'number') {
                 state.gamesBorrowedThreshold = Data
+
+            } else if (keys == 'yearRefId') {
+                state.yearRefId = Data
 
             } else if (keys == 'linkedCompetitionId') {
                 state.linkedCompetitionId = Data

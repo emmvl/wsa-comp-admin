@@ -42,8 +42,7 @@ function tableSort(key) {
     sortBy = sortOrder = null;
   }
   _this.setState({ sortBy: sortBy, sortOrder: sortOrder });
-  let offset = 0
-  _this.props.liveScoreCoachListAction(17, 1, _this.state.competitionId, _this.state.searchText, offset, sortBy, sortOrder);
+  _this.props.liveScoreCoachListAction(17, 1, _this.state.competitionId, _this.state.searchText, _this.state.offset, sortBy, sortOrder);
 }
 
 const listeners = (key) => ({
@@ -164,7 +163,8 @@ class LiveScoreCoaches extends Component {
 
     this.state = {
       searchText: "",
-      competitionId: null
+      competitionId: null,
+      offset: 0
     };
 
     _this = this;
@@ -183,9 +183,19 @@ class LiveScoreCoaches extends Component {
     }
   }
 
+  /// Handle Page change
+  handlePageChnage(page) {
+    let offset = page ? 10 * (page - 1) : 0;
+    this.setState({
+      offset
+    })
+    this.props.liveScoreCoachListAction(17, 1, this.state.competitionId, this.state.searchText, offset)
+  }
+
   contentView = () => {
-    let couchesList = isArrayNotEmpty(this.props.liveScoreCoachState.coachesResult) ? this.props.liveScoreCoachState.coachesResult : []
-    let teamList = isArrayNotEmpty(this.props.liveScoreCoachState.coachesResult) ? this.props.liveScoreCoachState.coachesResult : []
+    const { coachesResult, currentPage, totalCount } = this.props.liveScoreCoachState
+    let couchesList = isArrayNotEmpty(coachesResult) ? coachesResult : []
+    let teamList = isArrayNotEmpty(coachesResult) ? coachesResult : []
 
     return (
       <div className="comp-dash-table-view mt-4">
@@ -195,7 +205,7 @@ class LiveScoreCoaches extends Component {
             columns={columns}
             dataSource={couchesList}
             pagination={false}
-            loading={this.props.liveScoreCoachState.onLoad === true && true}
+            loading={this.props.liveScoreCoachState.onLoad}
             rowKey={(record) => "couchesList" + record.id}
           />
         </div>
@@ -212,8 +222,10 @@ class LiveScoreCoaches extends Component {
           >
             <Pagination
               className="antd-pagination"
-              defaultCurrent={1}
-              total={8}
+              current={currentPage}
+              total={totalCount}
+              defaultPageSize={10}
+              onChange={(page) => this.handlePageChnage(page)}
             />
           </div>
         </div>
@@ -349,7 +361,7 @@ class LiveScoreCoaches extends Component {
     const { id } = JSON.parse(getLiveScoreCompetiton())
     this.setState({ searchText: e.target.value })
     if (e.target.value == null || e.target.value === "") {
-      this.props.liveScoreCoachListAction(17, 1, id, e.target.value)
+      this.props.liveScoreCoachListAction(17, 1, id, e.target.value, this.state.offset)
     }
   }
 
@@ -358,7 +370,7 @@ class LiveScoreCoaches extends Component {
     var code = e.keyCode || e.which;
     const { id } = JSON.parse(getLiveScoreCompetiton())
     if (code === 13) { //13 is the enter keycode
-      this.props.liveScoreCoachListAction(17, 1, id, e.target.value)
+      this.props.liveScoreCoachListAction(17, 1, id, e.target.value, this.state.offset)
     }
   }
 
@@ -367,8 +379,8 @@ class LiveScoreCoaches extends Component {
     const { id } = JSON.parse(getLiveScoreCompetiton())
     if (this.state.searchText == null || this.state.searchText === "") {
     } else {
-      // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
-      this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText)
+      // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
+      this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText, this.state.offset)
     }
   }
 

@@ -24,6 +24,8 @@ const initialState = {
     onLoadSearch: false,
     managerSearchResult: [],
     loading: false,
+    totalCount: null,
+    currentPage: null
 };
 
 // function getManagerListObject(managerListArray, key) {
@@ -91,10 +93,12 @@ function liveScoreMangerState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-                MainManagerListResult: action.result,
-                managerListResult: action.result,
+                MainManagerListResult: action.result.userData,
+                managerListResult: action.result.userData,
                 status: action.status,
-                managerSearchResult: action.result,
+                managerSearchResult: action.result.userData,
+                currentPage: action.result.page.currentPage,
+                totalCount: action.result.page.totalCount,
             };
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_LOAD:
