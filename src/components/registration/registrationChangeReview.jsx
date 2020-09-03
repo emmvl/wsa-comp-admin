@@ -104,6 +104,23 @@ class RegistrationChangeReview extends Component {
         this.props.updateRegistrationReviewAction(value,key);
     }
 
+    getApprovalsIconColor = (item) => {
+        let color = item.refundTypeRefId == 1 ? "green" : "orange";
+        return color;
+    }
+
+    getOrgRefName = (orgRefTypeId) => {
+        let orgTypeRefName;
+        if(orgRefTypeId == 1){
+            orgTypeRefName = "Competition";
+        }else if(orgRefTypeId == 2){
+            orgTypeRefName = "Affliate";
+        }else if(orgRefTypeId == 3){
+            orgTypeRefName = "Membership";
+        }
+        return orgTypeRefName;
+    }
+
     saveReview = () =>{
         console.log("$$$$$$$$$$$$$$44")
         let reviewSaveData = this.props.registrationChangeState.reviewSaveData;
@@ -129,17 +146,6 @@ class RegistrationChangeReview extends Component {
         this.setState({loading: true});
     }
 
-    onSaveClick = (e) => {
-        console.log("************")
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                
-            }
-        });
-    }
-        
-
 
     ////modal view
     acceptModalView(getFieldDecorator) {
@@ -160,6 +166,7 @@ class RegistrationChangeReview extends Component {
                     <Radio  value={2}>{'Refund partial payment'}</Radio>
                     {reviewSaveData.refundTypeRefId == 2 ? 
                     <InputWithHead
+                            placeholder={AppConstants.refundAmount}
                             value={reviewSaveData.refundAmount}
                             onChange={(e) => this.updateRegistrationReview(e.target.value,"refundAmount")}
                         />
@@ -184,11 +191,14 @@ class RegistrationChangeReview extends Component {
                 <Radio.Group className="reg-competition-radio"
                     value={reviewSaveData.declineReasonRefId}
                     onChange={(e) => this.updateRegistrationReview(e.target.value,"declineReasonRefId")}>
-                    <Radio value={1}>{'They have already taken the court for training, grading or a competition game'}</Radio>
+                    <Radio value={1}>
+                        <span style={{whiteSpace: 'pre-wrap',display: 'inline-flex'}}>They have already taken the court for training, grading or a competition game</span>
+                    </Radio>
                     <Radio value={2}>{'They owe monies'}</Radio>
                     <Radio value={3}>{'Other'}</Radio>
                     {reviewSaveData.declineReasonRefId == 3 ? 
                     <InputWithHead
+                            placeholder={AppConstants.other}
                             value={reviewSaveData.otherInfo}
                             onChange={(e) => this.updateRegistrationReview(e.target.value,"otherInfo")}
                         />
@@ -361,7 +371,7 @@ class RegistrationChangeReview extends Component {
                     {(regChangeReviewData.approvals || []).map((item, index) =>(
                         <div>
                             <div style={{display: 'flex'}}>
-                                <div>{item.payingOrgName}</div>
+                                <div>{item.payingOrgName} - {this.getOrgRefName(item.orgRefTypeId)}</div>
                                 {item.refundTypeRefId != null  ? 
                                     <div>
                                         {item.refundTypeRefId != 3 ? 
@@ -378,11 +388,6 @@ class RegistrationChangeReview extends Component {
                 </div>
             </div>
         );
-    }
-
-    getApprovalsIconColor = (item) => {
-        let color = item.refundTypeRefId == 1 ? "green" : "orange";
-        return color;
     }
 
     //////footer view containing all the buttons
@@ -411,7 +416,8 @@ class RegistrationChangeReview extends Component {
                                     {AppConstants.decline}
                                 </Button>
                             </div>
-                        </div> : null }
+                        </div> 
+                        : null }
                     </div>
                 </div>
             </div>
