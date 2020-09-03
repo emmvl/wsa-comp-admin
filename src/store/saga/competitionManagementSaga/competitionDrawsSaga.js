@@ -5,6 +5,7 @@ import RegstrartionAxiosApi from "../../http/registrationHttp/registrationAxiosA
 import { message } from "antd";
 import history from "../../../util/history";
 import AppConstants from "../../../themes/appConstants";
+import moment from "moment"
 
 function* failSaga(result) {
     console.log("failSaga", result.message)
@@ -62,10 +63,13 @@ export function* getCompetitionDrawsSaga(action) {
 export function* getDrawsRoundsSaga(action) {
     try {
         const result = action.competitionId != "-1" ? yield call(CompetitionAxiosApi.getDrawsRounds,
-            action.yearRefId, action.competitionId) : yield call(CompetitionAxiosApi.getDateRange)
+            action.yearRefId, action.competitionId) : {
+                status: 1, result: []
+            };
         if (result.status === 1) {
-            const startDate = action.competitionId != "-1" ? null : result.result.data[0].startDate
-            const endDate = action.competitionId != "-1" ? null : result.result.data[0].endDate
+            const date = new Date()
+            const startDate = action.competitionId != "-1" ? null : moment(date).format("YYYY-MM-DD");
+            const endDate = action.competitionId != "-1" ? null : moment(date).format("YYYY-MM-DD")
             const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId, startDate, endDate);
             if (VenueResult.status === 1) {
                 const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, startDate, endDate);

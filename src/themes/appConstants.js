@@ -1573,6 +1573,8 @@ const AppConstants = {
   whatRegistrationChange: "what registration change do you",
   registrationChangeRef: "RegistrationChange",
   reasonWhyYourAreDecline: "Reason why you are declining the request for de-registration?",
+  toDate: "To date",
+  fromDate: "From date"
 };
 
 export default AppConstants;
