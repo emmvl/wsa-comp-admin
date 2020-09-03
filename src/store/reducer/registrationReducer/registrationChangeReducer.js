@@ -60,7 +60,8 @@ const initialState = {
         regChangeTypeRefId: null,
         startDate: null,
         userName: null,
-        userRegisteredTo: null
+        userRegisteredTo: null,
+        isShowButton: null
     },
     reviewSaveData: {
         refundAmount: null,

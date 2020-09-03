@@ -117,6 +117,14 @@ class RegistrationChangeReview extends Component {
         }
         reviewSaveData["organisationId"] = this.state.organisationId;
         reviewSaveData["deRegisterId"] = this.state.deRegisterId;
+        reviewSaveData["affOrgId"] = regChangeReviewData.affOrgId;
+        reviewSaveData["compOrgId"] = regChangeReviewData.compOrgId;
+        reviewSaveData["isDirect"] = regChangeReviewData.isDirect;
+        reviewSaveData["organisationTypeRefId"] = regChangeReviewData.organisationTypeRefId;
+        reviewSaveData["membershipMappingId"] = regChangeReviewData.membershipMappingId;
+        reviewSaveData["competitionId"] = regChangeReviewData.competitionId;
+        reviewSaveData["userId"] = regChangeReviewData.userId;
+        
         this.props.saveRegistrationChangeReview(reviewSaveData);
         this.setState({loading: true});
     }
@@ -368,18 +376,20 @@ class RegistrationChangeReview extends Component {
 
     //////footer view containing all the buttons
     footerView = () => {
+        let {regChangeReviewData} = this.props.registrationChangeState;
+        let isShowButton = regChangeReviewData.isShowButton;
         return (
             <div className="fluid-width">
                 <div className="footer-view">
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
-                                {/* <NavLink to='/liveScorerList'> */}
-                                <Button type="cancel-button" onClick = {() => this.goBack()} >{AppConstants.cancel}</Button>
-                                {/* </NavLink> */}
+                                <Button type="cancel-button" onClick = {() => this.goBack()} >{
+                                isShowButton == 1 ? AppConstants.cancel : AppConstants.back
+                                }</Button>
                             </div>
                         </div>
-
+                        {isShowButton == 1 ? 
                         <div className="col-sm" >
                             <div className="comp-buttons-view">
                                 <Button onClick={() => this.acceptModal("show")} className="user-approval-button mr-3" type="primary" htmlType="submit" >
@@ -390,7 +400,7 @@ class RegistrationChangeReview extends Component {
                                     {AppConstants.decline}
                                 </Button>
                             </div>
-                        </div>
+                        </div> : null }
                     </div>
                 </div>
             </div>
