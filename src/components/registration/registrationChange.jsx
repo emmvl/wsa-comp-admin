@@ -29,6 +29,22 @@ function tableSort(a, b, key) {
     return stringA.localeCompare(stringB)
 }
 
+function getColor(record,key) {
+    let color = '';
+    if(key == "compOrganiserApproved"){
+        color = record.compOrgApprovedStatus === 1 ? "green" : "orange";
+    }else if(key == "affiliateApproved"){
+        color = record.affiliateApprovedStatus === 1 ? "green" : "orange";
+    }else if(key == "stateApproved"){
+        color = record.stateApprovedStatus === 1 ? "green" : "orange";
+    }
+    return color;
+}
+
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
 
 const columns = [
     {
@@ -108,19 +124,72 @@ const columns = [
                 title: 'Comp Organiser',
                 dataIndex: 'compOrganiserApproved',
                 key: 'compOrganiserApproved',
-                sorter: (a, b) => tableSort(a, b, "compOrganiserApproved")
+                sorter: (a, b) => tableSort(a, b, "compOrganiserApproved"),
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                render: (compOrganiserApproved,record, index) => {
+                    return(
+                        <div>
+                            {compOrganiserApproved ? 
+                                <div style={{display: "flex",justifyContent:"space-between"}}>
+                                    <div>${compOrganiserApproved}</div>
+                                    {record.compOrgApprovedStatus != 3 ? 
+                                        <div style={{color: getColor(record,"compOrganiserApproved")}}>&#x2714;</div>
+                                        :
+                                        <div style={{color: "red"}}>&#x2718;</div>
+                                    }
+                                </div>
+                                : 
+                                null
+                            }
+                        </div>
+                    )
+                }
             },
             {
                 title: 'Affiliate',
                 dataIndex: 'affiliateApproved',
                 key: 'affiliateApproved',
-                sorter: (a, b) => tableSort(a, b, "affiliateApproved")
+                sorter: (a, b) => tableSort(a, b, "affiliateApproved"),
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                render: (affiliateApproved,record, index) => {
+                    return(
+                        <div>
+                            {affiliateApproved ?
+                                <div style={{display: "flex",justifyContent:"space-between"}}>
+                                    <div>${affiliateApproved}</div>
+                                    {record.affiliateApprovedStatus != 3 ? 
+                                        <div style={{color: getColor(record,"affiliateApproved")}}>&#x2714;</div>
+                                        :
+                                        <div style={{color: "red"}}>&#x2718;</div>
+                                    }
+                                </div>
+                            : null} 
+                        </div>
+                    )
+                }
             },
             {
                 title: 'State',
                 dataIndex: 'stateApproved',
                 key: 'stateApproved',
-                sorter: (a, b) => tableSort(a, b, "stateApproved")
+                sorter: (a, b) => tableSort(a, b, "stateApproved"),
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                render: (stateApproved,record,index) => {
+                    return(
+                        <div>
+                            {stateApproved ?
+                                <div style={{display: "flex",justifyContent:"space-between"}}>
+                                    <div>${stateApproved}</div>
+                                    {record.stateApprovedStatus != 3 ? 
+                                        <div style={{color: getColor(record,"stateApproved")}}>&#x2714;</div>
+                                        :
+                                        <div style={{color: "red"}}>&#x2718;</div>
+                                    }
+                                </div>
+                            : null}
+                        </div>
+                    )
+                }
             },
             {
                 title: 'Status',

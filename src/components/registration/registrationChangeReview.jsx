@@ -363,8 +363,14 @@ class RegistrationChangeReview extends Component {
                             <div style={{display: 'flex'}}>
                                 <div>{item.payingOrgName}</div>
                                 {item.refundTypeRefId != null  ? 
-                                    <div style={{paddingLeft:'10px'}}> Accepted</div> : 
-                                    <div style={{paddingLeft:'10px'}}> Declined</div>
+                                    <div>
+                                        {item.refundTypeRefId != 3 ? 
+                                            <div style={{color: this.getApprovalsIconColor(item),paddingLeft: "10px"}}>&#x2714;</div>
+                                            :
+                                            <div style={{color: "red",paddingLeft: "10px"}}>&#x2718;</div>
+                                        }
+                                    </div>
+                                  : null  
                                 }
                             </div>
                         </div>
@@ -372,6 +378,11 @@ class RegistrationChangeReview extends Component {
                 </div>
             </div>
         );
+    }
+
+    getApprovalsIconColor = (item) => {
+        let color = item.refundTypeRefId == 1 ? "green" : "orange";
+        return color;
     }
 
     //////footer view containing all the buttons
