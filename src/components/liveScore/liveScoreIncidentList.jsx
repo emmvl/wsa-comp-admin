@@ -171,37 +171,40 @@ class LiveScoreIncidentList extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        let { limit, sortBy, sortOrder } = this.state
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
-            this.props.liveScoreIncidentList(id, e.target.value, this.state.limit, 0);
+            this.props.liveScoreIncidentList(id, e.target.value, limit, 0, sortBy, sortOrder);
         }
     }
 
     // search key 
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
+        let { limit, sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
-            this.props.liveScoreIncidentList(id, e.target.value, this.state.limit, 0);
+            this.props.liveScoreIncidentList(id, e.target.value, limit, 0, sortBy, sortOrder);
         }
     }
 
     // on click of search icon
     onClickSearchIcon = () => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (this.state.searchText === null || this.state.searchText === "") {
+        let { searchText, limit, sortBy, sortOrder } = this.state
+        if (searchText === null || searchText === "") {
         }
         else {
-            this.props.liveScoreIncidentList(id, this.state.searchText, this.state.limit, 0);
+            this.props.liveScoreIncidentList(id, searchText, limit, 0, sortBy, sortOrder);
         }
     }
 
     handleTableChange(page) {
         let offset = page ? 10 * (page - 1) : 0;
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        let { searchText, limit } = this.state
+        let { searchText, limit, sortBy, sortOrder } = this.state
         this.setState({ offset: offset })
-        this.props.liveScoreIncidentList(id, searchText, limit, offset);
+        this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder);
     }
 
     ///////view for breadcrumb

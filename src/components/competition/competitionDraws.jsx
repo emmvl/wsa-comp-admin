@@ -9,7 +9,7 @@ import {
   message,
   Modal,
   Menu,
-  Tooltip
+  Tooltip, DatePicker
 } from 'antd';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import { NavLink } from 'react-router-dom';
@@ -177,23 +177,22 @@ class CompetitionDraws extends Component {
             }
           }
           else if (this.state.changeDateLoad == false) {
-            if (this.props.drawsState.allcompetitionDateRange.length > 0) {
-              let dateRangeData = this.props.drawsState.allcompetitionDateRange
-              let selectedDateRange = dateRangeData[0].displayRange
-              let startDate = dateRangeData[0].startDate
-              let endDate = dateRangeData[0].endDate
-              this.setState({
-                selectedDateRange: selectedDateRange,
-                startDate, endDate, venueId
-              })
-
-              this.props.getCompetitionDrawsAction(
-                this.state.yearRefId,
-                this.state.firstTimeCompId,
-                venueId,
-                0, null, startDate, endDate
-              );
-            }
+            let NullDate = new Date()
+            // if (this.props.drawsState.allcompetitionDateRange.length > 0) {
+            // let dateRangeData = this.props.drawsState.allcompetitionDateRange
+            // let selectedDateRange = dateRangeData[0].displayRange
+            let startDate = this.state.startDate == null ? moment(NullDate).format("YYYY-MM-DD") : this.state.startDate
+            let endDate = this.state.endDate == null ? moment(NullDate).format("YYYY-MM-DD") : this.state.endDate
+            this.setState({
+              startDate, endDate, venueId
+            })
+            this.props.getCompetitionDrawsAction(
+              this.state.yearRefId,
+              this.state.firstTimeCompId,
+              venueId,
+              0, null, startDate, endDate
+            );
+            // }
           }
           else {
             this.setState({
@@ -659,7 +658,9 @@ class CompetitionDraws extends Component {
       competitionDivisionGradeId: null,
       competitionStatus: statusRefId,
       organisation_Id: "-1",
-      selectedDateRange: null
+      selectedDateRange: null,
+      startDate: null,
+      endDate: null
     });
   }
 
@@ -996,18 +997,27 @@ class CompetitionDraws extends Component {
     this.props.publishDraws(this.state.firstTimeCompId, '', payload);
     this.setState({ visible: false, changeStatus: true })
   }
-  onChangeDate = (date, key) => {
-    let allRangeData = this.props.drawsState.allcompetitionDateRange
-    let dateData = key.split(':')
-    let selectedRangeIndex = dateData[0]
-    let startDate = allRangeData[selectedRangeIndex].startDate
-    let endDate = allRangeData[selectedRangeIndex].endDate
+  onChangeStartDate = (startDate, key) => {
+
     this.props.clearDraws()
     this.props.changeDrawsDateRangeAction(this.state.yearRefId,
-      this.state.firstTimeCompId, startDate, endDate)
+      this.state.firstTimeCompId, startDate, this.state.endDate)
     this.setState({
-      selectedDateRange: date,
-      startDate, endDate,
+      startDate: startDate,
+      roundId: 0,
+      venueId: null,
+      roundTime: null,
+      venueLoad: true,
+      competitionDivisionGradeId: null,
+      changeDateLoad: true
+    })
+  }
+  onChangeEndDate = (endDate, key) => {
+    this.props.clearDraws()
+    this.props.changeDrawsDateRangeAction(this.state.yearRefId,
+      this.state.firstTimeCompId, this.state.startDate, endDate)
+    this.setState({
+      endDate: endDate,
       roundId: 0,
       venueId: null,
       roundTime: null,
@@ -1049,7 +1059,7 @@ class CompetitionDraws extends Component {
           <div className="col-sm-10">
             <span className="form-heading">{AppConstants.draws}</span>
             <div className="row">
-              <div className="col-sm mr-0">
+              <div className="col-sm-4 mr-0">
                 <div
                   style={{
                     width: '100%',
@@ -1103,24 +1113,50 @@ class CompetitionDraws extends Component {
                         alignItems: 'center',
                       }}
                     >
-                      <span className="year-select-heading">
-                        {AppConstants.dateRange}:
+                      <div className="col-sm-6">
+                        <div
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}>
+                          <span className="year-select-heading">
+                            {AppConstants.fromDate}:
                       </span>
-                      <Select
-                        className="year-select"
-                        style={{ minWidth: 100, width: 'fit-content', }}
-                        onChange={(selectedDateRange, e) => this.onChangeDate(selectedDateRange, e.key)}
-                        value={this.state.selectedDateRange}
-                      >
-                        {this.props.drawsState.allcompetitionDateRange.length > 0 &&
-                          this.props.drawsState.allcompetitionDateRange.map((item, index) => {
-                            return (
-                              <Option key={index + ":" + "date"} value={item.displayRange}>
-                                {item.displayRange}
-                              </Option>
-                            );
-                          })}
-                      </Select>
+                          <DatePicker
+                            size="large"
+                            style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
+                            format={"DD-MM-YYYY"}
+                            //  defaultValue={new}
+                            onChange={(startDate) => this.onChangeStartDate(moment(startDate).format("YYYY-MM-DD"))}
+                            value={moment(this.state.startDate)}
+                            disabledDate={d => !d || d.isAfter(this.state.endDate)}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-sm-6">
+                        <div
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}>
+                          <span className="year-select-heading">
+                            {AppConstants.toDate}:
+                      </span>
+                          <DatePicker
+                            size="large"
+                            style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
+                            format={"DD-MM-YYYY"}
+                            placeholder={"dd-mm-yyyy"}
+                            onChange={(endDate) => this.onChangeEndDate(moment(endDate).format("YYYY-MM-DD"))}
+                            value={moment(this.state.endDate)}
+                            disabledDate={d => !d || d.isBefore(this.state.startDate)}
+                          />
+                        </div>
+                      </div>
                     </div>
                     :
                     <div style={{

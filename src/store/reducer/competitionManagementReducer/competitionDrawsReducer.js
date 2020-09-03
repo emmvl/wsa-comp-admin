@@ -765,7 +765,7 @@ function CompetitionDraws(state = initialState, action) {
       state.competitionVenues.unshift(venueObject)
       state.divisionGradeNameList.unshift(divisionNameObject)
       DrawsRoundsData.unshift(roundNameObject)
-      state.allcompetitionDateRange = JSON.parse(JSON.stringify(action.dateRangeResult))
+      state.allcompetitionDateRange = action.dateRangeResult
       state.updateLoad = false;
       return {
         ...state,

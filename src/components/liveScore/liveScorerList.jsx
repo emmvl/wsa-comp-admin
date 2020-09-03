@@ -130,8 +130,8 @@ const columns = [
                             </NavLink>
                         </div>
                     ) : (
-                        <span>{item.name}</span>
-                    )
+                            <span>{item.name}</span>
+                        )
                 ))}
             </div>
         )
@@ -211,14 +211,16 @@ class LiveScorerList extends Component {
 
     handlePagination(page) {
         let offset = page ? 10 * (page - 1) : 0;
+        let { searchtext, sortBy, sortOrder } = this.state
         const body = {
             "paging": {
                 "limit": 10,
                 "offset": offset
             },
-            "searchText": ""
+            "searchText": searchtext,
+            "sortBy": sortBy,
+            "sortOrder": sortOrder
         }
-
         this.props.liveScoreScorerListAction(id, 4, body)
     }
 
@@ -327,13 +329,16 @@ class LiveScorerList extends Component {
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
+        let { sortBy, sortOrder } = this.state
         if (e.target.value == null || e.target.value == "") {
             const body = {
                 "paging": {
                     "limit": 10,
                     "offset": 0
                 },
-                "search": e.target.value
+                "search": e.target.value,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
             }
 
             this.props.liveScoreScorerListAction(id, 4, body, e.target.value)
@@ -342,6 +347,7 @@ class LiveScorerList extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        let { sortBy, sortOrder } = this.state
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
@@ -350,7 +356,9 @@ class LiveScorerList extends Component {
                     "limit": 10,
                     "offset": 0
                 },
-                "search": e.target.value
+                "search": e.target.value,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
             }
             this.props.liveScoreScorerListAction(id, 4, body, this.state.searchText)
         }
@@ -358,17 +366,20 @@ class LiveScorerList extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        let { searchText, sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (this.state.searchText == null || this.state.searchText == "") {
+        if (searchText == null || searchText == "") {
         } else {
             const body = {
                 "paging": {
                     "limit": 10,
                     "offset": 0
                 },
-                "search": this.state.searchText
+                "search": searchText,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
             }
-            this.props.liveScoreScorerListAction(id, 4, body, this.state.searchText)
+            this.props.liveScoreScorerListAction(id, 4, body, searchText)
         }
     }
 
@@ -395,7 +406,7 @@ class LiveScorerList extends Component {
                         current={scorerListCurrentPage}
                         total={scorerListTotalCount}
                         onChange={(page) => this.handlePagination(page)}
-                        // defaultPageSize={10}
+                    // defaultPageSize={10}
                     />
                 </div>
             </div>
@@ -411,7 +422,7 @@ class LiveScorerList extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"}/>
+                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

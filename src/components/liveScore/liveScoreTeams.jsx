@@ -167,14 +167,14 @@ class LiveScoreTeam extends Component {
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset: offset })
-        this.props.getTeamsWithPagination(this.state.conpetitionId, offset, 10, this.state.searchText)
+        this.props.getTeamsWithPagination(this.state.conpetitionId, offset, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder)
     }
 
     // on change search text
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value == "") {
-            this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value)
+            this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value, this.state.sortBy, this.state.sortOrder)
         }
     }
 

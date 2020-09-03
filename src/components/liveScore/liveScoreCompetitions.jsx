@@ -30,8 +30,8 @@ const { Option } = Select;
 const { confirm } = Modal;
 let this_Obj = null;
 
-const listeners = (key) => ({
-    onClick: () => tableSort(key),
+const listeners = (key, tableName) => ({
+    onClick: () => tableSort(key, tableName),
 });
 
 function tableSort(key, tableName) {
@@ -46,7 +46,6 @@ function tableSort(key, tableName) {
     }
 
     this_Obj.setState({ sortBy, sortOrder });
-
     const body = {
         paging: {
             offsetOwned: this_Obj.state.ownOffset,
@@ -83,7 +82,7 @@ const columnsOwned = [
         dataIndex: "divisions",
         key: "divisions",
         sorter: true,
-        onHeaderCell: () => listeners("odivisions", "part"),
+        onHeaderCell: () => listeners("odivisions", "own"),
         render: divisions => {
             if (divisions != null) {
                 const divisionArray = divisions.split(",");
@@ -124,7 +123,7 @@ const columnsOwned = [
         dataIndex: "teamCount",
         key: "teamCount",
         sorter: true,
-        onHeaderCell: () => listeners("oteams", "part"),
+        onHeaderCell: () => listeners("oteams", "own"),
         render: (teamCount, record) => (
             <span
                 className="input-heading-add-another pt-0"
@@ -143,7 +142,7 @@ const columnsOwned = [
         dataIndex: "playerCount",
         key: "playerCount",
         sorter: true,
-        onHeaderCell: () => listeners("oplayers", "part"),
+        onHeaderCell: () => listeners("oplayers", "own"),
         render: (playerCount, record) => (
             <span
                 className="input-heading-add-another pt-0"
@@ -162,7 +161,7 @@ const columnsOwned = [
         dataIndex: "status",
         key: "status",
         sorter: true,
-        onHeaderCell: () => listeners("ostatus", "part"),
+        onHeaderCell: () => listeners("ostatus", "own"),
         render: (status, record) => (
             <span
                 className="input-heading-add-another pt-0"
@@ -221,7 +220,7 @@ const columnsParticipate = [
         dataIndex: "longName",
         key: "longName",
         sorter: true,
-        onHeaderCell: () => listeners("pname", "own"),
+        onHeaderCell: () => listeners("pname", "part"),
         render: (longName, record) => (
             <span
                 className="input-heading-add-another pt-0"
@@ -427,7 +426,7 @@ class LiveScoreCompetitions extends Component {
             },
         }
 
-        this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, key, this.state.year);
+        this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, this.state.sortBy, this.state.sortOrder, key, this.state.year);
     };
 
     onChangeYear = (evt) => {
@@ -573,7 +572,7 @@ class LiveScoreCompetitions extends Component {
 
                 <div className="d-flex justify-content-end">
                     <Pagination
-                        className="antd-pagination pb-0"
+                        className="antd-pagination"
                         current={participateCurrentPage}
                         total={participateTotalCount}
                         onChange={(page) => this.handlePagination(page, "part")}
@@ -659,10 +658,7 @@ class LiveScoreCompetitions extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
-
                 {/* <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" /> */}
-
-
                 {this.dropdownButtonView()}
                 {this.dropDownView()}
                 {this.ownedView()}

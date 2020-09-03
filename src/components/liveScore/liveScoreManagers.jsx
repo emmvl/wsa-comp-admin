@@ -18,7 +18,6 @@ import { teamListData } from "../../util/helpers";
 
 const { Content } = Layout;
 let userId = getUserId();
-
 let _this = null;
 
 function tableSort(key) {
@@ -215,7 +214,7 @@ class LiveScoreManagerList extends Component {
         this.setState({
             offset
         })
-        this.props.liveScoreManagerListAction(3, 1, this.state.competitionId, this.state.searchText, offset)
+        this.props.liveScoreManagerListAction(3, 1, this.state.competitionId, this.state.searchText, offset, this.state.sortBy, this.state.sortOrder)
     }
 
     ////////form content view
@@ -394,7 +393,7 @@ class LiveScoreManagerList extends Component {
         if (e.target.value == null || e.target.value === "") {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value)
 
-            this.props.liveScoreManagerListAction(3, 1, id, e.target.value)
+            this.props.liveScoreManagerListAction(3, 1, id, e.target.value, this.state.sortBy, this.state.sortOrder)
         }
     }
 

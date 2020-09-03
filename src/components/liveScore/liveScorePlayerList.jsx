@@ -53,8 +53,8 @@ const columns = [
                 profilePicture ? (
                     <img className="user-image" src={profilePicture} alt="" height="70" width="70" />
                 ) : (
-                    <span>{AppConstants.noImage}</span>
-                )
+                        <span>{AppConstants.noImage}</span>
+                    )
             )
         }
     },
@@ -82,7 +82,7 @@ const columns = [
             >
                 {firstName}
             </span>
-            // </NavLink>
+        // </NavLink>
     },
     {
         title: 'Last Name',
@@ -101,7 +101,7 @@ const columns = [
             >
                 {lastName}
             </span>
-            // </NavLink>
+        // </NavLink>
     },
     {
         title: 'DOB',
@@ -139,8 +139,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team.name}</span>
             </NavLink>
         ) : (
-            <span>{team.name}</span>
-        )
+                <span>{team.name}</span>
+            )
     },
     {
         title: 'Contact No',
@@ -181,7 +181,7 @@ class LiveScorePlayerList extends Component {
         super(props);
         this.state = {
             competitionId: null,
-            searchText: ""
+            searchText: "",
         }
         _this = this;
     }
@@ -199,7 +199,8 @@ class LiveScorePlayerList extends Component {
     /// Handle Page change
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        this.props.playerListWithPaginationAction(this.state.competitionId, offset, 10)
+        let { sortBy, sortOrder } = this.state
+        this.props.playerListWithPaginationAction(this.state.competitionId, offset, 10, undefined, sortBy, sortOrder)
     }
 
     ////////form content view
@@ -245,25 +246,28 @@ class LiveScorePlayerList extends Component {
 
     // on change search text
     onChangeSearchText = (e) => {
+        let { sortBy, sortOrder, competitionId } = this.state
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value === "") {
-            this.props.playerListWithPaginationAction(this.state.competitionId, 0, 10, e.target.value)
+            this.props.playerListWithPaginationAction(competitionId, 0, 10, e.target.value, sortBy, sortOrder)
         }
     }
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        let { sortBy, sortOrder, searchText, competitionId } = this.state
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
-            this.props.playerListWithPaginationAction(this.state.competitionId, 0, 10, this.state.searchText)
+            this.props.playerListWithPaginationAction(competitionId, 0, 10, searchText, sortBy, sortOrder)
         }
     }
 
     // on click of search icon
     onClickSearchIcon = () => {
+        let { sortBy, sortOrder, searchText, competitionId } = this.state
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
-            this.props.playerListWithPaginationAction(this.state.competitionId, 0, 10, this.state.searchText)
+            this.props.playerListWithPaginationAction(competitionId, 0, 10, searchText, sortBy, sortOrder)
         }
     }
 
@@ -425,7 +429,7 @@ class LiveScorePlayerList extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"}/>
+                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"} />
                 <Layout>
                     {this.headerView()}
                     <Content>
