@@ -300,22 +300,17 @@ class UserProfileEdit extends Component {
                         />
                     </div>
                     <div className="col-sm" >
-                        <InputWithHead heading={AppConstants.dob} required={"required-field"} />
-                        <Form.Item >
-                            {getFieldDecorator(`dateOfBirth`, {
-                                rules: [{ required: true, message: ValidationConstants.dateOfBirth }],
-                            })(
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%", marginTop: "9px" }}
-                                    onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    placeholder={"dd-mm-yyyy"}
-                                    name={'dateOfBirth'}
-                                />
-                            )}
-                        </Form.Item>
+                        <InputWithHead heading={AppConstants.dob}/>
+                        <DatePicker		   
+                            size="large"
+                            style={{ width: "100%", marginTop: "9px" }}
+                            onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
+                            format={"DD-MM-YYYY"}
+                            showTime={false}
+                            placeholder={"dd-mm-yyyy"}
+                            name={'dateOfBirth'}
+                            value={userData.dateOfBirth!= null && moment(userData.dateOfBirth) }
+                        />
                     </div>
                 </div>
                 <div className="row">

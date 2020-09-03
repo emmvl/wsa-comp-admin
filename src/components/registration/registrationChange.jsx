@@ -138,6 +138,7 @@ const columns = [
                     mode="horizontal"
                     style={{ lineHeight: '25px' }}
                 >
+                    {record.statusRefId == 2 ? 
                     <Menu.SubMenu
                         key="sub1"
                         style={{ borderBottomStyle: "solid", borderBottom: 0 }}
@@ -151,7 +152,9 @@ const columns = [
                             }}><span >Review</span></NavLink>
                         </Menu.Item>
                     </Menu.SubMenu>
+                    : null}
                 </Menu>
+                
             }
         ]
     }
