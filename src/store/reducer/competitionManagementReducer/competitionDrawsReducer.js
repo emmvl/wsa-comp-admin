@@ -115,7 +115,7 @@ function structureDrawsData(data) {
         dateArray = setupDateObjectArray(dateArray, object)
         // if (checkDateNotInArray(dateArray, object.matchDate)) {
         //   let dateObject = checkOutOfRound(object)
-        //   console.log("dateObject", dateObject)
+
         //   dateArray.push(dateObject);
         // }
         if (setupGradesArray(gradeArray, object.competitionDivisionGradeId)) {
@@ -132,6 +132,7 @@ function structureDrawsData(data) {
             venueShortName: object.venueShortName,
             venueNameCourtName: (JSON.stringify(object.venueShortName) + JSON.stringify(object.venueCourtNumber)),
             venueCourtId: object.venueCourtId,
+            roundId: object.roundId ? object.roundId : 0,
             slotsArray: [],
           });
         }
@@ -276,28 +277,18 @@ function getFixtureColor(team) {
     }
   }
   return color;
-  // let fixtureTempArray = JSON.parse(JSON.stringify(fixtureColorArray))
+}
 
-  // let color1 = getRandomColor()
-  // let color2 = getRandomColor()
-
-  // for (let [index, value] of colorsArrayDup.entries()) {
-  //   fixtureColorArray.push({
-  //     drawsId: draws.drawsId,
-  //     colorCode1: colorsArrayDup[index],
-  //     colorCode2: colorsArrayDup[Number(index) + 1]
-  //   });
-  //   color1 = colorsArrayDup[Number(index)]
-  //   color2 = colorsArrayDup[Number(index) + 1]
-
-  //   colorsArrayDup.splice(0, 2)
-  //   break
-  // }
-  // return {
-  //   color1,
-  //   color2,
-  // }
-
+function allcompetitionDrawsData(data) {
+  // let dateDrawsData = data.dates
+  let newStructureDateDraws
+  newStructureDateDraws = structureDrawsData(data.draws)
+  data.draws = newStructureDateDraws.mainCourtNumberArray
+  data.dateNewArray = newStructureDateDraws.sortedDateArray
+  data.legendsArray = newStructureDateDraws.legendsArray
+  return {
+    data,
+  }
 }
 
 function getGradeColor(gradeId) {
@@ -353,9 +344,6 @@ function checkSlots(slotsArray, slotObject) {
 function sortCourtArray(mainCourtNumberArray) {
   let isSortedArray = []
   const sortAlphaNum = (a, b) => a.venueNameCourtName.localeCompare(b.venueNameCourtName, 'en', { numeric: true })
-  // let collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
-  // isSortedArray = mainCourtNumberArray.sort(collator.compare)
-  // isSortedArray = mainCourtNumberArray.sort((a, b) => a.venueNameCourtName.localeCompare(b.venueNameCourtName));
   isSortedArray = mainCourtNumberArray.sort(sortAlphaNum)
   return isSortedArray
 }
@@ -393,7 +381,6 @@ function setupDateObjectArray(dateArray, drawObject) {
 
   }
   tempDateArray.push(defaultDateObject)
-
   return tempDateArray;
 }
 
@@ -408,8 +395,71 @@ function setupGradesArray(gradesArray, gradeId) {
   return true;
 }
 
-//// Swipe Array object - draws
+function checkSlotsDateStatus(slotsArray, checkdate) {
+  let obj = {
+    status: true,
+    index: null
+  }
+  for (let i in slotsArray) {
+    if (slotsArray[i].matchDate == checkdate) {
+      if (slotsArray[i].drawsId == null) {
+        obj = {
+          status: false,
+          index: i
+        }
+      }
+      else {
+        obj = {
+          status: true,
+          index: i
+        }
+      }
+      break;
+    }
+    else {
+      obj = {
+        status: true,
+        index: i
+      }
+    }
+  }
+  return obj
+}
 
+
+function checkDrawsArrayFunc(allDrawsData) {
+
+
+
+  let drawsAllDateData = allDrawsData.dateNewArray
+  let drawsAllData = allDrawsData.draws
+  for (let i in drawsAllDateData) {
+    let nullStatus = false
+    let checkDrawsObject = null
+    let checkdate = drawsAllDateData[i].date
+    for (let j in drawsAllData) {
+      checkDrawsObject = checkSlotsDateStatus(drawsAllData[j].slotsArray, checkdate)
+      if (checkDrawsObject.status === false) {
+
+      }
+      else {
+        nullStatus = true
+        break;
+      }
+    }
+    if (nullStatus === false) {
+      for (let j in drawsAllData) {
+        drawsAllData[j].slotsArray.splice(checkDrawsObject.index, 1)
+      }
+      drawsAllDateData.splice(i, 1)
+    }
+  }
+  allDrawsData.dateNewArray = drawsAllDateData
+  allDrawsData.draws = drawsAllData
+  return allDrawsData
+}
+
+//// Swipe Array object - draws
 function swapedDrawsArrayFunc(
   drawsArray,
   sourtXIndex,
@@ -446,83 +496,6 @@ function swapedDrawsArrayFunc(
     drawsArray[sourtXIndex].slotsArray[sourceYIndex] = targetCopy;
     drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceCopy;
   }
-
-
-
-  /*
-  var source = drawsArray[sourtXIndex].slotsArray[sourceYIndex];
-  var target = drawsArray[targetXIndex].slotsArray[targetYIndex];
- 
-  /// object of source index
- 
-  // if(source.drawsId != target.drawsId){
-    let sourceObject = {
-      drawsId: target.drawsId,
-      venueCourtNumber: target.venueCourtNumber,
-      venueCourtId: target.venueCourtId,
-      matchDate: target.matchDate,
-      startTime: target.startTime,
-      endTime: target.endTime,
-      homeTeamId: source.homeTeamId,
-      awayTeamId: source.awayTeamId,
-      homeTeamName: target.homeTeamName,
-      awayTeamName: target.awayTeamName,
-      competitionDivisionGradeId: source.competitionDivisionGradeId,
-      gradeName: source.gradeName,
-      isLocked: '1',
-      teamArray: [{teamName: target.homeTeamName, teamId: source.homeTeamId},{teamName: target.awayTeamName, teamId: source.awayTeamId}],
-      // source.teamArray,
-      colorCode: source.colorCode
-    };
-  
-    //// object of target index
-    let targetObject = {
-      drawsId: source.drawsId,
-      venueCourtNumber: source.venueCourtNumber,
-      venueCourtId: source.venueCourtId,
-      matchDate: source.matchDate,
-      startTime: source.startTime,
-      endTime: source.endTime,
-      homeTeamId: target.homeTeamId,
-      awayTeamId: target.awayTeamId,
-      homeTeamName: source.homeTeamName,
-      awayTeamName: source.awayTeamName,
-      competitionDivisionGradeId: target.competitionDivisionGradeId,
-      gradeName: target.gradeName,
-      isLocked: '1',
-      // teamArray: target.teamArray,
-      teamArray: [{teamName: source.homeTeamName, teamId: target.homeTeamId},{teamName: source.awayTeamName, teamId: target.awayTeamId}],
-      colorCode: target.colorCode
-    };
-  
-  
-    drawsArray[sourtXIndex].slotsArray[sourceYIndex] = targetObject;
-    drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceObject;
-  // }else{
-  //   let sourceObject = {
-  //     drawsId: target.drawsId,
-  //     venueCourtNumber: target.venueCourtNumber,
-  //     venueCourtId: target.venueCourtId,
-  //     matchDate: target.matchDate,
-  //     startTime: target.startTime,
-  //     endTime: target.endTime,
-  //     homeTeamId: source.awayTeamId,
-  //     awayTeamId: source.homeTeamId,
-  //     homeTeamName: source.awayTeamName,
-  //     awayTeamName: source.homeTeamName,
-  //     competitionDivisionGradeId: source.competitionDivisionGradeId,
-  //     gradeName: source.gradeName,
-  //     isLocked: '1',
-  //     teamArray: [{teamName: source.awayTeamName, teamId: source.awayTeamId},{teamName: source.homeTeamName, teamId: source.homeTeamId}],
-  //     // source.teamArray,
-  //     colorCode: source.colorCode
-  //   };
-  
-  //   drawsArray[sourtXIndex].slotsArray[sourceYIndex] = sourceObject;
-  // }
-  
-*/
-  console.log(sourceArray, drawsArray, 'valled')
   return drawsArray;
 }
 
@@ -720,172 +693,6 @@ function swapedDrawsEditArrayFunc(
         source.awayTeamName;
     }
   }
-
-
-  // let sourceObject = null
-  // let targetObject = null
-  /// object of source index
-  // if (sourceZIndex == 0) {
-  //   if (targetZIndex == 0) {
-  //     sourceObject = {
-  //       drawsId: source.drawsId,
-  //       venueCourtNumber: source.venueCourtNumber,
-  //       venueCourtId: source.venueCourtId,
-  //       matchDate: source.matchDate,
-  //       startTime: source.startTime,
-  //       endTime: source.endTime,
-  //       homeTeamId: target.homeTeamId,
-  //       awayTeamId: source.awayTeamId,
-  //       homeTeamName: source.homeTeamName, // home source
-  //       awayTeamName: source.awayTeamName,
-  //       competitionDivisionGradeId: source.competitionDivisionGradeId,
-  //       gradeName: source.gradeName,
-  //       isLocked: '1',
-  //       teamArray: source.teamArray,
-  //       colorCode: source.colorCode
-  //     };
-  //   } else {
-  //     sourceObject = {
-  //       drawsId: source.drawsId,
-  //       venueCourtNumber: source.venueCourtNumber,
-  //       venueCourtId: source.venueCourtId,
-  //       matchDate: source.matchDate,
-  //       startTime: source.startTime,
-  //       endTime: source.endTime,
-  //       homeTeamId: target.awayTeamId,
-  //       awayTeamId: source.awayTeamId,
-  //       homeTeamName: source.homeTeamName, // home source
-  //       awayTeamName: source.awayTeamName,
-  //       competitionDivisionGradeId: source.competitionDivisionGradeId,
-  //       gradeName: source.gradeName,
-  //       isLocked: '1',
-  //       teamArray: source.teamArray,
-  //       colorCode: source.colorCode
-  //     };
-  //   }
-
-  // } else {
-  //   if (targetZIndex == 0) {
-  //     sourceObject = {
-  //       drawsId: source.drawsId,
-  //       venueCourtNumber: source.venueCourtNumber,
-  //       venueCourtId: source.venueCourtId,
-  //       matchDate: source.matchDate,
-  //       startTime: source.startTime,
-  //       endTime: source.endTime,
-  //       homeTeamId: source.homeTeamId,
-  //       awayTeamId: target.homeTeamId,
-  //       homeTeamName: source.homeTeamName,
-  //       awayTeamName: source.awayTeamName, // away target
-  //       competitionDivisionGradeId: source.competitionDivisionGradeId,
-  //       gradeName: source.gradeName,
-  //       isLocked: '1',
-  //       teamArray: source.teamArray,
-  //       colorCode: source.colorCode
-  //     };
-  //   } else {
-  //     sourceObject = {
-  //       drawsId: source.drawsId,
-  //       venueCourtNumber: source.venueCourtNumber,
-  //       venueCourtId: source.venueCourtId,
-  //       matchDate: source.matchDate,
-  //       startTime: source.startTime,
-  //       endTime: source.endTime,
-  //       homeTeamId: source.homeTeamId,
-  //       awayTeamId: target.awayTeamId,
-  //       homeTeamName: source.homeTeamName,
-  //       awayTeamName: source.awayTeamName, // away target
-  //       competitionDivisionGradeId: source.competitionDivisionGradeId,
-  //       gradeName: source.gradeName,
-  //       isLocked: '1',
-  //       teamArray: source.teamArray,
-  //       colorCode: source.colorCode
-  //     };
-  //   }
-  // }
-
-  // //// object of target index
-  // if (targetZIndex == 0) {
-  //   if (sourceZIndex == 0) {
-  //     targetObject = {
-  //       drawsId: target.drawsId,
-  //       venueCourtNumber: target.venueCourtNumber,
-  //       venueCourtId: target.venueCourtId,
-  //       matchDate: target.matchDate,
-  //       startTime: target.startTime,
-  //       endTime: target.endTime,
-  //       homeTeamId: source.homeTeamId,
-  //       awayTeamId: target.awayTeamId,
-  //       homeTeamName: source.homeTeamName, // home source
-  //       awayTeamName: source.awayTeamName,
-  //       competitionDivisionGradeId: target.competitionDivisionGradeId,
-  //       gradeName: target.gradeName,
-  //       isLocked: '1',
-  //       teamArray: target.teamArray,
-  //       colorCode: target.colorCode
-  //     };
-  //   } else {
-  //     targetObject = {
-  //       drawsId: target.drawsId,
-  //       venueCourtNumber: target.venueCourtNumber,
-  //       venueCourtId: target.venueCourtId,
-  //       matchDate: target.matchDate,
-  //       startTime: target.startTime,
-  //       endTime: target.endTime,
-  //       homeTeamId: source.awayTeamId,
-  //       awayTeamId: target.awayTeamId,
-  //       homeTeamName: target.homeTeamName, // home source
-  //       awayTeamName: target.awayTeamName,
-  //       competitionDivisionGradeId: target.competitionDivisionGradeId,
-  //       gradeName: target.gradeName,
-  //       isLocked: '1',
-  //       teamArray: target.teamArray,
-  //       colorCode: target.colorCode
-  //     };
-  //   }
-  // } else {
-  //   if (sourceZIndex == 0) {
-  //     targetObject = {
-  //       drawsId: target.drawsId,
-  //       venueCourtNumber: target.venueCourtNumber,
-  //       venueCourtId: target.venueCourtId,
-  //       matchDate: target.matchDate,
-  //       startTime: target.startTime,
-  //       endTime: target.endTime,
-  //       homeTeamId: target.homeTeamId,
-  //       awayTeamId: source.homeTeamId,
-  //       homeTeamName: target.homeTeamName,
-  //       awayTeamName: source.awayTeamName, /// away source
-  //       competitionDivisionGradeId: target.competitionDivisionGradeId,
-  //       gradeName: target.gradeName,
-  //       isLocked: '1',
-  //       teamArray: target.teamArray,
-  //       colorCode: target.colorCode
-  //     };
-  //   } else {
-  //     targetObject = {
-  //       drawsId: target.drawsId,
-  //       venueCourtNumber: target.venueCourtNumber,
-  //       venueCourtId: target.venueCourtId,
-  //       matchDate: target.matchDate,
-  //       startTime: target.startTime,
-  //       endTime: target.endTime,
-  //       homeTeamId: target.homeTeamId,
-  //       awayTeamId: target.awayTeamId,
-  //       homeTeamName: target.homeTeamName,
-  //       awayTeamName: source.awayTeamName, /// away source
-  //       competitionDivisionGradeId: target.competitionDivisionGradeId,
-  //       gradeName: target.gradeName,
-  //       isLocked: '1',
-  //       teamArray: target.teamArray,
-  //       colorCode: target.colorCode
-  //     }
-  //   }
-  // }
-
-  // drawsArray[sourtXIndex].slotsArray[sourceYIndex] = targetObject;
-  // drawsArray[targetXIndex].slotsArray[targetYIndex] = sourceObject;
-
   return drawsArray;
 }
 
@@ -914,22 +721,22 @@ function CompetitionDraws(state = initialState, action) {
       return { ...state, onLoad: true, error: null, spinLoad: true, };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS:
+      let resultData
+      if (action.competitionId == "-1") {
+        let allCompetiitonDraws = action.result;
+        resultData = allcompetitionDrawsData(allCompetiitonDraws)
+      }
+      else {
+        let drawsResultData = action.result;
+        resultData = roundstructureData(drawsResultData)
+      }
 
-      let drawsResultData = action.result;
-      let resultData = roundstructureData(drawsResultData)
       state.publishStatus = action.result.drawsPublish
       state.isTeamInDraw = action.result.isTeamNotInDraws
-
       let orgData = JSON.parse(JSON.stringify(action.result.organisations))
-      // let orgObject = {
-      //   organisationName: "All",
-      //   organisationUniqueKey: "-1"
-      // }
-      // orgData.unshift(orgObject)
-
       return {
         ...state,
-        getRoundsDrawsdata: resultData.roundsdata,
+        getRoundsDrawsdata: action.competitionId == "-1" ? [resultData.data] : resultData.roundsdata,
         drawOrganisations: orgData,
         onLoad: false,
         error: null,
@@ -979,29 +786,42 @@ function CompetitionDraws(state = initialState, action) {
       let sourceYIndex = action.sourceArray[1];
       let targetXIndex = action.targetArray[0];
       let targetYIndex = action.targetArray[1];
-      let drawDataIndex = state.getRoundsDrawsdata.findIndex((x) => x.roundId === action.drawData)
-      let drawDataCase = state.getRoundsDrawsdata[drawDataIndex].draws;
-      let swapedDrawsArray = state.getRoundsDrawsdata[drawDataIndex].draws;
-      if (action.actionType == 'add') {
-        swapedDrawsArray = swapedDrawsArrayFunc(
-          drawDataCase,
-          sourceXIndex,
-          targetXIndex,
-          sourceYIndex,
-          targetYIndex
-        );
+      if (action.actionType !== 'all') {
+        let drawDataIndex = state.getRoundsDrawsdata.findIndex((x) => x.roundId === action.drawData)
+        let drawDataCase = state.getRoundsDrawsdata[drawDataIndex].draws;
+        let swapedDrawsArray = state.getRoundsDrawsdata[drawDataIndex].draws;
+        if (action.actionType == 'add') {
+          swapedDrawsArray = swapedDrawsArrayFunc(
+            drawDataCase,
+            sourceXIndex,
+            targetXIndex,
+            sourceYIndex,
+            targetYIndex
+          );
+        } else {
+          swapedDrawsArray = swapedDrawsEditArrayFunc(
+            drawDataCase,
+            sourceXIndex,
+            targetXIndex,
+            sourceYIndex,
+            targetYIndex,
+            action.sourceArray[2],
+            action.targetArray[2]
+          );
+        }
+        state.getRoundsDrawsdata[drawDataIndex].draws = swapedDrawsArray;
       } else {
-        swapedDrawsArray = swapedDrawsEditArrayFunc(
-          drawDataCase,
+        let allDrawDataCase = state.getRoundsDrawsdata[0].draws;
+        let allSwapedDrawsArray = state.getRoundsDrawsdata[0].draws;
+        allSwapedDrawsArray = swapedDrawsArrayFunc(
+          allDrawDataCase,
           sourceXIndex,
           targetXIndex,
           sourceYIndex,
           targetYIndex,
-          action.sourceArray[2],
-          action.targetArray[2]
         );
+        state.getRoundsDrawsdata[0].draws = allSwapedDrawsArray;
       }
-      state.getRoundsDrawsdata[drawDataIndex].draws = swapedDrawsArray;
       return {
         ...state,
         onLoad: false,
@@ -1047,40 +867,71 @@ function CompetitionDraws(state = initialState, action) {
       };
 
     case ApiConstants.API_UPDATE_COMPETITION_DRAWS_COURT_TIMINGS_SUCCESS:
-      if (action.actionType == 'add') {
-        let sourceXNullCaseIndex = action.sourceArray[0];
-        let sourceYNullCaseIndex = action.sourceArray[1];
-        let targetXNullCaseIndex = action.targetArray[0];
-        let targetYNullCaseIndex = action.targetArray[1];
-        let drawDataNullCaseIndex = state.getRoundsDrawsdata.findIndex((x) => x.roundId === action.drawData)
-        let drawDataNullCase = state.getRoundsDrawsdata[drawDataNullCaseIndex].draws;
+      // if (action.actionType == 'add') {
+      //   let sourceXNullCaseIndex = action.sourceArray[0];
+      //   let sourceYNullCaseIndex = action.sourceArray[1];
+      //   let targetXNullCaseIndex = action.targetArray[0];
+      //   let targetYNullCaseIndex = action.targetArray[1];
+      //   let drawDataNullCaseIndex = state.getRoundsDrawsdata.findIndex((x) => x.roundId === action.drawData)
+      //   let drawDataNullCase = state.getRoundsDrawsdata[drawDataNullCaseIndex].draws;
+      //   let swapedDrawsArrayNullCase = state.getRoundsDrawsdata[drawDataNullCaseIndex].draws;
+      //   swapedDrawsArrayNullCase = swapedDrawsArrayFunc(
+      //     drawDataNullCase,
+      //     sourceXNullCaseIndex,
+      //     targetXNullCaseIndex,
+      //     sourceYNullCaseIndex,
+      //     targetYNullCaseIndex
+      //   );
+      //   // } else {
+      //   //   swapedDrawsArrayNullCase = swapedDrawsEditArrayFunc(
+      //   //     drawDataNullCase,
+      //   //     sourceXNullCaseIndex,
+      //   //     targetXNullCaseIndex,
+      //   //     sourceYNullCaseIndex,
+      //   //     targetYNullCaseIndex,
+      //   //     action.sourceArray[2],
+      //   //     action.targetArray[2]
+      //   //   );
+      //   // }
 
-        let swapedDrawsArrayNullCase = state.getRoundsDrawsdata[drawDataNullCaseIndex].draws;
-
-        swapedDrawsArrayNullCase = swapedDrawsArrayFunc(
-          drawDataNullCase,
-          sourceXNullCaseIndex,
-          targetXNullCaseIndex,
-          sourceYNullCaseIndex,
-          targetYNullCaseIndex
-        );
-        // } else {
-        //   swapedDrawsArrayNullCase = swapedDrawsEditArrayFunc(
-        //     drawDataNullCase,
-        //     sourceXNullCaseIndex,
-        //     targetXNullCaseIndex,
-        //     sourceYNullCaseIndex,
-        //     targetYNullCaseIndex,
-        //     action.sourceArray[2],
-        //     action.targetArray[2]
-        //   );
-        // }
-        // console.log(state.getStaticDrawsData, drawDataNullCaseIndex)
-        state.getRoundsDrawsdata[drawDataNullCaseIndex].draws = swapedDrawsArrayNullCase;
+      //   state.getRoundsDrawsdata[drawDataNullCaseIndex].draws = swapedDrawsArrayNullCase;
+      //   // let checkDrawsArray = checkDrawsArrayFunc(JSON.parse(JSON.stringify(state.getRoundsDrawsdata[drawDataNullCaseIndex])))
+      //   // state.getRoundsDrawsdata = checkDrawsArray
+      // } else {
+      //   let sourceXNullCaseIndex = action.sourceArray[0];
+      //   let sourceYNullCaseIndex = action.sourceArray[1];
+      //   let targetXNullCaseIndex = action.targetArray[0];
+      //   let targetYNullCaseIndex = action.targetArray[1];
+      //   let drawDataNullCase = state.getRoundsDrawsdata[0].draws;
+      //   let swapedDrawsArrayNullCase = state.getRoundsDrawsdata[0].draws;
+      //   swapedDrawsArrayNullCase = swapedDrawsArrayFunc(
+      //     drawDataNullCase,
+      //     sourceXNullCaseIndex,
+      //     targetXNullCaseIndex,
+      //     sourceYNullCaseIndex,
+      //     targetYNullCaseIndex
+      //   );
+      //   state.getRoundsDrawsdata[0].draws = swapedDrawsArrayNullCase;
+      //   // let checkDrawsArray = checkDrawsArrayFunc(state.getRoundsDrawsdata[0])
+      //   // state.getRoundsDrawsdata[0] = checkDrawsArray
+      // }
+      let resultDataNew
+      if (action.competitionId == "-1") {
+        let allCompetiitonDraws = action.getResult;
+        resultDataNew = allcompetitionDrawsData(allCompetiitonDraws)
+      }
+      else {
+        let drawsResultData = action.getResult;
+        resultDataNew = roundstructureData(drawsResultData)
       }
 
+      state.publishStatus = action.getResult.drawsPublish
+      state.isTeamInDraw = action.getResult.isTeamNotInDraws
+      let orgDataNew = JSON.parse(JSON.stringify(action.getResult.organisations))
       return {
         ...state,
+        getRoundsDrawsdata: action.competitionId == "-1" ? [resultDataNew.data] : resultDataNew.roundsdata,
+        drawOrganisations: orgDataNew,
         onLoad: false,
         error: null,
         updateLoad: false,
@@ -1195,25 +1046,6 @@ function CompetitionDraws(state = initialState, action) {
     case ApiConstants.API_UPDATE_COMPETITION_FIXTURE_SUCCESS:
       let updatedFixtureResult = setFixtureColor(action.fixtureResult)
       state.fixtureArray = updatedFixtureResult
-      // let fixtureSourceXIndex = action.sourceArray[0];
-      // let fixtureSourceYIndex = action.sourceArray[1];
-      // let fixtureTargetXIndex = action.targetArray[0];
-      // let fixtureTargetYIndex = action.targetArray[1];
-
-      // let fixtureDataIndex = state.fixtureArray.findIndex((x) => x.roundId == action.roundId);
-      // let fixtureData = state.fixtureArray[fixtureDataIndex].draws
-      // let updatedFixtureData = state.fixtureArray[fixtureDataIndex].draws
-      // updatedFixtureData = swapedFixtureArrayFunc(
-      //   fixtureData,
-      //   fixtureSourceXIndex,
-      //   fixtureTargetXIndex,
-      //   fixtureSourceYIndex,
-      //   fixtureTargetYIndex,
-      //   action.sourceArray[2],
-      //   action.targetArray[2]
-      // );
-      // console.log(updatedFixtureData)
-      // state.fixtureArray[fixtureDataIndex].draws = updatedFixtureData;
       return {
         ...state,
         onLoad: false,
@@ -1231,11 +1063,18 @@ function CompetitionDraws(state = initialState, action) {
 
     case ApiConstants.API_UPDATE_DRAWS_LOCK_SUCCESS:
       let getDrawsArray = state.getRoundsDrawsdata
-      let getDrawsArrayIndex = getDrawsArray.findIndex((x) => x.roundId === action.roundId)
-      let updatetLockValueIndex = getDrawsArray[getDrawsArrayIndex].draws.findIndex((x) => x.venueCourtId == action.venueCourtId)
-      let updateslotsIndex = getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId == action.drawsId)
-      getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray[updateslotsIndex].isLocked = 0
-      state.getRoundsDrawsdata = getDrawsArray
+      if (action.key == "all") {
+        let updatetLockValueIndex = getDrawsArray[0].draws.findIndex((x) => x.venueCourtId == action.venueCourtId)
+        let updateslotsIndex = getDrawsArray[0].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId == action.drawsId)
+        getDrawsArray[0].draws[updatetLockValueIndex].slotsArray[updateslotsIndex].isLocked = 0
+        state.getRoundsDrawsdata = getDrawsArray
+      } else {
+        let getDrawsArrayIndex = getDrawsArray.findIndex((x) => x.roundId === action.roundId)
+        let updatetLockValueIndex = getDrawsArray[getDrawsArrayIndex].draws.findIndex((x) => x.venueCourtId == action.venueCourtId)
+        let updateslotsIndex = getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId == action.drawsId)
+        getDrawsArray[getDrawsArrayIndex].draws[updatetLockValueIndex].slotsArray[updateslotsIndex].isLocked = 0
+        state.getRoundsDrawsdata = getDrawsArray
+      }
       return {
         ...state,
         onLoad: false,
@@ -1263,7 +1102,6 @@ function CompetitionDraws(state = initialState, action) {
       }
 
     case ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_SUCCESS:
-      console.log(action)
       state.competitionVenues = JSON.parse(JSON.stringify(action.Venue_Result))
       state.divisionGradeNameList = JSON.parse(JSON.stringify(action.division_Result))
       let venueObjectNew = {
