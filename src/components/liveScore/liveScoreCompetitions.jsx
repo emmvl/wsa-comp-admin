@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {
     Button,
     Table,
-    // Select,
+    Select,
     Tag,
     Menu,
     Modal,
@@ -26,7 +26,7 @@ import DashboardLayout from "pages/dashboardLayout";
 
 import "./liveScore.css";
 
-// const { Option } = Select;
+const { Option } = Select;
 const { confirm } = Modal;
 let this_Obj = null;
 
@@ -55,7 +55,7 @@ function tableSort(key, tableName) {
             limitParticipating: 10,
         },
     };
-    this_Obj.props.liveScoreOwnPartCompetitionList(body, this_Obj.state.orgKey, sortBy, sortOrder, tableName);
+    this_Obj.props.liveScoreOwnPartCompetitionList(body, this_Obj.state.orgKey, sortBy, sortOrder, tableName, this_Obj.state.year);
 }
 
 const columnsOwned = [
@@ -340,7 +340,7 @@ class LiveScoreCompetitions extends Component {
         super(props);
 
         this.state = {
-            year: null,
+            year: 1,
             onLoad: false,
             orgKey: getOrganisationData() ? getOrganisationData().organisationId : null,
             orgLevel: AppConstants.state,
@@ -353,6 +353,7 @@ class LiveScoreCompetitions extends Component {
     }
 
     componentDidMount() {
+        this.props.getOnlyYearListAction(this.props.appState.yearList)
         const prevUrl = getPrevUrl();
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
             this.competitionListApi();
@@ -374,7 +375,7 @@ class LiveScoreCompetitions extends Component {
                 limitParticipating: 10,
             },
         };
-        this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, "all");
+        this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, "all", this.state.year);
     };
 
     setCompetitionID = (competitionData) => {
@@ -424,7 +425,7 @@ class LiveScoreCompetitions extends Component {
             },
         }
 
-        this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, key);
+        this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, key, this.state.year);
     };
 
     onChangeYear = (evt) => {
@@ -580,29 +581,75 @@ class LiveScoreCompetitions extends Component {
         );
     };
 
+    onYearClick(yearId) {
+        localStorage.setItem("yearId", yearId)
+        this.setState({ year: yearId })
+
+        const body = {
+            paging: {
+                offsetOwned: 0,
+                offsetParticipating: 0,
+                limitOwned: 10,
+                limitParticipating: 10,
+            },
+        };
+        this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, "all", yearId);
+    }
+
+    ///dropdown view containing all the dropdown of header
+    dropDownView = () => {
+        const { yearList } = this.props.appState
+        return (
+            <div
+                className="comp-player-grades-header-drop-down-view"
+                style={{ marginTop: 15 }}
+            >
+                <div className="col-sm-2">
+                    <div className="year-select-heading-view pb-3">
+                        <div className="reg-filter-col-cont"  >
+                            <span className="year-select-heading">
+                                {AppConstants.year}:</span>
+                            <Select
+                                className="year-select reg-filter-select-year ml-2"
+                                style={{ width: 90 }}
+                                onChange={yearId => this.onYearClick(yearId)}
+                                value={this.state.year}
+                            >
+                                {yearList.length > 0 && yearList.map((item, yearIndex) => (
+                                    < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
+                                ))
+                                }
+                            </Select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     ownedView = () => {
         let { ownedCompetitions, ownedTotalCount, ownedCurrentPage, ownedLoad } = this.props.liveScoreCompetition;
         return (
-          <div className="comp-dash-table-view mt-4">
-              <div className="table-responsive home-dash-table-view">
-                  <Table
-                    className="home-dashboard-table"
-                    columns={columnsOwned}
-                    dataSource={ownedCompetitions}
-                    pagination={false}
-                    loading={ownedLoad}
-                    rowKey={(record, index) => "ownedCompetitions" + record.id + index}
-                  />
-              </div>
-              <div className="d-flex justify-content-end">
-                  <Pagination
-                    className="antd-pagination pb-0"
-                    current={ownedCurrentPage}
-                    total={ownedTotalCount}
-                    onChange={(page) => this.handlePagination(page, "own")}
-                  />
-              </div>
-          </div>
+            <div className="comp-dash-table-view mt-4">
+                <div className="table-responsive home-dash-table-view">
+                    <Table
+                        className="home-dashboard-table"
+                        columns={columnsOwned}
+                        dataSource={ownedCompetitions}
+                        pagination={false}
+                        loading={ownedLoad}
+                        rowKey={(record, index) => "ownedCompetitions" + record.id + index}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination pb-0"
+                        current={ownedCurrentPage}
+                        total={ownedTotalCount}
+                        onChange={(page) => this.handlePagination(page, "own")}
+                    />
+                </div>
+            </div>
         );
     };
 
@@ -613,8 +660,9 @@ class LiveScoreCompetitions extends Component {
 
                 {/* <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" /> */}
 
-                
+
                 {this.dropdownButtonView()}
+                {this.dropDownView()}
                 {this.ownedView()}
                 {this.partHeaderView()}
                 {this.participatedView()}
@@ -626,6 +674,7 @@ class LiveScoreCompetitions extends Component {
 function mapStateToProps(state) {
     return {
         liveScoreCompetition: state.liveScoreCompetition,
+        appState: state.AppState,
     };
 }
 

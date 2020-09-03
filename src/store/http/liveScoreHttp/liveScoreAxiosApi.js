@@ -1260,9 +1260,9 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    innerHorizontalCompList(organisationId) {
+    innerHorizontalCompList(organisationId, yearRefId) {
 
-        let url = `/competitions/admin?organisationId=${organisationId}`;
+        let url = `/competitions/admin?organisationId=${organisationId}&yearRefId=${yearRefId}`;
 
         return Method.dataPost(url, null)
     },
@@ -1295,12 +1295,12 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, null)
     },
     /////livescore own part competition listing
-    liveScoreOwnPartCompetitionList(data, orgKey, sortBy, sortOrder) {
+    liveScoreOwnPartCompetitionList(data, orgKey, sortBy, sortOrder, yearRefId) {
         let url = null;
         if (orgKey) {
-            url = `/competitions/adminDashboard?organisationId=${orgKey}`;
+            url = `/competitions/adminDashboard?organisationId=${orgKey}&yearRefId=${yearRefId}`;
         } else {
-            url = `/competitions/adminDashboard`;
+            url = `/competitions/adminDashboard&yearRefId=${yearRefId}`;
         }
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;

@@ -94,7 +94,7 @@ class LiveScoreAddMatch extends Component {
                 this.props.getliveScoreScorerList(id, 4)
                 // this.props.liveScoreRoundListAction(id)
                 this.props.liveScoreClubListAction(id)
-                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id })
+                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id,offset:null })
                 this.setState({ loadvalue: true, allDisabled: true })
             } else {
                 history.push('/')
@@ -111,7 +111,7 @@ class LiveScoreAddMatch extends Component {
                 this.props.getliveScoreScorerList(id, 4)
                 // this.props.liveScoreRoundListAction(id)
                 this.props.liveScoreClubListAction(id)
-                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id })
+                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id,offset:null })
                 this.setState({ loadvalue: true, allDisabled: false })
             } else {
                 history.push('/')
@@ -934,6 +934,39 @@ class LiveScoreAddMatch extends Component {
                                 :
                                 null
                 }
+
+
+                {/* Umpire Reserve and Umpire Coach dpdn */}
+
+                {/* <div className="row" >
+                    <div className="col-sm" >
+
+                        <InputWithHead
+                            heading={AppConstants.umpireReserve}
+                        />
+                        <Select
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+
+                            placeholder={'Select Umpire Reserve'}
+                        
+                        >
+                            
+                        </Select>
+
+                    </div>
+                    <div className="col-sm" >
+                        <InputWithHead
+                            heading={AppConstants.umpireCoach}
+                        />
+                        <Select
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            placeholder={'Select Umpire Coach'}
+
+                        >
+
+                        </Select>
+                    </div>
+                </div> */}
 
 
                 <div className="row" >

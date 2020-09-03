@@ -239,9 +239,10 @@ let userHttpApi = {
 
   //liveScore coaches list
   liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder) {
-    let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
+    // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     let url
-    url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${id}&userName=${search}&offset=${offset}&limit=${10}`
+    url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${entityId}&userName=${search}&offset=${offset}&limit=${10}`
+
     if (sortBy && sortOrder) {
       url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
     }
@@ -277,15 +278,21 @@ let userHttpApi = {
   },
 
   umpireList(data) {
-    let url = ''
+    console.log(data, '***** Data')
+    let url = null
     if (data.userName) {
       url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}`
-    } else {
-      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${0}&limit=${10}`
+    } else if (data.offset != null) {
+      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}`
     }
+    else {
+      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}`
+    }
+
     if (data.sortBy && data.sortOrder) {
       url += `&sortBy=${data.sortBy}&sortOrder=${data.sortOrder}`;
     }
+
     return Method.dataGet(url, localStorage.token);
   },
 

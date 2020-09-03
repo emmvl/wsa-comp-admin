@@ -25,6 +25,8 @@ const initialState = {
     teams: null,
     onLoadSearch: false,
     selectedteam: [],
+    currentPage: null,
+    totalCount: null
 };
 
 function getTeamObj(teamSelectId, teamArr) {
@@ -82,8 +84,10 @@ function liveScoreCoachState(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-                coachesResult: action.result,
-                mainCoachListResult: action.result,
+                coachesResult: action.result.userData,
+                mainCoachListResult: action.result.userData,
+                currentPage: action.result.page.currentPage,
+                totalCount: action.result.page.totalCount,
                 status: action.status,
             };
 

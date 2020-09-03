@@ -276,8 +276,8 @@ class Umpire extends Component {
     };
 
     contentView = () => {
-        const { umpireList } = this.props.umpireState;
-        let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : [];
+        const { umpireList, totalCount, currentPage } = this.props.umpireState
+        let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : []
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -306,8 +306,8 @@ class Umpire extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
-                            current={1}
-                            total={10}
+                            current={currentPage}
+                            total={totalCount}
                             defaultPageSize={10}
                             onChange={this.handlePageChange}
                         />
@@ -364,11 +364,11 @@ class Umpire extends Component {
         const code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             this.props.umpireListAction({
-                refRoleId: refRoleTypes("umpire"),
-                entityTypes: entityTypes("COMPETITION"),
+                refRoleId: refRoleTypes('umpire'),
+                entityTypes: entityTypes('COMPETITION'),
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,
-                offset: 0,
+                offset: 0
             });
         }
     };
@@ -549,9 +549,9 @@ class Umpire extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires}/>
+                <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
 
-                <InnerHorizontalMenu menu="umpire" umpireSelectedKey="2"/>
+                <InnerHorizontalMenu menu="umpire" umpireSelectedKey="2" />
 
                 <Layout>
                     {this.headerView()}

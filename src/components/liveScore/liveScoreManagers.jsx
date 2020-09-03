@@ -32,8 +32,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy: sortBy, sortOrder: sortOrder });
-    let offset = 0
-    _this.props.liveScoreManagerListAction(3, 1, _this.state.competitionId, _this.state.searchText, offset, sortBy, sortOrder);
+    _this.props.liveScoreManagerListAction(3, 1, _this.state.competitionId, _this.state.searchText, _this.state.offset, sortBy, sortOrder);
 }
 
 const listeners = (key) => ({
@@ -196,7 +195,8 @@ class LiveScoreManagerList extends Component {
             year: "2020",
             scorerTableData: scorerData.scorerData,
             searchText: '',
-            competitionId: null
+            competitionId: null,
+            offset: 0
         }
 
         _this = this;
@@ -209,19 +209,27 @@ class LiveScoreManagerList extends Component {
         this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, offset)
     }
 
+    /// Handle Page change
+    handlePageChnage(page) {
+        let offset = page ? 10 * (page - 1) : 0;
+        this.setState({
+            offset
+        })
+        this.props.liveScoreManagerListAction(3, 1, this.state.competitionId, this.state.searchText, offset)
+    }
+
     ////////form content view
     contentView = () => {
-        const { liveScoreMangerState } = this.props;
-        let managerListData = liveScoreMangerState.managerListResult
+        const { managerListResult, currentPage, totalCount } = this.props.liveScoreMangerState;
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={managerListData}
+                        dataSource={managerListResult}
                         pagination={false}
-                        loading={this.props.liveScoreMangerState.onLoad == true && true}
+                        loading={this.props.liveScoreMangerState.onLoad}
                         rowKey={(record) => "managerListData" + record.id}
                     />
                 </div>
@@ -238,8 +246,10 @@ class LiveScoreManagerList extends Component {
                     >
                         <Pagination
                             className="antd-pagination"
-                            defaultCurrent={1}
-                            total={8}
+                            current={currentPage}
+                            total={totalCount}
+                            defaultPageSize={10}
+                            onChange={(page) => this.handlePageChnage(page)}
                         />
                     </div>
                 </div>
