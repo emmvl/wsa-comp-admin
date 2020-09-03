@@ -184,12 +184,13 @@ class LiveScoreCoaches extends Component {
   }
 
   /// Handle Page change
-  handlePageChnage(page) {
+  handlePageChange(page) {
     let offset = page ? 10 * (page - 1) : 0;
+    let { sortBy, sortOrder, searchText, competitionId } = this.state
     this.setState({
       offset
     })
-    this.props.liveScoreCoachListAction(17, 1, this.state.competitionId, this.state.searchText, offset)
+    this.props.liveScoreCoachListAction(17, 1, competitionId, searchText, offset, sortBy, sortOrder)
   }
 
   contentView = () => {
@@ -225,7 +226,7 @@ class LiveScoreCoaches extends Component {
               current={currentPage}
               total={totalCount}
               defaultPageSize={10}
-              onChange={(page) => this.handlePageChnage(page)}
+              onChange={(page) => this.handlePageChange(page)}
             />
           </div>
         </div>
@@ -360,8 +361,9 @@ class LiveScoreCoaches extends Component {
   onChangeSearchText = (e) => {
     const { id } = JSON.parse(getLiveScoreCompetiton())
     this.setState({ searchText: e.target.value })
+    let { sortBy, sortOrder, offset } = this.state
     if (e.target.value == null || e.target.value === "") {
-      this.props.liveScoreCoachListAction(17, 1, id, e.target.value, this.state.offset)
+      this.props.liveScoreCoachListAction(17, 1, id, e.target.value, offset, sortBy, sortOrder)
     }
   }
 
@@ -369,8 +371,9 @@ class LiveScoreCoaches extends Component {
   onKeyEnterSearchText = (e) => {
     var code = e.keyCode || e.which;
     const { id } = JSON.parse(getLiveScoreCompetiton())
+    let { sortBy, sortOrder, offset } = this.state
     if (code === 13) { //13 is the enter keycode
-      this.props.liveScoreCoachListAction(17, 1, id, e.target.value, this.state.offset)
+      this.props.liveScoreCoachListAction(17, 1, id, e.target.value, offset, sortBy, sortOrder)
     }
   }
 

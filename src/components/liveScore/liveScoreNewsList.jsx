@@ -152,7 +152,7 @@ const columns = [
         title: 'Active',
         dataIndex: 'news_expire_date',
         key: 'news_expire_date',
-        sorter: (a, b) => a.news_expire_date.length - b.news_expire_date.length,
+        // sorter: (a, b) => a.news_expire_date.length - b.news_expire_date.length,
         render: (news_expire_date, record) =>
             <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
                 <img className="dot-image"

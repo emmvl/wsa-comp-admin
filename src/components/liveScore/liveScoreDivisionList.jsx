@@ -164,9 +164,7 @@ const participateColumns = [
             return (
                 <span>{this_Obj.checkValue(recordGoalAttempts)}</span>
             )
-
         }
-
     },
     {
         title: 'Goal Attempts',
@@ -193,7 +191,6 @@ class LiveScoreDivisionList extends Component {
             offset: 0,
             liveScoreCompIsParent: false,
         }
-
         this_Obj = this;
     }
 
@@ -210,7 +207,7 @@ class LiveScoreDivisionList extends Component {
     onPageChange(page) {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset: offset })
-        this.props.getMainDivisionListAction(this.state.competitionId, offset)
+        this.props.getMainDivisionListAction(this.state.competitionId, offset, this.state.sortBy, this.state.sortOrder)
     }
 
     checkValue = (data) => {

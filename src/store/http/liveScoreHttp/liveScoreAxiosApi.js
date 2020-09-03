@@ -868,12 +868,14 @@ let LiveScoreAxiosApi = {
             "paging": payload.paging,
             "search": payload.search,
         }
-        let sortBy = payload.sortBy ? payload.sortBy : null
-        let sortOrder = payload.sortOrder ? payload.sortOrder : null
         if (select_status === 'All') {
-            url = `/players/activity?competitionId=${competitionId}&status=${""}&sortBy=${sortBy}&sortOrder=${sortOrder}`
+            url = `/players/activity?competitionId=${competitionId}&status=${""}`
+
         } else {
-            url = `/players/activity?competitionId=${competitionId}&status=${select_status}&sortBy=${sortBy}&sortOrder=${sortOrder}`
+            url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
+        }
+        if (payload.sortBy && payload.sortOrder) {
+            url += `&sortBy=${payload.sortBy}&sortOrder=${payload.sortOrder}`;
         }
         return Method.dataPost(url, token, body)
     },

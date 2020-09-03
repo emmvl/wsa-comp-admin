@@ -248,6 +248,8 @@ class LiveScoreTeamAttendance extends Component {
             divisionLoad: false,
             offset: 0,
             limit: 10,
+            sortBy: null,
+            sortOrder: null,
         }
         this_Obj = this
     }
@@ -287,11 +289,15 @@ class LiveScoreTeamAttendance extends Component {
     handleTablePagination(page) {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset })
+        let { searchText, sortBy, sortOrder } = this.state
         const paginationBody = {
             "paging": {
                 "limit": 10,
                 "offset": offset
             },
+            "search": searchText,
+            "sortBy": sortBy,
+            "sortOrder": sortOrder
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
@@ -307,12 +313,16 @@ class LiveScoreTeamAttendance extends Component {
     }
 
     onChangeStatus(status) {
+        let { searchText, sortBy, sortOrder } = this.state
         this.setState({ selectStatus: status })
         const paginationBody = {
             "paging": {
                 "limit": 10,
                 "offset": 0
             },
+            "search": searchText,
+            "sortBy": sortBy,
+            "sortOrder": sortOrder
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (status === 'All') {
@@ -337,6 +347,7 @@ class LiveScoreTeamAttendance extends Component {
 
     // on change search text
     onChangeSearchText = (e) => {
+        let { sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
         if (e.target.value === null || e.target.value === "") {
@@ -346,7 +357,9 @@ class LiveScoreTeamAttendance extends Component {
                     "limit": 10,
                     "offset": 0
                 },
-                "search": e.target.value
+                "search": e.target.value,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
             }
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
 
@@ -355,6 +368,7 @@ class LiveScoreTeamAttendance extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        let { sortBy, sortOrder } = this.state
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
@@ -364,7 +378,9 @@ class LiveScoreTeamAttendance extends Component {
                     "limit": 10,
                     "offset": 0
                 },
-                "search": e.target.value
+                "search": e.target.value,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
             }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
@@ -373,8 +389,9 @@ class LiveScoreTeamAttendance extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        let { searchText, sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (this.state.searchText === null || this.state.searchText === "") {
+        if (searchText === null || searchText === "") {
         }
         else {
             const body =
@@ -383,7 +400,9 @@ class LiveScoreTeamAttendance extends Component {
                     "limit": 10,
                     "offset": 0
                 },
-                "search": this.state.searchText
+                "search": searchText,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
             }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
