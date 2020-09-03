@@ -87,6 +87,93 @@ const columns = [
 
     },
     {
+        title: 'Player Id',
+        dataIndex: 'playerId',
+        key: 'playerId',
+        sorter: true,
+        onHeaderCell: () => listeners("playerId"),
+    },
+    {
+        title: 'First Name',
+        dataIndex: 'firstName',
+        key: 'firstName',
+        sorter: true,
+        onHeaderCell: () => listeners("firstName"),
+        render: (firstName) =>
+            <span className="input-heading-add-another pt-0">{firstName}</span>
+
+    },
+    {
+        title: 'Last Name',
+        dataIndex: 'lastName',
+        key: 'lastName',
+        sorter: true,
+        onHeaderCell: () => listeners("lastName"),
+        render: (lastName) =>
+
+            <span className="input-heading-add-another pt-0">{lastName}</span>
+
+    },
+    {
+        title: 'Division',
+        dataIndex: 'divisionName',
+        key: 'divisionName',
+        sorter: true,
+        onHeaderCell: () => listeners("division"),
+    },
+    {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        sorter: true,
+        onHeaderCell: () => listeners("status"),
+    },
+    {
+        title: 'Position',
+        dataIndex: 'positionName',
+        key: 'positionName',
+        sorter: true,
+        onHeaderCell: () => listeners("position"),
+    },
+];
+
+const borrowedColumns = [
+
+    {
+        title: 'Match id',
+        dataIndex: 'matchId',
+        key: 'matchId',
+        sorter: true,
+        onHeaderCell: () => listeners("matchId"),
+        render: (matchId) =>
+            <NavLink to={{
+                pathname: '/liveScoreMatchDetails',
+                state: { matchId: matchId, umpireKey: null }
+            }}>
+                <span className="input-heading-add-another pt-0">{matchId}</span>
+            </NavLink>
+
+    },
+    {
+        title: 'Start Time',
+        dataIndex: 'startTime',
+        key: 'startTime',
+        sorter: true,
+        onHeaderCell: () => listeners("startTime"),
+        render: (teamName) =>
+            <span >{liveScore_formateDateTime(teamName)}</span>
+    },
+    {
+        title: 'Team',
+        dataIndex: 'name',
+        key: 'name',
+        sorter: true,
+        onHeaderCell: () => listeners("team"),
+        render: (name) =>
+            <span >{name}</span>
+
+    },
+    {
         title: 'Borrowing Team',
         dataIndex: 'borrowingTeam',
         key: 'borrowingTeam',
@@ -146,7 +233,6 @@ const columns = [
         onHeaderCell: () => listeners("position"),
     },
 ];
-
 
 class LiveScoreTeamAttendance extends Component {
     constructor(props) {
@@ -220,7 +306,7 @@ class LiveScoreTeamAttendance extends Component {
         }
     }
 
-    onChnageStatus(status) {
+    onChangeStatus(status) {
         this.setState({ selectStatus: status })
         const paginationBody = {
             "paging": {
@@ -327,7 +413,7 @@ class LiveScoreTeamAttendance extends Component {
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ display: "flex", justifyContent: "flex-end", minWidth: 140 }}
-                                    onChange={(selectStatus) => this.onChnageStatus(selectStatus)}
+                                    onChange={(selectStatus) => this.onChangeStatus(selectStatus)}
                                     value={this.state.selectStatus} >
                                     <Option value={"All"}>{'All'}</Option>
                                     <Option value={"Borrowed"}>{'Borrowed Player'}</Option>
@@ -472,7 +558,7 @@ class LiveScoreTeamAttendance extends Component {
                     <Table
                         loading={this.props.liveScoreTeamAttendanceState.onLoad === true && true}
                         className="home-dashboard-table"
-                        columns={columns}
+                        columns={this.state.selectStatus === "Borrowed" ? borrowedColumns : columns}
                         dataSource={dataSource}
                         pagination={false}
                     // rowKey={(record, index) => record.matchId + index}

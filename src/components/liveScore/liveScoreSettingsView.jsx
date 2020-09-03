@@ -247,6 +247,8 @@ class LiveScoreSettingsView extends Component {
                     yearRefId
                 } = this.props.liveScoreSetting
 
+                localStorage.setItem("yearId", yearRefId)
+
                 const umpire = record1.includes("recordUmpire")
                 const umpirenum = umpire ? 1 : 0
                 const gameTimeTracking = record1.includes("gameTimeTracking")
@@ -1271,7 +1273,6 @@ class LiveScoreSettingsView extends Component {
     };
 
     onYearClick(yearRefId) {
-        localStorage.setItem("yearId", yearRefId)
         this.setState({ yearRefId })
 
         this.props.onChangeSettingForm({ key: "yearRefId", data: yearRefId })

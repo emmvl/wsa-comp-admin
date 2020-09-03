@@ -48,6 +48,7 @@ export function* getCompetitionDrawsSaga(action) {
                 type: ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
+                competitionId: action.competitionId
             });
         } else {
             yield call(failSaga, result)
@@ -179,15 +180,21 @@ export function* updateCourtTimingsDrawsAction(action) {
     try {
         const result = yield call(CompetitionAxiosApi.updateCourtTimingsDrawsAction, action.data);
         if (result.status === 1) {
-            yield put({
-                type: ApiConstants.API_UPDATE_COMPETITION_DRAWS_COURT_TIMINGS_SUCCESS,
-                result: result.result.data,
-                status: result.status,
-                sourceArray: action.sourceArray,
-                targetArray: action.targetArray,
-                actionType: action.actionType,
-                drawData: action.drawData
-            });
+            const getResult = yield call(CompetitionAxiosApi.getCompetitionDraws, action.apiData.yearRefId, action.apiData.competitionId, action.apiData.venueId, action.apiData.roundId, action.apiData.orgId, action.apiData.startDate, action.apiData.endDate);
+            if (getResult.status === 1) {
+                yield put({
+                    type: ApiConstants.API_UPDATE_COMPETITION_DRAWS_COURT_TIMINGS_SUCCESS,
+                    result: result.result.data,
+                    status: result.status,
+                    getResult: getResult.result.data,
+                    competitionId: action.apiData.competitionId,
+                    sourceArray: action.sourceArray,
+                    targetArray: action.targetArray,
+                    actionType: action.actionType,
+                    drawData: action.drawData
+                });
+            }
+            message.success(result.result.data.message)
         } else {
             yield call(failSaga, result)
         }
@@ -220,7 +227,6 @@ export function* getDivisionGradeNameListSaga(action) {
 export function* publishDraws(action) {
     try {
         const result = yield call(CompetitionAxiosApi.publishDrawsApi, action);
-        console.log(result)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_DRAW_PUBLISH_SUCCESS,
@@ -292,7 +298,6 @@ export function* competitionFixtureSaga(action) {
 }
 
 //// Update Competition Draws
-
 export function* updateCompetitionFixtures(action) {
     try {
         const result = yield call(CompetitionAxiosApi.updateFixture, action.data);
@@ -326,7 +331,6 @@ export function* updateCompetitionFixtures(action) {
     }
 }
 
-
 //////////update draws court timing where N/A(null) is there
 export function* updateDrawsLock(action) {
     try {
@@ -338,7 +342,8 @@ export function* updateDrawsLock(action) {
                 status: result.status,
                 roundId: action.roundId,
                 drawsId: action.drawsId,
-                venueCourtId: action.venueCourtId
+                venueCourtId: action.venueCourtId,
+                key: action.key
             });
             message.success(result.result.data.message)
         } else {
@@ -374,10 +379,8 @@ export function* getVenueAndDivisionSaga(action) {
     try {
         const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId, action.startDate, action.endDate);
         if (VenueResult.status === 1) {
-            console.log(VenueResult)
             const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, action.startDate, action.endDate);
             if (division_Result.status === 1) {
-                console.log(division_Result)
                 yield put({
                     type: ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_SUCCESS,
                     Venue_Result: VenueResult.result.data,

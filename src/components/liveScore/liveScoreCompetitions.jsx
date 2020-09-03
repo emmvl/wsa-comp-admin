@@ -354,6 +354,8 @@ class LiveScoreCompetitions extends Component {
 
     componentDidMount() {
         this.props.getOnlyYearListAction(this.props.appState.yearList)
+        localStorage.setItem("yearId", this.state.year)
+
         const prevUrl = getPrevUrl();
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
             this.competitionListApi();
