@@ -594,7 +594,7 @@ class LiveScoreCompetitions extends Component {
                 limitParticipating: 10,
             },
         };
-        this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, "all", yearId);
+        this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, this.state.sortBy, this.state.sortOrder, "all", yearId);
     }
 
     ///dropdown view containing all the dropdown of header

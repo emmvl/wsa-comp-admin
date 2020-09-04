@@ -10,7 +10,7 @@ class AllLegendComponent extends React.Component {
                     return (
                         <div key={index + "legend"} className="all-legend-main-div">
                             <div className="col-sm pb-4 pt-4">
-                                <span className="legend-text" style={{ fontSize: 18, fontWeight: 600 }}>{item.competitionName}</span>
+                                <span className="legend-text" style={{ fontSize: 13, fontWeight: 600 }}>{item.competitionName}</span>
                             </div>
                             <div className="d-flex" style={{ paddingLeft: 40 }}>
                                 {item.legendArray.map((subItem, subIndex) => {

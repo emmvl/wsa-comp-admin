@@ -198,7 +198,16 @@ const AppUniqueId = {
 
     //import team button
     impPlayerTeam_template_btn: "impPlayerTeam_template_btn",
-    importPlayerTeam_upload_btn: "importPlayerTeam_upload_btn"
+    importPlayerTeam_upload_btn: "importPlayerTeam_upload_btn",
+
+    competitionVenueNextBn: "competitionVenueNextBn",
+    competitionVenueSaveBn: "competitionVenueSaveBn",
+    compnameTextbox: "compnameTextbox",
+    timeBetweenRoundsDays: "timeBetweenRoundsDays",
+    timeBetweenRoundsHrs: "timeBetweenRoundsHrs",
+    timeBetweenRoundsMins: "timeBetweenRoundsMins",
+    compformat_save_btn: "compformat_save_btn",
+    draw_comp_dpdn: "draw_comp_dpdn"
 
 };
 
