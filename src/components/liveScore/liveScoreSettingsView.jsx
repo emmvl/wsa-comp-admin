@@ -31,17 +31,15 @@ import {
 } from '../../store/actions/LiveScoreAction/LiveScoreSettingAction'
 import Loader from '../../customComponents/loader';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
-import {
-
-    getCompetitonVenuesList
-} from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
+import { getCompetitionVenuesList } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import ImageLoader from '../../customComponents/ImageLoader'
 import history from "../../util/history";
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
 import { onInviteesSearchAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import { message } from "antd";
-import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
+import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
+import { getOnlyYearListAction } from "store/actions/appAction";
 
 
 
@@ -65,10 +63,14 @@ class LiveScoreSettingsView extends Component {
             selectedComp: props.location ? props.location.state ? props.location.state.selectedComp ? props.location.state.selectedComp : null : null : null,
             screenName: props.location ? props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null : null,
             edit: props.location ? props.location.state ? props.location.state.edit ? props.location.state.edit : null : null : null,
-            competitionId: null
+            competitionId: null,
+            yearId: 1,
+            yearLoading: false
         };
     }
     componentDidMount() {
+        this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.setState({ yearLoading: true })
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.props.umpireCompetitionListAction(null, null, organisationId)
 
@@ -77,10 +79,10 @@ class LiveScoreSettingsView extends Component {
             if (this.state.selectedComp !== null) {
                 if (this.state.edit === 'edit' || this.state.selectedComp) {
                     this.props.getLiveScoreSettingInitiate(this.state.selectedComp)
-                    this.props.getCompetitonVenuesList()
+                    this.props.getCompetitionVenuesList()
                 } else {
                     this.props.clearLiveScoreSetting()
-                    this.props.getCompetitonVenuesList()
+                    this.props.getCompetitionVenuesList()
                 }
             }
 
@@ -91,18 +93,18 @@ class LiveScoreSettingsView extends Component {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 if (this.props.location.state === 'edit' || id) {
                     this.props.getLiveScoreSettingInitiate(id)
-                    this.props.getCompetitonVenuesList()
+                    this.props.getCompetitionVenuesList()
                     this.setState({ competitionId: id })
                 } else {
                     this.props.clearLiveScoreSetting()
-                    this.props.getCompetitonVenuesList()
+                    this.props.getCompetitionVenuesList()
                 }
             }
         }
 
         if (this.props.location.state === 'add') {
             this.props.clearLiveScoreSetting()
-            this.props.getCompetitonVenuesList()
+            this.props.getCompetitionVenuesList()
 
             this.props.form.setFieldsValue({
                 "recordumpire": undefined
@@ -114,7 +116,6 @@ class LiveScoreSettingsView extends Component {
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreSetting != this.props.liveScoreSetting) {
             const { competitionName, shortName, competitionLogo, scoring, recordUmpireType } = this.props.liveScoreSetting.form
-            console.log(this.props.liveScoreSetting, "chchch")
             this.props.form.setFieldsValue({
                 competition_name: competitionName,
                 short_name: shortName,
@@ -129,6 +130,14 @@ class LiveScoreSettingsView extends Component {
 
         }
         if (nextProps.venueList != this.props.venueList) {
+        }
+
+        if (nextProps.appState !== this.props.appState) {
+            if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
+                let yearId = this.props.appState.yearList[0].id
+                this.props.onChangeSettingForm({ key: "yearRefId", data: yearId })
+                this.setState({ yearLoading: false });
+            }
         }
     }
 
@@ -234,8 +243,11 @@ class LiveScoreSettingsView extends Component {
                     borrowedPlayer,
                     gamesBorrowedThreshold,
                     linkedCompetitionId,
-                    premierCompLink
+                    premierCompLink,
+                    yearRefId
                 } = this.props.liveScoreSetting
+
+                localStorage.setItem("yearId", yearRefId)
 
                 const umpire = record1.includes("recordUmpire")
                 const umpirenum = umpire ? 1 : 0
@@ -283,6 +295,7 @@ class LiveScoreSettingsView extends Component {
                 formData.append('gamesBorrowedThreshold', gamesBorrowedThreshold)
 
                 formData.append('linkedCompetitionId', linkedCompetitionId)
+                formData.append('yearRefId', yearRefId)
 
 
                 if (attendenceRecordingTime) {
@@ -1259,6 +1272,53 @@ class LiveScoreSettingsView extends Component {
 
     };
 
+    onYearClick(yearRefId) {
+        this.setState({ yearRefId })
+
+        this.props.onChangeSettingForm({ key: "yearRefId", data: yearRefId })
+    }
+
+    dropDownView = () => {
+        const { yearList } = this.props.appState
+        const { yearRefId } = this.props.liveScoreSetting
+        return (
+            <div className="comp-venue-courts-dropdown-view mt-0">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm">
+                            <div
+                                style={{
+                                    width: "fit-content",
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <span className="year-select-heading">
+                                    {AppConstants.year}:
+                </span>
+
+                                <Select
+                                    className="year-select reg-filter-select-year ml-2"
+                                    // style={{ minWidth: 160 }}
+                                    onChange={yearId => this.onYearClick(yearId)}
+                                    value={yearRefId}
+                                >
+                                    {yearList.length > 0 && yearList.map((item, yearIndex) => (
+                                        < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
+                                    ))
+                                    }
+                                </Select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+
+
 
 
     render() {
@@ -1278,6 +1338,7 @@ class LiveScoreSettingsView extends Component {
                 }
                 <Layout>
                     {this.headerView()}
+                    {this.dropDownView()}
                     {/* <Content> */}
                     <Form autoComplete='off' onSubmit={this.handleSubmit} className="login-form">
                         {/* <Form onSubmit={this.checkSubmit} noValidate="novalidate" className="login-form"> */}
@@ -1296,18 +1357,20 @@ function mapStatetoProps(state) {
         venueList: state.LiveScoreMatchState,
         appState: state.AppState,
         competitionFeesState: state.CompetitionFeesState,
-        umpireCompetitionState: state.UmpireCompetitionState
+        umpireCompetitionState: state.UmpireCompetitionState,
+        appState: state.AppState,
     }
 }
 export default connect(mapStatetoProps, {
     clearLiveScoreSetting,
     getLiveScoreSettingInitiate,
     onChangeSettingForm,
-    getCompetitonVenuesList,
+    getCompetitionVenuesList,
     settingDataPostInititae,
     searchVenueList,
     clearFilter,
     onInviteesSearchAction,
     settingRegInvitees,
-    umpireCompetitionListAction
+    umpireCompetitionListAction,
+    getOnlyYearListAction
 })((Form.create()(LiveScoreSettingsView)));

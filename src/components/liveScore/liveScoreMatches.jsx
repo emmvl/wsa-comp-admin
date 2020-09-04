@@ -33,7 +33,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    _this.props.liveScoreMatchListAction(_this.state.competitionId, 1, 0, _this.state.searchText, _this.state.selectedDivision === 'All' ? null : _this.state.selectedDivision, _this.state.selectedRound === 'All' ? null : _this.state.selectedRound, undefined, sortBy, sortOrder);
+    _this.props.liveScoreMatchListAction(_this.state.competitionId, 1, _this.state.offset, _this.state.searchText, _this.state.selectedDivision === 'All' ? null : _this.state.selectedDivision, _this.state.selectedRound === 'All' ? null : _this.state.selectedRound, undefined, sortBy, sortOrder);
 }
 
 var _this = null
@@ -117,8 +117,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team1.name}</span>
             </NavLink>
         ) : (
-            <span>{team1.name}</span>
-        )
+                <span>{team1.name}</span>
+            )
     },
     {
         title: 'Away',
@@ -136,8 +136,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team2.name}</span>
             </NavLink>
         ) : (
-            <span>{team2.name}</span>
-        )
+                <span>{team2.name}</span>
+            )
     },
     {
         title: 'Venue',
@@ -258,8 +258,9 @@ class LiveScoreMatchesList extends Component {
 
     handleMatchTableList(page, competitionID) {
         let offset = page ? 10 * (page - 1) : 0;
+        this.setState({ offset })
         let start = 1
-        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound)
+        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
     }
 
     onExport() {
@@ -271,7 +272,7 @@ class LiveScoreMatchesList extends Component {
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value === "") {
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
         }
     }
 
@@ -475,7 +476,7 @@ class LiveScoreMatchesList extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreMatchListState.onLoad == true && true}
+                        loading={this.props.liveScoreMatchListState.onLoadMatch}
                         className="home-dashboard-table" columns={columns}
                         dataSource={DATA}
                         pagination={false}
@@ -571,10 +572,10 @@ class LiveScoreMatchesList extends Component {
         this.setState({ selectedDivision: division, selectedRound: 'All' })
         let offset = 0;
         let start = 1
-        const { competitionId, searchText, selectedRound } = this.state;
+        const { competitionId, searchText, selectedRound, sortBy, sortOrder } = this.state;
 
         setTimeout(() => {
-            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, selectedRound === 'All' ? null : selectedRound)
+            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, selectedRound === 'All' ? null : selectedRound, sortBy, sortOrder)
         }, 200);
         this.props.liveScoreRoundListAction(competitionId, division == 'All' ? '' : division)
 
@@ -583,8 +584,8 @@ class LiveScoreMatchesList extends Component {
     onChangeRound(roundName) {
         let offset = 0;
         let start = 1
-        const { competitionId, searchText, selectedDivision } = this.state;
-        this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, selectedDivision === 'All' ? null : selectedDivision, roundName === 'All' ? null : roundName)
+        const { competitionId, searchText, selectedDivision, sortBy, sortOrder } = this.state;
+        this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, selectedDivision === 'All' ? null : selectedDivision, roundName === 'All' ? null : roundName, sortBy, sortOrder)
         this.setState({ selectedRound: roundName })
     }
 
@@ -658,18 +659,18 @@ class LiveScoreMatchesList extends Component {
                 {this.state.umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                    <DashboardLayout
-                        menuHeading={AppConstants.liveScores}
-                        menuName={AppConstants.liveScores}
-                        onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                    />
-                )}
+                        <DashboardLayout
+                            menuHeading={AppConstants.liveScores}
+                            menuName={AppConstants.liveScores}
+                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                        />
+                    )}
 
                 {this.state.umpireKey ? (
                     <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"1"} />
                 ) : (
-                    <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
-                )}
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
+                    )}
 
                 <Layout>
                     {this.headerView()}

@@ -2,7 +2,7 @@ import { put, call } from 'redux-saga/effects'
 import ApiConstants from "../../../themes/apiConstants";
 import CompetitionAxiosApi from "../../http/competitionHttp/competitionAxiosApi";
 import { message } from "antd";
-import CommonAxiosApi from "../../http/commonHttp/commonAxios";
+import CommonAxiosApi from "../../http/commonHttp/commonAxiosApi";
 
 
 export function* venueTimeSaga(action) {

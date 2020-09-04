@@ -41,9 +41,8 @@ function tableSort(key) {
   } else if (_this.state.sortBy === key && _this.state.sortOrder === 'DESC') {
     sortBy = sortOrder = null;
   }
-  _this.setState({ sortBy, sortOrder });
-
-  _this.props.liveScoreCoachListAction(17, 1, _this.state.competitionId, _this.state.searchText, sortBy, sortOrder);
+  _this.setState({ sortBy: sortBy, sortOrder: sortOrder });
+  _this.props.liveScoreCoachListAction(17, 1, _this.state.competitionId, _this.state.searchText, _this.state.offset, sortBy, sortOrder);
 }
 
 const listeners = (key) => ({
@@ -119,8 +118,8 @@ const columns = [
               </NavLink>
             </div>
           ) : (
-            <span>{item.name}</span>
-          )
+              <span>{item.name}</span>
+            )
         ))}
       </div>
     ),
@@ -139,7 +138,7 @@ const columns = [
         <SubMenu
           key="sub1"
           title={
-            <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16"/>
+            <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
           }
         >
           <Menu.Item key="1">
@@ -164,7 +163,8 @@ class LiveScoreCoaches extends Component {
 
     this.state = {
       searchText: "",
-      competitionId: null
+      competitionId: null,
+      offset: 0
     };
 
     _this = this;
@@ -173,8 +173,8 @@ class LiveScoreCoaches extends Component {
   componentDidMount() {
     const { id } = JSON.parse(getLiveScoreCompetiton())
     this.setState({ competitionId: id })
-    let offset=0
-    this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText,offset)
+    let offset = 0
+    this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText, offset)
 
     if (id !== null) {
       this.props.getliveScoreTeams(id)
@@ -183,9 +183,20 @@ class LiveScoreCoaches extends Component {
     }
   }
 
+  /// Handle Page change
+  handlePageChange(page) {
+    let offset = page ? 10 * (page - 1) : 0;
+    let { sortBy, sortOrder, searchText, competitionId } = this.state
+    this.setState({
+      offset
+    })
+    this.props.liveScoreCoachListAction(17, 1, competitionId, searchText, offset, sortBy, sortOrder)
+  }
+
   contentView = () => {
-    let couchesList = isArrayNotEmpty(this.props.liveScoreCoachState.coachesResult) ? this.props.liveScoreCoachState.coachesResult : []
-    let teamList = isArrayNotEmpty(this.props.liveScoreCoachState.coachesResult) ? this.props.liveScoreCoachState.coachesResult : []
+    const { coachesResult, currentPage, totalCount } = this.props.liveScoreCoachState
+    let couchesList = isArrayNotEmpty(coachesResult) ? coachesResult : []
+    let teamList = isArrayNotEmpty(coachesResult) ? coachesResult : []
 
     return (
       <div className="comp-dash-table-view mt-4">
@@ -195,7 +206,7 @@ class LiveScoreCoaches extends Component {
             columns={columns}
             dataSource={couchesList}
             pagination={false}
-            loading={this.props.liveScoreCoachState.onLoad === true && true}
+            loading={this.props.liveScoreCoachState.onLoad}
             rowKey={(record) => "couchesList" + record.id}
           />
         </div>
@@ -212,8 +223,10 @@ class LiveScoreCoaches extends Component {
           >
             <Pagination
               className="antd-pagination"
-              defaultCurrent={1}
-              total={8}
+              current={currentPage}
+              total={totalCount}
+              defaultPageSize={10}
+              onChange={(page) => this.handlePageChange(page)}
             />
           </div>
         </div>
@@ -348,8 +361,9 @@ class LiveScoreCoaches extends Component {
   onChangeSearchText = (e) => {
     const { id } = JSON.parse(getLiveScoreCompetiton())
     this.setState({ searchText: e.target.value })
+    let { sortBy, sortOrder, offset } = this.state
     if (e.target.value == null || e.target.value === "") {
-      this.props.liveScoreCoachListAction(17, 1, id, e.target.value)
+      this.props.liveScoreCoachListAction(17, 1, id, e.target.value, offset, sortBy, sortOrder)
     }
   }
 
@@ -357,8 +371,9 @@ class LiveScoreCoaches extends Component {
   onKeyEnterSearchText = (e) => {
     var code = e.keyCode || e.which;
     const { id } = JSON.parse(getLiveScoreCompetiton())
+    let { sortBy, sortOrder, offset } = this.state
     if (code === 13) { //13 is the enter keycode
-      this.props.liveScoreCoachListAction(17, 1, id, e.target.value)
+      this.props.liveScoreCoachListAction(17, 1, id, e.target.value, offset, sortBy, sortOrder)
     }
   }
 
@@ -368,7 +383,7 @@ class LiveScoreCoaches extends Component {
     if (this.state.searchText == null || this.state.searchText === "") {
     } else {
       // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
-      this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText)
+      this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText, this.state.offset)
     }
   }
 

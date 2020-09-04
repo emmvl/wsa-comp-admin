@@ -218,14 +218,24 @@ function LiveScoreTeamState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_IMPORT_LOAD:
-            return { ...state, onLoad: true };
+            return {
+                ...state,
+                onLoad: true,
+                importResult: null,
+            };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_IMPORT_SUCCESS:
             return {
                 ...state,
                 onLoad: false,
                 importResult: action.result,
-            }
+            };
+
+        case ApiConstants.API_LIVE_SCORE_TEAM_IMPORT_RESET:
+            return {
+                ...state,
+                importResult: null,
+            };
 
         case ApiConstants.API_LIVE_SCORE_ADD_TEAM_LOAD:
             return { ...state, onLoad: true };

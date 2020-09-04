@@ -250,37 +250,39 @@ class LiveScoreGoalList extends Component {
     }
     // on change search text
     onChangeSearchText = (e) => {
+        let { sortBy, sortOrder } = this.state
         this.setState({ searchText: e.target.value })
         if (e.target.value === null || e.target.value === "") {
             let offset = 0
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset)
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, sortBy, sortOrder)
         }
     }
 
     // search key 
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
-
+        let { sortBy, sortOrder } = this.state
         if (code === 13) { //13 is the enter keycode
             let offset = 0
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset)
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, sortBy, sortOrder)
         }
     }
 
     // on click of search icon
     onClickSearchIcon = () => {
-
+        let { sortBy, sortOrder } = this.state
         if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
             let offset = 0
-            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset)
+            this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset, sortBy, sortOrder)
         }
     }
 
     onChangeFilter(filter) {
+        let { sortBy, sortOrder } = this.state
         let offset = 0
-        this.props.liveScoreGoalListAction(this.state.competitionId, filter, this.state.searchText, offset)
+        this.props.liveScoreGoalListAction(this.state.competitionId, filter, this.state.searchText, offset, sortBy, sortOrder)
         this.setState({ filter })
     }
 
@@ -364,7 +366,8 @@ class LiveScoreGoalList extends Component {
 
     onPageChange(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset)
+        let { sortBy, sortOrder } = this.state
+        this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset, sortBy, sortOrder)
     }
 
     ////////form content view

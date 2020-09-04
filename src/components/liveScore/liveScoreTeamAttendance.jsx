@@ -16,22 +16,48 @@ import { exportFilesAction } from "../../store/actions/appAction"
 import { getLiveScoreDivisionList } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
 import { liveScoreRoundListAction } from "../../store/actions/LiveScoreAction/liveScoreRoundAction";
 
-/////function to sort table column
-function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
-}
-
 const { Content } = Layout;
 const { Option } = Select;
+let this_Obj = null;
+
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
+function tableSort(key) {
+    let sortBy = key;
+    let sortOrder = null;
+    if (this_Obj.state.sortBy !== key) {
+        sortOrder = "ASC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "ASC") {
+        sortOrder = "DESC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "DESC") {
+        sortBy = sortOrder = null;
+    }
+
+    this_Obj.setState({ sortBy, sortOrder });
+    let { limit, offset, competitionId, searchText, selectStatus } = this_Obj.state
+    const body =
+    {
+        "paging": {
+            "limit": limit,
+            "offset": offset
+        },
+        "search": searchText,
+        "sortBy": sortBy,
+        "sortOrder": sortOrder
+    }
+    this_Obj.props.liveScoreTeamAttendanceListAction(competitionId, body, selectStatus)
+}
+
 const columns = [
 
     {
         title: 'Match id',
         dataIndex: 'matchId',
         key: 'matchId',
-        sorter: (a, b) => tableSort(a, b, "matchId"),
+        sorter: true,
+        onHeaderCell: () => listeners("matchId"),
         render: (matchId) =>
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
@@ -45,7 +71,8 @@ const columns = [
         title: 'Start Time',
         dataIndex: 'startTime',
         key: 'startTime',
-        sorter: (a, b) => tableSort(a, b, 'startTime'),
+        sorter: true,
+        onHeaderCell: () => listeners("startTime"),
         render: (teamName) =>
             <span >{liveScore_formateDateTime(teamName)}</span>
     },
@@ -53,31 +80,25 @@ const columns = [
         title: 'Team',
         dataIndex: 'name',
         key: 'name',
-        sorter: (a, b) => tableSort(a, b, 'name'),
+        sorter: true,
+        onHeaderCell: () => listeners("team"),
         render: (name) =>
             <span >{name}</span>
 
     },
-    // {
-    //     title: 'Borrowing Team',
-    //     dataIndex: 'teamName',
-    //     key: 'teamName',
-    //     sorter: (a, b) => tableSort(a, b, 'teamName'),
-    //     render: (teamName) =>
-    //         <span >{teamName}</span>
-
-    // },
     {
         title: 'Player Id',
         dataIndex: 'playerId',
         key: 'playerId',
-        sorter: (a, b) => tableSort(a, b, 'playerId'),
+        sorter: true,
+        onHeaderCell: () => listeners("playerId"),
     },
     {
         title: 'First Name',
         dataIndex: 'firstName',
         key: 'firstName',
-        sorter: (a, b) => tableSort(a, b, 'firstName'),
+        sorter: true,
+        onHeaderCell: () => listeners("firstName"),
         render: (firstName) =>
             <span className="input-heading-add-another pt-0">{firstName}</span>
 
@@ -86,7 +107,8 @@ const columns = [
         title: 'Last Name',
         dataIndex: 'lastName',
         key: 'lastName',
-        sorter: (a, b) => tableSort(a, b, 'lastName'),
+        sorter: true,
+        onHeaderCell: () => listeners("lastName"),
         render: (lastName) =>
 
             <span className="input-heading-add-another pt-0">{lastName}</span>
@@ -96,22 +118,121 @@ const columns = [
         title: 'Division',
         dataIndex: 'divisionName',
         key: 'divisionName',
-        sorter: (a, b) => tableSort(a, b, 'divisionName'),
+        sorter: true,
+        onHeaderCell: () => listeners("division"),
     },
     {
         title: 'Status',
         dataIndex: 'status',
         key: 'status',
-        sorter: (a, b) => tableSort(a, b, 'status'),
+        sorter: true,
+        onHeaderCell: () => listeners("status"),
     },
     {
         title: 'Position',
         dataIndex: 'positionName',
         key: 'positionName',
-        sorter: (a, b) => tableSort(a, b, 'positionName'),
+        sorter: true,
+        onHeaderCell: () => listeners("position"),
     },
 ];
 
+const borrowedColumns = [
+
+    {
+        title: 'Match id',
+        dataIndex: 'matchId',
+        key: 'matchId',
+        sorter: true,
+        onHeaderCell: () => listeners("matchId"),
+        render: (matchId) =>
+            <NavLink to={{
+                pathname: '/liveScoreMatchDetails',
+                state: { matchId: matchId, umpireKey: null }
+            }}>
+                <span className="input-heading-add-another pt-0">{matchId}</span>
+            </NavLink>
+
+    },
+    {
+        title: 'Start Time',
+        dataIndex: 'startTime',
+        key: 'startTime',
+        sorter: true,
+        onHeaderCell: () => listeners("startTime"),
+        render: (teamName) =>
+            <span >{liveScore_formateDateTime(teamName)}</span>
+    },
+    {
+        title: 'Team',
+        dataIndex: 'name',
+        key: 'name',
+        sorter: true,
+        onHeaderCell: () => listeners("team"),
+        render: (name) =>
+            <span >{name}</span>
+
+    },
+    {
+        title: 'Borrowing Team',
+        dataIndex: 'borrowingTeam',
+        key: 'borrowingTeam',
+        sorter: true,
+        onHeaderCell: () => listeners("borrowingTeam"),
+        render: (borrowingTeam) =>
+            <span >{borrowingTeam}</span>
+
+    },
+    {
+        title: 'Player Id',
+        dataIndex: 'playerId',
+        key: 'playerId',
+        sorter: true,
+        onHeaderCell: () => listeners("playerId"),
+    },
+    {
+        title: 'First Name',
+        dataIndex: 'firstName',
+        key: 'firstName',
+        sorter: true,
+        onHeaderCell: () => listeners("firstName"),
+        render: (firstName) =>
+            <span className="input-heading-add-another pt-0">{firstName}</span>
+
+    },
+    {
+        title: 'Last Name',
+        dataIndex: 'lastName',
+        key: 'lastName',
+        sorter: true,
+        onHeaderCell: () => listeners("lastName"),
+        render: (lastName) =>
+
+            <span className="input-heading-add-another pt-0">{lastName}</span>
+
+    },
+    {
+        title: 'Division',
+        dataIndex: 'divisionName',
+        key: 'divisionName',
+        sorter: true,
+        onHeaderCell: () => listeners("division"),
+    },
+    {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        sorter: true,
+        onHeaderCell: () => listeners("status"),
+    },
+    {
+        title: 'Position',
+        dataIndex: 'positionName',
+        key: 'positionName',
+        sorter: true,
+        onHeaderCell: () => listeners("position"),
+    },
+];
 
 class LiveScoreTeamAttendance extends Component {
     constructor(props) {
@@ -124,8 +245,13 @@ class LiveScoreTeamAttendance extends Component {
             searchText: "",
             selectedDivision: "All",
             selectedRound: "All",
-            divisionLoad: false
+            divisionLoad: false,
+            offset: 0,
+            limit: 10,
+            sortBy: null,
+            sortOrder: null,
         }
+        this_Obj = this
     }
 
 
@@ -162,12 +288,16 @@ class LiveScoreTeamAttendance extends Component {
 
     handleTablePagination(page) {
         let offset = page ? 10 * (page - 1) : 0;
-
+        this.setState({ offset })
+        let { searchText, sortBy, sortOrder } = this.state
         const paginationBody = {
             "paging": {
                 "limit": 10,
                 "offset": offset
             },
+            "search": searchText,
+            "sortBy": sortBy,
+            "sortOrder": sortOrder
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
@@ -182,13 +312,17 @@ class LiveScoreTeamAttendance extends Component {
         }
     }
 
-    onChnageStatus(status) {
+    onChangeStatus(status) {
+        let { searchText, sortBy, sortOrder } = this.state
         this.setState({ selectStatus: status })
         const paginationBody = {
             "paging": {
                 "limit": 10,
                 "offset": 0
             },
+            "search": searchText,
+            "sortBy": sortBy,
+            "sortOrder": sortOrder
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (status === 'All') {
@@ -213,6 +347,7 @@ class LiveScoreTeamAttendance extends Component {
 
     // on change search text
     onChangeSearchText = (e) => {
+        let { sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
         if (e.target.value === null || e.target.value === "") {
@@ -222,7 +357,9 @@ class LiveScoreTeamAttendance extends Component {
                     "limit": 10,
                     "offset": 0
                 },
-                "search": e.target.value
+                "search": e.target.value,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
             }
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
 
@@ -231,6 +368,7 @@ class LiveScoreTeamAttendance extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        let { sortBy, sortOrder } = this.state
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
@@ -240,7 +378,9 @@ class LiveScoreTeamAttendance extends Component {
                     "limit": 10,
                     "offset": 0
                 },
-                "search": e.target.value
+                "search": e.target.value,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
             }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
@@ -249,8 +389,9 @@ class LiveScoreTeamAttendance extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        let { searchText, sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (this.state.searchText === null || this.state.searchText === "") {
+        if (searchText === null || searchText === "") {
         }
         else {
             const body =
@@ -259,7 +400,9 @@ class LiveScoreTeamAttendance extends Component {
                     "limit": 10,
                     "offset": 0
                 },
-                "search": this.state.searchText
+                "search": searchText,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
             }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
@@ -289,7 +432,7 @@ class LiveScoreTeamAttendance extends Component {
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ display: "flex", justifyContent: "flex-end", minWidth: 140 }}
-                                    onChange={(selectStatus) => this.onChnageStatus(selectStatus)}
+                                    onChange={(selectStatus) => this.onChangeStatus(selectStatus)}
                                     value={this.state.selectStatus} >
                                     <Option value={"All"}>{'All'}</Option>
                                     <Option value={"Borrowed"}>{'Borrowed Player'}</Option>
@@ -434,7 +577,7 @@ class LiveScoreTeamAttendance extends Component {
                     <Table
                         loading={this.props.liveScoreTeamAttendanceState.onLoad === true && true}
                         className="home-dashboard-table"
-                        columns={columns}
+                        columns={this.state.selectStatus === "Borrowed" ? borrowedColumns : columns}
                         dataSource={dataSource}
                         pagination={false}
                     // rowKey={(record, index) => record.matchId + index}

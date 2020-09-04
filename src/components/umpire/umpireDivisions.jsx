@@ -143,7 +143,7 @@ class UmpireDivisions extends Component {
 
     contentView = () => {
         return (
-            <div className="content-view pt-4">
+            <div className="content-view pt-5">
                 <span className="text-heading-large">{AppConstants.allocatePools}</span>
                 <Radio.Group
                     className="reg-competition-radio"
@@ -159,7 +159,7 @@ class UmpireDivisions extends Component {
                     })}
                 </Radio.Group>
 
-                <span className='text-heading-large pt-5' >{AppConstants.umpirePools}</span>
+                <span className='text-heading-large pt-3 mb-0' >{AppConstants.umpirePools}</span>
                 <div className="row pt-3" >
                     <div className='col-sm-3 division-table-field-view'>
                         <InputWithHead heading={AppConstants.badgeAA} />

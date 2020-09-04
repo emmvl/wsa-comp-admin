@@ -8,8 +8,12 @@ import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { regCompetitionListAction, clearCompReducerDataAction, regCompetitionListDeleteAction } from "../../store/actions/registrationAction/competitionFeeAction";
+import { getRegistrationChangeDashboard } from "../../store/actions/registrationAction/registrationChangeAction";
+import { registrationChangeType } from "../../store/actions/commonAction/commonAction";
+
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
+import { getOrganisationData } from "util/sessionStorage";
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -25,6 +29,22 @@ function tableSort(a, b, key) {
     return stringA.localeCompare(stringB)
 }
 
+function getColor(record,key) {
+    let color = '';
+    if(key == "compOrganiserApproved"){
+        color = record.compOrgApprovedStatus === 1 ? "green" : "orange";
+    }else if(key == "affiliateApproved"){
+        color = record.affiliateApprovedStatus === 1 ? "green" : "orange";
+    }else if(key == "stateApproved"){
+        color = record.stateApprovedStatus === 1 ? "green" : "orange";
+    }
+    return color;
+}
+
+const listeners = (key) => ({
+    onClick: () => tableSort(key),
+});
+
 
 const columns = [
     {
@@ -37,22 +57,22 @@ const columns = [
                 sorter: (a, b) => tableSort(a, b, "userName")
             },
             {
-                title: '1st Affiliate',
-                dataIndex: 'currentAffiliate_1',
-                key: 'currentAffiliate_1',
-                sorter: (a, b) => tableSort(a, b, "currentAffiliate_1")
+                title: 'Comp Organiser',
+                dataIndex: 'compOrganiserName',
+                key: 'compOrganiserName',
+                sorter: (a, b) => tableSort(a, b, "compOrganiserName")
             },
             {
-                title: '2nd Affiliate',
-                dataIndex: 'currentAffiliate_2',
-                key: 'currentAffiliate_2',
-                sorter: (a, b) => tableSort(a, b, "currentAffiliate_2")
+                title: 'Affiliate',
+                dataIndex: 'affiliateName',
+                key: 'affiliateName',
+                sorter: (a, b) => tableSort(a, b, "affiliateName")
             },
             {
                 title: 'Competition',
-                dataIndex: 'currentCompetition',
-                key: 'currentCompetition',
-                sorter: (a, b) => tableSort(a, b, "currentCompetition")
+                dataIndex: 'competitionName',
+                key: 'competitionName',
+                sorter: (a, b) => tableSort(a, b, "competitionName")
             },
         ]
     },
@@ -84,9 +104,9 @@ const columns = [
         children: [
             {
                 title: 'Membership Type',
-                dataIndex: 'membershipType',
-                key: 'membershipType',
-                sorter: (a, b) => tableSort(a, b, "membershipType")
+                dataIndex: 'membershipTypeName',
+                key: 'membershipTypeName',
+                sorter: (a, b) => tableSort(a, b, "membershipTypeName")
             },
             {
                 title: 'Paid',
@@ -96,33 +116,86 @@ const columns = [
             },
             {
                 title: 'Type',
-                dataIndex: 'type',
-                key: 'type',
-                sorter: (a, b) => tableSort(a, b, "type")
+                dataIndex: 'regChangeType',
+                key: 'regChangeType',
+                sorter: (a, b) => tableSort(a, b, "regChangeType")
             },
             {
-                title: '1st Affiliate',
-                dataIndex: 'approvalAffiliate_1',
-                key: 'approvalAffiliate_1',
-                sorter: (a, b) => tableSort(a, b, "approvalAffiliate_1")
+                title: 'Comp Organiser',
+                dataIndex: 'compOrganiserApproved',
+                key: 'compOrganiserApproved',
+                sorter: (a, b) => tableSort(a, b, "compOrganiserApproved"),
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                render: (compOrganiserApproved,record, index) => {
+                    return(
+                        <div>
+                            {compOrganiserApproved ? 
+                                <div style={{display: "flex",justifyContent:"space-between"}}>
+                                    <div>${compOrganiserApproved}</div>
+                                    {record.compOrgApprovedStatus != 3 ? 
+                                        <div style={{color: getColor(record,"compOrganiserApproved")}}>&#x2714;</div>
+                                        :
+                                        <div style={{color: "red"}}>&#x2718;</div>
+                                    }
+                                </div>
+                                : 
+                                null
+                            }
+                        </div>
+                    )
+                }
             },
             {
-                title: '2nd Affiliate',
-                dataIndex: 'approvalAffiliate_2',
-                key: 'approvalAffiliate_2',
-                sorter: (a, b) => tableSort(a, b, "approvalAffiliate_2")
+                title: 'Affiliate',
+                dataIndex: 'affiliateApproved',
+                key: 'affiliateApproved',
+                sorter: (a, b) => tableSort(a, b, "affiliateApproved"),
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                render: (affiliateApproved,record, index) => {
+                    return(
+                        <div>
+                            {affiliateApproved ?
+                                <div style={{display: "flex",justifyContent:"space-between"}}>
+                                    <div>${affiliateApproved}</div>
+                                    {record.affiliateApprovedStatus != 3 ? 
+                                        <div style={{color: getColor(record,"affiliateApproved")}}>&#x2714;</div>
+                                        :
+                                        <div style={{color: "red"}}>&#x2718;</div>
+                                    }
+                                </div>
+                            : null} 
+                        </div>
+                    )
+                }
             },
             {
                 title: 'State',
-                dataIndex: 'state',
-                key: 'state',
-                sorter: (a, b) => tableSort(a, b, "state")
+                dataIndex: 'stateApproved',
+                key: 'stateApproved',
+                sorter: (a, b) => tableSort(a, b, "stateApproved"),
+                onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+                render: (stateApproved,record,index) => {
+                    return(
+                        <div>
+                            {stateApproved ?
+                                <div style={{display: "flex",justifyContent:"space-between"}}>
+                                    <div>${stateApproved}</div>
+                                    {record.stateApprovedStatus != 3 ? 
+                                        <div style={{color: getColor(record,"stateApproved")}}>&#x2714;</div>
+                                        :
+                                        <div style={{color: "red"}}>&#x2718;</div>
+                                    }
+                                </div>
+                            : null}
+                        </div>
+                    )
+                }
             },
             {
                 title: 'Status',
-                dataIndex: 'status',
-                key: 'status',
-                sorter: (a, b) => tableSort(a, b, "status")
+                dataIndex: 'approvedStatus',
+                key: 'approvedStatus',
+                sorter: (a, b) => tableSort(a, b, "approvedStatus")
             },
             {
                 title: "Action",
@@ -134,6 +207,7 @@ const columns = [
                     mode="horizontal"
                     style={{ lineHeight: '25px' }}
                 >
+                    {record.statusRefId == 2 ? 
                     <Menu.SubMenu
                         key="sub1"
                         style={{ borderBottomStyle: "solid", borderBottom: 0 }}
@@ -143,11 +217,13 @@ const columns = [
                     >
                         <Menu.Item key={'1'}>
                             <NavLink to={{
-                                pathname: '/registrationChangeReview',
+                                pathname: '/registrationChangeReview',deRegisterId: record.id
                             }}><span >Review</span></NavLink>
                         </Menu.Item>
                     </Menu.SubMenu>
+                    : null}
                 </Menu>
+                
             }
         ]
     }
@@ -208,17 +284,50 @@ class RegistrationChange extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
             deleteLoading: false,
             userRole: "",
             searchText: '',
             competition: 'All',
-            type: 'All'
+            type: 'All',
+            yearRefId: -1,
+            competitionId: "-1",
+            organisationId: getOrganisationData().organisationUniqueKey,
+            regChangeTypeRefId: -1,
+
         };
         this_Obj = this;
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
+    componentDidMount(){
+        this.props.registrationChangeType();
+        this.handleRegChangeList(1);
+    }
+
+    handleRegChangeList = (page) =>{
+        const {
+            yearRefId,
+            competitionId,
+            organisationId,
+            regChangeTypeRefId
+        } = this.state;
+
+        let filter = {
+            organisationId,
+            yearRefId,
+            competitionId,
+            regChangeTypeRefId,
+            paging: {
+                limit: 10,
+                offset: (page ? (10 * (page - 1)) : 0),
+            },
+        };
+
+        this.props.getRegistrationChangeDashboard(filter);
+
+        this.setState({ filter });
+
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -240,15 +349,27 @@ class RegistrationChange extends Component {
         );
     };
 
-    //////year change onchange
-    yearChange = (yearRefId) => {
-        this.setState({ yearRefId })
-        // this.handleCompetitionTableList(1, yearRefId, this.state.searchText)
-    }
-    // on change search text
+    onChangeDropDownValue = async (value, key) => {
+        await this.setState({
+            [key]: value,
+        });
+
+        this.handleRegChangeList(1);
+    };
+    
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
+        console.log("this.props.regChangeState", this.props.regChangeState);
+        const {regChangeCompetitions} = this.props.regChangeState;
+        const {regChangeTypes} = this.props.commonReducerState;
+        let competitionList;
+        if (this.state.yearRefId !== -1) {
+            competitionList = regChangeCompetitions.filter(x => x.yearRefId === this.state.yearRefId);
+        } else {
+            competitionList = regChangeCompetitions;
+        }
+
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
@@ -260,8 +381,9 @@ class RegistrationChange extends Component {
                                     className="year-select reg-filter-select1 ml-2"
                                     // style={{ width: 90 }}
                                     value={this.state.yearRefId}
-                                    onChange={(e) => this.yearChange(e)}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "yearRefId")}
                                 >
+                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {this.props.appState.yearList.map(item => {
                                         return (
                                             <Option key={"yearRefId" + item.id} value={item.id}>
@@ -279,10 +401,18 @@ class RegistrationChange extends Component {
                                 <Select
                                     className="year-select reg-filter-select-competition ml-2"
                                     // style={{ minWidth: 200 }}
-                                    value={this.state.competition}
-                                // onChange={(e) => this.yearChange(e)}
+                                    value={this.state.competitionId}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "competitionId")}
                                 >
-                                    <Option value={'All'}>{'All'}</Option>
+                                   <Option key={-1} value="-1">{AppConstants.all}</Option>
+                                    {(competitionList || []).map((item, cIndex) => (
+                                        <Option
+                                            key={"competition" + item.competitionId + cIndex}
+                                            value={item.competitionId}
+                                        >
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -293,10 +423,13 @@ class RegistrationChange extends Component {
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}
-                                    value={this.state.type}
-                                // onChange={(e) => this.yearChange(e)}
+                                    value={this.state.regChangeTypeRefId}
+                                    onChange={(e) => this.onChangeDropDownValue(e, "regChangeTypeRefId")}
                                 >
-                                    <Option value={'All'}>{'All'}</Option>
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {(regChangeTypes || []).map((g, index) => (
+                                        <Option key={g.id} value={g.id}>{g.description}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -342,24 +475,24 @@ class RegistrationChange extends Component {
 
     ////////form content view
     contentView = () => {
-
+        const {regChangeDashboardListData,regChangeDashboardListPage,regChangeDashboardListTotalCount} = this.props.regChangeState;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={Data}
+                        dataSource={regChangeDashboardListData}
                         pagination={false}
-                    // loading={this.props.competitionFeesState.onLoad == true && true}
+                     loading={this.props.regChangeState.onLoad == true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                    // current={competitionFeesState.regCompetitonFeeListPage}
-                    // total={total}
-                    // onChange={(page) => this.handleCompetitionTableList(page, this.state.yearRefId, this.state.searchText)}
+                        current={regChangeDashboardListPage}
+                        total={regChangeDashboardListTotalCount}
+                        onChange={(page) => this.handleRegChangeList(page)}
                     />
                 </div>
             </div>
@@ -389,14 +522,18 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         regCompetitionListAction, getOnlyYearListAction,
         clearCompReducerDataAction, regCompetitionListDeleteAction,
-        CLEAR_OWN_COMPETITION_DATA
+        CLEAR_OWN_COMPETITION_DATA,
+        getRegistrationChangeDashboard,
+        registrationChangeType
     }, dispatch)
 }
 
 function mapStatetoProps(state) {
     return {
         competitionFeesState: state.CompetitionFeesState,
+        regChangeState: state.RegistrationChangeState,
         appState: state.AppState,
+        commonReducerState: state.CommonReducerState
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)((RegistrationChange));

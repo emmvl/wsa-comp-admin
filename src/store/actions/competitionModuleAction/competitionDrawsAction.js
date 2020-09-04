@@ -56,14 +56,15 @@ function saveDraws(yearId, competitionId, drawsMasterId) {
 }
 
 /////update draws court timing where N/A is there
-function updateCourtTimingsDrawsAction(data, source, target, actionType, drawData) {
+function updateCourtTimingsDrawsAction(data, source, target, actionType, drawData, apiData) {
     const action = {
         type: ApiConstants.API_UPDATE_COMPETITION_DRAWS_COURT_TIMINGS_LOAD,
         data: data,
         sourceArray: source,
         targetArray: target,
         actionType: actionType,
-        drawData: drawData
+        drawData: drawData,
+        apiData: apiData
     }
     return action
 }
@@ -154,12 +155,12 @@ function updateCompetitionFixtures(data, source, target, roundId, yearId, compet
 
 
 //unlockDrawsAction
-function unlockDrawsAction(drawsId, roundId, venueCourtId) {
+function unlockDrawsAction(drawsId, roundId, venueCourtId, key) {
     const action = {
         type: ApiConstants.API_UPDATE_DRAWS_LOCK_LOAD,
         drawsId,
-        roundId, venueCourtId
-
+        roundId, venueCourtId,
+        key
     }
     return action
 }

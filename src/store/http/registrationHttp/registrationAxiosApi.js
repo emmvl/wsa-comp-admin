@@ -508,6 +508,22 @@ let AxiosApi = {
         var url = `/api/teamregistration/export`;
         return Method.dataPostDownload(url, token ,body ,"TeamRegistration" );
     },
+    saveDeRegister(payload){
+        var url = `/api/deregister`;
+        return Method.dataPost(url, token, payload);
+    },
+    getRegistrationChangeDashboard(payload){
+        var url = `/api/registrationchange/dashboard`;
+        return Method.dataPost(url, token, payload);
+    },
+    getRegistrationChangeReview(payload){
+        var url = `/api/registrationchange/review`;
+        return Method.dataPost(url, token, payload);
+    },
+    saveRegistrationChangeReview(payload){
+        var url = `/api/registrationchange/review/save`;
+        return Method.dataPost(url, token, payload);
+    }
 };
 
 const Method = {

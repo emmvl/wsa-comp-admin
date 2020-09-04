@@ -639,6 +639,7 @@ class LiveScorePositionTrackReport extends Component {
     /// Handle Page change
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
+        let { sortBy, sortOrder } = this.state
         const body =
         {
             "paging": {
@@ -647,7 +648,7 @@ class LiveScorePositionTrackReport extends Component {
             }
         }
         this.setState({ offset: offset })
-        this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
+        this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText, sortBy, sortOrder })
 
 
     }
@@ -685,6 +686,7 @@ class LiveScorePositionTrackReport extends Component {
     }
 
     onChangePeriod(reportId) {
+        let { sortBy, sortOrder } = this.state
         const body =
         {
             "paging": {
@@ -692,12 +694,12 @@ class LiveScorePositionTrackReport extends Component {
                 "offset": 0
             }
         }
-        this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: reportId, pagination: body, search: this.state.searchText })
+        this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: reportId, pagination: body, search: this.state.searchText, sortBy, sortOrder })
         this.setState({ reporting: reportId })
     }
 
     onChangeGame(aggregateId) {
-
+        let { sortBy, sortOrder } = this.state
         const body =
         {
             "paging": {
@@ -705,7 +707,7 @@ class LiveScorePositionTrackReport extends Component {
                 "offset": 0
             }
         }
-        this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: aggregateId, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
+        this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: aggregateId, reporting: this.state.reporting, pagination: body, search: this.state.searchText, sortBy, sortOrder })
         this.setState({ aggregate: aggregateId })
 
 
@@ -713,6 +715,7 @@ class LiveScorePositionTrackReport extends Component {
 
     // on change search text
     onChangeSearchText = (e) => {
+        let { sortBy, sortOrder } = this.state
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value == "") {
             const body =
@@ -722,12 +725,13 @@ class LiveScorePositionTrackReport extends Component {
                     "offset": 0
                 }
             }
-            this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: e.target.value })
+            this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: e.target.value, sortBy, sortOrder })
         }
     }
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        let { sortBy, sortOrder } = this.state
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             const body =
@@ -737,12 +741,13 @@ class LiveScorePositionTrackReport extends Component {
                     "offset": 0
                 }
             }
-            this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
+            this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText, sortBy, sortOrder })
         }
     }
 
     // on click of search icon
     onClickSearchIcon = () => {
+        let { sortBy, sortOrder } = this.state
         if (this.state.searchText == null || this.state.searchText == "") {
         }
         else {
@@ -753,7 +758,7 @@ class LiveScorePositionTrackReport extends Component {
                     "offset": 0
                 }
             }
-            this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
+            this.props.liveScorePositionTrackingAction({ compId: this.state.competitionId, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText, sortBy, sortOrder })
         }
     }
 

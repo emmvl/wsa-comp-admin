@@ -41,6 +41,11 @@ const object = {
     resultStatus: "",
     forfietedTeam: null,
     abandoneReason: null,
+    isFinals: false,
+    extraTimeType: null,
+    extraTimeMainBreak: null,
+    extraTimeqtrBreak: null,
+    extraTimeWinByGoals: null,
     team1: {
         id: "",
         name: "",
@@ -144,6 +149,12 @@ const matchObj = {
     resultStatus: "",
     forfietedTeam: null,
     abandoneReason: null,
+    isFinals: false,
+    extraTimeType: null,
+    extraTimeDuration: null,
+    extraTimeMainBreak: null,
+    extraTimeqtrBreak: null,
+    extraTimeWinByGoals: null,
 };
 
 const initialState = {
@@ -198,6 +209,8 @@ const initialState = {
     team2id: null,
     liveScoreBulkScoreList: [],
     highestSequence: null,
+    onLoadMatch: false,
+
 };
 
 function setMatchData(data) {
@@ -282,7 +295,7 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_LOAD:
             return {
                 ...state,
-                onLoad: true,
+                onLoadMatch: true,
                 isFetchingMatchList: true,
                 liveScoreMatchListData: [],
             };
@@ -291,7 +304,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             const result = getMatchListSettings(action.result.matches);
             return {
                 ...state,
-                onLoad: false,
+                onLoadMatch: false,
                 isFetchingMatchList: false,
                 liveScoreMatchListPage: action.result.page ? action.result.page.currentPage : 1,
                 liveScoreMatchListTotalCount: action.result.page ? action.result.page.totalCount : 0,
@@ -327,6 +340,9 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MATCH_SUCCESS:
             let data = action.result;
             state.addEditMatch = action.result;
+            console.log(data, 'API_LIVE_SCORE_ADD_EDIT_MATCH_SUCCESS')
+            state.addEditMatch['extraTimeMainBreak'] = data.extraTimeType === "FOUR_QUARTERS" ? data.extraTimeMainBreak : data.extraTimeBreak
+            state.addEditMatch['extraTimeqtrBreak'] = data.extraTimeType === "FOUR_QUARTERS" ? data.extraTimeBreak : null
             if (action.result) {
                 state.team1id = action.result.team1Id;
                 state.team2id = action.result.team2Id;
@@ -425,7 +441,22 @@ function liveScoreMatchReducer(state = initialState, action) {
                 state.team2id = null;
                 state.addEditMatch["divisionId"] = null;
                 state.addEditMatch["mnbMatchId"] = null;
-            } else {
+                state.addEditMatch["isFinals"] = false;
+                state.addEditMatch["extraTimeType"] = null;
+                state.addEditMatch["extraTimeDuration"] = null;
+                state.addEditMatch["extraTimeMainBreak"] = null;
+                state.addEditMatch["extraTimeqtrBreak"] = null;
+                state.addEditMatch["extraTimeWinByGoals"] = null;
+                state.matchData["isFinals"] = false;
+                state.matchData["extraTimeType"] = null;
+                state.matchData["extraTimeDuration"] = null;
+                state.matchData["extraTimeMainBreak"] = null;
+                state.matchData["extraTimeqtrBreak"] = null;
+                state.matchData["extraTimeWinByGoals"] = null;
+
+
+            }
+            else {
                 state[action.key] = action.data;
                 state.addEditMatch[action.key] = action.data;
                 state.matchData[action.key] = action.data;
@@ -547,13 +578,23 @@ function liveScoreMatchReducer(state = initialState, action) {
             return { ...state, onLoad: false };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_LOAD:
-            return { ...state, onLoad: true };
+            return {
+                ...state,
+                onLoad: true,
+                importResult: null,
+            };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_SUCCESS:
             return {
                 ...state,
                 onLoad: false,
                 importResult: action.result,
+            };
+
+        case ApiConstants.API_LIVE_SCORE_MATCH_IMPORT_RESET:
+            return {
+                ...state,
+                importResult: null,
             };
 
         case ApiConstants.API_LIVE_SCORE_CREATE_MATCH_FAIL:

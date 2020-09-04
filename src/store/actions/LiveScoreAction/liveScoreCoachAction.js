@@ -1,4 +1,4 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from "themes/apiConstants";
 
 function liveScoreCoachListAction(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder) {
     return {
@@ -21,33 +21,39 @@ function liveScoreUpdateCoach(data, key) {
     };
 }
 
-function liveScoreAddEditCoach(data, teamId, exsitingManagerId) {
+function liveScoreAddEditCoach(data, teamId, existingManagerId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_COACH_LOAD,
         data,
         teamId,
-        exsitingManagerId
+        existingManagerId,
     };
 }
 
-function liveScoreCoachSearch(data, competition_Id) {
+function liveScoreCoachSearch(data, competitionId) {
     return {
         type: ApiConstants.API_LIVESCORE_COACH_SEARCH_LOAD,
         data,
-        competition_Id
+        competitionId,
     };
 }
 
 function liveScoreClear() {
     return {
-        type: ApiConstants.CLEAR_LIVESCORE_MANAGER
+        type: ApiConstants.CLEAR_LIVESCORE_MANAGER,
     };
 }
 
 function liveScoreCoachImportAction(payload) {
     return {
         type: ApiConstants.API_LIVE_SCORE_COACH_IMPORT_LOAD,
-        payload
+        payload,
+    };
+}
+
+function liveScoreCoachResetImportResultAction() {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_COACH_IMPORT_RESET,
     };
 }
 
@@ -57,5 +63,6 @@ export {
     liveScoreAddEditCoach,
     liveScoreCoachSearch,
     liveScoreClear,
-    liveScoreCoachImportAction
+    liveScoreCoachImportAction,
+    liveScoreCoachResetImportResultAction,
 };

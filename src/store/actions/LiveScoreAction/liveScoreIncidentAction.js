@@ -1,10 +1,11 @@
 import ApiConstatnts from '../../../themes/apiConstants'
 
-function liveScoreIncidentList(competitionId, search) {
+function liveScoreIncidentList(competitionId, search, limit, offset, sortBy, sortOrder) {
     const action = {
         type: ApiConstatnts.API_LIVE_SCORE_INCIDENT_LIST_LOAD,
         competitionId: competitionId,
-        search: search
+        search: search,
+        limit, offset, sortBy, sortOrder
     };
     return action;
 }

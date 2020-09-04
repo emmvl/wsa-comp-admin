@@ -72,7 +72,7 @@ function* liveScoreManagerListSaga(action) {
 // Add/Edit Manager Saga
 function* liveScoreAddEditManagerSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreAddEditManager, action.data, action.teamId, action.exsitingManagerId);
+    const result = yield call(LiveScoreAxiosApi.liveScoreAddEditManager, action.data, action.teamId, action.existingManagerId);
 
     if (result.status === 1) {
       yield put({
@@ -92,10 +92,10 @@ function* liveScoreAddEditManagerSaga(action) {
   }
 }
 
-// Add/Edit Manager Saga
+// Search Manager Saga
 function* liveScoreManagerSearchSaga(action) {
   try {
-    const result = yield call(UserAxiosApi.liveScoreSearchManager, action.data, action.competition_Id);
+    const result = yield call(UserAxiosApi.liveScoreSearchManager, action.data, action.competitionId);
 
     if (result) {
       if (result.status === 1) {

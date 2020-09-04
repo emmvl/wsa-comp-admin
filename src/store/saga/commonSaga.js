@@ -1,10 +1,10 @@
-import { put, call, takeEvery } from "redux-saga/effects";
+import { put, call, takeEvery, take } from "redux-saga/effects";
 import { message } from "antd";
 
 import AppConstants from "themes/appConstants";
 import ApiConstants from "themes/apiConstants";
 import ValidationConstants from "themes/validationConstant";
-import CommonAxiosApi from "store/http/commonHttp/commonAxios";
+import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
 
 function* failSaga(result) {
   yield put({ type: ApiConstants.API_COMMON_SAGA_FAIL });
@@ -738,6 +738,26 @@ function* checkVenueAddressDuplicationSaga(action) {
   }
 }
 
+// Get the Reg Change Type Reference Saga
+function* registrationChangeSaga() {
+  try {
+    const result = yield call(CommonAxiosApi.getCommonReference, AppConstants.registrationChangeRef);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_REGISTRATION_CHANGE_TYPE_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+
 export default function* rootCommonSaga() {
   yield takeEvery(ApiConstants.API_TIME_SLOT_INIT_LOAD, getTimeSlotInitSaga);
   yield takeEvery(ApiConstants.API_GET_COMMON_REF_DATA_LOAD, getCommonDataSaga);
@@ -769,4 +789,5 @@ export default function* rootCommonSaga() {
   yield takeEvery(ApiConstants.API_REGISTRATION_PAYMENT_STATUS_LOAD, getRegistrationPaymentStatusSaga);
   yield takeEvery(ApiConstants.API_MATCH_PRINT_TEMPLATE_LOAD, getMatchPrintTemplateTypeSaga);
   yield takeEvery(ApiConstants.API_VENUE_ADDRESS_CHECK_DUPLICATION_LOAD, checkVenueAddressDuplicationSaga);
+  yield takeEvery(ApiConstants.API_REGISTRATION_CHANGE_TYPE_LOAD, registrationChangeSaga);
 }

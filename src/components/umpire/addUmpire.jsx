@@ -447,7 +447,7 @@ class AddUmpire extends Component {
     footerView = (isSubmitting) => {
         return (
             <div className="flud-widtih">
-                <div className="footer-view">
+                <div className="footer-view umpire-space">
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
@@ -458,7 +458,7 @@ class AddUmpire extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>

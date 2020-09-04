@@ -6,7 +6,7 @@ import { isArrayNotEmpty } from "util/helpers";
 import AxiosApi from "store/http/axiosApi";
 import LiveScoreApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
 import RegistrationAxiosApi from "store/http/registrationHttp/registrationAxiosApi";
-import CommonAxiosApi from "store/http/commonHttp/commonAxios";
+import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
 import UserAxiosApi from "store/http/userHttp/userAxiosApi.js";
 
 // Get the common year list reference

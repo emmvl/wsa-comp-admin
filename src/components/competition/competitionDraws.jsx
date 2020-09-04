@@ -9,7 +9,7 @@ import {
   message,
   Modal,
   Menu,
-  Tooltip
+  Tooltip, DatePicker
 } from 'antd';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import { NavLink } from 'react-router-dom';
@@ -65,6 +65,7 @@ import {
 import ValidationConstants from '../../themes/validationConstant';
 import moment from 'moment';
 import LegendComponent from '../../customComponents/legendComponent';
+import AllLegendComponent from '../../customComponents/allCompetitionLegendComponent'
 import { isArrayNotEmpty } from '../../util/helpers';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
 import AppUniqueId from "../../themes/appUniqueId";
@@ -110,7 +111,7 @@ class CompetitionDraws extends Component {
       endDate: null,
       changeDateLoad: false
     };
-
+    this.props.clearDraws();
   }
 
   componentDidUpdate(nextProps) {
@@ -177,23 +178,22 @@ class CompetitionDraws extends Component {
             }
           }
           else if (this.state.changeDateLoad == false) {
-            if (this.props.drawsState.allcompetitionDateRange.length > 0) {
-              let dateRangeData = this.props.drawsState.allcompetitionDateRange
-              let selectedDateRange = dateRangeData[0].displayRange
-              let startDate = dateRangeData[0].startDate
-              let endDate = dateRangeData[0].endDate
-              this.setState({
-                selectedDateRange: selectedDateRange,
-                startDate, endDate, venueId
-              })
-
-              this.props.getCompetitionDrawsAction(
-                this.state.yearRefId,
-                this.state.firstTimeCompId,
-                venueId,
-                0, null, startDate, endDate
-              );
-            }
+            let NullDate = new Date()
+            // if (this.props.drawsState.allcompetitionDateRange.length > 0) {
+            // let dateRangeData = this.props.drawsState.allcompetitionDateRange
+            // let selectedDateRange = dateRangeData[0].displayRange
+            let startDate = this.state.startDate == null ? moment(NullDate).format("YYYY-MM-DD") : this.state.startDate
+            let endDate = this.state.endDate == null ? moment(NullDate).format("YYYY-MM-DD") : this.state.endDate
+            this.setState({
+              startDate, endDate, venueId
+            })
+            this.props.getCompetitionDrawsAction(
+              this.state.yearRefId,
+              this.state.firstTimeCompId,
+              venueId,
+              0, null, startDate, endDate
+            );
+            // }
           }
           else {
             this.setState({
@@ -262,7 +262,6 @@ class CompetitionDraws extends Component {
     if (nextProps.drawsState.changeStatus != changeStatus) {
       if (this.props.drawsState.changeStatus == false && this.state.changeStatus == true) {
         let statusRefId = this.props.drawsState.publishStatus
-        console.log(this.props.appState.own_CompetitionArr)
         setOwn_competitionStatus(statusRefId)
         message.success("Draws published to live scores successfully");
         this.setState({ changeStatus: false, competitionStatus: statusRefId })
@@ -301,7 +300,7 @@ class CompetitionDraws extends Component {
   }
 
   apiCalls() {
-    this.props.clearDraws();
+
     let yearId = getOwnCompetitionYear();
     let storedCompetitionId = getOwn_competition();
     let storedCompetitionStatus = getOwn_competitionStatus()
@@ -399,6 +398,7 @@ class CompetitionDraws extends Component {
     drawData,
     round_Id
   ) => {
+    let updatedKey = this.state.firstTimeCompId === "-1" ? "all" : "add"
     let postData = null;
     if (sourceObejct.drawsId == null) {
       let columnObject = this.getColumnData(sourceIndexArray, drawData);
@@ -419,12 +419,23 @@ class CompetitionDraws extends Component {
         endTime: columnObject.endTime,
       };
     }
+    let apiData = {
+      yearRefId: this.state.yearRefId,
+      competitionId: this.state.firstTimeCompId,
+      venueId: this.state.venueId,
+      roundId: this.state.firstTimeCompId == "-1" ? 0 : this.state.roundId,
+      orgId: null,
+      startDate: this.state.firstTimeCompId == "-1" ? this.state.startDate : null,
+      endDate: this.state.firstTimeCompId == "-1" ? this.state.endDate : null
+    }
+
     this.props.updateCourtTimingsDrawsAction(
       postData,
       sourceIndexArray,
       targetIndexArray,
-      'add',
-      round_Id
+      updatedKey,
+      round_Id,
+      apiData
     );
 
     this.setState({ updateLoad: true });
@@ -439,6 +450,7 @@ class CompetitionDraws extends Component {
     drawsData,
     round_Id
   ) => {
+    let key = this.state.firstTimeCompId === "-1" ? "all" : "add"
     let customSourceObject = {
       // drawsId: sourceObejct.drawsId,
       drawsId: targetObject.drawsId,
@@ -465,7 +477,7 @@ class CompetitionDraws extends Component {
       postObject,
       sourceIndexArray,
       targetIndexArray,
-      'add',
+      key,
       round_Id
     );
 
@@ -519,7 +531,6 @@ class CompetitionDraws extends Component {
     // let drawData = this.props.drawsState.getStaticDrawsData;
     let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
     let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
-
     if (sourceObejct.drawsId !== null && targetObject.drawsId !== null) {
       this.updateCompetitionDraws(
         sourceObejct,
@@ -648,7 +659,9 @@ class CompetitionDraws extends Component {
       competitionDivisionGradeId: null,
       competitionStatus: statusRefId,
       organisation_Id: "-1",
-      selectedDateRange: null
+      selectedDateRange: null,
+      startDate: null,
+      endDate: null
     });
   }
 
@@ -908,7 +921,8 @@ class CompetitionDraws extends Component {
 
   //unlockDraws
   unlockDraws(id, round_Id, venueCourtId) {
-    this.props.unlockDrawsAction(id, round_Id, venueCourtId);
+    let key = this.state.firstTimeCompId == "-1" ? 'all' : "singleCompetition"
+    this.props.unlockDrawsAction(id, round_Id, venueCourtId, key);
   }
 
 
@@ -964,13 +978,10 @@ class CompetitionDraws extends Component {
   }
 
   onSelectDivisionsValues = (e) => {
-    console.log("e" + e);
-
     this.setState({ selectedDivisions: e })
   }
 
   onSelectRoundValues = (e) => {
-    console.log("e" + e);
     this.setState({ selectedRounds: e })
   }
 
@@ -987,18 +998,27 @@ class CompetitionDraws extends Component {
     this.props.publishDraws(this.state.firstTimeCompId, '', payload);
     this.setState({ visible: false, changeStatus: true })
   }
-  onChangeDate = (date, key) => {
-    let allRangeData = this.props.drawsState.allcompetitionDateRange
-    let dateData = key.split(':')
-    let selectedRangeIndex = dateData[0]
-    let startDate = allRangeData[selectedRangeIndex].startDate
-    let endDate = allRangeData[selectedRangeIndex].endDate
+  onChangeStartDate = (startDate, key) => {
+
     this.props.clearDraws()
     this.props.changeDrawsDateRangeAction(this.state.yearRefId,
-      this.state.firstTimeCompId, startDate, endDate)
+      this.state.firstTimeCompId, startDate, this.state.endDate)
     this.setState({
-      selectedDateRange: date,
-      startDate, endDate,
+      startDate: startDate,
+      roundId: 0,
+      venueId: null,
+      roundTime: null,
+      venueLoad: true,
+      competitionDivisionGradeId: null,
+      changeDateLoad: true
+    })
+  }
+  onChangeEndDate = (endDate, key) => {
+    this.props.clearDraws()
+    this.props.changeDrawsDateRangeAction(this.state.yearRefId,
+      this.state.firstTimeCompId, this.state.startDate, endDate)
+    this.setState({
+      endDate: endDate,
       roundId: 0,
       venueId: null,
       roundTime: null,
@@ -1040,7 +1060,7 @@ class CompetitionDraws extends Component {
           <div className="col-sm-10">
             <span className="form-heading">{AppConstants.draws}</span>
             <div className="row">
-              <div className="col-sm mr-0">
+              <div className="col-sm-4 mr-0">
                 <div
                   style={{
                     width: '100%',
@@ -1094,25 +1114,50 @@ class CompetitionDraws extends Component {
                         alignItems: 'center',
                       }}
                     >
-
-                      <span className="year-select-heading">
-                        {AppConstants.dateRange}
+                      <div className="col-sm-6">
+                        <div
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}>
+                          <span className="year-select-heading">
+                            {AppConstants.fromDate}:
                       </span>
-                      <Select
-                        className="year-select"
-                        style={{ minWidth: 100, width: 'fit-content', }}
-                        onChange={(selectedDateRange, e) => this.onChangeDate(selectedDateRange, e.key)}
-                        value={this.state.selectedDateRange}
-                      >
-                        {this.props.drawsState.allcompetitionDateRange.length > 0 &&
-                          this.props.drawsState.allcompetitionDateRange.map((item, index) => {
-                            return (
-                              <Option key={index + ":" + "date"} value={item.displayRange}>
-                                {item.displayRange}
-                              </Option>
-                            );
-                          })}
-                      </Select>
+                          <DatePicker
+                            size="large"
+                            style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
+                            format={"DD-MM-YYYY"}
+                            //  defaultValue={new}
+                            onChange={(startDate) => this.onChangeStartDate(moment(startDate).format("YYYY-MM-DD"))}
+                            value={moment(this.state.startDate)}
+                            disabledDate={d => !d || d.isAfter(this.state.endDate)}
+                          />
+                        </div>
+                      </div>
+                      <div className="col-sm-6">
+                        <div
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}>
+                          <span className="year-select-heading">
+                            {AppConstants.toDate}:
+                      </span>
+                          <DatePicker
+                            size="large"
+                            style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
+                            format={"DD-MM-YYYY"}
+                            placeholder={"dd-mm-yyyy"}
+                            onChange={(endDate) => this.onChangeEndDate(moment(endDate).format("YYYY-MM-DD"))}
+                            value={moment(this.state.endDate)}
+                            disabledDate={d => !d || d.isBefore(this.state.startDate)}
+                          />
+                        </div>
+                      </div>
                     </div>
                     :
                     <div style={{
@@ -1154,14 +1199,11 @@ class CompetitionDraws extends Component {
             </div>
           </div>
           <div className="col-sm-2 comp-draw-edit-btn-view">
-            {/* <NavLink to="/competitionDrawEdit"> */}
             <Button onClick={() => this.navigateToDrawEdit()} id={AppUniqueId.editDraw_Btn} className="live-score-edit" type="primary">
               {AppConstants.edit}
             </Button>
-            {/* </NavLink> */}
           </div>
         </div>
-        {/* {this.draggableView()} */}
         <div>
           {this.props.drawsState.spinLoad && (
             <div
@@ -1208,16 +1250,25 @@ class CompetitionDraws extends Component {
                         <div key={"drawData" + dateIndex}>
                           <div className="draws-round-view">
                             <span className="draws-round">
-                              {dateItem.roundName}
+                              {this.state.firstTimeCompId == "-1" ? "" : dateItem.roundName}
                             </span>
                           </div>
                           {this.draggableView(dateItem)}
-                          <div style={{ display: 'table' }}>
-                            <LegendComponent
-                              disabled={disabledStatus}
-                              legendArray={dateItem.legendsArray}
-                            />
-                          </div>
+                          {this.state.firstTimeCompId == "-1" ?
+                            <div>
+                              <AllLegendComponent
+                                allLegendArray={dateItem.legendsArray}
+                              />
+                            </div>
+                            :
+                            <div style={{ display: 'table' }}>
+                              <LegendComponent
+                                disabled={disabledStatus}
+                                legendArray={dateItem.legendsArray}
+                              />
+
+                            </div>
+                          }
                         </div>
                       );
                     }
@@ -1365,13 +1416,14 @@ class CompetitionDraws extends Component {
                           cursor: disabledStatus && "no-drop"
                         }}
                       >
-                        <Swappable
+                        {this.state.firstTimeCompId == "-1" ? <Swappable
                           id={
                             index.toString() +
                             ':' +
-                            slotIndex.toString() +
+                            slotIndex.toString()
+                            +
                             ':' +
-                            dateItem.roundId.toString()
+                            "1"
                           }
                           content={1}
                           swappable={
@@ -1382,7 +1434,7 @@ class CompetitionDraws extends Component {
                               source,
                               target,
                               dateItem.draws,
-                              dateItem.roundId
+                              "1"
                             )
                           }
                         >
@@ -1394,7 +1446,38 @@ class CompetitionDraws extends Component {
                           ) : (
                               <span>Free</span>
                             )}
-                        </Swappable>
+                        </Swappable> :
+                          <Swappable
+                            id={
+                              index.toString() +
+                              ':' +
+                              slotIndex.toString()
+                              +
+                              ':' +
+                              dateItem.roundId.toString()
+                            }
+                            content={1}
+                            swappable={
+                              this.checkSwap(slotObject)
+                            }
+                            onSwap={(source, target) =>
+                              this.onSwap(
+                                source,
+                                target,
+                                dateItem.draws,
+                                dateItem.roundId
+                              )
+                            }
+                          >
+                            {slotObject.drawsId != null ? (
+                              <span>
+                                {slotObject.homeTeamName} <br />
+                                {slotObject.awayTeamName}
+                              </span>
+                            ) : (
+                                <span>Free</span>
+                              )}
+                          </Swappable>}
                       </div>
                       {
                         slotObject.drawsId !== null && (
@@ -1459,7 +1542,13 @@ class CompetitionDraws extends Component {
                                 {slotObject.isLocked == 1 && (
                                   <Menu.Item
                                     key="1"
-                                    onClick={() =>
+                                    onClick={() => this.state.firstTimeCompId == "-1" ?
+                                      this.unlockDraws(
+                                        slotObject.drawsId,
+                                        "1",
+                                        courtData.venueCourtId
+
+                                      ) :
                                       this.unlockDraws(
                                         slotObject.drawsId,
                                         dateItem.roundId,
@@ -1502,7 +1591,7 @@ class CompetitionDraws extends Component {
         <div className="draws-legend-view">
           {/* <LegendComponent legendArray={Array(10).fill(legendsData).flat()} /> */}
         </div>
-      </div>
+      </div >
     );
   };
 

@@ -116,11 +116,16 @@ const columns = [
           <Menu.Item key="1" onClick={() => this_Obj.viewRegForm(e)}>
             <span>View</span>
           </Menu.Item>
+          {e.alreadyDeRegistered == 0 ?
+		      <Menu.Item key="2" onClick={() => history.push("\deregistration", {regData: e, personal: this_Obj.props.userState.personalData})}>
+            <span>De-registration</span>
+          </Menu.Item>	: null }  
         </SubMenu>
       </Menu>
     ),
   },
 ];
+
 
 const columnsPlayer = [
   {

@@ -194,7 +194,7 @@ class UmpirePoolAllocation extends Component {
     dropdownView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
-            <div className="comp-player-grades-header-drop-down-view">
+            <div className="comp-player-grades-header-drop-down-view comp">
                 <div className="fluid-width" >
                     <div className="row" >
 
@@ -543,23 +543,23 @@ class UmpirePoolAllocation extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width paddingBottom56px" >
+            <div className="fluid-width paddingBottom56px pool-space" >
                 <div className="row" >
-                    <div className="col-sm-3 mt-3" >
+                    <div className="col-sm-3 mt-3 pl-1" >
                         <div className="reg-add-save-button">
                             <NavLink to='/umpireSetting'>
                                 <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
-                    <div className="col-sm mt-3" >
+                    <div className="col-sm mt-3 pr-1" >
 
                         <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                             <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
                                 {AppConstants.save}
                             </Button>
                             <NavLink to='/umpireDivisions'>
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
+                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" >
                                     {AppConstants.next}
                                 </Button>
                             </NavLink>

@@ -19,7 +19,7 @@ import { bindActionCreators } from 'redux';
 import { liveScoreUpdateVenueChange, searchCourtList, clearFilter, onChangeVenueSaveAction } from '../../store/actions/LiveScoreAction/liveScoreVenueChamgeAction'
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
-import { getCompetitonVenuesList, } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
+import { getCompetitionVenuesList } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import history from '../../util/history'
 import ValidationConstants from '../../themes/validationConstant'
 import Loader from '../../customComponents/loader'
@@ -42,7 +42,7 @@ class LiveScoreVenueChange extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ comptitionId: id })
         if (id !== null) {
-            this.props.getCompetitonVenuesList(id, this.state.search);
+            this.props.getCompetitionVenuesList(id, this.state.search);
         } else {
             history.push('/')
         }
@@ -117,7 +117,7 @@ class LiveScoreVenueChange extends Component {
     onSearchVenue(searchValue) {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ search: searchValue })
-        this.props.getCompetitonVenuesList(id, searchValue);
+        this.props.getCompetitionVenuesList(id, searchValue);
     }
 
     onChangeVenue(venueId) {
@@ -464,7 +464,7 @@ class LiveScoreVenueChange extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScoreUpdateVenueChange,
-        getCompetitonVenuesList,
+        getCompetitionVenuesList,
         searchCourtList,
         clearFilter,
         onChangeVenueSaveAction
