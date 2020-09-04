@@ -65,6 +65,7 @@ import {
 import ValidationConstants from '../../themes/validationConstant';
 import moment from 'moment';
 import LegendComponent from '../../customComponents/legendComponent';
+import AllLegendComponent from '../../customComponents/allCompetitionLegendComponent'
 import { isArrayNotEmpty } from '../../util/helpers';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
 import AppUniqueId from "../../themes/appUniqueId";
@@ -1253,12 +1254,21 @@ class CompetitionDraws extends Component {
                             </span>
                           </div>
                           {this.draggableView(dateItem)}
-                          <div style={{ display: 'table' }}>
-                            <LegendComponent
-                              disabled={disabledStatus}
-                              legendArray={dateItem.legendsArray}
-                            />
-                          </div>
+                          {this.state.firstTimeCompId == "-1" ?
+                            <div>
+                              <AllLegendComponent
+                                allLegendArray={dateItem.legendsArray}
+                              />
+                            </div>
+                            :
+                            <div style={{ display: 'table' }}>
+                              <LegendComponent
+                                disabled={disabledStatus}
+                                legendArray={dateItem.legendsArray}
+                              />
+
+                            </div>
+                          }
                         </div>
                       );
                     }
