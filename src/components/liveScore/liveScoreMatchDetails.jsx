@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {Layout, Button, Table, Modal, Checkbox, Tooltip, Select, Input, Spin, AutoComplete} from 'antd';
+import {Layout, Button, Table, Modal, Checkbox, Tooltip, Select, Input, Spin, AutoComplete, Switch} from 'antd';
 
 import {
     liveScoreDeleteMatch,
@@ -202,6 +202,10 @@ class LiveScoreMatchDetails extends Component {
             visible: false,
             liveStreamLink: null,
             addPlayerModal: '',
+            team1Attendance: false,
+            team2Attendance: false,
+            borrowedTeam1Players: [],
+            borrowedTeam2Players: [],
         }
         this.umpireScore_View = this.umpireScore_View.bind(this)
         this.team_View = this.team_View.bind(this)
@@ -234,9 +238,8 @@ class LiveScoreMatchDetails extends Component {
             this.setState({ isLineUp: 0 })
             this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
         }
-
-
     }
+
     playingView(record, value, index, key) {
         this.props.changePlayerLineUpAction({ record: record, value: value, matchId: this.state.matchId, competitionId: this.state.competitionId, teamId: record.teamId, index: index, key: key })
     }
@@ -304,7 +307,7 @@ class LiveScoreMatchDetails extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mb-5">
                 <div className="row">
-                    <div className="col-sm-12 col-md-6 col-lg-6">
+                    <div className="col-sm-12 col-md-4 col-lg-4">
                         <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                             <span className="form-heading pb-0" >{length >= 1 ? match ? match[0].team1.name : '' : ''}</span>
                             <span className="input-heading-add-another pt-2 pl-1 pr-1" > vs </span>
@@ -314,12 +317,11 @@ class LiveScoreMatchDetails extends Component {
                             <span className='year-select-heading' >{'#' + this.state.matchId}</span>
                         </div>
                     </div>
-                    <div className="col-sm-12 col-md-6 col-lg-6" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                    <div className="col-sm-12 col-md-8 col-lg-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
 
-                            <div className="col-sm">
+                            <div className="col-sm pt-2">
                                 <div
-                                    className="comp-dashboard-botton-view-mobile"
                                     style={{
                                         width: "100%",
                                         display: "flex",
@@ -339,9 +341,8 @@ class LiveScoreMatchDetails extends Component {
                                 </div>
                             </div>
 
-                            <div className="col-sm">
+                            <div className="col-sm pt-2">
                                 <div
-                                    className="comp-dashboard-botton-view-mobile"
                                     style={{
                                         width: "100%",
                                         display: "flex",
@@ -358,9 +359,8 @@ class LiveScoreMatchDetails extends Component {
                                 </div>
                             </div>
 
-                            <div className="col-sm">
+                            <div className="col-sm pt-2">
                                 <div
-                                    className="comp-dashboard-botton-view-mobile"
                                     style={{
                                         width: "100%",
                                         display: "flex",
@@ -381,9 +381,8 @@ class LiveScoreMatchDetails extends Component {
 
                                 </div>
                             </div>
-                            <div className="col-sm">
+                            <div className="col-sm pt-2">
                                 <div
-                                    className="comp-dashboard-botton-view-mobile"
                                     style={{
                                         width: "100%",
                                         display: "flex",
@@ -392,10 +391,6 @@ class LiveScoreMatchDetails extends Component {
                                         justifyContent: "flex-end"
                                     }}
                                 >
-                                    {/* <Button onClick={() => this.showDeleteConfirm(this.state.matchId)} className="primary-add-comp-form" type="primary">
-                                        {AppConstants.delete}
-                                    </Button> */}
-
                                     <Tooltip
                                         style={{ height: '100%' }}
                                         onMouseEnter={() =>
@@ -543,7 +538,7 @@ class LiveScoreMatchDetails extends Component {
                         width: 150,
                         render: (p, row) => (
                           <Select
-                            className="table-cell-select"
+                            className="year-select reg-filter-select1 table-cell-select"
                             size="small"
                             style={{width: '100%'}}
                             defaultValue={row?.lineup?.positionId}
@@ -600,7 +595,7 @@ class LiveScoreMatchDetails extends Component {
                         width: 150,
                         render: (p, row) => (
                           <Select
-                            className="table-cell-select"
+                            className="year-select reg-filter-select1 table-cell-select"
                             size="small"
                             style={{width: '100%'}}
                             defaultValue={row?.lineup?.positionId}
@@ -657,7 +652,7 @@ class LiveScoreMatchDetails extends Component {
                         width: 150,
                         render: (p, row) => (
                           <Select
-                            className="table-cell-select"
+                            className="year-select reg-filter-select1 table-cell-select"
                             size="small"
                             style={{width: '100%'}}
                             defaultValue={row?.lineup?.positionId}
@@ -714,7 +709,7 @@ class LiveScoreMatchDetails extends Component {
                         width: 150,
                         render: (p, row) => (
                           <Select
-                            className="table-cell-select"
+                            className="year-select reg-filter-select1 table-cell-select"
                             size="small"
                             style={{width: '100%'}}
                             defaultValue={row?.lineup?.positionId}
@@ -778,10 +773,19 @@ class LiveScoreMatchDetails extends Component {
         )
     }
 
+    handleAttendanceView = (visible, team) => {
+      this.setState({
+          [team]: visible,
+      })
+    };
+
     //// Team details
     team_View = () => {
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : []
         const { team1Players, team2Players } = this.props.liveScoreMatchState
+        const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
+        const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
+
         const length = match ? match.length : 0
         return (
             <div className="match-details-rl-padding row mt-5">
@@ -799,34 +803,43 @@ class LiveScoreMatchDetails extends Component {
                             <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
                                 <span className='home-dash-left-text'>{AppConstants.players}</span>
                             </div>
-                            <div className="col-sm text-right" >
+                            <div className="col-sm text-right align-items-center" >
+                                <div className="d-flex mr-5 align-items-center year-select-heading">
+                                    <Switch
+                                      className="mr-3"
+                                      onChange={(checked) => this.handleAttendanceView(checked, 'team1Attendance')}
+                                    />
+                                    Attendance
+                                </div>
                                 <Button
                                   className="primary-add-comp-form"
                                   type="primary"
-                                  onClick={() => this.handleAddPlayerModal(length >= 1 && match[0].team1.id)}
+                                  onClick={() => this.handleAddPlayerModal('team1')}
                                 >
-                                    + {AppConstants.addNew}
+                                    + {AppConstants.borrowPlayer}
                                 </Button>
                             </div>
                         </div>
                         <div>
-                            <div className="col-12">
-                                {this.teamPlayersStatus(team1Players)}
-                            </div>
-                            {/* <Table className="home-dashboard-table pt-2" columns={columns} dataSource={team1players ? team1players : data} pagination={false}/> */}
-                            <div className="col-12">
-                                <Table
-                                  className="home-dashboard-table pt-2"
-                                  columns={this.state.isLineUp === 1 ? columnsTeam1 : columns}
-                                  dataSource={team1Players}
-                                  pagination={false}
-                                  scroll={{x: '100%'}}
-                                />
-                            </div>
+                            {this.state.team1Attendance ? (
+                              <div className="col-12">
+                                  {this.teamPlayersStatus(team1PlayersData)}
+                              </div>
+                            ) : (
+                              <div className="col-12">
+                                  <Table
+                                    className="home-dashboard-table pt-2"
+                                    columns={this.state.isLineUp === 1 ? columnsTeam1 : columns}
+                                    dataSource={team1PlayersData}
+                                    pagination={false}
+                                    scroll={{x: '100%'}}
+                                  />
+                              </div>
+                            )}
                         </div>
                     </div>
                 </div>
-                <div className="col-12" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
+                <div className="col-12 mt-5" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
                     <div className="" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: 'center' }}>
                         <img className="user-image" src={length >= 1 ? match ? match[0].team2.logoUrl : '' : ''} alt="" height="80" width="80" />
                         <span className="live-score-profile-user-name match-details-team-name">
@@ -840,29 +853,39 @@ class LiveScoreMatchDetails extends Component {
                             <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
                                 <span className='home-dash-left-text'>{AppConstants.players}</span>
                             </div>
-                            <div className="col-sm text-right" >
+                            <div className="col-sm text-right align-items-center" >
+                                <div className="d-flex mr-5 align-items-center year-select-heading">
+                                    <Switch
+                                      className="mr-3"
+                                      onChange={(checked) => this.handleAttendanceView(checked, 'team2Attendance')}
+                                    />
+                                    Attendance
+                                </div>
                                 <Button
                                   className="primary-add-comp-form"
                                   type="primary"
-                                  onClick={() => this.handleAddPlayerModal(length >= 1 && match[0].team2.id)}
+                                  onClick={() => this.handleAddPlayerModal('team2')}
                                 >
-                                    + {AppConstants.addNew}
+                                    + {AppConstants.borrowPlayer}
                                 </Button>
                             </div>
                         </div>
                         <div>
-                            <div className="col-12">
-                                {this.teamPlayersStatus(team2Players)}
-                            </div>
-                            <div className="col-12">
-                                <Table
-                                  className="home-dashboard-table pt-2"
-                                  columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
-                                  dataSource={team2Players}
-                                  pagination={false}
-                                  scroll={{x: '100%'}}
-                                />
-                            </div>
+                            {this.state.team2Attendance ? (
+                              <div className="col-12">
+                                  {this.teamPlayersStatus(team2PlayersData)}
+                              </div>
+                            ) : (
+                              <div className="col-12">
+                                  <Table
+                                    className="home-dashboard-table pt-2"
+                                    columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
+                                    dataSource={team2PlayersData}
+                                    pagination={false}
+                                    scroll={{x: '100%'}}
+                                  />
+                              </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -942,8 +965,8 @@ class LiveScoreMatchDetails extends Component {
         )
     }
 
-    handleAddPlayerModal = (teamId) => {
-        this.setState({addPlayerModal: teamId})
+    handleAddPlayerModal = (team) => {
+        this.setState({addPlayerModal: team})
     };
 
     handleAddPlayerCancel = () => {
@@ -955,13 +978,59 @@ class LiveScoreMatchDetails extends Component {
     };
 
     handleAddPlayer = (playerId) => {
-        console.log('handleAddPlayer', playerId);
+        if (playerId) {
+            const borrowedPlayer = (this.props.liveScorePlayerState.searchResult || [])
+              .find((player) => player.playerId === playerId);
+            const borrowedPlayerData = {
+                attendance: null,
+                attended: false,
+                lineup: null,
+                name: `${borrowedPlayer?.firstName || ''} ${borrowedPlayer?.lastName || ''}`,
+                photoUrl: borrowedPlayer?.profilePicture,
+                playerId: borrowedPlayer?.playerId,
+                team: borrowedPlayer?.team?.name,
+                teamId: borrowedPlayer?.team?.id,
+            };
+
+
+            if (this.state.addPlayerModal === 'team1') {
+                const borrowedTeam1Players = this.state.borrowedTeam1Players;
+                borrowedTeam1Players.push(borrowedPlayerData);
+
+                this.setState({
+                    borrowedTeam1Players,
+                });
+            } else {
+                const borrowedTeam2Players = this.state.borrowedTeam2Players;
+                borrowedTeam2Players.push(borrowedPlayerData);
+
+                this.setState({
+                    borrowedTeam2Players,
+                });
+            }
+        }
+
+        this.setState({addPlayerModal: ''})
     };
 
     AddPlayerModalView() {
         let playerId = null;
         const { id: competitionId, organisationId } = JSON.parse(getLiveScoreCompetiton())
         const { onLoadSearch, searchResult } = this.props.liveScorePlayerState;
+        const { team1Players, team2Players } = this.props.liveScoreMatchState;
+
+        const team1PlayerIds = team1Players.length > 0
+          ? team1Players.map((player) => player.playerId)
+          : [];
+        const team2PlayerIds = team2Players.length > 0
+          ? team2Players.map((player) => player.playerId)
+          : [];
+
+        const searchResultData = searchResult.length > 0
+          ? searchResult.filter((player) =>
+            team1PlayerIds.indexOf(player.playerId) < 0 && team2PlayerIds.indexOf(player.playerId) < 0
+          )
+          : [];
 
         return (
           <Modal
@@ -979,7 +1048,7 @@ class LiveScoreMatchDetails extends Component {
                 style={{ width: "100%", height: '56px' }}
                 placeholder="Add Player"
                 onSelect={(item, option) => {
-                    playerId = JSON.parse(option.key)
+                    playerId = JSON.parse(option.key);
                 }}
                 notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
                 onSearch={(value) => {
@@ -988,7 +1057,7 @@ class LiveScoreMatchDetails extends Component {
                     }
                 }}
               >
-                  {searchResult.length > 0 && searchResult.map((item) => {
+                  {searchResultData.length > 0 && searchResultData.map((item) => {
                       return <Option key={item.playerId} value={item.playerId.toString()}>
                           {item.firstName + " " + item.lastName}
                       </Option>

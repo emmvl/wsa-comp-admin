@@ -125,7 +125,8 @@
 }
 
 .table-cell-select .ant-select-selection {
-    min-height: unset;
+    border: 1px solid var(--app-d9d9d9) !important;
+    min-height: unset !important;
 }
 
 .match-score-detail {

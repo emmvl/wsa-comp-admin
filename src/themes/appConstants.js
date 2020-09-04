@@ -1394,6 +1394,7 @@ const AppConstants = {
   matchPrintTemplateType: 'Match Print Template Type',
   templateType: 'Template type',
   playerBorrowing: "Player Borrowing",
+  borrowPlayer: "Borrow player",
   gamesBorrowed: "Games Borrowed",
   minutesBorrowed: "Minutes Borrowed",
   premierCompLink: 'Premier Competition Link',
