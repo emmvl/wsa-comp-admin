@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message, Tooltip,  DatePicker, } from 'antd';
+import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message, Tooltip, DatePicker, } from 'antd';
 import './competition.css';
 import { NavLink } from 'react-router-dom';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -31,7 +31,7 @@ import {
     setOwn_competitionStatus,
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
-import moment from "moment";							
+import moment from "moment";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -693,7 +693,7 @@ class CompetitionFormat extends Component {
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50,
                             }} >
-                                <span id={AppUniqueId.compName_DrpDwn} className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
                                     id={AppUniqueId.compName_DrpDwn}
                                     name={"competition"}
@@ -726,10 +726,12 @@ class CompetitionFormat extends Component {
         let appState = this.props.appState;
         let isAllDivisionChecked = this.props.competitionFormatState.isAllDivisionChecked;
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
-		let nonPlayingDates  = data.nonPlayingDates != undefined ? data.nonPlayingDates : [] ;																					  
+        let nonPlayingDates = data.nonPlayingDates != undefined ? data.nonPlayingDates : [];
         return (
             <div className="content-view pt-4">
-                <InputWithHead disabled={disabledStatus} heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
+                <InputWithHead
+                    id={AppUniqueId.compnameTextbox}
+                    disabled={disabledStatus} heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
                     value={data.competitionName} onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}  ></InputWithHead>
                 <div style={{ marginTop: 15 }}>
                     <InputWithHead headingId={AppUniqueId.comp_Format_Type} heading={AppConstants.competitionFormat} required={"required-field"} />
@@ -769,7 +771,7 @@ class CompetitionFormat extends Component {
                 </Select> */}
 
                 <InputWithHead heading={AppConstants.matchType} required={"required-field"} headingId={AppUniqueId.matchType_Selection_dpdn} />
-                <Form.Item >
+                <Form.Item>
                     {getFieldDecorator('matchTypeRefId', {
                         rules: [{ required: true, message: ValidationConstants.matchTypeRequired }],
                     })(
@@ -828,16 +830,16 @@ class CompetitionFormat extends Component {
                 <div className="fluid-width">
                     <div className="row" >
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead auto_complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.days} value={data.roundInDays}
+                            <InputWithHead id={AppUniqueId.timeBetweenRoundsDays} auto_complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.days} value={data.roundInDays}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInDays')}></InputWithHead>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead auto_complete="new-roundInHours" disabled={disabledStatus} placeholder={AppConstants.hours} value={data.roundInHours}
+                            <InputWithHead id={AppUniqueId.timeBetweenRoundsHrs} auto_complete="new-roundInHours" disabled={disabledStatus} placeholder={AppConstants.hours} value={data.roundInHours}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInHours')}></InputWithHead>
 
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead auto_complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.mins} value={data.roundInMins}
+                            <InputWithHead id={AppUniqueId.timeBetweenRoundsMins} auto_complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.mins} value={data.roundInMins}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInMins')}></InputWithHead>
                         </div>
                     </div>
@@ -1062,6 +1064,7 @@ class CompetitionFormat extends Component {
                                         title={AppConstants.statusPublishHover}
                                     >
                                         <Button
+                                            id={AppUniqueId.compformat_save_btn}
                                             style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
                                             className="publish-button save-draft-text"
                                             type="primary"
@@ -1099,6 +1102,7 @@ class CompetitionFormat extends Component {
                                         title={AppConstants.statusPublishHover}
                                     >
                                         <Button
+                                            id={AppUniqueId.compformat_save_btn}
                                             style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
                                             className="publish-button save-draft-text"
                                             type="primary"
@@ -1141,7 +1145,7 @@ class CompetitionFormat extends Component {
                 </div>
                 <Modal
                     className="add-membership-type-modal"
-                    title= {AppConstants.regenerateDrawTitle}
+                    title={AppConstants.regenerateDrawTitle}
                     visible={this.state.drawGenerateModalVisible}
                     onOk={() => this.handleGenerateDrawModal("ok")}
                     onCancel={() => this.handleGenerateDrawModal("cancel")}>
