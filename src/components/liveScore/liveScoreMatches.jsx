@@ -281,7 +281,7 @@ class LiveScoreMatchesList extends Component {
         var code = e.keyCode || e.which;
 
         if (code === 13) { //13 is the enter keycode
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound,undefined, this.state.sortBy, this.state.sortOrder)
         }
     }
 
@@ -575,7 +575,7 @@ class LiveScoreMatchesList extends Component {
         const { competitionId, searchText, selectedRound, sortBy, sortOrder } = this.state;
 
         setTimeout(() => {
-            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, selectedRound === 'All' ? null : selectedRound, sortBy, sortOrder)
+            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, selectedRound === 'All' ? null : selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
         }, 200);
         this.props.liveScoreRoundListAction(competitionId, division == 'All' ? '' : division)
 
@@ -585,7 +585,7 @@ class LiveScoreMatchesList extends Component {
         let offset = 0;
         let start = 1
         const { competitionId, searchText, selectedDivision, sortBy, sortOrder } = this.state;
-        this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, selectedDivision === 'All' ? null : selectedDivision, roundName === 'All' ? null : roundName, sortBy, sortOrder)
+        this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, selectedDivision === 'All' ? null : selectedDivision, roundName === 'All' ? null : roundName, undefined, this.state.sortBy, this.state.sortOrder)
         this.setState({ selectedRound: roundName })
     }
 
