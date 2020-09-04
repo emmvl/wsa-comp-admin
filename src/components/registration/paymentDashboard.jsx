@@ -240,11 +240,12 @@ class PaymentDashboard extends Component {
     }
 
     handlePaymentTableList = (page) => {
+        let { sortBy, sortOrder } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
             offset
         })
-        this.props.getPaymentList(offset);
+        this.props.getPaymentList(offset, sortBy, sortOrder);
     };
     dropdownView = () => {
         return (

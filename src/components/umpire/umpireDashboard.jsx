@@ -584,6 +584,7 @@ class UmpireDashboard extends Component {
     }
 
     componentDidUpdate(nextProps) {
+        let { sortBy, sortOrder } = this.state
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading && !this.props.umpireCompetitionState.onLoad) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
@@ -667,6 +668,8 @@ class UmpireDashboard extends Component {
                     orgId: this.state.orgId,
                     roundId: this.state.round === "All" ? "" : [this.state.round],
                     pageData: body,
+                    sortBy,
+                    sortOrder,
                 });
 
                 this.props.umpireRoundListAction(this.state.selectedComp, this.state.division === "All" ? "" : this.state.division);
@@ -681,12 +684,12 @@ class UmpireDashboard extends Component {
                 screenKey: "umpire",
                 screen: "/umpireDashboard",
             });
-        // } else if (record.matchUmpiresId) {
-        //     history.push("/userPersonal", {
-        //         userId: record.matchUmpiresId,
-        //         screenKey: "umpire",
-        //         screen: "/umpireDashboard",
-        //     });
+            // } else if (record.matchUmpiresId) {
+            //     history.push("/userPersonal", {
+            //         userId: record.matchUmpiresId,
+            //         screenKey: "umpire",
+            //         screen: "/umpireDashboard",
+            //     });
         } else {
             // message.config({ duration: 1.5, maxCount: 1 });
             // message.warn(ValidationConstants.umpireMessage);
@@ -694,6 +697,7 @@ class UmpireDashboard extends Component {
     };
 
     handlePageChange = (page) => {
+        let { sortBy, sortOrder } = this.state
         let offsetData = page ? 10 * (page - 1) : 0;
         this.setState({ offsetData });
 
@@ -711,6 +715,8 @@ class UmpireDashboard extends Component {
             orgId: this.state.orgId,
             roundId: this.state.round === "All" ? "" : [this.state.round],
             pageData: body,
+            sortBy,
+            sortOrder,
         });
     };
 
@@ -792,6 +798,7 @@ class UmpireDashboard extends Component {
     };
 
     onVenueChange = (venueId) => {
+        let { sortBy, sortOrder } = this.state
         const body = {
             paging: {
                 limit: 10,
@@ -806,6 +813,8 @@ class UmpireDashboard extends Component {
             orgId: this.state.orgId,
             roundId: this.state.round === "All" ? "" : [this.state.round],
             pageData: body,
+            sortBy,
+            sortOrder,
         });
 
         this.setState({ venue: venueId });
@@ -813,7 +822,7 @@ class UmpireDashboard extends Component {
 
     onDivisionChange = (divisionId) => {
         this.setState({ division: divisionId, round: "All" });
-
+        let { sortBy, sortOrder } = this.state
         const body = {
             paging: {
                 limit: 10,
@@ -829,6 +838,8 @@ class UmpireDashboard extends Component {
                 orgId: this.state.orgId,
                 roundId: this.state.round === "All" ? "" : [this.state.round],
                 pageData: body,
+                sortBy,
+                sortOrder,
             });
         }, 100);
 
@@ -841,7 +852,7 @@ class UmpireDashboard extends Component {
         if (roundId !== "All") {
             this.props.umpireDashboardUpdate(roundId);
         }
-
+        let { sortBy, sortOrder } = this.state
         const body = {
             paging: {
                 limit: 10,
@@ -856,6 +867,8 @@ class UmpireDashboard extends Component {
             orgId: this.state.orgId,
             roundId: roundId === "All" ? "" : allRoundIds,
             pageData: body,
+            sortBy,
+            sortOrder,
         });
 
         this.setState({ round: roundId });
