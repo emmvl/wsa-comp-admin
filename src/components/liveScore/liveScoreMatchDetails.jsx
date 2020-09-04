@@ -60,14 +60,6 @@ const columns = [
         dataIndex: 'name',
         key: 'name',
         sorter: (a, b) => tableSort(a, b, "name"),
-        // render: (record, name) => console.log(record, 'record')
-        // <NavLink to={{
-        //     pathname: '/liveScorePlayerProfile',
-        //     state: { playerName: name }
-        // }}>
-        //     {/* <span class="input-heading-add-another pt-0" >{record.firstName + " " + record.lastName}</span> */}
-        //     </NavLink>
-
     },
     {
         title: 'Team',
@@ -839,7 +831,7 @@ class LiveScoreMatchDetails extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="col-12 mt-5" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
+                <div className="col-12 mt-5 mb-5" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
                     <div className="" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: 'center' }}>
                         <img className="user-image" src={length >= 1 ? match ? match[0].team2.logoUrl : '' : ''} alt="" height="80" width="80" />
                         <span className="live-score-profile-user-name match-details-team-name">
