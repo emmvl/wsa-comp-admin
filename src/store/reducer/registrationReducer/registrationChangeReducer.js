@@ -80,6 +80,9 @@ function regChangeReducer(state = initialState, action) {
             if(key == "declineReasonRefId"){
                 state.reviewSaveData["refundAmount"] = null;
                 state.reviewSaveData["refundTypeRefId"] = null;
+                if(data != 3){
+                    state.reviewSaveData["otherInfo"] = null;
+                }
             }
             else if(key == "refundTypeRefId"){
                 state.reviewSaveData["declineReasonRefId"] = null;
