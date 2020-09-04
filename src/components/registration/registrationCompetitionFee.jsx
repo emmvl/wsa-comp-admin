@@ -1858,6 +1858,7 @@ class RegistrationCompetitionFee extends Component {
     if (competitionFeesState.onLoad === false && this.state.loading === true) {
       this.setState({ loading: false });
       if (!competitionFeesState.error) {
+        window.scrollTo(0, 0);
         let competitionTabKey = this.state.isCreatorEdit == true && this.state.competitionTabKey == "4" ? "6" :
           JSON.stringify(JSON.parse(this.state.competitionTabKey) + 1)
         this.setState({
@@ -1879,6 +1880,7 @@ class RegistrationCompetitionFee extends Component {
       }
     }
     if (nextProps.competitionFeesState !== competitionFeesState) {
+	   						
       if (
         competitionFeesState.getCompAllDataOnLoad === false &&
         this.state.getDataLoading == true
