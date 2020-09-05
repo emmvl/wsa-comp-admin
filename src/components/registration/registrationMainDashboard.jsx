@@ -237,9 +237,10 @@ class RegistrationMainDashboard extends Component {
         });
     };
     onYearClick(yearId) {
+        let { sortBy, sortOrder } = this.state
         localStorage.setItem("yearId", yearId)
         this.setState({ year: yearId })
-        this.props.registrationMainDashboardListAction(yearId)
+        this.props.registrationMainDashboardListAction(yearId, sortBy, sortOrder)
         this.props.getAllCompetitionAction(yearId)
     }
 

@@ -393,7 +393,7 @@ class LiveScoreManagerList extends Component {
         if (e.target.value == null || e.target.value === "") {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value)
 
-            this.props.liveScoreManagerListAction(3, 1, id, e.target.value, this.state.sortBy, this.state.sortOrder)
+            this.props.liveScoreManagerListAction(3, 1, id, e.target.value, 0, this.state.sortBy, this.state.sortOrder)
         }
     }
 
@@ -403,7 +403,7 @@ class LiveScoreManagerList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
-            this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText)
+            this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder)
         }
     }
 
@@ -413,7 +413,7 @@ class LiveScoreManagerList extends Component {
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
-            this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText)
+            this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder)
         }
     }
 

@@ -65,6 +65,7 @@ import {
 import ValidationConstants from '../../themes/validationConstant';
 import moment from 'moment';
 import LegendComponent from '../../customComponents/legendComponent';
+import AllLegendComponent from '../../customComponents/allCompetitionLegendComponent'
 import { isArrayNotEmpty } from '../../util/helpers';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
 import AppUniqueId from "../../themes/appUniqueId";
@@ -717,6 +718,7 @@ class CompetitionDraws extends Component {
               {AppConstants.competition}:
             </span>
             <Select
+              id={AppUniqueId.draw_comp_dpdn}
               // style={{ minWidth: 200 }}
               name={'competition'}
               className="year-select reg-filter-select-competition ml-2"
@@ -750,7 +752,7 @@ class CompetitionDraws extends Component {
               // marginRight: 50
             }}
           >
-            <span id={AppUniqueId.division_dpdn} className="year-select-heading">
+            <span className="year-select-heading">
               {AppConstants.division}:
             </span>
             <Select
@@ -792,7 +794,7 @@ class CompetitionDraws extends Component {
               // marginRight: 50
             }}
           >
-            <span id={AppUniqueId.organisation_dpdn} className="year-select-heading">
+            <span className="year-select-heading">
               {AppConstants.organisation}:
             </span>
             <Select
@@ -1230,11 +1232,20 @@ class CompetitionDraws extends Component {
                           </span>
                         </div>
                         {this.draggableView(dateItem)}
-                        <div style={{ display: 'table' }}>
-                          <LegendComponent
-                            legendArray={dateItem.legendsArray}
-                          />
-                        </div>
+                        {this.state.firstTimeCompId == "-1" ?
+                          <div>
+                            <AllLegendComponent
+                              allLegendArray={dateItem.legendsArray}
+                            />
+                          </div>
+                          :
+                          <div style={{ display: 'table' }}>
+                            <LegendComponent
+                              disabled={disabledStatus}
+                              legendArray={dateItem.legendsArray}
+                            />
+                          </div>
+                        }
                       </div>
                     );
                   }
@@ -1253,12 +1264,20 @@ class CompetitionDraws extends Component {
                             </span>
                           </div>
                           {this.draggableView(dateItem)}
-                          <div style={{ display: 'table' }}>
-                            <LegendComponent
-                              disabled={disabledStatus}
-                              legendArray={dateItem.legendsArray}
-                            />
-                          </div>
+                          {this.state.firstTimeCompId == "-1" ?
+                            <div>
+                              <AllLegendComponent
+                                allLegendArray={dateItem.legendsArray}
+                              />
+                            </div>
+                            :
+                            <div style={{ display: 'table' }}>
+                              <LegendComponent
+                                disabled={disabledStatus}
+                                legendArray={dateItem.legendsArray}
+                              />
+                            </div>
+                          }
                         </div>
                       );
                     }

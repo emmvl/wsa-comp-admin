@@ -344,7 +344,7 @@ class UserTextualDashboard extends Component {
             },
         };
 
-        this.props.getUserDashboardTextualAction(filter);
+        this.props.getUserDashboardTextualAction(filter, this.state.sortBy, this.state.sortOrder);
 
         this.setState({ filter });
     };

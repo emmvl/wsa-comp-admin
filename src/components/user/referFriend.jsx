@@ -144,7 +144,7 @@ class ReferFriend extends Component {
                 offset: (page ? (10 * (page - 1)) : 0)
             }
         }
-        this.props.getUserReferFriendAction(filter);
+        this.props.getUserReferFriendAction(filter, this.state.sortBy, this.state.sortOrder);
     }
 
     referenceCalls = () => {

@@ -147,7 +147,7 @@ class PlayWithFriend extends Component {
                 offset: (page ? (10 * (page - 1)) : 0)
             }
         }
-        this.props.getUserFriendAction(filter);
+        this.props.getUserFriendAction(filter, this.state.sortBy, this.state.sortOrder);
     }
 
     referenceCalls = () => {

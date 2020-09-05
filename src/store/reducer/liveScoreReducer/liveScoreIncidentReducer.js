@@ -1,6 +1,5 @@
 import ApiConstants from '../../../themes/apiConstants'
 import liveScoreModal from '../../objectModel/liveScoreModal'
-import moment from "moment";
 import { isArrayNotEmpty } from "../../../util/helpers";
 
 var incidentObj = {
@@ -39,16 +38,12 @@ const initialState = {
     team2_Name: null,
     team1Id: null,
     team2Id: null,
-
 }
 
-
 function getTeamObj(teamSelectId, teamArr) {
-
     let teamObj = []
     let obj = ''
     for (let i in teamArr) {
-
         for (let j in teamSelectId) {
             if (teamSelectId[j] == teamArr[i].id) {
                 obj = {
@@ -66,7 +61,6 @@ function getTeamObj(teamSelectId, teamArr) {
 function getPlayerObj(playerSelectesId, playerArray) {
     let playerObj = []
     let obj = ''
-
     for (let i in playerArray) {
         for (let j in playerSelectesId) {
             if (playerSelectesId[j] == playerArray[i].id) {
@@ -83,74 +77,52 @@ function getPlayerObj(playerSelectesId, playerArray) {
 }
 
 function getPlayerId(playerArr) {
-
     let arr = []
     for (let i in playerArr) {
         arr.push(playerArr[i].player.id)
     }
-
     return arr
 }
 
 function getMediaIds(mediaArray) {
-    console.log(mediaArray, 'mediaArray')
-
     let media = []
-
     for (let i in mediaArray) {
         media.push(mediaArray[i].id)
     }
-
     return media
 }
 
 function removeMediaId(mediaArr, mediaType) {
-
     let ids = null
-
     let index = mediaArr.findIndex((x) => x.mediaType === mediaType)
-
     if (index > -1) {
         ids = mediaArr[index].id
     }
-
     return { ids: ids, index: index }
 }
 
 function getMediaUrl(mediaArray, mediaType) {
-
-
-
     let url
-
     for (let i in mediaArray) {
         var str = mediaArray[i].mediaType;
         var res = str.split("/", 1);
-
         if (mediaType == res[0]) {
             url = mediaArray[i].mediaUrl
         }
-
     }
     return url
-
 }
 
 function deleteSelectedMedia(mediaArray, mediaType) {
-
     for (let i in mediaArray) {
-
         let str = mediaArray[i].mediaType;
         let res = str.split("/", 1);
-
         if (mediaType == res[0]) {
             mediaArray.splice(i, 1)
             break;
         }
     }
-
     return mediaArray
-
 }
 
 function liveScoreIncidentState(state = initialState, action) {
@@ -161,7 +133,6 @@ function liveScoreIncidentState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_INCIDENT_LIST_SUCCESS:
             const result = action.result
             return {
-
                 ...state,
                 onLoad: false,
                 liveScoreIncidentResult: isArrayNotEmpty(result.incidents) ? result.incidents : [],
@@ -177,8 +148,8 @@ function liveScoreIncidentState(state = initialState, action) {
                 loading: false,
                 error: action.error,
                 status: result.status
-
             }
+
         case ApiConstants.API_LIVE_SCORE_INCIDENT_LIST_ERROR:
             return {
                 ...state,
@@ -201,11 +172,9 @@ function liveScoreIncidentState(state = initialState, action) {
 
             } else if (action.key === "isEdit") {
                 let data = action.data
-
-                console.log(data, 'checkingData')
+                state.playerResult = []
                 state.incidentMediaList = data.incidentMediaList
                 state.mediaData = action.data
-
                 state.incidentData['date'] = data.incidentTime
                 state.incidentData['time'] = data.incidentTime
                 state.incidentData['mnbMatchId'] = data.match.id
@@ -228,38 +197,29 @@ function liveScoreIncidentState(state = initialState, action) {
             } else if (action.key === "clearImage") {
                 if (state.mediaData) {
                     state.incidentData['addImages'] = null
-
                     let imageId = removeMediaId(state.mediaData.incidentMediaList, "image/png")
                     let media_Array = state.incidentMediaIds
                     media_Array.splice(imageId.index, 1)
                     state.mediaData.incidentMediaList.splice(imageId.index, 1)
                     state.incidentMediaIds = media_Array
-
                 }
-
-
             } else if (action.key === "clearVideo") {
                 if (state.mediaData) {
                     state.incidentData['addVideo'] = null
-
                     let videoId = removeMediaId(state.mediaData.incidentMediaList, "video/mp4")
-
                     let media_Array = state.incidentMediaIds
                     media_Array.splice(videoId.index, 1)
                     state.mediaData.incidentMediaList.splice(videoId.index, 1)
                     state.incidentMediaIds = media_Array
                 }
 
-
-
-
             } else if (action.key === "isAdd") {
                 state.incidentData = []
                 state.incidentMediaIds = []
+                state.playerResult = []
 
             } else if (action.key === "incidentImage") {
                 let array_Media_img = [...state.incidentMediaList]
-
                 state.incidentData['addImages'] = null
                 let imageMedia = deleteSelectedMedia(array_Media_img, 'image')
                 state.incidentMediaList = imageMedia
@@ -272,16 +232,16 @@ function liveScoreIncidentState(state = initialState, action) {
                 state.incidentMediaList = videoMedia
                 state.incidentMediaIds = getMediaIds(state.incidentMediaList)
 
+            } else if (action.key === "clearPyarIds") {
+                state.incidentData['playerIds'] = []
             } else {
                 state.incidentData[action.key] = action.data
             }
-
 
         case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
-
             state.teamResult = action.result
             return {
                 ...state,
@@ -290,15 +250,11 @@ function liveScoreIncidentState(state = initialState, action) {
                 status: action.status
             }
 
-
-
         case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SUCCESS:
-
             var playerListResult = liveScoreModal.getPlayerListData(action.result)
-
             return {
                 ...state,
                 onLoad: false,
@@ -310,9 +266,7 @@ function liveScoreIncidentState(state = initialState, action) {
             return { ...state, loading: true }
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS:
-
             return {
-
                 ...state,
                 loading: false,
                 success: true,

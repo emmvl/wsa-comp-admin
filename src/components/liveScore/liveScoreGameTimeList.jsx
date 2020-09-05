@@ -240,7 +240,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let offset = 1 ? 10 * (1 - 1) : 0
         this.setState({ filter: data.filter })
-        this.props.gameTimeStatisticsListAction(id, data.filter === 'All' ? "" : data.filter, offset, this.state.searchText)
+        this.props.gameTimeStatisticsListAction(id, data.filter === 'All' ? "" : data.filter, offset, this.state.searchText, this.state.sortBy, this.state.sortOrder)
     }
 
     onExport() {
@@ -264,7 +264,7 @@ class LiveScoreGameTimeList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         // this.setState({ searchText: e.target.value })
         if (code === 13) { //13 is the enter keycode
-            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText, this.state.sortBy, this.state.sortOrder)
         }
     }
 
@@ -274,7 +274,7 @@ class LiveScoreGameTimeList extends Component {
         if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
-            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText)
+            this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, this.state.searchText, this.state.sortBy, this.state.sortOrder)
         }
     }
 

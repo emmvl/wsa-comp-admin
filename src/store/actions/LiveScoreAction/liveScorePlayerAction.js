@@ -1,9 +1,9 @@
 import ApiConstants from "themes/apiConstants";
 
-function liveScorePlayerListAction(competitionID) {
+function liveScorePlayerListAction(competitionID, teamId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD,
-        competitionID,
+        competitionID, teamId
     };
 }
 

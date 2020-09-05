@@ -32,15 +32,59 @@ const initialState = {
   onActRndLoad: false,
   teamNames: null,
   liveScoreCompetiton: null,
-  allcompetitionDateRange: []
+  allcompetitionDateRange: [],
+
 
 };
 var gradeColorArray = [];
+var gradeCompColorArray = []
 var fixtureColorArray = [];
 const colorsArray = ColorsArray;
 const lightGray = '#999999';
 var legendsArray = [];
 let colorsArrayDup = [...colorsArray];
+let allColorsArray = colorsArray
+
+function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
+  let newArray = currentLegends
+  for (let i in drawsArray) {
+    for (let j in drawsArray[i].slotsArray) {
+      let competitionName = drawsArray[i].slotsArray[j].competitionName
+      let compIndex = currentLegends.findIndex((x) => x.competitionName == competitionName)
+      if (compIndex === -1) {
+        let color = drawsArray[i].slotsArray[j].colorCode
+        if (color !== "#999999") {
+          newArray.unshift({ competitionName: competitionName, legendArray: [] })
+          // let index = currentLegends.findIndex((x) => x.colorCode === color)
+          let object = {
+            "colorCode": color,
+            "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+            "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
+          }
+
+          // if (index === -1) {
+          newArray[0].legendArray.push(object)
+          // break;
+          // }
+        }
+      } else {
+        let color = drawsArray[i].slotsArray[j].colorCode
+        let getIndex = newArray[compIndex].legendArray.findIndex((x) => x.colorCode === color)
+        let object = {
+          "colorCode": color,
+          "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+          "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
+        }
+        if (getIndex === -1) {
+          if (color !== "#999999") {
+            newArray[compIndex].legendArray.push(object)
+          }
+        }
+      }
+    }
+  }
+  return newArray
+}
 
 function createLegendsArray(drawsArray, currentLegends, dateArray) {
   let newArray = currentLegends
@@ -59,7 +103,6 @@ function createLegendsArray(drawsArray, currentLegends, dateArray) {
         }
       }
     }
-
   }
   let dateArrayLength = isArrayNotEmpty(dateArray) ? dateArray.length : 1
   let temparray = []
@@ -89,7 +132,7 @@ function roundstructureData(data) {
   let newStructureDrawsData
   if (roundsdata.length > 0) {
     for (let i in roundsdata) {
-      newStructureDrawsData = structureDrawsData(roundsdata[i].draws)
+      newStructureDrawsData = structureDrawsData(roundsdata[i].draws, "single")
       roundsdata[i].draws = newStructureDrawsData.mainCourtNumberArray
       roundsdata[i].dateNewArray = newStructureDrawsData.sortedDateArray
       roundsdata[i].legendsArray = newStructureDrawsData.legendsArray
@@ -102,7 +145,7 @@ function roundstructureData(data) {
 
 
 
-function structureDrawsData(data) {
+function structureDrawsData(data, key) {
   let mainCourtNumberArray = [];
   let dateArray = [];
   let gradeArray = [];
@@ -146,11 +189,11 @@ function structureDrawsData(data) {
         data,
         sortMainCourtNumberArray,
         sortedDateArray,
-        gradeArray
+        gradeArray, key
       );
     }
   }
-  legendsArray = createLegendsArray(mainCourtNumberArray, legendArray, sortedDateArray)
+  legendsArray = key == "all" ? createCompLegendsArray(mainCourtNumberArray, legendArray, sortedDateArray) : createLegendsArray(mainCourtNumberArray, legendArray, sortedDateArray)
   return { mainCourtNumberArray, sortedDateArray, legendsArray };
 }
 
@@ -158,7 +201,7 @@ function mapSlotObjectsWithTimeSlots(
   drawsArray,
   mainCourtNumberArray,
   sortedDateArray,
-  gradeArray
+  gradeArray, key
 ) {
   for (let i in mainCourtNumberArray) {
     let tempSlotsArray = [];
@@ -168,7 +211,7 @@ function mapSlotObjectsWithTimeSlots(
           drawsArray,
           mainCourtNumberArray[i].venueCourtId,
           sortedDateArray[j].date,
-          gradeArray
+          gradeArray, key
         )
       );
     }
@@ -177,7 +220,7 @@ function mapSlotObjectsWithTimeSlots(
   return mainCourtNumberArray;
 }
 
-function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray) {
+function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, key) {
   let startTime;
   let endTime;
   for (let i in drawsArray) {
@@ -191,7 +234,7 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray) {
       //   drawsArray[i].competitionDivisionGradeId
       // );
 
-      let gradeColour = getGradeColor(drawsArray[i].competitionDivisionGradeId);
+      let gradeColour = key == "all" ? getCompGradeColor(drawsArray[i].competitionDivisionGradeId, drawsArray[i].competitionUniqueKey) : getGradeColor(drawsArray[i].competitionDivisionGradeId);
 
       // if (gradeIndex === -1) {
       drawsArray[i].colorCode = gradeColour;
@@ -282,13 +325,52 @@ function getFixtureColor(team) {
 function allcompetitionDrawsData(data) {
   // let dateDrawsData = data.dates
   let newStructureDateDraws
-  newStructureDateDraws = structureDrawsData(data.draws)
+  newStructureDateDraws = structureDrawsData(data.draws, "all")
   data.draws = newStructureDateDraws.mainCourtNumberArray
   data.dateNewArray = newStructureDateDraws.sortedDateArray
   data.legendsArray = newStructureDateDraws.legendsArray
   return {
     data,
   }
+}
+
+function getCompGradeColor(gradeId, competitionUniqueKey) {
+  let gradeColorCompTempArray = JSON.parse(JSON.stringify(gradeCompColorArray));
+  let compIndex = gradeColorCompTempArray.findIndex((x) => x.competitionUniqueKey == competitionUniqueKey);
+  var compGradeColor = lightGray;
+  if (compIndex !== -1) {
+    let compGradeIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex((x) => x.gradeId == gradeId);
+    if (compGradeIndex !== -1) {
+      compGradeColor = gradeColorCompTempArray[compIndex].newGradesArray[compGradeIndex].colorCode
+    }
+    else {
+      for (var i in allColorsArray) {
+        let colorIndex = gradeColorCompTempArray[compIndex].newGradesArray.findIndex(
+          (x) => x.colorCode === allColorsArray[i]
+        );
+        if (colorIndex === -1) {
+          gradeCompColorArray[compIndex].newGradesArray.push({ gradeId: gradeId, colorCode: allColorsArray[i] });
+          compGradeColor = allColorsArray[i];
+          allColorsArray.splice(i, 1)
+          break;
+        }
+      }
+    }
+  } else {
+    gradeCompColorArray.unshift({ competitionUniqueKey: competitionUniqueKey, newGradesArray: [] })
+    for (var j in allColorsArray) {
+      let colorIndex = gradeCompColorArray[0].newGradesArray.findIndex(
+        (x) => x.colorCode === allColorsArray[j]
+      );
+      if (colorIndex === -1) {
+        gradeCompColorArray[0].newGradesArray.push({ gradeId: gradeId, colorCode: allColorsArray[j] })
+        compGradeColor = allColorsArray[j];
+        allColorsArray.splice(j, 1)
+        break;
+      }
+    }
+  }
+  return compGradeColor
 }
 
 function getGradeColor(gradeId) {
@@ -428,9 +510,6 @@ function checkSlotsDateStatus(slotsArray, checkdate) {
 
 
 function checkDrawsArrayFunc(allDrawsData) {
-
-
-
   let drawsAllDateData = allDrawsData.dateNewArray
   let drawsAllData = allDrawsData.draws
   for (let i in drawsAllDateData) {
@@ -718,6 +797,7 @@ function CompetitionDraws(state = initialState, action) {
 
     //competition part player grade calculate player grading summary get API
     case ApiConstants.API_GET_COMPETITION_DRAWS_LOAD:
+      allColorsArray = [...colorsArray]
       return { ...state, onLoad: true, error: null, spinLoad: true, };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS:

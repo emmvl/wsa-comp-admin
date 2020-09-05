@@ -185,6 +185,7 @@ class UmpireRoaster extends Component {
     }
 
     componentDidUpdate(nextProps) {
+        let { sortBy, sortOrder } = this.state
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
@@ -218,7 +219,7 @@ class UmpireRoaster extends Component {
                     }
                 }
                 if (firstComp !== false) {
-                    this.props.umpireRoasterListAction(firstComp, this.state.status, refRoleTypes('umpire'), body)
+                    this.props.umpireRoasterListAction(firstComp, this.state.status, refRoleTypes('umpire'), body, sortBy, sortOrder)
                     this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList })
                 } else {
                     this.setState({ loading: false })
@@ -237,7 +238,7 @@ class UmpireRoaster extends Component {
                     }
                 }
 
-                this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, refRoleTypes('umpire'), body)
+                this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, refRoleTypes('umpire'), body, sortBy, sortOrder)
                 this.setState({ roasterLoad: false })
             }
         }
@@ -261,6 +262,7 @@ class UmpireRoaster extends Component {
 
     /// Handle Page change
     handlePageChnage(page) {
+        let { sortBy, sortOrder } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
             offsetData: offset
@@ -273,7 +275,7 @@ class UmpireRoaster extends Component {
             },
         }
 
-        this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, refRoleTypes('umpire'), body)
+        this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, refRoleTypes('umpire'), body, sortBy, sortOrder)
 
     }
 
@@ -319,6 +321,7 @@ class UmpireRoaster extends Component {
 
 
     onChangeComp(compID) {
+        let { sortBy, sortOrder } = this.state
         let selectedComp = compID.comp
         let compObj = null
         for (let i in this.state.compArray) {
@@ -342,12 +345,13 @@ class UmpireRoaster extends Component {
             },
         }
 
-        this.props.umpireRoasterListAction(selectedComp, this.state.status, refRoleTypes('umpire'), body)
+        this.props.umpireRoasterListAction(selectedComp, this.state.status, refRoleTypes('umpire'), body, sortBy, sortOrder)
         this.setState({ selectedComp, competitionUniqueKey: compKey })
 
     }
 
     onChangeStatus(status) {
+        let { sortBy, sortOrder } = this.state
         const body =
         {
             "paging": {
@@ -357,7 +361,7 @@ class UmpireRoaster extends Component {
         }
 
         if (this.state.selectedComp) {
-            this.props.umpireRoasterListAction(this.state.selectedComp, status, refRoleTypes('umpire'), body)
+            this.props.umpireRoasterListAction(this.state.selectedComp, status, refRoleTypes('umpire'), body, sortBy, sortOrder)
 
         }
         this.setState({ status })
@@ -504,7 +508,7 @@ class UmpireRoaster extends Component {
 
                         <div className="reg-col" >
                             <div className="reg-filter-col-cont">
-                                <span className='year-select-heading' style={{width:'135px'}}>{AppConstants.competition}:</span>
+                                <span className='year-select-heading' style={{ width: '135px' }}>{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ minWidth: 200 }}

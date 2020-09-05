@@ -203,7 +203,7 @@ class ShopOrderStatus extends Component {
     }
 
     handleTableList = (page) => {
-        let { yearRefId, searchText, paymentStatus, fulfilmentStatus, product } = this.state
+        let { yearRefId, searchText, paymentStatus, fulfilmentStatus, product, sortOrder, sortBy } = this.state
         let params =
         {
             limit: 10,
@@ -213,8 +213,8 @@ class ShopOrderStatus extends Component {
             paymentStatus: paymentStatus,
             fulfilmentStatus: fulfilmentStatus,
             product: product,
-            order: "",
-            sorterBy: ""
+            order: sortOrder ? sortOrder : "",
+            sorterBy: sortBy ? sortBy : ""
         }
         this.props.getOrderStatusListingAction(params)
     }

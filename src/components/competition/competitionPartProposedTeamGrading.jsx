@@ -132,6 +132,12 @@ const columns = [
 
     },
     {
+        title: 'Finalised Grade',
+        dataIndex: 'finalGradeName',
+        key: 'finalGradeName',
+        sorter: (a, b) => tableSort(a, b, "finalGradeName")
+    },
+    {
         title: 'Comments',
         dataIndex: 'comments',
         key: 'comments',

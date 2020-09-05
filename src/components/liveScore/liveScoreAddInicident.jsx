@@ -61,18 +61,20 @@ class LiveScoreAddIncident extends Component {
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        const { incidentData } = this.props.liveScoreIncidentState
         this.props.liveScoreIncidentTypeAction();
         if (id !== null) {
             this.props.getliveScoreTeams(id);
-            this.props.liveScorePlayerListAction(id);
+            // this.props.liveScorePlayerListAction(id);
         }
 
         if (this.state.isEdit === true) {
             this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isEdit")
             this.setInitalFiledValue()
-            // let imgUrl = isArrayNotEmpty(this.state.tableRecord.incidentMediaList) ? this.state.tableRecord.incidentMediaList[0] ? this.state.tableRecord.incidentMediaList[0].mediaUrl : null : null
-            // let videoUrl = isArrayNotEmpty(this.state.tableRecord.incidentMediaList) ? this.state.tableRecord.incidentMediaList[1] ? this.state.tableRecord.incidentMediaList[1].mediaUrl : null : null
-            // this.setState({ incidentId: this.state.tableRecord.id, image: imgUrl, video: videoUrl })
+            if (id !== null) {
+
+                this.props.liveScorePlayerListAction(id, incidentData.teamId);
+            }
         } else {
             this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isAdd")
         }
@@ -185,6 +187,19 @@ class LiveScoreAddIncident extends Component {
 
     }
 
+    setTeamId(teamId) {
+
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (id !== null) {
+            this.props.liveScorePlayerListAction(id, teamId);
+        }
+        this.props.liveScoreUpdateIncidentData(null, "clearPyarIds")
+        this.setInitalFiledValue()
+        this.props.liveScoreUpdateIncidentData(teamId, "teamId")
+
+
+    }
+
     //// Form View
     contentView = (getFieldDecorator) => {
         const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds, team1_Name, team2_Name, team1Id, team2Id } = this.props.liveScoreIncidentState
@@ -196,6 +211,7 @@ class LiveScoreAddIncident extends Component {
         let startDate = date ? moment(date, 'DD-MM-YYYY') : null
         let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
         let startTime = time_formate ? moment(time_formate, "HH:mm") : null
+
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -266,7 +282,7 @@ class LiveScoreAddIncident extends Component {
                                         className="reg-form-multiple-select"
                                         placeholder='Select Home Team'
                                         style={{ width: "100%" }}
-                                        onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
+                                        onChange={(teamId) => this.setTeamId(teamId)}
                                         // value={incidentData.teamId ? incidentData.teamId : ''}
 
                                         optionFilterProp="children"
@@ -282,7 +298,7 @@ class LiveScoreAddIncident extends Component {
                                         className="reg-form-multiple-select"
                                         placeholder='Select Home Team'
                                         style={{ width: "100%" }}
-                                        onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
+                                        onChange={(teamId) => this.setTeamId(teamId)}
                                         // value={incidentData.teamId ? incidentData.teamId : ''}
 
                                         optionFilterProp="children"
@@ -500,11 +516,7 @@ class LiveScoreAddIncident extends Component {
 
     onSaveClick = e => {
         e.preventDefault();
-
         const { incidentData, incidentId, incidentMediaIds } = this.props.liveScoreIncidentState;
-        console.log(incidentMediaIds, 'incidentMediaIds', this.state.image, this.state.video)
-
-
         // let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("DD-MM-YYYY") : null
         // let startDate = date ? moment(date, 'DD-MM-YYYY') : null
         // let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
@@ -513,14 +525,12 @@ class LiveScoreAddIncident extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { id } = JSON.parse(getLiveScoreCompetiton());
-
                 let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("YYYY-MMM-DD") : moment(incidentData.date).format("YYYY-MMM-DD");
                 let time = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : moment(incidentData.time).format("HH:mm");
                 let startDateTime = moment(date + " " + time);
                 let formatDateTime = new Date(startDateTime).toISOString();
                 let mediaArry;
                 let body;
-
                 if (this.state.image !== null && this.state.video !== null) {
                     mediaArry = [
                         this.state.image,

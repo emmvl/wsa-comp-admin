@@ -203,6 +203,7 @@ class Umpire extends Component {
     }
 
     componentDidUpdate(nextProps) {
+        let { sortBy, sortOrder } = this.state
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
@@ -234,6 +235,8 @@ class Umpire extends Component {
                         entityTypes: entityTypes("COMPETITION"),
                         compId: firstComp,
                         offset: 0,
+                        sortBy,
+                        sortOrder,
                     });
                     this.setState({
                         selectedComp: firstComp,
@@ -262,6 +265,7 @@ class Umpire extends Component {
     }
 
     handlePageChange = (page) => {
+        let { sortBy, sortOrder } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
             offsetData: offset,
@@ -272,6 +276,8 @@ class Umpire extends Component {
             entityTypes: entityTypes("COMPETITION"),
             compId: this.state.selectedComp,
             offset,
+            sortBy,
+            sortOrder,
         });
     };
 
@@ -320,7 +326,7 @@ class Umpire extends Component {
     onChangeComp = (compID) => {
         let selectedComp = compID.comp;
         // setUmpireCompId(selectedComp);
-
+        let { sortBy, sortOrder } = this.state
         let compObj = null;
         for (let i in this.state.compArray) {
             if (compID.comp === this.state.compArray[i].id) {
@@ -339,6 +345,8 @@ class Umpire extends Component {
             entityTypes: entityTypes("COMPETITION"),
             compId: selectedComp,
             offset: 0,
+            sortBy,
+            sortOrder,
         });
 
         this.setState({ selectedComp, competitionUniqueKey: compKey });
@@ -347,7 +355,7 @@ class Umpire extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value });
-
+        let { sortBy, sortOrder } = this.state
         if (e.target.value === null || e.target.value === "") {
             this.props.umpireListAction({
                 refRoleId: refRoleTypes("umpire"),
@@ -355,12 +363,15 @@ class Umpire extends Component {
                 compId: this.state.selectedComp,
                 offset: 0,
                 userName: e.target.value,
+                sortBy,
+                sortOrder,
             });
         }
     };
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        let { sortBy, sortOrder } = this.state
         const code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             this.props.umpireListAction({
@@ -368,13 +379,16 @@ class Umpire extends Component {
                 entityTypes: entityTypes('COMPETITION'),
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,
-                offset: 0
+                offset: 0,
+                sortBy,
+                sortOrder,
             });
         }
     };
 
     // on click of search icon
     onClickSearchIcon = () => {
+        let { sortBy, sortOrder } = this.state
         if (this.state.searchText === null || this.state.searchText === "") {
         } else {
             this.props.umpireListAction({
@@ -383,6 +397,8 @@ class Umpire extends Component {
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,
                 offset: 0,
+                sortBy,
+                sortOrder,
             });
         }
     };

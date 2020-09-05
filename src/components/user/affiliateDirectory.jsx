@@ -217,7 +217,7 @@ class AffiliateDirectory extends Component {
         offset: page ? 10 * (page - 1) : 0,
       },
     };
-    this.props.getAffiliateDirectoryAction(filter);
+    this.props.getAffiliateDirectoryAction(filter, this.state.sortBy, this.state.sortOrder);
   };
 
   naviageToAffiliate = (e) => {
