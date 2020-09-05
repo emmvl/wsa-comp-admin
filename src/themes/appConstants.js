@@ -183,7 +183,7 @@ const AppConstants = {
   addMembershipType: 'Add Membership Type',
   membershipFees: 'Membership Fees',
   applyMembershipFee: 'Apply Seasonal Membership Fees to',
-  casualFee: 'Casual Fee',
+  casualFee: 'Single Game (PAYG) Fee (inc GST)',
   gst: 'GST',
   seasonalFee: 'Seasonal fee',
   type: 'Type',
@@ -1088,9 +1088,9 @@ const AppConstants = {
   newsPublishNotifyMsg:
     'Publish the news/ message to the App and notify App users.',
   participateCompMsg:
-    'A list of all Competitions your Organisations is Competing In.',
+    'A list of all Competitions your Organisation is competing in.',
   ownedCompetitionMsg:
-    'A List of all Competitions your Organisation is responsible for.',
+    '	A List of all Competitions your Organisation is responsible for.',
   compDetailsMsg:
     'If you have opened Registrations for this Competition than Competition Details fields will be pre-populated but you can change key details as appropriate. If you have not opened Registrations for this competition, then you need to complete these screens.',
   knockOutMsg:
@@ -1558,6 +1558,24 @@ const AppConstants = {
   selectedDivision: "Selected Division",
   fullReset: "Full Reset",
   divisionSettings: "Division settings",
+  finalMatch: "Finals Match",
+  extra_Time: "Extra Time",
+  extraTimeType: "Extra Time Type",
+  extraTimeqtrBreak: "Extra Time Quarter Break",
+  alsoAssignAsUmpireCoach: "Also assign as Umpire Coach",
+  recordGoalAttempt: "Record goal attempt",
+  addAnotherPool: "Add Pool",
+  mergeCompetition: "Merge Competition",
+  differencesBetween: "There are some differences between",
+  oneHasPreference: "Which one has preference:",
+  divisioAndGrades: "Division and Grades",
+  combine: "Combine",
+  whatRegistrationChange: "what registration change do you",
+  registrationChangeRef: "RegistrationChange",
+  reasonWhyYourAreDecline: "Reason why you are declining the request for de-registration?",
+  refundAmount: "Refund Amount",
+  toDate: "To date",
+  fromDate: "From date"
 };
 
 export default AppConstants;

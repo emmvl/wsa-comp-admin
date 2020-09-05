@@ -73,7 +73,7 @@ import ShopOrderSummaryState from "./shopReducer/orderSummaryReducer";
 import SupportState from "./supportReducer";
 import ShopOrderStatusState from "./shopReducer/orderStatusReducer";
 
-import UmpirePaymentSettingState from "./umpireReducer/umpirePaymentSettingReducer"
+import UmpirePaymentSettingState from "./umpireReducer/umpirePaymentSettingReducer";
 
 const rootReducer = combineReducers({
   LoginState,

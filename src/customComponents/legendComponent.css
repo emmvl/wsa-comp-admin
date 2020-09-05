@@ -56,3 +56,15 @@ overflow: hidden;
 white-space: nowrap;
 padding-right: 10px;
 }
+.all-legend-main-div{
+    /* flex-direction: row; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    /* white-space: initial; */
+    /* word-wrap: break-word; */
+    /* float: left; */
+    clear: both; 
+    padding-right: 15px;
+    /* margin-left: 70px; */
+    padding-left: 15px;
+}

@@ -168,7 +168,7 @@ class OrderSummary extends Component {
     }
 
     handleTableList = (page) => {
-        let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this.state
+        let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod, sortOrder, sortBy } = this.state
         let params =
         {
             limit: 10,
@@ -178,8 +178,8 @@ class OrderSummary extends Component {
             postcode: postcode,
             affiliate: affiliateOrgId,
             paymentMethod: paymentMethod,
-            order: "",
-            sorterBy: ""
+            order: sortOrder ? sortOrder : "",
+            sorterBy: sortBy ? sortBy : ""
         }
         this.props.getOrderSummaryListingAction(params)
     }
@@ -389,7 +389,7 @@ class OrderSummary extends Component {
 
                         <div className="reg-col col-md-3 col-sm-6" >
                             <div className="reg-filter-col-cont" >
-                                <div className='year-select-heading' style={{ width: 95 }}>{AppConstants.postCode}</div>
+                                <div className='year-select-heading' style={{ width: 95 }}>{AppConstants.postCode} :</div>
                                 <div style={{ width: '76%' }}>
                                     <InputWithHead
                                         placeholder={AppConstants.postCode}

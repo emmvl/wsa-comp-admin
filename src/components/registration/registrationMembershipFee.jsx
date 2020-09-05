@@ -1025,8 +1025,8 @@ class RegistrationMembershipFee extends Component {
                                     {getFieldDecorator(`percentageValue${index} + ${childindex}`,
                                         { rules: [{ required: true, message: ValidationConstants.pleaseEnterChildDiscountPercentage }] })(
                                             <InputWithHead
-                                                heading={`Child ${childindex + 1}%`}
-                                                placeholder={`Child ${childindex + 1}%`}
+                                                heading={`Family Participant ${childindex + 1}%`}
+                                                placeholder={`Family Participant ${childindex + 1}%`}
                                                 onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
                                                 // value={childItem.percentageValue}
                                                 disabled={this.state.membershipIsUsed}

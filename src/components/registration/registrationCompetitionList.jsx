@@ -394,11 +394,12 @@ class RegistrationCompetitionList extends Component {
     };
 
     handleCompetitionTableList = (page, yearRefId, searchText) => {
+        let { sortBy, sortOrder } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
             offset,
         })
-        this.props.regCompetitionListAction(offset, yearRefId, searchText);
+        this.props.regCompetitionListAction(offset, yearRefId, searchText, sortBy, sortOrder);
     };
 
     ////////form content view

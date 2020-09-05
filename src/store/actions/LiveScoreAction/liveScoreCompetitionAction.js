@@ -42,13 +42,14 @@ export const liveScoreCompetitionDeleteError = (data) => {
     }
 }
 
-export const liveScoreOwnPartCompetitionList = (data, orgKey, sortBy, sortOrder, key) => {
+export const liveScoreOwnPartCompetitionList = (data, orgKey, sortBy, sortOrder, key, yearRefId) => {
     return {
         type: ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_LOAD,
         payload: data,
         orgKey,
         sortBy,
         sortOrder,
-        key
+        key,
+        yearRefId
     }
 }

@@ -1,4 +1,4 @@
-import ApiConstants from "../../../themes/apiConstants";
+import ApiConstants from "themes/apiConstants";
 
 // Division action
 function getLiveScoreDivisionList(competitionID, compKey, sortBy, sortOrder) {
@@ -22,7 +22,7 @@ function liveScoreUpdateDivisionAction(data, key, contentType) {
 }
 
 //createDivisionAction
-function createDivisionAction(name, divisionName, gradeName, competitionId, divisionId) {
+function createDivisionAction(name, divisionName, gradeName, competitionId, divisionId, positionTracking, recordGoalAttempts) {
     return {
         type: ApiConstants.API_LIVE_SCORE_CREATE_DIVISION_LOAD,
         name,
@@ -30,6 +30,8 @@ function createDivisionAction(name, divisionName, gradeName, competitionId, divi
         gradeName,
         competitionId,
         divisionId,
+        positionTracking,
+        recordGoalAttempts
     };
 }
 
@@ -45,6 +47,12 @@ function liveScoreDivisionImportAction(payload) {
     return {
         type: ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_LOAD,
         payload,
+    };
+}
+
+function liveScoreDivisionResetImportResultAction() {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_RESET,
     };
 }
 
@@ -65,5 +73,6 @@ export {
     createDivisionAction,
     liveScoreDeleteDivision,
     liveScoreDivisionImportAction,
+    liveScoreDivisionResetImportResultAction,
     getMainDivisionListAction,
 };

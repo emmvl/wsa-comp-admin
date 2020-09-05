@@ -1886,7 +1886,15 @@ function competitionFees(state = initialState, action) {
 
         ////membership product selected action tochange membership typearray data
         case ApiConstants.COMPETITION_FEES_MEMBERSHIP_PRODUCT_SELECTED_ONCHANGE:
-            state.defaultCompFeesMembershipProduct[action.index].isProductSelected = action.checked
+             state.defaultCompFeesMembershipProduct[action.index].isProductSelected = action.checked;
+				
+				let membershipProductobj = state.defaultCompFeesMembershipProduct[action.index];      												
+                membershipProductobj.competitionMembershipProductId = null;
+                let membershipProductTypesList = membershipProductobj.membershipProductTypes;
+                membershipProductTypesList.map((item)=>{         
+                    item.competitionMembershipProductId = null;
+                    item.competitionMembershipProductTypeId = 0;         
+                }); 
 
             return {
                 ...state,

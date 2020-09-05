@@ -18,6 +18,8 @@ const initialState = {
     mainDivisionList: [],
     totalCount: null,
     currentPage: null,
+    positionTracking: "null",
+    recordGoalAttempts: "null"
 };
 
 function liveScoreDivisionState(state = initialState, action) {
@@ -44,8 +46,17 @@ function liveScoreDivisionState(state = initialState, action) {
                 state.divisionName = action.data.divisionName;
                 state.gradeName = action.data.grade;
                 state.name = action.data.name;
+                state.positionTracking = action.data.positionTracking
+                state.recordGoalAttempts = action.data.recordGoalAttempts
+
             } else if (action.key === "isAddDivision") {
                 state.divisionData = divisionObj;
+            }
+            else if (action.key == "positionTracking") {
+                state.positionTracking = action.data
+            }
+            else if (action.key == "recordGoalAttempts") {
+                state.recordGoalAttempts = action.data
             }
             return {
                 ...state,
@@ -70,7 +81,11 @@ function liveScoreDivisionState(state = initialState, action) {
             return { ...state, onLoad: false };
 
         case ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_LOAD:
-            return { ...state, onLoad: true };
+            return {
+                ...state,
+                onLoad: true,
+                importResult: null,
+            };
 
         case ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_SUCCESS:
             return {
@@ -78,6 +93,12 @@ function liveScoreDivisionState(state = initialState, action) {
                 onLoad: false,
                 status: action.status,
                 importResult: action.result,
+            };
+
+        case ApiConstants.API_LIVE_SCORE_DIVISION_IMPORT_RESET:
+            return {
+                ...state,
+                importResult: null,
             };
 
         case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_FAIL:

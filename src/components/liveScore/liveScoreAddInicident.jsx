@@ -8,6 +8,7 @@ import {
     TimePicker,
     Select,
     Input,
+    message
 } from 'antd';
 import './liveScore.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -60,18 +61,20 @@ class LiveScoreAddIncident extends Component {
 
     componentDidMount() {
         const { id } = JSON.parse(getLiveScoreCompetiton())
+        const { incidentData } = this.props.liveScoreIncidentState
         this.props.liveScoreIncidentTypeAction();
         if (id !== null) {
             this.props.getliveScoreTeams(id);
-            this.props.liveScorePlayerListAction(id);
+            // this.props.liveScorePlayerListAction(id);
         }
 
         if (this.state.isEdit === true) {
             this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isEdit")
             this.setInitalFiledValue()
-            // let imgUrl = isArrayNotEmpty(this.state.tableRecord.incidentMediaList) ? this.state.tableRecord.incidentMediaList[0] ? this.state.tableRecord.incidentMediaList[0].mediaUrl : null : null
-            // let videoUrl = isArrayNotEmpty(this.state.tableRecord.incidentMediaList) ? this.state.tableRecord.incidentMediaList[1] ? this.state.tableRecord.incidentMediaList[1].mediaUrl : null : null
-            // this.setState({ incidentId: this.state.tableRecord.id, image: imgUrl, video: videoUrl })
+            if (id !== null) {
+
+                this.props.liveScorePlayerListAction(id, incidentData.teamId);
+            }
         } else {
             this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isAdd")
         }
@@ -115,17 +118,24 @@ class LiveScoreAddIncident extends Component {
             }
             this.setState({ image: data.files[0], imageSelection: URL.createObjectURL(data.files[0]) })
         }
-        this.props.liveScoreUpdateIncidentData(null, "clearImage")
+        // this.props.liveScoreUpdateIncidentData(null, "clearImage")
     };
 
     ////method to setVideo
     setVideo = (data) => {
         if (data.files[0] !== undefined) {
-            if (this.state.isEdit === true) {
-                // this.setState({ incidentVideo = '' })
+            if (data.files[0].size > AppConstants.video_size) {
+                message.error(AppConstants.videoSize)
+                // return;
+            } else {
+                this.setState({ videoTimeout: 2000, crossVideoIcon: false, video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
+                setTimeout(() => {
+                    this.setState({ videoTimeout: null, crossVideoIcon: true })
+                }, 2000);
             }
-            this.setState({ video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
-            this.props.liveScoreUpdateIncidentData(null, "clearVideo")
+            // this.setState({ video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
+
+            // this.props.liveScoreUpdateIncidentData(null, "clearVideo")
         }
     };
 
@@ -160,19 +170,39 @@ class LiveScoreAddIncident extends Component {
     }
 
     deleteImage() {
+        const { incidentMediaList } = this.props.liveScoreIncidentState
         this.setState({ image: null, imageSelection: '', crossImageIcon: false })
-        this.props.liveScoreUpdateIncidentData(null, "incidentImage")
+        if (incidentMediaList) {
+            this.props.liveScoreUpdateIncidentData(null, "incidentImage")
+        }
+
     }
 
     deleteVideo() {
+        const { incidentMediaList } = this.props.liveScoreIncidentState
         this.setState({ video: null, videoSelection: '', crossVideoIcon: false })
-        this.props.liveScoreUpdateIncidentData(null, "incidentVideo")
+        if (incidentMediaList) {
+            this.props.liveScoreUpdateIncidentData(null, "incidentVideo")
+        }
+
+    }
+
+    setTeamId(teamId) {
+
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (id !== null) {
+            this.props.liveScorePlayerListAction(id, teamId);
+        }
+        this.props.liveScoreUpdateIncidentData(null, "clearPyarIds")
+        this.setInitalFiledValue()
+        this.props.liveScoreUpdateIncidentData(teamId, "teamId")
+
+
     }
 
     //// Form View
     contentView = (getFieldDecorator) => {
-        const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds } = this.props.liveScoreIncidentState
-        console.log(this.state.matchDetails, 'matchDetails')
+        const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds, team1_Name, team2_Name, team1Id, team2Id } = this.props.liveScoreIncidentState
         let team_1 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.name : null : null
         let team1_Id = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.id : null : null
         let team_2 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team2.name : null : null
@@ -181,6 +211,7 @@ class LiveScoreAddIncident extends Component {
         let startDate = date ? moment(date, 'DD-MM-YYYY') : null
         let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
         let startTime = time_formate ? moment(time_formate, "HH:mm") : null
+
         return (
             <div className="content-view pt-4">
                 <div className="row" >
@@ -251,21 +282,23 @@ class LiveScoreAddIncident extends Component {
                                         className="reg-form-multiple-select"
                                         placeholder='Select Home Team'
                                         style={{ width: "100%" }}
-                                        onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
+                                        onChange={(teamId) => this.setTeamId(teamId)}
                                         // value={incidentData.teamId ? incidentData.teamId : ''}
 
                                         optionFilterProp="children"
                                     >
-                                        {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
+                                        {/* {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
                                             < Option value={item.id} > {item.name}</Option>
-                                        ))}
+                                        ))} */}
+                                        < Option value={team1Id} > {team1_Name}</Option>
+                                        < Option value={team2Id} > {team2_Name}</Option>
                                     </Select>
                                     :
                                     <Select
                                         className="reg-form-multiple-select"
                                         placeholder='Select Home Team'
                                         style={{ width: "100%" }}
-                                        onChange={(homeTeam) => this.props.liveScoreUpdateIncidentData(homeTeam, "teamId")}
+                                        onChange={(teamId) => this.setTeamId(teamId)}
                                         // value={incidentData.teamId ? incidentData.teamId : ''}
 
                                         optionFilterProp="children"
@@ -377,9 +410,12 @@ class LiveScoreAddIncident extends Component {
                                     this.setState({ imageTimeout: null, crossImageIcon: true })
                                 }, 2000);
                             }}
+                            onClick={(event) => {
+                                event.target.value = null
+                            }}
                         />
 
-                        <div style={{ position: 'absolute', bottom: 40, left: 150 }}>
+                        <div style={{ position: 'absolute', bottom: 71, left: 150 }}>
                             {(this.state.crossImageIcon || incidentData.addImages) &&
                                 <span className='user-remove-btn pl-2'
                                     style={{ cursor: 'pointer' }}>
@@ -390,6 +426,7 @@ class LiveScoreAddIncident extends Component {
                                         width="16"
                                         height="16"
                                         onClick={() => this.deleteImage()}
+
                                     />
                                 </span>
                             }
@@ -413,14 +450,17 @@ class LiveScoreAddIncident extends Component {
                             style={{ display: 'none' }}
                             onChange={(event) => {
                                 this.setVideo(event.target, "evt.target")
-                                this.setState({ videoTimeout: 2000, crossVideoIcon: false })
-                                setTimeout(() => {
-                                    this.setState({ videoTimeout: null, crossVideoIcon: true })
-                                }, 2000);
+                                // this.setState({ videoTimeout: 2000, crossVideoIcon: false })
+                                // setTimeout(() => {
+                                //     this.setState({ videoTimeout: null, crossVideoIcon: true })
+                                // }, 2000);
+                            }}
+                            onClick={(event) => {
+                                event.target.value = null
                             }}
                         />
 
-                        <div style={{ position: 'absolute', bottom: 40, left: 150 }}>
+                        <div style={{ position: 'absolute', bottom: 71, left: 150 }}>
                             {(this.state.crossVideoIcon || incidentData.addVideo) &&
                                 <span className='user-remove-btn pl-2'
                                     style={{ cursor: 'pointer' }}>
@@ -435,6 +475,7 @@ class LiveScoreAddIncident extends Component {
                                 </span>
                             }
                         </div>
+                        <span className="video_Message">{AppConstants.videoSizeMessage}</span>
                     </div>
                 </div>
 
@@ -475,11 +516,7 @@ class LiveScoreAddIncident extends Component {
 
     onSaveClick = e => {
         e.preventDefault();
-
         const { incidentData, incidentId, incidentMediaIds } = this.props.liveScoreIncidentState;
-        console.log(incidentMediaIds, 'incidentMediaIds')
-
-
         // let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("DD-MM-YYYY") : null
         // let startDate = date ? moment(date, 'DD-MM-YYYY') : null
         // let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
@@ -488,14 +525,12 @@ class LiveScoreAddIncident extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { id } = JSON.parse(getLiveScoreCompetiton());
-
                 let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("YYYY-MMM-DD") : moment(incidentData.date).format("YYYY-MMM-DD");
                 let time = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : moment(incidentData.time).format("HH:mm");
                 let startDateTime = moment(date + " " + time);
                 let formatDateTime = new Date(startDateTime).toISOString();
                 let mediaArry;
                 let body;
-
                 if (this.state.image !== null && this.state.video !== null) {
                     mediaArry = [
                         this.state.image,
@@ -547,6 +582,9 @@ class LiveScoreAddIncident extends Component {
                         body,
                         playerIds: incidentData.playerIds,
                         isEdit: this.state.isEdit,
+                        mediaArry: mediaArry,
+                        key: 'media',
+                        incidentMediaIds,
                     });
                 }
             }

@@ -25,7 +25,9 @@ const initialState = {
     selectedAffiliate: null,
     onAffiliateLoad: false,
     selectedAffiliateId: null,
-    onSaveLoad: false
+    onSaveLoad: false,
+    totalCount: null,
+    currentPage: null
 };
 
 function getAffiliateData(selectedAffiliateId, affiliateArray) {
@@ -83,11 +85,16 @@ function umpireState(state = initialState, action) {
         case ApiConstants.API_UMPIRE_LIST_LOAD:
             return { ...state, onLoad: true };
         case ApiConstants.API_UMPIRE_LIST_SUCCESS:
+
+            let user_Data = action.result.userData ? action.result.userData : action.result
+
             return {
                 ...state,
                 onLoad: false,
-                umpireList: action.result,
-                umpireListResult: action.result,
+                umpireList: user_Data,
+                umpireListResult: user_Data,
+                currentPage: action.result.page ? action.result.page.currentPage : null,
+                totalCount: action.result.page ? action.result.page.totalCount : null,
                 status: action.status
             };
         //// Add Umpire

@@ -178,7 +178,6 @@ class VenuesList extends Component {
     }
 
     handleVenuesTableList = (page, searchText) => {
-
         let offset = (page ? (10 * (page - 1)) : 0)
         let filter =
         {
@@ -189,9 +188,8 @@ class VenuesList extends Component {
                 offset: offset
             }
         }
-
         this.setState({ searchText: searchText, organisationId: getOrganisationData().organisationUniqueKey, offset: offset })
-        this.props.venuesListAction(filter);
+        this.props.venuesListAction(filter, this.state.sortBy, this.state.sortOrder);
     };
 
     naviageToVenue = (e) => {

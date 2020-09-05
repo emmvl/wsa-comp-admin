@@ -992,11 +992,11 @@ class UserOurOragnization extends Component {
                                     id="teamImport"
                                     ref={(input) => { this.filesInput = input }}
                                     name="file"
-                                    icon='file text outline'
-                                    iconPosition='left'
-                                    label='Upload PDF'
-                                    labelPosition='right'
-                                    placeholder='UploadPDF...'
+                                    // icon="file text outline"
+                                    // iconPosition="left"
+                                    // label="Upload PDF"
+                                    // labelPosition="right"
+                                    placeholder="UploadPDF..."
                                     onChange={this.handleForce}
                                     accept=".pdf"
                                 />

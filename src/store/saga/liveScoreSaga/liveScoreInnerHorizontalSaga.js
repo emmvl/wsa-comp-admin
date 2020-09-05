@@ -30,7 +30,7 @@ function* errorSaga(error) {
 //// get manager list
 export function* getInnerHorizontalCompSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.innerHorizontalCompList, action.organisationId)
+        const result = yield call(LiveScoreAxiosApi.innerHorizontalCompList, action.organisationId, action.yearRefId)
         if (result.status == 1) {
             yield put({
                 type: ApiConstants.API_INNER_HORIZONTAL_COMPETITION_LIST_SUCCESS,

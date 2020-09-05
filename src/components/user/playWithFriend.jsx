@@ -56,6 +56,11 @@ const columns = [
         key: 'name',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("registeredUser"),
+		render: (name, record) => (
+            <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
+                <span className="input-heading-add-another pt-0">{name}</span>
+            </NavLink>
+        ),
     },
     {
         title: 'Affiliate Name',
@@ -142,7 +147,7 @@ class PlayWithFriend extends Component {
                 offset: (page ? (10 * (page - 1)) : 0)
             }
         }
-        this.props.getUserFriendAction(filter);
+        this.props.getUserFriendAction(filter, this.state.sortBy, this.state.sortOrder);
     }
 
     referenceCalls = () => {

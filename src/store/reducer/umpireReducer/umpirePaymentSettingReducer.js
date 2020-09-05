@@ -20,17 +20,23 @@ const initialState = {
     paidByAffiliateDivision: [],
     affiliateDiv: affiliateDivObj,
     compOrgDiv: compOrgDivObj,
+    allDivisionBadge: false,
+    byPoolBtnAffiliate: false,
+    byBadgeBtnAffiliate: false,
+    inputFieldArrayAffiliate: [],
+    byBadgeDivisionAffiliate: [],
+    paidByCompOrgDivisionAffiliate: [],
+    poolViewArray: [],
+    poolViewArrayAffiliate: [],
+    allDivisionBadgeAffiliate: false
+
 };
 
 function getSelectedValue(divId, allArray) {
-    console.log(divId, 'getSelectedValue', allArray)
     for (let i in allArray) {
-
         for (let j in divId) {
-
             if (divId[j] === allArray[i].id) {
                 allArray[i].disabled = true
-
             }
         }
     }
@@ -59,7 +65,7 @@ function umpirePaymentSetting(state = initialState, action) {
 
             let data = action.data.value
             let key = action.data.key
-
+            let subkey = action.data.subkey
             if (key === 'paidByComp') {
                 state.paidByCompOrg = data
 
@@ -88,7 +94,6 @@ function umpirePaymentSetting(state = initialState, action) {
                 state.inputFieldArray = []
                 state.byBadgeDivision = []
             } else if (key === 'addAnotherGroup') {
-
                 var obj = {
                     name: null,
                     umpireRate: null,
@@ -96,23 +101,78 @@ function umpirePaymentSetting(state = initialState, action) {
                     umpCoachRate: null
                 }
                 state.inputFieldArray.push(obj)
+            }
+            else if (key == "addPoolFee") {
+                var obj = {
+                    fee: null,
+                }
+                state.poolViewArray.push(obj)
+            }
+            else if (key == "addPoolFeeAffiliate") {
+                var obj = {
+                    fee: null,
+                }
+                state.poolViewArrayAffiliate.push(obj)
+            }
+            else if (key == "removeItemPoolAffiliate") {
+                state.poolViewArrayAffiliate.splice(action.data.index, 1)
+            }
 
-            } else if (key === 'removeItem') {
+            else if (key === 'addAnotherGroupAffiliate') {
+                var obj = {
+                    name: null,
+                    umpireRate: null,
+                    umpReserveRate: null,
+                    umpCoachRate: null
+                }
+                state.inputFieldArrayAffiliate.push(obj)
+            }
+            else if (key === 'removeItem') {
                 state.inputFieldArray.splice(action.data.index, 1)
-
-            } else if (key === 'byBadgeDivision' || key === 'paidByCompOrgDivision') {
+            }
+            else if (key == "removeItemPool") {
+                state.poolViewArray.splice(action.data.index, 1)
+            }
+            else if (subkey == "feeFieldAffiliae") {
+                state.poolViewArrayAffiliate[action.data.index][key] = data
+            }
+            else if (key === 'removeItemAffiliate') {
+                state.inputFieldArrayAffiliate.splice(action.data.index, 1)
+            }
+            else if (key === 'byBadgeDivision' || key === 'paidByCompOrgDivision' || key === 'byBadgeDivisionAffiliate') {
                 state[key] = data
-
             } else if (key === 'refreshPage') {
                 state.paidByCompOrg = true
                 state.paidByAffiliate = false
                 state.byBadgeDivision = []
                 state.inputFieldArray = []
-
-            } else {
+            }
+            else if (key == "allDivisionBadge") {
+                state.allDivisionBadge = data
+            }
+            else if (key == "byBadgeBtnAffiliate") {
+                state.byBadgeBtnAffiliate = data
+                state.byPoolBtnAffiliate = false
+            }
+            else if (key == "byPoolBtnAffiliate") {
+                state.byPoolBtnAffiliate = data
+                state.byBadgeBtnAffiliate = false
+            }
+            else if (key == "allDivisionBadgeAffiliate") {
+                state.allDivisionBadgeAffiliate = data
+            }
+            else if (subkey == "inputFieldAffiliate") {
+                state.inputFieldArrayAffiliate[action.data.index][key] = data
+            }
+            else if (key == "fee") {
+                state.poolViewArray[action.data.index][key] = data
+            }
+            // else if(subkey == "feeField"){
+            //     state.
+            // }
+            else {
                 state.inputFieldArray[action.data.index][key] = data;
             }
-
             return {
                 ...state,
 

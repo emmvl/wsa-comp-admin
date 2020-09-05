@@ -60,9 +60,9 @@ export function* liveScoreCompetitionDelete({ payload, key }) {
 }
 
 /////livescore own part competition listing
-export function* liveScoreOwnPartCompetitionListSaga({ payload, orgKey, sortBy, sortOrder, key }) {
+export function* liveScoreOwnPartCompetitionListSaga({ payload, orgKey, sortBy, sortOrder, key, yearRefId }) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreOwnPartCompetitionList, payload, orgKey, sortBy, sortOrder)
+        const result = yield call(LiveScoreAxiosApi.liveScoreOwnPartCompetitionList, payload, orgKey, sortBy, sortOrder, yearRefId)
         if (result.status === 1) {
             yield put({ type: ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_SUCCESS, payload: result.result.data, key: key })
         } else {

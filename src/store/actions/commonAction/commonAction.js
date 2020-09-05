@@ -266,6 +266,14 @@ function checkVenueDuplication(body) {
     return action;
 }
 
+function registrationChangeType(){
+    const action = {
+        type: ApiConstants.API_REGISTRATION_CHANGE_TYPE_LOAD,
+    };
+
+    return action;
+}
+
 
 export {
     timeSlotInit,
@@ -299,4 +307,5 @@ export {
     registrationPaymentStatusAction,
     getMatchPrintTemplateType,
     checkVenueDuplication,
+    registrationChangeType
 }

@@ -49,6 +49,11 @@ const columns = [
     key: "affiliate",
   },
   {
+    title: "Competition",
+    dataIndex: "competitionName",
+    key: "competitionName",
+  },
+  {
     title: "Membership Product",
     dataIndex: "membershipProduct",
     key: "membershipProduct",
@@ -59,27 +64,27 @@ const columns = [
     key: "membershipType",
   },
   {
-    title: "Fees Paid (Incl. GST)",
-    dataIndex: "feesPaid",
-    key: "feesPaid",
+    title: "Division",
+    dataIndex: "divisionName",
+    key: "divisionName",
     width: 120,
-    render: (feesPaid, record, index) => {
-      return <div>{feesPaid != null ? "$" + feesPaid : ""}</div>;
+    render: (divisionName, record, index) => {
+      return <div>{divisionName != null ?  divisionName : ""}</div>;
     },
   },
-  {
-    title: "Payment Method",
-    dataIndex: "paymentType",
-    key: "paymentType",
-    render: (paymentType, record, index) => {
-      return <span style={{ textTransform: "capitalize" }}>{paymentType}</span>;
-    },
-  },
-  {
-    title: "Shop Purchases",
-    dataIndex: "shopPurchases",
-    key: "shopPurchases",
-  },
+  // {
+  //   title: "Payment Method",
+  //   dataIndex: "paymentType",
+  //   key: "paymentType",
+  //   render: (paymentType, record, index) => {
+  //     return <span style={{ textTransform: "capitalize" }}>{paymentType}</span>;
+  //   },
+  // },
+  // {
+  //   title: "Shop Purchases",
+  //   dataIndex: "shopPurchases",
+  //   key: "shopPurchases",
+  // },
   {
     title: "Status",
     dataIndex: "paymentStatus",
@@ -91,7 +96,7 @@ const columns = [
     },
   },
   {
-    title: "Reg.Form",
+    title: "Action",
     dataIndex: "regForm",
     key: "regForm",
     render: (regForm, e) => (
@@ -116,11 +121,16 @@ const columns = [
           <Menu.Item key="1" onClick={() => this_Obj.viewRegForm(e)}>
             <span>View</span>
           </Menu.Item>
+          {e.alreadyDeRegistered == 0 ?
+		      <Menu.Item key="2" onClick={() => history.push("\deregistration", {regData: e, personal: this_Obj.props.userState.personalData})}>
+            <span>De-register</span>
+          </Menu.Item>	: null }  
         </SubMenu>
       </Menu>
     ),
   },
 ];
+
 
 const columnsPlayer = [
   {

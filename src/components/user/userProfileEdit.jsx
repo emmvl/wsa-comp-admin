@@ -300,22 +300,17 @@ class UserProfileEdit extends Component {
                         />
                     </div>
                     <div className="col-sm" >
-                        <InputWithHead heading={AppConstants.dob} required={"required-field"} />
-                        <Form.Item >
-                            {getFieldDecorator(`dateOfBirth`, {
-                                rules: [{ required: true, message: ValidationConstants.dateOfBirth }],
-                            })(
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%", marginTop: "9px" }}
-                                    onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    placeholder={"dd-mm-yyyy"}
-                                    name={'dateOfBirth'}
-                                />
-                            )}
-                        </Form.Item>
+                        <InputWithHead heading={AppConstants.dob}/>
+                        <DatePicker		   
+                            size="large"
+                            style={{ width: "100%", marginTop: "9px" }}
+                            onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
+                            format={"DD-MM-YYYY"}
+                            showTime={false}
+                            placeholder={"dd-mm-yyyy"}
+                            name={'dateOfBirth'}
+                            value={userData.dateOfBirth!= null && moment(userData.dateOfBirth) }
+                        />
                     </div>
                 </div>
                 <div className="row">
@@ -370,22 +365,16 @@ class UserProfileEdit extends Component {
                     </div>
                 </div>
                 <div className='row'>
-                    <div className="col-sm" >
-                        <Form.Item >
-                            {getFieldDecorator('street1', {
-                                rules: [{ required: true, message: ValidationConstants.street1 }],
-                            })(
-                                <InputWithHead
-                                    auto_complete="new-addressOne"
-                                    required={"required-field"}
-                                    heading={AppConstants.addressOne}
-                                    placeholder={AppConstants.addressOne}
-                                    name={'street1'}
-                                    setFieldsValue={userData.street1}
-                                    onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-                                />
-                            )}
-                        </Form.Item>
+                   <div className="col-sm" style={{ paddingTop: "11px" }}>   
+                        <InputWithHead
+                            auto_complete="new-addressOne"
+                            style={{ marginTop: '9px' }}
+                            heading={AppConstants.addressOne}
+                            placeholder={AppConstants.addressOne}
+                            name={'street1'}
+                            value={userData.street1}
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
+                        />			
                     </div>
                     <div className="col-sm" style={{ paddingTop: "11px" }}>
                         <InputWithHead
@@ -401,67 +390,45 @@ class UserProfileEdit extends Component {
                     </div>
                 </div>
                 <div className="row" >
-                    <div className="col-sm" >
-                        <Form.Item >
-                            {getFieldDecorator('suburb', {
-                                rules: [{ required: true, message: ValidationConstants.suburbField[0] }],
-                            })(
-                                <InputWithHead
-                                    auto_complete="new-suburb"
-                                    required={"required-field"}
-                                    heading={AppConstants.suburb}
-                                    placeholder={AppConstants.suburb}
-                                    name={'suburb'}
-                                    setFieldsValue={userData.suburb}
-                                    onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
-                                />
-                            )}
-                        </Form.Item>
+                    <div className="col-sm" style={{paddingTop: "11px"}}>
+                        <InputWithHead
+                            style={{marginTop: '9px'}}
+                            heading={AppConstants.suburb}
+                            placeholder={AppConstants.suburb}
+                            name={'suburb'}
+                            value={userData.suburb}
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "suburb") }
+                        />									
                     </div>
                     <div className="col-sm" >
-                        <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
-                            <InputWithHead required={"required-field"} heading={AppConstants.stateHeading} />
-                        </div>
-                        <Form.Item >
-                            {getFieldDecorator("stateRefId", {
-                                rules: [{ required: true, message: ValidationConstants.stateField[0] }],
-                            })(
-                                <Select
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
-                                    placeholder={AppConstants.select}
-                                    setFieldsValue={userData.stateRefId}
-                                    name={'stateRefId'}
-                                    onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-                                >
-                                    {stateList.length > 0 && stateList.map((item) => (
-                                        < Option value={item.id}> {item.name}</Option>
-                                    ))
-                                    }
-                                </Select>
-                            )}
-                        </Form.Item>
+						<div style={{paddingTop: "10px", paddingBottom: "10px"}}>
+                            <InputWithHead heading={AppConstants.stateHeading}/>
+                        </div> 							   
+                            <Select
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182,}}
+                                placeholder={AppConstants.select}
+                                value={userData.stateRefId}
+                                name={'stateRefId'}
+                                onChange={(e) => this.onChangeSetValue(e, "stateRefId") }
+                            >
+                                {stateList.length > 0 && stateList.map((item) => (
+                                    < Option value={item.id}> {item.name}</Option>
+                                ))
+                                }
+                            </Select>							 								
                     </div>
                 </div>
                 <div className="row" >
                     <div className="col-sm" >
-                        <Form.Item >
-                            {getFieldDecorator('postalCode', {
-                                rules: [{ required: true, message: ValidationConstants.postCodeField[0] }],
-                            })(
-                                <InputWithHead
-                                    auto_complete="new-postalCode"
-                                    required={"required-field"}
-                                    heading={AppConstants.postCode}
-                                    placeholder={AppConstants.postCode}
-                                    name={'postalCode'}
-                                    setFieldsValue={userData.postalCode}
-                                    onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
-                                />
-                            )}
-                        </Form.Item>
+                        <InputWithHead															   
+                            heading={AppConstants.postCode}
+                            placeholder={AppConstants.postCode}
+                            name={'postalCode'}
+                            value={userData.postalCode}
+                            onChange={(e) =>  this.onChangeSetValue(e.target.value, "postalCode")}
+                        />									
                     </div>
                     <div className="col-sm"></div>
-
                 </div>
             </div>
         );
@@ -512,100 +479,100 @@ class UserProfileEdit extends Component {
                     </div>
                 </div>
                 <div className='row'>
-                    <div className="col-sm" >
-                        <Form.Item >
-                            {getFieldDecorator('street1', {
-                                rules: [{ required: true, message: ValidationConstants.street1 }],
-                            })(
-                                <InputWithHead
-                                    auto_complete="new-street1"
-                                    required={"required-field"}
-                                    heading={AppConstants.addressOne}
-                                    placeholder={AppConstants.addressOne}
-                                    name={'street1'}
-                                    setFieldsValue={userData.street1}
-                                    onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-                                />
-                            )}
-                        </Form.Item>
-                    </div>
-                    <div className="col-sm" style={{ paddingTop: "11px" }}>
+                    <div className="col-sm" style={{paddingTop: "11px"}}>
                         <InputWithHead
-                            auto_complete="new-street2"
-                            style={{ marginTop: "9px" }}
+                            style={{marginTop: "9px"}}
+																								  
+							   
+											  
+															   
+															   
+                            heading={AppConstants.addressOne}
+                            placeholder={AppConstants.addressOne}
+                            name={'street1'}
+                            value={userData.street1}
+                            onChange={(e) => this.onChangeSetValue(e.target.value, "street1") }
+                            />  
+							  
+									
+                    </div>
+                    <div className="col-sm" style={{paddingTop: "11px"}}> 
+                        <InputWithHead
+													   
+                            style={{marginTop: "9px"}}
                             heading={AppConstants.addressTwo}
                             placeholder={AppConstants.addressTwo}
                             name={'street2'}
                             value={userData.street2}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
+                            onChange={(e) =>  this.onChangeSetValue(e.target.value, "street2") }
                         />
-
+                   
                     </div>
                 </div>
                 <div className="row" >
-                    <div className="col-sm" >
-                        <Form.Item >
-                            {getFieldDecorator('suburb', {
-                                rules: [{ required: true, message: ValidationConstants.suburbField[0] }],
-                            })(
-                                <InputWithHead
-                                    auto_complete="new-suburb"
-                                    required={"required-field"}
-                                    heading={AppConstants.suburb}
-                                    placeholder={AppConstants.suburb}
-                                    name={'suburb'}
-                                    setFieldsValue={userData.suburb}
-                                    onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
+                    <div className="col-sm" style={{paddingTop: "11px"}}>
+                        <InputWithHead
+                            style={{marginTop: "9px"}}
+																										 
+							   
+											  
+															  
+															   
+                            heading={AppConstants.suburb}
+                            placeholder={AppConstants.suburb}
+                            name={'suburb'}
+                            value={userData.suburb}
+                            onChange={(e) =>  this.onChangeSetValue(e.target.value, "suburb")}
 
-                                />
-                            )}
-                        </Form.Item>
+                        />
+							  
+									
                     </div>
                     <div className="col-sm" >
-
-                        <div style={{ paddingTop: "10px", paddingBottom: "10px" }}>
-                            <InputWithHead required={"required-field"} heading={AppConstants.stateHeading} />
+                    
+                        <div style={{paddingTop: "10px", paddingBottom: "10px"}}>
+                            <InputWithHead heading={AppConstants.stateHeading} />
                         </div>
-                        <Form.Item >
-                            {getFieldDecorator("stateRefId", {
-                                rules: [{ required: true, message: ValidationConstants.stateField[0] }],
-                            })(
+									
+															  
+																										
+							   
                                 <Select
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                     placeholder={AppConstants.select_state}
                                     // onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-                                    setFieldsValue={userData.stateRefId}
+                                    value={userData.stateRefId}
                                     name={'stateRefId'}
-                                    onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
+                                    onChange={(e) =>  this.onChangeSetValue(e, "stateRefId")}
                                 >
                                     {stateList.length > 0 && stateList.map((item) => (
                                         < Option value={item.id}> {item.name}</Option>
                                     ))
                                     }
-                                </Select>
-                            )}
-                        </Form.Item>
+                                </Select> 
+							  
+									
                     </div>
                 </div>
 
                 {/* PlayerId and Team Selection row */}
                 <div className="row" >
-                    <div className="col-sm" >
-                        <Form.Item >
-                            {getFieldDecorator('postalCode', {
-                                rules: [{ required: true, message: ValidationConstants.postCodeField[0] }],
-                            })(
-                                <InputWithHead
-                                    auto_complete="new-postCode"
-                                    heading={AppConstants.postCode}
-                                    placeholder={AppConstants.enterPostCode}
-                                    name={'postalCode'}
-                                    setFieldsValue={userData.postalCode}
-                                    onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
+                    <div className="col-sm" style={{paddingTop: "11px"}} >
+                        <InputWithHead
+                            style={{marginTop: "9px"}}
+																										   
+							   
+											  
+																
+                            heading={AppConstants.postCode}
+                            placeholder={AppConstants.enterPostCode}
+                            name={'postalCode'}
+                            value={userData.postalCode}
+                            onChange={(e) =>  this.onChangeSetValue(e.target.value, "postalCode")}
 
-                                />
-                            )}
-                        </Form.Item>
+                        />
+							  
+									
                     </div>
                     <div className="col-sm" >
                         <Form.Item >

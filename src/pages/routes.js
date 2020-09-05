@@ -159,6 +159,7 @@ import UmpirePayment from "../components/umpire/umpirePayments"
 import UmpirePaymentSetting from "../components/umpire/umpirePaymentSettings"
 import UmpirePayout from "../components/umpire/umpirePayout"
 import OrderDetails from "../components/shop/orderDetails";
+import deRegistration from "components/registration/deRegistration";																	
 
 class Routes extends React.Component {
   render() {
@@ -813,6 +814,10 @@ class Routes extends React.Component {
         <PrivateRoute
           path="/orderDetails"
           component={lazyLoad(OrderDetails)}
+        />
+		<PrivateRoute
+          path="/deregistration"
+          component={lazyLoad(deRegistration)}
         />
 
         <Route path="/" component={lazyLoad(NotFound)} />

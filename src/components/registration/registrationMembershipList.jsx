@@ -83,7 +83,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Casual Fee (inc GST)',
+        title: 'Single Game (PAYG) Fee (inc GST)',
         dataIndex: 'casualFee',
         key: 'casualFee',
         render: (casualFee, record) => {
@@ -201,11 +201,12 @@ class RegistrationMembershipList extends Component {
 
 
     handleMembershipTableList = (page, yearRefId) => {
+        let { sortBy, sortOrder } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
             offset
         })
-        this.props.regMembershipListAction(offset, yearRefId)
+        this.props.regMembershipListAction(offset, yearRefId, sortBy, sortOrder)
     };
 
 

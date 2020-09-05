@@ -198,14 +198,17 @@ const ValidationConstants = {
     venueAddressRequiredError: "Venue address is required",
     venueAddressDetailsError: "Please input venue address in details",
     duplicatedVenueAddressError: "Venue address is duplicated, please select other address",
-    duplicateDiscountError:"Please remove the duplicate entry of Discount Code.",
+    duplicateDiscountError: "Please remove the duplicate entry of Discount Code.",
     mnbMatchId: 'mnbMatchId is required',
     pleaseSelectOneOption: "Please select any option.",
     pleaseProvideInstalmentDate: "Please provide an instalment date",
-    duplicateFamilyDiscountError:"Only one Family Discount Code for your organisation is permitted. Please remove the duplicate entry.",
-    membershipDuplicateFamilyDiscountError:"Only one Family Discount Code for Membership Fee is permitted. Please remove the duplicate entry.",																																   
+    duplicateFamilyDiscountError: "Only one Family Discount Code for your organisation is permitted. Please remove the duplicate entry.",
+    membershipDuplicateFamilyDiscountError: "Only one Family Discount Code for Membership Fee is permitted. Please remove the duplicate entry.",
     mobileLength: "Contact number must be 10 digits",
-	pleaseFillRegistration: 'Please fill the Registration Code',															
+    pleaseFillRegistration: 'Please fill the Registration Code',
+    extraTimeType: "Please select extra time type",
+    positionTrackingIsRequired: "Position tracking is required",
+    RecordGoalAttemptsIsRequired: "Record goal attempts is required"
 };
 
 export default ValidationConstants;

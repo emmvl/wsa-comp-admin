@@ -3,7 +3,7 @@ import { Menu, Select } from "antd";
 import { NavLink } from "react-router-dom";
 
 import AppConstants from "../themes/appConstants";
-import { checkOrganisationLevel } from "../util/permissions";
+import { checkOrganisationLevel, checkLivScoreCompIsParent } from "../util/permissions";
 import AccountMenu from "./InnerHorizontalMenu/AccountMenu";
 import "./layout.css";
 import AppUniqueId from "../themes/appUniqueId";
@@ -13,6 +13,7 @@ import { isArrayNotEmpty } from "../util/helpers";
 import { innerHorizontalCompetitionListAction } from '../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
 import { getLiveScoreCompetiton } from '../util/sessionStorage';
 import history from "../util/history";
+import { getOnlyYearListAction } from "../store/actions/appAction";
 
 const { SubMenu } = Menu;
 const { Option } = Select;
@@ -26,15 +27,26 @@ class InnerHorizontalMenu extends React.Component {
             selectedComp: null,
             loading: false,
             orgId: null,
-            orgState: false
+            orgState: false,
+            liveScoreCompIsParent: false,
+            yearId: null,
+            yearLoading: false,
         };
     }
 
     componentDidMount() {
+
+        if (this.props.menu === "liveScore") {
+            this.props.getOnlyYearListAction(this.props.appState.yearList)
+            this.setState({ yearLoading: true })
+        }
+
         checkOrganisationLevel().then((value) => (
             this.setState({ organisationLevel: value, orgState: true })
         ));
-
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
 
         if (this.props) {
             if (this.props.compSelectedKey !== "18") {
@@ -51,8 +63,22 @@ class InnerHorizontalMenu extends React.Component {
             if (JSON.parse(localStorage.getItem('setOrganisationData'))) {
                 let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
                 if (this.props.menu === "liveScore") {
-                    this.props.innerHorizontalCompetitionListAction(organisationId)
-                    this.setState({ loading: true, orgId: organisationId, orgState: false })
+
+
+                    if (nextProps.appState == this.props.appState) {
+                        if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
+                            let yearId = this.props.appState.yearList[0].id
+                            let yearRefId = localStorage.getItem("yearId")
+
+                            if (yearRefId) {
+                                this.props.innerHorizontalCompetitionListAction(organisationId, yearRefId)
+                                this.setState({ yearLoading: false, loading: true, orgId: organisationId, orgState: false, yearId: yearRefId })
+                            } else {
+                                this.props.innerHorizontalCompetitionListAction(organisationId, yearId)
+                                this.setState({ yearLoading: false, loading: true, orgId: organisationId, orgState: false, yearId })
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -64,13 +90,24 @@ class InnerHorizontalMenu extends React.Component {
                 let firstComp = 1
 
                 let isCompetition = await getLiveScoreCompetiton()
+                let yearValue = JSON.parse(localStorage.getItem("yearValue"))
 
-                if (isCompetition) {
-                    const { id } = JSON.parse(isCompetition)
-                    firstComp = id
-                } else {
+
+                if (yearValue == true) {
                     firstComp = compList.length > 0 && compList[0].id
+                    localStorage.setItem("yearValue", false)
+                    localStorage.setItem("LiveScoreCompetition", JSON.stringify(compList[0]))
+
+                } else {
+                    if (isCompetition) {
+                        const { id } = JSON.parse(isCompetition)
+
+                        firstComp = id
+                    } else {
+                        firstComp = compList.length > 0 && compList[0].id
+                    }
                 }
+
                 this.setState({ selectedComp: firstComp, compArray: compList, loading: false })
             }
         }
@@ -90,11 +127,25 @@ class InnerHorizontalMenu extends React.Component {
         history.push("/liveScoreDashboard")
     }
 
+    setYearId(yearId) {
+
+        localStorage.setItem("yearValue", true)
+        this.setState({ yearId, loading: true })
+
+        localStorage.setItem("yearId", yearId)
+        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+        this.props.innerHorizontalCompetitionListAction(organisationId, yearId)
+
+        history.push("/liveScoreDashboard")
+    }
+
     render() {
         let orgLevel = this.state.organisationLevel;
         const { menu, selectedKey } = this.props;
         const { competitionList } = this.props.innerHorizontalState
         let compList = isArrayNotEmpty(competitionList) ? competitionList : []
+        let { liveScoreCompIsParent } = this.state
+        const { yearList } = this.props.appState
         return (
             <div>
                 {menu === "competition" && <Menu
@@ -390,16 +441,16 @@ class InnerHorizontalMenu extends React.Component {
                                         <span>Match Day</span>
                                     }
                                 >
-                                    <Menu.Item key="12">
+                                    {liveScoreCompIsParent && <Menu.Item key="12">
                                         <NavLink to="/liveScoreBulkChange">
                                             <span>Bulk Match Change</span>
                                         </NavLink>
-                                    </Menu.Item>
-                                    <Menu.Item key="13">
+                                    </Menu.Item>}
+                                    {liveScoreCompIsParent && <Menu.Item key="13">
                                         <NavLink to="liveScoreVenueChange">
                                             <span>Court Change</span>
                                         </NavLink>
-                                    </Menu.Item>
+                                    </Menu.Item>}
                                     <Menu.Item key="14">
                                         <NavLink to="/liveScoreTeamAttendance">
                                             <span>Team Attendance</span>
@@ -438,7 +489,7 @@ class InnerHorizontalMenu extends React.Component {
                                         </NavLink>
                                     </Menu.Item>
                                 </SubMenu>
-                                <SubMenu
+                                {liveScoreCompIsParent && <SubMenu
                                     key="sub4"
                                     title={
                                         <span>Settings</span>
@@ -467,31 +518,55 @@ class InnerHorizontalMenu extends React.Component {
                                             <span>Match Sheets</span>
                                         </NavLink>
                                     </Menu.Item>
-                                </SubMenu>
-                                <Menu.Item key="21">
+                                </SubMenu>}
+                                {liveScoreCompIsParent && <Menu.Item key="21">
                                     <NavLink to="/liveScoreNewsList">
                                         <span>News & Messages</span>
                                     </NavLink>
-                                </Menu.Item>
+                                </Menu.Item>}
                             </Menu>
 
 
                         </div>
-                        <div className="col-sm-2 pr-5 inner-horizontal-dropdown-marginTop inner-horizontal-Comp-dropdown-div">
-                            <Select
-                                style={{ width: "fit-content", minWidth: 150, maxWidth: 220 }}
-                                className="year-select reg-filter-select1 innerSelect-value"
-                                onChange={(comp) => this.setCompetitionID(comp)}
-                                value={this.state.selectedComp}
-                            >
-                                {
-                                    compList.map((item, index) => {
-                                        return <Option key={`longName` + index} value={item.id}>{item.longName}</Option>
-                                    })
-                                }
 
-                            </Select>
+
+
+                        <div className='inner-horizontal-Comp-year-dropdown-div'>
+
+                            <div className="inner-horizontal-dropdown-marginTop">
+                                <Select
+                                    style={{ width: "fit-content", width: 90 }}
+                                    className="year-select reg-filter-select1 ml-5"
+                                    onChange={(yearId) => this.setYearId(yearId)}
+                                    value={JSON.parse(this.state.yearId)}
+                                >
+                                    {yearList.length > 0 && yearList.map((item, yearIndex) => (
+                                        < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
+                                    ))
+                                    }
+
+                                </Select>
+                            </div>
+
+
+                            <div className="col-sm-2 pr-5 inner-horizontal-dropdown-marginTop inner-horizontal-Comp-dropdown-div">
+                                <Select
+                                    style={{ width: "fit-content", minWidth: 190, maxWidth: 220 }}
+                                    className="year-select reg-filter-select1 innerSelect-value"
+                                    onChange={(comp) => this.setCompetitionID(comp)}
+                                    value={this.state.selectedComp}
+                                >
+                                    {
+                                        compList.map((item, index) => {
+                                            return <Option key={`longName` + index} value={item.id}>{item.longName}</Option>
+                                        })
+                                    }
+
+                                </Select>
+                            </div>
+
                         </div>
+
                     </div>
 
                 }
@@ -755,7 +830,8 @@ class InnerHorizontalMenu extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        innerHorizontalCompetitionListAction
+        innerHorizontalCompetitionListAction,
+        getOnlyYearListAction
     }, dispatch)
 }
 
@@ -763,6 +839,7 @@ function mapStatetoProps(state) {
     return {
         innerHorizontalState: state.InnerHorizontalState,
         userState: state.UserState,
+        appState: state.AppState,
     }
 }
 

@@ -471,7 +471,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
             <div className="fluid-width">
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={'Court'}  headingId={AppUniqueId.CourtPreferences_AllocSameCourt_CourtID}/>
+                        <InputWithHead heading={'Court'} headingId={AppUniqueId.CourtPreferences_AllocSameCourt_CourtID} />
                         <Form.Item>
                             {getFieldDecorator(`courtIDS${index}`,
                                 {
@@ -493,7 +493,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         </Form.Item>
                     </div>
                     {entityType == "6" ? <div className="col-sm">
-                        <InputWithHead heading={'Division'} headingId={AppUniqueId.CourtPreferences_AllocSameCourt_AddAnotherCourt_DivisionID}/>
+                        <InputWithHead heading={'Division'} headingId={AppUniqueId.CourtPreferences_AllocSameCourt_AddAnotherCourt_DivisionID} />
                         <Form.Item>
                             {getFieldDecorator(`entitiesDivisionId${index}`,
                                 {
@@ -1346,6 +1346,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 title={AppConstants.statusPublishHover}
                             >
                                 <Button style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text"
+                                    id={AppUniqueId.competitionVenueSaveBn}
                                     disabled={isPublished} htmlType='submit' type="primary">
                                     {AppConstants.save}
                                 </Button>
@@ -1353,7 +1354,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             {/* <NavLink to="/competitionFormat"> */}
                             <Button onClick={() => this.setState({
                                 onNextClicked: true
-                            })} htmlType='submit' disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                            })} htmlType='submit' id={AppUniqueId.competitionVenueNextBn} disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             {/* </NavLink> */}
                         </div>
                     </div>

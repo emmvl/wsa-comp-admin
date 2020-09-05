@@ -168,8 +168,17 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  border-bottom: 1px solid #e8e8e8;
+  /* border-bottom: 1px solid #e8e8e8; */
   background-color: var(--app-white);
+}
+
+.inner-horizontal-Comp-year-dropdown-div{
+  display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-bottom: 1px solid #e8e8e8;
 }
 
 @media screen and (max-width: 1190px) {

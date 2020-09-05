@@ -6,7 +6,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { getTeamsWithPagging } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
+import { getTeamsWithPagination } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
@@ -36,7 +36,7 @@ function tableSort(key) {
 
     this_Obj.setState({ sortBy, sortOrder });
 
-    this_Obj.props.getTeamsWithPagging(this_Obj.state.conpetitionId, this_Obj.state.offset, 10, this_Obj.state.searchText, sortBy, sortOrder)
+    this_Obj.props.getTeamsWithPagination(this_Obj.state.conpetitionId, this_Obj.state.offset, 10, this_Obj.state.searchText, sortBy, sortOrder)
 }
 ////columens data
 const columns = [
@@ -156,7 +156,7 @@ class LiveScoreTeam extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ conpetitionId: id })
         if (id !== null) {
-            this.props.getTeamsWithPagging(id, 0, 10, this.state.searchText)
+            this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText)
         } else {
             history.push("/")
         }
@@ -167,14 +167,14 @@ class LiveScoreTeam extends Component {
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset: offset })
-        this.props.getTeamsWithPagging(this.state.conpetitionId, offset, 10, this.state.searchText)
+        this.props.getTeamsWithPagination(this.state.conpetitionId, offset, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder)
     }
 
     // on change search text
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value == "") {
-            this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, e.target.value)
+            this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value, this.state.sortBy, this.state.sortOrder)
         }
     }
 
@@ -182,7 +182,7 @@ class LiveScoreTeam extends Component {
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
-            this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
+            this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
         }
     }
 
@@ -192,7 +192,7 @@ class LiveScoreTeam extends Component {
         if (this.state.searchText == null || this.state.searchText == "") {
         }
         else {
-            this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
+            this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
         }
     }
 
@@ -361,7 +361,7 @@ class LiveScoreTeam extends Component {
 // export default LiveScoreTeam;
 
 function mapDispatchtoprops(dispatch) {
-    return bindActionCreators({ getTeamsWithPagging, exportFilesAction }, dispatch)
+    return bindActionCreators({ getTeamsWithPagination, exportFilesAction }, dispatch)
 }
 
 function mapStatetoProps(state) {

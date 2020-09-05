@@ -77,7 +77,7 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, null)
     },
 
-    liveScoreGetAffilate(data) {
+    liveScoreGetAffiliate(data) {
         let url = ''
         if (data.name) {
             url = `organisation/name=${data.name}&competitionId=${data.id}`
@@ -109,7 +109,6 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreCompetition(data, year, orgKey, recordUmpireTypes, sortBy, sortOrder) {
-        console.log(data, year, orgKey, recordUmpireTypes, sortBy, sortOrder)
         let url = null;
         if (orgKey) {
             if (recordUmpireTypes) {
@@ -132,8 +131,13 @@ let LiveScoreAxiosApi = {
         }
     },
 
-    liveScorePlayerList(competitionID) {
-        const url = `/players?competitionId=${competitionID}`;
+    liveScorePlayerList(competitionID, teamId) {
+        let url = null
+        if (teamId) {
+            url = `/players?competitionId=${competitionID}&teamId=${teamId}`;
+        } else {
+            url = `/players?competitionId=${competitionID}`;
+        }
         return Method.dataGet(url, localStorage.token);
     },
 
@@ -233,8 +237,8 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    liveScoreIncidentList(competitionID, search) {
-        const url = `/incident?competitionId=${competitionID}&search=${search}`;
+    liveScoreIncidentList(competitionID, search, limit, offset, sortBy, sortOrder) {
+        const url = `/incident?competitionId=${competitionID}&search=${search}&limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortOrder=${sortOrder}`;
         return Method.dataGet(url, token)
     },
 
@@ -243,100 +247,251 @@ let LiveScoreAxiosApi = {
 
         if (recordUmpireType === 'NAMES') {
             if (isEdit) {
-                body = {
-                    "id": data.id ? data.id : 0,
-                    "startTime": data.startTime,
-                    "divisionId": data.divisionId,
-                    "type": data.type,
-                    "competitionId": competitionId,
-                    "mnbMatchId": data.mnbMatchId,
-                    "team1Id": data.team1id,
-                    "team2Id": data.team2id,
-                    "venueCourtId": data.venueId,
-                    "roundId": data.roundId,
-                    "matchDuration": data.matchDuration,
-                    "mainBreakDuration": data.mainBreakDuration,
-                    "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
-                    "team1Score": data.team1Score,
-                    "team2Score": data.team2Score,
-                    "resultStatus": data.resultStatus,
-                    "team1ResultId": team1resultId,
-                    "team2ResultId": team2resultId,
-                    "matchStatus": matchStatus,
-                    "endTime": endTime,
-                    "matchUmpires": umpireArr,
-                    "rosters": scorerData
-                    // "breakDuration": data.breakDuration
+
+                if (data.extraTimeType === 'FOUR_QUARTERS') {
+                    body = {
+                        "id": data.id ? data.id : 0,
+                        "startTime": data.startTime,
+                        "divisionId": data.divisionId,
+                        "type": data.type,
+                        "competitionId": competitionId,
+                        "mnbMatchId": data.mnbMatchId,
+                        "team1Id": data.team1id,
+                        "team2Id": data.team2id,
+                        "venueCourtId": data.venueId,
+                        "roundId": data.roundId,
+                        "matchDuration": data.matchDuration,
+                        "mainBreakDuration": data.mainBreakDuration,
+                        "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                        "team1Score": data.team1Score,
+                        "team2Score": data.team2Score,
+                        "resultStatus": data.resultStatus,
+                        "team1ResultId": team1resultId,
+                        "team2ResultId": team2resultId,
+                        "matchStatus": matchStatus,
+                        "endTime": endTime,
+                        "matchUmpires": umpireArr,
+                        "rosters": scorerData,
+                        "isFinals": data.isFinals,
+                        "extraTimeType": data.extraTimeType,
+                        "extraTimeDuration": data.extraTimeDuration,
+                        "extraTimeMainBreak": data.extraTimeMainBreak,
+                        "extraTimeBreak": data.extraTimeqtrBreak,
+                        "extraTimeWinByGoals": data.extraTimeWinByGoals,
+
+                    }
+                } else {
+                    body = {
+                        "id": data.id ? data.id : 0,
+                        "startTime": data.startTime,
+                        "divisionId": data.divisionId,
+                        "type": data.type,
+                        "competitionId": competitionId,
+                        "mnbMatchId": data.mnbMatchId,
+                        "team1Id": data.team1id,
+                        "team2Id": data.team2id,
+                        "venueCourtId": data.venueId,
+                        "roundId": data.roundId,
+                        "matchDuration": data.matchDuration,
+                        "mainBreakDuration": data.mainBreakDuration,
+                        "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                        "team1Score": data.team1Score,
+                        "team2Score": data.team2Score,
+                        "resultStatus": data.resultStatus,
+                        "team1ResultId": team1resultId,
+                        "team2ResultId": team2resultId,
+                        "matchStatus": matchStatus,
+                        "endTime": endTime,
+                        "matchUmpires": umpireArr,
+                        "rosters": scorerData,
+                        "isFinals": data.isFinals,
+                        "extraTimeType": data.extraTimeType,
+                        "extraTimeDuration": data.extraTimeDuration,
+                        "extraTimeBreak": data.extraTimeMainBreak,
+                        "extraTimeWinByGoals": data.extraTimeWinByGoals
+
+                    }
                 }
+
             } else {
-                body = {
-                    "id": data.id ? data.id : 0,
-                    "startTime": data.startTime,
-                    "divisionId": data.divisionId,
-                    "type": data.type,
-                    "competitionId": competitionId,
-                    "mnbMatchId": data.mnbMatchId,
-                    "team1Id": data.team1id,
-                    "team2Id": data.team2id,
-                    "venueCourtId": data.venueId,
-                    "roundId": data.roundId,
-                    "matchDuration": data.matchDuration,
-                    "mainBreakDuration": data.mainBreakDuration,
-                    "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
-                    "team1Score": data.team1Score,
-                    "team2Score": data.team2Score,
-                    "matchUmpires": umpireArr,
-                    "rosters": scorerData
-                    // "breakDuration": data.breakDuration
+                if (data.extraTimeType === 'FOUR_QUARTERS') {
+                    body = {
+                        "id": data.id ? data.id : 0,
+                        "startTime": data.startTime,
+                        "divisionId": data.divisionId,
+                        "type": data.type,
+                        "competitionId": competitionId,
+                        "mnbMatchId": data.mnbMatchId,
+                        "team1Id": data.team1id,
+                        "team2Id": data.team2id,
+                        "venueCourtId": data.venueId,
+                        "roundId": data.roundId,
+                        "matchDuration": data.matchDuration,
+                        "mainBreakDuration": data.mainBreakDuration,
+                        "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                        "team1Score": data.team1Score,
+                        "team2Score": data.team2Score,
+                        "matchUmpires": umpireArr,
+                        "rosters": scorerData,
+                        "isFinals": data.isFinals,
+                        "extraTimeType": data.extraTimeType,
+                        "extraTimeDuration": data.extraTimeDuration,
+                        "extraTimeMainBreak": data.extraTimeMainBreak,
+                        "extraTimeBreak": data.extraTimeqtrBreak,
+                        "extraTimeWinByGoals": data.extraTimeWinByGoals,
+                    }
+
+                } else {
+
+                    body = {
+                        "id": data.id ? data.id : 0,
+                        "startTime": data.startTime,
+                        "divisionId": data.divisionId,
+                        "type": data.type,
+                        "competitionId": competitionId,
+                        "mnbMatchId": data.mnbMatchId,
+                        "team1Id": data.team1id,
+                        "team2Id": data.team2id,
+                        "venueCourtId": data.venueId,
+                        "roundId": data.roundId,
+                        "matchDuration": data.matchDuration,
+                        "mainBreakDuration": data.mainBreakDuration,
+                        "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                        "team1Score": data.team1Score,
+                        "team2Score": data.team2Score,
+                        "matchUmpires": umpireArr,
+                        "rosters": scorerData,
+                        "isFinals": data.isFinals,
+                        "extraTimeType": data.extraTimeType,
+                        "extraTimeDuration": data.extraTimeDuration,
+                        "extraTimeBreak": data.extraTimeMainBreak,
+                        "extraTimeWinByGoals": data.extraTimeWinByGoals
+
+                    }
                 }
             }
         } else {
             if (isEdit) {
-                body = {
-                    "id": data.id ? data.id : 0,
-                    "startTime": data.startTime,
-                    "divisionId": data.divisionId,
-                    "type": data.type,
-                    "competitionId": competitionId,
-                    "mnbMatchId": data.mnbMatchId,
-                    "team1Id": data.team1id,
-                    "team2Id": data.team2id,
-                    "venueCourtId": data.venueId,
-                    "roundId": data.roundId,
-                    "matchDuration": data.matchDuration,
-                    "mainBreakDuration": data.mainBreakDuration,
-                    "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
-                    "team1Score": data.team1Score,
-                    "team2Score": data.team2Score,
-                    "resultStatus": data.resultStatus,
-                    "team1ResultId": team1resultId,
-                    "team2ResultId": team2resultId,
-                    "matchStatus": matchStatus,
-                    "endTime": endTime,
-                    "rosters": umpireArr,
-                    // "scorers": scorerData
-                    // "breakDuration": data.breakDuration
+                if (data.extraTimeType === 'FOUR_QUARTERS') {
+                    body = {
+                        "id": data.id ? data.id : 0,
+                        "startTime": data.startTime,
+                        "divisionId": data.divisionId,
+                        "type": data.type,
+                        "competitionId": competitionId,
+                        "mnbMatchId": data.mnbMatchId,
+                        "team1Id": data.team1id,
+                        "team2Id": data.team2id,
+                        "venueCourtId": data.venueId,
+                        "roundId": data.roundId,
+                        "matchDuration": data.matchDuration,
+                        "mainBreakDuration": data.mainBreakDuration,
+                        "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                        "team1Score": data.team1Score,
+                        "team2Score": data.team2Score,
+                        "resultStatus": data.resultStatus,
+                        "team1ResultId": team1resultId,
+                        "team2ResultId": team2resultId,
+                        "matchStatus": matchStatus,
+                        "endTime": endTime,
+                        "rosters": umpireArr,
+                        // "scorers": scorerData
+                        // "breakDuration": data.breakDuration
+                        "isFinals": data.isFinals,
+                        "extraTimeType": data.extraTimeType,
+                        "extraTimeDuration": data.extraTimeDuration,
+                        "extraTimeMainBreak": data.extraTimeMainBreak,
+                        "extraTimeBreak": data.extraTimeqtrBreak,
+                        "extraTimeWinByGoals": data.extraTimeWinByGoals,
+                    }
+                } else {
+
+                    body = {
+                        "id": data.id ? data.id : 0,
+                        "startTime": data.startTime,
+                        "divisionId": data.divisionId,
+                        "type": data.type,
+                        "competitionId": competitionId,
+                        "mnbMatchId": data.mnbMatchId,
+                        "team1Id": data.team1id,
+                        "team2Id": data.team2id,
+                        "venueCourtId": data.venueId,
+                        "roundId": data.roundId,
+                        "matchDuration": data.matchDuration,
+                        "mainBreakDuration": data.mainBreakDuration,
+                        "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                        "team1Score": data.team1Score,
+                        "team2Score": data.team2Score,
+                        "resultStatus": data.resultStatus,
+                        "team1ResultId": team1resultId,
+                        "team2ResultId": team2resultId,
+                        "matchStatus": matchStatus,
+                        "endTime": endTime,
+                        "rosters": umpireArr,
+                        // "scorers": scorerData
+                        // "breakDuration": data.breakDuration
+                        "isFinals": data.isFinals,
+                        "extraTimeType": data.extraTimeType,
+                        "extraTimeDuration": data.extraTimeDuration,
+                        "extraTimeBreak": data.extraTimeMainBreak,
+                        "extraTimeWinByGoals": data.extraTimeWinByGoals
+                    }
                 }
             } else {
-                body = {
-                    "id": data.id ? data.id : 0,
-                    "startTime": data.startTime,
-                    "divisionId": data.divisionId,
-                    "type": data.type,
-                    "competitionId": competitionId,
-                    "mnbMatchId": data.mnbMatchId,
-                    "team1Id": data.team1id,
-                    "team2Id": data.team2id,
-                    "venueCourtId": data.venueId,
-                    "roundId": data.roundId,
-                    "matchDuration": data.matchDuration,
-                    "mainBreakDuration": data.mainBreakDuration,
-                    "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
-                    "team1Score": data.team1Score,
-                    "team2Score": data.team2Score,
-                    "rosters": umpireArr,
-                    // "scorers": scorerData
-                    // "breakDuration": data.breakDuration
+                if (data.extraTimeType === 'FOUR_QUARTERS') {
+                    body = {
+                        "id": data.id ? data.id : 0,
+                        "startTime": data.startTime,
+                        "divisionId": data.divisionId,
+                        "type": data.type,
+                        "competitionId": competitionId,
+                        "mnbMatchId": data.mnbMatchId,
+                        "team1Id": data.team1id,
+                        "team2Id": data.team2id,
+                        "venueCourtId": data.venueId,
+                        "roundId": data.roundId,
+                        "matchDuration": data.matchDuration,
+                        "mainBreakDuration": data.mainBreakDuration,
+                        "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                        "team1Score": data.team1Score,
+                        "team2Score": data.team2Score,
+                        "rosters": umpireArr,
+                        // "scorers": scorerData
+                        // "breakDuration": data.breakDuration
+                        "isFinals": data.isFinals,
+                        "extraTimeType": data.extraTimeType,
+                        "extraTimeDuration": data.extraTimeDuration,
+                        "extraTimeMainBreak": data.extraTimeMainBreak,
+                        "extraTimeBreak": data.extraTimeqtrBreak,
+                        "extraTimeWinByGoals": data.extraTimeWinByGoals,
+                    }
+                } else {
+
+                    body = {
+                        "id": data.id ? data.id : 0,
+                        "startTime": data.startTime,
+                        "divisionId": data.divisionId,
+                        "type": data.type,
+                        "competitionId": competitionId,
+                        "mnbMatchId": data.mnbMatchId,
+                        "team1Id": data.team1id,
+                        "team2Id": data.team2id,
+                        "venueCourtId": data.venueId,
+                        "roundId": data.roundId,
+                        "matchDuration": data.matchDuration,
+                        "mainBreakDuration": data.mainBreakDuration,
+                        "breakDuration": (data.type === 'TWO_HALVES' || data.type === 'SINGLE') ? data.mainBreakDuration : data.qtrBreak,
+                        "team1Score": data.team1Score,
+                        "team2Score": data.team2Score,
+                        "rosters": umpireArr,
+                        // "scorers": scorerData
+                        // "breakDuration": data.breakDuration
+                        "isFinals": data.isFinals,
+                        "extraTimeType": data.extraTimeType,
+                        "extraTimeDuration": data.extraTimeDuration,
+                        "extraTimeBreak": data.extraTimeMainBreak,
+                        "extraTimeWinByGoals": data.extraTimeWinByGoals
+                    }
                 }
             }
         }
@@ -609,13 +764,15 @@ let LiveScoreAxiosApi = {
     },
 
     //create/edit division
-    liveScoreCreateDivision(name, divisionName, gradeName, competitionId, divisionId) {
+    liveScoreCreateDivision(name, divisionName, gradeName, competitionId, divisionId, positionTracking, recordGoalAttempts) {
         const body = {
             "name": name,
             "divisionName": divisionName,
             "grade": gradeName,
             "competitionId": competitionId,
             "id": divisionId,
+            "positionTracking": positionTracking == "null" ? null : positionTracking,
+            "recordGoalAttempts": recordGoalAttempts == "null" ? null : recordGoalAttempts
         }
         const url = `/division`
         return Method.dataPost(url, token, body)
@@ -709,12 +866,21 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreAttendanceList(competitionId, body, select_status) {
+    liveScoreAttendanceList(competitionId, payload, select_status) {
         let url
+        const body =
+        {
+            "paging": payload.paging,
+            "search": payload.search,
+        }
         if (select_status === 'All') {
             url = `/players/activity?competitionId=${competitionId}&status=${""}`
+
         } else {
             url = `/players/activity?competitionId=${competitionId}&status=${select_status}`
+        }
+        if (payload.sortBy && payload.sortOrder) {
+            url += `&sortBy=${payload.sortBy}&sortOrder=${payload.sortOrder}`;
         }
         return Method.dataPost(url, token, body)
     },
@@ -1101,9 +1267,9 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token)
     },
 
-    innerHorizontalCompList(organisationId) {
+    innerHorizontalCompList(organisationId, yearRefId) {
 
-        let url = `/competitions/admin?organisationId=${organisationId}`;
+        let url = `/competitions/admin?organisationId=${organisationId}&yearRefId=${yearRefId}`;
 
         return Method.dataPost(url, null)
     },
@@ -1136,12 +1302,12 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, null)
     },
     /////livescore own part competition listing
-    liveScoreOwnPartCompetitionList(data, orgKey, sortBy, sortOrder) {
+    liveScoreOwnPartCompetitionList(data, orgKey, sortBy, sortOrder, yearRefId) {
         let url = null;
         if (orgKey) {
-            url = `/competitions/adminDashboard?organisationId=${orgKey}`;
+            url = `/competitions/adminDashboard?organisationId=${orgKey}&yearRefId=${yearRefId}`;
         } else {
-            url = `/competitions/adminDashboard`;
+            url = `/competitions/adminDashboard&yearRefId=${yearRefId}`;
         }
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -1158,7 +1324,7 @@ let LiveScoreAxiosApi = {
         let url = `/matches/livestreamURL`;
         return Method.dataPost(url, token, body)
     },
-	resetLadderPoints(payload) {
+    resetLadderPoints(payload) {
         const url = `/teams/ladder/reset`
         return Method.dataPost(url, token, payload)
     },

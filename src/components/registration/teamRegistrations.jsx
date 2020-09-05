@@ -93,7 +93,10 @@ const columns = [
         key: 'userRegTeam',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-
+        render: (userRegTeam, record) =>
+            <NavLink to={{ pathname: `/userPersonal`, state: { userId: record.userId } }}>
+                <span className="input-heading-add-another pt-0" >{userRegTeam}</span>
+            </NavLink>
     },
     {
         title: 'User Role',
@@ -101,11 +104,11 @@ const columns = [
         key: 'roles',
         sorter: false,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (roles, record) =>{
+        render: (roles, record) => {
             return (
                 <div>
-                    {(roles || []).map((item) =>(
-                    <div key={item.roleDesc}>{item.roleDesc}</div>
+                    {(roles || []).map((item) => (
+                        <div key={item.roleDesc}>{item.roleDesc}</div>
                     ))}
                 </div>
             )
@@ -151,7 +154,7 @@ class TeamRegistrations extends Component {
             searchText: '',
         }
 
-        
+
         this_Obj = this;
     }
 
@@ -170,7 +173,9 @@ class TeamRegistrations extends Component {
             competitionUniqueKey,
             filterOrganisation,
             searchText,
-            statusRefId
+            statusRefId,
+            sortBy,
+            sortOrder
         } = this.state;
 
         let filter = {
@@ -185,9 +190,9 @@ class TeamRegistrations extends Component {
                 offset: (page ? (10 * (page - 1)) : 0)
             }
         }
-        this.props.getTeamRegistrationsAction(filter);
+        this.props.getTeamRegistrationsAction(filter, sortBy, sortOrder);
         this.setState({ filter });
-	}
+    }
 
     exportTeamRegistration = () => {
         let obj =
@@ -202,7 +207,7 @@ class TeamRegistrations extends Component {
 
         this.props.exportTeamRegistrationAction(obj);
         this.setState({
-            load:true
+            load: true
         })
         this.handleRegTableList(1);
     }
@@ -319,7 +324,7 @@ class TeamRegistrations extends Component {
                         <div style={{ marginRight: '1%', display: "flex", alignItems: 'center' }}>
                             <div className="d-flex flex-row-reverse button-with-search pb-3"
                             >
-                                <Button className="primary-add-comp-form" style={{ marginRight: 20 }} type="primary"  onClick={() => this.exportTeamRegistration()}>
+                                <Button className="primary-add-comp-form" style={{ marginRight: 20 }} type="primary" onClick={() => this.exportTeamRegistration()}>
                                     <div className="row">
                                         <div className="col-sm">
                                             <img
