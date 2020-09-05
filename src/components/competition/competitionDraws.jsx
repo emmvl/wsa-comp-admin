@@ -128,7 +128,7 @@ class CompetitionDraws extends Component {
     ) {
       if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
         if (venueData.length > 0) {
-          let venueId = venueData[0].id;
+          let venueId = this.state.firstTimeCompId == -1 ? this.state.venueId : venueData[0].id;
           setDraws_venue(venueId);
           if (this.state.firstTimeCompId != "-1") {
             if (drawsRoundData.length > 0) {
@@ -652,7 +652,7 @@ class CompetitionDraws extends Component {
     this.setState({
       firstTimeCompId: competitionId,
       roundId: 0,
-      venueId: null,
+      venueId: competitionId == -1 ? this.state.venueId : null,
       roundTime: null,
       venueLoad: true,
       competitionDivisionGradeId: null,
