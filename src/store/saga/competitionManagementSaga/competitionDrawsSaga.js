@@ -69,7 +69,7 @@ export function* getDrawsRoundsSaga(action) {
         if (result.status === 1) {
             const date = new Date()
             const startDate = action.competitionId != "-1" ? null : moment(date).format("YYYY-MM-DD");
-            const endDate =  null ; 
+            const endDate = action.competitionId != "-1" ? null : moment(date).format("YYYY-MM-DD")
             const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId, startDate, endDate);
             if (VenueResult.status === 1) {
                 const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, startDate, endDate);
