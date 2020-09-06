@@ -69,6 +69,7 @@ import AllLegendComponent from '../../customComponents/allCompetitionLegendCompo
 import { isArrayNotEmpty } from '../../util/helpers';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
 import AppUniqueId from "../../themes/appUniqueId";
+import { date } from 'yup';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -1168,7 +1169,7 @@ class CompetitionDraws extends Component {
                         type="primary"
                         onClick={() => this.applyDateFilter()}
                       >
-                        {AppConstants.save}
+                        {AppConstants.apply}
                       </Button>
                       </div>  
                     </div>
@@ -1269,26 +1270,36 @@ class CompetitionDraws extends Component {
                   this.props.drawsState.getRoundsDrawsdata.map(
                     (dateItem, dateIndex) => {
                       return (
-                        <div key={"drawData" + dateIndex}>
-                          <div className="draws-round-view">
-                            <span className="draws-round">
-                              {this.state.firstTimeCompId == "-1" ? "" : dateItem.roundName}
-                            </span>
-                          </div>
-                          {this.draggableView(dateItem)}
-                          {this.state.firstTimeCompId == "-1" ?
+                        <div>
+                          {dateItem.legendsArray.length > 0 ?
+                            <div key={"drawData" + dateIndex}>
+                              <div className="draws-round-view">
+                                <span className="draws-round">
+                                  {this.state.firstTimeCompId == "-1" ? "" : dateItem.roundName}
+                                </span>
+                              </div>
+                              {this.draggableView(dateItem)}
+                              {this.state.firstTimeCompId == "-1" ?
+                                <div>
+                                  <AllLegendComponent
+                                    allLegendArray={dateItem.legendsArray}
+                                  />
+                                </div>
+                                :
+                                <div style={{ display: 'table' }}>
+                                  <LegendComponent
+                                    disabled={disabledStatus}
+                                    legendArray={dateItem.legendsArray}
+                                  />
+                                </div>
+                              }
+                            </div>
+                          : 
                             <div>
-                              <AllLegendComponent
-                                allLegendArray={dateItem.legendsArray}
-                              />
-                            </div>
-                            :
-                            <div style={{ display: 'table' }}>
-                              <LegendComponent
-                                disabled={disabledStatus}
-                                legendArray={dateItem.legendsArray}
-                              />
-                            </div>
+                                {this.state.firstTimeCompId == -1 && 
+                                    <div class="comp-warning-info" style={{paddingBottom: "40px"}}>{AppConstants.noFixturesMessage}</div>
+                                }
+                            </div> 
                           }
                         </div>
                       );
