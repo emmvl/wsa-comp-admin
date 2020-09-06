@@ -447,7 +447,9 @@ class LiveScoreMatchDetails extends Component {
                     </div>
                     <div style={{ display:  "flex", alignContent: "center", flexDirection: 'column' }} >
                         {UmpireData.map((item, index) => (
-                            <span className="desc-text-style side-bar-profile-data pt-2" >{`U${index + 1}`}: {item.umpireName}</span>
+                            <span key={`umpire_${index}`} className="desc-text-style side-bar-profile-data pt-2" >
+                                {`U${index + 1}`}: {item.umpireName}
+                            </span>
                         ))}
                     </div>
                 </div>
@@ -456,17 +458,22 @@ class LiveScoreMatchDetails extends Component {
                         <span className="event-time-start-text" >{AppConstants.umpireClubName}</span>
                     </div>
                     <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }} >
-                        {UmpireData.map((item) => (
-                            <>
-                                {isArrayNotEmpty(item.competitionOrganisations) && item.competitionOrganisations.map((item) => (
-                                    <span className="inbox-name-text pt-2" >{item.name}</span>
+                        {UmpireData.map((item, index) => (
+                            <div  key={`umpire_club_data_${index}`}>
+                                {isArrayNotEmpty(item.competitionOrganisations)
+                                    && item.competitionOrganisations.map((item, index) => (
+                                    <span key={`umpire_club_${index}`} className="inbox-name-text pt-2" >
+                                        {item.name}
+                                    </span>
                                 ))}
-                            </>
+                            </div>
                         ))}
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
-                        {UmpireData.map((item) => (
-                            <span className="inbox-name-text pt-2" >{item.umpire2Club && item.umpire2Club.name}</span>
+                        {UmpireData.map((item, index) => (
+                            <span key={`umpire_data_${index}`} className="inbox-name-text pt-2" >
+                                {item.umpire2Club && item.umpire2Club.name}
+                            </span>
                         ))}
                     </div>
                 </div>
