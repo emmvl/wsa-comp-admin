@@ -227,6 +227,8 @@ class Registration extends Component {
             searchText,
             regFrom,
             regTo,
+            sortBy,
+            sortOrder
         } = this.state;
 
         let filter = {
@@ -251,7 +253,7 @@ class Registration extends Component {
             },
         };
 
-        this.props.endUserRegDashboardListAction(filter);
+        this.props.endUserRegDashboardListAction(filter, sortBy, sortOrder);
 
         this.setState({ filter });
     }
@@ -553,7 +555,7 @@ class Registration extends Component {
                                     value={this.state.paymentId}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-									{(payments || []).map((payment) => (
+                                    {(payments || []).map((payment) => (
                                         <Option
                                             key={payment.paymentTypeId}
                                             value={payment.paymentTypeId}

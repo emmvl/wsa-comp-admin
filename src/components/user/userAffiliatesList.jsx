@@ -192,7 +192,7 @@ class UserAffiliatesList extends Component {
                 offset: (page ? (10 * (page - 1)) : 0)
             }
         }
-        this.props.getAffiliatesListingAction(filter);
+        this.props.getAffiliatesListingAction(filter, this.state.sortBy, this.state.sortOrder);
     };
 
     naviageToAffiliate = (e) => {

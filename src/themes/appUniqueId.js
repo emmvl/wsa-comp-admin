@@ -177,6 +177,7 @@ const AppUniqueId = {
     publish_All_Or_PArt_radioBtn: "drawpublish_all_part_radiobtn",
     main_draws_round_tableview: "main_draws_round_tableview",
     draw_rounds_dpdn: "draw_rounds_dpdn",
+    apply_date_btn: "apply_date-btn",
 
     //// Unique Ids for Competition Finals ////////
 
@@ -198,7 +199,16 @@ const AppUniqueId = {
 
     //import team button
     impPlayerTeam_template_btn: "impPlayerTeam_template_btn",
-    importPlayerTeam_upload_btn: "importPlayerTeam_upload_btn"
+    importPlayerTeam_upload_btn: "importPlayerTeam_upload_btn",
+
+    competitionVenueNextBn: "competitionVenueNextBn",
+    competitionVenueSaveBn: "competitionVenueSaveBn",
+    compnameTextbox: "compnameTextbox",
+    timeBetweenRoundsDays: "timeBetweenRoundsDays",
+    timeBetweenRoundsHrs: "timeBetweenRoundsHrs",
+    timeBetweenRoundsMins: "timeBetweenRoundsMins",
+    compformat_save_btn: "compformat_save_btn",
+    draw_comp_dpdn: "draw_comp_dpdn"
 
 };
 

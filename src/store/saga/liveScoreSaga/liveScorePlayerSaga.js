@@ -47,7 +47,7 @@ function* errorSaga(error) {
 // Player list saga
 function* liveScorePlayerSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScorePlayerList, action.competitionID);
+    const result = yield call(LiveScoreAxiosApi.liveScorePlayerList, action.competitionID, action.teamId);
 
     if (result.status === 1) {
       yield put({
@@ -139,7 +139,7 @@ function* getPlayerListPaginationSaga(action) {
 function* getPlayerListSearchSaga(action) {
   try {
     const result = yield call(
-      LiveScoreAxiosApi.liveScorePlayerList,
+      LiveScoreAxiosApi.liveScorePlayerSearchList,
       action.competitionId,
       action.organisationId,
       action.name

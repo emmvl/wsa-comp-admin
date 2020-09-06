@@ -333,16 +333,14 @@ let AxiosApi = {
     async postCompetitionFeeSection(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/fees?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}
-                            &affiliateOrgId=${affiliateOrgId} `
+        var url = `/api/competitionfee/fees?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&affiliateOrgId=${affiliateOrgId} `
         return Method.dataPost(url, token, payload)
     },
     //post competition fee discount 
     async postCompetitonFeeDiscount(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/discount?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}
-                        &affiliateOrgId=${affiliateOrgId}`
+        var url = `/api/competitionfee/discount?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&affiliateOrgId=${affiliateOrgId}`
         return Method.dataPost(url, token, payload)
     },
 

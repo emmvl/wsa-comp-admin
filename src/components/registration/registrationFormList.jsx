@@ -151,11 +151,12 @@ class RegistrationFormList extends Component {
     }
 
     handleMembershipTableList = (page, yearRefId) => {
+        let { sortBy, sortOrder } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
             offset
         })
-        this.props.regDashboardListAction(offset, yearRefId)
+        this.props.regDashboardListAction(offset, yearRefId, sortBy, sortOrder)
     };
 
     ///////view for breadcrumb

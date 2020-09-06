@@ -69,6 +69,7 @@ import AllLegendComponent from '../../customComponents/allCompetitionLegendCompo
 import { isArrayNotEmpty } from '../../util/helpers';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
 import AppUniqueId from "../../themes/appUniqueId";
+import { date } from 'yup';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -129,7 +130,7 @@ class CompetitionDraws extends Component {
     ) {
       if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
         if (venueData.length > 0) {
-          let venueId = venueData[0].id;
+          let venueId = this.state.firstTimeCompId == -1 ? this.state.venueId : venueData[0].id;
           setDraws_venue(venueId);
           if (this.state.firstTimeCompId != "-1") {
             if (drawsRoundData.length > 0) {
@@ -653,7 +654,7 @@ class CompetitionDraws extends Component {
     this.setState({
       firstTimeCompId: competitionId,
       roundId: 0,
-      venueId: null,
+      venueId: competitionId == -1 ? this.state.venueId : null,
       roundTime: null,
       venueLoad: true,
       competitionDivisionGradeId: null,
@@ -718,6 +719,7 @@ class CompetitionDraws extends Component {
               {AppConstants.competition}:
             </span>
             <Select
+              id={AppUniqueId.draw_comp_dpdn}
               // style={{ minWidth: 200 }}
               name={'competition'}
               className="year-select reg-filter-select-competition ml-2"
@@ -751,7 +753,7 @@ class CompetitionDraws extends Component {
               // marginRight: 50
             }}
           >
-            <span id={AppUniqueId.division_dpdn} className="year-select-heading">
+            <span className="year-select-heading">
               {AppConstants.division}:
             </span>
             <Select
@@ -793,7 +795,7 @@ class CompetitionDraws extends Component {
               // marginRight: 50
             }}
           >
-            <span id={AppUniqueId.organisation_dpdn} className="year-select-heading">
+            <span className="year-select-heading">
               {AppConstants.organisation}:
             </span>
             <Select
@@ -1000,32 +1002,34 @@ class CompetitionDraws extends Component {
   }
   onChangeStartDate = (startDate, key) => {
 
-    this.props.clearDraws()
-    this.props.changeDrawsDateRangeAction(this.state.yearRefId,
-      this.state.firstTimeCompId, startDate, this.state.endDate)
+    // this.props.clearDraws()
+    // this.props.changeDrawsDateRangeAction(this.state.yearRefId,
+    //   this.state.firstTimeCompId, startDate, this.state.endDate)
     this.setState({
-      startDate: startDate,
-      roundId: 0,
-      venueId: null,
-      roundTime: null,
-      venueLoad: true,
-      competitionDivisionGradeId: null,
-      changeDateLoad: true
+      startDate: startDate
     })
   }
   onChangeEndDate = (endDate, key) => {
+    // this.props.clearDraws()
+    // this.props.changeDrawsDateRangeAction(this.state.yearRefId,
+    //   this.state.firstTimeCompId, this.state.startDate, endDate)
+    this.setState({
+      endDate: endDate
+    })
+  }
+
+  applyDateFilter = () => {
     this.props.clearDraws()
     this.props.changeDrawsDateRangeAction(this.state.yearRefId,
-      this.state.firstTimeCompId, this.state.startDate, endDate)
+      this.state.firstTimeCompId, this.state.startDate, this.state.endDate);
     this.setState({
-      endDate: endDate,
       roundId: 0,
       venueId: null,
       roundTime: null,
       venueLoad: true,
       competitionDivisionGradeId: null,
       changeDateLoad: true
-    })
+    });
   }
 
   //navigateToDrawEdit
@@ -1114,7 +1118,7 @@ class CompetitionDraws extends Component {
                         alignItems: 'center',
                       }}
                     >
-                      <div className="col-sm-6">
+                      <div className="col-sm-5.5">
                         <div
                           style={{
                             width: '100%',
@@ -1124,7 +1128,7 @@ class CompetitionDraws extends Component {
                           }}>
                           <span className="year-select-heading">
                             {AppConstants.fromDate}:
-                      </span>
+                          </span>
                           <DatePicker
                             size="large"
                             style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
@@ -1136,7 +1140,7 @@ class CompetitionDraws extends Component {
                           />
                         </div>
                       </div>
-                      <div className="col-sm-6">
+                      <div className="col-sm-5">
                         <div
                           style={{
                             width: '100%',
@@ -1146,7 +1150,7 @@ class CompetitionDraws extends Component {
                           }}>
                           <span className="year-select-heading">
                             {AppConstants.toDate}:
-                      </span>
+                          </span>
                           <DatePicker
                             size="large"
                             style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
@@ -1158,6 +1162,16 @@ class CompetitionDraws extends Component {
                           />
                         </div>
                       </div>
+                      <div className="col-sm-1.5">
+                      <Button
+                        id={AppUniqueId.apply_date_btn}
+                        className="open-reg-button"
+                        type="primary"
+                        onClick={() => this.applyDateFilter()}
+                      >
+                        {AppConstants.apply}
+                      </Button>
+                      </div>  
                     </div>
                     :
                     <div style={{
@@ -1231,11 +1245,20 @@ class CompetitionDraws extends Component {
                           </span>
                         </div>
                         {this.draggableView(dateItem)}
-                        <div style={{ display: 'table' }}>
-                          <LegendComponent
-                            legendArray={dateItem.legendsArray}
-                          />
-                        </div>
+                        {this.state.firstTimeCompId == "-1" ?
+                          <div>
+                            <AllLegendComponent
+                              allLegendArray={dateItem.legendsArray}
+                            />
+                          </div>
+                          :
+                          <div style={{ display: 'table' }}>
+                            <LegendComponent
+                              disabled={disabledStatus}
+                              legendArray={dateItem.legendsArray}
+                            />
+                          </div>
+                        }
                       </div>
                     );
                   }
@@ -1247,27 +1270,36 @@ class CompetitionDraws extends Component {
                   this.props.drawsState.getRoundsDrawsdata.map(
                     (dateItem, dateIndex) => {
                       return (
-                        <div key={"drawData" + dateIndex}>
-                          <div className="draws-round-view">
-                            <span className="draws-round">
-                              {this.state.firstTimeCompId == "-1" ? "" : dateItem.roundName}
-                            </span>
-                          </div>
-                          {this.draggableView(dateItem)}
-                          {this.state.firstTimeCompId == "-1" ?
+                        <div>
+                          {dateItem.legendsArray.length > 0 ?
+                            <div key={"drawData" + dateIndex}>
+                              <div className="draws-round-view">
+                                <span className="draws-round">
+                                  {this.state.firstTimeCompId == "-1" ? "" : dateItem.roundName}
+                                </span>
+                              </div>
+                              {this.draggableView(dateItem)}
+                              {this.state.firstTimeCompId == "-1" ?
+                                <div>
+                                  <AllLegendComponent
+                                    allLegendArray={dateItem.legendsArray}
+                                  />
+                                </div>
+                                :
+                                <div style={{ display: 'table' }}>
+                                  <LegendComponent
+                                    disabled={disabledStatus}
+                                    legendArray={dateItem.legendsArray}
+                                  />
+                                </div>
+                              }
+                            </div>
+                          : 
                             <div>
-                              <AllLegendComponent
-                                allLegendArray={dateItem.legendsArray}
-                              />
-                            </div>
-                            :
-                            <div style={{ display: 'table' }}>
-                              <LegendComponent
-                                disabled={disabledStatus}
-                                legendArray={dateItem.legendsArray}
-                              />
-
-                            </div>
+                                {this.state.firstTimeCompId == -1 && 
+                                    <div class="comp-warning-info" style={{paddingBottom: "40px"}}>{AppConstants.noFixturesMessage}</div>
+                                }
+                            </div> 
                           }
                         </div>
                       );

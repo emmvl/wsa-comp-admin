@@ -131,12 +131,20 @@ let LiveScoreAxiosApi = {
         }
     },
 
-    liveScorePlayerList(competitionId, organisationId, name) {
-        let url = `/players?competitionId=${competitionId}`;
+    liveScorePlayerList(competitionID, teamId) {
+        let url = null;
 
-        if (!!name && !!organisationId) {
-            url = `/players?competitionId=${competitionId}&organisationId=${organisationId}&name=${name}&includeLinkedCompetition=true`;
+        if (teamId) {
+            url = `/players?competitionId=${competitionID}&teamId=${teamId}`;
+        } else {
+            url = `/players?competitionId=${competitionID}`;
         }
+
+        return Method.dataGet(url, localStorage.token);
+    },
+
+    liveScorePlayerSearchList(competitionID, organisationId, name) {
+        const url = `/players?competitionId=${competitionID}&organisationId=${organisationId}&name=${name}&includeLinkedCompetition=true`;
 
         return Method.dataGet(url, localStorage.token);
     },

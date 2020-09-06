@@ -13,6 +13,7 @@ const initialState = {
     participateCurrentPage: 1,
     ownedLoad: false,
     partLoad: false,
+    allCompListLoad: false,
 }
 export default function liveScoreCompetition(state = initialState, payload) {
     switch (payload.type) {
@@ -79,6 +80,7 @@ export default function liveScoreCompetition(state = initialState, payload) {
                 loader: true,
                 ownedLoad: payload.key == "own" || payload.key == "all" ? true : false,
                 partLoad: payload.key == "part" || payload.key == "all" ? true : false,
+                allCompListLoad: true,
             }
         case ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_SUCCESS:
             let allData = payload.payload
@@ -97,6 +99,7 @@ export default function liveScoreCompetition(state = initialState, payload) {
                 loader: false,
                 ownedLoad: false,
                 partLoad: false,
+                allCompListLoad: false,
             }
         case ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_ERROR:
             return {
