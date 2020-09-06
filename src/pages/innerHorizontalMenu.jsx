@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Select } from "antd";
+import { Menu, Select, message } from "antd";
 import { NavLink } from "react-router-dom";
 
 import AppConstants from "../themes/appConstants";
@@ -31,6 +31,7 @@ class InnerHorizontalMenu extends React.Component {
             liveScoreCompIsParent: false,
             yearId: null,
             yearLoading: false,
+            defaultYear: null
         };
     }
 
@@ -69,7 +70,6 @@ class InnerHorizontalMenu extends React.Component {
                         if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
                             let yearId = this.props.appState.yearList[0].id
                             let yearRefId = localStorage.getItem("yearId")
-
                             if (yearRefId) {
                                 this.props.innerHorizontalCompetitionListAction(organisationId, yearRefId)
                                 this.setState({ yearLoading: false, loading: true, orgId: organisationId, orgState: false, yearId: yearRefId })
@@ -87,17 +87,29 @@ class InnerHorizontalMenu extends React.Component {
 
             if (this.state.loading == true && this.props.innerHorizontalState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.innerHorizontalState.competitionList) ? this.props.innerHorizontalState.competitionList : []
+                let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
+                if (!isArrayNotEmpty(compList)) {
+                    message.config({
+                        duration: 1.5,
+                        maxCount: 1
+                    })
+                    message.info(AppConstants.noCompetitionYear, 1.5);
+                    let defaultYear = localStorage.getItem("defaultYearId")
+                    this.setState({ yearId: defaultYear, loading: true })
+                    localStorage.setItem("yearId", defaultYear)
+                    this.props.innerHorizontalCompetitionListAction(organisationId, defaultYear)
+                    return
+                }
+
                 let firstComp = 1
 
                 let isCompetition = await getLiveScoreCompetiton()
-                let yearValue = JSON.parse(localStorage.getItem("yearValue"))
+                let yearValue = localStorage.getItem("yearValue")
 
-
-                if (yearValue == true) {
+                if (yearValue == "true") {
                     firstComp = compList.length > 0 && compList[0].id
-                    localStorage.setItem("yearValue", false)
+                    localStorage.setItem("yearValue", "false")
                     localStorage.setItem("LiveScoreCompetition", JSON.stringify(compList[0]))
-
                 } else {
                     if (isCompetition) {
                         const { id } = JSON.parse(isCompetition)
@@ -107,7 +119,6 @@ class InnerHorizontalMenu extends React.Component {
                         firstComp = compList.length > 0 && compList[0].id
                     }
                 }
-
                 this.setState({ selectedComp: firstComp, compArray: compList, loading: false })
             }
         }
@@ -129,7 +140,7 @@ class InnerHorizontalMenu extends React.Component {
 
     setYearId(yearId) {
 
-        localStorage.setItem("yearValue", true)
+        localStorage.setItem("yearValue", "true")
         this.setState({ yearId, loading: true })
 
         localStorage.setItem("yearId", yearId)

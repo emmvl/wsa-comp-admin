@@ -1575,7 +1575,8 @@ const AppConstants = {
   reasonWhyYourAreDecline: "Reason why you are declining the request for de-registration?",
   refundAmount: "Refund Amount",
   toDate: "To date",
-  fromDate: "From date"
+  fromDate: "From date",
+  noCompetitionYear:"There are no competitions for the selected year"
 };
 
 export default AppConstants;
