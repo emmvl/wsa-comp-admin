@@ -1577,7 +1577,8 @@ const AppConstants = {
   toDate: "To date",
   fromDate: "From date",
   apply: "Apply",
-  noFixturesMessage: "No fixtures are available within the provided date range"
+  noFixturesMessage: "No fixtures are available within the provided date range",
+  noCompetitionYear:"There are no competitions for the selected year"
 };
 
 export default AppConstants;
