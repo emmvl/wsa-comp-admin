@@ -177,6 +177,7 @@ const AppUniqueId = {
     publish_All_Or_PArt_radioBtn: "drawpublish_all_part_radiobtn",
     main_draws_round_tableview: "main_draws_round_tableview",
     draw_rounds_dpdn: "draw_rounds_dpdn",
+    apply_date_btn: "apply_date-btn",
 
     //// Unique Ids for Competition Finals ////////
 
