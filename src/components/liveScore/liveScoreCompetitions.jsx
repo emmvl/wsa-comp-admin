@@ -346,6 +346,7 @@ class LiveScoreCompetitions extends Component {
             offsetData: 0,
             ownOffset: 0,
             partOffset: 0,
+            allCompListLoad: false,
         };
 
         this_Obj = this;
@@ -367,6 +368,14 @@ class LiveScoreCompetitions extends Component {
         }
     }
 
+    componentDidUpdate(nextProps) {
+        const { allCompListLoad } = this.props.liveScoreCompetition;
+        if (this.state.allCompListLoad === true && allCompListLoad === false) {
+            this.setState({ allCompListLoad: false });
+            localStorage.setItem("defaultYearId", this.state.year)
+        }
+    }
+
     competitionListApi = () => {
         const body = {
             paging: {
@@ -377,6 +386,7 @@ class LiveScoreCompetitions extends Component {
             },
         };
         this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, "all", this.state.year);
+        this.setState({ allCompListLoad: true })
     };
 
     setCompetitionID = (competitionData) => {
