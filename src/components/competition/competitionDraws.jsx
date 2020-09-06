@@ -129,7 +129,7 @@ class CompetitionDraws extends Component {
     ) {
       if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
         if (venueData.length > 0) {
-          let venueId = venueData[0].id;
+          let venueId = this.state.firstTimeCompId == -1 ? this.state.venueId : venueData[0].id;
           setDraws_venue(venueId);
           if (this.state.firstTimeCompId != "-1") {
             if (drawsRoundData.length > 0) {
@@ -653,7 +653,7 @@ class CompetitionDraws extends Component {
     this.setState({
       firstTimeCompId: competitionId,
       roundId: 0,
-      venueId: null,
+      venueId: competitionId == -1 ? this.state.venueId : null,
       roundTime: null,
       venueLoad: true,
       competitionDivisionGradeId: null,
@@ -1001,32 +1001,34 @@ class CompetitionDraws extends Component {
   }
   onChangeStartDate = (startDate, key) => {
 
-    this.props.clearDraws()
-    this.props.changeDrawsDateRangeAction(this.state.yearRefId,
-      this.state.firstTimeCompId, startDate, this.state.endDate)
+    // this.props.clearDraws()
+    // this.props.changeDrawsDateRangeAction(this.state.yearRefId,
+    //   this.state.firstTimeCompId, startDate, this.state.endDate)
     this.setState({
-      startDate: startDate,
-      roundId: 0,
-      venueId: null,
-      roundTime: null,
-      venueLoad: true,
-      competitionDivisionGradeId: null,
-      changeDateLoad: true
+      startDate: startDate
     })
   }
   onChangeEndDate = (endDate, key) => {
+    // this.props.clearDraws()
+    // this.props.changeDrawsDateRangeAction(this.state.yearRefId,
+    //   this.state.firstTimeCompId, this.state.startDate, endDate)
+    this.setState({
+      endDate: endDate
+    })
+  }
+
+  applyDateFilter = () => {
     this.props.clearDraws()
     this.props.changeDrawsDateRangeAction(this.state.yearRefId,
-      this.state.firstTimeCompId, this.state.startDate, endDate)
+      this.state.firstTimeCompId, this.state.startDate, this.state.endDate);
     this.setState({
-      endDate: endDate,
       roundId: 0,
       venueId: null,
       roundTime: null,
       venueLoad: true,
       competitionDivisionGradeId: null,
       changeDateLoad: true
-    })
+    });
   }
 
   //navigateToDrawEdit
@@ -1115,7 +1117,7 @@ class CompetitionDraws extends Component {
                         alignItems: 'center',
                       }}
                     >
-                      <div className="col-sm-6">
+                      <div className="col-sm-5.5">
                         <div
                           style={{
                             width: '100%',
@@ -1125,7 +1127,7 @@ class CompetitionDraws extends Component {
                           }}>
                           <span className="year-select-heading">
                             {AppConstants.fromDate}:
-                      </span>
+                          </span>
                           <DatePicker
                             size="large"
                             style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
@@ -1137,7 +1139,7 @@ class CompetitionDraws extends Component {
                           />
                         </div>
                       </div>
-                      <div className="col-sm-6">
+                      <div className="col-sm-5">
                         <div
                           style={{
                             width: '100%',
@@ -1147,7 +1149,7 @@ class CompetitionDraws extends Component {
                           }}>
                           <span className="year-select-heading">
                             {AppConstants.toDate}:
-                      </span>
+                          </span>
                           <DatePicker
                             size="large"
                             style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
@@ -1159,6 +1161,16 @@ class CompetitionDraws extends Component {
                           />
                         </div>
                       </div>
+                      <div className="col-sm-1.5">
+                      <Button
+                        id={AppUniqueId.apply_date_btn}
+                        className="open-reg-button"
+                        type="primary"
+                        onClick={() => this.applyDateFilter()}
+                      >
+                        {AppConstants.save}
+                      </Button>
+                      </div>  
                     </div>
                     :
                     <div style={{
