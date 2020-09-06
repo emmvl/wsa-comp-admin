@@ -302,15 +302,15 @@ class LiveScoreMatchDetails extends Component {
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-8 col-lg-8 d-flex flex-row justify-content-end w-100">
-                        <div className="row">
+                        <div className="row align-items-center">
 
-                            <div className="col-sm pt-2 d-flex align-items-center">
+                            <div className="col-sm">
                                 <div className="d-flex align-items-center year-select-heading">
                                     <Switch
                                       className="mr-3"
                                       onChange={(checked) => this.handleAttendanceView(checked)}
                                     />
-                                    Attendance
+                                    {AppConstants.attendance}
                                 </div>
                             </div>
 
