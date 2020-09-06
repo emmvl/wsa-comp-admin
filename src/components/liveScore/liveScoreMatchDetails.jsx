@@ -285,7 +285,7 @@ class LiveScoreMatchDetails extends Component {
         let isMatchStatus = length > 0 && match[0].matchStatus === "ENDED";
 
         return (
-            <div className="comp-player-grades-header-drop-down-view mb-5">
+            <div className="p-4">
                 <div className="row">
                     <div className="col-sm-12 col-md-4 col-lg-4">
                         <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
@@ -301,7 +301,7 @@ class LiveScoreMatchDetails extends Component {
                             <span className='year-select-heading' >{'#' + this.state.matchId}</span>
                         </div>
                     </div>
-                    <div className="col-sm-12 col-md-8 col-lg-8 d-flex flex-row justify-content-end w-100">
+                    <div className="col-sm-12 col-md-8 col-lg-8 pr-5 pl-5 d-flex flex-row justify-content-end w-100">
                         <div className="row align-items-center">
 
                             <div className="col-sm">
@@ -425,22 +425,22 @@ class LiveScoreMatchDetails extends Component {
 
     //  Umpire & Score details
     umpireScore_View = () => {
-        const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : []
-        const umpires = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.umpires : []
-        const length = match ? match.length : 0
-        let UmpireData = isArrayNotEmpty(umpires) ? umpires : []
+        const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : [];
+        const umpires = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.umpires : [];
+        const length = match ? match.length : 0;
+        let UmpireData = isArrayNotEmpty(umpires) ? umpires : [];
 
         let scoreType = '';
         if (this.state.umpireKey === 'umpire') {
             const { scoringType } = JSON.parse(getUmpireCompetitonData())
-            scoreType = scoringType
+            scoreType = scoringType;
         } else {
             const { scoringType } = JSON.parse(getLiveScoreCompetiton())
-            scoreType = scoringType
+            scoreType = scoringType;
         }
 
         return (
-            <div className="row mt-4 mr-0 ml-0">
+            <div className="row mt-4 mr-0 ml-0 pr-4 pl-4">
                 <div className="col-sm-12 col-md-6 col-lg-3 mt-3">
                     <div className="match-score-detail">
                         <span className="event-time-start-text" >{AppConstants.umpireName}</span>
@@ -475,10 +475,14 @@ class LiveScoreMatchDetails extends Component {
                         <span className="event-time-start-text" >{AppConstants.scorerName}</span>
                     </div>
                     <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >S1: {length >= 1 ? match ? match[0].scorer1 ? match[0].scorer1.firstName + ' ' + match[0].scorer1.lastName : '' : '' : ''}</span>
+                        <span className="inbox-name-text pt-2" >
+                            S1: {length >= 1 && match && match[0].scorer1 ? match[0].scorer1.firstName + ' ' + match[0].scorer1.lastName : ''}
+                        </span>
                     </div>
                     {scoreType !== 'SINGLE' && <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >S2: {length >= 1 ? match ? match[0].scorer2 ? match[0].scorer2.firstName + ' ' + match[0].scorer2.lastName : '' : '' : ''}</span>
+                        <span className="inbox-name-text pt-2" >
+                            S2: {length >= 1 && match && match[0].scorer2 ? match[0].scorer2.firstName + ' ' + match[0].scorer2.lastName : ''}
+                        </span>
                     </div>}
                 </div>
                 <div className="col-sm-12 col-md-6 col-lg-3 mt-3">
