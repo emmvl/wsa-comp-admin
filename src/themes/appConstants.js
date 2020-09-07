@@ -1394,6 +1394,7 @@ const AppConstants = {
   matchPrintTemplateType: 'Match Print Template Type',
   templateType: 'Template type',
   playerBorrowing: "Player Borrowing",
+  borrowPlayer: "Borrow player",
   gamesBorrowed: "Games Borrowed",
   minutesBorrowed: "Minutes Borrowed",
   premierCompLink: 'Premier Competition Link',
@@ -1576,7 +1577,10 @@ const AppConstants = {
   refundAmount: "Refund Amount",
   toDate: "To date",
   fromDate: "From date",
-  noCompetitionYear:"There are no competitions for the selected year"
+  apply: "Apply",
+  noFixturesMessage: "No fixtures are available within the provided date range",
+  noCompetitionYear:"There are no competitions for the selected year",
+  attendance: "Attendance"
 };
 
 export default AppConstants;

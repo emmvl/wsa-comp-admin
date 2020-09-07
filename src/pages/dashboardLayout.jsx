@@ -113,9 +113,9 @@ class DashboardLayout extends React.Component {
     this.setOrganisationKey();
   }
 
-  getPresetOrganisation = async () => {
+  getPresetOrganisation = () => {
     const userOrganisationData = this.props.userState.getUserOrganisation;
-    const impersonationAffiliate = await getImpersonationAffiliate();
+    const impersonationAffiliate = getImpersonationAffiliate();
 
     if (!impersonationAffiliate) {
       if (this.state.impersonationAffiliateOrgId) {
@@ -125,7 +125,8 @@ class DashboardLayout extends React.Component {
       return null;
     }
 
-    return userOrganisationData.find((org) => org.organisationUniqueKey === impersonationAffiliate.affiliateOrgId);
+    return userOrganisationData
+      .find((org) => org.organisationUniqueKey === impersonationAffiliate.affiliateOrgId);
   }
 
   setOrganisationKey = () => {
@@ -140,7 +141,7 @@ class DashboardLayout extends React.Component {
   }
 
   endImpersonation = async () => {
-    const impersonationAffiliate = await getImpersonationAffiliate();
+    const impersonationAffiliate = getImpersonationAffiliate();
 
     if (impersonationAffiliate) {
       this.props.impersonationAction({

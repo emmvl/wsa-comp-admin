@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Modal, Button, DatePicker } from "antd";
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Modal, Button, DatePicker,Tag } from "antd";
 import "./product.scss";
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -37,7 +37,7 @@ function tableSort(key) {
     }
 
     this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder);
+    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder, this_Obj.state.userId);
 }
 
 
@@ -167,22 +167,32 @@ class PaymentDashboard extends Component {
             competition: "all",
             paymentFor: "all",
             loadingSave: false,
-            offset: 0
-
+            offset: 0,
+            userInfo: null,
+            userId: -1
         };
         this_Obj = this;
 
     }
     componentDidMount() {
-        this.handlePaymentTableList(1)
+        let userInfo = this.props.location.state ? this.props.location.state.personal : null;
+        this.setState({userInfo: userInfo});
+        let userId = userInfo != null ? userInfo.userId : -1;
+        this.handlePaymentTableList(1,userId)
     }
 
     onExport() {
         this.props.exportPaymentApi("paymentDashboard")
     }
 
+    clearFilterByUserId = () => {
+        this.setState({userInfo: null});
+        this.handlePaymentTableList(this.state.offset,-1)
+    } 
+
     ///////view for breadcrumb
     headerView = () => {
+        let tagName = this.state.userInfo != null ? this.state.userInfo.firstName + " " + this.state.userInfo.lastName : null;
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
@@ -194,6 +204,14 @@ class PaymentDashboard extends Component {
                         </div>
                         <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                             <div className="row">
+                                <div className="col-sm pt-1" style={{alignSelf: "center"}}>
+                                    <Tag 
+                                    closable 
+                                    color="volcano"
+                                    style={{paddingTop:"3px",height:"30px"}}
+                                    onClose={() => {this.clearFilterByUserId()}}
+                                    >{tagName}</Tag>
+                                </div>
                                 <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
@@ -239,13 +257,14 @@ class PaymentDashboard extends Component {
         console.log(date)
     }
 
-    handlePaymentTableList = (page) => {
+    handlePaymentTableList = (page,userId) => {
         let { sortBy, sortOrder } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
-            offset
+            offset: offset,
+            userId: userId
         })
-        this.props.getPaymentList(offset, sortBy, sortOrder);
+        this.props.getPaymentList(offset, sortBy, sortOrder, userId);
     };
     dropdownView = () => {
         return (
@@ -332,10 +351,11 @@ class PaymentDashboard extends Component {
         const { paymentState } = this.props;
         let total = paymentState.paymentListTotalCount;
         console.log(paymentState)
+        let userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
         return (
 
             <div className="comp-dash-table-view mt-2">
-                {this.dropdownView()}
+                {/* {this.dropdownView()} */}
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
@@ -350,7 +370,7 @@ class PaymentDashboard extends Component {
                         className="antd-pagination"
                         current={paymentState.paymentListPage}
                         total={total}
-                        onChange={(page) => this.handlePaymentTableList(page)}
+                        onChange={(page) => this.handlePaymentTableList(page,userId)}
                     />
                 </div>
             </div>

@@ -119,11 +119,12 @@ let AxiosApi = {
     },
 
     //get payment list 
-    async getPaymentList(offset, sortBy, sortOrder) {
+    async getPaymentList(offset, sortBy, sortOrder, userId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
             organisationUniqueKey: organisationUniqueKey,
+            userId: userId,
             paging: {
                 offset: offset,
                 limit: 10

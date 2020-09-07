@@ -124,7 +124,10 @@ const columns = [
           {e.alreadyDeRegistered == 0 ?
 		      <Menu.Item key="2" onClick={() => history.push("\deregistration", {regData: e, personal: this_Obj.props.userState.personalData})}>
             <span>De-register</span>
-          </Menu.Item>	: null }  
+          </Menu.Item>	: null }
+          <Menu.Item key="3" onClick={() => history.push("\paymentDashboard", {personal: this_Obj.props.userState.personalData})}>
+            <span>Payment</span>
+          </Menu.Item>  
         </SubMenu>
       </Menu>
     ),
