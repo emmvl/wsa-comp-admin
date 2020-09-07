@@ -120,6 +120,15 @@
     margin-top: 10px;
 }
 
+.match-details-team-name {
+    cursor: pointer;
+}
+
+.table-cell-select .ant-select-selection {
+    border: 1px solid var(--app-d9d9d9) !important;
+    min-height: unset !important;
+}
+
 .match-score-detail {
     border-bottom: 0.5px solid var(--app-e1e1f5);
     padding: 3px 0 10px 0;

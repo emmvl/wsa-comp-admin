@@ -36,7 +36,7 @@ import {
   getMembershipproduct,
   getDivisionsListSaga,
   getTeamRegistrationsSaga,
-  exportTeamRegistrationsSaga 
+  exportTeamRegistrationsSaga
 } from "./registrationSaga/registrationSaga";
 
 import {
@@ -70,7 +70,8 @@ import { liveScoreGoalSaga } from './liveScoreSaga/liveScoreGoalSaga'
 import { liveScoreScorerListSaga, liveScoreAssigneMatches, liveScoreChangeAssignStatus, liveScoreAddEditScorerSaga, liveScoreUnAssignMatcheSaga, liveScoreScorerSearchSaga } from './liveScoreSaga/liveScoreScorerSaga';
 import { liveScoreBulkPushBack, liveScoreBulkBringForwardSaga, liveScoreMatchResult, liveScoreEndMatchesSaga, liveScoreDoubleHeaderSaga, liveScoreAbandonMatchSaga } from './liveScoreSaga/liveScoreBulkMatchSaga';
 import { liveScoreDashboardSaga } from './liveScoreSaga/liveScoreDashboardSaga';
-import { liveScoreCompetitionSaga, liveScoreCompetitionDelete, liveScoreOwnPartCompetitionListSaga } from './liveScoreSaga/liveScoreCompetionSaga'
+import { liveScoreCompetitionSaga, liveScoreCompetitionDelete, liveScoreOwnPartCompetitionListSaga } from './liveScoreSaga/liveScoreCompetionSaga';
+import { liveScoreGamePositionSaga } from './liveScoreSaga/liveScoreGamePositionSaga';
 
 ////*******************Live Score********************************************End
 
@@ -251,6 +252,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_LIVESCORE_COMPETION_DELETE_INITIATE, liveScoreCompetitionDelete)
   yield takeEvery(ApiConstants.LiveScore_SETTING_VIEW_INITITAE, liveScoreSettingSaga)
   yield takeEvery(ApiConstants.LiveScore_SETTING_DATA_POST_INITATE, liveScorePostSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_GAME_POSITION_LIST_LOAD, liveScoreGamePositionSaga)
 
   // ****************************Live Score Saga**************************************End
 
@@ -527,7 +529,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_LOAD, getVenueAndDivisionSaga)
 
   yield takeEvery(ApiConstants.API_LIVE_SCORE_RESET_LADDER_LOAD, liveScoreResetLadderSaga);
-  
+
   yield takeEvery(ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_LOAD, exportTeamRegistrationsSaga);
 
   //Save DeRegister
@@ -543,4 +545,3 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_LOAD, regChangeSaga.saveRegistrationChangeReviewSaga)
  
 }
-

@@ -7,6 +7,15 @@ function liveScorePlayerListAction(competitionID, teamId) {
     };
 }
 
+function liveScorePlayerListSearchAction(competitionId, organisationId, name) {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SEARCH_LOAD,
+        competitionId,
+        organisationId,
+        name,
+    };
+}
+
 function liveScoreUpdatePlayerDataAction(data, key) {
     return {
         type: ApiConstants.API_LIVE_SCORE_UPDATE_PLAYER,
@@ -56,6 +65,7 @@ export {
     liveScoreAddEditPlayerAction,
     liveScoreUpdatePlayerDataAction,
     liveScorePlayerImportAction,
+    liveScorePlayerListSearchAction,
     liveScorePlayerResetImportResultAction,
     playerListWithPaginationAction,
 };

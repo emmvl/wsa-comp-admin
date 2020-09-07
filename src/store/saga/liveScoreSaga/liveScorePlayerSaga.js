@@ -135,9 +135,34 @@ function* getPlayerListPaginationSaga(action) {
   }
 }
 
+// Player list search
+function* getPlayerListSearchSaga(action) {
+  try {
+    const result = yield call(
+      LiveScoreAxiosApi.liveScorePlayerSearchList,
+      action.competitionId,
+      action.organisationId,
+      action.name
+    );
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SEARCH_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 export default function* rootLiveScorePlayerSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD, liveScorePlayerSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_PLAYER_LOAD, liveScoreAddEditPlayerSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD, liveScorePlayerImportSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD, getPlayerListPaginationSaga);
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SEARCH_LOAD, getPlayerListSearchSaga);
 }
