@@ -94,11 +94,20 @@ let userHttpApi = {
 
   liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder) {
     let url = ''
-    let offsetValue = offset ? offset : 0
+    // let offsetValue = offset ? offset : null
     if (searchText) {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}&offset=${offsetValue}&limit=${10}`;
+      if (offset != null) {
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}&offset=${offset}&limit=${10}`;
+      } else {
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}`;
+      }
     } else {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&offset=${offsetValue}&limit=${10}`;
+      if (offset != null) {
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&offset=${offset}&limit=${10}`;
+      } else {
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}`;
+      }
+
     }
 
     if (sortBy && sortOrder) {
@@ -184,10 +193,13 @@ let userHttpApi = {
 
   // Search scorer
   scorerSearchApi(functionId, entityTypeId, competitionId, searchText) {
-    if (searchText && searchText.length > 0) {
-      const url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
-      return Method.dataGet(url, token)
-    }
+    console.log(searchText, 'searchText')
+    // if (searchText && searchText.length > 0) {
+    //   const url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
+    //   return Method.dataGet(url, token)
+    // }
+    const url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
+    return Method.dataGet(url, token)
   },
 
   getUserFriendList(payload, sortBy, sortOrder) {
@@ -241,7 +253,11 @@ let userHttpApi = {
   liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder) {
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     let url
-    url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${entityId}&userName=${search}&offset=${offset}&limit=${10}`
+    if (offset != null) {
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${entityId}&userName=${search}&offset=${offset}&limit=${10}`
+    } else {
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${entityId}&userName=${search}`
+    }
 
     if (sortBy && sortOrder) {
       url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;

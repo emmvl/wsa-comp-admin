@@ -119,6 +119,7 @@ class LiveScoreBanners extends Component {
                     dataSource={bannerResult}
                     showHeader={false}
                     pagination={false}
+                    rowKey={(record, index) => record.bannerUrl + index}
                 />
             </div>
         )

@@ -141,7 +141,7 @@ const columns = [
                     //         <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data">{item.parentName}</span>
                     //     </NavLink>
                     //     :
-                    <span className="desc-text-style side-bar-profile-data">{item.parentName}</span>
+                    <span key={"linkedEntity" + i} className="desc-text-style side-bar-profile-data">{item.parentName}</span>
                 ))}
             </div>
         ),
