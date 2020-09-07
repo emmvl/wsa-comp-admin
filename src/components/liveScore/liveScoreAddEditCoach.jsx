@@ -343,10 +343,11 @@ class LiveScoreAddEditCoach extends Component {
                                     }}
                                     notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
                                     onSearch={(value) => {
-                                        value ?
-                                            this.props.liveScoreManagerSearch(value, this.state.conpetitionId)
-                                            :
-                                            this.props.liveScoreCoachListAction(3, 1, this.state.conpetitionId)
+                                        // value ?
+                                        //     this.props.liveScoreManagerSearch(value, this.state.conpetitionId)
+                                        //     :
+                                        //     this.props.liveScoreCoachListAction(3, 1, this.state.conpetitionId)
+                                        this.props.liveScoreCoachListAction(3, 1, this.state.conpetitionId, value)
                                     }}
                                 >
                                     {coachList.map((item) => {

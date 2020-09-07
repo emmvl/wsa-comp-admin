@@ -180,7 +180,7 @@ const columnsTodaysMatch = [
             pathname: '/liveScoreMatchDetails',
             state: { matchId: id, key: 'dashboard' }
         }} >
-            <span class="input-heading-add-another pt-0" >{id}</span>
+            <span className="input-heading-add-another pt-0" >{id}</span>
         </NavLink>
     },
     {
@@ -203,7 +203,7 @@ const columnsTodaysMatch = [
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team1, key: 'dashboard' }
             }} >
-                <span class="input-heading-add-another pt-0" >{team1.name}</span>
+                <span className="input-heading-add-another pt-0" >{team1.name}</span>
             </NavLink>
 
     },
@@ -217,7 +217,7 @@ const columnsTodaysMatch = [
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team2, key: 'dashboard' }
             }} >
-                <span class="input-heading-add-another pt-0" >{team2.name}</span>
+                <span className="input-heading-add-another pt-0" >{team2.name}</span>
             </NavLink>
     },
     {
@@ -260,7 +260,7 @@ const columnsTodaysMatch = [
                 >{item.umpireName}</span>
             ))
 
-        // <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
+        // <span className="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
         title: "Scorer 1",
         dataIndex: 'scorer1Status',
@@ -315,7 +315,7 @@ const columnsTodaysMatch_1 = [
             pathname: '/liveScoreMatchDetails',
             state: { matchId: id, key: 'dashboard' }
         }} >
-            <span class="input-heading-add-another pt-0" >{id}</span>
+            <span className="input-heading-add-another pt-0" >{id}</span>
         </NavLink>
     },
     {
@@ -338,7 +338,7 @@ const columnsTodaysMatch_1 = [
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team1, key: 'dashboard' }
             }} >
-                <span class="input-heading-add-another pt-0" >{team1.name}</span>
+                <span className="input-heading-add-another pt-0" >{team1.name}</span>
             </NavLink>
 
     },
@@ -352,7 +352,7 @@ const columnsTodaysMatch_1 = [
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team2, key: 'dashboard' }
             }} >
-                <span class="input-heading-add-another pt-0" >{team2.name}</span>
+                <span className="input-heading-add-another pt-0" >{team2.name}</span>
             </NavLink>
     },
     {
@@ -380,22 +380,22 @@ const columnsTodaysMatch_1 = [
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
                 state: { matchId: records.id, key: 'dashboard' }
-            }} ><span nowrap class="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
+            }} ><span nowrap className="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
     }, {
         title: "Umpire",
         dataIndex: 'umpires',
         key: 'umpires',
         sorter: (a, b, umpires) => checkSorting(a, b, umpires),
-        render: (umpires) =>
+        render: (umpires, record) =>
 
-            isArrayNotEmpty(umpires) && umpires.map((item) => (
-                <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)}
+            isArrayNotEmpty(umpires) && umpires.map((item, index) => (
+                <span key={record.id + index} style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)}
                     // className="desc-text-style side-bar-profile-data" 
                     className='multi-column-text-aligned'
                 >{item.umpireName}</span>
             ))
 
-        // <span class="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
+        // <span className="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
         title: <span nowrap className="column-width-style" >{"Scorer 1"} </span>,
         dataIndex: 'scorer1Status',

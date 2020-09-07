@@ -90,15 +90,17 @@ function liveScoreMangerState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_MANAGER_LIST_SUCCESS:
+
+            let user_Data = action.result.userData ? action.result.userData : action.result
             return {
                 ...state,
                 onLoad: false,
-                MainManagerListResult: action.result.userData,
-                managerListResult: action.result.userData,
+                MainManagerListResult: user_Data,
+                managerListResult: user_Data,
                 status: action.status,
-                managerSearchResult: action.result.userData,
-                currentPage: action.result.page.currentPage,
-                totalCount: action.result.page.totalCount,
+                managerSearchResult: user_Data,
+                currentPage: action.result.page ? action.result.page.currentPage : null,
+                totalCount: action.result.page ? action.result.page.totalCount : null,
             };
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MANAGER_LOAD:
