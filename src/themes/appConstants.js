@@ -1516,7 +1516,7 @@ const AppConstants = {
 
   umpirePayments: "Umpire Payments",
   bulkPayment: "Bulk Payment",
-  whoPayUmpire: "Who pays Umpires",
+  whoAssignsUmpire: "Who Assigns Umpires",
   umpireRate: "Umpire Rate",
   umpireResRate: "Ump. Reserve Rate",
   umpireCoachrate: "Ump. Coach Rate",
@@ -1574,12 +1574,13 @@ const AppConstants = {
   whatRegistrationChange: "what registration change do you",
   registrationChangeRef: "RegistrationChange",
   reasonWhyYourAreDecline: "Reason why you are declining the request for de-registration?",
+  whoPayUmpire: "Who pays Umpires",
   refundAmount: "Refund Amount",
   toDate: "To date",
   fromDate: "From date",
   apply: "Apply",
   noFixturesMessage: "No fixtures are available within the provided date range",
-  noCompetitionYear:"There are no competitions for the selected year",
+  noCompetitionYear: "There are no competitions for the selected year",
   attendance: "Attendance"
 };
 

@@ -81,13 +81,16 @@ function liveScoreCoachState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_COACH_LIST_SUCCESS:
+
+            let user_Data = action.result.userData ? action.result.userData : action.result
+
             return {
                 ...state,
                 onLoad: false,
-                coachesResult: action.result.userData,
-                mainCoachListResult: action.result.userData,
-                currentPage: action.result.page.currentPage,
-                totalCount: action.result.page.totalCount,
+                coachesResult: user_Data,
+                mainCoachListResult: user_Data,
+                currentPage: action.result.page ? action.result.page.currentPage : null,
+                totalCount: action.result.page ? action.result.page.totalCount : null,
                 status: action.status,
             };
 

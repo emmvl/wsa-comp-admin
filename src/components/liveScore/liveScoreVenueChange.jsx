@@ -185,6 +185,7 @@ class LiveScoreVenueChange extends Component {
                                         defaultOpenValue={moment("00:00", "hh:mm")}
                                         format={"hh:mm"}
                                         use12Hours={false}
+                                        placeholder={"Select Time"}
                                         onChange={(startTime) => this.props.liveScoreUpdateVenueChange(startTime, "startTime")}
                                     // value={venueChangeData.startTime}
                                     />
@@ -228,6 +229,7 @@ class LiveScoreVenueChange extends Component {
                                         style={{ width: "100%" }}
                                         defaultOpenValue={moment("00:00", "HH:mm")}
                                         format={"HH:mm"}
+                                        placeholder={"Select Time"}
                                         onChange={(endTime) => this.props.liveScoreUpdateVenueChange(endTime, "endTime")}
                                     // value={venueChangeData.endTime}
                                     />

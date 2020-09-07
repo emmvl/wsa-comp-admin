@@ -105,7 +105,7 @@ class UmpireDivisions extends Component {
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
-                                    marginBottom:"12px"
+                                    marginBottom: "12px"
                                 }}
                             >
                                 <span className="year-select-heading ">
@@ -117,7 +117,7 @@ class UmpireDivisions extends Component {
                                     style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
-                                    
+
                                 >
                                     {
                                         competition.map((item, index) => {
@@ -253,26 +253,8 @@ class UmpireDivisions extends Component {
                 </div>
 
 
+                {/* <span className="text-heading-large pt-5">{AppConstants.simultaneousMatchAllocations}</span> */}
                 {/* <div className="row  pt-3" >
-                    <div className='col-sm-3 division-table-field-view'>
-                        <InputWithHead heading={AppConstants.juniorUnbadge} />
-                    </div>
-                    <div className="col-sm" >
-                        <Select
-                            placeholder={"Select"}
-                            mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
-                        // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
-                        // value={this.state.umpPool}
-                        >
-                            <Option value={"GradeaGrade"}>{'A Grade'}</Option>
-                            <Option value={"GradebGrade"}>{'B Grade'}</Option>
-                            <Option value={"GradecGrade"}>{'C Grade'}</Option>
-                        </Select>
-                    </div>
-                </div> */}
-                <span className="text-heading-large pt-5">{AppConstants.simultaneousMatchAllocations}</span>
-                <div className="row  pt-3" >
                     <div className='col-sm-2 '>
 
                         <InputWithHead heading={AppConstants.poolName}
@@ -298,8 +280,9 @@ class UmpireDivisions extends Component {
                             value={this.state.umpireCoach}
                         />
                     </div>
-                </div>
-                <div className="row  pt-3" >
+                </div> */}
+
+                {/* <div className="row  pt-3" >
                     <div className='col-sm-2'>
                         <InputWithHead heading={"Badge A"}
                         />
@@ -320,7 +303,7 @@ class UmpireDivisions extends Component {
                             value={this.state.umpireCoach2}
                         />
                     </div>
-                </div>
+                </div> */}
 
             </div>
         )

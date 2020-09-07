@@ -408,6 +408,7 @@ class LiveScoreBulkChange extends Component {
                                         defaultOpenValue={moment("00:00", "HH:mm")}
                                         format={"HH:mm"}
                                         // minuteStep={15}
+                                        placeholder={"Select Time"}
                                         use12Hours={false}
                                         onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "startTime")}
                                     // value={pushBackData.startTime}
@@ -453,6 +454,7 @@ class LiveScoreBulkChange extends Component {
                                         defaultOpenValue={moment("00:00", "HH:mm")}
                                         format={"HH:mm"}
                                         // minuteStep={15}
+                                        placeholder={"Select Time"}
                                         use12Hours={false}
                                         onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
                                     // value={pushBackData.endTime}
@@ -595,6 +597,7 @@ class LiveScoreBulkChange extends Component {
                                         format={"HH:mm"}
                                         // value={bringForwardData.startTime}
                                         // minuteStep={15}
+                                        placeholder={"Select Time"}
                                         use12Hours={false}
                                     />
                                 )}
@@ -637,6 +640,7 @@ class LiveScoreBulkChange extends Component {
                                         defaultOpenValue={moment("00:00", "HH:mm")}
                                         onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
                                         format={"HH:mm"}
+                                        placeholder={"Select Time"}
                                         // value={bringForwardData.endTime}
                                         // minuteStep={15}
                                         use12Hours={false}
@@ -770,6 +774,7 @@ class LiveScoreBulkChange extends Component {
                                         defaultOpenValue={moment("00:00", "hh:mm")}
                                         format={"hh:mm"}
                                         // minuteStep={15}
+                                        placeholder={"Select Time"}
                                         onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "startTime")}
                                         // value={endMatchData.startTime}
                                         use12Hours={false}
@@ -812,6 +817,7 @@ class LiveScoreBulkChange extends Component {
                                         style={{ width: "100%" }}
                                         defaultOpenValue={moment("00:00", "HH:mm")}
                                         format={"HH:mm"}
+                                        placeholder={"Select Time"}
                                         onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
                                         // value={endMatchData.endTime}
                                         // minuteStep={15}
@@ -1047,6 +1053,7 @@ class LiveScoreBulkChange extends Component {
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     format={"HH:mm"}
                                     // minuteStep={15}
+                                    placeholder={"Select Time"}
                                     use12Hours={false}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "startTime")}
                                     value={abandonData.startTime}
@@ -1085,6 +1092,7 @@ class LiveScoreBulkChange extends Component {
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     format={"HH:mm"}
                                     // minuteStep={15}
+                                    placeholder={"Select Time"}
                                     use12Hours={false}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
                                     value={abandonData.endTime} />

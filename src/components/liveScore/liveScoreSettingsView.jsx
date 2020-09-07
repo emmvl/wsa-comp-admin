@@ -70,6 +70,8 @@ class LiveScoreSettingsView extends Component {
     }
     componentDidMount() {
         this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.onInviteeSearch('', 3)
+        this.onInviteeSearch('', 4)
         this.setState({ yearLoading: true })
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.props.umpireCompetitionListAction(null, null, organisationId)
