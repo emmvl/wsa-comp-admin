@@ -16,7 +16,7 @@ const initialState = {
     status: 0,
     scorerListResult: [],
     scorerListPage: 0,
-    scorerListTotalCount: "",
+    scorerListTotalCount: 0,
     scorerData: scorerObj,
     scorerRadioBtn: 'new',
     existingScorerId: null,

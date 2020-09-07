@@ -85,7 +85,7 @@ const columns = [
             pathname: '/liveScoreNewsView',
             state: { item: record }
         }}>
-            <span class="input-heading-add-another pt-0">{title}</span>
+            <span className="input-heading-add-another pt-0">{title}</span>
         </NavLink>
     },
     {
@@ -151,7 +151,7 @@ const columns = [
     {
         title: 'Active',
         dataIndex: 'news_expire_date',
-        key: 'news_expire_date',
+        key: 'news_expire_date_Active',
         // sorter: (a, b) => a.news_expire_date.length - b.news_expire_date.length,
         render: (news_expire_date, record) =>
             <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
@@ -239,6 +239,7 @@ class LiveScoreNewsList extends Component {
                         columns={columns}
                         dataSource={newsData}
                         pagination={false}
+                        rowKey={(record, index) => "newsData" + index}
                     />
                 </div>
 

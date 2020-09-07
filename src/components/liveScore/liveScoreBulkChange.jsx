@@ -232,11 +232,11 @@ class LiveScoreBulkChange extends Component {
     contentView = (getFieldDecorator) => {
         const { selectedOption } = this.props.liveScoreBulkMatchState
         return (
-            <div className="content-view pt-4">
+            <div className="content-view pt-5">
 
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <span className='text-heading-large' >{AppConstants.whatDoWantDO}</span>
-                    <div style={{ marginTop: -10 }}>
+                    <div style={{ marginTop: -13 }}>
                         <Tooltip placement="top" background='#ff8237'>
                             <span>{AppConstants.bulkMatchMsg}</span>
                             {/* {AppConstants.LatitudeMsg} */}
@@ -267,7 +267,7 @@ class LiveScoreBulkChange extends Component {
     radioBtnContainer() {
         const { bulkRadioBtn } = this.props.liveScoreBulkMatchState
         return (
-            <div >
+            <div style={{paddingLeft:'12px'}}>
                 <Radio.Group
                     // className="reg-competition-radio"
                     onChange={(e) => this.props.liveScoreUpdateBulkAction(e.target.value, "bulkRadioBtn")}
@@ -1390,7 +1390,7 @@ class LiveScoreBulkChange extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -1418,7 +1418,7 @@ class LiveScoreBulkChange extends Component {
                         onSubmit={this.handleSubmit}
                         noValidate="noValidate">
                         <Content>
-                            <div className="formView">{this.contentView(getFieldDecorator)}</div>
+                            <div className="formView CornerView">{this.contentView(getFieldDecorator)}</div>
                         </Content>
                         <Footer >{this.footerView()}</Footer>
                     </Form>

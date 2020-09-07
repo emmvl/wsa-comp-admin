@@ -224,7 +224,7 @@ class UmpirePaymentSetting extends Component {
                     >
 
                         {compOrgDiv.map((item) => (
-                            <Option disabled={item.disabled} value={item.id}>{item.name}</Option>
+                            <Option key={"compOrgDiv" + item.id} disabled={item.disabled} value={item.id}>{item.name}</Option>
                         ))}
 
                     </Select>

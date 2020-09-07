@@ -53,7 +53,7 @@ function tableSort(key) {
 const columns = [
 
     {
-        title: 'Match id',
+        title: 'Match Id',
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
@@ -140,7 +140,7 @@ const columns = [
 const borrowedColumns = [
 
     {
-        title: 'Match id',
+        title: 'Match Id',
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
@@ -580,7 +580,7 @@ class LiveScoreTeamAttendance extends Component {
                         columns={this.state.selectStatus === "Borrowed" ? borrowedColumns : columns}
                         dataSource={dataSource}
                         pagination={false}
-                    // rowKey={(record, index) => record.matchId + index}
+                        rowKey={(record, index) => record.matchId + index}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
