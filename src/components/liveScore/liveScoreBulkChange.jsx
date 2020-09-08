@@ -345,6 +345,7 @@ class LiveScoreBulkChange extends Component {
                             minuteStep={15}
                             use12Hours={false}
                             value={data.optionalTime}
+                            placeholder='Select Time'
                         />
                     </div>
                 </div>

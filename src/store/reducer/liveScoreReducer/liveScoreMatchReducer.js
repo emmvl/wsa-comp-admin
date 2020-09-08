@@ -455,6 +455,26 @@ function liveScoreMatchReducer(state = initialState, action) {
                 state.matchData["extraTimeWinByGoals"] = null;
 
 
+            } else if (action.key === "isFinals") {
+
+                if (action.data === true) {
+                    state[action.key] = action.data;
+                    state.addEditMatch[action.key] = action.data;
+                    state.matchData[action.key] = action.data;
+                } else {
+                    state.addEditMatch["isFinals"] = false;
+                    state.matchData["isFinals"] = false;
+                    state.addEditMatch["extraTimeType"] = null;
+                    state.addEditMatch["extraTimeDuration"] = null;
+                    state.addEditMatch["extraTimeMainBreak"] = null;
+                    state.addEditMatch["extraTimeqtrBreak"] = null;
+                    state.addEditMatch["extraTimeWinByGoals"] = null;
+                    state.matchData["extraTimeType"] = null;
+                    state.matchData["extraTimeDuration"] = null;
+                    state.matchData["extraTimeMainBreak"] = null;
+                    state.matchData["extraTimeqtrBreak"] = null;
+                    state.matchData["extraTimeWinByGoals"] = null;
+                }
             }
             else {
                 state[action.key] = action.data;

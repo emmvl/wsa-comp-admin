@@ -1,17 +1,18 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Button, Form, message } from "antd";
 import moment from "moment";
 
-import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
+import AppConstants from "themes/appConstants";
+import AppImages from "themes/appImages";
+import { getOrganisationData, setOrganisationData } from "util/sessionStorage";
 import {
   userPhotoUpdateAction,
   userDetailUpdateAction,
-} from "../../store/actions/userAction/userAction";
-import InputWithHead from "../../customComponents/InputWithHead";
-import Loader from "../../customComponents/loader";
+} from "store/actions/userAction/userAction";
+import InputWithHead from "customComponents/InputWithHead";
+import Loader from "customComponents/loader";
 
 function Profile(props) {
   const {
@@ -22,6 +23,16 @@ function Profile(props) {
   } = props;
 
   const [user, setUser] = useState(userState.userProfile);
+
+  useEffect(() => {
+    if (userState.userProfile.photoUrl) {
+      const orgData = getOrganisationData();
+      if (orgData) {
+        orgData.photoUrl = userState.userProfile.photoUrl;
+        setOrganisationData(orgData);
+      }
+    }
+  }, [userState.userProfile.photoUrl]);
 
   const onChangeField = useCallback(
     (e) => {
