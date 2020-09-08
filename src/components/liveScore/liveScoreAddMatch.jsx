@@ -1101,6 +1101,7 @@ class LiveScoreAddMatch extends Component {
                                     optionFilterProp="children"
                                     onChange={(id) => this.props.liveScoreUpdateMatchAction(id, "extraTimeType")}
                                     value={addEditMatch.extraTimeType ? addEditMatch.extraTimeType : undefined}
+                                    disabled={this.state.umpireKey === 'umpire' ? true : false}
                                 >
                                     <Option key={'SINGLE_PERIOD'} value={'SINGLE_PERIOD'} > {'Single Period'}</Option>
                                     <Option key={'TWO_HALVES'} value={'TWO_HALVES'} > {'Halves'}</Option>
@@ -1125,6 +1126,7 @@ class LiveScoreAddMatch extends Component {
                                     placeholder={'0'}
                                     onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeDuration")}
                                     value={addEditMatch.extraTimeDuration}
+                                    disabled={this.state.umpireKey === 'umpire' ? true : false}
                                 />
                                 {/* )}
     </Form.Item> */}
@@ -1143,6 +1145,7 @@ class LiveScoreAddMatch extends Component {
                                     placeholder={'0'}
                                     onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeMainBreak")}
                                     value={addEditMatch.extraTimeMainBreak}
+                                    disabled={this.state.umpireKey === 'umpire' ? true : false}
                                 />
                                 {/* )}
     </Form.Item> */}
@@ -1175,6 +1178,7 @@ class LiveScoreAddMatch extends Component {
 
                             onChange={(e) => this.props.liveScoreUpdateMatchAction(e.target.value, 'extraTimeWinByGoals')}
                             value={addEditMatch.extraTimeWinByGoals}
+                            disabled={this.state.umpireKey === 'umpire' ? true : false}
                         >
 
                             <Radio key={1} value={1}>{'1st Goal Wins'}</Radio>
