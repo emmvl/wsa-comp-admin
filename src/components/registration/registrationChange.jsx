@@ -191,12 +191,12 @@ const columns = [
                     )
                 }
             },
-            {
-                title: 'Status',
-                dataIndex: 'approvedStatus',
-                key: 'approvedStatus',
-                sorter: (a, b) => tableSort(a, b, "approvedStatus")
-            },
+            // {
+            //     title: 'Status',
+            //     dataIndex: 'approvedStatus',
+            //     key: 'approvedStatus',
+            //     sorter: (a, b) => tableSort(a, b, "approvedStatus")
+            // },
             {
                 title: "Action",
                 dataIndex: 'action',

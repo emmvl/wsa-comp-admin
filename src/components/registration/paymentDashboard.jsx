@@ -204,14 +204,16 @@ class PaymentDashboard extends Component {
                         </div>
                         <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                             <div className="row">
-                                <div className="col-sm pt-1" style={{alignSelf: "center"}}>
-                                    <Tag 
-                                    closable 
-                                    color="volcano"
-                                    style={{paddingTop:"3px",height:"30px"}}
-                                    onClose={() => {this.clearFilterByUserId()}}
-                                    >{tagName}</Tag>
-                                </div>
+                                {this.state.userInfo &&
+                                    <div className="col-sm pt-1" style={{alignSelf: "center"}}>
+                                        <Tag 
+                                        closable 
+                                        color="volcano"
+                                        style={{paddingTop:"3px",height:"30px"}}
+                                        onClose={() => {this.clearFilterByUserId()}}
+                                        >{tagName}</Tag>
+                                    </div>
+                                }
                                 <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
@@ -355,7 +357,7 @@ class PaymentDashboard extends Component {
         return (
 
             <div className="comp-dash-table-view mt-2">
-                {/* {this.dropdownView()} */}
+                {this.dropdownView()}
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
