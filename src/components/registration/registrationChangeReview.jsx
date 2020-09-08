@@ -141,9 +141,9 @@ class RegistrationChangeReview extends Component {
             this.setState({acceptVisible: true });
         }
         else if(key == "ok"){
-            console.log("^^^^^^^^^^^")
             this.setState({acceptVisible: false });
-            this.saveReview();
+            const {reviewSaveData} = this.props.registrationChangeState;
+            this.saveReview(reviewSaveData.invoices);
         }
         else {
             this.setState({acceptVisible: false });
@@ -157,6 +157,12 @@ class RegistrationChangeReview extends Component {
         }
         else if(key == "ok"){
             this.setState({declineVisible: false });
+            const {regChangeReviewData} = this.props.registrationChangeState;
+            let invoicesTemp = regChangeReviewData.invoices.map(e => ({ ... e }));
+            for(let invoice of invoicesTemp){
+                invoice.refundAmount = invoice.amount;
+            }
+            this.saveReview(invoicesTemp);
         }
         else {
             this.setState({declineVisible: false });
@@ -207,7 +213,7 @@ class RegistrationChangeReview extends Component {
         return orgTypeRefName;
     }
 
-    saveReview = () =>{
+    saveReview = (invoices) =>{
         console.log("$$$$$$$$$$$$$$44")
         let reviewSaveData = this.props.registrationChangeState.reviewSaveData;
         let regChangeReviewData = this.props.registrationChangeState.regChangeReviewData;
@@ -227,7 +233,7 @@ class RegistrationChangeReview extends Component {
         reviewSaveData["membershipMappingId"] = regChangeReviewData.membershipMappingId;
         reviewSaveData["competitionId"] = regChangeReviewData.competitionId;
         reviewSaveData["userId"] = regChangeReviewData.userId;
-        reviewSaveData["invoices"] = reviewSaveData.invoices;
+        reviewSaveData["invoices"] = invoices;
         
         this.props.saveRegistrationChangeReview(reviewSaveData);
         this.setState({loading: true});
