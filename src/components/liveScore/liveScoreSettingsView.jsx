@@ -23,7 +23,7 @@ import AppImages from "../../themes/appImages";
 import {
     getLiveScoreSettingInitiate,
     onChangeSettingForm,
-    settingDataPostInititae,
+    settingDataPostInitiate,
     clearLiveScoreSetting,
     searchVenueList,
     clearFilter,
@@ -318,7 +318,7 @@ class LiveScoreSettingsView extends Component {
                     formData.append('invitedOrganisation', JSON.stringify(invitedOrganisation))
                 }
 
-                this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName, competitionId: this.state.competitionId, isEdit: this.state.isEdit })
+                this.props.settingDataPostInitiate({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName, competitionId: this.state.competitionId, isEdit: this.state.isEdit })
 
             }
         });
@@ -1353,26 +1353,27 @@ class LiveScoreSettingsView extends Component {
         );
     }
 }
-function mapStatetoProps(state) {
+
+function mapStateToProps(state) {
     return {
         liveScoreSetting: state.LiveScoreSetting,
         venueList: state.LiveScoreMatchState,
-        appState: state.AppState,
         competitionFeesState: state.CompetitionFeesState,
         umpireCompetitionState: state.UmpireCompetitionState,
         appState: state.AppState,
     }
 }
-export default connect(mapStatetoProps, {
+
+export default connect(mapStateToProps, {
     clearLiveScoreSetting,
     getLiveScoreSettingInitiate,
     onChangeSettingForm,
     getCompetitionVenuesList,
-    settingDataPostInititae,
+    settingDataPostInitiate,
     searchVenueList,
     clearFilter,
     onInviteesSearchAction,
     settingRegInvitees,
     umpireCompetitionListAction,
     getOnlyYearListAction
-})((Form.create()(LiveScoreSettingsView)));
+})(Form.create()(LiveScoreSettingsView));

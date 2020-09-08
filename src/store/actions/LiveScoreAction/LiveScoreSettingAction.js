@@ -25,7 +25,7 @@ export const onChangeSettingForm = (data) => {
     }
 }
 
-export const settingDataPostInititae = (data) => {
+export const settingDataPostInitiate = (data) => {
     return {
         type: ApiConstants.LiveScore_SETTING_DATA_POST_INITATE,
         payload: data

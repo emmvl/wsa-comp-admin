@@ -22,6 +22,7 @@ import {
   getUserOrganisationAction,
   impersonationAction,
   onOrganisationChangeAction,
+  getUreAction,
 } from "store/actions/userAction/userAction";
 import Loader from "customComponents/loader";
 
@@ -69,8 +70,9 @@ class DashboardLayout extends React.Component {
 
         if (this.props.userState.impersonation && !this.state.impersonationLoad) {
           const impersonationAffiliate = this.state.impersonationAffiliateOrgId
-            ? this.props.userState.affiliateList
-                  .find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId)
+            ? this.props.userState.affiliateList.find(
+                (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
+              )
             : null;
           await setImpersonationAffiliate(impersonationAffiliate);
 
@@ -111,6 +113,7 @@ class DashboardLayout extends React.Component {
 
   componentDidMount() {
     this.setOrganisationKey();
+    this.props.getUreAction();
   }
 
   getPresetOrganisation = () => {
@@ -536,6 +539,7 @@ class DashboardLayout extends React.Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
+    getUreAction,
     getUserOrganisationAction,
     onOrganisationChangeAction,
     clearHomeDashboardData,
