@@ -24,8 +24,8 @@ class LiveScoreAddDivision extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit : false,
             tableData: this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : null : null,
             loader: false,
-            recordGoalAttemptArray: [{ id: null, value: "As per competiion" }, { id: true, value: "Yes" }, { id: false, value: "No" }],
-            positionTrackingArray: [{ id: null, value: "As per competiion" }, { id: true, value: "Yes" }, { id: false, value: "No" }],
+            recordGoalAttemptArray: [{ id: null, value: "As per Competition" }, { id: true, value: "Yes" }, { id: false, value: "No" }],
+            positionTrackingArray: [{ id: null, value: "As per Competition" }, { id: true, value: "Yes" }, { id: false, value: "No" }],
         }
 
     }
