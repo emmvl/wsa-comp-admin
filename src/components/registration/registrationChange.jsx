@@ -361,7 +361,7 @@ class RegistrationChange extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-        console.log("this.props.regChangeState", this.props.regChangeState);
+       // console.log("this.props.regChangeState", this.props.regChangeState);
         const {regChangeCompetitions} = this.props.regChangeState;
         const {regChangeTypes} = this.props.commonReducerState;
         let competitionList;

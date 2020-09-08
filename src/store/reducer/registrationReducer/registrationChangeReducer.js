@@ -64,7 +64,6 @@ const initialState = {
         isShowButton: null
     },
     reviewSaveData: {
-        refundAmount: null,
         refundTypeRefId:null,
         declineReasonRefId:null,
         otherInfo:null,

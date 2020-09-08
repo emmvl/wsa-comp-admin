@@ -108,6 +108,7 @@ class RegistrationChangeReview extends Component {
             declineVisible: false,
             deRegisterId: null,
             organisationId: getOrganisationData().organisationUniqueKey,
+            organisationTypeRefId: getOrganisationData().organisationTypeRefId,
             loading: false
         };
         this_Obj = this;
@@ -214,7 +215,7 @@ class RegistrationChangeReview extends Component {
     }
 
     saveReview = (invoices) =>{
-        console.log("$$$$$$$$$$$$$$44")
+        
         let reviewSaveData = this.props.registrationChangeState.reviewSaveData;
         let regChangeReviewData = this.props.registrationChangeState.regChangeReviewData;
         if(reviewSaveData.refundTypeRefId!= null){
@@ -229,11 +230,13 @@ class RegistrationChangeReview extends Component {
         reviewSaveData["affOrgId"] = regChangeReviewData.affOrgId;
         reviewSaveData["compOrgId"] = regChangeReviewData.compOrgId;
         reviewSaveData["isDirect"] = regChangeReviewData.isDirect;
-        reviewSaveData["organisationTypeRefId"] = regChangeReviewData.organisationTypeRefId;
+        reviewSaveData["organisationTypeRefId"] = this.state.organisationTypeRefId;
         reviewSaveData["membershipMappingId"] = regChangeReviewData.membershipMappingId;
         reviewSaveData["competitionId"] = regChangeReviewData.competitionId;
         reviewSaveData["userId"] = regChangeReviewData.userId;
         reviewSaveData["invoices"] = invoices;
+
+        console.log("$$$$$$$$$$$$$$::" + JSON.stringify(reviewSaveData));
         
         this.props.saveRegistrationChangeReview(reviewSaveData);
         this.setState({loading: true});
@@ -351,7 +354,7 @@ class RegistrationChangeReview extends Component {
     contentView = (getFieldDecorator) => {
 
         const { regChangeReviewData, deRegistionOption, reviewSaveData } = this.props.registrationChangeState
-        console.log(reviewSaveData, 'reviewSaveData')
+        //console.log(reviewSaveData, 'reviewSaveData')
 
         return (
             <div className="content-view pt-4">
@@ -478,7 +481,7 @@ class RegistrationChangeReview extends Component {
                 <div>
                     <InputWithHead heading={AppConstants.approvals} />
                     {(regChangeReviewData.approvals || []).map((item, index) =>(
-                        <div>
+                        <div key={item.orgRefTypeId + "approval" + index}>
                             <div style={{display: 'flex'}}>
                                 <div>{item.payingOrgName} - {this.getOrgRefName(item.orgRefTypeId)}</div>
                                 {item.refundTypeRefId != null  ? 
