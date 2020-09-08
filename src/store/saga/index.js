@@ -11,6 +11,7 @@ import liveScoreDivisionSaga from "./liveScoreSaga/liveScoreDivisionSaga";
 import liveScoreManagerSaga from "./liveScoreSaga/liveScoreManagerSaga";
 import liveScoreMatchSaga from "./liveScoreSaga/liveScoreMatchSaga";
 import liveScorePlayerSaga from "./liveScoreSaga/liveScorePlayerSaga";
+import liveScoreDeletePlayerSaga from "./liveScoreSaga/liveScorePlayerSaga";
 import liveScoreTeamSaga from "./liveScoreSaga/liveScoreTeamSaga";
 import liveScoreUmpiresSaga from "./liveScoreSaga/liveScoreUmpiresSaga";
 import shopOrderStatusSaga from "./shopSaga/shopOrderStatusSaga";
@@ -249,6 +250,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_REMOVE_BANNER_LOAD, liveScoreRemoveBannerSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_BULK_DOUBLE_HEADER_LOAD, liveScoreDoubleHeaderSaga)
   yield takeEvery(ApiConstants.API_LIVESCORE_COMPETITION_INITATE, liveScoreCompetitionSaga)
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD, liveScoreDeletePlayerSaga)
   yield takeEvery(ApiConstants.API_LIVESCORE_COMPETION_DELETE_INITIATE, liveScoreCompetitionDelete)
   yield takeEvery(ApiConstants.LiveScore_SETTING_VIEW_INITITAE, liveScoreSettingSaga)
   yield takeEvery(ApiConstants.LiveScore_SETTING_DATA_POST_INITATE, liveScorePostSaga)
@@ -534,14 +536,14 @@ export default function* rootSaga() {
 
   //Save DeRegister
   yield takeEvery(ApiConstants.API_SAVE_DE_REGISTRATION_LOAD, regChangeSaga.saveDeRegisterSaga)
- 
+
   //Get Registration Change Dashboard
   yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD, regChangeSaga.getRegistrationChangeDashboardSaga)
- 
+
   //Get Registration Change Dashboard
- yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_LOAD, regChangeSaga.getRegistrationChangeReviewSaga)
- 
+  yield takeEvery(ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_LOAD, regChangeSaga.getRegistrationChangeReviewSaga)
+
   //Save Registration Change Dashboard
   yield takeEvery(ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_LOAD, regChangeSaga.saveRegistrationChangeReviewSaga)
- 
+
 }
