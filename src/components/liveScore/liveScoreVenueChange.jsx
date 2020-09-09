@@ -150,7 +150,7 @@ class LiveScoreVenueChange extends Component {
                     </Tooltip>
                 </div>
 
-                <div className="fluid-width">
+                <div className="fluid-width CornerView">
 
                     <div className="row">
 
@@ -197,7 +197,7 @@ class LiveScoreVenueChange extends Component {
 
                 {/* end time date and time picker row */}
 
-                <div className="fluid-width">
+                <div className="fluid-width CornerView">
                     <div className="row">
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead required={"required-field"} heading={AppConstants.endDate} />
@@ -273,7 +273,7 @@ class LiveScoreVenueChange extends Component {
 
                 {/* court drop down view */}
                 <InputWithHead required={"required-field pb-0"} heading={AppConstants.court} />
-                <Form.Item className="form-conr">
+                <Form.Item className="form-conr space">
                     {getFieldDecorator("courts", {
                         rules: [{ required: true, message: ValidationConstants.court }],
                     })(
@@ -386,7 +386,7 @@ class LiveScoreVenueChange extends Component {
     footerView = (isSubmitting) => {
         return (
             <div className="fluid-width">
-                <div className="footer-view">
+                <div className="footer-view bulk">
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
@@ -395,7 +395,7 @@ class LiveScoreVenueChange extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>

@@ -45,10 +45,7 @@ class InnerHorizontalMenu extends React.Component {
         checkOrganisationLevel().then((value) => (
             this.setState({ organisationLevel: value, orgState: true })
         ));
-        checkLivScoreCompIsParent().then((value) => (
-            this.setState({ liveScoreCompIsParent: value })
-        ))
-
+        this.setLivScoreCompIsParent()
         if (this.props) {
             if (this.props.compSelectedKey !== "18") {
                 localStorage.removeItem("draws_roundTime");
@@ -56,6 +53,12 @@ class InnerHorizontalMenu extends React.Component {
                 localStorage.removeItem("draws_venue");
             }
         }
+    }
+
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     async componentDidUpdate(nextProps) {
@@ -120,6 +123,7 @@ class InnerHorizontalMenu extends React.Component {
                     }
                 }
                 this.setState({ selectedComp: firstComp, compArray: compList, loading: false })
+                this.setLivScoreCompIsParent()
             }
         }
     }
@@ -560,7 +564,8 @@ class InnerHorizontalMenu extends React.Component {
                                 <Select
                                     style={{ width: 90 }}
                                     className="year-select reg-filter-select1 ml-5"
-                                    onChange={this.setYearId}
+                                    // onChange={this.setYearId}
+                                    onChange={(yearId) => this.setYearId(yearId)}
                                     value={JSON.parse(this.state.yearId)}
                                 >
                                     {yearList.length > 0 && yearList.map((item, yearIndex) => (

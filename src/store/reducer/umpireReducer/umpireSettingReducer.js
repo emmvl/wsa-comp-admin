@@ -1,10 +1,10 @@
 import ApiConstants from "../../../themes/apiConstants";
 
 const settingsChecked = {
-    coachChecked: false,
-    reserveChecked: false,
+    coachChecked: true,
+    reserveChecked: true,
 }
-
+var compOrgDivObj = [{ id: 1, name: 'OpenA', disabled: false }, { id: 2, name: 'OpenB', disabled: false }, { id: 3, name: 'OpenC', disabled: false }]
 const initialState = {
     onLoad: false,
     error: null,
@@ -12,7 +12,12 @@ const initialState = {
     status: 0,
     defaultChecked: settingsChecked,
     allocateViaPool: false,
-    umpireYourOwn: false,
+    manuallyAllocate: false,
+    compOrganiser: true,
+    affiliateOrg: false,
+    compOrgDiv: compOrgDivObj,
+    selectAllDiv: true,
+    compOrgDivisionSelected: [],
 };
 function umpireSettingState(state = initialState, action) {
 
@@ -22,17 +27,32 @@ function umpireSettingState(state = initialState, action) {
             let data = action.data.data
             let key = action.data.key
 
-            if (key === 'allocateViaPool' || key === 'umpireYourOwn') {
+            if (key === 'allocateViaPool' || key === 'manuallyAllocate') {
 
                 if (key === 'allocateViaPool') {
                     state[key] = data
-                    state['umpireYourOwn'] = false
+                    state['manuallyAllocate'] = false
 
-                } else if (key === 'umpireYourOwn') {
+                } else if (key === 'manuallyAllocate') {
                     state[key] = data
                     state['allocateViaPool'] = false
                 }
-            } else {
+            }
+            else if (key === 'compOrganiser') {
+                state[key] = data
+                state['affiliateOrg'] = false
+
+            } else if (key === 'affiliateOrg') {
+                state[key] = data
+                state['compOrganiser'] = false
+            }
+            else if (key === 'selectAllDiv') {
+                state[key] = data
+            }
+            else if (key === 'compOrgDivisionSelected') {
+                state[key] = data
+            }
+            else {
                 state.defaultChecked[key] = data
             }
             return {

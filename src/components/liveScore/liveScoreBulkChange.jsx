@@ -504,7 +504,7 @@ class LiveScoreBulkChange extends Component {
 
                 {/* court drop down view */}
                 <InputWithHead heading={AppConstants.court}
-                // required={"required-field pb-0"}
+                required={"pb-0"}
                 />
                 <div>
                     {/* <Form.Item>
@@ -686,7 +686,7 @@ class LiveScoreBulkChange extends Component {
 
                 {/* court drop down view */}
                 <InputWithHead heading={AppConstants.court}
-                // required={"required-field pb-0"}
+                required={"pb-0"}
                 />
                 <div>
                     {/* <Form.Item>
@@ -866,7 +866,7 @@ class LiveScoreBulkChange extends Component {
 
                 {/* court drop down view */}
                 <InputWithHead heading={AppConstants.court}
-                // required={"required-field pb-0"} 
+                required={"pb-0"} 
                 />
                 <div>
                     {/* <Form.Item>
@@ -1137,7 +1137,7 @@ class LiveScoreBulkChange extends Component {
 
                     {/* court drop down view */}
                     <InputWithHead heading={AppConstants.court}
-                    // required={"required-field pb-0"} 
+                    required={"pb-0"} 
                     />
                     <div>
                         {/* <Form.Item>
@@ -1390,7 +1390,7 @@ class LiveScoreBulkChange extends Component {
     footerView = (isSubmitting) => {
         return (
             <div className="fluid-width">
-                <div className="footer-view">
+                <div className="footer-view bulk">
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">

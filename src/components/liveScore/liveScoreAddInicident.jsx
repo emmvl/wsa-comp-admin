@@ -268,7 +268,7 @@ class LiveScoreAddIncident extends Component {
 
                     </div>
                     <div className="col-sm" >
-                        <Form.Item className="slct-in-add-manager-livescore">
+                        <Form.Item className="slct-in-add-manager-livescore livefirst">
                             <InputWithHead
                                 required={"required-field "}
                                 heading={AppConstants.team}
@@ -312,9 +312,9 @@ class LiveScoreAddIncident extends Component {
                 </div>
                 <div className="row" >
                     <div className="col-sm" >
-                        <Form.Item className="slct-in-add-manager-livescore">
+                        <Form.Item className="slct-in-add-manager-livescore ">
                             <InputWithHead
-                                required={"required-field "}
+                                required={"required-field pb-2"}
                                 heading={AppConstants.players}
                             />
                             {getFieldDecorator("incidentPlayerName", {
@@ -337,9 +337,9 @@ class LiveScoreAddIncident extends Component {
                         </Form.Item>
                     </div>
                     <div className="col-sm">
-                        <Form.Item className="slct-in-add-manager-livescore">
+                        <Form.Item className="slct-in-add-manager-livescore livefirst one">
                             <InputWithHead
-                                required={"required-field "}
+                                required={"required-field pb-2 "}
                                 heading={AppConstants.incident}
                             />
                             {getFieldDecorator("incidentName", {
@@ -498,7 +498,7 @@ class LiveScoreAddIncident extends Component {
                                 {/* <Form.Item > */}
                                 {/* <Button onClick={(editData.title == '' || editData.author == null) ? this.handleSubmit : this.onSaveButton} className="user-approval-button" */}
                                 <Button
-                                    className="publish-button save-draft-text"
+                                    className="publish-button save-draft-text mr-0"
                                     type="primary"
                                     htmlType="submit"
                                     disabled={isSubmitting}
