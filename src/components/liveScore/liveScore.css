@@ -434,6 +434,36 @@
 .CornerView .ant-input-lg{
     border-radius:4px!important;
 }
+.footer-view.bulk{
+    padding: 10px 12.1% 5%;
+}
+.space .ant-form-item-control{
+    line-height: 26px;
+
+}
+.ant-input-affix-wrapper .ant-input-prefix {
+    top: 52%;
+    left: 16px;
+}
+.livefirst .reg-form-multiple-select .ant-select-selection {
+    height: auto;
+    min-height: 54px;
+    margin-top: 4px;
+}
+.livefirst .ant-select-selection {
+    min-height: 55px;
+    margin-top: 8px;
+}
+.livefirst .ant-select-selection__placeholder{
+    line-height: 24px;
+
+}
+.livefirst.one .ant-select-selection__placeholder {
+    line-height: 20px;
+}
+.ant-calendar-picker-input.ant-input {
+    border-radius: 4px;
+}
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {
         display: flex;

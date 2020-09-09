@@ -1324,7 +1324,7 @@ const AppConstants = {
   backToUmpire: 'Back to all Umpires',
   assignMatch: 'Assign Match',
   generateRoster: 'Generate Roster',
-  howUmpiresAllocated: 'How will Umpires be Allocated?',
+  howUmpiresAllocated: 'How are Umpires Allocated',
   umpirePreferences: "Umpire Preferences:",
   noOfMatches: 'Number of Matches they can ',
   timeBetweenUmpireMatch: 'Time between Umpiring Matches',
@@ -1581,7 +1581,11 @@ const AppConstants = {
   apply: "Apply",
   noFixturesMessage: "No fixtures are available within the provided date range",
   noCompetitionYear: "There are no competitions for the selected year",
-  attendance: "Attendance"
+  attendance: "Attendance",
+  umpireAllocationSettings: 'Umpire Assignment Settings',
+  whoAssignsUmpires: 'Who Assigns Umpires',
+  competitionOrganiser: 'Competition Organiser',
+  affiliateOrganisations: 'Affiliate Organisations',
 };
 
 export default AppConstants;
