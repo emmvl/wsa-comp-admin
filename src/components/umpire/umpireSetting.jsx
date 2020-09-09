@@ -23,6 +23,7 @@ import Loader from '../../customComponents/loader';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { updateUmpireDataAction } from '../../store/actions/umpireAction/umpireSettingAction'
+import history from "util/history";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -67,7 +68,6 @@ class UmpireSetting extends Component {
 
     ///////view for breadcrumb
     headerView = () => {
-
         return (
             <div className="header-view">
                 <Header
@@ -80,7 +80,7 @@ class UmpireSetting extends Component {
                 >
                     <Breadcrumb separator=">">
                         <Breadcrumb.Item className="breadcrumb-add">
-                            {AppConstants.umpireAllocation}
+                            {AppConstants.umpireAllocationSettings}
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </Header>
@@ -136,71 +136,39 @@ class UmpireSetting extends Component {
         );
     };
 
-    //////footer view containing all the buttons like submit and cancel
-    footerView = () => {
-
-        return (
-            <div className="fluid-width">
-
-                <div className="footer-view">
-                    <div className="row">
-                        <div className="col-sm">
-                            <div className="reg-add-save-button">
-                                <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
-                            </div>
-                        </div>
-                        <div className="col-sm">
-                            <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
-                                    {/* {AppConstants.generateRoster} */}
-                                    {AppConstants.save}
-                                </Button>
-                                <NavLink to='/umpirePoolAllocation'>
-                                    <Button className="publish-button save-draft-text" type="primary" htmlType="submit" >
-                                        {AppConstants.next}
-                                    </Button>
-                                </NavLink>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-
-    };
-
     umpireAllocationRadioView() {
 
-        const { allocateViaPool, umpireYourOwn } = this.props.umpireSettingState
+        const { allocateViaPool, manuallyAllocate } = this.props.umpireSettingState
 
-        const umpireLinkTeamArr = [
-            { id: 3, name: 'Link to a team' },
-            { id: 4, name: 'No preference' },
+        const allocateViaPoolArr = [
+            { id: 1, name: 'Random Allocation' },
+            { id: 2, name: 'Link to same Team each Round' },
         ]
 
         return (
             <div>
                 <span className='text-heading-large pt-2 pb-2' >{AppConstants.howUmpiresAllocated}</span>
                 <div style={{ display: "flex", flexDirection: "column" }}>
+
+                    <Radio
+                        onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "manuallyAllocate" })}
+                        checked={manuallyAllocate}>
+                        {'Manually Allocate'}
+                    </Radio>
+
                     <Radio
                         onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "allocateViaPool" })}
                         checked={allocateViaPool}>
                         {'Allocate via pools'}
                     </Radio>
 
-                    <Radio
-                        // className={paidByCompOrg ? 'pt-5' : 'pt-4'}
-                        onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "umpireYourOwn" })}
-                        checked={umpireYourOwn}>
-                        {'Umpire your own'}
-                    </Radio>
 
-                    {umpireYourOwn &&
+
+                    {allocateViaPool &&
                         <Radio.Group
                             className="reg-competition-radio ml-5"
                         >
-                            {umpireLinkTeamArr.length > 0 && umpireLinkTeamArr.map((item, index) => {
+                            {allocateViaPoolArr.length > 0 && allocateViaPoolArr.map((item, index) => {
                                 return (
                                     <Radio key={`name` + index} value={item.id}>{item.name}</Radio>
                                 )
@@ -217,42 +185,11 @@ class UmpireSetting extends Component {
 
     ////////form content view
     contentView = () => {
-        let defaultChecked = this.props.umpireSettingState.defaultChecked
+        const { compOrganiser, defaultChecked } = this.props.umpireSettingState
         return (
-            <div className="content-view pt-4 mt-5">
+            <div className="pt-2 mt-1">
 
                 {this.umpireAllocationRadioView()}
-
-                <span className='text-heading-large pt-5 pb-4' >{AppConstants.umpirePreferences}</span>
-
-
-                <div className="row" >
-                    <div className="col-sm" >
-                        <InputWithHead required={"pt-0"} heading={AppConstants.noOfMatches + 'Umpire/day'} />
-                        <Select
-                            placeholder={'Select'}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        >
-
-                            <Option value={"11111"}>{'1'}</Option>
-                            <Option value={"22222"}>{'2'}</Option>
-                            <Option value={"33333"}>{'3'}</Option>
-                        </Select>
-                    </div>
-                    <div className="col-sm" >
-                        <InputWithHead required={"pt-0"} heading={AppConstants.timeBetweenUmpireMatch} />
-                        <TimePicker
-                            className="comp-venue-time-timepicker"
-                            style={{ width: "100%" }}
-                            defaultOpenValue={moment("00:00", "HH:mm")}
-                            defaultValue={moment()}
-                            format={"HH:mm"}
-
-                        />
-
-                    </div>
-                </div>
-
 
                 <span className='text-heading-large pt-5' >{AppConstants.umpireReservePref}</span>
 
@@ -264,35 +201,7 @@ class UmpireSetting extends Component {
                 >
                     {AppConstants.activeUmpireReserves}
                 </Checkbox>
-                {defaultChecked.reserveChecked == true &&
-                    <div className='row'>
 
-                        <div className="col-sm" >
-                            <InputWithHead required={"pt-5"} heading={AppConstants.noOfMatches + 'Reserve/day'} />
-                            <Select
-                                placeholder={'Select'}
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            >
-                                <Option value={"11"}>{'1'}</Option>
-                                <Option value={"22"}>{'2'}</Option>
-                                <Option value={"33"}>{'3'}</Option>
-                            </Select>
-                        </div>
-
-                        <div className="col-sm" >
-                            <InputWithHead required={"pt-5"} heading={AppConstants.reserveAllocationTiming} />
-                            <Select
-                                placeholder={'Select'}
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            >
-                                <Option value={"before"}>{'Before'}</Option>
-                                <Option value={"inBetween"}>{'In-between'}</Option>
-                                <Option value={"after"}>{'After'}</Option>
-                            </Select>
-
-                        </div>
-                    </div>
-                }
 
                 <span className='text-heading-large pt-5' >{AppConstants.umpireCoach}</span>
                 <Checkbox
@@ -302,45 +211,105 @@ class UmpireSetting extends Component {
                 >
                     {AppConstants.activeUmpireCoach}
                 </Checkbox>
-                {defaultChecked.coachChecked == true &&
-                    <div className='row'>
-
-                        <div className="col-sm" >
-                            <InputWithHead required={"pt-5"} heading={AppConstants.noOfMatches + 'Coach/day'} />
-                            <Select
-                                placeholder={'Select'}
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            >
-                            </Select>
-                        </div>
-
-                        <div className="col-sm" >
-                            <InputWithHead required={"pt-5"} heading={'Number of Matches an Umpire coach can perform in a row'} />
-                            <Select
-                                placeholder={'Select'}
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            >
-                                <Option value={"111"}>{'1'}</Option>
-                                <Option value={"222"}>{'2'}</Option>
-                                <Option value={"333"}>{'3'}</Option>
-                            </Select>
-                        </div>
-
-                    </div>
-                }
-
 
             </div >
         );
     };
 
 
+    ////////top or say first view
+    topView = () => {
+        const { compOrganiser, affiliateOrg, compOrgDivisionSelected, selectAllDiv, compOrgDiv } = this.props.umpireSettingState
+        return (
+            <div className="content-view pt-4 mt-5">
+                <span className='text-heading-large pt-2 pb-2' >{AppConstants.whoAssignsUmpires}</span>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <Radio
+                        onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "compOrganiser" })}
+                        checked={compOrganiser}>
+                        {AppConstants.competitionOrganiser}
+                    </Radio>
+                    {compOrganiser && <div className="inside-container-view mb-4 mt-4" >
+                        <Checkbox
+                            onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: 'selectAllDiv' })}
+                            checked={selectAllDiv}
 
+                        >
+                            {AppConstants.allDivisions}
+                        </Checkbox>
+                        {
+                            selectAllDiv === false &&
+                            <Select
+                                mode='multiple'
+                                placeholder={'Select'}
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                                onChange={(divisionId) => this.props.updateUmpireDataAction({ data: divisionId, key: 'compOrgDivisionSelected' })}
+                                value={compOrgDivisionSelected}
+                            >
 
+                                {compOrgDiv.map((item) => (
+                                    <Option key={"compOrgDiv" + item.id} disabled={item.disabled} value={item.id}>{item.name}</Option>
+                                ))}
+
+                            </Select>
+                        }
+                        {this.contentView()}
+                    </div>}
+                    <Radio
+                        className={"pt-1"}
+                        onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "affiliateOrg" })}
+                        checked={affiliateOrg}>
+                        {AppConstants.affiliateOrganisations}
+                    </Radio>
+                </div>
+            </div >
+        );
+    };
+
+    checkScreenNavigation = (key) => {
+        const { allocateViaPool, manuallyAllocate, affiliateOrg } = this.props.umpireSettingState
+        if (affiliateOrg === true && key === "next") {
+            history.push("/umpirePayment");
+        }
+        else if (allocateViaPool === true && key === "next") {
+            history.push("/umpirePoolAllocation");
+        }
+        else if (manuallyAllocate === true) {
+            history.push("/umpireDashboard");
+        }
+    }
+    //////footer view containing all the buttons like submit and cancel
+    footerView = () => {
+        return (
+            <div className="fluid-width">
+                <div className="footer-view">
+                    <div className="row">
+                        <div className="col-sm">
+                            {/* <div className="reg-add-save-button">
+                                <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                            </div> */}
+                        </div>
+                        <div className="col-sm">
+                            <div className="comp-buttons-view">
+                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit"
+                                    onClick={() => this.checkScreenNavigation("save")} >
+                                    {AppConstants.save}
+                                </Button>
+                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit"
+                                    onClick={() => this.checkScreenNavigation("next")}>
+                                    {AppConstants.next}
+                                </Button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { allocateViaPool } = this.props.umpireSettingState
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
@@ -353,11 +322,9 @@ class UmpireSetting extends Component {
                         {this.headerView()}
                         {this.dropdownView()}
                         <Content>
-
-                            <div className="formView">{this.contentView()}</div>
-
+                            <div className="formView">{this.topView()}</div>
                         </Content>
-                        <Footer>{allocateViaPool && this.footerView()}</Footer>
+                        <Footer>{this.footerView()}</Footer>
                     </Form>
                 </Layout>
             </div>

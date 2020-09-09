@@ -791,6 +791,11 @@ let LiveScoreAxiosApi = {
         const url = `/division/id/${divisionId}`;
         return Method.dataDelete(url, token)
     },
+    // Delete Player
+    liveScoreDeletePlayer(playerId) {
+        const url = `/players/id/${playerId}`
+        return Method.dataDelete(url, token)
+    },
 
     /// get Game Time statistics api
     gameTimeStatistics(competitionId, aggregate, offset, searchText, sortBy, sortOrder) {

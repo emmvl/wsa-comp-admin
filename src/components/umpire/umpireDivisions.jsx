@@ -11,6 +11,7 @@ import { umpireCompetitionListAction } from "../../store/actions/umpireAction/um
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
 import { NavLink } from "react-router-dom";
+import history from "util/history";
 
 const { Header, Footer, } = Layout
 const { Option } = Select
@@ -331,7 +332,7 @@ class UmpireDivisions extends Component {
                                     {/* {AppConstants.generateRoster} */}
                                     {AppConstants.save}
                                 </Button>
-                                <Button className="open-reg-button" type="primary" htmlType="submit" >
+                                <Button onClick={() => history.push("/umpireDashboard")} className="open-reg-button" type="primary" htmlType="submit" >
                                     {AppConstants.createRoster}
                                 </Button>
                             </div>
