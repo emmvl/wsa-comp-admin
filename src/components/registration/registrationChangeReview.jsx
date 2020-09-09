@@ -39,6 +39,11 @@ const refundFullAmountColumns = [
         title: 'Paid Amount',
         dataIndex: 'amount',
         key: 'amount',
+        render: (amount,record, index) => {
+            return(
+                <div>${amount}</div>
+            );
+        }
     },
     {
         title: 'Fee Type',
@@ -68,6 +73,11 @@ const refundPartialAmountColumns = [
         title: 'Paid Amount',
         dataIndex: 'amount',
         key: 'amount',
+        render: (amount,record, index) => {
+            return(
+                <div>${amount}</div>
+            );
+        }
     },
     {
         title: 'Fee Type',
@@ -91,10 +101,12 @@ const refundPartialAmountColumns = [
         key: 'Refund Amount',
         render: (amount,record, index) => {
             return(
-                <Input
-                    style={{height:"25px",width:"100px",fontSize: "10px"}} type="number"
-                    onChange={(e) => this_Obj.updateInvoices(e.target.value,index)}
-                />
+                <div>
+                    <Input
+                        style={{height:"25px",width:"100px",fontSize: "10px"}} type="number"
+                        onChange={(e) => this_Obj.updateInvoices(e.target.value,index)}
+                    />
+                </div>
             );
         }
     }
