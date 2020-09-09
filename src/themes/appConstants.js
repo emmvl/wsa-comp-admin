@@ -576,7 +576,7 @@ const AppConstants = {
   selectTeam: 'Select Team',
   emailAdd: 'Email Address',
   enterEmail: 'Enter Email',
-  contactNO: 'Contact No',
+  contactNO: 'Contact no',
   enterContactNo: 'Enter Valid Contact Number',
   scorers: 'Scorers',
 
