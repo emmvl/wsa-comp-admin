@@ -78,6 +78,22 @@ function LiveScorePlayerState(state = initialState, action) {
                 playerData: action.result,
             };
 
+
+        case ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD:
+
+            return {
+                ...state,
+                onLoad: true,
+            }
+        case ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS:
+            return { ...state, onLoad: false };
+
+        case ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_FAIL:
+            return {
+                ...state,
+                onLoad: true,
+                importResult: null,
+            };
         case ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD:
             return {
                 ...state,

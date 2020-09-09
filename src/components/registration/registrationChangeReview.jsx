@@ -8,7 +8,8 @@ import {
     Breadcrumb,
     Form,
     Radio,
-    Modal
+    Modal,
+    Table
 } from "antd";
 import "./product.scss";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -27,10 +28,77 @@ import moment, { utc } from "moment";
 import { getOrganisationData } from "util/sessionStorage";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader';
+import { render } from "react-dom";
 
 const { Header, Footer, Content } = Layout;
 
 let this_Obj = null;
+
+const refundFullAmountColumns = [
+    {
+        title: 'Paid Amount',
+        dataIndex: 'amount',
+        key: 'amount',
+    },
+    {
+        title: 'Fee Type',
+        dataIndex: 'feeType',
+        key: 'feeType'
+    },
+    {
+        title: 'Date',
+        dataIndex: 'invoiceDate',
+        key: 'invoiceDate',
+        render: (invoiceDate,record, index) => {
+            let formattedDate = moment(invoiceDate).format('DD/MM/YYYY');
+            return(
+                <div>{formattedDate}</div>
+            );
+        }
+    },
+    {
+        title: 'Refund Amount',
+        dataIndex: 'amount',
+        key: 'Refund Amount'
+    }
+];
+
+const refundPartialAmountColumns = [
+    {
+        title: 'Paid Amount',
+        dataIndex: 'amount',
+        key: 'amount',
+    },
+    {
+        title: 'Fee Type',
+        dataIndex: 'feeType',
+        key: 'feeType'
+    },
+    {
+        title: 'Date',
+        dataIndex: 'invoiceDate',
+        key: 'invoiceDate',
+        render: (invoiceDate,record, index) => {
+            let formattedDate = moment(invoiceDate).format('DD/MM/YYYY');
+            return(
+                <div>{formattedDate}</div>
+            );
+        }
+    },
+    {
+        title: 'Refund Amount',
+        dataIndex: 'amount',
+        key: 'Refund Amount',
+        render: (amount,record, index) => {
+            return(
+                <Input
+                    style={{height:"25px",width:"100px",fontSize: "10px"}} type="number"
+                    onChange={(e) => this_Obj.updateInvoices(e.target.value,index)}
+                />
+            );
+        }
+    }
+]
 
 class RegistrationChangeReview extends Component {
     constructor(props) {
@@ -40,6 +108,7 @@ class RegistrationChangeReview extends Component {
             declineVisible: false,
             deRegisterId: null,
             organisationId: getOrganisationData().organisationUniqueKey,
+            organisationTypeRefId: getOrganisationData().organisationTypeRefId,
             loading: false
         };
         this_Obj = this;
@@ -73,9 +142,9 @@ class RegistrationChangeReview extends Component {
             this.setState({acceptVisible: true });
         }
         else if(key == "ok"){
-            console.log("^^^^^^^^^^^")
             this.setState({acceptVisible: false });
-            this.saveReview();
+            const {reviewSaveData} = this.props.registrationChangeState;
+            this.saveReview(reviewSaveData.invoices);
         }
         else {
             this.setState({acceptVisible: false });
@@ -89,6 +158,12 @@ class RegistrationChangeReview extends Component {
         }
         else if(key == "ok"){
             this.setState({declineVisible: false });
+            const {regChangeReviewData} = this.props.registrationChangeState;
+            let invoicesTemp = regChangeReviewData.invoices.map(e => ({ ... e }));
+            for(let invoice of invoicesTemp){
+                invoice.refundAmount = invoice.amount;
+            }
+            this.saveReview(invoicesTemp);
         }
         else {
             this.setState({declineVisible: false });
@@ -102,6 +177,24 @@ class RegistrationChangeReview extends Component {
 
     updateRegistrationReview = (value, key) =>{
         this.props.updateRegistrationReviewAction(value,key);
+
+        //For update invoices list 
+        if(key == "refundTypeRefId"){
+            const {regChangeReviewData} = this.props.registrationChangeState;
+            let invoicesTemp = regChangeReviewData.invoices.map(e => ({ ... e }));
+            if(value == 1){
+                for(let invoice of invoicesTemp){
+                    invoice.refundAmount = invoice.amount;
+                }
+            }
+            this.props.updateRegistrationReviewAction(invoicesTemp,"invoices");
+        }
+    }
+
+    updateInvoices = (refundAmount,index) => {
+        const {reviewSaveData} = this.props.registrationChangeState;
+        reviewSaveData.invoices[index].refundAmount = refundAmount;
+        this.updateRegistrationReview(reviewSaveData.invoices,"invoices")
     }
 
     getApprovalsIconColor = (item) => {
@@ -121,8 +214,8 @@ class RegistrationChangeReview extends Component {
         return orgTypeRefName;
     }
 
-    saveReview = () =>{
-        console.log("$$$$$$$$$$$$$$44")
+    saveReview = (invoices) =>{
+        
         let reviewSaveData = this.props.registrationChangeState.reviewSaveData;
         let regChangeReviewData = this.props.registrationChangeState.regChangeReviewData;
         if(reviewSaveData.refundTypeRefId!= null){
@@ -137,10 +230,13 @@ class RegistrationChangeReview extends Component {
         reviewSaveData["affOrgId"] = regChangeReviewData.affOrgId;
         reviewSaveData["compOrgId"] = regChangeReviewData.compOrgId;
         reviewSaveData["isDirect"] = regChangeReviewData.isDirect;
-        reviewSaveData["organisationTypeRefId"] = regChangeReviewData.organisationTypeRefId;
+        reviewSaveData["organisationTypeRefId"] = this.state.organisationTypeRefId;
         reviewSaveData["membershipMappingId"] = regChangeReviewData.membershipMappingId;
         reviewSaveData["competitionId"] = regChangeReviewData.competitionId;
         reviewSaveData["userId"] = regChangeReviewData.userId;
+        reviewSaveData["invoices"] = invoices;
+
+        console.log("$$$$$$$$$$$$$$::" + JSON.stringify(reviewSaveData));
         
         this.props.saveRegistrationChangeReview(reviewSaveData);
         this.setState({loading: true});
@@ -149,7 +245,7 @@ class RegistrationChangeReview extends Component {
 
     ////modal view
     acceptModalView(getFieldDecorator) {
-        const {reviewSaveData} = this.props.registrationChangeState;
+        const {reviewSaveData,regChangeReviewData} = this.props.registrationChangeState;
         return (
             <Modal
                 title={"Refund"}
@@ -163,14 +259,30 @@ class RegistrationChangeReview extends Component {
                     value={reviewSaveData.refundTypeRefId}
                     onChange={(e) => this.updateRegistrationReview(e.target.value,"refundTypeRefId")}>
                     <Radio  value={1}>{'Refund full amount'}</Radio>
+                    {reviewSaveData.refundTypeRefId == 1 ? 
+                        <Table
+                            className="refund-table"
+                            columns={refundFullAmountColumns}
+                            dataSource={regChangeReviewData.invoices}
+                            pagination={false}
+                        />
+                    : null } 
                     <Radio  value={2}>{'Refund partial payment'}</Radio>
                     {reviewSaveData.refundTypeRefId == 2 ? 
+                        <Table
+                            className="refund-table"
+                            columns={refundPartialAmountColumns}
+                            dataSource={regChangeReviewData.invoices}
+                            pagination={false}
+                        />
+                    : null } 
+                    {/* {reviewSaveData.refundTypeRefId == 2 ? 
                     <InputWithHead
                             placeholder={AppConstants.refundAmount}
                             value={reviewSaveData.refundAmount}
                             onChange={(e) => this.updateRegistrationReview(e.target.value,"refundAmount")}
                         />
-                        : null }
+                        : null } */}
                 </Radio.Group>
             </Modal>
         )
@@ -242,7 +354,7 @@ class RegistrationChangeReview extends Component {
     contentView = (getFieldDecorator) => {
 
         const { regChangeReviewData, deRegistionOption, reviewSaveData } = this.props.registrationChangeState
-        console.log(reviewSaveData, 'reviewSaveData')
+        //console.log(reviewSaveData, 'reviewSaveData')
 
         return (
             <div className="content-view pt-4">
@@ -369,7 +481,7 @@ class RegistrationChangeReview extends Component {
                 <div>
                     <InputWithHead heading={AppConstants.approvals} />
                     {(regChangeReviewData.approvals || []).map((item, index) =>(
-                        <div>
+                        <div key={item.orgRefTypeId + "approval" + index}>
                             <div style={{display: 'flex'}}>
                                 <div>{item.payingOrgName} - {this.getOrgRefName(item.orgRefTypeId)}</div>
                                 {item.refundTypeRefId != null  ? 

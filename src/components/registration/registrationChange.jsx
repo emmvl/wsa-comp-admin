@@ -139,7 +139,7 @@ const columns = [
                                     }
                                 </div>
                                 : 
-                                null
+                                'P'
                             }
                         </div>
                     )
@@ -155,6 +155,7 @@ const columns = [
                     return(
                         <div>
                             {affiliateApproved ?
+                                affiliateApproved != -1 ? 
                                 <div style={{display: "flex",justifyContent:"space-between"}}>
                                     <div>${affiliateApproved}</div>
                                     {record.affiliateApprovedStatus != 3 ? 
@@ -162,8 +163,8 @@ const columns = [
                                         :
                                         <div style={{color: "red"}}>&#x2718;</div>
                                     }
-                                </div>
-                            : null} 
+                                </div> : 'N/A'
+                            : 'P'} 
                         </div>
                     )
                 }
@@ -186,7 +187,7 @@ const columns = [
                                         <div style={{color: "red"}}>&#x2718;</div>
                                     }
                                 </div>
-                            : null}
+                            : 'P'}
                         </div>
                     )
                 }
@@ -360,7 +361,7 @@ class RegistrationChange extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-        console.log("this.props.regChangeState", this.props.regChangeState);
+       // console.log("this.props.regChangeState", this.props.regChangeState);
         const {regChangeCompetitions} = this.props.regChangeState;
         const {regChangeTypes} = this.props.commonReducerState;
         let competitionList;

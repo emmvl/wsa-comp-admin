@@ -128,31 +128,30 @@ class InnerHorizontalMenu extends React.Component {
         }
     }
 
-
     setCompetitionID = (compId) => {
-        this.setState({ selectedComp: compId })
-        let compObj = null
+        this.setState({ selectedComp: compId });
+        let compObj = null;
         for (let i in this.state.compArray) {
             if (compId == this.state.compArray[i].id) {
-                compObj = this.state.compArray[i]
+                compObj = this.state.compArray[i];
                 break;
             }
         }
-        localStorage.setItem("LiveScoreCompetition", JSON.stringify(compObj))
-        history.push("/liveScoreDashboard")
-    }
 
-    setYearId(yearId) {
+        localStorage.setItem("LiveScoreCompetition", JSON.stringify(compObj));
+        history.push("/liveScoreDashboard");
+    };
 
-        localStorage.setItem("yearValue", "true")
-        this.setState({ yearId, loading: true })
+    setYearId = (yearId) => {
+        localStorage.setItem("yearValue", "true");
+        this.setState({ yearId, loading: true });
 
-        localStorage.setItem("yearId", yearId)
-        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
-        this.props.innerHorizontalCompetitionListAction(organisationId, yearId)
+        localStorage.setItem("yearId", yearId);
+        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        this.props.innerHorizontalCompetitionListAction(organisationId, yearId);
 
-        history.push("/liveScoreDashboard")
-    }
+        history.push("/liveScoreDashboard");
+    };
 
     render() {
         let orgLevel = this.state.organisationLevel;
@@ -578,7 +577,7 @@ class InnerHorizontalMenu extends React.Component {
                                 <Select
                                     style={{ width: "fit-content", minWidth: 190, maxWidth: 220 }}
                                     className="year-select reg-filter-select1 innerSelect-value"
-                                    onChange={(comp) => this.setCompetitionID(comp)}
+                                    onChange={this.setCompetitionID}
                                     value={this.state.selectedComp}
                                 >
                                     {compList.map((item, index) => (
