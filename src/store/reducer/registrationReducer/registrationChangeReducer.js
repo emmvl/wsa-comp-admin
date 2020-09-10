@@ -33,6 +33,7 @@ const initialState = {
     ],
     reloadFormData:0,
     saveData : {
+        isAdmin:1,
         regChangeTypeRefId: 0,         // DeRegister/ Transfer
         deRegistrationOptionId: 0,   /// Yes/No
         reasonTypeRefId: 0,      
