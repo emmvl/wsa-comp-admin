@@ -1,6 +1,5 @@
 import ApiConstants from '../../../themes/apiConstants'
-import { actionChannel } from '@redux-saga/core/effects'
-import { isArrayNotEmpty, captializedString } from "../../../util/helpers";
+
 const initialState = {
     loader: false,
     form: {
@@ -59,7 +58,12 @@ const initialState = {
     associationOrg: [],
     clubOrg: [],
     editLoader: false,
-    yearRefId: null
+    yearRefId: null,
+    affiliateArray: [],
+    anyOrgArray: [],
+    invitedAnyAssoc: [],
+    invitedAnyClub: [],
+    competitionInvitees: []
 }
 
 
@@ -100,6 +104,90 @@ function recordingTimeMins(num) {
     return m
 }
 
+////remove Selected Element From Array
+function removeElementFromArray(array, data, keys) {
+    let findData = (array) => array === data;
+    let index = array.findIndex(findData)
+    array.splice(index, 1)
+
+    return array;
+}
+
+function getAffiliateValue(compInviteesArr, regInviteArr) {
+    let affiliateSelectedValue = null
+    for (let i in compInviteesArr) {
+        for (let j in regInviteArr) {
+            for (let k in regInviteArr[j].subReferences) {
+                if (compInviteesArr[i].inviteesRefId === regInviteArr[0].subReferences[k].id) {
+                    affiliateSelectedValue = compInviteesArr[i].inviteesRefId
+                }
+            }
+        }
+    }
+    return affiliateSelectedValue
+
+}
+
+function getAnyOrgValue(compInviteesArr, regInviteArr) {
+    let anyOrgSelectedValue = []
+    for (let i in compInviteesArr) {
+        for (let j in regInviteArr) {
+            for (let k in regInviteArr[j].subReferences) {
+                if (compInviteesArr[i].inviteesRefId == regInviteArr[1].subReferences[k].id) {
+                    anyOrgSelectedValue.push(compInviteesArr[i])
+                    break;
+                }
+            }
+            break;
+        }
+
+    }
+    return anyOrgSelectedValue
+}
+
+function getanyOrgArray(data) {
+    let arr = []
+    for (let i in data) {
+        if (data[i].inviteesRefId)
+            arr.push(data[i].inviteesRefId)
+    }
+    let filteredArr = arr.filter(function (item, index) {
+        if (arr.indexOf(item) == index)
+            return item;
+    });
+    return filteredArr
+}
+
+function getCheckBoxSelection(compInvitess) {
+    let associationLeague = false
+    let clubLeage = false
+    let assocLeage = null
+    for (let i in compInvitess) {
+        if (compInvitess[i].inviteesRefId === 7) {
+            associationLeague = true
+        }
+        if (compInvitess[i].inviteesRefId === 8) {
+            clubLeage = true
+            break;
+        }
+    }
+    return { assocLeage: associationLeague, club: clubLeage }
+}
+
+function getSelectedOrganization(data, compInviteesArr) {
+    let associationLeageOrg = []
+    let clubLeageOrg = []
+    for (let i in compInviteesArr) {
+        if (compInviteesArr[i].inviteesRefId === 7) {
+            associationLeageOrg.push(compInviteesArr[i].invitedOrganisationId)
+        }
+        if (compInviteesArr[i].inviteesRefId === 8) {
+            clubLeageOrg.push(compInviteesArr[i].invitedOrganisationId)
+        }
+    }
+    return { associationLeageOrg: associationLeageOrg, clubLeageOrg: clubLeageOrg }
+}
+
 export default function liveScoreSettingsViewReducer(state = initialState, { type, payload, }) {
 
     switch (type) {
@@ -109,7 +197,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 editLoader: true
             }
         case ApiConstants.LiveScore_SETTING_VIEW_SUCCESS:
-            console.log(payload, 'payload')
             const arraymaped = [{ ...payload }]
             const record1 = arraymaped.reduce((memo, data) => {
                 if (data.recordUmpire === 1) {
@@ -127,9 +214,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 return memo
             }, [])
             const record2 = arraymaped.reduce((memo, data) => {
-                // if (data.recordGoalAttempts === true) {
-                //     memo.push('recordGoalAttempts')
-                // }
                 if (data.centrePassEnabled) {
                     memo.push('centrePassEnabled')
                 }
@@ -149,6 +233,114 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             if (payload.yearRefId) {
                 state.yearRefId = payload.yearRefId
             }
+
+            let compInvitees = payload.competitionInvitees
+            state.invitedTo = []
+            state.anyOrgArray = []
+
+            if (compInvitees.length > 0) {
+                if (compInvitees.length === 1) {
+                    if (compInvitees[0].inviteesRefId === 2 || compInvitees[0].inviteesRefId === 3 || compInvitees[0].inviteesRefId === 5 || compInvitees[0].inviteesRefId === 6 || compInvitees[0].inviteesRefId === 7 || compInvitees[0].inviteesRefId === 8) {
+                        if (compInvitees[0].inviteesRefId === 5 || compInvitees[0].inviteesRefId === 6) {
+                            state.otherSelected = compInvitees[0].inviteesRefId
+                            state.invitedTo = [compInvitees[0].inviteesRefId]
+                        } else {
+                            state.invitedTo = [compInvitees[0].inviteesRefId]
+                            state.anyOrgArray = [compInvitees[0].inviteesRefId]
+
+                            let anyOrgValue = getAnyOrgValue(payload.competitionInvitees, state.registrationInvitees)
+                            let anyOrgArray = getanyOrgArray(anyOrgValue)
+                            let anyOrgCheckBoxSelection = getCheckBoxSelection(payload.competitionInvitees)
+                            state.associationChecked = anyOrgCheckBoxSelection.assocLeage
+                            state.clubChecked = anyOrgCheckBoxSelection.club
+                            let selectedOrganization = getSelectedOrganization(anyOrgArray, payload.competitionInvitees)
+                            state.associationLeague = selectedOrganization.associationLeageOrg
+                            state.clubSchool = selectedOrganization.clubLeageOrg
+                            let assocArray = []
+
+                            for (let i in selectedOrganization.associationLeageOrg) {
+                                let associationAffiliteObj = {
+                                    organisationId: selectedOrganization.associationLeageOrg[i]
+                                }
+                                assocArray.push(associationAffiliteObj)
+                            }
+
+                            state.invitedAnyAssoc = assocArray
+
+                            let clubArray = []
+
+                            for (let i in selectedOrganization.clubLeageOrg) {
+                                let clubAffiliteObj = {
+                                    organisationId: selectedOrganization.clubLeageOrg[i]
+                                }
+                                clubArray.push(clubAffiliteObj)
+                            }
+                            state.invitedAnyClub = clubArray
+                        }
+                    }
+
+                } else {
+                    let affiliateValue = getAffiliateValue(payload.competitionInvitees, state.registrationInvitees)
+                    state.affiliateSelected = affiliateValue
+
+                    if (affiliateValue) {
+                        if (affiliateValue == 2 || affiliateValue == 3) {
+                            state.affiliateArray = [affiliateValue]
+                            state.invitedTo = [affiliateValue]
+                        }
+                        state.invitedTo = [affiliateValue]
+                    }
+                    let anyOrgValue = getAnyOrgValue(payload.competitionInvitees, state.registrationInvitees)
+
+                    let anyOrgSelectedArr = getanyOrgArray(anyOrgValue, anyOrgValue)
+
+                    for (let i in anyOrgSelectedArr) {
+                        state.invitedTo.push(anyOrgSelectedArr[i])
+                        state.anyOrgArray.push(anyOrgSelectedArr[i])
+                    }
+                    let anyOrgCheckBoxSelection = getCheckBoxSelection(payload.competitionInvitees)
+                    state.associationChecked = anyOrgCheckBoxSelection.assocLeage
+                    state.clubChecked = anyOrgCheckBoxSelection.club
+                    let selectedOrganization = getSelectedOrganization(anyOrgSelectedArr, payload.competitionInvitees)
+                    state.associationLeague = selectedOrganization.associationLeageOrg
+                    state.clubSchool = selectedOrganization.clubLeageOrg
+                    let assocArray = []
+
+                    for (let i in selectedOrganization.associationLeageOrg) {
+                        let associationAffiliteObj = {
+                            organisationId: selectedOrganization.associationLeageOrg[i]
+                        }
+                        assocArray.push(associationAffiliteObj)
+                    }
+
+                    state.invitedAnyAssoc = assocArray
+
+                    let clubArray = []
+
+                    for (let i in selectedOrganization.clubLeageOrg) {
+                        let clubAffiliteObj = {
+                            organisationId: selectedOrganization.clubLeageOrg[i]
+                        }
+                        clubArray.push(clubAffiliteObj)
+                    }
+                    state.invitedAnyClub = clubArray
+                }
+
+            } else {
+                state.invitedTo = []
+                state.associationChecked = false
+                state.clubChecked = false
+                state.associationLeague = []
+                state.clubSchool = []
+                state.affiliateSelected = null
+                state.anyOrgSelected = null
+                state.otherSelected = null
+                state.invitedAnyAssoc = []
+                state.invitedAnyClub = []
+            }
+
+
+
 
             return {
                 ...state,
@@ -174,8 +366,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     lineupSelectionDays: recordingTimeDays(payload.lineupSelectionTime),
                     lineupSelectionHours: recordingTimeHours(payload.lineupSelectionTime),
                     lineupSelectionMins: recordingTimeMins(payload.lineupSelectionTime),
-
-
                 },
                 data: payload,
                 buzzerEnabled: payload.buzzerEnabled,
@@ -186,25 +376,19 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 gamesBorrowedThreshold: payload.gamesBorrowedThreshold,
                 linkedCompetitionId: payload.linkedCompetitionId,
                 inputNumberValue: payload.gamesBorrowedThreshold,
-
-
             }
         case ApiConstants.LiveScore_SETTING_VIEW_ERROR:
             return {
                 ...state,
                 loader: false
-                // error: payload
             }
 
         case ApiConstants.LiveScore_SETTING_VIEW_FAIL:
             return {
                 ...state,
                 loader: false
-                // error: payload
             }
         case ApiConstants.LiveScore_SETTING_CHANGE_FORM:
-
-
             const keys = payload.key
             const Data = payload.data
 
@@ -236,24 +420,22 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 state.recordUmpire = Data
             } else if (keys == 'affiliateSelected' || keys == 'anyOrgSelected' || keys == 'otherSelected' || keys == 'affiliateNonSelected' || keys == 'anyOrgNonSelected') {
                 state.invitedOrganisation = []
-                state.associationLeague = []
-                state.clubSchool = []
-
+                // state.associationLeague = []
+                // state.clubSchool = []
                 if (keys == 'affiliateSelected') {
                     state.affiliateSelected = Data
                     state.otherSelected = null
                     state.affiliateNonSelected = null
-                    // state.anyOrgNonSelected = null
-                    state.invitedTo.splice(0, 1, Data)
+                    state.affiliateArray.splice(0, 1, Data)
+                    state.invitedTo = [...state.affiliateArray, ...state.anyOrgArray]
                 }
                 if (keys == 'anyOrgSelected') {
                     state.anyOrgSelected = Data
                     state.otherSelected = null
-                    // state.affiliateNonSelected = null
                     state.anyOrgNonSelected = null
-                    state.invitedTo.splice(1, 1, Data)
+                    state.affiliateArray.splice(0, 1, Data)
+                    state.invitedTo = [...state.affiliateArray, ...state.anyOrgArray]
                 }
-
                 if (keys == 'otherSelected') {
                     state.otherSelected = Data
                     state.affiliateSelected = null
@@ -264,32 +446,36 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.invitedTo.push(Data)
                     state.associationChecked = false
                     state.clubChecked = false
+                    state.invitedAnyAssoc = []
+                    state.invitedAnyClub = []
+                    state.associationLeague = []
+                    state.clubSchool = []
+                    state.affiliateArray = []
+                    state.anyOrgArray = []
                 }
                 if (keys == 'affiliateNonSelected') {
-                    state.invitedTo = []
                     state.affiliateSelected = []
-                    // state.anyOrgSelected = []
                     state.otherSelected = null
                     state.affiliateNonSelected = Data
-                    // state.anyOrgNonSelected = null
-
+                    state.affiliateArray = []
+                    state.invitedTo = [...state.affiliateArray, ...state.anyOrgArray]
                 }
                 if (keys == 'anyOrgNonSelected') {
                     state.invitedTo = []
-                    // state.affiliateSelected = []
                     state.anyOrgSelected = []
                     state.otherSelected = null
                     state.associationChecked = false
                     state.clubChecked = false
-                    // state.affiliateNonSelected = null
                     state.anyOrgNonSelected = Data
-
+                    state.invitedAnyAssoc = []
+                    state.invitedAnyClub = []
+                    state.associationLeague = []
+                    state.clubSchool = []
+                    state.anyOrgArray = []
                 }
 
             } else if (keys == 'associationAffilite' || keys == 'clubAffilite') {
-
                 if (keys == 'associationAffilite') {
-
                     state.associationLeague = Data
                     let inviteeArray = []
                     for (let i in Data) {
@@ -297,18 +483,11 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                             organisationId: Data[i]
                         }
                         inviteeArray.push(associationAffiliteObj)
-
                     }
-
-
-
-
-                    state.associationOrg = inviteeArray
-                    state.invitedOrganisation = [...state.associationOrg, ...state.clubOrg]
-
-
+                    // state.associationOrg = inviteeArray
+                    state.invitedAnyAssoc = inviteeArray
+                    // state.invitedOrganisation = [...state.associationOrg, ...state.clubOrg]
                 }
-
                 if (keys == 'clubAffilite') {
                     state.clubSchool = Data
                     let inviteeArray = []
@@ -317,17 +496,13 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                             organisationId: Data[i]
                         }
                         inviteeArray.push(clubAffiliteObj)
-
                     }
-
-                    // state.invitedOrganisation = inviteeArray
-                    state.clubOrg = inviteeArray
-                    state.invitedOrganisation = [...state.associationOrg, ...state.clubOrg]
-
+                    // state.clubOrg = inviteeArray
+                    state.invitedAnyClub = inviteeArray
+                    // state.invitedOrganisation = [...state.associationOrg, ...state.clubOrg]
                 }
 
             } else if (keys == 'record1') {
-
                 let posTracking = false
                 for (let i in Data) {
                     if (Data[i] == "positionTracking") {
@@ -335,7 +510,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                         break;
                     }
                 }
-
                 if (posTracking) {
                     // state.lineupSelection = true
                 } else {
@@ -344,19 +518,34 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.form.lineupSelectionHours = null
                     state.form.lineupSelectionMins = null
                 }
-            } else if (keys == 'associationChecked' || keys == 'clubChecked') {
+            }
+            else if (keys == 'associationChecked') {
                 state.anyOrgNonSelected = null
                 state[keys] = payload.data
                 state.otherSelected = null
-
-                if (keys == 'associationChecked' && payload.data === false) {
+                if (Data === true) {
+                    state.anyOrgArray.push(payload.checkBoxId)
+                    state.invitedTo = [...state.affiliateArray, ...state.anyOrgArray]
+                } else {
+                    let removeElement = removeElementFromArray(state.anyOrgArray, payload.checkBoxId, 'associationChecked')
+                    state.anyOrgArray = removeElement
+                    state.invitedAnyAssoc = []
                     state.associationLeague = []
-
+                    state.invitedTo = [...state.affiliateArray, ...state.anyOrgArray]
                 }
-
-                if (keys == 'clubChecked' && payload.data === false) {
+            } else if (keys == 'clubChecked') {
+                state.anyOrgNonSelected = null
+                state[keys] = payload.data
+                state.otherSelected = null
+                if (Data === true) {
+                    state.anyOrgArray.push(payload.checkBoxId)
+                    state.invitedTo = [...state.affiliateArray, ...state.anyOrgArray]
+                } else {
+                    let removeElement = removeElementFromArray(state.anyOrgArray, payload.checkBoxId, 'clubChecked')
+                    state.anyOrgArray = removeElement
+                    state.invitedAnyClub = []
                     state.clubSchool = []
-
+                    state.invitedTo = [...state.affiliateArray, ...state.anyOrgArray]
                 }
             }
             return {
@@ -367,14 +556,24 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 }
             }
         case ApiConstants.LiveScore_SETTING_DATA_POST_INITATE:
-            return {
-                ...state,
-                loader: true
+
+            if (payload.isEdit == 'edit') {
+                return {
+                    ...state,
+                    editLoader: true
+                }
+            } else {
+                return {
+                    ...state,
+                    loader: true
+                }
             }
+
         case ApiConstants.LiveScore_SETTING_DATA_POST_SUCCESS:
             return {
                 ...state,
-                loader: false
+                loader: false,
+                editLoader: false
             }
         case ApiConstants.LiveScore_SETTING_DATA_POST_ERROR:
             return {
@@ -382,8 +581,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 loader: false
             }
         case ApiConstants.API_LIVE_SCORE_COMPETITION_VENUES_LIST_SUCCESS:
-
-
             return {
                 ...state,
                 venueData: payload,
@@ -423,33 +620,26 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     attendanceRecordingPeriod: [],
                     timerType: [],
                     allVenue: [],
-                    // venueData: []
-
                 }
             }
 
         case ApiConstants.LIVESCORE_SEARCH__SETTING:
-
             return { ...state, venueData: payload }
 
         case ApiConstants.CLEAR_FILTER_SEARCH:
             state.venueData = state.mainVenueList
             return {
                 ...state
-
             }
 
         case ApiConstants.SETTING_REGISTRATION_INVITEES_LOAD:
-
             return { ...state, loader: false }
 
         case ApiConstants.SETTING_REGISTRATION_INVITEES_SUCCESS:
-
             return {
                 ...state,
                 loader: false,
                 registrationInvitees: payload
-
             }
 
         default: return state

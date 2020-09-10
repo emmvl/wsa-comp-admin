@@ -4,7 +4,7 @@ var affiliateDivObj = [{ id: 1, name: 'OpenA', disabled: false }, { id: 2, name:
 var compOrgDivObj = [{ id: 1, name: 'OpenA', disabled: false }, { id: 2, name: 'OpenB', disabled: false }, { id: 3, name: 'OpenC', disabled: false }]
 var defaultInputFieldArray = [{
     name: "Badge AA",
-    umpireRate:56.25585,
+    umpireRate: 0,
     umpReserveRate: 0,
     umpCoachRate: 0
 },

@@ -71,7 +71,7 @@ class InnerHorizontalMenu extends React.Component {
 
                     if (nextProps.appState == this.props.appState) {
                         if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
-                            let yearId = this.props.appState.yearList[0].id
+                            let yearId = this.props.appState.yearList.length > 0 && this.props.appState.yearList[0].id
                             let yearRefId = localStorage.getItem("yearId")
                             if (yearRefId) {
                                 this.props.innerHorizontalCompetitionListAction(organisationId, yearRefId)
