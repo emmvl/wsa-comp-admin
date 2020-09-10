@@ -147,7 +147,7 @@ class UmpireSetting extends Component {
 
         return (
             <div>
-                <span className='text-heading-large pt-2 pb-2' >{AppConstants.howUmpiresAllocated}</span>
+                <span className='text-heading-large pt-4 pb-2' >{AppConstants.howUmpiresAllocated}</span>
                 <div style={{ display: "flex", flexDirection: "column" }}>
 
                     <Radio
@@ -187,7 +187,7 @@ class UmpireSetting extends Component {
     contentView = () => {
         const { compOrganiser, defaultChecked } = this.props.umpireSettingState
         return (
-            <div className="pt-2 mt-1">
+            <div className="pt-0 mt-4">
 
                 {this.umpireAllocationRadioView()}
 
