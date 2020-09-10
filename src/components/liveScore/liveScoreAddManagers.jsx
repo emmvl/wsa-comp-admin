@@ -347,7 +347,7 @@ class LiveScoreAddManager extends Component {
                                     auto_complete='new-contact'
                                     // type='number'
                                     required={"required-field pb-0 pt-0"}
-                                    heading={AppConstants.contactNO}
+                                    heading={AppConstants.contact_No}
                                     placeholder={AppConstants.enterContactNo}
                                     maxLength={10}
                                     onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
@@ -468,7 +468,7 @@ class LiveScoreAddManager extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>

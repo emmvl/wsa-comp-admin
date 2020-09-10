@@ -1631,18 +1631,18 @@ class LiveScoreAddMatch extends Component {
                 {!this.state.membershipIsUsed &&
                     <div className="footer-view">
                         <div className="row">
-                            <div className="col-sm-10 col-md-9">
+                            <div className="col-sm-10 col-md-9 pl-3">
                                 <div className="reg-add-save-button p-0">
-                                    <Button className="cancelBtnWidth" onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
+                                    <Button className="cancelBtnWidth mr-2" onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
                                     {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ forfeitVisible: true })} type="cancel-button">{AppConstants.forfiet}</Button>}
                                     {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ abandonVisible: true })} type="cancel-button">{AppConstants.abandon}</Button>}
                                     {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.endMatchResult()} type="cancel-button">{AppConstants.endMatch}</Button>}
                                 </div>
                             </div>
-                            <div className="col-sm-2 col-md-3 ">
+                            <div className="col-sm-2 col-md-3 pr-4">
                                 <div className="comp-buttons-view mt-0">
                                     <Button
-                                        className="publish-button save-draft-text" type="primary" htmlType="submit"
+                                        className="publish-button save-draft-text mr-0" type="primary" htmlType="submit"
                                         disabled={this.props.liveScoreMatchState.onLoad} >
                                         {AppConstants.save}
                                     </Button>

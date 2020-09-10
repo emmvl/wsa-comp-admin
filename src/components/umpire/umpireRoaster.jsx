@@ -508,7 +508,7 @@ class UmpireRoaster extends Component {
 
                         <div className="reg-col" >
                             <div className="reg-filter-col-cont">
-                                <span className='year-select-heading' style={{ width: '135px' }}>{AppConstants.competition}:</span>
+                                <span className='year-select-heading' style={{ width: '140px' }}>{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ minWidth: 200 }}
