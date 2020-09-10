@@ -53,6 +53,13 @@ const columns = [
         )
     },
     {
+        title: "Paid By",
+        dataIndex: "paidBy",
+        key: "paidBy",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    },
+    {
         title: "Affiliate",
         dataIndex: "affiliateName",
         key: "affiliateName",

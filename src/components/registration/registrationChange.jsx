@@ -51,7 +51,7 @@ const columns = [
         title: "Current",
         children: [
             {
-                title: 'User Name',
+                title: 'Participant',
                 dataIndex: 'userName',
                 key: 'userName',
                 sorter: (a, b) => tableSort(a, b, "userName")
