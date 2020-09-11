@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { regCompetitionListAction, clearCompReducerDataAction, regCompetitionListDeleteAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import { getRegistrationChangeDashboard } from "../../store/actions/registrationAction/registrationChangeAction";
 import { registrationChangeType } from "../../store/actions/commonAction/commonAction";
-
+import { currencyFormat } from "../../util/currencyFormat";
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
 import { getOrganisationData } from "util/sessionStorage";
@@ -129,18 +129,19 @@ const columns = [
                 render: (compOrganiserApproved,record, index) => {
                     return(
                         <div>
-                            {compOrganiserApproved!= null ? 
-                                <div style={{display: "flex",justifyContent:"space-between"}}>
-                                    <div>${compOrganiserApproved}</div>
-                                    {record.compOrgApprovedStatus != 3 ? 
+                            <div style={{display: "flex",justifyContent:"space-between"}}>
+                                <div>{compOrganiserApproved!= 'N/A' && compOrganiserApproved!= 'P' ? currencyFormat(compOrganiserApproved) : compOrganiserApproved}</div>
+                                {compOrganiserApproved!= "N/A" ? 
+                                <div>
+                                    {
+                                        record.compOrgApprovedStatus != 3 ? 
                                         <div style={{color: getColor(record,"compOrganiserApproved")}}>&#x2714;</div>
                                         :
                                         <div style={{color: "red"}}>&#x2718;</div>
                                     }
-                                </div>
-                                : 
-                                'P'
-                            }
+                                </div> : ""
+                                }
+                            </div>
                         </div>
                     )
                 }
@@ -154,17 +155,18 @@ const columns = [
                 render: (affiliateApproved,record, index) => {
                     return(
                         <div>
-                            {affiliateApproved!= null ?
-                                affiliateApproved != -1 ? 
-                                <div style={{display: "flex",justifyContent:"space-between"}}>
-                                    <div>${affiliateApproved}</div>
+                            <div style={{display: "flex",justifyContent:"space-between"}}>
+                                <div>{affiliateApproved!= 'N/A' && affiliateApproved!= 'P' ? currencyFormat(affiliateApproved) : affiliateApproved}</div>
+                                {affiliateApproved!= 'N/A' ?
+                                <div>
                                     {record.affiliateApprovedStatus != 3 ? 
                                         <div style={{color: getColor(record,"affiliateApproved")}}>&#x2714;</div>
                                         :
                                         <div style={{color: "red"}}>&#x2718;</div>
                                     }
-                                </div> : 'N/A'
-                            : 'P'} 
+                                </div> : ""
+                                }
+                            </div> 
                         </div>
                     )
                 }
@@ -178,16 +180,18 @@ const columns = [
                 render: (stateApproved,record,index) => {
                     return(
                         <div>
-                            {stateApproved!=null ?
-                                <div style={{display: "flex",justifyContent:"space-between"}}>
-                                    <div>${stateApproved}</div>
+                            <div style={{display: "flex",justifyContent:"space-between"}}>
+                                <div>{stateApproved != 'N/A' && stateApproved != 'P' ? currencyFormat(stateApproved) : stateApproved}</div>
+                                {stateApproved!= 'N/A' ? 
+                                <div>
                                     {record.stateApprovedStatus != 3 ? 
                                         <div style={{color: getColor(record,"stateApproved")}}>&#x2714;</div>
                                         :
                                         <div style={{color: "red"}}>&#x2718;</div>
                                     }
-                                </div>
-                            : 'P'}
+                                </div> : ""
+                                }
+                            </div>
                         </div>
                     )
                 }
