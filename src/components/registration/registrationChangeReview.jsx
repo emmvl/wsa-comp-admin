@@ -9,7 +9,8 @@ import {
     Form,
     Radio,
     Modal,
-    Table
+    Table,
+    message
 } from "antd";
 import "./product.scss";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -20,10 +21,10 @@ import { getYearAndCompetitionAction } from "../../store/actions/appAction";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ValidationConstants from "../../themes/validationConstant";
-import { isArrayNotEmpty } from '../../util/helpers';
+import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../util/helpers';
 import { updateRegistrationReviewAction, getRegistrationChangeReview, saveRegistrationChangeReview } 
         from '../../store/actions/registrationAction/registrationChangeAction'
-import { captializedString } from "../../util/helpers"
+
 import moment, { utc } from "moment";
 import { getOrganisationData } from "util/sessionStorage";
 import history from '../../util/history'
@@ -164,9 +165,35 @@ class RegistrationChangeReview extends Component {
             this.setState({acceptVisible: true });
         }
         else if(key == "ok"){
-            this.setState({acceptVisible: false });
             const {reviewSaveData} = this.props.registrationChangeState;
-            this.saveReview(reviewSaveData.invoices);
+            let err = false;
+            let msg = "";
+            if(reviewSaveData.refundTypeRefId == 2){
+                if(isArrayNotEmpty(reviewSaveData.invoices)){
+                    for(let item of reviewSaveData.invoices){
+                        if(!isNotNullOrEmptyString(item.refundAmount)){
+                            err = true; 
+                            msg = ValidationConstants.refundAmtRequired;
+                            break;
+                        }
+                        else if(item.refundAmount > item.amount){
+                            err = true;
+                            msg = ValidationConstants.refundAmtCheck;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if(err){
+                message.config({ duration: 0.9, maxCount: 1 })
+                message.error(msg);
+            }
+            else{
+                 this.setState({acceptVisible: false });
+                 this.saveReview(reviewSaveData.invoices);
+            }
+            
         }
         else {
             this.setState({acceptVisible: false });
@@ -214,6 +241,7 @@ class RegistrationChangeReview extends Component {
     }
 
     updateInvoices = (refundAmount,index) => {
+        console.log("refundAmount"+ refundAmount);
         const {reviewSaveData} = this.props.registrationChangeState;
         reviewSaveData.invoices[index].refundAmount = refundAmount;
         this.updateRegistrationReview(reviewSaveData.invoices,"invoices")
