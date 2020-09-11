@@ -51,6 +51,11 @@ const refundFullAmountColumns = [
         key: 'feeType'
     },
     {
+        title: 'Payment Type',
+        dataIndex: 'paymentType',
+        key: 'paymentType'
+    },
+    {
         title: 'Date',
         dataIndex: 'invoiceDate',
         key: 'invoiceDate',
@@ -83,6 +88,11 @@ const refundPartialAmountColumns = [
         title: 'Fee Type',
         dataIndex: 'feeType',
         key: 'feeType'
+    },
+    {
+        title: 'Payment Type',
+        dataIndex: 'paymentType',
+        key: 'paymentType'
     },
     {
         title: 'Date',
@@ -482,6 +492,7 @@ class RegistrationChangeReview extends Component {
                                     disabled={true}
                                     className='ml-5'
                                     placeholder='Other'
+                                    value={regChangeReviewData ?  regChangeReviewData.otherInfo : null}
                                     style={{ maxWidth: '50%', minHeight: 60 }} />
 
                             </div>
