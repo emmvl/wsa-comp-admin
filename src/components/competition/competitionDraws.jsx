@@ -9,7 +9,7 @@ import {
   message,
   Modal,
   Menu,
-  Tooltip, DatePicker
+  Tooltip, DatePicker, Checkbox
 } from 'antd';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import { NavLink } from 'react-router-dom';
@@ -110,7 +110,8 @@ class CompetitionDraws extends Component {
       selectedDateRange: null,
       startDate: null,
       endDate: null,
-      changeDateLoad: false
+      changeDateLoad: false,
+      dateRangeCheck: false
     };
     this.props.clearDraws();
   }
@@ -645,6 +646,7 @@ class CompetitionDraws extends Component {
     this.props.clearDraws('rounds');
     if (competitionId == -1) {
       this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId, "all");
+      this.setState({dateRangeCheck: true})
     } else {
       setOwn_competition(competitionId);
       setOwn_competitionStatus(statusRefId)
@@ -664,6 +666,10 @@ class CompetitionDraws extends Component {
       startDate: null,
       endDate: null
     });
+  }
+
+  onDateRangeCheck = (val) =>{
+    this.setState({dateRangeCheck: val});
   }
 
   // on DivisionGradeNameChange
@@ -741,6 +747,24 @@ class CompetitionDraws extends Component {
                 );
               })}
             </Select>
+          </div>
+        </div>
+        <div className="col-sm-2 pb-3" >
+          <div
+            style={{
+              width: "fit-content",
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginRight: 50,
+            }}
+          >
+            <Checkbox
+                className="single-checkbox"
+                onChange={(e) => this.onDateRangeCheck(e.target.checked)} 
+                checked={this.state.dateRangeCheck} >
+                {"Date Range"}
+            </Checkbox>
           </div>
         </div>
         <div className="col-sm pb-3">
@@ -1109,7 +1133,7 @@ class CompetitionDraws extends Component {
                     alignItems: 'center',
                   }}
                 >
-                  {this.state.firstTimeCompId == "-1" ?
+                  {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck == true ?
                     <div
                       style={{
                         width: '100%',
