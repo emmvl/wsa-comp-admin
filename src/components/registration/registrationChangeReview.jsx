@@ -210,7 +210,7 @@ class RegistrationChangeReview extends Component {
             const {regChangeReviewData} = this.props.registrationChangeState;
             let invoicesTemp = regChangeReviewData.invoices.map(e => ({ ... e }));
             for(let invoice of invoicesTemp){
-                invoice.refundAmount = invoice.amount;
+                invoice.refundAmount = 0;
             }
             this.saveReview(invoicesTemp);
         }
@@ -495,7 +495,7 @@ class RegistrationChangeReview extends Component {
                     <Radio.Group
                         disabled={true}
                         className="reg-competition-radio"
-                        value={regChangeReviewData ?  (regChangeReviewData.reasonTypeRefId!= null ? 2 : 1)  : null}
+                        value={regChangeReviewData ?  ((regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0) ? 2 : 1)  : null}
                     >
                         <Radio value={1}>{'Yes'}</Radio>
                         <Radio value={2}>{'No'}</Radio>
