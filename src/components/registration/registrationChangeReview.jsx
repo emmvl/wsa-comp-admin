@@ -9,7 +9,8 @@ import {
     Form,
     Radio,
     Modal,
-    Table
+    Table,
+    message
 } from "antd";
 import "./product.scss";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -20,10 +21,10 @@ import { getYearAndCompetitionAction } from "../../store/actions/appAction";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ValidationConstants from "../../themes/validationConstant";
-import { isArrayNotEmpty } from '../../util/helpers';
+import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../util/helpers';
 import { updateRegistrationReviewAction, getRegistrationChangeReview, saveRegistrationChangeReview } 
         from '../../store/actions/registrationAction/registrationChangeAction'
-import { captializedString } from "../../util/helpers"
+
 import moment, { utc } from "moment";
 import { getOrganisationData } from "util/sessionStorage";
 import history from '../../util/history'
@@ -49,6 +50,11 @@ const refundFullAmountColumns = [
         title: 'Fee Type',
         dataIndex: 'feeType',
         key: 'feeType'
+    },
+    {
+        title: 'Payment Type',
+        dataIndex: 'paymentType',
+        key: 'paymentType'
     },
     {
         title: 'Date',
@@ -83,6 +89,11 @@ const refundPartialAmountColumns = [
         title: 'Fee Type',
         dataIndex: 'feeType',
         key: 'feeType'
+    },
+    {
+        title: 'Payment Type',
+        dataIndex: 'paymentType',
+        key: 'paymentType'
     },
     {
         title: 'Date',
@@ -154,9 +165,35 @@ class RegistrationChangeReview extends Component {
             this.setState({acceptVisible: true });
         }
         else if(key == "ok"){
-            this.setState({acceptVisible: false });
             const {reviewSaveData} = this.props.registrationChangeState;
-            this.saveReview(reviewSaveData.invoices);
+            let err = false;
+            let msg = "";
+            if(reviewSaveData.refundTypeRefId == 2){
+                if(isArrayNotEmpty(reviewSaveData.invoices)){
+                    for(let item of reviewSaveData.invoices){
+                        if(!isNotNullOrEmptyString(item.refundAmount)){
+                            err = true; 
+                            msg = ValidationConstants.refundAmtRequired;
+                            break;
+                        }
+                        else if(item.refundAmount > item.amount){
+                            err = true;
+                            msg = ValidationConstants.refundAmtCheck;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if(err){
+                message.config({ duration: 0.9, maxCount: 1 })
+                message.error(msg);
+            }
+            else{
+                 this.setState({acceptVisible: false });
+                 this.saveReview(reviewSaveData.invoices);
+            }
+            
         }
         else {
             this.setState({acceptVisible: false });
@@ -173,7 +210,7 @@ class RegistrationChangeReview extends Component {
             const {regChangeReviewData} = this.props.registrationChangeState;
             let invoicesTemp = regChangeReviewData.invoices.map(e => ({ ... e }));
             for(let invoice of invoicesTemp){
-                invoice.refundAmount = invoice.amount;
+                invoice.refundAmount = 0;
             }
             this.saveReview(invoicesTemp);
         }
@@ -204,6 +241,7 @@ class RegistrationChangeReview extends Component {
     }
 
     updateInvoices = (refundAmount,index) => {
+        console.log("refundAmount"+ refundAmount);
         const {reviewSaveData} = this.props.registrationChangeState;
         reviewSaveData.invoices[index].refundAmount = refundAmount;
         this.updateRegistrationReview(reviewSaveData.invoices,"invoices")
@@ -250,8 +288,8 @@ class RegistrationChangeReview extends Component {
 
         console.log("$$$$$$$$$$$$$$::" + JSON.stringify(reviewSaveData));
         
-        // this.props.saveRegistrationChangeReview(reviewSaveData);
-        // this.setState({loading: true});
+        this.props.saveRegistrationChangeReview(reviewSaveData);
+        this.setState({loading: true});
     }
 
 
@@ -457,7 +495,7 @@ class RegistrationChangeReview extends Component {
                     <Radio.Group
                         disabled={true}
                         className="reg-competition-radio"
-                        value={regChangeReviewData ?  (regChangeReviewData.reasonTypeRefId!= null ? 2 : 1)  : null}
+                        value={regChangeReviewData ?  ((regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0) ? 2 : 1)  : null}
                     >
                         <Radio value={1}>{'Yes'}</Radio>
                         <Radio value={2}>{'No'}</Radio>
@@ -482,6 +520,7 @@ class RegistrationChangeReview extends Component {
                                     disabled={true}
                                     className='ml-5'
                                     placeholder='Other'
+                                    value={regChangeReviewData ?  regChangeReviewData.otherInfo : null}
                                     style={{ maxWidth: '50%', minHeight: 60 }} />
 
                             </div>

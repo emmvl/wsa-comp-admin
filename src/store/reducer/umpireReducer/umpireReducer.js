@@ -27,8 +27,39 @@ const initialState = {
     selectedAffiliateId: null,
     onSaveLoad: false,
     totalCount: null,
-    currentPage: null
+    currentPage: null,
+    coachList: [],
+    umpireCoachCheckBox: false
 };
+
+function isUmpireCoachCheck(data, key) {
+    if (data.userRoleEntities) {
+        let checkCoach = data.userRoleEntities
+        for (let i in checkCoach) {
+            if (checkCoach[i].roleId == key) {
+                return true
+            }
+        }
+    }
+    else {
+        return false
+    }
+}
+
+function createCoachArray(result) {
+    console.log(result)
+    let coachArray = []
+    for (let i in result) {
+        let userRole = result[i].userRoleEntities
+        for (let j in userRole) {
+            if (userRole[j].roleId == 20) {
+                coachArray.push(result[i])
+                break
+            }
+        }
+    }
+    return coachArray
+}
 
 function getAffiliateData(selectedAffiliateId, affiliateArray) {
     let affiliateObj = []
@@ -84,10 +115,13 @@ function umpireState(state = initialState, action) {
         //// Umpire List
         case ApiConstants.API_UMPIRE_LIST_LOAD:
             return { ...state, onLoad: true };
+
         case ApiConstants.API_UMPIRE_LIST_SUCCESS:
-
             let user_Data = action.result.userData ? action.result.userData : action.result
-
+            if (action.key == "data") {
+                let coachData = createCoachArray(JSON.parse(JSON.stringify(user_Data)))
+                state.coachList = coachData
+            }
             return {
                 ...state,
                 onLoad: false,
@@ -110,20 +144,22 @@ function umpireState(state = initialState, action) {
         case ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_LOAD:
             return { ...state, onAffiliateLoad: true };
         case ApiConstants.API_GET_UMPIRE_AFFILIATE_LIST_SUCCESS:
+            state.affilateList = action.result
             return {
                 ...state,
                 onAffiliateLoad: false,
-                affilateList: action.result,
                 status: action.status
             };
         //// Update Add Umpire Data
         case ApiConstants.UPDATE_ADD_UMPIRE_DATA:
+            console.log(state.affilateList, "affileientegttertet")
             let key = action.key
             let data = action.data
             if (key === 'umpireRadioBtn') {
                 state.umpireRadioBtn = data
                 state.affiliateId = []
-            } else if (key === 'affiliateId') {
+            }
+            else if (key === 'affiliateId') {
                 state.affiliateId = data
                 let affiliateObj = getAffiliateData(data, state.affilateList)
                 state.umpireData['affiliates'] = affiliateObj
@@ -133,6 +169,7 @@ function umpireState(state = initialState, action) {
                 let getAffiliateId = genrateSelectedAffiliateId(state.selectedAffiliateId, state.affilateList)
                 state.affiliateId = getAffiliateId
             } else if (action.key === 'isEditUmpire') {
+                console.log(data, "editable datatatatta")
                 state.umpireData.id = data.id
                 state.umpireData.firstName = data.firstName
                 state.umpireData.lastName = data.lastName
@@ -143,11 +180,15 @@ function umpireState(state = initialState, action) {
                 let umpireAffiliateObj = getAffiliateData(state.affiliateId, state.affilateList)
                 state.umpireData['affiliates'] = umpireAffiliateObj
                 state.umpireRadioBtn = 'new'
+                state.umpireCoachCheckBox = isUmpireCoachCheck(data, 20)
+                state.umpireCheckbox = isUmpireCoachCheck(data, 15)
             } else if (action.key === 'isAddUmpire') {
                 state.umpireData = umpireObj
                 state.umpireData.id = null
                 state.affiliateId = []
                 state.umpireRadioBtn = 'new'
+                state.umpireCoachCheckBox = false
+                state.umpireCheckbox = false
             } else {
                 state.umpireData[action.key] = action.data
             }

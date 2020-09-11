@@ -1058,10 +1058,11 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    addEditUmpire(data, teamId, exsitingManagerId) {
+    addEditUmpire(data, teamId, exsitingManagerId, isUmpire, isUmpireCoach) {
+        console.log(data, isUmpire, isUmpireCoach, "Add datatatattatatatat")
         let body = data
         let id = JSON.parse(localStorage.getItem('umpireCompetitionId'))
-        const url = `/users/umpire?competitionId=${id}`;
+        const url = `/users/umpire?competitionId=${id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}`;
         return Method.dataPost(url, token, body)
     },
 
@@ -1081,10 +1082,10 @@ let LiveScoreAxiosApi = {
         let body = paginationBody
 
         if (status === "All") {
-            url = `/roster/list?competitionId=${competitionID}&roleId=${refRoleId}`;
+            url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}&includeRosters=${true}`;
         }
         else {
-            url = `/roster/list?competitionId=${competitionID}&status=${status}&roleId=${refRoleId}`;
+            url = `/roster/list?competitionId=${competitionID}&status=${status}&roleIds=${refRoleId}&includeRosters=${true}`
         }
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;

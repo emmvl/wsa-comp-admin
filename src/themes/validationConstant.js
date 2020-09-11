@@ -209,7 +209,10 @@ const ValidationConstants = {
     extraTimeType: "Please select extra time type",
     positionTrackingIsRequired: "Position tracking is required",
     RecordGoalAttemptsIsRequired: "Record goal attempts is required",
-    pleaseSelectOrg: "Please select organisation"
+    pleaseSelectBetweenUmpireAndCoach: "User must be umpire, umpire coach or both",
+    pleaseSelectOrg: "Please select organisation",
+    refundAmtRequired: "Refund amount cannot be null.",
+    refundAmtCheck: "Refund amount cannot be greater that actual amount."
 };
 
 export default ValidationConstants;
