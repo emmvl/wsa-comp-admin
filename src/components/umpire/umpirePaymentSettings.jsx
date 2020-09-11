@@ -139,7 +139,6 @@ class UmpirePaymentSetting extends Component {
     //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
         const { paidByCompOrgDivision } = this.props.umpirePaymentSettingState
-        console.log(paidByCompOrgDivision, 'paidByCompOrgDivision')
         return (
             <div className="flud-widtih">
                 <div className="footer-view">
@@ -263,8 +262,8 @@ class UmpirePaymentSetting extends Component {
                         onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({ value: divisionId, key: 'paidByAffiliateDivision' })}
                         value={paidByAffiliateDivision}
                     >
-                        {affiliateDiv.map((item) => (
-                            <Option disabled={item.disabled} value={item.id}>{item.name}</Option>
+                        {affiliateDiv.map((item, index) => (
+                            <Option key={"affiliateDiv" + index} disabled={item.disabled} value={item.id}>{item.name}</Option>
                         ))}
                     </Select>
                 }
@@ -302,7 +301,7 @@ class UmpirePaymentSetting extends Component {
                             {
                                 inputFieldForByPool.length > 0 && inputFieldForByPool.map((item, index) => {
                                     return (
-                                        <div >
+                                        <div key={"inputFieldForByPool" + index}>
                                             {this.inputFieldsForByPool(item, index)}
                                         </div>
                                     )
@@ -411,7 +410,7 @@ class UmpirePaymentSetting extends Component {
                             {
                                 inputFieldsAffiliateOrgByPool.length > 0 && inputFieldsAffiliateOrgByPool.map((item, index) => {
                                     return (
-                                        <div >
+                                        <div key={"inputFieldsAffiliateOrgByPool" + index} >
                                             {this.inputFieldsForAffiliateByPool(item, index)}
                                         </div>
                                     )
@@ -511,7 +510,7 @@ class UmpirePaymentSetting extends Component {
                 {/* <div > */}
                 {inputFieldArray.length > 0 && inputFieldArray.map((item, index) => {
                     return (
-                        <div >
+                        <div key={"inputFieldArray" + index} >
                             {this.inputFields(item, index)}
                         </div>
                     )
@@ -541,8 +540,8 @@ class UmpirePaymentSetting extends Component {
                             onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({ value: divisionId, key: 'byBadgeDivisionAffiliate' })}
                             value={byBadgeDivisionAffiliate}
                         >
-                            {affiliateDiv.map((item) => (
-                                <Option disabled={item.disabled} value={item.id}>{item.name}</Option>
+                            {affiliateDiv.map((item, index) => (
+                                <Option key={"affiliateDiv" + index} disabled={item.disabled} value={item.id}>{item.name}</Option>
                             ))}
                         </Select>
                     }
@@ -551,7 +550,7 @@ class UmpirePaymentSetting extends Component {
                 {
                     inputFieldArrayAffiliate.length > 0 && inputFieldArrayAffiliate.map((item, index) => {
                         return (
-                            <div >
+                            <div key={"inputFieldArrayAffiliate" + index} >
                                 {this.inputFieldsAffiliate(item, index)}
                             </div>
                         )
