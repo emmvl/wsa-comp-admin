@@ -54,6 +54,16 @@ const columns = [
     key: "competitionName",
   },
   {
+    title: "Valid Until",
+    dataIndex: "expiryDate",
+    key: "expiryDate",
+    render: (expiryDate, record, index) =>(
+      <span>
+         {expiryDate != null ? moment(expiryDate).format("DD/MM/YYYY") : ""}
+      </span>
+    )
+  },
+  {
     title: "Membership Product",
     dataIndex: "membershipProduct",
     key: "membershipProduct",
@@ -125,7 +135,7 @@ const columns = [
 		      <Menu.Item key="2" onClick={() => history.push("\deregistration", {regData: e, personal: this_Obj.props.userState.personalData})}>
             <span>De-register</span>
           </Menu.Item>	: null }
-          <Menu.Item key="3" onClick={() => history.push("\paymentDashboard", {personal: this_Obj.props.userState.personalData})}>
+          <Menu.Item key="3" onClick={() => history.push("\paymentDashboard", {personal: this_Obj.props.userState.personalData, registrationId: e.registrationId})}>
             <span>Payment</span>
           </Menu.Item>  
         </SubMenu>

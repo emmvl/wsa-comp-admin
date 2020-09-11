@@ -129,7 +129,7 @@ const columns = [
                 render: (compOrganiserApproved,record, index) => {
                     return(
                         <div>
-                            {compOrganiserApproved ? 
+                            {compOrganiserApproved!= null ? 
                                 <div style={{display: "flex",justifyContent:"space-between"}}>
                                     <div>${compOrganiserApproved}</div>
                                     {record.compOrgApprovedStatus != 3 ? 
@@ -154,7 +154,7 @@ const columns = [
                 render: (affiliateApproved,record, index) => {
                     return(
                         <div>
-                            {affiliateApproved ?
+                            {affiliateApproved!= null ?
                                 affiliateApproved != -1 ? 
                                 <div style={{display: "flex",justifyContent:"space-between"}}>
                                     <div>${affiliateApproved}</div>
@@ -178,7 +178,7 @@ const columns = [
                 render: (stateApproved,record,index) => {
                     return(
                         <div>
-                            {stateApproved ?
+                            {stateApproved!=null ?
                                 <div style={{display: "flex",justifyContent:"space-between"}}>
                                     <div>${stateApproved}</div>
                                     {record.stateApprovedStatus != 3 ? 
