@@ -132,15 +132,17 @@ class RegistrationChangeReview extends Component {
             deRegisterId: null,
             organisationId: getOrganisationData().organisationUniqueKey,
             organisationTypeRefId: getOrganisationData().organisationTypeRefId,
-            loading: false
+            loading: false,
+            deRegData: null
         };
         this_Obj = this;
     }
 
     componentDidMount() {
-        let deRegisterId = this.props.location? this.props.location.deRegisterId ?  this.props.location.deRegisterId: null:  null;
-        console.log("deRegisterId::" + deRegisterId)
-        this.setState({deRegisterId});
+        let deRegisterId = this.props.location.state? this.props.location.state.deRegisterId :  null;
+        let deRegData = this.props.location.state? this.props.location.state.deRegData :  null;
+        console.log("deRegisterId::" + deRegisterId, deRegData)
+        this.setState({deRegisterId, deRegData});
         this.apiCall(deRegisterId);
     }
 
@@ -206,13 +208,19 @@ class RegistrationChangeReview extends Component {
             this.setState({declineVisible: true });
         }
         else if(key == "ok"){
-            this.setState({declineVisible: false });
-            const {regChangeReviewData} = this.props.registrationChangeState;
-            let invoicesTemp = regChangeReviewData.invoices.map(e => ({ ... e }));
-            for(let invoice of invoicesTemp){
-                invoice.refundAmount = 0;
+            const {regChangeReviewData, reviewSaveData} = this.props.registrationChangeState;
+            if(reviewSaveData.declineReasonRefId!= 0 && reviewSaveData.declineReasonRefId!= null){
+                this.setState({declineVisible: false });
+                let invoicesTemp = regChangeReviewData.invoices.map(e => ({ ... e }));
+                for(let invoice of invoicesTemp){
+                    invoice.refundAmount = 0;
+                }
+                this.saveReview(invoicesTemp);
             }
-            this.saveReview(invoicesTemp);
+            else{
+                message.config({ duration: 0.9, maxCount: 1 });
+                message.error(ValidationConstants.declineReasonRequired)
+            }
         }
         else {
             this.setState({declineVisible: false });
@@ -285,7 +293,12 @@ class RegistrationChangeReview extends Component {
         reviewSaveData["competitionId"] = regChangeReviewData.competitionId;
         reviewSaveData["userId"] = regChangeReviewData.userId;
         reviewSaveData["invoices"] = invoices;
-
+        let obj = {
+            stateApproved: this.state.deRegData.stateApproved,
+            compOrganiserApproved: this.state.deRegData.compOrganiserApproved,
+            affiliateApproved: this.state.deRegData.affiliateApproved
+        }
+        reviewSaveData["approvals"] = obj;
         console.log("$$$$$$$$$$$$$$::" + JSON.stringify(reviewSaveData));
         
         this.props.saveRegistrationChangeReview(reviewSaveData);
@@ -501,7 +514,7 @@ class RegistrationChangeReview extends Component {
                         <Radio value={2}>{'No'}</Radio>
                     </Radio.Group>
                 </div>
-                {regChangeReviewData.reasonTypeRefId!= null ?
+                {regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0?
                 <div>
                     <InputWithHead heading={AppConstants.reasonToDeRegister} />
                     <Radio.Group

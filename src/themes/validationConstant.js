@@ -210,8 +210,11 @@ const ValidationConstants = {
     positionTrackingIsRequired: "Position tracking is required",
     RecordGoalAttemptsIsRequired: "Record goal attempts is required",
     pleaseSelectOrg: "Please select organisation",
-    refundAmtRequired: "Refund amount cannot be null.",
-    refundAmtCheck: "Refund amount cannot be greater that actual amount."
+    refundAmtRequired: "Please enter the partial amount",
+    refundAmtCheck: "Refund amount cannot be greater that actual amount.",
+    declineReasonRequired: "Please select the reason to decline",
+    deRegisterReasonRequired: "Please select the reason to De-register",
+    deRegisterChangeTypeRequired: "Please select the De-register change type",
 };
 
 export default ValidationConstants;
