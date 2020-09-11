@@ -415,8 +415,7 @@ class DeRegistration extends Component {
                     >
                         {this.headerView()}
                         <Content>
-                            <Loader visible={this.props.deRegistrationState.onLoad || 
-                            this.props.deRegistrationState.onSaveLoad} />
+                            <Loader visible={this.props.deRegistrationState.onSaveLoad} />
                             <div className="formView">
                                 {this.contentView(getFieldDecorator)}
                             </div>
