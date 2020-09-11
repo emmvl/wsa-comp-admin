@@ -8,13 +8,15 @@ function umpireListAction(data) {
     return action;
 }
 
-function addUmpireAction(data, affiliateId, exsitingUmpireId, extraData) {
+function addUmpireAction(data, affiliateId, exsitingUmpireId, extraData, isUmpire, isUmpireCoach) {
     const action = {
         type: ApiConstants.API_ADD_UMPIRE_LOAD,
         data,
         affiliateId,
         exsitingUmpireId,
-        extraData
+        extraData,
+        isUmpire,
+        isUmpireCoach
     };
     return action;
 }
