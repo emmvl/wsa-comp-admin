@@ -208,7 +208,8 @@ const ValidationConstants = {
     pleaseFillRegistration: 'Please fill the Registration Code',
     extraTimeType: "Please select extra time type",
     positionTrackingIsRequired: "Position tracking is required",
-    RecordGoalAttemptsIsRequired: "Record goal attempts is required"
+    RecordGoalAttemptsIsRequired: "Record goal attempts is required",
+    pleaseSelectOrg: "Please select organisation"
 };
 
 export default ValidationConstants;

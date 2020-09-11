@@ -836,7 +836,7 @@ class LiveScoreAddNews extends Component {
             <div className="fluid-width">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm">
+                        <div className="col-sm pl-3">
                             <div className="reg-add-save-button">
                                 {/* <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreNewsList')} type="cancel-button">{AppConstants.cancel}</Button> */}
                                 <NavLink
@@ -851,9 +851,9 @@ class LiveScoreAddNews extends Component {
                                 </NavLink>
                             </div>
                         </div>
-                        <div className="col-sm">
+                        <div className="col-sm pr-3">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text"
+                                <Button className="publish-button save-draft-text mr-0"
                                     type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.next}
                                 </Button>

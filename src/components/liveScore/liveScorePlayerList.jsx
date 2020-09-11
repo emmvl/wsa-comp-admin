@@ -2,14 +2,18 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Layout, Button, Table, Pagination, Spin, message, Menu } from "antd";
+import { Input, Icon, Layout, Button, Table, Pagination, Spin, message, Menu, Modal } from "antd";
 
 import "./liveScore.css";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { playerListWithPaginationAction } from "../../store/actions/LiveScoreAction/liveScorePlayerAction";
+import {
+    playerListWithPaginationAction,
+    liveScoreDeletePlayerAction
+} from "../../store/actions/LiveScoreAction/liveScorePlayerAction";
+
 import { liveScore_formateDate } from "../../themes/dateformate";
 import history from "../../util/history";
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
@@ -19,6 +23,7 @@ import { teamListData } from "../../util/helpers";
 
 const { Content } = Layout;
 const { SubMenu } = Menu;
+const { confirm } = Modal;
 
 let _this = null;
 
@@ -152,7 +157,7 @@ const columns = [
     {
         title: "Action",
         key: 'action',
-        render: (data, record) => (
+        render: (data, record, playerId) => (
             <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
@@ -170,6 +175,14 @@ const columns = [
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
+                    <Menu.Item key="2" onClick={() => {
+                        _this.showDeleteConfirm(record.playerId);
+                    }}>
+
+                        <span>Delete</span>
+                    </Menu.Item>
+
+
                 </Menu.SubMenu>
             </Menu>
         )
@@ -195,6 +208,33 @@ class LiveScorePlayerList extends Component {
             history.push('/')
         }
     }
+
+    // Delete player
+
+    deletePlayer = (playerId) => {
+
+        this.props.liveScoreDeletePlayerAction(playerId)
+
+    }
+
+    showDeleteConfirm = (playerId) => {
+
+        let this_ = this
+        confirm({
+            title: 'Are you sure you want to delete this player?',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+                this_.deletePlayer(playerId)
+
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
+
 
     /// Handle Page change
     handlePageChnage(page) {
@@ -442,7 +482,7 @@ class LiveScorePlayerList extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ playerListWithPaginationAction, exportFilesAction }, dispatch)
+    return bindActionCreators({ playerListWithPaginationAction, exportFilesAction, liveScoreDeletePlayerAction }, dispatch)
 }
 
 function mapStateToProps(state) {

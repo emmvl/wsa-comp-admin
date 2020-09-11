@@ -3,7 +3,8 @@ import ApiConstants from "themes/apiConstants";
 function liveScorePlayerListAction(competitionID, teamId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD,
-        competitionID, teamId
+        competitionID,
+        teamId
     };
 }
 
@@ -32,6 +33,15 @@ function liveScoreAddEditPlayerAction(data, playerId, propsData) {
         propsData,
     };
 }
+
+function liveScoreDeletePlayerAction(playerId) {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD,
+        playerId,
+    }
+}
+
+
 
 function liveScorePlayerImportAction(competitionID, csvFile) {
     return {
@@ -68,4 +78,5 @@ export {
     liveScorePlayerListSearchAction,
     liveScorePlayerResetImportResultAction,
     playerListWithPaginationAction,
+    liveScoreDeletePlayerAction,
 };

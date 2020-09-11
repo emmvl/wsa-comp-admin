@@ -308,7 +308,7 @@ class UmpirePoolAllocation extends Component {
             <div className="d-flex flex-column">
                 {assignedData.map((teamItem, teamIndex) =>
                     (
-                        <Droppable droppableId={`${teamItem.teamId}`} >
+                        <Droppable key={"assignedData" + teamIndex} droppableId={`${teamItem.teamId}`} >
                             {(provided, snapshot) => (
                                 <div
                                     ref={provided.innerRef}

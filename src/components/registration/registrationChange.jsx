@@ -51,7 +51,7 @@ const columns = [
         title: "Current",
         children: [
             {
-                title: 'User Name',
+                title: 'Participant',
                 dataIndex: 'userName',
                 key: 'userName',
                 sorter: (a, b) => tableSort(a, b, "userName")
@@ -129,7 +129,7 @@ const columns = [
                 render: (compOrganiserApproved,record, index) => {
                     return(
                         <div>
-                            {compOrganiserApproved ? 
+                            {compOrganiserApproved!= null ? 
                                 <div style={{display: "flex",justifyContent:"space-between"}}>
                                     <div>${compOrganiserApproved}</div>
                                     {record.compOrgApprovedStatus != 3 ? 
@@ -139,7 +139,7 @@ const columns = [
                                     }
                                 </div>
                                 : 
-                                null
+                                'P'
                             }
                         </div>
                     )
@@ -154,7 +154,8 @@ const columns = [
                 render: (affiliateApproved,record, index) => {
                     return(
                         <div>
-                            {affiliateApproved ?
+                            {affiliateApproved!= null ?
+                                affiliateApproved != -1 ? 
                                 <div style={{display: "flex",justifyContent:"space-between"}}>
                                     <div>${affiliateApproved}</div>
                                     {record.affiliateApprovedStatus != 3 ? 
@@ -162,8 +163,8 @@ const columns = [
                                         :
                                         <div style={{color: "red"}}>&#x2718;</div>
                                     }
-                                </div>
-                            : null} 
+                                </div> : 'N/A'
+                            : 'P'} 
                         </div>
                     )
                 }
@@ -177,7 +178,7 @@ const columns = [
                 render: (stateApproved,record,index) => {
                     return(
                         <div>
-                            {stateApproved ?
+                            {stateApproved!=null ?
                                 <div style={{display: "flex",justifyContent:"space-between"}}>
                                     <div>${stateApproved}</div>
                                     {record.stateApprovedStatus != 3 ? 
@@ -186,17 +187,17 @@ const columns = [
                                         <div style={{color: "red"}}>&#x2718;</div>
                                     }
                                 </div>
-                            : null}
+                            : 'P'}
                         </div>
                     )
                 }
             },
-            {
-                title: 'Status',
-                dataIndex: 'approvedStatus',
-                key: 'approvedStatus',
-                sorter: (a, b) => tableSort(a, b, "approvedStatus")
-            },
+            // {
+            //     title: 'Status',
+            //     dataIndex: 'approvedStatus',
+            //     key: 'approvedStatus',
+            //     sorter: (a, b) => tableSort(a, b, "approvedStatus")
+            // },
             {
                 title: "Action",
                 dataIndex: 'action',
@@ -360,7 +361,7 @@ class RegistrationChange extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-        console.log("this.props.regChangeState", this.props.regChangeState);
+       // console.log("this.props.regChangeState", this.props.regChangeState);
         const {regChangeCompetitions} = this.props.regChangeState;
         const {regChangeTypes} = this.props.commonReducerState;
         let competitionList;

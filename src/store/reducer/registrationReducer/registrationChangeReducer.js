@@ -33,6 +33,7 @@ const initialState = {
     ],
     reloadFormData:0,
     saveData : {
+        isAdmin:1,
         regChangeTypeRefId: 0,         // DeRegister/ Transfer
         deRegistrationOptionId: 0,   /// Yes/No
         reasonTypeRefId: 0,      
@@ -64,10 +65,10 @@ const initialState = {
         isShowButton: null
     },
     reviewSaveData: {
-        refundAmount: null,
         refundTypeRefId:null,
         declineReasonRefId:null,
-        otherInfo:null
+        otherInfo:null,
+        invoices: null
     }
 }
 

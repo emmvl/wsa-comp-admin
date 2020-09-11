@@ -45,10 +45,7 @@ class InnerHorizontalMenu extends React.Component {
         checkOrganisationLevel().then((value) => (
             this.setState({ organisationLevel: value, orgState: true })
         ));
-        checkLivScoreCompIsParent().then((value) => (
-            this.setState({ liveScoreCompIsParent: value })
-        ))
-
+        this.setLivScoreCompIsParent()
         if (this.props) {
             if (this.props.compSelectedKey !== "18") {
                 localStorage.removeItem("draws_roundTime");
@@ -56,6 +53,12 @@ class InnerHorizontalMenu extends React.Component {
                 localStorage.removeItem("draws_venue");
             }
         }
+    }
+
+    setLivScoreCompIsParent = () => {
+        checkLivScoreCompIsParent().then((value) => (
+            this.setState({ liveScoreCompIsParent: value })
+        ))
     }
 
     async componentDidUpdate(nextProps) {
@@ -68,7 +71,7 @@ class InnerHorizontalMenu extends React.Component {
 
                     if (nextProps.appState == this.props.appState) {
                         if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
-                            let yearId = this.props.appState.yearList[0].id
+                            let yearId = this.props.appState.yearList.length > 0 && this.props.appState.yearList[0].id
                             let yearRefId = localStorage.getItem("yearId")
                             if (yearRefId) {
                                 this.props.innerHorizontalCompetitionListAction(organisationId, yearRefId)
@@ -120,250 +123,256 @@ class InnerHorizontalMenu extends React.Component {
                     }
                 }
                 this.setState({ selectedComp: firstComp, compArray: compList, loading: false })
+                this.setLivScoreCompIsParent()
             }
         }
     }
 
-
     setCompetitionID = (compId) => {
-        this.setState({ selectedComp: compId })
-        let compObj = null
+        this.setState({ selectedComp: compId });
+        let compObj = null;
         for (let i in this.state.compArray) {
             if (compId == this.state.compArray[i].id) {
-                compObj = this.state.compArray[i]
+                compObj = this.state.compArray[i];
                 break;
             }
         }
-        localStorage.setItem("LiveScoreCompetition", JSON.stringify(compObj))
-        history.push("/liveScoreDashboard")
-    }
 
-    setYearId(yearId) {
+        localStorage.setItem("LiveScoreCompetition", JSON.stringify(compObj));
+        history.push("/liveScoreDashboard");
+    };
 
-        localStorage.setItem("yearValue", "true")
-        this.setState({ yearId, loading: true })
+    setYearId = (yearId) => {
+        localStorage.setItem("yearValue", "true");
+        this.setState({ yearId, loading: true });
 
-        localStorage.setItem("yearId", yearId)
-        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
-        this.props.innerHorizontalCompetitionListAction(organisationId, yearId)
+        localStorage.setItem("yearId", yearId);
+        let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        this.props.innerHorizontalCompetitionListAction(organisationId, yearId);
 
-        history.push("/liveScoreDashboard")
-    }
+        history.push("/liveScoreDashboard");
+    };
 
     render() {
         let orgLevel = this.state.organisationLevel;
         const { menu, selectedKey } = this.props;
-        const { competitionList } = this.props.innerHorizontalState
-        let compList = isArrayNotEmpty(competitionList) ? competitionList : []
-        let { liveScoreCompIsParent } = this.state
-        const { yearList } = this.props.appState
+        const { competitionList } = this.props.innerHorizontalState;
+        let compList = isArrayNotEmpty(competitionList) ? competitionList : [];
+        let { liveScoreCompIsParent } = this.state;
+        const { yearList } = this.props.appState;
         return (
             <div>
-                {menu === "competition" && <Menu
-                    // className="nav-collapse collapse"
-                    theme="light"
-                    mode="horizontal"
-                    defaultSelectedKeys={['1']}
-                    style={{ lineHeight: '64px' }}
-                    selectedKeys={[this.props.compSelectedKey]}
-                >
-                    <Menu.Item key="1">
-                        <NavLink to="/competitionDashboard">
-                            Dashboard
-                        </NavLink>
-                    </Menu.Item>
-
-                    <SubMenu
-                        key="sub1"
-                        title={
-                            <span id={AppUniqueId.own_comp_tab} >Own Competitions</span>
-                        }
+                {menu === "competition" && (
+                    <Menu
+                        // className="nav-collapse collapse"
+                        theme="light"
+                        mode="horizontal"
+                        defaultSelectedKeys={['1']}
+                        style={{ lineHeight: '64px' }}
+                        selectedKeys={[this.props.compSelectedKey]}
                     >
-                        <Menu.Item key="2">
-                            {/* <a href="https://comp-management-test.firebaseapp.com/quick-competitions.html">Quick Competition</a> */}
-                            <NavLink to="/quickCompetition">
-                                <span id={AppUniqueId.quick_comp_subtab}>Quick Competition</span>
+                        <Menu.Item key="1">
+                            <NavLink to="/competitionDashboard">
+                                Dashboard
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key="3">
-                            <NavLink to="/competitionOpenRegForm">
-                                <span id={AppUniqueId.comp_details_subtab}> Competition Details</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="4">
-                            <NavLink to="/competitionPlayerGrades">
-                                <span id={AppUniqueId.player_grad_subtab}>Player Grading</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="5">
-                            <NavLink to="/competitionPartTeamGradeCalculate">
-                                <span id={AppUniqueId.team_grad_subtab}>Team Grading</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="6">
-                            <NavLink to="/competitionCourtAndTimesAssign">
-                                <span id={AppUniqueId.timeslots_subtab}>Time Slots</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="7">
-                            <NavLink to="/competitionVenueTimesPrioritisation">
-                                <span id={AppUniqueId.venues_subtab}>Venues</span>
-                            </NavLink>
-                        </Menu.Item>
-                        {/* <Menu.Item key="8">
-                            <NavLink to="/competitionLadder">
-                                <span>Ladder</span>
-                            </NavLink>
-                        </Menu.Item> */}
-                        <Menu.Item key="9">
-                            <NavLink to="/competitionFormat">
-                                <span id={AppUniqueId.comp_formats_subtab}>Competition Format</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="10">
-                            <NavLink to="/competitionFinals">
-                                <span id={AppUniqueId.finals_subtab}>Finals</span>
-                            </NavLink>
-                        </Menu.Item>
-                        {/* <Menu.Item key="11">
-                            <a href="http://clixlogix.org/test/netball/fixtures.html">Fixtures</a>
-                            <NavLink to="competitionFixtures">
-                                Fixtures
-                            </NavLink>
-                        </Menu.Item> */}
 
-                        <Menu.Item key="18">
-                            {/* <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a> */}
-                            <NavLink to="/competitionDraws">
-                                <span id={AppUniqueId.draws_subtab}>Draws</span>
-                            </NavLink>
-                        </Menu.Item>
-                        {/* <SubMenu
-                            key="sub2"
+                        <SubMenu
+                            key="sub1"
                             title={
-                                <span>Draw</span>
+                                <span id={AppUniqueId.own_comp_tab} >Own Competitions</span>
                             }
                         >
-                            <Menu.Item key="13">
-                                <NavLink to="/competitionReGrading">
-                                    <span>Re-grading</span>
+                            <Menu.Item key="2">
+                                {/* <a href="https://comp-management-test.firebaseapp.com/quick-competitions.html">Quick Competition</a> */}
+                                <NavLink to="/quickCompetition">
+                                    <span id={AppUniqueId.quick_comp_subtab}>Quick Competition</span>
                                 </NavLink>
                             </Menu.Item>
+                            <Menu.Item key="3">
+                                <NavLink to="/competitionOpenRegForm">
+                                    <span id={AppUniqueId.comp_details_subtab}> Competition Details</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="4">
+                                <NavLink to="/competitionPlayerGrades">
+                                    <span id={AppUniqueId.player_grad_subtab}>Player Grading</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="5">
+                                <NavLink to="/competitionPartTeamGradeCalculate">
+                                    <span id={AppUniqueId.team_grad_subtab}>Team Grading</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="6">
+                                <NavLink to="/competitionCourtAndTimesAssign">
+                                    <span id={AppUniqueId.timeslots_subtab}>Time Slots</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="7">
+                                <NavLink to="/competitionVenueTimesPrioritisation">
+                                    <span id={AppUniqueId.venues_subtab}>Venues</span>
+                                </NavLink>
+                            </Menu.Item>
+                            {/*
+                            <Menu.Item key="8">
+                                <NavLink to="/competitionLadder">
+                                    <span>Ladder</span>
+                                </NavLink>
+                            </Menu.Item>
+                            */}
+                            <Menu.Item key="9">
+                                <NavLink to="/competitionFormat">
+                                    <span id={AppUniqueId.comp_formats_subtab}>Competition Format</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="10">
+                                <NavLink to="/competitionFinals">
+                                    <span id={AppUniqueId.finals_subtab}>Finals</span>
+                                </NavLink>
+                            </Menu.Item>
+                            {/*
+                            <Menu.Item key="11">
+                                <a href="http://clixlogix.org/test/netball/fixtures.html">Fixtures</a>
+                                <NavLink to="competitionFixtures">
+                                    Fixtures
+                                </NavLink>
+                            </Menu.Item>
+                            */}
                             <Menu.Item key="18">
-                                <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a>
+                                {/* <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a> */}
                                 <NavLink to="/competitionDraws">
-                                    <span>Draws</span>
+                                    <span id={AppUniqueId.draws_subtab}>Draws</span>
                                 </NavLink>
                             </Menu.Item>
-                        </SubMenu> */}
-                    </SubMenu>
+                            {/*
+                            <SubMenu
+                                key="sub2"
+                                title={
+                                    <span>Draw</span>
+                                }
+                            >
+                                <Menu.Item key="13">
+                                    <NavLink to="/competitionReGrading">
+                                        <span>Re-grading</span>
+                                    </NavLink>
+                                </Menu.Item>
+                                <Menu.Item key="18">
+                                    <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a>
+                                    <NavLink to="/competitionDraws">
+                                        <span>Draws</span>
+                                    </NavLink>
+                                </Menu.Item>
+                            </SubMenu> */}
+                        </SubMenu>
 
-                    <SubMenu
-                        key="sub3"
-                        title={
-                            <span id={AppUniqueId.participating_in_comp_tab}>Participating-In Competitions</span>
-                        }
+                        <SubMenu
+                            key="sub3"
+                            title={
+                                <span id={AppUniqueId.participating_in_comp_tab}>Participating-In Competitions</span>
+                            }
+                        >
+                            <Menu.Item key="14">
+                                <NavLink to="/competitionPartPlayerGrades">
+                                    <span id={AppUniqueId.playergrad_particip_tab}>Player Grading</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="15">
+                                <NavLink to="/competitionPartProposedTeamGrading">
+                                    <span id={AppUniqueId.teamgrad_particip_tab}>Team Grading</span>
+                                </NavLink>
+                            </Menu.Item>
+                        </SubMenu>
+                    </Menu>
+                )}
+
+                {menu === "registration" && (
+                    <Menu
+                        theme="light"
+                        mode="horizontal"
+                        defaultSelectedKeys={['1']}
+                        style={{ lineHeight: '64px' }}
+                        selectedKeys={[this.props.regSelectedKey]}
                     >
-                        <Menu.Item key="14">
-                            <NavLink to="/competitionPartPlayerGrades">
-                                <span id={AppUniqueId.playergrad_particip_tab}>Player Grading</span>
+                        <Menu.Item key="1">
+                            <NavLink to="/registrationDashboard">
+                                <span>Dashboard</span>
                             </NavLink>
                         </Menu.Item>
-                        <Menu.Item key="15">
-                            <NavLink to="/competitionPartProposedTeamGrading">
-                                <span id={AppUniqueId.teamgrad_particip_tab}>Team Grading</span>
-                            </NavLink>
-                        </Menu.Item>
-                    </SubMenu>
-                </Menu>
-                }
-
-                {menu === "registration" && <Menu
-                    theme="light"
-                    mode="horizontal"
-                    defaultSelectedKeys={['1']}
-                    style={{ lineHeight: '64px' }}
-                    selectedKeys={[this.props.regSelectedKey]}
-                >
-                    <Menu.Item key="1">
-                        <NavLink to="/registrationDashboard">
-                            <span>Dashboard</span>
-                        </NavLink>
-                    </Menu.Item>
-                    <SubMenu
-                        key="sub4"
-                        title={
-                            <span>Registrations</span>
-                        }
-                    >
-                        <Menu.Item key="2">
-                            <NavLink to="/registration">
+                        <SubMenu
+                            key="sub4"
+                            title={
                                 <span>Registrations</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="10">
-                            <NavLink to="/teamRegistrations">
-                                <span>Team Registrations</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="9">
-                            <NavLink to="/registrationChange">
-                                <span>Registration Change</span>
-                            </NavLink>
-                        </Menu.Item>
-                    </SubMenu>
-                    {orgLevel === AppConstants.national || orgLevel === AppConstants.state && (
-                        <Menu.Item key="6">
-                            <NavLink to="/registrationMembershipList">
-                                <span>Membership</span>
-                            </NavLink>
-                        </Menu.Item>
-                    )}
-                    <SubMenu
-                        key="sub1"
-                        title={
-                            <span>Competition</span>
-                        }
-                    >
-                        <Menu.Item key="7">
-                            <NavLink to="/registrationCompetitionList">
+                            }
+                        >
+                            <Menu.Item key="2">
+                                <NavLink to="/registration">
+                                    <span>Registrations</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="10">
+                                <NavLink to="/teamRegistrations">
+                                    <span>Team Registrations</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="9">
+                                <NavLink to="/registrationChange">
+                                    <span>Registration Change</span>
+                                </NavLink>
+                            </Menu.Item>
+                        </SubMenu>
+                        {(orgLevel === AppConstants.national || orgLevel === AppConstants.state) && (
+                            <Menu.Item key="6">
+                                <NavLink to="/registrationMembershipList">
+                                    <span>Membership</span>
+                                </NavLink>
+                            </Menu.Item>
+                        )}
+                        <SubMenu
+                            key="sub1"
+                            title={
                                 <span>Competition</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="3">
-                            <NavLink to="/registrationFormList">
-                                <span>Registration Form</span>
-                            </NavLink>
-                        </Menu.Item>
-                    </SubMenu>
-                    <SubMenu
-                        key="sub2"
-                        title={
-                            <span>Payments</span>
-                        }
-                    >
-                        <Menu.Item key="8">
-                            <NavLink to="/paymentDashboard">
-                                <span>Payment Dashboard</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="4">
-                            <NavLink to="/registrationPayments">
-                                <span>Payment Gateway</span>
-                            </NavLink>
-                            {/* <a href="https://comp-management-test.firebaseapp.com/payment-dashboard.html">Payments</a> */}
-                        </Menu.Item>
-                        <Menu.Item key="5">
-                            <NavLink to="/registrationSettlements">
-                                <span>Payouts</span>
-                            </NavLink>
-                        </Menu.Item>
-                    </SubMenu>
-                    {/* <Menu.Item key="9">De-registration forms</Menu.Item> */}
-                </Menu>
-                }
+                            }
+                        >
+                            <Menu.Item key="7">
+                                <NavLink to="/registrationCompetitionList">
+                                    <span>Competition</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="3">
+                                <NavLink to="/registrationFormList">
+                                    <span>Registration Form</span>
+                                </NavLink>
+                            </Menu.Item>
+                        </SubMenu>
+                        <SubMenu
+                            key="sub2"
+                            title={
+                                <span>Payments</span>
+                            }
+                        >
+                            <Menu.Item key="8">
+                                <NavLink to="/paymentDashboard">
+                                    <span>Payment Dashboard</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="4">
+                                <NavLink to="/registrationPayments">
+                                    <span>Payment Gateway</span>
+                                </NavLink>
+                                {/* <a href="https://comp-management-test.firebaseapp.com/payment-dashboard.html">Payments</a> */}
+                            </Menu.Item>
+                            <Menu.Item key="5">
+                                <NavLink to="/registrationSettlements">
+                                    <span>Payouts</span>
+                                </NavLink>
+                            </Menu.Item>
+                        </SubMenu>
+                        {/* <Menu.Item key="9">De-registration forms</Menu.Item> */}
+                    </Menu>
+                )}
 
-                {menu === "liveScore" &&
+                {menu === "liveScore" && (
                     <div className="row mr-0">
                         <div className="col-sm pr-0">
                             <Menu
@@ -373,7 +382,6 @@ class InnerHorizontalMenu extends React.Component {
                                 style={{ lineHeight: '64px' }}
                                 selectedKeys={[this.props.liveScoreSelectedKey]}
                             >
-
                                 <Menu.Item key="1">
                                     <NavLink to="/liveScoreDashboard">
                                         <span>Dashboard</span>
@@ -386,9 +394,7 @@ class InnerHorizontalMenu extends React.Component {
                                     }
                                 >
                                     <Menu.Item key="2">
-                                        <NavLink to={{
-                                            pathname: '/liveScoreMatches',
-                                        }}>
+                                        <NavLink to={{ pathname: '/liveScoreMatches' }}>
                                             <span>Matches</span>
                                         </NavLink>
                                     </Menu.Item>
@@ -399,7 +405,7 @@ class InnerHorizontalMenu extends React.Component {
                                     </Menu.Item>
                                     <Menu.Item key="23">
                                         <NavLink to="/LiveScoreCoaches">
-                                            <span>Coaches </span>
+                                            <span>Coaches</span>
                                         </NavLink>
                                     </Menu.Item>
                                     <Menu.Item key="4">
@@ -413,10 +419,12 @@ class InnerHorizontalMenu extends React.Component {
                                         </NavLink>
                                     </Menu.Item>
                                     <Menu.Item key="6">
-                                        <NavLink to={{
-                                            pathname: "/umpireDashboard",
-                                            state: { liveScoreUmpire: 'liveScoreUmpire' }
-                                        }}>
+                                        <NavLink
+                                            to={{
+                                                pathname: "/umpireDashboard",
+                                                state: { liveScoreUmpire: 'liveScoreUmpire' }
+                                            }}
+                                        >
                                             <span>Umpires</span>
                                         </NavLink>
                                     </Menu.Item>
@@ -452,16 +460,20 @@ class InnerHorizontalMenu extends React.Component {
                                         <span>Match Day</span>
                                     }
                                 >
-                                    {liveScoreCompIsParent && <Menu.Item key="12">
-                                        <NavLink to="/liveScoreBulkChange">
-                                            <span>Bulk Match Change</span>
-                                        </NavLink>
-                                    </Menu.Item>}
-                                    {liveScoreCompIsParent && <Menu.Item key="13">
-                                        <NavLink to="liveScoreVenueChange">
-                                            <span>Court Change</span>
-                                        </NavLink>
-                                    </Menu.Item>}
+                                    {liveScoreCompIsParent && (
+                                        <Menu.Item key="12">
+                                            <NavLink to="/liveScoreBulkChange">
+                                                <span>Bulk Match Change</span>
+                                            </NavLink>
+                                        </Menu.Item>
+                                    )}
+                                    {liveScoreCompIsParent && (
+                                        <Menu.Item key="13">
+                                            <NavLink to="liveScoreVenueChange">
+                                                <span>Court Change</span>
+                                            </NavLink>
+                                        </Menu.Item>
+                                    )}
                                     <Menu.Item key="14">
                                         <NavLink to="/liveScoreTeamAttendance">
                                             <span>Team Attendance</span>
@@ -478,11 +490,13 @@ class InnerHorizontalMenu extends React.Component {
                                                 <span>Game Time</span>
                                             </NavLink>
                                         </Menu.Item>
-                                        {/* <Menu.Item key="16">
-                                <NavLink to="/liveScoreShooting">
-                                    <span>Shooting</span>
-                                </NavLink>
-                            </Menu.Item> */}
+                                        {/*
+                                        <Menu.Item key="16">
+                                            <NavLink to="/liveScoreShooting">
+                                                <span>Shooting</span>
+                                            </NavLink>
+                                        </Menu.Item>
+                                        */}
                                         <Menu.Item key="16">
                                             <NavLink to="/liveScoreGoalsList">
                                                 <span>Goals</span>
@@ -500,171 +514,157 @@ class InnerHorizontalMenu extends React.Component {
                                         </NavLink>
                                     </Menu.Item>
                                 </SubMenu>
-                                {liveScoreCompIsParent && <SubMenu
-                                    key="sub4"
-                                    title={
-                                        <span>Settings</span>
-                                    }
-                                >
-                                    <Menu.Item key="18">
-                                        <NavLink to={{
-                                            pathname: '/liveScoreSettingsView',
-                                            state: 'edit'
-                                        }}>
+                                {liveScoreCompIsParent && (
+                                    <SubMenu
+                                        key="sub4"
+                                        title={
                                             <span>Settings</span>
+                                        }
+                                    >
+                                        <Menu.Item key="18">
+                                            <NavLink
+                                                to={{
+                                                    pathname: '/liveScoreSettingsView',
+                                                    state: 'edit'
+                                                }}
+                                            >
+                                                <span>Settings</span>
+                                            </NavLink>
+                                        </Menu.Item>
+                                        <Menu.Item key="19">
+                                            <NavLink to="/liveScoreLadderSettings">
+                                                <span>Ladder/Draw</span>
+                                            </NavLink>
+                                        </Menu.Item>
+                                        <Menu.Item key="20">
+                                            <NavLink to="/liveScoreBanners">
+                                                <span>Banners</span>
+                                            </NavLink>
+                                        </Menu.Item>
+                                        <Menu.Item key="22">
+                                            <NavLink to="/liveScoreMatchSheet">
+                                                <span>Match Sheets</span>
+                                            </NavLink>
+                                        </Menu.Item>
+                                    </SubMenu>
+                                )}
+                                {liveScoreCompIsParent && (
+                                    <Menu.Item key="21">
+                                        <NavLink to="/liveScoreNewsList">
+                                            <span>News & Messages</span>
                                         </NavLink>
                                     </Menu.Item>
-                                    <Menu.Item key="19">
-                                        <NavLink to="/liveScoreLadderSettings">
-                                            <span>Ladder/Draw</span>
-                                        </NavLink>
-                                    </Menu.Item>
-                                    <Menu.Item key="20">
-                                        <NavLink to="/liveScoreBanners">
-                                            <span>Banners</span>
-                                        </NavLink>
-                                    </Menu.Item>
-                                    <Menu.Item key="22">
-                                        <NavLink to="/liveScoreMatchSheet">
-                                            <span>Match Sheets</span>
-                                        </NavLink>
-                                    </Menu.Item>
-                                </SubMenu>}
-                                {liveScoreCompIsParent && <Menu.Item key="21">
-                                    <NavLink to="/liveScoreNewsList">
-                                        <span>News & Messages</span>
-                                    </NavLink>
-                                </Menu.Item>}
+                                )}
                             </Menu>
-
-
                         </div>
 
-
-
-                        <div className='inner-horizontal-Comp-year-dropdown-div'>
-
+                        <div className="inner-horizontal-Comp-year-dropdown-div">
                             <div className="inner-horizontal-dropdown-marginTop">
                                 <Select
-                                    style={{ width: "fit-content", width: 90 }}
+                                    style={{ width: 90 }}
                                     className="year-select reg-filter-select1 ml-5"
+                                    // onChange={this.setYearId}
                                     onChange={(yearId) => this.setYearId(yearId)}
                                     value={JSON.parse(this.state.yearId)}
                                 >
                                     {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                        < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
-                                    ))
-                                    }
-
+                                        <Option key={"yearlist" + yearIndex} value={item.id}>{item.name}</Option>
+                                    ))}
                                 </Select>
                             </div>
-
 
                             <div className="col-sm-2 pr-5 inner-horizontal-dropdown-marginTop inner-horizontal-Comp-dropdown-div">
                                 <Select
                                     style={{ width: "fit-content", minWidth: 190, maxWidth: 220 }}
                                     className="year-select reg-filter-select1 innerSelect-value"
-                                    onChange={(comp) => this.setCompetitionID(comp)}
+                                    onChange={this.setCompetitionID}
                                     value={this.state.selectedComp}
                                 >
-                                    {
-                                        compList.map((item, index) => {
-                                            return <Option key={`longName` + index} value={item.id}>{item.longName}</Option>
-                                        })
-                                    }
-
+                                    {compList.map((item, index) => (
+                                        <Option key={'longName' + index} value={item.id}>{item.longName}</Option>
+                                    ))}
                                 </Select>
                             </div>
-
                         </div>
-
                     </div>
+                )}
 
-                }
-
-                {menu === "umpire" && <Menu
-                    theme="light"
-                    mode="horizontal"
-                    defaultSelectedKeys={['1']}
-                    style={{ lineHeight: '64px' }}
-                    selectedKeys={[this.props.umpireSelectedKey]}
-                >
-                    <Menu.Item key="1">
-                        <NavLink to="/umpireDashboard">
-                            <span>Dashboard</span>
-                        </NavLink>
-                    </Menu.Item>
-
-
-                    <SubMenu
-                        key="Umpires"
-                        title={
-                            <span>Umpires</span>
-                        }
+                {menu === "umpire" && (
+                    <Menu
+                        theme="light"
+                        mode="horizontal"
+                        defaultSelectedKeys={['1']}
+                        style={{ lineHeight: '64px' }}
+                        selectedKeys={[this.props.umpireSelectedKey]}
                     >
-                        <Menu.Item key="2">
-                            <NavLink to="/umpire">
-                                <span>Umpires</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="3">
-                            <NavLink to="/umpireRoster">
-                                <span>Umpire Roster</span>
+                        <Menu.Item key="1">
+                            <NavLink to="/umpireDashboard">
+                                <span>Dashboard</span>
                             </NavLink>
                         </Menu.Item>
                         <SubMenu
-                            key="umpireAllocation"
+                            key="Umpires"
                             title={
-                                <span>Umpire Allocation</span>
+                                <span>Umpires</span>
                             }
                         >
-                            <Menu.Item key="6">
-                                <NavLink to="/umpireSetting">
+                            <Menu.Item key="2">
+                                <NavLink to="/umpire">
+                                    <span>Umpires</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="3">
+                                <NavLink to="/umpireRoster">
+                                    <span>Umpire Roster</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <SubMenu
+                                key="umpireAllocation"
+                                title={
+                                    <span>Umpire Allocation</span>
+                                }
+                            >
+                                <Menu.Item key="6">
+                                    <NavLink to="/umpireSetting">
+                                        <span>Settings</span>
+                                    </NavLink>
+                                </Menu.Item>
+                                <Menu.Item key="5">
+                                    <NavLink to="/umpirePoolAllocation">
+                                        <span>Pools</span>
+                                    </NavLink>
+                                </Menu.Item>
+                                <Menu.Item key="4">
+                                    <NavLink to="/umpireDivisions">
+                                        <span>Divisions</span>
+                                    </NavLink>
+                                </Menu.Item>
+                            </SubMenu>
+                        </SubMenu>
+                        <SubMenu
+                            key="payments"
+                            title={
+                                <span>Payments</span>
+                            }
+                        >
+                            <Menu.Item key="7">
+                                <NavLink to="/umpirePayment">
+                                    <span>Payments</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="8">
+                                <NavLink to="/umpirePayout">
+                                    <span>Payouts</span>
+                                </NavLink>
+                            </Menu.Item>
+                            <Menu.Item key="9">
+                                <NavLink to="/umpirePaymentSetting">
                                     <span>Settings</span>
                                 </NavLink>
                             </Menu.Item>
-                            <Menu.Item key="5">
-                                <NavLink to="/umpirePoolAllocation">
-                                    <span>Pools</span>
-                                </NavLink>
-                            </Menu.Item>
-                            <Menu.Item key="4">
-                                <NavLink to="/umpireDivisions">
-                                    <span>Divisions</span>
-                                </NavLink>
-                            </Menu.Item>
-
-
                         </SubMenu>
-                    </SubMenu>
-
-                    <SubMenu
-                        key="payments"
-                        title={
-                            <span>Payments</span>
-                        }
-                    >
-                        <Menu.Item key="7">
-                            <NavLink to="/umpirePayment">
-                                <span>Payments</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="8">
-                            <NavLink to="/umpirePayout">
-                                <span>Payouts</span>
-                            </NavLink>
-                        </Menu.Item>
-                        <Menu.Item key="9">
-                            <NavLink to="/umpirePaymentSetting">
-                                <span>Settings</span>
-                            </NavLink>
-                        </Menu.Item>
-                    </SubMenu>
-
-
-                </Menu>
-                }
-
+                    </Menu>
+                )}
 
                 {menu === "user" && (
                     <Menu
@@ -675,9 +675,11 @@ class InnerHorizontalMenu extends React.Component {
                         selectedKeys={[this.props.userSelectedKey]}
                     >
                         <Menu.Item key="1">
-                            {/* <NavLink to="/userGraphicalDashboard">
+                            {/*
+                            <NavLink to="/userGraphicalDashboard">
                                 <span>{AppConstants.dashboard}</span>
-                            </NavLink> */}
+                            </NavLink>
+                            */}
                             <NavLink to="/userTextualDashboard">
                                 <span>{AppConstants.dashboard}</span>
                             </NavLink>
@@ -686,11 +688,13 @@ class InnerHorizontalMenu extends React.Component {
                             key="sub2"
                             title={<span>{AppConstants.users}</span>}
                         >
-                            {/* <Menu.Item key="4">
+                            {/*
+                            <Menu.Item key="4">
                                 <NavLink to="/userTextualDashboard">
                                     <span>{AppConstants.users}</span>
                                 </NavLink>
-                            </Menu.Item> */}
+                            </Menu.Item>
+                            */}
                             <Menu.Item key="5">
                                 <NavLink to="/playWithFriend">
                                     <span>{AppConstants.playWithAFriend}</span>
@@ -702,8 +706,8 @@ class InnerHorizontalMenu extends React.Component {
                                 </NavLink>
                             </Menu.Item>
                         </SubMenu>
-
-                        {/* <SubMenu
+                        {/*
+                        <SubMenu
                             key="sub2"
                             title={<span>{AppConstants.maintain}</span>}
                         >
@@ -712,7 +716,8 @@ class InnerHorizontalMenu extends React.Component {
                                     <span>{AppConstants.venueAndCourts}</span>
                                 </NavLink>
                             </Menu.Item>
-                        </SubMenu> */}
+                        </SubMenu>
+                        */}
                         <SubMenu
                             key="sub1"
                             title={
@@ -734,11 +739,13 @@ class InnerHorizontalMenu extends React.Component {
                                     <span>{AppConstants.affiliateDirectory}</span>
                                 </NavLink>
                             </Menu.Item>
-                            {/* <Menu.Item key="3">
+                            {/*
+                            <Menu.Item key="3">
                                 <NavLink to="/userAffiliateApproveRejectForm">
                                     <span>{AppConstants.affiliateApproveReject}</span>
                                 </NavLink>
-                            </Menu.Item> */}
+                            </Menu.Item>
+                            */}
                         </SubMenu>
                     </Menu>
                 )}
@@ -753,7 +760,7 @@ class InnerHorizontalMenu extends React.Component {
                     >
                         <Menu.Item key="1">
                             <NavLink to="/homeDashboard">
-                                <span id={AppConstants.homeTab}>  {AppConstants.home}</span>
+                                <span id={AppConstants.homeTab}>{AppConstants.home}</span>
                             </NavLink>
                         </Menu.Item>
                         <SubMenu
@@ -807,7 +814,6 @@ class InnerHorizontalMenu extends React.Component {
                                 </NavLink>
                             </Menu.Item>
                         </SubMenu>
-
                         <Menu.Item key="4">
                             <NavLink to="/shopSettings">
                                 <span>{AppConstants.settings}</span>
@@ -820,20 +826,21 @@ class InnerHorizontalMenu extends React.Component {
                     <AccountMenu selectedKey={selectedKey} />
                 )}
 
-                {menu === "liveScoreNews" && <Menu
-                    theme="light"
-                    mode="horizontal"
-                    defaultSelectedKeys={['1']}
-                    style={{ lineHeight: '64px' }}
-                    selectedKeys={[this.props.liveScoreNewsSelectedKey]}
-                >
-                    <Menu.Item key="21">
-                        <NavLink to="/liveScoreNewsList">
-                            <span>News & Messages</span>
-                        </NavLink>
-                    </Menu.Item>
-                </Menu>
-                }
+                {menu === "liveScoreNews" && (
+                    <Menu
+                        theme="light"
+                        mode="horizontal"
+                        defaultSelectedKeys={['1']}
+                        style={{ lineHeight: '64px' }}
+                        selectedKeys={[this.props.liveScoreNewsSelectedKey]}
+                    >
+                        <Menu.Item key="21">
+                            <NavLink to="/liveScoreNewsList">
+                                <span>News & Messages</span>
+                            </NavLink>
+                        </Menu.Item>
+                    </Menu>
+                )}
             </div>
         );
     }

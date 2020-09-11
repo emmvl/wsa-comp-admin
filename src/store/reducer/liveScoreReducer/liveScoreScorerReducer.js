@@ -16,7 +16,7 @@ const initialState = {
     status: 0,
     scorerListResult: [],
     scorerListPage: 0,
-    scorerListTotalCount: "",
+    scorerListTotalCount: 0,
     scorerData: scorerObj,
     scorerRadioBtn: 'new',
     existingScorerId: null,
@@ -68,16 +68,16 @@ function liveScoreScorerState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_SCORER_LIST_SUCCESS:
-            let scorerList = action.result
+            let scorerList = action.result.users ? action.result.users : action.result
 
             // let teamData = getTeamData(scorerList.users)
             return {
                 ...state,
                 onLoad: false,
                 status: action.status,
-                scorerListResult: scorerList.users,
-                scorerListCurrentPage: scorerList.page.currentPage,
-                scorerListTotalCount: scorerList.page.totalCount
+                scorerListResult: scorerList,
+                scorerListCurrentPage: action.result.page ? action.result.page.currentPage : null,
+                scorerListTotalCount: action.result.page ? action.result.page.totalCount : null
             }
 
         case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
@@ -199,7 +199,7 @@ function liveScoreScorerState(state = initialState, action) {
 
 
         case ApiConstants.API_LIVESCORE_SCORER_SEARCH_LOAD:
-            
+
             return {
                 ...state,
                 onLoadSearch: true

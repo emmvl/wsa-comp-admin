@@ -10,7 +10,7 @@ function getliveScoreTeams(competitionID, divisionId) {
 
 // Team View action
 function getTeamViewPlayerList(teamId) {
-    return  {
+    return {
         type: ApiConstants.API_GET_TEAM_VIEW_PLAYER_LIST_LOAD,
         teamId,
     };
@@ -22,6 +22,12 @@ function liveScoreDeleteTeam(teamId) {
         type: ApiConstants.API_LIVE_SCORE_DELETE_TEAM_LOAD,
         teamId,
     };
+}
+function liveScoreDeletePlayerAction(playerId) {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD,
+        playerId,
+    }
 }
 
 function liveScoreAddTeamform(payload) {
@@ -99,4 +105,5 @@ export {
     liveScoreTeamResetImportResultAction,
     liveScoreGetTeamDataAction,
     getTeamsWithPagination,
+    liveScoreDeletePlayerAction,
 };

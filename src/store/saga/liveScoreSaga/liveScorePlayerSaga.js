@@ -116,6 +116,31 @@ function* liveScorePlayerImportSaga(action) {
   }
 }
 
+
+// Delete Player Saga
+
+function* liveScoreDeletePlayerSaga(action) {
+  try {
+    const result = yield call(LiveScoreAxiosApi.liveScoreDeletePlayer, action.playerId)
+
+
+    if (result.status == 1) {
+      yield put({
+        type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS,
+        status: result.status,
+      });
+      history.push("/liveScorePlayerList");
+
+      message.success("Player Deleted Successfully.");
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+
 // Player list pagination
 function* getPlayerListPaginationSaga(action) {
   try {
@@ -165,4 +190,5 @@ export default function* rootLiveScorePlayerSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD, liveScorePlayerImportSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD, getPlayerListPaginationSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SEARCH_LOAD, getPlayerListSearchSaga);
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD, liveScoreDeletePlayerSaga);
 }

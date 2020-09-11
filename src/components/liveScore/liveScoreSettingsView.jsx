@@ -23,7 +23,7 @@ import AppImages from "../../themes/appImages";
 import {
     getLiveScoreSettingInitiate,
     onChangeSettingForm,
-    settingDataPostInititae,
+    settingDataPostInitiate,
     clearLiveScoreSetting,
     searchVenueList,
     clearFilter,
@@ -40,7 +40,7 @@ import { onInviteesSearchAction } from "../../store/actions/registrationAction/c
 import { message } from "antd";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
 import { getOnlyYearListAction } from "store/actions/appAction";
-
+import { getOrganisationData } from '../../util/sessionStorage';
 
 
 const { Header, Footer } = Layout;
@@ -65,17 +65,24 @@ class LiveScoreSettingsView extends Component {
             edit: props.location ? props.location.state ? props.location.state.edit ? props.location.state.edit : null : null : null,
             competitionId: null,
             yearId: 1,
-            yearLoading: false
+            yearLoading: false,
+            organisationTypeRefId: 0,
+            regInvitees: false
         };
     }
     componentDidMount() {
+        localStorage.setItem("regInvitees", "true")
+        let orgData = getOrganisationData();
+        this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.onInviteeSearch('', 3)
+        this.onInviteeSearch('', 4)
         this.setState({ yearLoading: true })
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.props.umpireCompetitionListAction(null, null, organisationId)
 
         if (this.state.screenName == 'umpireDashboard') {
-
+            this.props.settingRegInvitees()
             if (this.state.selectedComp !== null) {
                 if (this.state.edit === 'edit' || this.state.selectedComp) {
                     this.props.getLiveScoreSettingInitiate(this.state.selectedComp)
@@ -134,9 +141,11 @@ class LiveScoreSettingsView extends Component {
 
         if (nextProps.appState !== this.props.appState) {
             if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
-                let yearId = this.props.appState.yearList[0].id
-                this.props.onChangeSettingForm({ key: "yearRefId", data: yearId })
-                this.setState({ yearLoading: false });
+                let yearId = this.props.appState.yearList.length > 0 ? this.props.appState.yearList[0].id : null
+                if (this.props.appState.yearList.length > 0) {
+                    this.props.onChangeSettingForm({ key: "yearRefId", data: yearId })
+                    this.setState({ yearLoading: false });
+                }
             }
         }
     }
@@ -244,7 +253,13 @@ class LiveScoreSettingsView extends Component {
                     gamesBorrowedThreshold,
                     linkedCompetitionId,
                     premierCompLink,
-                    yearRefId
+                    yearRefId,
+                    invitedAnyAssoc,
+                    invitedAnyClub,
+                    associationChecked,
+                    clubChecked,
+                    associationLeague,
+                    clubSchool,
                 } = this.props.liveScoreSetting
 
                 localStorage.setItem("yearId", yearRefId)
@@ -276,7 +291,6 @@ class LiveScoreSettingsView extends Component {
                 formData.append('longName', captializedString(competitionName))
                 formData.append('name', captializedString(shortName))
                 formData.append('logo', competitionLogo)
-                // formData.append('recordUmpire', umpirenum)
                 formData.append('recordUmpireType', recordUmpire)
                 formData.append('gameTimeTracking', gameTimeTracking)
                 formData.append('positionTracking', positionTracking)
@@ -291,32 +305,78 @@ class LiveScoreSettingsView extends Component {
                 formData.append('buzzerEnabled', buzzerEnabled)
                 formData.append('warningBuzzerEnabled', warningBuzzerEnabled)
                 formData.append('playerBorrowingType', borrowedPlayer)
-
                 formData.append('gamesBorrowedThreshold', gamesBorrowedThreshold)
-
                 formData.append('linkedCompetitionId', linkedCompetitionId)
                 formData.append('yearRefId', yearRefId)
-
-
                 if (attendenceRecordingTime) {
                     formData.append('attendanceSelectionTime', attendenceRecordingTime)
                 }
-
-
                 if (lineupSelection) {
                     formData.append('lineupSelectionEnabled', lineupSelection)
                     formData.append('lineupSelectionTime', lineUpSelectionTime)
                 }
-
-
-                if (this.state.isEdit == 'add') {
-                    console.log(invitedTo, 'invitedTo', JSON.stringify(invitedTo))
-                    let invitedToArr = invitedTo[0] === 6 ? [] : invitedTo
-                    formData.append('invitedTo', JSON.stringify(invitedToArr))
-                    formData.append('invitedOrganisation', JSON.stringify(invitedOrganisation))
+                let invitedToArr = invitedTo.filter(function (item, index) {
+                    if (invitedTo.indexOf(item) == index)
+                        return item;
+                });
+                formData.append('invitedTo', JSON.stringify(invitedToArr))
+                if (invitedAnyAssoc.length > 0) {
+                    formData.append('invitedAnyAssoc', JSON.stringify(invitedAnyAssoc))
+                }
+                if (invitedAnyClub.length > 0) {
+                    formData.append('invitedAnyClub', JSON.stringify(invitedAnyClub))
                 }
 
-                this.props.settingDataPostInititae({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName, competitionId: this.state.competitionId, isEdit: this.state.isEdit })
+
+                if (invitedTo.length === 0) {
+                    message.config({
+                        duration: 1.5,
+                        maxCount: 1
+                    })
+                    message.error(ValidationConstants.pleaseSelectRegInvitees, 1.5);
+                    localStorage.setItem("regInvitees", "false")
+                } else if (associationChecked === true || clubChecked === true) {
+                    if (associationChecked === true && clubChecked === true) {
+                        if (associationLeague.length === 0 || clubSchool.length === 0) {
+                            message.config({
+                                duration: 1.5,
+                                maxCount: 1
+                            })
+                            message.error(ValidationConstants.pleaseSelectOrg, 1.5);
+                            localStorage.setItem("regInvitees", "false")
+                        } else {
+                            localStorage.setItem("regInvitees", "true")
+                        }
+                    } else if (associationChecked === true) {
+                        if (associationLeague.length === 0) {
+                            message.config({
+                                duration: 1.5,
+                                maxCount: 1
+                            })
+                            message.error(ValidationConstants.pleaseSelectOrg, 1.5);
+                            localStorage.setItem("regInvitees", "false")
+                        } else {
+                            localStorage.setItem("regInvitees", "true")
+                        }
+                    } else if (clubChecked === true) {
+                        if (clubSchool.length === 0) {
+                            message.config({
+                                duration: 1.5,
+                                maxCount: 1
+                            })
+                            message.error(ValidationConstants.pleaseSelectOrg, 1.5);
+                            localStorage.setItem("regInvitees", "false")
+                        } else {
+                            localStorage.setItem("regInvitees", "true")
+                        }
+                    }
+                } else {
+                    localStorage.setItem("regInvitees", "true")
+                }
+                let regInvitees = localStorage.getItem("regInvitees")
+                if (regInvitees === "true") {
+                    this.props.settingDataPostInitiate({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName, competitionId: this.state.competitionId, isEdit: this.state.isEdit })
+                }
 
             }
         });
@@ -972,7 +1032,8 @@ class LiveScoreSettingsView extends Component {
                     </Checkbox>
                 </div>
 
-                {this.state.isEdit == 'add' && this.regInviteesView()}
+                {/* {this.state.isEdit == 'add' && this.regInviteesView()} */}
+                {this.regInviteesView()}
             </div>
         )
     };
@@ -1059,8 +1120,9 @@ class LiveScoreSettingsView extends Component {
     }
 
     regInviteesView = () => {
-        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected, registrationInvitees, associationChecked, clubChecked } = this.props.liveScoreSetting
+        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected, registrationInvitees, associationChecked, clubChecked, invitedTo, anyOrgArray } = this.props.liveScoreSetting
         let invitees = isArrayNotEmpty(registrationInvitees) ? registrationInvitees : [];
+        let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
         return (
             <div >
                 <div>
@@ -1076,36 +1138,56 @@ class LiveScoreSettingsView extends Component {
                                 <div>
                                     {item.subReferences.length == 0 ?
                                         <Radio value={item.id}>{item.description}</Radio>
+
+
                                         : <div>
-                                            <div class="applicable-to-heading invitees-main">{item.description}</div>
+                                            <div class="applicable-to-heading invitees-main">{(orgLevelId == '2' || orgLevelId == '3') && item.description}</div>
                                             {(item.subReferences).map((subItem, subIndex) => (
-                                                subItem.id == 2
+                                                orgLevelId == '2' && subItem.id == 2
                                                     ?
                                                     <>
                                                         <div style={{ marginLeft: '20px' }}>
                                                             <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
                                                         </div>
 
-
-                                                    </>
-                                                    :
-                                                    <>
-                                                        <div style={{ marginLeft: '20px' }}>
-                                                            <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
-                                                        </div>
-
-
-
-                                                        <div style={{ marginLeft: 20 }}>
+                                                        {/* <div style={{ marginLeft: 20 }}>
                                                             <Radio.Group
-                                                                onChange={(e) => this.props.onChangeSettingForm({ key: "affiliateNonSelected", data: e.target.value })}
+                                                                onChange={(e) => this.props.onChangeSettingForm({ key: "affiliateNonSelected", data: e.target.value, subItem: subItem })}
                                                                 value={affiliateNonSelected}
                                                             >
                                                                 <Radio
 
                                                                     key={'none1'} value={'none1'}>{'None'}</Radio>
                                                             </Radio.Group>
-                                                        </div>
+                                                        </div> */}
+
+
+                                                    </>
+                                                    :
+                                                    <>
+                                                        {
+                                                            ((orgLevelId == '2' || orgLevelId == '3') && subItem.id == 3) &&
+                                                            <>
+                                                                <div style={{ marginLeft: '20px' }}>
+                                                                    <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
+                                                                </div>
+
+                                                                <div style={{ marginLeft: 20 }}>
+                                                                    <Radio.Group
+                                                                        onChange={(e) => this.props.onChangeSettingForm({ key: "affiliateNonSelected", data: e.target.value, subItem: subItem })}
+                                                                        value={affiliateNonSelected}
+                                                                    >
+                                                                        <Radio
+
+                                                                            key={'none1'} value={'none1'}>{'None'}</Radio>
+                                                                    </Radio.Group>
+                                                                </div>
+                                                            </>
+
+                                                        }
+
+
+
                                                     </>
 
                                             ))}
@@ -1131,23 +1213,6 @@ class LiveScoreSettingsView extends Component {
                                         <Radio value={item.id}>{item.description}</Radio>
                                         : <div>
                                             <div class="applicable-to-heading invitees-main">{item.description}</div>
-                                            {/* {(item.subReferences).map((subItem, subIndex) => (
-                                                <div style={{ marginLeft: '20px' }}>
-                                                    <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
-                                                    <Checkbox
-                                                        className="single-checkbox"
-                                                        checked={this.props.liveScoreSetting.checkBoxSelection}
-                                                        onChange={e => this.props.onChangeSettingForm({ key: 'anyOrgCheckBox', data: e.target.checked, subItem: subItem })}
-                                                    >
-                                                        {subItem.description}
-                                                    </Checkbox>
-
-                                                    {this.affiliatesSearchInvitee(subItem, anyOrgSelected)}
-
-                                                </div>
-
-
-                                            ))} */}
 
                                             <div style={{
                                                 display: "flex",
@@ -1155,11 +1220,11 @@ class LiveScoreSettingsView extends Component {
                                                 paddingLeft: 13
                                             }}>
 
-                                                <Checkbox style={{ paddingLeft: 7, paddingTop: 8 }} checked={associationChecked} onChange={e => this.props.onChangeSettingForm({ key: 'associationChecked', data: e.target.checked })}>{item.subReferences[0].description}</Checkbox>
+                                                <Checkbox style={{ paddingLeft: 7, paddingTop: 8 }} checked={associationChecked} onChange={e => this.props.onChangeSettingForm({ key: 'associationChecked', data: e.target.checked, checkBoxId: item.subReferences[0].id })}>{item.subReferences[0].description}</Checkbox>
 
                                                 {associationChecked && this.associationSearchInvitee()}
 
-                                                <Checkbox style={{ paddingTop: 15, paddingLeft: associationChecked ? 5 : 0 }} checked={clubChecked} onChange={e => this.props.onChangeSettingForm({ key: 'clubChecked', data: e.target.checked })}>{item.subReferences[1].description}</Checkbox>
+                                                <Checkbox style={{ paddingTop: 15, paddingLeft: associationChecked ? 5 : 0 }} checked={clubChecked} onChange={e => this.props.onChangeSettingForm({ key: 'clubChecked', data: e.target.checked, checkBoxId: item.subReferences[1].id })}>{item.subReferences[1].description}</Checkbox>
 
                                                 {clubChecked && this.clubSearchInvitee()}
 
@@ -1209,6 +1274,7 @@ class LiveScoreSettingsView extends Component {
 
 
                                         :
+                                        item.id == 5 &&
                                         <Radio value={item.id}>{item.description}</Radio>
                                     }
                                 </div>
@@ -1331,7 +1397,7 @@ class LiveScoreSettingsView extends Component {
                     <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"18"} />
                 }
                 {
-                    this.state.isEdit ?
+                    this.state.isEdit == 'edit' ?
                         <Loader visible={this.props.liveScoreSetting.editLoader} />
                         :
                         <Loader visible={this.props.liveScoreSetting.loader} />
@@ -1351,26 +1417,27 @@ class LiveScoreSettingsView extends Component {
         );
     }
 }
-function mapStatetoProps(state) {
+
+function mapStateToProps(state) {
     return {
         liveScoreSetting: state.LiveScoreSetting,
         venueList: state.LiveScoreMatchState,
-        appState: state.AppState,
         competitionFeesState: state.CompetitionFeesState,
         umpireCompetitionState: state.UmpireCompetitionState,
         appState: state.AppState,
     }
 }
-export default connect(mapStatetoProps, {
+
+export default connect(mapStateToProps, {
     clearLiveScoreSetting,
     getLiveScoreSettingInitiate,
     onChangeSettingForm,
     getCompetitionVenuesList,
-    settingDataPostInititae,
+    settingDataPostInitiate,
     searchVenueList,
     clearFilter,
     onInviteesSearchAction,
     settingRegInvitees,
     umpireCompetitionListAction,
     getOnlyYearListAction
-})((Form.create()(LiveScoreSettingsView)));
+})(Form.create()(LiveScoreSettingsView));
