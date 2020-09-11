@@ -217,8 +217,6 @@ class LiveScorePlayerList extends Component {
 
     }
 
-
-
     showDeleteConfirm = (playerId) => {
 
         let this_ = this

@@ -10,6 +10,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getTeamViewPlayerList, liveScoreDeleteTeam } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import moment from "moment";
+import { liveScoreDeletePlayerAction } from "../../store/actions/LiveScoreAction/liveScorePlayerAction";
+
 import Loader from '../../customComponents/loader'
 import { isArrayNotEmpty } from '../../util/helpers'
 import history from "../../util/history";
@@ -68,7 +70,7 @@ const columns = [
     },
     {
         title: "Action",
-        render: (data, record) => <Menu
+        render: (data, record, playerId) => <Menu
             className="action-triple-dot-submenu"
             theme="light"
             mode="horizontal"
@@ -85,6 +87,14 @@ const columns = [
                         <span>Edit</span>
                     </NavLink>
                 </Menu.Item>
+                <Menu.Item key="2" onClick={() => {
+                    _this.showDeleteConfirmPlayer(record.id);
+
+                }}>
+
+                    <span>Delete</span>
+                </Menu.Item>
+
             </Menu.SubMenu>
         </Menu>
     }
@@ -124,6 +134,31 @@ class LiveScoreTeamView extends Component {
 
         }
     }
+
+    // Delete Player
+    deletePlayer = (playerId) => {
+        this.props.liveScoreDeletePlayerAction(playerId)
+
+    }
+
+    showDeleteConfirmPlayer = (playerId) => {
+        let this_ = this
+        confirm({
+            title: 'Are you sure you want to delete this player?',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+                this_.deletePlayer(playerId)
+
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
+    }
+
+
     ////view for profile image
     profileImageView = () => {
         // let data = this.state.data 
@@ -395,7 +430,7 @@ class LiveScoreTeamView extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ getTeamViewPlayerList, liveScoreDeleteTeam }, dispatch)
+    return bindActionCreators({ getTeamViewPlayerList, liveScoreDeleteTeam, liveScoreDeletePlayerAction }, dispatch)
 }
 
 function mapStateToProps(state) {
