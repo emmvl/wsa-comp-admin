@@ -29,6 +29,23 @@ const listeners = (key) => ({
     onClick: () => tableSort(key),
 });
 
+function checkUserRoll(rolesArr, index) {
+    let isClub = "NO"
+    if (isArrayNotEmpty(rolesArr)) {
+        for (let i in rolesArr) {
+            let roles = rolesArr[i].role
+            if (roles.name == "umpire_coach") {
+                isClub = "YES"
+            }
+        }
+
+    }
+
+    return isClub
+
+}
+
+
 function tableSort(key) {
     let sortBy = key;
     let sortOrder = null;
@@ -128,7 +145,7 @@ const columns = [
         key: "umpireCoach",
         sorter: true,
         onHeaderCell: () => listeners("umpireCoach"),
-        render: (umpireCoach) => <span>{umpireCoach}</span>,
+        render: (umpireCoach, record, index) => <span>{checkUserRoll(record.userRoleEntities, index)}</span>,
     },
     {
         title: "Action",
@@ -203,7 +220,7 @@ class Umpire extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        let { sortBy, sortOrder } = this.state
+        const { sortBy, sortOrder } = this.state;
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList)
@@ -265,7 +282,7 @@ class Umpire extends Component {
     }
 
     handlePageChange = (page) => {
-        let { sortBy, sortOrder } = this.state
+        const { sortBy, sortOrder } = this.state;
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
             offsetData: offset,
@@ -282,8 +299,8 @@ class Umpire extends Component {
     };
 
     contentView = () => {
-        const { umpireList, totalCount, currentPage } = this.props.umpireState
-        let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : []
+        const { umpireList, totalCount, currentPage } = this.props.umpireState;
+        let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : [];
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -326,7 +343,8 @@ class Umpire extends Component {
     onChangeComp = (compID) => {
         let selectedComp = compID.comp;
         // setUmpireCompId(selectedComp);
-        let { sortBy, sortOrder } = this.state
+
+        const { sortBy, sortOrder } = this.state;
         let compObj = null;
         for (let i in this.state.compArray) {
             if (compID.comp === this.state.compArray[i].id) {
@@ -355,7 +373,8 @@ class Umpire extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value });
-        let { sortBy, sortOrder } = this.state
+
+        const { sortBy, sortOrder } = this.state;
         if (e.target.value === null || e.target.value === "") {
             this.props.umpireListAction({
                 refRoleId: refRoleTypes("umpire"),
@@ -369,14 +388,14 @@ class Umpire extends Component {
         }
     };
 
-    // search key 
+    // search key
     onKeyEnterSearchText = (e) => {
-        let { sortBy, sortOrder } = this.state
+        const { sortBy, sortOrder } = this.state;
         const code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             this.props.umpireListAction({
-                refRoleId: refRoleTypes('umpire'),
-                entityTypes: entityTypes('COMPETITION'),
+                refRoleId: refRoleTypes("umpire"),
+                entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,
                 offset: 0,
@@ -388,7 +407,7 @@ class Umpire extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
-        let { sortBy, sortOrder } = this.state
+        const { sortBy, sortOrder } = this.state;
         if (this.state.searchText === null || this.state.searchText === "") {
         } else {
             this.props.umpireListAction({

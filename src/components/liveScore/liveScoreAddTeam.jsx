@@ -183,7 +183,6 @@ class LiveScoreAddTeam extends Component {
         const { teamManagerData, affilateList, divisionList, managerType, logoUrl } = this.props.liveScoreTeamState
         let name = teamManagerData.name
         let alias = teamManagerData.alias
-        console.log(teamManagerData.logoUrl, 'logoUrl')
         return (
             <div className="content-view pt-4">
                 <Form.Item>

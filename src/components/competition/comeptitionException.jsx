@@ -108,7 +108,7 @@ class CompetitionException extends Component {
                     this.callGenerateDraw();
                 }
                 else{
-                    this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+                    this.props.getActiveRoundsAction(this.state.yearRefId, this.state.competitionId);
                     this.setState({ roundLoad: true });
                 }
               
@@ -314,7 +314,16 @@ class CompetitionException extends Component {
                 "startTime": this.state.time,
                 "endTime": moment(date).format("HH:mm")
             }
-            this.props.updateCourtTimingsDrawsAction(postObj, null, null, "exception")
+            let apiData = {
+                yearRefId: this.state.yearRefId,
+                competitionId: this.state.competitionId,
+                venueId: this.state.venueId,
+                roundId: this.state.competitionId == "-1" ? 0 : this.state.roundId,
+                orgId: null,
+                startDate: this.state.competitionId == "-1" ? this.state.startDate : null,
+                endDate: this.state.competitionId == "-1" ? this.state.endDate : null
+              }
+            this.props.updateCourtTimingsDrawsAction(postObj, null, null, "exception", null, apiData)
             this.setState({ exceptionUpdateLoad: true });
         }
     }
@@ -322,7 +331,7 @@ class CompetitionException extends Component {
     reGenerateDraw = () => {
         let competitionStatus = getOwn_competitionStatus();
         if(competitionStatus == 2){
-          this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+          this.props.getActiveRoundsAction(this.state.yearRefId, this.state.competitionId);
           this.setState({ roundLoad: true });
         }
         else{
@@ -348,7 +357,7 @@ class CompetitionException extends Component {
       callGenerateDraw = () =>{
         let payload = {
           yearRefId: this.state.yearRefId,
-          competitionUniqueKey: this.state.firstTimeCompId,
+          competitionUniqueKey: this.state.competitionId,
           organisationId: getOrganisationData().organisationUniqueKey,
           roundId: this.state.generateRoundId
         };

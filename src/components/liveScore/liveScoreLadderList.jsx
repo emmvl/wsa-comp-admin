@@ -299,7 +299,7 @@ class LiveScoreLadderList extends Component {
                         className="home-dashboard-table"
                         columns={columns} dataSource={DATA}
                         pagination={false}
-                    // rowKey={(record, index) => record.id + index}
+                        rowKey={(record, index) => record.rank + index}
                     />
                 </div>
                 {/* <div className="d-flex justify-content-end">

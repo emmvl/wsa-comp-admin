@@ -120,6 +120,15 @@
     margin-top: 10px;
 }
 
+.match-details-team-name {
+    cursor: pointer;
+}
+
+.table-cell-select .ant-select-selection {
+    border: 1px solid var(--app-d9d9d9) !important;
+    min-height: unset !important;
+}
+
 .match-score-detail {
     border-bottom: 0.5px solid var(--app-e1e1f5);
     padding: 3px 0 10px 0;
@@ -421,6 +430,39 @@
   .ant-select-selection--multiple .ant-select-selection__choice__remove {
     right: 8px;
     top: -1px;
+}
+.CornerView .ant-input-lg{
+    border-radius:4px!important;
+}
+.footer-view.bulk{
+    padding: 10px 12.1% 5%;
+}
+.space .ant-form-item-control{
+    line-height: 26px;
+
+}
+.ant-input-affix-wrapper .ant-input-prefix {
+    top: 52%;
+    left: 16px;
+}
+.livefirst .reg-form-multiple-select .ant-select-selection {
+    height: auto;
+    min-height: 54px;
+    margin-top: 4px;
+}
+.livefirst .ant-select-selection {
+    min-height: 55px;
+    margin-top: 8px;
+}
+.livefirst .ant-select-selection__placeholder{
+    line-height: 24px;
+
+}
+.livefirst.one .ant-select-selection__placeholder {
+    line-height: 20px;
+}
+.ant-calendar-picker-input.ant-input {
+    border-radius: 4px;
 }
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {

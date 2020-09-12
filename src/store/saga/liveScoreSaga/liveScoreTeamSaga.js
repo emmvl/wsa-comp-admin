@@ -103,6 +103,29 @@ function* liveScoreDeleteTeamSaga(action) {
   }
 }
 
+// Delete Player Saga 
+
+function* liveScoreDeletePlayerSaga(action) {
+  try {
+    const result = yield call(LiveScoreAxiosApi.liveScoreDeletePlayer, action.playerId)
+
+
+    if (result.status == 1) {
+      yield put({
+        type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS,
+        status: result.status,
+      });
+      history.push("/liveScoreTeam");
+      message.success("Player Deleted Successfully.");
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+
 function* liveScoreTeamDivisionSaga(action) {
   try {
     const result = yield call(LiveScoreAxiosApi.liveScoreGetDivision, action.payload);
@@ -222,4 +245,5 @@ export default function* rootLiveScoreTeamSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_IMPORT_LOAD, liveScoreTeamImportSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_TEAM_LOAD, liveScoreGetTeamSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD, liveScoreTeamPagingSaga);
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD, liveScoreDeletePlayerSaga);
 }

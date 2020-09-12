@@ -61,16 +61,13 @@ function tableSort(key) {
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === "DESC") {
         sortBy = sortOrder = null;
     }
-
     const body = {
         paging: {
             limit: 10,
             offset: this_obj.state.offsetData,
         },
     };
-
     this_obj.setState({ sortBy, sortOrder });
-
     this_obj.props.getUmpireDashboardList({
         compId: this_obj.state.selectedComp,
         divisionId: this_obj.state.division === "All" ? "" : this_obj.state.division,
@@ -105,6 +102,17 @@ function checkUmpireType(umpireArray, key) {
         }
     }
     return object;
+}
+
+function checkUmpireReserve(reserveArray, key) {
+    let object = null;
+    for (let i in reserveArray) {
+        if (reserveArray[i].roleId == key) {
+            object = reserveArray[i]
+            break
+        }
+    }
+    return object
 }
 
 const columnsInvite = [
@@ -253,19 +261,33 @@ const columnsInvite = [
     },
     {
         title: 'Umpire Reserve',
-        dataIndex: 'umpireReserve',
-        key: 'umpireReserve',
+        dataIndex: 'umpireReserves',
+        key: 'umpireReserves',
         sorter: true,
-        onHeaderCell: () => listeners("umpireReserve"),
-        render: (umpireReserve) => <span>{umpireReserve}</span>,
+        onHeaderCell: () => listeners("umpireReserves"),
+        render: (umpireReserves, record) => {
+            let umpireReserve = checkUmpireReserve(umpireReserves, 19) ? checkUmpireReserve(umpireReserves, 19) : [];
+            return (
+                <span onClick={() => this_obj.checkUserIdUmpire(umpireReserve)}
+                    className="input-heading-add-another pt-0">{umpireReserve.umpireFirstName ? umpireReserve.umpireFirstName + " " + umpireReserve.umpireLastName : ""}</span>
+            )
+        }
+
     },
     {
         title: 'Umpire Coach',
-        dataIndex: 'umpireCoach',
-        key: 'umpireCoach',
+        dataIndex: 'umpireCoaches',
+        key: 'umpireCoaches',
         sorter: true,
-        onHeaderCell: () => listeners("umpireCoach"),
-        render: (umpireCoach) => <span >{umpireCoach}</span>,
+        onHeaderCell: () => listeners("umpireCoaches"),
+        render: (umpireCoaches, record) => {
+            let umpireCoach = checkUmpireReserve(umpireCoaches, 20) ? checkUmpireReserve(umpireCoaches, 20) : [];
+            return (
+                <span onClick={() => this_obj.checkUserIdUmpire(umpireCoach)}
+                    className="input-heading-add-another pt-0">{umpireCoach.umpireFirstName ? umpireCoach.umpireFirstName + " " + umpireCoach.umpireLastName : ""}</span>
+            )
+        }
+
     },
     {
         title: "Action",
@@ -480,19 +502,33 @@ const columns = [
     },
     {
         title: 'Umpire Reserve',
-        dataIndex: 'umpireReserve',
-        key: 'umpireReserve',
+        dataIndex: 'umpireReserves',
+        key: 'umpireReserves',
         sorter: true,
-        onHeaderCell: () => listeners("umpireReserve"),
-        render: (umpireReserve) => <span >{umpireReserve}</span>,
+        onHeaderCell: () => listeners("umpireReserves"),
+        render: (umpireReserves, record) => {
+            let umpireReserve = checkUmpireReserve(umpireReserves, 19) ? checkUmpireReserve(umpireReserves, 19) : [];
+            return (
+                <span onClick={() => this_obj.checkUserIdUmpire(umpireReserve)}
+                    className="input-heading-add-another pt-0">{umpireReserve.umpireFirstName ? umpireReserve.umpireFirstName + " " + umpireReserve.umpireLastName : ""}</span>
+            )
+        }
+
     },
     {
         title: 'Umpire Coach',
-        dataIndex: 'umpireCoach',
-        key: 'umpireCoach',
+        dataIndex: 'umpireCoaches',
+        key: 'umpireCoaches',
         sorter: true,
-        onHeaderCell: () => listeners("umpireCoach"),
-        render: (umpireCoach) => <span >{umpireCoach}</span>,
+        onHeaderCell: () => listeners("umpireCoaches"),
+        render: (umpireCoaches, record) => {
+            let umpireCoach = checkUmpireReserve(umpireCoaches, 20) ? checkUmpireReserve(umpireCoaches, 20) : [];
+            return (
+                <span onClick={() => this_obj.checkUserIdUmpire(umpireCoach)}
+                    className="input-heading-add-another pt-0">{umpireCoach.umpireFirstName ? umpireCoach.umpireFirstName + " " + umpireCoach.umpireLastName : ""}</span>
+            )
+        }
+
     },
     {
         title: "Action",

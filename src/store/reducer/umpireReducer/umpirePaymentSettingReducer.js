@@ -2,6 +2,93 @@ import ApiConstants from "../../../themes/apiConstants";
 
 var affiliateDivObj = [{ id: 1, name: 'OpenA', disabled: false }, { id: 2, name: 'OpenB', disabled: false }, { id: 3, name: 'OpenC', disabled: false }]
 var compOrgDivObj = [{ id: 1, name: 'OpenA', disabled: false }, { id: 2, name: 'OpenB', disabled: false }, { id: 3, name: 'OpenC', disabled: false }]
+var defaultInputFieldArray = [{
+    name: "Badge AA",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+},
+{
+    name: "Badge A",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+},
+{
+    name: "Badge B",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+},
+{
+    name: "Badge C",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+}]
+
+var defaultInputFieldForByPoolArray = [{
+    name: "Pool A",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+},
+{
+    name: "Pool B",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+},
+{
+    name: "Pool C",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+}]
+
+var defaultInputFieldArrayAffiliate = [{
+    name: "Badge AA",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+},
+{
+    name: "Badge A",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+},
+{
+    name: "Badge B",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+},
+{
+    name: "Badge C",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+}]
+
+var defaulInputFieldsAffiliateOrgByPool = [{
+    name: "Pool A",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+},
+{
+    name: "Pool B",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+},
+{
+    name: "Pool C",
+    umpireRate: 0,
+    umpReserveRate: 0,
+    umpCoachRate: 0
+}]
 
 const initialState = {
     onLoad: false,
@@ -13,7 +100,7 @@ const initialState = {
     paidByAffiliate: false,
     byBadgeBtn: false,
     byPoolBtn: false,
-    inputFieldArray: [],
+    inputFieldArray: defaultInputFieldArray,
     paidByCompOrgDivision: [],
     byBadgeDivision: [],
     selectAllDiv: false,
@@ -23,12 +110,14 @@ const initialState = {
     allDivisionBadge: false,
     byPoolBtnAffiliate: false,
     byBadgeBtnAffiliate: false,
-    inputFieldArrayAffiliate: [],
+    inputFieldArrayAffiliate: defaultInputFieldArrayAffiliate,
     byBadgeDivisionAffiliate: [],
     paidByCompOrgDivisionAffiliate: [],
     poolViewArray: [],
     poolViewArrayAffiliate: [],
-    allDivisionBadgeAffiliate: false
+    allDivisionBadgeAffiliate: false,
+    inputFieldForByPool: defaultInputFieldForByPoolArray,
+    inputFieldsAffiliateOrgByPool: defaulInputFieldsAffiliateOrgByPool
 
 };
 
@@ -86,13 +175,13 @@ function umpirePaymentSetting(state = initialState, action) {
 
             } else if (key === 'byBadge') {
                 state.byBadgeBtn = data
-                state.byPoolBtn = false
+                // state.byPoolBtn = false
+                // state.byBadgeDivision = ['BadgeAA', 'BadgeA', 'BadgeC']
 
             } else if (key === 'byPool') {
                 state.byPoolBtn = data
-                state.byBadgeBtn = false
-                state.inputFieldArray = []
-                state.byBadgeDivision = []
+                // state.byBadgeBtn = false
+                // state.inputFieldArray = []
             } else if (key === 'addAnotherGroup') {
                 var obj = {
                     name: null,
@@ -126,9 +215,29 @@ function umpirePaymentSetting(state = initialState, action) {
                     umpCoachRate: null
                 }
                 state.inputFieldArrayAffiliate.push(obj)
+            } else if (key === 'addAnotherGroupForByPool') {
+                var obj = {
+                    name: null,
+                    umpireRate: null,
+                    umpReserveRate: null,
+                    umpCoachRate: null
+                }
+                state.inputFieldForByPool.push(obj)
+            }
+            else if (key === 'addAnotherInputFieldsAffiliateOrgByPool') {
+                var obj = {
+                    name: null,
+                    umpireRate: null,
+                    umpReserveRate: null,
+                    umpCoachRate: null
+                }
+                state.inputFieldsAffiliateOrgByPool.push(obj)
             }
             else if (key === 'removeItem') {
                 state.inputFieldArray.splice(action.data.index, 1)
+            }
+            else if (key === 'removePoolItem') {
+                state.inputFieldForByPool.splice(action.data.index, 1)
             }
             else if (key == "removeItemPool") {
                 state.poolViewArray.splice(action.data.index, 1)
@@ -139,37 +248,60 @@ function umpirePaymentSetting(state = initialState, action) {
             else if (key === 'removeItemAffiliate') {
                 state.inputFieldArrayAffiliate.splice(action.data.index, 1)
             }
+            else if (key == "removeinputFieldsAffiliateOrgByPool") {
+                state.inputFieldsAffiliateOrgByPool.splice(action.data.index, 1)
+            }
             else if (key === 'byBadgeDivision' || key === 'paidByCompOrgDivision' || key === 'byBadgeDivisionAffiliate') {
                 state[key] = data
             } else if (key === 'refreshPage') {
                 state.paidByCompOrg = true
                 state.paidByAffiliate = false
                 state.byBadgeDivision = []
-                state.inputFieldArray = []
+                // state.inputFieldArray = []
             }
             else if (key == "allDivisionBadge") {
                 state.allDivisionBadge = data
             }
             else if (key == "byBadgeBtnAffiliate") {
                 state.byBadgeBtnAffiliate = data
-                state.byPoolBtnAffiliate = false
+                // state.byPoolBtnAffiliate = false
+                // state.byBadgeDivisionAffiliate = ['BadgeAA', 'BadgeA', 'BadgeC']
             }
             else if (key == "byPoolBtnAffiliate") {
                 state.byPoolBtnAffiliate = data
-                state.byBadgeBtnAffiliate = false
+                // state.byBadgeBtnAffiliate = false
             }
             else if (key == "allDivisionBadgeAffiliate") {
                 state.allDivisionBadgeAffiliate = data
             }
             else if (subkey == "inputFieldAffiliate") {
-                state.inputFieldArrayAffiliate[action.data.index][key] = data
+                if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
+                    state.inputFieldArrayAffiliate[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
+                } else {
+                    state.inputFieldArrayAffiliate[action.data.index][key] = data
+                }
             }
             else if (key == "fee") {
                 state.poolViewArray[action.data.index][key] = data
             }
-            // else if(subkey == "feeField"){
-            //     state.
-            // }
+            else if (subkey == "byPoolInputFeilds") {
+
+                if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
+                    state.inputFieldForByPool[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
+                } else {
+                    state.inputFieldForByPool[action.data.index][key] = data;
+                }
+
+            } else if (subkey == "inputFieldsAffiliateOrgByPool") {
+                if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
+                    state.inputFieldsAffiliateOrgByPool[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
+                } else {
+                    state.inputFieldsAffiliateOrgByPool[action.data.index][key] = data;
+                }
+            }
+            else if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
+                state.inputFieldArray[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
+            }
             else {
                 state.inputFieldArray[action.data.index][key] = data;
             }

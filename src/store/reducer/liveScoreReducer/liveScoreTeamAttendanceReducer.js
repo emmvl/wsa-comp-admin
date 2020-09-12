@@ -9,7 +9,7 @@ const initialState = {
     teamAttendanceResult: [],
     teamAttendanceList: [],
     teamAttendancePage: 0,
-    teamAttendanceTotalCount: "",
+    teamAttendanceTotalCount: 0,
     divisionList: [],
     highestSequence: null,
     roundLoad: false,

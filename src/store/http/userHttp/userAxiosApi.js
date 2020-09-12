@@ -94,11 +94,20 @@ let userHttpApi = {
 
   liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder) {
     let url = ''
-    let offsetValue = offset ? offset : 0
+    // let offsetValue = offset ? offset : null
     if (searchText) {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}&offset=${offsetValue}&limit=${10}`;
+      if (offset != null) {
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}&offset=${offset}&limit=${10}`;
+      } else {
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&userName=${searchText}`;
+      }
     } else {
-      url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&offset=${offsetValue}&limit=${10}`;
+      if (offset != null) {
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}&offset=${offset}&limit=${10}`;
+      } else {
+        url = `/users/byRole?roleId=${roleId}&entityTypeId=${entityTypeId}&entityId=${entityId}`;
+      }
+
     }
 
     if (sortBy && sortOrder) {
@@ -184,10 +193,13 @@ let userHttpApi = {
 
   // Search scorer
   scorerSearchApi(functionId, entityTypeId, competitionId, searchText) {
-    if (searchText && searchText.length > 0) {
-      const url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
-      return Method.dataGet(url, token)
-    }
+    console.log(searchText, 'searchText')
+    // if (searchText && searchText.length > 0) {
+    //   const url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
+    //   return Method.dataGet(url, token)
+    // }
+    const url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
+    return Method.dataGet(url, token)
   },
 
   getUserFriendList(payload, sortBy, sortOrder) {
@@ -241,7 +253,11 @@ let userHttpApi = {
   liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder) {
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
     let url
-    url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${entityId}&userName=${search}&offset=${offset}&limit=${10}`
+    if (offset != null) {
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${entityId}&userName=${search}&offset=${offset}&limit=${10}`
+    } else {
+      url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${entityId}&userName=${search}`
+    }
 
     if (sortBy && sortOrder) {
       url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -278,15 +294,14 @@ let userHttpApi = {
   },
 
   umpireList(data) {
-    console.log(data, '***** Data')
     let url = null
     if (data.userName) {
-      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}`
+      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
     } else if (data.offset != null) {
-      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}`
+      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}`
     }
     else {
-      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}`
+      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}`
     }
 
     if (data.sortBy && data.sortOrder) {
@@ -426,7 +441,6 @@ let Method = {
         })
         .then(result => {
           if (result.status === 200) {
-            console.log("*************" + JSON.stringify(result.data));
             const url = window.URL.createObjectURL(new Blob([result.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -706,7 +720,6 @@ let Method = {
         })
         .then(result => {
           if (result.status === 200) {
-            console.log("*************" + JSON.stringify(result.data));
             const url = window.URL.createObjectURL(new Blob([result.data]));
             const link = document.createElement('a');
             link.href = url;

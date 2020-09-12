@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Modal, Button, DatePicker } from "antd";
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Modal, Button, DatePicker,Tag } from "antd";
 import "./product.scss";
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -37,7 +37,7 @@ function tableSort(key) {
     }
 
     this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder);
+    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder, this_Obj.state.userId);
 }
 
 
@@ -51,6 +51,13 @@ const columns = [
         render: (userFirstName, record) => (
             <span>{record.userFirstName + " " + record.userLastName}</span>
         )
+    },
+    {
+        title: "Paid By",
+        dataIndex: "paidBy",
+        key: "paidBy",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
         title: "Affiliate",
@@ -94,7 +101,12 @@ const columns = [
         title: "Our Portion",
         dataIndex: "affiliatePortion",
         key: "affiliatePortion",
-        render: (affiliatePortion, record) => currencyFormat(affiliatePortion),
+        render: (affiliatePortion, record) => (
+            affiliatePortion < 0 ?
+               <span style={{color:"red"}}>{ "(" + currencyFormat(affiliatePortion * -1) + ")"}</span> 
+               :
+               <span>{currencyFormat(affiliatePortion)}</span> 
+        ),
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("ourPortion"),
     },
@@ -167,22 +179,36 @@ class PaymentDashboard extends Component {
             competition: "all",
             paymentFor: "all",
             loadingSave: false,
-            offset: 0
-
+            offset: 0,
+            userInfo: null,
+            userId: -1,
+            registrationId: null
         };
         this_Obj = this;
 
     }
     componentDidMount() {
-        this.handlePaymentTableList(1)
+        let userInfo = this.props.location.state ? this.props.location.state.personal : null;
+        let registrationId = this.props.location.state ? this.props.location.state.registrationId : null;
+        this.setState({userInfo: userInfo, registrationId: registrationId});
+        let userId = userInfo != null ? userInfo.userId : -1;
+        let regId = registrationId!= null ? registrationId: '-1';
+        console.log("registrationId", registrationId);
+        this.handlePaymentTableList(1,userId, regId)
     }
 
     onExport() {
         this.props.exportPaymentApi("paymentDashboard")
     }
 
+    clearFilterByUserId = () => {
+        this.setState({userInfo: null});
+        this.handlePaymentTableList(this.state.offset,-1, "-1")
+    } 
+
     ///////view for breadcrumb
     headerView = () => {
+        let tagName = this.state.userInfo != null ? this.state.userInfo.firstName + " " + this.state.userInfo.lastName : null;
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
@@ -194,6 +220,16 @@ class PaymentDashboard extends Component {
                         </div>
                         <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                             <div className="row">
+                                {this.state.userInfo &&
+                                    <div className="col-sm pt-1" style={{alignSelf: "center"}}>
+                                        <Tag 
+                                        closable 
+                                        color="volcano"
+                                        style={{paddingTop:"3px",height:"30px"}}
+                                        onClose={() => {this.clearFilterByUserId()}}
+                                        >{tagName}</Tag>
+                                    </div>
+                                }
                                 <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
@@ -239,13 +275,15 @@ class PaymentDashboard extends Component {
         console.log(date)
     }
 
-    handlePaymentTableList = (page) => {
+    handlePaymentTableList = (page,userId, regId) => {
         let { sortBy, sortOrder } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
-            offset
+            offset: offset,
+            userId: userId,
+            registrationId: regId
         })
-        this.props.getPaymentList(offset, sortBy, sortOrder);
+        this.props.getPaymentList(offset, sortBy, sortOrder, userId, regId);
     };
     dropdownView = () => {
         return (
@@ -332,6 +370,8 @@ class PaymentDashboard extends Component {
         const { paymentState } = this.props;
         let total = paymentState.paymentListTotalCount;
         console.log(paymentState)
+        let userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
+        let regId = this.state.registrationId!= null ? this.state.registrationId: '-1';
         return (
 
             <div className="comp-dash-table-view mt-2">
@@ -350,7 +390,7 @@ class PaymentDashboard extends Component {
                         className="antd-pagination"
                         current={paymentState.paymentListPage}
                         total={total}
-                        onChange={(page) => this.handlePaymentTableList(page)}
+                        onChange={(page) => this.handlePaymentTableList(page,userId, regId)}
                     />
                 </div>
             </div>

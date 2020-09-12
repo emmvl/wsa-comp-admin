@@ -20,7 +20,7 @@ const initialState = {
     ],
     deRegistionOption: [
         { id: 1, value: "I am over committed with other activities and can't fit in time for netball" },
-        { id: 2, value: "I have been injured or health reason(not netball related" },
+        { id: 2, value: "I have been injured or health reason(not netball related)" },
         { id: 3, value: "Decided not to participant in netball" },
         { id: 4, value: "Moving to a different geographical area" },
         { id: 5, value: "Other" },
@@ -33,6 +33,7 @@ const initialState = {
     ],
     reloadFormData:0,
     saveData : {
+        isAdmin:1,
         regChangeTypeRefId: 0,         // DeRegister/ Transfer
         deRegistrationOptionId: 0,   /// Yes/No
         reasonTypeRefId: 0,      
@@ -64,10 +65,10 @@ const initialState = {
         isShowButton: null
     },
     reviewSaveData: {
-        refundAmount: null,
         refundTypeRefId:null,
         declineReasonRefId:null,
-        otherInfo:null
+        otherInfo:null,
+        invoices: null
     }
 }
 

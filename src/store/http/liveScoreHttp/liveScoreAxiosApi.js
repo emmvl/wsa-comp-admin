@@ -132,12 +132,20 @@ let LiveScoreAxiosApi = {
     },
 
     liveScorePlayerList(competitionID, teamId) {
-        let url = null
+        let url = null;
+
         if (teamId) {
             url = `/players?competitionId=${competitionID}&teamId=${teamId}`;
         } else {
             url = `/players?competitionId=${competitionID}`;
         }
+
+        return Method.dataGet(url, localStorage.token);
+    },
+
+    liveScorePlayerSearchList(competitionID, organisationId, name) {
+        const url = `/players?competitionId=${competitionID}&organisationId=${organisationId}&name=${name}&includeLinkedCompetition=true`;
+
         return Method.dataGet(url, localStorage.token);
     },
 
@@ -783,6 +791,11 @@ let LiveScoreAxiosApi = {
         const url = `/division/id/${divisionId}`;
         return Method.dataDelete(url, token)
     },
+    // Delete Player
+    liveScoreDeletePlayer(playerId) {
+        const url = `/players/id/${playerId}`
+        return Method.dataDelete(url, token)
+    },
 
     /// get Game Time statistics api
     gameTimeStatistics(competitionId, aggregate, offset, searchText, sortBy, sortOrder) {
@@ -1045,10 +1058,11 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    addEditUmpire(data, teamId, exsitingManagerId) {
+    addEditUmpire(data, teamId, exsitingManagerId, isUmpire, isUmpireCoach) {
+        console.log(data, isUmpire, isUmpireCoach, "Add datatatattatatatat")
         let body = data
         let id = JSON.parse(localStorage.getItem('umpireCompetitionId'))
-        const url = `/users/umpire?competitionId=${id}`;
+        const url = `/users/umpire?competitionId=${id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}`;
         return Method.dataPost(url, token, body)
     },
 
@@ -1068,10 +1082,10 @@ let LiveScoreAxiosApi = {
         let body = paginationBody
 
         if (status === "All") {
-            url = `/roster/list?competitionId=${competitionID}&roleId=${refRoleId}`;
+            url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}&includeRosters=${true}`;
         }
         else {
-            url = `/roster/list?competitionId=${competitionID}&status=${status}&roleId=${refRoleId}`;
+            url = `/roster/list?competitionId=${competitionID}&status=${status}&roleIds=${refRoleId}&includeRosters=${true}`
         }
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -1202,6 +1216,11 @@ let LiveScoreAxiosApi = {
 
     liveScoreIncidentType() {
         const url = `/ref/incidentTypes`;
+        return Method.dataGet(url, token)
+    },
+
+    liveScoreGamePositions() {
+        const url = `/ref/gamePositions`;
         return Method.dataGet(url, token)
     },
 

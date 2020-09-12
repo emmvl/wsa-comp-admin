@@ -353,6 +353,7 @@ class LiveScoreCompetitions extends Component {
     }
 
     componentDidMount() {
+        localStorage.setItem("yearValue", "false")
         this.props.getOnlyYearListAction(this.props.appState.yearList)
         localStorage.setItem("yearId", this.state.year)
 

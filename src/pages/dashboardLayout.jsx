@@ -22,6 +22,7 @@ import {
   getUserOrganisationAction,
   impersonationAction,
   onOrganisationChangeAction,
+  getUreAction,
 } from "store/actions/userAction/userAction";
 import Loader from "customComponents/loader";
 
@@ -69,8 +70,9 @@ class DashboardLayout extends React.Component {
 
         if (this.props.userState.impersonation && !this.state.impersonationLoad) {
           const impersonationAffiliate = this.state.impersonationAffiliateOrgId
-            ? this.props.userState.affiliateList
-                  .find((affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId)
+            ? this.props.userState.affiliateList.find(
+                (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
+              )
             : null;
           await setImpersonationAffiliate(impersonationAffiliate);
 
@@ -111,11 +113,12 @@ class DashboardLayout extends React.Component {
 
   componentDidMount() {
     this.setOrganisationKey();
+    this.props.getUreAction();
   }
 
-  getPresetOrganisation = async () => {
+  getPresetOrganisation = () => {
     const userOrganisationData = this.props.userState.getUserOrganisation;
-    const impersonationAffiliate = await getImpersonationAffiliate();
+    const impersonationAffiliate = getImpersonationAffiliate();
 
     if (!impersonationAffiliate) {
       if (this.state.impersonationAffiliateOrgId) {
@@ -125,7 +128,8 @@ class DashboardLayout extends React.Component {
       return null;
     }
 
-    return userOrganisationData.find((org) => org.organisationUniqueKey === impersonationAffiliate.affiliateOrgId);
+    return userOrganisationData
+      .find((org) => org.organisationUniqueKey === impersonationAffiliate.affiliateOrgId);
   }
 
   setOrganisationKey = () => {
@@ -140,7 +144,7 @@ class DashboardLayout extends React.Component {
   }
 
   endImpersonation = async () => {
-    const impersonationAffiliate = await getImpersonationAffiliate();
+    const impersonationAffiliate = getImpersonationAffiliate();
 
     if (impersonationAffiliate) {
       this.props.impersonationAction({
@@ -535,6 +539,7 @@ class DashboardLayout extends React.Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
+    getUreAction,
     getUserOrganisationAction,
     onOrganisationChangeAction,
     clearHomeDashboardData,

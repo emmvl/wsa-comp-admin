@@ -801,27 +801,33 @@ function CompetitionDraws(state = initialState, action) {
       return { ...state, onLoad: true, error: null, spinLoad: true, };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS:
-      let resultData
-      if (action.competitionId == "-1") {
-        let allCompetiitonDraws = action.result;
-        resultData = allcompetitionDrawsData(allCompetiitonDraws)
-      }
-      else {
-        let drawsResultData = action.result;
-        resultData = roundstructureData(drawsResultData)
-      }
+      try{
+          let resultData;
+          if (action.competitionId == "-1" || action.dateRangeCheck) {
+            let allCompetiitonDraws = action.result;
+            resultData = allcompetitionDrawsData(allCompetiitonDraws)
+          }
+          else {
+            let drawsResultData = action.result;
+            resultData = roundstructureData(drawsResultData)
+          }
 
-      state.publishStatus = action.result.drawsPublish
-      state.isTeamInDraw = action.result.isTeamNotInDraws
-      let orgData = JSON.parse(JSON.stringify(action.result.organisations))
-      return {
-        ...state,
-        getRoundsDrawsdata: action.competitionId == "-1" ? [resultData.data] : resultData.roundsdata,
-        drawOrganisations: orgData,
-        onLoad: false,
-        error: null,
-        spinLoad: false
-      };
+          state.publishStatus = action.result.drawsPublish
+          state.isTeamInDraw = action.result.isTeamNotInDraws
+          let orgData = JSON.parse(JSON.stringify(action.result.organisations))
+          return {
+            ...state,
+            getRoundsDrawsdata: action.competitionId == "-1" || action.dateRangeCheck ? [resultData.data] : resultData.roundsdata,
+            drawOrganisations: orgData,
+            onLoad: false,
+            error: null,
+            spinLoad: false
+          };
+      }catch(ex){
+        console.log("exception:",ex)
+      }
+      
+     
 
     /////get rounds in the competition draws
     case ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_LOAD:

@@ -94,7 +94,7 @@ class LiveScoreAddMatch extends Component {
                 this.props.getliveScoreScorerList(id, 4)
                 // this.props.liveScoreRoundListAction(id)
                 this.props.liveScoreClubListAction(id)
-                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id,offset:null })
+                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
                 this.setState({ loadvalue: true, allDisabled: true })
             } else {
                 history.push('/')
@@ -111,7 +111,7 @@ class LiveScoreAddMatch extends Component {
                 this.props.getliveScoreScorerList(id, 4)
                 // this.props.liveScoreRoundListAction(id)
                 this.props.liveScoreClubListAction(id)
-                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id,offset:null })
+                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
                 this.setState({ loadvalue: true, allDisabled: false })
             } else {
                 history.push('/')
@@ -591,11 +591,13 @@ class LiveScoreAddMatch extends Component {
 
     //// Form View
     contentView = (getFieldDecorator) => {
-        let { addEditMatch, divisionList, roundList, teamResult, recordUmpireType, scorer1, scorer2, umpire1Name, umpire2Name, umpire1TextField, umpire2TextField, umpire1Orag, umpire2Orag } = this.props.liveScoreMatchState
+        let { addEditMatch, divisionList, roundList, teamResult, recordUmpireType, scorer1, scorer2, umpire1Name, umpire2Name, umpire1TextField, umpire2TextField, umpire1Orag, umpire2Orag, umpireReserve, umpireCoach } = this.props.liveScoreMatchState
         let { venueData, clubListData } = this.props.liveScoreMatchState
         const { scorerListResult } = this.props.liveScoreState
-        const { umpireList } = this.props.umpireState
+        const { umpireList, coachList } = this.props.umpireState
+        console.log(umpireList, coachList, umpire1Name)
         let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : []
+        let coachListResult = isArrayNotEmpty(coachList) ? coachList : []
         let { allDisabled } = this.state
         return (
             <div className="content-view pt-4">
@@ -938,7 +940,7 @@ class LiveScoreAddMatch extends Component {
 
                 {/* Umpire Reserve and Umpire Coach dpdn */}
 
-                {/* <div className="row" >
+                <div className="row" >
                     <div className="col-sm" >
 
                         <InputWithHead
@@ -946,11 +948,13 @@ class LiveScoreAddMatch extends Component {
                         />
                         <Select
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-
+                            onChange={(umpireReserve) => this.props.liveScoreUpdateMatchAction(umpireReserve, 'umpireReserve')}
                             placeholder={'Select Umpire Reserve'}
-                        
+                            value={umpireReserve ? umpireReserve : undefined}
                         >
-                            
+                            {umpireListResult.map((item) => (
+                                <option key={item.id} value={item.id}>{item.firstName + " " + item.lastName}</option>
+                            ))}
                         </Select>
 
                     </div>
@@ -961,12 +965,15 @@ class LiveScoreAddMatch extends Component {
                         <Select
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             placeholder={'Select Umpire Coach'}
-
+                            onChange={(umpireCoach) => this.props.liveScoreUpdateMatchAction(umpireCoach, 'umpireCoach')}
+                            value={umpireCoach ? umpireCoach : undefined}
                         >
-
+                            {coachListResult.map((item) => (
+                                <option key={item.id} value={item.id}>{item.firstName + " " + item.lastName}</option>
+                            ))}
                         </Select>
                     </div>
-                </div> */}
+                </div>
 
 
                 <div className="row" >
@@ -1064,6 +1071,7 @@ class LiveScoreAddMatch extends Component {
 
     finalFieldsView(getFieldDecorator) {
         const { addEditMatch } = this.props.liveScoreMatchState
+        console.log(this.state.umpireKey, 'umpireKey')
         return (
             <div >
 
@@ -1075,108 +1083,118 @@ class LiveScoreAddMatch extends Component {
                     className="single-checkbox mt-5"
                     onChange={(e) => this.props.liveScoreUpdateMatchAction(e.target.checked, 'isFinals')}
                     checked={addEditMatch.isFinals}
+                    disabled={this.state.umpireKey === 'umpire' ? true : false}
                 >
                     {AppConstants.finalMatch}
                 </Checkbox>
 
-                <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }} >{AppConstants.extra_Time}</span>
+                {
+                    addEditMatch.isFinals &&
+                    <div>
+                        <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }} >{AppConstants.extra_Time}</span>
 
 
-                <div className="row" >
-                    <div className="col-sm" >
-                        <InputWithHead heading={AppConstants.extraTimeType} />
-                        {/* <Form.Item>
-                            {getFieldDecorator('extraTimeType', {
-                                rules: [{ required: true, message: ValidationConstants.extraTimeType }]
-                            })( */}
-                        <Select
-                            showSearch
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            placeholder={'Select Type'}
-                            optionFilterProp="children"
-                            onChange={(id) => this.props.liveScoreUpdateMatchAction(id, "extraTimeType")}
-                            value={addEditMatch.extraTimeType ? addEditMatch.extraTimeType : undefined}
-                        >
-                            <Option key={'SINGLE_PERIOD'} value={'SINGLE_PERIOD'} > {'Single Period'}</Option>
-                            <Option key={'TWO_HALVES'} value={'TWO_HALVES'} > {'Halves'}</Option>
-                            <Option key={'FOUR_QUARTERS'} value={'FOUR_QUARTERS'} > {'Quarters'}</Option>
-                        </Select>
+                        <div className="row" >
+                            <div className="col-sm" >
+                                <InputWithHead heading={AppConstants.extraTimeType} />
+                                {/* <Form.Item>
+        {getFieldDecorator('extraTimeType', {
+            rules: [{ required: true, message: ValidationConstants.extraTimeType }]
+        })( */}
+                                <Select
+                                    showSearch
+                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                    placeholder={'Select Type'}
+                                    optionFilterProp="children"
+                                    onChange={(id) => this.props.liveScoreUpdateMatchAction(id, "extraTimeType")}
+                                    value={addEditMatch.extraTimeType ? addEditMatch.extraTimeType : undefined}
+                                    disabled={this.state.umpireKey === 'umpire' ? true : false}
+                                >
+                                    <Option key={'SINGLE_PERIOD'} value={'SINGLE_PERIOD'} > {'Single Period'}</Option>
+                                    <Option key={'TWO_HALVES'} value={'TWO_HALVES'} > {'Halves'}</Option>
+                                    <Option key={'FOUR_QUARTERS'} value={'FOUR_QUARTERS'} > {'Quarters'}</Option>
+                                </Select>
 
-                        {/* )}
-                        </Form.Item> */}
+                                {/* )}
+    </Form.Item> */}
 
-                    </div>
+                            </div>
 
-                    <div className="col-sm" >
-                        <InputWithHead heading={AppConstants.extraTimeDuration} />
+                            <div className="col-sm" >
+                                <InputWithHead heading={AppConstants.extraTimeDuration} />
 
-                        {/* <Form.Item>
-                            {getFieldDecorator('extraTimeDuration', {
-                                rules: [{ required: true, message: ValidationConstants.durationField }]
-                            })( */}
-                        <InputNumber
-                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                            placeholder={'0'}
-                            onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeDuration")}
-                            value={addEditMatch.extraTimeDuration}
-                        />
-                        {/* )}
-                        </Form.Item> */}
+                                {/* <Form.Item>
+        {getFieldDecorator('extraTimeDuration', {
+            rules: [{ required: true, message: ValidationConstants.durationField }]
+        })( */}
+                                <InputNumber
+                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                    placeholder={'0'}
+                                    onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeDuration")}
+                                    value={addEditMatch.extraTimeDuration}
+                                    disabled={this.state.umpireKey === 'umpire' ? true : false}
+                                />
+                                {/* )}
+    </Form.Item> */}
 
-                    </div>
+                            </div>
 
-                    <div className="col-sm" >
-                        <InputWithHead heading={AppConstants.extraTimeMainBreak} />
-                        {/* <Form.Item>
-                            {getFieldDecorator('extraTimeMainBreak', {
-                                rules: [{ required: true, message: ValidationConstants.durationField }]
-                            })( */}
-                        <InputNumber
-                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                            placeholder={'0'}
-                            onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeMainBreak")}
-                            value={addEditMatch.extraTimeMainBreak}
-                        />
-                        {/* )}
-                        </Form.Item> */}
+                            <div className="col-sm" >
+                                <InputWithHead heading={AppConstants.extraTimeMainBreak} />
+                                {/* <Form.Item>
+        {getFieldDecorator('extraTimeMainBreak', {
+            rules: [{ required: true, message: ValidationConstants.durationField }]
+        })( */}
+                                <InputNumber
+                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                    placeholder={'0'}
+                                    onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeMainBreak")}
+                                    value={addEditMatch.extraTimeMainBreak}
+                                    disabled={this.state.umpireKey === 'umpire' ? true : false}
+                                />
+                                {/* )}
+    </Form.Item> */}
 
 
-                    </div>
+                            </div>
 
-                    {
-                        addEditMatch.extraTimeType === 'FOUR_QUARTERS' &&
-                        <div className="col-sm" >
-                            <InputWithHead heading={AppConstants.extraTimeqtrBreak} />
-                            <InputNumber
-                                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                placeholder={'0'}
-                                onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeqtrBreak")}
-                                value={addEditMatch.extraTimeqtrBreak}
-                            />
+                            {
+                                addEditMatch.extraTimeType === 'FOUR_QUARTERS' &&
+                                <div className="col-sm" >
+                                    <InputWithHead heading={AppConstants.extraTimeqtrBreak} />
+                                    <InputNumber
+                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                        placeholder={'0'}
+                                        onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeqtrBreak")}
+                                        value={addEditMatch.extraTimeqtrBreak}
+                                    />
 
+                                </div>
+                            }
                         </div>
-                    }
-                </div>
 
-                <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }} >{AppConstants.extraTime}</span>
+                        <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }} >{AppConstants.extraTime}</span>
 
-                <InputWithHead heading={AppConstants.extraTimeIfDraw2} />
+                        <InputWithHead heading={AppConstants.extraTimeIfDraw2} />
 
-                <Radio.Group
-                    className="reg-competition-radio"
+                        <Radio.Group
+                            className="reg-competition-radio"
 
-                    onChange={(e) => this.props.liveScoreUpdateMatchAction(e.target.value, 'extraTimeWinByGoals')}
-                    value={addEditMatch.extraTimeWinByGoals}
-                >
+                            onChange={(e) => this.props.liveScoreUpdateMatchAction(e.target.value, 'extraTimeWinByGoals')}
+                            value={addEditMatch.extraTimeWinByGoals}
+                            disabled={this.state.umpireKey === 'umpire' ? true : false}
+                        >
 
-                    <Radio key={1} value={1}>{'1st Goal Wins'}</Radio>
-                    <Radio key={2} value={2}>{'2nd Goal Wins'}</Radio>
-                    <Radio key={0} value={0}>{'None'}</Radio>
+                            <Radio key={1} value={1}>{'1st Goal Wins'}</Radio>
+                            <Radio key={2} value={2}>{'2nd Goal Wins'}</Radio>
+                            <Radio key={0} value={0}>{'None'}</Radio>
 
-                </Radio.Group>
+                        </Radio.Group>
+                    </div>
+                }
 
             </div>
         );
@@ -1233,7 +1251,7 @@ class LiveScoreAddMatch extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                let { addEditMatch, matchData, start_date, start_time, start_post_date, umpire1Orag, umpire1TextField, umpire2Orag, umpire2TextField, umpire1Name, umpire2Name, scorer1, scorer2, recordUmpireType, matchUmpireId_1, matchUmpireId_2, scorerRosterId_1, scorerRosterId_2, umpireRosterId_1, umpireRosterId_2, team1id, team2id, matchResult } = this.props.liveScoreMatchState
+                let { addEditMatch, matchData, start_date, start_time, start_post_date, umpire1Orag, umpire1TextField, umpire2Orag, umpire2TextField, umpire1Name, umpire2Name, scorer1, scorer2, recordUmpireType, matchUmpireId_1, matchUmpireId_2, scorerRosterId_1, scorerRosterId_2, umpireRosterId_1, umpireRosterId_2, team1id, team2id, matchResult, umpireReserve, umpireCoach } = this.props.liveScoreMatchState
                 let match_date_ = moment(start_date, "DD-MM-YYYY")
                 let startDate = moment(match_date_).format("YYYY-MMM-DD")
                 let start = moment(start_time).format("HH:mm")
@@ -1245,7 +1263,7 @@ class LiveScoreAddMatch extends Component {
 
                 let umpireData
                 let scorerData
-                let umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2
+                let umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2, umpireReserve_obj, umpireCoach_obj
 
                 if (recordUmpireType == 'NAMES') {
 
@@ -1359,29 +1377,45 @@ class LiveScoreAddMatch extends Component {
 
                     }
 
+                    umpireReserve_obj = {
+                        matchId: this.state.matchId,
+                        roleId: 19,
+                        userId: umpireReserve
+                    }
+                    umpireCoach_obj = {
+                        matchId: this.state.matchId,
+                        roleId: 20,
+                        userId: umpireCoach
+                    }
+
+
                     // umpireData = [umpire_1_Obj, umpire_2_Obj]
 
                 } else if (recordUmpireType == 'USERS') {
-
-
+                    umpireReserve_obj = {
+                        matchId: this.state.matchId,
+                        roleId: 19,
+                        userId: umpireReserve
+                    }
+                    umpireCoach_obj = {
+                        matchId: this.state.matchId,
+                        roleId: 20,
+                        userId: umpireCoach
+                    }
                     if (umpireRosterId_1) {
                         umpire_1_Obj = {
                             matchId: this.state.matchId,
                             userId: umpire1Name,
                             roleId: 15,
                             rosterId: umpireRosterId_1
-
                         }
-
                     } else {
                         umpire_1_Obj = {
                             matchId: this.state.matchId,
                             userId: umpire1Name,
                             roleId: 15,
-
                         }
                     }
-
                     if (umpireRosterId_2) {
                         umpire_2_Obj = {
                             matchId: this.state.matchId,
@@ -1396,8 +1430,6 @@ class LiveScoreAddMatch extends Component {
                             roleId: 15,
                         }
                     }
-
-
                     if (scorerRosterId_1) {
                         scorers_1 = {
                             matchId: this.state.matchId,
@@ -1414,8 +1446,6 @@ class LiveScoreAddMatch extends Component {
                             roleId: 4,
                         }
                     }
-
-
                     if (scorerRosterId_2) {
                         scorers_2 = {
                             matchId: this.state.matchId,
@@ -1432,16 +1462,11 @@ class LiveScoreAddMatch extends Component {
                             roleId: 4,
                         }
                     }
-
-
                     if (this.state.scoringType === 'SINGLE') {
-
                         if (scorers_1) {
                             umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
-
                         } else {
                             umpireData = [umpire_1_Obj, umpire_2_Obj]
-
                         }
 
                     } else {
@@ -1535,7 +1560,6 @@ class LiveScoreAddMatch extends Component {
                         }
                     }
 
-
                     if (scorerRosterId_2) {
                         if (this.state.isEdit) {
                             scorers_2 = {
@@ -1606,7 +1630,12 @@ class LiveScoreAddMatch extends Component {
                     matchStatus = addEditMatch.matchStatus === "0" ? null : addEditMatch.matchStatus;
                     matchData["resultStatus"] = addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus
                 }
-
+                if (umpireReserve) {
+                    umpireData.push(umpireReserve_obj)
+                }
+                if (umpireCoach) {
+                    umpireData.push(umpireCoach_obj)
+                }
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
             }
         });
@@ -1620,18 +1649,18 @@ class LiveScoreAddMatch extends Component {
                 {!this.state.membershipIsUsed &&
                     <div className="footer-view">
                         <div className="row">
-                            <div className="col-sm-10 col-md-9">
+                            <div className="col-sm-10 col-md-9 pl-3">
                                 <div className="reg-add-save-button p-0">
-                                    <Button className="cancelBtnWidth" onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
+                                    <Button className="cancelBtnWidth mr-2" onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
                                     {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ forfeitVisible: true })} type="cancel-button">{AppConstants.forfiet}</Button>}
                                     {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ abandonVisible: true })} type="cancel-button">{AppConstants.abandon}</Button>}
                                     {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.endMatchResult()} type="cancel-button">{AppConstants.endMatch}</Button>}
                                 </div>
                             </div>
-                            <div className="col-sm-2 col-md-3 ">
+                            <div className="col-sm-2 col-md-3 pr-4">
                                 <div className="comp-buttons-view mt-0">
                                     <Button
-                                        className="publish-button save-draft-text" type="primary" htmlType="submit"
+                                        className="publish-button save-draft-text mr-0" type="primary" htmlType="submit"
                                         disabled={this.props.liveScoreMatchState.onLoad} >
                                         {AppConstants.save}
                                     </Button>

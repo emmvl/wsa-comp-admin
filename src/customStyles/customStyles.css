@@ -250,3 +250,28 @@
     align-items: center
   }
 }
+
+.refund-table .ant-table-thead > tr > th {
+  font-weight: 500;
+  font-family: inter-medium;
+  font-size: 10px;
+  overflow-wrap: break-word;
+  color: var(--app-9b9bad);
+  background-color: var(--app-white);
+  padding: 8px;
+  text-align: center;
+}
+
+.refund-table .ant-table-tbody > tr > td {
+  overflow-wrap: break-word;
+  color: var(--app-4c4c6d);
+  font-size: 10px;
+  font-family: inter;
+  background-color: var(--app-white);
+  padding: 8px;
+  text-align: center;
+}
+
+.refund-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .refund-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .refund-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .home-dashboard-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+  background: var(--app-f1c2a2) !important;
+}

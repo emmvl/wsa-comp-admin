@@ -68,9 +68,9 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "makePayment"),
     },
     {
-        title: "Action",
-        dataIndex: 'action',
-        key: 'action',
+        title: "Pay",
+        dataIndex: 'pay',
+        key: 'pay',
         render: () =>
             <Checkbox
                 className="single-checkbox"
@@ -150,7 +150,7 @@ class umpirePayments extends Component {
                         columns={columns}
                         dataSource={data}
                         pagination={false}
-                    // rowKey={(record, index) => "umpireListResult" + record.id + index}
+                        rowKey={(record, index) => "umpirePayments" + record.matchId + index}
                     />
                 </div>
             </div>
@@ -274,11 +274,12 @@ class umpirePayments extends Component {
                         <div className="col-sm" >
                             <div className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "100%",
+                                    width: "96.5%",
                                     display: "flex",
                                     flexDirection: "column",
                                     alignItems: "flex-end",
                                     justifyContent: "flex-end",
+                                    alignContent:"center"
                                 }}
                             >
                                 {/* <Button
@@ -287,14 +288,14 @@ class umpirePayments extends Component {
                                 >{AppConstants.bulkPayment}
                                 </Button> */}
 
-                                <div className='single-checkbox-width'>
+                                {/* <div className='single-checkbox-width'> */}
                                     <Checkbox
                                         className="single-checkbox"
                                         defaultChecked={false}
                                     >
                                         {'All'}
                                     </Checkbox>
-                                </div>
+                                {/* </div> */}
                             </div>
 
 
