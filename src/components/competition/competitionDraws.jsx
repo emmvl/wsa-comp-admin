@@ -1181,7 +1181,7 @@ class CompetitionDraws extends Component {
                             //  defaultValue={new}
                             onChange={(startDate) => this.onChangeStartDate(moment(startDate).format("YYYY-MM-DD"))}
                             value={moment(this.state.startDate)}
-                            disabledDate={d => !d || d.isAfter(this.state.endDate)}
+                            // disabledDate={d => !d || d.isAfter(this.state.endDate)}
                           />
                         </div>
                       </div>
@@ -1203,7 +1203,7 @@ class CompetitionDraws extends Component {
                             placeholder={"dd-mm-yyyy"}
                             onChange={(endDate) => this.onChangeEndDate(moment(endDate).format("YYYY-MM-DD"))}
                             value={moment(this.state.endDate)}
-                            disabledDate={d => !d || d.isBefore(this.state.startDate)}
+                            // disabledDate={d => !d || d.isBefore(this.state.startDate)}
                           />
                         </div>
                       </div>
