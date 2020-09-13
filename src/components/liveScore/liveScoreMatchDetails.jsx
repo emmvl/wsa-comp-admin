@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {Layout, Button, Table, Modal, Checkbox, Tooltip, Select, Input, Spin, AutoComplete, Switch} from 'antd';
+import { Layout, Button, Table, Modal, Checkbox, Tooltip, Select, Input, Spin, AutoComplete, Switch } from 'antd';
 
 import {
     liveScoreDeleteMatch,
@@ -113,9 +113,9 @@ const columnsTeam1 = [
         render: (team, record, index) => {
             return (
                 <Checkbox
-                  className={record.lineup && record.lineup.playing ? 'checkbox-green-color-outline mt-1' : 'single-checkbox mt-1'}
-                  checked={record.attendance && record.attendance.isPlaying}
-                  onChange={(e) => this_.playingView(record, e.target.checked, index, 'team1Players')}
+                    className={record.lineup && record.lineup.playing ? 'checkbox-green-color-outline mt-1' : 'single-checkbox mt-1'}
+                    checked={record.attendance && record.attendance.isPlaying}
+                    onChange={(e) => this_.playingView(record, e.target.checked, index, 'team1Players')}
                 />
             )
         },
@@ -155,9 +155,9 @@ const columnsTeam2 = [
         render: (attended, record, index) => {
             return (
                 <Checkbox
-                  className={record.lineup && record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1'}
-                  checked={record.attendance && record.attendance.isPlaying}
-                  onChange={(e) => this_.playingView(record, e.target.checked, index, 'team2Players')}
+                    className={record.lineup && record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1'}
+                    checked={record.attendance && record.attendance.isPlaying}
+                    onChange={(e) => this_.playingView(record, e.target.checked, index, 'team2Players')}
                 />
             )
         },
@@ -198,11 +198,11 @@ class LiveScoreMatchDetails extends Component {
         this.props.getLiveScoreGamePositionsList()
 
         if (this.state.umpireKey == 'umpire') {
-            const { lineupSelectionEnabled, status, id } = JSON.parse(getUmpireCompetitonData())
-            isLineUpEnable = lineupSelectionEnabled
-            match_status = status
+            // const { lineupSelectionEnabled, status, id } = JSON.parse(getUmpireCompetitonData())
+            isLineUpEnable = getUmpireCompetitonData().lineupSelectionEnabled
+            match_status = getUmpireCompetitonData().status
 
-            this.setState({ competitionId: id })
+            this.setState({ competitionId: getUmpireCompetitonData().id })
         } else {
             const { lineupSelectionEnabled, status, id } = JSON.parse(getLiveScoreCompetiton())
             isLineUpEnable = lineupSelectionEnabled
@@ -281,10 +281,10 @@ class LiveScoreMatchDetails extends Component {
     // view for breadcrumb
     headerView = () => {
         const match = this.props.liveScoreMatchState.matchDetails
-          ? this.props.liveScoreMatchState.matchDetails.match
-          : [];
+            ? this.props.liveScoreMatchState.matchDetails.match
+            : [];
         const matchDetails = this.props.liveScoreMatchState.matchDetails
-          ? this.props.liveScoreMatchState.matchDetails : [];
+            ? this.props.liveScoreMatchState.matchDetails : [];
 
         const length = match ? match.length : 0;
         let isMatchStatus = length > 0 && match[0].matchStatus === "ENDED";
@@ -312,8 +312,8 @@ class LiveScoreMatchDetails extends Component {
                             <div className="col-sm">
                                 <div className="d-flex align-items-center year-select-heading">
                                     <Switch
-                                      className="mr-3"
-                                      onChange={(checked) => this.handleAttendanceView(checked)}
+                                        className="mr-3"
+                                        onChange={(checked) => this.handleAttendanceView(checked)}
                                     />
                                     {AppConstants.attendance}
                                 </div>
@@ -351,7 +351,7 @@ class LiveScoreMatchDetails extends Component {
                                     }}
                                 >
                                     <Button onClick={() => this.showModal(match[0].livestreamURL)}
-                                            className="primary-add-comp-form" type="primary">
+                                        className="primary-add-comp-form" type="primary">
                                         + {AppConstants.addliveStream}
                                     </Button>
                                 </div>
@@ -437,8 +437,8 @@ class LiveScoreMatchDetails extends Component {
 
         let scoreType = '';
         if (this.state.umpireKey === 'umpire') {
-            const { scoringType } = JSON.parse(getUmpireCompetitonData())
-            scoreType = scoringType;
+            // const { scoringType } = JSON.parse(getUmpireCompetitonData())
+            scoreType = getUmpireCompetitonData().scoringType;
         } else {
             const { scoringType } = JSON.parse(getLiveScoreCompetiton())
             scoreType = scoringType;
@@ -450,7 +450,7 @@ class LiveScoreMatchDetails extends Component {
                     <div className="match-score-detail">
                         <span className="event-time-start-text" >{AppConstants.umpireName}</span>
                     </div>
-                    <div style={{ display:  "flex", alignContent: "center", flexDirection: 'column' }} >
+                    <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }} >
                         {UmpireData.map((item, index) => (
                             <span key={`umpire_${index}`} className="desc-text-style side-bar-profile-data pt-2" >
                                 {`U${index + 1}`}: {item.umpireName}
@@ -464,13 +464,13 @@ class LiveScoreMatchDetails extends Component {
                     </div>
                     <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }} >
                         {UmpireData.map((item, index) => (
-                            <div  key={`umpire_club_data_${index}`}>
+                            <div key={`umpire_club_data_${index}`}>
                                 {isArrayNotEmpty(item.competitionOrganisations)
                                     && item.competitionOrganisations.map((item, index) => (
-                                    <span key={`umpire_club_${index}`} className="inbox-name-text pt-2" >
-                                        {item.name}
-                                    </span>
-                                ))}
+                                        <span key={`umpire_club_${index}`} className="inbox-name-text pt-2" >
+                                            {item.name}
+                                        </span>
+                                    ))}
                             </div>
                         ))}
                     </div>
@@ -510,7 +510,7 @@ class LiveScoreMatchDetails extends Component {
     };
 
     teamPlayersStatus = (data) => {
-        const competition =  JSON.parse(getLiveScoreCompetiton());
+        const competition = JSON.parse(getLiveScoreCompetiton());
 
         const columns = [
             {
@@ -527,16 +527,16 @@ class LiveScoreMatchDetails extends Component {
                         key: 'position1',
                         width: 150,
                         render: (p, row) => (
-                          <Select
-                            className="year-select reg-filter-select1 table-cell-select"
-                            size="small"
-                            style={{width: '100%'}}
-                            defaultValue={row?.lineup?.positionId}
-                          >
-                              {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
-                              ))}
-                          </Select>
+                            <Select
+                                className="year-select reg-filter-select1 table-cell-select"
+                                size="small"
+                                style={{ width: '100%' }}
+                                defaultValue={row?.lineup?.positionId}
+                            >
+                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                    <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                ))}
+                            </Select>
                         )
                     },
                     {
@@ -544,7 +544,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'goals1',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number" />
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -552,7 +552,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'miss1',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number" />
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -560,7 +560,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'pmiss1',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number" />
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -571,8 +571,8 @@ class LiveScoreMatchDetails extends Component {
                             competition?.attendanceRecordingPeriod === 'MINUTE' ? (
                                 <Input size="small" type="number" />
                             ) : (
-                                <Checkbox/>
-                            )
+                                    <Checkbox />
+                                )
                     },
                 ],
             },
@@ -584,16 +584,16 @@ class LiveScoreMatchDetails extends Component {
                         key: 'position2',
                         width: 150,
                         render: (p, row) => (
-                          <Select
-                            className="year-select reg-filter-select1 table-cell-select"
-                            size="small"
-                            style={{width: '100%'}}
-                            defaultValue={row?.lineup?.positionId}
-                          >
-                              {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
-                              ))}
-                          </Select>
+                            <Select
+                                className="year-select reg-filter-select1 table-cell-select"
+                                size="small"
+                                style={{ width: '100%' }}
+                                defaultValue={row?.lineup?.positionId}
+                            >
+                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                    <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
+                                ))}
+                            </Select>
                         )
                     },
                     {
@@ -601,7 +601,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'goals2',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number" />
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -609,7 +609,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'miss2',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number" />
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -617,7 +617,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'pmiss2',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number" />
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -625,11 +625,11 @@ class LiveScoreMatchDetails extends Component {
                         key: 'sec2',
                         width: 60,
                         render: (p, row) =>
-                          competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                            <Input size="small" type="number" />
-                          ) : (
-                            <Checkbox/>
-                          )
+                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                <Input size="small" type="number" />
+                            ) : (
+                                    <Checkbox />
+                                )
                     },
                 ],
             },
@@ -641,16 +641,16 @@ class LiveScoreMatchDetails extends Component {
                         key: 'position3',
                         width: 150,
                         render: (p, row) => (
-                          <Select
-                            className="year-select reg-filter-select1 table-cell-select"
-                            size="small"
-                            style={{width: '100%'}}
-                            defaultValue={row?.lineup?.positionId}
-                          >
-                              {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                <Option key={`position3_${position.id}`} value={position.id}>{position.name}</Option>
-                              ))}
-                          </Select>
+                            <Select
+                                className="year-select reg-filter-select1 table-cell-select"
+                                size="small"
+                                style={{ width: '100%' }}
+                                defaultValue={row?.lineup?.positionId}
+                            >
+                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                    <Option key={`position3_${position.id}`} value={position.id}>{position.name}</Option>
+                                ))}
+                            </Select>
                         )
                     },
                     {
@@ -658,7 +658,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'goals3',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number"/>
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -666,7 +666,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'miss3',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number"/>
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -674,7 +674,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'pmiss3',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number"/>
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -682,11 +682,11 @@ class LiveScoreMatchDetails extends Component {
                         key: 'sec3',
                         width: 60,
                         render: (p, row) =>
-                          competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                            <Input size="small" type="number" />
-                          ) : (
-                            <Checkbox/>
-                          )
+                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                <Input size="small" type="number" />
+                            ) : (
+                                    <Checkbox />
+                                )
                     },
                 ],
             },
@@ -698,16 +698,16 @@ class LiveScoreMatchDetails extends Component {
                         key: 'position4',
                         width: 150,
                         render: (p, row) => (
-                          <Select
-                            className="year-select reg-filter-select1 table-cell-select"
-                            size="small"
-                            style={{width: '100%'}}
-                            defaultValue={row?.lineup?.positionId}
-                          >
-                              {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                <Option key={`position4_${position.id}`} value={position.id}>{position.name}</Option>
-                              ))}
-                          </Select>
+                            <Select
+                                className="year-select reg-filter-select1 table-cell-select"
+                                size="small"
+                                style={{ width: '100%' }}
+                                defaultValue={row?.lineup?.positionId}
+                            >
+                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                    <Option key={`position4_${position.id}`} value={position.id}>{position.name}</Option>
+                                ))}
+                            </Select>
                         )
                     },
                     {
@@ -715,7 +715,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'goals4',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number" />
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -723,7 +723,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'miss4',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number" />
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -731,7 +731,7 @@ class LiveScoreMatchDetails extends Component {
                         key: 'pmiss4',
                         width: 60,
                         render: () => (
-                          <Input size="small" type="number" />
+                            <Input size="small" type="number" />
                         )
                     },
                     {
@@ -739,34 +739,34 @@ class LiveScoreMatchDetails extends Component {
                         key: 'sec4',
                         width: 60,
                         render: (p, row) =>
-                          competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                            <Input size="small" type="number" />
-                          ) : (
-                            <Checkbox />
-                          )
+                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                <Input size="small" type="number" />
+                            ) : (
+                                    <Checkbox />
+                                )
                     },
                 ],
             },
         ];
 
         return (
-          <Table
-            className="home-dashboard-table"
-            columns={columns}
-            dataSource={data}
-            size="small"
-            scroll={{x: '100%'}}
-            pagination={false}
-            loading={this.props.liveScoreGamePositionState.onLoad}
-            rowKey={(record) => record.id}
-          />
+            <Table
+                className="home-dashboard-table"
+                columns={columns}
+                dataSource={data}
+                size="small"
+                scroll={{ x: '100%' }}
+                pagination={false}
+                loading={this.props.liveScoreGamePositionState.onLoad}
+                rowKey={(record) => record.id}
+            />
         )
     };
 
     handleAttendanceView = (visible, team) => {
-      this.setState({
-          teamAttendance: visible,
-      })
+        this.setState({
+            teamAttendance: visible,
+        })
     };
 
     // Team details
@@ -781,10 +781,10 @@ class LiveScoreMatchDetails extends Component {
         return (
             <div className="row mt-5 ml-0 mr-0 mb-5">
                 <div className={this.state.teamAttendance ? 'col-12' : 'col-6 col-md-6 col-sm-12'}
-                     style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
+                    style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
                     <div className="d-flex flex-column align-items-center justify-content-center">
                         <img className="user-image" src={length >= 1 && match ? match[0].team1.logoUrl : ''}
-                             alt="" height="80" width="80" />
+                            alt="" height="80" width="80" />
                         <span className="live-score-profile-user-name match-details-team-name">
                             {length >= 1 ? match ? match[0].team1.name : '' : ''}
                         </span>
@@ -798,9 +798,9 @@ class LiveScoreMatchDetails extends Component {
                             </div>
                             <div className="col-sm text-right align-items-center" >
                                 <Button
-                                  className="primary-add-comp-form"
-                                  type="primary"
-                                  onClick={() => this.handleAddPlayerModal('team1')}
+                                    className="primary-add-comp-form"
+                                    type="primary"
+                                    onClick={() => this.handleAddPlayerModal('team1')}
                                 >
                                     + {AppConstants.borrowPlayer}
                                 </Button>
@@ -808,28 +808,28 @@ class LiveScoreMatchDetails extends Component {
                         </div>
                         <div>
                             {this.state.teamAttendance ? (
-                              <div className="col-12">
-                                  {this.teamPlayersStatus(team1PlayersData)}
-                              </div>
+                                <div className="col-12">
+                                    {this.teamPlayersStatus(team1PlayersData)}
+                                </div>
                             ) : (
-                              <div className="col-12">
-                                  <Table
-                                    className="home-dashboard-table pt-2"
-                                    columns={this.state.isLineUp === 1 ? columnsTeam1 : columns}
-                                    dataSource={team1PlayersData}
-                                    pagination={false}
-                                    scroll={{x: '100%'}}
-                                  />
-                              </div>
-                            )}
+                                    <div className="col-12">
+                                        <Table
+                                            className="home-dashboard-table pt-2"
+                                            columns={this.state.isLineUp === 1 ? columnsTeam1 : columns}
+                                            dataSource={team1PlayersData}
+                                            pagination={false}
+                                            scroll={{ x: '100%' }}
+                                        />
+                                    </div>
+                                )}
                         </div>
                     </div>
                 </div>
                 <div className={this.state.teamAttendance ? 'col-12 mt-5' : 'col-6 col-md-6 col-sm-12'}
-                     style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
+                    style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
                     <div className="d-flex flex-column align-items-center justify-content-center">
                         <img className="user-image" src={length >= 1 && match ? match[0].team2.logoUrl : ''}
-                             alt="" height="80" width="80" />
+                            alt="" height="80" width="80" />
                         <span className="live-score-profile-user-name match-details-team-name">
                             {length >= 1 && match ? match[0].team2.name : ''}
                         </span>
@@ -843,9 +843,9 @@ class LiveScoreMatchDetails extends Component {
                             </div>
                             <div className="col-sm text-right align-items-center" >
                                 <Button
-                                  className="primary-add-comp-form"
-                                  type="primary"
-                                  onClick={() => this.handleAddPlayerModal('team2')}
+                                    className="primary-add-comp-form"
+                                    type="primary"
+                                    onClick={() => this.handleAddPlayerModal('team2')}
                                 >
                                     + {AppConstants.borrowPlayer}
                                 </Button>
@@ -853,20 +853,20 @@ class LiveScoreMatchDetails extends Component {
                         </div>
                         <div>
                             {this.state.teamAttendance ? (
-                              <div className="col-12">
-                                  {this.teamPlayersStatus(team2PlayersData)}
-                              </div>
+                                <div className="col-12">
+                                    {this.teamPlayersStatus(team2PlayersData)}
+                                </div>
                             ) : (
-                              <div className="col-12">
-                                  <Table
-                                    className="home-dashboard-table pt-2"
-                                    columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
-                                    dataSource={team2PlayersData}
-                                    pagination={false}
-                                    scroll={{x: '100%'}}
-                                  />
-                              </div>
-                            )}
+                                    <div className="col-12">
+                                        <Table
+                                            className="home-dashboard-table pt-2"
+                                            columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
+                                            dataSource={team2PlayersData}
+                                            pagination={false}
+                                            scroll={{ x: '100%' }}
+                                        />
+                                    </div>
+                                )}
                         </div>
                     </div>
                 </div>
@@ -939,21 +939,21 @@ class LiveScoreMatchDetails extends Component {
     }
 
     handleAddPlayerModal = (team) => {
-        this.setState({addPlayerModal: team});
+        this.setState({ addPlayerModal: team });
     };
 
     handleAddPlayerCancel = () => {
-        this.setState({addPlayerModal: ''});
+        this.setState({ addPlayerModal: '' });
     };
 
     handleAddPlayerOk = () => {
-        this.setState({addPlayerModal: ''});
+        this.setState({ addPlayerModal: '' });
     };
 
     handleAddPlayer = (playerId) => {
         if (playerId) {
             const borrowedPlayer = (this.props.liveScorePlayerState.searchResult || [])
-              .find((player) => player.playerId === playerId);
+                .find((player) => player.playerId === playerId);
             const borrowedPlayerData = {
                 attendance: null,
                 attended: false,
@@ -982,74 +982,74 @@ class LiveScoreMatchDetails extends Component {
             }
         }
 
-        this.setState({addPlayerModal: ''});
+        this.setState({ addPlayerModal: '' });
     };
 
     AddPlayerModalView() {
         let playerId = null;
-        const { id: competitionId, organisationId } = JSON.parse(getLiveScoreCompetiton())
+        const { id: competitionId, organisationId } = this.state.umpireKey ? JSON.parse(getUmpireCompetitonData()) : JSON.parse(getLiveScoreCompetiton())
         const { onLoadSearch, searchResult } = this.props.liveScorePlayerState;
         const { team1Players, team2Players } = this.props.liveScoreMatchState;
         const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
         const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
 
-        const team1PlayerIds = team1PlayersData.length > 0
-          ? team1PlayersData.map((player) => player.playerId)
-          : [];
-        const team2PlayerIds = team2PlayersData.length > 0
-          ? team2PlayersData.map((player) => player.playerId)
-          : [];
+        const team1PlayerIds = team1Players.length > 0
+            ? team1Players.map((player) => player.playerId)
+            : [];
+        const team2PlayerIds = team2Players.length > 0
+            ? team2Players.map((player) => player.playerId)
+            : [];
 
         const searchResultData = searchResult.length > 0
-          ? searchResult.filter((player) =>
-            team1PlayerIds.indexOf(player.playerId) < 0 && team2PlayerIds.indexOf(player.playerId) < 0
-          )
-          : [];
+            ? searchResult.filter((player) =>
+                team1PlayerIds.indexOf(player.playerId) < 0 && team2PlayerIds.indexOf(player.playerId) < 0
+            )
+            : [];
 
         return (
-          <Modal
-            title={AppConstants.addPlayer}
-            visible={!!this.state.addPlayerModal}
-            onOk={this.handleAddPlayerOk}
-            onCancel={this.handleAddPlayerCancel}
-            cancelButtonProps={{ style: { display: 'none' } }}
-            okButtonProps={{ style: { display: 'none' } }}
-            centered={true}
-            footer={null}
-          >
-              <AutoComplete
-                loading={true}
-                style={{ width: "100%", height: '56px' }}
-                placeholder="Add Player"
-                onSelect={(item, option) => {
-                    playerId = JSON.parse(option.key);
-                }}
-                notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
-                onSearch={(value) => {
-                    if (value) {
-                        this.props.liveScorePlayerListSearchAction(competitionId, organisationId, value)
-                    }
-                }}
-              >
-                  {searchResultData.length > 0 && searchResultData.map((item) => {
-                      return <Option key={item.playerId} value={item.playerId.toString()}>
-                          {item.firstName + " " + item.lastName}
-                      </Option>
-                  })}
-              </AutoComplete>
-              <div
-                className="comp-dashboard-botton-view-mobile"
-                style={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    paddingTop: 24
-                }}
-              >
-                  <Button onClick={() => this.handleAddPlayer(playerId)} className="primary-add-comp-form" type="primary">
-                      {AppConstants.save}
-                  </Button>
-              </div>
-          </Modal>
+            <Modal
+                title={AppConstants.addPlayer}
+                visible={!!this.state.addPlayerModal}
+                onOk={this.handleAddPlayerOk}
+                onCancel={this.handleAddPlayerCancel}
+                cancelButtonProps={{ style: { display: 'none' } }}
+                okButtonProps={{ style: { display: 'none' } }}
+                centered={true}
+                footer={null}
+            >
+                <AutoComplete
+                    loading={true}
+                    style={{ width: "100%", height: '56px' }}
+                    placeholder="Add Player"
+                    onSelect={(item, option) => {
+                        playerId = JSON.parse(option.key);
+                    }}
+                    notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
+                    onSearch={(value) => {
+                        if (value) {
+                            this.props.liveScorePlayerListSearchAction(competitionId, organisationId, value)
+                        }
+                    }}
+                >
+                    {searchResultData.length > 0 && searchResultData.map((item) => {
+                        return <Option key={item.playerId} value={item.playerId.toString()}>
+                            {item.firstName + " " + item.lastName}
+                        </Option>
+                    })}
+                </AutoComplete>
+                <div
+                    className="comp-dashboard-botton-view-mobile"
+                    style={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        paddingTop: 24
+                    }}
+                >
+                    <Button onClick={() => this.handleAddPlayer(playerId)} className="primary-add-comp-form" type="primary">
+                        {AppConstants.save}
+                    </Button>
+                </div>
+            </Modal>
         )
     }
 
@@ -1062,9 +1062,9 @@ class LiveScoreMatchDetails extends Component {
                         <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                         :
                         <DashboardLayout
-                          menuHeading={AppConstants.liveScores}
-                          menuName={AppConstants.liveScores}
-                          onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                            menuHeading={AppConstants.liveScores}
+                            menuName={AppConstants.liveScores}
+                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                         />
                 }
 
@@ -1073,8 +1073,8 @@ class LiveScoreMatchDetails extends Component {
                         <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"1"} />
                         :
                         <InnerHorizontalMenu
-                          menu={"liveScore"}
-                          liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
+                            menu={"liveScore"}
+                            liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
                         />
                 }
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />

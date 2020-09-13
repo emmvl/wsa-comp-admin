@@ -4,6 +4,11 @@ const isNotNullOrEmptyString = word => (word !== null && word !== undefined && w
 
 const getAge = (birthDate) => (Math.floor((new Date() - new Date(birthDate).getTime()) / 3.15576e+10));
 
+
+const isNotNullAndUndefined = (value) => {
+    return  value !== undefined && value !== null
+}
+
 const deepCopyFunction = inObject => {
     let outObject, value, key;
 
@@ -69,4 +74,5 @@ module.exports = {
     teamListData,
     regexNumberExpression,
     isImageFormatValid,
+    isNotNullAndUndefined
 };

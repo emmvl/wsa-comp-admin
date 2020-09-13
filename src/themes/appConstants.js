@@ -1588,6 +1588,8 @@ const AppConstants = {
   whoAssignsUmpires: 'Who Assigns Umpires',
   competitionOrganiser: 'Competition Organiser',
   affiliateOrganisations: 'Affiliate Organisations',
+  whatRegistrationChange: "what registration change do you",
+  takenCourtforTraining: "Have you taken the court for training, grading or a compitition game",
 };
 
 export default AppConstants;

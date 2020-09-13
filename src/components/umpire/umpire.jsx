@@ -29,6 +29,23 @@ const listeners = (key) => ({
     onClick: () => tableSort(key),
 });
 
+function checkUserRoll(rolesArr, index) {
+    let isClub = "NO"
+    if (isArrayNotEmpty(rolesArr)) {
+        for (let i in rolesArr) {
+            let roles = rolesArr[i].role
+            if (roles.name == "umpire_coach") {
+                isClub = "YES"
+            }
+        }
+
+    }
+
+    return isClub
+
+}
+
+
 function tableSort(key) {
     let sortBy = key;
     let sortOrder = null;
@@ -128,7 +145,7 @@ const columns = [
         key: "umpireCoach",
         sorter: true,
         onHeaderCell: () => listeners("umpireCoach"),
-        render: (umpireCoach) => <span>{umpireCoach}</span>,
+        render: (umpireCoach, record, index) => <span>{checkUserRoll(record.userRoleEntities, index)}</span>,
     },
     {
         title: "Action",

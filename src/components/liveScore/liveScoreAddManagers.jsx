@@ -239,11 +239,11 @@ class LiveScoreAddManager extends Component {
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%", }}
                                     onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
-                                    value={teamId}
+                                    // value={teamId}
                                     optionFilterProp="children"
                                 >
                                     {teamData.map((item) => (
-                                        < Option value={item.id} >{item.name}</Option>
+                                        < Option key={item.id} value={item.id} >{item.name}</Option>
                                     ))
                                     }
                                 </Select>
@@ -275,7 +275,7 @@ class LiveScoreAddManager extends Component {
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
                                     onChange={(firstName) => this.props.liveScoreUpdateManagerDataAction(captializedString(firstName.target.value), 'firstName')}
-                                    value={managerData.firstName}
+                                    // value={managerData.firstName}
                                     onBlur={(i) => this.props.form.setFieldsValue({
                                         'First Name': captializedString(i.target.value)
                                     })}
@@ -296,7 +296,7 @@ class LiveScoreAddManager extends Component {
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
                                     onChange={(lastName) => this.props.liveScoreUpdateManagerDataAction(captializedString(lastName.target.value), 'lastName')}
-                                    value={managerData.lastName}
+                                    // value={managerData.lastName}
                                     onBlur={(i) => this.props.form.setFieldsValue({
                                         'Last Name': captializedString(i.target.value)
                                     })}
@@ -329,7 +329,7 @@ class LiveScoreAddManager extends Component {
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
                                     onChange={(email) => this.props.liveScoreUpdateManagerDataAction(email.target.value, 'email')}
-                                    value={managerData.email}
+                                    // value={managerData.email}
                                     disabled={this.state.isEdit === true && true}
                                 />
                             )}
@@ -351,7 +351,8 @@ class LiveScoreAddManager extends Component {
                                     placeholder={AppConstants.enterContactNo}
                                     maxLength={10}
                                     onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
-                                    value={managerData.mobileNumber} />
+                                // value={managerData.mobileNumber} 
+                                />
                             )}
                         </Form.Item>
                     </div>
@@ -370,7 +371,7 @@ class LiveScoreAddManager extends Component {
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%" }}
                                     onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
-                                    value={teamId}
+                                    // value={teamId}
                                     showSearch
                                     optionFilterProp="children"
                                 >

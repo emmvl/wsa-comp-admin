@@ -195,7 +195,7 @@ class LiveScoreAddEditCoach extends Component {
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
                                     onChange={(firstName) => this.props.liveScoreUpdateCoach(captializedString(firstName.target.value), 'firstName')}
-                                    value={coachdata.firstName}
+                                    // value={coachdata.firstName}
                                     onBlur={(i) => this.props.form.setFieldsValue({
                                         'First Name': captializedString(i.target.value)
                                     })}
@@ -248,7 +248,7 @@ class LiveScoreAddEditCoach extends Component {
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
                                     onChange={(email) => this.props.liveScoreUpdateCoach(email.target.value, 'email')}
-                                    value={coachdata.email}
+                                    // value={coachdata.email}
                                     disabled={this.state.isEdit == true && true}
                                 />
                             )}
@@ -296,7 +296,7 @@ class LiveScoreAddEditCoach extends Component {
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%" }}
                                     onChange={(teamId) => this.props.liveScoreUpdateCoach(teamId, 'teamId')}
-                                    value={[741, 738]}
+                                    // value={[741, 738]}
                                     showSearch
                                     optionFilterProp="children"
 
@@ -376,7 +376,7 @@ class LiveScoreAddEditCoach extends Component {
                                     placeholder={AppConstants.selectTeam}
                                     style={{ width: "100%", }}
                                     onChange={(teamId) => this.props.liveScoreUpdateCoach(teamId, 'teamId')}
-                                    value={teamId}
+                                    // value={teamId}
                                     optionFilterProp="children"
                                 >
                                     {teamData.map((item) => (

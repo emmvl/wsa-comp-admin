@@ -275,17 +275,32 @@ function umpirePaymentSetting(state = initialState, action) {
                 state.allDivisionBadgeAffiliate = data
             }
             else if (subkey == "inputFieldAffiliate") {
-                state.inputFieldArrayAffiliate[action.data.index][key] = data
+                if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
+                    state.inputFieldArrayAffiliate[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
+                } else {
+                    state.inputFieldArrayAffiliate[action.data.index][key] = data
+                }
             }
             else if (key == "fee") {
                 state.poolViewArray[action.data.index][key] = data
             }
             else if (subkey == "byPoolInputFeilds") {
-                state.inputFieldForByPool[action.data.index][key] = data;
+
+                if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
+                    state.inputFieldForByPool[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
+                } else {
+                    state.inputFieldForByPool[action.data.index][key] = data;
+                }
 
             } else if (subkey == "inputFieldsAffiliateOrgByPool") {
-                state.inputFieldsAffiliateOrgByPool[action.data.index][key] = data;
-
+                if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
+                    state.inputFieldsAffiliateOrgByPool[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
+                } else {
+                    state.inputFieldsAffiliateOrgByPool[action.data.index][key] = data;
+                }
+            }
+            else if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
+                state.inputFieldArray[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
             }
             else {
                 state.inputFieldArray[action.data.index][key] = data;

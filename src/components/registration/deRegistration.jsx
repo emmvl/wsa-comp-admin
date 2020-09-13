@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Form, Select, Button, Radio } from 'antd';
+import { Layout, Breadcrumb, Form, Select, Button, Radio, message } from 'antd';
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
@@ -61,18 +61,28 @@ class DeRegistration extends Component {
             if(!err){
                 let deRegisterState = this.props.deRegistrationState;
                 let saveData = JSON.parse(JSON.stringify(deRegisterState.saveData));
-                let regData = this.state.regData;
-                let personal = this.state.personal;
-                saveData["userId"] = personal.userId;
-                saveData["organisationId"] = regData.organisationId;
-                saveData["competitionId"] = regData.competitionId;
-                saveData["membershipMappingId"] = regData.membershipMappingId;
-                saveData["teamId"] = regData.teamId;
-                saveData["divisionId"] = regData.divisionId;
-                saveData["registrationId"] = regData.registrationId;
-                console.log("saveData::" + JSON.stringify(saveData));
-                this.props.saveDeRegisterDataAction(saveData);
-                this.setState({saveLoad: true});
+                if(saveData.regChangeTypeRefId == 0 || saveData.regChangeTypeRefId == null){
+                    message.config({ duration: 0.9, maxCount: 1 });
+                    message.error(ValidationConstants.deRegisterChangeTypeRequired);
+                }
+                else if(saveData.deRegistrationOptionId == 2 && saveData.reasonTypeRefId == 0){
+                    message.config({ duration: 0.9, maxCount: 1 });
+                    message.error(ValidationConstants.deRegisterReasonRequired);
+                }
+                else{
+                    let regData = this.state.regData;
+                    let personal = this.state.personal;
+                    saveData["userId"] = personal.userId;
+                    saveData["organisationId"] = regData.organisationId;
+                    saveData["competitionId"] = regData.competitionId;
+                    saveData["membershipMappingId"] = regData.membershipMappingId;
+                    saveData["teamId"] = regData.teamId;
+                    saveData["divisionId"] = regData.divisionId;
+                    saveData["registrationId"] = regData.registrationId;
+                    console.log("saveData::" + JSON.stringify(saveData));
+                    this.props.saveDeRegisterDataAction(saveData);
+                    this.setState({saveLoad: true});
+                }
             }
         })
     }
@@ -415,8 +425,7 @@ class DeRegistration extends Component {
                     >
                         {this.headerView()}
                         <Content>
-                            <Loader visible={this.props.deRegistrationState.onLoad || 
-                            this.props.deRegistrationState.onSaveLoad} />
+                            <Loader visible={this.props.deRegistrationState.onSaveLoad} />
                             <div className="formView">
                                 {this.contentView(getFieldDecorator)}
                             </div>

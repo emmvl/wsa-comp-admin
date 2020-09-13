@@ -294,15 +294,14 @@ let userHttpApi = {
   },
 
   umpireList(data) {
-    console.log(data, '***** Data')
     let url = null
     if (data.userName) {
-      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}`
+      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
     } else if (data.offset != null) {
-      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}`
+      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}`
     }
     else {
-      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}`
+      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}`
     }
 
     if (data.sortBy && data.sortOrder) {
@@ -442,7 +441,6 @@ let Method = {
         })
         .then(result => {
           if (result.status === 200) {
-            console.log("*************" + JSON.stringify(result.data));
             const url = window.URL.createObjectURL(new Blob([result.data]));
             const link = document.createElement('a');
             link.href = url;
@@ -722,7 +720,6 @@ let Method = {
         })
         .then(result => {
           if (result.status === 200) {
-            console.log("*************" + JSON.stringify(result.data));
             const url = window.URL.createObjectURL(new Blob([result.data]));
             const link = document.createElement('a');
             link.href = url;

@@ -57,12 +57,12 @@ const columns = [
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     render: (firstName, record) =>
-      // <NavLink to={{
-      //   pathname: '/liveScoreCoachDetail',
-      //   state: { userId: record.id, screenKey: "livescore" }
-      // }}>
-      <span className="input-heading-add-another pt-0">{firstName}</span>
-    // </NavLink>
+      <NavLink to={{
+        pathname: '/userPersonal',
+        state: { userId: record.id, screenKey: "livescore", screen: "/LiveScoreCoaches" }
+      }}>
+        <span className="input-heading-add-another pt-0">{firstName}</span>
+      </NavLink>
   },
   {
     title: "Last Name",
@@ -71,12 +71,12 @@ const columns = [
     sorter: true,
     onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     render: (lastName, record) =>
-      // <NavLink to={{
-      //   pathname: '/userPersonal',
-      //   state: { userId: record.id, screenKey: "livescore" }
-      // }}>
-      <span className="input-heading-add-another pt-0">{lastName}</span>
-    // </NavLink>
+      <NavLink to={{
+        pathname: '/userPersonal',
+        state: { userId: record.id, screenKey: "livescore", screen: "/LiveScoreCoaches" }
+      }}>
+        <span className="input-heading-add-another pt-0">{lastName}</span>
+      </NavLink>
   },
   {
     title: "Email",
