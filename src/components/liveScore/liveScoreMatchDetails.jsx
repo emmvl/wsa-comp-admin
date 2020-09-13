@@ -182,6 +182,8 @@ class LiveScoreMatchDetails extends Component {
             liveStreamLink: null,
             addPlayerModal: '',
             teamAttendance: false,
+            team1Attendance: [],
+            team2Attendance: [],
             borrowedTeam1Players: [],
             borrowedTeam2Players: [],
         };
@@ -216,6 +218,9 @@ class LiveScoreMatchDetails extends Component {
             this.setState({ isLineUp: 0 })
             this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
         }
+    }
+
+    componentDidUpdate(nextProps) {
     }
 
     playingView(record, value, index, key) {
@@ -985,12 +990,14 @@ class LiveScoreMatchDetails extends Component {
         const { id: competitionId, organisationId } = JSON.parse(getLiveScoreCompetiton())
         const { onLoadSearch, searchResult } = this.props.liveScorePlayerState;
         const { team1Players, team2Players } = this.props.liveScoreMatchState;
+        const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
+        const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
 
-        const team1PlayerIds = team1Players.length > 0
-          ? team1Players.map((player) => player.playerId)
+        const team1PlayerIds = team1PlayersData.length > 0
+          ? team1PlayersData.map((player) => player.playerId)
           : [];
-        const team2PlayerIds = team2Players.length > 0
-          ? team2Players.map((player) => player.playerId)
+        const team2PlayerIds = team2PlayersData.length > 0
+          ? team2PlayersData.map((player) => player.playerId)
           : [];
 
         const searchResultData = searchResult.length > 0
