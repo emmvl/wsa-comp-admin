@@ -12,11 +12,11 @@ function getCompetitionVenue(competitionId) {
 
 
 /////get competition draws
-function getCompetitionDrawsAction(yearRefId, competitionId, venueId, roundId, orgId, startDate, endDate) {
+function getCompetitionDrawsAction(yearRefId, competitionId, venueId, roundId, orgId, startDate, endDate, dateRangeCheck) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_DRAWS_LOAD,
         yearRefId, competitionId, venueId, roundId,
-        orgId, startDate, endDate
+        orgId, startDate, endDate, dateRangeCheck
     };
     return action;
 }

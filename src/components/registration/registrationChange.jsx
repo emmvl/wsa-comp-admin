@@ -14,6 +14,7 @@ import { currencyFormat } from "../../util/currencyFormat";
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
 import { getOrganisationData } from "util/sessionStorage";
+import history from "../../util/history";
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -220,10 +221,8 @@ const columns = [
                             <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                         }
                     >
-                        <Menu.Item key={'1'}>
-                            <NavLink to={{
-                                pathname: '/registrationChangeReview',deRegisterId: record.id
-                            }}><span >Review</span></NavLink>
+                        <Menu.Item key={'1'} onClick={() => history.push("/registrationChangeReview", {deRegisterId: record.id,deRegData: record})}>
+                           <span >Review</span>
                         </Menu.Item>
                     </Menu.SubMenu>
                     : null}

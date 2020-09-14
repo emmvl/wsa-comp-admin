@@ -49,7 +49,8 @@ export function* getCompetitionDrawsSaga(action) {
                 type: ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
-                competitionId: action.competitionId
+                competitionId: action.competitionId,
+                dateRangeCheck: action.dateRangeCheck
             });
         } else {
             yield call(failSaga, result)

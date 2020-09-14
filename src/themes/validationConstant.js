@@ -211,8 +211,11 @@ const ValidationConstants = {
     RecordGoalAttemptsIsRequired: "Record goal attempts is required",
     pleaseSelectBetweenUmpireAndCoach: "User must be umpire, umpire coach or both",
     pleaseSelectOrg: "Please select organisation",
-    refundAmtRequired: "Refund amount cannot be null.",
-    refundAmtCheck: "Refund amount cannot be greater that actual amount."
+    refundAmtRequired: "Please enter the partial amount",
+    refundAmtCheck: "Refund amount cannot be greater that actual amount.",
+    declineReasonRequired: "Please select the reason to decline",
+    deRegisterReasonRequired: "Please select the reason to De-register",
+    deRegisterChangeTypeRequired: "Please select the De-register change type",
 };
 
 export default ValidationConstants;
