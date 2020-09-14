@@ -525,7 +525,7 @@ class CompetitionDashboard extends Component {
     };
 
     participatedView = () => (
-        <div className="comp-dash-table-view">
+        <div className="comp-dash-table-view" style={{ paddingBottom: 100 }}>
             <div className="table-responsive home-dash-table-view">
                 <Table
                     loading={this.props.competitionDashboardState.onLoad}
@@ -548,7 +548,7 @@ class CompetitionDashboard extends Component {
     }
 
     ownedView = () => (
-        <div className="comp-dash-table-view" style={{ paddingBottom: 100 }}>
+        <div className="comp-dash-table-view">
             <div className="table-responsive home-dash-table-view">
                 <Table
                     loading={this.props.competitionDashboardState.onLoad}
