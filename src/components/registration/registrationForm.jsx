@@ -1596,9 +1596,9 @@ class RegistrationForm extends Component {
                                     getFieldDecorator
                                 )}
                             </div>
-                            <div className="formView">{this.UserRegisterView(
+                            {/* <div className="formView">{this.UserRegisterView(
                                 getFieldDecorator
-                            )}</div>
+                            )}</div> */}
                             <div className="formView">{this.advancedSettingView()}</div>
                             <div className="formView">{this.sendInviteToView()}</div>
                             {/* <div className="formView">

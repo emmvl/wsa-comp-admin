@@ -1297,7 +1297,7 @@ class CompetitionDraws extends Component {
                             />
                           </div>
                           :
-                          <div style={{ display: 'table' }}>
+                          <div style={{ display: 'table', marginTop: 35 }}>
                             <LegendComponent
                               disabled={disabledStatus}
                               legendArray={dateItem.legendsArray}
@@ -1331,7 +1331,7 @@ class CompetitionDraws extends Component {
                                   />
                                 </div>
                                 :
-                                <div style={{ display: 'table' }}>
+                                <div style={{ display: 'table', marginTop: 35 }}>
                                   <LegendComponent
                                     disabled={disabledStatus}
                                     legendArray={dateItem.legendsArray}
@@ -1665,9 +1665,9 @@ class CompetitionDraws extends Component {
             );
           })}
         </div>
-        <div className="draws-legend-view">
-          {/* <LegendComponent legendArray={Array(10).fill(legendsData).flat()} /> */}
-        </div>
+        {/* <div className="draws-legend-view"> */}
+        {/* <LegendComponent legendArray={Array(10).fill(legendsData).flat()} /> */}
+        {/* </div> */}
       </div >
     );
   };

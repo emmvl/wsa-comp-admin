@@ -263,8 +263,7 @@ const columnsInvite = [
         title: 'Umpire Reserve',
         dataIndex: 'umpireReserves',
         key: 'umpireReserves',
-        sorter: true,
-        onHeaderCell: () => listeners("umpireReserves"),
+        sorter: false,
         render: (umpireReserves, record) => {
             let umpireReserve = checkUmpireReserve(umpireReserves, 19) ? checkUmpireReserve(umpireReserves, 19) : [];
             return (
@@ -278,8 +277,7 @@ const columnsInvite = [
         title: 'Umpire Coach',
         dataIndex: 'umpireCoaches',
         key: 'umpireCoaches',
-        sorter: true,
-        onHeaderCell: () => listeners("umpireCoaches"),
+        sorter: false,
         render: (umpireCoaches, record) => {
             let umpireCoach = checkUmpireReserve(umpireCoaches, 20) ? checkUmpireReserve(umpireCoaches, 20) : [];
             return (
@@ -504,8 +502,7 @@ const columns = [
         title: 'Umpire Reserve',
         dataIndex: 'umpireReserves',
         key: 'umpireReserves',
-        sorter: true,
-        onHeaderCell: () => listeners("umpireReserves"),
+        sorter: false,
         render: (umpireReserves, record) => {
             let umpireReserve = checkUmpireReserve(umpireReserves, 19) ? checkUmpireReserve(umpireReserves, 19) : [];
             return (
@@ -519,8 +516,7 @@ const columns = [
         title: 'Umpire Coach',
         dataIndex: 'umpireCoaches',
         key: 'umpireCoaches',
-        sorter: true,
-        onHeaderCell: () => listeners("umpireCoaches"),
+        sorter: false,
         render: (umpireCoaches, record) => {
             let umpireCoach = checkUmpireReserve(umpireCoaches, 20) ? checkUmpireReserve(umpireCoaches, 20) : [];
             return (
