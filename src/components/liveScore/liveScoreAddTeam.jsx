@@ -111,10 +111,10 @@ class LiveScoreAddTeam extends Component {
 
         const { selectedManager } = this.props.liveScoreTeamState
         this.props.form.setFieldsValue({
-            'teamName': data.name,
-            'teamAlias': data.alias,
-            'division': data.divisionId,
-            'affiliate': data.competitionOrganisation ? data.competitionOrganisation.name : "",
+            'teamName': data ? data.name : null,
+            'teamAlias': data ? data.alias : null,
+            'division': data ? data.divisionId : null,
+            'affiliate': data ? data.competitionOrganisation ? data.competitionOrganisation.name : "" : "",
             'managerId': selectedManager
 
         })
@@ -181,8 +181,9 @@ class LiveScoreAddTeam extends Component {
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { teamManagerData, affilateList, divisionList, managerType, logoUrl } = this.props.liveScoreTeamState
-        let name = teamManagerData.name
-        let alias = teamManagerData.alias
+        console.log(teamManagerData, 'teamManagerData')
+        // let name = teamManagerData.name
+        let alias = teamManagerData ? teamManagerData.alias : null
         return (
             <div className="content-view pt-4">
                 <Form.Item>
@@ -240,7 +241,7 @@ if(x[0].charCodeAt()>=97)
 
                                 <ImageLoader
                                     timeout={this.state.timeout}
-                                    src={teamManagerData.logoUrl ? teamManagerData.logoUrl : AppImages.circleImage} />
+                                    src={teamManagerData ? teamManagerData.logoUrl ? teamManagerData.logoUrl : AppImages.circleImage : AppImages.circleImage} />
                             </div>
                             <input
                                 type="file"

@@ -782,7 +782,7 @@ export function* impersonationSaga(action) {
 function* userDeleteSaga(action) {
   try {
     const result = yield call(UserAxiosApi.deleteUserById, action.payload);
-    if (result.status === 1) {      
+    if (result.status === 1) {
       yield put({
         type: ApiConstants.API_USER_DELETE_SUCCESS,
         result: result.result.data,
@@ -795,6 +795,26 @@ function* userDeleteSaga(action) {
     yield call(errorSaga, error);
   }
 }
+
+// Get the User Module Registration by Competition Data
+function* getUserModuleIncidentDataSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserModuleIncidentData, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_USER_MODULE_INCIDENT_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
@@ -834,5 +854,6 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_UPDATE_CHARITY_ROUND_UP_LOAD, updateCharitySaga);
   yield takeEvery(ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD, updateTermsAndConditionsSaga);
   yield takeEvery(ApiConstants.API_IMPERSONATION_LOAD, impersonationSaga);
-  yield takeEvery(ApiConstants.API_USER_DELETE_LOAD, userDeleteSaga);																		   
+  yield takeEvery(ApiConstants.API_USER_DELETE_LOAD, userDeleteSaga);
+  yield takeEvery(ApiConstants.API_GET_USER_MODULE_INCIDENT_LIST_LOAD, getUserModuleIncidentDataSaga);
 }

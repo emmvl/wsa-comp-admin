@@ -246,14 +246,7 @@ class LiveScoreAddIncident extends Component {
                 </div>
 
                 <div className="row" >
-                    <div className="col-sm" >
-
-
-                        {/* <Form.Item className="slct-in-add-manager-livescore">
-
-                            {getFieldDecorator("mnbMatchId", {
-                                rules: [{ required: true, message: ValidationConstants.mnbMatchId }],
-                            })( */}
+                    {/* <div className="col-sm" >
 
                         <InputWithHead
                             auto_complete='new-mnbId'
@@ -263,10 +256,8 @@ class LiveScoreAddIncident extends Component {
                             value={this.state.matchId ? this.state.matchId : incidentData.mnbMatchId}
                             onChange={(event) => this.props.liveScoreUpdateIncidentData(event.target.value, "mnbMatchId")}
                         />
-                        {/* )}
-                        </Form.Item> */}
 
-                    </div>
+                    </div> */}
                     <div className="col-sm" >
                         <Form.Item className="slct-in-add-manager-livescore livefirst">
                             <InputWithHead
@@ -312,29 +303,29 @@ class LiveScoreAddIncident extends Component {
                 </div>
                 <div className="row" >
                     <div className="col-sm" >
-                        <Form.Item className="slct-in-add-manager-livescore ">
-                            <InputWithHead
-                                required={"required-field pb-2"}
-                                heading={AppConstants.players}
-                            />
-                            {getFieldDecorator("incidentPlayerName", {
+                        {/* <Form.Item className="slct-in-add-manager-livescore "> */}
+                        <InputWithHead
+                            // required={"required-field pb-2"}
+                            heading={AppConstants.players}
+                        />
+                        {/* {getFieldDecorator("incidentPlayerName", {
                                 rules: [{ required: true, message: ValidationConstants.incidentPlayer }],
-                            })(
-                                <Select
-                                    loading={this.props.liveScoreState.onLoad === true && true}
-                                    mode="multiple"
-                                    showSearch={true}
-                                    placeholder={AppConstants.selectPlayer}
-                                    style={{ width: "100%", }}
-                                    onChange={(playerId) => this.props.liveScoreUpdateIncidentData(playerId, "playerId")}
-                                // value={playerIds}
-                                >
-                                    {isArrayNotEmpty(playerResult) && playerResult.map((item) => (
-                                        < Option value={item.playerId} > {item.firstName + " " + item.lastName}</Option>
-                                    ))}
-                                </Select>
-                            )}
-                        </Form.Item>
+                            })( */}
+                        <Select
+                            loading={this.props.liveScoreState.onLoad === true && true}
+                            mode="multiple"
+                            showSearch={true}
+                            placeholder={AppConstants.selectPlayer}
+                            style={{ width: "100%", }}
+                            onChange={(playerId) => this.props.liveScoreUpdateIncidentData(playerId, "playerId")}
+                        // value={playerIds}
+                        >
+                            {isArrayNotEmpty(playerResult) && playerResult.map((item) => (
+                                < Option value={item.playerId} > {item.firstName + " " + item.lastName}</Option>
+                            ))}
+                        </Select>
+                        {/* //     )}
+                        // </Form.Item> */}
                     </div>
                     <div className="col-sm">
                         <Form.Item className="slct-in-add-manager-livescore livefirst one">

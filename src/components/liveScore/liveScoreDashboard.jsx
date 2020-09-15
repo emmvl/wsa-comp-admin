@@ -259,8 +259,6 @@ const columnsTodaysMatch = [
                     className='multi-column-text-aligned'
                 >{item.umpireName}</span>
             ))
-
-        // <span className="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
         title: "Scorer 1",
         dataIndex: 'scorer1Status',
@@ -394,8 +392,6 @@ const columnsTodaysMatch_1 = [
                     className='multi-column-text-aligned'
                 >{item.umpireName}</span>
             ))
-
-        // <span className="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
         title: <span nowrap className="column-width-style" >{"Scorer 1"} </span>,
         dataIndex: 'scorer1Status',

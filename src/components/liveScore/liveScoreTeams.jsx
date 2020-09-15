@@ -317,7 +317,6 @@ class LiveScoreTeam extends Component {
         const teamResult = this.props.liveScoreTeamState;
         const teamData = teamResult.teamResult;
         let total = teamResult.totalTeams
-        // console.log(teamResult.teamResult, "teamResult")
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">

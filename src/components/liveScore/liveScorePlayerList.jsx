@@ -230,7 +230,6 @@ class LiveScorePlayerList extends Component {
 
             },
             onCancel() {
-                console.log('Cancel');
             },
         });
     }

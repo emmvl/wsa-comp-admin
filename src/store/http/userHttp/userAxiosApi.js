@@ -359,6 +359,11 @@ let userHttpApi = {
     const url = `api/user/delete`;
     return Method.dataPost(url, token, payload);
   },
+
+  getUserModuleIncidentData(payload) {
+    const url = `api/user/activity/incident`;
+    return Method.dataPost(url, token, payload);
+  },
 }
 
 let Method = {

@@ -107,9 +107,10 @@ class LiveScoreTeamView extends Component {
         this.state = {
             data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null,
             // teamId: props.location.state ? props.location.state.teamId : null,
-            teamId: props.location ? props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id ? props.location.state.tableRecord.id : props.location.state.tableRecord.team ? props.location.state.tableRecord.team.id : null : null : null : null,
+            teamId: props.location ? props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.teamId ? props.location.state.tableRecord.teamId : props.location ? props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id ? props.location.state.tableRecord.id : props.location ? props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.team ? props.location.state.tableRecord.team.id : null : null : null : null : null : null : null : null : null : null,
             screenName: this.props.location.state ? this.props.location.state.screenName : null,
             key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
+            // teamId: null
         }
         _this = this
     }
@@ -124,7 +125,8 @@ class LiveScoreTeamView extends Component {
         }
     }
     componentDidMount() {
-        const { teamId } = this.props.location ? this.props.location.state : null
+        // const { teamId } = this.props.location ? this.props.location.state : null
+        let teamId = this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null
 
         let teamIds = this.state.teamId ? this.state.teamId : teamId
         this.props.getTeamViewPlayerList(teamIds)
@@ -153,7 +155,6 @@ class LiveScoreTeamView extends Component {
 
             },
             onCancel() {
-                console.log('Cancel');
             },
         });
     }
@@ -325,7 +326,6 @@ class LiveScoreTeamView extends Component {
                 this_.deleteTeam(teamId)
             },
             onCancel() {
-                console.log('Cancel');
             },
         });
     }
@@ -350,7 +350,7 @@ class LiveScoreTeamView extends Component {
                             >
                                 <NavLink to={{
                                     pathname: "/liveScoreAddTeam",
-                                    state: { isEdit: true, teamId: this.state.teamId, key: this.state.key }
+                                    state: { isEdit: true, teamId: this.state.teamId ? this.state.teamId : this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null, key: this.state.key }
                                 }}>
                                     <Button className="primary-add-comp-form" type="primary">
                                         + {AppConstants.edit}

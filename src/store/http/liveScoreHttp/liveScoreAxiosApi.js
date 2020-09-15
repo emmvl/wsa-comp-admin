@@ -246,7 +246,11 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreIncidentList(competitionID, search, limit, offset, sortBy, sortOrder) {
-        const url = `/incident?competitionId=${competitionID}&search=${search}&limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        let url = null
+        url = `/incident?competitionId=${competitionID}&search=${search}&limit=${limit}&offset=${offset}`;
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
         return Method.dataGet(url, token)
     },
 
@@ -1232,23 +1236,34 @@ let LiveScoreAxiosApi = {
             body.append("media", media[i])
         }
 
+        // if (data.isEdit) {
+        //     if (data.incidentMediaIds.length > 0) {
+        //         let incidentMediaId = JSON.stringify(data.incidentMediaIds)
+        //         if (media) {
+        //             const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+        //             return Method.dataPatch(url, token, body)
+        //         } else {
+        //             const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+        //             return Method.dataPatch(url, token)
+        //         }
+        //     } else {
+        //         let incidentMediaId = JSON.stringify(data.incidentMediaIds)
+        //         const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+        //         return Method.dataPatch(url, token, body)
+        //     }
+
+        // } else {
+        //     let incidentMediaId = JSON.stringify(data.incidentMediaIds)
+        //     const url = `/incident/media?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+        //     return Method.dataPost(url, token, body)
+        // }
+        let incidentMediaId = JSON.stringify(data.incidentMediaIds)
         if (data.isEdit) {
-            if (data.incidentMediaIds.length > 0) {
-                let incidentMediaId = JSON.stringify(data.incidentMediaIds)
-                if (media) {
-                    const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
-                    return Method.dataPatch(url, token, body)
-                } else {
-                    const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
-                    return Method.dataPatch(url, token)
-                }
-            } else {
-                const url = `/incident/media/edit?incidentId=${incidentId}`;
-                return Method.dataPatch(url, token, body)
-            }
+            const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+            return Method.dataPatch(url, token, body)
 
         } else {
-            const url = `/incident/media?incidentId=${incidentId}`;
+            const url = `/incident/media?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
             return Method.dataPost(url, token, body)
         }
     },
