@@ -1348,6 +1348,13 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, payload)
     },
 
+    liveScoreExportGameAttendance(data) {
+        const { matchId, teamId, body } = data;
+        const url = `/gtattendances/manualUpload?matchId=${matchId}&teamId=${teamId}`;
+
+        return Method.dataPost(url, token, body);
+    },
+
 };
 
 const Method = {

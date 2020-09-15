@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Layout, Button, Table, Modal, Checkbox, Tooltip, Select, Input, Spin, AutoComplete, Switch } from 'antd';
+import {
+    Layout, Button, Table, Modal, Checkbox, Tooltip, Select, Input, Spin, AutoComplete, Switch, message,
+} from 'antd';
 
 import {
     liveScoreDeleteMatch,
@@ -13,6 +15,9 @@ import {
 import {
     liveScorePlayerListSearchAction
 } from "../../store/actions/LiveScoreAction/liveScorePlayerAction"
+import {
+    liveScoreExportGameAttendanceAction
+} from "../../store/actions/LiveScoreAction/liveScoreGameAttendanceAction"
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
 import {
@@ -35,9 +40,10 @@ const { Option } = Select;
 
 // function to sort table column
 function tableSort(a, b, key) {
-    let stringA = JSON.stringify(a[key])
-    let stringB = JSON.stringify(b[key])
-    return stringA.localeCompare(stringB)
+    let stringA = JSON.stringify(a[key]);
+    let stringB = JSON.stringify(b[key]);
+
+    return stringA.localeCompare(stringB);
 }
 
 let this_ = null;
@@ -221,10 +227,98 @@ class LiveScoreMatchDetails extends Component {
     }
 
     componentDidUpdate(nextProps) {
+        if (this.props.liveScoreMatchState !== nextProps.liveScoreMatchState) {
+            const { team1Players, team2Players } = this.props.liveScoreMatchState;
+            const team1Attendance = this.getAttendance(team1Players);
+            const team2Attendance = this.getAttendance(team2Players);
+
+            if (this.state.team1Attendance.length === 0 && this.state.team2Attendance.length === 0) {
+                this.setState({ team1Attendance });
+                this.setState({ team2Attendance });
+            }
+        }
     }
 
+    getPlayerAttendance = (player, borrowed = false) => {
+        let attendance = [];
+
+        if (player) {
+            attendance = Array(4).fill(null).map((_, index) => ({
+              teamId: player?.teamId,
+              matchId: this.state.matchId,
+              playerId: player?.playerId,
+              positionId: player?.lineup?.positionId,
+              isBorrowed: borrowed,
+              isPlaying: true,
+              verifiedBy: null,
+              mnbPushed: false,
+              period: index + 1,
+            }));
+        }
+
+        return attendance;
+    };
+
+    setAttendance = (team, playerId, period, field, value) => {
+        const teamAttendance = team === 'team1' ? this.state.team1Attendance : this.state.team2Attendance;
+        const attendanceIndex = teamAttendance
+          .findIndex((att) => att.playerId === playerId && att.period === period);
+        teamAttendance[attendanceIndex] = {
+            ...teamAttendance[attendanceIndex],
+            [field]: value,
+        };
+
+        if (team === 'team1') {
+            this.setState({
+                team1Attendance: teamAttendance,
+            })
+        } else if (team === 'team2') {
+            this.setState({
+                team2Attendance: teamAttendance,
+            })
+        }
+    };
+
+    getAttendance = (players) => {
+        let attendance = [];
+
+        if (players && players.length > 0) {
+            players.forEach((player) => {
+                attendance = attendance.concat(this.getPlayerAttendance(player))
+            });
+        }
+
+        return attendance;
+    };
+
+    exportAttendance = (team, teamId) => {
+        const teamAttendance = team === 'team1' ? this.state.team1Attendance : this.state.team2Attendance;
+        const filteredAttendance = teamAttendance.filter((att) => !!att?.positionId);
+
+        if (filteredAttendance.length === 0) {
+            message.error(AppConstants.noAttendanceData);
+
+            return;
+        }
+
+        this.props.liveScoreExportGameAttendanceAction(
+          this.state.matchId,
+          teamId,
+          filteredAttendance,
+        );
+    };
+
     playingView(record, value, index, key) {
-        this.props.changePlayerLineUpAction({ record: record, value: value, matchId: this.state.matchId, competitionId: this.state.competitionId, teamId: record.teamId, index: index, key: key })
+        this.props.changePlayerLineUpAction(
+          {
+              record: record,
+              value: value,
+              matchId: this.state.matchId,
+              competitionId: this.state.competitionId,
+              teamId: record.teamId,
+              index: index,
+              key: key
+          })
     }
 
     onChange = e => {
@@ -509,7 +603,7 @@ class LiveScoreMatchDetails extends Component {
         )
     };
 
-    teamPlayersStatus = (data) => {
+    teamPlayersStatus = (data, team) => {
         const competition = JSON.parse(getLiveScoreCompetiton());
 
         const columns = [
@@ -532,6 +626,7 @@ class LiveScoreMatchDetails extends Component {
                                 size="small"
                                 style={{ width: '100%' }}
                                 defaultValue={row?.lineup?.positionId}
+                                onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
                             >
                                 {this.props.liveScoreGamePositionState.positionList.map((position) => (
                                     <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
@@ -571,8 +666,13 @@ class LiveScoreMatchDetails extends Component {
                             competition?.attendanceRecordingPeriod === 'MINUTE' ? (
                                 <Input size="small" type="number" />
                             ) : (
-                                    <Checkbox />
-                                )
+                                <Checkbox
+                                  onChange={
+                                      (e) =>
+                                        this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
+                                  }
+                                />
+                            )
                     },
                 ],
             },
@@ -589,6 +689,10 @@ class LiveScoreMatchDetails extends Component {
                                 size="small"
                                 style={{ width: '100%' }}
                                 defaultValue={row?.lineup?.positionId}
+                                onChange={
+                                    (value) =>
+                                      this.setAttendance(team, row.playerId, 2, 'positionId', value)
+                                }
                             >
                                 {this.props.liveScoreGamePositionState.positionList.map((position) => (
                                     <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
@@ -626,10 +730,18 @@ class LiveScoreMatchDetails extends Component {
                         width: 60,
                         render: (p, row) =>
                             competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <Input size="small" type="number" />
+                                <Input
+                                  size="small"
+                                  type="number"
+                                />
                             ) : (
-                                    <Checkbox />
-                                )
+                                <Checkbox
+                                  onChange={
+                                      (e) =>
+                                        this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
+                                  }
+                                />
+                            )
                     },
                 ],
             },
@@ -646,6 +758,10 @@ class LiveScoreMatchDetails extends Component {
                                 size="small"
                                 style={{ width: '100%' }}
                                 defaultValue={row?.lineup?.positionId}
+                                onChange={
+                                    (value) =>
+                                      this.setAttendance(team, row.playerId, 3, 'positionId', value)
+                                }
                             >
                                 {this.props.liveScoreGamePositionState.positionList.map((position) => (
                                     <Option key={`position3_${position.id}`} value={position.id}>{position.name}</Option>
@@ -685,8 +801,13 @@ class LiveScoreMatchDetails extends Component {
                             competition?.attendanceRecordingPeriod === 'MINUTE' ? (
                                 <Input size="small" type="number" />
                             ) : (
-                                    <Checkbox />
-                                )
+                                <Checkbox
+                                  onChange={
+                                      (e) =>
+                                        this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
+                                  }
+                                />
+                            )
                     },
                 ],
             },
@@ -703,6 +824,10 @@ class LiveScoreMatchDetails extends Component {
                                 size="small"
                                 style={{ width: '100%' }}
                                 defaultValue={row?.lineup?.positionId}
+                                onChange={
+                                    (value) =>
+                                      this.setAttendance(team, row.playerId, 4, 'positionId', value)
+                                }
                             >
                                 {this.props.liveScoreGamePositionState.positionList.map((position) => (
                                     <Option key={`position4_${position.id}`} value={position.id}>{position.name}</Option>
@@ -742,8 +867,13 @@ class LiveScoreMatchDetails extends Component {
                             competition?.attendanceRecordingPeriod === 'MINUTE' ? (
                                 <Input size="small" type="number" />
                             ) : (
-                                    <Checkbox />
-                                )
+                                <Checkbox
+                                  onChange={
+                                      (e) =>
+                                        this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
+                                  }
+                                />
+                            )
                     },
                 ],
             },
@@ -797,6 +927,15 @@ class LiveScoreMatchDetails extends Component {
                                 <span className='home-dash-left-text'>{AppConstants.players}</span>
                             </div>
                             <div className="col-sm text-right align-items-center" >
+                                {this.state.teamAttendance &&
+                                    <Button
+                                      className="primary-add-comp-form mr-4"
+                                      type="primary"
+                                      onClick={() => this.exportAttendance('team1', match[0]?.team1?.id)}
+                                    >
+                                        + {AppConstants.exportAttendance}
+                                    </Button>
+                                }
                                 <Button
                                     className="primary-add-comp-form"
                                     type="primary"
@@ -809,19 +948,19 @@ class LiveScoreMatchDetails extends Component {
                         <div>
                             {this.state.teamAttendance ? (
                                 <div className="col-12">
-                                    {this.teamPlayersStatus(team1PlayersData)}
+                                    {this.teamPlayersStatus(team1PlayersData, 'team1')}
                                 </div>
                             ) : (
-                                    <div className="col-12">
-                                        <Table
-                                            className="home-dashboard-table pt-2"
-                                            columns={this.state.isLineUp === 1 ? columnsTeam1 : columns}
-                                            dataSource={team1PlayersData}
-                                            pagination={false}
-                                            scroll={{ x: '100%' }}
-                                        />
-                                    </div>
-                                )}
+                                <div className="col-12">
+                                    <Table
+                                        className="home-dashboard-table pt-2"
+                                        columns={this.state.isLineUp === 1 ? columnsTeam1 : columns}
+                                        dataSource={team1PlayersData}
+                                        pagination={false}
+                                        scroll={{ x: '100%' }}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -842,6 +981,15 @@ class LiveScoreMatchDetails extends Component {
                                 <span className='home-dash-left-text'>{AppConstants.players}</span>
                             </div>
                             <div className="col-sm text-right align-items-center" >
+                                {this.state.teamAttendance &&
+                                    <Button
+                                      className="primary-add-comp-form mr-4"
+                                      type="primary"
+                                      onClick={() => this.exportAttendance('team2', match[0]?.team2?.id)}
+                                    >
+                                        + {AppConstants.exportAttendance}
+                                    </Button>
+                                }
                                 <Button
                                     className="primary-add-comp-form"
                                     type="primary"
@@ -854,19 +1002,19 @@ class LiveScoreMatchDetails extends Component {
                         <div>
                             {this.state.teamAttendance ? (
                                 <div className="col-12">
-                                    {this.teamPlayersStatus(team2PlayersData)}
+                                    {this.teamPlayersStatus(team2PlayersData, 'team2')}
                                 </div>
                             ) : (
-                                    <div className="col-12">
-                                        <Table
-                                            className="home-dashboard-table pt-2"
-                                            columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
-                                            dataSource={team2PlayersData}
-                                            pagination={false}
-                                            scroll={{ x: '100%' }}
-                                        />
-                                    </div>
-                                )}
+                                <div className="col-12">
+                                    <Table
+                                        className="home-dashboard-table pt-2"
+                                        columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
+                                        dataSource={team2PlayersData}
+                                        pagination={false}
+                                        scroll={{ x: '100%' }}
+                                    />
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -954,6 +1102,7 @@ class LiveScoreMatchDetails extends Component {
         if (playerId) {
             const borrowedPlayer = (this.props.liveScorePlayerState.searchResult || [])
                 .find((player) => player.playerId === playerId);
+            const borrowedPlayerAttendance = this.getPlayerAttendance(borrowedPlayer, true);
             const borrowedPlayerData = {
                 attendance: null,
                 attended: false,
@@ -967,17 +1116,23 @@ class LiveScoreMatchDetails extends Component {
 
             if (this.state.addPlayerModal === 'team1') {
                 const borrowedTeam1Players = this.state.borrowedTeam1Players;
+                const team1Attendance = this.state.team1Attendance;
                 borrowedTeam1Players.push(borrowedPlayerData);
+                team1Attendance.push(borrowedPlayerAttendance);
 
                 this.setState({
                     borrowedTeam1Players,
+                    team1Attendance,
                 });
             } else {
                 const borrowedTeam2Players = this.state.borrowedTeam2Players;
                 borrowedTeam2Players.push(borrowedPlayerData);
+                const team2Attendance = this.state.team2Attendance;
+                team2Attendance.push(borrowedPlayerAttendance);
 
                 this.setState({
                     borrowedTeam2Players,
+                    team2Attendance,
                 });
             }
         }
@@ -993,11 +1148,11 @@ class LiveScoreMatchDetails extends Component {
         const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
         const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
 
-        const team1PlayerIds = team1Players.length > 0
-            ? team1Players.map((player) => player.playerId)
+        const team1PlayerIds = team1PlayersData.length > 0
+            ? team1PlayersData.map((player) => player.playerId)
             : [];
-        const team2PlayerIds = team2Players.length > 0
-            ? team2Players.map((player) => player.playerId)
+        const team2PlayerIds = team2PlayersData.length > 0
+            ? team2PlayersData.map((player) => player.playerId)
             : [];
 
         const searchResultData = searchResult.length > 0
@@ -1101,6 +1256,7 @@ function mapDispatchToProps(dispatch) {
         liveScoreAddLiveStreamAction,
         getLiveScoreGamePositionsList,
         liveScorePlayerListSearchAction,
+        liveScoreExportGameAttendanceAction,
     }, dispatch)
 }
 
@@ -1109,6 +1265,7 @@ function mapStateToProps(state) {
         liveScoreMatchState: state.LiveScoreMatchState,
         liveScoreGamePositionState: state.liveScoreGamePositionState,
         liveScorePlayerState: state.LiveScorePlayerState,
+        liveScoreGameAttendanceState: state.liveScoreGameAttendanceState,
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreMatchDetails);
