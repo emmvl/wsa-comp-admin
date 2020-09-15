@@ -94,6 +94,16 @@ function validateColor(data) {
     }
 }
 
+function validateUmpireColor(data) {
+    if (data.status === "YES") {
+        return AppColor.umpireTextGreen;
+    } else if (data.status === "NO") {
+        return AppColor.umpireTextRed;
+    } else {
+        return AppColor.standardTxtColor;
+    }
+}
+
 function checkUmpireType(umpireArray, key) {
     let object = null;
     for (let i in umpireArray) {
@@ -267,8 +277,8 @@ const columnsInvite = [
         render: (umpireReserves, record) => {
             let umpireReserve = checkUmpireReserve(umpireReserves, 19) ? checkUmpireReserve(umpireReserves, 19) : [];
             return (
-                <span onClick={() => this_obj.checkUserIdUmpire(umpireReserve)}
-                    className="input-heading-add-another pt-0">{umpireReserve.umpireFirstName ? umpireReserve.umpireFirstName + " " + umpireReserve.umpireLastName : ""}</span>
+                <span style={{ color: validateUmpireColor(umpireReserve), cursor: "pointer" }} onClick={() => this_obj.checkUserIdUmpire(umpireReserve)}
+                    className="multi-column-text-aligned">{umpireReserve.umpireFirstName ? umpireReserve.umpireFirstName + " " + umpireReserve.umpireLastName : ""}</span>
             )
         }
 
@@ -281,8 +291,9 @@ const columnsInvite = [
         render: (umpireCoaches, record) => {
             let umpireCoach = checkUmpireReserve(umpireCoaches, 20) ? checkUmpireReserve(umpireCoaches, 20) : [];
             return (
-                <span onClick={() => this_obj.checkUserIdUmpire(umpireCoach)}
-                    className="input-heading-add-another pt-0">{umpireCoach.umpireFirstName ? umpireCoach.umpireFirstName + " " + umpireCoach.umpireLastName : ""}</span>
+                <span style={{ color: validateUmpireColor(umpireCoach), cursor: "pointer" }}
+                    onClick={() => this_obj.checkUserIdUmpire(umpireCoach)}
+                    className="multi-column-text-aligned">{umpireCoach.umpireFirstName ? umpireCoach.umpireFirstName + " " + umpireCoach.umpireLastName : ""}</span>
             )
         }
 
@@ -506,8 +517,8 @@ const columns = [
         render: (umpireReserves, record) => {
             let umpireReserve = checkUmpireReserve(umpireReserves, 19) ? checkUmpireReserve(umpireReserves, 19) : [];
             return (
-                <span onClick={() => this_obj.checkUserIdUmpire(umpireReserve)}
-                    className="input-heading-add-another pt-0">{umpireReserve.umpireFirstName ? umpireReserve.umpireFirstName + " " + umpireReserve.umpireLastName : ""}</span>
+                <span style={{ color: validateUmpireColor(umpireReserve), cursor: "pointer" }} className="multi-column-text-aligned" onClick={() => this_obj.checkUserIdUmpire(umpireReserve)}
+                >{umpireReserve.umpireFirstName ? umpireReserve.umpireFirstName + " " + umpireReserve.umpireLastName : ""}</span>
             )
         }
 
@@ -520,8 +531,9 @@ const columns = [
         render: (umpireCoaches, record) => {
             let umpireCoach = checkUmpireReserve(umpireCoaches, 20) ? checkUmpireReserve(umpireCoaches, 20) : [];
             return (
-                <span onClick={() => this_obj.checkUserIdUmpire(umpireCoach)}
-                    className="input-heading-add-another pt-0">{umpireCoach.umpireFirstName ? umpireCoach.umpireFirstName + " " + umpireCoach.umpireLastName : ""}</span>
+                <span style={{ color: validateUmpireColor(umpireCoach), cursor: "pointer" }}
+                    onClick={() => this_obj.checkUserIdUmpire(umpireCoach)}
+                    className="multi-column-text-aligned">{umpireCoach.umpireFirstName ? umpireCoach.umpireFirstName + " " + umpireCoach.umpireLastName : ""}</span>
             )
         }
 
