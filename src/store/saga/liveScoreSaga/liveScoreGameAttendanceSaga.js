@@ -29,7 +29,7 @@ function* errorSaga(error) {
 }
 
 
-//// get manager list
+// Export game attendance
 export function* liveScoreExportGameAttendance(action) {
   try {
     const result = yield call(
