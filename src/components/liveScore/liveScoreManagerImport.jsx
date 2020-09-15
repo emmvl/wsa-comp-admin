@@ -10,7 +10,10 @@ import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
 import { userExportFilesAction } from "store/actions/appAction";
-import { liveScoreManagerImportAction, liveScoreManagerResetImportResultAction } from "store/actions/LiveScoreAction/liveScoreManagerAction";
+import {
+    liveScoreManagerImportAction,
+    liveScoreManagerResetImportResultAction
+} from "store/actions/LiveScoreAction/liveScoreManagerAction";
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -99,6 +102,12 @@ class LiveScoreManagerImport extends Component {
 
         if (this.state.csvData) {
             this.props.liveScoreManagerImportAction({ id, csvFile: this.state.csvData });
+
+            this.setState({
+                csvData: null,
+            }, () => {
+                this.filesInput.value = null;
+            });
         } else {
             message.config({ duration: 0.9, maxCount: 1 });
             message.error(ValidationConstants.csvField);
@@ -119,7 +128,9 @@ class LiveScoreManagerImport extends Component {
                     <label>
                         <input
                             type="file"
-                            ref={(input) => { this.filesInput = input }}
+                            ref={(input) => {
+                                this.filesInput = input
+                            }}
                             name="file"
                             // icon="file text outline"
                             // iconPosition="left"
@@ -156,7 +167,7 @@ class LiveScoreManagerImport extends Component {
     render() {
         const { liveScoreMangerState: { importResult, onLoad } } = this.props;
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}

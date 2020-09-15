@@ -1588,8 +1588,10 @@ const AppConstants = {
   whoAssignsUmpires: 'Who Assigns Umpires',
   competitionOrganiser: 'Competition Organiser',
   affiliateOrganisations: 'Affiliate Organisations',
-  whatRegistrationChange: "what registration change do you",
   takenCourtforTraining: "Have you taken the court for training, grading or a compitition game",
+  exportAttendance: 'Export Attendance',
+  noAttendanceData: 'There is no attendance data to export',
+  exportAttendanceMessage: 'Attendance exported successfully',
 };
 
 export default AppConstants;

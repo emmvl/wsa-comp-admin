@@ -117,7 +117,7 @@ function* liveScorePlayerImportSaga(action) {
 }
 
 
-// Delete Player Saga 
+// Delete Player Saga
 
 function* liveScoreDeletePlayerSaga(action) {
   try {
