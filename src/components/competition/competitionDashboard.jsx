@@ -5,7 +5,6 @@ import { bindActionCreators } from "redux";
 import { Layout, Button, Table, Select, Tag, Modal, Menu, Radio } from "antd";
 import moment from "moment";
 import Tooltip from "react-png-tooltip";
-
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import AppUniqueId from "themes/appUniqueId";
@@ -23,6 +22,10 @@ import { clearCompReducerDataAction } from "store/actions/registrationAction/com
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
+import {
+    setOwnCompetitionYear,
+    setOwn_competition,
+} from "../../util/sessionStorage";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -513,15 +516,16 @@ class CompetitionDashboard extends Component {
         );
     };
 
-    compScreenDeciderCheck = (record) => {
-        let registrationCloseDate = record.registrationCloseDate && moment(record.registrationCloseDate);
-        let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
-
-        // if (record.hasRegistration === 1 && isRegClosed === false) {
-        //     history.push("/registrationCompetitionFee", { id: record.competitionId });
-        // } else {
-        history.push("/registrationCompetitionForm", { id: record.competitionId });
-        // }
+    compScreenDeciderCheck = (record, key) => {
+        let storedYearID = localStorage.getItem("yearId");
+        let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
+        if (key == "own") {
+            history.push("/competitionOpenRegForm", { id: record.competitionId, selectedYearId });
+            setOwn_competition(record.competitionId)
+            setOwnCompetitionYear(selectedYearId)
+        } else {
+            history.push("/registrationCompetitionForm", { id: record.competitionId });
+        }
     };
 
     participatedView = () => (
@@ -534,8 +538,9 @@ class CompetitionDashboard extends Component {
                     dataSource={this.props.competitionDashboardState.participatingInComptitions}
                     pagination={false}
                     onRow={(record) => ({
-                        onClick: () => this.compScreenDeciderCheck(record),
+                        onClick: () => this.compScreenDeciderCheck(record, "part"),
                     })}
+                    rowKey={(record, index) => "participatingInComptitions" + record.competitionId + index}
                 />
             </div>
         </div>
@@ -557,9 +562,10 @@ class CompetitionDashboard extends Component {
                     dataSource={this.props.competitionDashboardState.ownedCompetitions}
                     pagination={false}
                     onRow={(record) => ({
-                        onClick: () => this.compScreenDeciderCheck(record),
+                        onClick: () => this.compScreenDeciderCheck(record, "own"),
                     })}
                     key={AppUniqueId.owned_compet_content_table}
+                    rowKey={(record, index) => "ownedCompetitions" + record.competitionId + index}
                 />
             </div>
             <Modal

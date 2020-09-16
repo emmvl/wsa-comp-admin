@@ -291,7 +291,7 @@ class CompetitionOpenRegForm extends Component {
                     dataIndex: "clear",
                     key: "clear",
                     render: (clear, record, index) => {
-                        console.log(this.state.competitionStatus)
+                        // console.log(this.state.competitionStatus)
                         return (
 
                             <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: "pointer" }}>
@@ -475,6 +475,7 @@ class CompetitionOpenRegForm extends Component {
     }
 
     componentDidMount() {
+        window.scrollTo(0, 0)
         let orgData = getOrganisationData()
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
@@ -1398,7 +1399,7 @@ class CompetitionOpenRegForm extends Component {
                 }
             },
             onCancel() {
-                console.log('Cancel');
+                // console.log('Cancel');
             },
         });
     }
