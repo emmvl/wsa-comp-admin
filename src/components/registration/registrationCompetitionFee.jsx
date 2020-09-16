@@ -1880,7 +1880,7 @@ class RegistrationCompetitionFee extends Component {
       }
     }
     if (nextProps.competitionFeesState !== competitionFeesState) {
-	   						
+
       if (
         competitionFeesState.getCompAllDataOnLoad === false &&
         this.state.getDataLoading == true
@@ -5160,7 +5160,7 @@ class RegistrationCompetitionFee extends Component {
         {isCasual == true && (
           <div className="inside-container-view">
             <div className="contextualHelp-RowDirection">
-              <span className="form-heading">{AppConstants.casualFee}</span>
+              <span className="form-heading">{AppConstants.singleGameFee}</span>
               <div style={{ marginTop: 4 }}>
                 <CustumToolTip placement="top" background="#ff8237">
                   <span>{AppConstants.paymentCausalFeeMsg}</span>

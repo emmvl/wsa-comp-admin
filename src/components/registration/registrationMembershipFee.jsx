@@ -74,7 +74,7 @@ const columns = [
     },
 
     {
-        title: AppConstants.casualFee + " (excl. GST)",
+        title: AppConstants.casualFeeExclGst,
         dataIndex: "casualFee",
         key: "casualFee",
         filterDropdown: true,
@@ -264,29 +264,29 @@ class RegistrationMembershipFee extends Component {
                     this.setState({ loading: true })
                 }
                 else if (this.state.membershipTabKey == "3") {
-                     let errMsg = null;
+                    let errMsg = null;
                     let discountData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductDiscountData.membershipProductDiscounts[0].discounts))
 
-                    
+
                     let disMap = new Map();
                     let discountDuplicateError = false;
-                    for(let item of discountData){
+                    for (let item of discountData) {
                         let key = null;
-                        if(item.membershipPrdTypeDiscountTypeRefId == 2){
-                            key= item.membershipProductTypeMappingId + "#" + item.membershipPrdTypeDiscountTypeRefId + "#" + item.discountCode;
-                            console.log("key value"+JSON.stringify(key));
-                          }
-                        else if(item.membershipPrdTypeDiscountTypeRefId == 3){
-                            key= item.membershipProductTypeMappingId + "#" + item.membershipPrdTypeDiscountTypeRefId + "#" + item.discountCode;
+                        if (item.membershipPrdTypeDiscountTypeRefId == 2) {
+                            key = item.membershipProductTypeMappingId + "#" + item.membershipPrdTypeDiscountTypeRefId + "#" + item.discountCode;
+                            console.log("key value" + JSON.stringify(key));
                         }
-                        if(disMap.get(key) == undefined){
+                        else if (item.membershipPrdTypeDiscountTypeRefId == 3) {
+                            key = item.membershipProductTypeMappingId + "#" + item.membershipPrdTypeDiscountTypeRefId + "#" + item.discountCode;
+                        }
+                        if (disMap.get(key) == undefined) {
                             disMap.set(key, 1);
                         }
-                        else{
-                            if(item.membershipPrdTypeDiscountTypeRefId == 3){
+                        else {
+                            if (item.membershipPrdTypeDiscountTypeRefId == 3) {
                                 errMsg = ValidationConstants.membershipDuplicateFamilyDiscountError;
-                            }         
-                            else{
+                            }
+                            else {
                                 errMsg = ValidationConstants.duplicateDiscountError;
                             }
                             discountDuplicateError = true;
@@ -312,7 +312,7 @@ class RegistrationMembershipFee extends Component {
                         else {
                             item['amount'] = null
                         }
-                                   // return item
+                        // return item
                     }
                     let discountBody =
                     {
@@ -324,15 +324,15 @@ class RegistrationMembershipFee extends Component {
                             }
                         ]
                     }
-                    if(discountDuplicateError){
+                    if (discountDuplicateError) {
                         message.config({ duration: 0.9, maxCount: 1 })
                         message.error(errMsg);
                     }
-                    else{
+                    else {
                         this.props.regSaveMembershipProductDiscountAction(discountBody)
                         this.setState({ loading: true })
                     }
-                   
+
                 }
             }
         });
@@ -648,18 +648,18 @@ class RegistrationMembershipFee extends Component {
                                             </div>
                                         </div>
                                     )}
-									<div className="fluid-width">
-										<Checkbox
-											className="single-checkbox"
-											style={{ marginLeft: "0px" }}
-											checked={item.isAllow}
-											onChange={e =>
-												this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
-											}
-											disabled={this.state.membershipIsUsed}
-										>
-											{AppConstants.allowTeamRegistration}
-										</Checkbox>
+                                    <div className="fluid-width">
+                                        <Checkbox
+                                            className="single-checkbox"
+                                            style={{ marginLeft: "0px" }}
+                                            checked={item.isAllow}
+                                            onChange={e =>
+                                                this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
+                                            }
+                                            disabled={this.state.membershipIsUsed}
+                                        >
+                                            {AppConstants.allowTeamRegistration}
+                                        </Checkbox>
                                     </div>
                                     {item.isPlaying != 1 && (
                                         <Checkbox
@@ -673,11 +673,11 @@ class RegistrationMembershipFee extends Component {
                                         >
                                             {AppConstants.childrenCheckNumber}
                                         </Checkbox>
-                                    )}	
+                                    )}
                                     {item.isAllow && item.isPlaying == 1 && (
                                         <div className="fluid-width" style={{ marginTop: "10px" }}>
                                             <div className="row">
-                                                <div className="col-sm"  style={{ marginLeft: 25}}>
+                                                <div className="col-sm" style={{ marginLeft: 25 }}>
 
                                                     <Form.Item  >
                                                         {getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, {
@@ -698,7 +698,7 @@ class RegistrationMembershipFee extends Component {
                                             </div>
                                         </div>
                                     )}
-																	  
+
                                 </div>
                             )
                         }
@@ -1215,14 +1215,14 @@ class RegistrationMembershipFee extends Component {
     }
 
     ////add  or remove  discount in discount section
-     addRemoveDiscount = (keyAction, index) => {
+    addRemoveDiscount = (keyAction, index) => {
         this.props.addRemoveDiscountAction(keyAction, index)
-        if(keyAction == "remove"){
-            setTimeout(() =>{
+        if (keyAction == "remove") {
+            setTimeout(() => {
                 this.setFieldDecoratorValues();
-              },300);            
-        }        
-    };  
+            }, 300);
+        }
+    };
 
     //On change membership product discount type
     onChangeMembershipProductDisType = (discountType, index) => {

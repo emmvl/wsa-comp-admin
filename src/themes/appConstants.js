@@ -183,9 +183,11 @@ const AppConstants = {
   addMembershipType: 'Add Membership Type',
   membershipFees: 'Membership Fees',
   applyMembershipFee: 'Apply Seasonal Membership Fees to',
-  casualFee: 'Single Game (PAYG) Fee (inc GST)',
+  casualFee: 'Single Game Fee (inc GST)',
+  singleGameFee: 'Single Game Fee',
+  casualFeeExclGst: 'Single Game Fee (excl. GST)',
   gst: 'GST',
-  seasonalFee: 'Seasonal fee',
+  seasonalFee: 'Individual User Seasonal Fee',
   type: 'Type',
   reg_1_comp: '1st Competition Registration only',
   reg_all_comp: 'All Competitions Registrations',
@@ -577,7 +579,7 @@ const AppConstants = {
   emailAdd: 'Email Address',
   enterEmail: 'Enter Email',
   contactNO: 'Contact no',
-  contact_No:'Contact No',
+  contact_No: 'Contact No',
 
   enterContactNo: 'Enter Valid Contact Number',
   scorers: 'Scorers',
@@ -1254,7 +1256,7 @@ const AppConstants = {
   finalsMessage: 'Finals has not been enabled for this Competition',
   allowTeamRegistration: 'Allow Team Registrations',
   teamRegistration: "Team Registrations",
-  individualRegistrations: "Individual Registrations",
+  individualRegistrations: "Individual User Registrations",
 
   /////////shop
   listProducts: "List Products",

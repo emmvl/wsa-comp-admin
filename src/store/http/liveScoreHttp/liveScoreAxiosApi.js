@@ -1086,10 +1086,10 @@ let LiveScoreAxiosApi = {
         let body = paginationBody
 
         if (status === "All") {
-            url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}&includeRosters=${true}`;
+            url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;
         }
         else {
-            url = `/roster/list?competitionId=${competitionID}&status=${status}&roleIds=${refRoleId}&includeRosters=${true}`
+            url = `/roster/list?competitionId=${competitionID}&status=${status}&roleIds=${refRoleId}`
         }
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -1098,7 +1098,7 @@ let LiveScoreAxiosApi = {
     },
 
     umpireRoasterActionPerform(data) {
-        const url = `/roster?rosterId=${data.roasterId}&status=${data.status}&category=${data.category}`;
+        const url = `/roster?rosterId=${data.roasterId}&status=${data.status}&category=${data.category}&callViaWeb=true`;
         return Method.dataPatch(url, token)
     },
 
