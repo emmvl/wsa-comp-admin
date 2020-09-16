@@ -76,15 +76,16 @@ function filteredSettingArray(result) {
   let otherQuestions = []
   let advanceSettings = []
   for (let i in result) {
-    if (result[i].id == 13 || result[i].id == 14 || result[i].id == 15 || result[i].id == 16) {
-      demographic.push(result[i])
-    } else if (result[i].id == 5 || result[i].id == 6 || result[i].id == 10) {
+    // if (result[i].id == 13 || result[i].id == 14 || result[i].id == 15 || result[i].id == 16) {
+    //   demographic.push(result[i])
+    // } 
+    if (result[i].id >=7 && result[i].id <= 14) {
       netballQuestions.push(result[i])
     }
-    else if (result[i].id == 8 || result[i].id == 9 || result[i].id == 12 || result[i].id == 11) {
-      otherQuestions.push(result[i])
-    }
-    else if (result[i].id == 1 || result[i].id == 17 || result[i].id == 18) {
+    // else if (result[i].id == 8 || result[i].id == 9 || result[i].id == 12 || result[i].id == 11) {
+    //   otherQuestions.push(result[i])
+    // }
+    else if (result[i].id >= 1 && result[i].id <= 6) {
       advanceSettings.push(result[i])
     }
 
