@@ -1592,6 +1592,8 @@ const AppConstants = {
   exportAttendance: 'Export Attendance',
   noAttendanceData: 'There is no attendance data to export',
   exportAttendanceMessage: 'Attendance exported successfully',
+  hardshipCode:"Hardship Code",
+  addCode:"Add Code",				 
 };
 
 export default AppConstants;

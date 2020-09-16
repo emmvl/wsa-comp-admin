@@ -20,7 +20,8 @@ const newObjvalue = {
   trainingVenueId: null,
   registerMethods: [],
   registrationSettings: [],
-  registrationDisclaimer: []
+  registrationDisclaimer: [],
+  hardShipCodes:[],				   
 };
 const regFormChecked = {
   replyName: false,
@@ -808,6 +809,7 @@ function registration(state = initialState, action) {
       state.selectedDemographic = selectedInvitees.selectedDemographic
       state.SelectedOtherQuestions = selectedInvitees.SelectedOtherQuestions
       state.selectedNetballQuestions = selectedInvitees.selectedNetballQuestions
+	  state.hardShipCodes = formData[0].hardShipCodes !== null ? formData[0].hardShipCodes :[] ;
 
 
       let productListValue = getProductArr(
@@ -869,6 +871,19 @@ function registration(state = initialState, action) {
         state.selectedMethod = action.updatedData
         let updateRegistrationMethod = getRegistrationFormMethod(action.updatedData, JSON.parse(JSON.stringify(state.defaultRegistrationMethod)))
         state.registrationFormData[0]["registerMethods"] = updateRegistrationMethod
+      }
+	  else if (action.key == "addHardshipCode") {
+        if(isArrayNotEmpty(state.registrationFormData[0].hardShipCodes)){
+          state.registrationFormData[0].hardShipCodes.push(action.updatedData);
+        }
+        else{
+          state.registrationFormData[0].hardShipCodes = [];
+          state.registrationFormData[0].hardShipCodes.push(action.updatedData);
+        }  
+      }
+      else if (action.key == "addHardshipCodeValueChange") {
+        let {value,index} = action.updatedData;
+        state.registrationFormData[0].hardShipCodes[index].code = value;        
       }
       else {
         let oldData = state.registrationFormData;

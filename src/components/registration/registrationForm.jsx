@@ -485,6 +485,22 @@ class RegistrationForm extends Component {
         this.props.updateRegistrationForm(value, "registrationLock")
         setFieldValue("registrationLock")
     }
+	addHardshipCode = (orgRegistrationId) => {     
+        let obj = {            
+            id:0,
+            code:null,
+            orgRegistrationId:orgRegistrationId,
+            isActive:1,
+        }
+        this.props.updateRegistrationForm(obj, "addHardshipCode")
+    }
+    onChangeSetValue = (value,index) =>{
+        let obj = {
+            value:value,
+            index:index
+        }
+        this.props.updateRegistrationForm(obj, "addHardshipCodeValueChange")
+    }
 
     regOpenDate = () => {
         if (this.props.registrationState.registrationFormData.length > 0) {
@@ -1470,6 +1486,39 @@ class RegistrationForm extends Component {
             </div>
         )
     }
+    hardshipCodeView = () => {        
+        const {hardShipCodes,orgRegistrationId} = this.props.registrationState.registrationFormData[0];
+        let hardShipCodesList = hardShipCodes == null ? [] : hardShipCodes
+        return(
+            <div className="discount-view pt-5">
+                <span className="form-heading pb-2">{AppConstants.hardshipCode}</span>
+                {hardShipCodesList.map((item,index)=>{
+                    return(
+                        <div>
+                            <div style={{display:"flex",marginTop:"13px"}}>                   
+                                <InputWithHead
+                                    style={{width: "252px" , marginRight: "28px"}}                   
+                                    placeholder={AppConstants.code} 
+                                    value={item.code == 0 ? " " : item.code}
+                                    onChange={(e) => this.onChangeSetValue(e.target.value , index)}
+                                />     
+                                <a>
+                                    <span onClick={() => this.addNonPlayingDate()} className="input-heading-add-another" style={{textDecoration: "underline",paddingTop:18}}>
+                                        {AppConstants.email}
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    );
+                })                    
+                }
+                <span className="input-heading-add-another" onClick={(e) => this.addHardshipCode(orgRegistrationId)} >
+                    +{AppConstants.addCode}
+                </span>
+            </div>
+        )
+
+    }
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
@@ -1598,6 +1647,7 @@ class RegistrationForm extends Component {
                             )}</div> */}
                             <div className="formView">{this.advancedSettingView()}</div>
                             <div className="formView">{this.sendInviteToView()}</div>
+							<div className="formView">{this.hardshipCodeView()}</div>		 
                             {/* <div className="formView">
                                     {this.disclaimerView(
                                         getFieldDecorator
