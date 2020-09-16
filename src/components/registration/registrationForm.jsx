@@ -1148,7 +1148,7 @@ class RegistrationForm extends Component {
                     </div>
                 </div>
 
-                <div className="inside-container-view">
+                {/* <div className="inside-container-view">
                     <span className="setting-heading">{AppConstants.demographicQuestions}</span>
                     <Tree
                         className="tree-government-rebate"
@@ -1162,7 +1162,7 @@ class RegistrationForm extends Component {
                     >
                         {this.ShowAdvancedSettingSettingTree(demographicSetting)}
                     </Tree>
-                </div>
+                </div> */}
                 <div className="inside-container-view">
                     <span className="setting-heading">{AppConstants.netballQuestions}</span>
                     <Tree
@@ -1179,7 +1179,7 @@ class RegistrationForm extends Component {
                         {this.ShowAdvancedSettingSettingTree(netballQuestionsSetting)}
                     </Tree>
                 </div>
-                <div className="inside-container-view">
+                {/* <div className="inside-container-view">
                     <span className="setting-heading">{AppConstants.otherQuestions}</span>
                     <Tree
                         className="tree-government-rebate"
@@ -1193,10 +1193,7 @@ class RegistrationForm extends Component {
                     >
                         {this.ShowAdvancedSettingSettingTree(otherQuestionsSetting)}
                     </Tree>
-                </div>
-
-
-
+                </div> */}
 
                 <span className="form-heading pt-5">{AppConstants.advancedSettings}</span>
                 <div className="inside-container-view">

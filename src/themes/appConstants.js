@@ -898,7 +898,7 @@ const AppConstants = {
   countryOfBirth: 'Country of Birth',
   disability: 'Disability',
   additionalQuestions: 'Additional Questions',
-  otherQuestions: 'Other Questions',
+  otherQuestions: 'Other Netball Questions',
   netballQuestions: 'Netball Questions',
   demographicQuestions: 'Demographic Questions',
   addDivisionsAndGrades: 'Add Divisions and Grades',
