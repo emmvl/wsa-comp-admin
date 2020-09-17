@@ -57,7 +57,6 @@ class AddUmpire extends Component {
     }
 
     componentDidMount() {
-        console.log(this.state.tableRecord)
         let compId = null
 
         if (getUmpireCompetiton()) {
@@ -65,7 +64,6 @@ class AddUmpire extends Component {
 
             this.props.umpireListAction({ refRoleId: 5, entityTypes: 1, compId: compId, offset: 0 })
             if (compId !== null) {
-                console.log(compId, "**************************")
                 this.props.getUmpireAffiliateList({ id: compId })
                 this.setState({ isUmpireAffiliate: true })
             }
@@ -121,7 +119,6 @@ class AddUmpire extends Component {
     }
     setInitalFiledValue() {
         const { umpireData, affiliateId, umpireCoachCheckBox } = this.props.umpireState
-        console.log(umpireData, affiliateId, "chchchchch", umpireCoachCheckBox)
         this.props.form.setFieldsValue({
             'First Name': umpireData.firstName,
             'Last Name': umpireData.lastName,
@@ -240,17 +237,16 @@ class AddUmpire extends Component {
                         <Form.Item className="slct-in-add-manager-livescore">
                             <InputWithHead
                                 required={"required-field pb-1"}
-                                heading={AppConstants.affiliate} />
+                                heading={AppConstants.organisation} />
                             {getFieldDecorator("umpireAffiliateName", {
-                                rules: [{ required: true, message: ValidationConstants.affiliateField }],
+                                rules: [{ required: true, message: ValidationConstants.organisationField }],
                             })(
                                 <Select
                                     mode="multiple"
                                     showSearch
-                                    placeholder={AppConstants.selectAffiliate}
+                                    placeholder={AppConstants.selectOrganisation}
                                     style={{ width: "100%", }}
                                     onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
-                                    // value={affiliateId}
                                     notFoundContent={onAffiliateLoad === true ? <Spin size="small" /> : null}
                                     optionFilterProp="children"
                                 >
@@ -384,15 +380,15 @@ class AddUmpire extends Component {
                         <Form.Item className="slct-in-add-manager-livescore">
                             <InputWithHead
                                 required={"required-field pb-1"}
-                                heading={AppConstants.affiliate} />
+                                heading={AppConstants.organisation} />
                             {getFieldDecorator("umpireNewAffiliateName", {
-                                rules: [{ required: true, message: ValidationConstants.affiliateField }],
+                                rules: [{ required: true, message: ValidationConstants.organisationField }],
                             })(
 
                                 <Select
                                     mode="multiple"
                                     showSearch
-                                    placeholder={AppConstants.selectAffiliate}
+                                    placeholder={AppConstants.selectOrganisation}
                                     style={{ width: "100%", }}
                                     onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
                                     // value={affiliateId}

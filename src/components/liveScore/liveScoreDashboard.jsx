@@ -499,16 +499,30 @@ const columnsTodaysIncient = [
         dataIndex: 'incidentPlayers',
         key: 'team',
         sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
-        render: (incidentPlayers, record) =>
-            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
+        render: (incidentPlayers, record) => {
+            return (
+                <>
+                    {
+                        isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
 
-                <NavLink to={{
-                    pathname: '/liveScoreTeamView',
-                    state: { tableRecord: record, screenName: 'liveScoreDashboard' }
-                }}>
-                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
-                </NavLink>
-            )),
+                            item.player ? item.player.team ? item.player.team.deleted_at ?
+                                <span className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
+                                :
+                                <NavLink to={{
+                                    pathname: '/liveScoreTeamView',
+                                    state: { tableRecord: record, screenName: 'liveScoreDashboard' }
+                                }}>
+                                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
+                                </NavLink>
+                                :
+                                null
+                                :
+                                null
+                        ))
+                    }
+                </>
+            )
+        }
     },
     {
         title: "Description",

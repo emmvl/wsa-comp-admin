@@ -789,6 +789,32 @@ const columnsIncident = [
 
   },
   {
+    title: 'Team',
+    dataIndex: 'teamName',
+    key: 'teamName',
+    sorter: true,
+    render: (teamName, record) => {
+
+      return (
+        <>
+          {
+            record.teamDeletedAt ?
+              <span className="desc-text-style side-bar-profile-data" >{teamName}</span>
+              :
+              <NavLink to={{
+                pathname: '/liveScoreTeamView',
+                state: { tableRecord: record, screenName: 'userPersonal' }
+              }}>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{teamName}</span>
+              </NavLink>
+
+          }
+        </>
+      )
+    }
+
+  },
+  {
     title: 'Type',
     dataIndex: 'incidentTypeName',
     key: 'incidentTypeName',
