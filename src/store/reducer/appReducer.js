@@ -79,7 +79,7 @@ function filteredSettingArray(result) {
     // if (result[i].id == 13 || result[i].id == 14 || result[i].id == 15 || result[i].id == 16) {
     //   demographic.push(result[i])
     // } 
-    if (result[i].id >=7 && result[i].id <= 14) {
+    if (result[i].id >= 7 && result[i].id <= 14) {
       netballQuestions.push(result[i])
     }
     // else if (result[i].id == 8 || result[i].id == 9 || result[i].id == 12 || result[i].id == 11) {
@@ -482,6 +482,10 @@ function appState(state = initialState, action) {
 
       if (action.key == "participate_CompetitionArr") {
         state.participate_CompetitionArr = []
+      }
+      else if (action.key == "all") {
+        state.participate_CompetitionArr = []
+        state.own_CompetitionArr = []
       }
       else {
         state.own_CompetitionArr = []

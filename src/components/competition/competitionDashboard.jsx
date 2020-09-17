@@ -230,7 +230,7 @@ class CompetitionDashboard extends Component {
             deleteCompLoad: false,
         };
 
-        this.props.CLEAR_OWN_COMPETITION_DATA("participate_CompetitionArr");
+        this.props.CLEAR_OWN_COMPETITION_DATA("all");
 
         this_Obj = this;
     }
@@ -520,7 +520,7 @@ class CompetitionDashboard extends Component {
         let storedYearID = localStorage.getItem("yearId");
         let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
         if (key == "own") {
-            history.push("/competitionOpenRegForm", { id: record.competitionId, selectedYearId });
+            history.push("/competitionOpenRegForm", { id: record.competitionId, screenKey: "compDashboard" });
             setOwn_competition(record.competitionId)
             setOwnCompetitionYear(selectedYearId)
         } else {
