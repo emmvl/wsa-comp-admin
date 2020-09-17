@@ -634,8 +634,8 @@ const AppConstants = {
   addPlayer: 'Add Player',
   editPlayer: 'Edit Player',
   profilePic: 'Profile Picture',
-  enterPlayerID: 'Enter player id',
-  playerId: 'Player Id',
+  enterPlayerID: 'Enter player ID',
+  playerId: 'Player ID',
   shootingState: 'Shooting Stats',
   incidentDetails: 'Incident Detail',
   photos: 'Photos',
@@ -1594,8 +1594,8 @@ const AppConstants = {
   exportAttendance: 'Export Attendance',
   noAttendanceData: 'There is no attendance data to export',
   exportAttendanceMessage: 'Attendance exported successfully',
-  hardshipCode:"Hardship Code",
-  addCode:"Add Code",				 
+  hardshipCode: "Hardship Code",
+  addCode: "Add Code",
 };
 
 export default AppConstants;

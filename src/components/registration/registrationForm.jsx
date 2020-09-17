@@ -870,7 +870,7 @@ class RegistrationForm extends Component {
                                 {defaultChecked.replyName === true && (
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_complete="new-name"
+                                            auto_complete="off"
                                             placeholder={"Name"}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyName")}
                                             value={formDataValue ? formDataValue.replyName : ''}
@@ -898,7 +898,7 @@ class RegistrationForm extends Component {
 
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_complete="new-role"
+                                            auto_complete="off"
                                             placeholder={AppConstants.role}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyRole")}
                                             value={formDataValue ? formDataValue.replyRole : ''}
@@ -934,7 +934,7 @@ class RegistrationForm extends Component {
                                                 ],
                                             })(
                                                 <InputWithHead
-                                                    auto_complete="new-email"
+                                                    auto_complete="off"
                                                     placeholder={AppConstants.email}
                                                     onChange={e =>
                                                         this.props.updateRegistrationForm(e.target.value, "replyEmail")
@@ -969,7 +969,7 @@ class RegistrationForm extends Component {
                                             {(
                                                 <InputWithHead
                                                     // type="number"
-                                                    auto_complete="new-phoneNo"
+                                                    auto_complete="off"
                                                     maxLength={10}
                                                     placeholder={AppConstants.phone}
                                                     onChange={(e) => this.changeNumber(e.target.value)}

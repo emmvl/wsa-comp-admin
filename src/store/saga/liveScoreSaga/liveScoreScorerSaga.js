@@ -124,9 +124,10 @@ export function* liveScoreChangeAssignStatus(action) {
 export function* liveScoreUnAssignMatcheSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.unAssignMatcheStatus, action.records)
+        console.log(action)
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_SUCCESS,
+                type: ApiConstants.API_LIVESCORE_UNASSIGN_STATUS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
                 index: action.index,

@@ -56,11 +56,10 @@ let AxiosApi = {
     },
 
     async getVenue(action) {
-        console.log("action.key" + action.key);
         let organisationId = await getOrganisationData().organisationUniqueKey;
-        if (action.key == "all") {
-            organisationId = '';
-        }
+        // if (action.key == "all") {
+        //     organisationId = '';
+        // }
         var url = `/api/venue/all?organisationUniqueKey=${organisationId}`;
         return Method.dataGet(url, token);
     },
@@ -124,7 +123,7 @@ let AxiosApi = {
     },
 
     ////Add Venue Api
-    async  addVenue(venuData) {
+    async addVenue(venuData) {
         let userId = await getUserId()
         let organisationId = await getOrganisationData().organisationUniqueKey;
         let body = {
@@ -166,7 +165,7 @@ let AxiosApi = {
     },
 
     ////own Competition venue list
-    async  getVenueList(competitionID, search) {
+    async getVenueList(competitionID, search) {
         var url = ""
         let organisationId = await getOrganisationData().organisationUniqueKey;
         if (competitionID) {
@@ -194,7 +193,7 @@ let AxiosApi = {
     },
 
     /// All Venues Listing 
-    async  getVenuesList(payload, sortBy, sortOrder) {
+    async getVenuesList(payload, sortBy, sortOrder) {
         let userId = await getUserId()
         let url
         url = `/api/venue/list?userId=${userId}`;
@@ -206,12 +205,12 @@ let AxiosApi = {
         return Method.dataPost(url, token, payload);
     },
     /// Get Venue by Id 
-    async  getVenueById(payload) {
+    async getVenueById(payload) {
         let userId = await getUserId()
         let url = `/api/venue/edit?userId=${userId}`;
         return Method.dataPost(url, token, payload);
     },
-    async  venueDelete(payload) {
+    async venueDelete(payload) {
         let userId = await getUserId()
         let url = `/api/venue/delete?userId=${userId}`;
         return Method.dataPost(url, token, payload);

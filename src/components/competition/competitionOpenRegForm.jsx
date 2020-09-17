@@ -374,7 +374,8 @@ class CompetitionOpenRegForm extends Component {
                     if (screenKey == "compDashboard") {
                         competitionId = getOwn_competition()
                         let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
-                        statusRefId = compIndex > -1 ? competitionTypeList[0].statusRefId : 1
+                        statusRefId = compIndex > -1 ? competitionTypeList[compIndex].statusRefId : competitionTypeList[0].statusRefId
+                        competitionId = compIndex > -1 ? competitionId : competitionTypeList[0].competitionId
                     }
                     else {
                         competitionId = competitionTypeList[0].competitionId
