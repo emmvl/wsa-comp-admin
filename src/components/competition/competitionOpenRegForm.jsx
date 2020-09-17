@@ -368,8 +368,18 @@ class CompetitionOpenRegForm extends Component {
             let competitionTypeList = this.props.appState.own_CompetitionArr
             if (nextProps.appState.own_CompetitionArr !== competitionTypeList) {
                 if (competitionTypeList.length > 0) {
-                    let competitionId = competitionTypeList[0].competitionId
-                    let statusRefId = competitionTypeList[0].statusRefId
+                    let screenKey = this.props.location.state ? this.props.location.state.screenKey : null
+                    let competitionId = null
+                    let statusRefId = null
+                    if (screenKey == "compDashboard") {
+                        competitionId = getOwn_competition()
+                        let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
+                        statusRefId = compIndex > -1 ? competitionTypeList[0].statusRefId : 1
+                    }
+                    else {
+                        competitionId = competitionTypeList[0].competitionId
+                        statusRefId = competitionTypeList[0].statusRefId
+                    }
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_competition(competitionId)
