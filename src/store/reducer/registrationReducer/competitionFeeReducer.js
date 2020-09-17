@@ -2187,13 +2187,25 @@ function competitionFees(state = initialState, action) {
             if(action.key == "seasonalfee"){
                 state.SelectedSeasonalFeeKey = action.value;
                 state.seasonalExpendedKey = action.value[0];
+				if( action.value.includes("6") || action.value.includes(6) || action.value.includes("7") || action.value.includes(7)){
+                    state.competitionDetailData.isSeasonalUponReg = true;
+                }
+                else{
+                    state.competitionDetailData.isSeasonalUponReg = false;
+                }     	
                 let updatedSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalFeeArr, state.defaultSelectedSeasonalFee, 2,state.selectedSeasonalInstalmentDates)
                 state.SelectedSeasonalFee = updatedSeasonal.getUpdatedCasualFeeArr
                 state.selectedSeasonalInstalmentDates = updatedSeasonal.instalmentDates;
             }
             else if(action.key == "seasonalteamfee"){
                 state.selectedSeasonalTeamFeeKey = action.value;
-                state.seasonalTeamExpendedKey = action.value[0];                
+                state.seasonalTeamExpendedKey = action.value[0]; 
+                if( action.value.includes("6") || action.value.includes(6) || action.value.includes("7") || action.value.includes(7)){
+                    state.competitionDetailData.isTeamSeasonalUponReg = true;
+                }
+                else{
+                    state.competitionDetailData.isTeamSeasonalUponReg = false;
+                }			   
                 let updatedTeamSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalTeamFeeArr, state.defaultSelectedSeasonalTeamFee, 3,state.selectedTeamSeasonalInstalmentDates)
                 state.selectedSeasonalTeamFee = updatedTeamSeasonal.getUpdatedCasualFeeArr;
                 state.selectedTeamSeasonalInstalmentDates = updatedTeamSeasonal.instalmentDates;
