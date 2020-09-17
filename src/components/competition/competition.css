@@ -667,6 +667,11 @@ a.collapsed i {
   overflow: inherit;
 }
 
+.ant-calendar-range-picker-separator{
+  vertical-align: middle;
+  display: unset
+ }
+
 @media (max-width: 991px) {
   .comp-buttons-view .open-reg-button {
     margin-top: 20px;
@@ -864,3 +869,4 @@ a.collapsed i {
   font-weight: 700;
   margin-top: 15px;
 }			   
+

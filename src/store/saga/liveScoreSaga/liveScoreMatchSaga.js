@@ -125,7 +125,7 @@ function* liveScoreCreateMatchSaga(action) {
         history.push(action.key === "dashboard" ? "liveScoreDashboard" : action.key === "umpireRoaster" ? "umpireRoaster" : "/liveScoreMatches");
       }
 
-      message.success(action.data.id === 0 ? "Match has been created Successfully." : "Match has been updated Successfully.");
+      message.success(action.data.id === 0 ? "Match has been created successfully." : "Match has been updated successfully.");
     } else {
       yield call(failSaga, result);
     }

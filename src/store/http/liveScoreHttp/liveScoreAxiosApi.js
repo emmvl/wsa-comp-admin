@@ -975,7 +975,7 @@ let LiveScoreAxiosApi = {
 
     // Unassign status 
     unAssignMatcheStatus(records) {
-        const url = `/roster/admin?id=${records.rosterId}`
+        const url = `/roster/admin?id=${records.rosterId}&category=Scoring`
         return Method.dataDelete(url, token)
     },
 
@@ -1103,7 +1103,7 @@ let LiveScoreAxiosApi = {
     },
 
     umpireRoasterDeleteAction(data) {
-        const url = `/roster?id=${data.roasterId}`
+        const url = `/roster?id=${data.roasterId}&category=${data.category}`
         return Method.dataDelete(url, localStorage.token)
     },
 
@@ -1154,7 +1154,7 @@ let LiveScoreAxiosApi = {
 
     /////////unassign umpire from the match(delete)
     unassignUmpire(rosterId) {
-        const url = `/roster/admin?id=${rosterId}`
+        const url = `/roster/admin?id=${rosterId}&category=Umpiring`
         return Method.dataDelete(url, token)
     },
 

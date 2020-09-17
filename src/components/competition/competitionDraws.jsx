@@ -307,7 +307,6 @@ class CompetitionDraws extends Component {
   }
 
   apiCalls() {
-
     let yearId = getOwnCompetitionYear();
     let storedCompetitionId = getOwn_competition();
     let storedCompetitionStatus = getOwn_competitionStatus()
@@ -1160,7 +1159,7 @@ class CompetitionDraws extends Component {
                         alignItems: 'center',
                       }}
                     >
-                      <div className="col-sm-6">
+                      <div className="col-sm-7">
                         <div
                           style={{
                             width: '100%',
@@ -1168,7 +1167,7 @@ class CompetitionDraws extends Component {
                             flexDirection: 'row',
                             alignItems: 'center',
                           }}>
-                          <span className="year-select-heading">
+                          <span className="year-select-heading" style={{ width: 100 }}>
                             {AppConstants.dateRange}:
                           </span>
                           <RangePicker

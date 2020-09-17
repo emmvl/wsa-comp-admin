@@ -177,9 +177,9 @@ class UserOurOragnization extends Component {
             localStorage.clear();
             history.push("/login");
         } catch (error) {
-           console.log("Error" + error); 
+            console.log("Error" + error);
         }
-       
+
     };
 
     referenceCalls = (organisationId) => {
@@ -620,7 +620,7 @@ class UserOurOragnization extends Component {
                         rules: [{ required: true, message: ValidationConstants.nameField[2] }],
                     })(
                         <InputWithHead
-                            auto_complete='new-name'
+                            auto_complete='off'
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.organisationName}
                             placeholder={AppConstants.organisationName}
