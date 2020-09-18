@@ -72,14 +72,14 @@ class CompetitionReplicate extends Component {
                 <span className='form-heading'>{AppConstants.replicateWhichCompetition}</span>
                 <div className="fluid-width" >
                     <div className="row pt-4" >
-                        <div className="col-sm-4" >
+                        <div className="col-sm-5" style={{ minWidth: 250 }} >
                             <div className="row">
                                 <div className="col-sm-4" >
                                     <InputWithHead heading={AppConstants.year} />
                                 </div>
                                 <div className="col-sm" >
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                                         onChange={(year) => this.setState({ year })}
                                         value={this.state.year}
                                     >
@@ -88,9 +88,9 @@ class CompetitionReplicate extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm"  >
                             <div className="row">
-                                <div className="col-sm-4" >
+                                <div className="col-sm-4" style={{ minWidth: 150 }}>
                                     <InputWithHead heading={"Competition Name"} />
                                 </div>
                                 <div className="col-sm" >

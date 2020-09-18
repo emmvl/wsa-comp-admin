@@ -380,7 +380,7 @@ const AppConstants = {
   grades: 'Grades',
   Venues_Courts: 'Venues & Courts',
   competitionFormatGameTimes: 'Competition Format & Game Times',
-  review: 'review',
+  review: 'Review',
   Step_3: 'Step 3',
   contactNumber: 'Contact Number',
   addAnotherCourt: 'Add another court',
