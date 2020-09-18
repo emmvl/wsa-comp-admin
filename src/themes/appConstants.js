@@ -1598,7 +1598,8 @@ const AppConstants = {
   addCode: "Add Code",
   competitionDates: "Competition Dates",
   replicateSetting: "Replicate Settings",
-  venuePreferences: "Venue Preferences"
+  venuePreferences: "Venue Preferences",
+  competitionName:"Competition Name"	 
 };
 
 export default AppConstants;
