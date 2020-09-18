@@ -1596,6 +1596,7 @@ const AppConstants = {
   exportAttendanceMessage: 'Attendance exported successfully',
   hardshipCode: "Hardship Code",
   addCode: "Add Code",
+  competitionName:"Competition Name",			 
 };
 
 export default AppConstants;
