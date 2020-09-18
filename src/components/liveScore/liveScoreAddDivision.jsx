@@ -214,7 +214,7 @@ class LiveScoreAddDivision extends Component {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 let divisionId = this.state.tableData ? this.state.tableData.id : 0;
                 this.props.createDivisionAction(name, divisionName, gradeName, id, divisionId, positionTracking, recordGoalAttempts)
-                }
+            }
         });
     };
     //////footer view containing all the buttons like save and cancel
@@ -232,7 +232,7 @@ class LiveScoreAddDivision extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>

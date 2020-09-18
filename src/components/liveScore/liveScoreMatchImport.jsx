@@ -143,9 +143,11 @@ class LiveScoreMatchImport extends Component {
             <span className="user-contact-heading">{AppConstants.fileInput}</span>
 
             <div className="col-sm">
-                <div className="row">
+                <div className="row" >
                     {/* <CSVReader cssClass="react-csv-input" onFileLoaded={this.handleForce} /> */}
                     <input
+                        style={{ cursor: "pointer" }}
+                        className="pt-2 pb-2"
                         type="file"
                         ref={(input) => {
                             this.filesInput = input

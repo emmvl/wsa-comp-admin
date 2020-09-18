@@ -17,6 +17,8 @@ import moment from "moment";
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction"
+import { getOrganisationAction } from "store/actions/userAction/userAction";
+import { regCompetitionFeeListDeleteSaga } from "store/saga/registrationSaga/competitionFeeSaga";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -84,11 +86,17 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (user, record) => {
+            let organisationArray = record.user.userRoleEntities.length > 0 && this_obj.getOrganisationArray(record.user.userRoleEntities, record.roleId)
             return (
                 <div>
-                    {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item, index) => (
-                        <span key={`organisationName` + index} className='multi-column-text-aligned'>{item.competitionOrganisation && item.competitionOrganisation.name}</span>
-                    ))
+                    {organisationArray.length > 0 && organisationArray.map((item, index) => {
+                        console.log(item)
+                        return (
+                            <span key={`organisationName` + index} className='multi-column-text-aligned'>{
+
+                                item.competitionOrganisation && item.competitionOrganisation.name}</span>
+                        )
+                    })
                     }
                 </div>)
         },
@@ -267,6 +275,20 @@ class UmpireRoaster extends Component {
         else {
             history.push("/userPersonal", { userId: record.userId, screenKey: "umpireRoaster", screen: "/umpireRoster" })
         }
+    }
+
+    getOrganisationArray(data, roleId) {
+        let orgArray = []
+        if (data.length > 0) {
+            for (let i in data) {
+                if (data[i].roleId == roleId) {
+                    orgArray.push(data[i])
+                    return orgArray
+                }
+            }
+        }
+        return orgArray
+
     }
 
     //getUmpireCategory
