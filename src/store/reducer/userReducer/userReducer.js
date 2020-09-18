@@ -119,7 +119,11 @@ const initialState = {
   impersonationLoad: false,
   impersonation: false,
   userRoleEntity: [],
-  userProfileUpdate: null
+  userProfileUpdate: null,
+  userIncidentData: [],
+  incidentDataLoad: false,
+  incidentCurrentPage: null,
+  incidentTotalCount: null
 };
 
 function userReducer(state = initialState, action) {
@@ -258,14 +262,14 @@ function userReducer(state = initialState, action) {
       if (action.key == 'charityRoundUp') {
         state.affiliateOurOrg.charityRoundUp[action.index].isSelected = action.value
       }
-     
+
       if (action.key == "name") {
-         state.affiliateOurOrg["charity"][action.index][action.key] = action.value
+        state.affiliateOurOrg["charity"][action.index][action.key] = action.value
       }
       if (action.key == "description") {
-          state.affiliateOurOrg["charity"][action.index][action.key] = action.value
+        state.affiliateOurOrg["charity"][action.index][action.key] = action.value
       }
-      
+
       return { ...state }
 
     case ApiConstants.UPDATE_NEW_AFFILIATE:
@@ -680,13 +684,13 @@ function userReducer(state = initialState, action) {
 
     case ApiConstants.API_UPDATE_TERMS_AND_CONDITION_SUCCESS:
       let ourOrgTCData = state.affiliateOurOrg;
-      ourOrgTCData["termsAndConditions"] =  action.result.organisation.termsAndConditions;
-      if(action.result.organisation.termsAndConditionsRefId == "2"){
-        ourOrgTCData["termsAndConditionsFile"] =  action.result.organisation.termsAndConditions;
+      ourOrgTCData["termsAndConditions"] = action.result.organisation.termsAndConditions;
+      if (action.result.organisation.termsAndConditionsRefId == "2") {
+        ourOrgTCData["termsAndConditionsFile"] = action.result.organisation.termsAndConditions;
         ourOrgTCData["termsAndConditionsLink"] = null;
       }
-      else{
-        ourOrgTCData["termsAndConditionsLink"] =  action.result.organisation.termsAndConditions;
+      else {
+        ourOrgTCData["termsAndConditionsLink"] = action.result.organisation.termsAndConditions;
         ourOrgTCData["termsAndConditionsFile"] = null;
       }
 
@@ -707,16 +711,28 @@ function userReducer(state = initialState, action) {
         impersonation: action.result.success,
         status: action.status,
       };
-	case ApiConstants.API_USER_DELETE_LOAD:
-		return {
-			...state,
-			onLoad: true,
-		};
-	case ApiConstants.API_USER_DELETE_SUCCESS:
-		return {
-			...state,
-			onLoad: false,
-		};    
+    case ApiConstants.API_USER_DELETE_LOAD:
+      return {
+        ...state,
+        onLoad: true,
+      };
+    case ApiConstants.API_USER_DELETE_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+      };
+
+    case ApiConstants.API_GET_USER_MODULE_INCIDENT_LIST_LOAD:
+      return { ...state, incidentDataLoad: true };
+
+    case ApiConstants.API_GET_USER_MODULE_INCIDENT_LIST_SUCCESS:
+      return {
+        ...state,
+        incidentDataLoad: false,
+        userIncidentData: action.result.results,
+        incidentCurrentPage: action.result.page.currentPage,
+        incidentTotalCount: action.result.page.totalCount
+      };
 
 
     default:
@@ -728,10 +744,10 @@ function userReducer(state = initialState, action) {
 function getCharityResult(data) {
   let newCharityResult = []
   if (isArrayNotEmpty(data)) {
-      for (let i in data) {
-          data[i]["isSelected"] = false
-      }
-      newCharityResult = data
+    for (let i in data) {
+      data[i]["isSelected"] = false
+    }
+    newCharityResult = data
   }
   return newCharityResult
 
@@ -743,26 +759,26 @@ function checkSelectedCharity(selected, data) {
   let arr = [];
   let chMap = new Map();
   for (let i in data) {
-      let obj = {
-        id: 0,
-        description: data[i].description,
-        charityRoundUpRefId: data[i].id,
-        isSelected: false
+    let obj = {
+      id: 0,
+      description: data[i].description,
+      charityRoundUpRefId: data[i].id,
+      isSelected: false
+    }
+    if (selected) {
+      let filteredRes = selected.find(x => x.charityRoundUpRefId == data[i].id);
+      if (filteredRes != null && filteredRes != undefined) {
+        obj.id = filteredRes.id;
+        obj.charityRoundUpRefId = filteredRes.charityRoundUpRefId;
+        obj.isSelected = true;
+        arr.push(obj);
       }
-      if (selected){
-        let filteredRes = selected.find(x=>x.charityRoundUpRefId == data[i].id);
-        if(filteredRes!= null && filteredRes!= undefined){
-          obj.id = filteredRes.id;
-          obj.charityRoundUpRefId = filteredRes.charityRoundUpRefId;
-          obj.isSelected = true;
-          arr.push(obj);
-        }
-        else{
-          arr.push(obj);
-        }
-      } else {
-          arr.push(obj);
+      else {
+        arr.push(obj);
       }
+    } else {
+      arr.push(obj);
+    }
   }
   return arr;
 }

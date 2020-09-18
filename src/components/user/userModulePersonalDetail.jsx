@@ -27,6 +27,7 @@ import {
   getUserModuleActivityScorerAction,
   getUserModuleActivityManagerAction,
   getUserHistoryAction,
+  getUserModuleIncidentListAction
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -35,6 +36,7 @@ import history from "../../util/history";
 import { liveScore_formateDate } from "../../themes/dateformate";
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
+import { liveScore_MatchFormate } from '../../themes/dateformate'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -57,9 +59,9 @@ const columns = [
     title: "Valid Until",
     dataIndex: "expiryDate",
     key: "expiryDate",
-    render: (expiryDate, record, index) =>(
+    render: (expiryDate, record, index) => (
       <span>
-         {expiryDate != null ? moment(expiryDate).format("DD/MM/YYYY") : ""}
+        {expiryDate != null ? moment(expiryDate).format("DD/MM/YYYY") : ""}
       </span>
     )
   },
@@ -79,7 +81,7 @@ const columns = [
     key: "divisionName",
     width: 120,
     render: (divisionName, record, index) => {
-      return <div>{divisionName != null ?  divisionName : ""}</div>;
+      return <div>{divisionName != null ? divisionName : ""}</div>;
     },
   },
   // {
@@ -132,12 +134,12 @@ const columns = [
             <span>View</span>
           </Menu.Item>
           {e.alreadyDeRegistered == 0 ?
-		      <Menu.Item key="2" onClick={() => history.push("\deregistration", {regData: e, personal: this_Obj.props.userState.personalData})}>
-            <span>De-register</span>
-          </Menu.Item>	: null }
-          <Menu.Item key="3" onClick={() => history.push("\paymentDashboard", {personal: this_Obj.props.userState.personalData, registrationId: e.registrationId})}>
+            <Menu.Item key="2" onClick={() => history.push("\deregistration", { regData: e, personal: this_Obj.props.userState.personalData })}>
+              <span>De-register</span>
+            </Menu.Item> : null}
+          <Menu.Item key="3" onClick={() => history.push("\paymentDashboard", { personal: this_Obj.props.userState.personalData, registrationId: e.registrationId })}>
             <span>Payment</span>
-          </Menu.Item>  
+          </Menu.Item>
         </SubMenu>
       </Menu>
     ),
@@ -751,6 +753,76 @@ const columnsHistory = [
   },
 ];
 
+const columnsIncident = [
+  {
+    title: 'Date',
+    dataIndex: 'incidentTime',
+    key: 'incidentTime',
+    sorter: true,
+    render: (incidentTime) => <span>{liveScore_MatchFormate(incidentTime)}</span>
+  },
+  {
+    title: 'Match ID',
+    dataIndex: 'matchId',
+    key: 'matchId',
+    sorter: true,
+  },
+  {
+    title: 'Player ID',
+    dataIndex: 'playerId',
+    key: 'incident Players',
+    sorter: true,
+
+  },
+  {
+    title: 'First Name',
+    dataIndex: 'firstName',
+    key: 'Incident Players First Name',
+    sorter: true,
+
+  },
+  {
+    title: 'Last Name',
+    dataIndex: 'lastName',
+    key: 'Incident Players Last Name',
+    sorter: true,
+
+  },
+  {
+    title: 'Team',
+    dataIndex: 'teamName',
+    key: 'teamName',
+    sorter: true,
+    render: (teamName, record) => {
+
+      return (
+        <>
+          {
+            record.teamDeletedAt ?
+              <span className="desc-text-style side-bar-profile-data" >{teamName}</span>
+              :
+              <NavLink to={{
+                pathname: '/liveScoreTeamView',
+                state: { tableRecord: record, screenName: 'userPersonal' }
+              }}>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{teamName}</span>
+              </NavLink>
+
+          }
+        </>
+      )
+    }
+
+  },
+  {
+    title: 'Type',
+    dataIndex: 'incidentTypeName',
+    key: 'incidentTypeName',
+    sorter: true,
+
+  },
+];
+
 class UserModulePersonalDetail extends Component {
   constructor(props) {
     super(props);
@@ -1019,7 +1091,20 @@ class UserModulePersonalDetail extends Component {
       this.handleRegistrationTableList(1, userId, competition, yearRefId);
     } else if (tabKey === "6") {
       this.handleHistoryTableList(1, userId);
+    } else if (tabKey === "7") {
+      this.handleIncidentableList(1, userId, competition, yearRefId);
     }
+  };
+
+  handleIncidentableList = (page, userId, competition, yearRefId) => {
+    let filter = {
+      competitionId: competition.competitionUniqueKey,
+      userId: userId,
+      yearId: yearRefId,
+      limit: 10,
+      offset: page ? 10 * (page - 1) : 0,
+    };
+    this.props.getUserModuleIncidentListAction(filter);
   };
 
   hanleActivityTableList = (page, userId, competition, key, yearRefId) => {
@@ -1106,10 +1191,10 @@ class UserModulePersonalDetail extends Component {
             {personal.photoUrl ? (
               <img src={personal.photoUrl} alt="" />
             ) : (
-              <span className="user-contact-heading">
-                {AppConstants.noImage}
-              </span>
-            )}
+                <span className="user-contact-heading">
+                  {AppConstants.noImage}
+                </span>
+              )}
           </div>
           <span className="user-contact-heading">
             {personal.firstName + " " + personal.lastName}
@@ -1747,27 +1832,27 @@ class UserModulePersonalDetail extends Component {
           <div key={index} style={{ marginBottom: "15px" }}>
             <InputWithHead heading={item.description} />
             {item.registrationSettingsRefId == 6 ||
-            item.registrationSettingsRefId == 11 ? (
-              <div className="applicable-to-text">
-                {item.contentValue == null
-                  ? AppConstants.noInformationProvided
-                  : item.contentValue}
-              </div>
-            ) : null}
+              item.registrationSettingsRefId == 11 ? (
+                <div className="applicable-to-text">
+                  {item.contentValue == null
+                    ? AppConstants.noInformationProvided
+                    : item.contentValue}
+                </div>
+              ) : null}
             {item.registrationSettingsRefId == 7 ? (
               <div>
                 {item.contentValue == "No" ? (
                   <div className="applicable-to-text">{item.contentValue}</div>
                 ) : (
-                  <div className="table-responsive home-dash-table-view">
-                    <Table
-                      className="home-dashboard-table"
-                      columns={columnsPlayedBefore}
-                      dataSource={item.playedBefore}
-                      pagination={false}
-                    />
-                  </div>
-                )}
+                    <div className="table-responsive home-dash-table-view">
+                      <Table
+                        className="home-dashboard-table"
+                        columns={columnsPlayedBefore}
+                        dataSource={item.playedBefore}
+                        pagination={false}
+                      />
+                    </div>
+                  )}
               </div>
             ) : null}
             {item.registrationSettingsRefId == 8 ? (
@@ -1922,6 +2007,57 @@ class UserModulePersonalDetail extends Component {
     );
   };
 
+  hanleIncidentTableList = (page, userId, competition, yearRefId) => {
+    let filter = {
+      competitionId: competition.competitionUniqueKey,
+      userId: userId,
+      yearId: yearRefId,
+      limit: 10,
+      offset: page ? 10 * (page - 1) : 0,
+    };
+    this.props.getUserModuleIncidentListAction(filter);
+  };
+
+  incidentView = () => {
+    let userState = this.props.userState;
+    let incidentData = userState.userIncidentData;
+    let total = userState.incidentTotalCount;
+    return (
+      <div
+        className="comp-dash-table-view mt-2"
+        style={{ backgroundColor: "#f7fafc" }}
+      >
+        <div className="user-module-row-heading">
+          {AppConstants.playerHeading}
+        </div>
+        <div className="table-responsive home-dash-table-view">
+          <Table
+            className="home-dashboard-table"
+            columns={columnsIncident}
+            dataSource={incidentData}
+            pagination={false}
+            loading={userState.incidentDataLoad}
+          />
+        </div>
+        <div className="d-flex justify-content-end ">
+          <Pagination
+            className="antd-pagination pb-3"
+            current={userState.incidentCurrentPage}
+            total={total}
+            onChange={(page) =>
+              this.hanleIncidentTableList(
+                page,
+                this.state.userId,
+                this.state.competition,
+                this.state.yearRefId
+              )
+            }
+          />
+        </div>
+      </div>
+    );
+  };
+
   render() {
     let {
       activityPlayerList,
@@ -1973,8 +2109,8 @@ class UserModulePersonalDetail extends Component {
                           this.scorerActivityView()}
                         {/* {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()} */}
                         {activityPlayerList.length == 0 &&
-                        activityManagerList.length == 0 &&
-                        activityScorerList.length == 0 && //&& activityParentList.length == 0
+                          activityManagerList.length == 0 &&
+                          activityScorerList.length == 0 && //&& activityParentList.length == 0
                           this.noDataAvailable()}
                       </TabPane>
                       <TabPane tab={AppConstants.statistics} key="2">
@@ -1995,6 +2131,9 @@ class UserModulePersonalDetail extends Component {
                       </TabPane>
                       <TabPane tab={AppConstants.history} key="6">
                         {this.historyView()}
+                      </TabPane>
+                      <TabPane tab={AppConstants.incident} key="7">
+                        {this.incidentView()}
                       </TabPane>
                     </Tabs>
                   </div>
@@ -2022,6 +2161,7 @@ function mapDispatchToProps(dispatch) {
       getUserModuleActivityManagerAction,
       getOnlyYearListAction,
       getUserHistoryAction,
+      getUserModuleIncidentListAction
     },
     dispatch
   );

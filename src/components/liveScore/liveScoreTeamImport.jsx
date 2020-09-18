@@ -10,7 +10,10 @@ import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
 import { exportFilesAction } from "store/actions/appAction";
-import { liveScoreTeamImportAction, liveScoreTeamResetImportResultAction } from "store/actions/LiveScoreAction/liveScoreTeamAction";
+import {
+    liveScoreTeamImportAction,
+    liveScoreTeamResetImportResultAction
+} from "store/actions/LiveScoreAction/liveScoreTeamAction";
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -85,6 +88,12 @@ class LiveScoreTeamImport extends Component {
 
         if (this.state.csvData) {
             this.props.liveScoreTeamImportAction({ id, csvFile: this.state.csvData });
+
+            this.setState({
+                csvData: null,
+            }, () => {
+                this.filesInput.value = null;
+            });
         } else {
             message.config({ duration: 0.9, maxCount: 1 });
             message.error(ValidationConstants.csvField);
@@ -106,7 +115,9 @@ class LiveScoreTeamImport extends Component {
 
                     <input
                         type="file"
-                        ref={(input) => { this.filesInput = input }}
+                        ref={(input) => {
+                            this.filesInput = input
+                        }}
                         name="file"
                         // icon="file text outline"
                         // iconPosition="left"

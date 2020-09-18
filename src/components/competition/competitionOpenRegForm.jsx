@@ -291,7 +291,7 @@ class CompetitionOpenRegForm extends Component {
                     dataIndex: "clear",
                     key: "clear",
                     render: (clear, record, index) => {
-                        console.log(this.state.competitionStatus)
+                        // console.log(this.state.competitionStatus)
                         return (
 
                             <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: "pointer" }}>
@@ -368,8 +368,19 @@ class CompetitionOpenRegForm extends Component {
             let competitionTypeList = this.props.appState.own_CompetitionArr
             if (nextProps.appState.own_CompetitionArr !== competitionTypeList) {
                 if (competitionTypeList.length > 0) {
-                    let competitionId = competitionTypeList[0].competitionId
-                    let statusRefId = competitionTypeList[0].statusRefId
+                    let screenKey = this.props.location.state ? this.props.location.state.screenKey : null
+                    let competitionId = null
+                    let statusRefId = null
+                    if (screenKey == "compDashboard") {
+                        competitionId = getOwn_competition()
+                        let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
+                        statusRefId = compIndex > -1 ? competitionTypeList[compIndex].statusRefId : competitionTypeList[0].statusRefId
+                        competitionId = compIndex > -1 ? competitionId : competitionTypeList[0].competitionId
+                    }
+                    else {
+                        competitionId = competitionTypeList[0].competitionId
+                        statusRefId = competitionTypeList[0].statusRefId
+                    }
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_competition(competitionId)
@@ -475,6 +486,7 @@ class CompetitionOpenRegForm extends Component {
     }
 
     componentDidMount() {
+        window.scrollTo(0, 0)
         let orgData = getOrganisationData()
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
@@ -1398,7 +1410,7 @@ class CompetitionOpenRegForm extends Component {
                 }
             },
             onCancel() {
-                console.log('Cancel');
+                // console.log('Cancel');
             },
         });
     }

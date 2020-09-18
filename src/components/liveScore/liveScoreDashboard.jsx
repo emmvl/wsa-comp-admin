@@ -259,8 +259,6 @@ const columnsTodaysMatch = [
                     className='multi-column-text-aligned'
                 >{item.umpireName}</span>
             ))
-
-        // <span className="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
         title: "Scorer 1",
         dataIndex: 'scorer1Status',
@@ -394,8 +392,6 @@ const columnsTodaysMatch_1 = [
                     className='multi-column-text-aligned'
                 >{item.umpireName}</span>
             ))
-
-        // <span className="input-heading-add-another pt-0" onClick={() => { console.log('hello clcicked ') }} >{competition.recordUmpire}</span>
     }, {
         title: <span nowrap className="column-width-style" >{"Scorer 1"} </span>,
         dataIndex: 'scorer1Status',
@@ -503,16 +499,30 @@ const columnsTodaysIncient = [
         dataIndex: 'incidentPlayers',
         key: 'team',
         sorter: (a, b) => tableSort(a, b, "incidentPlayers"),
-        render: (incidentPlayers, record) =>
-            isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
+        render: (incidentPlayers, record) => {
+            return (
+                <>
+                    {
+                        isArrayNotEmpty(incidentPlayers) && incidentPlayers.map((item) => (
 
-                <NavLink to={{
-                    pathname: '/liveScoreTeamView',
-                    state: { tableRecord: record, screenName: 'liveScoreDashboard' }
-                }}>
-                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
-                </NavLink>
-            )),
+                            item.player ? item.player.team ? item.player.team.deleted_at ?
+                                <span className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
+                                :
+                                <NavLink to={{
+                                    pathname: '/liveScoreTeamView',
+                                    state: { tableRecord: record, screenName: 'liveScoreDashboard' }
+                                }}>
+                                    <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{getTeamName(item)}</span>
+                                </NavLink>
+                                :
+                                null
+                                :
+                                null
+                        ))
+                    }
+                </>
+            )
+        }
     },
     {
         title: "Description",

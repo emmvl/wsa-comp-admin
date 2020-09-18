@@ -15,7 +15,7 @@ const errLine = (key, error) => (
         >
             {key}:
         </div>
-        <div>{error.map((msg, index) => (<p key={index * index}>{msg}</p>))}</div>
+        <div>{error.message.map((msg, index) => (<p key={index * index}>{msg}</p>))}</div>
     </div>
 );
 
@@ -40,7 +40,7 @@ export const receiptImportResult = (result) => {
 
     success({
         title: resMsg,
-        content: showContent(resErr),
+        // content: showContent(resErr),
         type: Object.keys(resErr).length === 0
             ? "success"
             : (resData.length === 0 ? "error" : "warning"),

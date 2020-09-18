@@ -305,7 +305,7 @@ class RegistrationCompetitionForm extends Component {
                 let orgData = getOrganisationData()
                 let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0
                 let isCreatorEdit = creatorId == organisationUniqueKey ? false : true;
-
+ 
                 this.setPermissionFields(isPublished, isRegClosed, isCreatorEdit)
 
                 this.setState({
@@ -338,14 +338,14 @@ class RegistrationCompetitionForm extends Component {
         if (isPublished) {
             if (isRegClosed) {
                 let permissionObject = {
-                    compDetailDisable: false,
+                    compDetailDisable: true,
                     regInviteesDisable: true,
                     membershipDisable: true,
-                    divisionsDisable: false,
+                    divisionsDisable: true,
                     feesTableDisable: true,
                     paymentsDisable: true,
                     discountsDisable: true,
-                    allDisable: false,
+                    allDisable: true,
                     isPublished: true
                 }
                 this.setState({ permissionState: permissionObject })
@@ -493,7 +493,7 @@ class RegistrationCompetitionForm extends Component {
         let compFeesState = this.props.competitionFeesState
         let competitionId = compFeesState.competitionId
         let postData = compFeesState.competitionDetailData
-        console.log("postData", postData)
+        // console.log("postData", postData)
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 let nonPlayingDate = JSON.stringify(postData.nonPlayingDates)
@@ -579,7 +579,7 @@ class RegistrationCompetitionForm extends Component {
 
 
     onChange(checkedValues) {
-        console.log("checked = ", checkedValues);
+        // console.log("checked = ", checkedValues);
     }
 
     divisionTableDataOnchange(checked, record, index, keyword) {
@@ -610,7 +610,7 @@ class RegistrationCompetitionForm extends Component {
                 >
                     <Breadcrumb separator=">">
                         <Breadcrumb.Item className="breadcrumb-add">
-                            {competitionId == null ? AppConstants.addCompetition : AppConstants.editCompetition}
+                            {competitionId == null ? AppConstants.addCompetition : AppConstants.competitionDetails}
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </Header>
@@ -640,7 +640,6 @@ class RegistrationCompetitionForm extends Component {
                                         { rules: [{ required: true, message: ValidationConstants.pleaseSelectYear }] })(
                                             <Select
                                                 className="year-select reg-filter-select-year ml-2"
-                                            // style={{ minWidth: 160 }}
                                             >
                                                 {this.props.appState.yearList.map(item => {
                                                     return (
@@ -1069,7 +1068,7 @@ class RegistrationCompetitionForm extends Component {
                                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                         placeholder={AppConstants.selectRound}
                                         onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
-                                        value={detailsData.competitionDetailData.noOfRounds}
+                                        // value={detailsData.competitionDetailData.noOfRounds}
                                         disabled={compDetailDisable}
                                     >
                                         {roundsArray.map(item => {
@@ -1174,8 +1173,8 @@ class RegistrationCompetitionForm extends Component {
     }
 
     handleDeleteDivision = (key) => {
-        console.log("****************handleDeleteDivision" + JSON.stringify(this.state.competitionDivision));
-        console.log("&&&&&&" + this.state.divisionIndex);
+        // console.log("****************handleDeleteDivision" + JSON.stringify(this.state.competitionDivision));
+        // console.log("&&&&&&" + this.state.divisionIndex);
 
         if (key == "ok") {
             let payload = {
@@ -1268,7 +1267,7 @@ class RegistrationCompetitionForm extends Component {
                 }
             },
             onCancel() {
-                console.log('Cancel');
+                // console.log('Cancel');
             },
         });
     }
