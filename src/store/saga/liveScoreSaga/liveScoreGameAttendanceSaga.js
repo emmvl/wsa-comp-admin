@@ -6,7 +6,7 @@ import AppConstants from "../../../themes/appConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 
 function* failSaga(result) {
-  yield put({ type: ApiConstants.API_LIVE_SCORE_EXPORT_ATTENDANCE_FAIL });
+  yield put({ type: ApiConstants.API_LIVE_SCORE_GAME_ATTENDANCE_FAIL });
   let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
   message.config({
     duration: 1.5,
@@ -17,7 +17,7 @@ function* failSaga(result) {
 
 function* errorSaga(error) {
   yield put({
-    type: ApiConstants.API_LIVE_SCORE_EXPORT_ATTENDANCE_ERROR,
+    type: ApiConstants.API_LIVE_SCORE_GAME_ATTENDANCE_ERROR,
     error: error,
     status: error.status
   });
@@ -28,6 +28,30 @@ function* errorSaga(error) {
   message.error(AppConstants.somethingWentWrong);
 }
 
+// Get game attendance
+export function* liveScoreGameAttendanceList(action) {
+  try {
+    const result = yield call(
+      LiveScoreAxiosApi.liveScoreGameAttendanceList,
+      {
+        matchId: action.matchId,
+        teamId: action.teamId,
+      }
+    );
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_LIVE_SCORE_GAME_ATTENDANCE_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+      message.info(AppConstants.exportAttendanceMessage);
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
 
 // Export game attendance
 export function* liveScoreExportGameAttendance(action) {
@@ -57,4 +81,5 @@ export function* liveScoreExportGameAttendance(action) {
 
 export default function* liveScoreGameAttendanceSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_EXPORT_ATTENDANCE_LOAD, liveScoreExportGameAttendance);
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_GAME_ATTENDANCE_LIST_LOAD, liveScoreGameAttendanceList);
 }

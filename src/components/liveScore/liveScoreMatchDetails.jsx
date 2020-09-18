@@ -16,7 +16,7 @@ import {
     liveScorePlayerListSearchAction
 } from "../../store/actions/LiveScoreAction/liveScorePlayerAction"
 import {
-    liveScoreExportGameAttendanceAction
+    liveScoreExportGameAttendanceAction, liveScoreGameAttendanceListAction
 } from "../../store/actions/LiveScoreAction/liveScoreGameAttendanceAction"
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
@@ -188,6 +188,7 @@ class LiveScoreMatchDetails extends Component {
             liveStreamLink: null,
             addPlayerModal: '',
             teamAttendance: false,
+            gameAttendanceList: [],
             team1Attendance: [],
             team2Attendance: [],
             borrowedTeam1Players: [],
@@ -199,29 +200,27 @@ class LiveScoreMatchDetails extends Component {
     }
 
     componentDidMount() {
-        let isLineUpEnable = null
-        let match_status = null
-        this.props.getLiveScoreGamePositionsList()
+        let isLineUpEnable = null;
+        let match_status = null;
+        this.props.getLiveScoreGamePositionsList();
+        this.props.liveScoreGameAttendanceListAction(this.state.matchId);
 
-        if (this.state.umpireKey == 'umpire') {
-            // const { lineupSelectionEnabled, status, id } = JSON.parse(getUmpireCompetitonData())
-            isLineUpEnable = getUmpireCompetitonData().lineupSelectionEnabled
-            match_status = getUmpireCompetitonData().status
+        if (this.state.umpireKey === 'umpire') {
+            isLineUpEnable = getUmpireCompetitonData().lineupSelectionEnabled;
 
             this.setState({ competitionId: getUmpireCompetitonData().id })
         } else {
-            const { lineupSelectionEnabled, status, id } = JSON.parse(getLiveScoreCompetiton())
-            isLineUpEnable = lineupSelectionEnabled
-            match_status = status
+            const { lineupSelectionEnabled, status, id } = JSON.parse(getLiveScoreCompetiton());
+            isLineUpEnable = lineupSelectionEnabled;
             this.setState({ competitionId: id })
 
         }
 
-        if (isLineUpEnable == 1) {
-            this.setState({ isLineUp: 1 })
+        if (isLineUpEnable === 1) {
+            this.setState({ isLineUp: 1 });
             this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
         } else {
-            this.setState({ isLineUp: 0 })
+            this.setState({ isLineUp: 0 });
             this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
         }
     }
@@ -235,6 +234,13 @@ class LiveScoreMatchDetails extends Component {
             if (this.state.team1Attendance.length === 0 && this.state.team2Attendance.length === 0) {
                 this.setState({ team1Attendance });
                 this.setState({ team2Attendance });
+            }
+        }
+
+        if (this.props.liveScoreGameAttendanceState !== nextProps.liveScoreGameAttendanceState) {
+            const gameAttendanceList = this.props.liveScoreGameAttendanceState.gameAttendanceList;
+            if (gameAttendanceList) {
+                this.setState({ gameAttendanceList });
             }
         }
     }
@@ -277,6 +283,16 @@ class LiveScoreMatchDetails extends Component {
                 team2Attendance: teamAttendance,
             })
         }
+    };
+
+    getAttendanceValue = (playerId, period, field) => {
+        const attendance = this.state.gameAttendanceList
+          .find((att) => att.playerId === playerId && att.period === period);
+        if (attendance && attendance[field]) {
+            return attendance[field];
+        }
+
+        return null;
     };
 
     getAttendance = (players) => {
@@ -534,7 +550,7 @@ class LiveScoreMatchDetails extends Component {
             // const { scoringType } = JSON.parse(getUmpireCompetitonData())
             scoreType = getUmpireCompetitonData().scoringType;
         } else {
-            const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+            const { scoringType } = JSON.parse(getLiveScoreCompetiton());
             scoreType = scoringType;
         }
 
@@ -625,7 +641,7 @@ class LiveScoreMatchDetails extends Component {
                                 className="year-select reg-filter-select1 table-cell-select"
                                 size="small"
                                 style={{ width: '100%' }}
-                                defaultValue={row?.lineup?.positionId}
+                                defaultValue={this.getAttendanceValue(row.playerId, 1 , 'positionId')}
                                 onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
                             >
                                 {this.props.liveScoreGamePositionState.positionList.map((position) => (
@@ -667,6 +683,7 @@ class LiveScoreMatchDetails extends Component {
                                 <Input size="small" type="number" />
                             ) : (
                                 <Checkbox
+                                  defaultChecked={this.getAttendanceValue(row.playerId, 1 , 'isPlaying')}
                                   onChange={
                                       (e) =>
                                         this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
@@ -688,7 +705,7 @@ class LiveScoreMatchDetails extends Component {
                                 className="year-select reg-filter-select1 table-cell-select"
                                 size="small"
                                 style={{ width: '100%' }}
-                                defaultValue={row?.lineup?.positionId}
+                                defaultValue={this.getAttendanceValue(row.playerId, 2 , 'positionId')}
                                 onChange={
                                     (value) =>
                                       this.setAttendance(team, row.playerId, 2, 'positionId', value)
@@ -736,6 +753,7 @@ class LiveScoreMatchDetails extends Component {
                                 />
                             ) : (
                                 <Checkbox
+                                  defaultChecked={this.getAttendanceValue(row.playerId, 2 , 'isPlaying')}
                                   onChange={
                                       (e) =>
                                         this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
@@ -757,7 +775,7 @@ class LiveScoreMatchDetails extends Component {
                                 className="year-select reg-filter-select1 table-cell-select"
                                 size="small"
                                 style={{ width: '100%' }}
-                                defaultValue={row?.lineup?.positionId}
+                                defaultValue={this.getAttendanceValue(row.playerId, 3 , 'positionId')}
                                 onChange={
                                     (value) =>
                                       this.setAttendance(team, row.playerId, 3, 'positionId', value)
@@ -802,6 +820,7 @@ class LiveScoreMatchDetails extends Component {
                                 <Input size="small" type="number" />
                             ) : (
                                 <Checkbox
+                                  defaultChecked={this.getAttendanceValue(row.playerId, 3 , 'isPlaying')}
                                   onChange={
                                       (e) =>
                                         this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
@@ -823,7 +842,7 @@ class LiveScoreMatchDetails extends Component {
                                 className="year-select reg-filter-select1 table-cell-select"
                                 size="small"
                                 style={{ width: '100%' }}
-                                defaultValue={row?.lineup?.positionId}
+                                defaultValue={this.getAttendanceValue(row.playerId, 4 , 'positionId')}
                                 onChange={
                                     (value) =>
                                       this.setAttendance(team, row.playerId, 4, 'positionId', value)
@@ -868,6 +887,7 @@ class LiveScoreMatchDetails extends Component {
                                 <Input size="small" type="number" />
                             ) : (
                                 <Checkbox
+                                  defaultChecked={this.getAttendanceValue(row.playerId, 4 , 'isPlaying')}
                                   onChange={
                                       (e) =>
                                         this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
@@ -1142,7 +1162,8 @@ class LiveScoreMatchDetails extends Component {
 
     AddPlayerModalView() {
         let playerId = null;
-        const { id: competitionId, organisationId } = this.state.umpireKey ? JSON.parse(getUmpireCompetitonData()) : JSON.parse(getLiveScoreCompetiton())
+        const { id: competitionId, organisationId } =
+          this.state.umpireKey ? JSON.parse(getUmpireCompetitonData()) : JSON.parse(getLiveScoreCompetiton());
         const { onLoadSearch, searchResult } = this.props.liveScorePlayerState;
         const { team1Players, team2Players } = this.props.liveScoreMatchState;
         const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
@@ -1257,6 +1278,7 @@ function mapDispatchToProps(dispatch) {
         getLiveScoreGamePositionsList,
         liveScorePlayerListSearchAction,
         liveScoreExportGameAttendanceAction,
+        liveScoreGameAttendanceListAction,
     }, dispatch)
 }
 
@@ -1269,5 +1291,3 @@ function mapStateToProps(state) {
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreMatchDetails);
-
-

@@ -25,14 +25,28 @@ function liveScoreGameAttendanceState(state = initialState, action) {
         exported: true,
       };
 
-    case ApiConstants.API_LIVE_SCORE_EXPORT_ATTENDANCE_FAIL:
+    case ApiConstants.API_LIVE_SCORE_GAME_ATTENDANCE_LIST_LOAD:
+      return {
+        ...state,
+        onLoad: true,
+        gameAttendanceList: action.result,
+      };
+
+    case ApiConstants.API_LIVE_SCORE_GAME_ATTENDANCE_LIST_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        gameAttendanceList: action.result,
+      };
+
+    case ApiConstants.API_LIVE_SCORE_GAME_ATTENDANCE_FAIL:
       return {
         ...state,
         onLoad: false,
         exported: false,
       };
 
-    case ApiConstants.API_LIVE_SCORE_EXPORT_ATTENDANCE_ERROR:
+    case ApiConstants.API_LIVE_SCORE_GAME_ATTENDANCE_ERROR:
       return {
         ...state,
         onLoad: false,

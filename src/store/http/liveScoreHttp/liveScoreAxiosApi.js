@@ -1355,6 +1355,18 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+    liveScoreGameAttendanceList(data) {
+        const { matchId, teamId } = data;
+
+        let url = `/gtattendances?matchId=${matchId}`;
+
+        if (teamId) {
+            url = `/gtattendances?matchId=${matchId}&teamId=${teamId}`;
+        }
+
+        return Method.dataGet(url, token);
+    },
+
 };
 
 const Method = {
