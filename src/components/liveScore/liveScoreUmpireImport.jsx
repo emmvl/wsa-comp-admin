@@ -8,7 +8,10 @@ import ValidationConstants from "themes/validationConstant";
 import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
-import { liveScoreUmpireImportAction, liveScoreUmpireResetImportResultAction } from "store/actions/LiveScoreAction/livescoreUmpiresAction";
+import {
+    liveScoreUmpireImportAction,
+    liveScoreUmpireResetImportResultAction
+} from "store/actions/LiveScoreAction/livescoreUmpiresAction";
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -91,6 +94,12 @@ class LiveScoreUmpireImport extends Component {
                 id,
                 csvFile: this.state.csvData,
                 screenName: "liveScoreUmpireList",
+            });
+
+            this.setState({
+                csvData: null,
+            }, () => {
+                this.filesInput.value = null;
             });
         } else {
             message.config({ duration: 0.9, maxCount: 1 });

@@ -38,12 +38,24 @@ function checkUserRoll(rolesArr, index) {
                 isClub = "YES"
             }
         }
-
     }
-
     return isClub
+}
+
+function checkUmpireUserRoll(rolesArr, key) {
+    let isUmpire = "NO"
+    if (isArrayNotEmpty(rolesArr)) {
+        for (let i in rolesArr) {
+            if (rolesArr[i].roleId == key) {
+                isUmpire = "YES"
+
+            }
+        }
+    }
+    return isUmpire
 
 }
+
 
 
 function tableSort(key) {
@@ -59,7 +71,7 @@ function tableSort(key) {
 
     this_obj.setState({ sortBy, sortOrder });
     this_obj.props.umpireListAction({
-        refRoleId: refRoleTypes("umpire"),
+        refRoleId: JSON.stringify([15, 20]),
         entityTypes: entityTypes("COMPETITION"),
         compId: this_obj.state.selectedComp,
         offset: this_obj.state.offsetData,
@@ -138,6 +150,14 @@ const columns = [
                 ))}
             </div>
         )
+    },
+    {
+        title: "Umpire",
+        dataIndex: "umpire",
+        key: "umpire",
+        sorter: true,
+        onHeaderCell: () => listeners("umpire"),
+        render: (umpireCoach, record, index) => <span>{checkUmpireUserRoll(record.userRoleEntities, 15)}</span>,
     },
     {
         title: "Umpire Coach",
@@ -248,7 +268,7 @@ class Umpire extends Component {
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
                 if (firstComp !== false) {
                     this.props.umpireListAction({
-                        refRoleId: refRoleTypes("umpire"),
+                        refRoleId: JSON.stringify([15, 20]),
                         entityTypes: entityTypes("COMPETITION"),
                         compId: firstComp,
                         offset: 0,
@@ -289,7 +309,7 @@ class Umpire extends Component {
         });
 
         this.props.umpireListAction({
-            refRoleId: refRoleTypes("umpire"),
+            refRoleId: JSON.stringify([15, 20]),
             entityTypes: entityTypes("COMPETITION"),
             compId: this.state.selectedComp,
             offset,
@@ -331,7 +351,7 @@ class Umpire extends Component {
                             className="antd-pagination"
                             current={currentPage}
                             total={totalCount}
-                            defaultPageSize={10}
+                            // defaultPageSize={10}
                             onChange={this.handlePageChange}
                         />
                     </div>
@@ -359,7 +379,7 @@ class Umpire extends Component {
         let compKey = compID.competitionUniqueKey;
 
         this.props.umpireListAction({
-            refRoleId: refRoleTypes("umpire"),
+            refRoleId: JSON.stringify([15, 20]),
             entityTypes: entityTypes("COMPETITION"),
             compId: selectedComp,
             offset: 0,
@@ -377,7 +397,7 @@ class Umpire extends Component {
         const { sortBy, sortOrder } = this.state;
         if (e.target.value === null || e.target.value === "") {
             this.props.umpireListAction({
-                refRoleId: refRoleTypes("umpire"),
+                refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
                 offset: 0,
@@ -394,7 +414,7 @@ class Umpire extends Component {
         const code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             this.props.umpireListAction({
-                refRoleId: refRoleTypes("umpire"),
+                refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,
@@ -411,7 +431,7 @@ class Umpire extends Component {
         if (this.state.searchText === null || this.state.searchText === "") {
         } else {
             this.props.umpireListAction({
-                refRoleId: refRoleTypes("umpire"),
+                refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,

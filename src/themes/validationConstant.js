@@ -216,6 +216,7 @@ const ValidationConstants = {
     declineReasonRequired: "Please select the reason to decline",
     deRegisterReasonRequired: "Please select the reason to De-register",
     deRegisterChangeTypeRequired: "Please select the De-register change type",
+    organisationField: 'Organisation is required'
 };
 
 export default ValidationConstants;

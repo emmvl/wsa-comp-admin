@@ -33,7 +33,8 @@ class QuickCompetitionInvitations extends Component {
             teamOptionId: 1,
             playerOptionId: 1,
             divisionGradeOptionId: 1,
-            venueOptionId: 1
+            venueOptionId: 1,
+            compNameOptionId:1,
         }
     }
 
@@ -97,6 +98,7 @@ class QuickCompetitionInvitations extends Component {
             "playerOptionId": typeSelection.playerMismatch == 0 ? null :this.state.playerOptionId,
             "divisionGradeOptionId": typeSelection.divisionGradesMismatch == 0 ? null : this.state.divisionGradeOptionId,
             "venueOptionId": typeSelection.venueMismatch == 0 ? null :this.state.venueOptionId,
+			"compNameOptionId":this.state.compNameOptionId,											   
         }
 
         this.props.mergeCompetitionProceed(payload)
@@ -117,6 +119,9 @@ class QuickCompetitionInvitations extends Component {
         }
         else if(key == "venues"){
             this.setState({venueOptionId:value});
+        }
+		else if(key == "competitionName"){
+            this.setState({compNameOptionId:value});
         }
     } 
 
@@ -255,7 +260,24 @@ class QuickCompetitionInvitations extends Component {
                                         <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>
                                     </Radio.Group>
                                 </div>   
-                            }                          
+                            }    
+                            <div>                      
+                                <div  className='popup-text-color'>
+                                    {AppConstants.competitionName}
+                                </div>
+                                <Radio.Group
+                                    className="reg-competition-radio"
+                                    onChange={(e) =>
+                                        this.competitionTypeSelection(
+                                            e.target.value,
+                                            'competitionName'
+                                        )}
+                                value={this.state.divisionGradeOptionId}
+                                >                                   
+                                    <Radio  value ={1} >{mergeCompetitionSelection.quickCompetition}</Radio> 
+                                    <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>                          
+                                </Radio.Group>
+                            </div>  							  
                         </div>
                     </Modal>
                 </div>

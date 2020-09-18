@@ -87,7 +87,7 @@ const columns = [
             return (
                 <div>
                     {record.user.userRoleEntities.length > 0 && record.user.userRoleEntities.map((item, index) => (
-                        <span key={`organisationName` + index} className='multi-column-text-aligned'>{item.competitionOrganisation.name}</span>
+                        <span key={`organisationName` + index} className='multi-column-text-aligned'>{item.competitionOrganisation && item.competitionOrganisation.name}</span>
                     ))
                     }
                 </div>)
@@ -151,16 +151,16 @@ const columns = [
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
             >
-                <Menu.Item key={'1'}>
-                    <span onClick={() => this_obj.onActionPerform(record, 'YES')} >Accept</span>
+                <Menu.Item key={'1'} onClick={() => this_obj.onActionPerform(record, 'YES')}>
+                    <span  >Accept</span>
                 </Menu.Item>
-                <Menu.Item key="2" >
+                <Menu.Item key="2" onClick={() => this_obj.onActionPerform(record, 'NO')}>
 
-                    <span onClick={() => this_obj.onActionPerform(record, 'NO')}>Decline</span>
+                    <span >Decline</span>
 
                 </Menu.Item>
-                <Menu.Item key="3" >
-                    <span onClick={() => this_obj.onActionPerform(record, 'DELETE')}>Unassign</span>
+                <Menu.Item key="3" onClick={() => this_obj.onActionPerform(record, 'DELETE')}>
+                    <span >Unassign</span>
                 </Menu.Item>
             </Menu.SubMenu>
         </Menu>
@@ -254,7 +254,8 @@ class UmpireRoaster extends Component {
     }
 
     onActionPerform(record, status) {
-        this.props.umpireRoasterOnActionClick({ roasterId: record.id, status: status, category: 'umpiring' })
+        let category = this.getUmpireCategory(record.roleId)
+        this.props.umpireRoasterOnActionClick({ roasterId: record.id, status: status, category: category })
         this.setState({ roasterLoad: true })
     }
 
@@ -265,6 +266,19 @@ class UmpireRoaster extends Component {
         }
         else {
             history.push("/userPersonal", { userId: record.userId, screenKey: "umpireRoaster", screen: "/umpireRoster" })
+        }
+    }
+
+    //getUmpireCategory
+    getUmpireCategory(roleId) {
+        if (roleId == 15) {
+            return "Umpiring"
+        }
+        else if (roleId == 19) {
+            return "UmpireReserve"
+        }
+        else if (roleId == 20) {
+            return "UmpireCoach"
         }
     }
 

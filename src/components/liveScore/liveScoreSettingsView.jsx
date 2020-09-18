@@ -634,7 +634,6 @@ class LiveScoreSettingsView extends Component {
                                 onChange={e => this.onChangeCheckBox(e)}>
                                 {applyTo1.map((item) => (
                                     <Tooltip background='#ff8237'>
-                                        {/* <span>{item.helpMsg}</span> */}
                                         {item.helpMsg}
                                     </Tooltip>
                                 ))}
@@ -654,7 +653,6 @@ class LiveScoreSettingsView extends Component {
                             >
                                 {applyTo2.map((item) => (
                                     <Tooltip background='#ff8237'>
-                                        {/* <span>{item.helpMsg}</span> */}
                                         {item.helpMsg}
                                     </Tooltip>
                                 ))}
@@ -700,7 +698,7 @@ class LiveScoreSettingsView extends Component {
                                     placeholder={'Select Record'}
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
                                     onChange={recordSelection => this.props.onChangeSettingForm({ key: "attendanceRecordingType", data: recordSelection })}
-                                    value={this.props.liveScoreSetting.form.attendanceRecordingType}
+                                // value={this.props.liveScoreSetting.form.attendanceRecordingType}
                                 // defaultValue={}
                                 // value={this.props.liveScoreSetting.form.attendanceRecordingType}
                                 >
@@ -932,7 +930,6 @@ class LiveScoreSettingsView extends Component {
                 </div>
 
                 {/* radion button view */}
-                {/* <span required={"required-field pb-0"} className="applicable-to-heading">{AppConstants.scoring}</span> */}
                 <InputWithHead required={"required-field"} heading={AppConstants.scoring} />
                 <div className='contextualHelp-RowDirection' >
                     <Form.Item>
@@ -942,7 +939,7 @@ class LiveScoreSettingsView extends Component {
                             <Radio.Group
                                 className="reg-competition-radio"
                                 onChange={e => this.competition_format(e)}
-                                value={this.props.liveScoreSetting.form.scoring}
+                            // value={this.props.liveScoreSetting.form.scoring}
                             >
                                 <div className="row ml-2" style={{ marginTop: 0 }} >
 
@@ -1150,18 +1147,6 @@ class LiveScoreSettingsView extends Component {
                                                             <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
                                                         </div>
 
-                                                        {/* <div style={{ marginLeft: 20 }}>
-                                                            <Radio.Group
-                                                                onChange={(e) => this.props.onChangeSettingForm({ key: "affiliateNonSelected", data: e.target.value, subItem: subItem })}
-                                                                value={affiliateNonSelected}
-                                                            >
-                                                                <Radio
-
-                                                                    key={'none1'} value={'none1'}>{'None'}</Radio>
-                                                            </Radio.Group>
-                                                        </div> */}
-
-
                                                     </>
                                                     :
                                                     <>
@@ -1283,28 +1268,6 @@ class LiveScoreSettingsView extends Component {
                     </Radio.Group>
 
                 </div>
-
-                {/* <div>
-                    <Radio.Group
-                        className="reg-competition-radio mt-5"
-                        onChange={(e) => this.props.onChangeSettingForm({ key: "invitees", data: e.target.value })}
-                    >
-                        <div>
-                            {subReferences.length == 0 ?
-                                <Radio value={invitees_1.id}>{invitees_1.description}</Radio>
-                                : <div>
-                                    <div class="applicable-to-heading invitees-main">{invitees_1.description}</div>
-                                    {(subReferences).map((subItem, subIndex) => (
-                                        <div style={{ marginLeft: '20px' }}>
-                                            <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
-                                        </div>
-                                    ))}
-                                </div>
-                            }
-                        </div>
-                    </Radio.Group>
-                </div> */}
-
             </div >
         );
     };
@@ -1317,15 +1280,9 @@ class LiveScoreSettingsView extends Component {
                 <div className="footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            {/* <div className="reg-add-save-button">
-                                <Button type="cancel-button">{AppConstants.delete}</Button>
-                            </div> */}
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                {/* <Button className="save-draft-text" type="save-draft-text">
-                                    {AppConstants.saveAsDraft}
-                                </Button> */}
                                 <Button disabled={this.props.liveScoreSetting.loader} onClick={this.handleSubmit} htmlType='submit' className="publish-button" type="primary">
                                     {this.state.competitionTabKey == 6 ? AppConstants.publish : AppConstants.save}
                                 </Button>

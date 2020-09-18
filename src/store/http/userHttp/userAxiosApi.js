@@ -296,12 +296,12 @@ let userHttpApi = {
   umpireList(data) {
     let url = null
     if (data.userName) {
-      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
     } else if (data.offset != null) {
-      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}`
     }
     else {
-      url = `/users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}`
     }
 
     if (data.sortBy && data.sortOrder) {
@@ -357,6 +357,11 @@ let userHttpApi = {
 
   deleteUserById(payload) {
     const url = `api/user/delete`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  getUserModuleIncidentData(payload) {
+    const url = `api/user/activity/incident`;
     return Method.dataPost(url, token, payload);
   },
 }

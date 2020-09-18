@@ -639,7 +639,7 @@ class UserAddAffiliates extends Component {
                 )
               }
               value={item.mobileNumber}
-              auto_complete="new-phoneNumber"
+              auto_complete="off"
             />
 
             <InputWithHead

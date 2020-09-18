@@ -179,7 +179,6 @@ class CompetitionFormat extends Component {
 
                     this.setState({ loading: false });
                 }
-                console.log("&&&&&&&&&&&&&&&" + competitionModuleState.status);
                 if (competitionModuleState.status == 5 && competitionModuleState.drawGenerateLoad == false) {
                     this.setState({ loading: false });
                     message.error(ValidationConstants.drawsMessage[0]);
@@ -245,7 +244,6 @@ class CompetitionFormat extends Component {
 
     // on Competition change
     onCompetitionChange(competitionId, statusRefId) {
-        console.log("competitionId::" + competitionId);
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
         let payload = {
@@ -830,16 +828,16 @@ class CompetitionFormat extends Component {
                 <div className="fluid-width">
                     <div className="row" >
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead id={AppUniqueId.timeBetweenRoundsDays} auto_complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.days} value={data.roundInDays}
+                            <InputWithHead id={AppUniqueId.timeBetweenRoundsDays} auto_complete="off" disabled={disabledStatus} placeholder={AppConstants.days} value={data.roundInDays}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInDays')}></InputWithHead>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead id={AppUniqueId.timeBetweenRoundsHrs} auto_complete="new-roundInHours" disabled={disabledStatus} placeholder={AppConstants.hours} value={data.roundInHours}
+                            <InputWithHead id={AppUniqueId.timeBetweenRoundsHrs} auto_complete="off" disabled={disabledStatus} placeholder={AppConstants.hours} value={data.roundInHours}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInHours')}></InputWithHead>
 
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead id={AppUniqueId.timeBetweenRoundsMins} auto_complete="new-roundInDays" disabled={disabledStatus} placeholder={AppConstants.mins} value={data.roundInMins}
+                            <InputWithHead id={AppUniqueId.timeBetweenRoundsMins} auto_complete="off" disabled={disabledStatus} placeholder={AppConstants.mins} value={data.roundInMins}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'roundInMins')}></InputWithHead>
                         </div>
                     </div>
@@ -908,7 +906,7 @@ class CompetitionFormat extends Component {
                                             }]
                                         })(
                                             <InputWithHead
-                                                auto_complete="new-matchDuration"
+                                                auto_complete="off"
                                                 id={AppUniqueId.match_Duration}
                                                 heading={AppConstants.matchDuration}
                                                 disabled={disabledStatus}
@@ -927,7 +925,7 @@ class CompetitionFormat extends Component {
                                                 rules: [{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }]
                                             })(
                                                 <InputWithHead
-                                                    auto_complete="new-mainBreak"
+                                                    auto_complete="off"
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.mainBreak}
                                                     required={(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? "required-field" : null}
@@ -947,7 +945,7 @@ class CompetitionFormat extends Component {
                                                 rules: [{ required: (data.matchTypeRefId == 3 ? true : false), message: ValidationConstants.qtrBreak }]
                                             })(
                                                 <InputWithHead
-                                                    auto_complete="new-qtrBreak"
+                                                    auto_complete="off"
                                                     disabled={disabledStatus}
                                                     heading={AppConstants.qtrBreak} placeholder={AppConstants.mins}
                                                     required={(data.matchTypeRefId == 3) ? "required-field" : null}

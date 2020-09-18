@@ -152,7 +152,6 @@ function umpireState(state = initialState, action) {
             };
         //// Update Add Umpire Data
         case ApiConstants.UPDATE_ADD_UMPIRE_DATA:
-            console.log(state.affilateList, "affileientegttertet")
             let key = action.key
             let data = action.data
             if (key === 'umpireRadioBtn') {
@@ -169,7 +168,6 @@ function umpireState(state = initialState, action) {
                 let getAffiliateId = genrateSelectedAffiliateId(state.selectedAffiliateId, state.affilateList)
                 state.affiliateId = getAffiliateId
             } else if (action.key === 'isEditUmpire') {
-                console.log(data, "editable datatatatta")
                 state.umpireData.id = data.id
                 state.umpireData.firstName = data.firstName
                 state.umpireData.lastName = data.lastName
