@@ -260,7 +260,8 @@ class QuickCompetitionInvitations extends Component {
                                         <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>
                                     </Radio.Group>
                                 </div>   
-                            }                          
+                            }    
+                            <div>                      
                                 <div  className='popup-text-color'>
                                     {AppConstants.competitionName}
                                 </div>
