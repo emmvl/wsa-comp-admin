@@ -988,6 +988,8 @@ class UserOurOragnization extends Component {
 
                             <label className="pt-2">
                                 <input
+                                    style={{ cursor: "pointer" }}
+                                    className="pt-2 pb-2"
                                     type="file"
                                     id="teamImport"
                                     ref={(input) => { this.filesInput = input }}

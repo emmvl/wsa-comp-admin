@@ -62,7 +62,7 @@ class AddUmpire extends Component {
         if (getUmpireCompetiton()) {
             compId = JSON.parse(getUmpireCompetiton())
 
-            this.props.umpireListAction({ refRoleId: 5, entityTypes: 1, compId: compId, offset: 0 })
+            this.props.umpireListAction({ refRoleId: JSON.stringify([5]) , entityTypes: 1, compId: compId, offset: 0 })
             if (compId !== null) {
                 this.props.getUmpireAffiliateList({ id: compId })
                 this.setState({ isUmpireAffiliate: true })
@@ -217,7 +217,7 @@ class AddUmpire extends Component {
                                         value ?
                                             this.props.umpireSearchAction({ refRoleId: refRoleTypes('member'), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value, offset: 0 })
                                             :
-                                            this.props.umpireListAction({ refRoleId: refRoleTypes('member'), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, offset: 0 })
+                                            this.props.umpireListAction({ refRoleId: JSON.stringify([refRoleTypes('member')]), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, offset: 0 })
 
                                     }}
                                 >{umpireList.map((item, index) => {

@@ -118,7 +118,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
                     render: (lat, record, index) => {
                         const { getFieldDecorator } = this.props.form;
-                       // console.log(index, 'tooltipindex')
+                        // console.log(index, 'tooltipindex')
                         return (
 
                             // <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: index > 0 ? 0 : 150 }}>
@@ -277,7 +277,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     setFormFieldValue = () => {
 
         let venueData = this.props.venueTimeState.venuData;
-       // console.log("setFormFieldValue" + JSON.stringify(venueData));
+        // console.log("setFormFieldValue" + JSON.stringify(venueData));
         // this.props.form.setFieldsValue({
         //     name: venueData.venueName,
         //     addressOne: venueData.street1,
@@ -437,8 +437,8 @@ class CompetitionVenueAndTimesAdd extends Component {
         });
 
         const stateRefId = stateList.length > 0 && address.state
-          ? stateList.find((state) => state.name === address.state).id
-          : null;
+            ? stateList.find((state) => state.name === address.state).id
+            : null;
 
         this.props.form.setFieldsValue({
             stateRefId,
@@ -951,7 +951,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     }
 
                     if (!hasError) {
-                        venuData["screenNavigationKey"]  = this.state.screenNavigationKey;
+                        venuData["screenNavigationKey"] = this.state.screenNavigationKey;
                         //console.log("venuData" + JSON.stringify(venuData));
                         this.props.addVenueAction(venuData)
                         this.setState({ saveContraintLoad: true });
@@ -988,7 +988,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-       // console.log(this.props.venueTimeState.venuData, 'this.props.commonReducerState')
+        // console.log(this.props.venueTimeState.venuData, 'this.props.commonReducerState')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <Loader visible={this.props.commonReducerState.onLoad || this.props.venueTimeState.onLoad} />

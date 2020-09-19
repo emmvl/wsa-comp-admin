@@ -125,6 +125,8 @@ class LiveScoreCoachImport extends Component {
                 <div className="row">
                     <label>
                         <input
+                            style={{ cursor: "pointer" }}
+                            className="pt-2 pb-2"
                             type="file"
                             ref={(input) => {
                                 this.filesInput = input

@@ -259,7 +259,7 @@ class LiveScoreAddNews extends Component {
     ////method to setimage
     setImage = (data) => {
 
-        this.setState({imageSelection:null,image:null})
+        this.setState({ imageSelection: null, image: null })
         this.props.liveScoreUpdateNewsAction(null, "newsImage")
 
         const { liveScoreNewsState } = this.props;
@@ -306,8 +306,8 @@ class LiveScoreAddNews extends Component {
             if (data.files[0].size > AppConstants.video_size) {
                 message.error(AppConstants.videoSize);
                 return;
-            }else{
-                this.setState({ videoTimeout: 2000, crossVideoIcon: false,video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
+            } else {
+                this.setState({ videoTimeout: 2000, crossVideoIcon: false, video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
                 setTimeout(() => {
                     this.setState({ videoTimeout: null, crossVideoIcon: true })
                 }, 2000);
@@ -453,12 +453,12 @@ class LiveScoreAddNews extends Component {
         this.props.liveScoreUpdateNewsAction(recipientName, recipientKey)
     }
 
-    deleteImage(){
+    deleteImage() {
         this.setState({ image: null, imageSelection: AppImages.circleImage, crossImageIcon: false })
         this.props.liveScoreUpdateNewsAction(null, "newsImage")
     }
 
-    deleteVideo(){
+    deleteVideo() {
         this.setState({ video: null, videoSelection: '', crossVideoIcon: false })
         this.props.liveScoreUpdateNewsAction(null, "newsVideo")
     }
@@ -466,7 +466,7 @@ class LiveScoreAddNews extends Component {
 
     ////////form content view
     contentView = (getFieldDecorator) => {
-        const { addEditNews,news_expire_date,expire_time,newsImage,newsVideo } = this.props.liveScoreNewsState;
+        const { addEditNews, news_expire_date, expire_time, newsImage, newsVideo } = this.props.liveScoreNewsState;
         let editData = addEditNews;
         let expiryDate = news_expire_date
         let expiryTime = expire_time
@@ -491,7 +491,7 @@ class LiveScoreAddNews extends Component {
                         />
                     )}
                 </Form.Item>
-                <InputWithHead heading={AppConstants.newsBody}
+                <InputWithHead required={"pb-0"} heading={AppConstants.newsBody}
                 // value={editData.body}
                 />
 
@@ -502,7 +502,7 @@ class LiveScoreAddNews extends Component {
                         rules: [{ required: true, message: ValidationConstants.newsValidation[1] }],
                     })(
                         <InputWithHead
-                            required={"required-field pb-0 pt-0"}
+                            required={"required-field pb-0 pt-3 "}
                             heading={AppConstants.author}
                             placeholder={AppConstants.enterAuthor}
                             name={'authorName'}
@@ -553,9 +553,9 @@ class LiveScoreAddNews extends Component {
                                         this.setState({ imageTimeout: null, crossImageIcon: true })
                                     }, 2000);
                                 }}
-                                onClick={(event)=> { 
+                                onClick={(event) => {
                                     event.target.value = null
-                               }}
+                                }}
                             />
 
                             <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
@@ -568,7 +568,7 @@ class LiveScoreAddNews extends Component {
                                             alt=""
                                             width="16"
                                             height="16"
-                                            onClick={() =>this.deleteImage()}
+                                            onClick={() => this.deleteImage()}
                                         />
                                     </span>
                                 }
@@ -598,9 +598,9 @@ class LiveScoreAddNews extends Component {
                                 //     this.setState({ videoTimeout: null, crossVideoIcon: true })
                                 // }, 2000);
                             }}
-                            onClick={(event)=> { 
+                            onClick={(event) => {
                                 event.target.value = null
-                           }}
+                            }}
                         />
                         <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
                             {(this.state.crossVideoIcon || newsVideo) &&
@@ -612,7 +612,7 @@ class LiveScoreAddNews extends Component {
                                         alt=""
                                         width="16"
                                         height="16"
-                                        onClick={() =>this.deleteVideo()}
+                                        onClick={() => this.deleteVideo()}
                                     />
                                 </span>
                             }
@@ -816,9 +816,9 @@ class LiveScoreAddNews extends Component {
                 let editData = liveScoreNewsState.addEditNews;
                 if (getLiveScoreCompetiton()) {
                     const { id } = JSON.parse(getLiveScoreCompetiton())
-                    this.props.liveScoreAddNewsAction({editData:editData,mediaArry:mediaArry,newsId:newsId,key:this.state.key,compId:id,newsImage:data.newsImage,newsVideo:data.newsVideo})
+                    this.props.liveScoreAddNewsAction({ editData: editData, mediaArry: mediaArry, newsId: newsId, key: this.state.key, compId: id, newsImage: data.newsImage, newsVideo: data.newsVideo })
                 } else {
-                    this.props.liveScoreAddNewsAction({editData:editData,mediaArry:mediaArry,newsId:newsId,key:this.state.key,compId:1,newsImage:data.newsImage,newsVideo:data.newsVideo})
+                    this.props.liveScoreAddNewsAction({ editData: editData, mediaArry: mediaArry, newsId: newsId, key: this.state.key, compId: 1, newsImage: data.newsImage, newsVideo: data.newsVideo })
                 }
                 this.setState({ getDataLoading: true })
             }

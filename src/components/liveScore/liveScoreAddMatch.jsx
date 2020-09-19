@@ -94,7 +94,7 @@ class LiveScoreAddMatch extends Component {
                 this.props.getliveScoreScorerList(id, 4)
                 // this.props.liveScoreRoundListAction(id)
                 this.props.liveScoreClubListAction(id)
-                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
+                this.props.umpireListAction({ refRoleId: JSON.stringify([15,20]) , entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
                 this.setState({ loadvalue: true, allDisabled: true })
             } else {
                 history.push('/')
@@ -111,7 +111,7 @@ class LiveScoreAddMatch extends Component {
                 this.props.getliveScoreScorerList(id, 4)
                 // this.props.liveScoreRoundListAction(id)
                 this.props.liveScoreClubListAction(id)
-                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
+                this.props.umpireListAction({ refRoleId: JSON.stringify([15,20]), entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
                 this.setState({ loadvalue: true, allDisabled: false })
             } else {
                 history.push('/')
@@ -243,6 +243,7 @@ class LiveScoreAddMatch extends Component {
     ModalView(getFieldDecorator) {
         return (
             <Modal
+                title={AppConstants.round}
                 visible={this.state.visible}
                 onOk={this.state.createRound.length == 0 ? this.handleSubmit : this.onCreateRound}
                 onCancel={this.handleCancel}
@@ -256,7 +257,7 @@ class LiveScoreAddMatch extends Component {
                         rules: [{ required: false, message: ValidationConstants.roundField }]
                     })(
                         <InputWithHead
-                            required={"required-field pb-0"}
+                            required={"required-field pb-0 pt-0"}
                             heading={AppConstants.round}
                             placeholder={AppConstants.round}
                             // value={this.state.createRound}

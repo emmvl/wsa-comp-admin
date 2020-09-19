@@ -164,6 +164,8 @@ class ImportTeamPlayerModal extends React.Component {
                         <div className="col-sm">
                             <div className="row">
                                 <input
+                                    style={{ cursor: "pointer" }}
+                                    className="pt-2 pb-2"
                                     type="file"
                                     id="quickPlayerImport"
                                     ref={(input) => { this.filesInput = input }}
