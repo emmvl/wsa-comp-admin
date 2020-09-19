@@ -94,7 +94,7 @@ class LiveScoreAddMatch extends Component {
                 this.props.getliveScoreScorerList(id, 4)
                 // this.props.liveScoreRoundListAction(id)
                 this.props.liveScoreClubListAction(id)
-                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
+                this.props.umpireListAction({ refRoleId: JSON.stringify([refRoleTypes('umpire')]) , entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
                 this.setState({ loadvalue: true, allDisabled: true })
             } else {
                 history.push('/')
@@ -111,7 +111,7 @@ class LiveScoreAddMatch extends Component {
                 this.props.getliveScoreScorerList(id, 4)
                 // this.props.liveScoreRoundListAction(id)
                 this.props.liveScoreClubListAction(id)
-                this.props.umpireListAction({ refRoleId: refRoleTypes('umpire'), entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
+                this.props.umpireListAction({ refRoleId: JSON.stringify([refRoleTypes('umpire')]), entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
                 this.setState({ loadvalue: true, allDisabled: false })
             } else {
                 history.push('/')
