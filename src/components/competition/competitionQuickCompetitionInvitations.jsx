@@ -272,7 +272,7 @@ class QuickCompetitionInvitations extends Component {
                                             e.target.value,
                                             'competitionName'
                                         )}
-                                value={this.state.divisionGradeOptionId}
+                                value={this.state.compNameOptionId}
                                 >                                   
                                     <Radio  value ={1} >{mergeCompetitionSelection.quickCompetition}</Radio> 
                                     <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>                          
