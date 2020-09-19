@@ -296,12 +296,12 @@ let userHttpApi = {
   umpireList(data) {
     let url = null
     if (data.userName) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=[${data.refRoleId}]&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
     } else if (data.offset != null) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=[${data.refRoleId}]&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}`
     }
     else {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=[${data.refRoleId}]&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}`
     }
 
     if (data.sortBy && data.sortOrder) {
