@@ -133,12 +133,14 @@ class LiveScorerPlayerImport extends Component {
 
     contentView = () => (
         <div className="content-view pt-4">
-            <span className="input-heading">{AppConstants.fileInput}</span>
+            <span className="user-contact-heading">{AppConstants.fileInput}</span>
 
             <div className="col-sm">
                 <div className="row">
                     <label>
                         <input
+                            style={{ cursor: "pointer" }}
+                            className="pt-2 pb-2"
                             type="file"
                             ref={(input) => {
                                 this.filesInput = input

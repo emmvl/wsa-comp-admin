@@ -1,23 +1,26 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Checkbox, Select } from 'antd';
+import { Layout, Breadcrumb, Button, Checkbox, Select, DatePicker } from 'antd';
 import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
+import moment from 'moment'
+import history from "../../util/history";
 
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-
-
+const { RangePicker } = DatePicker
 
 class CompetitionReplicate extends Component {
     constructor(props) {
         super(props);
         this.state = {
             year: "2018",
-            compName: "2018winter"
+            compName: "2018 Winter",
+            startDate: new Date(),
+            endDate: new Date()
         }
     }
 
@@ -54,6 +57,13 @@ class CompetitionReplicate extends Component {
 
         )
     }
+    onChangeStartDate = (startDate, endDate) => {
+        this.setState({
+            startDate: startDate,
+            endDate: endDate
+
+        })
+    }
 
     ////////form content view
     contentView = () => {
@@ -61,241 +71,143 @@ class CompetitionReplicate extends Component {
             <div className="content-view pt-5 ">
                 <span className='form-heading'>{AppConstants.replicateWhichCompetition}</span>
                 <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm" >
-                            <InputWithHead heading={AppConstants.year} />
-                            <Select
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                onChange={(year) => this.setState({ year })}
-                                value={this.state.year}
-                            >
-                                <Option value={"2018"}>{AppConstants.year2018}</Option>
-                            </Select>
+                    <div className="row pt-4" >
+                        <div className="col-sm-5" style={{ minWidth: 250 }} >
+                            <div className="row">
+                                <div className="col-sm-4" >
+                                    <InputWithHead heading={AppConstants.year} />
+                                </div>
+                                <div className="col-sm" >
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                                        onChange={(year) => this.setState({ year })}
+                                        value={this.state.year}
+                                    >
+                                        <Option value={"2018"}>{AppConstants.year2018}</Option>
+                                    </Select>
+                                </div>
+                            </div>
                         </div>
-                        <div className="col-sm" >
-                            <InputWithHead heading={"Competition Name"} />
-                            <Select
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                onChange={(compName) => this.setState({ compName })}
-                                value={this.state.compName}
-                            >
-                                <Option value={AppConstants.winter2018}></Option>
-                            </Select>
-
+                        <div className="col-sm"  >
+                            <div className="row">
+                                <div className="col-sm-4" style={{ minWidth: 150 }}>
+                                    <InputWithHead heading={"Competition Name"} />
+                                </div>
+                                <div className="col-sm" >
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(compName) => this.setState({ compName })}
+                                        value={this.state.compName}
+                                    >
+                                        <Option value={AppConstants.winter2018}>{AppConstants.winter2018}</Option>
+                                    </Select>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                 </div>
-                <InputWithHead heading={AppConstants.newCompetitionName} placeholder={AppConstants.newCompetitionName} />
+                <span className='form-heading pt-4'>{AppConstants.newCompetition}</span>
+                <div className="row pt-4" >
+                    <div className="col-sm" >
+                        <div className="row">
+                            <div className="col-sm-4" >
+                                <InputWithHead heading={AppConstants.year} />
+                            </div>
+                            <div className="col-sm" >
+                                <Select
+                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                    onChange={(year) => this.setState({ year })}
+                                    value={this.state.year}
+                                >
+                                    <Option value={"2018"}>{AppConstants.year2018}</Option>
+                                </Select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="row pt-4" >
+                    <div className="col-sm" >
+                        <div className="row">
+                            <div className="col-sm-4" >
+                                <InputWithHead heading={AppConstants.competition_name} />
+                            </div>
+                            <div className="col-sm" >
+                                <InputWithHead auto_complete="off" placeholder={AppConstants.competition_name} value={this.state.competitionName} onChange={(e) => this.setState({ competitionName: e.target.value })} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <div className="fluid-width" style={{ marginTop: 15 }}>
+                <div className="row pt-4" >
+                    <div className="col-sm" >
+                        <div className="row">
+                            <div className="col-sm-4" >
+                                <InputWithHead heading={AppConstants.competitionDates} />
+                            </div>
+                            <div className="col-sm" >
+                                <RangePicker
+                                    size='large'
+                                    onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
+                                    format={"DD-MM-YYYY"}
+                                    style={{ width: "100%", minWidth: 180 }}
+                                    value={[moment(this.state.startDate), moment(this.state.endDate)]}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span className='form-heading pt-4'>{AppConstants.replicateSetting}</span>
+
+                <div className="fluid-width" style={{ paddingLeft: "inherit" }}>
                     <div className="row"  >
-                        <div className="col-sm-5" >
-                            <InputWithHead heading={AppConstants.competitionLogo} />
-                        </div>
-                        <div className="col-sm-1"  >
-                            <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                        </div>
-                        <div className="col-sm-6" >
-                            <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                        </div>
+                        <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.competitionLogo}</Checkbox>
                     </div>
-
-                </div>
-                <div className="fluid-width" >
                     <div className="row"  >
-                        <div className="col-sm-5" >
-                            <InputWithHead heading={AppConstants.competitionDetails} />
-                        </div>
-                        <div className="col-sm-1"  >
-                            <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                        </div>
-                        <div className="col-sm-6" >
-                            <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                        </div>
+                        <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.competitionDetails}</Checkbox>
                     </div>
-
-                </div>
-                <div className="fluid-width" >
                     <div className="row"  >
-                        <div className="col-sm-5" >
-                            <InputWithHead heading={AppConstants.competitionType} />
-                        </div>
-                        <div className="col-sm-1"  >
-                            <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                        </div>
-                        <div className="col-sm-6" >
-                            <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                        </div>
+                        <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.competitionType}</Checkbox>
                     </div>
-
-                </div>
-                <div className="fluid-width" >
                     <div className="row"  >
-                        <div className="col-sm-5" >
-                            <InputWithHead heading={AppConstants.startDate} />
-                        </div>
-                        <div className="col-sm-1"  >
-                            <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                        </div>
-                        <div className="col-sm-6" >
-                            <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                        </div>
+                        <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.nonPlayingDates}</Checkbox>
                     </div>
-
-                </div>
-                <div className="fluid-width" >
                     <div className="row"  >
-                        <div className="col-sm-5" >
-                            <InputWithHead heading={AppConstants.nonPlayingDates} />
-                        </div>
-                        <div className="col-sm-1"  >
-                            <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                        </div>
-                        <div className="col-sm-6" >
-                            <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                        </div>
+                        <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.registration_type}</Checkbox>
                     </div>
-
-                </div>
-                <div className="fluid-width" >
                     <div className="row"  >
-                        <div className="col-sm-5" >
-                            <InputWithHead heading={AppConstants.registration_type} />
-                        </div>
-                        <div className="col-sm-1"  >
-                            <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                        </div>
-                        <div className="col-sm-6" >
-                            <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                        </div>
+                        <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.registrationFees}</Checkbox>
                     </div>
 
-                </div>
-                <div className="fluid-width" >
                     <div className="row"  >
-                        <div className="col-sm-5" >
-                            <InputWithHead heading={AppConstants.registrationFees} />
-                        </div>
-                        <div className="col-sm-1"  >
-                            <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                        </div>
-                        <div className="col-sm-6" >
-                            <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                        </div>
+                        <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.venues}</Checkbox>
                     </div>
-
-                </div>
-                <div className="fluid-width" >
                     <div className="row"  >
-                        <div className="col-sm-5" >
-                            <InputWithHead heading={AppConstants.fixtures} />
-                        </div>
-                        <div className="col-sm-1"  >
-                            <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                        </div>
-                        <div className="col-sm-6" >
-                            <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                        </div>
+                        <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.fixtures}</Checkbox>
                     </div>
-
+                    <div className="row"  >
+                        <Checkbox className="comp-replicate-single-checkbox" style={{ paddingLeft: 30 }} defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.divisions}</Checkbox>
+                    </div>
+                    <div className="row"  >
+                        <Checkbox className="comp-replicate-single-checkbox" style={{ paddingLeft: 30 }} defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.grades}</Checkbox>
+                    </div>
+                    <div className="row"  >
+                        <Checkbox className="comp-replicate-single-checkbox" style={{ paddingLeft: 30 }} defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.teams}</Checkbox>
+                    </div>
+                    <div className="row"  >
+                        <Checkbox className="comp-replicate-single-checkbox" style={{ paddingLeft: 30 }} defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.venuePreferences}</Checkbox>
+                    </div>
+                    <div className="row"  >
+                        <Checkbox className="comp-replicate-single-checkbox" style={{ paddingLeft: 30 }} defaultChecked={true} onChange={(e) => this.onChange(e)}>{AppConstants.timeSlot}</Checkbox>
+                    </div>
                 </div>
-
-                <div className="comp-replicate-bottom-view">
-
-                    <div className="fluid-width" >
-                        <div className="row"  >
-                            <div className="col-sm-5" >
-                                <InputWithHead heading={AppConstants.divisions} />
-                            </div>
-                            <div className="col-sm-1"  >
-                                <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                            </div>
-                            <div className="col-sm-6" >
-                                <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div className="fluid-width" >
-                        <div className="row"  >
-                            <div className="col-sm-5" >
-                                <InputWithHead heading={AppConstants.grades} />
-                            </div>
-                            <div className="col-sm-1"  >
-                                <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                            </div>
-                            <div className="col-sm-6" >
-                                <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div className="fluid-width" >
-                        <div className="row"  >
-                            <div className="col-sm-5" >
-                                <InputWithHead heading={AppConstants.Venues_Courts} />
-                            </div>
-                            <div className="col-sm-1"  >
-                                <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                            </div>
-                            <div className="col-sm-6" >
-                                <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div className="fluid-width" >
-                        <div className="row"  >
-                            <div className="col-sm-5" >
-                                <InputWithHead heading={AppConstants.competitionFormatGameTimes} />
-                            </div>
-                            <div className="col-sm-1"  >
-                                <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                            </div>
-                            <div className="col-sm-6" >
-                                <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div className="fluid-width" >
-                        <div className="row"  >
-                            <div className="col-sm-5" >
-                                <InputWithHead heading={AppConstants.draws} />
-                            </div>
-                            <div className="col-sm-1"  >
-                                <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                            </div>
-                            <div className="col-sm-6" >
-                                <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div className="fluid-width" >
-                        <div className="row"  >
-                            <div className="col-sm-5" >
-                                <InputWithHead heading={AppConstants.teams} />
-                            </div>
-                            <div className="col-sm-1"  >
-                                <Checkbox className="comp-replicate-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}></Checkbox>
-                            </div>
-                            <div className="col-sm-6" >
-                                <Button className='comp-replicate-primary-edit' type='primary'>{AppConstants.edit}</Button>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
             </div>
-
         )
     }
 
-
+    cancelCall = () => {
+        history.push('/competitionDashboard')
+    }
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
@@ -305,13 +217,12 @@ class CompetitionReplicate extends Component {
                     <div className="row" >
                         <div className="col-sm" >
                             <div className="reg-add-save-button">
-                                <Button type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button onClick={() => this.cancelCall()} className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                             </div>
                         </div>
                         <div className="col-sm" >
                             <div className="comp-buttons-view">
-                                <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button>
-                                <Button className="open-reg-button" type="primary">{AppConstants.review}</Button>
+                                <Button className="open-reg-button" className="publish-button" type="primary">{AppConstants.review}</Button>
                             </div>
                         </div>
                     </div>

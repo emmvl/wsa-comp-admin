@@ -39,7 +39,8 @@ function tableSort(key) {
 var _this = null
 function setMatchResult(record) {
     if (record.team1ResultId !== null) {
-        if (record.team1ResultId === 4 || record.team1ResultId === 6 || record.team1ResultId === 6) {
+        if (record.team1ResultId === 4 || record.team1ResultId === 6 || record.team2ResultId === 6 ||
+            record.team2ResultId === 4) {
             return "Forfeit";
         } else if (record.team1ResultId === 8 || record.team1ResultId === 9) {
             return "Abandoned";

@@ -447,64 +447,64 @@ class UserEditAffiliates extends Component {
           (this.state.loggedInuserOrgTypeRefId == 2 &&
             affiliate.organisationTypeRefId == 4)
         ) ? (
-          <div className="row mt-3">
-            <div className="col-sm">
-              <InputWithHead heading={AppConstants.affilatedTo} />
-            </div>
-            <div
-              className="col-sm"
-              style={{ display: "flex", alignItems: "center" }}
-            >
-              <InputWithHead
-                auto_complete="new-affilatedTo"
-                heading={affiliate.affiliatedToOrgName}
-                onChange={(e) =>
-                  this.onChangeSetValue(e, AppConstants.organisationTypeRefId)
-                }
-              />
-            </div>
-          </div>
-        ) : (
-          <div>
-            <InputWithHead
-              heading={AppConstants.affilatedTo}
-              required={"required-field"}
-            />
-            <Form.Item>
-              {getFieldDecorator("affiliatedToOrgId", {
-                rules: [
-                  {
-                    required: true,
-                    message: ValidationConstants.affiliateToRequired,
-                  },
-                ],
-              })(
-                <Select
-                  style={{ width: "100%", paddingRight: 1 }}
-                  setFieldsValue={affiliate.affiliatedToOrgId}
+            <div className="row mt-3">
+              <div className="col-sm">
+                <InputWithHead heading={AppConstants.affilatedTo} />
+              </div>
+              <div
+                className="col-sm"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <InputWithHead
+                  auto_complete="new-affilatedTo"
+                  heading={affiliate.affiliatedToOrgName}
                   onChange={(e) =>
-                    this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)
+                    this.onChangeSetValue(e, AppConstants.organisationTypeRefId)
                   }
-                >
-                  {(affiliateToData.affiliatedTo || [])
-                    .filter(
-                      (x) =>
-                        x.organisationtypeRefId == organisationTypeRefId - 1 &&
-                        x.organisationId != this.state.affiliateOrgId
-                    )
-                    .map((aff, index) => (
-                      <Option
-                        key={aff.organisationId}
-                        value={aff.organisationId}
-                      >
-                        {aff.name}
-                      </Option>
-                    ))}
-                </Select>
-              )}
-            </Form.Item>
-          </div>
-        )}
+                />
+              </div>
+            </div>
+          ) : (
+            <div>
+              <InputWithHead
+                heading={AppConstants.affilatedTo}
+                required={"required-field"}
+              />
+              <Form.Item>
+                {getFieldDecorator("affiliatedToOrgId", {
+                  rules: [
+                    {
+                      required: true,
+                      message: ValidationConstants.affiliateToRequired,
+                    },
+                  ],
+                })(
+                  <Select
+                    style={{ width: "100%", paddingRight: 1 }}
+                    setFieldsValue={affiliate.affiliatedToOrgId}
+                    onChange={(e) =>
+                      this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)
+                    }
+                  >
+                    {(affiliateToData.affiliatedTo || [])
+                      .filter(
+                        (x) =>
+                          x.organisationtypeRefId == organisationTypeRefId - 1 &&
+                          x.organisationId != this.state.affiliateOrgId
+                      )
+                      .map((aff, index) => (
+                        <Option
+                          key={aff.organisationId}
+                          value={aff.organisationId}
+                        >
+                          {aff.name}
+                        </Option>
+                      ))}
+                  </Select>
+                )}
+              </Form.Item>
+            </div>
+          )}
         <Form.Item>
           {getFieldDecorator("name", {
             rules: [
@@ -826,6 +826,8 @@ class UserEditAffiliates extends Component {
             <div className=" pl-5 pb-5 pt-4">
               <label className="pt-2">
                 <input
+                  style={{ cursor: "pointer" }}
+                  className="pt-2 pb-2"
                   type="file"
                   id="teamImport"
                   ref={(input) => {

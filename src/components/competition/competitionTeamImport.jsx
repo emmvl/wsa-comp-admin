@@ -147,6 +147,8 @@ class CompetitionTeamImport extends Component {
                 <div className="col-sm">
                     <div className="row">
                         <input
+                            style={{ cursor: "pointer" }}
+                            className="pt-2 pb-2"
                             type="file"
                             id="teamImport"
                             ref={(input) => { this.filesInput = input }}

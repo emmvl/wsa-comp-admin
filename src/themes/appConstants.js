@@ -369,7 +369,7 @@ const AppConstants = {
   gradeToggle: 'Grade Toggle',
   finalisedDraw: 'Finalised Draw',
   confirm: 'Confirm',
-  replicateWhichCompetition: 'Replicate which competition?',
+  replicateWhichCompetition: 'Replicate which competition',
   year2018: '2018',
   winter2018: '2018 Winter',
   newCompetitionName: 'New Competition Name',
@@ -380,7 +380,7 @@ const AppConstants = {
   grades: 'Grades',
   Venues_Courts: 'Venues & Courts',
   competitionFormatGameTimes: 'Competition Format & Game Times',
-  review: 'review',
+  review: 'Review',
   Step_3: 'Step 3',
   contactNumber: 'Contact Number',
   addAnotherCourt: 'Add another court',
@@ -1383,7 +1383,7 @@ const AppConstants = {
   poolName: "Pool Name",
   umpireReserve: "Umpire Reserve",
   points: "Points",
-  reasonForChange: 'Reason for change',
+  reasonForChange: 'Reason For Change',
   editIncident: 'Edit Incident',
   addCompetitionFormat: 'Add Competition Format',
   fileUploadPdf: "File Upload (File Type: PDF)",
@@ -1595,6 +1595,10 @@ const AppConstants = {
   exportAttendanceMessage: 'Attendance exported successfully',
   hardshipCode: "Hardship Code",
   addCode: "Add Code",
+  competitionDates: "Competition Dates",
+  replicateSetting: "Replicate Settings",
+  venuePreferences: "Venue Preferences",
+  competitionName:"Competition Name"	 
 };
 
 export default AppConstants;
