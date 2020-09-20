@@ -23,6 +23,7 @@ import supportSaga from "./supportSaga";
 import umpireDashboardSaga from "./umpireSaga/umpireDashboardSaga";
 import userSaga from "./userSaga";
 import liveScoreGameAttendanceSaga from './liveScoreSaga/liveScoreGameAttendanceSaga';
+import liveScorePlayerMinuteTrackingSaga from './liveScoreSaga/liveScorePlayerMinuteTrackingSaga';
 
 import {
   getRegistrationFormSaga,
@@ -179,6 +180,7 @@ export default function* rootSaga() {
     fork(liveScoreTeamSaga),
     fork(liveScoreUmpiresSaga),
     fork(liveScoreGameAttendanceSaga),
+    fork(liveScorePlayerMinuteTrackingSaga),
 
     // Shop
     fork(shopOrderStatusSaga),

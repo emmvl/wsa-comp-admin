@@ -1382,6 +1382,26 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
+    liveScorePlayerMinuteTrackingList(data) {
+        const { matchId, teamId, playerId } = data;
+        let url = `/pmt?matchId=${matchId}`;
+        if (teamId) {
+            url += `&teamId=${teamId}`;
+        }
+
+        if (playerId) {
+            url += `&playerId=${playerId}`;
+        }
+
+        return Method.dataGet(url, token);
+    },
+
+    liveScorePlayerMinuteRecord(data) {
+        const url = '/pmt/record';
+
+        return Method.dataPost(url, token, data);
+    },
+
 };
 
 const Method = {

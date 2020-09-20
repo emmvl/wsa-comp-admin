@@ -44,7 +44,6 @@ export function* liveScoreGameAttendanceList(action) {
         result: result.result.data,
         status: result.status,
       });
-      message.info(AppConstants.exportAttendanceMessage);
     } else {
       yield call(failSaga, result)
     }
