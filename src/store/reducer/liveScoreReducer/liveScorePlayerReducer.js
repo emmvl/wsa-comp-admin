@@ -24,6 +24,7 @@ const initialState = {
     playerDataArr: [],
     totalCount: null,
     searchResult: [],
+    currentPage: 1
 };
 
 function LiveScorePlayerState(state = initialState, action) {
@@ -133,11 +134,12 @@ function LiveScorePlayerState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onLoad: true, currentPage: 1 };
 
         case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_SUCCESS:
             const playerListResult = liveScoreModal.getPlayerListData(action.result.players);
             state.totalCount = action.result.page.totalCount;
+            state.currentPage = action.result.page.currentPage;
             return {
                 ...state,
                 onLoad: false,

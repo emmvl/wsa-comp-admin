@@ -196,6 +196,14 @@ function LiveScoreTeamState(state = initialState, action) {
                 },
             };
 
+        case ApiConstants.API_LIVE_SCORE_DELETE_TEAM_PLAYER_LOAD:
+            return {
+                ...state,
+                onLoad: true
+            }
+        case ApiConstants.API_LIVE_SCORE_DELETE_TEAM_PLAYER_SUCCESS:
+            return { ...state, onLoad: false };
+
         case ApiConstants.GET_AFFILATE_SUCCESS:
             return {
                 ...state,
