@@ -254,7 +254,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_REMOVE_BANNER_LOAD, liveScoreRemoveBannerSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_BULK_DOUBLE_HEADER_LOAD, liveScoreDoubleHeaderSaga)
   yield takeEvery(ApiConstants.API_LIVESCORE_COMPETITION_INITATE, liveScoreCompetitionSaga)
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD, liveScoreDeletePlayerSaga)
+  // yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD, liveScoreDeletePlayerSaga)
   yield takeEvery(ApiConstants.API_LIVESCORE_COMPETION_DELETE_INITIATE, liveScoreCompetitionDelete)
   yield takeEvery(ApiConstants.LiveScore_SETTING_VIEW_INITITAE, liveScoreSettingSaga)
   yield takeEvery(ApiConstants.LiveScore_SETTING_DATA_POST_INITATE, liveScorePostSaga)

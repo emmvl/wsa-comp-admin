@@ -88,7 +88,7 @@ const columns = [
                     </NavLink>
                 </Menu.Item>
                 <Menu.Item key="2" onClick={() => {
-                    _this.showDeleteConfirmPlayer(record.id);
+                    _this.showDeleteConfirmPlayer(record.id, record.competitionId);
 
                 }}>
 
@@ -138,12 +138,12 @@ class LiveScoreTeamView extends Component {
     }
 
     // Delete Player
-    deletePlayer = (playerId) => {
-        this.props.liveScoreDeletePlayerAction(playerId)
+    deletePlayer = (playerId, competitionId) => {
+        this.props.liveScoreDeletePlayerAction(playerId, competitionId, 0, "team")
 
     }
 
-    showDeleteConfirmPlayer = (playerId) => {
+    showDeleteConfirmPlayer = (playerId, competitionId) => {
         let this_ = this
         confirm({
             title: 'Are you sure you want to delete this player?',
@@ -151,7 +151,7 @@ class LiveScoreTeamView extends Component {
             okType: 'danger',
             cancelText: 'No',
             onOk() {
-                this_.deletePlayer(playerId)
+                this_.deletePlayer(playerId, competitionId)
 
             },
             onCancel() {
