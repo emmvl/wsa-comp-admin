@@ -779,9 +779,13 @@ class CompetitionFormat extends Component {
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
                             value={data.matchTypeRefId}>
-                            {(appState.matchTypes || []).map((item, index) => (
-                                <Option key={item.id} value={item.id}>{item.description}</Option>
-                            ))}
+                            {(appState.matchTypes || []).map((item, index) => {
+                                if (item.name !== "SINGLE") {
+                                    return (
+                                        <Option key={item.id} value={item.id}>{item.description}</Option>
+                                    )
+                                }
+                            })}
                         </Select>
                     )}
                 </Form.Item>
