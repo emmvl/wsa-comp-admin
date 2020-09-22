@@ -314,7 +314,7 @@ class LiveScoreAddScorer extends Component {
                                     auto_complete='new-contact'
                                     // type='number'
                                     required={"required-field pb-0 pt-0"}
-                                    heading={AppConstants.contactNO}
+                                    heading={AppConstants.contact_No}
                                     placeholder={AppConstants.enterContactNo}
                                     onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
                                     maxLength={10} />

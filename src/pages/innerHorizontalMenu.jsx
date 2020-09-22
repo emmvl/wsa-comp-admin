@@ -403,16 +403,17 @@ class InnerHorizontalMenu extends React.Component {
                                             <span>Teams</span>
                                         </NavLink>
                                     </Menu.Item>
-                                    <Menu.Item key="23">
-                                        <NavLink to="/LiveScoreCoaches">
-                                            <span>Coaches</span>
-                                        </NavLink>
-                                    </Menu.Item>
                                     <Menu.Item key="4">
                                         <NavLink to="/liveScoreManagerList">
                                             <span>Managers</span>
                                         </NavLink>
                                     </Menu.Item>
+                                    <Menu.Item key="23">
+                                        <NavLink to="/LiveScoreCoaches">
+                                            <span>Coaches</span>
+                                        </NavLink>
+                                    </Menu.Item>
+
                                     <Menu.Item key="5">
                                         <NavLink to="/liveScorerList">
                                             <span>Scorers</span>

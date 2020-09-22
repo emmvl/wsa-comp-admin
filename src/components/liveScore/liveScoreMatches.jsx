@@ -83,7 +83,7 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: 'Match Id',
+        title: 'Match ID',
         dataIndex: 'id',
         key: 'id',
         sorter: true,

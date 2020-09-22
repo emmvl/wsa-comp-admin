@@ -175,7 +175,7 @@ const ValidationConstants = {
     incidentName: "Incident name is required.",
     divisionAndTimeslot: "Please select Division and Timeslot",
     pleaseSelectAffiliate: "Please select one affiliate.",
-    incidentPlayer: "Player Name is required",
+    incidentPlayer: "Player name is required",
     point: "Point is required.",
     reasonChange: "Reason is required.",
     userName: 'User name is required.',

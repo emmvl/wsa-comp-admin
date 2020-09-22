@@ -46,7 +46,7 @@ function tableSort(key) {
 const columns1 = [
 
     {
-        title: 'Match Id',
+        title: 'Match ID',
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,

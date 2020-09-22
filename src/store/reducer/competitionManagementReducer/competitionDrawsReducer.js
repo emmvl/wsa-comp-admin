@@ -801,33 +801,33 @@ function CompetitionDraws(state = initialState, action) {
       return { ...state, onLoad: true, error: null, spinLoad: true, };
 
     case ApiConstants.API_GET_COMPETITION_DRAWS_SUCCESS:
-      try{
-          let resultData;
-          if (action.competitionId == "-1" || action.dateRangeCheck) {
-            let allCompetiitonDraws = action.result;
-            resultData = allcompetitionDrawsData(allCompetiitonDraws)
-          }
-          else {
-            let drawsResultData = action.result;
-            resultData = roundstructureData(drawsResultData)
-          }
+      try {
+        let resultData;
+        if (action.competitionId == "-1" || action.dateRangeCheck) {
+          let allCompetiitonDraws = action.result;
+          resultData = allcompetitionDrawsData(allCompetiitonDraws)
+        }
+        else {
+          let drawsResultData = action.result;
+          resultData = roundstructureData(drawsResultData)
+        }
 
-          state.publishStatus = action.result.drawsPublish
-          state.isTeamInDraw = action.result.isTeamNotInDraws
-          let orgData = JSON.parse(JSON.stringify(action.result.organisations))
-          return {
-            ...state,
-            getRoundsDrawsdata: action.competitionId == "-1" || action.dateRangeCheck ? [resultData.data] : resultData.roundsdata,
-            drawOrganisations: orgData,
-            onLoad: false,
-            error: null,
-            spinLoad: false
-          };
-      }catch(ex){
-        console.log("exception:",ex)
+        state.publishStatus = action.result.drawsPublish
+        state.isTeamInDraw = action.result.isTeamNotInDraws
+        let orgData = JSON.parse(JSON.stringify(action.result.organisations))
+        return {
+          ...state,
+          getRoundsDrawsdata: action.competitionId == "-1" || action.dateRangeCheck ? [resultData.data] : resultData.roundsdata,
+          drawOrganisations: orgData,
+          onLoad: false,
+          error: null,
+          spinLoad: false
+        };
+      } catch (ex) {
+        console.log("exception:", ex)
       }
-      
-     
+
+
 
     /////get rounds in the competition draws
     case ApiConstants.API_GET_COMPETITION_DRAWS_ROUNDS_LOAD:
@@ -1002,7 +1002,7 @@ function CompetitionDraws(state = initialState, action) {
       //   // state.getRoundsDrawsdata[0] = checkDrawsArray
       // }
       let resultDataNew
-      if (action.competitionId == "-1") {
+      if (action.competitionId == "-1" || action.dateRangeCheck) {
         let allCompetiitonDraws = action.getResult;
         resultDataNew = allcompetitionDrawsData(allCompetiitonDraws)
       }
@@ -1010,13 +1010,12 @@ function CompetitionDraws(state = initialState, action) {
         let drawsResultData = action.getResult;
         resultDataNew = roundstructureData(drawsResultData)
       }
-
       state.publishStatus = action.getResult.drawsPublish
       state.isTeamInDraw = action.getResult.isTeamNotInDraws
       let orgDataNew = JSON.parse(JSON.stringify(action.getResult.organisations))
       return {
         ...state,
-        getRoundsDrawsdata: action.competitionId == "-1" ? [resultDataNew.data] : resultDataNew.roundsdata,
+        getRoundsDrawsdata: action.competitionId == "-1" || action.dateRangeCheck ? [resultDataNew.data] : resultDataNew.roundsdata,
         drawOrganisations: orgDataNew,
         onLoad: false,
         error: null,

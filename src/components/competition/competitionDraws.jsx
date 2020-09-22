@@ -404,7 +404,7 @@ class CompetitionDraws extends Component {
     drawData,
     round_Id
   ) => {
-    let updatedKey = this.state.firstTimeCompId === "-1" ? "all" : "add"
+    let updatedKey = this.state.firstTimeCompId === "-1" || this.state.dateRangeCheck ? "all" : "add"
     let postData = null;
     if (sourceObejct.drawsId == null) {
       let columnObject = this.getColumnData(sourceIndexArray, drawData);
@@ -441,7 +441,8 @@ class CompetitionDraws extends Component {
       targetIndexArray,
       updatedKey,
       round_Id,
-      apiData
+      apiData,
+      this.state.dateRangeCheck
     );
 
     this.setState({ updateLoad: true });
@@ -456,7 +457,7 @@ class CompetitionDraws extends Component {
     drawsData,
     round_Id
   ) => {
-    let key = this.state.firstTimeCompId === "-1" ? "all" : "add"
+    let key = this.state.firstTimeCompId === "-1" || this.state.dateRangeCheck ? "all" : "add"
     let customSourceObject = {
       // drawsId: sourceObejct.drawsId,
       drawsId: targetObject.drawsId,
@@ -1307,7 +1308,7 @@ class CompetitionDraws extends Component {
                           </span>
                         </div>
                         {this.draggableView(dateItem)}
-                        {this.state.firstTimeCompId == "-1" ?
+                        {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
                           <div>
                             <AllLegendComponent
                               allLegendArray={dateItem.legendsArray}

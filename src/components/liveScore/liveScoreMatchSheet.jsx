@@ -307,7 +307,7 @@ class LiveScoreMatchSheet extends Component {
             sorter: (a, b) => tableSort(a, b, "name"),
         },
         {
-            title: AppConstants.createdAt,
+            title: "Created At",
             dataIndex: 'createdAt',
             key: 'createdAt',
             sorter: (a, b) => tableSort(a, b, "createdAt"),
