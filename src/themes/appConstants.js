@@ -1592,7 +1592,6 @@ const AppConstants = {
   affiliateOrganisations: 'Affiliate Organisations',
   takenCourtforTraining: "Have you taken the court for training, grading or a compitition game",
   exportAttendance: 'Export Attendance',
-  noAttendanceData: 'There is no attendance data to export',
   exportAttendanceMessage: 'Attendance exported successfully',
   hardshipCode: "Hardship Code",
   addCode: "Add Code",
