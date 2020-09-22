@@ -49,7 +49,7 @@ class UserProfileEdit extends Component {
                 dateOfBirth: "",street1:"",street2:"",suburb:"",stateRefId: 1,postalCode: "",statusRefId: 0,
                 emergencyContactName: "",emergencyContactNumber: "", existingMedicalCondition: "",regularMedication: "",
                 disabilityCareNumber: '', isDisability: 0,
-                disabilityTypeRefId: 0,  countryRefId: null, nationalityRefId: null,languages: "",childrenCheckNumber: "",childrenCheckExpiryDate: ""
+                disabilityTypeRefId: 0,  countryRefId: null, childrenCheckNumber: "",childrenCheckExpiryDate: ""
             },
             titleLabel:"",
             section: "",
@@ -714,7 +714,7 @@ class UserProfileEdit extends Component {
                                 </Select>
                             </div>
                         </div>    
-                        <div className="row" >
+                        {/* <div className="row" >
                             <div className="col-sm" >
                                 <div style={{paddingTop: "11px", paddingBottom: "10px"}}>
                                     <InputWithHead heading={AppConstants.nationalityReference} />
@@ -741,8 +741,9 @@ class UserProfileEdit extends Component {
                                     name={'languages'}
                                 />
                             </div>
-                        </div>
-                    </div>}
+                        </div> */}
+                    </div>
+                    }
                     <div className="row">
                         <div className="col-sm" >
                             <InputWithHead
