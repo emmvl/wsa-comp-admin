@@ -193,11 +193,13 @@ class LiveScoreMatchDetails extends Component {
             liveStreamLink: null,
             addPlayerModal: '',
             teamAttendance: false,
+            loadAttendanceData: true,
             gameAttendanceList: [],
             team1Attendance: [],
             team2Attendance: [],
             borrowedTeam1Players: [],
             borrowedTeam2Players: [],
+            loadTrackingData: true,
             minutesTrackingData: [],
         };
         this.umpireScore_View = this.umpireScore_View.bind(this);
@@ -245,15 +247,27 @@ class LiveScoreMatchDetails extends Component {
 
         if (this.props.liveScoreGameAttendanceState !== nextProps.liveScoreGameAttendanceState) {
             const gameAttendanceList = this.props.liveScoreGameAttendanceState.gameAttendanceList;
-            if (gameAttendanceList) {
+            if (gameAttendanceList && this.state.loadAttendanceData) {
                 this.setState({ gameAttendanceList });
+                this.setState({ loadAttendanceData: false });
             }
         }
 
-        if (this.props.liveScorePlayerMinuteTrackingState !== nextProps.liveScorePlayerMinuteTrackingState) {
-            const trackingList = this.props.liveScorePlayerMinuteTrackingState.trackingList;
-            if (trackingList) {
+        if (this.props.liveScorePlayerMinuteTrackingState.trackingList
+          !== nextProps.liveScorePlayerMinuteTrackingState.trackingList) {
+            const trackingList = this.props.liveScorePlayerMinuteTrackingState.trackingList || [];
+            if (trackingList.length > 0 && this.state.loadTrackingData) {
                 this.setState({ minutesTrackingData: trackingList });
+                this.setState({ loadTrackingData: false });
+            }
+        }
+
+
+        if (this.props.liveScorePlayerMinuteTrackingState.recordLoad
+          !== nextProps.liveScorePlayerMinuteTrackingState.recordLoad) {
+            if (!this.props.liveScorePlayerMinuteTrackingState.recordLoad) {
+                this.setState({loadTrackingData: true});
+                this.props.liveScorePlayerMinuteTrackingListAction(this.state.matchId);
             }
         }
     }
@@ -321,9 +335,11 @@ class LiveScoreMatchDetails extends Component {
     };
 
     setMinuteTrackingData = (teamId, playerId, period, value) => {
-        const trackingData = this.state.minutesTrackingData;
-        const trackingDataIndex = this.state.minutesTrackingData
-          .findIndex((data) => data.playerId === playerId && data.period === period);
+        const trackingData = this.state.minutesTrackingData || [];
+
+        const trackingDataIndex = trackingData.length > 0
+          ? trackingData.findIndex((data) => data.playerId === playerId && data.period === period)
+          : -1;
         if (trackingDataIndex > -1) {
             trackingData[trackingDataIndex] = {
                 ...trackingData[trackingDataIndex],
@@ -1301,7 +1317,12 @@ class LiveScoreMatchDetails extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-
+                <Loader
+                  visible={
+                      this.props.liveScorePlayerMinuteTrackingState.onLoad
+                      || this.props.liveScorePlayerMinuteTrackingState.recordLoad
+                  }
+                />
                 {
                     this.state.umpireKey ?
                         <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />

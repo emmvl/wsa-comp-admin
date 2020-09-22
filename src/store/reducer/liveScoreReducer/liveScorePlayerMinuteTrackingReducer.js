@@ -36,7 +36,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
       return {
         ...state,
         onLoad: false,
-        trackingList: action.result,
+        trackingList: action.result.data,
         status: action.status
       };
 
