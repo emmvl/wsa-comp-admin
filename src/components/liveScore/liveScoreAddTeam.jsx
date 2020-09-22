@@ -75,21 +75,23 @@ class LiveScoreAddTeam extends Component {
 
     componentDidMount() {
 
-        if (this.state.isEdit == true) {
+        if (getLiveScoreCompetiton()) {
+            if (this.state.isEdit == true) {
 
-            this.props.liveScoreGetTeamDataAction(this.state.teamId)
-            this.setState({ load: true })
+                this.props.liveScoreGetTeamDataAction(this.state.teamId)
+                this.setState({ load: true })
+            }
+            else {
+                this.props.liveScoreAddTeamform({ key: 'addTeam' })
+            }
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ loaclCompetitionID: id })
+            this.props.liveScoreGetDivision(id)
+            this.props.liveScoreGetAffiliate({ id, name: '' })
+            this.props.liveScoreManagerListAction(5, 1, id)
+        } else {
+            history.push('/liveScoreCompetitions')
         }
-        else {
-            this.props.liveScoreAddTeamform({ key: 'addTeam' })
-        }
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ loaclCompetitionID: id })
-
-        // this.props.getliveScoreDivisions(1)
-        this.props.liveScoreGetDivision(id)
-        this.props.liveScoreGetAffiliate({ id, name: '' })
-        this.props.liveScoreManagerListAction(5, 1, id)
     }
     componentDidUpdate(nextProps) {
         let { teamManagerData } = this.props.liveScoreTeamState

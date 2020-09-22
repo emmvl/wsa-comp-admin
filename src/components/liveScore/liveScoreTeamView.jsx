@@ -129,7 +129,11 @@ class LiveScoreTeamView extends Component {
         let teamId = this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null
 
         let teamIds = this.state.teamId ? this.state.teamId : teamId
-        this.props.getTeamViewPlayerList(teamIds)
+        if (teamIds) {
+            this.props.getTeamViewPlayerList(teamIds)
+        } else {
+            history.push("/liveScoreCompetitions")
+        }
     }
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreTeamState != this.props.liveScoreTeamState) {

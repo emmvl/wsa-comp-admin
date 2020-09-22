@@ -758,14 +758,14 @@ const columnsIncident = [
     title: 'Date',
     dataIndex: 'incidentTime',
     key: 'incidentTime',
-    sorter: true,
+    sorter: (a, b) => a.incidentTime.localeCompare(b.incidentTime),
     render: (incidentTime) => <span>{liveScore_MatchFormate(incidentTime)}</span>
   },
   {
     title: 'Match ID',
     dataIndex: 'matchId',
     key: 'matchId',
-    sorter: true,
+    sorter:true,
   },
   {
     title: 'Player ID',
@@ -778,21 +778,21 @@ const columnsIncident = [
     title: 'First Name',
     dataIndex: 'firstName',
     key: 'Incident Players First Name',
-    sorter: true,
+    sorter: (a, b) => a.firstName.localeCompare(b.firstName),
 
   },
   {
     title: 'Last Name',
     dataIndex: 'lastName',
     key: 'Incident Players Last Name',
-    sorter: true,
+    sorter: (a, b) => a.lastName.localeCompare(b.lastName),
 
   },
   {
     title: 'Team',
     dataIndex: 'teamName',
     key: 'teamName',
-    sorter: true,
+    sorter: (a, b) => a.teamName.localeCompare(b.teamName),
     render: (teamName, record) => {
 
       return (
@@ -818,7 +818,7 @@ const columnsIncident = [
     title: 'Type',
     dataIndex: 'incidentTypeName',
     key: 'incidentTypeName',
-    sorter: true,
+    sorter: (a, b) => a.incidentTypeName.localeCompare(b.incidentTypeName),
 
   },
 ];
@@ -1367,7 +1367,8 @@ class UserModulePersonalDetail extends Component {
                 page,
                 this.state.userId,
                 this.state.competition,
-                "player"
+                "player",
+                this.state.yearRefId
               )
             }
           />

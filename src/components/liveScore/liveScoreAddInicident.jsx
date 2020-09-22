@@ -60,23 +60,26 @@ class LiveScoreAddIncident extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        const { incidentData } = this.props.liveScoreIncidentState
-        this.props.liveScoreIncidentTypeAction();
-        if (id !== null) {
-            this.props.getliveScoreTeams(id);
-            // this.props.liveScorePlayerListAction(id);
-        }
-
-        if (this.state.isEdit === true) {
-            this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isEdit")
-            this.setInitalFiledValue()
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            const { incidentData } = this.props.liveScoreIncidentState
+            this.props.liveScoreIncidentTypeAction();
             if (id !== null) {
+                this.props.getliveScoreTeams(id);
+            }
 
-                this.props.liveScorePlayerListAction(id, incidentData.teamId);
+            if (this.state.isEdit === true) {
+                this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isEdit")
+                this.setInitalFiledValue()
+                if (id !== null) {
+
+                    this.props.liveScorePlayerListAction(id, incidentData.teamId);
+                }
+            } else {
+                this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isAdd")
             }
         } else {
-            this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isAdd")
+            history.push('/liveScoreCompetitions')
         }
     }
 
@@ -202,6 +205,7 @@ class LiveScoreAddIncident extends Component {
 
     //// Form View
     contentView = (getFieldDecorator) => {
+
         const { incidentData, teamResult, playerResult, incidentTypeResult, playerIds, team1_Name, team2_Name, team1Id, team2Id } = this.props.liveScoreIncidentState
         let team_1 = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.name : null : null
         let team1_Id = this.state.matchDetails ? isArrayNotEmpty(this.state.matchDetails.match) ? this.state.matchDetails.match[0].team1.id : null : null
@@ -318,7 +322,7 @@ class LiveScoreAddIncident extends Component {
                             placeholder={AppConstants.selectPlayer}
                             style={{ width: "100%", }}
                             onChange={(playerId) => this.props.liveScoreUpdateIncidentData(playerId, "playerId")}
-                        // value={playerIds}
+                            value={playerIds}
                         >
                             {isArrayNotEmpty(playerResult) && playerResult.map((item) => (
                                 < Option value={item.playerId} > {item.firstName + " " + item.lastName}</Option>
@@ -516,8 +520,10 @@ class LiveScoreAddIncident extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 const { id } = JSON.parse(getLiveScoreCompetiton());
-                let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("YYYY-MMM-DD") : moment(incidentData.date).format("YYYY-MMM-DD");
-                let time = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : moment(incidentData.time).format("HH:mm");
+                // let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("YYYY-MMM-DD") : moment(incidentData.date).format("YYYY-MMM-DD");
+                let date = incidentData.date ? moment(incidentData.date).format("YYYY-MMM-DD") : this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("YYYY-MMM-DD") : null
+                let time = incidentData.date ? moment(incidentData.time).format("HH:mm") : this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
+                // let time = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : moment(incidentData.time).format("HH:mm");
                 let startDateTime = moment(date + " " + time);
                 let formatDateTime = new Date(startDateTime).toISOString();
                 let mediaArry;

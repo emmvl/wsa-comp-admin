@@ -1354,7 +1354,7 @@ const AppConstants = {
   dragImageToUpload: "Drag image to upload",
   addType: "Add type",
   coachSearch: 'Coach Search',
-  incident: "Incident",
+  incident: "Incidents",
   selectIncident: "Select Incident",
   _spectator: "Spectator",
   discipline: "Discipline",

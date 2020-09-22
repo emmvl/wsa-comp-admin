@@ -204,25 +204,33 @@ class LiveScoreMatchDetails extends Component {
         this.props.getLiveScoreGamePositionsList()
 
         if (this.state.umpireKey == 'umpire') {
-            // const { lineupSelectionEnabled, status, id } = JSON.parse(getUmpireCompetitonData())
-            isLineUpEnable = getUmpireCompetitonData().lineupSelectionEnabled
-            match_status = getUmpireCompetitonData().status
-
-            this.setState({ competitionId: getUmpireCompetitonData().id })
+            if (getUmpireCompetitonData()) {
+                isLineUpEnable = getUmpireCompetitonData().lineupSelectionEnabled
+                match_status = getUmpireCompetitonData().status
+                this.setState({ competitionId: getUmpireCompetitonData().id })
+            } else {
+                history.push("/liveScoreCompetitions")
+            }
         } else {
-            const { lineupSelectionEnabled, status, id } = JSON.parse(getLiveScoreCompetiton())
-            isLineUpEnable = lineupSelectionEnabled
-            match_status = status
-            this.setState({ competitionId: id })
+            if (getLiveScoreCompetiton()) {
+                const { lineupSelectionEnabled, status, id } = JSON.parse(getLiveScoreCompetiton())
+                isLineUpEnable = lineupSelectionEnabled
+                match_status = status
+                this.setState({ competitionId: id })
+            } else {
+                history.push("/liveScoreCompetitions")
+            }
 
         }
 
-        if (isLineUpEnable == 1) {
-            this.setState({ isLineUp: 1 })
-            this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
-        } else {
-            this.setState({ isLineUp: 0 })
-            this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
+        if (getUmpireCompetitonData() || getLiveScoreCompetiton()) {
+            if (isLineUpEnable == 1) {
+                this.setState({ isLineUp: 1 })
+                this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
+            } else {
+                this.setState({ isLineUp: 0 })
+                this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
+            }
         }
     }
 
@@ -244,15 +252,15 @@ class LiveScoreMatchDetails extends Component {
 
         if (player) {
             attendance = Array(4).fill(null).map((_, index) => ({
-              teamId: player?.teamId,
-              matchId: this.state.matchId,
-              playerId: player?.playerId,
-              positionId: player?.lineup?.positionId,
-              isBorrowed: borrowed,
-              isPlaying: true,
-              verifiedBy: null,
-              mnbPushed: false,
-              period: index + 1,
+                teamId: player ?.teamId,
+                matchId: this.state.matchId,
+                playerId: player ?.playerId,
+                positionId: player ?.lineup ?.positionId,
+                isBorrowed: borrowed,
+                isPlaying: true,
+                verifiedBy: null,
+                mnbPushed: false,
+                period: index + 1,
             }));
         }
 
@@ -262,7 +270,7 @@ class LiveScoreMatchDetails extends Component {
     setAttendance = (team, playerId, period, field, value) => {
         const teamAttendance = team === 'team1' ? this.state.team1Attendance : this.state.team2Attendance;
         const attendanceIndex = teamAttendance
-          .findIndex((att) => att.playerId === playerId && att.period === period);
+            .findIndex((att) => att.playerId === playerId && att.period === period);
         teamAttendance[attendanceIndex] = {
             ...teamAttendance[attendanceIndex],
             [field]: value,
@@ -293,7 +301,7 @@ class LiveScoreMatchDetails extends Component {
 
     exportAttendance = (team, teamId) => {
         const teamAttendance = team === 'team1' ? this.state.team1Attendance : this.state.team2Attendance;
-        const filteredAttendance = teamAttendance.filter((att) => !!att?.positionId);
+        const filteredAttendance = teamAttendance.filter((att) => !!att ?.positionId);
 
         if (filteredAttendance.length === 0) {
             message.error(AppConstants.noAttendanceData);
@@ -302,23 +310,23 @@ class LiveScoreMatchDetails extends Component {
         }
 
         this.props.liveScoreExportGameAttendanceAction(
-          this.state.matchId,
-          teamId,
-          filteredAttendance,
+            this.state.matchId,
+            teamId,
+            filteredAttendance,
         );
     };
 
     playingView(record, value, index, key) {
         this.props.changePlayerLineUpAction(
-          {
-              record: record,
-              value: value,
-              matchId: this.state.matchId,
-              competitionId: this.state.competitionId,
-              teamId: record.teamId,
-              index: index,
-              key: key
-          })
+            {
+                record: record,
+                value: value,
+                matchId: this.state.matchId,
+                competitionId: this.state.competitionId,
+                teamId: record.teamId,
+                index: index,
+                key: key
+            })
     }
 
     onChange = e => {
@@ -349,7 +357,7 @@ class LiveScoreMatchDetails extends Component {
     };
 
     // method to show modal view after click
-    showModal = (livestreamURL,) => {
+    showModal = (livestreamURL, ) => {
         console.log(livestreamURL);
         this.setState({
             visible: true,
@@ -531,11 +539,18 @@ class LiveScoreMatchDetails extends Component {
 
         let scoreType = '';
         if (this.state.umpireKey === 'umpire') {
-            // const { scoringType } = JSON.parse(getUmpireCompetitonData())
-            scoreType = getUmpireCompetitonData().scoringType;
+            if (getUmpireCompetitonData()) {
+                scoreType = getUmpireCompetitonData().scoringType;
+            } else {
+                history.push("/liveScoreCompetitions")
+            }
         } else {
-            const { scoringType } = JSON.parse(getLiveScoreCompetiton())
-            scoreType = scoringType;
+            if (getLiveScoreCompetiton()) {
+                const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+                scoreType = scoringType;
+            } else {
+                history.push("/liveScoreCompetitions")
+            }
         }
 
         return (
@@ -604,293 +619,298 @@ class LiveScoreMatchDetails extends Component {
     };
 
     teamPlayersStatus = (data, team) => {
-        const competition = JSON.parse(getLiveScoreCompetiton());
+        if (getLiveScoreCompetiton()) {
+            const competition = JSON.parse(getLiveScoreCompetiton());
+            const columns = [
+                {
+                    title: 'Name',
+                    dataIndex: 'name',
+                    key: 'name',
+                    width: 120,
+                },
+                {
+                    title: 'Period 1',
+                    children: [
+                        {
+                            title: 'Position',
+                            key: 'position1',
+                            width: 150,
+                            render: (p, row) => (
+                                <Select
+                                    className="year-select reg-filter-select1 table-cell-select"
+                                    size="small"
+                                    style={{ width: '100%' }}
+                                    defaultValue={row ?.lineup ?.positionId}
+                                    onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
+                                >
+                                    {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                        <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                    ))}
+                                </Select>
+                            )
+                        },
+                        {
+                            title: 'Goals',
+                            key: 'goals1',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: 'Miss',
+                            key: 'miss1',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: 'P Miss',
+                            key: 'pmiss1',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: competition ?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                            key: 'sec1',
+                            width: 60,
+                            render: (p, row) =>
+                                competition ?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                    <Input size="small" type="number" />
+                                ) : (
+                                        <Checkbox
+                                            onChange={
+                                                (e) =>
+                                                    this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
+                                            }
+                                        />
+                                    )
+                        },
+                    ],
+                },
+                {
+                    title: 'Period 2',
+                    children: [
+                        {
+                            title: 'Position',
+                            key: 'position2',
+                            width: 150,
+                            render: (p, row) => (
+                                <Select
+                                    className="year-select reg-filter-select1 table-cell-select"
+                                    size="small"
+                                    style={{ width: '100%' }}
+                                    defaultValue={row ?.lineup ?.positionId}
+                                    onChange={
+                                        (value) =>
+                                            this.setAttendance(team, row.playerId, 2, 'positionId', value)
+                                    }
+                                >
+                                    {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                        <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
+                                    ))}
+                                </Select>
+                            )
+                        },
+                        {
+                            title: 'Goals',
+                            key: 'goals2',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: 'Miss',
+                            key: 'miss2',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: 'P Miss',
+                            key: 'pmiss2',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: competition ?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                            key: 'sec2',
+                            width: 60,
+                            render: (p, row) =>
+                                competition ?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                    <Input
+                                        size="small"
+                                        type="number"
+                                    />
+                                ) : (
+                                        <Checkbox
+                                            onChange={
+                                                (e) =>
+                                                    this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
+                                            }
+                                        />
+                                    )
+                        },
+                    ],
+                },
+                {
+                    title: 'Period 3',
+                    children: [
+                        {
+                            title: 'Position',
+                            key: 'position3',
+                            width: 150,
+                            render: (p, row) => (
+                                <Select
+                                    className="year-select reg-filter-select1 table-cell-select"
+                                    size="small"
+                                    style={{ width: '100%' }}
+                                    defaultValue={row ?.lineup ?.positionId}
+                                    onChange={
+                                        (value) =>
+                                            this.setAttendance(team, row.playerId, 3, 'positionId', value)
+                                    }
+                                >
+                                    {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                        <Option key={`position3_${position.id}`} value={position.id}>{position.name}</Option>
+                                    ))}
+                                </Select>
+                            )
+                        },
+                        {
+                            title: 'Goals',
+                            key: 'goals3',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: 'Miss',
+                            key: 'miss3',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: 'P Miss',
+                            key: 'pmiss3',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: competition ?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                            key: 'sec3',
+                            width: 60,
+                            render: (p, row) =>
+                                competition ?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                    <Input size="small" type="number" />
+                                ) : (
+                                        <Checkbox
+                                            onChange={
+                                                (e) =>
+                                                    this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
+                                            }
+                                        />
+                                    )
+                        },
+                    ],
+                },
+                {
+                    title: 'Period 4',
+                    children: [
+                        {
+                            title: 'Position',
+                            key: 'position4',
+                            width: 150,
+                            render: (p, row) => (
+                                <Select
+                                    className="year-select reg-filter-select1 table-cell-select"
+                                    size="small"
+                                    style={{ width: '100%' }}
+                                    defaultValue={row ?.lineup ?.positionId}
+                                    onChange={
+                                        (value) =>
+                                            this.setAttendance(team, row.playerId, 4, 'positionId', value)
+                                    }
+                                >
+                                    {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                        <Option key={`position4_${position.id}`} value={position.id}>{position.name}</Option>
+                                    ))}
+                                </Select>
+                            )
+                        },
+                        {
+                            title: 'Goals',
+                            key: 'goals4',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: 'Miss',
+                            key: 'miss4',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: 'P Miss',
+                            key: 'pmiss4',
+                            width: 60,
+                            render: () => (
+                                <Input size="small" type="number" />
+                            )
+                        },
+                        {
+                            title: competition ?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                            key: 'sec4',
+                            width: 60,
+                            render: (p, row) =>
+                                competition ?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                    <Input size="small" type="number" />
+                                ) : (
+                                        <Checkbox
+                                            onChange={
+                                                (e) =>
+                                                    this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
+                                            }
+                                        />
+                                    )
+                        },
+                    ],
+                },
+            ];
 
-        const columns = [
-            {
-                title: 'Name',
-                dataIndex: 'name',
-                key: 'name',
-                width: 120,
-            },
-            {
-                title: 'Period 1',
-                children: [
-                    {
-                        title: 'Position',
-                        key: 'position1',
-                        width: 150,
-                        render: (p, row) => (
-                            <Select
-                                className="year-select reg-filter-select1 table-cell-select"
-                                size="small"
-                                style={{ width: '100%' }}
-                                defaultValue={row?.lineup?.positionId}
-                                onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
-                            >
-                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                    <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
-                                ))}
-                            </Select>
-                        )
-                    },
-                    {
-                        title: 'Goals',
-                        key: 'goals1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec1',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <Input size="small" type="number" />
-                            ) : (
-                                <Checkbox
-                                  onChange={
-                                      (e) =>
-                                        this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
-                                  }
-                                />
-                            )
-                    },
-                ],
-            },
-            {
-                title: 'Period 2',
-                children: [
-                    {
-                        title: 'Position',
-                        key: 'position2',
-                        width: 150,
-                        render: (p, row) => (
-                            <Select
-                                className="year-select reg-filter-select1 table-cell-select"
-                                size="small"
-                                style={{ width: '100%' }}
-                                defaultValue={row?.lineup?.positionId}
-                                onChange={
-                                    (value) =>
-                                      this.setAttendance(team, row.playerId, 2, 'positionId', value)
-                                }
-                            >
-                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                    <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
-                                ))}
-                            </Select>
-                        )
-                    },
-                    {
-                        title: 'Goals',
-                        key: 'goals2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec2',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <Input
-                                  size="small"
-                                  type="number"
-                                />
-                            ) : (
-                                <Checkbox
-                                  onChange={
-                                      (e) =>
-                                        this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                                  }
-                                />
-                            )
-                    },
-                ],
-            },
-            {
-                title: 'Period 3',
-                children: [
-                    {
-                        title: 'Position',
-                        key: 'position3',
-                        width: 150,
-                        render: (p, row) => (
-                            <Select
-                                className="year-select reg-filter-select1 table-cell-select"
-                                size="small"
-                                style={{ width: '100%' }}
-                                defaultValue={row?.lineup?.positionId}
-                                onChange={
-                                    (value) =>
-                                      this.setAttendance(team, row.playerId, 3, 'positionId', value)
-                                }
-                            >
-                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                    <Option key={`position3_${position.id}`} value={position.id}>{position.name}</Option>
-                                ))}
-                            </Select>
-                        )
-                    },
-                    {
-                        title: 'Goals',
-                        key: 'goals3',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss3',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss3',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec3',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <Input size="small" type="number" />
-                            ) : (
-                                <Checkbox
-                                  onChange={
-                                      (e) =>
-                                        this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
-                                  }
-                                />
-                            )
-                    },
-                ],
-            },
-            {
-                title: 'Period 4',
-                children: [
-                    {
-                        title: 'Position',
-                        key: 'position4',
-                        width: 150,
-                        render: (p, row) => (
-                            <Select
-                                className="year-select reg-filter-select1 table-cell-select"
-                                size="small"
-                                style={{ width: '100%' }}
-                                defaultValue={row?.lineup?.positionId}
-                                onChange={
-                                    (value) =>
-                                      this.setAttendance(team, row.playerId, 4, 'positionId', value)
-                                }
-                            >
-                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                    <Option key={`position4_${position.id}`} value={position.id}>{position.name}</Option>
-                                ))}
-                            </Select>
-                        )
-                    },
-                    {
-                        title: 'Goals',
-                        key: 'goals4',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss4',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss4',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec4',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <Input size="small" type="number" />
-                            ) : (
-                                <Checkbox
-                                  onChange={
-                                      (e) =>
-                                        this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
-                                  }
-                                />
-                            )
-                    },
-                ],
-            },
-        ];
+            return (
+                <Table
+                    className="home-dashboard-table"
+                    columns={columns}
+                    dataSource={data}
+                    size="small"
+                    scroll={{ x: '100%' }}
+                    pagination={false}
+                    loading={this.props.liveScoreGamePositionState.onLoad}
+                    rowKey={(record) => record.id}
+                />
+            )
+        } else {
+            history.push("/liveScoreCompetitions")
+        }
 
-        return (
-            <Table
-                className="home-dashboard-table"
-                columns={columns}
-                dataSource={data}
-                size="small"
-                scroll={{ x: '100%' }}
-                pagination={false}
-                loading={this.props.liveScoreGamePositionState.onLoad}
-                rowKey={(record) => record.id}
-            />
-        )
+
     };
 
     handleAttendanceView = (visible, team) => {
@@ -929,9 +949,9 @@ class LiveScoreMatchDetails extends Component {
                             <div className="col-sm text-right align-items-center" >
                                 {this.state.teamAttendance &&
                                     <Button
-                                      className="primary-add-comp-form mr-4"
-                                      type="primary"
-                                      onClick={() => this.exportAttendance('team1', match[0]?.team1?.id)}
+                                        className="primary-add-comp-form mr-4"
+                                        type="primary"
+                                        onClick={() => this.exportAttendance('team1', match[0] ?.team1 ?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
@@ -951,16 +971,16 @@ class LiveScoreMatchDetails extends Component {
                                     {this.teamPlayersStatus(team1PlayersData, 'team1')}
                                 </div>
                             ) : (
-                                <div className="col-12">
-                                    <Table
-                                        className="home-dashboard-table pt-2"
-                                        columns={this.state.isLineUp === 1 ? columnsTeam1 : columns}
-                                        dataSource={team1PlayersData}
-                                        pagination={false}
-                                        scroll={{ x: '100%' }}
-                                    />
-                                </div>
-                            )}
+                                    <div className="col-12">
+                                        <Table
+                                            className="home-dashboard-table pt-2"
+                                            columns={this.state.isLineUp === 1 ? columnsTeam1 : columns}
+                                            dataSource={team1PlayersData}
+                                            pagination={false}
+                                            scroll={{ x: '100%' }}
+                                        />
+                                    </div>
+                                )}
                         </div>
                     </div>
                 </div>
@@ -983,9 +1003,9 @@ class LiveScoreMatchDetails extends Component {
                             <div className="col-sm text-right align-items-center" >
                                 {this.state.teamAttendance &&
                                     <Button
-                                      className="primary-add-comp-form mr-4"
-                                      type="primary"
-                                      onClick={() => this.exportAttendance('team2', match[0]?.team2?.id)}
+                                        className="primary-add-comp-form mr-4"
+                                        type="primary"
+                                        onClick={() => this.exportAttendance('team2', match[0] ?.team2 ?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
@@ -1005,16 +1025,16 @@ class LiveScoreMatchDetails extends Component {
                                     {this.teamPlayersStatus(team2PlayersData, 'team2')}
                                 </div>
                             ) : (
-                                <div className="col-12">
-                                    <Table
-                                        className="home-dashboard-table pt-2"
-                                        columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
-                                        dataSource={team2PlayersData}
-                                        pagination={false}
-                                        scroll={{ x: '100%' }}
-                                    />
-                                </div>
-                            )}
+                                    <div className="col-12">
+                                        <Table
+                                            className="home-dashboard-table pt-2"
+                                            columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
+                                            dataSource={team2PlayersData}
+                                            pagination={false}
+                                            scroll={{ x: '100%' }}
+                                        />
+                                    </div>
+                                )}
                         </div>
                     </div>
                 </div>
@@ -1107,11 +1127,11 @@ class LiveScoreMatchDetails extends Component {
                 attendance: null,
                 attended: false,
                 lineup: null,
-                name: `${borrowedPlayer?.firstName || ''} ${borrowedPlayer?.lastName || ''}`,
-                photoUrl: borrowedPlayer?.profilePicture,
-                playerId: borrowedPlayer?.playerId,
-                team: borrowedPlayer?.team?.name,
-                teamId: borrowedPlayer?.team?.id,
+                name: `${borrowedPlayer ?.firstName || ''} ${borrowedPlayer ?.lastName || ''}`,
+                photoUrl: borrowedPlayer ?.profilePicture,
+                playerId: borrowedPlayer ?.playerId,
+                team: borrowedPlayer ?.team ?.name,
+                teamId: borrowedPlayer ?.team ?.id,
             };
 
             if (this.state.addPlayerModal === 'team1') {
@@ -1142,70 +1162,76 @@ class LiveScoreMatchDetails extends Component {
 
     AddPlayerModalView() {
         let playerId = null;
-        const { id: competitionId, organisationId } = this.state.umpireKey ? JSON.parse(getUmpireCompetitonData()) : JSON.parse(getLiveScoreCompetiton())
-        const { onLoadSearch, searchResult } = this.props.liveScorePlayerState;
-        const { team1Players, team2Players } = this.props.liveScoreMatchState;
-        const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
-        const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
 
-        const team1PlayerIds = team1PlayersData.length > 0
-            ? team1PlayersData.map((player) => player.playerId)
-            : [];
-        const team2PlayerIds = team2PlayersData.length > 0
-            ? team2PlayersData.map((player) => player.playerId)
-            : [];
+        if (getUmpireCompetitonData() || getLiveScoreCompetiton()) {
+            const { id: competitionId, organisationId } = this.state.umpireKey ? JSON.parse(getUmpireCompetitonData()) : JSON.parse(getLiveScoreCompetiton())
+            const { onLoadSearch, searchResult } = this.props.liveScorePlayerState;
+            const { team1Players, team2Players } = this.props.liveScoreMatchState;
+            const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
+            const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
 
-        const searchResultData = searchResult.length > 0
-            ? searchResult.filter((player) =>
-                team1PlayerIds.indexOf(player.playerId) < 0 && team2PlayerIds.indexOf(player.playerId) < 0
+            const team1PlayerIds = team1PlayersData.length > 0
+                ? team1PlayersData.map((player) => player.playerId)
+                : [];
+            const team2PlayerIds = team2PlayersData.length > 0
+                ? team2PlayersData.map((player) => player.playerId)
+                : [];
+
+            const searchResultData = searchResult.length > 0
+                ? searchResult.filter((player) =>
+                    team1PlayerIds.indexOf(player.playerId) < 0 && team2PlayerIds.indexOf(player.playerId) < 0
+                )
+                : [];
+
+            return (
+                <Modal
+                    title={AppConstants.addPlayer}
+                    visible={!!this.state.addPlayerModal}
+                    onOk={this.handleAddPlayerOk}
+                    onCancel={this.handleAddPlayerCancel}
+                    cancelButtonProps={{ style: { display: 'none' } }}
+                    okButtonProps={{ style: { display: 'none' } }}
+                    centered={true}
+                    footer={null}
+                >
+                    <AutoComplete
+                        loading={true}
+                        style={{ width: "100%", height: '56px' }}
+                        placeholder="Add Player"
+                        onSelect={(item, option) => {
+                            playerId = JSON.parse(option.key);
+                        }}
+                        notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
+                        onSearch={(value) => {
+                            if (value) {
+                                this.props.liveScorePlayerListSearchAction(competitionId, organisationId, value)
+                            }
+                        }}
+                    >
+                        {searchResultData.length > 0 && searchResultData.map((item) => {
+                            return <Option key={item.playerId} value={item.playerId.toString()}>
+                                {item.firstName + " " + item.lastName}
+                            </Option>
+                        })}
+                    </AutoComplete>
+                    <div
+                        className="comp-dashboard-botton-view-mobile"
+                        style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            paddingTop: 24
+                        }}
+                    >
+                        <Button onClick={() => this.handleAddPlayer(playerId)} className="primary-add-comp-form" type="primary">
+                            {AppConstants.save}
+                        </Button>
+                    </div>
+                </Modal>
             )
-            : [];
+        } else {
+            history.push("/liveScoreCompetitions")
+        }
 
-        return (
-            <Modal
-                title={AppConstants.addPlayer}
-                visible={!!this.state.addPlayerModal}
-                onOk={this.handleAddPlayerOk}
-                onCancel={this.handleAddPlayerCancel}
-                cancelButtonProps={{ style: { display: 'none' } }}
-                okButtonProps={{ style: { display: 'none' } }}
-                centered={true}
-                footer={null}
-            >
-                <AutoComplete
-                    loading={true}
-                    style={{ width: "100%", height: '56px' }}
-                    placeholder="Add Player"
-                    onSelect={(item, option) => {
-                        playerId = JSON.parse(option.key);
-                    }}
-                    notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
-                    onSearch={(value) => {
-                        if (value) {
-                            this.props.liveScorePlayerListSearchAction(competitionId, organisationId, value)
-                        }
-                    }}
-                >
-                    {searchResultData.length > 0 && searchResultData.map((item) => {
-                        return <Option key={item.playerId} value={item.playerId.toString()}>
-                            {item.firstName + " " + item.lastName}
-                        </Option>
-                    })}
-                </AutoComplete>
-                <div
-                    className="comp-dashboard-botton-view-mobile"
-                    style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        paddingTop: 24
-                    }}
-                >
-                    <Button onClick={() => this.handleAddPlayer(playerId)} className="primary-add-comp-form" type="primary">
-                        {AppConstants.save}
-                    </Button>
-                </div>
-            </Modal>
-        )
     }
 
     render() {

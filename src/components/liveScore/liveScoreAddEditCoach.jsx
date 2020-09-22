@@ -41,19 +41,23 @@ class LiveScoreAddEditCoach extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ conpetitionId: id })
-        if (id !== null) {
-            this.props.getliveScoreTeams(id)
-        }
-        if (this.state.isEdit === true) {
-            this.props.liveScoreUpdateCoach(this.state.tableRecord, 'isEditCoach')
-            this.setState({ loader: true })
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ conpetitionId: id })
+            if (id !== null) {
+                this.props.getliveScoreTeams(id)
+            }
+            if (this.state.isEdit === true) {
+                this.props.liveScoreUpdateCoach(this.state.tableRecord, 'isEditCoach')
+                this.setState({ loader: true })
+            } else {
+                this.props.liveScoreUpdateCoach('', 'isAddCoach')
+            }
+            if (this.state.isEdit === true) {
+                this.setInitalFiledValue()
+            }
         } else {
-            this.props.liveScoreUpdateCoach('', 'isAddCoach')
-        }
-        if (this.state.isEdit === true) {
-            this.setInitalFiledValue()
+            history.push('/liveScoreCompetitions')
         }
     }
 

@@ -56,7 +56,7 @@ function LiveScorePlayerState(state = initialState, action) {
                     state.playerData = {
                         firstName: action.data.firstName,
                         lastName: action.data.lastName,
-                        dateOfBirth: action.data.dob ? moment(action.data.dob).format("DD-MM-YYYY") : null,
+                        dateOfBirth: action.data.dateOfBirth ? moment(action.data.dateOfBirth).format("DD-MM-YYYY") : null,
                         phoneNumber: action.data.phoneNumber,
                         mnbPlayerId: action.data.mnbPlayerId,
                         teamId: action.data.team ? action.data.team.id : action.data.teamId,

@@ -218,22 +218,24 @@ class LiveScoreMatchesList extends Component {
 
     componentDidMount() {
         if (this.state.umpireKey === 'umpire') {
-            const { id } = JSON.parse(getUmpireCompetitonData())
-            this.setState({ competitionId: id })
-            if (id !== null) {
+            if (getUmpireCompetitonData()) {
+                const { id } = JSON.parse(getUmpireCompetitonData())
+                this.setState({ competitionId: id })
                 this.handleMatchTableList(1, id)
             } else {
-                history.push('/')
+                history.push("/liveScoreCompetitions")
             }
+
         } else {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id })
-            if (id !== null) {
+
+            if (getLiveScoreCompetiton()) {
+                const { id } = JSON.parse(getLiveScoreCompetiton())
+                this.setState({ competitionId: id })
                 this.handleMatchTableList(1, id)
                 this.props.getLiveScoreDivisionList(id)
                 this.props.liveScoreRoundListAction(id, this.state.selectedDivision == 'All' ? '' : this.state.selectedDivision)
             } else {
-                history.push('/')
+                history.push("/liveScoreCompetitions")
             }
         }
     }
@@ -282,7 +284,7 @@ class LiveScoreMatchesList extends Component {
         var code = e.keyCode || e.which;
 
         if (code === 13) { //13 is the enter keycode
-            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound,undefined, this.state.sortBy, this.state.sortOrder)
+            this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
         }
     }
 
