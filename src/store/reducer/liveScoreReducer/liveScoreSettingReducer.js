@@ -63,7 +63,8 @@ const initialState = {
     anyOrgArray: [],
     invitedAnyAssoc: [],
     invitedAnyClub: [],
-    competitionInvitees: []
+    competitionInvitees: [],
+    gameTimeTrackingType: 0
 }
 
 
@@ -347,6 +348,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 form: {
                     ...state.form,
                     id: payload.id,
+                    gameTimeTrackingType: payload.gameTimeTrackingType ? payload.gameTimeTrackingType : 0,
                     competitionName: payload.longName,
                     shortName: payload.name,
                     competitionLogo: payload.logoUrl,

@@ -196,7 +196,8 @@ export function* updateCourtTimingsDrawsAction(action) {
                     sourceArray: action.sourceArray,
                     targetArray: action.targetArray,
                     actionType: action.actionType,
-                    drawData: action.drawData
+                    drawData: action.drawData,
+                    dateRangeCheck: action.dateRangeCheck
                 });
             }
             message.success(result.result.data.message)

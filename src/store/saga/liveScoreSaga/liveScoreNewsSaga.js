@@ -67,7 +67,7 @@ export function* liveScoreAddNewsSaga(action) {
                 result: result.result.data,
                 status: result.status,
             });
-            message.success(action.data.newsId ? 'News Edited Successfully.' : 'News Added Successfully.');
+            message.success(action.data.newsId ? 'News edited successfully.' : 'News added successfully.');
         } else {
             yield call(failSaga, result)
         }

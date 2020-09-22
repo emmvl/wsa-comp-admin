@@ -678,11 +678,11 @@ const AppConstants = {
   selectImage: 'Select Image',
   bannerlink: 'Banner Link',
   removeBanner: 'Remove Banner',
-  showHomePage: 'Show on Home Page',
-  showOnDrawsPage: 'Show on Draws Page',
-  showOnLadderPage: 'Show on Ladder Page',
-  showOnNewsPage: 'Show on News Page',
-  showOnChatPage: 'Show on Chat Page',
+  showHomePage: 'Show On Home Page',
+  showOnDrawsPage: 'Show On Draws Page',
+  showOnLadderPage: 'Show On Ladder Page',
+  showOnNewsPage: 'Show On News Page',
+  showOnChatPage: 'Show On Chat Page',
   bannerFormat: 'Banner Format',
   teamAttendane: 'Team Attendance',
   newsList: 'News List',
@@ -1281,6 +1281,7 @@ const AppConstants = {
   variants: 'Variants',
   enableVariants: 'Enable Variants',
   variantName: 'Variant Name',
+  variant_name: 'Variant name',
   orders: 'Orders',
   orderSummary: 'Order Summary',
   orderStatus: 'Order Status',
@@ -1396,7 +1397,7 @@ const AppConstants = {
   importTeamPlayer: "Import Team and Players",
   quickCompetitionFormat: "Competition Format (3/3)",
   matchPrintTemplateType: 'Match Print Template Type',
-  templateType: 'Template type',
+  templateType: 'Template Type',
   playerBorrowing: "Player Borrowing",
   borrowPlayer: "Borrow player",
   gamesBorrowed: "Games Borrowed",
@@ -1598,7 +1599,7 @@ const AppConstants = {
   competitionDates: "Competition Dates",
   replicateSetting: "Replicate Settings",
   venuePreferences: "Venue Preferences",
-  competitionName:"Competition Name"	 
+  competitionName: "Competition Name"
 };
 
 export default AppConstants;
