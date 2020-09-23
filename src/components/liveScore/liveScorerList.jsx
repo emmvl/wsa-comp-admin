@@ -200,12 +200,17 @@ class LiveScorerList extends Component {
             },
             "searchText": ""
         };
-        const { id } = JSON.parse(getLiveScoreCompetiton());
-        this.setState({ competitionId: id });
-        if (id !== null) {
-            this.props.liveScoreScorerListAction(id, 4, body);
+
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton());
+            this.setState({ competitionId: id });
+            if (id !== null) {
+                this.props.liveScoreScorerListAction(id, 4, body);
+            } else {
+                history.push('/');
+            }
         } else {
-            history.push('/');
+            history.push('/liveScoreCompetitions')
         }
     }
 

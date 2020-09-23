@@ -44,25 +44,27 @@ class LiveScoreAddScorer extends Component {
     };
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        // this.props.liveScoreScorerSearch(8, 1, id)
 
-        if (id !== null) {
-            // this.props.getliveScoreDivisions(id)
-            this.props.getliveScoreTeams(id)
-        } else {
-            history.push('/')
-        }
-        this.props.liveScoreClear()
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            if (id !== null) {
+                this.props.getliveScoreTeams(id)
+            } else {
+                history.push('/')
+            }
+            this.props.liveScoreClear()
 
-        if (this.state.isEdit === true) {
-            this.props.liveScoreScorerUpdate(this.state.tableRecord, "isEditScorer")
-            this.setInitalFiledValue(this.state.tableRecord)
-            this.setState({ loader: true })
+            if (this.state.isEdit === true) {
+                this.props.liveScoreScorerUpdate(this.state.tableRecord, "isEditScorer")
+                this.setInitalFiledValue(this.state.tableRecord)
+                this.setState({ loader: true })
+            } else {
+                this.props.liveScoreScorerUpdate("", "isAddScorer")
+            }
+            this.setState({ load: true, competition_id: id })
         } else {
-            this.props.liveScoreScorerUpdate("", "isAddScorer")
+            history.push('/liveScoreCompetitions')
         }
-        this.setState({ load: true, competition_id: id })
     }
 
     componentDidUpdate(nextProps) {

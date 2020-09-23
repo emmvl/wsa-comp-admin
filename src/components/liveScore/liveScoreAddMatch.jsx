@@ -101,11 +101,11 @@ class LiveScoreAddMatch extends Component {
                 }
 
             } else {
-                const { id } = JSON.parse(getLiveScoreCompetiton())
-                const { scoringType } = JSON.parse(getLiveScoreCompetiton())
-                this.setState({ compId: id, scoringType: scoringType })
+                if (getLiveScoreCompetiton()) {
+                    const { id } = JSON.parse(getLiveScoreCompetiton())
+                    const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+                    this.setState({ compId: id, scoringType: scoringType })
 
-                if (id !== null) {
                     this.props.getCompetitionVenuesList(id, "");
                     this.props.getLiveScoreDivisionList(id)
                     this.props.getliveScoreScorerList(id, 4)

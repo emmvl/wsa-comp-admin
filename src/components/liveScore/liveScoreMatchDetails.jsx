@@ -210,26 +210,39 @@ class LiveScoreMatchDetails extends Component {
     componentDidMount() {
         let isLineUpEnable = null;
         this.props.getLiveScoreGamePositionsList();
-        this.props.liveScoreGameAttendanceListAction(this.state.matchId);
-        this.props.liveScorePlayerMinuteTrackingListAction(this.state.matchId);
 
-        if (this.state.umpireKey === 'umpire') {
-            isLineUpEnable = getUmpireCompetitonData().lineupSelectionEnabled;
-
-            this.setState({ competitionId: getUmpireCompetitonData().id })
-        } else {
-            const { lineupSelectionEnabled, status, id } = JSON.parse(getLiveScoreCompetiton());
-            isLineUpEnable = lineupSelectionEnabled;
-            this.setState({ competitionId: id })
+        if (this.state.matchId) {
+            this.props.liveScoreGameAttendanceListAction(this.state.matchId);
+            this.props.liveScorePlayerMinuteTrackingListAction(this.state.matchId);
 
         }
 
-        if (isLineUpEnable === 1) {
-            this.setState({ isLineUp: 1 });
-            this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
+        if (this.state.umpireKey === 'umpire') {
+            if (getUmpireCompetitonData()) {
+                isLineUpEnable = getUmpireCompetitonData().lineupSelectionEnabled;
+                this.setState({ competitionId: getUmpireCompetitonData().id })
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         } else {
-            this.setState({ isLineUp: 0 });
-            this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
+            if (getLiveScoreCompetiton()) {
+                const { lineupSelectionEnabled, status, id } = JSON.parse(getLiveScoreCompetiton());
+                isLineUpEnable = lineupSelectionEnabled;
+                this.setState({ competitionId: id })
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
+
+        }
+
+        if (this.props.location.state) {
+            if (isLineUpEnable === 1) {
+                this.setState({ isLineUp: 1 });
+                this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
+            } else {
+                this.setState({ isLineUp: 0 });
+                this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
+            }
         }
     }
 
@@ -1523,10 +1536,10 @@ class LiveScoreMatchDetails extends Component {
                     {this.headerView()}
 
                     <Content>
-                        {this.umpireScore_View()}
-                        {this.team_View()}
-                        {this.ModalView()}
-                        {this.AddPlayerModalView()}
+                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && this.state.umpireKey === 'umpire')) && this.umpireScore_View()}
+                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && this.state.umpireKey === 'umpire')) && this.team_View()}
+                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && this.state.umpireKey === 'umpire')) && this.ModalView()}
+                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && this.state.umpireKey === 'umpire')) && this.AddPlayerModalView()}
                     </Content>
                 </Layout>
             </div >
