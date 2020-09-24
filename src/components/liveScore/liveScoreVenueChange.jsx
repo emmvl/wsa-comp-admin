@@ -39,12 +39,16 @@ class LiveScoreVenueChange extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ comptitionId: id })
-        if (id !== null) {
-            this.props.getCompetitionVenuesList(id, this.state.search);
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ comptitionId: id })
+            if (id !== null) {
+                this.props.getCompetitionVenuesList(id, this.state.search);
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
 
     }

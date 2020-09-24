@@ -77,6 +77,7 @@ import SupportState from "./supportReducer";
 import ShopOrderStatusState from "./shopReducer/orderStatusReducer";
 
 import UmpirePaymentSettingState from "./umpireReducer/umpirePaymentSettingReducer";
+import CompetitionMultiDrawsState from "./competitionManagementReducer/competitionMultiDrawsReducer";
 import liveScorePlayerMinuteTrackingState from "./liveScoreReducer/liveScorePlayerMinuteTrackingReducer";
 
 const rootReducer = combineReducers({
@@ -147,6 +148,7 @@ const rootReducer = combineReducers({
   UmpirePaymentSettingState,
   ShopOrderStatusState,
   liveScoreGameAttendanceState,
+  CompetitionMultiDrawsState,
   liveScorePlayerMinuteTrackingState,
 });
 

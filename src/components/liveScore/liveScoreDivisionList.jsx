@@ -195,13 +195,17 @@ class LiveScoreDivisionList extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id })
-        checkLivScoreCompIsParent().then((value) => (
-            this.setState({ liveScoreCompIsParent: value })
-        ))
-        let offset = 0
-        this.props.getMainDivisionListAction(id, offset)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id })
+            checkLivScoreCompIsParent().then((value) => (
+                this.setState({ liveScoreCompIsParent: value })
+            ))
+            let offset = 0
+            this.props.getMainDivisionListAction(id, offset)
+        } else {
+            history.push('/liveScoreCompetitions')
+        }
     }
 
     onPageChange(page) {

@@ -74,12 +74,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
             isQuickCompetition: false,
             onNextClicked: false
         };
-        // this.props.clearYearCompetitionAction()
-        // this.props.getCommonRefData()
     }
 
     componentDidMount() {
-        //this.props.venueListAction();
+        this.props.updateVenueConstraintsData(null, null, 'clearData', this.props.location.state)
         this.props.getVenuesTypeAction('all');
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()

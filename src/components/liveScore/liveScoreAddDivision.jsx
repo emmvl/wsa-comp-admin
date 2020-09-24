@@ -258,7 +258,7 @@ class LiveScoreAddDivision extends Component {
                         className="login-form">
                         <Content>
 
-                            <div className="formView"> {this.contentView(getFieldDecorator)}  </div>
+                            <div className="formView"> {getLiveScoreCompetiton() ? this.contentView(getFieldDecorator) : history.push('/liveScoreCompetitions')}  </div>
                         </Content>
                         <Footer>
                             {this.footerView()}

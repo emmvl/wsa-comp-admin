@@ -201,19 +201,23 @@ class LiveScorePlayerList extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id })
-        if (id !== null) {
-            this.props.playerListWithPaginationAction(id, 0, 10)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id })
+            if (id !== null) {
+                this.props.playerListWithPaginationAction(id, 0, 10)
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
     }
 
     // Delete player
 
     deletePlayer = (playerId) => {
-        this.props.liveScoreDeletePlayerAction(playerId, this.state.competitionId, this.state.offset,)
+        this.props.liveScoreDeletePlayerAction(playerId, this.state.competitionId, this.state.offset)
     }
 
     showDeleteConfirm = (playerId) => {
@@ -472,9 +476,9 @@ class LiveScorePlayerList extends Component {
                 />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"} />
                 <Layout>
-                    {this.headerView()}
+                    {getLiveScoreCompetiton() && this.headerView()}
                     <Content>
-                        {this.contentView()}
+                        {getLiveScoreCompetiton() && this.contentView()}
                     </Content>
                 </Layout>
             </div>

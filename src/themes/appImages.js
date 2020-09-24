@@ -50,6 +50,8 @@ const AppImages = {
   activeLiveScoreIcon: require("../images/active-livescore.svg"),
   blueDot: require("../images/blueDot.png"),
   email: require("../images/email.png"),
+  downloadIcon: require("../images/down-arrow.png"),
+  filterIcon: require("../images/filter-results-button.png"),
 };
 
 export default AppImages;

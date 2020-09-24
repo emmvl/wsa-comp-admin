@@ -180,10 +180,10 @@ class LiveScoreTeamView extends Component {
                 <div className='profile-image-view mr-5' >
 
                     {
-                        this.props.liveScoreTeamState && this.props.liveScoreTeamState.teamData ?
+                        this.props.liveScoreTeamState && this.props.liveScoreTeamState.teamData && this.props.liveScoreTeamState.teamData.logoUrl ?
                             <img className="user-image" src={logoUrl ? logoUrl : ''} alt="" height="80" width="80" />
                             :
-                            <span className="user-contact-heading">{'No Image'}</span>
+                            <span className="user-contact-heading">{' '}</span>
                     }
 
 
