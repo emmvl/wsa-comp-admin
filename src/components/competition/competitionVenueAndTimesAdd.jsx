@@ -422,7 +422,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
         this.props.checkVenueDuplication(address);
 
-        if (!address.addressOne) {
+        if (!address.addressOne && !address.suburb) {
             this.setState({
                 venueAddressError: ValidationConstants.venueAddressDetailsError,
             })
