@@ -219,12 +219,16 @@ class LiveScoreGameTimeList extends Component {
     }
 
     componentDidMount() {
-        const { id, attendanceRecordingPeriod } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id, filter: attendanceRecordingPeriod })
-        if (id !== null) {
-            this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
+        if (getLiveScoreCompetiton()) {
+            const { id, attendanceRecordingPeriod } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id, filter: attendanceRecordingPeriod })
+            if (id !== null) {
+                this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
+            } else {
+                history.push("/liveScoreCompetitions")
+            }
         } else {
-            history.push("/")
+            history.push('/liveScoreCompetitions')
         }
     }
 
@@ -413,7 +417,7 @@ class LiveScoreGameTimeList extends Component {
                 <Layout>
                     {this.headerView()}
                     <Content>
-                        {this.tableView()}
+                        {getLiveScoreCompetiton() && this.tableView()}
                     </Content>
                 </Layout>
             </div>

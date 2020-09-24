@@ -71,10 +71,14 @@ class LiveScorerPlayerImport extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton());
-        this.setState({ competitionId: id });
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton());
+            this.setState({ competitionId: id });
 
-        this.props.liveScorePlayerResetImportResultAction();
+            this.props.liveScorePlayerResetImportResultAction();
+        } else {
+            history.push('/liveScoreCompetitions')
+        }
     }
 
     headerView = () => (

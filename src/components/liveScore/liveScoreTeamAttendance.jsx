@@ -263,14 +263,18 @@ class LiveScoreTeamAttendance extends Component {
                 "offset": 0
             },
         }
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id, divisionLoad: true })
-        if (id !== null) {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
-            this.props.getLiveScoreDivisionList(id)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id, divisionLoad: true })
+            if (id !== null) {
+                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
+                this.props.getLiveScoreDivisionList(id)
 
+            } else {
+                history.pushState('/liveScoreCompetitions')
+            }
         } else {
-            history.pushState('/')
+            history.push('/liveScoreCompetitions')
         }
     }
 

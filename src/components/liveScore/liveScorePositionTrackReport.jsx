@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import { liveScorePositionTrackingAction } from '../../store/actions/LiveScoreAction/liveScorePositionTrackingAction'
 import { getLiveScoreCompetiton } from "../../util/sessionStorage"
 import { isArrayNotEmpty } from "../../util/helpers";
+import history from "../../util/history";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -575,17 +576,21 @@ class LiveScorePositionTrackReport extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
 
-        const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            const body = {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
+                }
             }
-        }
-        this.props.liveScorePositionTrackingAction({ compId: id, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
+            this.props.liveScorePositionTrackingAction({ compId: id, aggregate: this.state.aggregate, reporting: this.state.reporting, pagination: body, search: this.state.searchText })
 
-        this.setState({ competitionId: id })
+            this.setState({ competitionId: id })
+        } else {
+            history.push('/liveScoreCompetitions')
+        }
     }
 
     ///////view for breadcrumb
