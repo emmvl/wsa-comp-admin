@@ -162,6 +162,7 @@ import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSag
 import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizontalSaga'
 
 import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga'
+import rootCompetitionMultiDrawSaga from "./competitionManagementSaga/competitionMultiDrawsSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -200,6 +201,9 @@ export default function* rootSaga() {
 
     // User
     fork(userSaga),
+
+    ///Multi draw in Competition
+    fork(rootCompetitionMultiDrawSaga),
   ]);
 
 

@@ -1596,10 +1596,16 @@ const AppConstants = {
   exportAttendanceMessage: 'Attendance exported successfully',
   hardshipCode: "Hardship Code",
   addCode: "Add Code",
+  go: "Go",
+  matchCalender: "Match Calender",
+  showByMatches: "Show By Matches",
+  hideFilter: "Hide Filter",
+  showAll: "Show all",
+  showLess: "Show less",
   competitionDates: "Competition Dates",
   replicateSetting: "Replicate Settings",
   venuePreferences: "Venue Preferences",
-  competitionName: "Competition Name"
+  competitionName: "Competition Name",
 };
 
 export default AppConstants;
