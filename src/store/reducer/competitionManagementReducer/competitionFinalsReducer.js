@@ -26,7 +26,8 @@ const initialState = {
     result: [],
     status: 0,
     competitionFinalsList: [obj],
-    competitionVenuesList: []
+    competitionVenuesList: [],
+    finalTypeRefId: null
 };
 function competitionFinalsReducer(state = initialState, action) {
 
@@ -41,7 +42,8 @@ function competitionFinalsReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 competitionFinalsList: compFinalsData.finals,
-                competitionVenuesList: compFinalsData.venues,	 
+                competitionVenuesList: compFinalsData.venues,	
+                finalTypeRefId: compFinalsData.finalTypeRefId,
                 status: action.status
             };
 
