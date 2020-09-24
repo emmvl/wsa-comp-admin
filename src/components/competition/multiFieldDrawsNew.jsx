@@ -601,11 +601,13 @@ class MultifieldDrawsNew extends Component {
                         )
                     }
                     )}
+                    {isArrayNotEmpty(competitionVenues) && <span className="input-heading-add-another pt-4"
+                        onClick={() => this.changeShowAllStatus("venue")}>
+                        {showAllVenue == true ? AppConstants.showLess : AppConstants.showAll}
+                    </span>
+                    }
                 </div>
-                <span className="input-heading-add-another pt-4"
-                    onClick={() => this.changeShowAllStatus("venue")}>
-                    {showAllVenue == true ? AppConstants.showLess : AppConstants.showAll}
-                </span>
+
             </>
         )
     }
@@ -660,11 +662,13 @@ class MultifieldDrawsNew extends Component {
                         }
                         )}
                     </div>
+                    {isArrayNotEmpty(own_CompetitionArr) && <span className="input-heading-add-another pt-4"
+                        onClick={() => this.changeShowAllStatus("comp")}>
+                        {showAllComp == true ? AppConstants.showLess : AppConstants.showAll}
+                    </span>
+                    }
                 </div>
-                <span className="input-heading-add-another pt-4"
-                    onClick={() => this.changeShowAllStatus("comp")}>
-                    {showAllComp == true ? AppConstants.showLess : AppConstants.showAll}
-                </span>
+
             </>
         )
     }
@@ -723,8 +727,8 @@ class MultifieldDrawsNew extends Component {
                             </div>
                         )
                     })}
-                </div>
                 <span className="input-heading-add-another pt-4">{AppConstants.showAll}</span>
+                </div>
             </>
         )
     }
