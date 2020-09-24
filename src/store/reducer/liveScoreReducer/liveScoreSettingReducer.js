@@ -24,7 +24,8 @@ const initialState = {
         minutes: null,
         lineupSelectionDays: null,
         lineupSelectionHours: null,
-        lineupSelectionMins: null
+        lineupSelectionMins: null,
+        gameTimeTrackingType:0
 
     },
     buzzerEnabled: false,
@@ -348,7 +349,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 form: {
                     ...state.form,
                     id: payload.id,
-                    gameTimeTrackingType: payload.gameTimeTrackingType ? payload.gameTimeTrackingType : 0,
+                    gameTimeTrackingType: payload.gameTimeTrackingType  != null? payload.gameTimeTrackingType : 0,
                     competitionName: payload.longName,
                     shortName: payload.name,
                     competitionLogo: payload.logoUrl,
