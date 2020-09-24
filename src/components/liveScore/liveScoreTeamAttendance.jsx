@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Pagination, Input, Icon, message } from 'antd';
+import { Layout, Breadcrumb, Button, Table, Select, Pagination, Input, Icon } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -15,7 +15,6 @@ import { isArrayNotEmpty } from '../../util/helpers'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { getLiveScoreDivisionList } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
 import { liveScoreRoundListAction } from "../../store/actions/LiveScoreAction/liveScoreRoundAction";
-import ValidationConstants from "../../themes/validationConstant";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -100,10 +99,8 @@ const columns = [
         key: 'firstName',
         sorter: true,
         onHeaderCell: () => listeners("firstName"),
-        render: (firstName, record) =>
-            <span className="input-heading-add-another pt-0"
-                onClick={() => this_Obj.checkUserId(record)}
-            >{firstName}</span>
+        render: (firstName) =>
+            <span className="input-heading-add-another pt-0">{firstName}</span>
 
     },
     {
@@ -112,11 +109,9 @@ const columns = [
         key: 'lastName',
         sorter: true,
         onHeaderCell: () => listeners("lastName"),
-        render: (lastName, record) =>
+        render: (lastName) =>
 
-            <span className="input-heading-add-another pt-0"
-                onClick={() => this_Obj.checkUserId(record)}
-            >{lastName}</span>
+            <span className="input-heading-add-another pt-0">{lastName}</span>
 
     },
     {
@@ -393,19 +388,6 @@ class LiveScoreTeamAttendance extends Component {
             }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
-        }
-    }
-
-    checkUserId(record) {
-        if (record.userId == null) {
-            message.config({ duration: 1.5, maxCount: 1 })
-            message.warn(ValidationConstants.playerMessage)
-        } else {
-            history.push("/userPersonal", {
-                userId: record.userId,
-                screenKey: "livescore",
-                screen: "/liveScorePlayerList"
-            })
         }
     }
 
