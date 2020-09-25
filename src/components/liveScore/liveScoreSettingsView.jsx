@@ -41,6 +41,7 @@ import { message } from "antd";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { getOrganisationData } from '../../util/sessionStorage';
+import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
 
 
 const { Header, Footer } = Layout;
@@ -123,7 +124,6 @@ class LiveScoreSettingsView extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreSetting != this.props.liveScoreSetting) {
-            console.log(this.props.liveScoreSetting.form)
             const { competitionName, shortName, competitionLogo, scoring, recordUmpireType, gameTimeTrackingType } = this.props.liveScoreSetting.form
             this.props.form.setFieldsValue({
                 competition_name: competitionName,
@@ -186,7 +186,6 @@ class LiveScoreSettingsView extends Component {
 
     //method to check box selection
     onChangeCheckBox(checkedValues) {
-        console.log(checkedValues)
         this.props.onChangeSettingForm({ key: 'record1', data: checkedValues })
     }
     onChangeCheckBox2(checkedValues) {
@@ -287,7 +286,6 @@ class LiveScoreSettingsView extends Component {
                     let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
                     orgId = organisationId
                 }
-                console.log(gameTimeTrackingType)
                 var formData = new FormData();
 
                 formData.append('id', id)
@@ -381,7 +379,9 @@ class LiveScoreSettingsView extends Component {
                     localStorage.setItem("regInvitees", "true")
                 }
                 let regInvitees = localStorage.getItem("regInvitees")
+                console.log(regInvitees, 'regInvitees')
                 if (regInvitees === "true") {
+                    this.props.initializeCompData()
                     this.props.settingDataPostInitiate({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName, competitionId: this.state.competitionId, isEdit: this.state.isEdit })
                 }
 
@@ -1436,5 +1436,6 @@ export default connect(mapStateToProps, {
     onInviteesSearchAction,
     settingRegInvitees,
     umpireCompetitionListAction,
-    getOnlyYearListAction
+    getOnlyYearListAction,
+    initializeCompData,
 })(Form.create()(LiveScoreSettingsView));

@@ -1,16 +1,35 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function innerHorizontalCompetitionListAction(organisationId, yearRefId) {
+function innerHorizontalCompetitionListAction(organisationId, yearRefId, compData) {
     const action = {
         type: ApiConstants.API_INNER_HORIZONTAL_COMPETITION_LIST_LOAD,
         organisationId,
-        yearRefId
+        yearRefId,
+        compData
 
     };
 
     return action;
 }
 
+function updateInnerHorizontalData() {
+    const action = {
+        type: ApiConstants.API_UPDATE_INNER_HORIZONTAL,
+    };
+
+    return action;
+}
+
+function initializeCompData() {
+    const action = {
+        type: ApiConstants.API_INITIALIZE_COMP_DATA,
+    };
+
+    return action;
+}
+
 export {
-    innerHorizontalCompetitionListAction
+    innerHorizontalCompetitionListAction,
+    updateInnerHorizontalData,
+    initializeCompData
 };
