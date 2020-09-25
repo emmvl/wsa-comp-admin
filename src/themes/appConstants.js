@@ -1606,6 +1606,11 @@ const AppConstants = {
   replicateSetting: "Replicate Settings",
   venuePreferences: "Venue Preferences",
   competitionName: "Competition Name",
+  pools: "Pools",
+  gradesOrPools: "Grades / Pools",
+  playOff3rdposition: "Playoff for 3rd position",
+  whoPlaysWho: "Who plays who",
+  whoPlaysWhoValidation: "Please remove duplicate from who playes who"
 };
 
 export default AppConstants;
