@@ -36,7 +36,7 @@ import AppImages from "../../themes/appImages";
 import { bindActionCreators } from "redux";
 import moment from "moment";
 import ValidationConstants from "../../themes/validationConstant";
-import { isArrayNotEmpty, regexNumberExpression } from "../../util/helpers";
+import { isArrayNotEmpty, regexNumberExpression, randomKeyGen } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -486,9 +486,10 @@ class RegistrationForm extends Component {
         setFieldValue("registrationLock")
     }
 	addHardshipCode = (orgRegistrationId) => {     
+        let code = randomKeyGen(8);
         let obj = {            
             id:0,
-            code:null,
+            code:code,
             orgRegistrationId:orgRegistrationId,
             isActive:1,
         }
@@ -1497,13 +1498,14 @@ class RegistrationForm extends Component {
                         <div>
                             <div style={{display:"flex",marginTop:"13px"}}>                   
                                 <InputWithHead
+                                    disabled={item.isActive == 0}
                                     style={{width: "252px" , marginRight: "28px"}}                   
                                     placeholder={AppConstants.code} 
                                     value={item.code == 0 ? " " : item.code}
                                     onChange={(e) => this.onChangeSetValue(e.target.value , index)}
                                 />     
                                 <a>
-                                    <span onClick={() => this.addNonPlayingDate()} className="input-heading-add-another" style={{textDecoration: "underline",paddingTop:18}}>
+                                    <span className="input-heading-add-another" style={{textDecoration: "underline",paddingTop:18}}>
                                         {AppConstants.email}
                                     </span>
                                 </a>

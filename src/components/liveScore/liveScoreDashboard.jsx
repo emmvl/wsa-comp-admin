@@ -16,6 +16,7 @@ import moment from "moment";
 import { isArrayNotEmpty } from "../../util/helpers";
 import Tooltip from 'react-png-tooltip'
 import ValidationConstants from "../../themes/validationConstant";
+import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
 
 const { Content } = Layout;
 let this_obj = null;
@@ -597,6 +598,7 @@ class LiveScoreDashboard extends Component {
             incidents: "incidents"
         }
         this_obj = this
+        this.props.initializeCompData()
     }
 
     componentDidMount() {
@@ -926,7 +928,7 @@ class LiveScoreDashboard extends Component {
     }
 }
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreDashboardListAction }, dispatch)
+    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData }, dispatch)
 }
 
 function mapStateToProps(state) {

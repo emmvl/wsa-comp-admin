@@ -3,6 +3,7 @@ import ApiConstants from "../../../themes/apiConstants";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
 import AppConstants from "../../../themes/appConstants";
+import { isArrayNotEmpty } from "util/helpers";
 
 function* failSaga(result) {
     yield put({ type: ApiConstants.API_INNER_HORIZONTAL_FAIL });
@@ -29,8 +30,13 @@ function* errorSaga(error) {
 
 //// get manager list
 export function* getInnerHorizontalCompSaga(action) {
+
     try {
-        const result = yield call(LiveScoreAxiosApi.innerHorizontalCompList, action.organisationId, action.yearRefId)
+        const result = action.compData.length > 1 ? {
+            status: 1,
+            result: { data: action.compData }
+        } :
+            yield call(LiveScoreAxiosApi.innerHorizontalCompList, action.organisationId, action.yearRefId)
         if (result.status == 1) {
             yield put({
                 type: ApiConstants.API_INNER_HORIZONTAL_COMPETITION_LIST_SUCCESS,
