@@ -6,7 +6,6 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
-import { Formik } from "formik";
 import * as Yup from "yup";
 import { bindActionCreators } from "redux";
 import history from "../../util/history";
@@ -20,9 +19,8 @@ import {
 } from "../../store/actions/userAction/userAction";
 import ValidationConstants from "../../themes/validationConstant";
 import { getCommonRefData } from "../../store/actions/commonAction/commonAction";
-import { getUserId, getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData } from "../../util/sessionStorage";
 import Loader from "../../customComponents/loader";
-import Tooltip from "react-png-tooltip";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -55,13 +53,13 @@ class UserAddAffiliates extends Component {
     this.props.getRoleAction();
     this.clearContact();
     this.addContact();
+    this.formRef = React.createRef();
   }
 
   componentDidMount() {
-    console.log("Component Did mount");
   }
+
   componentDidUpdate(nextProps) {
-    console.log("Component componentDidUpdate");
     let userState = this.props.userState;
     let affiliateTo = this.props.userState.affiliateTo;
     if (userState.onLoad === false && this.state.loading === true) {
@@ -88,11 +86,8 @@ class UserAddAffiliates extends Component {
           this.setState({
             loggedInuserOrgTypeRefId: affiliateTo.organisationTypeRefId,
             organisationName: affiliateTo.organisationName,
-            whatIsTheLowestOrgThatCanAddChild:
-              affiliateTo.whatIsTheLowestOrgThatCanAddChild,
+            whatIsTheLowestOrgThatCanAddChild: affiliateTo.whatIsTheLowestOrgThatCanAddChild,
           });
-
-          console.log("affiliateTo::" + JSON.stringify(affiliateTo));
         }
       }
     }
@@ -129,7 +124,7 @@ class UserAddAffiliates extends Component {
           AppConstants.affiliatedToOrgId
         );
         this.props.updateNewAffiliateAction(null, "affiliatedToOrgName");
-        this.props.form.setFieldsValue({
+        this.formRef.current.setFieldsValue({
           affiliatedToOrgId: null,
         });
       }
@@ -141,6 +136,7 @@ class UserAddAffiliates extends Component {
     let contacts = [];
     this.props.updateNewAffiliateAction(contacts, "contacts");
   };
+
   addContact = () => {
     let affiliate = this.props.userState.affiliate.affiliate;
     let contacts = affiliate.contacts;
@@ -163,7 +159,6 @@ class UserAddAffiliates extends Component {
 
   removeModalHandle = (key) => {
     if (key == "ok") {
-      console.log("Index::" + this.state.currentIndex);
       this.removeContact(this.state.currentIndex);
       this.setState({ deleteModalVisible: false });
     } else {
@@ -196,67 +191,50 @@ class UserAddAffiliates extends Component {
     this.props.updateNewAffiliateAction(contacts, "contacts");
   };
 
-  saveAffiliate = (e) => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      console.log("err::" + err);
-      if (!err) {
-        let affiliate = this.props.userState.affiliate.affiliate;
-        if (
-          affiliate.contacts == null ||
-          affiliate.contacts == undefined ||
-          affiliate.contacts.length == 0
-        ) {
-          message.error(ValidationConstants.affiliateContactRequired[0]);
-        } else {
-          let data = affiliate.contacts.find((x) =>
-            x.permissions.find((y) => y.roleId == 2)
-          );
-          if (data == undefined || data == null || data == "") {
-            message.error(ValidationConstants.affiliateContactRequired[0]);
-          } else {
-            let affiliateToOrgId = affiliate.affiliatedToOrgId;
-            let contacts = JSON.stringify(affiliate.contacts);
-            let formData = new FormData();
-            if (affiliateToOrgId == 0) {
-              affiliate.affiliatedToOrgId = this.state.organisationId;
-              affiliate.organisationId = this.state.organisationId;
-            }
-            affiliate.whatIsTheLowestOrgThatCanAddChild = this.state.whatIsTheLowestOrgThatCanAddChild;
-            formData.append("organisationLogo", null);
-            formData.append("affiliateId", affiliate.affiliateId);
-            formData.append("affiliateOrgId", affiliate.affiliateOrgId);
-            formData.append(
-              "organisationTypeRefId",
-              affiliate.organisationTypeRefId
-            );
-            formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
-            formData.append(
-              "organisationId",
-              getOrganisationData().organisationUniqueKey
-            );
-            formData.append("name", affiliate.name);
-            formData.append("street1", affiliate.street1);
-            formData.append("street2", affiliate.street2);
-            formData.append("suburb", affiliate.suburb);
-            formData.append("phoneNo", affiliate.phoneNo);
-            formData.append("city", affiliate.city);
-            formData.append("postalCode", affiliate.postalCode);
-            formData.append("stateRefId", affiliate.stateRefId);
-            formData.append(
-              "whatIsTheLowestOrgThatCanAddChild",
-              affiliate.whatIsTheLowestOrgThatCanAddChild
-            );
-            formData.append("contacts", contacts);
-            console.log("Req Body ::" + JSON.stringify(affiliate));
-            this.setState({ loading: true });
-            this.props.saveAffiliateAction(formData);
-          }
-        }
+  saveAffiliate = (values) => {
+    let affiliate = this.props.userState.affiliate.affiliate;
+    if (
+      affiliate.contacts == null ||
+      affiliate.contacts == undefined ||
+      affiliate.contacts.length == 0
+    ) {
+      message.error(ValidationConstants.affiliateContactRequired[0]);
+    } else {
+      let data = affiliate.contacts.find((x) =>
+        x.permissions.find((y) => y.roleId == 2)
+      );
+      if (data == undefined || data == null || data == "") {
+        message.error(ValidationConstants.affiliateContactRequired[0]);
       } else {
-        message.error(ValidationConstants.requiredMessage);
+        let affiliateToOrgId = affiliate.affiliatedToOrgId;
+        let contacts = JSON.stringify(affiliate.contacts);
+        let formData = new FormData();
+        if (affiliateToOrgId == 0) {
+          affiliate.affiliatedToOrgId = this.state.organisationId;
+          affiliate.organisationId = this.state.organisationId;
+        }
+        affiliate.whatIsTheLowestOrgThatCanAddChild = this.state.whatIsTheLowestOrgThatCanAddChild;
+        formData.append("organisationLogo", null);
+        formData.append("affiliateId", affiliate.affiliateId);
+        formData.append("affiliateOrgId", affiliate.affiliateOrgId);
+        formData.append("organisationTypeRefId", affiliate.organisationTypeRefId);
+        formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
+        formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+        formData.append("name", affiliate.name);
+        formData.append("street1", affiliate.street1);
+        formData.append("street2", affiliate.street2);
+        formData.append("suburb", affiliate.suburb);
+        formData.append("phoneNo", affiliate.phoneNo);
+        formData.append("city", affiliate.city);
+        formData.append("postalCode", affiliate.postalCode);
+        formData.append("stateRefId", affiliate.stateRefId);
+        formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
+        formData.append("contacts", contacts);
+
+        this.setState({ loading: true });
+        this.props.saveAffiliateAction(formData);
       }
-    });
+    }
   };
 
   ///////view for breadcrumb
@@ -288,19 +266,15 @@ class UserAddAffiliates extends Component {
   };
 
   ////////form content view
-  contentView = (getFieldDecorator) => {
+  contentView = () => {
     let affiliateToData = this.props.userState.affiliateTo;
     let affiliate = this.props.userState.affiliate.affiliate;
     const { stateList } = this.props.commonReducerState;
     if (affiliate.organisationTypeRefId === 0) {
-      if (
-        affiliateToData.organisationTypes != undefined &&
-        affiliateToData.organisationTypes.length > 0
-      )
-        affiliate.organisationTypeRefId =
-          affiliateToData.organisationTypes[0].id;
+      if (affiliateToData.organisationTypes != undefined && affiliateToData.organisationTypes.length > 0)
+        affiliate.organisationTypeRefId = affiliateToData.organisationTypes[0].id;
     }
-    console.log("affiliateaffiliate::" + JSON.stringify(affiliate));
+
     return (
       <div className="content-view pt-4">
         <InputWithHead
@@ -326,8 +300,7 @@ class UserAddAffiliates extends Component {
           (this.state.loggedInuserOrgTypeRefId == 1 &&
             (affiliate.organisationTypeRefId == 3 ||
               affiliate.organisationTypeRefId == 4)) ||
-          (this.state.loggedInuserOrgTypeRefId == 2 &&
-            affiliate.organisationTypeRefId == 4)
+          (this.state.loggedInuserOrgTypeRefId == 2 && affiliate.organisationTypeRefId == 4)
         ) ? (
           <div className="row mt-3">
             <div className="col-sm">
@@ -352,74 +325,60 @@ class UserAddAffiliates extends Component {
               heading={AppConstants.affilatedTo}
               required={"required-field"}
             />
-            <Form.Item>
-              {getFieldDecorator("affiliatedToOrgId", {
-                rules: [
-                  {
-                    required: true,
-                    message: ValidationConstants.affiliateToRequired,
-                  },
-                ],
-              })(
-                <Select
-                  style={{ width: "100%", paddingRight: 1 }}
-                  onChange={(e) =>
-                    this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)
-                  }
-                >
-                  {(affiliateToData.affiliatedTo || [])
-                    .filter(
-                      (x) =>
-                        x.organisationtypeRefId ==
-                        affiliate.organisationTypeRefId - 1
-                    )
-                    .map((aff, index) => (
-                      <Option
-                        key={aff.organisationId}
-                        value={aff.organisationId}
-                      >
-                        {aff.name}
-                      </Option>
-                    ))}
-                </Select>
-              )}
+
+            <Form.Item
+              name='affiliatedToOrgId'
+              rules={[{
+                required: true,
+                message: ValidationConstants.affiliateToRequired,
+              }]}
+            >
+              <Select
+                style={{ width: "100%", paddingRight: 1 }}
+                onChange={(e) =>
+                  this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)
+                }
+              >
+                {(affiliateToData.affiliatedTo || [])
+                  .filter(
+                    (x) => x.organisationtypeRefId == affiliate.organisationTypeRefId - 1
+                  )
+                  .map((aff, index) => (
+                    <Option
+                      key={aff.organisationId}
+                      value={aff.organisationId}
+                    >
+                      {aff.name}
+                    </Option>
+                  ))}
+              </Select>
             </Form.Item>
           </div>
         )}
-        <Form.Item>
-          {getFieldDecorator("name", {
-            rules: [
-              { required: true, message: ValidationConstants.nameField[2] },
-            ],
-          })(
-            <InputWithHead
-              auto_complete="new-name"
-              required={"required-field pt-0 pb-0"}
-              heading={AppConstants.name}
-              placeholder={AppConstants.name}
-              onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
-              //value={affiliate.name}
-              setFieldsValue={affiliate.name}
-            />
-          )}
+
+        <Form.Item name='name' rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
+          <InputWithHead
+            auto_complete="new-name"
+            required={"required-field pt-0 pb-0"}
+            heading={AppConstants.name}
+            placeholder={AppConstants.name}
+            onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
+            //value={affiliate.name}
+            setFieldsValue={affiliate.name}
+          />
         </Form.Item>
-        <Form.Item>
-          {getFieldDecorator("addressOne", {
-            rules: [
-              { required: true, message: ValidationConstants.addressField[2] },
-            ],
-          })(
-            <InputWithHead
-              required={"required-field pt-0 pb-0"}
-              auto_complete="new-address"
-              heading={AppConstants.addressOne}
-              placeholder={AppConstants.addressOne}
-              name={AppConstants.addressOne}
-              onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-              //value={affiliate.street1}
-              setFieldsValue={affiliate.street1}
-            />
-          )}
+
+        <Form.Item name='addressOne' rules={[{ required: true, message: ValidationConstants.addressField[2] }]}>
+          <InputWithHead
+            required={"required-field pt-0 pb-0"}
+            auto_complete="new-address"
+            heading={AppConstants.addressOne}
+            placeholder={AppConstants.addressOne}
+            name={AppConstants.addressOne}
+            onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
+            //value={affiliate.street1}
+            setFieldsValue={affiliate.street1}
+          />
         </Form.Item>
 
         <InputWithHead
@@ -430,22 +389,16 @@ class UserAddAffiliates extends Component {
           value={affiliate.street2}
         />
 
-        <Form.Item>
-          {getFieldDecorator("suburb", {
-            rules: [
-              { required: true, message: ValidationConstants.suburbField[0] },
-            ],
-          })(
-            <InputWithHead
-              auto_complete="new-suburb"
-              required={"required-field pt-3 pb-0"}
-              heading={AppConstants.suburb}
-              placeholder={AppConstants.suburb}
-              onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
-              //value={affiliate.suburb}
-              setFieldsValue={affiliate.suburb}
-            />
-          )}
+        <Form.Item name='suburb' rules={[{ required: true, message: ValidationConstants.suburbField[0] }]}>
+          <InputWithHead
+            auto_complete="new-suburb"
+            required={"required-field pt-3 pb-0"}
+            heading={AppConstants.suburb}
+            placeholder={AppConstants.suburb}
+            onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
+            //value={affiliate.suburb}
+            setFieldsValue={affiliate.suburb}
+          />
         </Form.Item>
 
         <InputWithHead
@@ -453,46 +406,33 @@ class UserAddAffiliates extends Component {
           heading={AppConstants.stateHeading}
         />
 
-        <Form.Item>
-          {getFieldDecorator("stateRefId", {
-            rules: [
-              { required: true, message: ValidationConstants.stateField[0] },
-            ],
-          })(
-            <Select
-              style={{ width: "100%" }}
-              placeholder={AppConstants.select}
-              onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-              //value={affiliate.stateRefId}
-              setFieldsValue={affiliate.stateRefId}
-            >
-              {stateList.length > 0 &&
-                stateList.map((item) => (
-                  <Option value={item.id}> {item.name}</Option>
-                ))}
-            </Select>
-          )}
+        <Form.Item name='stateRefId' rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
+          <Select
+            style={{ width: "100%" }}
+            placeholder={AppConstants.select}
+            onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
+            //value={affiliate.stateRefId}
+            setFieldsValue={affiliate.stateRefId}
+          >
+            {stateList.length > 0 && stateList.map((item) => (
+              <Option value={item.id}> {item.name}</Option>
+            ))}
+          </Select>
         </Form.Item>
 
-        <Form.Item>
-          {getFieldDecorator("postcode", {
-            rules: [
-              { required: true, message: ValidationConstants.postCodeField[0] },
-            ],
-          })(
-            <InputWithHead
-              auto_complete="new-postCode"
-              required={"required-field"}
-              heading={AppConstants.postcode}
-              placeholder={AppConstants.postcode}
-              onChange={(e) =>
-                this.onChangeSetValue(e.target.value, "postalCode")
-              }
-              //value={affiliate.postalCode}
-              setFieldsValue={affiliate.postalCode}
-              maxLength={4}
-            />
-          )}
+        <Form.Item name='postcode' rules={[{ required: true, message: ValidationConstants.postCodeField[0] }]}>
+          <InputWithHead
+            auto_complete="new-postCode"
+            required={"required-field"}
+            heading={AppConstants.postcode}
+            placeholder={AppConstants.postcode}
+            onChange={(e) =>
+              this.onChangeSetValue(e.target.value, "postalCode")
+            }
+            //value={affiliate.postalCode}
+            setFieldsValue={affiliate.postalCode}
+            maxLength={4}
+          />
         </Form.Item>
 
         <InputWithHead
@@ -507,13 +447,13 @@ class UserAddAffiliates extends Component {
     );
   };
 
-  contacts = (getFieldDecorator) => {
+  contacts = () => {
     let userState = this.props.userState;
     let affiliate = this.props.userState.affiliate.affiliate;
     let roles = this.props.userState.roles.filter(
       (x) => x.applicableToWeb == 1
     );
-    console.log("Roles::" + JSON.stringify(roles));
+
     return (
       <div className="discount-view pt-5">
         <span className="form-heading">{AppConstants.contacts}</span>
@@ -532,35 +472,29 @@ class UserAddAffiliates extends Component {
                 className="transfer-image-view pointer"
                 onClick={() => this.deleteContact(index)}
               >
-                <span class="user-remove-btn">
-                  <i class="fa fa-trash-o" aria-hidden="true"></i>
+                <span className="user-remove-btn">
+                  <i className="fa fa-trash-o" aria-hidden="true" />
                 </span>
                 <span className="user-remove-text">{AppConstants.remove}</span>
               </div>
             </div>
 
-            <Form.Item>
-              {getFieldDecorator(`firstName${index}`, {
-                rules: [
-                  { required: true, message: ValidationConstants.nameField[0] },
-                ],
-              })(
-                <InputWithHead
-                  auto_complete="new-firstName"
-                  required={"required-field pt-0 pb-0"}
-                  heading={AppConstants.firstName}
-                  placeholder={AppConstants.firstName}
-                  onChange={(e) =>
-                    this.onChangeContactSetValue(
-                      e.target.value,
-                      "firstName",
-                      index
-                    )
-                  }
-                  //value={item.firstName}
-                  setFieldsValue={item.firstName}
-                />
-              )}
+            <Form.Item name={`firstName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[0] }]}>
+              <InputWithHead
+                auto_complete="new-firstName"
+                required={"required-field pt-0 pb-0"}
+                heading={AppConstants.firstName}
+                placeholder={AppConstants.firstName}
+                onChange={(e) =>
+                  this.onChangeContactSetValue(
+                    e.target.value,
+                    "firstName",
+                    index
+                  )
+                }
+                //value={item.firstName}
+                setFieldsValue={item.firstName}
+              />
             </Form.Item>
 
             <InputWithHead
@@ -577,54 +511,47 @@ class UserAddAffiliates extends Component {
               auto_complete="new-middleName"
             />
 
-            <Form.Item>
-              {getFieldDecorator(`lastName${index}`, {
-                rules: [
-                  { required: true, message: ValidationConstants.nameField[1] },
-                ],
-              })(
-                <InputWithHead
-                  required={"required-field pt-0 pb-0"}
-                  heading={AppConstants.lastName}
-                  placeholder={AppConstants.lastName}
-                  onChange={(e) =>
-                    this.onChangeContactSetValue(
-                      e.target.value,
-                      "lastName",
-                      index
-                    )
-                  }
-                  setFieldsValue={item.lastName}
-                  auto_complete="new-lastName"
-                />
-              )}
+            <Form.Item name={`lastName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
+              <InputWithHead
+                required={"required-field pt-0 pb-0"}
+                heading={AppConstants.lastName}
+                placeholder={AppConstants.lastName}
+                onChange={(e) =>
+                  this.onChangeContactSetValue(
+                    e.target.value,
+                    "lastName",
+                    index
+                  )
+                }
+                setFieldsValue={item.lastName}
+                auto_complete="new-lastName"
+              />
             </Form.Item>
 
-            <Form.Item>
-              {getFieldDecorator(`email${index}`, {
-                rules: [
-                  {
-                    required: true,
-                    message: ValidationConstants.emailField[0],
-                  },
-                  {
-                    type: "email",
-                    pattern: new RegExp(AppConstants.emailExp),
-                    message: ValidationConstants.email_validation,
-                  },
-                ],
-              })(
-                <InputWithHead
-                  auto_complete="new-email"
-                  required={"required-field pt-0 pb-0"}
-                  heading={AppConstants.email}
-                  placeholder={AppConstants.email}
-                  onChange={(e) =>
-                    this.onChangeContactSetValue(e.target.value, "email", index)
-                  }
-                  setFieldsValue={item.email}
-                />
-              )}
+            <Form.Item
+              name={`email${index}`}
+              rules={[
+                {
+                  required: true,
+                  message: ValidationConstants.emailField[0],
+                },
+                {
+                  type: "email",
+                  pattern: new RegExp(AppConstants.emailExp),
+                  message: ValidationConstants.email_validation,
+                }
+              ]}
+            >
+              <InputWithHead
+                auto_complete="new-email"
+                required={"required-field pt-0 pb-0"}
+                heading={AppConstants.email}
+                placeholder={AppConstants.email}
+                onChange={(e) =>
+                  this.onChangeContactSetValue(e.target.value, "email", index)
+                }
+                setFieldsValue={item.email}
+              />
             </Form.Item>
 
             <InputWithHead
@@ -648,29 +575,27 @@ class UserAddAffiliates extends Component {
               conceptulHelpMsg={AppConstants.addAffiliatePermissionLevelMsg}
               marginTop={5}
             />
-            <Form.Item>
-              {getFieldDecorator(`permissions${index}`, {
-                rules: [
-                  {
-                    required: true,
-                    message: ValidationConstants.rolesField[0],
-                  },
-                ],
-              })(
-                <Select
-                  style={{ width: "100%", paddingRight: 1 }}
-                  onChange={(e) =>
-                    this.onChangeContactSetValue(e, "roles", index)
-                  }
-                  setFieldsValue={item.roleId}
-                >
-                  {(roles || []).map((role, index) => (
-                    <Option key={role.id} value={role.id}>
-                      {role.description}
-                    </Option>
-                  ))}
-                </Select>
-              )}
+
+            <Form.Item
+              name={`permissions${index}`}
+              rules={[{
+                required: true,
+                message: ValidationConstants.rolesField[0],
+              }]}
+            >
+              <Select
+                style={{ width: "100%", paddingRight: 1 }}
+                onChange={(e) =>
+                  this.onChangeContactSetValue(e, "roles", index)
+                }
+                setFieldsValue={item.roleId}
+              >
+                {(roles || []).map((role, index) => (
+                  <Option key={role.id} value={role.id}>
+                    {role.description}
+                  </Option>
+                ))}
+              </Select>
             </Form.Item>
           </div>
         ))}
@@ -739,9 +664,9 @@ class UserAddAffiliates extends Component {
       </div>
     );
   };
+
   render() {
     let userState = this.props.userState;
-    const { getFieldDecorator } = this.props.form;
     return (
       <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
         <DashboardLayout
@@ -752,15 +677,19 @@ class UserAddAffiliates extends Component {
         <Layout>
           {this.headerView()}
           <Form
+            ref={this.formRef}
             autoComplete="off"
-            onSubmit={this.saveAffiliate}
+            onFinish={this.saveAffiliate}
+            onFinishFailed={(err) => {
+              message.error(ValidationConstants.requiredMessage);
+            }}
             noValidate="noValidate"
           >
             <Content>
               <div className="formView">
-                {this.contentView(getFieldDecorator)}
+                {this.contentView()}
               </div>
-              <div className="formView">{this.contacts(getFieldDecorator)}</div>
+              <div className="formView">{this.contacts()}</div>
               <Loader visible={userState.onLoad} />
             </Content>
             <Footer>{this.footerView()}</Footer>
@@ -785,14 +714,15 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
   return {
     userState: state.UserState,
     appState: state.AppState,
     commonReducerState: state.CommonReducerState,
   };
 }
+
 export default connect(
-  mapStatetoProps,
+  mapStateToProps,
   mapDispatchToProps
-)(Form.create()(UserAddAffiliates));
+)(UserAddAffiliates);

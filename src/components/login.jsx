@@ -137,7 +137,7 @@ class Login extends Component {
                     isSubmitting,
                     setFieldValue
                   }) => (
-                  <Form onSubmit={handleSubmit}>
+                  <Form onFinish={handleSubmit}>
                     <div className="auth-form" style={{ zIndex: 15 }}>
                       {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
                     </div>

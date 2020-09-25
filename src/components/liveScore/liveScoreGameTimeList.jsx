@@ -1,15 +1,17 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Breadcrumb, Pagination, Select, Input, Icon } from "antd";
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Layout, Button, Table, Breadcrumb, Pagination, Select, Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { gameTimeStatisticsListAction } from '../../store/actions/LiveScoreAction/liveScoregameTimeStatisticsAction'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
-import { NavLink } from 'react-router-dom';
 import { exportFilesAction } from "../../store/actions/appAction"
 import { teamListData } from "../../util/helpers";
 
@@ -18,10 +20,8 @@ const { Option } = Select;
 
 var this_obj = null
 
-
 /// Check play percentage value
 function checkPlay(record) {
-
     let playTimeTeamMatches = JSON.parse(record.playTimeTeamMatches)
     let playTime = record.playTime ? JSON.parse(record.playTime) : 0
 
@@ -31,11 +31,7 @@ function checkPlay(record) {
         let result = 100 * (playTime / playTimeTeamMatches)
         return result.toFixed(2) + "%"
     }
-
-
-
 }
-
 
 //// Check play time
 function checkPlayTime(record) {
@@ -60,7 +56,6 @@ function checkPlayTime(record) {
             let time_value = hDisplay + mDisplay + sDisplay;
 
             return time_value
-
         } else {
             if (record.playTime === 0) {
                 return record.playTime + " Periods"
@@ -74,12 +69,9 @@ function checkPlayTime(record) {
 }
 
 function checkPlayerId(player) {
-
     if (player.mnbPlayerId == "undefined" || player.mnbPlayerId == "") {
-
         return player.id
     } else {
-
         return player.mnbPlayerId
     }
 }
@@ -102,20 +94,16 @@ function tableSort(key) {
 
     this_obj.setState({ sortBy, sortOrder });
 
-
     this_obj.props.gameTimeStatisticsListAction(this_obj.state.competitionId, this_obj.state.filter === 'All' ? "" : this_obj.state.filter, this_obj.state.offset, this_obj.state.searchText, sortBy, sortOrder)
 }
 
-////columens data
 const columns = [
-
     {
         title: 'Player Id',
         dataIndex: 'player',
         key: 'player',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('playerId'),
-
         render: (player, record) => <NavLink to={{
             pathname: '/liveScorePlayerView',
             state: { tableRecord: record }
@@ -129,7 +117,6 @@ const columns = [
         key: 'firstName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('firstName'),
-
         render: (firstName, player) => <NavLink to={{
             pathname: '/liveScorePlayerView',
             state: { tableRecord: player }
@@ -142,8 +129,7 @@ const columns = [
         dataIndex: 'lastName',
         key: 'lastName',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('lastName'),
-
+        onHeaderCell: () => listeners('lastName'),
         render: (lastName, player) => <NavLink to={{
             pathname: '/liveScorePlayerView',
             state: { tableRecord: player }
@@ -156,23 +142,23 @@ const columns = [
         dataIndex: 'team',
         key: 'team',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('team'),
+        onHeaderCell: () => listeners('team'),
         render: (team) => teamListData(team.id) ?
             <NavLink to={{
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team, screenName: 'fromGameTimeList' }
             }} >
                 <span className="input-heading-add-another pt-0" >{team.name}</span>
-            </NavLink> : <span  >{team.name}</span>
+            </NavLink> : <span>{team.name}</span>
     },
     {
         title: 'DIV',
         dataIndex: 'division',
         key: 'division',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('div'),
+        onHeaderCell: () => listeners('div'),
         render: (division) =>
-            <span >{division ? division.name : ""}</span>
+            <span>{division ? division.name : ""}</span>
     },
     {
         title: 'Play Time',
@@ -181,16 +167,16 @@ const columns = [
         sorter: false,
         // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (playTime, record) =>
-            <span >{checkPlayTime(record)}</span>
+            <span>{checkPlayTime(record)}</span>
     },
     {
         title: 'Play %',
         dataIndex: 'playPercent',
         key: 'playPercent',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('playPercent'),
+        onHeaderCell: () => listeners('playPercent'),
         render: (playTime, record) =>
-            <span  >{checkPlay(record)}</span>
+            <span>{checkPlay(record)}</span>
     },
     // {
     //     title: 'Playing Up %',
@@ -200,10 +186,7 @@ const columns = [
     //     render: (playingUp) =>
     //         <span class="input-heading-add-another pt-0" style={{ color: playingUp < '25%' ? 'red' : 'green' }} >{playingUp}</span>
     // },
-
 ];
-
-
 
 class LiveScoreGameTimeList extends Component {
     constructor(props) {
@@ -228,12 +211,11 @@ class LiveScoreGameTimeList extends Component {
         }
     }
 
-    handleGameTimeTableList(page, competitionId, aggergate) {
+    handleGameTimeTableList = (page, competitionId, aggregate) => {
         let offset = page ? 10 * (page - 1) : 0
         this.setState({ offset: offset })
 
-        this.props.gameTimeStatisticsListAction(competitionId, aggergate === 'All' ? "" : aggergate, offset, this.state.searchText, this.state.sortBy, this.state.sortOrder)
-
+        this.props.gameTimeStatisticsListAction(competitionId, aggregate === 'All' ? "" : aggregate, offset, this.state.searchText, this.state.sortBy, this.state.sortOrder)
     }
 
     setFilterValue = (data) => {
@@ -243,11 +225,10 @@ class LiveScoreGameTimeList extends Component {
         this.props.gameTimeStatisticsListAction(id, data.filter === 'All' ? "" : data.filter, offset, this.state.searchText, this.state.sortBy, this.state.sortOrder)
     }
 
-    onExport() {
+    onExport = () => {
         let url = AppConstants.gameTimeExport + this.state.competitionId + `&aggregate=${this.state.filter}`
         this.props.exportFilesAction(url)
     }
-
 
     // on change search text
     onChangeSearchText = (e) => {
@@ -258,7 +239,7 @@ class LiveScoreGameTimeList extends Component {
         }
     }
 
-    // search key 
+    // search key
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -281,9 +262,9 @@ class LiveScoreGameTimeList extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view mt-4 ">
-                < div className="row" >
-                    <div className="col-sm" style={{ alignSelf: 'center' }} >
+            <div className="comp-player-grades-header-drop-down-view mt-4">
+                < div className="row">
+                    <div className="col-sm" style={{ alignSelf: 'center' }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.gameTimeStatistics}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -295,22 +276,21 @@ class LiveScoreGameTimeList extends Component {
                         justifyContent: "flex-end",
                     }}>
                         <div className="row">
-
                             <div className="col-sm">
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ display: "flex", justifyContent: "flex-end", minWidth: 140 }}
                                     // onChange={(selectStatus) => this.setState({ selectStatus })}
                                     onChange={(filter) => this.setFilterValue({ filter })}
-                                    value={this.state.filter} >
+                                    value={this.state.filter}
+                                >
                                     {/* <Option value={'All'}>{'All'}</Option> */}
                                     <Option value={AppConstants.period}>{AppConstants.periods}</Option>
                                     <Option value={AppConstants.minute}>{AppConstants.minutes}</Option>
                                     <Option value={AppConstants.matches}>{AppConstants.totalGames}</Option>
                                 </Select>
                             </div>
-                            <div className="col-sm"
-                                style={{ display: "flex" }}>
+                            <div className="col-sm" style={{ display: "flex" }}>
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
@@ -320,8 +300,9 @@ class LiveScoreGameTimeList extends Component {
                                         alignSelf: 'center',
                                         alignItems: "flex-end",
                                         justifyContent: "flex-end"
-                                    }} >
-                                    <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
+                                    }}
+                                >
+                                    <Button onClick={this.onExport} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -338,18 +319,22 @@ class LiveScoreGameTimeList extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div >
-                </div >
+                    </div>
+                </div>
                 {/* search box */}
-                <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
-                    <div className="comp-product-search-inp-width" >
-                        <Input className="product-reg-search-input"
-                            onChange={(e) => this.onChangeSearchText(e)}
+                <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end' }}>
+                    <div className="comp-product-search-inp-width">
+                        <Input
+                            className="product-reg-search-input"
+                            onChange={this.onChangeSearchText}
                             placeholder="Search..."
-                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                onClick={() => this.onClickSearchIcon()}
-                            />}
+                            onKeyPress={this.onKeyEnterSearchText}
+                            prefix={
+                                <SearchOutlined
+                                    style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={this.onClickSearchIcon}
+                                />
+                            }
                             allowClear
                         />
                     </div>
@@ -387,16 +372,15 @@ class LiveScoreGameTimeList extends Component {
                             flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "flex-end"
-                        }} >
-                    </div>
+                        }}
+                    />
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
                             current={this.props.liveScoreGameTimeStatisticsState.gameTimeStatisticsPage}
                             total={total}
                             onChange={(page) => this.handleGameTimeTableList(page, id, this.state.filter)}
-                        // defaultPageSize={10}
-
+                            // defaultPageSize={10}
                         />
                     </div>
                 </div>
@@ -431,5 +415,5 @@ function mapStateToProps(state) {
         liveScoreGameTimeStatisticsState: state.LiveScoreGameTimeStatisticsState
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)((LiveScoreGameTimeList));
 
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreGameTimeList);

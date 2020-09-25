@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Button, Input, Icon, DatePicker, Modal } from "antd";
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Button, Input, DatePicker, Modal } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 
 import AppConstants from "themes/appConstants";
@@ -14,7 +15,7 @@ import { getGenderAction } from "store/actions/commonAction/commonAction";
 import {
     getUserDashboardTextualAction,
     exportOrgRegQuestionAction,
-    userDeleteAction
+    userDeleteAction,
 } from "store/actions/userAction/userAction";
 import InputWithHead from "customComponents/InputWithHead";
 import Loader from "customComponents/loader";
@@ -230,7 +231,7 @@ class UserTextualDashboard extends Component {
         let this_ = this
         let name = user.name
         confirm({
-            title: 'Do you really want to delete the user "' + name + '"?',
+            title: `Do you really want to delete the user "${name}"?`,
             okText: "Yes",
             okType: "danger",
             cancelText: "No",
@@ -301,7 +302,8 @@ class UserTextualDashboard extends Component {
     };
 
     onChangeSearchText = async (e) => {
-        let value = e.target.value;
+        const value = e.target.value;
+
         await this.setState({ searchText: value });
 
         if (!value) {
@@ -327,7 +329,7 @@ class UserTextualDashboard extends Component {
             searchText,
         } = this.state;
 
-        let filter = {
+        const filter = {
             organisationId,
             yearRefId,
             competitionUniqueKey,
@@ -361,7 +363,7 @@ class UserTextualDashboard extends Component {
             searchText,
         } = this.state;
 
-        let filter = {
+        const filter = {
             organisationId,
             yearRefId,
             competitionUniqueKey,
@@ -380,7 +382,9 @@ class UserTextualDashboard extends Component {
             <div className="row">
                 <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                     <Breadcrumb separator=" > ">
-                        <Breadcrumb.Item className="breadcrumb-add">{AppConstants.userProfile}</Breadcrumb.Item>
+                        <Breadcrumb.Item className="breadcrumb-add">
+                            {AppConstants.userProfile}
+                        </Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
 
@@ -394,8 +398,7 @@ class UserTextualDashboard extends Component {
                                     placeholder="Search..."
                                     onKeyPress={this.onKeyEnterSearchText}
                                     prefix={
-                                        <Icon
-                                            type="search"
+                                        <SearchOutlined
                                             style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                             onClick={this.onClickSearchIcon}
                                         />

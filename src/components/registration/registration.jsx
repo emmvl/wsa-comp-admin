@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Breadcrumb, Icon, Table, Select, Menu, Pagination, DatePicker, Input, Button } from "antd";
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, DatePicker, Input, Button } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import { isEmptyArray } from "formik";
 import moment from "moment";
 
@@ -14,7 +15,7 @@ import { getOrganisationData, getPrevUrl } from "util/sessionStorage";
 import {
     getCommonRefData,
     getGenderAction,
-    registrationPaymentStatusAction
+    registrationPaymentStatusAction,
 } from "store/actions/commonAction/commonAction";
 import { endUserRegDashboardListAction } from "store/actions/registrationAction/endUserRegistrationAction";
 import { getAllCompetitionAction } from "store/actions/registrationAction/registrationDashboardAction";
@@ -71,7 +72,7 @@ const columns = [
         render: (name, record) => (
             <NavLink
                 to={{
-                    pathname: `/userPersonal`,
+                    pathname: "/userPersonal",
                     state: {
                         userId: record.userId,
                         screenKey: "registration",
@@ -89,7 +90,7 @@ const columns = [
         key: "registrationDate",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (registrationDate, record, index) => (
+        render: (registrationDate) => (
             <div>
                 {registrationDate != null ? moment(registrationDate).format("DD/MM/YYYY") : ""}
             </div>
@@ -137,7 +138,7 @@ const columns = [
         title: "Action",
         dataIndex: "isUsed",
         key: "isUsed",
-        render: (isUsed, e) => (
+        render: () => (
             <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
@@ -305,7 +306,7 @@ class Registration extends Component {
     };
 
     onChangeSearchText = async (e) => {
-        let value = e.target.value;
+        const value = e.target.value;
 
         await this.setState({ searchText: value });
 
@@ -362,7 +363,7 @@ class Registration extends Component {
                                 value={this.state.paymentStatusRefId}
                             >
                                 <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                {(paymentStatus || []).map((g, index) => (
+                                {(paymentStatus || []).map((g) => (
                                     <Option key={g.id} value={g.id}>{g.description}</Option>
                                 ))}
                             </Select>
@@ -373,12 +374,11 @@ class Registration extends Component {
                         <div className="comp-product-search-inp-width">
                             <Input
                                 className="product-reg-search-input"
-                                onChange={(e) => this.onChangeSearchText(e)}
+                                onChange={this.onChangeSearchText}
                                 placeholder="Search..."
-                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                onKeyPress={this.onKeyEnterSearchText}
                                 prefix={
-                                    <Icon
-                                        type="search"
+                                    <SearchOutlined
                                         style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                         onClick={this.onClickSearchIcon}
                                     />

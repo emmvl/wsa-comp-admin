@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Button, Table, Select, Tag, Form, Tooltip, message, Menu, Modal } from 'antd';
+import { Layout, Breadcrumb, Input, Button, Table, Select, Tag, Tooltip, message, Menu, Modal } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -79,7 +79,7 @@ const columns = [
         render: (playerHistory, record, key) => (
             <span>
                 {playerHistory.map((item, index) => (
-                    (item.divisionGrade != null && item.divisionGrade != "") ? 
+                    (item.divisionGrade != null && item.divisionGrade != "") ?
                     <Tooltip
                         className="comp-player-table-tag2"
                         style={{ height: "100%" }}
@@ -152,14 +152,14 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, e, index) => (
-            <Menu className="action-triple-dot-submenu" theme="light" mode="horizontal"
-                style={{ lineHeight: "25px" }}>
-                <SubMenu key="sub1"
+            <Menu className="action-triple-dot-submenu" theme="light" mode="horizontal" style={{ lineHeight: "25px" }}>
+                <SubMenu
+                    key="sub1"
                     disabled={this_obj.state.competitionStatus == 1 ? true : false}
-                    title={<img className="dot-image" src={AppImages.moreTripleDot}
-                        alt="" width="16" height="16"
-                    />
-                    }>
+                    title={
+                        <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                    }
+                >
                     <Menu.Item key="1" onClick={() => this_obj.onClickChangeDivision(e)}>
                         <span>Change Division</span>
                     </Menu.Item>
@@ -312,7 +312,7 @@ class CompetitionPartProposedTeamGrading extends Component {
     handleOk = e => {
         {
             this.state.comment.length > 0 &&
-                this.props.partProposedSummaryComment(this.state.firstTimeCompId, this.state.divisionId, this.state.teamId, this.state.comment)
+            this.props.partProposedSummaryComment(this.state.firstTimeCompId, this.state.divisionId, this.state.teamId, this.state.comment)
         }
         this.props.clearReducerCompPartPlayerGradingAction("commentList")
         this.setState({
@@ -578,14 +578,14 @@ class CompetitionPartProposedTeamGrading extends Component {
                     value={this.state.comment}
                     commentLoad={commentLoad}
                     commentList={commentList}
-                // owner={this.state.commentsCreatedBy}
-                // OwnCreatedComment={this.state.commentsCreatedOn}
-                // ownnerComment={this.state.comments}
-                // affilate={this.state.responseCommentsCreatedBy}
-                // affilateCreatedComment={this.state.responseCommentsCreatedOn}
-                // affilateComment={this.state.responseComments}
-                // finalGradeId={this.state.finalGradeId}
-                // proposedGradeID={this.state.proposedGradeID}
+                    // owner={this.state.commentsCreatedBy}
+                    // OwnCreatedComment={this.state.commentsCreatedOn}
+                    // ownnerComment={this.state.comments}
+                    // affilate={this.state.responseCommentsCreatedBy}
+                    // affilateCreatedComment={this.state.responseCommentsCreatedOn}
+                    // affilateComment={this.state.responseComments}
+                    // finalGradeId={this.state.finalGradeId}
+                    // proposedGradeID={this.state.proposedGradeID}
                 />
 
                 <Modal
@@ -682,7 +682,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                     </div>
                 </div>
             </div>
-            // </div >
+            // </div>
         )
     }
 
@@ -704,10 +704,10 @@ class CompetitionPartProposedTeamGrading extends Component {
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getYearAndCompetitionParticipateAction,
@@ -728,7 +728,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         ownTeamGradingState: state.CompetitionOwnTeamGradingState,
@@ -737,4 +737,5 @@ function mapStatetoProps(state) {
         partPlayerGradingState: state.CompetitionPartPlayerGradingState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionPartProposedTeamGrading));
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionPartProposedTeamGrading);

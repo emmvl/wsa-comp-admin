@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { NavLink } from "react-router-dom";
-import { Input, Layout, message, Breadcrumb, Button, Table, Pagination, Icon, Select } from "antd";
+import { Input, Layout, message, Breadcrumb, Button, Table, Pagination, Select } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import "./liveScore.css";
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
@@ -117,8 +118,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team1.name}</span>
             </NavLink>
         ) : (
-                <span>{team1.name}</span>
-            )
+            <span>{team1.name}</span>
+        )
     },
     {
         title: 'Away',
@@ -136,8 +137,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team2.name}</span>
             </NavLink>
         ) : (
-                <span>{team2.name}</span>
-            )
+            <span>{team2.name}</span>
+        )
     },
     {
         title: 'Venue',
@@ -276,7 +277,7 @@ class LiveScoreMatchesList extends Component {
         }
     }
 
-    // search key 
+    // search key
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
 
@@ -317,8 +318,8 @@ class LiveScoreMatchesList extends Component {
                         ) : setMatchResult(records)}
                     </div>
                 ) : (
-                        <span className="white-space-nowrap">{setMatchResult(records)}</span>
-                    )}
+                    <span className="white-space-nowrap">{setMatchResult(records)}</span>
+                )}
             </div>
         )
     }
@@ -638,12 +639,15 @@ class LiveScoreMatchesList extends Component {
                         <div className="comp-product-search-inp-width pb-3">
                             <Input
                                 className="product-reg-search-input"
-                                onChange={(e) => this.onChangeSearchText(e)}
+                                onChange={this.onChangeSearchText}
                                 placeholder="Search..."
-                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                    onClick={() => this.onClickSearchIcon()}
-                                />}
+                                onKeyPress={this.onKeyEnterSearchText}
+                                prefix={
+                                    <SearchOutlined
+                                        style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                        onClick={this.onClickSearchIcon}
+                                    />
+                                }
                                 allowClear
                             />
                         </div>
@@ -659,18 +663,18 @@ class LiveScoreMatchesList extends Component {
                 {this.state.umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                        <DashboardLayout
-                            menuHeading={AppConstants.liveScores}
-                            menuName={AppConstants.liveScores}
-                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                        />
-                    )}
+                    <DashboardLayout
+                        menuHeading={AppConstants.liveScores}
+                        menuName={AppConstants.liveScores}
+                        onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    />
+                )}
 
                 {this.state.umpireKey ? (
                     <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"1"} />
                 ) : (
-                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
-                    )}
+                    <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
+                )}
 
                 <Layout>
                     {this.headerView()}

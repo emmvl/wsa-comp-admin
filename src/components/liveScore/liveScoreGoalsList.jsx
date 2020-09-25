@@ -1,20 +1,20 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Pagination, Select, Button, Input, Icon } from 'antd';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Layout, Breadcrumb, Table, Pagination, Select, Button, Input } from 'antd';
+import { SearchOutlined } from "@ant-design/icons";
+
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { liveScoreGoalListAction } from '../../store/actions/LiveScoreAction/liveScoreGoalsAction'
 import history from "../../util/history";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { isArrayNotEmpty } from '../../util/helpers'
-
-
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -44,15 +44,12 @@ function tableSort(key) {
 }
 
 const columns1 = [
-
     {
         title: 'Match Id',
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-
-
     },
     {
         title: 'Date',
@@ -61,7 +58,6 @@ const columns1 = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('date'),
         // render: (startTime) => <span  >{liveScore_formateDateTime(startTime)}</span>
-
     },
     {
         title: 'Team',
@@ -104,7 +100,6 @@ const columns1 = [
         key: 'gamePositionName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('position'),
-
     },
     {
         title: 'Misses',
@@ -113,14 +108,12 @@ const columns1 = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('misses'),
     },
-
     {
         title: 'Goals',
         dataIndex: 'goal',
         key: 'goal',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners('goals'),
-
     },
     {
         title: 'Attempts',
@@ -153,8 +146,6 @@ const columns2 = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (firstName, record) => {
-            console.log(record, 'recordCheck')
-
             return (
                 <NavLink to={{
                     pathname: '/liveScorePlayerView',
@@ -216,7 +207,6 @@ const columns2 = [
     },
 ]
 
-
 class LiveScoreGoalList extends Component {
     constructor(props) {
         super(props);
@@ -243,11 +233,11 @@ class LiveScoreGoalList extends Component {
         }
     }
 
-
-    onExport() {
+    onExport = () => {
         let url = AppConstants.goalExport + this.state.competitionId + `&aggregate=${this.state.filter}`
         this.props.exportFilesAction(url)
     }
+
     // on change search text
     onChangeSearchText = (e) => {
         let { sortBy, sortOrder } = this.state
@@ -258,7 +248,7 @@ class LiveScoreGoalList extends Component {
         }
     }
 
-    // search key 
+    // search key
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
         let { sortBy, sortOrder } = this.state
@@ -279,13 +269,12 @@ class LiveScoreGoalList extends Component {
         }
     }
 
-    onChangeFilter(filter) {
+    onChangeFilter = (filter) => {
         let { sortBy, sortOrder } = this.state
         let offset = 0
         this.props.liveScoreGoalListAction(this.state.competitionId, filter, this.state.searchText, offset, sortBy, sortOrder)
         this.setState({ filter })
     }
-
 
     ///////view for breadcrumb
     headerView = () => {
@@ -316,7 +305,7 @@ class LiveScoreGoalList extends Component {
                                 </Select>
                             </div>
                             <div className="col-sm"
-                                style={{ display: "flex" }}>
+                                 style={{ display: "flex" }}>
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
@@ -349,13 +338,17 @@ class LiveScoreGoalList extends Component {
                 {/* search box */}
                 <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
                     <div className="comp-product-search-inp-width" >
-                        <Input className="product-reg-search-input"
-                            onChange={(e) => this.onChangeSearchText(e)}
+                        <Input
+                            className="product-reg-search-input"
+                            onChange={this.onChangeSearchText}
                             placeholder="Search..."
-                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                onClick={() => this.onClickSearchIcon()}
-                            />}
+                            onKeyPress={this.onKeyEnterSearchText}
+                            prefix={
+                                <SearchOutlined
+                                    style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={this.onClickSearchIcon}
+                                />
+                            }
                             allowClear
                         />
                     </div>

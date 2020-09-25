@@ -71,8 +71,8 @@ class DashboardLayout extends React.Component {
         if (this.props.userState.impersonation && !this.state.impersonationLoad) {
           const impersonationAffiliate = this.state.impersonationAffiliateOrgId
             ? this.props.userState.affiliateList.find(
-                (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
-              )
+              (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
+            )
             : null;
           await setImpersonationAffiliate(impersonationAffiliate);
 
@@ -514,8 +514,8 @@ class DashboardLayout extends React.Component {
               onChange={this.handleImpersonationOrg}
               placeholder="Organisation"
               showSearch
-              filterOption={(input, option) =>
-                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              filterOption={(input, data) =>
+                data.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               loading={this.props.userState.onLoad}
             >

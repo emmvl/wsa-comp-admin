@@ -76,6 +76,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         };
         // this.props.clearYearCompetitionAction()
         // this.props.getCommonRefData()
+        this.formRef = React.createRef();
     }
 
     componentDidMount() {
@@ -229,7 +230,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
             let courtIDS = `courtIDS${index}`
             let entitiesDivisionId = `entitiesDivisionId${index}`
             let entitiesGradeId = `entitiesGradeId${index}`
-            this.props.form.setFieldsValue({
+            this.formRef.current.setFieldsValue({
                 [courtIDS]: item.venueCourtId,
                 [entitiesDivisionId]: item.entitiesDivisionId,
                 [entitiesGradeId]: item.entitiesGradeId
@@ -341,9 +342,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     value={this.state.yearRefId}
                                 >
                                     {own_YearArr.length > 0 && own_YearArr.map((item, index) => (
-                                        < Option key={"year" + index} value={item.id} > {item.name}</Option>
-                                    ))
-                                    }
+                                        <Option key={"year" + index} value={item.id} > {item.name}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -368,7 +368,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 >
                                     {own_CompetitionArr.length > 0 && own_CompetitionArr.map((item, index) => {
                                         return (
-                                            < Option key={item.statusRefId} value={item.competitionId}> {item.competitionName}</Option>
+                                            <Option key={item.statusRefId} value={item.competitionId}> {item.competitionName}</Option>
                                         );
                                     })}
                                 </Select>
@@ -380,51 +380,39 @@ class CompetitionVenueTimesPrioritisation extends Component {
         );
     };
 
-    nonPlayingDatesView(item, index, getFieldDecorator) {
+    nonPlayingDatesView(item, index) {
         return (
             <div className="fluid-width">
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item>
-                            {getFieldDecorator(`name${index}`,
-                                {
-                                    rules: [{ required: true, message: ValidationConstant.nameField[2] }]
-                                })(
-                                    <InputWithHead
-                                        auto_complete="new-name"
-                                        placeholder={AppConstants.name}
-                                        onChange={name => {
-                                            this.props.updateVenueConstraintsData(name.target.value, index, 'name', 'nonPlayingDates')
-
-                                        }
-                                        }
-                                        value={item.name}
-                                    />
-                                )}
+                        <Form.Item name={`name${index}`} rules={[{ required: true, message: ValidationConstant.nameField[2] }]}>
+                            <InputWithHead
+                                auto_complete="new-name"
+                                placeholder={AppConstants.name}
+                                onChange={name => {
+                                    this.props.updateVenueConstraintsData(name.target.value, index, 'name', 'nonPlayingDates')
+                                }}
+                                value={item.name}
+                            />
                         </Form.Item>
                     </div>
                     <div className="col-sm">
-                        <Form.Item>
-                            {getFieldDecorator(`date${index}`,
-                                {
-                                    rules: [{ required: true, message: ValidationConstant.dateField }]
-                                })(
-                                    <DatePicker
-                                        className="comp-dashboard-botton-view-mobile"
-                                        size="large"
-                                        style={{ width: "100%" }}
-                                        format={"DD/MM/YYYY"}
-                                        placeholder={"dd-mm-yyyy"}
-                                        showTime={false}
-                                        onChange={date => this.props.updateVenueConstraintsData(moment(date).format('YYYY-MM-DD'), index, 'nonPlayingDate', 'nonPlayingDates')}
-                                        value={item.nonPlayingDate && moment(item.nonPlayingDate)}
-                                    />
-                                )}
+                        <Form.Item name={`date${index}`} rules={[{ required: true, message: ValidationConstant.dateField }]}>
+                            <DatePicker
+                                className="comp-dashboard-botton-view-mobile"
+                                size="large"
+                                style={{ width: "100%" }}
+                                format={"DD/MM/YYYY"}
+                                placeholder={"dd-mm-yyyy"}
+                                showTime={false}
+                                onChange={date => this.props.updateVenueConstraintsData(moment(date).format('YYYY-MM-DD'), index, 'nonPlayingDate', 'nonPlayingDates')}
+                                value={item.nonPlayingDate && moment(item.nonPlayingDate)}
+                            />
                         </Form.Item>
                     </div>
                     <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.removePrefencesObjectAction(index, item, 'nonPlayingDates')}>
                         <span className="user-remove-btn">
-                            <i className="fa fa-trash-o" aria-hidden="true"></i>
+                            <i className="fa fa-trash-o" aria-hidden="true" />
                         </span>
                         <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
                     </div>
@@ -433,7 +421,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         )
     }
 
-    nonPlayingDatesContainer(getFieldDecorator) {
+    nonPlayingDatesContainer() {
         const { venueConstrainstData, } = this.props.venueTimeState
         let nonPlayingDatesList = venueConstrainstData ? venueConstrainstData.nonPlayingDates : []
         return (
@@ -442,7 +430,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
                 {isArrayNotEmpty(nonPlayingDatesList) && nonPlayingDatesList.map((item, index) => {
                     return <div className="col-sm mt-3">
-                        {this.nonPlayingDatesView(item, index, getFieldDecorator)}
+                        {this.nonPlayingDatesView(item, index)}
                     </div>
                 })}
 
@@ -461,7 +449,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
 
-    divisionView(item, index, entityType, getFieldDecorator) {
+    divisionView(item, index, entityType) {
         const { courtArray, divisionList, gradeList } = this.props.venueTimeState
         let divisionsList = isArrayNotEmpty(divisionList) ? divisionList : []
         let courtList = isArrayNotEmpty(courtArray) ? courtArray : []
@@ -472,71 +460,52 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead heading={'Court'} headingId={AppUniqueId.CourtPreferences_AllocSameCourt_CourtID} />
-                        <Form.Item>
-                            {getFieldDecorator(`courtIDS${index}`,
-                                {
-                                    rules: [{ required: true, message: ValidationConstant.courtField[3] }]
-                                })(
-                                    <Select
-                                        disabled={disabledStatus}
-                                        style={{ width: "100%", minWidth: 182 }}
-                                        placeholder={'Select Court'}
-                                        onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "venueCourtId", "courtPreferences")}
-                                    // value={item.venueCourtId}
-                                    >
-                                        {courtList.length > 0 && courtList.map((item) => (
-                                            < Option value={item.venueId} > {courtList.length > 0 && item.name}</Option>
-                                        ))
-                                        }
-                                    </Select>
-                                )}
+                        <Form.Item name={`courtIDS${index}`} rules={[{ required: true, message: ValidationConstant.courtField[3] }]}>
+                            <Select
+                                disabled={disabledStatus}
+                                style={{ width: "100%", minWidth: 182 }}
+                                placeholder={'Select Court'}
+                                onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "venueCourtId", "courtPreferences")}
+                                // value={item.venueCourtId}
+                            >
+                                {courtList.length > 0 && courtList.map((item) => (
+                                    < Option value={item.venueId} > {courtList.length > 0 && item.name}</Option>
+                                ))}
+                            </Select>
                         </Form.Item>
                     </div>
                     {entityType == "6" ? <div className="col-sm">
-                        <InputWithHead heading={'Division'} headingId={AppUniqueId.CourtPreferences_AllocSameCourt_AddAnotherCourt_DivisionID} />
-                        <Form.Item>
-                            {getFieldDecorator(`entitiesDivisionId${index}`,
-                                {
-                                    rules: [{ required: true, message: ValidationConstant.courtField[4] }]
-                                })(
-                                    <Select
-                                        disabled={disabledStatus}
-                                        mode={'multiple'}
-                                        style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
-                                        placeholder={'Select Division'}
-                                        onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesDivision", "courtPreferences")}
+                            <InputWithHead heading={'Division'} headingId={AppUniqueId.CourtPreferences_AllocSameCourt_AddAnotherCourt_DivisionID} />
+                            <Form.Item name={`entitiesDivisionId${index}`} rules={[{ required: true, message: ValidationConstant.courtField[4] }]}>
+                                <Select
+                                    disabled={disabledStatus}
+                                    mode={'multiple'}
+                                    style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
+                                    placeholder={'Select Division'}
+                                    onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesDivision", "courtPreferences")}
                                     // value={item.entitiesDivisionId}
-                                    >
-                                        {divisionsList.map((item) => (
-                                            < Option value={item.competitionMembershipProductDivision} > {item.divisionName}</Option>
-                                        ))
-                                        }
-                                    </Select>
-                                )}
-                        </Form.Item>
-                    </div> :
+                                >
+                                    {divisionsList.map((item) => (
+                                        < Option value={item.competitionMembershipProductDivision} > {item.divisionName}</Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </div> :
                         <div className="col-sm">
                             <InputWithHead heading={'Grade'} />
-                            <Form.Item>
-                                {getFieldDecorator(`entitiesGradeId${index}`,
-                                    {
-                                        rules: [{ required: true, message: ValidationConstant.courtField[5] }]
-                                    })(
-                                        <Select
-                                            disabled={disabledStatus}
-                                            mode="multiple"
-                                            style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
-                                            placeholder={'Select Grade'}
-                                            // value={item.entitiesGradeId}
-                                            onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesGrade", "courtPreferences")}
-                                        >
-                                            {
-                                                gradesList.map((item) => (
-                                                    <Option value={item.competitionDivisionGradeId} > {item.gradeName}</Option>
-                                                ))
-                                            }
-                                        </Select>
-                                    )}
+                            <Form.Item name={`entitiesGradeId${index}`} rules={[{ required: true, message: ValidationConstant.courtField[5] }]}>
+                                <Select
+                                    disabled={disabledStatus}
+                                    mode="multiple"
+                                    style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
+                                    placeholder={'Select Grade'}
+                                    // value={item.entitiesGradeId}
+                                    onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesGrade", "courtPreferences")}
+                                >
+                                    {gradesList.map((item) => (
+                                        <Option value={item.competitionDivisionGradeId} > {item.gradeName}</Option>
+                                    ))}
+                                </Select>
                             </Form.Item>
                         </div>
 
@@ -568,9 +537,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         placeholder={'Select Court'}
                     >
                         {courtArray.length > 0 && courtArray.map((item) => (
-                            < Option value={item.venueCourtId} > {item.name}</Option>
-                        ))
-                        }
+                            <Option value={item.venueCourtId} > {item.name}</Option>
+                        ))}
                     </Select>
                 </div>
                 <div className="col-sm">
@@ -581,9 +549,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         placeholder={'Select Grade'}
                     >
                         {gradesList.map((item) => (
-                            < Option value={item.competitionDivisionGradeId.toString()} > {item.gradeName}</Option>
-                        ))
-                        }
+                            <Option value={item.competitionDivisionGradeId.toString()} > {item.gradeName}</Option>
+                        ))}
                     </Select>
                 </div>
             </div>
@@ -591,7 +558,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         )
     }
 
-    courtPrefnceView(getFieldDecorator) {
+    courtPrefnceView() {
         const { venueConstrainstData, evenRotation } = this.props.venueTimeState
         // let courtRotationId = venueConstrainstData && venueConstrainstData.courtRotationRefId
         let courtRotationId = evenRotation
@@ -603,7 +570,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 <div className="comp-venue-time-inside-container-view">
                     {courtPreferencesList.map((item, index,) => {
                         return <div className="col-sm">
-                            {this.divisionView(item, index, courtRotationId, getFieldDecorator)}
+                            {this.divisionView(item, index, courtRotationId)}
                         </div>
                     })}
 
@@ -633,8 +600,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     className="reg-competition-radio"
                     onChange={(e) => { this.setState({ homeTeamRotationFlag: false }); this.props.updateVenueConstraintsData(e.target.value, null, "", "homeRotationValue") }}
                     value={venueConstrainstData && venueConstrainstData.homeTeamRotationRefId}
-                // value={homeRotation}
-                // defaultValue={homeRotation}
+                    // value={homeRotation}
+                    // defaultValue={homeRotation}
                 >
                     {homeTeamRotationList.length > 0 && homeTeamRotationList.map((item, index) => {
                         return (
@@ -651,9 +618,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 }
                             </div>
                         )
-
-                    }
-                    )}
+                    })}
                 </Radio.Group>
                 {this.state.homeTeamRotationFlag == true ?
                     <div className="venue-cons-err">{ValidationConstant.homeTeamRotationRequired}</div> : null
@@ -741,7 +706,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 >
 
                     {courtRotationList.length > 0 && courtRotationList.map((item, index) => {
-
                         return (
                             <div >
                                 <div className='contextualHelp-RowDirection' >
@@ -767,10 +731,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                                 return (
                                                     <Radio id={this.getCourtRotationId(item.id, 'subPref1')} key={"sec" + index} value={item.id}>{item.description}</Radio>
                                                 )
-
-                                            }
-                                            )}
-
+                                            })}
                                         </Radio.Group>
                                     </div>
                                 }
@@ -787,17 +748,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                                 return (
                                                     <Radio id={this.getCourtRotationId(item.id, 'subPref2')} value={item.id}>{item.description}</Radio>
                                                 )
-
-                                            }
-                                            )}
-
+                                            })}
                                         </Radio.Group>
                                     </div>
                                 }
                             </div>
                         )
-                    }
-                    )}
+                    })}
                 </Radio.Group>
                 {this.state.evenRotationFlag == true ?
                     <div className="venue-cons-err">{ValidationConstant.courtRotationRequired}</div> : null
@@ -880,20 +837,20 @@ class CompetitionVenueTimesPrioritisation extends Component {
             val = moment(val).format("YYYY-MM-DD");
         }
         if (key == "competitionMembershipProductDivisionId") {
-            this.props.form.setFieldsValue({
+            this.formRef.current.setFieldsValue({
                 [`mpGradeId${index}`]: null,
                 [`mpTeamAId${index}`]: null,
                 [`mpTeamBId${index}`]: null,
             })
         }
         else if (key == "competitionDivisionGradeId") {
-            this.props.form.setFieldsValue({
+            this.formRef.current.setFieldsValue({
                 [`mpTeamAId${index}`]: null,
                 [`mpTeamBId${index}`]: null,
             })
         }
         else if (key == "venueId") {
-            this.props.form.setFieldsValue({
+            this.formRef.current.setFieldsValue({
                 [`mpCourtId${index}`]: null,
             })
         }
@@ -906,20 +863,20 @@ class CompetitionVenueTimesPrioritisation extends Component {
             val = moment(val).format("YYYY-MM-DD");
         }
         if (key == "competitionMembershipProductDivisionId") {
-            this.props.form.setFieldsValue({
+            this.formRef.current.setFieldsValue({
                 [`ldGradeId${index}`]: null,
                 [`ldTeamAId${index}`]: null,
                 [`ldTeamBId${index}`]: null,
             })
         }
         else if (key == "competitionDivisionGradeId") {
-            this.props.form.setFieldsValue({
+            this.formRef.current.setFieldsValue({
                 [`ldTeamAId${index}`]: null,
                 [`ldTeamBId${index}`]: null,
             })
         }
         else if (key == "venueId") {
-            this.props.form.setFieldsValue({
+            this.formRef.current.setFieldsValue({
                 [`ldCourtId${index}`]: null,
             })
         }
@@ -941,9 +898,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
         }
     }
 
-    matchPreferenceView = (getFieldDecorator) => {
+    matchPreferenceView = () => {
         const { venueConstrainstData, venuePost } = this.props.venueTimeState;
-        console.log("venueConstrainstData.matchPreference" + JSON.stringify(venueConstrainstData.matchPreference));
 
         return (
             <div className="content-view" style={{ paddingTop: '30px' }}>
@@ -952,155 +908,123 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     <div className="fluid-width comp-venue-time-inside-container-view" style={{ marginBottom: '20px' }}>
                         <div className="col-sm delete-image-view pb-4" onClick={() => this.removeDetail(index, "matchPreference")}>
                             <span className="user-remove-btn">
-                                <i className="fa fa-trash-o" aria-hidden="true"></i>
+                                <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
                         </div>
                         <div className="row" >
                             <div className="col-sm-3" >
                                 <InputWithHead heading={AppConstants.division} required={"required-field"} />
-                                <Form.Item >
-                                    {getFieldDecorator(`mpDivisionId${index}`, {
-                                        rules: [{ required: true, message: ValidationConstant.divisionName }]
-                                    })(
-                                        <Select
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            onChange={(div) => this.onChangeSetMPValue(div, 'competitionMembershipProductDivisionId', index)}
-                                            setFieldsValue={item.competitionMembershipProductDivisionId}
-                                        >
-                                            {(venueConstrainstData.divisionGrades || []).map((div, divIndex) => (
-                                                <Option key={div.competitionMembershipProductDivisionId} value={div.competitionMembershipProductDivisionId}>{div.divisionName}</Option>
-                                            ))}
-                                        </Select>
-                                    )}
+                                <Form.Item name={`mpDivisionId${index}`} rules={[{ required: true, message: ValidationConstant.divisionName }]} >
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'competitionMembershipProductDivisionId', index)}
+                                        setFieldsValue={item.competitionMembershipProductDivisionId}
+                                    >
+                                        {(venueConstrainstData.divisionGrades || []).map((div, divIndex) => (
+                                            <Option key={div.competitionMembershipProductDivisionId} value={div.competitionMembershipProductDivisionId}>{div.divisionName}</Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
                             </div>
                             <div className="col-sm-3" >
                                 <InputWithHead heading={AppConstants.grade} required={"required-field"} />
-                                <Form.Item >
-                                    {getFieldDecorator(`mpGradeId${index}`, {
-                                        rules: [{ required: true, message: ValidationConstant.gradeNameRequired }]
-                                    })(
-                                        <Select
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            onChange={(div) => this.onChangeSetMPValue(div, 'competitionDivisionGradeId', index)}
-                                            setFieldsValue={item.competitionDivisionGradeId}
-                                        >
-                                            {(item.grades || []).map((g, gIndex) => (
-                                                <Option key={g.gradeId} value={g.gradeId}>{g.gradeName}</Option>
-                                            ))}
-                                        </Select>
-                                    )}
+                                <Form.Item name={`mpGradeId${index}`} rules={[{ required: true, message: ValidationConstant.gradeNameRequired }]} >
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'competitionDivisionGradeId', index)}
+                                        setFieldsValue={item.competitionDivisionGradeId}
+                                    >
+                                        {(item.grades || []).map((g, gIndex) => (
+                                            <Option key={g.gradeId} value={g.gradeId}>{g.gradeName}</Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
                             </div>
                             <div className="col-sm-3" >
                                 <InputWithHead heading={AppConstants.teamA} required={"required-field"} />
-                                <Form.Item >
-                                    {getFieldDecorator(`mpTeamAId${index}`, {
-                                        rules: [{ required: true, message: ValidationConstant.teamName }]
-                                    })(
-                                        <Select
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            onChange={(div) => this.onChangeSetMPValue(div, 'team1Id', index)}
-                                            setFieldsValue={item.team1Id}
-                                        >
-                                            {(item.teams || []).map((t, index) => (
-                                                <Option key={t.teamId} value={t.teamId}>{t.teamName}</Option>
-                                            ))}
-                                        </Select>
-                                    )}
+                                <Form.Item name={`mpTeamAId${index}`} rules={[{ required: true, message: ValidationConstant.teamName }]} >
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'team1Id', index)}
+                                        setFieldsValue={item.team1Id}
+                                    >
+                                        {(item.teams || []).map((t, index) => (
+                                            <Option key={t.teamId} value={t.teamId}>{t.teamName}</Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
                             </div>
                             <div className="col-sm-3" >
                                 <InputWithHead heading={AppConstants.teamB} required={"required-field"} />
-                                <Form.Item >
-                                    {getFieldDecorator(`mpTeamBId${index}`, {
-                                        rules: [{ required: true, message: ValidationConstant.teamName }]
-                                    })(
-                                        <Select
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            onChange={(div) => this.onChangeSetMPValue(div, 'team2Id', index)}
-                                            setFieldsValue={item.team2Id}
-                                        >
-                                            {(item.teams || []).map((t1, tIndex) => (
-                                                <Option key={t1.teamId} value={t1.teamId}>{t1.teamName}</Option>
-                                            ))}
-                                        </Select>
-                                    )}
+                                <Form.Item name={`mpTeamBId${index}`} rules={[{ required: true, message: ValidationConstant.teamName }]} >
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'team2Id', index)}
+                                        setFieldsValue={item.team2Id}
+                                    >
+                                        {(item.teams || []).map((t1, tIndex) => (
+                                            <Option key={t1.teamId} value={t1.teamId}>{t1.teamName}</Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
                             </div>
                         </div>
                         <div className="row" >
                             <div className="col-sm-3" >
                                 <InputWithHead heading={AppConstants.venue} required={"required-field"} />
-                                <Form.Item >
-                                    {getFieldDecorator(`mpVenueId${index}`, {
-                                        rules: [{ required: true, message: ValidationConstant.pleaseSelectvenue }]
-                                    })(
-                                        <Select
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            onChange={(div) => this.onChangeSetMPValue(div, 'venueId', index)}
-                                            setFieldsValue={item.venueId}
-                                        >
-                                            {(venuePost || []).map((v, vIndex) => (
-                                                <Option key={v.venueId} value={v.venueId}>{v.venueName}</Option>
-                                            ))}
-                                        </Select>
-                                    )}
+                                <Form.Item name={`mpVenueId${index}`} rules={[{ required: true, message: ValidationConstant.pleaseSelectvenue }]} >
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'venueId', index)}
+                                        setFieldsValue={item.venueId}
+                                    >
+                                        {(venuePost || []).map((v, vIndex) => (
+                                            <Option key={v.venueId} value={v.venueId}>{v.venueName}</Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
                             </div>
                             <div className="col-sm-3" >
                                 <InputWithHead heading={AppConstants.courts} required={"required-field"} />
-                                <Form.Item >
-                                    {getFieldDecorator(`mpCourtId${index}`, {
-                                        rules: [{ required: true, message: ValidationConstant.court }]
-                                    })(
-                                        <Select
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            onChange={(div) => this.onChangeSetMPValue(div, 'courtId', index)}
-                                            setFieldsValue={item.courtId}
-                                        >
-                                            {(item.courts || []).map((c, cIndex) => (
-                                                <Option key={c.venueCourtId} value={c.venueCourtId}>{c.courtNumber}</Option>
-                                            ))}
-                                        </Select>
-                                    )}
+                                <Form.Item name={`mpCourtId${index}`} rules={[{ required: true, message: ValidationConstant.court }]} >
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={(div) => this.onChangeSetMPValue(div, 'courtId', index)}
+                                        setFieldsValue={item.courtId}
+                                    >
+                                        {(item.courts || []).map((c, cIndex) => (
+                                            <Option key={c.venueCourtId} value={c.venueCourtId}>{c.courtNumber}</Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
                             </div>
                             <div className="col-sm-3" >
                                 <InputWithHead heading={AppConstants.date} required={"required-field"} />
-                                <Form.Item >
-                                    {getFieldDecorator(`mpMatchDate${index}`, {
-                                        rules: [{ required: true, message: ValidationConstant.dateField }]
-                                    })(
-                                        <DatePicker
-                                            size="large"
-                                            placeholder={"dd-mm-yyyy"}
-                                            style={{ width: "100%" }}
-                                            onChange={(e) => this.onChangeSetMPValue(e, 'matchDate', index)}
-                                            name={"matchDate"}
-                                            format={"DD-MM-YYYY"}
-                                            showTime={false}
-                                        />
-                                    )}
+                                <Form.Item name={`mpMatchDate${index}`} rules={[{ required: true, message: ValidationConstant.dateField }]} >
+                                    <DatePicker
+                                        size="large"
+                                        placeholder={"dd-mm-yyyy"}
+                                        style={{ width: "100%" }}
+                                        onChange={(e) => this.onChangeSetMPValue(e, 'matchDate', index)}
+                                        name={"matchDate"}
+                                        format={"DD-MM-YYYY"}
+                                        showTime={false}
+                                    />
                                 </Form.Item>
                             </div>
                             <div className="col-sm-3" >
                                 <InputWithHead heading={AppConstants.startTime} required={"required-field"} />
-                                <Form.Item >
-                                    {getFieldDecorator(`mpStartTime${index}`, {
-                                        rules: [{ required: true, message: ValidationConstant.startTime }]
-                                    })(
-                                        <TimePicker
-                                            className="comp-venue-time-timepicker"
-                                            style={{ width: "100%" }}
-                                            onChange={(time) => this.onChangeSetMPValue(time.format("HH:mm"), 'startTime', index)}
-                                            //value={moment(item.endTime, "HH:mm")}
-                                            format={"HH:mm "}
-                                            //minuteStep={15}
-                                            use12Hours={false}
-                                        />
-                                    )}
+                                <Form.Item name={`mpStartTime${index}`} rules={[{ required: true, message: ValidationConstant.startTime }]} >
+                                    <TimePicker
+                                        className="comp-venue-time-timepicker"
+                                        style={{ width: "100%" }}
+                                        onChange={(time) => this.onChangeSetMPValue(time.format("HH:mm"), 'startTime', index)}
+                                        //value={moment(item.endTime, "HH:mm")}
+                                        format={"HH:mm "}
+                                        //minuteStep={15}
+                                        use12Hours={false}
+                                    />
                                 </Form.Item>
                             </div>
                         </div>
@@ -1113,9 +1037,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
         )
     }
 
-    lockedGradesView = (getFieldDecorator) => {
+    lockedGradesView = () => {
         const { venueConstrainstData, venuePost } = this.props.venueTimeState;
-        console.log("venueConstrainstData.lockedDraws" + JSON.stringify(venueConstrainstData.lockedDraws));
         let lockedDraws = venueConstrainstData.lockedDraws != null ? venueConstrainstData.lockedDraws : [];
         return (
             <div className="content-view" style={{ paddingTop: '30px' }}>
@@ -1127,7 +1050,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
                                 <div className="col-sm delete-image-view pb-4" onClick={() => this.removeDetail(index, "lockedDraws")}>
                                     <span className="user-remove-btn">
-                                        <i className="fa fa-trash-o" aria-hidden="true"></i>
+                                        <i className="fa fa-trash-o" aria-hidden="true" />
                                     </span>
                                     <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
                                 </div>
@@ -1135,148 +1058,116 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 <div className="row" >
                                     <div className="col-sm-3" >
                                         <InputWithHead heading={AppConstants.division} required={"required-field"} />
-                                        <Form.Item >
-                                            {getFieldDecorator(`ldDivisionId${index}`, {
-                                                rules: [{ required: true, message: ValidationConstant.divisionName }]
-                                            })(
-                                                <Select
-                                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                                    onChange={(div) => this.onChangeSetLDValue(div, 'competitionMembershipProductDivisionId', index)}
-                                                    setFieldsValue={item.competitionMembershipProductDivisionId}
-                                                >
-                                                    {(venueConstrainstData.divisionGrades || []).map((div, divIndex) => (
-                                                        <Option key={div.competitionMembershipProductDivisionId} value={div.competitionMembershipProductDivisionId}>{div.divisionName}</Option>
-                                                    ))}
-                                                </Select>
-                                            )}
+                                        <Form.Item name={`ldDivisionId${index}`} rules={[{ required: true, message: ValidationConstant.divisionName }]} >
+                                            <Select
+                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                onChange={(div) => this.onChangeSetLDValue(div, 'competitionMembershipProductDivisionId', index)}
+                                                setFieldsValue={item.competitionMembershipProductDivisionId}
+                                            >
+                                                {(venueConstrainstData.divisionGrades || []).map((div, divIndex) => (
+                                                    <Option key={div.competitionMembershipProductDivisionId} value={div.competitionMembershipProductDivisionId}>{div.divisionName}</Option>
+                                                ))}
+                                            </Select>
                                         </Form.Item>
                                     </div>
                                     <div className="col-sm-3" >
                                         <InputWithHead heading={AppConstants.grade} required={"required-field"} />
-                                        <Form.Item >
-                                            {getFieldDecorator(`ldGradeId${index}`, {
-                                                rules: [{ required: true, message: ValidationConstant.gradeNameRequired }]
-                                            })(
-                                                <Select
-                                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                                    onChange={(div) => this.onChangeSetLDValue(div, 'competitionDivisionGradeId', index)}
-                                                    setFieldsValue={item.competitionDivisionGradeId}
-                                                >
-                                                    {(item.grades || []).map((g, gIndex) => (
-                                                        <Option key={g.gradeId} value={g.gradeId}>{g.gradeName}</Option>
-                                                    ))}
-                                                </Select>
-                                            )}
+                                        <Form.Item name={`ldGradeId${index}`} rules={[{ required: true, message: ValidationConstant.gradeNameRequired }]} >
+                                            <Select
+                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                onChange={(div) => this.onChangeSetLDValue(div, 'competitionDivisionGradeId', index)}
+                                                setFieldsValue={item.competitionDivisionGradeId}
+                                            >
+                                                {(item.grades || []).map((g, gIndex) => (
+                                                    <Option key={g.gradeId} value={g.gradeId}>{g.gradeName}</Option>
+                                                ))}
+                                            </Select>
                                         </Form.Item>
                                     </div>
                                     <div className="col-sm-3" >
                                         <InputWithHead heading={AppConstants.teamA} required={"required-field"} />
-                                        <Form.Item >
-                                            {getFieldDecorator(`ldTeamAId${index}`, {
-                                                rules: [{ required: true, message: ValidationConstant.teamName }]
-                                            })(
-                                                <Select
-                                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                                    onChange={(div) => this.onChangeSetLDValue(div, 'team1Id', index)}
-                                                    setFieldsValue={item.team1Id}
-                                                >
-                                                    {(item.teams || []).map((t, index) => (
-                                                        <Option key={t.teamId} value={t.teamId}>{t.teamName}</Option>
-                                                    ))}
-                                                </Select>
-                                            )}
+                                        <Form.Item name={`ldTeamAId${index}`} rules={[{ required: true, message: ValidationConstant.teamName }]} >
+                                            <Select
+                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                onChange={(div) => this.onChangeSetLDValue(div, 'team1Id', index)}
+                                                setFieldsValue={item.team1Id}
+                                            >
+                                                {(item.teams || []).map((t, index) => (
+                                                    <Option key={t.teamId} value={t.teamId}>{t.teamName}</Option>
+                                                ))}
+                                            </Select>
                                         </Form.Item>
                                     </div>
                                     <div className="col-sm-3" >
                                         <InputWithHead heading={AppConstants.teamB} required={"required-field"} />
-                                        <Form.Item >
-                                            {getFieldDecorator(`ldTeamBId${index}`, {
-                                                rules: [{ required: true, message: ValidationConstant.teamName }]
-                                            })(
-                                                <Select
-                                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                                    onChange={(div) => this.onChangeSetLDValue(div, 'team2Id', index)}
-                                                    setFieldsValue={item.team2Id}
-                                                >
-                                                    {(item.teams || []).map((t1, tIndex) => (
-                                                        <Option key={t1.teamId} value={t1.teamId}>{t1.teamName}</Option>
-                                                    ))}
-                                                </Select>
-                                            )}
+                                        <Form.Item name={`ldTeamBId${index}`} rules={[{ required: true, message: ValidationConstant.teamName }]} >
+                                            <Select
+                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                onChange={(div) => this.onChangeSetLDValue(div, 'team2Id', index)}
+                                                setFieldsValue={item.team2Id}
+                                            >
+                                                {(item.teams || []).map((t1, tIndex) => (
+                                                    <Option key={t1.teamId} value={t1.teamId}>{t1.teamName}</Option>
+                                                ))}
+                                            </Select>
                                         </Form.Item>
                                     </div>
                                 </div>
                                 <div className="row" >
                                     <div className="col-sm-3" >
                                         <InputWithHead heading={AppConstants.venue} required={"required-field"} />
-                                        <Form.Item >
-                                            {getFieldDecorator(`ldVenueId${index}`, {
-                                                rules: [{ required: true, message: ValidationConstant.pleaseSelectvenue }]
-                                            })(
-                                                <Select
-                                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                                    onChange={(div) => this.onChangeSetLDValue(div, 'venueId', index)}
-                                                    setFieldsValue={item.venueId}
-                                                >
-                                                    {(venuePost || []).map((v, vIndex) => (
-                                                        <Option key={v.venueId} value={v.venueId}>{v.venueName}</Option>
-                                                    ))}
-                                                </Select>
-                                            )}
+                                        <Form.Item name={`ldVenueId${index}`} rules={[{ required: true, message: ValidationConstant.pleaseSelectvenue }]} >
+                                            <Select
+                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                onChange={(div) => this.onChangeSetLDValue(div, 'venueId', index)}
+                                                setFieldsValue={item.venueId}
+                                            >
+                                                {(venuePost || []).map((v, vIndex) => (
+                                                    <Option key={v.venueId} value={v.venueId}>{v.venueName}</Option>
+                                                ))}
+                                            </Select>
                                         </Form.Item>
                                     </div>
                                     <div className="col-sm-3" >
                                         <InputWithHead heading={AppConstants.courts} required={"required-field"} />
-                                        <Form.Item >
-                                            {getFieldDecorator(`ldCourtId${index}`, {
-                                                rules: [{ required: true, message: ValidationConstant.court }]
-                                            })(
-                                                <Select
-                                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                                    onChange={(div) => this.onChangeSetLDValue(div, 'courtId', index)}
-                                                    setFieldsValue={item.courtId}
-                                                >
-                                                    {(item.courts || []).map((c, cIndex) => (
-                                                        <Option key={c.venueCourtId} value={c.venueCourtId}>{c.courtNumber}</Option>
-                                                    ))}
-                                                </Select>
-                                            )}
+                                        <Form.Item name={`ldCourtId${index}`} rules={[{ required: true, message: ValidationConstant.court }]} >
+                                            <Select
+                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                onChange={(div) => this.onChangeSetLDValue(div, 'courtId', index)}
+                                                setFieldsValue={item.courtId}
+                                            >
+                                                {(item.courts || []).map((c, cIndex) => (
+                                                    <Option key={c.venueCourtId} value={c.venueCourtId}>{c.courtNumber}</Option>
+                                                ))}
+                                            </Select>
                                         </Form.Item>
                                     </div>
                                     <div className="col-sm-3" >
                                         <InputWithHead heading={AppConstants.date} required={"required-field"} />
-                                        <Form.Item >
-                                            {getFieldDecorator(`ldMatchDate${index}`, {
-                                                rules: [{ required: true, message: ValidationConstant.dateField }]
-                                            })(
-                                                <DatePicker
-                                                    size="large"
-                                                    placeholder={"dd-mm-yyyy"}
-                                                    style={{ width: "100%" }}
-                                                    onChange={(e) => this.onChangeSetLDValue(e, 'matchDate', index)}
-                                                    name={"matchDate"}
-                                                    format={"DD-MM-YYYY"}
-                                                    showTime={false}
-                                                />
-                                            )}
+                                        <Form.Item name={`ldMatchDate${index}`} rules={[{ required: true, message: ValidationConstant.dateField }]} >
+                                            <DatePicker
+                                                size="large"
+                                                placeholder={"dd-mm-yyyy"}
+                                                style={{ width: "100%" }}
+                                                onChange={(e) => this.onChangeSetLDValue(e, 'matchDate', index)}
+                                                name={"matchDate"}
+                                                format={"DD-MM-YYYY"}
+                                                showTime={false}
+                                            />
                                         </Form.Item>
                                     </div>
                                     <div className="col-sm-3" >
                                         <InputWithHead heading={AppConstants.startTime} required={"required-field"} />
-                                        <Form.Item >
-                                            {getFieldDecorator(`ldStartTime${index}`, {
-                                                rules: [{ required: true, message: ValidationConstant.startTime }]
-                                            })(
-                                                <TimePicker
-                                                    className="comp-venue-time-timepicker"
-                                                    style={{ width: "100%" }}
-                                                    onChange={(time) => this.onChangeSetLDValue(time.format("HH:mm"), 'startTime', index)}
-                                                    //value={moment(item.endTime, "HH:mm")}
-                                                    format={"HH:mm "}
-                                                    //minuteStep={15}
-                                                    use12Hours={false}
-                                                />
-                                            )}
+                                        <Form.Item name={`ldStartTime${index}`} rules={[{ required: true, message: ValidationConstant.startTime }]} >
+                                            <TimePicker
+                                                className="comp-venue-time-timepicker"
+                                                style={{ width: "100%" }}
+                                                onChange={(time) => this.onChangeSetLDValue(time.format("HH:mm"), 'startTime', index)}
+                                                //value={moment(item.endTime, "HH:mm")}
+                                                format={"HH:mm "}
+                                                //minuteStep={15}
+                                                use12Hours={false}
+                                            />
                                         </Form.Item>
                                     </div>
                                 </div>
@@ -1292,17 +1183,17 @@ class CompetitionVenueTimesPrioritisation extends Component {
     }
 
     ////////form content view
-    contentView = (getFieldDecorator) => {
+    contentView = () => {
         const { selectedRadioBtn } = this.props.venueTimeState
         return (
             <div className="content-view">
                 {this.selectAddVenueView()}
 
-                {/* {this.nonPlayingDatesContainer(getFieldDecorator)} */}
+                {/* {this.nonPlayingDatesContainer()} */}
 
                 {this.anyGradePrefenceView()}
 
-                {selectedRadioBtn === 5 && this.courtPrefnceView(getFieldDecorator)}
+                {selectedRadioBtn === 5 && this.courtPrefnceView()}
 
                 {this.homeTeamRotationView()}
 
@@ -1345,9 +1236,11 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 visible={this.state.tooltipVisibleDelete}
                                 title={AppConstants.statusPublishHover}
                             >
-                                <Button style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text"
+                                <Button
+                                    style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text"
                                     id={AppUniqueId.competitionVenueSaveBn}
-                                    disabled={isPublished} htmlType='submit' type="primary">
+                                    disabled={isPublished} htmlType='submit' type="primary"
+                                >
                                     {AppConstants.save}
                                 </Button>
                             </Tooltip>
@@ -1364,10 +1257,9 @@ class CompetitionVenueTimesPrioritisation extends Component {
     };
 
 
-    onSaveConstraints = (e) => {
+    onSaveConstraints = (values) => {
         let venueConstarintsDetails = this.props.venueTimeState
         const { venueConstrainstData, competitionUniqueKey, yearRefId, courtPreferencesPost } = venueConstarintsDetails
-        e.preventDefault();
 
         if (venueConstrainstData.courtRotationRefId == 0) {
             this.setState({ evenRotationFlag: true });
@@ -1398,14 +1290,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 "lockedDraws": venueConstrainstData.lockedDraws
             }
 
-            console.log("postObject::" + JSON.stringify(postObject));
-
-            this.props.form.validateFields((err, values) => {
-                if (!err) {
-                    this.setState({ saveContraintLoad: true })
-                    this.props.venueConstraintPostAction(postObject)
-                }
-            })
+            this.setState({ saveContraintLoad: true })
+            this.props.venueConstraintPostAction(postObject)
         }
 
 
@@ -1426,7 +1312,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
     render() {
         // console.log(this.props.venueTimeState.courtRotation)
-        const { getFieldDecorator } = this.props.form;
         const { venueConstrainstData } = this.props.venueTimeState;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
@@ -1440,28 +1325,32 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     {this.headerView()}
                     {this.dropdownView()}
                     <Form
+                        ref={this.formRef}
                         autoComplete="off"
-                        onSubmit={this.onSaveConstraints}
+                        onFinish={this.onSaveConstraints}
+                        onFinishFailed={(err) => {
+                            this.formRef.current.scrollToField(err.errorFields[0].name);
+                        }}
                         noValidate="noValidate"
                     >
                         <Content>
-                            <div className="formView">{
-                                !this.state.isQuickCompetition ? this.contentView(getFieldDecorator) :
-                                    this.qcWarningView()}</div>
+                            <div className="formView">
+                                {!this.state.isQuickCompetition ? this.contentView() : this.qcWarningView()}
+                            </div>
 
-                            {/* {venueConstrainstData.competitionTypeRefId == 1 ? 
+                            {/* {venueConstrainstData.competitionTypeRefId == 1 ?
                                 <div>
                                     <div className="formView" style={{marginTop: '20px'}}>
-                                        {this.matchPreferenceView(getFieldDecorator)}
+                                        {this.matchPreferenceView()}
                                     </div>
-                                
+
                                     {
-                                        venueConstrainstData.lockedDraws!= null && venueConstrainstData.lockedDraws.length > 0 ? 
+                                        venueConstrainstData.lockedDraws!= null && venueConstrainstData.lockedDraws.length > 0 ?
                                         <div className="formView" style={{marginTop: '20px'}}>
-                                            {this.lockedGradesView(getFieldDecorator)}
+                                            {this.lockedGradesView()}
                                         </div> : null
                                     }
-                                </div> : null 
+                                </div> : null
                             } */}
 
                         </Content>
@@ -1472,6 +1361,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         venueConstraintListAction,
@@ -1492,11 +1382,12 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         venueTimeState: state.VenueTimeState,
         appState: state.AppState,
         commonReducerState: state.CommonReducerState
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionVenueTimesPrioritisation));
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionVenueTimesPrioritisation);
