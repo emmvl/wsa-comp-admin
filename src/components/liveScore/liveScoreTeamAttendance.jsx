@@ -79,12 +79,12 @@ const columns = [
     },
     {
         title: 'Team',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'playerTeamName',
+        key: 'playerTeamName',
         sorter: true,
-        onHeaderCell: () => listeners("team"),
-        render: (name) =>
-            <span >{name}</span>
+        onHeaderCell: () => listeners("playerTeamName"),
+        render: (playerTeamName) =>
+            <span >{playerTeamName}</span>
 
     },
     {
@@ -170,22 +170,22 @@ const borrowedColumns = [
     },
     {
         title: 'Team',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'playerTeamName',
+        key: 'playerTeamName',
         sorter: true,
-        onHeaderCell: () => listeners("team"),
-        render: (name) =>
-            <span >{name}</span>
+        onHeaderCell: () => listeners("playerTeamName"),
+        render: (playerTeamName) =>
+            <span >{playerTeamName}</span>
 
     },
     {
         title: 'Borrowing Team',
-        dataIndex: 'borrowingTeam',
-        key: 'borrowingTeam',
+        dataIndex: 'name',
+        key: 'name',
         sorter: true,
-        onHeaderCell: () => listeners("borrowingTeam"),
-        render: (borrowingTeam) =>
-            <span >{borrowingTeam}</span>
+        onHeaderCell: () => listeners("name"),
+        render: (name) =>
+            <span >{name}</span>
 
     },
     {

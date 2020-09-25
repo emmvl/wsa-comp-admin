@@ -321,6 +321,23 @@ class CompetitionFinals extends Component {
         }
     }
 
+    checkDuplicates = (competitionFinalsList) => {
+        try{
+            let error = false;
+            for(let final of competitionFinalsList){
+                let poolIds = [final.wpwPool1,final.wpwPool2,final.wpwPool3,final.wpwPool4];
+                console.log("diplicate",poolIds.some(x => poolIds.indexOf(x) !== poolIds.lastIndexOf(x)));
+                if(poolIds.some(x => poolIds.indexOf(x) !== poolIds.lastIndexOf(x))){
+                    error = true;
+                    break;
+                }
+            }
+            return error;
+        }catch(ex){
+            console.log("Error in checkDuplicates"+ex);
+        }
+    }
+
     getSaveFinalList = (finalList) => {
         for(let final of finalList){
             final["finalTypeRefId"] = this.props.competitionFinalsState.finalTypeRefId
@@ -330,12 +347,17 @@ class CompetitionFinals extends Component {
 
     saveCompetitionFinals = (e) => {
         e.preventDefault();
+        const {competitionFinalsList,competitionVenuesList} = this.props.competitionFinalsState;
         this.props.form.validateFieldsAndScroll((err, values) => {
             console.log("err::" + err);
             if (!err) {
+                if(this.checkDuplicates(competitionFinalsList)){
+                    message.error(AppConstants.whoPlaysWhoValidation);
+                    return;
+                }
                 this.setState({ buttonPressed: "save" });
-                let finalsList = this.getSaveFinalList(this.props.competitionFinalsState.competitionFinalsList);
-                let venueList = this.props.competitionFinalsState.competitionVenuesList;
+                let finalsList = this.getSaveFinalList(competitionFinalsList);
+                let venueList = competitionVenuesList;
                 let payload = {
                     "yearRefId": this.state.yearRefId,
                     "competitionUniqueKey": this.state.firstTimeCompId,
