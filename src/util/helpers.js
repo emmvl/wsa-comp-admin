@@ -1,3 +1,5 @@
+// import _ from "lodash";
+
 const isArrayNotEmpty = array => (array !== null && Array.isArray(array) && array.length > 0);
 
 const isNotNullOrEmptyString = word => (word !== null && word !== undefined && word.length > 0);
@@ -64,6 +66,19 @@ const isImageFormatValid = value => {
     return (fileTypes.indexOf(value) > -1);
 };
 
+function randomKeyGen(keyLength) {
+    var i, key = "", characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+    var charactersLength = characters.length;
+
+    for (i = 0; i < keyLength; i++) {
+        key += characters.substr(Math.floor((Math.random() * charactersLength) + 1), 1);
+    }
+
+    return key;
+}
+
+
 module.exports = {
     isArrayNotEmpty,
     isNotNullOrEmptyString,
@@ -74,5 +89,6 @@ module.exports = {
     teamListData,
     regexNumberExpression,
     isImageFormatValid,
-    isNotNullAndUndefined
+    isNotNullAndUndefined,
+    randomKeyGen
 };
