@@ -1610,7 +1610,9 @@ const AppConstants = {
   gradesOrPools: "Grades / Pools",
   playOff3rdposition: "Playoff for 3rd position",
   whoPlaysWho: "Who plays who",
-  whoPlaysWhoValidation: "Please remove duplicate from who playes who"
+  whoPlaysWhoValidation: "Please remove duplicate from who playes who",
+  heroImageForCompetition: "Hero Image for Competition",
+  heroImageSizeText: "Approximate Dimension: Width: 1200px  Height: 400px"
 };
 
 export default AppConstants;

@@ -222,7 +222,8 @@ const ValidationConstants = {
     wpwPool1Required: "WPW pool1 is required",
     wpwPool2Required: "WPW pool2 is required",
     wpwPool3Required: "WPW pool3 is required",
-    wpwPool4Required: "WPW pool4 is required"
+    wpwPool4Required: "WPW pool4 is required",
+    heroImageIsRequired: "Hero image is required"
 };
 
 export default ValidationConstants;

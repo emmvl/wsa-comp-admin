@@ -58,11 +58,11 @@ function competitionFinalsReducer(state = initialState, action) {
             };
         
         case ApiConstants.UPDATE_COMPETITION_FINALS:
-        
             let oldData = state.competitionFinalsList;
             let updatedValue = action.updatedData;
             let getKey = action.key;
             let index = action.index;
+            let subIndex = action.subIndex;
             if(action.key.venueList == "venueList")
             {
                 state.competitionVenuesList = []
@@ -73,6 +73,8 @@ function competitionFinalsReducer(state = initialState, action) {
                     }
                     state.competitionVenuesList.push(obj)
                 })
+            }else if(subIndex != undefined){
+                oldData[index].whoPlaysWho[subIndex][getKey] = updatedValue;
             }
             else{
                 oldData[index][getKey] = updatedValue;
