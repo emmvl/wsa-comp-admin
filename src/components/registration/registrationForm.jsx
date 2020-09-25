@@ -1498,17 +1498,19 @@ class RegistrationForm extends Component {
                         <div>
                             <div style={{display:"flex",marginTop:"13px"}}>                   
                                 <InputWithHead
+                                    readOnly={true}
                                     disabled={item.isActive == 0}
                                     style={{width: "252px" , marginRight: "28px"}}                   
                                     placeholder={AppConstants.code} 
                                     value={item.code == 0 ? " " : item.code}
                                     onChange={(e) => this.onChangeSetValue(e.target.value , index)}
-                                />     
+                                /> 
+                                {item.isActive == 1 &&     
                                 <a>
                                     <span className="input-heading-add-another" style={{textDecoration: "underline",paddingTop:18}}>
                                         {AppConstants.email}
                                     </span>
-                                </a>
+                                </a>}
                             </div>
                         </div>
                     );
