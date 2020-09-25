@@ -133,22 +133,23 @@ function checkSlectedInvitees(result, reg_demoSetting, reg_NetballSetting, reg_Q
 
   if (result) {
     for (let i in result) {
-      if (result[i].registrationSettingsRefId == 13 || result[i].registrationSettingsRefId == 14
-        || result[i].registrationSettingsRefId == 15 || result[i].registrationSettingsRefId == 16) {
-        selectedDemographic.push(result[i].registrationSettingsRefId)
-        reg_demoSetting.push(result[i])
+      // if (result[i].registrationSettingsRefId == 13 || result[i].registrationSettingsRefId == 14
+      //   || result[i].registrationSettingsRefId == 15 || result[i].registrationSettingsRefId == 16) {
+      //   selectedDemographic.push(result[i].registrationSettingsRefId)
+      //   reg_demoSetting.push(result[i])
 
-      } else if (result[i].registrationSettingsRefId == 7 || result[i].registrationSettingsRefId == 6 || result[i].registrationSettingsRefId == 10) {
+      // } 
+      if (result[i].registrationSettingsRefId >= 7 && result[i].registrationSettingsRefId <= 14) {
         selectedNetballQuestions.push(result[i].registrationSettingsRefId)
         reg_NetballSetting.push(result[i])
       }
-      else if (result[i].registrationSettingsRefId == 8 || result[i].registrationSettingsRefId == 9 ||
-        result[i].registrationSettingsRefId == 12 || result[i].registrationSettingsRefId == 11) {
-        SelectedOtherQuestions.push(result[i].registrationSettingsRefId)
-        reg_QuestionsSetting.push(result[i])
-      }
-      else if (result[i].registrationSettingsRefId == 1 || result[i].registrationSettingsRefId == 17 ||
-        result[i].registrationSettingsRefId == 18 || result[i].registrationSettingsRefId == 2 || result[i].registrationSettingsRefId == 3 || result[i].registrationSettingsRefId == 4) {
+      // else if (result[i].registrationSettingsRefId == 8 || result[i].registrationSettingsRefId == 9 ||
+      //   result[i].registrationSettingsRefId == 12 || result[i].registrationSettingsRefId == 11) {
+      //   SelectedOtherQuestions.push(result[i].registrationSettingsRefId)
+      //   reg_QuestionsSetting.push(result[i])
+      // }
+      else if (result[i].registrationSettingsRefId == 1 || result[i].registrationSettingsRefId == 5 ||
+        result[i].registrationSettingsRefId == 7 || result[i].registrationSettingsRefId == 2 || result[i].registrationSettingsRefId == 3 || result[i].registrationSettingsRefId == 4) {
         selectedAdvanceSettings.push(result[i].registrationSettingsRefId)
         reg_settings.push(result[i])
       }
