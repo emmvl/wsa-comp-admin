@@ -1612,7 +1612,8 @@ const AppConstants = {
   whoPlaysWho: "Who plays who",
   whoPlaysWhoValidation: "Please remove duplicate from who playes who",
   heroImageForCompetition: "Hero Image for Competition",
-  heroImageSizeText: "Approximate Dimension: Width: 1200px  Height: 400px"
+  heroImageSizeText: "Approximate Dimension: Width: 1200px  Height: 400px",
+  poolSettingsWhoPlaysWho: "Pool Settings - Who Plays Who"
 };
 
 export default AppConstants;
