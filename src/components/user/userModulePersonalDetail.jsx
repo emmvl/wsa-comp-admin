@@ -84,14 +84,14 @@ const columns = [
       return <div>{divisionName != null ? divisionName : ""}</div>;
     },
   },
-  // {
-  //   title: "Payment Method",
-  //   dataIndex: "paymentType",
-  //   key: "paymentType",
-  //   render: (paymentType, record, index) => {
-  //     return <span style={{ textTransform: "capitalize" }}>{paymentType}</span>;
-  //   },
-  // },
+  {
+    title: "Paid By",
+    dataIndex: "paidBy",
+    key: "paidBy",
+    render: (paidBy, record, index) => {
+      return <span>{paidBy}</span>;
+    },
+  },
   // {
   //   title: "Shop Purchases",
   //   dataIndex: "shopPurchases",
