@@ -1490,6 +1490,7 @@ class RegistrationForm extends Component {
     hardshipCodeView = () => {        
         const {hardShipCodes,orgRegistrationId} = this.props.registrationState.registrationFormData[0];
         let hardShipCodesList = hardShipCodes == null ? [] : hardShipCodes
+        let isPublished = this.state.isPublished;
         return(
             <div className="discount-view pt-5">
                 <span className="form-heading pb-2">{AppConstants.hardshipCode}</span>
@@ -1499,14 +1500,14 @@ class RegistrationForm extends Component {
                             <div style={{display:"flex",marginTop:"13px"}}>                   
                                 <InputWithHead
                                     readOnly={true}
-                                    disabled={item.isActive == 0}
+                                    disabled={item.isActive == 0 || isPublished}
                                     style={{width: "252px" , marginRight: "28px"}}                   
                                     placeholder={AppConstants.code} 
                                     value={item.code == 0 ? " " : item.code}
                                     onChange={(e) => this.onChangeSetValue(e.target.value , index)}
                                 /> 
                                 {item.isActive == 1 &&     
-                                <a>
+                                <a disabled={isPublished}>
                                     <span className="input-heading-add-another" style={{textDecoration: "underline",paddingTop:18}}>
                                         {AppConstants.email}
                                     </span>
@@ -1516,9 +1517,11 @@ class RegistrationForm extends Component {
                     );
                 })                    
                 }
+                {!isPublished &&
                 <span className="input-heading-add-another" onClick={(e) => this.addHardshipCode(orgRegistrationId)} >
                     +{AppConstants.addCode}
                 </span>
+                }
             </div>
         )
 
