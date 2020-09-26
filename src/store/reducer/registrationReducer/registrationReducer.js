@@ -20,7 +20,8 @@ const newObjvalue = {
   trainingVenueId: null,
   registerMethods: [],
   registrationSettings: [],
-  registrationDisclaimer: []
+  registrationDisclaimer: [],
+  hardShipCodes:[],				   
 };
 const regFormChecked = {
   replyName: false,
@@ -132,22 +133,23 @@ function checkSlectedInvitees(result, reg_demoSetting, reg_NetballSetting, reg_Q
 
   if (result) {
     for (let i in result) {
-      if (result[i].registrationSettingsRefId == 13 || result[i].registrationSettingsRefId == 14
-        || result[i].registrationSettingsRefId == 15 || result[i].registrationSettingsRefId == 16) {
-        selectedDemographic.push(result[i].registrationSettingsRefId)
-        reg_demoSetting.push(result[i])
+      // if (result[i].registrationSettingsRefId == 13 || result[i].registrationSettingsRefId == 14
+      //   || result[i].registrationSettingsRefId == 15 || result[i].registrationSettingsRefId == 16) {
+      //   selectedDemographic.push(result[i].registrationSettingsRefId)
+      //   reg_demoSetting.push(result[i])
 
-      } else if (result[i].registrationSettingsRefId == 7 || result[i].registrationSettingsRefId == 6 || result[i].registrationSettingsRefId == 10) {
+      // } 
+      if (result[i].registrationSettingsRefId >= 7 && result[i].registrationSettingsRefId <= 14) {
         selectedNetballQuestions.push(result[i].registrationSettingsRefId)
         reg_NetballSetting.push(result[i])
       }
-      else if (result[i].registrationSettingsRefId == 8 || result[i].registrationSettingsRefId == 9 ||
-        result[i].registrationSettingsRefId == 12 || result[i].registrationSettingsRefId == 11) {
-        SelectedOtherQuestions.push(result[i].registrationSettingsRefId)
-        reg_QuestionsSetting.push(result[i])
-      }
-      else if (result[i].registrationSettingsRefId == 1 || result[i].registrationSettingsRefId == 17 ||
-        result[i].registrationSettingsRefId == 18 || result[i].registrationSettingsRefId == 2 || result[i].registrationSettingsRefId == 3 || result[i].registrationSettingsRefId == 4) {
+      // else if (result[i].registrationSettingsRefId == 8 || result[i].registrationSettingsRefId == 9 ||
+      //   result[i].registrationSettingsRefId == 12 || result[i].registrationSettingsRefId == 11) {
+      //   SelectedOtherQuestions.push(result[i].registrationSettingsRefId)
+      //   reg_QuestionsSetting.push(result[i])
+      // }
+      else if (result[i].registrationSettingsRefId == 1 || result[i].registrationSettingsRefId == 5 ||
+        result[i].registrationSettingsRefId == 7 || result[i].registrationSettingsRefId == 2 || result[i].registrationSettingsRefId == 3 || result[i].registrationSettingsRefId == 4) {
         selectedAdvanceSettings.push(result[i].registrationSettingsRefId)
         reg_settings.push(result[i])
       }
@@ -808,6 +810,7 @@ function registration(state = initialState, action) {
       state.selectedDemographic = selectedInvitees.selectedDemographic
       state.SelectedOtherQuestions = selectedInvitees.SelectedOtherQuestions
       state.selectedNetballQuestions = selectedInvitees.selectedNetballQuestions
+	  state.hardShipCodes = formData[0].hardShipCodes !== null ? formData[0].hardShipCodes :[] ;
 
 
       let productListValue = getProductArr(
@@ -869,6 +872,19 @@ function registration(state = initialState, action) {
         state.selectedMethod = action.updatedData
         let updateRegistrationMethod = getRegistrationFormMethod(action.updatedData, JSON.parse(JSON.stringify(state.defaultRegistrationMethod)))
         state.registrationFormData[0]["registerMethods"] = updateRegistrationMethod
+      }
+	  else if (action.key == "addHardshipCode") {
+        if(isArrayNotEmpty(state.registrationFormData[0].hardShipCodes)){
+          state.registrationFormData[0].hardShipCodes.push(action.updatedData);
+        }
+        else{
+          state.registrationFormData[0].hardShipCodes = [];
+          state.registrationFormData[0].hardShipCodes.push(action.updatedData);
+        }  
+      }
+      else if (action.key == "addHardshipCodeValueChange") {
+        let {value,index} = action.updatedData;
+        state.registrationFormData[0].hardShipCodes[index].code = value;        
       }
       else {
         let oldData = state.registrationFormData;

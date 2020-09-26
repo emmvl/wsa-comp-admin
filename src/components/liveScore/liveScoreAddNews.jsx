@@ -477,15 +477,16 @@ class LiveScoreAddNews extends Component {
                     />
                 </Form.Item>
                 <InputWithHead
+                    required={"pb-0"}
                     heading={AppConstants.newsBody}
                     // value={editData.body}
                 />
 
                 {this.EditorView()}
 
-                <Form.Item name='author' rules={[{ required: true, message: ValidationConstants.newsValidation[1] }]}>
+                <Form.Item name="author" rules={[{ required: true, message: ValidationConstants.newsValidation[1] }]}>
                     <InputWithHead
-                        required={"required-field pb-0 pt-0"}
+                        required={"required-field pb-0 pt-3"}
                         heading={AppConstants.author}
                         placeholder={AppConstants.enterAuthor}
                         name={'authorName'}
@@ -766,9 +767,9 @@ class LiveScoreAddNews extends Component {
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.props.liveScoreAddNewsAction({
-                editData: editData,
-                mediaArry: mediaArry,
-                newsId: newsId,
+                editData,
+                mediaArry,
+                newsId,
                 key: this.state.key,
                 compId: id,
                 newsImage: data.newsImage,
@@ -776,9 +777,9 @@ class LiveScoreAddNews extends Component {
             })
         } else {
             this.props.liveScoreAddNewsAction({
-                editData: editData,
-                mediaArry: mediaArry,
-                newsId: newsId,
+                editData,
+                mediaArry,
+                newsId,
                 key: this.state.key,
                 compId: 1,
                 newsImage: data.newsImage,

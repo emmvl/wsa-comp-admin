@@ -74,19 +74,22 @@ class LiveScoreAddTeam extends Component {
     }
 
     componentDidMount() {
-        if (this.state.isEdit == true) {
-            this.props.liveScoreGetTeamDataAction(this.state.teamId)
-            this.setState({ load: true })
-        } else {
-            this.props.liveScoreAddTeamform({ key: 'addTeam' })
-        }
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ loaclCompetitionID: id })
+        if (getLiveScoreCompetiton()) {
+            if (this.state.isEdit == true) {
+                this.props.liveScoreGetTeamDataAction(this.state.teamId)
+                this.setState({ load: true })
+            } else {
+                this.props.liveScoreAddTeamform({ key: 'addTeam' })
+            }
 
-        // this.props.getliveScoreDivisions(1)
-        this.props.liveScoreGetDivision(id)
-        this.props.liveScoreGetAffiliate({ id, name: '' })
-        this.props.liveScoreManagerListAction(5, 1, id)
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ loaclCompetitionID: id })
+            this.props.liveScoreGetDivision(id)
+            this.props.liveScoreGetAffiliate({ id, name: '' })
+            this.props.liveScoreManagerListAction(5, 1, id)
+        } else {
+            history.push('/liveScoreCompetitions')
+        }
     }
 
     componentDidUpdate(nextProps) {
@@ -106,11 +109,11 @@ class LiveScoreAddTeam extends Component {
     setInitalFiledValue(data) {
         const { selectedManager } = this.props.liveScoreTeamState
         this.formRef.current.setFieldsValue({
-            'teamName': data.name,
-            'teamAlias': data.alias,
-            'division': data.divisionId,
-            'affiliate': data.competitionOrganisation ? data.competitionOrganisation.name : "",
-            'managerId': selectedManager
+            teamName: data ? data.name : null,
+            teamAlias: data ? data.alias : null,
+            division: data ? data.divisionId : null,
+            affiliate: (data && data.competitionOrganisation) ? data.competitionOrganisation.name : "",
+            managerId: selectedManager
         })
     }
 
@@ -171,8 +174,8 @@ class LiveScoreAddTeam extends Component {
     ////////form content view
     contentView = () => {
         const { teamManagerData, affilateList, divisionList, managerType, logoUrl } = this.props.liveScoreTeamState
-        let name = teamManagerData.name
-        let alias = teamManagerData.alias
+        // let name = teamManagerData.name
+        let alias = teamManagerData ? teamManagerData.alias : null
         return (
             <div className="content-view pt-4">
                 <Form.Item name='teamName' rules={[{ required: true, message: ValidationConstants.teamName }]}>
@@ -214,7 +217,7 @@ class LiveScoreAddTeam extends Component {
                             <div className="reg-competition-logo-view" onClick={this.selectImage}>
                                 <ImageLoader
                                     timeout={this.state.timeout}
-                                    src={teamManagerData.logoUrl ? teamManagerData.logoUrl : AppImages.circleImage}
+                                    src={(teamManagerData && teamManagerData.logoUrl) ? teamManagerData.logoUrl : AppImages.circleImage}
                                 />
                             </div>
                             <input

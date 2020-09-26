@@ -20,6 +20,8 @@ import LiveScoreMangerState from './liveScoreReducer/liveScoreManagerReducer'
 import LiveScoreScorerState from './liveScoreReducer/liveScoreScorerReducer'
 import LiveScoreDashboardState from './liveScoreReducer/liveScoreDashboardReducer'
 import liveScoreGamePositionState from './liveScoreReducer/liveScoreGamePositionReducer'
+import liveScoreGameAttendanceState from './liveScoreReducer/liveScoreGameAttendanceReducer'
+
 ////*****************Live Score**************************End////
 
 import CompetitionDashboardState from './competitionManagementReducer/competitionDashboard'
@@ -75,6 +77,8 @@ import SupportState from "./supportReducer";
 import ShopOrderStatusState from "./shopReducer/orderStatusReducer";
 
 import UmpirePaymentSettingState from "./umpireReducer/umpirePaymentSettingReducer";
+import CompetitionMultiDrawsState from "./competitionManagementReducer/competitionMultiDrawsReducer";
+import liveScorePlayerMinuteTrackingState from "./liveScoreReducer/liveScorePlayerMinuteTrackingReducer";
 
 const rootReducer = combineReducers({
   LoginState,
@@ -143,6 +147,9 @@ const rootReducer = combineReducers({
   SupportState,
   UmpirePaymentSettingState,
   ShopOrderStatusState,
+  liveScoreGameAttendanceState,
+  CompetitionMultiDrawsState,
+  liveScorePlayerMinuteTrackingState,
 });
 
 export default rootReducer;

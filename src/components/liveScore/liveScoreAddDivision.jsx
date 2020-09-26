@@ -224,7 +224,7 @@ class LiveScoreAddDivision extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -252,7 +252,9 @@ class LiveScoreAddDivision extends Component {
                         className="login-form"
                     >
                         <Content>
-                            <div className="formView">{this.contentView()}</div>
+                            <div className="formView">
+                                {getLiveScoreCompetiton() ? this.contentView() : history.push('/liveScoreCompetitions')}
+                            </div>
                         </Content>
                         <Footer>
                             {this.footerView()}

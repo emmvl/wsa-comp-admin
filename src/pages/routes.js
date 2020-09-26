@@ -159,7 +159,8 @@ import UmpirePayment from "../components/umpire/umpirePayments"
 import UmpirePaymentSetting from "../components/umpire/umpirePaymentSettings"
 import UmpirePayout from "../components/umpire/umpirePayout"
 import OrderDetails from "../components/shop/orderDetails";
-import deRegistration from "components/registration/deRegistration";																	
+import deRegistration from "components/registration/deRegistration";
+import MultifieldDrawsNew from "../components/competition/multiFieldDrawsNew";
 
 class Routes extends React.Component {
   render() {
@@ -810,16 +811,20 @@ class Routes extends React.Component {
           path="/umpirePayout"
           component={lazyLoad(UmpirePayout)}
         />
-        
+
         <PrivateRoute
           path="/orderDetails"
           component={lazyLoad(OrderDetails)}
         />
-		<PrivateRoute
+        <PrivateRoute
           path="/deregistration"
           component={lazyLoad(deRegistration)}
         />
 
+        <PrivateRoute
+          path="/multiDraws"
+          component={lazyLoad(MultifieldDrawsNew)}
+        />
         <Route path="/" component={lazyLoad(NotFound)} />
 
         <Redirect from="*" to="/404" />

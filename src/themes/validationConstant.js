@@ -175,7 +175,7 @@ const ValidationConstants = {
     incidentName: "Incident name is required.",
     divisionAndTimeslot: "Please select Division and Timeslot",
     pleaseSelectAffiliate: "Please select one affiliate.",
-    incidentPlayer: "Player Name is required",
+    incidentPlayer: "Player name is required",
     point: "Point is required.",
     reasonChange: "Reason is required.",
     userName: 'User name is required.',
@@ -216,6 +216,14 @@ const ValidationConstants = {
     declineReasonRequired: "Please select the reason to decline",
     deRegisterReasonRequired: "Please select the reason to De-register",
     deRegisterChangeTypeRequired: "Please select the De-register change type",
+    organisationField: 'Organisation is required',
+    pleaseSelectGradesOrPools: "Please select Grades or Pooles",
+    playOff3rdpositionRequired: "Playoff 3rd position required",
+    wpwPool1Required: "WPW pool1 is required",
+    wpwPool2Required: "WPW pool2 is required",
+    wpwPool3Required: "WPW pool3 is required",
+    wpwPool4Required: "WPW pool4 is required",
+    heroImageIsRequired: "Hero image is required"
 };
 
 export default ValidationConstants;

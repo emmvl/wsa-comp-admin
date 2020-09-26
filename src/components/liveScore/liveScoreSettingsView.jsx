@@ -38,6 +38,7 @@ import { onInviteesSearchAction } from "../../store/actions/registrationAction/c
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction";
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { getOrganisationData } from '../../util/sessionStorage';
+import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
 
 const { Header, Footer } = Layout;
 const { Option } = Select;
@@ -61,7 +62,8 @@ class LiveScoreSettingsView extends Component {
             yearId: 1,
             yearLoading: false,
             organisationTypeRefId: 0,
-            regInvitees: false
+            regInvitees: false,
+            trackFullPeriod: 0
         };
         this.formRef = createRef();
     }
@@ -116,7 +118,7 @@ class LiveScoreSettingsView extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreSetting != this.props.liveScoreSetting) {
-            const { competitionName, shortName, competitionLogo, scoring, recordUmpireType } = this.props.liveScoreSetting.form
+            const { competitionName, shortName, competitionLogo, scoring, recordUmpireType, gameTimeTrackingType } = this.props.liveScoreSetting.form
             this.formRef.current.setFieldsValue({
                 competition_name: competitionName,
                 short_name: shortName,
@@ -127,7 +129,11 @@ class LiveScoreSettingsView extends Component {
                 attendanceReport: this.props.liveScoreSetting.form.attendanceRecordingPeriod,
                 attendanceRecord: this.props.liveScoreSetting.form.attendanceRecordingType,
             })
+            this.setState({
+                trackFullPeriod: gameTimeTrackingType
+            })
         }
+
         if (nextProps.venueList != this.props.venueList) {
         }
 
@@ -171,7 +177,6 @@ class LiveScoreSettingsView extends Component {
 
     //method to check box selection
     onChangeCheckBox(checkedValues) {
-
         this.props.onChangeSettingForm({ key: 'record1', data: checkedValues })
     }
 
@@ -255,12 +260,12 @@ class LiveScoreSettingsView extends Component {
         const recordGoalAttempts = record1.includes("recordGoalAttempts")
         const centrePassEnabled = record2.includes("centrePassEnabled")
         const incidentsEnabled = record2.includes("incidentsEnabled")
+        const gameTimeTrackingType = record1.includes("gameTimeTracking") && this.state.trackFullPeriod
 
         let attendenceRecordingTime = this.getRecordingTime(days, hours, minutes)
         let lineUpSelectionTime = null
         if (lineupSelection) {
             lineUpSelectionTime = this.getRecordingTime(lineupSelectionDays, lineupSelectionHours, lineupSelectionMins)
-
         }
 
         let orgId = null
@@ -293,6 +298,9 @@ class LiveScoreSettingsView extends Component {
         formData.append('yearRefId', yearRefId)
         if (attendenceRecordingTime) {
             formData.append('attendanceSelectionTime', attendenceRecordingTime)
+        }
+        if (gameTimeTracking !== false) {
+            formData.append('gameTimeTrackingType', gameTimeTrackingType)
         }
         if (lineupSelection) {
             formData.append('lineupSelectionEnabled', lineupSelection)
@@ -357,6 +365,7 @@ class LiveScoreSettingsView extends Component {
         }
         let regInvitees = localStorage.getItem("regInvitees")
         if (regInvitees === "true") {
+            this.props.initializeCompData()
             this.props.settingDataPostInitiate({
                 body: formData,
                 venue: venue,
@@ -424,20 +433,47 @@ class LiveScoreSettingsView extends Component {
         }
     }
 
+    differentPositionTracking = (options, selectedOption) => {
+        let trackFullPeriod = [{ value: 0, name: "Track Full Period" }, { value: 1, name: "Track End of Period" }]
+        if (options.value == "gameTimeTracking" && selectedOption.includes("gameTimeTracking")) {
+            return (
+                <div className="pt-4">
+                    <Select
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182, maxWidth: 300 }}
+                        onChange={trackFullPeriod => this.setState({
+                            trackFullPeriod
+                        })}
+                        value={this.state.trackFullPeriod}
+                        placeholder={AppConstants.selectComptition}
+                    >
+                        {trackFullPeriod.length > 0 && trackFullPeriod.map((item, index) => {
+                            return (
+                                <Option key={index + 'trackFullPeriod'} value={item.value}>
+                                    {item.name}
+                                </Option>
+                            );
+                        })}
+                    </Select>
+                </div>
+            )
+        }
+    }
+
     ////////form content view
     contentView = () => {
         const { competitionName, competitionLogo, scoring, days, hours, minutes, lineupSelectionDays, lineupSelectionHours, lineupSelectionMins, record1, venue, Logo } = this.props.liveScoreSetting.form
         const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink, borrowedPlayer, gamesBorrowedThreshold, linkedCompetitionId } = this.props.liveScoreSetting
         let grade = this.state.venueData
         // const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
-        const applyTo1 = [{ label: ' Game Time Tracking', value: "gameTimeTracking", }, {
-            label: 'Position Tracking',
-            value: "positionTracking",
-        }, { label: 'Record Goal Attempts', value: "recordGoalAttempts", }];
-        const applyTo2 = [{ label: 'Centre Pass Enabled', value: "centrePassEnabled", }, {
-            label: 'Incidents Enabled',
-            value: "incidentsEnabled",
-        }];
+        const applyTo1 = [
+            { label: 'Game Time Tracking', value: "gameTimeTracking" },
+            { label: 'Position Tracking', value: "positionTracking" },
+            { label: 'Record Goal Attempts', value: "recordGoalAttempts" },
+        ];
+        const applyTo2 = [
+            { label: 'Centre Pass Enabled', value: "centrePassEnabled" },
+            { label: 'Incidents Enabled', value: "incidentsEnabled" },
+        ];
         const turnOffBuzzer = [{ label: AppConstants.turnOffBuzzer, value: true }];
         const buzzerEnabledArr = [{ label: AppConstants.turnOff_30Second, value: true }];
 
@@ -594,19 +630,21 @@ class LiveScoreSettingsView extends Component {
                         <div className="col-sm">
                             <Checkbox.Group
                                 style={{
-                                    display: "-ms-flexbox",
+                                    display: "flex",
                                     flexDirection: "column",
                                     justifyContent: "center"
                                 }}
-                                options={applyTo1}
+                                // options={applyTo1}
                                 value={this.props.liveScoreSetting.form.record1}
                                 onChange={e => this.onChangeCheckBox(e)}
                             >
                                 {applyTo1.map((item) => (
-                                    <Tooltip background='#ff8237'>
-                                        {/* <span>{item.helpMsg}</span> */}
-                                        {item.helpMsg}
-                                    </Tooltip>
+                                    <div>
+                                        <Checkbox className="single-checkbox-radio-style pt-4 ml-0" value={item.value}>
+                                            {item.label}
+                                        </Checkbox>
+                                        {this.differentPositionTracking(item, this.props.liveScoreSetting.form.record1)}
+                                    </div>
                                 ))}
                             </Checkbox.Group>
                         </div>
@@ -623,7 +661,6 @@ class LiveScoreSettingsView extends Component {
                             >
                                 {applyTo2.map((item) => (
                                     <Tooltip background='#ff8237'>
-                                        {/* <span>{item.helpMsg}</span> */}
                                         {item.helpMsg}
                                     </Tooltip>
                                 ))}
@@ -665,8 +702,13 @@ class LiveScoreSettingsView extends Component {
                 <span className='text-heading-large pt-5'>{AppConstants.attendence_reord_report}</span>
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead required={"required-field pb-3"} marginTop={0} conceptulHelp
-                                       conceptulHelpMsg={AppConstants.recordMsg} heading={AppConstants.record}/>
+                        <InputWithHead
+                            required={"required-field pb-3"}
+                            marginTop={0}
+                            conceptulHelp
+                            conceptulHelpMsg={AppConstants.recordMsg}
+                            heading={AppConstants.record}
+                        />
                         <Form.Item name='attendanceRecord' rules={[{ required: true, message: ValidationConstants.attendanceRecordField }]}>
                             <Select
                                 placeholder={'Select Record'}
@@ -675,7 +717,7 @@ class LiveScoreSettingsView extends Component {
                                     key: "attendanceRecordingType",
                                     data: recordSelection
                                 })}
-                                value={this.props.liveScoreSetting.form.attendanceRecordingType}
+                                // value={this.props.liveScoreSetting.form.attendanceRecordingType}
                                 // defaultValue={}
                                 // value={this.props.liveScoreSetting.form.attendanceRecordingType}
                             >
@@ -903,14 +945,13 @@ class LiveScoreSettingsView extends Component {
                 </div>
 
                 {/* radio button view */}
-                {/* <span required={"required-field pb-0"} className="applicable-to-heading">{AppConstants.scoring}</span> */}
                 <InputWithHead required={"required-field"} heading={AppConstants.scoring} />
                 <div className='contextualHelp-RowDirection'>
                     <Form.Item name='scoring' rules={[{ required: true, message: ValidationConstants.scoringField }]}>
                         <Radio.Group
                             className="reg-competition-radio"
                             onChange={e => this.competition_format(e)}
-                            value={this.props.liveScoreSetting.form.scoring}
+                            // value={this.props.liveScoreSetting.form.scoring}
                         >
                             <div className="row ml-2" style={{ marginTop: 0 }}>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -1170,6 +1211,7 @@ class LiveScoreSettingsView extends Component {
                                                 paddingLeft: 13
                                             }}>
                                                 <Checkbox
+                                                    className="single-checkbox-radio-style"
                                                     style={{ paddingLeft: 7, paddingTop: 8 }}
                                                     checked={associationChecked}
                                                     onChange={e => this.props.onChangeSettingForm({
@@ -1184,6 +1226,7 @@ class LiveScoreSettingsView extends Component {
                                                 {associationChecked && this.associationSearchInvitee()}
 
                                                 <Checkbox
+                                                    className="single-checkbox-radio-style"
                                                     style={{ paddingTop: 15, paddingLeft: associationChecked ? 5 : 0 }}
                                                     checked={clubChecked}
                                                     onChange={e => this.props.onChangeSettingForm({
@@ -1253,27 +1296,6 @@ class LiveScoreSettingsView extends Component {
                         }
                     </Radio.Group>
                 </div>
-
-                {/* <div>
-                    <Radio.Group
-                        className="reg-competition-radio mt-5"
-                        onChange={(e) => this.props.onChangeSettingForm({ key: "invitees", data: e.target.value })}
-                    >
-                        <div>
-                            {subReferences.length == 0 ?
-                                <Radio value={invitees_1.id}>{invitees_1.description}</Radio>
-                                : <div>
-                                    <div class="applicable-to-heading invitees-main">{invitees_1.description}</div>
-                                    {(subReferences).map((subItem, subIndex) => (
-                                        <div style={{ marginLeft: '20px' }}>
-                                            <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
-                                        </div>
-                                    ))}
-                                </div>
-                            }
-                        </div>
-                    </Radio.Group>
-                </div> */}
             </div>
         );
     };
@@ -1285,17 +1307,12 @@ class LiveScoreSettingsView extends Component {
                 <div className="footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            {/* <div className="reg-add-save-button">
-                                <Button type="cancel-button">{AppConstants.delete}</Button>
-                            </div> */}
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                {/* <Button className="save-draft-text" type="save-draft-text">
-                                    {AppConstants.saveAsDraft}
-                                </Button> */}
                                 <Button
                                     disabled={this.props.liveScoreSetting.loader}
+                                    onClick={this.handleSubmit}
                                     htmlType='submit'
                                     className="publish-button"
                                     type="primary"
@@ -1414,5 +1431,6 @@ export default connect(mapStateToProps, {
     onInviteesSearchAction,
     settingRegInvitees,
     umpireCompetitionListAction,
-    getOnlyYearListAction
+    getOnlyYearListAction,
+    initializeCompData,
 })(LiveScoreSettingsView);

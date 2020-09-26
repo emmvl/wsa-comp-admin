@@ -10,7 +10,10 @@ import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
 import { exportFilesAction } from "store/actions/appAction";
-import { liveScorePlayerImportAction, liveScorePlayerResetImportResultAction } from "store/actions/LiveScoreAction/liveScorePlayerAction";
+import {
+    liveScorePlayerImportAction,
+    liveScorePlayerResetImportResultAction,
+} from "store/actions/LiveScoreAction/liveScorePlayerAction";
 import Loader from "customComponents/loader";
 import DashboardLayout from "pages/dashboardLayout";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
@@ -68,10 +71,14 @@ class LiveScorerPlayerImport extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton());
-        this.setState({ competitionId: id });
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton());
+            this.setState({ competitionId: id });
 
-        this.props.liveScorePlayerResetImportResultAction();
+            this.props.liveScorePlayerResetImportResultAction();
+        } else {
+            history.push('/liveScoreCompetitions')
+        }
     }
 
     headerView = () => (
@@ -108,6 +115,12 @@ class LiveScorerPlayerImport extends Component {
 
         if (this.state.csvData) {
             this.props.liveScorePlayerImportAction(id, this.state.csvData);
+
+            this.setState({
+                csvData: null,
+            }, () => {
+                this.filesInput.value = null;
+            });
         } else {
             message.config({
                 duration: 0.9,
@@ -117,19 +130,21 @@ class LiveScorerPlayerImport extends Component {
         }
     };
 
-    onExport= () => {
+    onExport = () => {
         let url = AppConstants.exportUrl + `competitionId=${this.state.competitionId}`;
         this.props.exportFilesAction(url);
     };
 
     contentView = () => (
         <div className="content-view pt-4">
-            <span className="input-heading">{AppConstants.fileInput}</span>
+            <span className="user-contact-heading">{AppConstants.fileInput}</span>
 
             <div className="col-sm">
                 <div className="row">
                     <label>
                         <input
+                            style={{ cursor: "pointer" }}
+                            className="pt-2 pb-2"
                             type="file"
                             ref={(input) => {
                                 this.filesInput = input

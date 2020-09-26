@@ -24,7 +24,8 @@ const initialState = {
         minutes: null,
         lineupSelectionDays: null,
         lineupSelectionHours: null,
-        lineupSelectionMins: null
+        lineupSelectionMins: null,
+        gameTimeTrackingType:0
 
     },
     buzzerEnabled: false,
@@ -63,7 +64,8 @@ const initialState = {
     anyOrgArray: [],
     invitedAnyAssoc: [],
     invitedAnyClub: [],
-    competitionInvitees: []
+    competitionInvitees: [],
+    gameTimeTrackingType: 0
 }
 
 
@@ -229,7 +231,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             } else {
                 state.premierCompLink = false
             }
-
             if (payload.yearRefId) {
                 state.yearRefId = payload.yearRefId
             }
@@ -237,6 +238,16 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             let compInvitees = payload.competitionInvitees
             state.invitedTo = []
             state.anyOrgArray = []
+            state.associationChecked = false
+            state.clubChecked = false
+            state.associationLeague = []
+            state.clubSchool = []
+            state.affiliateSelected = null
+            state.affiliateNonSelected = []
+            state.anyOrgSelected = []
+            state.otherSelected = []
+            state.invitedAnyAssoc = []
+            state.invitedAnyClub = []
 
             if (compInvitees.length > 0) {
                 if (compInvitees.length === 1) {
@@ -247,7 +258,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                         } else {
                             state.invitedTo = [compInvitees[0].inviteesRefId]
                             state.anyOrgArray = [compInvitees[0].inviteesRefId]
-
                             let anyOrgValue = getAnyOrgValue(payload.competitionInvitees, state.registrationInvitees)
                             let anyOrgArray = getanyOrgArray(anyOrgValue)
                             let anyOrgCheckBoxSelection = getCheckBoxSelection(payload.competitionInvitees)
@@ -257,18 +267,14 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                             state.associationLeague = selectedOrganization.associationLeageOrg
                             state.clubSchool = selectedOrganization.clubLeageOrg
                             let assocArray = []
-
                             for (let i in selectedOrganization.associationLeageOrg) {
                                 let associationAffiliteObj = {
                                     organisationId: selectedOrganization.associationLeageOrg[i]
                                 }
                                 assocArray.push(associationAffiliteObj)
                             }
-
                             state.invitedAnyAssoc = assocArray
-
                             let clubArray = []
-
                             for (let i in selectedOrganization.clubLeageOrg) {
                                 let clubAffiliteObj = {
                                     organisationId: selectedOrganization.clubLeageOrg[i]
@@ -278,7 +284,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                             state.invitedAnyClub = clubArray
                         }
                     }
-
                 } else {
                     let affiliateValue = getAffiliateValue(payload.competitionInvitees, state.registrationInvitees)
                     state.affiliateSelected = affiliateValue
@@ -338,16 +343,13 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 state.invitedAnyAssoc = []
                 state.invitedAnyClub = []
             }
-
-
-
-
             return {
                 ...state,
                 editLoader: false,
                 form: {
                     ...state.form,
                     id: payload.id,
+                    gameTimeTrackingType: payload.gameTimeTrackingType  != null? payload.gameTimeTrackingType : 0,
                     competitionName: payload.longName,
                     shortName: payload.name,
                     competitionLogo: payload.logoUrl,
@@ -420,8 +422,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 state.recordUmpire = Data
             } else if (keys == 'affiliateSelected' || keys == 'anyOrgSelected' || keys == 'otherSelected' || keys == 'affiliateNonSelected' || keys == 'anyOrgNonSelected') {
                 state.invitedOrganisation = []
-                // state.associationLeague = []
-                // state.clubSchool = []
                 if (keys == 'affiliateSelected') {
                     state.affiliateSelected = Data
                     state.otherSelected = null
@@ -484,9 +484,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                         }
                         inviteeArray.push(associationAffiliteObj)
                     }
-                    // state.associationOrg = inviteeArray
                     state.invitedAnyAssoc = inviteeArray
-                    // state.invitedOrganisation = [...state.associationOrg, ...state.clubOrg]
                 }
                 if (keys == 'clubAffilite') {
                     state.clubSchool = Data
@@ -497,9 +495,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                         }
                         inviteeArray.push(clubAffiliteObj)
                     }
-                    // state.clubOrg = inviteeArray
                     state.invitedAnyClub = inviteeArray
-                    // state.invitedOrganisation = [...state.associationOrg, ...state.clubOrg]
                 }
 
             } else if (keys == 'record1') {
@@ -511,7 +507,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     }
                 }
                 if (posTracking) {
-                    // state.lineupSelection = true
                 } else {
                     state.lineupSelection = false
                     state.form.lineupSelectionDays = null

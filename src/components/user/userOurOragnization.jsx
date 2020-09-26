@@ -572,14 +572,14 @@ class UserOurOrganization extends Component {
 
         return (
             <div className="content-view pt-4">
-                <Form.Item name='name' rules={[{ required: true, message: ValidationConstants.nameField[2] }]} >
+                <Form.Item name="name" rules={[{ required: true, message: ValidationConstants.nameField[2] }]} >
                     <InputWithHead
-                        auto_complete='new-name'
+                        auto_complete="off"
                         required={"required-field pt-0 pb-0"}
                         heading={AppConstants.organisationName}
                         placeholder={AppConstants.organisationName}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
-                        //value={affiliate.name}
+                        // value={affiliate.name}
                         disabled={!this.state.isEditable}
                         setFieldsValue={affiliate.name}
                     />
@@ -903,6 +903,8 @@ class UserOurOrganization extends Component {
                         <div className="pl-5 pb-5 pt-4">
                             <label className="pt-2">
                                 <input
+                                    style={{ cursor: "pointer" }}
+                                    className="pt-2 pb-2"
                                     type="file"
                                     id="teamImport"
                                     ref={(input) => { this.filesInput = input }}

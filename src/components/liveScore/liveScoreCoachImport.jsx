@@ -10,7 +10,10 @@ import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
 import { userExportFilesAction } from "store/actions/appAction";
-import { liveScoreCoachImportAction, liveScoreCoachResetImportResultAction } from "store/actions/LiveScoreAction/liveScoreCoachAction";
+import {
+    liveScoreCoachImportAction,
+    liveScoreCoachResetImportResultAction
+} from "store/actions/LiveScoreAction/liveScoreCoachAction";
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -63,10 +66,14 @@ class LiveScoreCoachImport extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton());
-        this.setState({ competitionId: id });
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton());
+            this.setState({ competitionId: id });
 
-        this.props.liveScoreCoachResetImportResultAction();
+            this.props.liveScoreCoachResetImportResultAction();
+        } else {
+            history.push('/liveScoreCompetitions')
+        }
     }
 
     headerView = () => (
@@ -98,6 +105,12 @@ class LiveScoreCoachImport extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton());
         if (this.state.csvData) {
             this.props.liveScoreCoachImportAction({ id, csvFile: this.state.csvData });
+
+            this.setState({
+                csvData: null,
+            }, () => {
+                this.filesInput.value = null;
+            });
         } else {
             message.config({ duration: 0.9, maxCount: 1 });
             message.error(ValidationConstants.csvField);
@@ -116,8 +129,12 @@ class LiveScoreCoachImport extends Component {
                 <div className="row">
                     <label>
                         <input
+                            style={{ cursor: "pointer" }}
+                            className="pt-2 pb-2"
                             type="file"
-                            ref={(input) => { this.filesInput = input }}
+                            ref={(input) => {
+                                this.filesInput = input
+                            }}
                             name="file"
                             // icon="file text outline"
                             // iconPosition="left"

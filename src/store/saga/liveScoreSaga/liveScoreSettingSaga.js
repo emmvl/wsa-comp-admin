@@ -28,7 +28,6 @@ export function* liveScoreSettingSaga({ payload }) {
 }
 
 export function* liveScorePostSaga({ payload }) {
-    yield console.log('Sagapayload', payload)
     try {
 
         const result = yield call(LiveScoreAxiosApi.liveScoreSettingPost, payload)
@@ -55,7 +54,6 @@ export function* liveScorePostSaga({ payload }) {
             }
 
         } else {
-            console.log()
             yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_FAIL, payloads: result })
             let msg = result.result.data.message ? result.result.data.message : "'Something Went Wrong'"
             setTimeout(() => {
@@ -73,7 +71,6 @@ export function* settingRegInviteesSaga({ payload }) {
     try {
 
         const result = yield call(CommonAxiosApi.getRegistrationInvitees)
-        console.log('saga', result)
         if (result.status === 1) {
             yield put({ type: ApiConstants.SETTING_REGISTRATION_INVITEES_SUCCESS, payload: result.result.data, })
         } else {

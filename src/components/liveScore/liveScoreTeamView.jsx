@@ -88,7 +88,7 @@ const columns = [
                     </NavLink>
                 </Menu.Item>
                 <Menu.Item key="2" onClick={() => {
-                    _this.showDeleteConfirmPlayer(record.id);
+                    _this.showDeleteConfirmPlayer(record.id, record.competitionId);
 
                 }}>
 
@@ -107,9 +107,10 @@ class LiveScoreTeamView extends Component {
         this.state = {
             data: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord : null : null,
             // teamId: props.location.state ? props.location.state.teamId : null,
-            teamId: props.location ? props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id ? props.location.state.tableRecord.id : props.location.state.tableRecord.team ? props.location.state.tableRecord.team.id : null : null : null : null,
+            teamId: props.location ? props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.teamId ? props.location.state.tableRecord.teamId : props.location ? props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id ? props.location.state.tableRecord.id : props.location ? props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.team ? props.location.state.tableRecord.team.id : null : null : null : null : null : null : null : null : null : null,
             screenName: this.props.location.state ? this.props.location.state.screenName : null,
             key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
+            // teamId: null
         }
         _this = this
     }
@@ -124,10 +125,15 @@ class LiveScoreTeamView extends Component {
         }
     }
     componentDidMount() {
-        const { teamId } = this.props.location ? this.props.location.state : null
+        // const { teamId } = this.props.location ? this.props.location.state : null
+        let teamId = this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null
 
         let teamIds = this.state.teamId ? this.state.teamId : teamId
-        this.props.getTeamViewPlayerList(teamIds)
+        if (teamIds) {
+            this.props.getTeamViewPlayerList(teamIds)
+        } else {
+            history.push("/liveScoreCompetitions")
+        }
     }
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreTeamState != this.props.liveScoreTeamState) {
@@ -136,12 +142,12 @@ class LiveScoreTeamView extends Component {
     }
 
     // Delete Player
-    deletePlayer = (playerId) => {
-        this.props.liveScoreDeletePlayerAction(playerId)
+    deletePlayer = (playerId, competitionId) => {
+        this.props.liveScoreDeletePlayerAction(playerId, competitionId, 0, "team")
 
     }
 
-    showDeleteConfirmPlayer = (playerId) => {
+    showDeleteConfirmPlayer = (playerId, competitionId) => {
         let this_ = this
         confirm({
             title: 'Are you sure you want to delete this player?',
@@ -149,11 +155,10 @@ class LiveScoreTeamView extends Component {
             okType: 'danger',
             cancelText: 'No',
             onOk() {
-                this_.deletePlayer(playerId)
+                this_.deletePlayer(playerId, competitionId)
 
             },
             onCancel() {
-                console.log('Cancel');
             },
         });
     }
@@ -175,10 +180,10 @@ class LiveScoreTeamView extends Component {
                 <div className='profile-image-view mr-5' >
 
                     {
-                        this.props.liveScoreTeamState && this.props.liveScoreTeamState.teamData ?
+                        this.props.liveScoreTeamState && this.props.liveScoreTeamState.teamData && this.props.liveScoreTeamState.teamData.logoUrl ?
                             <img className="user-image" src={logoUrl ? logoUrl : ''} alt="" height="80" width="80" />
                             :
-                            <span className="user-contact-heading">{'No Image'}</span>
+                            <span className="user-contact-heading">{' '}</span>
                     }
 
 
@@ -325,7 +330,6 @@ class LiveScoreTeamView extends Component {
                 this_.deleteTeam(teamId)
             },
             onCancel() {
-                console.log('Cancel');
             },
         });
     }
@@ -350,7 +354,7 @@ class LiveScoreTeamView extends Component {
                             >
                                 <NavLink to={{
                                     pathname: "/liveScoreAddTeam",
-                                    state: { isEdit: true, teamId: this.state.teamId, key: this.state.key }
+                                    state: { isEdit: true, teamId: this.state.teamId ? this.state.teamId : this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null, key: this.state.key }
                                 }}>
                                     <Button className="primary-add-comp-form" type="primary">
                                         + {AppConstants.edit}

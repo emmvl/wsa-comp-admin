@@ -74,13 +74,11 @@ class CompetitionVenueTimesPrioritisation extends Component {
             isQuickCompetition: false,
             onNextClicked: false
         };
-        // this.props.clearYearCompetitionAction()
-        // this.props.getCommonRefData()
         this.formRef = React.createRef();
     }
 
     componentDidMount() {
-        //this.props.venueListAction();
+        this.props.updateVenueConstraintsData(null, null, 'clearData', this.props.location.state)
         this.props.getVenuesTypeAction('all');
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
@@ -1256,21 +1254,18 @@ class CompetitionVenueTimesPrioritisation extends Component {
         );
     };
 
-
     onSaveConstraints = (values) => {
         let venueConstarintsDetails = this.props.venueTimeState
         const { venueConstrainstData, competitionUniqueKey, yearRefId, courtPreferencesPost } = venueConstarintsDetails
 
         if (venueConstrainstData.courtRotationRefId == 0) {
             this.setState({ evenRotationFlag: true });
-        }
-        else {
+        } else {
             this.setState({ evenRotationFlag: false });
         }
         if (venueConstrainstData.homeTeamRotationRefId == 0) {
             this.setState({ homeTeamRotationFlag: true });
-        }
-        else {
+        } else {
             this.setState({ homeTeamRotationFlag: false });
         }
 
@@ -1293,9 +1288,6 @@ class CompetitionVenueTimesPrioritisation extends Component {
             this.setState({ saveContraintLoad: true })
             this.props.venueConstraintPostAction(postObject)
         }
-
-
-
     }
 
     qcWarningView = () => {
@@ -1308,10 +1300,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
         )
     }
 
-
-
     render() {
-        // console.log(this.props.venueTimeState.courtRotation)
         const { venueConstrainstData } = this.props.venueTimeState;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>

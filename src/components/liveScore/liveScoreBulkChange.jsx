@@ -57,14 +57,17 @@ class LiveScoreBulkChange extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.props.liveScoreBulkMatchAction()
-        if (id !== null) {
-            this.props.getCompetitionVenuesList(id, this.state.search);
-            this.props.liveScoreRoundListAction(id)
-            // this.props.getliveScoreDivisions(id)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.props.liveScoreBulkMatchAction()
+            if (id !== null) {
+                this.props.getCompetitionVenuesList(id, this.state.search);
+                this.props.liveScoreRoundListAction(id)
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
     }
 

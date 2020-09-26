@@ -246,7 +246,11 @@ let LiveScoreAxiosApi = {
     },
 
     liveScoreIncidentList(competitionID, search, limit, offset, sortBy, sortOrder) {
-        const url = `/incident?competitionId=${competitionID}&search=${search}&limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        let url = null
+        url = `/incident?competitionId=${competitionID}&search=${search}&limit=${limit}&offset=${offset}`;
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
         return Method.dataGet(url, token)
     },
 
@@ -971,7 +975,7 @@ let LiveScoreAxiosApi = {
 
     // Unassign status 
     unAssignMatcheStatus(records) {
-        const url = `/roster/admin?id=${records.rosterId}`
+        const url = `/roster/admin?id=${records.rosterId}&category=Scoring`
         return Method.dataDelete(url, token)
     },
 
@@ -1082,10 +1086,10 @@ let LiveScoreAxiosApi = {
         let body = paginationBody
 
         if (status === "All") {
-            url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}&includeRosters=${true}`;
+            url = `/roster/list?competitionId=${competitionID}&roleIds=${refRoleId}`;
         }
         else {
-            url = `/roster/list?competitionId=${competitionID}&status=${status}&roleIds=${refRoleId}&includeRosters=${true}`
+            url = `/roster/list?competitionId=${competitionID}&status=${status}&roleIds=${refRoleId}`
         }
         if (sortBy && sortOrder) {
             url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -1094,12 +1098,12 @@ let LiveScoreAxiosApi = {
     },
 
     umpireRoasterActionPerform(data) {
-        const url = `/roster?rosterId=${data.roasterId}&status=${data.status}&category=${data.category}`;
+        const url = `/roster?rosterId=${data.roasterId}&status=${data.status}&category=${data.category}&callViaWeb=true`;
         return Method.dataPatch(url, token)
     },
 
     umpireRoasterDeleteAction(data) {
-        const url = `/roster?id=${data.roasterId}`
+        const url = `/roster?id=${data.roasterId}&category=${data.category}`
         return Method.dataDelete(url, localStorage.token)
     },
 
@@ -1150,7 +1154,7 @@ let LiveScoreAxiosApi = {
 
     /////////unassign umpire from the match(delete)
     unassignUmpire(rosterId) {
-        const url = `/roster/admin?id=${rosterId}`
+        const url = `/roster/admin?id=${rosterId}&category=Umpiring`
         return Method.dataDelete(url, token)
     },
 
@@ -1232,23 +1236,34 @@ let LiveScoreAxiosApi = {
             body.append("media", media[i])
         }
 
+        // if (data.isEdit) {
+        //     if (data.incidentMediaIds.length > 0) {
+        //         let incidentMediaId = JSON.stringify(data.incidentMediaIds)
+        //         if (media) {
+        //             const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+        //             return Method.dataPatch(url, token, body)
+        //         } else {
+        //             const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+        //             return Method.dataPatch(url, token)
+        //         }
+        //     } else {
+        //         let incidentMediaId = JSON.stringify(data.incidentMediaIds)
+        //         const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+        //         return Method.dataPatch(url, token, body)
+        //     }
+
+        // } else {
+        //     let incidentMediaId = JSON.stringify(data.incidentMediaIds)
+        //     const url = `/incident/media?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+        //     return Method.dataPost(url, token, body)
+        // }
+        let incidentMediaId = JSON.stringify(data.incidentMediaIds)
         if (data.isEdit) {
-            if (data.incidentMediaIds.length > 0) {
-                let incidentMediaId = JSON.stringify(data.incidentMediaIds)
-                if (media) {
-                    const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
-                    return Method.dataPatch(url, token, body)
-                } else {
-                    const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
-                    return Method.dataPatch(url, token)
-                }
-            } else {
-                const url = `/incident/media/edit?incidentId=${incidentId}`;
-                return Method.dataPatch(url, token, body)
-            }
+            const url = `/incident/media/edit?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
+            return Method.dataPatch(url, token, body)
 
         } else {
-            const url = `/incident/media?incidentId=${incidentId}`;
+            const url = `/incident/media?incidentId=${incidentId}&incidentMediaIds=${incidentMediaId}`;
             return Method.dataPost(url, token, body)
         }
     },
@@ -1346,6 +1361,45 @@ let LiveScoreAxiosApi = {
     resetLadderPoints(payload) {
         const url = `/teams/ladder/reset`
         return Method.dataPost(url, token, payload)
+    },
+
+    liveScoreExportGameAttendance(data) {
+        const { matchId, teamId, body } = data;
+        const url = `/gtattendances/manualUpload?matchId=${matchId}&teamId=${teamId}`;
+
+        return Method.dataPost(url, token, body);
+    },
+
+    liveScoreGameAttendanceList(data) {
+        const { matchId, teamId } = data;
+
+        let url = `/gtattendances?matchId=${matchId}`;
+
+        if (teamId) {
+            url = `/gtattendances?matchId=${matchId}&teamId=${teamId}`;
+        }
+
+        return Method.dataGet(url, token);
+    },
+
+    liveScorePlayerMinuteTrackingList(data) {
+        const { matchId, teamId, playerId } = data;
+        let url = `/pmt?matchId=${matchId}`;
+        if (teamId) {
+            url += `&teamId=${teamId}`;
+        }
+
+        if (playerId) {
+            url += `&playerId=${playerId}`;
+        }
+
+        return Method.dataGet(url, token);
+    },
+
+    liveScorePlayerMinuteRecord(data) {
+        const url = '/pmt/record';
+
+        return Method.dataPost(url, token, data);
     },
 
 };

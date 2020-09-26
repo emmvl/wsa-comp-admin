@@ -234,6 +234,7 @@ function liveScoreIncidentState(state = initialState, action) {
 
             } else if (action.key === "clearPyarIds") {
                 state.incidentData['playerIds'] = []
+                state.playerIds = []
             } else {
                 state.incidentData[action.key] = action.data
             }

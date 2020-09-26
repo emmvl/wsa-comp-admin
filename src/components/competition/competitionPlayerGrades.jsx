@@ -972,6 +972,7 @@ class CompetitionPlayerGrades extends Component {
                 >
                     <div >
                         <InputWithHead
+                            auto_complete="off"
                             id={AppUniqueId.PlayerGrading_addTeamName}
                             required={"pt-0 mt-0"}
                             heading={AppConstants.addTeam}

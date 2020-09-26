@@ -171,7 +171,7 @@ const columns = [
         onHeaderCell: () => listeners("totalSeasonalFee"),
     },
     {
-        title: "Total Fee - PAYG (inc GST)",
+        title: "Total Fee - Single Game (inc GST)",
         dataIndex: "casualFees",
         key: "casualFees",
         render: (casualFees, record) => totalCasualFees(casualFees, record),

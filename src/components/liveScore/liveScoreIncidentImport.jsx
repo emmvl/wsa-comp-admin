@@ -61,6 +61,8 @@ class LiveScoreIncidentImport extends Component {
                             onFileLoaded={this.handleForce}
                         /> */}
                         <input
+                            style={{ cursor: "pointer" }}
+                            className="pt-2 pb-2"
                             type="file"
                             ref={(input) => { this.filesInput = input }}
                             name="file"

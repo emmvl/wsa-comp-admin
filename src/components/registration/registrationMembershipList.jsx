@@ -70,7 +70,7 @@ const columns = [
 
     },
     {
-        title: 'Seasonal Fee (inc GST)',
+        title: 'Individual User Seasonal Fee (inc GST)',
         dataIndex: 'seasonalFee',
         key: 'seasonalFee',
         render: (seasonalFee, record) => {
@@ -83,7 +83,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: 'Single Game (PAYG) Fee (inc GST)',
+        title: 'Single Game Fee (inc GST)',
         dataIndex: 'casualFee',
         key: 'casualFee',
         render: (casualFee, record) => {

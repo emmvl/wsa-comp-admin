@@ -82,77 +82,78 @@ class LiveScoreAddMatch extends Component {
     }
 
     componentDidMount() {
-        if (this.state.umpireKey == 'umpire') {
-            const { id } = JSON.parse(getUmpireCompetitonData())
-
-            const { scoringType } = JSON.parse(getUmpireCompetitonData())
-            this.setState({ compId: id, scoringType: scoringType })
-
-            if (id !== null) {
-                this.props.getCompetitionVenuesList(id, "");
-                this.props.getLiveScoreDivisionList(id)
-                this.props.getliveScoreScorerList(id, 4)
-                // this.props.liveScoreRoundListAction(id)
-                this.props.liveScoreClubListAction(id)
-                this.props.umpireListAction({
-                    refRoleId: refRoleTypes('umpire'),
-                    entityTypes: entityTypes('COMPETITION'),
-                    compId: id,
-                    offset: null
-                })
-                this.setState({ loadvalue: true, allDisabled: true })
-            } else {
-                history.push('/')
-            }
-        } else {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            const { scoringType } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ compId: id, scoringType: scoringType })
-
-            if (id !== null) {
-                this.props.getCompetitionVenuesList(id, "");
-                this.props.getLiveScoreDivisionList(id)
-                this.props.getliveScoreScorerList(id, 4)
-                // this.props.liveScoreRoundListAction(id)
-                this.props.liveScoreClubListAction(id)
-                this.props.umpireListAction({
-                    refRoleId: refRoleTypes('umpire'),
-                    entityTypes: entityTypes('COMPETITION'),
-                    compId: id,
-                    offset: null
-                })
-                this.setState({ loadvalue: true, allDisabled: false })
-            } else {
-                history.push('/')
-            }
-        }
-
-        if (this.state.isEdit == true) {
-            let isLineUpEnable = null
-            let match_status = null
-            this.props.liveScoreAddEditMatchAction(this.state.matchId)
-            this.props.ladderSettingGetMatchResultAction()
-            this.props.liveScoreUpdateMatchAction('', "clearData")
-
+        if (getUmpireCompetitonData() || getLiveScoreCompetiton()) {
             if (this.state.umpireKey == 'umpire') {
-                const { lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData())
-                isLineUpEnable = lineupSelectionEnabled
-                match_status = status
+                const { id } = JSON.parse(getUmpireCompetitonData())
+                const { scoringType } = JSON.parse(getUmpireCompetitonData())
+                this.setState({ compId: id, scoringType: scoringType })
+
+                if (id !== null) {
+                    this.props.getCompetitionVenuesList(id, "");
+                    this.props.getLiveScoreDivisionList(id)
+                    this.props.getliveScoreScorerList(id, 4)
+                    this.props.liveScoreClubListAction(id)
+                    this.props.umpireListAction({
+                        refRoleId: JSON.stringify([15, 20]),
+                        entityTypes: entityTypes('COMPETITION'),
+                        compId: id,
+                        offset: null
+                    })
+                    this.setState({ loadvalue: true, allDisabled: true })
+                } else {
+                    history.push('/liveScoreCompetitions')
+                }
             } else {
-                const { lineupSelectionEnabled, status } = JSON.parse(getLiveScoreCompetiton())
-                isLineUpEnable = lineupSelectionEnabled
-                match_status = status
+                if (getLiveScoreCompetiton()) {
+                    const { id } = JSON.parse(getLiveScoreCompetiton())
+                    const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+                    this.setState({ compId: id, scoringType: scoringType })
+
+                    this.props.getCompetitionVenuesList(id, "");
+                    this.props.getLiveScoreDivisionList(id)
+                    this.props.getliveScoreScorerList(id, 4)
+                    this.props.liveScoreClubListAction(id)
+                    this.props.umpireListAction({
+                        refRoleId: JSON.stringify([15, 20]),
+                        entityTypes: entityTypes('COMPETITION'),
+                        compId: id,
+                        offset: null
+                    })
+                    this.setState({ loadvalue: true, allDisabled: false })
+                } else {
+                    history.push('/liveScoreCompetitions')
+                }
             }
 
-            if (isLineUpEnable == 1) {
-                this.setState({ isLineUp: 1 })
-                this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
+            if (this.state.isEdit == true) {
+                let isLineUpEnable = null
+                let match_status = null
+                this.props.liveScoreAddEditMatchAction(this.state.matchId)
+                this.props.ladderSettingGetMatchResultAction()
+                this.props.liveScoreUpdateMatchAction('', "clearData")
+
+                if (this.state.umpireKey == 'umpire') {
+                    const { lineupSelectionEnabled, status } = JSON.parse(getUmpireCompetitonData())
+                    isLineUpEnable = lineupSelectionEnabled
+                    match_status = status
+                } else {
+                    const { lineupSelectionEnabled, status } = JSON.parse(getLiveScoreCompetiton())
+                    isLineUpEnable = lineupSelectionEnabled
+                    match_status = status
+                }
+
+                if (isLineUpEnable == 1) {
+                    this.setState({ isLineUp: 1 })
+                    this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
+                } else {
+                    this.setState({ isLineUp: 0 })
+                    this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
+                }
             } else {
-                this.setState({ isLineUp: 0 })
-                this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
+                this.props.liveScoreUpdateMatchAction('', "addMatch")
             }
         } else {
-            this.props.liveScoreUpdateMatchAction('', "addMatch")
+            history.push('/liveScoreCompetitions')
         }
     }
 
@@ -244,6 +245,7 @@ class LiveScoreAddMatch extends Component {
     ModalView() {
         return (
             <Modal
+                title={AppConstants.round}
                 visible={this.state.visible}
                 onOk={this.state.createRound.length == 0 ? this.handleSubmit : this.onCreateRound}
                 onCancel={this.handleCancel}
@@ -252,9 +254,9 @@ class LiveScoreAddMatch extends Component {
                 okText={'Save'}
                 centered={true}
             >
-                <Form.Item name='addRound' rules={[{ required: false, message: ValidationConstants.roundField }]}>
+                <Form.Item name="addRound" rules={[{ required: false, message: ValidationConstants.roundField }]}>
                     <InputWithHead
-                        required={"required-field pb-0"}
+                        required={"required-field pb-0 pt-0"}
                         heading={AppConstants.round}
                         placeholder={AppConstants.round}
                         // value={this.state.createRound}

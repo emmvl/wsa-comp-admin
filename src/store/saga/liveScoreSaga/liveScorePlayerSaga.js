@@ -117,23 +117,39 @@ function* liveScorePlayerImportSaga(action) {
 }
 
 
-// Delete Player Saga 
+// Delete Player Saga
 
 function* liveScoreDeletePlayerSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreDeletePlayer, action.playerId)
-
-
-    if (result.status == 1) {
-      yield put({
-        type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS,
-        status: result.status,
-      });
-      history.push("/liveScorePlayerList");
-
-      message.success("Player Deleted Successfully.");
+    const deleteResult = yield call(LiveScoreAxiosApi.liveScoreDeletePlayer, action.playerId)
+    if (deleteResult.status == 1) {
+      if (action.key) {
+        yield put({
+          type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS,
+          status: deleteResult.status,
+        });
+        message.success("Player Deleted Successfully.");
+        history.push("/liveScorePlayerList")
+      } else {
+        const result = yield call(LiveScoreAxiosApi.getPlayerWithPaggination, action.competitionId, action.offset, 10, action.search, action.sortBy, action.sortOrder);
+        if (result.status === 1) {
+          yield put({
+            type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_SUCCESS,
+            result: result.result.data,
+            status: result.status,
+          });
+          message.success("Player Deleted Successfully.");
+        }
+        else {
+          yield put({
+            type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS,
+            status: result.status,
+          });
+          message.success("Player Deleted Successfully.");
+        }
+      }
     } else {
-      yield call(failSaga, result);
+      yield call(failSaga, deleteResult);
     }
   } catch (error) {
     yield call(errorSaga, error);

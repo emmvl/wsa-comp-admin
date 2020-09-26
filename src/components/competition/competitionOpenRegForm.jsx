@@ -274,20 +274,18 @@ class CompetitionOpenRegForm extends Component {
                                     onClick={() => !this.state.permissionState.divisionsDisable ? this.addRemoveDivision(index, record, "remove") : null}
                                 />
                             </span>
-
-
                         )
                     }
                 }
             ],
             divisionState: false,
             nextButtonClicked: false
-
         };
         this_Obj = this;
         this.props.clearCompReducerDataAction("all")
         this.formRef = createRef();
     }
+
     componentDidUpdate(nextProps) {
         let competitionFeesState = this.props.competitionFeesState
         if (competitionFeesState.onLoad === false && this.state.loading === true) {
@@ -338,8 +336,18 @@ class CompetitionOpenRegForm extends Component {
             let competitionTypeList = this.props.appState.own_CompetitionArr
             if (nextProps.appState.own_CompetitionArr !== competitionTypeList) {
                 if (competitionTypeList.length > 0) {
-                    let competitionId = competitionTypeList[0].competitionId
-                    let statusRefId = competitionTypeList[0].statusRefId
+                    let screenKey = this.props.location.state ? this.props.location.state.screenKey : null
+                    let competitionId = null
+                    let statusRefId = null
+                    if (screenKey == "compDashboard") {
+                        competitionId = getOwn_competition()
+                        let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
+                        statusRefId = compIndex > -1 ? competitionTypeList[compIndex].statusRefId : competitionTypeList[0].statusRefId
+                        competitionId = compIndex > -1 ? competitionId : competitionTypeList[0].competitionId
+                    } else {
+                        competitionId = competitionTypeList[0].competitionId
+                        statusRefId = competitionTypeList[0].statusRefId
+                    }
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_competition(competitionId)
@@ -445,6 +453,7 @@ class CompetitionOpenRegForm extends Component {
     }
 
     componentDidMount() {
+        window.scrollTo(0, 0)
         let orgData = getOrganisationData()
         this.setState({ organisationTypeRefId: orgData.organisationTypeRefId })
         let competitionId = null
@@ -573,6 +582,7 @@ class CompetitionOpenRegForm extends Component {
                 formData.append("description", postData.description);
                 formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                 formData.append("competitionFormatRefId", postData.competitionFormatRefId);
+                formData.append("finalTypeRefId", postData.finalTypeRefId);
                 formData.append("startDate", postData.startDate);
                 formData.append("endDate", postData.endDate);
                 if (postData.competitionFormatRefId == 4) {
@@ -696,8 +706,8 @@ class CompetitionOpenRegForm extends Component {
         this.props.clearCompReducerDataAction("all")
         this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
-
     }
+
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { own_YearArr, own_CompetitionArr, } = this.props.appState
@@ -1038,6 +1048,7 @@ class CompetitionOpenRegForm extends Component {
                 <span className="applicable-to-heading required-field">{AppConstants.typeOfCompetition}</span>
                 <Form.Item
                     name='competitionTypeRefId'
+                    initialValue={1}
                     rules={[{ required: true, message: ValidationConstants.pleaseSelectCompetitionType }]}
                 >
                     <Radio.Group
@@ -1077,6 +1088,23 @@ class CompetitionOpenRegForm extends Component {
                         ))}
                     </Radio.Group>
                 </Form.Item>
+
+                <span className="applicable-to-heading required-field">{AppConstants.gradesOrPools}</span>
+                <Form.Item
+                    name="finalTypeRefId"
+                    initialValue={detailsData.competitionDetailData.finalTypeRefId}
+                    rules={[{ required: true, message: ValidationConstants.pleaseSelectGradesOrPools}]}
+                >
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "finalTypeRefId")}
+                        setFieldsValue={detailsData.competitionDetailData.finalTypeRefId}
+                    >
+                        <Radio value={1}>{AppConstants.grades}</Radio>
+                        <Radio value={2}>{AppConstants.pools}</Radio>
+                    </Radio.Group>
+                </Form.Item>
+
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -1169,7 +1197,6 @@ class CompetitionOpenRegForm extends Component {
                         this.nonPlayingDateView(item, index))
                     }
                     <a>
-
                         <span onClick={() => !compDetailDisable ? this.addNonPlayingDate() : null} className="input-heading-add-another">
                             + {AppConstants.addAnotherNonPlayingDate}
                         </span>
@@ -1328,7 +1355,7 @@ class CompetitionOpenRegForm extends Component {
                 }
             },
             onCancel() {
-                console.log('Cancel');
+                // console.log('Cancel');
             },
         });
     }

@@ -40,7 +40,7 @@ function tableSort(key) {
     }
     _this.setState({ sortBy, sortOrder });
     if (_this.state.competitionId) {
-        _this.props.playerListWithPaginationAction(_this.state.competitionId, 0, 10, undefined, sortBy, sortOrder);
+        _this.props.playerListWithPaginationAction(_this.state.competitionId, _this.state.offset, 10, undefined, sortBy, sortOrder);
     }
 }
 
@@ -176,7 +176,7 @@ const columns = [
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="2" onClick={() => {
-                        _this.showDeleteConfirm(record.playerId);
+                        _this.showDeleteConfirm(record.playerId,);
                     }}>
                         <span>Delete</span>
                     </Menu.Item>
@@ -192,23 +192,28 @@ class LiveScorePlayerList extends Component {
         this.state = {
             competitionId: null,
             searchText: "",
+            offset: 0
         }
         _this = this;
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id })
-        if (id !== null) {
-            this.props.playerListWithPaginationAction(id, 0, 10)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id })
+            if (id !== null) {
+                this.props.playerListWithPaginationAction(id, 0, 10)
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
     }
 
     // Delete player
     deletePlayer = (playerId) => {
-        this.props.liveScoreDeletePlayerAction(playerId)
+        this.props.liveScoreDeletePlayerAction(playerId, this.state.competitionId, this.state.offset)
     }
 
     showDeleteConfirm = (playerId) => {
@@ -222,7 +227,6 @@ class LiveScorePlayerList extends Component {
                 this_.deletePlayer(playerId)
             },
             onCancel() {
-                console.log('Cancel');
             },
         });
     }
@@ -231,12 +235,15 @@ class LiveScorePlayerList extends Component {
     handlePageChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
         let { sortBy, sortOrder } = this.state
+        this.setState({
+            offset
+        })
         this.props.playerListWithPaginationAction(this.state.competitionId, offset, 10, undefined, sortBy, sortOrder)
     }
 
     ////////form content view
     contentView = () => {
-        let { result, totalCount } = this.props.liveScorePlayerState
+        let { result, totalCount, currentPage } = this.props.liveScorePlayerState
 
         return (
             <div className="comp-dash-table-view mt-4">
@@ -247,7 +254,7 @@ class LiveScorePlayerList extends Component {
                         columns={columns}
                         dataSource={result}
                         pagination={false}
-                        rowKey={(record) => record.playerId}
+                        // rowKey={(record) => record.playerId}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
@@ -265,7 +272,7 @@ class LiveScorePlayerList extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
-                            defaultCurrent={1}
+                            current={currentPage}
                             total={totalCount}
                             onChange={this.handlePageChange}
                         />
@@ -461,9 +468,9 @@ class LiveScorePlayerList extends Component {
                 />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"} />
                 <Layout>
-                    {this.headerView()}
+                    {getLiveScoreCompetiton() && this.headerView()}
                     <Content>
-                        {this.contentView()}
+                        {getLiveScoreCompetiton() && this.contentView()}
                     </Content>
                 </Layout>
             </div>

@@ -75,6 +75,8 @@ const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
+const { RangePicker } = DatePicker;
+
 class CompetitionDraws extends Component {
   constructor(props) {
     super(props);
@@ -148,7 +150,7 @@ class CompetitionDraws extends Component {
                   this.state.yearRefId,
                   this.state.firstTimeCompId,
                   venueId,
-                  roundId, null, null, null , this.state.dateRangeCheck
+                  roundId, null, null, null, this.state.dateRangeCheck
                 );
                 this.setState({
                   roundId,
@@ -305,7 +307,6 @@ class CompetitionDraws extends Component {
   }
 
   apiCalls() {
-
     let yearId = getOwnCompetitionYear();
     let storedCompetitionId = getOwn_competition();
     let storedCompetitionStatus = getOwn_competitionStatus()
@@ -403,7 +404,7 @@ class CompetitionDraws extends Component {
     drawData,
     round_Id
   ) => {
-    let updatedKey = this.state.firstTimeCompId === "-1" ? "all" : "add"
+    let updatedKey = this.state.firstTimeCompId === "-1" || this.state.dateRangeCheck ? "all" : "add"
     let postData = null;
     if (sourceObejct.drawsId == null) {
       let columnObject = this.getColumnData(sourceIndexArray, drawData);
@@ -440,7 +441,8 @@ class CompetitionDraws extends Component {
       targetIndexArray,
       updatedKey,
       round_Id,
-      apiData
+      apiData,
+      this.state.dateRangeCheck
     );
 
     this.setState({ updateLoad: true });
@@ -455,7 +457,7 @@ class CompetitionDraws extends Component {
     drawsData,
     round_Id
   ) => {
-    let key = this.state.firstTimeCompId === "-1" ? "all" : "add"
+    let key = this.state.firstTimeCompId === "-1" || this.state.dateRangeCheck ? "all" : "add"
     let customSourceObject = {
       // drawsId: sourceObejct.drawsId,
       drawsId: targetObject.drawsId,
@@ -649,7 +651,7 @@ class CompetitionDraws extends Component {
     this.props.clearDraws('rounds');
     if (competitionId == -1) {
       this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId, "all");
-      this.setState({dateRangeCheck: true})
+      this.setState({ dateRangeCheck: true })
     } else {
       setOwn_competition(competitionId);
       setOwn_competitionStatus(statusRefId)
@@ -671,7 +673,7 @@ class CompetitionDraws extends Component {
     });
   }
 
-  onDateRangeCheck = (val) =>{
+  onDateRangeCheck = (val) => {
     this.props.clearDraws();
     let startDate = val ? moment(new Date()).format("YYYY-MM-DD") : null;
     let endDate = val ? moment(new Date()).format("YYYY-MM-DD") : null;
@@ -681,7 +683,7 @@ class CompetitionDraws extends Component {
       this.state.venueId,
       this.state.roundId, null, startDate, endDate, val
     );
-    this.setState({dateRangeCheck: val,startDate: startDate,endDate: endDate});
+    this.setState({ dateRangeCheck: val, startDate: startDate, endDate: endDate });
   }
 
   // on DivisionGradeNameChange
@@ -698,7 +700,8 @@ class CompetitionDraws extends Component {
         alignItems: "center",
         display: "flex",
         justifyContent: "space-between",
-        flexWrap: "wrap"}}>
+        flexWrap: "wrap"
+      }}>
         <div className="pb-3">
           <div
             style={{
@@ -728,7 +731,7 @@ class CompetitionDraws extends Component {
           </div>
         </div>
         <div className="pb-3" >
-          <div style={{display: "flex"}}>
+          <div style={{ display: "flex" }}>
             <div
               style={{
                 width: "fit-content",
@@ -776,11 +779,12 @@ class CompetitionDraws extends Component {
               }}
             >
               <Checkbox
-                  className="year-select-heading"
-                  disabled={this.state.firstTimeCompId == -1}
-                  onChange={(e) => this.onDateRangeCheck(e.target.checked)}
-                  checked={this.state.dateRangeCheck} >
-                  {"Date Range"}
+                className="year-select-heading"
+                disabled={this.state.firstTimeCompId == -1}
+                onChange={(e) => this.onDateRangeCheck(e.target.checked)}
+                checked={this.state.dateRangeCheck}
+              >
+                {"Date Range"}
               </Checkbox>
             </div>
           </div>
@@ -909,7 +913,7 @@ class CompetitionDraws extends Component {
       this.state.firstTimeCompId,
       this.state.venueId,
       roundId,
-      this.state.organisation_Id, null, null , this.state.dateRangeCheck
+      this.state.organisation_Id, null, null, this.state.dateRangeCheck
     );
   };
 
@@ -1043,23 +1047,18 @@ class CompetitionDraws extends Component {
     this.props.publishDraws(this.state.firstTimeCompId, '', payload);
     this.setState({ visible: false, changeStatus: true })
   }
-  onChangeStartDate = (startDate, key) => {
+  onChangeStartDate = (startDate, endDate) => {
 
     // this.props.clearDraws()
     // this.props.changeDrawsDateRangeAction(this.state.yearRefId,
     //   this.state.firstTimeCompId, startDate, this.state.endDate)
     this.setState({
-      startDate: startDate
-    })
-  }
-  onChangeEndDate = (endDate, key) => {
-    // this.props.clearDraws()
-    // this.props.changeDrawsDateRangeAction(this.state.yearRefId,
-    //   this.state.firstTimeCompId, this.state.startDate, endDate)
-    this.setState({
+      startDate: startDate,
       endDate: endDate
+
     })
   }
+
 
   applyDateFilter = () => {
     this.props.clearDraws()
@@ -1162,7 +1161,28 @@ class CompetitionDraws extends Component {
                         alignItems: 'center',
                       }}
                     >
-                      <div className="col-sm-5.5">
+                      <div className="col-sm-7">
+                        <div
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                          }}>
+                          <span className="year-select-heading" style={{ width: 100 }}>
+                            {AppConstants.dateRange}:
+                          </span>
+                          <RangePicker
+                            size={'large'}
+                            onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
+                            format={"DD-MM-YYYY"}
+                            style={{ width: "100%", minWidth: 180, paddingLeft: 5 }}
+                            value={[moment(this.state.startDate), moment(this.state.endDate)]}
+                          />
+                        </div>
+                      </div>
+
+                      {/* <div className="col-sm-6">
                         <div
                           style={{
                             width: '100%',
@@ -1183,8 +1203,8 @@ class CompetitionDraws extends Component {
                             // disabledDate={d => !d || d.isAfter(this.state.endDate)}
                           />
                         </div>
-                      </div>
-                      <div className="col-sm-5">
+                      </div> */}
+                      {/* <div className="col-sm-5">
                         <div
                           style={{
                             width: '100%',
@@ -1205,16 +1225,16 @@ class CompetitionDraws extends Component {
                             // disabledDate={d => !d || d.isBefore(this.state.startDate)}
                           />
                         </div>
-                      </div>
+                      </div> */}
                       <div className="col-sm-1.5">
-                      <Button
-                        id={AppUniqueId.apply_date_btn}
-                        className="open-reg-button"
-                        type="primary"
-                        onClick={() => this.applyDateFilter()}
-                      >
-                        {AppConstants.apply}
-                      </Button>
+                        <Button
+                          id={AppUniqueId.apply_date_btn}
+                          className="open-reg-button"
+                          type="primary"
+                          onClick={() => this.applyDateFilter()}
+                        >
+                          {AppConstants.apply}
+                        </Button>
                       </div>
                     </div>
                     :
@@ -1289,7 +1309,7 @@ class CompetitionDraws extends Component {
                           </span>
                         </div>
                         {this.draggableView(dateItem)}
-                        {this.state.firstTimeCompId == "-1" ?
+                        {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
                           <div>
                             <AllLegendComponent
                               allLegendArray={dateItem.legendsArray}
@@ -1341,7 +1361,7 @@ class CompetitionDraws extends Component {
                           :
                             <div>
                               {this.state.firstTimeCompId == -1 &&
-                                <div class="comp-warning-info" style={{paddingBottom: "40px"}}>{AppConstants.noFixturesMessage}</div>
+                                <div class="comp-warning-info" style={{ paddingBottom: "40px" }}>{AppConstants.noFixturesMessage}</div>
                               }
                             </div>
                           }
@@ -1842,6 +1862,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(CompetitionDraws);

@@ -41,13 +41,17 @@ class LiveScoreLadderAdjustment extends Component {
     }
 
     componentDidMount() {
-        this.props.updateLadderSetting({ key: 'refresh' })
+        if (getLiveScoreCompetiton()) {
+            this.props.updateLadderSetting({ key: 'refresh' })
 
-        const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id, compUniqueKey: uniqueKey })
-        if (id !== null) {
-            this.props.getLiveScoreDivisionList(id)
-            this.setState({ loadding: true, })
+            const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id, compUniqueKey: uniqueKey })
+            if (id !== null) {
+                this.props.getLiveScoreDivisionList(id)
+                this.setState({ loadding: true, })
+            }
+        } else {
+            history.push('/liveScoreCompetitions')
         }
     }
 

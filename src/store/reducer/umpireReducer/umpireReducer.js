@@ -46,6 +46,22 @@ function isUmpireCoachCheck(data, key) {
     }
 }
 
+
+function createUmpireArray(result) {
+    let umpireArray = []
+    for (let i in result) {
+        let userRoleCheck = result[i].userRoleEntities
+        for (let j in userRoleCheck) {
+            if (userRoleCheck[j].roleId == 15 || userRoleCheck[j].roleId == 19) {
+                umpireArray.push(result[i])
+                break
+            }
+        }
+    }
+    return umpireArray
+}
+
+
 function createCoachArray(result) {
     console.log(result)
     let coachArray = []
@@ -122,11 +138,12 @@ function umpireState(state = initialState, action) {
                 let coachData = createCoachArray(JSON.parse(JSON.stringify(user_Data)))
                 state.coachList = coachData
             }
+            let checkUserData = createUmpireArray(JSON.parse(JSON.stringify(user_Data)))
             return {
                 ...state,
                 onLoad: false,
-                umpireList: user_Data,
-                umpireListResult: user_Data,
+                umpireList: checkUserData,
+                umpireListResult: checkUserData,
                 currentPage: action.result.page ? action.result.page.currentPage : null,
                 totalCount: action.result.page ? action.result.page.totalCount : null,
                 status: action.status
@@ -152,7 +169,6 @@ function umpireState(state = initialState, action) {
             };
         //// Update Add Umpire Data
         case ApiConstants.UPDATE_ADD_UMPIRE_DATA:
-            console.log(state.affilateList, "affileientegttertet")
             let key = action.key
             let data = action.data
             if (key === 'umpireRadioBtn') {
@@ -169,7 +185,6 @@ function umpireState(state = initialState, action) {
                 let getAffiliateId = genrateSelectedAffiliateId(state.selectedAffiliateId, state.affilateList)
                 state.affiliateId = getAffiliateId
             } else if (action.key === 'isEditUmpire') {
-                console.log(data, "editable datatatatta")
                 state.umpireData.id = data.id
                 state.umpireData.firstName = data.firstName
                 state.umpireData.lastName = data.lastName

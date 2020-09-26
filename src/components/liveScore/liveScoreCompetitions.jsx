@@ -23,8 +23,8 @@ import { getOnlyYearListAction } from "store/actions/appAction";
 import { liveScoreOwnPartCompetitionList, liveScoreCompetitionActionInitiate, liveScoreCompetitionDeleteInitiate } from "store/actions/LiveScoreAction/liveScoreCompetitionAction";
 // import Loader from "customComponents/loader";
 import DashboardLayout from "pages/dashboardLayout";
-
 import "./liveScore.css";
+import { updateInnerHorizontalData, initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -353,6 +353,7 @@ class LiveScoreCompetitions extends Component {
     }
 
     componentDidMount() {
+        this.props.updateInnerHorizontalData()
         localStorage.setItem("yearValue", "false")
         this.props.getOnlyYearListAction(this.props.appState.yearList)
         localStorage.setItem("yearId", this.state.year)
@@ -692,4 +693,5 @@ export default connect(mapStateToProps, {
     liveScoreCompetitionActionInitiate,
     liveScoreCompetitionDeleteInitiate,
     getOnlyYearListAction,
+    updateInnerHorizontalData
 })(LiveScoreCompetitions);

@@ -410,7 +410,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             venueId: venuData?.venueId,
         });
 
-        if (!address.addressOne) {
+        if (!address.addressOne && !address.suburb) {
             this.setState({
                 venueAddressError: ValidationConstants.venueAddressDetailsError,
             })

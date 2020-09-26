@@ -19,12 +19,13 @@ function saveCompetitionFinalsAction(payload) {
     return action;
 }
 
-function updateCompetitionFinalsAction(data, key, index) {
+function updateCompetitionFinalsAction(data, key, index, subIndex) {
     const action = {
       type: ApiConstants.UPDATE_COMPETITION_FINALS,
       updatedData: data,
       key: key,
-      index: index
+      index: index,
+      subIndex: subIndex
     };
     return action;
   }

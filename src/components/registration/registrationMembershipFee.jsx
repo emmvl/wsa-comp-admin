@@ -73,7 +73,7 @@ const columns = [
         key: "membershipProductName",
     },
     {
-        title: AppConstants.casualFee + " (excl. GST)",
+        title: AppConstants.casualFeeExclGst,
         dataIndex: "casualFee",
         key: "casualFee",
         filterDropdown: true,
@@ -240,12 +240,12 @@ class RegistrationMembershipFee extends Component {
                 return item
             })
             let productBody = {
-                "membershipProductId": productId,
-                "yearRefId": yearRefId,
-                "statusRefId": this.state.statusRefId,
-                "validityRefId": validityRefId,
-                "membershipProductName": membershipProductName,
-                "membershipProductTypes": finalMembershipTypes
+                membershipProductId: productId,
+                yearRefId: yearRefId,
+                statusRefId: this.state.statusRefId,
+                validityRefId: validityRefId,
+                membershipProductName: membershipProductName,
+                membershipProductTypes: finalMembershipTypes
             }
             if (productBody.membershipProductTypes.length > 0) {
                 this.props.regSaveMembershipProductDetailsAction(productBody)
@@ -309,11 +309,11 @@ class RegistrationMembershipFee extends Component {
                 // return item
             }
             let discountBody = {
-                "membershipProductId": productId,
-                "statusRefId": this.state.statusRefId,
-                "membershipProductDiscounts": [
+                membershipProductId: productId,
+                statusRefId: this.state.statusRefId,
+                membershipProductDiscounts: [
                     {
-                        "discounts": discountData
+                        discounts: discountData
                     }
                 ]
             }
@@ -562,10 +562,13 @@ class RegistrationMembershipFee extends Component {
                                         <div className="row">
                                             <div className="col-sm">
                                                 <InputWithHead heading={AppConstants.dobFrom} />
-                                                <Form.Item name={`dobFrom${index}`} rules={[{
-                                                    required: true,
-                                                    message: ValidationConstants.pleaseSelectDOBFrom
-                                                }]}>
+                                                <Form.Item
+                                                    name={`dobFrom${index}`}
+                                                    rules={[{
+                                                        required: true,
+                                                        message: ValidationConstants.pleaseSelectDOBFrom
+                                                    }]}
+                                                >
                                                     <DatePicker
                                                         size="large"
                                                         style={{ width: "100%" }}
@@ -581,10 +584,13 @@ class RegistrationMembershipFee extends Component {
                                             </div>
                                             <div className="col-sm">
                                                 <InputWithHead heading={AppConstants.dobTo} />
-                                                <Form.Item name={`dobTo${index}`} rules={[{
-                                                    required: true,
-                                                    message: ValidationConstants.PleaseSelectDOBTo
-                                                }]}>
+                                                <Form.Item
+                                                    name={`dobTo${index}`}
+                                                    rules={[{
+                                                        required: true,
+                                                        message: ValidationConstants.PleaseSelectDOBTo
+                                                    }]}
+                                                >
                                                     <DatePicker
                                                         size="large"
                                                         style={{ width: "100%" }}
@@ -631,7 +637,7 @@ class RegistrationMembershipFee extends Component {
                                 {item.isAllow && item.isPlaying == 1 && (
                                     <div className="fluid-width" style={{ marginTop: "10px" }}>
                                         <div className="row">
-                                            <div className="col-sm"  style={{ marginLeft: 25}}>
+                                            <div className="col-sm" style={{ marginLeft: 25}}>
                                                 <Form.Item
                                                     name={`allowTeamRegistrationTypeRefId${index}`}
                                                     rules={[{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]}

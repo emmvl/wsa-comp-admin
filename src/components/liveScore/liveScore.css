@@ -464,6 +464,13 @@
 .ant-calendar-picker-input.ant-input {
     border-radius: 4px;
 }
+.attendance-table .ant-input-number {
+    padding: 0;
+    height: unset;
+}
+.livescore-editor-news.col-sm {
+    padding: 0 12px;
+}
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {
         display: flex;

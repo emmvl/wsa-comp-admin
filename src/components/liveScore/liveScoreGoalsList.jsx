@@ -45,7 +45,7 @@ function tableSort(key) {
 
 const columns1 = [
     {
-        title: 'Match Id',
+        title: 'Match ID',
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
@@ -222,14 +222,17 @@ class LiveScoreGoalList extends Component {
     }
 
     componentDidMount() {
-        // let competitionId = getCompetitonId()
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id })
-        if (id !== null) {
-            let offset = 0
-            this.props.liveScoreGoalListAction(id, this.state.filter, this.state.searchText, offset)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id })
+            if (id !== null) {
+                let offset = 0
+                this.props.liveScoreGoalListAction(id, this.state.filter, this.state.searchText, offset)
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
     }
 

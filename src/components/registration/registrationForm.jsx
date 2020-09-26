@@ -38,7 +38,7 @@ import {
 } from "../../store/actions/appAction";
 import AppImages from "../../themes/appImages";
 import ValidationConstants from "../../themes/validationConstant";
-import { isArrayNotEmpty, regexNumberExpression } from "../../util/helpers";
+import { isArrayNotEmpty, regexNumberExpression, randomKeyGen } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -449,6 +449,25 @@ class RegistrationForm extends Component {
         setFieldValue("registrationLock")
     }
 
+    addHardshipCode = (orgRegistrationId) => {
+        let code = randomKeyGen(8);
+        let obj = {
+            id: 0,
+            code: code,
+            orgRegistrationId: orgRegistrationId,
+            isActive: 1,
+        }
+        this.props.updateRegistrationForm(obj, "addHardshipCode")
+    }
+
+    onChangeSetValue = (value, index) => {
+        let obj = {
+            value: value,
+            index: index
+        }
+        this.props.updateRegistrationForm(obj, "addHardshipCodeValueChange")
+    }
+
     regOpenDate = () => {
         if (this.props.registrationState.registrationFormData.length > 0) {
             let formDataValue = this.props.registrationState.registrationFormData[0]
@@ -809,7 +828,7 @@ class RegistrationForm extends Component {
                                 {defaultChecked.replyName === true && (
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_complete="new-name"
+                                            auto_complete="off"
                                             placeholder={"Name"}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyName")}
                                             value={formDataValue ? formDataValue.replyName : ''}
@@ -834,7 +853,7 @@ class RegistrationForm extends Component {
                                 {defaultChecked.replyRole === true && (
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_complete="new-role"
+                                            auto_complete="off"
                                             placeholder={AppConstants.role}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyRole")}
                                             value={formDataValue ? formDataValue.replyRole : ''}
@@ -859,15 +878,16 @@ class RegistrationForm extends Component {
                                 </div>
                                 {defaultChecked.replyEmail === true && (
                                     <div className="col-sm">
-                                        <Form.Item name='email' rules={[
-                                            {
+                                        <Form.Item
+                                            name="email"
+                                            rules={[{
                                                 type: "email",
                                                 pattern: new RegExp(AppConstants.emailExp),
                                                 message: ValidationConstants.email_validation
-                                            }
-                                        ]}>
+                                            }]}
+                                        >
                                             <InputWithHead
-                                                auto_complete="new-email"
+                                                auto_complete="off"
                                                 placeholder={AppConstants.email}
                                                 onChange={e =>
                                                     this.props.updateRegistrationForm(e.target.value, "replyEmail")
@@ -900,7 +920,7 @@ class RegistrationForm extends Component {
                                         >
                                             <InputWithHead
                                                 // type="number"
-                                                auto_complete="new-phoneNo"
+                                                auto_complete="off"
                                                 maxLength={10}
                                                 placeholder={AppConstants.phone}
                                                 onChange={(e) => this.changeNumber(e.target.value)}
@@ -1091,7 +1111,7 @@ class RegistrationForm extends Component {
                     </div>
                 </div>
 
-                <div className="inside-container-view">
+                {/* <div className="inside-container-view">
                     <span className="setting-heading">{AppConstants.demographicQuestions}</span>
                     <Tree
                         className="tree-government-rebate"
@@ -1105,7 +1125,7 @@ class RegistrationForm extends Component {
                     >
                         {this.ShowAdvancedSettingSettingTree(demographicSetting)}
                     </Tree>
-                </div>
+                </div> */}
                 <div className="inside-container-view">
                     <span className="setting-heading">{AppConstants.netballQuestions}</span>
                     <Tree
@@ -1122,7 +1142,7 @@ class RegistrationForm extends Component {
                         {this.ShowAdvancedSettingSettingTree(netballQuestionsSetting)}
                     </Tree>
                 </div>
-                <div className="inside-container-view">
+                {/* <div className="inside-container-view">
                     <span className="setting-heading">{AppConstants.otherQuestions}</span>
                     <Tree
                         className="tree-government-rebate"
@@ -1136,7 +1156,7 @@ class RegistrationForm extends Component {
                     >
                         {this.ShowAdvancedSettingSettingTree(otherQuestionsSetting)}
                     </Tree>
-                </div>
+                </div> */}
 
                 <span className="form-heading pt-5">{AppConstants.advancedSettings}</span>
 
@@ -1411,6 +1431,40 @@ class RegistrationForm extends Component {
         )
     }
 
+    hardshipCodeView = () => {
+        const { hardShipCodes, orgRegistrationId } = this.props.registrationState.registrationFormData[0];
+        let hardShipCodesList = hardShipCodes == null ? [] : hardShipCodes
+        return (
+            <div className="discount-view pt-5">
+                <span className="form-heading pb-2">{AppConstants.hardshipCode}</span>
+                {hardShipCodesList.map((item, index) => (
+                    <div>
+                        <div style={{ display: "flex", marginTop: "13px" }}>
+                            <InputWithHead
+                              readOnly={true}
+                              disabled={item.isActive == 0}
+                              style={{ width: "252px", marginRight: "28px" }}
+                              placeholder={AppConstants.code}
+                              value={item.code == 0 ? " " : item.code}
+                              onChange={(e) => this.onChangeSetValue(e.target.value, index)}
+                            />
+                            {item.isActive == 1 &&
+                                <a>
+                                    <span className="input-heading-add-another" style={{ textDecoration: "underline", paddingTop: 18 }}>
+                                        {AppConstants.email}
+                                    </span>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                ))}
+                <span className="input-heading-add-another" onClick={(e) => this.addHardshipCode(orgRegistrationId)}>
+                    +{AppConstants.addCode}
+                </span>
+            </div>
+        )
+    }
+
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         let registrationData = this.props.registrationState.registrationFormData.length > 0 ? this.props.registrationState.registrationFormData[0] : [];
@@ -1533,6 +1587,7 @@ class RegistrationForm extends Component {
                             {/* <div className="formView">{this.UserRegisterView()}</div> */}
                             <div className="formView">{this.advancedSettingView()}</div>
                             <div className="formView">{this.sendInviteToView()}</div>
+							              <div className="formView">{this.hardshipCodeView()}</div>
                             {/* <div className="formView">
                                 {this.disclaimerView()}
                             </div> */}

@@ -8,7 +8,10 @@ import ValidationConstants from "themes/validationConstant";
 import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
-import { liveScoreUmpireImportAction, liveScoreUmpireResetImportResultAction } from "store/actions/LiveScoreAction/livescoreUmpiresAction";
+import {
+    liveScoreUmpireImportAction,
+    liveScoreUmpireResetImportResultAction
+} from "store/actions/LiveScoreAction/livescoreUmpiresAction";
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -92,6 +95,12 @@ class LiveScoreUmpireImport extends Component {
                 csvFile: this.state.csvData,
                 screenName: "liveScoreUmpireList",
             });
+
+            this.setState({
+                csvData: null,
+            }, () => {
+                this.filesInput.value = null;
+            });
         } else {
             message.config({ duration: 0.9, maxCount: 1 });
             message.error(ValidationConstants.csvField);
@@ -100,12 +109,14 @@ class LiveScoreUmpireImport extends Component {
 
     contentView = () => (
         <div className="content-view pt-4">
-            <span className="input-heading">{AppConstants.fileInput}</span>
+            <span className="user-contact-heading">{AppConstants.fileInput}</span>
 
             <div className="col-sm">
                 <div className="row">
                     <label>
                         <input
+                            style={{ cursor: "pointer" }}
+                            className="pt-2 pb-2"
                             type="file"
                             ref={(input) => {
                                 this.filesInput = input
@@ -131,10 +142,10 @@ class LiveScoreUmpireImport extends Component {
                                 {AppConstants.upload}
                             </Button>
                         ) : (
-                            <Button type="primary" className="primary-add-comp-form" onClick={this.onUploadBtn}>
-                                {AppConstants.upload}
-                            </Button>
-                        )}
+                                <Button type="primary" className="primary-add-comp-form" onClick={this.onUploadBtn}>
+                                    {AppConstants.upload}
+                                </Button>
+                            )}
                     </div>
                 </div>
             </div>

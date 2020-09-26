@@ -125,12 +125,16 @@ class LiveScoreIncidentList extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (id !== null) {
-            let { searchText, limit, offset } = this.state
-            this.props.liveScoreIncidentList(id, searchText, limit, offset);
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            if (id !== null) {
+                let { searchText, limit, offset } = this.state
+                this.props.liveScoreIncidentList(id, searchText, limit, offset);
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
     }
 

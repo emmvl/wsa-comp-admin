@@ -11,7 +11,10 @@ import history from "util/history";
 import { getLiveScoreCompetiton } from "util/sessionStorage";
 import { showInvalidData } from "util/showImportResult";
 import { exportFilesAction } from "store/actions/appAction";
-import { liveScoreMatchImportAction, liveScoreMatchResetImportResultAction } from "store/actions/LiveScoreAction/liveScoreMatchAction";
+import {
+    liveScoreMatchImportAction,
+    liveScoreMatchResetImportResultAction
+} from "store/actions/LiveScoreAction/liveScoreMatchAction";
 import Loader from "customComponents/loader";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -99,10 +102,14 @@ class LiveScoreMatchImport extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton());
-        this.setState({ competitionId: id });
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton());
+            this.setState({ competitionId: id });
 
-        this.props.liveScoreMatchResetImportResultAction();
+            this.props.liveScoreMatchResetImportResultAction();
+        } else {
+            history.push("/liveScoreCompetitions")
+        }
     }
 
     headerView = () => (
@@ -140,11 +147,15 @@ class LiveScoreMatchImport extends Component {
             <span className="user-contact-heading">{AppConstants.fileInput}</span>
 
             <div className="col-sm">
-                <div className="row">
+                <div className="row" >
                     {/* <CSVReader cssClass="react-csv-input" onFileLoaded={this.handleForce} /> */}
                     <input
+                        style={{ cursor: "pointer" }}
+                        className="pt-2 pb-2"
                         type="file"
-                        ref={(input) => { this.filesInput = input }}
+                        ref={(input) => {
+                            this.filesInput = input
+                        }}
                         name="file"
                         // icon="file text outline"
                         // iconPosition="left"
@@ -184,6 +195,12 @@ class LiveScoreMatchImport extends Component {
 
         if (this.state.csvData) {
             this.props.liveScoreMatchImportAction(id, this.state.csvData);
+
+            this.setState({
+                csvData: null,
+            }, () => {
+                this.filesInput.value = null;
+            });
         } else {
             message.config({ duration: 0.9, maxCount: 1 });
             message.error(ValidationConstants.csvField);

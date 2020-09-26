@@ -22,6 +22,8 @@ import stripeSaga from "./stripeSaga";
 import supportSaga from "./supportSaga";
 import umpireDashboardSaga from "./umpireSaga/umpireDashboardSaga";
 import userSaga from "./userSaga";
+import liveScoreGameAttendanceSaga from './liveScoreSaga/liveScoreGameAttendanceSaga';
+import liveScorePlayerMinuteTrackingSaga from './liveScoreSaga/liveScorePlayerMinuteTrackingSaga';
 
 import {
   getRegistrationFormSaga,
@@ -160,6 +162,7 @@ import * as liveScoreMatchSheetSaga from './liveScoreSaga/liveScoreMatchSheetSag
 import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizontalSaga'
 
 import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga'
+import rootCompetitionMultiDrawSaga from "./competitionManagementSaga/competitionMultiDrawsSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -177,6 +180,8 @@ export default function* rootSaga() {
     fork(liveScorePlayerSaga),
     fork(liveScoreTeamSaga),
     fork(liveScoreUmpiresSaga),
+    fork(liveScoreGameAttendanceSaga),
+    fork(liveScorePlayerMinuteTrackingSaga),
 
     // Shop
     fork(shopOrderStatusSaga),
@@ -196,6 +201,9 @@ export default function* rootSaga() {
 
     // User
     fork(userSaga),
+
+    ///Multi draw in Competition
+    fork(rootCompetitionMultiDrawSaga),
   ]);
 
 
@@ -250,7 +258,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_REMOVE_BANNER_LOAD, liveScoreRemoveBannerSaga)
   yield takeEvery(ApiConstants.API_LIVE_SCORE_BULK_DOUBLE_HEADER_LOAD, liveScoreDoubleHeaderSaga)
   yield takeEvery(ApiConstants.API_LIVESCORE_COMPETITION_INITATE, liveScoreCompetitionSaga)
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD, liveScoreDeletePlayerSaga)
+  // yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD, liveScoreDeletePlayerSaga)
   yield takeEvery(ApiConstants.API_LIVESCORE_COMPETION_DELETE_INITIATE, liveScoreCompetitionDelete)
   yield takeEvery(ApiConstants.LiveScore_SETTING_VIEW_INITITAE, liveScoreSettingSaga)
   yield takeEvery(ApiConstants.LiveScore_SETTING_DATA_POST_INITATE, liveScorePostSaga)

@@ -284,7 +284,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         if (this.state.screenNavigationKey == AppConstants.venues) {
             setTimeout(() => {
                 this.props.clearVenueDataAction("venue");
-                history.push('/competitionVenueTimesPrioritisation')
+                history.push('/competitionVenueTimesPrioritisation', 'fromAddVenue')
             }, 800);
             this.setState({ saveContraintLoad: false })
         }
@@ -400,7 +400,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
         this.props.checkVenueDuplication(address);
 
-        if (!address.addressOne) {
+        if (!address.addressOne && !address.suburb) {
             this.setState({
                 venueAddressError: ValidationConstants.venueAddressDetailsError,
             })
@@ -870,7 +870,6 @@ class CompetitionVenueAndTimesAdd extends Component {
 
             if (!hasError) {
                 venuData["screenNavigationKey"] = this.state.screenNavigationKey;
-                //console.log("venuData" + JSON.stringify(venuData));
                 this.props.addVenueAction(venuData)
                 this.setState({ saveContraintLoad: true });
             }

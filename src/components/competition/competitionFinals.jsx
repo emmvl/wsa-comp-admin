@@ -33,6 +33,7 @@ import {
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
 import { NavLink } from 'react-router-dom';
+import { isArrayNotEmpty } from "util/helpers";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -102,12 +103,12 @@ class CompetitionFinals extends Component {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId;
-                    let statusRefId = competitionList[0].statusRefId
+                    let statusRefId = competitionList[0].statusRefId;
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     console.log("competitionId::" + competitionId);
                     this.apiCalls(competitionId, this.state.yearRefId);
-                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
+                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId})
                 }
             }
         }
@@ -198,10 +199,18 @@ class CompetitionFinals extends Component {
         let venueList = this.props.competitionFinalsState.competitionVenuesList;
         let venueListId = []
         venueList.map((item) => {
-            venueListId.push(item.venueId)
+            venueListId.push(item.venueId);
         });
 
         (finalsList || []).map((item, index) => {
+            if (item.whoPlaysWho) {
+                for (let i = 0; i < item.whoPlaysWho.length; i++) {
+                    if (item.whoPlaysWho[i].noOfPools == 2) {
+                        this.onChangeSetValue(item.pools[0].poolId, 'wpwPool1', index, i);
+                        this.onChangeifSetValue(item.pools[1].poolId, 'wpwPool2', index, i);
+                    }
+                }
+            }
             this.formRef.current.setFieldsValue({
                 [`finalsStartDate${index}`]: (item.finalsStartDate != null && item.finalsStartDate != '')
                     ? moment(item.finalsStartDate, "YYYY-MM-DD")
@@ -219,6 +228,7 @@ class CompetitionFinals extends Component {
                 [`extraTimeBreak${index}`]: item.extraTimeBreak,
                 [`beforeExtraTime${index}`]: item.beforeExtraTime,
                 [`extraTimeDrawRefId${index}`]: item.extraTimeDrawRefId,
+                [`poolTopRefId${index}`]: item.poolTopRefId
             });
         });
 
@@ -246,10 +256,10 @@ class CompetitionFinals extends Component {
             organisationId: this.state.organisationId
         }
         this.props.getCompetitionFinalsAction(payload);
-        this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
+        this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId });
     }
 
-    onChangeSetValue = (id, fieldName, index) => {
+    onChangeSetValue = (id, fieldName, index, subIndex) => {
         if (index == "venueList") {
             let obj = {
                 venueListArray: fieldName,
@@ -259,7 +269,7 @@ class CompetitionFinals extends Component {
             this.props.updateCompetitionFinalsAction(id, obj, index);
         }
         else {
-            this.props.updateCompetitionFinalsAction(id, fieldName, index);
+            this.props.updateCompetitionFinalsAction(id, fieldName, index, subIndex);
         }
     }
 
@@ -289,11 +299,68 @@ class CompetitionFinals extends Component {
         this.setState({ loading: true });
     }
 
+    getFinalFixtureTemplateData = (hasTop4) => {
+        try {
+            let finalFixtureTemplateList = [];
+            let poolsArray = [
+                {
+                    "id": 1,
+                    "description": "Top1"
+                },
+                {
+                    "id": 2,
+                    "description": "Top2"
+                },
+                {
+                    "id": 3,
+                    "description": "Top4"
+                }
+            ];
+            finalFixtureTemplateList = (hasTop4 == 1)
+                ? poolsArray
+                : poolsArray.slice(0, poolsArray.length - 1);
+            return finalFixtureTemplateList;
+        } catch (ex) {
+            console.log("Error in getFinalFixtureTemplateData" + ex);
+        }
+    }
+
+    checkDuplicates = (competitionFinalsList) => {
+        try {
+            let error = false;
+            for (let final of competitionFinalsList) {
+                for (let wpw of final.whoPlaysWho) {
+                    let poolIds = [wpw.wpwPool1, wpw.wpwPool2, wpw.wpwPool3, wpw.wpwPool4];
+                    if (poolIds.some(x => poolIds.indexOf(x) !== poolIds.lastIndexOf(x))) {
+                        error = true;
+                        break;
+                    }
+                }
+            }
+            return error;
+        } catch (ex) {
+            console.log("Error in checkDuplicates" + ex);
+        }
+    }
+
+    getSaveFinalList = (finalList) => {
+        for (let final of finalList) {
+            final["finalTypeRefId"] = this.props.competitionFinalsState.finalTypeRefId
+        }
+        return finalList;
+    }
+
     saveCompetitionFinals = (value) => {
+        const competitionFinalsList = this.props.competitionFinalsState.competitionFinalsList;
+        if (this.checkDuplicates(competitionFinalsList)) {
+            message.error(AppConstants.whoPlaysWhoValidation);
+            return;
+        }
+
         this.setState({ buttonPressed: "save" });
-        let finalsList = this.props.competitionFinalsState.competitionFinalsList;
-        let venueList = this.props.competitionFinalsState.competitionVenuesList;
-        let payload = {
+        const finalsList = this.getSaveFinalList(competitionFinalsList);
+        const venueList = this.props.competitionFinalsState.competitionVenuesList;
+        const payload = {
             "yearRefId": this.state.yearRefId,
             "competitionUniqueKey": this.state.firstTimeCompId,
             "organisationId": this.state.organisationId,
@@ -402,6 +469,7 @@ class CompetitionFinals extends Component {
     contentView = () => {
         let finalsList = this.props.competitionFinalsState.competitionFinalsList;
         let venueList = this.props.competitionFinalsState.competitionVenuesList;
+        const {finalTypeRefId } = this.props.competitionFinalsState;
         let appState = this.props.appState;
         let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
@@ -432,139 +500,253 @@ class CompetitionFinals extends Component {
                 }
                 <div className="compitition-finals-division">
                     {(finalsList || []).map((data, index) => (
-                        <div key={data.competitionFormatTemplateId} className="inside-container-view" style={{ paddingTop: 5 }}>
-                            <div>
-                                <InputWithHead heading={AppConstants.divisions} />
-                                {data.divisions != null ?
-                                    <div>
-                                        {(data.divisions || []).map((div, divIndex) => (
-                                            <span>
-                                                <span>{div.divisionName}</span>
-                                                <span>{data.divisions.length != (divIndex + 1) ? ', ' : ''}</span>
-                                            </span>
-                                        ))} </div>
-                                    : <span>{AppConstants.allDivisions}</span>
-                                }
-                                <div className="row">
-                                    <div className="col-sm-6">
-                                        <InputWithHead heading={AppConstants.finalsStartDate} required={"required-field"} />
-                                        <Form.Item name={`finalsStartDate${index}`} rules={[{ required: true, message: ValidationConstants.finalsStartDateRequired }]}>
-                                            <DatePicker
-                                                id={AppUniqueId.final_StartDate}
-                                                disabled={disabledStatus}
-                                                size="large"
-                                                placeholder={"dd-mm-yyyy"}
-                                                style={{ width: "100%" }}
-                                                onChange={(e) => this.onChangeSetValue(e, 'finalsStartDate', index)}
-                                                name={"finalsStartDate"}
-                                                format={"DD-MM-YYYY"}
-                                                showTime={false}
-                                            />
-                                        </Form.Item>
-                                    </div>
-                                </div>
-                                <InputWithHead headingId={AppUniqueId.final_FixtureTemplate_radioBtn} heading={AppConstants.finalFixtures} required={"required-field"} />
-                                <Form.Item name={`finalsFixtureTemplateRefId${index}`} rules={[{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]}>
-                                    <Radio.Group
-                                        disabled={disabledStatus}
-                                        className="reg-competition-radio"
-                                        id={AppUniqueId.draw_Publish_btn}
-                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'finalsFixtureTemplateRefId', index)}
-                                        setFieldsValue={data.finalsFixtureTemplateRefId}
-                                    >
-                                        {(finalFixtureTemplateData || []).map((fix, fixIndex) => (
-                                            <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
-                                        ))}
-                                    </Radio.Group>
-                                </Form.Item>
-                                <InputWithHead heading={AppConstants.matchType} required={"required-field"} />
-                                <Form.Item name={`finalsMatchTypeRefId${index}`} rules={[{ required: true, message: ValidationConstants.matchTypeRequired }]}>
-                                    <Select
-                                        disabled={disabledStatus}
-                                        id={AppUniqueId.final_Match_Type_dpdn}
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                        onChange={(matchType) => this.onChangeSetValue(matchType, 'finalsMatchTypeRefId', index)}
-                                        setFieldsValue={data.finalsMatchTypeRefId}
-                                    >
-                                        {(appState.matchTypes || []).map((item, index) => (
-                                            <Option key={item.id} value={item.id}>{item.description}</Option>
-                                        ))}
-                                    </Select>
-                                </Form.Item>
-                                <div className="fluid-width" >
-                                    <div className="row" >
-                                        <div id={AppUniqueId.finals_matchduration} className="col-sm-3" >
-                                            <Form.Item
-                                                name={`matchDuration${index}`}
-                                                rules={[{
-                                                    required: true, pattern: new RegExp("^[1-9][0-9]*$"),
-                                                    message: ValidationConstants.matchDuration
-                                                }]}
-                                            >
-                                                <InputWithHead
-                                                    auto_complete='new-matchDuration'
+                        <div key={data.competitionFormatTemplateId}>
+                            <div className="inside-container-view" style={{ paddingTop: 5 }}>
+                                <div>
+                                    <InputWithHead heading={AppConstants.divisions} />
+                                    {data.divisions != null ?
+                                        <div>
+                                            {(data.divisions || []).map((div, divIndex) => (
+                                                <span>
+                                                    <span>{div.divisionName}</span>
+                                                    <span>{data.divisions.length != (divIndex + 1) ? ', ' : ''}</span>
+                                                </span>
+                                            ))} </div>
+                                        : <span>{AppConstants.allDivisions}</span>
+                                    }
+                                    <div className="row">
+                                        <div className="col-sm-6">
+                                            <InputWithHead heading={AppConstants.finalsStartDate} required={"required-field"} />
+                                            <Form.Item name={`finalsStartDate${index}`} rules={[{ required: true, message: ValidationConstants.finalsStartDateRequired }]}>
+                                                <DatePicker
+                                                    id={AppUniqueId.final_StartDate}
                                                     disabled={disabledStatus}
-                                                    heading={AppConstants.matchDuration}
-                                                    required={"required-field"}
-                                                    placeholder={AppConstants.mins}
-                                                    setFieldsValue={data.matchDuration}
-                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'matchDuration', index)}
+                                                    size="large"
+                                                    placeholder={"dd-mm-yyyy"}
+                                                    style={{ width: "100%" }}
+                                                    onChange={(e) => this.onChangeSetValue(e, 'finalsStartDate', index)}
+                                                    name={"finalsStartDate"}
+                                                    format={"DD-MM-YYYY"}
+                                                    showTime={false}
                                                 />
                                             </Form.Item>
                                         </div>
-                                        {(data.finalsMatchTypeRefId == 2 || data.finalsMatchTypeRefId == 3) ?
-                                            <div id={AppUniqueId.finals_mainbreak} className="col-sm-3" >
-                                                <Form.Item name={`mainBreak${index}`} rules={[{ required: true, message: ValidationConstants.mainBreak }]}>
-                                                    <InputWithHead
-                                                        auto_complete="new-mainBreak"
-                                                        disabled={disabledStatus}
-                                                        heading={AppConstants.mainBreak}
-                                                        required={"required-field"}
-                                                        placeholder={AppConstants.mins}
-                                                        setFieldsValue={data.mainBreak}
-                                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'mainBreak', index)}
-                                                    />
-                                                </Form.Item>
-                                            </div> : null
-                                        }
-                                        {data.finalsMatchTypeRefId == 3 ?
-                                            <div id={AppUniqueId.finals_qtrbreak} className="col-sm-3" >
-                                                <Form.Item name={`qtrBreak${index}`} rules={[{ required: true, message: ValidationConstants.qtrBreak }]}>
-                                                    <InputWithHead
-                                                        auto_complete="new-qtrBreak"
-                                                        disabled={disabledStatus}
-                                                        heading={AppConstants.qtrBreak}
-                                                        required={"required-field"}
-                                                        placeholder={AppConstants.mins}
-                                                        setFieldsValue={data.qtrBreak}
-                                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'qtrBreak', index)}
-                                                    />
-                                                </Form.Item>
-                                            </div>
-                                            : null}
-                                        {data.timeslotGenerationRefId != 2 ?
-                                            <div className="col-sm-3">
-                                                <Form.Item name={`timeBetweenGames${index}`} rules={[{ required: true, message: ValidationConstants.timeBetweenGames }]}>
-                                                    <InputWithHead
-                                                        auto_complete='new-timeBetweenGames'
-                                                        disabled={disabledStatus}
-                                                        heading={AppConstants.betweenGames}
-                                                        required={"required-field"}
-                                                        placeholder={AppConstants.mins}
-                                                        setFieldsValue={data.timeBetweenGames}
-                                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'timeBetweenGames', index)}
-                                                    />
-                                                </Form.Item>
-                                            </div>
-                                            : null}
                                     </div>
+                                    <InputWithHead headingId={AppUniqueId.final_FixtureTemplate_radioBtn} heading={AppConstants.finalFixtures} required={"required-field"} />
+                                    {finalTypeRefId == 1 ?
+                                        <Form.Item name={`finalsFixtureTemplateRefId${index}`} rules={[{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]}>
+                                            <Select
+                                                disabled={disabledStatus}
+                                                setFieldsValue={data.finalsFixtureTemplateRefId}
+                                                onChange={(e) => this.onChangeSetValue(e, 'finalsFixtureTemplateRefId', index)}
+                                            >
+                                                {(finalFixtureTemplateData || []).map((fix, fixIndex) => (
+                                                    <Option key={fix.id} value={fix.id}>{fix.description}</Option>
+                                                ))}
+                                            </Select>
+                                        </Form.Item>
+                                    :
+                                        <Form.Item name={`poolTopRefId${index}`} rules={[{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]}>
+                                            <Select
+                                                disabled={disabledStatus}
+                                                setFieldsValue={data.poolTopRefId}
+                                                onChange={(e) => this.onChangeSetValue(e, 'poolTopRefId', index)}
+                                            >
+                                                {(this.getFinalFixtureTemplateData(data.hasTop4) || []).map((fix, fixIndex) => (
+                                                    <Option key={fix.id} value={fix.id}>{fix.description}</Option>
+                                                ))}
+                                          </Select>
+                                        </Form.Item>
+                                    }
+
+                                    {(data.poolTopRefId == 2 || data.poolTopRefId == 3) && (
+                                        // <Form.Item>
+                                        <Checkbox
+                                            disabled={disabledStatus}
+                                            className="single-checkbox"
+                                            checked={data.playOff3rdposition == 1 ? true : false}
+                                            onChange={e => this.onChangeSetValue(e.target.checked ? 1 : 0, "playOff3rdposition",index)}
+                                        >
+                                            {AppConstants.playOff3rdposition}
+                                        </Checkbox>
+                                        // </Form.Item>
+                                    )}
+
+                                    <InputWithHead heading={AppConstants.matchType} required={"required-field"} />
+                                    <Form.Item name={`finalsMatchTypeRefId${index}`} rules={[{ required: true, message: ValidationConstants.matchTypeRequired }]}>
+                                        <Select
+                                            disabled={disabledStatus}
+                                            id={AppUniqueId.final_Match_Type_dpdn}
+                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                            onChange={(matchType) => this.onChangeSetValue(matchType, 'finalsMatchTypeRefId', index)}
+                                            setFieldsValue={data.finalsMatchTypeRefId}
+                                        >
+                                            {(appState.matchTypes || []).map((item, index) => {
+                                                if (item.name !== "SINGLE") {
+                                                    return (
+                                                        <Option key={item.id} value={item.id}>{item.description}</Option>
+                                                    )
+                                                }
+                                            })}
+                                        </Select>
+                                    </Form.Item>
+                                    <div className="fluid-width">
+                                        <div className="row" >
+                                            <div id={AppUniqueId.finals_matchduration} className="col-sm-3" >
+                                                <Form.Item
+                                                    name={`matchDuration${index}`}
+                                                    rules={[{
+                                                        required: true, pattern: new RegExp("^[1-9][0-9]*$"),
+                                                        message: ValidationConstants.matchDuration
+                                                    }]}
+                                                >
+                                                    <InputWithHead
+                                                        auto_complete='new-matchDuration'
+                                                        disabled={disabledStatus}
+                                                        heading={AppConstants.matchDuration}
+                                                        required={"required-field"}
+                                                        placeholder={AppConstants.mins}
+                                                        setFieldsValue={data.matchDuration}
+                                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'matchDuration', index)}
+                                                    />
+                                                </Form.Item>
+                                            </div>
+                                            {(data.finalsMatchTypeRefId == 2 || data.finalsMatchTypeRefId == 3) && (
+                                                <div id={AppUniqueId.finals_mainbreak} className="col-sm-3" >
+                                                    <Form.Item name={`mainBreak${index}`} rules={[{ required: true, message: ValidationConstants.mainBreak }]}>
+                                                        <InputWithHead
+                                                            auto_complete="new-mainBreak"
+                                                            disabled={disabledStatus}
+                                                            heading={AppConstants.mainBreak}
+                                                            required={"required-field"}
+                                                            placeholder={AppConstants.mins}
+                                                            setFieldsValue={data.mainBreak}
+                                                            onChange={(e) => this.onChangeSetValue(e.target.value, 'mainBreak', index)}
+                                                        />
+                                                    </Form.Item>
+                                                </div>
+                                            )}
+                                            {data.finalsMatchTypeRefId == 3 && (
+                                                <div id={AppUniqueId.finals_qtrbreak} className="col-sm-3" >
+                                                    <Form.Item name={`qtrBreak${index}`} rules={[{ required: true, message: ValidationConstants.qtrBreak }]}>
+                                                        <InputWithHead
+                                                            auto_complete="new-qtrBreak"
+                                                            disabled={disabledStatus}
+                                                            heading={AppConstants.qtrBreak}
+                                                            required={"required-field"}
+                                                            placeholder={AppConstants.mins}
+                                                            setFieldsValue={data.qtrBreak}
+                                                            onChange={(e) => this.onChangeSetValue(e.target.value, 'qtrBreak', index)}
+                                                        />
+                                                    </Form.Item>
+                                                </div>
+                                            )}
+                                            {data.timeslotGenerationRefId != 2 && (
+                                                <div className="col-sm-3">
+                                                    <Form.Item name={`timeBetweenGames${index}`} rules={[{ required: true, message: ValidationConstants.timeBetweenGames }]}>
+                                                        <InputWithHead
+                                                            auto_complete='new-timeBetweenGames'
+                                                            disabled={disabledStatus}
+                                                            heading={AppConstants.betweenGames}
+                                                            required={"required-field"}
+                                                            placeholder={AppConstants.mins}
+                                                            setFieldsValue={data.timeBetweenGames}
+                                                            onChange={(e) => this.onChangeSetValue(e.target.value, 'timeBetweenGames', index)}
+                                                        />
+                                                    </Form.Item>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+
+                                    {/* <span className='input-heading-add-another'>+ {AppConstants.addAnotherFinalFormat}</span> */}
+                                    {/* <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault',index)}>{AppConstants.setAsDefault}</Checkbox> */}
                                 </div>
-
-
-                                {/* <span className='input-heading-add-another'>+ {AppConstants.addAnotherFinalFormat}</span> */}
-                                {/* <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault',index)}>{AppConstants.setAsDefault}</Checkbox> */}
+                                {this.extraTimeView()}
                             </div>
-                            {this.extraTimeView()}
+                            {isArrayNotEmpty(data.whoPlaysWho) && (
+                                <div className="inside-container-view" style={{ paddingTop: 5 }}>
+                                    <InputWithHead heading={AppConstants.whoPlaysWho} required={"required-field"} />
+                                    {(data.whoPlaysWho || []).map((whoPlaysWhoItem,whoPlaysWhoIndex) => (
+                                        <div key={whoPlaysWhoItem.competitiondivisionId}>
+                                            {whoPlaysWhoItem.noOfPools == 4 && (
+                                                <div>
+                                                    <InputWithHead heading={whoPlaysWhoItem.divisionName}/>
+                                                    <div className="row">
+                                                        <div className="col-md-6">
+                                                            <Form.Item
+                                                                name={`wpwPool1${whoPlaysWhoIndex}`}
+                                                                rules={[{ required: true, message: ValidationConstants.wpwPool1Required }]}
+                                                            >
+                                                                <Select
+                                                                    disabled={disabledStatus}
+                                                                    style={{marginBottom: "20px"}}
+                                                                    setFieldsValue={whoPlaysWhoItem.wpwPool1}
+                                                                    onChange={(e) => this.onChangeSetValue(e, 'wpwPool1', index, whoPlaysWhoIndex)}
+                                                                >
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
+                                                                        <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
+                                                                    ))}
+                                                                </Select>
+                                                            </Form.Item>
+                                                        </div>
+                                                        <div className="col-md-6">
+                                                            <Form.Item
+                                                                name={`wpwPool2${whoPlaysWhoIndex}`}
+                                                                rules={[{ required: true, message: ValidationConstants.wpwPool2Required }]}
+                                                            >
+                                                                <Select
+                                                                    disabled={disabledStatus}
+                                                                    style={{marginBottom: "20px"}}
+                                                                    setFieldsValue={whoPlaysWhoItem.wpwPool2}
+                                                                    onChange={(e) => this.onChangeSetValue(e, 'wpwPool2', index, whoPlaysWhoIndex)}
+                                                                >
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
+                                                                        <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
+                                                                    ))}
+                                                                </Select>
+                                                            </Form.Item>
+                                                        </div>
+                                                        <div className="col-md-6">
+                                                            <Form.Item
+                                                                name={`wpwPool3${whoPlaysWhoIndex}`}
+                                                                rules={[{ required: true, message: ValidationConstants.wpwPool3Required }]}
+                                                            >
+                                                                <Select
+                                                                    disabled={disabledStatus}
+                                                                    setFieldsValue={whoPlaysWhoItem.wpwPool3}
+                                                                    onChange={(e) => this.onChangeSetValue(e, 'wpwPool3', index, whoPlaysWhoIndex)}
+                                                                >
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
+                                                                        <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
+                                                                    ))}
+                                                                </Select>
+                                                            </Form.Item>
+                                                        </div>
+                                                        <div className="col-md-6">
+                                                            <Form.Item
+                                                                name={`wpwPool4${whoPlaysWhoIndex}`}
+                                                                rules={[{ required: true, message: ValidationConstants.wpwPool4Required }]}
+                                                            >
+                                                                <Select
+                                                                    disabled={disabledStatus}
+                                                                    setFieldsValue={whoPlaysWhoItem.wpwPool4}
+                                                                    onChange={(e) => this.onChangeSetValue(e, 'wpwPool4', index, whoPlaysWhoIndex)}
+                                                                >
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
+                                                                        <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
+                                                                    ))}
+                                                                </Select>
+                                                            </Form.Item>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ))}
 

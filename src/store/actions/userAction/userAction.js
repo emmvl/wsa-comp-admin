@@ -333,11 +333,19 @@ function updateTermsAndCondtionAction(payload) {
 }
 
 function userDeleteAction(payload) {
-    const action = {
-        type: ApiConstants.API_USER_DELETE_LOAD,
-        payload:payload
-    };
-    return action
+  const action = {
+    type: ApiConstants.API_USER_DELETE_LOAD,
+    payload: payload
+  };
+  return action
+}
+
+function getUserModuleIncidentListAction(payload) {
+  const action = {
+    type: ApiConstants.API_GET_USER_MODULE_INCIDENT_LIST_LOAD,
+    payload: payload
+  };
+  return action
 }
 
 export {
@@ -383,5 +391,6 @@ export {
   updateCharityAction,
   updateTermsAndCondtionAction,
   impersonationAction,
-  userDeleteAction
+  userDeleteAction,
+  getUserModuleIncidentListAction
 }

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Layout, Button, Table, Breadcrumb, Pagination, Select, Input } from "antd";
+import { Layout, Button, Table, Breadcrumb, Pagination, Select, Input, message } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -14,6 +14,7 @@ import history from "../../util/history";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { teamListData } from "../../util/helpers";
+import ValidationConstants from "../../themes/validationConstant";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -100,29 +101,29 @@ function tableSort(key) {
 const columns = [
     {
         title: 'Player Id',
-        dataIndex: 'player',
-        key: 'player',
+        dataIndex: 'id',
+        key: 'id',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('playerId'),
-        render: (player, record) => <NavLink to={{
-            pathname: '/liveScorePlayerView',
-            state: { tableRecord: record }
-        }} >
-            <span className="input-heading-add-another pt-0" >{checkPlayerId(player)}</span>
-        </NavLink>
+        onHeaderCell: () => listeners('id'),
+        // render: (id, record) => <span
+        //     className="input-heading-add-another pt-0"
+        //     onClick={() => this_obj.checkUserId(record)}
+        // >
+        //     {id}
+        // </span>
     },
     {
         title: 'First name',
         dataIndex: 'firstName',
         key: 'firstName',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners('firstName'),
-        render: (firstName, player) => <NavLink to={{
-            pathname: '/liveScorePlayerView',
-            state: { tableRecord: player }
-        }} >
-            <span className="input-heading-add-another pt-0" >{firstName}</span>
-        </NavLink>
+        onHeaderCell: () => listeners('firstName'),
+        render: (firstName, record) => <span
+            className="input-heading-add-another pt-0"
+            onClick={() => this_obj.checkUserId(record)}
+        >
+            {firstName}
+        </span>
     },
     {
         title: 'Last Name',
@@ -130,12 +131,12 @@ const columns = [
         key: 'lastName',
         sorter: true,
         onHeaderCell: () => listeners('lastName'),
-        render: (lastName, player) => <NavLink to={{
-            pathname: '/liveScorePlayerView',
-            state: { tableRecord: player }
-        }} >
-            <span className="input-heading-add-another pt-0" >{lastName}</span>
-        </NavLink>
+        render: (lastName, record) => <span
+            className="input-heading-add-another pt-0"
+            onClick={() => this_obj.checkUserId(record)}
+        >
+            {lastName}
+        </span>
     },
     {
         title: 'Team',
@@ -157,8 +158,7 @@ const columns = [
         key: 'division',
         sorter: true,
         onHeaderCell: () => listeners('div'),
-        render: (division) =>
-            <span>{division ? division.name : ""}</span>
+        render: (division) => <span>{division ? division.name : ""}</span>
     },
     {
         title: 'Play Time',
@@ -166,8 +166,7 @@ const columns = [
         key: 'playTime',
         sorter: false,
         // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (playTime, record) =>
-            <span>{checkPlayTime(record)}</span>
+        render: (playTime, record) => <span>{checkPlayTime(record)}</span>
     },
     {
         title: 'Play %',
@@ -175,8 +174,7 @@ const columns = [
         key: 'playPercent',
         sorter: true,
         onHeaderCell: () => listeners('playPercent'),
-        render: (playTime, record) =>
-            <span>{checkPlay(record)}</span>
+        render: (playTime, record) => <span>{checkPlay(record)}</span>
     },
     // {
     //     title: 'Playing Up %',
@@ -202,12 +200,30 @@ class LiveScoreGameTimeList extends Component {
     }
 
     componentDidMount() {
-        const { id, attendanceRecordingPeriod } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id, filter: attendanceRecordingPeriod })
-        if (id !== null) {
-            this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
+        if (getLiveScoreCompetiton()) {
+            const { id, attendanceRecordingPeriod } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id, filter: attendanceRecordingPeriod })
+            if (id !== null) {
+                this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
+            } else {
+                history.push("/liveScoreCompetitions")
+            }
         } else {
-            history.push("/")
+            history.push('/liveScoreCompetitions')
+        }
+    }
+
+    checkUserId(record) {
+        let userId = record.player ? record.player.userId : null
+        if (userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        } else {
+            history.push("/userPersonal", {
+                userId: userId,
+                screenKey: "livescore",
+                screen: "/liveScorePlayerList"
+            })
         }
     }
 
@@ -397,7 +413,7 @@ class LiveScoreGameTimeList extends Component {
                 <Layout>
                     {this.headerView()}
                     <Content>
-                        {this.tableView()}
+                        {getLiveScoreCompetiton() && this.tableView()}
                     </Content>
                 </Layout>
             </div>

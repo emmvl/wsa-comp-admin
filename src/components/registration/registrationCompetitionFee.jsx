@@ -1791,7 +1791,8 @@ class RegistrationCompetitionFee extends Component {
         },
       ],
       divisionState: false,
-      affiliateOrgId: null
+      affiliateOrgId: null,
+      heroImage: null
     };
 
     this_Obj = this;
@@ -2571,6 +2572,7 @@ class RegistrationCompetitionFee extends Component {
     if (tabKey == '1') {
       if (
         compFeesState.competitionDetailData.competitionLogoUrl !== null &&
+        compFeesState.competitionDetailData.heroImageUrl !== null &&
         invitees.length > 0
       ) {
         let formData = new FormData();
@@ -2641,6 +2643,16 @@ class RegistrationCompetitionFee extends Component {
             // formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
           }
         }
+
+        if (this.state.image) {
+          formData.append("uploadFileType", 1);
+        } else if (this.state.heroImage) {
+          formData.append("uploadFileType", 2);
+          formData.append("competition_logo", this.state.heroImage);
+        } else if (this.state.image && this.state.heroImage) {
+          formData.append("uploadFileType", 3);
+        }
+
         formData.append('logoIsDefault', postData.logoIsDefault);
         this.props.saveCompetitionFeesDetailsAction(
           formData,
@@ -2655,6 +2667,9 @@ class RegistrationCompetitionFee extends Component {
         }
         if (compFeesState.competitionDetailData.competitionLogoUrl == null) {
           message.error(ValidationConstants.competitionLogoIsRequired);
+        }
+        if (compFeesState.competitionDetailData.heroImageUrl == null) {
+          message.error(ValidationConstants.heroImageIsRequired);
         }
       }
     } else if (tabKey == '2') {
@@ -3193,36 +3208,59 @@ class RegistrationCompetitionFee extends Component {
     </div>
   );
 
-  setImage = (data) => {
+  setImage = (data, key) => {
     if (data.files[0] !== undefined) {
       let files_ = data.files[0].type.split('image/');
       let fileType = files_[1];
 
-      if (data.files[0].size > AppConstants.logo_size) {
-        message.error(AppConstants.logoImageSize);
-        return;
-      }
-
-      if (fileType == `jpeg` || fileType == `png` || fileType == `gif`) {
-        this.setState({
-          image: data.files[0],
-          profileImage: URL.createObjectURL(data.files[0]),
-          isSetDefaul: true,
-        });
-        this.props.add_editcompetitionFeeDeatils(
-          URL.createObjectURL(data.files[0]),
-          'competitionLogoUrl'
-        );
-        this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
-      } else {
-        message.error(AppConstants.logoType);
-        return;
+      if (key == "competitionLogoUrl") {
+        if (data.files[0].size > AppConstants.logo_size) {
+          message.error(AppConstants.logoImageSize);
+          return;
+        }
+        if (fileType == `jpeg` || fileType == `png` || fileType == `gif`) {
+          this.setState({
+            image: data.files[0],
+            profileImage: URL.createObjectURL(data.files[0]),
+            isSetDefaul: true,
+          });
+          this.props.add_editcompetitionFeeDeatils(
+            URL.createObjectURL(data.files[0]),
+            'competitionLogoUrl'
+          );
+          this.props.add_editcompetitionFeeDeatils(false, 'logoIsDefault');
+        } else {
+          message.error(AppConstants.logoType);
+          return;
+        }
+      } else if (key == "heroImageUrl") {
+        if (fileType == `jpeg` || fileType == `png` || fileType == `gif`) {
+          this.setState({
+            heroImage: data.files[0]
+          });
+          this.props.add_editcompetitionFeeDeatils(
+            URL.createObjectURL(data.files[0]),
+            'heroImageUrl'
+          );
+        } else {
+          message.error(AppConstants.logoType);
+          return;
+        }
       }
     }
   };
 
   selectImage() {
     const fileInput = document.getElementById('user-pic');
+    fileInput.setAttribute('type', 'file');
+    fileInput.setAttribute('accept', 'image/*');
+    if (!!fileInput) {
+      fileInput.click();
+    }
+  }
+
+  selectHeroImage() {
+    const fileInput = document.getElementById('hero-pic');
     fileInput.setAttribute('type', 'file');
     fileInput.setAttribute('accept', 'image/*');
     if (!!fileInput) {
@@ -3434,7 +3472,7 @@ class RegistrationCompetitionFee extends Component {
                 type="file"
                 id="user-pic"
                 style={{ display: 'none' }}
-                onChange={(evt) => this.setImage(evt.target)}
+                onChange={(evt) => this.setImage(evt.target,"competitionLogoUrl")}
               />
             </div>
             <div
@@ -3482,8 +3520,33 @@ class RegistrationCompetitionFee extends Component {
           </div>
         </div>
 
-        <InputWithHead heading={AppConstants.description} />
+        <InputWithHead required={'required-field pb-0 '} heading={AppConstants.heroImageForCompetition}/>
+        <div className="reg-competition-hero-image-view"
+          onClick={this.selectHeroImage}>
+            <div style={{overflow: "hidden",minHeight: "150px",maxHeight: "287px"}}>
+              <img
+              src={ detailsData.competitionDetailData.heroImageUrl == null ?
+                AppImages.circleImage :
+                detailsData.competitionDetailData.heroImageUrl}
+              name={'image'}
+              style={detailsData.competitionDetailData.heroImageUrl == null ? { height: "120px", width: "120px"} : {width: "100%"}}
+              onError={(ev) => {
+                ev.target.src = AppImages.circleImage;
+              }}/>
+              <input
+                disabled={compDetailDisable}
+                type="file"
+                id="hero-pic"
+                style={{ display: 'none' }}
+                onChange={(evt) => this.setImage(evt.target,"heroImageUrl")}
+              />
+            </div>
+            <span style={detailsData.competitionDetailData.heroImageUrl == null ?
+              {alignSelf: "center",marginLeft: "20px",color: "var(--app-bbbbc6)",fontSize: "13px"}:{display: "none"}}>
+              {AppConstants.heroImageSizeText}</span>
+        </div>
 
+        <InputWithHead heading={AppConstants.description} />
         <TextArea
           placeholder={AppConstants.addShortNotes_registering}
           allowClear
@@ -4882,7 +4945,7 @@ class RegistrationCompetitionFee extends Component {
         {isCasual == true && (
           <div className="inside-container-view">
             <div className="contextualHelp-RowDirection">
-              <span className="form-heading">{AppConstants.casualFee}</span>
+              <span className="form-heading">{AppConstants.singleGameFee}</span>
               <div style={{ marginTop: 4 }}>
                 <CustumToolTip placement="top" background="#ff8237">
                   <span>{AppConstants.paymentCausalFeeMsg}</span>

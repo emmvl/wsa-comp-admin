@@ -598,6 +598,7 @@ class Registration extends Component {
                                 <div className="year-select-heading" style={{ width: 95 }}>{AppConstants.postCode}</div>
                                 <div style={{ width: "76%" }}>
                                     <InputWithHead
+                                        auto_complete="off"
                                         placeholder={AppConstants.postCode}
                                         onChange={(e) => this.onChangeDropDownValue(e.target.value, "postalCode")}
                                         value={this.state.postalCode}

@@ -561,7 +561,7 @@ class AddProduct extends Component {
                 />
                 {this.editorView()}
 
-                <InputWithHead required="pt-4" heading={AppConstants.type}  />
+                <InputWithHead required="pt-4" heading={AppConstants.type} />
                 <Select
                     className="shop-type-select"
                     onChange={(value) =>
@@ -897,19 +897,16 @@ class AddProduct extends Component {
                             <div className="col-sm-5">
                                 <Form.Item
                                     name={`variants${0}name`}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message:
-                                            ValidationConstants.pleaseEnterVariantName,
-                                        },
-                                    ]}
+                                    rules={[{
+                                        required: true,
+                                        message: ValidationConstants.pleaseEnterVariantName,
+                                    }]}
                                 >
                                     <InputWithHead
-                                        auto_complete='off'
-                                        required={"required-field pb-0"}
+                                        auto_complete="off"
+                                        required="required-field pb-0"
                                         heading={AppConstants.variantName}
-                                        placeholder={AppConstants.variantName}
+                                        placeholder={AppConstants.variant_name}
                                         onChange={(e) => this.onVariantNameChange(e.target.value)}
                                         disabled={this.state.allDisabled}
                                     />

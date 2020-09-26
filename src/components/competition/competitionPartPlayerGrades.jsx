@@ -937,6 +937,7 @@ class CompetitionPartPlayerGrades extends Component {
                     onCancel={() => this.handleCancel()}
                 >
                     <InputWithHead
+                        auto_complete="off"
                         required={"pt-0 mt-0"}
                         heading={AppConstants.addTeam}
                         placeholder={AppConstants.pleaseEnterteamName}

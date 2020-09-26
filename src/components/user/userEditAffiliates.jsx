@@ -410,7 +410,7 @@ class UserEditAffiliates extends Component {
         let organisationTypeRefId = affiliate.organisationTypeRefId;
         return (
             <div className="content-view pt-4">
-                <InputWithHead heading={AppConstants.organisationType}/>
+                <InputWithHead heading={AppConstants.organisationType} />
                 <Select
                     style={{ width: "100%", paddingRight: 1 }}
                     onChange={(e) =>
@@ -433,7 +433,7 @@ class UserEditAffiliates extends Component {
                 ) ? (
                     <div className="row mt-3">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.affilatedTo}/>
+                            <InputWithHead heading={AppConstants.affilatedTo} />
                         </div>
                         <div
                             className="col-sm"
@@ -454,10 +454,13 @@ class UserEditAffiliates extends Component {
                             heading={AppConstants.affilatedTo}
                             required={"required-field"}
                         />
-                        <Form.Item name='affiliatedToOrgId' rules={[{
-                            required: true,
-                            message: ValidationConstants.affiliateToRequired,
-                        }]}>
+                        <Form.Item
+                            name="affiliatedToOrgId"
+                            rules={[{
+                                required: true,
+                                message: ValidationConstants.affiliateToRequired,
+                            }]}
+                        >
                             <Select
                                 style={{ width: "100%", paddingRight: 1 }}
                                 setFieldsValue={affiliate.affiliatedToOrgId}
@@ -483,7 +486,7 @@ class UserEditAffiliates extends Component {
                         </Form.Item>
                     </div>
                 )}
-                <Form.Item name='name' rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
+                <Form.Item name="name" rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
                     <InputWithHead
                         auto_complete="new-name"
                         required={"required-field pt-0 pb-0"}
@@ -494,7 +497,7 @@ class UserEditAffiliates extends Component {
                         setFieldsValue={affiliate.name}
                     />
                 </Form.Item>
-                <Form.Item name='addressOne' rules={[{ required: true, message: ValidationConstants.addressField[2] }]}>
+                <Form.Item name="addressOne" rules={[{ required: true, message: ValidationConstants.addressField[2] }]}>
                     <InputWithHead
                         required={"required-field pt-0 pb-0"}
                         heading={AppConstants.addressOne}
@@ -755,6 +758,8 @@ class UserEditAffiliates extends Component {
                         <div className=" pl-5 pb-5 pt-4">
                             <label className="pt-2">
                                 <input
+                                    style={{ cursor: "pointer" }}
+                                    className="pt-2 pb-2"
                                     type="file"
                                     id="teamImport"
                                     ref={(input) => {

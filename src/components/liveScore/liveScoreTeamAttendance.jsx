@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Layout, Breadcrumb, Button, Table, Select, Pagination, Input } from 'antd';
+import { Layout, Breadcrumb, Button, Table, Select, Pagination, Input, message } from 'antd';
 import { SearchOutlined } from "@ant-design/icons";
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -17,6 +17,7 @@ import { isArrayNotEmpty } from '../../util/helpers'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { getLiveScoreDivisionList } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
 import { liveScoreRoundListAction } from "../../store/actions/LiveScoreAction/liveScoreRoundAction";
+import ValidationConstants from "../../themes/validationConstant";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -77,12 +78,12 @@ const columns = [
     },
     {
         title: 'Team',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'playerTeamName',
+        key: 'playerTeamName',
         sorter: true,
-        onHeaderCell: () => listeners("team"),
-        render: (name) =>
-            <span>{name}</span>
+        onHeaderCell: () => listeners("playerTeamName"),
+        render: (playerTeamName) =>
+            <span>{playerTeamName}</span>
     },
     {
         title: 'Player Id',
@@ -97,8 +98,10 @@ const columns = [
         key: 'firstName',
         sorter: true,
         onHeaderCell: () => listeners("firstName"),
-        render: (firstName) =>
-            <span className="input-heading-add-another pt-0">{firstName}</span>
+        render: (firstName, record) =>
+            <span className="input-heading-add-another pt-0" onClick={() => this_Obj.checkUserId(record)}>
+                {firstName}
+            </span>
     },
     {
         title: 'Last Name',
@@ -106,8 +109,10 @@ const columns = [
         key: 'lastName',
         sorter: true,
         onHeaderCell: () => listeners("lastName"),
-        render: (lastName) =>
-            <span className="input-heading-add-another pt-0">{lastName}</span>
+        render: (lastName, record) =>
+            <span className="input-heading-add-another pt-0" onClick={() => this_Obj.checkUserId(record)}>
+                {lastName}
+            </span>
     },
     {
         title: 'Division',
@@ -158,21 +163,21 @@ const borrowedColumns = [
     },
     {
         title: 'Team',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'playerTeamName',
+        key: 'playerTeamName',
         sorter: true,
-        onHeaderCell: () => listeners("team"),
-        render: (name) =>
-            <span>{name}</span>
+        onHeaderCell: () => listeners("playerTeamName"),
+        render: (playerTeamName) =>
+            <span>{playerTeamName}</span>
     },
     {
         title: 'Borrowing Team',
-        dataIndex: 'borrowingTeam',
-        key: 'borrowingTeam',
+        dataIndex: 'name',
+        key: 'name',
         sorter: true,
-        onHeaderCell: () => listeners("borrowingTeam"),
-        render: (borrowingTeam) =>
-            <span>{borrowingTeam}</span>
+        onHeaderCell: () => listeners("name"),
+        render: (name) =>
+            <span>{name}</span>
     },
     {
         title: 'Player Id',
@@ -242,21 +247,24 @@ class LiveScoreTeamAttendance extends Component {
         this_Obj = this
     }
 
-    // componentDidMount
     componentDidMount() {
         let paginationBody = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
+            paging: {
+                limit: 10,
+                offset: 0
             },
         }
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id, divisionLoad: true })
-        if (id !== null) {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
-            this.props.getLiveScoreDivisionList(id)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id, divisionLoad: true })
+            if (id !== null) {
+                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
+                this.props.getLiveScoreDivisionList(id)
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         } else {
-            history.pushState('/')
+            history.push('/liveScoreCompetitions')
         }
     }
 
@@ -331,16 +339,15 @@ class LiveScoreTeamAttendance extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
         if (e.target.value === null || e.target.value === "") {
-            const body =
-                {
-                    "paging": {
-                        "limit": 10,
-                        "offset": 0
-                    },
-                    "search": e.target.value,
-                    "sortBy": sortBy,
-                    "sortOrder": sortOrder
-                }
+            const body = {
+                paging: {
+                    limit: 10,
+                    offset: 0
+                },
+                search: e.target.value,
+                sortBy: sortBy,
+                sortOrder: sortOrder
+            }
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
         }
     }
@@ -351,18 +358,29 @@ class LiveScoreTeamAttendance extends Component {
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
-            const body =
-                {
-                    "paging": {
-                        "limit": 10,
-                        "offset": 0
-                    },
-                    "search": e.target.value,
-                    "sortBy": sortBy,
-                    "sortOrder": sortOrder
-                }
-
+            const body = {
+                paging: {
+                    limit: 10,
+                    offset: 0
+                },
+                search: e.target.value,
+                sortBy: sortBy,
+                sortOrder: sortOrder
+            }
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+        }
+    }
+
+    checkUserId(record) {
+        if (record.userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        } else {
+            history.push("/userPersonal", {
+                userId: record.userId,
+                screenKey: "livescore",
+                screen: "/liveScorePlayerList"
+            })
         }
     }
 
@@ -373,15 +391,14 @@ class LiveScoreTeamAttendance extends Component {
         if (searchText === null || searchText === "") {
         } else {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": searchText,
-                "sortBy": sortBy,
-                "sortOrder": sortOrder
+                search: searchText,
+                sortBy: sortBy,
+                sortOrder: sortOrder
             };
-
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
         }
     }
@@ -574,7 +591,6 @@ class LiveScoreTeamAttendance extends Component {
         )
     }
 
-    /////// render function
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >

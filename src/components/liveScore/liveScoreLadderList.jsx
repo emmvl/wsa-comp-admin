@@ -189,19 +189,20 @@ class LiveScoreLadderList extends Component {
     }
 
     componentDidMount() {
-        // let competitionID = getCompetitonId()
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        checkLivScoreCompIsParent().then((value) => (
-            this.setState({ liveScoreCompIsParent: value })
-        ))
-        if (id !== null) {
-            // this.props.getliveScoreDivisions(competitionID);
-            // this.props.getliveScoreDivisions(id);
-            this.setState({ loadding: true })
-            this.props.getLiveScoreDivisionList(id)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            checkLivScoreCompIsParent().then((value) => (
+                this.setState({ liveScoreCompIsParent: value })
+            ))
+            if (id !== null) {
+                this.setState({ loadding: true })
+                this.props.getLiveScoreDivisionList(id)
 
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
     }
 

@@ -132,7 +132,7 @@ const columns = [
                         <div>
                             <div style={{display: "flex",justifyContent:"space-between"}}>
                                 <div>{compOrganiserApproved!= 'N/A' && compOrganiserApproved!= 'P' ? currencyFormat(compOrganiserApproved) : compOrganiserApproved}</div>
-                                {compOrganiserApproved!= "N/A" ? 
+                                {compOrganiserApproved!= "N/A" && compOrganiserApproved!= 'P' ? 
                                 <div>
                                     {
                                         record.compOrgApprovedStatus != 3 ? 
@@ -158,7 +158,7 @@ const columns = [
                         <div>
                             <div style={{display: "flex",justifyContent:"space-between"}}>
                                 <div>{affiliateApproved!= 'N/A' && affiliateApproved!= 'P' ? currencyFormat(affiliateApproved) : affiliateApproved}</div>
-                                {affiliateApproved!= 'N/A' ?
+                                {affiliateApproved!= 'N/A' && affiliateApproved!= 'P' ?
                                 <div>
                                     {record.affiliateApprovedStatus != 3 ? 
                                         <div style={{color: getColor(record,"affiliateApproved")}}>&#x2714;</div>
@@ -183,7 +183,7 @@ const columns = [
                         <div>
                             <div style={{display: "flex",justifyContent:"space-between"}}>
                                 <div>{stateApproved != 'N/A' && stateApproved != 'P' ? currencyFormat(stateApproved) : stateApproved}</div>
-                                {stateApproved!= 'N/A' ? 
+                                {stateApproved!= 'N/A' && stateApproved != 'P'? 
                                 <div>
                                     {record.stateApprovedStatus != 3 ? 
                                         <div style={{color: getColor(record,"stateApproved")}}>&#x2714;</div>
@@ -213,7 +213,7 @@ const columns = [
                     mode="horizontal"
                     style={{ lineHeight: '25px' }}
                 >
-                    {record.statusRefId == 2 ? 
+                    {record.statusRefId == 1 ? 
                     <Menu.SubMenu
                         key="sub1"
                         style={{ borderBottomStyle: "solid", borderBottom: 0 }}

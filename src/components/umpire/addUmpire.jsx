@@ -62,7 +62,7 @@ class AddUmpire extends Component {
         if (getUmpireCompetiton()) {
             compId = JSON.parse(getUmpireCompetiton())
 
-            this.props.umpireListAction({ refRoleId: 5, entityTypes: 1, compId: compId, offset: 0 })
+            this.props.umpireListAction({ refRoleId: JSON.stringify([5]) , entityTypes: 1, compId: compId, offset: 0 })
             if (compId !== null) {
                 this.props.getUmpireAffiliateList({ id: compId })
                 this.setState({ isUmpireAffiliate: true })
@@ -208,9 +208,22 @@ class AddUmpire extends Component {
                                 notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
                                 onSearch={(value) => {
                                     this.setState({ isUserNotFound: false, exsitingValue: value })
-                                    value
-                                        ? this.props.umpireSearchAction({ refRoleId: refRoleTypes('member'), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value, offset: 0 })
-                                        : this.props.umpireListAction({ refRoleId: refRoleTypes('member'), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, offset: 0 })
+                                    if (value) {
+                                        this.props.umpireSearchAction({
+                                            refRoleId: refRoleTypes('member'),
+                                            entityTypes: entityTypes('COMPETITION'),
+                                            compId: this.state.competition_id,
+                                            userName: value,
+                                            offset: 0
+                                        })
+                                    } else {
+                                        this.props.umpireListAction({
+                                            refRoleId: JSON.stringify([refRoleTypes('member')]),
+                                            entityTypes: entityTypes('COMPETITION'),
+                                            compId: this.state.competition_id,
+                                            offset: 0
+                                        })
+                                    }
                                 }}
                             >
                                 {umpireList.map((item) => (
@@ -227,23 +240,26 @@ class AddUmpire extends Component {
                 </div>
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name='umpireAffiliateName' rules={[{ required: true, message: ValidationConstants.affiliateField }]} className="slct-in-add-manager-livescore">
+                        <Form.Item
+                            name="umpireAffiliateName"
+                            rules={[{ required: true, message: ValidationConstants.organisationField }]}
+                            className="slct-in-add-manager-livescore"
+                        >
                             <InputWithHead
                                 required={"required-field pb-1"}
-                                heading={AppConstants.affiliate}
+                                heading={AppConstants.organisation}
                             />
                             <Select
                                 mode="multiple"
                                 showSearch
-                                placeholder={AppConstants.selectAffiliate}
+                                placeholder={AppConstants.selectOrganisation}
                                 style={{ width: "100%", }}
                                 onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
-                                // value={affiliateId}
                                 notFoundContent={onAffiliateLoad === true ? <Spin size="small" /> : null}
                                 optionFilterProp="children"
                             >
                                 {affilateData.map((item) => (
-                                    <Option value={item.id}>{item.name}</Option>
+                                    <Option value={item.id} key={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -354,18 +370,18 @@ class AddUmpire extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <Form.Item
-                            name='umpireNewAffiliateName'
-                            rules={[{ required: true, message: ValidationConstants.affiliateField }]}
+                            name="umpireNewAffiliateName"
+                            rules={[{ required: true, message: ValidationConstants.organisationField }]}
                             className="slct-in-add-manager-livescore"
                         >
                             <InputWithHead
                                 required={"required-field pb-1"}
-                                heading={AppConstants.affiliate}
+                                heading={AppConstants.organisation}
                             />
                             <Select
                                 mode="multiple"
                                 showSearch
-                                placeholder={AppConstants.selectAffiliate}
+                                placeholder={AppConstants.selectOrganisation}
                                 style={{ width: "100%", }}
                                 onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
                                 // value={affiliateId}

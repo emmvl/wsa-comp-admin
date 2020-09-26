@@ -33,10 +33,14 @@ function liveScoreAddEditPlayerAction(data, playerId, propsData) {
         propsData,
     };
 }
-function liveScoreDeletePlayerAction(playerId) {
+
+function liveScoreDeletePlayerAction(playerId, competitionId, offset, key) {
     return {
         type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD,
         playerId,
+        competitionId,
+        offset,
+        key
     }
 }
 

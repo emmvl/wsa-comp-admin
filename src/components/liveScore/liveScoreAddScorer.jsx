@@ -51,26 +51,27 @@ class LiveScoreAddScorer extends Component {
     };
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        // this.props.liveScoreScorerSearch(8, 1, id)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            if (id !== null) {
+                this.props.getliveScoreTeams(id)
+            } else {
+                history.push('/')
+            }
+            this.props.liveScoreClear()
 
-        if (id !== null) {
-            // this.props.getliveScoreDivisions(id)
-            this.props.getliveScoreTeams(id)
+            if (this.state.isEdit === true) {
+                this.props.liveScoreScorerUpdate(this.state.tableRecord, "isEditScorer")
+                this.setInitalFiledValue(this.state.tableRecord)
+                this.setState({ loader: true })
+            } else {
+                this.props.liveScoreScorerUpdate("", "isAddScorer")
+            }
+            this.setState({ load: true, competition_id: id });
+            this.formRef = React.createRef();
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
-        this.props.liveScoreClear()
-
-        if (this.state.isEdit === true) {
-            this.props.liveScoreScorerUpdate(this.state.tableRecord, "isEditScorer")
-            this.setInitalFiledValue(this.state.tableRecord)
-            this.setState({ loader: true })
-        } else {
-            this.props.liveScoreScorerUpdate("", "isAddScorer")
-        }
-        this.setState({ load: true, competition_id: id });
-        this.formRef = React.createRef();
     }
 
     componentDidUpdate(nextProps) {
@@ -298,7 +299,7 @@ class LiveScoreAddScorer extends Component {
                                 auto_complete='new-contact'
                                 // type='number'
                                 required={"required-field pb-0 pt-0"}
-                                heading={AppConstants.contactNO}
+                                heading={AppConstants.contact_No}
                                 placeholder={AppConstants.enterContactNo}
                                 onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
                                 maxLength={10}
