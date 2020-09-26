@@ -228,16 +228,18 @@ class RegistrationForm extends Component {
 	
     // mail client details
 
-    mailClientView = (code) => {
+    mailClientView = (code,isPublished) => {
         let affilateName = getOrganisationData().name;
         let body = `${AppConstants.mailBodyText} \n${code}  \n \nRegards,  \n${affilateName}`;
       return(
         <div>
-            <Mailto email="" subject="" body={body}>
-            <span className="input-heading-add-another" style={{textDecoration: "underline",paddingTop:18}}>
-                {AppConstants.email}
-            </span>
-            </Mailto>
+             <a disabled={isPublished} >  
+                <Mailto email="" subject="" body={body}>                
+                    <span className="input-heading-add-another" style={{textDecoration: "underline",paddingTop:18}}>
+                        {AppConstants.email}
+                    </span>                            
+                </Mailto>
+            </a>  
         </div>
       )
     }
@@ -1517,15 +1519,15 @@ class RegistrationForm extends Component {
                     return(
                         <div>
                             <div style={{display:"flex",marginTop:"13px"}}>                    
-                                <div class="hardshipcode-text">
-										
+                                <div className = {item.isActive == 0 ? "hardshipcode-text-active" :"hardshipcode-text"}>								
+		  
                                     {item.code}
-                                </div>                               
-								   
+                                </div> 
+		   
                                 {item.isActive == 1 &&  
                                 <div>
-                                    {this.mailClientView(item.code)}
-															
+                                    {this.mailClientView(item.code,isPublished)}															
+			   
                                 </div>                            
                                }
                             </div>
