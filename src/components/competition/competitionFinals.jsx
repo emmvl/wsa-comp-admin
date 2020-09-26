@@ -269,6 +269,7 @@ class CompetitionFinals extends Component {
     }
 
     onChangeSetValue = (id, fieldName, index, subIndex) => {
+        console.log("subIndex::" + subIndex)
         if (index == "venueList") {
             let obj = {
                 venueListArray: fieldName,
@@ -339,11 +340,13 @@ class CompetitionFinals extends Component {
             let errorMessage = '';
             for(let final of competitionFinalsList){
                 for(let wpw of final.whoPlaysWho){
-                    let poolIds = [wpw.wpwPool1,wpw.wpwPool2,wpw.wpwPool3,wpw.wpwPool4];
-                    if(poolIds.some(x => poolIds.indexOf(x) !== poolIds.lastIndexOf(x))){
-                        errorMessage = AppConstants.whoPlaysWhoValidation + " in Division " + wpw.divisionName;
-                        error = true;
-                        break;
+                    if(wpw.noOfPools == 4){
+                        let poolIds = [wpw.wpwPool1,wpw.wpwPool2,wpw.wpwPool3,wpw.wpwPool4];
+                        if(poolIds.some(x => poolIds.indexOf(x) !== poolIds.lastIndexOf(x))){
+                            errorMessage = AppConstants.whoPlaysWhoValidation + " in Division " + wpw.divisionName;
+                            error = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -493,6 +496,7 @@ class CompetitionFinals extends Component {
         let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
         let detailsData = this.props.competitionFeesState
+        console.log("finalsList",finalsList);
         return (
             <div>
                 {(finalsList != null && finalsList.length > 0) &&
