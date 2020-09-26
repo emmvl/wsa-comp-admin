@@ -211,6 +211,14 @@ class CompetitionFinals extends Component {
                         this.onChangeSetValue(item.pools[0].poolId, 'wpwPool1', index, i);
                         this.onChangeifSetValue(item.pools[1].poolId, 'wpwPool2', index, i);
                     }
+                    if(item.whoPlaysWho[i].noOfPools == 4){
+                        this.props.form.setFieldsValue({
+                            [`wpwPool1${i}`]: item.whoPlaysWho[i].wpwPool1,
+                            [`wpwPool2${i}`]: item.whoPlaysWho[i].wpwPool2,
+                            [`wpwPool3${i}`]: item.whoPlaysWho[i].wpwPool3,
+                            [`wpwPool4${i}`]: item.whoPlaysWho[i].wpwPool4
+                        });
+                    }
                 }
             }
             this.props.form.setFieldsValue({
@@ -328,16 +336,18 @@ class CompetitionFinals extends Component {
     checkDuplicates = (competitionFinalsList) => {
         try{
             let error = false;
+            let errorMessage = '';
             for(let final of competitionFinalsList){
                 for(let wpw of final.whoPlaysWho){
                     let poolIds = [wpw.wpwPool1,wpw.wpwPool2,wpw.wpwPool3,wpw.wpwPool4];
                     if(poolIds.some(x => poolIds.indexOf(x) !== poolIds.lastIndexOf(x))){
+                        errorMessage = AppConstants.whoPlaysWhoValidation + " in Division " + wpw.divisionName;
                         error = true;
                         break;
                     }
                 }
             }
-            return error;
+            return {error,errorMessage};
         }catch(ex){
             console.log("Error in checkDuplicates"+ex);
         }
@@ -356,8 +366,9 @@ class CompetitionFinals extends Component {
         this.props.form.validateFieldsAndScroll((err, values) => {
             console.log("err::" + err);
             if (!err) {
-                if(this.checkDuplicates(competitionFinalsList)){
-                    message.error(AppConstants.whoPlaysWhoValidation);
+                let checkDuplicate = this.checkDuplicates(competitionFinalsList);
+                if(checkDuplicate.error){
+                    message.error(checkDuplicate.errorMessage);
                     return;
                 }
                 this.setState({ buttonPressed: "save" });
@@ -702,13 +713,14 @@ class CompetitionFinals extends Component {
                                 </div>
                                 {isArrayNotEmpty(data.whoPlaysWho) && (
                                     <div className="inside-container-view" style={{ paddingTop: 5 }}>
-                                        <InputWithHead heading={AppConstants.whoPlaysWho} required={"required-field"} />
+                                        <span className="input-heading" style={{ fontSize: 18}} >{AppConstants.poolSettingsWhoPlaysWho}</span>
                                         {(data.whoPlaysWho || []).map((whoPlaysWhoItem,whoPlaysWhoIndex) => {
                                             return(
                                                 <div key={whoPlaysWhoItem.competitiondivisionId}>
                                                     {whoPlaysWhoItem.noOfPools == 4 && (
                                                         <div>
-                                                            <InputWithHead heading={whoPlaysWhoItem.divisionName}/>
+                                                            <InputWithHead heading={AppConstants.division + " : " + whoPlaysWhoItem.divisionName}
+                                                            required={"pt-0"}/>
                                                             <div className="row">
                                                                 <div className="col-md-6">
                                                                     <Form.Item >
