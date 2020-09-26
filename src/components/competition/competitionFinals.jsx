@@ -208,8 +208,8 @@ class CompetitionFinals extends Component {
             if(item.whoPlaysWho){
                 for(let i=0;i<item.whoPlaysWho.length;i++){
                     if(item.whoPlaysWho[i].noOfPools == 2){
-                        this.onChangeSetValue(item.pools[0].poolId, 'wpwPool1', index, i);
-                        this.onChangeifSetValue(item.pools[1].poolId, 'wpwPool2', index, i);
+                        this.onChangeSetValue(item.whoPlaysWho[i].pools[0].poolId, 'wpwPool1', index, i);
+                        this.onChangeSetValue(item.whoPlaysWho[i].pools[1].poolId, 'wpwPool2', index, i);
                     }
                     if(item.whoPlaysWho[i].noOfPools == 4){
                         this.props.form.setFieldsValue({
