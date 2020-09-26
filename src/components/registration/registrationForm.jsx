@@ -47,7 +47,11 @@ import { inviteTypeAction } from '../../store/actions/commonAction/commonAction'
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
-
+const Mailto = ({ email, subject, body, children }) => {    
+    return (
+      <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`}>{children}</a>
+    );
+  };
 
 
 let this_Obj = null;
@@ -221,7 +225,22 @@ class RegistrationForm extends Component {
         //     }
         // }
     }
+	
+    // mail client details
 
+    mailClientView = (code) => {
+        let affilateName = getOrganisationData().name;
+        let body = `${AppConstants.mailBodyText} \n${code}  \n \nRegards,  \n${affilateName}`;
+      return(
+        <div>
+            <Mailto email="" subject="" body={body}>
+            <span className="input-heading-add-another" style={{textDecoration: "underline",paddingTop:18}}>
+                {AppConstants.email}
+            </span>
+            </Mailto>
+        </div>
+      )
+    }
     // year change and get competition lost
     onYearChange = (allYearRefId) => {
         this.setState({ allCompetition: null, allYearRefId: allYearRefId, })
@@ -1497,21 +1516,18 @@ class RegistrationForm extends Component {
                 {hardShipCodesList.map((item,index)=>{
                     return(
                         <div>
-                            <div style={{display:"flex",marginTop:"13px"}}>                   
-                                <InputWithHead
-                                    readOnly={true}
-                                    disabled={item.isActive == 0 || isPublished}
-                                    style={{width: "252px" , marginRight: "28px"}}                   
-                                    placeholder={AppConstants.code} 
-                                    value={item.code == 0 ? " " : item.code}
-                                    onChange={(e) => this.onChangeSetValue(e.target.value , index)}
-                                /> 
-                                {item.isActive == 1 &&     
-                                <a disabled={isPublished}>
-                                    <span className="input-heading-add-another" style={{textDecoration: "underline",paddingTop:18}}>
-                                        {AppConstants.email}
-                                    </span>
-                                </a>}
+                            <div style={{display:"flex",marginTop:"13px"}}>                    
+                                <div class="hardshipcode-text">
+										
+                                    {item.code}
+                                </div>                               
+								   
+                                {item.isActive == 1 &&  
+                                <div>
+                                    {this.mailClientView(item.code)}
+															
+                                </div>                            
+                               }
                             </div>
                         </div>
                     );
@@ -1654,7 +1670,9 @@ class RegistrationForm extends Component {
                             )}</div> */}
                             <div className="formView">{this.advancedSettingView()}</div>
                             <div className="formView">{this.sendInviteToView()}</div>
-							<div className="formView">{this.hardshipCodeView()}</div>		 
+							{isHardshipEnabled == 1 &&
+                                <div className="formView">{this.hardshipCodeView()}</div>
+                            }		  
                             {/* <div className="formView">
                                     {this.disclaimerView(
                                         getFieldDecorator

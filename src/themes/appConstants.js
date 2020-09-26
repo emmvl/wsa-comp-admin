@@ -1613,7 +1613,8 @@ const AppConstants = {
   whoPlaysWhoValidation: "Please remove duplicate from who playes who",
   heroImageForCompetition: "Hero Image for Competition",
   heroImageSizeText: "Approximate Dimension: Width: 1200px  Height: 400px",
-  poolSettingsWhoPlaysWho: "Pool Settings - Who Plays Who"
+  poolSettingsWhoPlaysWho: "Pool Settings - Who Plays Who",
+  mailBodyText:`Hi,\n \nPlease use the following discount Code when you register in order to have your fee waived.`,
 };
 
 export default AppConstants;
