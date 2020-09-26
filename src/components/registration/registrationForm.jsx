@@ -1636,6 +1636,7 @@ class RegistrationForm extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+         const {isHardshipEnabled} = this.props.registrationState.registrationFormData[0];
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout
