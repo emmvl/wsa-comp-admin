@@ -228,13 +228,13 @@ class RegistrationForm extends Component {
 	
     // mail client details
 
-    mailClientView = (code,isPublished) => {
+    mailClientView = (code) => {
         let affilateName = getOrganisationData().name;
         let body = `${AppConstants.mailBodyText} \n${code}  \n \nRegards,  \n${affilateName}`;
       return(
         <div>
-             <a disabled={isPublished} >  
-                <Mailto email="" subject="" body={body}>                
+             <a >  
+                <Mailto email="" subject={AppConstants.hardshipCode} body={body}>                
                     <span className="input-heading-add-another" style={{textDecoration: "underline",paddingTop:18}}>
                         {AppConstants.email}
                     </span>                            
@@ -1511,7 +1511,7 @@ class RegistrationForm extends Component {
     hardshipCodeView = () => {        
         const {hardShipCodes,orgRegistrationId} = this.props.registrationState.registrationFormData[0];
         let hardShipCodesList = hardShipCodes == null ? [] : hardShipCodes
-        let isPublished = this.state.isPublished;
+        //let isPublished = this.state.isPublished;
         return(
             <div className="discount-view pt-5">
                 <span className="form-heading pb-2">{AppConstants.hardshipCode}</span>
@@ -1526,7 +1526,7 @@ class RegistrationForm extends Component {
 		   
                                 {item.isActive == 1 &&  
                                 <div>
-                                    {this.mailClientView(item.code,isPublished)}															
+                                    {this.mailClientView(item.code)}															
 			   
                                 </div>                            
                                }
@@ -1535,11 +1535,11 @@ class RegistrationForm extends Component {
                     );
                 })                    
                 }
-                {!isPublished &&
+                {/* {!isPublished && */}
                 <span className="input-heading-add-another" onClick={(e) => this.addHardshipCode(orgRegistrationId)} >
                     +{AppConstants.addCode}
                 </span>
-                }
+                {/* } */}
             </div>
         )
 
