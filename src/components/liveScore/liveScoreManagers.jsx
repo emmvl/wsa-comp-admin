@@ -202,10 +202,15 @@ class LiveScoreManagerList extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id })
-        let offset = 0
-        this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, offset)
+
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id })
+            let offset = 0
+            this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, offset)
+        } else {
+            history.push('/liveScoreCompetitions')
+        }
     }
 
     /// Handle Page change

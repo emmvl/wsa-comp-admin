@@ -46,6 +46,22 @@ function isUmpireCoachCheck(data, key) {
     }
 }
 
+
+function createUmpireArray(result) {
+    let umpireArray = []
+    for (let i in result) {
+        let userRoleCheck = result[i].userRoleEntities
+        for (let j in userRoleCheck) {
+            if (userRoleCheck[j].roleId == 15 || userRoleCheck[j].roleId == 19) {
+                umpireArray.push(result[i])
+                break
+            }
+        }
+    }
+    return umpireArray
+}
+
+
 function createCoachArray(result) {
     console.log(result)
     let coachArray = []
@@ -122,11 +138,12 @@ function umpireState(state = initialState, action) {
                 let coachData = createCoachArray(JSON.parse(JSON.stringify(user_Data)))
                 state.coachList = coachData
             }
+            let checkUserData = createUmpireArray(JSON.parse(JSON.stringify(user_Data)))
             return {
                 ...state,
                 onLoad: false,
-                umpireList: user_Data,
-                umpireListResult: user_Data,
+                umpireList: checkUserData,
+                umpireListResult: checkUserData,
                 currentPage: action.result.page ? action.result.page.currentPage : null,
                 totalCount: action.result.page ? action.result.page.totalCount : null,
                 status: action.status

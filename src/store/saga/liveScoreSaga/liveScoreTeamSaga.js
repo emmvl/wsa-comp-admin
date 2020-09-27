@@ -112,7 +112,7 @@ function* liveScoreDeletePlayerSaga(action) {
 
     if (result.status == 1) {
       yield put({
-        type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS,
+        type: ApiConstants.API_LIVE_SCORE_DELETE_TEAM_PLAYER_SUCCESS,
         status: result.status,
       });
       history.push("/liveScoreTeam");
@@ -245,5 +245,5 @@ export default function* rootLiveScoreTeamSaga() {
   yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_IMPORT_LOAD, liveScoreTeamImportSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_GET_TEAM_LOAD, liveScoreGetTeamSaga);
   yield takeEvery(ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD, liveScoreTeamPagingSaga);
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD, liveScoreDeletePlayerSaga);
+  yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_TEAM_PLAYER_LOAD, liveScoreDeletePlayerSaga);
 }

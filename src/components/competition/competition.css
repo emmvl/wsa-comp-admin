@@ -851,6 +851,74 @@ a.collapsed i {
   color:inherit;
 }
 
+.multiDrawHeaderView{
+  width: 95%;
+  margin: auto;
+  background-color: white;
+  border-radius: 5px;
+  height: 90px;
+  box-shadow: rgba(0, 0, 0, 0.1) 8px 11px 28px 6px;
+}
+
+.multiDrawContentView{
+  border-radius: 10px;
+  box-shadow: 0 8px 16px 0 rgba(27, 27, 52, 0.06);
+  background-color: var(--app-white);
+  margin-top: 30px;
+}
+
+.multi-draw-list-top-head{
+  padding: 15px 15px 15px 15px ;
+}
+
+.multi-field-draw-edit-button {
+  background-color: var(--app-white) !important;
+  border-color: var(--app-color) !important;
+  color: var(--app-color) !important;
+  font-weight: 500;
+  font-family: inter;
+  font-size: 15px;
+  width: fit-content;
+  height: 32.5px;
+  border-radius: 8px;
+  margin-right: 20px;
+  border-width: 1.5px;
+}
+
+
+a.view-more-btn i.fa.fa-angle-up  {
+  transform: rotate(0deg)!important;
+}
+
+a.view-more-btn.collapsed i.fa.fa-angle-up  {
+  transform: rotate(180deg)!important;
+}
+
+.ant-checkbox-indeterminate .ant-checkbox-inner::after {
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background-color:var(--app-color) !important;
+  border: 0;
+  -webkit-transform: translate(-50%, -50%) scale(1);
+      -ms-transform: translate(-50%, -50%) scale(1);
+          transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  content: ' ';
+}
+
+
+.multi-draw-left-list-view {
+  overflow: auto;
+  text-overflow: ellipsis;
+  -webkit-appearance: none;
+  overflow-y: auto;
+  white-space: nowrap;
+  max-height: 645px;
+  height: fit-content;
+}
+
 @media(max-width:1200px){
   .table-responsive.table-competition {
     max-width: 1200px;

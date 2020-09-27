@@ -153,12 +153,16 @@ class LiveScoreTeam extends Component {
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ conpetitionId: id })
-        if (id !== null) {
-            this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ conpetitionId: id })
+            if (id !== null) {
+                this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText)
+            } else {
+                history.push("/liveScoreCompetitions")
+            }
         } else {
-            history.push("/")
+            history.push("/liveScoreCompetitions")
         }
 
     }

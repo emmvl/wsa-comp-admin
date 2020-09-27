@@ -618,6 +618,7 @@ class CompetitionOpenRegForm extends Component {
                         formData.append("description", postData.description);
                         formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                         formData.append("competitionFormatRefId", postData.competitionFormatRefId);
+                        formData.append("finalTypeRefId",postData.finalTypeRefId);
                         formData.append("startDate", postData.startDate);
                         formData.append("endDate", postData.endDate);
                         if (postData.competitionFormatRefId == 4) {
@@ -1144,6 +1145,19 @@ class CompetitionOpenRegForm extends Component {
                                     </div>
                                 );
                             })}
+                        </Radio.Group>
+                    )}
+                </Form.Item>
+                <span className="applicable-to-heading required-field">{AppConstants.gradesOrPools}</span>
+                <Form.Item>
+                    {getFieldDecorator('finalTypeRefId', { initialValue: detailsData.competitionDetailData.finalTypeRefId },
+                    { rules: [{ required: true, message: ValidationConstants.pleaseSelectGradesOrPools}] })(
+                        <Radio.Group
+                            className="reg-competition-radio"
+                            onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "finalTypeRefId")}
+                            setFieldsValue={detailsData.competitionDetailData.finalTypeRefId}>
+                                <Radio value={1}>{AppConstants.grades}</Radio>
+                                <Radio value={2}>{AppConstants.pools}</Radio>
                         </Radio.Group>
                     )}
                 </Form.Item>

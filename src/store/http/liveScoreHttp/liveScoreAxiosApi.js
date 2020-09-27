@@ -1370,6 +1370,38 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
+    liveScoreGameAttendanceList(data) {
+        const { matchId, teamId } = data;
+
+        let url = `/gtattendances?matchId=${matchId}`;
+
+        if (teamId) {
+            url = `/gtattendances?matchId=${matchId}&teamId=${teamId}`;
+        }
+
+        return Method.dataGet(url, token);
+    },
+
+    liveScorePlayerMinuteTrackingList(data) {
+        const { matchId, teamId, playerId } = data;
+        let url = `/pmt?matchId=${matchId}`;
+        if (teamId) {
+            url += `&teamId=${teamId}`;
+        }
+
+        if (playerId) {
+            url += `&playerId=${playerId}`;
+        }
+
+        return Method.dataGet(url, token);
+    },
+
+    liveScorePlayerMinuteRecord(data) {
+        const url = '/pmt/record';
+
+        return Method.dataPost(url, token, data);
+    },
+
 };
 
 const Method = {

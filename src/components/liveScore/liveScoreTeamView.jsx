@@ -88,7 +88,7 @@ const columns = [
                     </NavLink>
                 </Menu.Item>
                 <Menu.Item key="2" onClick={() => {
-                    _this.showDeleteConfirmPlayer(record.id);
+                    _this.showDeleteConfirmPlayer(record.id, record.competitionId);
 
                 }}>
 
@@ -129,7 +129,11 @@ class LiveScoreTeamView extends Component {
         let teamId = this.props.location ? this.props.location.state ? this.props.location.state.teamId : null : null
 
         let teamIds = this.state.teamId ? this.state.teamId : teamId
-        this.props.getTeamViewPlayerList(teamIds)
+        if (teamIds) {
+            this.props.getTeamViewPlayerList(teamIds)
+        } else {
+            history.push("/liveScoreCompetitions")
+        }
     }
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreTeamState != this.props.liveScoreTeamState) {
@@ -138,12 +142,12 @@ class LiveScoreTeamView extends Component {
     }
 
     // Delete Player
-    deletePlayer = (playerId) => {
-        this.props.liveScoreDeletePlayerAction(playerId)
+    deletePlayer = (playerId, competitionId) => {
+        this.props.liveScoreDeletePlayerAction(playerId, competitionId, 0, "team")
 
     }
 
-    showDeleteConfirmPlayer = (playerId) => {
+    showDeleteConfirmPlayer = (playerId, competitionId) => {
         let this_ = this
         confirm({
             title: 'Are you sure you want to delete this player?',
@@ -151,7 +155,7 @@ class LiveScoreTeamView extends Component {
             okType: 'danger',
             cancelText: 'No',
             onOk() {
-                this_.deletePlayer(playerId)
+                this_.deletePlayer(playerId, competitionId)
 
             },
             onCancel() {
@@ -176,10 +180,10 @@ class LiveScoreTeamView extends Component {
                 <div className='profile-image-view mr-5' >
 
                     {
-                        this.props.liveScoreTeamState && this.props.liveScoreTeamState.teamData ?
+                        this.props.liveScoreTeamState && this.props.liveScoreTeamState.teamData && this.props.liveScoreTeamState.teamData.logoUrl ?
                             <img className="user-image" src={logoUrl ? logoUrl : ''} alt="" height="80" width="80" />
                             :
-                            <span className="user-contact-heading">{'No Image'}</span>
+                            <span className="user-contact-heading">{' '}</span>
                     }
 
 

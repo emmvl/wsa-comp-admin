@@ -370,7 +370,7 @@ function craeteSelectedCourtPrefArray(selectedCourts, allCourtsList, courtRotati
 }
 
 function createEntityObject(action, courtPreferencesPost, evenRotation, venuePrefId) {
-  
+
     let entityObjectArr = []
     for (let i in action.data) {
         let checkEntitiyObject = checkEntitiyObjectValues(action.data[i], courtPreferencesPost, venuePrefId)
@@ -461,7 +461,7 @@ function VenueTimeState(state = initialState, action) {
             return { ...state, onLoad: true, onVenueSuccess: true };
 
         case ApiConstants.API_VENUE_CONSTRAINTS_LIST_SUCCESS:
-
+            // state.selectedVenueId = []
             state.courtRotation = getCourtRotation(action.commResult.CourtRotation)
 
             const courtRotationHelpMsg = getCourtRotationHelpMsg(state.courtRotation, state.courtPrefHelpMsg)
@@ -508,7 +508,6 @@ function VenueTimeState(state = initialState, action) {
                 state.venuePost.push(venueObj)
             }
 
-            console.log("selecetdVenueListId, selectedVenueId", selecetdVenueListId, state.selectedVenueId)
 
             // let setVenueObj = getVenueObj(action.result)
             // state.venueConstrainstData = setVenueObj
@@ -548,6 +547,8 @@ function VenueTimeState(state = initialState, action) {
 
 
         case ApiConstants.API_UPDATE_VENUE_TIME_DATA:
+
+
             if (action.key == "remove") {
                 let expandedRowKeyRemove = action.index + 1;
                 state.venuData['venueCourts'].splice(action.index, 1);
@@ -757,11 +758,17 @@ function VenueTimeState(state = initialState, action) {
 
         case ApiConstants.API_UPDATE_VENUE_CONSTRAINTS_DATA:
 
+
+            if (action.key == 'clearData' && action.contentType == null) {
+                state.selectedVenueIdAdd = null
+                state.selectedVenueId = []
+            }
+
             if (action.contentType == 'venueListSection') {
 
                 // state.venues.push(venueObj) //// add Venue object*
                 state.selectedVenueId = action.data
-             
+
                 let venueSelectedData = state.venueList.filter(function (object_1) {
                     return action.data.some(function (object_2) {
                         return object_1.id === object_2;
@@ -1063,6 +1070,7 @@ function VenueTimeState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_VENUE_CONSTRAINT_POST_SUCCESS:
+            state.createVenue = null
             return {
                 ...state,
                 onLoad: false,
@@ -1197,15 +1205,14 @@ function VenueTimeState(state = initialState, action) {
 
         case ApiConstants.API_ADD_VENUE_SUCCESS:
             if (action.result != null && action.result.screenNavigationKey == AppConstants.venues) {
-               console.log('Venue Time Constraints' + action.result.venueId)
                 state.selectedVenueIdAdd = "addVenue"
                 state.selectedVenueId.push(action.result.venueId)
-               
+
                 let courtAddData = generateCourtObj(state.courtArray, action.result)
                 state.courtArray = courtAddData
                 state.createVenue = action.result
 
-               
+
             }
             return { ...state }
 

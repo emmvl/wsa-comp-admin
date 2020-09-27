@@ -179,31 +179,41 @@ const columns2 = [
 class LiveScoreAssignMatch extends Component {
     constructor(props) {
         super(props);
-        const { scoringType } = JSON.parse(getLiveScoreCompetiton())
-        this.state = {
-            filter: '',
-            competitionId: 0,
-            teamID: null,
-            // columns: scoringType == "SINGLE" ? columns1 : columns2,
-            columns: columns2,
-            lodding: false,
-            scoring_Type: scoringType
-        };
+        if (getLiveScoreCompetiton()) {
+            const { scoringType } = JSON.parse(getLiveScoreCompetiton())
+            this.state = {
+                filter: '',
+                competitionId: 0,
+                teamID: null,
+                // columns: scoringType == "SINGLE" ? columns1 : columns2,
+                columns: columns2,
+                lodding: false,
+                scoring_Type: scoringType
+            };
+        } else {
+            history.push('/liveScoreCompetitions')
+        }
+
         this_obj = this
 
     }
 
     componentDidMount() {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ lodding: true })
 
-        if (id !== null) {
-            this.props.getliveScoreTeams(id)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ lodding: true })
+
+            if (id !== null) {
+                this.props.getliveScoreTeams(id)
+
+            } else {
+                history.push('/')
+            }
 
         } else {
-            history.push('/')
+            history.push('/liveScoreCompetitions')
         }
-
     }
 
     componentDidUpdate(nextProps) {
@@ -373,9 +383,9 @@ class LiveScoreAssignMatch extends Component {
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
                 <Layout>
-                    {this.headerView()}
+                    {getLiveScoreCompetiton() && this.headerView()}
                     <Content>
-                        {this.tableView()}
+                        {getLiveScoreCompetiton() && this.tableView()}
                     </Content>
                 </Layout>
             </div>

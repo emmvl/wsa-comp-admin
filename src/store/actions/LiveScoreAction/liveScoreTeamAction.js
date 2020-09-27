@@ -25,7 +25,7 @@ function liveScoreDeleteTeam(teamId) {
 }
 function liveScoreDeletePlayerAction(playerId) {
     return {
-        type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD,
+        type: ApiConstants.API_LIVE_SCORE_DELETE_TEAM_PLAYER_LOAD,
         playerId,
     }
 }

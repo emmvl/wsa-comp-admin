@@ -281,7 +281,7 @@ class UmpireRoaster extends Component {
         let orgArray = []
         if (data.length > 0) {
             for (let i in data) {
-                if (data[i].roleId == roleId) {
+                if (data[i].roleId == roleId == 19 ? 15 : roleId) {
                     orgArray.push(data[i])
                     return orgArray
                 }

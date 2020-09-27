@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Pagination, Input, Icon } from 'antd';
+import { Layout, Breadcrumb, Button, Table, Select, Pagination, Input, Icon, message } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -15,6 +15,7 @@ import { isArrayNotEmpty } from '../../util/helpers'
 import { exportFilesAction } from "../../store/actions/appAction"
 import { getLiveScoreDivisionList } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
 import { liveScoreRoundListAction } from "../../store/actions/LiveScoreAction/liveScoreRoundAction";
+import ValidationConstants from "../../themes/validationConstant";
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -78,12 +79,12 @@ const columns = [
     },
     {
         title: 'Team',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'playerTeamName',
+        key: 'playerTeamName',
         sorter: true,
-        onHeaderCell: () => listeners("team"),
-        render: (name) =>
-            <span >{name}</span>
+        onHeaderCell: () => listeners("playerTeamName"),
+        render: (playerTeamName) =>
+            <span >{playerTeamName}</span>
 
     },
     {
@@ -99,8 +100,10 @@ const columns = [
         key: 'firstName',
         sorter: true,
         onHeaderCell: () => listeners("firstName"),
-        render: (firstName) =>
-            <span className="input-heading-add-another pt-0">{firstName}</span>
+        render: (firstName, record) =>
+            <span className="input-heading-add-another pt-0"
+                onClick={() => this_Obj.checkUserId(record)}
+            >{firstName}</span>
 
     },
     {
@@ -109,9 +112,11 @@ const columns = [
         key: 'lastName',
         sorter: true,
         onHeaderCell: () => listeners("lastName"),
-        render: (lastName) =>
+        render: (lastName, record) =>
 
-            <span className="input-heading-add-another pt-0">{lastName}</span>
+            <span className="input-heading-add-another pt-0"
+                onClick={() => this_Obj.checkUserId(record)}
+            >{lastName}</span>
 
     },
     {
@@ -165,22 +170,22 @@ const borrowedColumns = [
     },
     {
         title: 'Team',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'playerTeamName',
+        key: 'playerTeamName',
         sorter: true,
-        onHeaderCell: () => listeners("team"),
-        render: (name) =>
-            <span >{name}</span>
+        onHeaderCell: () => listeners("playerTeamName"),
+        render: (playerTeamName) =>
+            <span >{playerTeamName}</span>
 
     },
     {
         title: 'Borrowing Team',
-        dataIndex: 'borrowingTeam',
-        key: 'borrowingTeam',
+        dataIndex: 'name',
+        key: 'name',
         sorter: true,
-        onHeaderCell: () => listeners("borrowingTeam"),
-        render: (borrowingTeam) =>
-            <span >{borrowingTeam}</span>
+        onHeaderCell: () => listeners("name"),
+        render: (name) =>
+            <span >{name}</span>
 
     },
     {
@@ -263,14 +268,18 @@ class LiveScoreTeamAttendance extends Component {
                 "offset": 0
             },
         }
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ competitionId: id, divisionLoad: true })
-        if (id !== null) {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
-            this.props.getLiveScoreDivisionList(id)
+        if (getLiveScoreCompetiton()) {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id, divisionLoad: true })
+            if (id !== null) {
+                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
+                this.props.getLiveScoreDivisionList(id)
 
+            } else {
+                history.pushState('/liveScoreCompetitions')
+            }
         } else {
-            history.pushState('/')
+            history.push('/liveScoreCompetitions')
         }
     }
 
@@ -384,6 +393,19 @@ class LiveScoreTeamAttendance extends Component {
             }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+        }
+    }
+
+    checkUserId(record) {
+        if (record.userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        } else {
+            history.push("/userPersonal", {
+                userId: record.userId,
+                screenKey: "livescore",
+                screen: "/liveScorePlayerList"
+            })
         }
     }
 

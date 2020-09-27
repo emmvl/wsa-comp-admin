@@ -82,60 +82,62 @@ class LiveScorerView extends Component {
         }
     }
 
-    componentDidMount() {
-        console.log(this.state.data)
-    }
     ////view for profile image
     profileImageView = () => {
         let data = this.state.data
-        return (
-            <div className="fluid-width mt-2" >
-                {/* <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
-                <span className="live-score-profile-user-name">{this.scorerName}</span> */}
+        if (data) {
+            return (
+                <div className="fluid-width mt-2" >
+                    {/* <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
+                    <span className="live-score-profile-user-name">{this.scorerName}</span> */}
 
-                <div className='profile-image-view mr-5' >
-                    <span className="user-contact-heading">{AppConstants.scorerProfile}</span>
-                    <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
-                    <span className="user-contact-heading">{data.firstName} {data.lastName}</span>
+                    <div className='profile-image-view mr-5' >
+                        <span className="user-contact-heading">{AppConstants.scorerProfile}</span>
+                        <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
+                        <span className="user-contact-heading">{data.firstName} {data.lastName}</span>
+                    </div>
+
+                    <span className="desc-text-style side-bar-profile-data pt-0">{AppConstants.aboutScorer}</span>
+
+                    <div className="profile-img-view-style">
+
+                        <div className="live-score-side-desc-view">
+                            <div className="live-score-title-icon-view">
+                                <div className="live-score-icon-view">
+                                    <img src={AppImages.group} height="16" width="16" alt="" />
+                                </div>
+                                <span className='year-select-heading ml-3'>{AppConstants.emailAddress}</span>
+                            </div>
+                            <span className="desc-text-style side-bar-profile-data">{data.email}</span>
+                        </div>
+
+                        <div className="live-score-side-desc-view">
+                            <div className="live-score-title-icon-view">
+                                <div className="live-score-icon-view">
+                                    <img src={AppImages.callAnswer} alt="" height="16" width="16" />
+                                </div>
+                                <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
+                            </div>
+                            <span className="desc-text-style side-bar-profile-data">{data.mobileNumber}</span>
+                        </div>
+
+                        <div className="live-score-side-desc-view">
+                            <div className="live-score-title-icon-view">
+                                <div className="live-score-icon-view">
+                                    <img src={AppImages.group} height="16" width="16" alt="" />
+                                </div>
+                                <span className='year-select-heading ml-3'>{AppConstants.team}</span>
+                            </div>
+                            <span className="desc-text-style side-bar-profile-data">{data.team}</span>
+                        </div>
+
+                    </div>
                 </div>
+            )
+        } else {
+            history.push('/liveScoreCompetitions')
+        }
 
-                <span className="desc-text-style side-bar-profile-data pt-0">{AppConstants.aboutScorer}</span>
-
-                <div className="profile-img-view-style">
-
-                    <div className="live-score-side-desc-view">
-                        <div className="live-score-title-icon-view">
-                            <div className="live-score-icon-view">
-                                <img src={AppImages.group} height="16" width="16" alt="" />
-                            </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.emailAddress}</span>
-                        </div>
-                        <span className="desc-text-style side-bar-profile-data">{data.email}</span>
-                    </div>
-
-                    <div className="live-score-side-desc-view">
-                        <div className="live-score-title-icon-view">
-                            <div className="live-score-icon-view">
-                                <img src={AppImages.callAnswer} alt="" height="16" width="16" />
-                            </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
-                        </div>
-                        <span className="desc-text-style side-bar-profile-data">{data.mobileNumber}</span>
-                    </div>
-
-                    <div className="live-score-side-desc-view">
-                        <div className="live-score-title-icon-view">
-                            <div className="live-score-icon-view">
-                                <img src={AppImages.group} height="16" width="16" alt="" />
-                            </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.team}</span>
-                        </div>
-                        <span className="desc-text-style side-bar-profile-data">{data.team}</span>
-                    </div>
-
-                </div>
-            </div>
-        )
     }
 
     ///////view for breadcrumb

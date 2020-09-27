@@ -1,4 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
+import { getLiveScoreCompetiton } from '../../../util/sessionStorage';
 
 const initialState = {
     onLoad: false,
@@ -37,6 +38,38 @@ function innerHorizontalState(state = initialState, action) {
                 onLoad: false,
                 success: false
             };
+
+        case ApiConstants.API_UPDATE_INNER_HORIZONTAL:
+            // const livescoreSavedCompObject_2 = JSON.parse(getLiveScoreCompetiton())
+            state.competitionList = []
+            console.log(state.competitionList, 'livescoreSavedCompObject_@@@2')
+            return {
+                ...state,
+            };
+
+        case ApiConstants.API_INITIALIZE_COMP_DATA:
+            if (getLiveScoreCompetiton()) {
+                const livescoreSavedCompObject = JSON.parse(getLiveScoreCompetiton())
+                state.competitionList.push(livescoreSavedCompObject)
+                let data = state.competitionList
+                let dataArr = data.map(item => {
+                    return [item.longName, item]
+                });
+                let maparr = new Map(dataArr);
+                let resultData = [...maparr.values()];
+                state.competitionList = resultData
+
+            }
+
+            return {
+                ...state,
+            };
+
+        case ApiConstants.LiveScore_SETTING_SUCCESS:
+            state.competitionList.push(action.payload)
+            return {
+                ...state,
+            }
 
         default:
             return state;

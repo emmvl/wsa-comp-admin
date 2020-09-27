@@ -26,7 +26,8 @@ const initialState = {
     result: [],
     status: 0,
     competitionFinalsList: [obj],
-    competitionVenuesList: []
+    competitionVenuesList: [],
+    finalTypeRefId: null
 };
 function competitionFinalsReducer(state = initialState, action) {
 
@@ -41,7 +42,8 @@ function competitionFinalsReducer(state = initialState, action) {
                 ...state,
                 onLoad: false,
                 competitionFinalsList: compFinalsData.finals,
-                competitionVenuesList: compFinalsData.venues,	 
+                competitionVenuesList: compFinalsData.venues,	
+                finalTypeRefId: compFinalsData.finalTypeRefId,
                 status: action.status
             };
 
@@ -56,11 +58,11 @@ function competitionFinalsReducer(state = initialState, action) {
             };
         
         case ApiConstants.UPDATE_COMPETITION_FINALS:
-        
             let oldData = state.competitionFinalsList;
             let updatedValue = action.updatedData;
             let getKey = action.key;
             let index = action.index;
+            let subIndex = action.subIndex;
             if(action.key.venueList == "venueList")
             {
                 state.competitionVenuesList = []
@@ -71,6 +73,8 @@ function competitionFinalsReducer(state = initialState, action) {
                     }
                     state.competitionVenuesList.push(obj)
                 })
+            }else if(subIndex != undefined){
+                oldData[index].whoPlaysWho[subIndex][getKey] = updatedValue;
             }
             else{
                 oldData[index][getKey] = updatedValue;

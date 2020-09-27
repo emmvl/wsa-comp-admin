@@ -61,7 +61,7 @@ const columns = [
     key: "expiryDate",
     render: (expiryDate, record, index) => (
       <span>
-        {expiryDate != null ? moment(expiryDate).format("DD/MM/YYYY") : ""}
+        {expiryDate != null ? (expiryDate != 'Single Use' ? moment(expiryDate).format("DD/MM/YYYY") : expiryDate ) : ""}
       </span>
     )
   },
@@ -84,14 +84,29 @@ const columns = [
       return <div>{divisionName != null ? divisionName : ""}</div>;
     },
   },
-  // {
-  //   title: "Payment Method",
-  //   dataIndex: "paymentType",
-  //   key: "paymentType",
-  //   render: (paymentType, record, index) => {
-  //     return <span style={{ textTransform: "capitalize" }}>{paymentType}</span>;
-  //   },
-  // },
+  {
+    title: "Paid By",
+    dataIndex: "paidBy",
+    key: "paidBy",
+    render: (paidBy, record, index) => { 
+      return(
+      <div>
+        {this_Obj.state.userId == record.paidByUserId ? 'Self' :
+        <NavLink
+                  to={{
+                      pathname: `/userPersonal`,
+                      state: {
+                          userId: record.paidByUserId,
+                          tabKey: "registration"
+                      },
+                  }}
+              >
+                  <span className="input-heading-add-another pt-0">{paidBy}</span>
+        </NavLink>}
+        </div>
+        )
+    },
+  },
   // {
   //   title: "Shop Purchases",
   //   dataIndex: "shopPurchases",
@@ -758,14 +773,14 @@ const columnsIncident = [
     title: 'Date',
     dataIndex: 'incidentTime',
     key: 'incidentTime',
-    sorter: true,
+    sorter: (a, b) => a.incidentTime.localeCompare(b.incidentTime),
     render: (incidentTime) => <span>{liveScore_MatchFormate(incidentTime)}</span>
   },
   {
     title: 'Match ID',
     dataIndex: 'matchId',
     key: 'matchId',
-    sorter: true,
+    sorter:true,
   },
   {
     title: 'Player ID',
@@ -778,21 +793,21 @@ const columnsIncident = [
     title: 'First Name',
     dataIndex: 'firstName',
     key: 'Incident Players First Name',
-    sorter: true,
+    sorter: (a, b) => a.firstName.localeCompare(b.firstName),
 
   },
   {
     title: 'Last Name',
     dataIndex: 'lastName',
     key: 'Incident Players Last Name',
-    sorter: true,
+    sorter: (a, b) => a.lastName.localeCompare(b.lastName),
 
   },
   {
     title: 'Team',
     dataIndex: 'teamName',
     key: 'teamName',
-    sorter: true,
+    sorter: (a, b) => a.teamName.localeCompare(b.teamName),
     render: (teamName, record) => {
 
       return (
@@ -818,7 +833,7 @@ const columnsIncident = [
     title: 'Type',
     dataIndex: 'incidentTypeName',
     key: 'incidentTypeName',
-    sorter: true,
+    sorter: (a, b) => a.incidentTypeName.localeCompare(b.incidentTypeName),
 
   },
 ];
@@ -1367,7 +1382,8 @@ class UserModulePersonalDetail extends Component {
                 page,
                 this.state.userId,
                 this.state.competition,
-                "player"
+                "player",
+                this.state.yearRefId
               )
             }
           />
@@ -1516,16 +1532,16 @@ class UserModulePersonalDetail extends Component {
     let childContacts =
       personalByCompData.length > 0 ? personalByCompData[0].childContacts : [];
     let countryName = "";
-    let nationalityName = "";
-    let languages = "";
+    // let nationalityName = "";
+    // let languages = "";
     let childrenCheckNumber = "";
     let childrenCheckExpiryDate = "";
     let userRegId = null;
 
     if (personalByCompData != null && personalByCompData.length > 0) {
       countryName = personalByCompData[0].countryName;
-      nationalityName = personalByCompData[0].nationalityName;
-      languages = personalByCompData[0].languages;
+      // nationalityName = personalByCompData[0].nationalityName;
+      // languages = personalByCompData[0].languages;
       userRegId = personalByCompData[0].userRegistrationId;
       childrenCheckNumber = personalByCompData[0].childrenCheckNumber;
       childrenCheckExpiryDate = personalByCompData[0].childrenCheckExpiryDate;
@@ -1646,7 +1662,7 @@ class UserModulePersonalDetail extends Component {
                     {countryName}
                   </div>
                 </div>
-                <div className="other-info-row">
+                {/* <div className="other-info-row">
                   <div className="year-select-heading other-info-label">
                     {AppConstants.nationalityReference}
                   </div>
@@ -1661,7 +1677,7 @@ class UserModulePersonalDetail extends Component {
                   <div className="desc-text-style side-bar-profile-data other-info-font">
                     {languages}
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
             <div className="other-info-row">
