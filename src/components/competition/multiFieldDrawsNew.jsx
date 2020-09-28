@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import { Layout, Button, Breadcrumb, Popover, Select, DatePicker, Checkbox, Form, message } from "antd";
+import { Layout, Button, Select, DatePicker, Checkbox, message } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import history from "../../util/history";
-import _ from "lodash";
 import '../../../node_modules/react-grid-layout/css/styles.css'
 import '../../../node_modules/react-resizable/css/styles.css'
-import InputWithHead from "../../customComponents/InputWithHead";
 import loadjs from 'loadjs';
 import moment from 'moment';
 import AppImages from "../../themes/appImages";
@@ -34,7 +32,6 @@ import {
     getVenuesTypeAction,
 } from '../../store/actions/appAction';
 import { generateDrawAction } from '../../store/actions/competitionModuleAction/competitionModuleAction';
-import { setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData } from "../../util/sessionStorage"
 import {
     setOwnCompetitionYear,
     getOwnCompetitionYear,
@@ -49,7 +46,6 @@ import {
     setDraws_division_grade,
     getDraws_division_grade,
     getOrganisationData,
-
     getOwn_competitionStatus,
     setOwn_competitionStatus
 } from '../../util/sessionStorage';
@@ -58,10 +54,24 @@ import ValidationConstants from '../../themes/validationConstant';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Footer, Content } = Layout;
-const venueStaticData = [{ name: "Venue 1", checked: true }, { name: "Venue 2", checked: true }, { name: "Venue 3", checked: true }, { name: "Venue 4", checked: false },
-{ name: "Venue 1", checked: true }, { name: "Venue 2", checked: true }, { name: "Venue 3", checked: true }, { name: "Venue 4", checked: false }]
-const compStaticData = [{ name: "Monday Night Social", checked: true }, { name: "NSW State Age", checked: true }, { name: "NWA Winter", checked: true },
-{ name: "Monday Night Social", checked: true }, { name: "NSW State Age", checked: true }, { name: "NWA Winter", checked: true }]
+const venueStaticData = [
+    { name: "Venue 1", checked: true },
+    { name: "Venue 2", checked: true },
+    { name: "Venue 3", checked: true },
+    { name: "Venue 4", checked: false },
+    { name: "Venue 1", checked: true },
+    { name: "Venue 2", checked: true },
+    { name: "Venue 3", checked: true },
+    { name: "Venue 4", checked: false },
+]
+const compStaticData = [
+    { name: "Monday Night Social", checked: true },
+    { name: "NSW State Age", checked: true },
+    { name: "NWA Winter", checked: true },
+    { name: "Monday Night Social", checked: true },
+    { name: "NSW State Age", checked: true },
+    { name: "NWA Winter", checked: true },
+]
 const divisionStaticData = [{
     name: "Monday Night Social", divisionArr: [
         { name: "Junior-A", checked: true }, { name: "Junior-B", checked: true }, { name: "Opens-A", checked: true }, { name: "Opens-A", checked: false },
@@ -72,6 +82,7 @@ const divisionStaticData = [{
         { name: "Junior-A", checked: true }, { name: "Junior-B", checked: true }, { name: "Opens-A", checked: true }, { name: "Opens-A", checked: false }
     ]
 }]
+
 class MultifieldDrawsNew extends Component {
     constructor(props) {
         super(props);
@@ -108,9 +119,6 @@ class MultifieldDrawsNew extends Component {
             startDate: new Date(),
             endDate: new Date(),
             dateRangeCheck: false,
-
-
-
             allVenueChecked: true,
             allCompChecked: true,
             allDivisionChecked: true,
@@ -564,14 +572,15 @@ class MultifieldDrawsNew extends Component {
                         <span className="user-contact-heading">{AppConstants.venue}</span>
                     </div>
                     <div className="col-sm d-flex justify-content-end " style={{ marginTop: 5 }}>
-                        <a className="view-more-btn"
+                        <a
+                            className="view-more-btn"
                             data-toggle="collapse"
                             href={`#venue-collapsable-div`}
                             role="button"
                             aria-expanded="false"
-                        // aria-controls={teamIndex}
+                            // aria-controls={teamIndex}
                         >
-                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" ></i>
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
                         </a>
                     </div>
 
@@ -593,19 +602,21 @@ class MultifieldDrawsNew extends Component {
                                     className="single-checkbox-radio-style"
                                     style={{ paddingTop: 8 }}
                                     checked={item.checked}
-                                // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                    // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
                                 >
                                     {item.name}
                                 </Checkbox>
                             </div>
                         )
-                    }
+                    })}
+                    {isArrayNotEmpty(competitionVenues) && (
+                        <span
+                            className="input-heading-add-another pt-4"
+                            onClick={() => this.changeShowAllStatus("venue")}
+                        >
+                            {showAllVenue == true ? AppConstants.showLess : AppConstants.showAll}
+                        </span>
                     )}
-                    {isArrayNotEmpty(competitionVenues) && <span className="input-heading-add-another pt-4"
-                        onClick={() => this.changeShowAllStatus("venue")}>
-                        {showAllVenue == true ? AppConstants.showLess : AppConstants.showAll}
-                    </span>
-                    }
                 </div>
 
             </>
@@ -615,7 +626,6 @@ class MultifieldDrawsNew extends Component {
     ///////left side view for competition liting with checkbox
     competitionLeftView = () => {
         let { own_CompetitionArr } = this.props.appState
-        console.log("own_CompetitionArr", own_CompetitionArr)
         let { showAllComp } = this.state
         return (
             <>
@@ -624,14 +634,15 @@ class MultifieldDrawsNew extends Component {
                         <span className="user-contact-heading">{AppConstants.competitions}</span>
                     </div>
                     <div className="col-sm d-flex justify-content-end" style={{ marginTop: 5 }}>
-                        <a className="view-more-btn"
+                        <a
+                            className="view-more-btn"
                             data-toggle="collapse"
                             href={`#comp-collapsable-div`}
                             role="button"
                             aria-expanded="true"
-                        // aria-controls={teamIndex}
+                            // aria-controls={teamIndex}
                         >
-                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" ></i>
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
                         </a>
                     </div>
                 </div>
@@ -653,20 +664,22 @@ class MultifieldDrawsNew extends Component {
                                         className="single-checkbox-radio-style"
                                         style={{ paddingTop: 8 }}
                                         checked={item.checked}
-                                    // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                        // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
                                     >
                                         {item.competitionName}
                                     </Checkbox>
                                 </div>
                             )
-                        }
-                        )}
+                        })}
                     </div>
-                    {isArrayNotEmpty(own_CompetitionArr) && <span className="input-heading-add-another pt-4"
-                        onClick={() => this.changeShowAllStatus("comp")}>
-                        {showAllComp == true ? AppConstants.showLess : AppConstants.showAll}
-                    </span>
-                    }
+                    {isArrayNotEmpty(own_CompetitionArr) && (
+                        <span
+                            className="input-heading-add-another pt-4"
+                            onClick={() => this.changeShowAllStatus("comp")}
+                        >
+                            {showAllComp == true ? AppConstants.showLess : AppConstants.showAll}
+                        </span>
+                    )}
                 </div>
 
             </>
@@ -682,14 +695,15 @@ class MultifieldDrawsNew extends Component {
                         <span className="user-contact-heading">{AppConstants.divisions}</span>
                     </div>
                     <div className="col-sm d-flex justify-content-end" style={{ marginTop: 5 }}>
-                        <a className="view-more-btn"
+                        <a
+                            className="view-more-btn"
                             data-toggle="collapse"
                             href={`#division-collapsable-div`}
                             role="button"
                             aria-expanded="true"
-                        // aria-controls={teamIndex}
+                            // aria-controls={teamIndex}
                         >
-                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" ></i>
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" />
                         </a>
                     </div>
                 </div>
@@ -711,23 +725,22 @@ class MultifieldDrawsNew extends Component {
                                 </div>
                                 {isArrayNotEmpty(item.divisionArr) && item.divisionArr.map((subItem, subIndex) => {
                                     return (
-                                        <div >
+                                        <div>
                                             <Checkbox
                                                 className="single-checkbox-radio-style"
                                                 style={{ paddingTop: 8 }}
                                                 checked={subItem.checked}
-                                            // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                                // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
                                             >
                                                 {subItem.name}
                                             </Checkbox>
                                         </div>
                                     )
-                                }
-                                )}
+                                })}
                             </div>
                         )
                     })}
-                <span className="input-heading-add-another pt-4">{AppConstants.showAll}</span>
+                    <span className="input-heading-add-another pt-4">{AppConstants.showAll}</span>
                 </div>
             </>
         )
@@ -747,7 +760,6 @@ class MultifieldDrawsNew extends Component {
         )
     }
 
-    // contauner view
     containerView() {
         return (
             <div className="multiDrawContentView">
@@ -795,22 +807,26 @@ class MultifieldDrawsNew extends Component {
         )
     }
 
-    ////main render method
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.draws} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout
+                    menuHeading={AppConstants.draws}
+                    menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                />
                 <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
                 <Layout className="comp-dash-table-view">
                     {this.headerView()}
                     <Content>{this.contentView()}</Content>
-                    <Footer></Footer>
+                    <Footer />
                     <Loader visible={this.props.drawsState.updateLoad || this.props.competitionModuleState.drawGenerateLoad} />
                 </Layout>
             </div>
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
@@ -834,14 +850,15 @@ function mapDispatchToProps(dispatch) {
     );
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         drawsState: state.CompetitionMultiDrawsState,
         competitionModuleState: state.CompetitionModuleState,
     };
 }
+
 export default connect(
-    mapStatetoProps,
+    mapStateToProps,
     mapDispatchToProps
-)(Form.create()(MultifieldDrawsNew));
+)(MultifieldDrawsNew);
