@@ -35,6 +35,9 @@ import AppImages from '../../themes/appImages';
 import { captializedString } from '../../util/helpers';
 import PlacesAutocomplete from "./elements/PlaceAutoComplete";
 import Loader from "../../customComponents/loader";
+import {
+    getOrganisationData
+} from "../../util/sessionStorage"
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -107,12 +110,9 @@ class CompetitionVenueAndTimesAdd extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
-
                             <Tooltip placement="bottom" background='#ff8237'>
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
-
-
                         );
                     },
 
@@ -120,10 +120,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                         const { getFieldDecorator } = this.props.form;
                         // console.log(index, 'tooltipindex')
                         return (
-
                             // <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: index > 0 ? 0 : 150 }}>
                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
-
                                 <Form.Item >
                                     {getFieldDecorator(`lat${index}`, {
                                         rules: [{ required: true, message: ValidationConstants.courtField[1] }],
@@ -133,11 +131,9 @@ class CompetitionVenueAndTimesAdd extends Component {
                                             onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
                                             setFieldsValue={lat}
                                             placeholder={'Longitude'}
-
                                         />
                                     )}
                                 </Form.Item>
-
                             </div>
                         )
                     }
@@ -149,11 +145,9 @@ class CompetitionVenueAndTimesAdd extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
-
                             <Tooltip placement="bottom" background='#ff8237'>
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
-
                         );
                     },
                     render: (lng, record, index) => {
@@ -171,7 +165,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                                         />
                                     )}
                                 </Form.Item>
-
                             </div>
                         )
                     }
@@ -224,7 +217,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         };
         this.myRef = React.createRef()
         this.props.getCommonRefData()
-        this.props.getOrganisationAction()
+        this.props.getOrganisationAction("organisationUniqueKey")
 
     }
 
@@ -419,14 +412,14 @@ class CompetitionVenueAndTimesAdd extends Component {
     handlePlacesAutocomplete = (data) => {
         const { stateList } = this.props.commonReducerState;
         const address = data;
-
         this.props.checkVenueDuplication(address);
 
         if (!address.addressOne && !address.suburb) {
             this.setState({
                 venueAddressError: ValidationConstants.venueAddressDetailsError,
             })
-        } else {
+        }
+        else {
             this.setState({
                 venueAddressError: ''
             })
@@ -457,6 +450,9 @@ class CompetitionVenueAndTimesAdd extends Component {
         }
     };
 
+    onChangeLinkToAffiliate = (affiliateData) => {
+        this.props.updateVenuAndTimeDataAction(affiliateData, 'organisations', 'organisations')
+    }
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { venuData } = this.props.venueTimeState
@@ -612,8 +608,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                                     mode="multiple"
                                     showSearch
                                     style={{ width: "100%" }}
-                                    onChange={(affiliateData) => this.props.updateVenuAndTimeDataAction(affiliateData, 'organisations', 'organisations')}
-                                    placeholder={'Select '}
+                                    onChange={(affiliateData) => this.onChangeLinkToAffiliate(affiliateData)}
+                                    placeholder={'Select'}
                                     optionFilterProp="children"
                                 >
                                     {venueOrganisation.length > 0 && venueOrganisation.map((item, index) => (

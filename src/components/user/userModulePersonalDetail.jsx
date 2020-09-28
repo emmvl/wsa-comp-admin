@@ -38,6 +38,12 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
 
+
+function tableSort(a, b, key) {
+  let stringA = JSON.stringify(a[key]);
+  let stringB = JSON.stringify(b[key]);
+  return stringA.localeCompare(stringB);
+}
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -61,7 +67,7 @@ const columns = [
     key: "expiryDate",
     render: (expiryDate, record, index) => (
       <span>
-        {expiryDate != null ? (expiryDate != 'Single Use' ? moment(expiryDate).format("DD/MM/YYYY") : expiryDate ) : ""}
+        {expiryDate != null ? (expiryDate != 'Single Use' ? moment(expiryDate).format("DD/MM/YYYY") : expiryDate) : ""}
       </span>
     )
   },
@@ -167,13 +173,13 @@ const columnsPlayer = [
     title: "Match Id",
     dataIndex: "matchId",
     key: "matchId",
-    sorter: (a, b) => a.matchId.localeCompare(b.matchId),
+    sorter: (a, b) => tableSort(a, b, "matchId"),
   },
   {
     title: "Date",
     dataIndex: "stateDate",
     key: "stateDate",
-    sorter: (a, b) => a.stateDate.localeCompare(b.stateDate),
+    sorter: (a, b) => tableSort(a, b, "stateDate"),
     render: (stateDate, record, index) => {
       return (
         <div>
@@ -186,43 +192,43 @@ const columnsPlayer = [
     title: "Home",
     dataIndex: "home",
     key: "home",
-    sorter: (a, b) => a.home.localeCompare(b.home),
+    sorter: (a, b) => tableSort(a, b, "home"),
   },
   {
     title: "Away",
     dataIndex: "away",
     key: "away",
-    sorter: (a, b) => a.away.localeCompare(b.away),
+    sorter: (a, b) => tableSort(a, b, "away"),
   },
   {
     title: "Result",
     dataIndex: "teamScore",
     key: "teamScore",
-    sorter: (a, b) => a.teamScore.localeCompare(b.teamScore),
+    sorter: (a, b) => tableSort(a, b, "teamScore"),
   },
   {
     title: "Game time",
     dataIndex: "gameTime",
     key: "gameTime",
-    sorter: (a, b) => a.gameTime.localeCompare(b.gameTime),
+    sorter: (a, b) => tableSort(a, b, "gameTime"),
   },
   {
     title: "Status",
     dataIndex: "status",
     key: "status",
-    sorter: (a, b) => a.status.localeCompare(b.status),
+    sorter: (a, b) => tableSort(a, b, "status"),
   },
   {
     title: "Competition",
     dataIndex: "competitionName",
     key: "competitionName",
-    sorter: (a, b) => a.competitionName.localeCompare(b.competitionName),
+    sorter: (a, b) => tableSort(a, b, "competitionName"),
   },
   {
     title: "Affiliate",
     dataIndex: "affiliate",
     key: "affiliate",
-    sorter: (a, b) => a.affiliate.localeCompare(b.affiliate),
+    sorter: (a, b) => tableSort(a, b, "affiliate"),
   },
 ];
 
@@ -773,41 +779,41 @@ const columnsIncident = [
     title: 'Date',
     dataIndex: 'incidentTime',
     key: 'incidentTime',
-    sorter: (a, b) => a.incidentTime.localeCompare(b.incidentTime),
+    sorter: (a, b) => tableSort(a, b, "incidentTime"),
     render: (incidentTime) => <span>{liveScore_MatchFormate(incidentTime)}</span>
   },
   {
     title: 'Match ID',
     dataIndex: 'matchId',
     key: 'matchId',
-    sorter:true,
+    sorter: (a, b) => tableSort(a, b, "matchId"),
   },
   {
     title: 'Player ID',
     dataIndex: 'playerId',
     key: 'incident Players',
-    sorter: true,
+    sorter: (a, b) => tableSort(a, b, "playerId"),
 
   },
   {
     title: 'First Name',
     dataIndex: 'firstName',
     key: 'Incident Players First Name',
-    sorter: (a, b) => a.firstName.localeCompare(b.firstName),
+    sorter: (a, b) => tableSort(a, b, "firstName"),
 
   },
   {
     title: 'Last Name',
     dataIndex: 'lastName',
     key: 'Incident Players Last Name',
-    sorter: (a, b) => a.lastName.localeCompare(b.lastName),
+    sorter: (a, b) => tableSort(a, b, "lastName"),
 
   },
   {
     title: 'Team',
     dataIndex: 'teamName',
     key: 'teamName',
-    sorter: (a, b) => a.teamName.localeCompare(b.teamName),
+    sorter: (a, b) => tableSort(a, b, "teamName"),
     render: (teamName, record) => {
 
       return (

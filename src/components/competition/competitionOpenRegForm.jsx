@@ -365,25 +365,30 @@ class CompetitionOpenRegForm extends Component {
             }
         }
         if (nextProps.appState !== this.props.appState) {
-            let competitionTypeList = this.props.appState.own_CompetitionArr
-            if (nextProps.appState.own_CompetitionArr !== competitionTypeList) {
+            let competitionTypeList = this.props.appState.all_own_CompetitionArr
+            if (nextProps.appState.all_own_CompetitionArr !== competitionTypeList) {
                 if (competitionTypeList.length > 0) {
                     let screenKey = this.props.location.state ? this.props.location.state.screenKey : null
                     let competitionId = null
                     let statusRefId = null
+                    let competitionStatus = null
                     if (screenKey == "compDashboard") {
                         competitionId = getOwn_competition()
                         let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
                         statusRefId = compIndex > -1 ? competitionTypeList[compIndex].statusRefId : competitionTypeList[0].statusRefId
                         competitionId = compIndex > -1 ? competitionId : competitionTypeList[0].competitionId
+                        competitionStatus = competitionTypeList[compIndex].competitionStatus
                     }
                     else {
                         competitionId = competitionTypeList[0].competitionId
                         statusRefId = competitionTypeList[0].statusRefId
+                        competitionStatus = competitionTypeList[0].competitionStatus
                     }
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
-                    setOwn_competitionStatus(statusRefId)
-                    setOwn_competition(competitionId)
+                    if (competitionStatus == 2) {
+                        setOwn_competitionStatus(statusRefId)
+                        setOwn_competition(competitionId)
+                    }
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
             }
@@ -500,7 +505,7 @@ class CompetitionOpenRegForm extends Component {
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
-        let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
+        let compData = this.props.appState.all_own_CompetitionArr.length > 0 ? this.props.appState.all_own_CompetitionArr : undefined
 
         if (storedCompetitionId && yearId && propsData && compData) {
             this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId, null, this.state.sourceModule)
@@ -742,9 +747,13 @@ class CompetitionOpenRegForm extends Component {
     }
 
 
-    onCompetitionChange(competitionId, statusRefId) {
-        setOwn_competition(competitionId)
-        setOwn_competitionStatus(statusRefId)
+    onCompetitionChange(competitionId, statusRefId, competitionArray) {
+        let competititionIndex = competitionArray.findIndex((x) => x.competitionId == competitionId)
+        let competitionStatus = competitionArray[competititionIndex].competitionStatus
+        if (competitionStatus == 2) {
+            setOwn_competition(competitionId)
+            setOwn_competitionStatus(statusRefId)
+        }
         this.props.clearCompReducerDataAction("all")
         this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
@@ -754,7 +763,7 @@ class CompetitionOpenRegForm extends Component {
     dropdownView = (
         getFieldDecorator
     ) => {
-        const { own_YearArr, own_CompetitionArr, } = this.props.appState
+        const { own_YearArr, all_own_CompetitionArr, } = this.props.appState
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -804,11 +813,11 @@ class CompetitionOpenRegForm extends Component {
                                 <Select
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
-                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
+                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key, this.props.appState.all_own_CompetitionArr)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {this.props.appState.own_CompetitionArr.map(item => {
+                                    {this.props.appState.all_own_CompetitionArr.map(item => {
                                         return (
                                             <Option key={item.statusRefId} value={item.competitionId}>
                                                 {item.competitionName}

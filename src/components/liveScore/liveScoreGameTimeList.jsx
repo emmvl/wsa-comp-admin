@@ -237,6 +237,20 @@ class LiveScoreGameTimeList extends Component {
         }
     }
 
+    checkUserId(record) {
+        let userId = record.player ? record.player.userId : null
+        if (userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        } else {
+            history.push("/userPersonal", {
+                userId: userId,
+                screenKey: "livescore",
+                screen: "/liveScorePlayerList"
+            })
+        }
+    }
+
     handleGameTimeTableList(page, competitionId, aggergate) {
         let offset = page ? 10 * (page - 1) : 0
         this.setState({ offset: offset })

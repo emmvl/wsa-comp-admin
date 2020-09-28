@@ -147,17 +147,29 @@ class LiveScoreTeam extends Component {
         this.state = {
             conpetitionId: null,
             searchText: "",
-            offset: 0
+            offset: 0,
+            sortBy: null,
+            sortOrder: null,
         };
         this_Obj = this
     }
 
     componentDidMount() {
+        let { livescoreTeamActionObject } = this.props.liveScoreTeamState
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ conpetitionId: id })
             if (id !== null) {
-                this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText)
+                if (livescoreTeamActionObject) {
+                    let offset = livescoreTeamActionObject.offset
+                    let searchText = livescoreTeamActionObject.search
+                    let sortBy = livescoreTeamActionObject.sortBy
+                    let sortOrder = livescoreTeamActionObject.sortOrder
+                    this.setState({ offset, searchText, sortBy, sortOrder })
+                    this.props.getTeamsWithPagination(id, offset, 10, searchText, sortBy, sortOrder)
+                } else {
+                    this.props.getTeamsWithPagination(id, 0, 10, this.state.searchText)
+                }
             } else {
                 history.push("/liveScoreCompetitions")
             }
@@ -303,6 +315,7 @@ class LiveScoreTeam extends Component {
                     <div className="comp-product-search-inp-width" >
                         <Input className="product-reg-search-input"
                             onChange={(e) => this.onChangeSearchText(e)}
+                            value={this.state.searchText}
                             placeholder="Search..."
                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
@@ -321,6 +334,7 @@ class LiveScoreTeam extends Component {
         const teamResult = this.props.liveScoreTeamState;
         const teamData = teamResult.teamResult;
         let total = teamResult.totalTeams
+        let teamCurrentPage = teamResult.teamCurrentPage
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -336,7 +350,7 @@ class LiveScoreTeam extends Component {
                 <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
-                        defaultCurrent={1}
+                        current={teamCurrentPage}
                         total={total}
                         onChange={(page) => this.handlePageChnage(page)}
                     />

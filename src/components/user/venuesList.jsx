@@ -125,7 +125,7 @@ const columns = [
                     title={<img className="dot-image" src={AppImages.moreTripleDot}
                         alt="" width="16" height="16" />}>
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/competitionVenueAndTimesEdit`, state: { venueId: e.id, key: AppConstants.venuesList, isUsed: isUsed } }} >
+                        <NavLink to={{ pathname: `/competitionVenueAndTimesEdit`, state: { venueId: e.id, key: AppConstants.venuesList, isUsed: isUsed, isCreator: e.isCreator } }} >
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
