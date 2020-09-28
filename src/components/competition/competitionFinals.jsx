@@ -106,7 +106,6 @@ class CompetitionFinals extends Component {
                     let statusRefId = competitionList[0].statusRefId;
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
-                    console.log("competitionId::" + competitionId);
                     this.apiCalls(competitionId, this.state.yearRefId);
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId})
                 }
@@ -194,7 +193,6 @@ class CompetitionFinals extends Component {
     }
 
     setFormFieldValue = () => {
-
         let finalsList = Object.assign(this.props.competitionFinalsState.competitionFinalsList);
         let venueList = this.props.competitionFinalsState.competitionVenuesList;
         let venueListId = []
@@ -206,8 +204,16 @@ class CompetitionFinals extends Component {
             if (item.whoPlaysWho) {
                 for (let i = 0; i < item.whoPlaysWho.length; i++) {
                     if (item.whoPlaysWho[i].noOfPools == 2) {
-                        this.onChangeSetValue(item.pools[0].poolId, 'wpwPool1', index, i);
-                        this.onChangeifSetValue(item.pools[1].poolId, 'wpwPool2', index, i);
+                        this.onChangeSetValue(item.whoPlaysWho[i].pools[0].poolId, 'wpwPool1', index, i);
+                        this.onChangeSetValue(item.whoPlaysWho[i].pools[1].poolId, 'wpwPool2', index, i);
+                    }
+                    if (item.whoPlaysWho[i].noOfPools == 4) {
+                        this.formRef.current.setFieldsValue({
+                            [`wpwPool1${i}`]: item.whoPlaysWho[i].wpwPool1,
+                            [`wpwPool2${i}`]: item.whoPlaysWho[i].wpwPool2,
+                            [`wpwPool3${i}`]: item.whoPlaysWho[i].wpwPool3,
+                            [`wpwPool4${i}`]: item.whoPlaysWho[i].wpwPool4
+                        });
                     }
                 }
             }
@@ -247,7 +253,6 @@ class CompetitionFinals extends Component {
 
     // on Competition change
     onCompetitionChange(competitionId, statusRefId) {
-        console.log("competitionId::" + competitionId);
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
         let payload = {
@@ -328,16 +333,20 @@ class CompetitionFinals extends Component {
     checkDuplicates = (competitionFinalsList) => {
         try {
             let error = false;
+            let errorMessage = '';
             for (let final of competitionFinalsList) {
                 for (let wpw of final.whoPlaysWho) {
-                    let poolIds = [wpw.wpwPool1, wpw.wpwPool2, wpw.wpwPool3, wpw.wpwPool4];
-                    if (poolIds.some(x => poolIds.indexOf(x) !== poolIds.lastIndexOf(x))) {
-                        error = true;
-                        break;
+                    if (wpw.noOfPools == 4) {
+                        let poolIds = [wpw.wpwPool1, wpw.wpwPool2, wpw.wpwPool3, wpw.wpwPool4];
+                        if (poolIds.some(x => poolIds.indexOf(x) !== poolIds.lastIndexOf(x))) {
+                            errorMessage = AppConstants.whoPlaysWhoValidation + " in Division " + wpw.divisionName;
+                            error = true;
+                            break;
+                        }
                     }
                 }
             }
-            return error;
+            return { error, errorMessage };
         } catch (ex) {
             console.log("Error in checkDuplicates" + ex);
         }
@@ -350,16 +359,18 @@ class CompetitionFinals extends Component {
         return finalList;
     }
 
-    saveCompetitionFinals = (value) => {
-        const competitionFinalsList = this.props.competitionFinalsState.competitionFinalsList;
-        if (this.checkDuplicates(competitionFinalsList)) {
-            message.error(AppConstants.whoPlaysWhoValidation);
+    saveCompetitionFinals = (values) => {
+        const { competitionFinalsList, competitionVenuesList } = this.props.competitionFinalsState;
+        const checkDuplicate = this.checkDuplicates(competitionFinalsList);
+
+        if (checkDuplicate.error) {
+            message.error(checkDuplicate.errorMessage);
             return;
         }
 
         this.setState({ buttonPressed: "save" });
         const finalsList = this.getSaveFinalList(competitionFinalsList);
-        const venueList = this.props.competitionFinalsState.competitionVenuesList;
+        const venueList = competitionVenuesList;
         const payload = {
             "yearRefId": this.state.yearRefId,
             "competitionUniqueKey": this.state.firstTimeCompId,
@@ -667,12 +678,12 @@ class CompetitionFinals extends Component {
                             </div>
                             {isArrayNotEmpty(data.whoPlaysWho) && (
                                 <div className="inside-container-view" style={{ paddingTop: 5 }}>
-                                    <InputWithHead heading={AppConstants.whoPlaysWho} required={"required-field"} />
+                                    <span className="input-heading" style={{ fontSize: 18 }}>{AppConstants.poolSettingsWhoPlaysWho}</span>
                                     {(data.whoPlaysWho || []).map((whoPlaysWhoItem,whoPlaysWhoIndex) => (
                                         <div key={whoPlaysWhoItem.competitiondivisionId}>
                                             {whoPlaysWhoItem.noOfPools == 4 && (
                                                 <div>
-                                                    <InputWithHead heading={whoPlaysWhoItem.divisionName}/>
+                                                    <InputWithHead heading={AppConstants.division + " : " + whoPlaysWhoItem.divisionName} required={"pt-0"} />
                                                     <div className="row">
                                                         <div className="col-md-6">
                                                             <Form.Item
@@ -681,11 +692,11 @@ class CompetitionFinals extends Component {
                                                             >
                                                                 <Select
                                                                     disabled={disabledStatus}
-                                                                    style={{marginBottom: "20px"}}
+                                                                    style={{ marginBottom: "20px" }}
                                                                     setFieldsValue={whoPlaysWhoItem.wpwPool1}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool1', index, whoPlaysWhoIndex)}
                                                                 >
-                                                                    {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
                                                                         <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
                                                                     ))}
                                                                 </Select>
@@ -698,11 +709,11 @@ class CompetitionFinals extends Component {
                                                             >
                                                                 <Select
                                                                     disabled={disabledStatus}
-                                                                    style={{marginBottom: "20px"}}
+                                                                    style={{ marginBottom: "20px" }}
                                                                     setFieldsValue={whoPlaysWhoItem.wpwPool2}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool2', index, whoPlaysWhoIndex)}
                                                                 >
-                                                                    {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
                                                                         <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
                                                                     ))}
                                                                 </Select>
@@ -718,7 +729,7 @@ class CompetitionFinals extends Component {
                                                                     setFieldsValue={whoPlaysWhoItem.wpwPool3}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool3', index, whoPlaysWhoIndex)}
                                                                 >
-                                                                    {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
                                                                         <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
                                                                     ))}
                                                                 </Select>
@@ -734,7 +745,7 @@ class CompetitionFinals extends Component {
                                                                     setFieldsValue={whoPlaysWhoItem.wpwPool4}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool4', index, whoPlaysWhoIndex)}
                                                                 >
-                                                                    {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
                                                                         <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
                                                                     ))}
                                                                 </Select>

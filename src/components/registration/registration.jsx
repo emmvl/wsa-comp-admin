@@ -123,6 +123,29 @@ const columns = [
         ),
     },
     {
+        title: "Paid By",
+        dataIndex: "paidBy",
+        key: "paidBy",
+        render: (paidBy, record, index) => { 
+          return(
+          <div>
+            {record.userId == record.paidByUserId ? 'Self' :
+            <NavLink
+                      to={{
+                          pathname: `/userPersonal`,
+                          state: {
+                              userId: record.paidByUserId,
+                              tabKey: "registration"
+                          },
+                      }}
+                  >
+                      <span className="input-heading-add-another pt-0">{paidBy}</span>
+            </NavLink>}
+            </div>
+            )
+        },
+      },
+    {
         title: "Fee (incl. GST)",
         dataIndex: "fee",
         key: "fee",

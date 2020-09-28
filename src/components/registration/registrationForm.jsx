@@ -47,7 +47,11 @@ import { inviteTypeAction } from '../../store/actions/commonAction/commonAction'
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
-
+const Mailto = ({ email, subject, body, children }) => {
+    return (
+        <a href={`mailto:${email}?subject=${encodeURIComponent(subject) || ''}&body=${encodeURIComponent(body) || ''}`}>{children}</a>
+    );
+};
 let this_Obj = null;
 
 const columns = [
@@ -206,6 +210,22 @@ class RegistrationForm extends Component {
         //         }
         //     }
         // }
+    }
+
+    mailClientView = (code) => {
+        let affilateName = getOrganisationData().name;
+        let body = `${AppConstants.mailBodyText} \n${code}  \n \nRegards,  \n${affilateName}`;
+        return (
+            <div>
+                <a>
+                    <Mailto email="" subject={AppConstants.hardshipCode} body={body}>
+                        <span className="input-heading-add-another" style={{ textDecoration: "underline", paddingTop: 18 }}>
+                            {AppConstants.email}
+                        </span>
+                    </Mailto>
+                </a>
+            </div>
+        )
     }
 
     // year change and get competition lost
@@ -1434,33 +1454,32 @@ class RegistrationForm extends Component {
     hardshipCodeView = () => {
         const { hardShipCodes, orgRegistrationId } = this.props.registrationState.registrationFormData[0];
         let hardShipCodesList = hardShipCodes == null ? [] : hardShipCodes
+        // let isPublished = this.state.isPublished;
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading pb-2">{AppConstants.hardshipCode}</span>
-                {hardShipCodesList.map((item, index) => (
-                    <div>
-                        <div style={{ display: "flex", marginTop: "13px" }}>
-                            <InputWithHead
-                              readOnly={true}
-                              disabled={item.isActive == 0}
-                              style={{ width: "252px", marginRight: "28px" }}
-                              placeholder={AppConstants.code}
-                              value={item.code == 0 ? " " : item.code}
-                              onChange={(e) => this.onChangeSetValue(e.target.value, index)}
-                            />
-                            {item.isActive == 1 &&
-                                <a>
-                                    <span className="input-heading-add-another" style={{ textDecoration: "underline", paddingTop: 18 }}>
-                                        {AppConstants.email}
-                                    </span>
-                                </a>
-                            }
+                {hardShipCodesList.map((item) => {
+                    return (
+                        <div>
+                            <div style={{ display: "flex", marginTop: "13px" }}>
+                                <div className={item.isActive == 0 ? "hardshipcode-text-active" : "hardshipcode-text"}>
+                                    {item.code}
+                                </div>
+
+                                {item.isActive == 1 &&
+                                    <div>
+                                        {this.mailClientView(item.code)}
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
+                {/* {!isPublished && */}
                 <span className="input-heading-add-another" onClick={(e) => this.addHardshipCode(orgRegistrationId)}>
                     +{AppConstants.addCode}
                 </span>
+                {/* } */}
             </div>
         )
     }
@@ -1560,6 +1579,7 @@ class RegistrationForm extends Component {
     }
 
     render() {
+        const { isHardshipEnabled } = this.props.registrationState.registrationFormData[0];
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout
@@ -1587,10 +1607,10 @@ class RegistrationForm extends Component {
                             {/* <div className="formView">{this.UserRegisterView()}</div> */}
                             <div className="formView">{this.advancedSettingView()}</div>
                             <div className="formView">{this.sendInviteToView()}</div>
-							              <div className="formView">{this.hardshipCodeView()}</div>
-                            {/* <div className="formView">
-                                {this.disclaimerView()}
-                            </div> */}
+                            {isHardshipEnabled == 1 &&
+                                <div className="formView">{this.hardshipCodeView()}</div>
+                            }
+                            {/* <div className="formView">{this.disclaimerView()}</div> */}
                             <Loader visible={this.state.onRegistrationLoad || this.props.appState.onLoad || this.props.registrationState.onLoad} />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
