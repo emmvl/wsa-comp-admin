@@ -615,7 +615,7 @@ class RegistrationChangeReview extends Component {
                     <Form
                         noValidate="noValidate" >
                         <Content>
-                            <Loader visible={this.props.registrationChangeState.onLoad || 
+                            <Loader visible={this.props.registrationChangeState.onChangeReviewLoad || 
                                 this.props.registrationChangeState.onSaveLoad} />
                             <div className="formView">
                                 {this.contentView(getFieldDecorator)}
