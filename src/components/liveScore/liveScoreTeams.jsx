@@ -315,6 +315,7 @@ class LiveScoreTeam extends Component {
                     <div className="comp-product-search-inp-width" >
                         <Input className="product-reg-search-input"
                             onChange={(e) => this.onChangeSearchText(e)}
+                            value={this.state.searchText}
                             placeholder="Search..."
                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
