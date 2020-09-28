@@ -208,8 +208,6 @@ class CompetitionVenueAndTimesAdd extends Component {
         this.formRef = React.createRef();
     }
 
-
-
     removeTableObj(clear, record, index) {
         this.props.updateVenuAndTimeDataAction("", index, "remove")
     }
@@ -229,7 +227,6 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     setHeaderValue = (screenNavigationKey) => {
-
         if (screenNavigationKey === AppConstants.venues)
             this.setState({ screenHeader: AppConstants.competitions });
         else if ((screenNavigationKey === AppConstants.competitionFees) ||
@@ -256,7 +253,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     setFormFieldValue = () => {
         let venueData = this.props.venueTimeState.venuData;
-        // this.props.form.setFieldsValue({
+        // this.formRef.current.setFieldsValue({
         //     name: venueData.venueName,
         //     addressOne: venueData.street1,
         //     suburb: venueData.suburb,
@@ -336,10 +333,6 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     getDisabledMinutes = (selectedHour, startTime) => {
-        // console.log("&&&&&&&&&&&" + startTime);
-        // console.log("selectedHour::" + startTime.split(":")[0]);
-        // console.log("Current Minute::" + startTime.split(":")[1]);
-        // console.log("*****selectedHour:::" + selectedHour);
         let hour = Number(startTime.split(":")[0]);
         let min = Number(startTime.split(":")[1]);
         var minutes = [];
@@ -358,7 +351,6 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     validateTime = (rule, value, callback, startTime, endTime, type) => {
-        //console.log("StartTime" + startTime + "EndTime::" + endTime + "Type::" + type);
         if (type == "end") {
             if (startTime > endTime) {
                 callback('End time should be greater than start time');

@@ -198,14 +198,14 @@ class UserOurOrganization extends Component {
         }
 
         // (contacts || []).map((item, index) => {
-        //     this.props.form.setFieldsValue({
+        //     this.formRef.current.setFieldsValue({
         //         [`firstName${index}`]: item.firstName,
         //         [`lastName${index}`]: item.lastName,
         //         [`email${index}`]: item.email,
         //     });
         //     let permissions = item.permissions;
         //     permissions.map((perm, permIndex) => {
-        //         this.props.form.setFieldsValue({
+        //         this.formRef.current.setFieldsValue({
         //             [`permissions${index}`]: perm.roleId,
         //         });
         //     })

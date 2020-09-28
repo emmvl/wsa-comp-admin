@@ -214,16 +214,15 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
         ////Non playing dates value
         // allData.nonPlayingDates.length > 0 && allData.nonPlayingDates.map((item, index) => {
-
         //     let name = `name${index}`
         //     let date = `date${index}`
-        //     this.props.form.setFieldsValue({
+        //     this.formRef.current.setFieldsValue({
         //         [name]: item.name,
         //         [date]: moment(item.nonPlayingDate)
         //     })
         // })
 
-        ////Court prefences  value
+        ////Court preferences  value
         allData.courtPreferences.length > 0 && allData.courtPreferences.map((item, index) => {
             let courtIDS = `courtIDS${index}`
             let entitiesDivisionId = `entitiesDivisionId${index}`
@@ -244,7 +243,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     //     console.log("*********" + JSON.stringify(allData.matchPreference));
     //     (allData.matchPreference || []).map((mp, index) => {
     //         this.onChangeSetMPValue(null, 'mpinitial', index);
-    //         this.props.form.setFieldsValue({
+    //         this.formRef.current.setFieldsValue({
     //             [`mpDivisionId${index}`]: mp.competitionMembershipProductDivisionId,
     //             [`mpGradeId${index}`]: mp.competitionDivisionGradeId,
     //             [`mpTeamAId${index}`]: mp.team1Id,
@@ -262,7 +261,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
     //     console.log("*********" + JSON.stringify(allData.lockedDraws));
     //     (allData.lockedDraws || []).map((ld, index) => {
     //         this.onChangeSetLDValue(null, 'ldinitial', index);
-    //         this.props.form.setFieldsValue({
+    //         this.formRef.current.setFieldsValue({
     //             [`ldDivisionId${index}`]: ld.competitionMembershipProductDivisionId,
     //             [`ldGradeId${index}`]: ld.competitionDivisionGradeId,
     //             [`ldTeamAId${index}`]: ld.team1Id,

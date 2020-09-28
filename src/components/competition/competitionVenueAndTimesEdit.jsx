@@ -280,7 +280,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 [`lng${index}`]: item.lng,
             });
             // (item.availabilities || []).map((av, avIndex) => {
-            //     this.props.form.setFieldsValue({
+            //     this.formRef.current.setFieldsValue({
             //         [`startTime${index}${avIndex}`]:  moment(av.startTime, "HH:mm"),
             //         [`endTime${index}${avIndex}`]:  moment(av.endTime, "HH:mm"),
             //     });
@@ -297,14 +297,12 @@ class CompetitionVenueAndTimesEdit extends Component {
         if (venueOrganisation != null && venueOrganisation.length > 0) {
             venueOrganisation.map((item, index) => {
                 // let affiliate = affiliateData.find(x=>x == item.id);
-                // if(affiliate!= null && affiliate!= undefined)
-                // {
+                // if (affiliate!= null && affiliate!= undefined) {
                 //     item["isDisabled"] = isVenueMapped == true ? true: false;
-                // }else{
+                // } else {
                 //     item["isDisabled"] = false;
                 // }
                 item["isDisabled"] = this.state.isUsed;
-
             });
             this.setState({ venueOrganisation: venueOrganisation });
         }

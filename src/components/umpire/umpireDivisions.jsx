@@ -331,7 +331,6 @@ class UmpireDivisions extends Component {
     }
 
     render = () => {
-        // const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
