@@ -49,8 +49,19 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("name"),
         render: (userFirstName, record) => (
-            <span>{record.userFirstName + " " + record.userLastName}</span>
-        )
+            <NavLink
+                to={{
+                    pathname: `/userPersonal`,
+                    state: {
+                        userId: record.userId,
+                        screenKey: "paymentDashboard",
+                        screen: "/paymentDashboard",
+                    },
+                }}
+            >
+                <span className="input-heading-add-another pt-0">{record.userFirstName + " " + record.userLastName}</span>
+            </NavLink>
+        ),
     },
     {
         title: "Paid By",
