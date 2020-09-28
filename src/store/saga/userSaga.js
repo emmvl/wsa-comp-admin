@@ -194,7 +194,7 @@ function* getAffiliatedToOrganisationSaga(action) {
 // Get Organisation for Venue
 function* getOrganisationForVenueSaga(action) {
   try {
-    const result = yield call(UserAxiosApi.getVenueOrganisation);
+    const result = yield call(UserAxiosApi.getVenueOrganisation, action.key);
 
     if (result.status === 1) {
       yield put({

@@ -67,6 +67,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             isUsed: false,
             venueAddress: null,
             venueAddressError: '',
+            isCreator: null,
             courtColumns: [
                 {
                     title: "Court Number",
@@ -193,7 +194,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         };
         this_Obj = this;
         this.props.getCommonRefData()
-        this.props.getOrganisationAction()
+        this.props.getOrganisationAction("organisationUniqueKey")
 
     }
 
@@ -216,11 +217,13 @@ class CompetitionVenueAndTimesEdit extends Component {
         window.scroll(0, 0);
         let venueId = this.props.location.state.venueId;
         let isUsed = this.props.location.state.isUsed;
+        let isCreator = this.props.location.state.isCreator
         this.props.updateVenuAndTimeDataAction(isUsed, 'venueIsUsed', "venueIsUsed")
         this.setState({
             screenNavigationKey: this.props.location.state.key,
             venueId: venueId,
-            isUsed: isUsed
+            isUsed: isUsed,
+            isCreator: isCreator
         })
         let payload = {
             venueId: venueId
@@ -473,12 +476,9 @@ class CompetitionVenueAndTimesEdit extends Component {
             ? stateList.find((state) => state.id === venuData.stateRefId).name
             : null;
 
-        let defaultVenueAddress = `${
-            venuData.street1 ? `${venuData.street1},` : ''
-            } ${
-            venuData.suburb ? `${venuData.suburb},` : ''
-            } ${
-            state ? `${state},` : ''
+        let defaultVenueAddress = `${venuData.street1 ? `${venuData.street1},` : ''
+            } ${venuData.suburb ? `${venuData.suburb},` : ''
+            } ${state ? `${state},` : ''
             } Australia`;
 
         return (
@@ -494,7 +494,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             auto_complete="new-name"
                             required={"required-field pt-0 pb-0"}
                             heading={AppConstants.name}
-                            disabled={this.state.isUsed}
+                            disabled={this.state.isUsed || !this.state.isCreator}
                             placeholder={AppConstants.name}
                             onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'name')}
                             setFieldsValue={venuData.name}
@@ -509,7 +509,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             auto_complete="new-shortName"
                             required={"required-field"}
                             heading={AppConstants.short_Name}
-                            disabled={this.state.isUsed}
+                            disabled={this.state.isUsed || !this.state.isCreator}
                             placeholder={AppConstants.short_Name}
                             onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'shortName')}
                             setFieldsValue={venuData.shortName}
@@ -523,7 +523,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.venueSearch}
                         required
                         error={this.state.venueAddressError}
-                        disabled={this.state.isUsed}
+                        disabled={this.state.isUsed || !this.state.isCreator}
                         onBlur={() => {
                             this.setState({
                                 venueAddressError: ''
@@ -542,7 +542,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             placeholder={AppConstants.addressOne}
                             onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
                             setFieldsValue={venuData.street1}
-                            disabled={this.state.isUsed}
+                            disabled={this.state.isUsed || !this.state.isCreator}
                         />
                     )}
                 </Form.Item>
@@ -554,7 +554,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     placeholder={AppConstants.addressTwo}
                     onChange={(street2) => this.props.updateVenuAndTimeDataAction(street2.target.value, 'Venue', 'street2')}
                     value={venuData.street2}
-                    disabled={this.state.isUsed}
+                    disabled={this.state.isUsed || !this.state.isCreator}
                 />
 
 
@@ -567,7 +567,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             placeholder={AppConstants.suburb}
                             onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
                             setFieldsValue={venuData.suburb}
-                            disabled={this.state.isUsed}
+                            disabled={this.state.isUsed || !this.state.isCreator}
                         />
                     )}
                 </Form.Item>
@@ -584,7 +584,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             placeholder={AppConstants.select}
                             onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
                             setFieldsValue={venuData.stateRefId}
-                            disabled={this.state.isUsed}
+                            disabled={this.state.isUsed || !this.state.isCreator}
 
                         >
                             {stateList.length > 0 && stateList.map((item) => (
@@ -606,7 +606,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(postalCode.target.value, 'Venue', 'postalCode')}
                             setFieldsValue={venuData.postalCode}
                             maxLength={4}
-                            disabled={this.state.isUsed}
+                            disabled={this.state.isUsed || !this.state.isCreator}
                         />
                     )}
                 </Form.Item>
@@ -617,7 +617,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     placeholder={AppConstants.contactNumber}
                     onChange={(contactNumber) => this.props.updateVenuAndTimeDataAction(contactNumber.target.value, 'Venue', 'contactNumber')}
                     value={venuData.contactNumber}
-                    disabled={this.state.isUsed}
+                    disabled={this.state.isUsed || !this.state.isCreator}
                 />
 
                 <div className="fluid-width" style={{ marginTop: 25 }}>

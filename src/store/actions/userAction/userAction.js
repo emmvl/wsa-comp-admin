@@ -92,9 +92,10 @@ function updateOrgAffiliateAction(data, key) {
 }
 
 // Get organisation
-function getOrganisationAction() {
+function getOrganisationAction(key) {
   return {
-    type: ApiConstants.API_ORGANISATION_LOAD
+    type: ApiConstants.API_ORGANISATION_LOAD,
+    key
   }
 }
 

@@ -3,7 +3,7 @@ import { message } from "antd";
 import userHttp from "./userHttp";
 import history from "../../../util/history";
 import ValidationConstants from "../../../themes/validationConstant";
-import { getUserId, getAuthToken /* , getOrganisationData */ } from "../../../util/sessionStorage"
+import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
 
 let token = getAuthToken();
 let userId = getUserId();
@@ -86,9 +86,15 @@ let userHttpApi = {
     return Method.dataGet(url, token);
   },
 
-  async getVenueOrganisation() {
+  async getVenueOrganisation(key) {
+    console.log(key)
     let userId = await getUserId()
-    const url = `api/organisation?userId=${userId}`;
+    let organisationUniqueKey = await getOrganisationData().organisationUniqueKey
+    let url = `api/organisation?userId=${userId}`;
+    if (key) {
+      url += `&organisationUniqueKey=${organisationUniqueKey}`
+    }
+    console.log(url)
     return Method.dataGet(url, token)
   },
 
