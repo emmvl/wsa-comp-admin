@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Layout, Button, Breadcrumb, Popover, Select, DatePicker, Checkbox, Form, message } from "antd";
+import { Layout, Button, Breadcrumb, Popover, Menu, Select, DatePicker, Checkbox, Form, message } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import history from "../../util/history";
+import { NavLink } from 'react-router-dom';
 import _ from "lodash";
 import '../../../node_modules/react-grid-layout/css/styles.css'
 import '../../../node_modules/react-resizable/css/styles.css'
@@ -11,9 +12,11 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import loadjs from 'loadjs';
 import moment from 'moment';
 import AppImages from "../../themes/appImages";
+import Swappable from '../../customComponents/SwappableComponent';
 import { isArrayNotEmpty } from '../../util/helpers';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { getDayName, getTime } from '../../themes/dateformate';
 import Loader from '../../customComponents/loader';
 import {
     getCompetitionDrawsAction,
@@ -27,7 +30,8 @@ import {
     matchesListDrawsAction,
     unlockDrawsAction,
     getActiveRoundsAction,
-    changeDrawsDateRangeAction
+    changeDrawsDateRangeAction,
+    checkBoxOnChange,
 } from '../../store/actions/competitionModuleAction/competitionMultiDrawsAction';
 import {
     getYearAndCompetitionOwnAction,
@@ -54,22 +58,25 @@ import {
     setOwn_competitionStatus
 } from '../../util/sessionStorage';
 import ValidationConstants from '../../themes/validationConstant';
+import './draws.scss';
+import getColor from "../../util/coloredCheckbox";
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Footer, Content } = Layout;
-const venueStaticData = [{ name: "Venue 1", checked: true }, { name: "Venue 2", checked: true }, { name: "Venue 3", checked: true }, { name: "Venue 4", checked: false },
-{ name: "Venue 1", checked: true }, { name: "Venue 2", checked: true }, { name: "Venue 3", checked: true }, { name: "Venue 4", checked: false }]
-const compStaticData = [{ name: "Monday Night Social", checked: true }, { name: "NSW State Age", checked: true }, { name: "NWA Winter", checked: true },
-{ name: "Monday Night Social", checked: true }, { name: "NSW State Age", checked: true }, { name: "NWA Winter", checked: true }]
+const { SubMenu } = Menu;
+// const venueStaticData = [{ name: "Venue 1", checked: true }, { name: "Venue 2", checked: true }, { name: "Venue 3", checked: true }, { name: "Venue 4", checked: false },
+// { name: "Venue 1", checked: true }, { name: "Venue 2", checked: true }, { name: "Venue 3", checked: true }, { name: "Venue 4", checked: false }]
+// const compStaticData = [{ name: "Monday Night Social", checked: true }, { name: "NSW State Age", checked: true }, { name: "NWA Winter", checked: true },
+// { name: "Monday Night Social", checked: true }, { name: "NSW State Age", checked: true }, { name: "NWA Winter", checked: true }]
 const divisionStaticData = [{
     name: "Monday Night Social", divisionArr: [
-        { name: "Junior-A", checked: true }, { name: "Junior-B", checked: true }, { name: "Opens-A", checked: true }, { name: "Opens-A", checked: false },
-        { name: "Junior-A", checked: true }, { name: "Junior-B", checked: true }, { name: "Opens-A", checked: true }, { name: "Opens-A", checked: false }
+        { name: "Junior-A", checked: true, color: "#ff8237" }, { name: "Junior-B", checked: true, color: "#6AD672" }, { name: "Opens-A", checked: true, color: "#0556DE" }, { name: "Opens-A", checked: false, color: "#FD2F90" },
+        { name: "Junior-A", checked: true, color: "#F77927" }, { name: "Junior-B", checked: true, color: "#000000" }, { name: "Opens-A", checked: true, color: "#000000" }, { name: "Opens-A", checked: false, color: "#000000" }
     ]
 }, {
     name: "NSW State Age", divisionArr: [
-        { name: "Junior-A", checked: true }, { name: "Junior-B", checked: true }, { name: "Opens-A", checked: true }, { name: "Opens-A", checked: false }
+        { name: "Junior-A", checked: true, color: "#000000" }, { name: "Junior-B", checked: true, color: "#000000" }, { name: "Opens-A", checked: true, color: "#000000" }, { name: "Opens-A", checked: false, color: "#000000" }
     ]
 }]
 class MultifieldDrawsNew extends Component {
@@ -117,6 +124,9 @@ class MultifieldDrawsNew extends Component {
             showAllVenue: false,
             showAllComp: false,
             showAllDivision: false,
+            filterEnable: true,
+            showAllOrg: false,
+            allOrgChecked: true,
         };
     }
 
@@ -379,6 +389,20 @@ class MultifieldDrawsNew extends Component {
         }
     }
 
+    applyDateFilter = () => {
+        this.props.clearDraws()
+        this.props.changeDrawsDateRangeAction(this.state.yearRefId,
+            this.state.firstTimeCompId, this.state.startDate, this.state.endDate);
+        this.setState({
+            roundId: 0,
+            //venueId: null,
+            roundTime: null,
+            venueLoad: true,
+            competitionDivisionGradeId: null,
+            changeDateLoad: true
+        });
+    }
+
     //////year change onchange
     onYearChange = (yearId) => {
         this.props.clearDraws('rounds');
@@ -410,8 +434,25 @@ class MultifieldDrawsNew extends Component {
         })
     }
 
+    changeAllVenueStatus = (value, key) => {
+        if (key == "venue") {
+            this.props.checkBoxOnChange(value, "allCompetitionVenues")
+            this.setState({ allVenueChecked: value })
+        }
+        else if (key == 'competition') {
+            this.props.checkBoxOnChange(value, "allCompetition")
+            this.setState({ allCompChecked: value })
+        }
+        else if (key == "org") {
+            this.props.checkBoxOnChange(value, "allOrganisation")
+            this.setState({ allOrgChecked: value })
+
+        }
+    }
+
     // on Competition change
     onCompetitionChange(competitionId, statusRefId) {
+        let newDate = new Date()
         this.props.clearDraws('rounds');
         if (competitionId == -1) {
             this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId, "all");
@@ -432,10 +473,29 @@ class MultifieldDrawsNew extends Component {
             competitionStatus: statusRefId,
             organisation_Id: "-1",
             selectedDateRange: null,
-            // startDate: null,
-            // endDate: null
+            startDate: moment(newDate).format("YYYY-MM-DD"),
+            endDate: moment(newDate).format("YYYY-MM-DD"),
         });
     }
+
+    //////onRoundsChange
+    onRoundsChange = (roundId) => {
+        let roundData = this.props.drawsState.getDrawsRoundsData;
+        this.props.clearDraws();
+        let matchRoundData = roundData.findIndex((x) => x.roundId == roundId);
+        let roundTime = roundData[matchRoundData].startDateTime;
+        // this.props.dateSelection(roundId)
+        this.setState({ roundId, roundTime });
+        setDraws_round(roundId);
+        setDraws_roundTime(roundTime);
+        this.props.getCompetitionDrawsAction(
+            this.state.yearRefId,
+            this.state.firstTimeCompId,
+            this.state.venueId,
+            roundId,
+            this.state.organisation_Id, null, null, this.state.dateRangeCheck
+        );
+    };
 
     checkDisplayCountList = (array, showAllStatus) => {
         if (array.length >= 5 && showAllStatus == true) {
@@ -456,8 +516,53 @@ class MultifieldDrawsNew extends Component {
         else if (key == "comp") {
             this.setState({ showAllComp: !this.state.showAllComp })
         }
-        else if (key == "comp") {
+        else if (key == "division") {
             this.setState({ showAllDivision: !this.state.showAllDivision })
+        }
+        else if (key == "org") {
+            this.setState({ showAllOrg: !this.state.showAllOrg })
+        }
+    }
+
+    filterOnClick = () => {
+        this.setState({ filterEnable: !this.state.filterEnable })
+    }
+
+    onMatchesList = () => {
+        this.props.matchesListDrawsAction(this.state.firstTimeCompId);
+    };
+
+    checkColor(slot) {
+        if (slot.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0) {
+            if (this.state.organisation_Id == slot.awayTeamOrganisationId || this.state.organisation_Id == slot.homeTeamOrganisationId || this.state.organisation_Id == "-1") {
+                return slot.colorCode
+            }
+            else {
+                return "#999999"
+            }
+        }
+        else {
+            return "#999999"
+        }
+    }
+
+    checkSwap(slot) {
+        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        if (slot.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0) {
+            if (this.state.organisation_Id == slot.awayTeamOrganisationId || this.state.organisation_Id == slot.homeTeamOrganisationId || this.state.organisation_Id == "-1") {
+                if (!disabledStatus) {
+                    return true
+                }
+                else {
+                    return false
+                }
+            }
+            else {
+                return false
+            }
+        }
+        else {
+            return false
         }
     }
 
@@ -543,7 +648,7 @@ class MultifieldDrawsNew extends Component {
                             </Select>
                         </div>
                         <div className="col-sm d-flex justify-content-end align-items-center pr-1">
-                            <Button className="primary-add-comp-form" type="primary">
+                            <Button className="primary-add-comp-form" type="primary" onClick={() => this.applyDateFilter()}>
                                 {AppConstants.go}
                             </Button>
                         </div>
@@ -581,8 +686,9 @@ class MultifieldDrawsNew extends Component {
                         className="single-checkbox-radio-style"
                         style={{ paddingTop: 8 }}
                         checked={this.state.allVenueChecked}
-                        onChange={e => this.setState({ allVenueChecked: e.target.checked })}
-                        indeterminate={this.state.allVenueChecked ? false : true}
+                        onChange={e => this.changeAllVenueStatus(e.target.checked, "venue")}
+                    // onChange={e => this.setState({ allVenueChecked: e.target.checked })}
+                    // indeterminate={this.state.allVenueChecked ? false : true}
                     >
                         {AppConstants.all}
                     </Checkbox>
@@ -593,7 +699,7 @@ class MultifieldDrawsNew extends Component {
                                     className="single-checkbox-radio-style"
                                     style={{ paddingTop: 8 }}
                                     checked={item.checked}
-                                // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                    onChange={e => this.props.checkBoxOnChange(e.target.checked, "competitionVenues", index)}
                                 >
                                     {item.name}
                                 </Checkbox>
@@ -601,9 +707,9 @@ class MultifieldDrawsNew extends Component {
                         )
                     }
                     )}
-                    {isArrayNotEmpty(competitionVenues) && <span className="input-heading-add-another pt-4"
+                    {isArrayNotEmpty(competitionVenues) || competitionVenues.length > 5 && <span className="input-heading-add-another pt-4"
                         onClick={() => this.changeShowAllStatus("venue")}>
-                        {showAllVenue == true ? AppConstants.showLess : AppConstants.showAll}
+                        {showAllVenue == true ? AppConstants.hide : AppConstants.showAll}
                     </span>
                     }
                 </div>
@@ -615,7 +721,7 @@ class MultifieldDrawsNew extends Component {
     ///////left side view for competition liting with checkbox
     competitionLeftView = () => {
         let { own_CompetitionArr } = this.props.appState
-        console.log("own_CompetitionArr", own_CompetitionArr)
+        let { drawsCompetitionArray } = this.props.drawsState
         let { showAllComp } = this.state
         return (
             <>
@@ -640,20 +746,21 @@ class MultifieldDrawsNew extends Component {
                         className="single-checkbox-radio-style"
                         style={{ paddingTop: 8 }}
                         checked={this.state.allCompChecked}
-                        onChange={e => this.setState({ allCompChecked: e.target.checked })}
-                        indeterminate={this.state.allCompChecked ? false : true}
+                        // onChange={e => this.setState({ allCompChecked: e.target.checked })}
+                        onChange={e => this.changeAllVenueStatus(e.target.checked, "competition")}
+                    // indeterminate={this.state.allCompChecked ? false : true}
                     >
                         {AppConstants.all}
                     </Checkbox>
                     <div className={showAllComp ? "multi-draw-left-list-view" : ""}>
-                        {isArrayNotEmpty(own_CompetitionArr) && own_CompetitionArr.map((item, index) => {
+                        {isArrayNotEmpty(drawsCompetitionArray) && drawsCompetitionArray.map((item, index) => {
                             return (
                                 index < this.checkDisplayCountList(own_CompetitionArr, showAllComp) && <div className="column pl-5">
                                     <Checkbox
                                         className="single-checkbox-radio-style"
                                         style={{ paddingTop: 8 }}
-                                        checked={item.checked}
-                                    // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                        checked={item.competitionStatus}
+                                        onChange={e => this.props.checkBoxOnChange(e.target.checked, "competition", index)}
                                     >
                                         {item.competitionName}
                                     </Checkbox>
@@ -662,9 +769,9 @@ class MultifieldDrawsNew extends Component {
                         }
                         )}
                     </div>
-                    {isArrayNotEmpty(own_CompetitionArr) && <span className="input-heading-add-another pt-4"
+                    {isArrayNotEmpty(drawsCompetitionArray) || drawsCompetitionArray.length > 5 && <span className="input-heading-add-another pt-4"
                         onClick={() => this.changeShowAllStatus("comp")}>
-                        {showAllComp == true ? AppConstants.showLess : AppConstants.showAll}
+                        {showAllComp == true ? AppConstants.hide : AppConstants.showAll}
                     </span>
                     }
                 </div>
@@ -673,8 +780,12 @@ class MultifieldDrawsNew extends Component {
         )
     }
 
+
     ///////left side view for division liting with checkbox
     divisionLeftView = () => {
+        let { divisionGradeNameList, drawDivisions } = this.props.drawsState
+        let { showAllDivision } = this.state
+        console.log(drawDivisions, "divisionGradeNameList", divisionGradeNameList)
         return (
             <>
                 <div className="row">
@@ -693,32 +804,34 @@ class MultifieldDrawsNew extends Component {
                         </a>
                     </div>
                 </div>
-                <div id="division-collapsable-div" className="pt-3 collapse in">
-                    <Checkbox
+                <div id="division-collapsable-div" className="pt-0 collapse in">
+                    {/* <Checkbox
                         className="single-checkbox-radio-style"
                         style={{ paddingTop: 8 }}
                         checked={this.state.allDivisionChecked}
                         onChange={e => this.setState({ allDivisionChecked: e.target.checked })}
-                        indeterminate={this.state.allDivisionChecked ? false : true}
                     >
                         {AppConstants.all}
-                    </Checkbox>
-                    {isArrayNotEmpty(divisionStaticData) && divisionStaticData.map((item, index) => {
+                    </Checkbox> */}
+                    {isArrayNotEmpty(drawDivisions) && drawDivisions.map((item, index) => {
                         return (
                             <div className="column pl-5">
                                 <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-                                    <span className="inbox-time-text" >{item.name}</span>
+                                    <span className="inbox-time-text" >{item.competitionName}</span>
                                 </div>
-                                {isArrayNotEmpty(item.divisionArr) && item.divisionArr.map((subItem, subIndex) => {
+                                {isArrayNotEmpty(item.legendArray) && item.legendArray.map((subItem, subIndex) => {
                                     return (
                                         <div >
                                             <Checkbox
-                                                className="single-checkbox-radio-style"
+                                                className={`single-checkbox-radio-style ${getColor(subItem.colorCode)}`}
                                                 style={{ paddingTop: 8 }}
+                                                // checked={subItem.checked}
                                                 checked={subItem.checked}
+                                                onChange={e => this.props.checkBoxOnChange(e.target.checked, "division", index, subIndex)}
+
                                             // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
                                             >
-                                                {subItem.name}
+                                                {subItem.divisionName + "-" + subItem.gradeName}
                                             </Checkbox>
                                         </div>
                                     )
@@ -727,22 +840,110 @@ class MultifieldDrawsNew extends Component {
                             </div>
                         )
                     })}
-                <span className="input-heading-add-another pt-4">{AppConstants.showAll}</span>
+                    {/* <div className={showAllDivision ? "multi-draw-left-list-view" : ""}>
+                        {isArrayNotEmpty(divisionGradeNameList) && divisionGradeNameList.map((item, index) => {
+                            return (
+                                index < this.checkDisplayCountList(divisionGradeNameList, showAllDivision) && <div className="column pl-5">
+                                    <Checkbox
+                                        className="single-checkbox-radio-style"
+                                        style={{ paddingTop: 8 }}
+                                        checked={item.checked}
+                                    // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                    >
+                                        {item.name}
+                                    </Checkbox>
+                                </div>
+                            )
+                        }
+                        )}
+                    </div> */}
+                    {isArrayNotEmpty(drawDivisions) || drawDivisions.length > 5 && <span className="input-heading-add-another pt-4"
+                        onClick={() => this.changeShowAllStatus("division")}>
+                        {showAllDivision == true ? AppConstants.hide : AppConstants.showAll}
+                    </span>
+                    }
                 </div>
             </>
         )
     }
 
+    ///////left side view for organisation listing with checkbox
+    organisationLeftView = () => {
+        let { drawOrganisations } = this.props.drawsState
+        let { showAllOrg, allOrgChecked } = this.state
+        return (
+            <>
+                <div className="row">
+                    <div className="col-sm d-flex justify-content-start ">
+                        <span className="user-contact-heading">{AppConstants.organisation}</span>
+                    </div>
+                    <div className="col-sm d-flex justify-content-end" style={{ marginTop: 5 }}>
+                        <a className="view-more-btn"
+                            data-toggle="collapse"
+                            href={`#org-collapsable-div`}
+                            role="button"
+                            aria-expanded="true"
+                        // aria-controls={teamIndex}
+                        >
+                            <i className="fa fa-angle-up" style={{ color: "#ff8237", }} aria-hidden="true" ></i>
+                        </a>
+                    </div>
+                </div>
+                <div id="org-collapsable-div" className="pt-3 collapse in">
+                    <Checkbox
+                        className="single-checkbox-radio-style"
+                        style={{ paddingTop: 8 }}
+                        checked={this.state.allOrgChecked}
+                        onChange={e => this.changeAllVenueStatus(e.target.checked, "org")}
+                    // onChange={e => this.setState({ allOrgChecked: e.target.checked })}
+                    >
+                        {AppConstants.all}
+                    </Checkbox>
+                    <div className={showAllOrg ? "multi-draw-left-list-view" : ""}>
+                        {isArrayNotEmpty(drawOrganisations) && drawOrganisations.map((item, index) => {
+                            return (
+                                index < this.checkDisplayCountList(drawOrganisations, showAllOrg) && <div className="column pl-5">
+                                    <Checkbox
+                                        className="single-checkbox-radio-style"
+                                        style={{ paddingTop: 8 }}
+                                        checked={item.checked}
+                                        onChange={e => this.props.checkBoxOnChange(e.target.checked, "organisation", index)}
+
+                                    // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                    >
+                                        {item.organisationName}
+                                    </Checkbox>
+                                </div>
+                            )
+                        }
+                        )}
+                    </div>
+                    {isArrayNotEmpty(drawOrganisations) && <span className="input-heading-add-another pt-4"
+                        onClick={() => this.changeShowAllStatus("org")}>
+                        {showAllOrg == true ? AppConstants.hide : AppConstants.showAll}
+                    </span>
+                    }
+                </div>
+
+            </>
+        )
+    }
+
     sideMenuView = () => {
+        let { filterEnable } = this.state
         return (
             <div className="multiDrawContentView multi-draw-list-top-head pr-0">
-                <div className="d-flex align-items-center mt-4">
+                <div
+                    className="d-flex align-items-center mt-4"
+                    onClick={() => this.filterOnClick()}
+                    style={{ cursor: "pointer" }}>
                     <img className="dot-image" src={AppImages.filterIcon} alt="" width="16" height="16" />
-                    <span className="input-heading-add-another pt-0 pl-3">{AppConstants.hideFilter}</span>
+                    <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span>
                 </div>
-                {this.venueLeftView()}
-                {this.competitionLeftView()}
-                {this.divisionLeftView()}
+                {filterEnable && this.venueLeftView()}
+                {filterEnable && this.competitionLeftView()}
+                {filterEnable && this.divisionLeftView()}
+                {filterEnable && this.organisationLeftView()}
             </div>
         )
     }
@@ -775,16 +976,373 @@ class MultifieldDrawsNew extends Component {
                         </div>
                     </div>
                     <div className="col-sm-6 pr-0 d-flex justify-content-end align-items-center">
-                        <img className="dot-image" src={AppImages.downloadIcon} alt="" width="16" height="16" />
-                        <span className="input-heading-add-another pt-0 pr-5 pl-3">{AppConstants.matchesList}</span>
+                        <div onClick={() => this.onMatchesList()}>
+                            <img className="dot-image" src={AppImages.downloadIcon} alt="" width="16" height="16" />
+                            <span className="input-heading-add-another pt-0 pr-5 pl-3">{AppConstants.matchesList}</span>
+                        </div>
                         <Button className="multi-field-draw-edit-button" type="primary">
                             {AppConstants.edit}
                         </Button>
                     </div>
+                    {this.props.drawsState.updateLoad ? (
+                        <div className="draggable-wrap draw-data-table">
+                            <Loader visible={this.props.drawsState.updateLoad} />
+                            {this.props.drawsState.getRoundsDrawsdata.length > 0 &&
+                                this.props.drawsState.getRoundsDrawsdata.map(
+                                    (dateItem, dateIndex) => {
+                                        return (
+                                            <div key={"drawData" + dateIndex}>
+                                                {/* <div className="draws-round-view">
+                                                    <span className="draws-round">
+                                                        {dateItem.roundName}
+                                                    </span>
+                                                </div> */}
+                                                {this.draggableView(dateItem)}
+                                                {/* {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
+                                                    <div>
+                                                        <AllLegendComponent
+                                                            allLegendArray={dateItem.legendsArray}
+                                                        />
+                                                    </div>
+                                                    :
+                                                    <div style={{ display: 'table', marginTop: 35 }}>
+                                                        <LegendComponent
+                                                            disabled={disabledStatus}
+                                                            legendArray={dateItem.legendsArray}
+                                                        />
+                                                    </div>
+                                                } */}
+                                            </div>
+                                        );
+                                    }
+                                )}
+                        </div>
+                    ) : (
+                            <div className="draggable-wrap draw-data-table">
+                                {this.props.drawsState.getRoundsDrawsdata.length > 0 &&
+                                    this.props.drawsState.getRoundsDrawsdata.map(
+                                        (dateItem, dateIndex) => {
+                                            return (
+                                                <div>
+                                                    {dateItem.legendsArray.length > 0 ?
+                                                        <div className="pt-4" key={"drawData" + dateIndex}>
+                                                            {/* <div className="draws-round-view">
+                                                                <span className="draws-round">
+                                                                    {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? "" : dateItem.roundName}
+                                                                </span>
+                                                            </div> */}
+                                                            {this.draggableView(dateItem)}
+                                                            {/* {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
+                                                                <div>
+                                                                    <AllLegendComponent
+                                                                        allLegendArray={dateItem.legendsArray}
+                                                                    />
+                                                                </div>
+                                                                :
+                                                                <div style={{ display: 'table', marginTop: 35 }}>
+                                                                    <LegendComponent
+                                                                        disabled={disabledStatus}
+                                                                        legendArray={dateItem.legendsArray}
+                                                                    />
+                                                                </div>
+                                                            } */}
+                                                        </div>
+                                                        :
+                                                        <div>
+                                                            {/* {this.state.firstTimeCompId == -1 &&
+                                                                <div class="comp-warning-info" style={{ paddingBottom: "40px" }}>{AppConstants.noFixturesMessage}</div>
+                                                            } */}
+                                                        </div>
+                                                    }
+                                                </div>
+                                            );
+                                        }
+                                    )}
+                            </div>
+                        )}
+
                 </div>
             </div>
         );
     }
+
+
+    draggableView = (dateItem) => {
+        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        var dateMargin = 25;
+        var dayMargin = 25;
+        let topMargin = 0;
+        let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray)
+            ? this.props.drawsState.legendsArray
+            : [];
+        return (
+            <div>
+                <div className="scroll-bar pb-4">
+                    <div className="table-head-wrap" >
+                        {/* Day name list */}
+                        <div className="tablehead-row">
+                            <div className="sr-no empty-bx"></div>
+
+                            {dateItem.dateNewArray.length > 0 &&
+                                dateItem.dateNewArray.map((item, index) => {
+                                    if (index !== 0) {
+                                        dateMargin += 110;
+                                    }
+                                    if (index == 0) {
+                                        dateMargin = 70;
+                                    }
+                                    return (
+                                        <span key={"day" + index} style={{ left: dateMargin }}>
+                                            {item.notInDraw == false ? getDayName(item.date) : ''}
+                                        </span>
+                                    );
+                                })}
+                        </div>
+                        {/* Times list */}
+                        <div className="tablehead-row">
+                            <div className="sr-no empty-bx"></div>
+
+                            {dateItem.dateNewArray.length > 0 &&
+                                dateItem.dateNewArray.map((item, index) => {
+                                    if (index !== 0) {
+                                        dayMargin += 110;
+                                    }
+                                    if (index == 0) {
+                                        dayMargin = 70;
+                                    }
+                                    return (
+                                        <span key={"time" + index}
+                                            style={{
+                                                left: dayMargin,
+                                                fontSize: item.notInDraw !== false && 11,
+                                            }}
+                                        >
+                                            {item.notInDraw == false
+                                                ? getTime(item.date)
+                                                : 'Not in draw'}
+                                        </span>
+                                    );
+                                })}
+                        </div>
+                    </div>
+                </div>
+                <div className="main-canvas Draws" >
+                    {dateItem.draws.map((courtData, index) => {
+                        let leftMargin = 25;
+                        if (index !== 0) {
+                            topMargin += 70;
+                        }
+                        return (
+                            <div key={"court" + index}>
+                                <div className="sr-no" style={{ height: 62 }}>
+                                    <div className="venueCourt-tex-div">
+                                        <span className="venueCourt-text">
+                                            {courtData.venueShortName +
+                                                '-' +
+                                                courtData.venueCourtNumber}
+                                        </span>
+                                    </div>
+                                </div>
+                                {courtData.slotsArray.map((slotObject, slotIndex) => {
+                                    if (slotIndex !== 0) {
+                                        leftMargin += 110;
+                                    }
+                                    if (slotIndex == 0) {
+                                        leftMargin = 70;
+                                    }
+                                    return (
+                                        <div key={"slot" + slotIndex}>
+                                            <span
+                                                style={{ left: leftMargin, top: topMargin }}
+                                                className={'border'}
+                                            ></span>
+                                            <div
+                                                className={'box purple-bg'}
+                                                style={{
+                                                    backgroundColor:
+                                                        this.checkColor(slotObject),
+                                                    left: leftMargin,
+                                                    top: topMargin,
+                                                    overflow: 'hidden',
+                                                    whiteSpace: 'nowrap',
+                                                    cursor: disabledStatus && "no-drop"
+                                                }}
+                                            >
+                                                {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? <Swappable
+                                                    id={
+                                                        index.toString() +
+                                                        ':' +
+                                                        slotIndex.toString()
+                                                        +
+                                                        ':' +
+                                                        "1"
+                                                    }
+                                                    content={1}
+                                                    swappable={
+                                                        this.checkSwap(slotObject)
+                                                    }
+                                                    onSwap={(source, target) =>
+                                                        this.onSwap(
+                                                            source,
+                                                            target,
+                                                            dateItem.draws,
+                                                            "1"
+                                                        )
+                                                    }
+                                                >
+                                                    {slotObject.drawsId != null ? (
+                                                        <span>
+                                                            {slotObject.homeTeamName} <br />
+                                                            {slotObject.awayTeamName}
+                                                        </span>
+                                                    ) : (
+                                                            <span>Free</span>
+                                                        )}
+                                                </Swappable> :
+                                                    <Swappable
+                                                        id={
+                                                            index.toString() +
+                                                            ':' +
+                                                            slotIndex.toString()
+                                                            +
+                                                            ':' +
+                                                            dateItem.roundId.toString()
+                                                        }
+                                                        content={1}
+                                                        swappable={
+                                                            this.checkSwap(slotObject)
+                                                        }
+                                                        onSwap={(source, target) =>
+                                                            this.onSwap(
+                                                                source,
+                                                                target,
+                                                                dateItem.draws,
+                                                                dateItem.roundId
+                                                            )
+                                                        }
+                                                    >
+                                                        {slotObject.drawsId != null ? (
+                                                            <span>
+                                                                {slotObject.homeTeamName} <br />
+                                                                {slotObject.awayTeamName}
+                                                            </span>
+                                                        ) : (
+                                                                <span>Free</span>
+                                                            )}
+                                                    </Swappable>}
+                                            </div>
+                                            {
+                                                slotObject.drawsId !== null && (
+                                                    <div
+                                                        className="box-exception"
+                                                        style={{
+                                                            left: leftMargin,
+                                                            top: topMargin + 50,
+                                                            overflow: 'hidden',
+                                                            whiteSpace: 'nowrap',
+                                                        }}
+                                                    >
+                                                        <Menu
+
+                                                            className="action-triple-dot-draws"
+                                                            theme="light"
+                                                            mode="horizontal"
+                                                            style={{ lineHeight: '16px', borderBottom: 0, cursor: disabledStatus && "no-drop" }}
+                                                        >
+                                                            <SubMenu
+                                                                disabled={disabledStatus}
+                                                                // style={{ borderBottomStyle: "solid", borderBottom: 2 }}
+                                                                key="sub1"
+                                                                title={
+                                                                    slotObject.isLocked == 1 ? (
+                                                                        <div
+                                                                            style={{
+                                                                                display: 'flex',
+                                                                                justifyContent: 'space-between',
+                                                                                width: 80,
+                                                                                maxWidth: 80,
+                                                                            }}
+                                                                        >
+                                                                            <img
+                                                                                className="dot-image"
+                                                                                src={AppImages.drawsLock}
+                                                                                alt=""
+                                                                                width="16"
+                                                                                height="10"
+                                                                            />
+                                                                            <img
+                                                                                className="dot-image"
+                                                                                src={AppImages.moreTripleDot}
+                                                                                alt=""
+                                                                                width="16"
+                                                                                height="10"
+                                                                            />
+                                                                        </div>
+                                                                    ) : (
+                                                                            <div>
+                                                                                <img
+                                                                                    className="dot-image"
+                                                                                    src={AppImages.moreTripleDot}
+                                                                                    alt=""
+                                                                                    width="16"
+                                                                                    height="10"
+                                                                                />
+                                                                            </div>
+                                                                        )
+                                                                }
+                                                            >
+                                                                {slotObject.isLocked == 1 && (
+                                                                    <Menu.Item
+                                                                        key="1"
+                                                                        onClick={() => this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
+                                                                            this.unlockDraws(
+                                                                                slotObject.drawsId,
+                                                                                "1",
+                                                                                courtData.venueCourtId
+
+                                                                            ) :
+                                                                            this.unlockDraws(
+                                                                                slotObject.drawsId,
+                                                                                dateItem.roundId,
+                                                                                courtData.venueCourtId
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <div style={{ display: 'flex' }}>
+                                                                            <span>Unlock</span>
+                                                                        </div>
+                                                                    </Menu.Item>
+                                                                )}
+                                                                <Menu.Item key="2">
+                                                                    <NavLink
+                                                                        to={{
+                                                                            pathname: `/competitionException`,
+                                                                            state: {
+                                                                                drawsObj: slotObject,
+                                                                                yearRefId: this.state.yearRefId,
+                                                                                competitionId: this.state.firstTimeCompId,
+                                                                                organisationId: this.state.organisationId,
+                                                                            },
+                                                                        }}
+                                                                    >
+                                                                        <span>Exception</span>
+                                                                    </NavLink>
+                                                                </Menu.Item>
+                                                            </SubMenu>
+                                                        </Menu>
+                                                    </div>
+                                                )
+                                            }
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })}
+                </div>
+            </div >
+        );
+    };
 
     contentView = () => {
         return (
@@ -797,6 +1355,7 @@ class MultifieldDrawsNew extends Component {
 
     ////main render method
     render() {
+        console.log(this.props.drawsState)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.draws} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
@@ -828,7 +1387,8 @@ function mapDispatchToProps(dispatch) {
             generateDrawAction,
             unlockDrawsAction,
             getActiveRoundsAction,
-            changeDrawsDateRangeAction
+            changeDrawsDateRangeAction,
+            checkBoxOnChange,
         },
         dispatch
     );

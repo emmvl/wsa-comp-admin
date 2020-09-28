@@ -999,7 +999,7 @@ class CompetitionFinals extends Component {
                                         visible={this.state.tooltipVisibleDelete}
                                         title={AppConstants.statusPublishHover}
                                     >
-                                        <Button disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 6 }} className="open-reg-button" type="primary" htmlType="submit" >Create Draft Draw</Button>
+                                        <Button id={AppUniqueId.finalCreateDrawsBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 6 }} className="open-reg-button" type="primary" htmlType="submit" >Create Draft Draw</Button>
                                     </Tooltip>
                                 </div>
                             </div>

@@ -33,6 +33,8 @@ const initialState = {
   teamNames: null,
   liveScoreCompetiton: null,
   allcompetitionDateRange: [],
+  drawDivisions: [],
+  drawsCompetitionArray: []
 
 
 };
@@ -59,7 +61,9 @@ function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
           let object = {
             "colorCode": color,
             "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
-            "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
+            "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A",
+            "competitionDivisionGradeId": drawsArray[i].slotsArray[j].competitionDivisionGradeId ? drawsArray[i].slotsArray[j].competitionDivisionGradeId : "N/A",
+            "checked": true
           }
 
           // if (index === -1) {
@@ -320,6 +324,19 @@ function getFixtureColor(team) {
     }
   }
   return color;
+}
+
+function getCompetitionArray(draws) {
+  console.log(draws)
+  let competitionArray = []
+  for (let i in draws) {
+    let competitionObject = {
+      competitionName: draws[i].competitionName,
+      competitionStatus: true
+    }
+    competitionArray.push(competitionObject)
+  }
+  return competitionArray
 }
 
 function allcompetitionDrawsData(data) {
@@ -775,6 +792,31 @@ function swapedDrawsEditArrayFunc(
   return drawsArray;
 }
 
+///insert checked parameter in venue array
+function updateCompVenue(venueArray, value) {
+  for (let i in venueArray) {
+    venueArray[i].checked = value
+  }
+  return venueArray
+}
+//update all organisations checked
+function updateAllOrganisations(orgArray, value) {
+  for (let i in orgArray) {
+    orgArray[i].checked = value
+  }
+  return orgArray
+}
+
+
+// update all checked competition
+function updateCompArray(competitionArray, value) {
+  console.log("value", value)
+  for (let i in competitionArray) {
+    competitionArray[i].competitionStatus = value
+  }
+  return competitionArray
+}
+
 function CompetitionMultiDraws(state = initialState, action) {
   switch (action.type) {
     case ApiConstants.API_COMPETITION_MULTI_DRAWS_FAIL:
@@ -814,7 +856,9 @@ function CompetitionMultiDraws(state = initialState, action) {
 
         state.publishStatus = action.result.drawsPublish
         state.isTeamInDraw = action.result.isTeamNotInDraws
-        let orgData = JSON.parse(JSON.stringify(action.result.organisations))
+        state.drawDivisions = action.competitionId == "-1" || action.dateRangeCheck ? resultData.data ? resultData.data.legendsArray : [] : []
+        state.drawsCompetitionArray = state.drawDivisions.length > 0 ? getCompetitionArray(JSON.parse(JSON.stringify(state.drawDivisions))) : []
+        let orgData = updateAllOrganisations(JSON.parse(JSON.stringify(action.result.organisations)), true)
         return {
           ...state,
           getRoundsDrawsdata: action.competitionId == "-1" || action.dateRangeCheck ? [resultData.data] : resultData.roundsdata,
@@ -834,7 +878,8 @@ function CompetitionMultiDraws(state = initialState, action) {
       return { ...state, onLoad: true, updateLoad: true, error: null, drawOrganisations: [] };
 
     case ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_SUCCESS:
-      state.competitionVenues = JSON.parse(JSON.stringify(action.Venue_Result))
+      let updatedCompetitionVenues = updateCompVenue(action.Venue_Result, true)
+      state.competitionVenues = updatedCompetitionVenues
       state.divisionGradeNameList = JSON.parse(JSON.stringify(action.division_Result))
       let DrawsRoundsData = JSON.parse(JSON.stringify(action.result))
       // let venueObject = {
@@ -976,6 +1021,7 @@ function CompetitionMultiDraws(state = initialState, action) {
       };
 
     case ApiConstants.cleardrawsData:
+      state.drawDivisions = []
       state.isTeamInDraw = null
       state.publishStatus = 0
       state.getStaticDrawsData = [];
@@ -1103,17 +1149,13 @@ function CompetitionMultiDraws(state = initialState, action) {
       }
 
     case ApiConstants.API_MULTI_CHANGE_DATE_RANGE_GET_VENUE_DIVISIONS_SUCCESS:
-      state.competitionVenues = JSON.parse(JSON.stringify(action.Venue_Result))
+      let updatedCompetition_Venues = updateCompVenue(action.Venue_Result, true)
+      state.competitionVenues = updatedCompetition_Venues
       state.divisionGradeNameList = JSON.parse(JSON.stringify(action.division_Result))
-      let venueObjectNew = {
-        name: "All Venues",
-        id: 0
-      }
       let divisionNameObjectNew = {
         name: "All Division",
         competitionDivisionGradeId: 0
       }
-      state.competitionVenues.unshift(venueObjectNew)
       state.divisionGradeNameList.unshift(divisionNameObjectNew)
       state.updateLoad = false;
       return {
@@ -1122,6 +1164,42 @@ function CompetitionMultiDraws(state = initialState, action) {
         getDrawsRoundsData: [],
         error: null,
       };
+
+    case ApiConstants.ONCHANGE_MULTI_FIELD_DRAWS_CHECKBOX:
+      if (action.key == "competitionVenues") {
+        state[action.key][action.index].checked = action.value
+      }
+      if (action.key == "competition") {
+        state.drawsCompetitionArray[action.index].competitionStatus = action.value
+      }
+      if (action.key == "division") {
+        console.log(state.drawDivisions, action)
+        state.drawDivisions[action.index].legendArray[action.subIndex].checked = action.value
+      }
+      if (action.key == 'allCompetitionVenues') {
+        let allVenueChange = updateCompVenue(JSON.parse(JSON.stringify(state.competitionVenues)), action.value)
+        state.competitionVenues = allVenueChange
+
+      }
+      if (action.key == "allCompetition") {
+        let allCompetitionChange = updateCompArray(JSON.parse(JSON.stringify(state.drawsCompetitionArray)), action.value)
+        state.drawsCompetitionArray = allCompetitionChange
+      }
+      if (action.key == "allOrganisation") {
+        let allOrganisations = updateAllOrganisations(JSON.parse(JSON.stringify(state.drawOrganisations)), action.value)
+        state.drawOrganisations = allOrganisations
+
+      }
+      if (action.key == "organisation") {
+        state[action.key][action.index].checked = action.value
+      }
+
+      return {
+        ...state,
+        onLoad: false,
+        error: null,
+      };
+
 
     default:
       return state;

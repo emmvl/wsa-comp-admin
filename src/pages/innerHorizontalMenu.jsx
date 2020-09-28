@@ -14,6 +14,7 @@ import { innerHorizontalCompetitionListAction, updateInnerHorizontalData, initia
 import { getLiveScoreCompetiton, getLiveScoreUmpireCompitionData } from '../util/sessionStorage';
 import history from "../util/history";
 import { getOnlyYearListAction } from "../store/actions/appAction";
+import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
 
 const { SubMenu } = Menu;
 const { Option } = Select;
@@ -143,7 +144,7 @@ class InnerHorizontalMenu extends React.Component {
                 break;
             }
         }
-
+        this.props.clearDataOnCompChangeAction()
         localStorage.setItem("LiveScoreCompetition", JSON.stringify(compObj));
         history.push("/liveScoreDashboard");
     };
@@ -155,6 +156,7 @@ class InnerHorizontalMenu extends React.Component {
         // localStorage.setItem("LiveScoreCompetition", undefined);
         localStorage.setItem("yearId", yearId);
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        this.props.clearDataOnCompChangeAction()
         this.props.innerHorizontalCompetitionListAction(organisationId, yearId, this.props.innerHorizontalState.competitionList);
 
         history.push("/liveScoreDashboard");
@@ -861,7 +863,8 @@ function mapDispatchToProps(dispatch) {
         innerHorizontalCompetitionListAction,
         getOnlyYearListAction,
         updateInnerHorizontalData,
-        initializeCompData
+        initializeCompData,
+        clearDataOnCompChangeAction,
     }, dispatch)
 }
 
