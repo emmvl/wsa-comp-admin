@@ -120,20 +120,24 @@ class CompetitionFinals extends Component {
                 this.setState({ loading: false });
                 if (!competitionFinalsState.error) {
                     if (this.state.buttonPressed == "save") {
-                        let payload = {
-                            yearRefId: this.state.yearRefId,
-                            competitionUniqueKey: this.state.firstTimeCompId,
-                            organisationId: this.state.organisationId
-                        }
-                        if (competitionModuleState.drawGenerateLoad == false) {
-                            let competitionStatus = getOwn_competitionStatus();
-                            if (competitionStatus != 2) {
-                                this.props.generateDrawAction(payload);
-                                this.setState({ loading: true });
+                        if(competitionFinalsState.status == 4){
+                            message.error(competitionFinalsState.errorMessage);
+                        }else{
+                            let payload = {
+                                yearRefId: this.state.yearRefId,
+                                competitionUniqueKey: this.state.firstTimeCompId,
+                                organisationId: this.state.organisationId
                             }
-                            else {
-                                this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
-                                this.setState({ roundLoad: true });
+                            if (competitionModuleState.drawGenerateLoad == false) {
+                                let competitionStatus = getOwn_competitionStatus();
+                                if (competitionStatus != 2) {
+                                    this.props.generateDrawAction(payload);
+                                    this.setState({ loading: true });
+                                }
+                                else {
+                                    this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+                                    this.setState({ roundLoad: true });
+                                }
                             }
                         }
                     }
