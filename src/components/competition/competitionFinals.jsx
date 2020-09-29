@@ -334,6 +334,25 @@ class CompetitionFinals extends Component {
         }
     }
 
+    isShowPlayOff3rdPosition = (final) => {
+        try{
+            let show = false;
+            if(final.poolTopRefId == 2 ){
+                show = true;
+            }else if(final.poolTopRefId == 3){
+                show = true;
+            }else if(final.poolTopRefId == 1){
+                let hasTop4 = final.whoPlaysWho.find(x => x.noOfPools == 4);
+                if(hasTop4 != undefined){
+                    show = true;
+                }
+            }
+            return show;
+        }catch(ex){
+            console.log("Error in isShowPlayOff3rdPosition::"+ex);
+        }
+    }
+
     checkDuplicates = (competitionFinalsList) => {
         try{
             let error = false;
@@ -601,7 +620,7 @@ class CompetitionFinals extends Component {
                                             </Form.Item>
                                         }
                                         
-                                        {(data.poolTopRefId == 2 || data.poolTopRefId == 3) && (
+                                        {(this.isShowPlayOff3rdPosition(data)) && (
                                             // <Form.Item>
                                             //     {getFieldDecorator(`playOff3rdposition${index}`, {
                                             //         rules: [{ required: true, message: ValidationConstants.playOff3rdpositionRequired}]

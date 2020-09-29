@@ -4,6 +4,7 @@ import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
 const initialState = {
     onLoad: false,
+    onChangeReviewLoad: false,
     error: null,
     result: null,
     status: 0,
@@ -148,13 +149,13 @@ function regChangeReducer(state = initialState, action) {
                 error: null
             }
         case ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_LOAD:
-            return {...state, onLoad: true}
+            return {...state, onChangeReviewLoad: true}
 
         case ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_SUCCESS:
             let regChangeReviewData = action.result;
             return {
                 ...state,
-                onLoad: false,
+                onChangeReviewLoad: false,
                 regChangeReviewData: regChangeReviewData,
                 status: action.status,
                 error: null
