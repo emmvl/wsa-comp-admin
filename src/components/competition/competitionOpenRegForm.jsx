@@ -378,6 +378,8 @@ class CompetitionOpenRegForm extends Component {
                         statusRefId = compIndex > -1 ? competitionTypeList[compIndex].statusRefId : competitionTypeList[0].statusRefId
                         competitionId = compIndex > -1 ? competitionId : competitionTypeList[0].competitionId
                         competitionStatus = competitionTypeList[compIndex].competitionStatus
+                        setOwn_competitionStatus('')
+                        setOwn_competition('')
                     }
                     else {
                         competitionId = competitionTypeList[0].competitionId
@@ -623,7 +625,7 @@ class CompetitionOpenRegForm extends Component {
                         formData.append("description", postData.description);
                         formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                         formData.append("competitionFormatRefId", postData.competitionFormatRefId);
-                        formData.append("finalTypeRefId",postData.finalTypeRefId);
+                        formData.append("finalTypeRefId", postData.finalTypeRefId);
                         formData.append("startDate", postData.startDate);
                         formData.append("endDate", postData.endDate);
                         if (postData.competitionFormatRefId == 4) {
@@ -1160,15 +1162,15 @@ class CompetitionOpenRegForm extends Component {
                 <span className="applicable-to-heading required-field">{AppConstants.gradesOrPools}</span>
                 <Form.Item>
                     {getFieldDecorator('finalTypeRefId', { initialValue: detailsData.competitionDetailData.finalTypeRefId },
-                    { rules: [{ required: true, message: ValidationConstants.pleaseSelectGradesOrPools}] })(
-                        <Radio.Group
-                            className="reg-competition-radio"
-                            onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "finalTypeRefId")}
-                            setFieldsValue={detailsData.competitionDetailData.finalTypeRefId}>
+                        { rules: [{ required: true, message: ValidationConstants.pleaseSelectGradesOrPools }] })(
+                            <Radio.Group
+                                className="reg-competition-radio"
+                                onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "finalTypeRefId")}
+                                setFieldsValue={detailsData.competitionDetailData.finalTypeRefId}>
                                 <Radio value={1}>{AppConstants.grades}</Radio>
                                 <Radio value={2}>{AppConstants.pools}</Radio>
-                        </Radio.Group>
-                    )}
+                            </Radio.Group>
+                        )}
                 </Form.Item>
                 <div className="fluid-width">
                     <div className="row">

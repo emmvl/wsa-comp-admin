@@ -71,8 +71,8 @@ class DashboardLayout extends React.Component {
         if (this.props.userState.impersonation && !this.state.impersonationLoad) {
           const impersonationAffiliate = this.state.impersonationAffiliateOrgId
             ? this.props.userState.affiliateList.find(
-                (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
-              )
+              (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
+            )
             : null;
           await setImpersonationAffiliate(impersonationAffiliate);
 
@@ -234,7 +234,6 @@ class DashboardLayout extends React.Component {
     setOrganisationData(organisationData);
     this.props.clearHomeDashboardData("user");
     clearUmpireStorage();
-    localStorage.removeItem('own_competition')
     setPrevUrl(history.location);
     history.push("./homeDashboard", { orgChange: "changeOrg" });
     window.location.reload();
@@ -378,11 +377,10 @@ class DashboardLayout extends React.Component {
         )}
 
         <header
-          className={`site-header ${
-            this.state.impersonationLoad && this.state.impersonationOrgData
-              ? "impersonation-site-header"
-              : ""
-          }`}
+          className={`site-header ${this.state.impersonationLoad && this.state.impersonationOrgData
+            ? "impersonation-site-header"
+            : ""
+            }`}
         >
           <div className="header-wrap">
             <div className="row m-0-res">
