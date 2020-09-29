@@ -382,6 +382,17 @@ class CompetitionFinals extends Component {
         return finalList;
     }
 
+    has4Pools = (whoPlaysWhoList) => {
+        if(whoPlaysWhoList){
+            let has4Pools = whoPlaysWhoList.find(x => x.noOfPools == 4);
+            if(has4Pools == undefined){
+                return false;
+            }else{
+                return true;
+            }
+        }
+    }
+
     saveCompetitionFinals = (e) => {
         e.preventDefault();
         const {competitionFinalsList,competitionVenuesList} = this.props.competitionFinalsState;
@@ -587,7 +598,10 @@ class CompetitionFinals extends Component {
                                                 </Form.Item>
                                             </div>
                                         </div>
-                                        <InputWithHead headingId={AppUniqueId.final_FixtureTemplate_radioBtn} heading={AppConstants.finalFixtures} required={"required-field"} />
+                                        <InputWithHead 
+                                        headingId={AppUniqueId.final_FixtureTemplate_radioBtn} 
+                                        heading={AppConstants.fixtureTemplate} 
+                                        required={"required-field"} />
                                         {finalTypeRefId == 1 ?
                                             <Form.Item >
                                                 {getFieldDecorator(`finalsFixtureTemplateRefId${index}`, {
@@ -621,19 +635,13 @@ class CompetitionFinals extends Component {
                                         }
                                         
                                         {(this.isShowPlayOff3rdPosition(data)) && (
-                                            // <Form.Item>
-                                            //     {getFieldDecorator(`playOff3rdposition${index}`, {
-                                            //         rules: [{ required: true, message: ValidationConstants.playOff3rdpositionRequired}]
-                                            //     })(
-                                                    <Checkbox
-                                                    disabled={disabledStatus}
-                                                    className="single-checkbox"
-                                                    checked={data.playOff3rdposition == 1 ? true : false}
-                                                    onChange={e => this.onChangeSetValue(e.target.checked ? 1 : 0, "playOff3rdposition",index)} >
-                                                        {AppConstants.playOff3rdposition}
-                                                    </Checkbox>
-                                            //     )}
-                                            // </Form.Item>
+                                            <Checkbox
+                                                disabled={disabledStatus}
+                                                className="single-checkbox"
+                                                checked={data.playOff3rdposition == 1 ? true : false}
+                                                onChange={e => this.onChangeSetValue(e.target.checked ? 1 : 0, "playOff3rdposition",index)} >
+                                                    {AppConstants.playOff3rdposition}
+                                            </Checkbox>
                                         )}
 
                                         <InputWithHead heading={AppConstants.matchType} required={"required-field"} />
@@ -732,9 +740,9 @@ class CompetitionFinals extends Component {
                                         {/* <span className='input-heading-add-another'>+ {AppConstants.addAnotherFinalFormat}</span> */}
                                         {/* <Checkbox className="single-checkbox pt-2" defaultChecked={data.isDefault} onChange={(e) => this.onChangeSetValue(e.target.checked, 'isDefault',index)}>{AppConstants.setAsDefault}</Checkbox> */}
                                     </div>
-                                    {this.extraTimeView(getFieldDecorator)}
+                                    {this.extraTimeView(getFieldDecorator,data,index)}
                                 </div>
-                                {isArrayNotEmpty(data.whoPlaysWho) && (
+                                {this.has4Pools(data.whoPlaysWho) && (
                                     <div className="inside-container-view" style={{ paddingTop: 5 }}>
                                         <span className="input-heading" style={{ fontSize: 18}} >{AppConstants.poolSettingsWhoPlaysWho}</span>
                                         {(data.whoPlaysWho || []).map((whoPlaysWhoItem,whoPlaysWhoIndex) => {
@@ -835,16 +843,16 @@ class CompetitionFinals extends Component {
         )
     }
 
-    extraTimeView = (getFieldDecorator) => {
-        let finalsList = this.props.competitionFinalsState.competitionFinalsList;
-        let venueList = this.props.competitionFinalsState.competitionVenuesList;
+    extraTimeView = (getFieldDecorator,data,index) => {
+        //let finalsList = this.props.competitionFinalsState.competitionFinalsList;
+        //let venueList = this.props.competitionFinalsState.competitionVenuesList;
         let appState = this.props.appState;
         let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
-        let detailsData = this.props.competitionFeesState
+        //let detailsData = this.props.competitionFeesState
         return (
             <div>
-                {(finalsList || []).map((data, index) => (
+                {/* {(finalsList || []).map((data, index) => ( */}
 
                     <div>
                         <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }} >{AppConstants.finalExtraTime}</span>
@@ -979,7 +987,7 @@ class CompetitionFinals extends Component {
                             </Form.Item>
                         </div>
                     </div>
-                ))}
+                {/* ))} */}
             </div>
         )
     }
