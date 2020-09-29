@@ -218,11 +218,7 @@ class LiveScoreMatchesList extends Component {
         _this = this
     }
 
-    shouldComponentUpdate(){
-        return true
-    }
-
-    componentDidMount() {
+    async componentDidMount() {
         let matchListActionObject = this.props.liveScoreMatchListState.matchListActionObject
         let selectedDivision = this.state.selectedDivision
         let page = 1
@@ -235,7 +231,7 @@ class LiveScoreMatchesList extends Component {
             let selectedRound = matchListActionObject.roundName ? matchListActionObject.roundName : "All"
             sortBy = matchListActionObject.sortBy
             sortOrder = matchListActionObject.sortOrder
-            this.setState({ offset, searchText, selectedDivision, selectedDivision, selectedRound, sortBy, sortOrder })
+            await this.setState({ offset, searchText, selectedDivision, selectedDivision, selectedRound, sortBy, sortOrder })
             page = Math.floor(offset / 10) + 1;
         }
 
