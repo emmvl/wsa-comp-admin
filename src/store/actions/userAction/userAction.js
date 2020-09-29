@@ -349,6 +349,46 @@ function getUserModuleIncidentListAction(payload) {
   return action
 }
 
+function getUserRole(userId) {
+  const action = {
+    type: ApiConstants.API_GET_USER_ROLE_LOAD,
+    userId
+  };
+  return action
+}
+
+function getScorerData(payload, roleId, matchStatus) {
+  const action = {
+    type: ApiConstants.API_GET_SCORER_ACTIVITY_LOAD,
+    payload,
+    roleId,
+    matchStatus
+  };
+  return action
+}
+
+function getUmpireData(payload, roleId, matchStatus) {
+  const action = {
+    type: ApiConstants.API_GET_UMPIRE_DATA_LOAD,
+    payload,
+    roleId,
+    matchStatus
+  };
+  return action
+}
+
+function getCoachData(payload, roleId, matchStatus) {
+  const action = {
+    type: ApiConstants.API_GET_COACH_DATA_LOAD,
+    payload,
+    roleId,
+    matchStatus
+  };
+  return action
+}
+
+
+
 export {
   getRoleAction,
   getUreAction,
@@ -393,5 +433,9 @@ export {
   updateTermsAndCondtionAction,
   impersonationAction,
   userDeleteAction,
-  getUserModuleIncidentListAction
+  getUserModuleIncidentListAction,
+  getUserRole,
+  getScorerData,
+  getUmpireData,
+  getCoachData
 }

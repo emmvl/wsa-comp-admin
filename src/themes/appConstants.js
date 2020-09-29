@@ -1611,13 +1611,14 @@ const AppConstants = {
   playOff3rdposition: "Playoff for 3rd position",
   whoPlaysWho: "Who plays who",
   whoPlaysWhoValidation: "Please remove duplicate from who playes who",
+  umpireActivity: "Umpire Activity",
   showFilter: "Show Filter",
   hide: "Hide",
 
   heroImageForCompetition: "Hero Image for Competition",
   heroImageSizeText: "Approximate Dimension: Width: 1200px  Height: 400px",
   poolSettingsWhoPlaysWho: "Pool Settings - Who Plays Who",
-  mailBodyText:`Hi,\n \nPlease use the following discount Code when you register in order to have your fee waived.`,
+  mailBodyText: `Hi,\n \nPlease use the following discount Code when you register in order to have your fee waived.`,
 };
 
 export default AppConstants;

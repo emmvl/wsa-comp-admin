@@ -27,7 +27,11 @@ import {
   getUserModuleActivityScorerAction,
   getUserModuleActivityManagerAction,
   getUserHistoryAction,
-  getUserModuleIncidentListAction
+  getUserModuleIncidentListAction,
+  getUserRole,
+  getScorerData,
+  getUmpireData,
+  getCoachData
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -94,23 +98,23 @@ const columns = [
     title: "Paid By",
     dataIndex: "paidBy",
     key: "paidBy",
-    render: (paidBy, record, index) => { 
-      return(
-      <div>
-        {this_Obj.state.userId == record.paidByUserId ? 'Self' :
-        <NavLink
-                  to={{
-                      pathname: `/userPersonal`,
-                      state: {
-                          userId: record.paidByUserId,
-                          tabKey: "registration"
-                      },
-                  }}
-              >
-                  <span className="input-heading-add-another pt-0">{paidBy}</span>
-        </NavLink>}
+    render: (paidBy, record, index) => {
+      return (
+        <div>
+          {this_Obj.state.userId == record.paidByUserId ? 'Self' :
+            <NavLink
+              to={{
+                pathname: `/userPersonal`,
+                state: {
+                  userId: record.paidByUserId,
+                  tabKey: "registration"
+                },
+              }}
+            >
+              <span className="input-heading-add-another pt-0">{paidBy}</span>
+            </NavLink>}
         </div>
-        )
+      )
     },
   },
   // {
@@ -844,6 +848,137 @@ const columnsIncident = [
   },
 ];
 
+const umpireActivityColumn = [
+  {
+    title: 'Date',
+    dataIndex: 'date',
+    key: 'date',
+    sorter: true,
+  },
+  {
+    title: 'Match',
+    dataIndex: 'match',
+    key: 'match',
+    sorter: true,
+
+  },
+  {
+    title: 'Payment',
+    dataIndex: 'payment',
+    key: 'payment',
+    sorter: true,
+
+  },
+  {
+    title: 'Payment Date',
+    dataIndex: 'paymentDtae',
+    key: 'paymentDtae',
+    sorter: true,
+
+  },
+  {
+    title: 'Payment Amount',
+    dataIndex: 'paymentAmount',
+    key: 'paymentAmount',
+    sorter: true,
+
+  },
+]
+
+const umpireActivityData = []
+
+const coachColumn = [
+  {
+    title: 'Match ID',
+    dataIndex: 'matchId',
+    key: 'coach matchId',
+    sorter: true,
+
+  },
+  {
+    title: 'Date',
+    dataIndex: 'startTime',
+    key: 'coach date',
+    sorter: (a, b) => a.startTime.localeCompare(b.startTime),
+    render: (startTime, record, index) => {
+      return (
+        <div>
+          {startTime != null ? moment(startTime).format("DD/MM/YYYY") : ""}
+        </div>
+      );
+    },
+  },
+  {
+    title: 'Home Team',
+    dataIndex: 'homeTeam',
+    key: 'coach homeTeam',
+    sorter: (a, b) => a.homeTeam.localeCompare(b.homeTeam),
+
+  },
+  {
+    title: 'Away Team',
+    dataIndex: 'awayTeam',
+    key: 'coach awayTeam',
+    sorter: (a, b) => a.awayTeam.localeCompare(b.awayTeam),
+
+  },
+  {
+    title: 'Result',
+    dataIndex: 'resultStatus',
+    key: 'coach result',
+    sorter: (a, b) => a.resultStatus.localeCompare(b.resultStatus),
+
+  },
+]
+
+const coachList = []
+
+const umpireColumn = [
+  {
+    title: 'Match ID',
+    dataIndex: 'matchId',
+    key: 'Umpire matchId',
+    sorter: true,
+
+  },
+  {
+    title: 'Date',
+    dataIndex: 'startTime',
+    key: 'Umpire date',
+    sorter: (a, b) => a.startTime.localeCompare(b.startTime),
+    render: (startTime, record, index) => {
+      return (
+        <div>
+          {startTime != null ? moment(startTime).format("DD/MM/YYYY") : ""}
+        </div>
+      );
+    },
+  },
+  {
+    title: 'Home Team',
+    dataIndex: 'homeTeam',
+    key: 'Umpire homeTeam',
+    sorter: (a, b) => a.homeTeam.localeCompare(b.homeTeam),
+
+  },
+  {
+    title: 'Away Team',
+    dataIndex: 'awayTeam',
+    key: 'Umpire awayTeam',
+    sorter: (a, b) => a.awayTeam.localeCompare(b.awayTeam),
+
+  },
+  {
+    title: 'Result',
+    dataIndex: 'resultStatus',
+    key: 'Umpire result',
+    sorter: (a, b) => a.resultStatus.localeCompare(b.resultStatus),
+
+  },
+]
+
+const umpireList = []
+
 class UserModulePersonalDetail extends Component {
   constructor(props) {
     super(props);
@@ -953,6 +1088,7 @@ class UserModulePersonalDetail extends Component {
       userId: userId,
       organisationId: getOrganisationData().organisationUniqueKey,
     };
+    this.props.getUserRole(userId)
     this.props.getUserModulePersonalDetailsAction(payload);
     this.props.getUserModulePersonalByCompetitionAction(payload);
   };
@@ -1103,6 +1239,8 @@ class UserModulePersonalDetail extends Component {
       // this.hanleActivityTableList(1, userId, competition, "parent", yearRefId);
       this.hanleActivityTableList(1, userId, competition, "scorer", yearRefId);
       this.hanleActivityTableList(1, userId, competition, "manager", yearRefId);
+      this.hanleActivityTableList(1, userId, competition, "umpire", yearRefId);
+      this.hanleActivityTableList(1, userId, competition, "umpireCoach", yearRefId);
     }
     if (tabKey === "3") {
       this.props.getUserModulePersonalByCompetitionAction(payload);
@@ -1132,7 +1270,7 @@ class UserModulePersonalDetail extends Component {
     let filter = {
       competitionId: competition.competitionUniqueKey,
       organisationId: getOrganisationData().organisationUniqueKey,
-      userId: userId,
+      userId: this.state.userId,
       yearRefId: yearRefId,
       paging: {
         limit: 10,
@@ -1141,8 +1279,10 @@ class UserModulePersonalDetail extends Component {
     };
     if (key == "player") this.props.getUserModuleActivityPlayerAction(filter);
     if (key == "parent") this.props.getUserModuleActivityParentAction(filter);
-    if (key == "scorer") this.props.getUserModuleActivityScorerAction(filter);
     if (key == "manager") this.props.getUserModuleActivityManagerAction(filter);
+    if (key == "scorer") this.props.getScorerData(filter, 4, "ENDED");
+    if (key == "umpire") this.props.getUmpireData(filter, 15, "ENDED");
+    if (key == "umpireCoach") this.props.getCoachData(filter, 20, "ENDED");
   };
 
   handleRegistrationTableList = (page, userId, competition, yearRefId) => {
@@ -1440,8 +1580,8 @@ class UserModulePersonalDetail extends Component {
 
   scorerActivityView = () => {
     let userState = this.props.userState;
-    let activityScorerList = userState.activityScorerList;
-    let total = userState.activityScorerTotalCount;
+    let activityScorerList = userState.scorerActivityRoster;
+    let total = userState.scorerTotalCount;
     return (
       <div
         className="comp-dash-table-view mt-2"
@@ -1462,14 +1602,15 @@ class UserModulePersonalDetail extends Component {
         <div className="d-flex justify-content-end">
           <Pagination
             className="antd-pagination pb-3"
-            current={userState.activityScorerPage}
+            current={userState.scorerCurrentPage}
             total={total}
             onChange={(page) =>
               this.hanleActivityTableList(
                 page,
                 this.state.userId,
                 this.state.competition,
-                "scorer"
+                "scorer",
+                this.state.yearRefId
               )
             }
           />
@@ -2080,6 +2221,122 @@ class UserModulePersonalDetail extends Component {
     );
   };
 
+  coachActivityView() {
+    let userState = this.props.userState;
+    let activityCoachList = userState.coachActivityRoster;
+    let total = userState.coachTotalCount;
+    return (
+      <div
+        className="comp-dash-table-view mt-2"
+        style={{ backgroundColor: "#f7fafc" }}
+      >
+        <div className="user-module-row-heading">
+          {AppConstants.coach}
+        </div>
+        <div className="table-responsive home-dash-table-view">
+          <Table
+            className="home-dashboard-table"
+            columns={coachColumn}
+            dataSource={activityCoachList}
+            pagination={false}
+            loading={userState.coachDataLoad == true && true}
+          />
+        </div>
+        <div className="d-flex justify-content-end">
+          <Pagination
+            className="antd-pagination pb-3"
+            current={userState.coachCurrentPage}
+            total={total}
+            onChange={(page) =>
+              this.hanleActivityTableList(
+                page,
+                this.state.userId,
+                this.state.competition,
+                "umpireCoach",
+                this.state.yearRefId
+              )
+            }
+          />
+        </div>
+      </div>
+    );
+  }
+
+  umpireActivityTable() {
+    let userState = this.props.userState;
+    let activityUmpireList = userState.umpireActivityRoster;
+    let total = userState.umpireTotalCount;
+    return (
+      <div
+        className="comp-dash-table-view mt-2"
+        style={{ backgroundColor: "#f7fafc" }}
+      >
+        <div className="user-module-row-heading">
+          {AppConstants.umpire}
+        </div>
+        <div className="table-responsive home-dash-table-view">
+          <Table
+            className="home-dashboard-table"
+            columns={umpireColumn}
+            dataSource={activityUmpireList}
+            pagination={false}
+            loading={userState.umpireDataLoad == true && true}
+          />
+        </div>
+        <div className="d-flex justify-content-end">
+          <Pagination
+            className="antd-pagination pb-3"
+            current={userState.umpireCurrentPage}
+            total={total}
+            onChange={(page) =>
+              this.hanleActivityTableList(
+                page,
+                this.state.userId,
+                this.state.competition,
+                "umpire",
+                this.state.yearRefId
+              )
+            }
+          />
+        </div>
+      </div>
+    );
+  }
+
+  umpireActivityView = () => {
+
+    return (
+      <div
+        className="comp-dash-table-view mt-2"
+        style={{ backgroundColor: "#f7fafc" }}
+      >
+        <div className="table-responsive home-dash-table-view">
+          <Table
+            className="home-dashboard-table"
+            columns={umpireActivityColumn}
+            dataSource={umpireActivityData}
+            pagination={false}
+          />
+        </div>
+        <div className="d-flex justify-content-end ">
+          <Pagination
+            className="antd-pagination pb-3"
+          // current={userState.incidentCurrentPage}
+          // total={total}
+          // onChange={(page) =>
+          //   this.hanleIncidentTableList(
+          //     page,
+          //     this.state.userId,
+          //     this.state.competition,
+          //     this.state.yearRefId
+          //   )
+          // }
+          />
+        </div>
+      </div>
+    );
+  };
+
   render() {
     let {
       activityPlayerList,
@@ -2087,6 +2344,10 @@ class UserModulePersonalDetail extends Component {
       activityScorerList,
       activityParentList,
       personalByCompData,
+      userRole,
+      coachActivityRoster,
+      umpireActivityRoster,
+      scorerActivityRoster
     } = this.props.userState;
     let personalDetails = personalByCompData != null ? personalByCompData : [];
     let userRegistrationId = null;
@@ -2126,13 +2387,25 @@ class UserModulePersonalDetail extends Component {
                         {activityManagerList != null &&
                           activityManagerList.length > 0 &&
                           this.managerActivityView()}
-                        {activityScorerList != null &&
-                          activityScorerList.length > 0 &&
+
+                        {coachActivityRoster != null &&
+                          coachActivityRoster.length > 0 &&
+                          this.coachActivityView()}
+
+                        {umpireActivityRoster != null &&
+                          umpireActivityRoster.length > 0 &&
+                          this.umpireActivityTable()}
+
+
+                        {scorerActivityRoster != null &&
+                          scorerActivityRoster.length > 0 &&
                           this.scorerActivityView()}
                         {/* {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()} */}
                         {activityPlayerList.length == 0 &&
                           activityManagerList.length == 0 &&
-                          activityScorerList.length == 0 && //&& activityParentList.length == 0
+                          scorerActivityRoster.length == 0 &&
+                          coachActivityRoster.length == 0 &&
+                          umpireActivityRoster.length == 0 &&
                           this.noDataAvailable()}
                       </TabPane>
                       <TabPane tab={AppConstants.statistics} key="2">
@@ -2157,6 +2430,12 @@ class UserModulePersonalDetail extends Component {
                       <TabPane tab={AppConstants.incident} key="7">
                         {this.incidentView()}
                       </TabPane>
+                      {
+                        userRole &&
+                        <TabPane tab={AppConstants.umpireActivity} key="8">
+                          {this.umpireActivityView()}
+                        </TabPane>
+                      }
                     </Tabs>
                   </div>
                 </div>
@@ -2183,7 +2462,12 @@ function mapDispatchToProps(dispatch) {
       getUserModuleActivityManagerAction,
       getOnlyYearListAction,
       getUserHistoryAction,
-      getUserModuleIncidentListAction
+      getUserModuleIncidentListAction,
+      getUserRole,
+      getScorerData,
+      getUmpireData,
+      getCoachData
+
     },
     dispatch
   );

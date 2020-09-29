@@ -370,6 +370,26 @@ let userHttpApi = {
     const url = `api/user/activity/incident`;
     return Method.dataPost(url, token, payload);
   },
+
+  getUserRoleData(userId) {
+    const url = `ure/byUserId?userId=${userId}`;
+    return Method.dataGet(url, token);
+  },
+
+  getScorerActivityData(payload, roleId, matchStatus) {
+    const url = `api/user/activity/roster?roleId=${roleId}&matchStatus=${matchStatus}`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  getUmpireData(payload, roleId, matchStatus) {
+    const url = `api/user/activity/roster?roleId=${roleId}&matchStatus=${matchStatus}`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  getCoachData(payload, roleId, matchStatus) {
+    const url = `api/user/activity/roster?roleId=${roleId}&matchStatus=${matchStatus}`;
+    return Method.dataPost(url, token, payload);
+  }
 }
 
 let Method = {
