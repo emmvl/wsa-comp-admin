@@ -159,6 +159,7 @@ function generateCourtData(courtData) {
         if (isArrayNotEmpty(courtDetails)) {
             for (let j in courtDetails) {
                 let object = {
+                    vId: courtData[i].venueId ? courtData[i].venueId :courtData[i].id,
                     lat: courtDetails[j].lat,
                     lng: courtDetails[j].lng,
                     courtNumber: courtDetails[j].courtNumber,
@@ -172,6 +173,20 @@ function generateCourtData(courtData) {
     }
 
     return courtselectedArr
+}
+
+function clearVenueFromCourtPreferences(state){
+    let venueIds  = state.selectedVenueId;
+    let courtPreferences = state.venueConstrainstData.courtPreferences;
+    let courtsNotValid = courtPreferences.filter(x => !venueIds.some(y => x.venueId === y));
+    if(courtsNotValid){
+        for(let court of courtsNotValid){
+            // court.venueId = null;
+            // court.venueCourtId = null;
+            let index = courtPreferences.indexOf(court);
+            courtPreferences.splice(index,1);
+        }
+    }
 }
 
 //// Match selected venues
@@ -788,6 +803,8 @@ function VenueTimeState(state = initialState, action) {
                 state.venuePost = selectedVenues
                 // state.venueConstrainstData[action.key] = selectedVenues
 
+                clearVenueFromCourtPreferences(state);
+
             } else if (action.contentType == 'addAnotherNonPlayingDate') {
                 let nonPlayingDatesObj = {
                     competitionNonPlayingDatesId: 0,
@@ -852,6 +869,8 @@ function VenueTimeState(state = initialState, action) {
                     state.courtPreferencesPost[action.index].entities = checkCourts
                 }
                 else {
+                    let court = state.courtArray.find(x => x.venueId == action.data)
+                    state.venueConstrainstData[action.contentType][action.index].venueId = court.vId;
                     state.venueConstrainstData[action.contentType][action.index][action.key] = action.data
                     state.courtPreferencesPost[action.index][action.key] = action.data
                 }
@@ -1047,7 +1066,8 @@ function VenueTimeState(state = initialState, action) {
                         "entitiesDivision": [],
                         "entitiesDivisionId": [],
                         "entitiesGrade": [],
-                        "entitiesGradeId": []
+                        "entitiesGradeId": [],
+                        "venueId": null
                     }
 
                     let divisionObj = {
