@@ -382,7 +382,7 @@ class LiveScoreSettingsView extends Component {
                 console.log(regInvitees, 'regInvitees')
                 if (regInvitees === "true") {
                     this.props.initializeCompData()
-                    this.props.settingDataPostInitiate({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName, competitionId: this.state.competitionId, isEdit: this.state.isEdit })
+                    this.props.settingDataPostInitiate({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName ? this.state.screenName : 'liveScore', competitionId: this.state.competitionId, isEdit: this.state.isEdit })
                 }
 
             }

@@ -579,7 +579,7 @@ class UmpireRoaster extends Component {
                         {/* Comp List */}
                         <div className="reg-col" >
                             <div className="reg-filter-col-cont" style={{ width: "90%" }}>
-                                <span className='year-select-heading' style={{ width: '135px' }}>{AppConstants.competition}:</span>
+                                <span className='year-select-heading' style={{ width: '175px' }}>{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ minWidth: 200 }}
@@ -597,8 +597,8 @@ class UmpireRoaster extends Component {
 
                         {/* Venue List */}
                         <div className="reg-col1 ml-0" >
-                            <div className="reg-filter-col-cont ml-5 " style={{ width: "90%" }} >
-                                <span className='year-select-heading'>{AppConstants.status}:</span>
+                            <div className="reg-filter-col-cont ml-0 " style={{ width: "90%" }} >
+                                <span className='year-select-heading' style={{ width: '127px' }}>{AppConstants.status}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ minWidth: 160 }}
@@ -614,8 +614,8 @@ class UmpireRoaster extends Component {
                         </div>
                         {/* umpire role */}
                         <div className="reg-col1 ml-0" >
-                            <div className="reg-filter-col-cont ml-5" style={{ width: "90%" }}>
-                                <span className='year-select-heading'>{AppConstants.role}:</span>
+                            <div className="reg-filter-col-cont ml-4" style={{ width: "90%" }}>
+                                <span className='year-select-heading' style={{width:"102px"}}>{AppConstants.role}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ minWidth: 160 }}

@@ -713,6 +713,7 @@ class AddProduct extends Component {
                             <InputWithHead
                                 auto_complete='off'
                                 heading={AppConstants.price}
+                                required={'pt-3'}
                                 placeholder={AppConstants.price}
                                 prefix="$"
                                 onChange={(e) =>
@@ -731,6 +732,7 @@ class AddProduct extends Component {
                                 auto_complete='off'
                                 heading={AppConstants.costPerItem}
                                 placeholder={AppConstants.costPerItem}
+                                required={'pt-3'}
                                 prefix="$"
                                 onChange={(e) =>
                                     this.props.onChangeProductDetails(
@@ -787,7 +789,7 @@ class AddProduct extends Component {
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.inventory}</span>
                 <div className="fluid-width">
-                    <div className="pt-4">
+                    <div className="pt-4 mb-2">
                         <Checkbox
                             className="single-checkbox mt-0"
                             checked={productDetailData.inventoryTracking}

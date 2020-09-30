@@ -444,16 +444,16 @@ class LiveScoreAddScorer extends Component {
             <div className="fluid-width">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm-3">
+                        <div className="col-sm-3 pl-3">
                             <div className="reg-add-save-button">
                                 <NavLink to='/liveScorerList'>
                                     <Button className="cancelBtnWidth" onClick={() => history.push('/liveScorerList')} type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>
                         </div>
-                        <div className="col-sm">
+                        <div className="col-sm pr-3">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>

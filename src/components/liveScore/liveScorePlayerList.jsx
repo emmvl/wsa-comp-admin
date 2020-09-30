@@ -64,7 +64,7 @@ const columns = [
         }
     },
     {
-        title: 'Player Id',
+        title: 'Player ID',
         dataIndex: 'playerId',
         key: 'playerId',
         sorter: true,

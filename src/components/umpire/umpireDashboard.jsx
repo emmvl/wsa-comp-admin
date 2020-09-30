@@ -1051,7 +1051,7 @@ class UmpireDashboard extends Component {
                     <div className="row reg-filter-row">
                         <div className="reg-col">
                             <div className="reg-filter-col-cont">
-                                <div className="year-select-heading" style={{ width: "157px" }}>
+                                <div className="year-select-heading" style={{ width: "145px" }}>
                                     {AppConstants.competition} :
                                 </div>
 
@@ -1072,7 +1072,7 @@ class UmpireDashboard extends Component {
 
                         <div className="reg-col1 ml-5">
                             <div className="reg-filter-col-cont">
-                                <div className="year-select-heading" style={{ width: "147px" }}>{AppConstants.venue} :</div>
+                                <div className="year-select-heading" style={{ width: "133px" }}>{AppConstants.venue} :</div>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     onChange={this.onVenueChange}
@@ -1106,7 +1106,7 @@ class UmpireDashboard extends Component {
 
                         <div className="reg-col1 ml-5">
                             <div className="reg-filter-col-cont">
-                                <div className="year-select-heading">{AppConstants.round} :</div>
+                                <div className="year-select-heading" style={{ width: "128px" }}>{AppConstants.round} :</div>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     onChange={this.onRoundChange}
