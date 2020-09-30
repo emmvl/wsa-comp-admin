@@ -164,7 +164,7 @@ function generateCourtData(courtData) {
                     courtNumber: courtDetails[j].courtNumber,
                     venueId: courtDetails[j].venueCourtId,
                     availabilities: courtDetails[j].availabilities,
-                    name: courtData[i].venueName + " - " + courtDetails[j].courtNumber
+                    name: (courtData[i].venueName ? courtData[i].venueName : courtData[i].name) + " - " + courtDetails[j].courtNumber
                 }
                 courtselectedArr.push(object)
             }

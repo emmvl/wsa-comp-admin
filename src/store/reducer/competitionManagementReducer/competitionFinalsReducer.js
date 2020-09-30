@@ -27,7 +27,8 @@ const initialState = {
     status: 0,
     competitionFinalsList: [obj],
     competitionVenuesList: [],
-    finalTypeRefId: null
+    finalTypeRefId: null,
+    errorMessage: null
 };
 function competitionFinalsReducer(state = initialState, action) {
 
@@ -54,7 +55,8 @@ function competitionFinalsReducer(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-                status: action.status
+                status: action.status,
+                errorMessage: action.result
             };
         
         case ApiConstants.UPDATE_COMPETITION_FINALS:
