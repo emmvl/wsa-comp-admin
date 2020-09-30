@@ -215,6 +215,7 @@ const ValidationConstants = {
     refundAmtCheck: "Refund amount cannot be greater that actual amount.",
     declineReasonRequired: "Please select the reason to decline",
     deRegisterReasonRequired: "Please select the reason to De-register",
+    transferReasonRequired: "Please select the reason to Trasfer",
     deRegisterChangeTypeRequired: "Please select the De-register change type",
     organisationField: 'Organisation is required',
     pleaseSelectGradesOrPools: "Please select Grades or Pooles",

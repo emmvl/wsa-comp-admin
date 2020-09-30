@@ -556,4 +556,5 @@ export default function* rootSaga() {
 
   yield takeEvery(ApiConstants.API_UMPIRE_MAIN_LIST_LOAD, umpireSaga.umpireListDataSaga)
 
+  yield takeEvery(ApiConstants.API_GET_TRANSFER_COMPETITIONS_LOAD, regChangeSaga.getTransferOrganisationsSaga);
 }
