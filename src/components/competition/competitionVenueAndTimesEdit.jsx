@@ -32,7 +32,7 @@ import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader';
 import CSVReader from 'react-csv-reader'
 import PlacesAutocomplete from "./elements/PlaceAutoComplete";
-
+import { getOrganisationData } from "../../util/sessionStorage"
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 let this_Obj = null;
@@ -177,14 +177,14 @@ class CompetitionVenueAndTimesEdit extends Component {
                     render: (clear, record, index) => (
                         <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: 'pointer', }}>
                             {/* {!record.isDisabled && ( */}
-                                <img
-                                    className="dot-image"
-                                    src={AppImages.redCross}
-                                    alt=""
-                                    width="16"
-                                    height="16"
-                                    onClick={() => this.removeTableObj(clear, record, index)}
-                                />
+                            <img
+                                className="dot-image"
+                                src={AppImages.redCross}
+                                alt=""
+                                width="16"
+                                height="16"
+                                onClick={() => this.removeTableObj(clear, record, index)}
+                            />
                             {/* )} */}
                         </span>
                     )
@@ -314,7 +314,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         let isVenueMapped = venueData.isVenueMapped;
         let affiliateData = venueData.affiliateData;
         let venueOrganisation = this.props.userState.venueOrganisation;
-
+        let organisationId = getOrganisationData().organisationUniqueKey;
         if (venueOrganisation != null && venueOrganisation.length > 0) {
             venueOrganisation.map((item, index) => {
                 // let affiliate = affiliateData.find(x=>x == item.id);
@@ -325,8 +325,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 //     item["isDisabled"] = false;
                 // }
                 // item["isDisabled"] = this.state.isUsed;
-                item["isDisabled"] = item.isChild == "0" ? true : false
-
+                item["isDisabled"] = item.isChild == "0" && item.organisationUniqueKey !== organisationId ? true : false
             });
             this.setState({ venueOrganisation: venueOrganisation });
         }
@@ -723,12 +722,12 @@ class CompetitionVenueAndTimesEdit extends Component {
                     </Form.Item> */}
                 </div>
                 {/* {!item.isDisabled && ( */}
-                    <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.removeObjectAction(index, item, 'gameTimeslot')}>
-                        <span className="user-remove-btn">
-                            <i className="fa fa-trash-o" aria-hidden="true"></i>
-                        </span>
-                        <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
-                    </div>
+                <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.removeObjectAction(index, item, 'gameTimeslot')}>
+                    <span className="user-remove-btn">
+                        <i className="fa fa-trash-o" aria-hidden="true"></i>
+                    </span>
+                    <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                </div>
                 {/* )} */}
             </div>
         )
@@ -750,10 +749,10 @@ class CompetitionVenueAndTimesEdit extends Component {
                     })}
                 </div>
                 {/* {!this.state.isUsed ? */}
-                    <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'gameDays')} className="input-heading-add-another">
-                        + {AppConstants.addAnotherDay}
-                    </span> 
-                    {/* : null
+                <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'gameDays')} className="input-heading-add-another">
+                    + {AppConstants.addAnotherDay}
+                </span>
+                {/* : null
                 } */}
             </div>
         );
@@ -846,11 +845,11 @@ class CompetitionVenueAndTimesEdit extends Component {
                 })}
                 {/* {this.gameData(item, index)} */}
                 {/* {!this.state.isUsed ? */}
-                    <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, tableIndex, 'availabilities', 'add_TimeSlot')} className="input-heading-add-another pt-3">
-                        + {AppConstants.add_TimeSlot}
-                    </span> 
-                //     : null
-                // }
+                <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, tableIndex, 'availabilities', 'add_TimeSlot')} className="input-heading-add-another pt-3">
+                    + {AppConstants.add_TimeSlot}
+                </span>
+             {/* : null
+            } */}
             </div>
         )
     }
@@ -869,23 +868,23 @@ class CompetitionVenueAndTimesEdit extends Component {
                         <span className="required-field" style={{ fontSize: "14px", paddingTop: '5px' }}></span>
                     </span>
                     {/* {!this.state.isUsed ? */}
-                        <Button className="primary-add-comp-form" type="primary" style={{ marginLeft: 'auto' }}>
-                            <div className="row">
-                                <div className="col-sm">
-                                    <label for="venueCourtUpload" className="csv-reader">
-                                        <img src={AppImages.import} alt="" className="export-image" />
-                                        {AppConstants.import}
-                                    </label>
-                                    <CSVReader
-                                        inputId="venueCourtUpload"
-                                        inputStyle={{ display: 'none' }}
-                                        parserOptions={papaparseOptions}
-                                        onFileLoaded={this.readVenueCourtCSV}
-                                    />
-                                </div>
+                    <Button className="primary-add-comp-form" type="primary" style={{ marginLeft: 'auto' }}>
+                        <div className="row">
+                            <div className="col-sm">
+                                <label for="venueCourtUpload" className="csv-reader">
+                                    <img src={AppImages.import} alt="" className="export-image" />
+                                    {AppConstants.import}
+                                </label>
+                                <CSVReader
+                                    inputId="venueCourtUpload"
+                                    inputStyle={{ display: 'none' }}
+                                    parserOptions={papaparseOptions}
+                                    onFileLoaded={this.readVenueCourtCSV}
+                                />
                             </div>
-                        </Button> 
-                        {/* : null
+                        </div>
+                    </Button>
+                    {/* : null
                     } */}
                 </div>
 
@@ -905,15 +904,15 @@ class CompetitionVenueAndTimesEdit extends Component {
                         />
                     </div>
                     {/* {!this.state.isUsed ? */}
-                        <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'venueCourts')} className="input-heading-add-another">
-                            + {AppConstants.addCourt}
-                        </span> 
-                        {/* : null
+                    <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'venueCourts')} className="input-heading-add-another">
+                        + {AppConstants.addCourt}
+                    </span>
+                    {/* : null
                     } */}
                 </div>
             </div>
         );
-    }; 
+    };
 
     onAddVenue = (e) => {
         e.preventDefault();
@@ -1005,10 +1004,10 @@ class CompetitionVenueAndTimesEdit extends Component {
                                     {AppConstants.cancel}
                                 </Button>
                                 {/* {!this.state.isUsed ? */}
-                                    <Button className="publish-button" type="primary" htmlType="submit">
-                                        {AppConstants.save}
-                                    </Button>
-                                    {/* : null} */}
+                                <Button className="publish-button" type="primary" htmlType="submit">
+                                    {AppConstants.save}
+                                </Button>
+                                {/* : null} */}
                             </div>
                         </div>
                     </div>
