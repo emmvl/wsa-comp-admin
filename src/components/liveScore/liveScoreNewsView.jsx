@@ -77,14 +77,14 @@ class LiveScoreNewsView extends Component {
         //     editorState
         // })
 
-        const html = newsData.body ? newsData.body :"";
+        const html = newsData ? newsData.body ? newsData.body : "" : "";
         const contentBlock = htmlToDraft(html);
         if (contentBlock) {
-          const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-          const editorState = EditorState.createWithContent(contentState);
-         this.setState({
-            editorState
-        })
+            const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+            const editorState = EditorState.createWithContent(contentState);
+            this.setState({
+                editorState
+            })
 
         }
     }
@@ -169,8 +169,8 @@ class LiveScoreNewsView extends Component {
         const { editorState } = this.state;
         return (
             <div className="content-view pt-4">
-                <InputWithHead heading={newsData.title} />
-                {newsData.newsImage && <img style={{ cursor: 'pointer' }} onClick={() => this.showModal(
+                <InputWithHead heading={newsData ? newsData.title : history.push('/liveScoreCompetitions')} />
+                {(newsData && newsData.newsImage) && <img style={{ cursor: 'pointer' }} onClick={() => this.showModal(
                     newsData.newsImage)}
                     src={newsData ? newsData.newsImage : ''}
                     height='100' width='100' />}
@@ -190,7 +190,7 @@ class LiveScoreNewsView extends Component {
                 </div>
 
 
-                {newsData.newsVideo && <div className='video-view mt-5'>
+                {(newsData && newsData.newsVideo) && <div className='video-view mt-5'>
                     <video style={{ cursor: 'pointer' }} onClick={() => this.showModal(newsData.newsVideo, true)}
                         src={newsData ? newsData.newsVideo : ''} height='100' width='150' />
                 </div>}
@@ -247,7 +247,7 @@ class LiveScoreNewsView extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-                                {!newsDataArr.published_at &&
+                                {(newsDataArr && !newsDataArr.published_at) &&
                                     // <div style={{ display: 'flex', flexDirection: 'row', paddingHorizontal: 50, }}>
                                     <div style={{ display: 'flex', flexDirection: 'row' }}>
                                         <Button
@@ -267,8 +267,8 @@ class LiveScoreNewsView extends Component {
                                     <Button className="open-reg-button" type="primary"
                                         onClick={() => this.onSubmitNewsPublish(newsDataArr, false)}
                                     >
-                                        {!newsDataArr.published_at ? AppConstants.publish_notify
-                                            : (newsDataArr.isActive == 1 && newsDataArr.isNotification == 1) ?
+                                        {(newsDataArr && !newsDataArr.published_at) ? AppConstants.publish_notify
+                                            : (newsDataArr && newsDataArr.isActive == 1 && newsDataArr.isNotification == 1) ?
                                                 AppConstants.notifyAgain : AppConstants.notify
 
                                         }

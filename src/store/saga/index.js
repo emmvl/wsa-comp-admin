@@ -554,4 +554,6 @@ export default function* rootSaga() {
   //Save Registration Change Dashboard
   yield takeEvery(ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_LOAD, regChangeSaga.saveRegistrationChangeReviewSaga)
 
+  yield takeEvery(ApiConstants.API_UMPIRE_MAIN_LIST_LOAD, umpireSaga.umpireListDataSaga)
+
 }

@@ -29,7 +29,12 @@ const initialState = {
     totalCount: null,
     currentPage: null,
     coachList: [],
-    umpireCoachCheckBox: false
+    umpireCoachCheckBox: false,
+    coachList_Data: [],
+    umpireList_Data: [],
+    umpireListResult_Data: [],
+    currentPage_Data: null,
+    totalCount_Data: null
 };
 
 function isUmpireCoachCheck(data, key) {
@@ -53,6 +58,20 @@ function createUmpireArray(result) {
         let userRoleCheck = result[i].userRoleEntities
         for (let j in userRoleCheck) {
             if (userRoleCheck[j].roleId == 15 || userRoleCheck[j].roleId == 19) {
+                umpireArray.push(result[i])
+                break
+            }
+        }
+    }
+    return umpireArray
+}
+
+function createUmpireCoachArray(result) {
+    let umpireArray = []
+    for (let i in result) {
+        let userRoleCheck = result[i].userRoleEntities
+        for (let j in userRoleCheck) {
+            if (userRoleCheck[j].roleId == 15 || userRoleCheck[j].roleId == 20) {
                 umpireArray.push(result[i])
                 break
             }
@@ -148,6 +167,28 @@ function umpireState(state = initialState, action) {
                 totalCount: action.result.page ? action.result.page.totalCount : null,
                 status: action.status
             };
+
+        ////Main Umpire List
+        case ApiConstants.API_UMPIRE_MAIN_LIST_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_UMPIRE_MAIN_LIST_SUCCESS:
+            let userMain_Data = action.result.userData ? action.result.userData : action.result
+            if (action.key == "data") {
+                let coachData = createCoachArray(JSON.parse(JSON.stringify(userMain_Data)))
+                state.coachList_Data = coachData
+            }
+            let checkUser_Data = createUmpireCoachArray(JSON.parse(JSON.stringify(userMain_Data)))
+            return {
+                ...state,
+                onLoad: false,
+                umpireList_Data: checkUser_Data,
+                umpireListResult_Data: checkUser_Data,
+                currentPage_Data: action.result.page ? action.result.page.currentPage : null,
+                totalCount_Data: action.result.page ? action.result.page.totalCount : null,
+                status: action.status
+            };
+
         //// Add Umpire
         case ApiConstants.API_ADD_UMPIRE_LOAD:
             return { ...state, onSaveLoad: true };

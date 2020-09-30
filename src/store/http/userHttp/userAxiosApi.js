@@ -389,7 +389,25 @@ let userHttpApi = {
   getCoachData(payload, roleId, matchStatus) {
     const url = `api/user/activity/roster?roleId=${roleId}&matchStatus=${matchStatus}`;
     return Method.dataPost(url, token, payload);
-  }
+  },
+
+  umpireList_Data(data) {
+    let url = null
+    if (data.userName) {
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+    } else if (data.offset != null) {
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+    }
+    else {
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}`
+    }
+
+    if (data.sortBy && data.sortOrder) {
+      url += `&sortBy=${data.sortBy}&sortOrder=${data.sortOrder}`;
+    }
+
+    return Method.dataGet(url, localStorage.token);
+  },
 }
 
 let Method = {

@@ -13,7 +13,7 @@ import history from "util/history";
 import { refRoleTypes } from "util/refRoles";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
-import { umpireListAction } from "store/actions/umpireAction/umpireAction";
+import { umpireMainListAction } from "store/actions/umpireAction/umpireAction";
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -70,7 +70,7 @@ function tableSort(key) {
     }
 
     this_obj.setState({ sortBy, sortOrder });
-    this_obj.props.umpireListAction({
+    this_obj.props.umpireMainListAction({
         refRoleId: JSON.stringify([15, 20]),
         entityTypes: entityTypes("COMPETITION"),
         compId: this_obj.state.selectedComp,
@@ -267,7 +267,7 @@ class Umpire extends Component {
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
                 if (firstComp !== false) {
-                    this.props.umpireListAction({
+                    this.props.umpireMainListAction({
                         refRoleId: JSON.stringify([15, 20]),
                         entityTypes: entityTypes("COMPETITION"),
                         compId: firstComp,
@@ -308,7 +308,7 @@ class Umpire extends Component {
             offsetData: offset,
         });
 
-        this.props.umpireListAction({
+        this.props.umpireMainListAction({
             refRoleId: JSON.stringify([15, 20]),
             entityTypes: entityTypes("COMPETITION"),
             compId: this.state.selectedComp,
@@ -319,8 +319,8 @@ class Umpire extends Component {
     };
 
     contentView = () => {
-        const { umpireList, totalCount, currentPage } = this.props.umpireState;
-        let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : [];
+        const { umpireList_Data, totalCount_Data, currentPage_Data } = this.props.umpireState;
+        let umpireListResult = isArrayNotEmpty(umpireList_Data) ? umpireList_Data : [];
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -349,8 +349,8 @@ class Umpire extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
-                            current={currentPage}
-                            total={totalCount}
+                            current={currentPage_Data}
+                            total={totalCount_Data}
                             // defaultPageSize={10}
                             onChange={this.handlePageChange}
                         />
@@ -378,7 +378,7 @@ class Umpire extends Component {
 
         let compKey = compID.competitionUniqueKey;
 
-        this.props.umpireListAction({
+        this.props.umpireMainListAction({
             refRoleId: JSON.stringify([15, 20]),
             entityTypes: entityTypes("COMPETITION"),
             compId: selectedComp,
@@ -396,7 +396,7 @@ class Umpire extends Component {
 
         const { sortBy, sortOrder } = this.state;
         if (e.target.value === null || e.target.value === "") {
-            this.props.umpireListAction({
+            this.props.umpireMainListAction({
                 refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
@@ -413,7 +413,7 @@ class Umpire extends Component {
         const { sortBy, sortOrder } = this.state;
         const code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
-            this.props.umpireListAction({
+            this.props.umpireMainListAction({
                 refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
@@ -430,7 +430,7 @@ class Umpire extends Component {
         const { sortBy, sortOrder } = this.state;
         if (this.state.searchText === null || this.state.searchText === "") {
         } else {
-            this.props.umpireListAction({
+            this.props.umpireMainListAction({
                 refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
@@ -624,7 +624,7 @@ class Umpire extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
-        umpireListAction,
+        umpireMainListAction,
         userExportFilesAction,
     }, dispatch);
 }
