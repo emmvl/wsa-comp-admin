@@ -16,6 +16,11 @@
   max-width: 155px !important;
 }
 
+.innerSelect-value-draws
+.ant-select-selection-selected-value{
+  max-width: 120px !important;
+}
+
 .ant-menu {
   font-size: 14px;
   color: var(--app-4c4c6d);
@@ -308,6 +313,10 @@
 
 @media (max-width: 1024px) {
 .innerSelect-value
+.ant-select-selection-selected-value{
+  max-width: 120px !important;
+}
+.innerSelect-value-draws
 .ant-select-selection-selected-value{
   max-width: 120px !important;
 }

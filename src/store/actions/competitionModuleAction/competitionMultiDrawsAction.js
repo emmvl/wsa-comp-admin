@@ -77,9 +77,9 @@ function dateSelectionRounds(data) {
     return action
 
 }
-function clearDraws(key) {
+function clearMultiDraws(key) {
     const action = {
-        type: ApiConstants.cleardrawsData,
+        type: ApiConstants.clearMultidrawsData,
         key
     }
     return action
@@ -175,7 +175,7 @@ export {
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,
     dateSelectionRounds,
-    clearDraws,
+    clearMultiDraws,
     getDivisionGradeNameLisAction,
     publishDraws,
     matchesListDrawsAction,

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Breadcrumb, Popover, Menu, Select, DatePicker, Checkbox, Form, message } from "antd";
+import { Layout, Button, Breadcrumb, Popover, Menu, Select, DatePicker, Checkbox, Form, message, Spin } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -25,7 +25,7 @@ import {
     saveDraws,
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,
-    clearDraws,
+    clearMultiDraws,
     publishDraws,
     matchesListDrawsAction,
     unlockDrawsAction,
@@ -128,6 +128,7 @@ class MultifieldDrawsNew extends Component {
             showAllOrg: false,
             allOrgChecked: true,
         };
+        this.props.clearMultiDraws()
     }
 
 
@@ -262,7 +263,7 @@ class MultifieldDrawsNew extends Component {
                     !competitionModuleState.error &&
                     competitionModuleState.status == 1
                 ) {
-                    this.props.clearDraws('rounds');
+                    this.props.clearMultiDraws('rounds');
                     this.setState({
                         firstTimeCompId: this.state.firstTimeCompId,
                         roundId: null,
@@ -390,22 +391,43 @@ class MultifieldDrawsNew extends Component {
     }
 
     applyDateFilter = () => {
-        this.props.clearDraws()
-        this.props.changeDrawsDateRangeAction(this.state.yearRefId,
-            this.state.firstTimeCompId, this.state.startDate, this.state.endDate);
-        this.setState({
-            roundId: 0,
-            //venueId: null,
-            roundTime: null,
-            venueLoad: true,
-            competitionDivisionGradeId: null,
-            changeDateLoad: true
-        });
+        this.props.clearMultiDraws()
+        if (this.state.firstTimeCompId == "-1") {
+            this.props.changeDrawsDateRangeAction(this.state.yearRefId,
+                this.state.firstTimeCompId, this.state.startDate, this.state.endDate);
+            this.setState({
+                roundId: 0,
+                //venueId: null,
+                roundTime: null,
+                venueLoad: true,
+                competitionDivisionGradeId: null,
+                changeDateLoad: true
+            });
+        }
+        else {
+            this.props.getCompetitionDrawsAction(
+                this.state.yearRefId,
+                this.state.firstTimeCompId,
+                this.state.venueId,
+                this.state.roundId,
+                this.state.organisation_Id, null, null, this.state.dateRangeCheck
+            );
+            // this.setState({
+            // venueLoad: true,
+            // changeDateLoad: true
+            //     roundId: 0,
+            //     //venueId: null,
+            //     roundTime: null,
+            //     venueLoad: true,
+            //     competitionDivisionGradeId: null,
+            //     changeDateLoad: true
+            // });
+        }
     }
 
     //////year change onchange
     onYearChange = (yearId) => {
-        this.props.clearDraws('rounds');
+        this.props.clearMultiDraws('rounds');
         setOwnCompetitionYear(yearId);
         setOwn_competition(undefined);
         setOwn_competitionStatus(undefined)
@@ -450,13 +472,158 @@ class MultifieldDrawsNew extends Component {
         }
     }
 
+    onSwap(source, target, drawData, round_Id) {
+        let sourceIndexArray = source.split(':');
+        let targetIndexArray = target.split(':');
+        let sourceXIndex = sourceIndexArray[0];
+        let sourceYIndex = sourceIndexArray[1];
+        let targetXIndex = targetIndexArray[0];
+        let targetYIndex = targetIndexArray[1];
+        if (sourceXIndex === targetXIndex && sourceYIndex === targetYIndex) {
+            return;
+        }
+        // let drawData = this.props.drawsState.getStaticDrawsData;
+        let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
+        let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
+        if (sourceObejct.drawsId !== null && targetObject.drawsId !== null) {
+            this.updateCompetitionDraws(
+                sourceObejct,
+                targetObject,
+                sourceIndexArray,
+                targetIndexArray,
+                drawData,
+                round_Id
+            );
+        } else if (sourceObejct.drawsId == null && targetObject.drawsId == null) {
+        } else {
+            this.updateCompetitionNullDraws(
+                sourceObejct,
+                targetObject,
+                sourceIndexArray,
+                targetIndexArray,
+                drawData,
+                round_Id
+            );
+        }
+    }
+
+    getColumnData = (indexArray, drawData) => {
+        let yIndex = indexArray[1];
+        let object = null;
+
+        for (let i in drawData) {
+            let slot = drawData[i].slotsArray[yIndex];
+            if (slot.drawsId !== null) {
+                object = slot;
+                break;
+            }
+        }
+        return object;
+    };
+
+    ///////update the competition draws on  swapping and hitting update Apis if both has value
+    updateCompetitionDraws = (
+        sourceObejct,
+        targetObject,
+        sourceIndexArray,
+        targetIndexArray,
+        drawsData,
+        round_Id
+    ) => {
+        let key = this.state.firstTimeCompId === "-1" || this.state.dateRangeCheck ? "all" : "add"
+        let customSourceObject = {
+            // drawsId: sourceObejct.drawsId,
+            drawsId: targetObject.drawsId,
+            homeTeamId: sourceObejct.homeTeamId,
+            awayTeamId: sourceObejct.awayTeamId,
+            competitionDivisionGradeId: sourceObejct.competitionDivisionGradeId,
+            isLocked: 1,
+        };
+        let customTargetObject = {
+            // drawsId: targetObject.drawsId,
+            drawsId: sourceObejct.drawsId,
+            homeTeamId: targetObject.homeTeamId,
+            awayTeamId: targetObject.awayTeamId,
+            // homeTeamId: 268,
+            // awayTeamId: 262,
+            competitionDivisionGradeId: targetObject.competitionDivisionGradeId,
+            isLocked: 1,
+        };
+        let postObject = {
+            draws: [customSourceObject, customTargetObject],
+        };
+
+        this.props.updateCompetitionDraws(
+            postObject,
+            sourceIndexArray,
+            targetIndexArray,
+            key,
+            round_Id
+        );
+
+        this.setState({ updateLoad: true });
+    };
+
+    ///////update the competition draws on  swapping and hitting update Apis if one has N/A(null)
+    updateCompetitionNullDraws = (
+        sourceObejct,
+        targetObject,
+        sourceIndexArray,
+        targetIndexArray,
+        drawData,
+        round_Id
+    ) => {
+        let updatedKey = this.state.firstTimeCompId === "-1" || this.state.dateRangeCheck ? "all" : "add"
+        let postData = null;
+        if (sourceObejct.drawsId == null) {
+            let columnObject = this.getColumnData(sourceIndexArray, drawData);
+            postData = {
+                drawsId: targetObject.drawsId,
+                venueCourtId: sourceObejct.venueCourtId,
+                matchDate: moment(columnObject.matchDate).format('YYYY-MM-DD HH:mm'),
+                startTime: columnObject.startTime,
+                endTime: columnObject.endTime,
+            };
+        } else {
+            let columnObject = this.getColumnData(targetIndexArray, drawData);
+            postData = {
+                drawsId: sourceObejct.drawsId,
+                venueCourtId: targetObject.venueCourtId,
+                matchDate: moment(columnObject.matchDate).format('YYYY-MM-DD HH:mm'),
+                startTime: columnObject.startTime,
+                endTime: columnObject.endTime,
+            };
+        }
+        let apiData = {
+            yearRefId: this.state.yearRefId,
+            competitionId: this.state.firstTimeCompId,
+            venueId: this.state.venueId,
+            roundId: this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? 0 : this.state.roundId,
+            orgId: null,
+            startDate: this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? this.state.startDate : null,
+            endDate: this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? this.state.endDate : null
+        }
+
+        this.props.updateCourtTimingsDrawsAction(
+            postData,
+            sourceIndexArray,
+            targetIndexArray,
+            updatedKey,
+            round_Id,
+            apiData,
+            this.state.dateRangeCheck
+        );
+
+        this.setState({ updateLoad: true });
+    };
+
     // on Competition change
     onCompetitionChange(competitionId, statusRefId) {
         let newDate = new Date()
-        this.props.clearDraws('rounds');
+        this.props.clearMultiDraws('rounds');
         if (competitionId == -1) {
             this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId, "all");
-            this.setState({ dateRangeCheck: true })
+            // this.setState({ dateRangeCheck: true })
         } else {
             setOwn_competition(competitionId);
             setOwn_competitionStatus(statusRefId)
@@ -481,7 +648,7 @@ class MultifieldDrawsNew extends Component {
     //////onRoundsChange
     onRoundsChange = (roundId) => {
         let roundData = this.props.drawsState.getDrawsRoundsData;
-        this.props.clearDraws();
+        this.props.clearMultiDraws();
         let matchRoundData = roundData.findIndex((x) => x.roundId == roundId);
         let roundTime = roundData[matchRoundData].startDateTime;
         // this.props.dateSelection(roundId)
@@ -533,9 +700,23 @@ class MultifieldDrawsNew extends Component {
     };
 
     checkColor(slot) {
-        if (slot.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0) {
-            if (this.state.organisation_Id == slot.awayTeamOrganisationId || this.state.organisation_Id == slot.homeTeamOrganisationId || this.state.organisation_Id == "-1") {
-                return slot.colorCode
+        let checkDivisionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
+        let checkCompetitionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
+        let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
+        let checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
+        if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
+            if (!checkCompetitionFalse.includes(slot.competitionName)) {
+                if (!checkVenueFalse.includes(slot.venueId)) {
+                    if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
+                        return slot.colorCode
+                    }
+                    else {
+                        return "#999999"
+                    }
+                }
+                else {
+                    return "#999999"
+                }
             }
             else {
                 return "#999999"
@@ -546,14 +727,55 @@ class MultifieldDrawsNew extends Component {
         }
     }
 
-    checkSwap(slot) {
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
-        if (slot.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0) {
-            if (this.state.organisation_Id == slot.awayTeamOrganisationId || this.state.organisation_Id == slot.homeTeamOrganisationId || this.state.organisation_Id == "-1") {
-                if (!disabledStatus) {
-                    return true
+    checkAllDivisionData = () => {
+        let uncheckedDivisionArr = []
+        let { drawDivisions } = this.props.drawsState
+        if (drawDivisions.length > 0) {
+            for (let i in drawDivisions) {
+                let divisionsArr = drawDivisions[i].legendArray
+                for (let j in divisionsArr) {
+                    if (divisionsArr[j].checked == false) {
+                        uncheckedDivisionArr.push(divisionsArr[j].competitionDivisionGradeId)
+                    }
                 }
-                else {
+            }
+        }
+        return uncheckedDivisionArr
+    }
+
+
+    checkAllCompetitionData = (checkedArray, key) => {
+        let uncheckedArr = []
+        if (checkedArray.length > 0) {
+            for (let i in checkedArray) {
+                if (checkedArray[i].checked == false) {
+                    uncheckedArr.push(checkedArray[i][key])
+                }
+            }
+            return uncheckedArr
+        }
+    }
+    checkSwap(slot) {
+        let checkDivisionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
+        let checkCompetitionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
+        let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
+        let checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
+        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
+            if (!checkCompetitionFalse.includes(slot.competitionName)) {
+                if (!checkVenueFalse.includes(slot.venueId)) {
+                    if (!checkOrganisationFalse.includes(slot.awayTeamOrganisationId) || !checkOrganisationFalse.includes(slot.homeTeamOrganisationId)) {
+                        if (!disabledStatus) {
+                            return true
+                        }
+                        else {
+                            return false
+                        }
+                    }
+                    else {
+                        return false
+                    }
+                } else {
                     return false
                 }
             }
@@ -600,6 +822,7 @@ class MultifieldDrawsNew extends Component {
                                     minWidth: 250
                                 }}>
                                 <RangePicker
+                                    disabled={this.state.firstTimeCompId == "-1" ? false : true}
                                     onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
                                     format={"DD-MM-YYYY"}
                                     style={{ width: "100%", minWidth: 180 }}
@@ -609,7 +832,7 @@ class MultifieldDrawsNew extends Component {
                         </div>
                         <div className="col-sm mt-2">
                             <Select
-                                className="year-select reg-filter-select1"
+                                className="year-select reg-filter-select1 innerSelect-value-draws"
                                 style={{ maxWidth: 150, minWidth: 150 }}
                                 onChange={(competitionId, e) =>
                                     this.onCompetitionChange(competitionId, e.key)
@@ -634,6 +857,7 @@ class MultifieldDrawsNew extends Component {
                             <Select
                                 className="year-select reg-filter-select1"
                                 style={{ maxWidth: 150, minWidth: 150 }}
+                                disabled={this.state.firstTimeCompId == "-1" ? true : false}
                                 onChange={(roundId) => this.onRoundsChange(roundId)}
                                 value={this.state.roundId}
                             >
@@ -759,7 +983,7 @@ class MultifieldDrawsNew extends Component {
                                     <Checkbox
                                         className="single-checkbox-radio-style"
                                         style={{ paddingTop: 8 }}
-                                        checked={item.competitionStatus}
+                                        checked={item.checked}
                                         onChange={e => this.props.checkBoxOnChange(e.target.checked, "competition", index)}
                                     >
                                         {item.competitionName}
@@ -778,6 +1002,17 @@ class MultifieldDrawsNew extends Component {
 
             </>
         )
+    }
+
+    //navigateToDrawEdit
+    navigateToDrawEdit = () => {
+        if (this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck) {
+            this.props.clearMultiDraws('rounds');
+            history.push("/competitionDrawEdit")
+        }
+        else {
+            history.push("/competitionDrawEdit")
+        }
     }
 
 
@@ -804,43 +1039,37 @@ class MultifieldDrawsNew extends Component {
                         </a>
                     </div>
                 </div>
-                <div id="division-collapsable-div" className="pt-0 collapse in">
-                    {/* <Checkbox
-                        className="single-checkbox-radio-style"
-                        style={{ paddingTop: 8 }}
-                        checked={this.state.allDivisionChecked}
-                        onChange={e => this.setState({ allDivisionChecked: e.target.checked })}
-                    >
-                        {AppConstants.all}
-                    </Checkbox> */}
-                    {isArrayNotEmpty(drawDivisions) && drawDivisions.map((item, index) => {
-                        return (
-                            <div className="column pl-5">
-                                <div style={{ paddingTop: 10, paddingBottom: 10 }}>
-                                    <span className="inbox-time-text" >{item.competitionName}</span>
-                                </div>
-                                {isArrayNotEmpty(item.legendArray) && item.legendArray.map((subItem, subIndex) => {
-                                    return (
-                                        <div >
-                                            <Checkbox
-                                                className={`single-checkbox-radio-style ${getColor(subItem.colorCode)}`}
-                                                style={{ paddingTop: 8 }}
-                                                // checked={subItem.checked}
-                                                checked={subItem.checked}
-                                                onChange={e => this.props.checkBoxOnChange(e.target.checked, "division", index, subIndex)}
+                {this.state.firstTimeCompId == "-1" ?
+                    <div id="division-collapsable-div" className="pt-0 collapse in">
+                        {/* {this.state.firstTimeCompId == "-1" */}
+                        {isArrayNotEmpty(drawDivisions) && drawDivisions.map((item, index) => {
+                            return (
+                                <div className="column pl-5">
+                                    <div style={{ paddingTop: 10, paddingBottom: 10 }}>
+                                        <span className="inbox-time-text" >{item.competitionName}</span>
+                                    </div>
+                                    {isArrayNotEmpty(item.legendArray) && item.legendArray.map((subItem, subIndex) => {
+                                        return (
+                                            <div >
+                                                <Checkbox
+                                                    className={`single-checkbox-radio-style ${getColor(subItem.colorCode)}`}
+                                                    style={{ paddingTop: 8 }}
+                                                    // checked={subItem.checked}
+                                                    checked={subItem.checked}
+                                                    onChange={e => this.props.checkBoxOnChange(e.target.checked, "division", index, subIndex)}
 
-                                            // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
-                                            >
-                                                {subItem.divisionName + "-" + subItem.gradeName}
-                                            </Checkbox>
-                                        </div>
-                                    )
-                                }
-                                )}
-                            </div>
-                        )
-                    })}
-                    {/* <div className={showAllDivision ? "multi-draw-left-list-view" : ""}>
+                                                // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                                >
+                                                    {subItem.divisionName + "-" + subItem.gradeName}
+                                                </Checkbox>
+                                            </div>
+                                        )
+                                    }
+                                    )}
+                                </div>
+                            )
+                        })}
+                        {/* <div className={showAllDivision ? "multi-draw-left-list-view" : ""}>
                         {isArrayNotEmpty(divisionGradeNameList) && divisionGradeNameList.map((item, index) => {
                             return (
                                 index < this.checkDisplayCountList(divisionGradeNameList, showAllDivision) && <div className="column pl-5">
@@ -857,12 +1086,38 @@ class MultifieldDrawsNew extends Component {
                         }
                         )}
                     </div> */}
-                    {isArrayNotEmpty(drawDivisions) || drawDivisions.length > 5 && <span className="input-heading-add-another pt-4"
-                        onClick={() => this.changeShowAllStatus("division")}>
-                        {showAllDivision == true ? AppConstants.hide : AppConstants.showAll}
-                    </span>
-                    }
-                </div>
+                        {isArrayNotEmpty(drawDivisions) || drawDivisions.length > 5 && <span className="input-heading-add-another pt-4"
+                            onClick={() => this.changeShowAllStatus("division")}>
+                            {showAllDivision == true ? AppConstants.hide : AppConstants.showAll}
+                        </span>
+                        }
+                    </div>
+                    :
+                    <div id="division-collapsable-div" className="pt-0 collapse in">
+                        {isArrayNotEmpty(divisionGradeNameList) && divisionGradeNameList.map((item, index) => {
+                            return (
+                                index < this.checkDisplayCountList(divisionGradeNameList, showAllDivision) && <div className="column pl-5">
+                                    <Checkbox
+                                        className={`single-checkbox-radio-style ${getColor(item.colorCode)}`}
+                                        style={{ paddingTop: 8 }}
+                                        checked={item.checked}
+                                        onChange={e => this.props.checkBoxOnChange(e.target.checked, "singleCompeDivision", index)}
+                                    // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                                    >
+                                        {item.name}
+                                    </Checkbox>
+                                </div>
+                            )
+                        }
+                        )}
+
+                        {isArrayNotEmpty(divisionGradeNameList) || divisionGradeNameList.length > 5 && <span className="input-heading-add-another pt-4"
+                            onClick={() => this.changeShowAllStatus("division")}>
+                            {showAllDivision == true ? AppConstants.hide : AppConstants.showAll}
+                        </span>
+                        }
+                    </div>
+                }
             </>
         )
     }
@@ -908,8 +1163,6 @@ class MultifieldDrawsNew extends Component {
                                         style={{ paddingTop: 8 }}
                                         checked={item.checked}
                                         onChange={e => this.props.checkBoxOnChange(e.target.checked, "organisation", index)}
-
-                                    // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
                                     >
                                         {item.organisationName}
                                     </Checkbox>
@@ -918,7 +1171,7 @@ class MultifieldDrawsNew extends Component {
                         }
                         )}
                     </div>
-                    {isArrayNotEmpty(drawOrganisations) && <span className="input-heading-add-another pt-4"
+                    {isArrayNotEmpty(drawOrganisations) || drawOrganisations.length > 5 && <span className="input-heading-add-another pt-4"
                         onClick={() => this.changeShowAllStatus("org")}>
                         {showAllOrg == true ? AppConstants.hide : AppConstants.showAll}
                     </span>
@@ -928,6 +1181,13 @@ class MultifieldDrawsNew extends Component {
             </>
         )
     }
+
+    //unlockDraws
+    unlockDraws(id, round_Id, venueCourtId) {
+        let key = this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? 'all' : "singleCompetition"
+        this.props.unlockDrawsAction(id, round_Id, venueCourtId, key);
+    }
+
 
     sideMenuView = () => {
         let { filterEnable } = this.state
@@ -941,7 +1201,7 @@ class MultifieldDrawsNew extends Component {
                     <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span>
                 </div>
                 {filterEnable && this.venueLeftView()}
-                {filterEnable && this.competitionLeftView()}
+                {this.state.firstTimeCompId !== "-1" || filterEnable && this.competitionLeftView()}
                 {filterEnable && this.divisionLeftView()}
                 {filterEnable && this.organisationLeftView()}
             </div>
@@ -980,10 +1240,35 @@ class MultifieldDrawsNew extends Component {
                             <img className="dot-image" src={AppImages.downloadIcon} alt="" width="16" height="16" />
                             <span className="input-heading-add-another pt-0 pr-5 pl-3">{AppConstants.matchesList}</span>
                         </div>
-                        <Button className="multi-field-draw-edit-button" type="primary">
+                        <Button className="multi-field-draw-edit-button" type="primary" onClick={() => this.navigateToDrawEdit()}>
                             {AppConstants.edit}
                         </Button>
                     </div>
+
+
+                </div>
+                <div >
+                    {this.props.drawsState.spinLoad && (
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                height: 100,
+                                alignItems: 'center',
+                            }}
+                        >
+                            <Spin size='default' spinning={this.props.drawsState.spinLoad} />
+                        </div>
+                    )}
+                    {this.props.drawsState.getRoundsDrawsdata.length <= 0 &&
+                        < div style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            height: 100,
+                            alignItems: 'center',
+                        }}></div>
+
+                    }
                     {this.props.drawsState.updateLoad ? (
                         <div className="draggable-wrap draw-data-table">
                             <Loader visible={this.props.drawsState.updateLoad} />
@@ -991,27 +1276,17 @@ class MultifieldDrawsNew extends Component {
                                 this.props.drawsState.getRoundsDrawsdata.map(
                                     (dateItem, dateIndex) => {
                                         return (
-                                            <div key={"drawData" + dateIndex}>
-                                                {/* <div className="draws-round-view">
-                                                    <span className="draws-round">
-                                                        {dateItem.roundName}
-                                                    </span>
-                                                </div> */}
-                                                {this.draggableView(dateItem)}
-                                                {/* {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
-                                                    <div>
-                                                        <AllLegendComponent
-                                                            allLegendArray={dateItem.legendsArray}
-                                                        />
+                                            <div>
+                                                {this.state.firstTimeCompId != "-1" &&
+                                                    <div className="draws-round-view">
+                                                        <span className="draws-round">
+                                                            {dateItem.roundName}
+                                                        </span>
                                                     </div>
-                                                    :
-                                                    <div style={{ display: 'table', marginTop: 35 }}>
-                                                        <LegendComponent
-                                                            disabled={disabledStatus}
-                                                            legendArray={dateItem.legendsArray}
-                                                        />
-                                                    </div>
-                                                } */}
+                                                }
+                                                <div key={"drawData" + dateIndex}>
+                                                    {this.draggableView(dateItem)}
+                                                </div>
                                             </div>
                                         );
                                     }
@@ -1019,50 +1294,41 @@ class MultifieldDrawsNew extends Component {
                         </div>
                     ) : (
                             <div className="draggable-wrap draw-data-table">
+                                <Loader visible={this.props.drawsState.updateLoad} />
                                 {this.props.drawsState.getRoundsDrawsdata.length > 0 &&
                                     this.props.drawsState.getRoundsDrawsdata.map(
                                         (dateItem, dateIndex) => {
                                             return (
-                                                <div>
-                                                    {dateItem.legendsArray.length > 0 ?
-                                                        <div className="pt-4" key={"drawData" + dateIndex}>
-                                                            {/* <div className="draws-round-view">
-                                                                <span className="draws-round">
-                                                                    {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? "" : dateItem.roundName}
-                                                                </span>
-                                                            </div> */}
-                                                            {this.draggableView(dateItem)}
-                                                            {/* {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
-                                                                <div>
-                                                                    <AllLegendComponent
-                                                                        allLegendArray={dateItem.legendsArray}
-                                                                    />
-                                                                </div>
-                                                                :
-                                                                <div style={{ display: 'table', marginTop: 35 }}>
-                                                                    <LegendComponent
-                                                                        disabled={disabledStatus}
-                                                                        legendArray={dateItem.legendsArray}
-                                                                    />
-                                                                </div>
-                                                            } */}
-                                                        </div>
-                                                        :
-                                                        <div>
-                                                            {/* {this.state.firstTimeCompId == -1 &&
-                                                                <div class="comp-warning-info" style={{ paddingBottom: "40px" }}>{AppConstants.noFixturesMessage}</div>
-                                                            } */}
+                                                <div className="pt-4" key={"drawData" + dateIndex}>
+                                                    {this.state.firstTimeCompId != "-1" &&
+                                                        <div className="draws-round-view">
+                                                            <span className="draws-round">
+                                                                {dateItem.roundName}
+                                                            </span>
                                                         </div>
                                                     }
+                                                    {this.draggableView(dateItem)}
                                                 </div>
+
+                                                /* {dateItem.legendsArray.length > 0 ?
+                                                     <div className="pt-4" key={"drawData" + dateIndex}>
+                                                         {this.draggableView(dateItem)}
+                                                     </div>
+                                                     :
+                                                     <div>
+                                                         {
+                                                             <div class="comp-warning-info" style={{ paddingBottom: "40px" }}>{AppConstants.noFixturesMessage}</div>
+                                                         }
+                                                     </div>
+                                                 } */
+                                                // </div>
                                             );
                                         }
                                     )}
                             </div>
                         )}
-
                 </div>
-            </div>
+            </div >
         );
     }
 
@@ -1329,17 +1595,17 @@ class MultifieldDrawsNew extends Component {
                                                                     </NavLink>
                                                                 </Menu.Item>
                                                             </SubMenu>
-                                                        </Menu>
-                                                    </div>
+                                                        </Menu >
+                                                    </div >
                                                 )
                                             }
                                         </div>
                                     );
                                 })}
-                            </div>
+                            </div >
                         );
                     })}
-                </div>
+                </div >
             </div >
         );
     };
@@ -1381,7 +1647,7 @@ function mapDispatchToProps(dispatch) {
             saveDraws,
             getCompetitionVenue,
             updateCourtTimingsDrawsAction,
-            clearDraws,
+            clearMultiDraws,
             publishDraws,
             matchesListDrawsAction,
             generateDrawAction,
