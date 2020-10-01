@@ -169,7 +169,7 @@ function regChangeReducer(state = initialState, action) {
                 error: null
             }
 
-        case ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_SUCCESS:
+        case ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_LOAD:
             return {...state, onSaveLoad: true}
 
         case ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_SUCCESS:
