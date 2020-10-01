@@ -399,14 +399,16 @@ class CompetitionFinals extends Component {
 
     saveCompetitionFinals = (e) => {
         e.preventDefault();
-        const {competitionFinalsList,competitionVenuesList} = this.props.competitionFinalsState;
+        const {competitionFinalsList,competitionVenuesList,finalTypeRefId} = this.props.competitionFinalsState;
         this.props.form.validateFieldsAndScroll((err, values) => {
             console.log("err::" + err);
             if (!err) {
-                let checkDuplicate = this.checkDuplicates(competitionFinalsList);
-                if(checkDuplicate.error){
-                    message.error(checkDuplicate.errorMessage);
-                    return;
+                if(finalTypeRefId != 1){
+                    let checkDuplicate = this.checkDuplicates(competitionFinalsList);
+                    if(checkDuplicate.error){
+                        message.error(checkDuplicate.errorMessage);
+                        return;
+                    }
                 }
                 this.setState({ buttonPressed: "save" });
                 let finalsList = this.getSaveFinalList(competitionFinalsList);
