@@ -521,6 +521,10 @@ let AxiosApi = {
     saveRegistrationChangeReview(payload) {
         var url = `/api/registrationchange/review/save`;
         return Method.dataPost(url, token, payload);
+    },
+    getTransferOrganisationsData(payload) {
+        var url = `/api/transfer/competitions?`;
+        return Method.dataPost(url, token, payload);
     }
 };
 

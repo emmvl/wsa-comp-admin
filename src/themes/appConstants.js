@@ -1619,7 +1619,8 @@ const AppConstants = {
   heroImageSizeText: "Approximate Dimension: Width: 1200px  Height: 400px",
   poolSettingsWhoPlaysWho: "Pool Settings - Who Plays Who",
   mailBodyText: `Hi,\n \nPlease use the following discount Code when you register in order to have your fee waived.`,
-  fixtureTemplate: "Fixture Template"
+  fixtureTemplate: "Fixture Template",
+  reasonForTransfer: "Reasons(s) for wanting to transfer.",
 };
 
 export default AppConstants;

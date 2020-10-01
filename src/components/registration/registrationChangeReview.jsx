@@ -49,7 +49,12 @@ const refundFullAmountColumns = [
     {
         title: 'Fee Type',
         dataIndex: 'feeType',
-        key: 'feeType'
+        key: 'feeType',
+        render: (feeType,record, index) => {
+            return(
+                <span style={{ textTransform: "capitalize" }}>{feeType}</span>
+            );
+        }
     },
     {
         title: 'Payment Type',
