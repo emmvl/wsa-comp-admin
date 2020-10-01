@@ -209,7 +209,9 @@ const AppUniqueId = {
     timeBetweenRoundsMins: "timeBetweenRoundsMins",
     compformat_save_btn: "compformat_save_btn",
     draw_comp_dpdn: "draw_comp_dpdn",
-    finalCreateDrawsBtn: "final_CreateDraws_Btn"
+    finalCreateDrawsBtn: "final_CreateDraws_Btn",
+
+    compformat_next_btn: "compformat_next_btn"
 };
 
 export default AppUniqueId;
