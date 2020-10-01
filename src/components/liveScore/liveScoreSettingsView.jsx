@@ -1242,7 +1242,7 @@ class LiveScoreSettingsView extends Component {
                     ((isEdit.edit == 'edit' || isEdit == 'edit') && this.state.onOkClick) &&
                     <div className="transfer-image-view">
                         <Button onClick={() => this.openModel()} className="primary-add-comp-form" type="primary">
-                            +{AppConstants.edit}
+                            {AppConstants.edit}
                         </Button>
                     </div>
                 }

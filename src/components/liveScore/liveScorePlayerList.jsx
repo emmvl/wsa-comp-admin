@@ -40,7 +40,7 @@ function tableSort(key) {
     }
     _this.setState({ sortBy, sortOrder });
     if (_this.state.competitionId) {
-        _this.props.playerListWithPaginationAction(_this.state.competitionId, _this.state.offset, 10, undefined, sortBy, sortOrder);
+        _this.props.playerListWithPaginationAction(_this.state.competitionId, _this.state.offset, 10, _this.state.searchText, sortBy, sortOrder);
     }
 }
 
@@ -176,7 +176,7 @@ const columns = [
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="2" onClick={() => {
-                        _this.showDeleteConfirm(record.playerId,);
+                        _this.showDeleteConfirm(record.playerId);
                     }}>
 
                         <span>Delete</span>
@@ -195,17 +195,30 @@ class LiveScorePlayerList extends Component {
         this.state = {
             competitionId: null,
             searchText: "",
-            offset: 0
+            offset: 0,
+            sortBy: null,
+            sortOrder: null,
         }
         _this = this;
     }
 
     componentDidMount() {
+        let { playerListActionObject } = this.props.liveScorePlayerState
+        console.log("playerListActionObject", playerListActionObject)
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ competitionId: id })
             if (id !== null) {
-                this.props.playerListWithPaginationAction(id, 0, 10)
+                if (playerListActionObject) {
+                    let offset = playerListActionObject.offset
+                    let searchText = playerListActionObject.search
+                    let sortBy = playerListActionObject.sortBy
+                    let sortOrder = playerListActionObject.sortOrder
+                    this.setState({ offset, searchText, sortBy, sortOrder })
+                    this.props.playerListWithPaginationAction(id, offset, 10, searchText, sortBy, sortOrder);
+                } else {
+                    this.props.playerListWithPaginationAction(id, 0, 10)
+                }
             } else {
                 history.push('/liveScoreCompetitions')
             }
@@ -245,7 +258,7 @@ class LiveScorePlayerList extends Component {
         this.setState({
             offset
         })
-        this.props.playerListWithPaginationAction(this.state.competitionId, offset, 10, undefined, sortBy, sortOrder)
+        this.props.playerListWithPaginationAction(this.state.competitionId, offset, 10, this.state.searchText, sortBy, sortOrder)
     }
 
     ////////form content view
@@ -442,6 +455,7 @@ class LiveScorePlayerList extends Component {
                                 onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
                                 onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                value={this.state.searchText}
                                 prefix={
                                     <Icon
                                         type="search"

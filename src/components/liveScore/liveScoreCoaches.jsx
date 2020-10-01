@@ -164,19 +164,30 @@ class LiveScoreCoaches extends Component {
     this.state = {
       searchText: "",
       competitionId: null,
-      offset: 0
+      offset: 0,
+      sortBy: null,
+      sortOrder: null,
     };
 
     _this = this;
   }
 
   componentDidMount() {
+    let { coachListActionObject } = this.props.liveScoreCoachState
     if (getLiveScoreCompetiton()) {
       const { id } = JSON.parse(getLiveScoreCompetiton())
       this.setState({ competitionId: id })
       let offset = 0
-      this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText, offset)
-
+      if (coachListActionObject) {
+        offset = coachListActionObject.offset
+        let searchText = coachListActionObject.search
+        let sortBy = coachListActionObject.sortBy
+        let sortOrder = coachListActionObject.sortOrder
+        this.setState({ offset, searchText, sortBy, sortOrder })
+        this.props.liveScoreCoachListAction(17, 1, id, searchText, offset, sortBy, sortOrder);
+      } else {
+        this.props.liveScoreCoachListAction(17, 1, id, this.state.searchText, offset)
+      }
       if (id !== null) {
         this.props.getliveScoreTeams(id)
       } else {
@@ -340,6 +351,7 @@ class LiveScoreCoaches extends Component {
               onChange={(e) => this.onChangeSearchText(e)}
               placeholder="Search..."
               onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+              value={this.state.searchText}
               prefix={
                 <Icon
                   type="search"

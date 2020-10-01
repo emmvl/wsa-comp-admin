@@ -27,7 +27,8 @@ const initialState = {
     assignMatchListPage: 0,
     assignMatchTotalCount: "",
     searchScorer: [],
-    onLoadSearch: false
+    onLoadSearch: false,
+    scorerActionObject: null,
 }
 
 
@@ -65,7 +66,7 @@ function liveScoreScorerState(state = initialState, action) {
 
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_SCORER_LIST_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onLoad: true, scorerActionObject: action };
 
         case ApiConstants.API_LIVE_SCORE_SCORER_LIST_SUCCESS:
             let scorerList = action.result.users ? action.result.users : action.result
@@ -227,6 +228,10 @@ function liveScoreScorerState(state = initialState, action) {
                 status: action.status,
                 error: action.error
             }
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.scorerActionObject = null
+            return { ...state, onLoad: false };
 
         default:
             return state;

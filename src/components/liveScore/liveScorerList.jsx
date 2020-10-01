@@ -186,13 +186,17 @@ class LiveScorerList extends Component {
             year: "2020",
             scorerTableData: scorerData.scorerData,
             searchtext: '',
-            competitionId: null
+            competitionId: null,
+            offset: 0,
+            sortBy: null,
+            sortOrder: null,
         }
 
         _this = this;
     }
 
     componentDidMount() {
+        let { scorerActionObject } = this.props.liveScoreScorerState
         const body = {
             "paging": {
                 "limit": 10,
@@ -205,7 +209,16 @@ class LiveScorerList extends Component {
             const { id } = JSON.parse(getLiveScoreCompetiton());
             this.setState({ competitionId: id });
             if (id !== null) {
-                this.props.liveScoreScorerListAction(id, 4, body);
+                if (scorerActionObject) {
+                    let body = scorerActionObject.body
+                    let searchText = scorerActionObject.body.search
+                    let sortBy = scorerActionObject.sortBy
+                    let sortOrder = scorerActionObject.sortOrder
+                    this.setState({ searchText, sortBy, sortOrder })
+                    this.props.liveScoreScorerListAction(id, 4, body, undefined, sortBy, sortOrder);
+                } else {
+                    this.props.liveScoreScorerListAction(id, 4, body);
+                }
             } else {
                 history.push('/');
             }
@@ -315,6 +328,7 @@ class LiveScorerList extends Component {
                             onChange={(e) => this.onChangeSearchText(e)}
                             placeholder="Search..."
                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            value={this.state.searchText}
                             prefix={
                                 <Icon
                                     type="search"

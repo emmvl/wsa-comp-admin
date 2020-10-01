@@ -24,7 +24,8 @@ const initialState = {
     playerDataArr: [],
     totalCount: null,
     searchResult: [],
-    currentPage: 1
+    currentPage: 1,
+    playerListActionObject: null,
 };
 
 function LiveScorePlayerState(state = initialState, action) {
@@ -134,7 +135,7 @@ function LiveScorePlayerState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD:
-            return { ...state, onLoad: true, currentPage: 1 };
+            return { ...state, onLoad: true, playerListActionObject: action };
 
         case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_SUCCESS:
             const playerListResult = liveScoreModal.getPlayerListData(action.result.players);
@@ -146,6 +147,10 @@ function LiveScorePlayerState(state = initialState, action) {
                 result: playerListResult,
                 status: action.status,
             };
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.playerListActionObject = null
+            return { ...state, onLoad: false };
 
         default:
             return state;
