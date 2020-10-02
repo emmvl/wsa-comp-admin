@@ -790,7 +790,7 @@ class MultifieldDrawsNew extends Component {
 
     headerView = () => {
         return (
-            <div className="comp-draw-content-view">
+            <div className="comp-draw-content-view" style={{marginTop:15}}>
                 <div className="multi-draw-list-top-head row">
                     <div className="col-sm-3 mt-3">
                         <span className="form-heading">{AppConstants.draws}</span>
