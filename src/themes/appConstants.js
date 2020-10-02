@@ -1597,7 +1597,7 @@ const AppConstants = {
   hardshipCode: "Hardship Code",
   addCode: "Add Code",
   go: "Go",
-  matchCalender: "Match Calender",
+  matchCalender: "Match Calendar",
   showByMatches: "Show By Matches",
   hideFilter: "Hide Filter",
   showAll: "Show all",

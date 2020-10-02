@@ -43,7 +43,7 @@ function* errorSaga(error) {
 function* getCompetitionDrawsSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.getCompetitionDraws,
-            action.yearRefId, action.competitionId, action.venueId, action.roundId, action.orgId, action.startDate, action.endDate);
+            action.yearRefId, action.competitionId, 0, action.roundId, action.orgId, action.startDate, action.endDate);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_SUCCESS,

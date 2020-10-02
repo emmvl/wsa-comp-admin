@@ -1227,12 +1227,12 @@ class MultifieldDrawsNew extends Component {
                                 marginTop: 5
                             }}
                         >
-                            <Checkbox
+                            {/* <Checkbox
                                 className="year-select-heading"
                                 onChange={(e) => this.setState({ showByMatches: e.target.checked })}
                                 checked={this.state.showByMatches} >
                                 {AppConstants.showByMatches}
-                            </Checkbox>
+                            </Checkbox> */}
                         </div>
                     </div>
                     <div className="col-sm-6 pr-0 d-flex justify-content-end align-items-center">
