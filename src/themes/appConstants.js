@@ -1621,6 +1621,7 @@ const AppConstants = {
   mailBodyText: `Hi,\n \nPlease use the following discount Code when you register in order to have your fee waived.`,
   fixtureTemplate: "Fixture Template",
   reasonForTransfer: "Reasons(s) for wanting to transfer.",
+  registrationCloseDate: "Registration close date"
 };
 
 export default AppConstants;

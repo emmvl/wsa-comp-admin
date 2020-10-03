@@ -643,6 +643,11 @@ let CompetitionAxiosApi = {
     {
       var url = `/api/competition/delete?competitionId=${competitionId}&deleteOptionId=${targetValue}`;
       return Method.dataDelete(url, token);
+    },
+    
+    async replicateSave(replicateData){
+        var url = `api/replicate/review`
+        return Method.dataPost(url, token, replicateData)
     }
 };
 

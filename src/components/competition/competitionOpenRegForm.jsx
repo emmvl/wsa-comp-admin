@@ -368,11 +368,12 @@ class CompetitionOpenRegForm extends Component {
             let competitionTypeList = this.props.appState.all_own_CompetitionArr
             if (nextProps.appState.all_own_CompetitionArr !== competitionTypeList) {
                 if (competitionTypeList.length > 0) {
-                    let screenKey = this.props.location.state ? this.props.location.state.screenKey : null
+                    let screenKey = this.props.location.state ? this.props.location.state.screenKey : null;
+                    let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null
                     let competitionId = null
                     let statusRefId = null
                     let competitionStatus = null
-                    if (screenKey == "compDashboard") {
+                    if (screenKey == "compDashboard" || fromReplicate == 1) {
                         competitionId = getOwn_competition()
                         let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
                         statusRefId = compIndex > -1 ? competitionTypeList[compIndex].statusRefId : competitionTypeList[0].statusRefId
@@ -507,27 +508,36 @@ class CompetitionOpenRegForm extends Component {
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
-        let compData = this.props.appState.all_own_CompetitionArr.length > 0 ? this.props.appState.all_own_CompetitionArr : undefined
-
-        if (storedCompetitionId && yearId && propsData && compData) {
-            this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId, null, this.state.sourceModule)
-            this.setState({
-                yearRefId: JSON.parse(yearId),
-                firstTimeCompId: storedCompetitionId,
-                competitionStatus: storedCompetitionStatus,
-                getDataLoading: true
-            })
-        }
-        else if (yearId) {
+        let compData = this.props.appState.all_own_CompetitionArr.length > 0 ? this.props.appState.all_own_CompetitionArr : undefined;
+        let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
+        if(fromReplicate != 1){
+            if (storedCompetitionId && yearId && propsData && compData) {
+                this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId, null, this.state.sourceModule)
+                this.setState({
+                    yearRefId: JSON.parse(yearId),
+                    firstTimeCompId: storedCompetitionId,
+                    competitionStatus: storedCompetitionStatus,
+                    getDataLoading: true
+                })
+            }
+            else if (yearId) {
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+                this.setState({
+                    yearRefId: JSON.parse(yearId)
+                });
+            }
+            else {
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
+                setOwnCompetitionYear(1)
+            }
+        }else{
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
-                yearRefId: JSON.parse(yearId)
-            })
+                yearRefId: JSON.parse(yearId),
+                firstTimeCompId: storedCompetitionId
+            });
         }
-        else {
-            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
-        }
+        
     }
 
     ////alll the api calls
