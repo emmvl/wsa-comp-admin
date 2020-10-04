@@ -544,6 +544,10 @@ class RegistrationCompetitionForm extends Component {
                             }
                         }
                         formData.append("logoIsDefault", postData.logoIsDefault)
+
+                        if(this.state.image){
+                            formData.append("uploadFileType",1);
+                        }
                         this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id, this.state.sourceModule)
                         this.setState({ loading: true, divisionState: true });
                     } else {
