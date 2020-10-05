@@ -830,7 +830,7 @@ class MultifieldDrawsNew extends Component {
                             </Select>
                         </div>
 
-                        <div className="col-sm-4 col-lg-3 col-md-5 mt-2">
+                        <div className="col-sm-2.5 mt-2">
                             <Select
                                 className="year-select reg-filter-select1 innerSelect-value-draws"
                                 style={{ minWidth: 150, maxWidth: 250 }}
@@ -892,7 +892,7 @@ class MultifieldDrawsNew extends Component {
                             </div>
                         </div>
 
-                        <div className='col-sm-2 mt-2'>
+                        <div className='col-sm-2 mt-2' style={{ minWidth: 180 }}>
                             <Checkbox
                                 className="single-checkbox-radio-style"
                                 style={{ paddingTop: 8 }}
@@ -1679,8 +1679,8 @@ class MultifieldDrawsNew extends Component {
     contentView = () => {
         return (
             <div className='row '>
-                <div className={this.state.filterEnable ? 'col-sm-3 ' : "col-sm-1 "} style={{ minWidth: this.state.filterEnable && 200 }}>{this.sideMenuView()}</div>
-                <div className='col-sm '>{this.containerView()}</div>
+                <div className={this.state.filterEnable ? 'col-sm-3' : "col-sm-1"} >{this.sideMenuView()}</div>
+                <div className={this.state.filterEnable ? 'col-sm-9' : "col-sm"}>{this.containerView()}</div>
             </div>
         )
     }
