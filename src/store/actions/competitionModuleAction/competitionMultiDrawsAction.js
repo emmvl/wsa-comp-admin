@@ -23,10 +23,10 @@ function getCompetitionDrawsAction(yearRefId, competitionId, venueId, roundId, o
 
 
 ///get rounds in the competition draws
-function getDrawsRoundsAction(yearRefId, competitionId, key) {
+function getDrawsRoundsAction(yearRefId, competitionId, key, dateRangeCheck) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_LOAD,
-        yearRefId, competitionId, key
+        yearRefId, competitionId, key, dateRangeCheck
     };
     return action;
 }

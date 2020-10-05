@@ -7,6 +7,14 @@ import history from "../../../util/history";
 import AppConstants from "../../../themes/appConstants";
 import moment from "moment"
 
+function getRangeCheck(action) {
+    if (action.competitionId == "-1" || action.dateRangeCheck) {
+        return false
+    } else {
+        return true
+    }
+}
+
 function* failSaga(result) {
     console.log("failSaga", result.message)
     yield put({
@@ -62,23 +70,24 @@ function* getCompetitionDrawsSaga(action) {
 
 ////get rounds in the competition draws
 function* getDrawsRoundsSaga(action) {
+    let dateRangeCheck = getRangeCheck(action)
     try {
-        const result = action.competitionId != "-1" ? yield call(CompetitionAxiosApi.getDrawsRounds,
+        const result = dateRangeCheck ? yield call(CompetitionAxiosApi.getDrawsRounds,
             action.yearRefId, action.competitionId) : {
                 status: 1, result: []
             };
         if (result.status === 1) {
             const date = new Date()
-            const startDate = action.competitionId != "-1" ? null : moment(date).format("YYYY-MM-DD");
-            const endDate = action.competitionId != "-1" ? null : moment(date).format("YYYY-MM-DD")
+            const startDate = dateRangeCheck ? null : moment(date).format("YYYY-MM-DD");
+            const endDate = dateRangeCheck ? null : moment(date).format("YYYY-MM-DD")
             const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId, startDate, endDate);
             if (VenueResult.status === 1) {
                 const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, startDate, endDate);
                 if (division_Result.status === 1) {
                     yield put({
                         type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_SUCCESS,
-                        result: action.competitionId != "-1" ? result.result.data : [],
-                        dateRangeResult: action.competitionId != "-1" ? [] : result.result.data,
+                        result: dateRangeCheck ? result.result.data : [],
+                        dateRangeResult: dateRangeCheck ? [] : result.result.data,
                         Venue_Result: VenueResult.result.data,
                         division_Result: division_Result.result.data,
                         status: result.status,
@@ -86,8 +95,8 @@ function* getDrawsRoundsSaga(action) {
                 } else {
                     yield put({
                         type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_SUCCESS,
-                        result: action.competitionId != "-1" ? result.result.data : [],
-                        dateRangeResult: action.competitionId != "-1" ? [] : result.result.data,
+                        result: action.competitionId != "-1" || action.dateRangeCheck ? result.result.data : [],
+                        dateRangeResult: action.competitionId != "-1" || action.dateRangeCheck ? [] : result.result.data,
                         Venue_Result: VenueResult.result.data,
                         division_Result: [],
                         status: result.status,
@@ -97,8 +106,8 @@ function* getDrawsRoundsSaga(action) {
             else {
                 yield put({
                     type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_SUCCESS,
-                    result: action.competitionId != "-1" ? result.result.data : [],
-                    dateRangeResult: action.competitionId != "-1" ? [] : result.result.data,
+                    result: action.competitionId != "-1" || action.dateRangeCheck ? result.result.data : [],
+                    dateRangeResult: action.competitionId != "-1" || action.dateRangeCheck ? [] : result.result.data,
                     Venue_Result: [],
                     division_Result: [],
                     status: result.status,

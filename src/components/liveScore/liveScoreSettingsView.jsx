@@ -736,6 +736,7 @@ class LiveScoreSettingsView extends Component {
                         </div>
                         <div className="col-sm" style={{ paddingTop: 1 }}>
                             <Checkbox.Group
+                                className="checkBoxGroup-checkbox-radio-style"
                                 style={{
                                     display: "-ms-flexbox",
                                     flexDirection: "column",
