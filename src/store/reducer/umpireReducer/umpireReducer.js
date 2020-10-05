@@ -34,7 +34,8 @@ const initialState = {
     umpireList_Data: [],
     umpireListResult_Data: [],
     currentPage_Data: null,
-    totalCount_Data: null
+    totalCount_Data: null,
+    umpireListActionObject: null
 };
 
 function isUmpireCoachCheck(data, key) {
@@ -170,7 +171,7 @@ function umpireState(state = initialState, action) {
 
         ////Main Umpire List
         case ApiConstants.API_UMPIRE_MAIN_LIST_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onLoad: true, umpireListActionObject: action.data };
 
         case ApiConstants.API_UMPIRE_MAIN_LIST_SUCCESS:
             let userMain_Data = action.result.userData ? action.result.userData : action.result
@@ -286,6 +287,11 @@ function umpireState(state = initialState, action) {
                 error: action.error,
                 status: action.status
             };
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.umpireListActionObject = null
+            return { ...state, onLoad: false };
+
         default:
             return state;
     }

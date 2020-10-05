@@ -77,6 +77,7 @@ function tableSort(key) {
         offset: this_obj.state.offsetData,
         sortBy,
         sortOrder,
+        userName: this_obj.state.searchText
     })
 }
 
@@ -228,18 +229,36 @@ class Umpire extends Component {
             competitionUniqueKey: null,
             compArray: [],
             offsetData: 0,
+            sortBy: null,
+            sortOrder: null
+
         };
 
         this_obj = this;
     }
 
-    componentDidMount() {
+    async  componentDidMount() {
+
+        const { umpireListActionObject } = this.props.umpireState
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (umpireListActionObject) {
+            let offsetData = umpireListActionObject.offset
+            let searchText = umpireListActionObject.userName ? umpireListActionObject.userName : ""
+            sortBy = umpireListActionObject.sortBy
+            sortOrder = umpireListActionObject.sortOrder
+            await this.setState({ sortBy, sortOrder, offsetData, searchText })
+        }
+
         let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
         this.setState({ loading: true });
         this.props.umpireCompetitionListAction(null, null, organisationId, "USERS");
     }
 
     componentDidUpdate(nextProps) {
+
+
+
         const { sortBy, sortOrder } = this.state;
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
@@ -266,14 +285,17 @@ class Umpire extends Component {
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
+                let sortBy = this.state.sortBy
+                let sortOrder = this.state.sortOrder
                 if (firstComp !== false) {
                     this.props.umpireMainListAction({
                         refRoleId: JSON.stringify([15, 20]),
                         entityTypes: entityTypes("COMPETITION"),
                         compId: firstComp,
-                        offset: 0,
+                        offset: this.state.offsetData,
                         sortBy,
                         sortOrder,
+                        userName: this.state.searchText,
                     });
                     this.setState({
                         selectedComp: firstComp,
@@ -315,6 +337,7 @@ class Umpire extends Component {
             offset,
             sortBy,
             sortOrder,
+            userName: this.state.searchText,
         });
     };
 
@@ -385,6 +408,7 @@ class Umpire extends Component {
             offset: 0,
             sortBy,
             sortOrder,
+            userName: this.state.searchText,
         });
 
         this.setState({ selectedComp, competitionUniqueKey: compKey });
@@ -400,7 +424,7 @@ class Umpire extends Component {
                 refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
-                offset: 0,
+                offset: this.state.offsetData,
                 userName: e.target.value,
                 sortBy,
                 sortOrder,
@@ -418,7 +442,7 @@ class Umpire extends Component {
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,
-                offset: 0,
+                offset: this.state.offsetData,
                 sortBy,
                 sortOrder,
             });
@@ -435,7 +459,7 @@ class Umpire extends Component {
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,
-                offset: 0,
+                offset: this.state.offsetData,
                 sortBy,
                 sortOrder,
             });
@@ -585,6 +609,7 @@ class Umpire extends Component {
                                 onChange={this.onChangeSearchText}
                                 placeholder="Search..."
                                 onKeyPress={this.onKeyEnterSearchText}
+                                value={this.state.searchText}
                                 prefix={
                                     <Icon
                                         type="search"

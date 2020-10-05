@@ -41,6 +41,8 @@ import { liveScore_formateDate } from "../../themes/dateformate";
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
+import StripeKeys from "../stripe/stripeKeys";
+import { getStripeLoginLinkAction } from "../../store/actions/stripeAction/stripeAction";
 
 
 function tableSort(a, b, key) {
@@ -850,38 +852,58 @@ const columnsIncident = [
 
 const umpireActivityColumn = [
   {
+    title: 'Match Id',
+    dataIndex: 'matchId',
+    key: 'matchId',
+    sorter: true,
+  },
+  {
     title: 'Date',
     dataIndex: 'date',
     key: 'date',
     sorter: true,
   },
   {
-    title: 'Match',
-    dataIndex: 'match',
-    key: 'match',
+    title: 'Time',
+    dataIndex: 'time',
+    key: 'time',
     sorter: true,
-
   },
   {
-    title: 'Payment',
-    dataIndex: 'payment',
-    key: 'payment',
+    title: 'Competition',
+    dataIndex: 'competition',
+    key: 'competition',
     sorter: true,
-
   },
   {
-    title: 'Payment Date',
-    dataIndex: 'paymentDtae',
-    key: 'paymentDtae',
+    title: 'Affiliate',
+    dataIndex: 'affiliate',
+    key: 'affiliate',
     sorter: true,
-
   },
   {
-    title: 'Payment Amount',
-    dataIndex: 'paymentAmount',
-    key: 'paymentAmount',
+    title: 'Home',
+    dataIndex: 'home',
+    key: 'home',
     sorter: true,
-
+  },
+  {
+    title: 'Away',
+    dataIndex: 'away',
+    key: 'away',
+    sorter: true,
+  },
+  {
+    title: 'Amount',
+    dataIndex: 'amount',
+    key: 'amount',
+    sorter: true,
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    sorter: true,
   },
 ]
 
@@ -996,6 +1018,7 @@ class UserModulePersonalDetail extends Component {
       competitions: [],
       teams: [],
       divisions: [],
+      stripeDashBoardLoad: false
     };
   }
 
@@ -1080,6 +1103,15 @@ class UserModulePersonalDetail extends Component {
         // this.tabApiCalls(this.state.tabKey, this.getEmptyCompObj(), this.state.userId);
       }
     }
+
+    if (this.props.stripeState.onLoad === false && this.state.stripeDashBoardLoad === true) {
+      this.setState({ stripeDashBoardLoad: false })
+      let stripeDashboardUrl = this.props.stripeState.stripeLoginLink
+      if (stripeDashboardUrl) {
+        window.open(stripeDashboardUrl, '_newtab');
+      }
+    }
+
   }
 
   apiCalls = (userId) => {
@@ -2303,13 +2335,78 @@ class UserModulePersonalDetail extends Component {
     );
   }
 
-  umpireActivityView = () => {
+  stripeConnected = () => {
+    let orgData = getOrganisationData()
+    let stripeAccountID = orgData ? orgData.stripeAccountID : null
+    return stripeAccountID
+  }
 
+  userEmail = () => {
+    let orgData = getOrganisationData()
+    let email = orgData && orgData.email ? encodeURIComponent(orgData.email) : ""
+    return email
+  }
+
+  stripeDashboardLoginUrl = () => {
+
+    this.setState({ stripeDashBoardLoad: true })
+    this.props.getStripeLoginLinkAction()
+  }
+
+  umpireActivityView = () => {
+    let stripeConnected = this.stripeConnected()
+    let userEmail = this.userEmail()
+    let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
     return (
       <div
         className="comp-dash-table-view mt-2"
         style={{ backgroundColor: "#f7fafc" }}
       >
+        <div className="transfer-image-view mb-3">
+          <Button
+            className="primary-add-comp-form" type="primary">
+            <div className="row">
+              <div className="col-sm">
+                <img
+                  src={AppImages.export}
+                  alt=""
+                  className="export-image"
+                />
+                {AppConstants.export}
+              </div>
+            </div>
+          </Button>
+
+        </div>
+
+
+        <div className="transfer-image-view mb-3">
+
+          {stripeConnected ?
+            <Button
+              type="primary"
+              className="open-reg-button"
+              onClick={() => this.stripeDashboardLoginUrl()}
+            >
+              {AppConstants.editBankAccount}
+            </Button>
+            :
+            <Button
+              type="primary"
+              className="open-reg-button"
+            >
+              <a href={stripeConnectURL} class="stripe-connect">
+                <span>
+                  {AppConstants.uploadBankAccnt}
+                </span>
+              </a>
+
+            </Button>
+          }
+
+        </div>
+
+
         <div className="table-responsive home-dash-table-view">
           <Table
             className="home-dashboard-table"
@@ -2466,8 +2563,8 @@ function mapDispatchToProps(dispatch) {
       getUserRole,
       getScorerData,
       getUmpireData,
-      getCoachData
-
+      getCoachData,
+      getStripeLoginLinkAction
     },
     dispatch
   );
@@ -2477,6 +2574,7 @@ function mapStatetoProps(state) {
   return {
     userState: state.UserState,
     appState: state.AppState,
+    stripeState: state.StripeState,
   };
 }
 
