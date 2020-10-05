@@ -1678,9 +1678,9 @@ class MultifieldDrawsNew extends Component {
 
     contentView = () => {
         return (
-            <div className='row multiDrawRow'>
-                <div className={this.state.filterEnable ? 'col-sm-3 multiDrawLeftView' : "col-sm-1 multiDrawLeftView"} style={{ minWidth: this.state.filterEnable && 200 }}>{this.sideMenuView()}</div>
-                <div className='col-sm multiDrawRightView'>{this.containerView()}</div>
+            <div className='row '>
+                <div className={this.state.filterEnable ? 'col-sm-3 ' : "col-sm-1 "} style={{ minWidth: this.state.filterEnable && 200 }}>{this.sideMenuView()}</div>
+                <div className='col-sm '>{this.containerView()}</div>
             </div>
         )
     }
