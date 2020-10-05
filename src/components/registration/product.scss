@@ -1004,6 +1004,9 @@ input[type="number"] {
   font-family: inter;
   font-weight: normal;
 }
+.checkBoxGroup-checkbox-radio-style .ant-checkbox + span{
+  margin-bottom: 3px;
+}
 
 @media (max-width: 767px) {
   .auth-form {

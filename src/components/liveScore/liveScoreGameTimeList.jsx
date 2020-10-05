@@ -111,7 +111,7 @@ function tableSort(key) {
 const columns = [
 
     {
-        title: 'Player Id',
+        title: 'Player ID',
         dataIndex: 'id',
         key: 'id',
         sorter: true,

@@ -609,6 +609,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.umpireSelectedKey]}
+                        onClick={() => this.props.clearDataOnCompChangeAction()}
                     >
                         <Menu.Item key="1">
                             <NavLink to="/umpireDashboard">

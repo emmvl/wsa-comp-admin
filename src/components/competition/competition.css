@@ -1,7 +1,20 @@
 @import "../../themes/colorVariables.css";
 .paddingBottom56px{
   padding-bottom: 56px;
+}
+.multiDrawRow{
+  width: 100%;
+  margin-right: 0px;
+  margin-left: 0px;
+}
+.multiDrawLeftView{
+  width: 20%;
+  padding-left: 0px;
 
+}
+.multiDrawRightView{
+  width: 80%;
+  padding-right: 0px;
 }
 .requiredSpan{
   content: '*';
@@ -679,11 +692,26 @@ a.collapsed i {
   .comp-buttons-view .save-draft-text {
     margin-right: 20px;
   }
+  
 }
 
 @media (max-width: 767px) {
   .paddingBottom56px{
     padding-bottom: 5px;
+  }
+  .multiDrawRow{
+    width: inherit;
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+  .multiDrawLeftView{
+    width: 100%;
+    padding-left: 15px;
+  
+  }
+  .multiDrawRightView{
+    width: 100%;
+    padding-right: 15px;
   }
   .comp-buttons-view {
     display: flex;

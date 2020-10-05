@@ -114,10 +114,6 @@ class MultifieldDrawsNew extends Component {
             selectedDateRange: null,
             startDate: new Date(),
             endDate: new Date(),
-            dateRangeCheck: false,
-
-
-
             allVenueChecked: true,
             allCompChecked: true,
             allDivisionChecked: true,
@@ -127,6 +123,8 @@ class MultifieldDrawsNew extends Component {
             filterEnable: true,
             showAllOrg: false,
             allOrgChecked: true,
+            singleCompDivisionCheked: true,
+            filterDates: false
         };
         this.props.clearMultiDraws()
     }
@@ -136,7 +134,6 @@ class MultifieldDrawsNew extends Component {
         let userState = this.props.userState
         let competitionModuleState = this.props.competitionModuleState;
         let drawsRoundData = this.props.drawsState.getDrawsRoundsData;
-
         let drawOrganisations = this.props.drawsState.drawOrganisations
         let venueData = this.props.drawsState.competitionVenues;
         let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
@@ -148,13 +145,13 @@ class MultifieldDrawsNew extends Component {
         ) {
             if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
                 if (venueData.length > 0) {
-                    let venueId = this.state.firstTimeCompId == -1 || this.state.dateRangeCheck ? this.state.venueId : venueData[0].id;
+                    let venueId = this.state.firstTimeCompId == -1 || this.state.filterDates ? this.state.venueId : venueData[0].id;
                     setDraws_venue(venueId);
-                    if (this.state.firstTimeCompId != "-1" && !this.state.dateRangeCheck) {
+                    if (this.state.firstTimeCompId != "-1" && !this.state.filterDates) {
                         if (drawsRoundData.length > 0) {
                             let roundId = null;
                             let roundTime = null;
-                            //let currentDate = this.state.dateRangeCheck ? moment(new Date()).format("YYYY-MM-DD") : null;
+                            // let currentDate = this.state.filterDates ? moment(new Date()).format("YYYY-MM-DD") : null;
                             if (drawsRoundData.length > 1) {
                                 roundId = drawsRoundData[1].roundId;
                                 setDraws_round(roundId);
@@ -164,7 +161,7 @@ class MultifieldDrawsNew extends Component {
                                     this.state.yearRefId,
                                     this.state.firstTimeCompId,
                                     venueId,
-                                    roundId, null, null, null, this.state.dateRangeCheck
+                                    roundId, null, null, null, this.state.filterDates
                                 );
                                 this.setState({
                                     roundId,
@@ -182,7 +179,7 @@ class MultifieldDrawsNew extends Component {
                                     this.state.yearRefId,
                                     this.state.firstTimeCompId,
                                     venueId,
-                                    roundId, null, null, null, this.state.dateRangeCheck
+                                    roundId, null, null, null, this.state.filterDates
                                 );
                                 this.setState({
                                     roundId,
@@ -213,7 +210,7 @@ class MultifieldDrawsNew extends Component {
                             this.state.yearRefId,
                             this.state.firstTimeCompId,
                             venueId,
-                            0, null, startDate, endDate, this.state.dateRangeCheck
+                            0, null, startDate, endDate, this.state.filterDates
                         );
                         // }
                     }
@@ -225,7 +222,7 @@ class MultifieldDrawsNew extends Component {
                             this.state.yearRefId,
                             this.state.firstTimeCompId,
                             venueId,
-                            0, null, this.state.startDate, this.state.endDate, this.state.dateRangeCheck
+                            0, null, this.state.startDate, this.state.endDate, this.state.filterDates
                         );
                     }
                 }
@@ -358,9 +355,8 @@ class MultifieldDrawsNew extends Component {
                     yearId,
                     storedCompetitionId,
                     venueId,
-                    roundId, null, null, null, this.state.dateRangeCheck
+                    roundId, null, null, null, this.state.filterDates
                 );
-
                 this.setState({
                     venueId: JSON.parse(venueId),
                     roundId: JSON.parse(roundId),
@@ -392,7 +388,7 @@ class MultifieldDrawsNew extends Component {
 
     applyDateFilter = () => {
         this.props.clearMultiDraws()
-        if (this.state.firstTimeCompId == "-1") {
+        if (this.state.firstTimeCompId == "-1" || this.state.filterDates) {
             this.props.changeDrawsDateRangeAction(this.state.yearRefId,
                 this.state.firstTimeCompId, this.state.startDate, this.state.endDate);
             this.setState({
@@ -410,7 +406,7 @@ class MultifieldDrawsNew extends Component {
                 this.state.firstTimeCompId,
                 this.state.venueId,
                 this.state.roundId,
-                this.state.organisation_Id, null, null, this.state.dateRangeCheck
+                this.state.organisation_Id, null, null, this.state.applyDateFilter
             );
             // this.setState({
             // venueLoad: true,
@@ -469,6 +465,14 @@ class MultifieldDrawsNew extends Component {
             this.props.checkBoxOnChange(value, "allOrganisation")
             this.setState({ allOrgChecked: value })
 
+        }
+        else if (key == 'allDivisionChecked') {
+            this.props.checkBoxOnChange(value, "allDivisionChecked")
+            this.setState({ allDivisionChecked: value })
+        }
+        else if (key == 'singleCompDivisionCheked') {
+            this.props.checkBoxOnChange(value, "singleCompDivisionCheked")
+            this.setState({ singleCompDivisionCheked: value })
         }
     }
 
@@ -530,7 +534,7 @@ class MultifieldDrawsNew extends Component {
         drawsData,
         round_Id
     ) => {
-        let key = this.state.firstTimeCompId === "-1" || this.state.dateRangeCheck ? "all" : "add"
+        let key = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add"
         let customSourceObject = {
             // drawsId: sourceObejct.drawsId,
             drawsId: targetObject.drawsId,
@@ -573,7 +577,7 @@ class MultifieldDrawsNew extends Component {
         drawData,
         round_Id
     ) => {
-        let updatedKey = this.state.firstTimeCompId === "-1" || this.state.dateRangeCheck ? "all" : "add"
+        let updatedKey = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add"
         let postData = null;
         if (sourceObejct.drawsId == null) {
             let columnObject = this.getColumnData(sourceIndexArray, drawData);
@@ -598,10 +602,10 @@ class MultifieldDrawsNew extends Component {
             yearRefId: this.state.yearRefId,
             competitionId: this.state.firstTimeCompId,
             venueId: this.state.venueId,
-            roundId: this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? 0 : this.state.roundId,
+            roundId: this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : this.state.roundId,
             orgId: null,
-            startDate: this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? this.state.startDate : null,
-            endDate: this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? this.state.endDate : null
+            startDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.startDate : null,
+            endDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.endDate : null
         }
 
         this.props.updateCourtTimingsDrawsAction(
@@ -611,7 +615,7 @@ class MultifieldDrawsNew extends Component {
             updatedKey,
             round_Id,
             apiData,
-            this.state.dateRangeCheck
+            this.state.filterDates
         );
 
         this.setState({ updateLoad: true });
@@ -623,8 +627,9 @@ class MultifieldDrawsNew extends Component {
         this.props.clearMultiDraws('rounds');
         if (competitionId == -1) {
             this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId, "all");
-            // this.setState({ dateRangeCheck: true })
-        } else {
+            this.setState({ filterDates: true })
+        }
+        else {
             setOwn_competition(competitionId);
             setOwn_competitionStatus(statusRefId)
             this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
@@ -640,8 +645,9 @@ class MultifieldDrawsNew extends Component {
             competitionStatus: statusRefId,
             organisation_Id: "-1",
             selectedDateRange: null,
-            startDate: moment(newDate).format("YYYY-MM-DD"),
-            endDate: moment(newDate).format("YYYY-MM-DD"),
+            // startDate: moment(newDate).format("YYYY-MM-DD"),
+            // endDate: moment(newDate).format("YYYY-MM-DD"),
+            showAllDivision: true
         });
     }
 
@@ -660,7 +666,7 @@ class MultifieldDrawsNew extends Component {
             this.state.firstTimeCompId,
             this.state.venueId,
             roundId,
-            this.state.organisation_Id, null, null, this.state.dateRangeCheck
+            this.state.organisation_Id, null, null, this.state.filterDates
         );
     };
 
@@ -700,8 +706,9 @@ class MultifieldDrawsNew extends Component {
     };
 
     checkColor(slot) {
-        let checkDivisionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
-        let checkCompetitionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
+        console.log(this.state.filterDates, this.state.firstTimeCompId)
+        let checkDivisionFalse = this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
+        let checkCompetitionFalse = this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
         let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
         let checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
         if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
@@ -754,8 +761,10 @@ class MultifieldDrawsNew extends Component {
             }
             return uncheckedArr
         }
+        return uncheckedArr
     }
     checkSwap(slot) {
+        console.log(this.state.filterDates, this.state.firstTimeCompId)
         let checkDivisionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
         let checkCompetitionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
         let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
@@ -788,18 +797,26 @@ class MultifieldDrawsNew extends Component {
         }
     }
 
+    onDateRangeCheck = (val) => {
+        this.props.clearMultiDraws("rounds");
+        let startDate = moment(new Date()).format("YYYY-MM-DD");
+        let endDate = moment(new Date()).format("YYYY-MM-DD");
+        this.props.getDrawsRoundsAction(this.state.yearRefId, this.state.firstTimeCompId, null, val);
+        this.setState({ filterDates: val, startDate: startDate, endDate: endDate, venueLoad: true, });
+    }
+
     headerView = () => {
         return (
-            <div className="comp-draw-content-view" style={{marginTop:15}}>
+            <div className="comp-draw-content-view" style={{ marginTop: 15 }}>
                 <div className="multi-draw-list-top-head row">
-                    <div className="col-sm-3 mt-3">
+                    <div className="col-sm-2 mt-3">
                         <span className="form-heading">{AppConstants.draws}</span>
                     </div>
-                    <div className="col-sm-9 row pr-0">
+                    <div className="col-sm-10 row pr-0">
                         <div className="col-sm mt-2">
                             <Select
                                 className="year-select reg-filter-select1"
-                                style={{ maxWidth: 150, minWidth: 150 }}
+                                style={{ maxWidth: 100, minWidth: 100 }}
                                 onChange={(yearRefId) => this.onYearChange(yearRefId)}
                                 value={this.state.yearRefId}
                             >
@@ -812,28 +829,11 @@ class MultifieldDrawsNew extends Component {
                                 })}
                             </Select>
                         </div>
-                        <div className="col-sm mt-2">
-                            <div
-                                style={{
-                                    width: '100%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    minWidth: 250
-                                }}>
-                                <RangePicker
-                                    disabled={this.state.firstTimeCompId == "-1" ? false : true}
-                                    onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
-                                    format={"DD-MM-YYYY"}
-                                    style={{ width: "100%", minWidth: 180 }}
-                                    value={[moment(this.state.startDate), moment(this.state.endDate)]}
-                                />
-                            </div>
-                        </div>
-                        <div className="col-sm mt-2">
+
+                        <div className="col-sm-2.5 mt-2">
                             <Select
                                 className="year-select reg-filter-select1 innerSelect-value-draws"
-                                style={{ maxWidth: 150, minWidth: 150 }}
+                                style={{ minWidth: 150, maxWidth: 250 }}
                                 onChange={(competitionId, e) =>
                                     this.onCompetitionChange(competitionId, e.key)
                                 }
@@ -853,11 +853,13 @@ class MultifieldDrawsNew extends Component {
                                 })}
                             </Select>
                         </div>
+
+
                         <div className="col-sm mt-2">
                             <Select
                                 className="year-select reg-filter-select1"
                                 style={{ maxWidth: 150, minWidth: 150 }}
-                                disabled={this.state.firstTimeCompId == "-1" ? true : false}
+                                disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? true : false}
                                 onChange={(roundId) => this.onRoundsChange(roundId)}
                                 value={this.state.roundId}
                             >
@@ -870,6 +872,38 @@ class MultifieldDrawsNew extends Component {
                                         );
                                     })}
                             </Select>
+                        </div>
+                        <div className="col-sm mt-2">
+                            <div
+                                style={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    minWidth: 250
+                                }}>
+                                <RangePicker
+                                    disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
+                                    onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
+                                    format={"DD-MM-YYYY"}
+                                    style={{ width: "100%", minWidth: 180 }}
+                                    value={[moment(this.state.startDate), moment(this.state.endDate)]}
+                                />
+                            </div>
+                        </div>
+
+                        <div className='col-sm-2 mt-2' style={{ minWidth: 180 }}>
+                            <Checkbox
+                                className="single-checkbox-radio-style"
+                                style={{ paddingTop: 8 }}
+                                checked={this.state.filterDates}
+                                // onChange={(e) => this.setState({ filterDates: e.target.checked })}
+                                onChange={(e) => this.onDateRangeCheck(e.target.checked)}
+                                disabled={this.state.firstTimeCompId == "-1" ? true : false}
+                            // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
+                            >
+                                {AppConstants.filterDates}
+                            </Checkbox>
                         </div>
                         <div className="col-sm d-flex justify-content-end align-items-center pr-1">
                             <Button className="primary-add-comp-form" type="primary" onClick={() => this.applyDateFilter()}>
@@ -931,7 +965,7 @@ class MultifieldDrawsNew extends Component {
                         )
                     }
                     )}
-                    {isArrayNotEmpty(competitionVenues) || competitionVenues.length > 5 && <span className="input-heading-add-another pt-4"
+                    {(isArrayNotEmpty(competitionVenues) || competitionVenues.length > 5) && <span className="input-heading-add-another pt-4"
                         onClick={() => this.changeShowAllStatus("venue")}>
                         {showAllVenue == true ? AppConstants.hide : AppConstants.showAll}
                     </span>
@@ -993,7 +1027,7 @@ class MultifieldDrawsNew extends Component {
                         }
                         )}
                     </div>
-                    {isArrayNotEmpty(drawsCompetitionArray) || drawsCompetitionArray.length > 5 && <span className="input-heading-add-another pt-4"
+                    {(isArrayNotEmpty(drawsCompetitionArray) || drawsCompetitionArray.length > 5) && <span className="input-heading-add-another pt-4"
                         onClick={() => this.changeShowAllStatus("comp")}>
                         {showAllComp == true ? AppConstants.hide : AppConstants.showAll}
                     </span>
@@ -1006,7 +1040,7 @@ class MultifieldDrawsNew extends Component {
 
     //navigateToDrawEdit
     navigateToDrawEdit = () => {
-        if (this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck) {
+        if (this.state.firstTimeCompId == "-1" || this.state.filterDates) {
             this.props.clearMultiDraws('rounds');
             history.push("/competitionDrawEdit")
         }
@@ -1039,8 +1073,18 @@ class MultifieldDrawsNew extends Component {
                         </a>
                     </div>
                 </div>
-                {this.state.firstTimeCompId == "-1" ?
+                {this.state.firstTimeCompId == "-1" || this.state.filterDates ?
+
                     <div id="division-collapsable-div" className="pt-0 collapse in">
+                        <Checkbox
+                            className="single-checkbox-radio-style"
+                            style={{ paddingTop: 8 }}
+                            checked={this.state.allDivisionChecked}
+                            onChange={e => this.changeAllVenueStatus(e.target.checked, "allDivisionChecked")}
+                        // onChange={e => this.setState({ allOrgChecked: e.target.checked })}
+                        >
+                            {AppConstants.all}
+                        </Checkbox>
                         {/* {this.state.firstTimeCompId == "-1" */}
                         {isArrayNotEmpty(drawDivisions) && drawDivisions.map((item, index) => {
                             return (
@@ -1086,7 +1130,7 @@ class MultifieldDrawsNew extends Component {
                         }
                         )}
                     </div> */}
-                        {isArrayNotEmpty(drawDivisions) || drawDivisions.length > 5 && <span className="input-heading-add-another pt-4"
+                        {(isArrayNotEmpty(drawDivisions) || drawDivisions.length > 5) && <span className="input-heading-add-another pt-4"
                             onClick={() => this.changeShowAllStatus("division")}>
                             {showAllDivision == true ? AppConstants.hide : AppConstants.showAll}
                         </span>
@@ -1094,6 +1138,15 @@ class MultifieldDrawsNew extends Component {
                     </div>
                     :
                     <div id="division-collapsable-div" className="pt-0 collapse in">
+                        <Checkbox
+                            className="single-checkbox-radio-style"
+                            style={{ paddingTop: 8 }}
+                            checked={this.state.singleCompDivisionCheked}
+                            onChange={e => this.changeAllVenueStatus(e.target.checked, "singleCompDivisionCheked")}
+                        // onChange={e => this.setState({ allOrgChecked: e.target.checked })}
+                        >
+                            {AppConstants.all}
+                        </Checkbox>
                         {isArrayNotEmpty(divisionGradeNameList) && divisionGradeNameList.map((item, index) => {
                             return (
                                 index < this.checkDisplayCountList(divisionGradeNameList, showAllDivision) && <div className="column pl-5">
@@ -1171,8 +1224,8 @@ class MultifieldDrawsNew extends Component {
                         }
                         )}
                     </div>
-                    {isArrayNotEmpty(drawOrganisations) || drawOrganisations.length > 5 && <span className="input-heading-add-another pt-4"
-                        onClick={() => this.changeShowAllStatus("org")}>
+                    {(isArrayNotEmpty(drawOrganisations) || drawOrganisations.length > 5) && <span className="input-heading-add-another pt-4"
+                        onClick={() => this.changeShowAllStatus("division")}>
                         {showAllOrg == true ? AppConstants.hide : AppConstants.showAll}
                     </span>
                     }
@@ -1184,7 +1237,7 @@ class MultifieldDrawsNew extends Component {
 
     //unlockDraws
     unlockDraws(id, round_Id, venueCourtId) {
-        let key = this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? 'all' : "singleCompetition"
+        let key = this.state.firstTimeCompId == "-1" || this.state.filterDates ? 'all' : "singleCompetition"
         this.props.unlockDrawsAction(id, round_Id, venueCourtId, key);
     }
 
@@ -1192,19 +1245,32 @@ class MultifieldDrawsNew extends Component {
     sideMenuView = () => {
         let { filterEnable } = this.state
         return (
-            <div className="multiDrawContentView multi-draw-list-top-head pr-0">
-                <div
-                    className="d-flex align-items-center mt-4"
-                    onClick={() => this.filterOnClick()}
-                    style={{ cursor: "pointer" }}>
-                    <img className="dot-image" src={AppImages.filterIcon} alt="" width="16" height="16" />
-                    <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span>
-                </div>
-                {filterEnable && this.venueLeftView()}
-                {this.state.firstTimeCompId !== "-1" || filterEnable && this.competitionLeftView()}
-                {filterEnable && this.divisionLeftView()}
-                {filterEnable && this.organisationLeftView()}
-            </div>
+            <div className="multiDrawContentView multi-draw-list-top-head pr-0"
+                style={{ display: !filterEnable && "flex", justifyContent: !filterEnable && 'center', paddingLeft: !filterEnable && 1 }}>
+                {
+                    filterEnable ?
+                        <div
+                            className="d-flex align-items-center mt-4"
+                            onClick={() => this.filterOnClick()
+                            }
+                            style={{ cursor: "pointer" }}>
+                            <img className="dot-image" src={AppImages.filterIcon} alt="" width="16" height="16" />
+                            <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span>
+                        </div >
+                        :
+                        <div
+                            className="d-flex align-items-center mt-4"
+                            onClick={() => this.filterOnClick()}
+                            style={{ cursor: "pointer" }}>
+                            <img className="dot-image" src={AppImages.filterIcon} alt="" width="25" height="25" />
+                            {/* <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span> */}
+                        </div>
+                }
+                { filterEnable && this.venueLeftView()}
+                { this.state.firstTimeCompId !== "-1" || !this.state.filterDates || filterEnable && this.competitionLeftView()}
+                { filterEnable && this.divisionLeftView()}
+                { filterEnable && this.organisationLeftView()}
+            </div >
         )
     }
 
@@ -1434,7 +1500,7 @@ class MultifieldDrawsNew extends Component {
                                                     cursor: disabledStatus && "no-drop"
                                                 }}
                                             >
-                                                {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? <Swappable
+                                                {this.state.firstTimeCompId == "-1" || this.state.filterDates ? <Swappable
                                                     id={
                                                         index.toString() +
                                                         ':' +
@@ -1560,7 +1626,7 @@ class MultifieldDrawsNew extends Component {
                                                                 {slotObject.isLocked == 1 && (
                                                                     <Menu.Item
                                                                         key="1"
-                                                                        onClick={() => this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
+                                                                        onClick={() => this.state.firstTimeCompId == "-1" || this.state.filterDates ?
                                                                             this.unlockDraws(
                                                                                 slotObject.drawsId,
                                                                                 "1",
@@ -1612,9 +1678,9 @@ class MultifieldDrawsNew extends Component {
 
     contentView = () => {
         return (
-            <div className='row'>
-                <div className='col-sm-3'>{this.sideMenuView()}</div>
-                <div className='col-sm-9'>{this.containerView()}</div>
+            <div className='row '>
+                <div className={this.state.filterEnable ? 'col-sm-3' : "col-sm-1"} >{this.sideMenuView()}</div>
+                <div className={this.state.filterEnable ? 'col-sm-9' : "col-sm"}>{this.containerView()}</div>
             </div>
         )
     }

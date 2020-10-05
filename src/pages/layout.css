@@ -18,7 +18,7 @@
 
 .innerSelect-value-draws
 .ant-select-selection-selected-value{
-  max-width: 120px !important;
+  max-width: 200px !important;
 }
 
 .ant-menu {
@@ -112,7 +112,8 @@
   border-radius: 18px;
   padding-top: 1px;
   margin-left: 3px;
-  color: rgba(27, 27, 52, 0.4);
+  /* color: rgba(27, 27, 52, 0.4); */
+  color: var(--app-1b1b34);
   background-color: var(--app-f7fafc);
 }
 
@@ -318,6 +319,6 @@
 }
 .innerSelect-value-draws
 .ant-select-selection-selected-value{
-  max-width: 120px !important;
+  max-width: 2000px !important;
 }
 }

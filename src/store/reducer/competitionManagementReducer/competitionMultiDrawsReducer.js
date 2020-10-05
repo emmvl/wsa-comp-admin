@@ -824,6 +824,16 @@ function swapedDrawsEditArrayFunc(
   return drawsArray;
 }
 
+function updateAllDivisions(drawsDivisionArray, value) {
+  for (let i in drawsDivisionArray) {
+    let divisionArray = drawsDivisionArray[i].legendArray
+    for (let j in divisionArray) {
+      divisionArray[j].checked = value
+    }
+  }
+  return drawsDivisionArray
+}
+
 ///insert checked parameter in venue array
 function updateCompVenue(venueArray, value) {
   for (let i in venueArray) {
@@ -874,22 +884,25 @@ function CompetitionMultiDraws(state = initialState, action) {
       return { ...state, onLoad: true, error: null, spinLoad: true, };
 
     case ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_SUCCESS:
+      console.log(action, "887")
       try {
         let resultData;
+        let singleCompetitionDivision
         if (action.competitionId == "-1" || action.dateRangeCheck) {
           let allCompetiitonDraws = action.result;
           resultData = allcompetitionDrawsData(allCompetiitonDraws)
+          state.drawDivisions = resultData.data.legendsArray
         }
         else {
           let drawsResultData = action.result;
           resultData = roundstructureData(drawsResultData)
+          singleCompetitionDivision = pushColorDivision(JSON.parse(JSON.stringify(state.divisionGradeNameList)), JSON.parse(JSON.stringify(resultData.roundsdata)))
         }
-
         state.publishStatus = action.result.drawsPublish
         state.isTeamInDraw = action.result.isTeamNotInDraws
-        state.drawDivisions = action.competitionId == "-1" || action.dateRangeCheck ? resultData.data ? resultData.data.legendsArray : [] : []
-        let singleCompetitionDivision = action.competitionId != "-1" && pushColorDivision(JSON.parse(JSON.stringify(state.divisionGradeNameList)), JSON.parse(JSON.stringify(resultData.roundsdata)))
-        state.divisionGradeNameList = singleCompetitionDivision
+        // state.drawDivisions  = action.competitionId == "-1" || action.dateRangeCheck == true ? resultData.data ? resultData.data.legendsArray : [] : []
+        // let singleCompetitionDivision = action.competitionId != "-1" || !action.dateRangeChec && pushColorDivision(JSON.parse(JSON.stringify(state.divisionGradeNameList)), JSON.parse(JSON.stringify(resultData.roundsdata)))
+        state.divisionGradeNameList = singleCompetitionDivision ? singleCompetitionDivision : []
         state.drawsCompetitionArray = state.drawDivisions.length > 0 ? getCompetitionArray(JSON.parse(JSON.stringify(state.drawDivisions))) : []
         let orgData = updateAllOrganisations(JSON.parse(JSON.stringify(action.result.organisations)), true)
         return {
@@ -1228,6 +1241,14 @@ function CompetitionMultiDraws(state = initialState, action) {
       }
       if (action.key == "organisation") {
         state.drawOrganisations[action.index].checked = action.value
+      }
+      if (action.key == "allDivisionChecked") {
+        let allDivision = updateAllDivisions(JSON.parse(JSON.stringify(state.drawDivisions)), action.value)
+        state.drawDivisions = allDivision
+      }
+      if (action.key == "singleCompDivisionCheked") {
+        let singleCompAllDivision = updateAllOrganisations(JSON.parse(JSON.stringify(state.divisionGradeNameList)), action.value)
+        state.divisionGradeNameList = singleCompAllDivision ? singleCompAllDivision : []
       }
 
       return {
