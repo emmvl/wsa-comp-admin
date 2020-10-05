@@ -39,6 +39,9 @@ function getColor(record,key) {
     }else if(key == "stateApproved"){
         color = record.stateApprovedStatus === 1 ? "green" : "orange";
     }
+    else {
+        color = "green";
+    }
     return color;
 }
 
@@ -81,22 +84,64 @@ const columns = [
         title: "Transfer",
         children: [
             {
-                title: '1st Affiliate',
-                dataIndex: 'transferAffiliate_1',
-                key: 'transferAffiliate_1',
-                sorter: (a, b) => tableSort(a, b, "transferAffiliate_1")
+                title: 'Comp Organiser',
+                dataIndex: 'transferCompOrgName',
+                key: 'transferCompOrgName',
+                sorter: (a, b) => tableSort(a, b, "transferCompOrgName"),
+                render: (transferCompOrgName,record, index) => {
+                    return(
+                        <div>
+                            <div style={{display: "flex",justifyContent:"space-between"}}>
+                                <div>{transferCompOrgName}</div>
+                                {transferCompOrgName && 
+                                <div className="transfer-status">{record.tCompOrgStatus == 0 ? "("+record.tCompOrgApproved+")" : 
+                                    <div>
+                                        {record.tCompOrgStatus!= 3 ?
+                                            <div style={{color: getColor(record,"tCompOrgApproved")}}>&#x2714;</div>
+                                            :
+                                            <div style={{color: "red"}}>&#x2718;</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    )
+                }
             },
             {
-                title: '2nd Affiliate',
-                dataIndex: 'transferAffiliate_2',
-                key: 'transferAffiliate_2',
-                sorter: (a, b) => tableSort(a, b, "transferAffiliate_2")
+                title: 'Affiliate',
+                dataIndex: 'transferAffOrgName',
+                key: 'transferAffOrgName',
+                sorter: (a, b) => tableSort(a, b, "transferAffOrgName"),
+                render: (transferAffOrgName,record, index) => {
+                    return(
+                        <div>
+                            <div style={{display: "flex",justifyContent:"space-between"}}>
+                                <div>{transferAffOrgName}</div>
+                                {transferAffOrgName && 
+                                <div className="transfer-status">{record.tAffStatus == 0 ? "("+record.tAffApproved+")" : 
+                                    <div>
+                                        {record.tAffStatus!= 3 ?
+                                            <div style={{color: getColor(record,"tAffApproved")}}>&#x2714;</div>
+                                            :
+                                            <div style={{color: "red"}}>&#x2718;</div>
+                                        }
+                                    </div>
+                                    }
+                                </div>
+                                }
+                            </div>
+                        </div>
+                    )
+                }
             },
             {
                 title: 'Competition',
-                dataIndex: 'transferCompetition',
-                key: 'transferCompetition',
-                sorter: (a, b) => tableSort(a, b, "transferCompetition")
+                dataIndex: 'transferCompName',
+                key: 'transferCompName',
+                sorter: (a, b) => tableSort(a, b, "transferCompName")
             },
         ]
     },
