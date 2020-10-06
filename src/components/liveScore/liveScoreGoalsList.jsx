@@ -268,7 +268,7 @@ class LiveScoreGoalList extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         let { sortBy, sortOrder } = this.state
-        this.setState({ searchText: e.target.value })
+        this.setState({ searchText: e.target.value,offset: 0 })
         if (e.target.value === null || e.target.value === "") {
             let offset = 0
             this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, sortBy, sortOrder)
@@ -277,6 +277,7 @@ class LiveScoreGoalList extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         let { sortBy, sortOrder } = this.state
         if (code === 13) { //13 is the enter keycode
@@ -287,6 +288,7 @@ class LiveScoreGoalList extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         let { sortBy, sortOrder } = this.state
         if (this.state.searchText === null || this.state.searchText === "") {
         }

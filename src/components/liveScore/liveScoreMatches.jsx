@@ -292,7 +292,7 @@ class LiveScoreMatchesList extends Component {
 
     // on change search text
     onChangeSearchText = (e) => {
-        this.setState({ searchText: e.target.value })
+        this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value === "") {
             this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
         }
@@ -301,7 +301,7 @@ class LiveScoreMatchesList extends Component {
     // search key 
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
-
+        this.setState({ offset: 0 })
         if (code === 13) { //13 is the enter keycode
             this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
         }
@@ -309,6 +309,7 @@ class LiveScoreMatchesList extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
             this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound)

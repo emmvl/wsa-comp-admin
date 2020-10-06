@@ -28,9 +28,9 @@ function tableSort(key) {
     const body = {
         "paging": {
             "limit": 10,
-            "offset": 0
+            "offset": _this.state.offset
         },
-        "searchText": ""
+        "searchText": _this.state.searchtext
     };
 
     let sortBy = key;
@@ -347,7 +347,7 @@ class LiveScorerList extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ searchText: e.target.value })
+        this.setState({ searchText: e.target.value,offset: 0 })
         let { sortBy, sortOrder } = this.state
         if (e.target.value == null || e.target.value == "") {
             const body = {
@@ -366,6 +366,7 @@ class LiveScorerList extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        this.setState({ offset: 0 })
         let { sortBy, sortOrder } = this.state
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -385,6 +386,7 @@ class LiveScorerList extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         let { searchText, sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (searchText == null || searchText == "") {

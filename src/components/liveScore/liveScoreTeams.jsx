@@ -188,7 +188,7 @@ class LiveScoreTeam extends Component {
 
     // on change search text
     onChangeSearchText = (e) => {
-        this.setState({ searchText: e.target.value })
+        this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value == "") {
             this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value, this.state.sortBy, this.state.sortOrder)
         }
@@ -196,6 +196,7 @@ class LiveScoreTeam extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
@@ -204,7 +205,7 @@ class LiveScoreTeam extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
-
+        this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText == "") {
         }
         else {
