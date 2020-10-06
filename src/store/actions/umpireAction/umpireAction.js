@@ -53,11 +53,20 @@ function umpireClear() {
     return action
 }
 
+function umpireMainListAction(data) {
+    const action = {
+        type: ApiConstants.API_UMPIRE_MAIN_LIST_LOAD,
+        data
+    };
+    return action;
+}
+
 export {
     umpireListAction,
     addUmpireAction,
     updateAddUmpireData,
     getUmpireAffiliateList,
     umpireSearchAction,
-    umpireClear
+    umpireClear,
+    umpireMainListAction
 } 

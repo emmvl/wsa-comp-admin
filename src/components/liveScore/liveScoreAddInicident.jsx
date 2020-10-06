@@ -309,7 +309,7 @@ class LiveScoreAddIncident extends Component {
                     <div className="col-sm" >
                         {/* <Form.Item className="slct-in-add-manager-livescore "> */}
                         <InputWithHead
-                            // required={"required-field pb-2"}
+                            required={"pb-0 pt-4.5"}
                             heading={AppConstants.players}
                         />
                         {/* {getFieldDecorator("incidentPlayerName", {
@@ -334,7 +334,7 @@ class LiveScoreAddIncident extends Component {
                     <div className="col-sm">
                         <Form.Item className="slct-in-add-manager-livescore livefirst one">
                             <InputWithHead
-                                required={"required-field pb-2 "}
+                                required={"required-field pb-0 pt-4.5"}
                                 heading={AppConstants.incident}
                             />
                             {getFieldDecorator("incidentName", {

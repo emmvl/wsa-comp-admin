@@ -148,7 +148,7 @@ let AxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
         // var url = `/api/orgregistration/competitionyear/${year}`;
-        var url = `/api/orgregistration/owncompetition/${year}?organisationUniqueKey=${organisationUniqueKey}`;
+        var url = `/api/orgregistration/competition/${year}?organisationUniqueKey=${organisationUniqueKey}&listedCompetitions=owned`;
         return Method.dataGet(url, token);
     },
     // get participate competition list
@@ -156,7 +156,7 @@ let AxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
         // var url = `/api/orgregistration/competitionyear/${year}`;
-        var url = `/api/orgregistration/affiliatedcompetition/${year}?organisationUniqueKey=${organisationUniqueKey}`;
+        var url = `/api/orgregistration/competition/${year}?organisationUniqueKey=${organisationUniqueKey}&listedCompetitions=participating`;
         return Method.dataGet(url, token);
     },
 
@@ -300,7 +300,7 @@ let AxiosApi = {
     },
 
     /////save the division table data  in the competition fees section
-    async saveCompetitionFeesDivisionAction(payload, competitionId,affiliateOrgId) {
+    async saveCompetitionFeesDivisionAction(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let sourceModule = payload.sourceModule != undefined ? payload.sourceModule : "REG";
@@ -490,7 +490,7 @@ let AxiosApi = {
         var url = `/api/competitionfee/status/update`;
         return Method.dataPost(url, token, body);
     },
-	getTeamRegistrations(payload, sortBy, sortOrder) {
+    getTeamRegistrations(payload, sortBy, sortOrder) {
         let url;
         if (sortBy && sortOrder) {
             url = `/api/teamregistration/dashboard?sortBy=${sortBy}&sortOrder=${sortOrder}`
@@ -499,27 +499,31 @@ let AxiosApi = {
             url = `/api/teamregistration/dashboard`;
         }
         let body = payload;
-        return Method.dataPost(url, token ,body);
+        return Method.dataPost(url, token, body);
     },
-	exportTeamRegistrations(payload) {
+    exportTeamRegistrations(payload) {
         let body = payload
         var url = `/api/teamregistration/export`;
-        return Method.dataPostDownload(url, token ,body ,"TeamRegistration" );
+        return Method.dataPostDownload(url, token, body, "TeamRegistration");
     },
-    saveDeRegister(payload){
+    saveDeRegister(payload) {
         var url = `/api/deregister`;
         return Method.dataPost(url, token, payload);
     },
-    getRegistrationChangeDashboard(payload){
+    getRegistrationChangeDashboard(payload) {
         var url = `/api/registrationchange/dashboard`;
         return Method.dataPost(url, token, payload);
     },
-    getRegistrationChangeReview(payload){
+    getRegistrationChangeReview(payload) {
         var url = `/api/registrationchange/review`;
         return Method.dataPost(url, token, payload);
     },
-    saveRegistrationChangeReview(payload){
+    saveRegistrationChangeReview(payload) {
         var url = `/api/registrationchange/review/save`;
+        return Method.dataPost(url, token, payload);
+    },
+    getTransferOrganisationsData(payload) {
+        var url = `/api/transfer/competitions?`;
         return Method.dataPost(url, token, payload);
     }
 };
@@ -744,73 +748,73 @@ const Method = {
         const url = newUrl;
         return await new Promise((resolve, reject) => {
             http
-            .post(url, body, {
-              responseType: 'arraybuffer',
-              headers: {
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*",
-                Accept: "application/csv",
-                Authorization: "BWSA " + authorization,
-                "SourceSystem": "WebAdmin"
-              }
-            })
-            .then(result => {
-              if (result.status === 200) {
-                console.log("*************" + JSON.stringify(result.data));
-                const url = window.URL.createObjectURL(new Blob([result.data]));
-                const link = document.createElement('a');
-                link.href = url;
-                link.setAttribute('download', fileName + '.csv'); //or any other extension
-                document.body.appendChild(link);
-                link.click();
-                return resolve({
-                  status: 1,
-                  result: result
-                });
-              } else if (result.status === 212) {
-                return resolve({
-                  status: 4,
-                  result: result
-                });
-              } else {
-                if (result) {
-                  return reject({
-                    status: 3,
-                    error: result.data.message,
-                  });
-                } else {
-                  return reject({
-                    status: 4,
-                    error: "Something went wrong."
-                  });
-                }
-              }
-            })
-            .catch(err => {
-              if (err.response) {
-                if (err.response.status !== null && err.response.status !== undefined) {
-                  if (err.response.status === 401) {
-                    let unauthorizedStatus = err.response.status
-                    if (unauthorizedStatus === 401) {
-                      logout()
-                      message.error(ValidationConstants.messageStatus401)
+                .post(url, body, {
+                    responseType: 'arraybuffer',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Access-Control-Allow-Origin": "*",
+                        Accept: "application/csv",
+                        Authorization: "BWSA " + authorization,
+                        "SourceSystem": "WebAdmin"
                     }
-                  } else {
-                    return reject({
-                      status: 5,
-                      error: err
-                    })
-                  }
-                }
-              } else {
-                return reject({
-                  status: 5,
-                  error: err
+                })
+                .then(result => {
+                    if (result.status === 200) {
+                        console.log("*************" + JSON.stringify(result.data));
+                        const url = window.URL.createObjectURL(new Blob([result.data]));
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.setAttribute('download', fileName + '.csv'); //or any other extension
+                        document.body.appendChild(link);
+                        link.click();
+                        return resolve({
+                            status: 1,
+                            result: result
+                        });
+                    } else if (result.status === 212) {
+                        return resolve({
+                            status: 4,
+                            result: result
+                        });
+                    } else {
+                        if (result) {
+                            return reject({
+                                status: 3,
+                                error: result.data.message,
+                            });
+                        } else {
+                            return reject({
+                                status: 4,
+                                error: "Something went wrong."
+                            });
+                        }
+                    }
+                })
+                .catch(err => {
+                    if (err.response) {
+                        if (err.response.status !== null && err.response.status !== undefined) {
+                            if (err.response.status === 401) {
+                                let unauthorizedStatus = err.response.status
+                                if (unauthorizedStatus === 401) {
+                                    logout()
+                                    message.error(ValidationConstants.messageStatus401)
+                                }
+                            } else {
+                                return reject({
+                                    status: 5,
+                                    error: err
+                                })
+                            }
+                        }
+                    } else {
+                        return reject({
+                            status: 5,
+                            error: err
+                        });
+                    }
                 });
-              }
-            });
         });
-      }   
+    }
 };
 
 

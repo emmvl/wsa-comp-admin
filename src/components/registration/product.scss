@@ -1004,6 +1004,9 @@ input[type="number"] {
   font-family: inter;
   font-weight: normal;
 }
+.checkBoxGroup-checkbox-radio-style .ant-checkbox + span{
+  margin-bottom: 3px;
+}
 
 @media (max-width: 767px) {
   .auth-form {
@@ -1033,4 +1036,9 @@ input[type="number"] {
   font-family: inter-medium, sans-serif;
   width: 120px;
   color:var(--app-bbbbc6);
+}
+
+.transfer-status{
+  padding-left:10px;
+  align-self: center;
 }

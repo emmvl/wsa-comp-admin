@@ -195,19 +195,30 @@ class LiveScoreManagerList extends Component {
             scorerTableData: scorerData.scorerData,
             searchText: '',
             competitionId: null,
-            offset: 0
+            offset: 0,
+            sortBy: null,
+            sortOrder: null,
         }
 
         _this = this;
     }
 
     componentDidMount() {
-
+        let { managerListActionObject } = this.props.liveScoreMangerState
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ competitionId: id })
             let offset = 0
-            this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, offset)
+            if (managerListActionObject) {
+                offset = managerListActionObject.offset
+                let searchText = managerListActionObject.searchText
+                let sortBy = managerListActionObject.sortBy
+                let sortOrder = managerListActionObject.sortOrder
+                this.setState({ offset, searchText, sortBy, sortOrder })
+                this.props.liveScoreManagerListAction(3, 1, id, searchText, offset, sortBy, sortOrder);
+            } else {
+                this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, offset)
+            }
         } else {
             history.push('/liveScoreCompetitions')
         }
@@ -375,6 +386,7 @@ class LiveScoreManagerList extends Component {
                                 onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
                                 onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                value={this.state.searchText}
                                 prefix={
                                     <Icon
                                         type="search"
@@ -394,7 +406,7 @@ class LiveScoreManagerList extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ searchText: e.target.value })
+        this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value === "") {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value)
 
@@ -404,6 +416,7 @@ class LiveScoreManagerList extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
@@ -414,6 +427,7 @@ class LiveScoreManagerList extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {

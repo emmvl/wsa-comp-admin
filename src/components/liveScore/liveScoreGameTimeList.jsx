@@ -111,7 +111,7 @@ function tableSort(key) {
 const columns = [
 
     {
-        title: 'Player Id',
+        title: 'Player ID',
         dataIndex: 'id',
         key: 'id',
         sorter: true,
@@ -204,22 +204,49 @@ class LiveScoreGameTimeList extends Component {
             filter: '',
             competitionId: null,
             searchText: '',
-            offset: 0
+            offset: 0,
+            sortBy: null,
+            sortOrder: null,
         };
         this_obj = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let { gameTimeStatisticsActionObject } = this.props.liveScoreGameTimeStatisticsState
         if (getLiveScoreCompetiton()) {
             const { id, attendanceRecordingPeriod } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ competitionId: id, filter: attendanceRecordingPeriod })
             if (id !== null) {
-                this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
+                if (gameTimeStatisticsActionObject) {
+                    let offset = gameTimeStatisticsActionObject.offset
+                    let searchText = gameTimeStatisticsActionObject.searchText
+                    let sortBy = gameTimeStatisticsActionObject.sortBy
+                    let sortOrder = gameTimeStatisticsActionObject.sortOrder
+                    let aggregate = gameTimeStatisticsActionObject.aggregate
+                    await this.setState({ offset, searchText, sortBy, sortOrder, filter: aggregate })
+                    this.props.gameTimeStatisticsListAction(id, aggregate === 'All' ? "" : aggregate, offset, searchText, sortBy, sortOrder)
+                } else {
+                    this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
+                }
             } else {
                 history.push("/liveScoreCompetitions")
             }
         } else {
             history.push('/liveScoreCompetitions')
+        }
+    }
+
+    checkUserId(record) {
+        let userId = record.player ? record.player.userId : null
+        if (userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        } else {
+            history.push("/userPersonal", {
+                userId: userId,
+                screenKey: "livescore",
+                screen: "/liveScorePlayerList"
+            })
         }
     }
 
@@ -261,7 +288,7 @@ class LiveScoreGameTimeList extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ searchText: e.target.value })
+        this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
             this.props.gameTimeStatisticsListAction(id, this.state.filter === 'All' ? "" : this.state.filter, 0, e.target.value, this.state.sortBy, this.state.sortOrder)
         }
@@ -269,6 +296,7 @@ class LiveScoreGameTimeList extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         // this.setState({ searchText: e.target.value })
@@ -279,6 +307,7 @@ class LiveScoreGameTimeList extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (this.state.searchText === null || this.state.searchText === "") {
         }
@@ -356,6 +385,7 @@ class LiveScoreGameTimeList extends Component {
                             onChange={(e) => this.onChangeSearchText(e)}
                             placeholder="Search..."
                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            value={this.state.searchText}
                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                 onClick={() => this.onClickSearchIcon()}
                             />}

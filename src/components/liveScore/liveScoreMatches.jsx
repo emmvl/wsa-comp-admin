@@ -211,17 +211,35 @@ class LiveScoreMatchesList extends Component {
             selectedRound: 'All',
             isBulkUpload: false,
             isScoreChanged: false,
-            onScoreUpdate: false
+            onScoreUpdate: false,
+            sortBy: null,
+            sortOrder: null,
         }
         _this = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let matchListActionObject = this.props.liveScoreMatchListState.matchListActionObject
+        let selectedDivision = this.state.selectedDivision
+        let page = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (matchListActionObject) {
+            let offset = matchListActionObject.offset
+            let searchText = matchListActionObject.search
+            selectedDivision = matchListActionObject.divisionId ? matchListActionObject.divisionId : "All"
+            let selectedRound = matchListActionObject.roundName ? matchListActionObject.roundName : "All"
+            sortBy = matchListActionObject.sortBy
+            sortOrder = matchListActionObject.sortOrder
+            await this.setState({ offset, searchText, selectedDivision, selectedDivision, selectedRound, sortBy, sortOrder })
+            page = Math.floor(offset / 10) + 1;
+        }
+
         if (this.state.umpireKey === 'umpire') {
             if (getUmpireCompetitonData()) {
                 const { id } = JSON.parse(getUmpireCompetitonData())
                 this.setState({ competitionId: id })
-                this.handleMatchTableList(1, id)
+                this.handleMatchTableList(page, id)
             } else {
                 history.push("/liveScoreCompetitions")
             }
@@ -231,9 +249,9 @@ class LiveScoreMatchesList extends Component {
             if (getLiveScoreCompetiton()) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 this.setState({ competitionId: id })
-                this.handleMatchTableList(1, id)
+                this.handleMatchTableList(page, id, sortBy, sortOrder)
                 this.props.getLiveScoreDivisionList(id)
-                this.props.liveScoreRoundListAction(id, this.state.selectedDivision == 'All' ? '' : this.state.selectedDivision)
+                this.props.liveScoreRoundListAction(id, selectedDivision == 'All' ? '' : selectedDivision)
             } else {
                 history.push("/liveScoreCompetitions")
             }
@@ -259,11 +277,12 @@ class LiveScoreMatchesList extends Component {
         )
     }
 
-    handleMatchTableList(page, competitionID) {
+    handleMatchTableList(page, competitionID, sortBy, sortOrder) {
+        console.log("page", page, sortBy, sortOrder)
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset })
         let start = 1
-        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
+        this.props.liveScoreMatchListAction(competitionID, start, offset, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound, undefined, sortBy, sortOrder)
     }
 
     onExport() {
@@ -273,7 +292,7 @@ class LiveScoreMatchesList extends Component {
 
     // on change search text
     onChangeSearchText = (e) => {
-        this.setState({ searchText: e.target.value })
+        this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value === "") {
             this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
         }
@@ -282,7 +301,7 @@ class LiveScoreMatchesList extends Component {
     // search key 
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
-
+        this.setState({ offset: 0 })
         if (code === 13) { //13 is the enter keycode
             this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
         }
@@ -290,6 +309,7 @@ class LiveScoreMatchesList extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
             this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, this.state.searchText, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound == 'All' ? null : this.state.selectedRound)
@@ -465,7 +485,7 @@ class LiveScoreMatchesList extends Component {
         if (checkScoreChanged === true) {
             message.info("Please save or cancel the current changes! ");
         } else {
-            this.handleMatchTableList(page, this.state.competitionId)
+            this.handleMatchTableList(page, this.state.competitionId, this.state.sortBy, this.state.sortOrder)
         }
     }
 
@@ -643,6 +663,7 @@ class LiveScoreMatchesList extends Component {
                                 className="product-reg-search-input"
                                 onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
+                                value={this.state.searchText}
                                 onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                 prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                     onClick={() => this.onClickSearchIcon()}

@@ -173,7 +173,7 @@ const columnActiveNews = [
 
 const columnsTodaysMatch = [
     {
-        title: "Match Id",
+        title: "Match ID",
         dataIndex: 'id',
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
@@ -306,7 +306,7 @@ const columnsTodaysMatch = [
 
 const columnsTodaysMatch_1 = [
     {
-        title: <span nowrap className="column-width-style" >{"Match Id"} </span>,
+        title: <span nowrap className="column-width-style" >{"Match ID"} </span>,
         dataIndex: 'id',
         key: 'id',
         sorter: (a, b) => tableSort(a, b, 'id'),
@@ -446,7 +446,7 @@ const columnsTodaysIncient = [
             </NavLink>
     },
     {
-        title: 'Match Id',
+        title: 'Match ID',
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: (a, b) => tableSort(a, b, 'matchId'),

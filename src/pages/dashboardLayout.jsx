@@ -25,7 +25,7 @@ import {
   getUreAction,
 } from "store/actions/userAction/userAction";
 import Loader from "customComponents/loader";
-
+import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
 import "./layout.css";
 
 const { Option } = Select;
@@ -71,8 +71,8 @@ class DashboardLayout extends React.Component {
         if (this.props.userState.impersonation && !this.state.impersonationLoad) {
           const impersonationAffiliate = this.state.impersonationAffiliateOrgId
             ? this.props.userState.affiliateList.find(
-                (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
-              )
+              (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
+            )
             : null;
           await setImpersonationAffiliate(impersonationAffiliate);
 
@@ -377,11 +377,10 @@ class DashboardLayout extends React.Component {
         )}
 
         <header
-          className={`site-header ${
-            this.state.impersonationLoad && this.state.impersonationOrgData
-              ? "impersonation-site-header"
-              : ""
-          }`}
+          className={`site-header ${this.state.impersonationLoad && this.state.impersonationOrgData
+            ? "impersonation-site-header"
+            : ""
+            }`}
         >
           <div className="header-wrap">
             <div className="row m-0-res">
@@ -447,7 +446,7 @@ class DashboardLayout extends React.Component {
                               </div>
                             </li>
                             <li className={menuName === AppConstants.liveScores ? "active" : ""}>
-                              <div className="lives-cores menu-wrap">
+                              <div className="lives-cores menu-wrap" onClick={() => this.props.clearDataOnCompChangeAction()}>
                                 <NavLink to="/liveScoreCompetitions">
                                   <span className="icon" />
                                   {AppConstants.liveScores}
@@ -546,6 +545,7 @@ function mapDispatchToProps(dispatch) {
     getOrganisationAction,
     impersonationAction,
     getAffiliatesListingAction,
+    clearDataOnCompChangeAction,
   }, dispatch);
 }
 

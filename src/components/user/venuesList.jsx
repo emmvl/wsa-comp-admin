@@ -125,7 +125,7 @@ const columns = [
                     title={<img className="dot-image" src={AppImages.moreTripleDot}
                         alt="" width="16" height="16" />}>
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/competitionVenueAndTimesEdit`, state: { venueId: e.id, key: AppConstants.venuesList, isUsed: isUsed } }} >
+                        <NavLink to={{ pathname: `/competitionVenueAndTimesEdit`, state: { venueId: e.id, key: AppConstants.venuesList, isUsed: isUsed, isCreator: e.isCreator } }} >
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -146,13 +146,25 @@ class VenuesList extends Component {
             deleteLoading: false,
             filter: null,
             organisationId: null,
-            offset: 0
+            offset: 0,
+            sortBy: null,
+            sortOrder: null,
         }
         this_Obj = this;
-        this.handleVenuesTableList(1, "");
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let { venueListActionObject } = this.props.commonReducerState
+        if (venueListActionObject) {
+            let filter = venueListActionObject.data
+            let searchText = venueListActionObject.data.searchText
+            let sortBy = venueListActionObject.sortBy
+            let sortOrder = venueListActionObject.sortOrder
+            await this.setState({ searchText, sortBy, sortOrder, filter })
+            this.props.venuesListAction(filter, sortBy, sortOrder);
+        } else {
+            this.handleVenuesTableList(1, "");
+        }
         console.log("Component Did mount");
     }
 
@@ -257,7 +269,9 @@ class VenuesList extends Component {
                         <div className="reg-product-search-inp-width">
                             <Input className="product-reg-search-input"
                                 onChange={(e) => this.onChangeSearchText(e)}
-                                placeholder="Search..." onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                placeholder="Search..."
+                                value={this.state.searchText}
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                 prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                     onClick={() => this.onClickSearchIcon()} />}
                                 allowClear
@@ -310,7 +324,9 @@ class VenuesList extends Component {
                                 <div className="reg-product-search-inp-width">
                                     <Input className="product-reg-search-input"
                                         onChange={(e) => this.onChangeSearchText(e.target.value)}
-                                        placeholder="Search..." onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                        value={this.state.searchText}
+                                        placeholder="Search..."
+                                        onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                         prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                         />
                                         }

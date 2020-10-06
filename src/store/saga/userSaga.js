@@ -194,7 +194,7 @@ function* getAffiliatedToOrganisationSaga(action) {
 // Get Organisation for Venue
 function* getOrganisationForVenueSaga(action) {
   try {
-    const result = yield call(UserAxiosApi.getVenueOrganisation);
+    const result = yield call(UserAxiosApi.getVenueOrganisation, action.key);
 
     if (result.status === 1) {
       yield put({
@@ -815,6 +815,83 @@ function* getUserModuleIncidentDataSaga(action) {
   }
 }
 
+// Get the User Role 
+function* getUserRole(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUserRoleData, action.userId);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_USER_ROLE_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+// Get the Scorer Activity Data
+function* getScorerActivitySaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getScorerActivityData, action.payload, action.roleId, action.matchStatus);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_SCORER_ACTIVITY_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+// Get the Umpire Data
+function* getUmpireSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getUmpireData, action.payload, action.roleId, action.matchStatus);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_UMPIRE_DATA_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+// Get the Coach Data
+function* getCoachSaga(action) {
+  try {
+    const result = yield call(UserAxiosApi.getCoachData, action.payload, action.roleId, action.matchStatus);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_COACH_DATA_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+
 
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
@@ -856,4 +933,8 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_IMPERSONATION_LOAD, impersonationSaga);
   yield takeEvery(ApiConstants.API_USER_DELETE_LOAD, userDeleteSaga);
   yield takeEvery(ApiConstants.API_GET_USER_MODULE_INCIDENT_LIST_LOAD, getUserModuleIncidentDataSaga);
+  yield takeEvery(ApiConstants.API_GET_USER_ROLE_LOAD, getUserRole);
+  yield takeEvery(ApiConstants.API_GET_SCORER_ACTIVITY_LOAD, getScorerActivitySaga);
+  yield takeEvery(ApiConstants.API_GET_UMPIRE_DATA_LOAD, getUmpireSaga);
+  yield takeEvery(ApiConstants.API_GET_COACH_DATA_LOAD, getCoachSaga);
 }

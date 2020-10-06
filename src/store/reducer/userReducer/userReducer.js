@@ -123,7 +123,19 @@ const initialState = {
   userIncidentData: [],
   incidentDataLoad: false,
   incidentCurrentPage: null,
-  incidentTotalCount: null
+  incidentTotalCount: null,
+  userRole: [],
+  scorerActivityRoster: [],
+  scorerCurrentPage: null,
+  scorerTotalCount: null,
+  umpireDataLoad: false,
+  umpireActivityRoster: [],
+  umpireCurrentPage: null,
+  umpireTotalCount: null,
+  coachDataLoad: false,
+  coachActivityRoster: [],
+  coachCurrentPage: null,
+  coachTotalCount: null
 };
 
 function userReducer(state = initialState, action) {
@@ -186,7 +198,7 @@ function userReducer(state = initialState, action) {
         onLoad: false,
         affiliateList: data.affiliates,
         affiliateListPage: data.page ? data.page.currentPage : 1,
-        affiliateListTotalCount: data.page.totalCount,
+        affiliateListTotalCount: data.page ? data.page.totalCount : 0,
         status: action.status
       };
 
@@ -734,10 +746,75 @@ function userReducer(state = initialState, action) {
         incidentTotalCount: action.result.page.totalCount
       };
 
+    case ApiConstants.API_GET_USER_ROLE_LOAD:
+      return { ...state, };
+
+    case ApiConstants.API_GET_USER_ROLE_SUCCESS:
+      let userRole = getUserRole(action.result)
+      state.userRole = userRole
+      return {
+        ...state,
+      };
+
+    ////Scorer
+    case ApiConstants.API_GET_SCORER_ACTIVITY_LOAD:
+      return { ...state, activityScorerOnLoad: true };
+
+    case ApiConstants.API_GET_SCORER_ACTIVITY_SUCCESS:
+      return {
+        ...state,
+        activityScorerOnLoad: false,
+        scorerActivityRoster: action.result.activityRoster,
+        scorerCurrentPage: action.result.page.currentPage,
+        scorerTotalCount: action.result.page.totalCount,
+      };
+
+    ////Umpire
+    case ApiConstants.API_GET_UMPIRE_DATA_LOAD:
+      return { ...state, umpireDataLoad: true };
+
+    case ApiConstants.API_GET_UMPIRE_DATA_SUCCESS:
+      return {
+        ...state,
+        umpireDataLoad: false,
+        umpireActivityRoster: action.result.activityRoster,
+        umpireCurrentPage: action.result.page.currentPage,
+        umpireTotalCount: action.result.page.totalCount,
+      };
+
+    ////Coach
+    case ApiConstants.API_GET_COACH_DATA_LOAD:
+      return { ...state, coachDataLoad: true };
+
+    case ApiConstants.API_GET_COACH_DATA_SUCCESS:
+      return {
+        ...state,
+        coachDataLoad: false,
+        coachActivityRoster: action.result.activityRoster,
+        coachCurrentPage: action.result.page.currentPage,
+        coachTotalCount: action.result.page.totalCount,
+      };
+
+
 
     default:
       return state;
   }
+}
+
+//get User Role
+function getUserRole(userRoleData) {
+
+  let userRole = false
+
+  for (let i in userRoleData) {
+    if (userRoleData[i].roleId == 15 || userRoleData[i].roleId == 20) {
+
+      userRole = true
+      break;
+    }
+  }
+  return userRole
 }
 
 //get charity result

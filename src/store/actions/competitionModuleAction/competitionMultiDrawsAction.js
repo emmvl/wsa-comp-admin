@@ -23,10 +23,10 @@ function getCompetitionDrawsAction(yearRefId, competitionId, venueId, roundId, o
 
 
 ///get rounds in the competition draws
-function getDrawsRoundsAction(yearRefId, competitionId, key) {
+function getDrawsRoundsAction(yearRefId, competitionId, key, dateRangeCheck, startDate, endDate) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_LOAD,
-        yearRefId, competitionId, key
+        yearRefId, competitionId, key, dateRangeCheck, startDate, endDate
     };
     return action;
 }
@@ -77,9 +77,9 @@ function dateSelectionRounds(data) {
     return action
 
 }
-function clearDraws(key) {
+function clearMultiDraws(key) {
     const action = {
-        type: ApiConstants.cleardrawsData,
+        type: ApiConstants.clearMultidrawsData,
         key
     }
     return action
@@ -157,6 +157,16 @@ function changeDrawsDateRangeAction(yearRefId, competitionId, startDate, endDate
     }
 
 }
+
+////on change filter checkbox on multi field draws
+function checkBoxOnChange(value, key, index, subIndex) {
+    const action = {
+        type: ApiConstants.ONCHANGE_MULTI_FIELD_DRAWS_CHECKBOX,
+        value, key, index, subIndex
+    }
+    return action
+}
+
 export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
@@ -165,7 +175,7 @@ export {
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,
     dateSelectionRounds,
-    clearDraws,
+    clearMultiDraws,
     getDivisionGradeNameLisAction,
     publishDraws,
     matchesListDrawsAction,
@@ -173,5 +183,6 @@ export {
     clearFixtureData,
     unlockDrawsAction,
     getActiveRoundsAction,
-    changeDrawsDateRangeAction
+    changeDrawsDateRangeAction,
+    checkBoxOnChange,
 }

@@ -789,7 +789,7 @@ const AppConstants = {
   ///livescores
   todaysIncidents: "Today's Incidents",
   todaysMatch: "Today's Matches",
-  recipientSelection: 'Enter Recipients',
+  recipientSelection: 'Select Recipients',
 
   ////addedd 2 march
   ByMatch: 'By Match',
@@ -1597,7 +1597,7 @@ const AppConstants = {
   hardshipCode: "Hardship Code",
   addCode: "Add Code",
   go: "Go",
-  matchCalender: "Match Calender",
+  matchCalender: "Match Calendar",
   showByMatches: "Show By Matches",
   hideFilter: "Hide Filter",
   showAll: "Show all",
@@ -1611,10 +1611,27 @@ const AppConstants = {
   playOff3rdposition: "Playoff for 3rd position",
   whoPlaysWho: "Who plays who",
   whoPlaysWhoValidation: "Please remove duplicate from who playes who",
+  umpireActivity: "Umpire Activity",
+  showFilter: "Show Filter",
+  hide: "Hide",
+
   heroImageForCompetition: "Hero Image for Competition",
   heroImageSizeText: "Approximate Dimension: Width: 1200px  Height: 400px",
   poolSettingsWhoPlaysWho: "Pool Settings - Who Plays Who",
-  mailBodyText:`Hi,\n \nPlease use the following discount Code when you register in order to have your fee waived.`,
+  mailBodyText: `Hi,\n \nPlease use the following discount Code when you register in order to have your fee waived.`,
+  fixtureTemplate: "Fixture Template",
+  reasonForTransfer: "Reasons(s) for wanting to transfer.",
+  registrationCloseDate: "Registration close date",
+  filterDates: "Filter Dates",
+  uploadBankAccnt: "Upload Bank Account",
+  editBankAccount: "Edit Bank Account",
+  registrationCloseDate: "Registration close date",
+  theyAlreadyTakenCourt: "They have already taken the court for training, grading or a competition game",
+  theyOweMonies: "They owe monies",
+  noTeamAvailable: "No team available",
+  suspended: "Suspended",
+  reasonWhyYourAreDeclineFromTransfer: "Reason why you are declining the request to transfer from your organisation",
+  reasonWhyYourAreDeclineToTransfer: "Reason why you are declining the request to transfer to you organisation",
 };
 
 export default AppConstants;

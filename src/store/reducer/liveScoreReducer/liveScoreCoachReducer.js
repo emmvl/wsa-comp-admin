@@ -26,7 +26,8 @@ const initialState = {
     onLoadSearch: false,
     selectedteam: [],
     currentPage: null,
-    totalCount: null
+    totalCount: null,
+    coachListActionObject: null,
 };
 
 function getTeamObj(teamSelectId, teamArr) {
@@ -78,7 +79,7 @@ function generateTeamId(teamIdArr) {
 function liveScoreCoachState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_COACH_LIST_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onLoad: true, coachListActionObject: action };
 
         case ApiConstants.API_LIVE_SCORE_COACH_LIST_SUCCESS:
 
@@ -208,6 +209,10 @@ function liveScoreCoachState(state = initialState, action) {
                 ...state,
                 importResult: null,
             };
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.coachListActionObject = null
+            return { ...state, onLoad: false };
 
         default:
             return state;

@@ -10,7 +10,8 @@ import {
     InputNumber,
     Form,
     Input,
-    Icon
+    Icon,
+    Modal
 } from "antd";
 import { NavLink } from "react-router-dom";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -46,6 +47,7 @@ import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScor
 
 const { Header, Footer } = Layout;
 const { Option } = Select;
+const { confirm } = Modal;
 
 
 
@@ -69,7 +71,8 @@ class LiveScoreSettingsView extends Component {
             yearLoading: false,
             organisationTypeRefId: 0,
             regInvitees: false,
-            trackFullPeriod: 0
+            trackFullPeriod: 0,
+            onOkClick: true,
         };
     }
     componentDidMount() {
@@ -262,8 +265,51 @@ class LiveScoreSettingsView extends Component {
                     clubChecked,
                     associationLeague,
                     clubSchool,
+                    radioSelectionArr,
+                    invitedAnyAssocArr,
+                    invitedAnyClubArr
                 } = this.props.liveScoreSetting
 
+                let invitedToValue = null
+                let assocValue = null
+                let clubValue = null
+                let selectionValue = null
+
+                let arr_1 = radioSelectionArr.sort()
+                let arr_2 = invitedTo.sort()
+
+                if (JSON.stringify(radioSelectionArr) === JSON.stringify(invitedTo)) {
+                    invitedToValue = false
+                } else {
+                    invitedToValue = true
+                }
+
+
+                let sortedArr = invitedAnyAssoc.sort((a, b) => (a.organisationId > b.organisationId ? 1 : -1))
+                let sortedArr_1 = invitedAnyAssocArr.sort((a, b) => (a.organisationId > b.organisationId ? 1 : -1))
+
+
+                if (invitedAnyAssoc.length > 0) {
+                    if (JSON.stringify(invitedAnyAssocArr) === JSON.stringify(invitedAnyAssoc)) {
+                        assocValue = false
+                    } else {
+                        assocValue = true
+                    }
+                }
+
+                if (invitedAnyClub.length > 0) {
+                    if (JSON.stringify(invitedAnyClubArr) === JSON.stringify(invitedAnyClub)) {
+                        clubValue = false
+                    } else {
+                        clubValue = true
+                    }
+                }
+
+                if (invitedToValue || assocValue || clubValue) {
+                    selectionValue = true
+                } else {
+                    selectionValue = false
+                }
                 localStorage.setItem("yearId", yearRefId)
 
                 const umpire = record1.includes("recordUmpire")
@@ -310,6 +356,7 @@ class LiveScoreSettingsView extends Component {
                 formData.append('gamesBorrowedThreshold', gamesBorrowedThreshold)
                 formData.append('linkedCompetitionId', linkedCompetitionId)
                 formData.append('yearRefId', yearRefId)
+                formData.append('isInvitorsChanged', selectionValue)
                 if (attendenceRecordingTime) {
                     formData.append('attendanceSelectionTime', attendenceRecordingTime)
                 }
@@ -379,10 +426,9 @@ class LiveScoreSettingsView extends Component {
                     localStorage.setItem("regInvitees", "true")
                 }
                 let regInvitees = localStorage.getItem("regInvitees")
-                console.log(regInvitees, 'regInvitees')
                 if (regInvitees === "true") {
                     this.props.initializeCompData()
-                    this.props.settingDataPostInitiate({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName, competitionId: this.state.competitionId, isEdit: this.state.isEdit })
+                    this.props.settingDataPostInitiate({ body: formData, venue: venue, settingView: this.props.location.state, screenName: this.state.screenName ? this.state.screenName : 'liveScore', competitionId: this.state.competitionId, isEdit: this.state.isEdit })
                 }
 
             }
@@ -690,6 +736,7 @@ class LiveScoreSettingsView extends Component {
                         </div>
                         <div className="col-sm" style={{ paddingTop: 1 }}>
                             <Checkbox.Group
+                                className="checkBoxGroup-checkbox-radio-style"
                                 style={{
                                     display: "-ms-flexbox",
                                     flexDirection: "column",
@@ -1076,8 +1123,6 @@ class LiveScoreSettingsView extends Component {
                         {AppConstants.turnOff_30Second}
                     </Checkbox>
                 </div>
-
-                {/* {this.state.isEdit == 'add' && this.regInviteesView()} */}
                 {this.regInviteesView()}
             </div>
         )
@@ -1102,6 +1147,7 @@ class LiveScoreSettingsView extends Component {
         let detailsData = this.props.competitionFeesState
         let associationAffilites = detailsData.associationAffilites
         const { associationLeague } = this.props.liveScoreSetting
+        let disbledCompenent = ((this.state.isEdit == 'edit' || this.state.edit == 'edit') && this.state.onOkClick) ? true : false
         return (
             < div className='col-sm ml-3'>
                 <Select
@@ -1116,6 +1162,7 @@ class LiveScoreSettingsView extends Component {
                     onSearch={(value) => { this.onInviteeSearch(value, 3) }}
                     showSearch={true}
                     onBlur={() => this.onInviteeSearch("", 3)}
+                    disabled={disbledCompenent}
                 >
                     {associationAffilites.map((item) => {
                         return (
@@ -1136,6 +1183,7 @@ class LiveScoreSettingsView extends Component {
         let detailsData = this.props.competitionFeesState
         let clubAffilites = detailsData.clubAffilites
         const { clubSchool } = this.props.liveScoreSetting
+        let disbledCompenent = ((this.state.isEdit == 'edit' || this.state.edit == 'edit') && this.state.onOkClick) ? true : false
         return (
             < div className='col-sm ml-3'>
                 <Select
@@ -1150,6 +1198,7 @@ class LiveScoreSettingsView extends Component {
                     filterOption={false}
                     onSearch={(value) => { this.onInviteeSearch(value, 4) }}
                     onBlur={() => this.onInviteeSearch("", 4)}
+                    disabled={disbledCompenent}
                 >
                     {clubAffilites.map((item) => {
                         return (
@@ -1164,17 +1213,46 @@ class LiveScoreSettingsView extends Component {
         )
     }
 
+    openModel = (props) => {
+        let this_ = this;
+        confirm({
+            title: 'Editing the organisations may impact your team and role associations. Would you like to proceed?',
+            // content: 'Some descriptions',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            maskClosable: true,
+            onOk() {
+                this_.setState({ onOkClick: false })
+            },
+            onCancel() {
+                this_.setState({ onOkClick: true })
+            },
+        });
+    };
+
     regInviteesView = () => {
-        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected, registrationInvitees, associationChecked, clubChecked, invitedTo, anyOrgArray } = this.props.liveScoreSetting
+        const { affiliateSelected, anyOrgSelected, otherSelected, nonSelected, affiliateNonSelected, anyOrgNonSelected, registrationInvitees, associationChecked, clubChecked, invitedTo, anyOrgArray, radioSelectionArr, invitedAnyAssocArr, invitedAnyClubArr, invitedAnyAssoc, invitedAnyClub } = this.props.liveScoreSetting
         let invitees = isArrayNotEmpty(registrationInvitees) ? registrationInvitees : [];
         let orgLevelId = JSON.stringify(this.state.organisationTypeRefId);
+        let disbledCompenent = ((this.state.isEdit == 'edit' || this.state.edit == 'edit') && this.state.onOkClick) ? true : false
+        let isEdit = this.state.isEdit || this.state.edit
         return (
-            <div >
+            <div className={((isEdit.edit == 'edit' || isEdit == 'edit') && this.state.onOkClick) && "inside-container-view"}>
+                {
+                    ((isEdit.edit == 'edit' || isEdit == 'edit') && this.state.onOkClick) &&
+                    <div className="transfer-image-view">
+                        <Button onClick={() => this.openModel()} className="primary-add-comp-form" type="primary">
+                            {AppConstants.edit}
+                        </Button>
+                    </div>
+                }
                 <div>
                     <Radio.Group
-                        className="reg-competition-radio mt-5"
+                        className={((isEdit.edit == 'edit' || isEdit == 'edit') && this.state.onOkClick) ? "reg-competition-radio" : "reg-competition-radio mt-5"}
                         onChange={(e) => this.props.onChangeSettingForm({ key: "affiliateSelected", data: e.target.value })}
                         value={affiliateSelected}
+                        disabled={disbledCompenent}
                     >
                         {(invitees || []).map((item, index) =>
                             (
@@ -1209,9 +1287,10 @@ class LiveScoreSettingsView extends Component {
                                                                     <Radio.Group
                                                                         onChange={(e) => this.props.onChangeSettingForm({ key: "affiliateNonSelected", data: e.target.value, subItem: subItem })}
                                                                         value={affiliateNonSelected}
+                                                                        disabled={disbledCompenent}
                                                                     >
                                                                         <Radio
-
+                                                                            disabled={disbledCompenent}
                                                                             key={'none1'} value={'none1'}>{'None'}</Radio>
                                                                     </Radio.Group>
                                                                 </div>
@@ -1236,6 +1315,7 @@ class LiveScoreSettingsView extends Component {
                         className="reg-competition-radio mt-0"
                         onChange={(e) => this.onInviteesChange(e.target.value)}
                         value={anyOrgSelected}
+                        disabled={disbledCompenent}
                     >
                         {(invitees || []).map((item, index) =>
                             (
@@ -1252,18 +1332,19 @@ class LiveScoreSettingsView extends Component {
                                                 flexDirection: "column",
                                                 paddingLeft: 13
                                             }}>
-                                                <Checkbox className="single-checkbox-radio-style" style={{ paddingLeft: 7, paddingTop: 8 }} checked={associationChecked} onChange={e => this.props.onChangeSettingForm({ key: 'associationChecked', data: e.target.checked, checkBoxId: item.subReferences[0].id })}>{item.subReferences[0].description}</Checkbox>
+                                                <Checkbox disabled={disbledCompenent} className="single-checkbox-radio-style" style={{ paddingLeft: 7, paddingTop: 8 }} checked={associationChecked} onChange={e => this.props.onChangeSettingForm({ key: 'associationChecked', data: e.target.checked, checkBoxId: item.subReferences[0].id })}>{item.subReferences[0].description}</Checkbox>
                                                 {associationChecked && this.associationSearchInvitee()}
-                                                <Checkbox className="single-checkbox-radio-style" style={{ paddingTop: 15, paddingLeft: associationChecked ? 5 : 0 }} checked={clubChecked} onChange={e => this.props.onChangeSettingForm({ key: 'clubChecked', data: e.target.checked, checkBoxId: item.subReferences[1].id })}>{item.subReferences[1].description}</Checkbox>
+                                                <Checkbox disabled={disbledCompenent} className="single-checkbox-radio-style" style={{ paddingTop: 15, paddingLeft: associationChecked ? 5 : 0 }} checked={clubChecked} onChange={e => this.props.onChangeSettingForm({ key: 'clubChecked', data: e.target.checked, checkBoxId: item.subReferences[1].id })}>{item.subReferences[1].description}</Checkbox>
                                                 {clubChecked && this.clubSearchInvitee()}
                                             </div>
                                             <div style={{ marginLeft: 20 }}>
                                                 <Radio.Group
                                                     onChange={(e) => this.props.onChangeSettingForm({ key: "anyOrgNonSelected", data: e.target.value })}
                                                     value={anyOrgNonSelected}
+                                                    disabled={disbledCompenent}
                                                 >
                                                     <Radio
-
+                                                        disabled={disbledCompenent}
                                                         key={'none2'} value={'none2'}>{'None'}</Radio>
                                                 </Radio.Group>
                                             </div>
@@ -1278,6 +1359,7 @@ class LiveScoreSettingsView extends Component {
                         className="reg-competition-radio mt-0"
                         onChange={(e) => this.props.onChangeSettingForm({ key: "otherSelected", data: e.target.value })}
                         value={otherSelected}
+                        disabled={disbledCompenent}
                     >
                         {(invitees || []).map((item, index) =>
                             (

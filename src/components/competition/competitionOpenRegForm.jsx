@@ -365,25 +365,33 @@ class CompetitionOpenRegForm extends Component {
             }
         }
         if (nextProps.appState !== this.props.appState) {
-            let competitionTypeList = this.props.appState.own_CompetitionArr
-            if (nextProps.appState.own_CompetitionArr !== competitionTypeList) {
+            let competitionTypeList = this.props.appState.all_own_CompetitionArr
+            if (nextProps.appState.all_own_CompetitionArr !== competitionTypeList) {
                 if (competitionTypeList.length > 0) {
-                    let screenKey = this.props.location.state ? this.props.location.state.screenKey : null
+                    let screenKey = this.props.location.state ? this.props.location.state.screenKey : null;
+                    let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null
                     let competitionId = null
                     let statusRefId = null
-                    if (screenKey == "compDashboard") {
+                    let competitionStatus = null
+                    if (screenKey == "compDashboard" || fromReplicate == 1) {
                         competitionId = getOwn_competition()
                         let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
                         statusRefId = compIndex > -1 ? competitionTypeList[compIndex].statusRefId : competitionTypeList[0].statusRefId
                         competitionId = compIndex > -1 ? competitionId : competitionTypeList[0].competitionId
+                        competitionStatus = competitionTypeList[compIndex].competitionStatus
+                        setOwn_competitionStatus('')
+                        setOwn_competition('')
                     }
                     else {
                         competitionId = competitionTypeList[0].competitionId
                         statusRefId = competitionTypeList[0].statusRefId
+                        competitionStatus = competitionTypeList[0].competitionStatus
                     }
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
-                    setOwn_competitionStatus(statusRefId)
-                    setOwn_competition(competitionId)
+                    if (competitionStatus == 2) {
+                        setOwn_competitionStatus(statusRefId)
+                        setOwn_competition(competitionId)
+                    }
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
             }
@@ -500,27 +508,36 @@ class CompetitionOpenRegForm extends Component {
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
-        let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
-
-        if (storedCompetitionId && yearId && propsData && compData) {
-            this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId, null, this.state.sourceModule)
-            this.setState({
-                yearRefId: JSON.parse(yearId),
-                firstTimeCompId: storedCompetitionId,
-                competitionStatus: storedCompetitionStatus,
-                getDataLoading: true
-            })
-        }
-        else if (yearId) {
+        let compData = this.props.appState.all_own_CompetitionArr.length > 0 ? this.props.appState.all_own_CompetitionArr : undefined;
+        let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
+        if(fromReplicate != 1){
+            if (storedCompetitionId && yearId && propsData && compData) {
+                this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId, null, this.state.sourceModule)
+                this.setState({
+                    yearRefId: JSON.parse(yearId),
+                    firstTimeCompId: storedCompetitionId,
+                    competitionStatus: storedCompetitionStatus,
+                    getDataLoading: true
+                })
+            }
+            else if (yearId) {
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+                this.setState({
+                    yearRefId: JSON.parse(yearId)
+                });
+            }
+            else {
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
+                setOwnCompetitionYear(1)
+            }
+        }else{
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
-                yearRefId: JSON.parse(yearId)
-            })
+                yearRefId: JSON.parse(yearId),
+                firstTimeCompId: storedCompetitionId
+            });
         }
-        else {
-            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
-        }
+        
     }
 
     ////alll the api calls
@@ -618,7 +635,7 @@ class CompetitionOpenRegForm extends Component {
                         formData.append("description", postData.description);
                         formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                         formData.append("competitionFormatRefId", postData.competitionFormatRefId);
-                        formData.append("finalTypeRefId",postData.finalTypeRefId);
+                        formData.append("finalTypeRefId", postData.finalTypeRefId);
                         formData.append("startDate", postData.startDate);
                         formData.append("endDate", postData.endDate);
                         if (postData.competitionFormatRefId == 4) {
@@ -655,6 +672,11 @@ class CompetitionOpenRegForm extends Component {
                             }
                         }
                         formData.append("logoIsDefault", postData.logoIsDefault)
+
+                        if(this.state.image){
+                            formData.append("uploadFileType",1);
+                        }
+
                         this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id, this.state.sourceModule)
                         this.setState({ loading: true, divisionState: true });
                     } else {
@@ -742,9 +764,13 @@ class CompetitionOpenRegForm extends Component {
     }
 
 
-    onCompetitionChange(competitionId, statusRefId) {
-        setOwn_competition(competitionId)
-        setOwn_competitionStatus(statusRefId)
+    onCompetitionChange(competitionId, statusRefId, competitionArray) {
+        let competititionIndex = competitionArray.findIndex((x) => x.competitionId == competitionId)
+        let competitionStatus = competitionArray[competititionIndex].competitionStatus
+        if (competitionStatus == 2) {
+            setOwn_competition(competitionId)
+            setOwn_competitionStatus(statusRefId)
+        }
         this.props.clearCompReducerDataAction("all")
         this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
@@ -754,7 +780,7 @@ class CompetitionOpenRegForm extends Component {
     dropdownView = (
         getFieldDecorator
     ) => {
-        const { own_YearArr, own_CompetitionArr, } = this.props.appState
+        const { own_YearArr, all_own_CompetitionArr, } = this.props.appState
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -804,11 +830,11 @@ class CompetitionOpenRegForm extends Component {
                                 <Select
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
-                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
+                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key, this.props.appState.all_own_CompetitionArr)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {this.props.appState.own_CompetitionArr.map(item => {
+                                    {this.props.appState.all_own_CompetitionArr.map(item => {
                                         return (
                                             <Option key={item.statusRefId} value={item.competitionId}>
                                                 {item.competitionName}
@@ -1151,15 +1177,15 @@ class CompetitionOpenRegForm extends Component {
                 <span className="applicable-to-heading required-field">{AppConstants.gradesOrPools}</span>
                 <Form.Item>
                     {getFieldDecorator('finalTypeRefId', { initialValue: detailsData.competitionDetailData.finalTypeRefId },
-                    { rules: [{ required: true, message: ValidationConstants.pleaseSelectGradesOrPools}] })(
-                        <Radio.Group
-                            className="reg-competition-radio"
-                            onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "finalTypeRefId")}
-                            setFieldsValue={detailsData.competitionDetailData.finalTypeRefId}>
+                        { rules: [{ required: true, message: ValidationConstants.pleaseSelectGradesOrPools }] })(
+                            <Radio.Group
+                                className="reg-competition-radio"
+                                onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "finalTypeRefId")}
+                                setFieldsValue={detailsData.competitionDetailData.finalTypeRefId}>
                                 <Radio value={1}>{AppConstants.grades}</Radio>
                                 <Radio value={2}>{AppConstants.pools}</Radio>
-                        </Radio.Group>
-                    )}
+                            </Radio.Group>
+                        )}
                 </Form.Item>
                 <div className="fluid-width">
                     <div className="row">

@@ -8,14 +8,15 @@ const initialState = {
     umpireRoasterList: [],
     umpireCurrentPage: null,
     umpireTotalCount: null,
-    roasterLoading: false
+    roasterLoading: false,
+    umpireRosterListActionObject: null
 };
 
 function umpireRoasterdState(state = initialState, action) {
     switch (action.type) {
         //// Umpire List
         case ApiConstants.API_UMPIRE_ROASTER_LIST_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onLoad: true, umpireRosterListActionObject: action };
         case ApiConstants.API_UMPIRE_ROASTER_LIST_SUCCESS:
             return {
                 ...state,
@@ -58,6 +59,12 @@ function umpireRoasterdState(state = initialState, action) {
                 error: action.error,
                 status: action.status
             };
+
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.umpireRosterListActionObject = null
+            return { ...state, onLoad: false };
+
         default:
             return state;
     }

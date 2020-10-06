@@ -93,3 +93,20 @@ export function* competitionDashboardDeleteSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* saveReplicateSaga(action){
+    try {
+        const result = yield call(CompetitionAxiosApi.replicateSave,action.replicateData);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_REPLICATE_SAVE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

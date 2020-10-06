@@ -274,7 +274,7 @@ class LiveScoreAddEditCoach extends Component {
                                 <InputWithHead
                                     auto_complete='new-contact'
                                     required={"required-field pb-0 pt-0"}
-                                    heading={AppConstants.contactNO}
+                                    heading={AppConstants.contact_No}
                                     placeholder={AppConstants.enterContactNo}
                                     setFieldsValue={AppConstants.contactNO}
                                     maxLength={10}
@@ -404,16 +404,16 @@ class LiveScoreAddEditCoach extends Component {
             <div className="flud-widtih">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm-3">
+                        <div className="col-sm-3 pl-3">
                             <div className="reg-add-save-button">
                                 <NavLink to='/liveScoreCoaches'>
                                     <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>
                         </div>
-                        <div className="col-sm">
+                        <div className="col-sm pr-3">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>

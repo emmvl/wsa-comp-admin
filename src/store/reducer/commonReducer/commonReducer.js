@@ -55,7 +55,8 @@ const initialState = {
     paymentStatus: [],
     matchPrintTemplateType: [],
     venueAddressDuplication: false,
-    regChangeTypes: []
+    regChangeTypes: [],
+    venueListActionObject: null,
 };
 
 
@@ -234,7 +235,7 @@ function commonReducerState(state = initialState, action) {
             }
         ////Venue List for User Module
         case ApiConstants.API_VENUES_LIST_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onLoad: true, venueListActionObject: action };
 
         case ApiConstants.API_VENUES_LIST_SUCCESS:
             return {
@@ -407,7 +408,7 @@ function commonReducerState(state = initialState, action) {
                 onLoad: false,
                 error: null
             }
-            
+
 
         case ApiConstants.API_REGISTRATION_PAYMENT_STATUS_LOAD:
             return {
@@ -463,6 +464,10 @@ function commonReducerState(state = initialState, action) {
                 onLoad: false,
                 error: null
             };
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.venueListActionObject = null
+            return { ...state, onLoad: false };
 
         default:
             return state;

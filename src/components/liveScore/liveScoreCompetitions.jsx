@@ -347,6 +347,9 @@ class LiveScoreCompetitions extends Component {
             ownOffset: 0,
             partOffset: 0,
             allCompListLoad: false,
+            sortBy: null,
+            sortOrder: null,
+
         };
 
         this_Obj = this;
@@ -379,16 +382,28 @@ class LiveScoreCompetitions extends Component {
     }
 
     competitionListApi = () => {
-        const body = {
-            paging: {
-                offsetOwned: 0,
-                offsetParticipating: 0,
-                limitOwned: 10,
-                limitParticipating: 10,
-            },
-        };
-        this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, "all", this.state.year);
-        this.setState({ allCompListLoad: true })
+        let { competitionListActionObject } = this.props.liveScoreCompetition
+        if (competitionListActionObject) {
+            let body = competitionListActionObject.payload
+            let orgKey = competitionListActionObject.orgKey
+            let sortBy = competitionListActionObject.sortBy
+            let sortOrder = competitionListActionObject.sortOrder
+            let key = competitionListActionObject.key
+            let year = competitionListActionObject.yearRefId
+            this.props.liveScoreOwnPartCompetitionList(body, orgKey, sortBy, sortOrder, key, year);
+            this.setState({ allCompListLoad: true, sortBy, sortOrder, year })
+        } else {
+            const body = {
+                paging: {
+                    offsetOwned: 0,
+                    offsetParticipating: 0,
+                    limitOwned: 10,
+                    limitParticipating: 10,
+                },
+            };
+            this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, "all", this.state.year);
+            this.setState({ allCompListLoad: true })
+        }
     };
 
     setCompetitionID = (competitionData) => {

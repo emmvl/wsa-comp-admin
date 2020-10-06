@@ -215,11 +215,11 @@ class CompetitionPlayerGrades extends Component {
                                             pathname: `/competitionTeamsImport`,
                                             state: { competitionId: this.state.firstTimeCompId, screenNavigationKey: 'PlayerGrading' }
                                         }}>
-                                            <Button id={AppUniqueId.PlayerGrading_ImportTeamBtn} disabled={this.state.competitionStatus == 1 ? true : false} className="primary-add-comp-form" type="primary">
+                                            <Button disabled={this.state.competitionStatus == 1 ? true : false} className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
                                                         <img
-                                                            id={AppUniqueId.PlayerGradingDivisionName_dpdn}
+                                                            id={AppUniqueId.PlayerGrading_ImportTeamBtn}
                                                             src={AppImages.import}
                                                             alt=""
                                                             className="export-image"

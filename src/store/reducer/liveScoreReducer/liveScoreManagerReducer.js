@@ -25,7 +25,8 @@ const initialState = {
     managerSearchResult: [],
     loading: false,
     totalCount: null,
-    currentPage: null
+    currentPage: null,
+    managerListActionObject: null,
 };
 
 // function getManagerListObject(managerListArray, key) {
@@ -87,7 +88,7 @@ function getSelectedTeam(managerSelectedId, managerArr) {
 function liveScoreMangerState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_MANAGER_LIST_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onLoad: true, managerListActionObject: action };
 
         case ApiConstants.API_LIVE_SCORE_MANAGER_LIST_SUCCESS:
 
@@ -214,6 +215,10 @@ function liveScoreMangerState(state = initialState, action) {
                 ...state,
                 importResult: null,
             };
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.managerListActionObject = null
+            return { ...state, onLoad: false };
 
         default:
             return state;

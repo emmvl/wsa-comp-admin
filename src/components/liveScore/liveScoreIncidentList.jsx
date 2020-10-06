@@ -148,11 +148,28 @@ class LiveScoreIncidentList extends Component {
     }
 
     componentDidMount() {
+
+        const { incidentListActionObject } = this.props.liveScoreIncidentState
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             if (id !== null) {
-                let { searchText, limit, offset } = this.state
-                this.props.liveScoreIncidentList(id, searchText, limit, offset);
+
+                if (incidentListActionObject) {
+                    let offset = incidentListActionObject.offset
+                    let searchText = incidentListActionObject.search
+                    sortBy = incidentListActionObject.sortBy
+                    sortOrder = incidentListActionObject.sortOrder
+                    this.setState({ sortBy, sortOrder, offset, searchText })
+                    this.props.liveScoreIncidentList(id, searchText, 10, offset, sortBy, sortOrder);
+                } else {
+                    let { searchText, limit, offset, sortBy, sortOrder } = this.state
+                    this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder);
+                }
+
+
             } else {
                 history.push('/liveScoreCompetitions')
             }
@@ -184,6 +201,7 @@ class LiveScoreIncidentList extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         let { limit, sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -194,6 +212,7 @@ class LiveScoreIncidentList extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let { searchText, limit, sortBy, sortOrder } = this.state
         if (searchText === null || searchText === "") {
@@ -309,6 +328,7 @@ class LiveScoreIncidentList extends Component {
                             onChange={(e) => this.onChangeSearchText(e)}
                             placeholder="Search..."
                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            value={this.state.searchText}
                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                 onClick={() => this.onClickSearchIcon()}
                             />}

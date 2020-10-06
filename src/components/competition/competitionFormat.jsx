@@ -1079,6 +1079,7 @@ class CompetitionFormat extends Component {
                                     </Tooltip>
 
                                     <Button
+                                        id={AppUniqueId.compformat_next_btn}
                                         htmlType='submit'
                                         disabled={isPublished}
                                         onClick={() => this.setState({ buttonClicked: "next" })}

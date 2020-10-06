@@ -137,7 +137,7 @@ import {
 
 import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
 ////Competition Dashboard Saga
-import { competitionDashboardSaga, updateCompetitionStatusSaga, competitionDashboardDeleteSaga } from './competitionManagementSaga/competitionDashboardSaga';
+import { competitionDashboardSaga, updateCompetitionStatusSaga, competitionDashboardDeleteSaga,saveReplicateSaga } from './competitionManagementSaga/competitionDashboardSaga';
 
 // EndUserRegistrationSaga
 import * as endUserRegSaga from '../saga/registrationSaga/endUserRegistrationSaga';
@@ -554,4 +554,10 @@ export default function* rootSaga() {
   //Save Registration Change Dashboard
   yield takeEvery(ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_LOAD, regChangeSaga.saveRegistrationChangeReviewSaga)
 
+  yield takeEvery(ApiConstants.API_UMPIRE_MAIN_LIST_LOAD, umpireSaga.umpireListDataSaga)
+
+  yield takeEvery(ApiConstants.API_GET_TRANSFER_COMPETITIONS_LOAD, regChangeSaga.getTransferOrganisationsSaga);
+
+  //replicate save service
+  yield takeEvery(ApiConstants.API_REPLICATE_SAVE_LOAD, saveReplicateSaga);
 }

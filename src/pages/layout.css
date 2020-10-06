@@ -16,6 +16,11 @@
   max-width: 155px !important;
 }
 
+.innerSelect-value-draws
+.ant-select-selection-selected-value{
+  max-width: 170px !important;
+}
+
 .ant-menu {
   font-size: 14px;
   color: var(--app-4c4c6d);
@@ -107,7 +112,8 @@
   border-radius: 18px;
   padding-top: 1px;
   margin-left: 3px;
-  color: rgba(27, 27, 52, 0.4);
+  /* color: rgba(27, 27, 52, 0.4); */
+  color: var(--app-1b1b34);
   background-color: var(--app-f7fafc);
 }
 
@@ -310,5 +316,9 @@
 .innerSelect-value
 .ant-select-selection-selected-value{
   max-width: 120px !important;
+}
+.innerSelect-value-draws
+.ant-select-selection-selected-value{
+  max-width: 170px !important;
 }
 }

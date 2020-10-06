@@ -48,13 +48,13 @@ function tableSort(key) {
         "sortBy": sortBy,
         "sortOrder": sortOrder
     }
-    this_Obj.props.liveScoreTeamAttendanceListAction(competitionId, body, selectStatus)
+    this_Obj.props.liveScoreTeamAttendanceListAction(competitionId, body, selectStatus, this_Obj.state.selectedDivision == "All" ? '' : this_Obj.state.selectedDivision, this_Obj.state.selectedRound == "All" ? "" : this_Obj.state.selectedRound)
 }
 
 const columns = [
 
     {
-        title: 'Match Id',
+        title: 'Match ID',
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
@@ -121,8 +121,8 @@ const columns = [
     },
     {
         title: 'Division',
-        dataIndex: 'divisionName',
-        key: 'divisionName',
+        dataIndex: 'divisionGradeName',
+        key: 'divisionGradeName',
         sorter: true,
         onHeaderCell: () => listeners("division"),
     },
@@ -255,26 +255,32 @@ class LiveScoreTeamAttendance extends Component {
             limit: 10,
             sortBy: null,
             sortOrder: null,
+            roundLoad: false,
+            sortBy: null,
+            sortOrder: null,
         }
         this_Obj = this
     }
 
 
     // componentDidMount
-    componentDidMount() {
-        let paginationBody = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
-            },
-        }
+    async componentDidMount() {
+        let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id, divisionLoad: true })
+            if (teamAttendanceListActionObject) {
+                let body = teamAttendanceListActionObject.body
+                let searchText = body.search
+                let selectedDivision = teamAttendanceListActionObject.divisionId ? teamAttendanceListActionObject.divisionId : "All"
+                let selectedRound = teamAttendanceListActionObject.roundId ? teamAttendanceListActionObject.roundId : "All"
+                let sortBy = body.sortBy
+                let sortOrder = body.sortOrder
+                let selectStatus = teamAttendanceListActionObject.select_status
+                await this.setState({ searchText, selectedDivision, selectedRound, sortBy, sortOrder, selectStatus })
+            }
+            await this.setState({ competitionId: id, divisionLoad: true })
             if (id !== null) {
-                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
                 this.props.getLiveScoreDivisionList(id)
-
             } else {
                 history.pushState('/liveScoreCompetitions')
             }
@@ -284,18 +290,28 @@ class LiveScoreTeamAttendance extends Component {
     }
 
     componentDidUpdate(nextProps) {
+        let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
+        let page = teamAttendanceListActionObject ? Math.floor(teamAttendanceListActionObject.body.paging.offset / 10) + 1 : 0;
+        let roundList = this.props.liveScoreTeamAttendanceState.roundList
         if (nextProps.liveScoreTeamAttendanceState !== this.props.liveScoreTeamAttendanceState) {
             if (this.props.liveScoreTeamAttendanceState.onDivisionLoad === false && this.state.divisionLoad === true) {
-
                 this.props.liveScoreRoundListAction(this.state.competitionId, this.state.selectedDivision == 'All' ? "" : this.state.selectedDivision)
-                this.setState({ divisionLoad: false })
-
+                this.setState({ divisionLoad: false, roundLoad: true })
+            }
+        }
+        if (nextProps.roundList !== roundList) {
+            if (this.props.liveScoreTeamAttendanceState.roundLoad === false && this.state.roundLoad === true) {
+                this.handleTablePagination(page)
+                this.setState({ roundLoad: false })
             }
         }
     }
 
 
-    handleTablePagination(page) {
+    handleTablePagination(page, roundName) {
+        let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
+        console.log("teamAttendanceListActionObject", teamAttendanceListActionObject)
+        let roundSelect = roundName ? roundName : this.state.selectedRound
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset })
         let { searchText, sortBy, sortOrder } = this.state
@@ -311,9 +327,9 @@ class LiveScoreTeamAttendance extends Component {
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
             if (this.state.selectStatus === 'All') {
-                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
+                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, roundSelect == "All" ? "" : roundSelect)
             } else {
-                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
+                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, roundSelect == "All" ? "" : roundSelect)
             }
 
         } else {
@@ -335,11 +351,10 @@ class LiveScoreTeamAttendance extends Component {
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (status === 'All') {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status)
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, this.state.selectedRound == "All" ? '' : this.state.selectedRound)
         } else {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status)
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, this.state.selectedRound == "All" ? '' : this.state.selectedRound)
         }
-
     }
 
     onExport() {
@@ -358,7 +373,7 @@ class LiveScoreTeamAttendance extends Component {
     onChangeSearchText = (e) => {
         let { sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ searchText: e.target.value })
+        this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
             const body =
             {
@@ -370,13 +385,14 @@ class LiveScoreTeamAttendance extends Component {
                 "sortBy": sortBy,
                 "sortOrder": sortOrder
             }
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, this.state.selectedRound == "All" ? '' : this.state.selectedRound)
 
         }
     }
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        this.setState({ offset: 0 })
         let { sortBy, sortOrder } = this.state
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -392,7 +408,20 @@ class LiveScoreTeamAttendance extends Component {
                 "sortOrder": sortOrder
             }
 
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, this.state.selectedRound == "All" ? '' : this.state.selectedRound)
+        }
+    }
+
+    checkUserId(record) {
+        if (record.userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        } else {
+            history.push("/userPersonal", {
+                userId: record.userId,
+                screenKey: "livescore",
+                screen: "/liveScorePlayerList"
+            })
         }
     }
 
@@ -411,6 +440,7 @@ class LiveScoreTeamAttendance extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         let { searchText, sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (searchText === null || searchText === "") {
@@ -426,8 +456,7 @@ class LiveScoreTeamAttendance extends Component {
                 "sortBy": sortBy,
                 "sortOrder": sortOrder
             }
-
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, this.state.selectedRound == "All" ? '' : this.state.selectedRound)
         }
     }
 
@@ -512,13 +541,12 @@ class LiveScoreTeamAttendance extends Component {
     }
 
     onChangeDivision(division) {
-
-        this.props.liveScoreRoundListAction(this.state.competitionId, division == 'All' ? "" : division)
-        this.setState({ selectedDivision: division, selectedRound: 'All' })
+        this.props.liveScoreRoundListAction(this.state.competitionId, division == 'All' ? "" : division, this.state.selectedRound)
+        this.setState({ selectedDivision: division, selectedRound: 'All', roundLoad: true })
     }
 
     onChangeRound(roundName) {
-
+        this.handleTablePagination(0, roundName)
         this.setState({ selectedRound: roundName })
     }
 
@@ -561,7 +589,7 @@ class LiveScoreTeamAttendance extends Component {
                                 <Option value={'All'}>{'All'}</Option>
                                 {
                                     roundListArr.map((item) => {
-                                        return <Option key={"round" + item.id} value={item.name}>{item.name}</Option>
+                                        return <Option key={"round" + item.id} value={item.id}>{item.name}</Option>
                                     })
                                 }
                             </Select>
@@ -574,6 +602,7 @@ class LiveScoreTeamAttendance extends Component {
                                 onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
                                 onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                value={this.state.searchText}
                                 prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                     onClick={() => this.onClickSearchIcon()}
                                 />}

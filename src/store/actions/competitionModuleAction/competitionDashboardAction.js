@@ -33,9 +33,30 @@ function deleteCompetitionAction(competitionId,targetValue) {
     };
     return action;
 }
+
+function updateReplicateSaveObjAction(data,key,subKey){
+    const action = {
+        type: ApiConstants.UPDATE_REPLICATE_SAVE_OBJ,
+        data: data,
+        key: key,
+        subKey: subKey
+    }
+    return action;
+}
+
+function replicateSaveAction(replicateSave){
+    const action = {
+        type: ApiConstants.API_REPLICATE_SAVE_LOAD,
+        replicateData: replicateSave
+    }
+    return action;
+}
+
 export {
     competitionDashboardAction,
     fixtureTemplateRoundsAction,
     updateCompetitionStatus,
-	deleteCompetitionAction
+    deleteCompetitionAction,
+    updateReplicateSaveObjAction,
+    replicateSaveAction
 }

@@ -72,7 +72,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
             competitionStatus: 0,
             tooltipVisibleDelete: false,
             isQuickCompetition: false,
-            onNextClicked: false
+            onNextClicked: false,
+            addOrRemoveVenues: false
         };
     }
 
@@ -203,6 +204,16 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 })
             }
 
+        }
+
+        if(this.state.addOrRemoveVenues == true){
+            let courtPreferences = this.props.venueTimeState.venueConstrainstData.courtPreferences;
+            for(let index in courtPreferences){
+                this.props.form.setFieldsValue({
+                   [`courtIDS${index}`] : courtPreferences[index].venueCourtId
+                });
+            }
+            this.setState({addOrRemoveVenues: false});
         }
 
     }
@@ -819,7 +830,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
     //On selection of venue
     onSelectValues(venueId) {
         this.props.updateVenueConstraintsData(venueId, null, 'venues', 'venueListSection')
-        this.props.clearFilter()
+        this.props.clearFilter();
+        this.setState({addOrRemoveVenues: true})
     }
 
     selectAddVenueView() {
