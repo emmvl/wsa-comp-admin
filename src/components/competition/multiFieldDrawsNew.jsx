@@ -625,8 +625,8 @@ class MultifieldDrawsNew extends Component {
     onCompetitionChange(competitionId, statusRefId) {
         let newDate = new Date()
         this.props.clearMultiDraws('rounds');
-        if (competitionId == -1) {
-            this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId, "all");
+        if (competitionId == -1 || this.state.filterDates) {
+            this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId, "all", true, this.state.startDate, this.state.endDate);
             this.setState({ filterDates: true })
         }
         else {
@@ -647,7 +647,7 @@ class MultifieldDrawsNew extends Component {
             selectedDateRange: null,
             // startDate: moment(newDate).format("YYYY-MM-DD"),
             // endDate: moment(newDate).format("YYYY-MM-DD"),
-            showAllDivision: true
+            showAllDivision: false
         });
     }
 
@@ -706,7 +706,6 @@ class MultifieldDrawsNew extends Component {
     };
 
     checkColor(slot) {
-        console.log(this.state.filterDates, this.state.firstTimeCompId)
         let checkDivisionFalse = this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
         let checkCompetitionFalse = this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
         let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
@@ -764,7 +763,6 @@ class MultifieldDrawsNew extends Component {
         return uncheckedArr
     }
     checkSwap(slot) {
-        console.log(this.state.filterDates, this.state.firstTimeCompId)
         let checkDivisionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllDivisionData() : this.checkAllCompetitionData(this.props.drawsState.divisionGradeNameList, 'competitionDivisionGradeId')
         let checkCompetitionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
         let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
@@ -833,7 +831,7 @@ class MultifieldDrawsNew extends Component {
                         <div className="col-sm-2.5 mt-2">
                             <Select
                                 className="year-select reg-filter-select1 innerSelect-value-draws"
-                                style={{ minWidth: 150, maxWidth: 250 }}
+                                style={{ minWidth: 210, maxWidth: 210 }}
                                 onChange={(competitionId, e) =>
                                     this.onCompetitionChange(competitionId, e.key)
                                 }
@@ -1054,7 +1052,6 @@ class MultifieldDrawsNew extends Component {
     divisionLeftView = () => {
         let { divisionGradeNameList, drawDivisions } = this.props.drawsState
         let { showAllDivision } = this.state
-        console.log(drawDivisions, "divisionGradeNameList", divisionGradeNameList)
         return (
             <>
                 <div className="row">
@@ -1164,7 +1161,7 @@ class MultifieldDrawsNew extends Component {
                         }
                         )}
 
-                        {isArrayNotEmpty(divisionGradeNameList) || divisionGradeNameList.length > 5 && <span className="input-heading-add-another pt-4"
+                        {(isArrayNotEmpty(divisionGradeNameList) || divisionGradeNameList.length > 5) && <span className="input-heading-add-another pt-4"
                             onClick={() => this.changeShowAllStatus("division")}>
                             {showAllDivision == true ? AppConstants.hide : AppConstants.showAll}
                         </span>
@@ -1225,7 +1222,7 @@ class MultifieldDrawsNew extends Component {
                         )}
                     </div>
                     {(isArrayNotEmpty(drawOrganisations) || drawOrganisations.length > 5) && <span className="input-heading-add-another pt-4"
-                        onClick={() => this.changeShowAllStatus("division")}>
+                        onClick={() => this.changeShowAllStatus("org")}>
                         {showAllOrg == true ? AppConstants.hide : AppConstants.showAll}
                     </span>
                     }
@@ -1254,15 +1251,15 @@ class MultifieldDrawsNew extends Component {
                             onClick={() => this.filterOnClick()
                             }
                             style={{ cursor: "pointer" }}>
-                            <img className="dot-image" src={AppImages.filterIcon} alt="" width="16" height="16" />
+                            <img className="dot-image" src={AppImages.filterIcon} alt="" width="20" height="20" style={{ marginBottom: 7 }} />
                             <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span>
                         </div >
                         :
                         <div
-                            className="d-flex align-items-center mt-4"
+                            className="d-flex align-items-center mt-1"
                             onClick={() => this.filterOnClick()}
                             style={{ cursor: "pointer" }}>
-                            <img className="dot-image" src={AppImages.filterIcon} alt="" width="25" height="25" />
+                            <img className="dot-image" src={AppImages.filterIcon} alt="" width="28" height="28" />
                             {/* <span className="input-heading-add-another pt-0 pl-3">{filterEnable ? AppConstants.hideFilter : AppConstants.showFilter}</span> */}
                         </div>
                 }
@@ -1687,7 +1684,6 @@ class MultifieldDrawsNew extends Component {
 
     ////main render method
     render() {
-        console.log(this.props.drawsState)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.draws} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />

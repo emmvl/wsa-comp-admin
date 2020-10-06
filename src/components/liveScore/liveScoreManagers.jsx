@@ -406,7 +406,7 @@ class LiveScoreManagerList extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ searchText: e.target.value })
+        this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value === "") {
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, e.target.value)
 
@@ -416,6 +416,7 @@ class LiveScoreManagerList extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
@@ -426,6 +427,7 @@ class LiveScoreManagerList extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {

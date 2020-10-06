@@ -66,13 +66,12 @@ const AppUniqueId = {
     PlayerGradingCompetition_dpdn: "playgrad_compname_dpdn",
     PlayerGradingDivisionName_dpdn: "playgrad_divname_dpdn",
     PlayerGrading_ImportBtn: "playgrad_import_bn",
-    PlayerGrading_ImportTeamBtn: "playgrad_importeam_bn",
+    PlayerGrading_ImportTeamBtn: "playgrad_importteam_bn",
     PlayerGrading_CreateTeam: "playgrad_create_team_bn",
     PlayerGrading_addTeamName: "playgrad_addTeamname",
     PlayerGrading_unassigned_Player_CheckBox: "playgrad_unassigned_chkbox",
     playgrad_Next_bn: "playgrad_Next_bn",
     playgrad_newTeam_chkbx: "playgrad_newTeam_chkbx",
-
     //// Unique Ids for ImportPlayer ////////
 
     downLoadTempletebtn: "playerImport_template_btn",

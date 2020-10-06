@@ -72,14 +72,21 @@ function* getCompetitionDrawsSaga(action) {
 function* getDrawsRoundsSaga(action) {
     let dateRangeCheck = getRangeCheck(action)
     try {
+        let startDate
+        let endDate
         const result = dateRangeCheck ? yield call(CompetitionAxiosApi.getDrawsRounds,
             action.yearRefId, action.competitionId) : {
                 status: 1, result: []
             };
         if (result.status === 1) {
-            const date = new Date()
-            const startDate = dateRangeCheck ? null : moment(date).format("YYYY-MM-DD");
-            const endDate = dateRangeCheck ? null : moment(date).format("YYYY-MM-DD")
+            if (action.startDate) {
+                startDate = dateRangeCheck ? null : action.startDate;
+                endDate = dateRangeCheck ? null : action.endDate
+            } else {
+                const date = new Date()
+                startDate = dateRangeCheck ? null : moment(date).format("YYYY-MM-DD");
+                endDate = dateRangeCheck ? null : moment(date).format("YYYY-MM-DD")
+            }
             const VenueResult = yield call(RegstrartionAxiosApi.getCompetitionVenue, action.competitionId, startDate, endDate);
             if (VenueResult.status === 1) {
                 const division_Result = yield call(CompetitionAxiosApi.getDivisionGradeNameList, action.competitionId, startDate, endDate);

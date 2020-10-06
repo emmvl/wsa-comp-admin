@@ -41,7 +41,8 @@ function tableSort(key) {
         paging: {
             limit: 10,
             offset: (this_Obj.state.pageNo ? (10 * (this_Obj.state.pageNo - 1)) : 0)
-        }
+        },
+        stateOrganisations: false,
     }
     this_Obj.setState({ sortBy, sortOrder });
     this_Obj.props.getAffiliatesListingAction(filterData, sortBy, sortOrder);
@@ -190,7 +191,8 @@ class UserAffiliatesList extends Component {
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0)
-            }
+            },
+            stateOrganisations: false,
         }
         this.props.getAffiliatesListingAction(filter, this.state.sortBy, this.state.sortOrder);
     };

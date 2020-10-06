@@ -201,6 +201,7 @@ class LiveScoreIncidentList extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         let { limit, sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -211,6 +212,7 @@ class LiveScoreIncidentList extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         const { id } = JSON.parse(getLiveScoreCompetiton())
         let { searchText, limit, sortBy, sortOrder } = this.state
         if (searchText === null || searchText === "") {

@@ -14,7 +14,8 @@ const initialState = {
     highestSequence: null,
     roundLoad: false,
     roundList: [],
-    onDivisionLoad: false
+    onDivisionLoad: false,
+    teamAttendanceListActionObject: null,
 }
 
 function getHighestSequence(roundArr) {
@@ -45,6 +46,7 @@ function liveScoreTeamAttendanceState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_TEAM_ATTENDANCE_LIST_LOAD:
             state.teamAttendanceResult = []
+            state.teamAttendanceListActionObject = action
             return {
                 ...state,
                 onLoad: true,
@@ -79,14 +81,14 @@ function liveScoreTeamAttendanceState(state = initialState, action) {
             return { ...state, onDivisionLoad: true, };
 
 
-            case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
+        case ApiConstants.API_LIVE_SCORE_ONLY_DIVISION_SUCCESS:
 
-                return {
-                    ...state,
-                    onDivisionLoad: false,
-                    divisionList: action.result,
-                    status: action.status
-                };
+            return {
+                ...state,
+                onDivisionLoad: false,
+                divisionList: action.result,
+                status: action.status
+            };
 
         case ApiConstants.API_LIVE_SCORE_ROUND_LIST_LOAD:
             return { ...state, roundLoad: true };
@@ -105,6 +107,10 @@ function liveScoreTeamAttendanceState(state = initialState, action) {
                 roundLoad: false
             };
 
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.teamAttendanceListActionObject = null
+            return { ...state, onLoad: false };
 
         default:
             return state

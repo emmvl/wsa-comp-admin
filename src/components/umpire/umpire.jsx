@@ -416,7 +416,7 @@ class Umpire extends Component {
 
     // on change search text
     onChangeSearchText = (e) => {
-        this.setState({ searchText: e.target.value });
+        this.setState({ searchText: e.target.value, offsetData: 0 });
 
         const { sortBy, sortOrder } = this.state;
         if (e.target.value === null || e.target.value === "") {
@@ -424,7 +424,7 @@ class Umpire extends Component {
                 refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
-                offset: this.state.offsetData,
+                offset: 0,
                 userName: e.target.value,
                 sortBy,
                 sortOrder,
@@ -434,6 +434,7 @@ class Umpire extends Component {
 
     // search key
     onKeyEnterSearchText = (e) => {
+        this.setState({ offsetData: 0 });
         const { sortBy, sortOrder } = this.state;
         const code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
@@ -442,7 +443,7 @@ class Umpire extends Component {
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,
-                offset: this.state.offsetData,
+                offset: 0,
                 sortBy,
                 sortOrder,
             });
@@ -451,6 +452,7 @@ class Umpire extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offsetData: 0 });
         const { sortBy, sortOrder } = this.state;
         if (this.state.searchText === null || this.state.searchText === "") {
         } else {
@@ -459,7 +461,7 @@ class Umpire extends Component {
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
                 userName: this.state.searchText,
-                offset: this.state.offsetData,
+                offset: 0,
                 sortBy,
                 sortOrder,
             });

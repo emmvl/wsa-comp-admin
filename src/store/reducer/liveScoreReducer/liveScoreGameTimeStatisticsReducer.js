@@ -7,7 +7,8 @@ const initialState = {
     gameTimeStatisticsListResult: [],
     gameTimeStatistics: "",
     gameTimeStatisticsPage: 0,
-    gameTimeStatisticstotalCount: 0
+    gameTimeStatisticstotalCount: 0,
+    gameTimeStatisticsActionObject: null,
 }
 
 function liveScoreGameTimeStatisticsState(state = initialState, action) {
@@ -15,8 +16,8 @@ function liveScoreGameTimeStatisticsState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_GAME_TIME_STATISTICS_LIST_LOAD:
             return {
                 ...state,
-                onLoad: true
-
+                onLoad: true,
+                gameTimeStatisticsActionObject: action
             }
 
         case ApiConstants.API_LIVE_SCORE_GAME_TIME_STATISTICS_LIST_SUCCESS:
@@ -44,6 +45,10 @@ function liveScoreGameTimeStatisticsState(state = initialState, action) {
                 status: action.status,
                 error: action.error
             }
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.gameTimeStatisticsActionObject = null
+            return { ...state, onLoad: false };
 
         default: return state
     }

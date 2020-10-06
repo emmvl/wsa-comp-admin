@@ -25,7 +25,7 @@ import {
   getUreAction,
 } from "store/actions/userAction/userAction";
 import Loader from "customComponents/loader";
-
+import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
 import "./layout.css";
 
 const { Option } = Select;
@@ -446,7 +446,7 @@ class DashboardLayout extends React.Component {
                               </div>
                             </li>
                             <li className={menuName === AppConstants.liveScores ? "active" : ""}>
-                              <div className="lives-cores menu-wrap">
+                              <div className="lives-cores menu-wrap" onClick={() => this.props.clearDataOnCompChangeAction()}>
                                 <NavLink to="/liveScoreCompetitions">
                                   <span className="icon" />
                                   {AppConstants.liveScores}
@@ -545,6 +545,7 @@ function mapDispatchToProps(dispatch) {
     getOrganisationAction,
     impersonationAction,
     getAffiliatesListingAction,
+    clearDataOnCompChangeAction,
   }, dispatch);
 }
 

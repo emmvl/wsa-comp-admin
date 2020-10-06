@@ -181,6 +181,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.compSelectedKey]}
+                        onClick={() => this.props.clearDataOnCompChangeAction()}
                     >
                         <Menu.Item key="1">
                             <NavLink to="/competitionDashboard">
@@ -304,6 +305,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.regSelectedKey]}
+                        onClick={() => this.props.clearDataOnCompChangeAction()}
                     >
                         <Menu.Item key="1">
                             <NavLink to="/registrationDashboard">
@@ -687,6 +689,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.userSelectedKey]}
+                        onClick={() => this.props.clearDataOnCompChangeAction()}
                     >
                         <Menu.Item key="1">
                             {/*
@@ -771,6 +774,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.userSelectedKey]}
+                        onClick={() => this.props.clearDataOnCompChangeAction()}
                     >
                         <Menu.Item key="1">
                             <NavLink to="/homeDashboard">
@@ -797,6 +801,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.shopSelectedKey]}
+                        onClick={() => this.props.clearDataOnCompChangeAction()}
                     >
                         <Menu.Item key="1">
                             <NavLink to="/shopDashboard">
@@ -847,6 +852,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.liveScoreNewsSelectedKey]}
+                        onClick={() => this.props.clearDataOnCompChangeAction()}
                     >
                         <Menu.Item key="21">
                             <NavLink to="/liveScoreNewsList">

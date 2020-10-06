@@ -305,7 +305,7 @@ class LiveScorePlayerList extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         let { sortBy, sortOrder, competitionId } = this.state
-        this.setState({ searchText: e.target.value })
+        this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value === "") {
             this.props.playerListWithPaginationAction(competitionId, 0, 10, e.target.value, sortBy, sortOrder)
         }
@@ -314,6 +314,7 @@ class LiveScorePlayerList extends Component {
     // search key 
     onKeyEnterSearchText = (e) => {
         let { sortBy, sortOrder, searchText, competitionId } = this.state
+        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             this.props.playerListWithPaginationAction(competitionId, 0, 10, searchText, sortBy, sortOrder)
@@ -323,6 +324,7 @@ class LiveScorePlayerList extends Component {
     // on click of search icon
     onClickSearchIcon = () => {
         let { sortBy, sortOrder, searchText, competitionId } = this.state
+        this.setState({ offset: 0 })
         if (this.state.searchText == null || this.state.searchText === "") {
         } else {
             this.props.playerListWithPaginationAction(competitionId, 0, 10, searchText, sortBy, sortOrder)

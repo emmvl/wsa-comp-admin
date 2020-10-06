@@ -376,7 +376,7 @@ class LiveScoreCoaches extends Component {
   // on change search text
   onChangeSearchText = (e) => {
     const { id } = JSON.parse(getLiveScoreCompetiton())
-    this.setState({ searchText: e.target.value })
+    this.setState({ searchText: e.target.value, offset: 0 })
     let { sortBy, sortOrder, offset } = this.state
     if (e.target.value == null || e.target.value === "") {
       this.props.liveScoreCoachListAction(17, 1, id, e.target.value, offset, sortBy, sortOrder)
@@ -385,6 +385,7 @@ class LiveScoreCoaches extends Component {
 
   // search key 
   onKeyEnterSearchText = (e) => {
+    this.setState({ offset: 0 })
     var code = e.keyCode || e.which;
     const { id } = JSON.parse(getLiveScoreCompetiton())
     let { sortBy, sortOrder, offset } = this.state
@@ -396,6 +397,7 @@ class LiveScoreCoaches extends Component {
   // on click of search icon
   onClickSearchIcon = () => {
     const { id } = JSON.parse(getLiveScoreCompetiton())
+    this.setState({ offset: 0 })
     if (this.state.searchText == null || this.state.searchText === "") {
     } else {
       // this.props.getTeamsWithPagging(this.state.conpetitionId, 0, 10, this.state.searchText)
