@@ -227,17 +227,31 @@ class LiveScoreGoalList extends Component {
             filter: "By Match",
             competitionId: null,
             searchText: "",
+            sortBy: null,
+            sortOrder: null,
         }
         this_obj = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let { livescoreGoalActionObject } = this.props.liveScoreGoalState
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ competitionId: id })
             if (id !== null) {
                 let offset = 0
-                this.props.liveScoreGoalListAction(id, this.state.filter, this.state.searchText, offset)
+                if (livescoreGoalActionObject) {
+                    offset = livescoreGoalActionObject.offset
+                    let searchText = livescoreGoalActionObject.search
+                    let sortBy = livescoreGoalActionObject.sortBy
+                    let sortOrder = livescoreGoalActionObject.sortOrder
+                    let goalType = livescoreGoalActionObject.goalType
+                    await this.setState({ offset, searchText, sortBy, sortOrder, filter: goalType })
+                    this.props.liveScoreGoalListAction(id, goalType, searchText, offset, sortBy, sortOrder)
+                }
+                else {
+                    this.props.liveScoreGoalListAction(id, this.state.filter, this.state.searchText, offset)
+                }
             } else {
                 history.push('/liveScoreCompetitions')
             }
@@ -356,6 +370,7 @@ class LiveScoreGoalList extends Component {
                             onChange={(e) => this.onChangeSearchText(e)}
                             placeholder="Search..."
                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            value={this.state.searchText}
                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                 onClick={() => this.onClickSearchIcon()}
                             />}

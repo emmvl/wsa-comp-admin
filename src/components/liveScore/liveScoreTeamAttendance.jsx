@@ -255,27 +255,32 @@ class LiveScoreTeamAttendance extends Component {
             limit: 10,
             sortBy: null,
             sortOrder: null,
-            roundLoad: false
+            roundLoad: false,
+            sortBy: null,
+            sortOrder: null,
         }
         this_Obj = this
     }
 
 
     // componentDidMount
-    componentDidMount() {
-        let paginationBody = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
-            },
-        }
+    async componentDidMount() {
+        let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id, divisionLoad: true })
+            if (teamAttendanceListActionObject) {
+                let body = teamAttendanceListActionObject.body
+                let searchText = body.search
+                let selectedDivision = teamAttendanceListActionObject.divisionId ? teamAttendanceListActionObject.divisionId : "All"
+                let selectedRound = teamAttendanceListActionObject.roundId ? teamAttendanceListActionObject.roundId : "All"
+                let sortBy = body.sortBy
+                let sortOrder = body.sortOrder
+                let selectStatus = teamAttendanceListActionObject.select_status
+                await this.setState({ searchText, selectedDivision, selectedRound, sortBy, sortOrder, selectStatus })
+            }
+            await this.setState({ competitionId: id, divisionLoad: true })
             if (id !== null) {
-                // this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
                 this.props.getLiveScoreDivisionList(id)
-
             } else {
                 history.pushState('/liveScoreCompetitions')
             }
@@ -285,6 +290,8 @@ class LiveScoreTeamAttendance extends Component {
     }
 
     componentDidUpdate(nextProps) {
+        let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
+        let page = teamAttendanceListActionObject ? Math.floor(teamAttendanceListActionObject.body.paging.offset / 10) + 1 : 0;
         let roundList = this.props.liveScoreTeamAttendanceState.roundList
         if (nextProps.liveScoreTeamAttendanceState !== this.props.liveScoreTeamAttendanceState) {
             if (this.props.liveScoreTeamAttendanceState.onDivisionLoad === false && this.state.divisionLoad === true) {
@@ -294,7 +301,7 @@ class LiveScoreTeamAttendance extends Component {
         }
         if (nextProps.roundList !== roundList) {
             if (this.props.liveScoreTeamAttendanceState.roundLoad === false && this.state.roundLoad === true) {
-                this.handleTablePagination(0)
+                this.handleTablePagination(page)
                 this.setState({ roundLoad: false })
             }
         }
@@ -302,6 +309,8 @@ class LiveScoreTeamAttendance extends Component {
 
 
     handleTablePagination(page, roundName) {
+        let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
+        console.log("teamAttendanceListActionObject", teamAttendanceListActionObject)
         let roundSelect = roundName ? roundName : this.state.selectedRound
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset })
@@ -346,7 +355,6 @@ class LiveScoreTeamAttendance extends Component {
         } else {
             this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, this.state.selectedRound == "All" ? '' : this.state.selectedRound)
         }
-
     }
 
     onExport() {
@@ -592,6 +600,7 @@ class LiveScoreTeamAttendance extends Component {
                                 onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
                                 onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                value={this.state.searchText}
                                 prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                     onClick={() => this.onClickSearchIcon()}
                                 />}

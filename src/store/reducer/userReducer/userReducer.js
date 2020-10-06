@@ -198,7 +198,7 @@ function userReducer(state = initialState, action) {
         onLoad: false,
         affiliateList: data.affiliates,
         affiliateListPage: data.page ? data.page.currentPage : 1,
-        affiliateListTotalCount: data.page.totalCount,
+        affiliateListTotalCount: data.page ? data.page.totalCount : 0,
         status: action.status
       };
 

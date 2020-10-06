@@ -14,6 +14,7 @@ const initialState = {
     ownedLoad: false,
     partLoad: false,
     allCompListLoad: false,
+    competitionListActionObject: null,
 }
 export default function liveScoreCompetition(state = initialState, payload) {
     switch (payload.type) {
@@ -81,7 +82,9 @@ export default function liveScoreCompetition(state = initialState, payload) {
                 ownedLoad: payload.key == "own" || payload.key == "all" ? true : false,
                 partLoad: payload.key == "part" || payload.key == "all" ? true : false,
                 allCompListLoad: true,
+                competitionListActionObject: payload,
             }
+
         case ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_SUCCESS:
             let allData = payload.payload
             if (payload.key == "own" || payload.key == "all") {
@@ -108,6 +111,11 @@ export default function liveScoreCompetition(state = initialState, payload) {
                 ownedLoad: false,
                 partLoad: false,
             }
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.competitionListActionObject = null
+            return { ...state, onLoad: false };
+
         default:
             return state
     }

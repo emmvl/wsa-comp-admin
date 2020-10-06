@@ -7,7 +7,8 @@ const initialState = {
     result: [],
     status: 0,
     totalCount: null,
-    currentPage:null
+    currentPage: null,
+    livescoreGoalActionObject: null,
 };
 function LiveScoreGoalState(state = initialState, action) {
 
@@ -15,7 +16,7 @@ function LiveScoreGoalState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_GOAL_LIST_LOAD:
 
 
-            return { ...state, onLoad: true, result: [] };
+            return { ...state, onLoad: true, result: [], livescoreGoalActionObject: action };
 
         case ApiConstants.API_LIVE_SCORE_GOAL_LIST_SUCCESS:
             let result = action.result.result
@@ -48,6 +49,10 @@ function LiveScoreGoalState(state = initialState, action) {
                 error: action.error,
                 status: action.status
             };
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.livescoreGoalActionObject = null
+            return { ...state, onLoad: false };
 
         default:
             return state;

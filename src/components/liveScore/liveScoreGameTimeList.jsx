@@ -204,17 +204,30 @@ class LiveScoreGameTimeList extends Component {
             filter: '',
             competitionId: null,
             searchText: '',
-            offset: 0
+            offset: 0,
+            sortBy: null,
+            sortOrder: null,
         };
         this_obj = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let { gameTimeStatisticsActionObject } = this.props.liveScoreGameTimeStatisticsState
         if (getLiveScoreCompetiton()) {
             const { id, attendanceRecordingPeriod } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ competitionId: id, filter: attendanceRecordingPeriod })
             if (id !== null) {
-                this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
+                if (gameTimeStatisticsActionObject) {
+                    let offset = gameTimeStatisticsActionObject.offset
+                    let searchText = gameTimeStatisticsActionObject.searchText
+                    let sortBy = gameTimeStatisticsActionObject.sortBy
+                    let sortOrder = gameTimeStatisticsActionObject.sortOrder
+                    let aggregate = gameTimeStatisticsActionObject.aggregate
+                    await this.setState({ offset, searchText, sortBy, sortOrder, filter: aggregate })
+                    this.props.gameTimeStatisticsListAction(id, aggregate === 'All' ? "" : aggregate, offset, searchText, sortBy, sortOrder)
+                } else {
+                    this.props.gameTimeStatisticsListAction(id, attendanceRecordingPeriod, 0, this.state.searchText)
+                }
             } else {
                 history.push("/liveScoreCompetitions")
             }
@@ -370,6 +383,7 @@ class LiveScoreGameTimeList extends Component {
                             onChange={(e) => this.onChangeSearchText(e)}
                             placeholder="Search..."
                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            value={this.state.searchText}
                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                 onClick={() => this.onClickSearchIcon()}
                             />}
