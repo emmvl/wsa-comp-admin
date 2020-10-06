@@ -18,7 +18,7 @@
 
 .innerSelect-value-draws
 .ant-select-selection-selected-value{
-  max-width: 200px !important;
+  max-width: 170px !important;
 }
 
 .ant-menu {
@@ -319,6 +319,6 @@
 }
 .innerSelect-value-draws
 .ant-select-selection-selected-value{
-  max-width: 2000px !important;
+  max-width: 170px !important;
 }
 }

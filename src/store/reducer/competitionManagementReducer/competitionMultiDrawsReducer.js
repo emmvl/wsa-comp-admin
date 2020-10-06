@@ -359,7 +359,6 @@ function pushColorDivision(division, drawsResultData) {
 }
 
 function getCompetitionArray(draws) {
-  console.log(draws)
   let competitionArray = []
   for (let i in draws) {
     let competitionObject = {
@@ -867,6 +866,7 @@ function CompetitionMultiDraws(state = initialState, action) {
         error: action.error,
         status: action.status,
         updateLoad: false,
+        spinLoad: false
       };
 
     case ApiConstants.API_COMPETITION_MULTI_DRAWS_ERROR:
@@ -876,6 +876,7 @@ function CompetitionMultiDraws(state = initialState, action) {
         error: action.error,
         status: action.status,
         updateLoad: false,
+        spinLoad: false
       };
 
     //competition part player grade calculate player grading summary get API
@@ -884,7 +885,6 @@ function CompetitionMultiDraws(state = initialState, action) {
       return { ...state, onLoad: true, error: null, spinLoad: true, };
 
     case ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_SUCCESS:
-      console.log(action, "887")
       try {
         let resultData;
         let singleCompetitionDivision
@@ -898,6 +898,8 @@ function CompetitionMultiDraws(state = initialState, action) {
           resultData = roundstructureData(drawsResultData)
           singleCompetitionDivision = pushColorDivision(JSON.parse(JSON.stringify(state.divisionGradeNameList)), JSON.parse(JSON.stringify(resultData.roundsdata)))
         }
+        state.competitionVenues = action.result ? action.result.venues ? updateCompVenue(action.result.venues, true) : state.competitionVenues : state.competitionVenues
+
         state.publishStatus = action.result.drawsPublish
         state.isTeamInDraw = action.result.isTeamNotInDraws
         // state.drawDivisions  = action.competitionId == "-1" || action.dateRangeCheck == true ? resultData.data ? resultData.data.legendsArray : [] : []
@@ -1082,7 +1084,8 @@ function CompetitionMultiDraws(state = initialState, action) {
         state.getDrawsRoundsData = [];
         state.divisionGradeNameList = [];
         state.legendsArray = [];
-        legendsArray = []
+        legendsArray = [];
+        state.drawsCompetitionArray = []
       }
       return { ...state };
 
@@ -1222,7 +1225,6 @@ function CompetitionMultiDraws(state = initialState, action) {
         state.drawsCompetitionArray[action.index].checked = action.value
       }
       if (action.key == "division") {
-        console.log(state.drawDivisions, action)
         state.drawDivisions[action.index].legendArray[action.subIndex].checked = action.value
       }
       if (action.key == 'allCompetitionVenues') {
