@@ -421,7 +421,7 @@ class RegistrationChangeReview extends Component {
     ////////form content view
     contentView = (getFieldDecorator) => {
 
-        const { regChangeReviewData, deRegistionOption, reviewSaveData } = this.props.registrationChangeState
+        const { regChangeReviewData, deRegistionOption, transferOption } = this.props.registrationChangeState
         //console.log(reviewSaveData, 'reviewSaveData')
 
         return (
@@ -507,46 +507,82 @@ class RegistrationChangeReview extends Component {
                             value={regChangeReviewData ?  regChangeReviewData.regChangeType : null}
                         />
                 </div>
-
+                {regChangeReviewData.regChangeTypeRefId == 1 ?
                 <div>
-                    <InputWithHead heading={AppConstants.doTheySayForGame} />
-                    <Radio.Group
-                        disabled={true}
-                        className="reg-competition-radio"
-                        value={regChangeReviewData ?  ((regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0) ? 2 : 1)  : null}
-                    >
-                        <Radio value={1}>{'Yes'}</Radio>
-                        <Radio value={2}>{'No'}</Radio>
-                    </Radio.Group>
+                    <div>
+                        <InputWithHead heading={AppConstants.doTheySayForGame} />
+                        <Radio.Group
+                            disabled={true}
+                            className="reg-competition-radio"
+                            value={regChangeReviewData ?  ((regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0) ? 2 : 1)  : null}
+                        >
+                            <Radio value={1}>{'Yes'}</Radio>
+                            <Radio value={2}>{'No'}</Radio>
+                        </Radio.Group>
+                    </div>
+                    {regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0?
+                    <div>
+                        <InputWithHead heading={AppConstants.reasonToDeRegister} />
+                        <Radio.Group
+                            disabled={true}
+                            className="reg-competition-radio"
+                            value={regChangeReviewData ?  regChangeReviewData.reasonTypeRefId : null}
+                        >
+                            {isArrayNotEmpty(deRegistionOption) && deRegistionOption.map((item) => (
+                                <Radio key={item.id} value={item.id}>{item.value}</Radio>
+                            ))
+                            }
+                            {
+                                (regChangeReviewData.reasonTypeRefId == 5) &&
+                                <div>
+                                    <InputWithHead
+                                        disabled={true}
+                                        className='ml-5'
+                                        placeholder='Other'
+                                        value={regChangeReviewData ?  regChangeReviewData.otherInfo : null}
+                                        style={{ maxWidth: '50%', minHeight: 60 }} />
+
+                                </div>
+                            }
+
+                        </Radio.Group>
+                    </div> : null }
                 </div>
-                {regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0?
+                : 
                 <div>
-                    <InputWithHead heading={AppConstants.reasonToDeRegister} />
-                    <Radio.Group
-                        disabled={true}
-                        className="reg-competition-radio"
-                        value={regChangeReviewData ?  regChangeReviewData.reasonTypeRefId : null}
-                    >
-                        {isArrayNotEmpty(deRegistionOption) && deRegistionOption.map((item) => (
-                            <Radio key={item.id} value={item.id}>{item.value}</Radio>
-                        ))
-                        }
-                        {
-                            (regChangeReviewData.reasonTypeRefId == 5) &&
-                            <div>
-                                <InputWithHead
-                                    disabled={true}
-                                    className='ml-5'
-                                    placeholder='Other'
-                                    value={regChangeReviewData ?  regChangeReviewData.otherInfo : null}
-                                    style={{ maxWidth: '50%', minHeight: 60 }} />
+                    <InputWithHead heading={AppConstants.organisationName} placeholder={AppConstants.organisationName} 
+                    value={regChangeReviewData.transferOrgName} disabled={true}/>
+                    <InputWithHead heading={AppConstants.competition_name} placeholder={AppConstants.competition_name} 
+                    value={regChangeReviewData.transferCompName} disabled={true}/>
+                    {regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0?
+                    <div>
+                        <InputWithHead heading={AppConstants.reasonForTransfer} />
+                        <Radio.Group
+                            disabled={true}
+                            className="reg-competition-radio"
+                            value={regChangeReviewData ?  regChangeReviewData.reasonTypeRefId : null}
+                        >
+                            {isArrayNotEmpty(transferOption) && transferOption.map((item) => (
+                                <Radio key={item.id} value={item.id}>{item.value}</Radio>
+                            ))
+                            }
+                            {
+                                (regChangeReviewData.reasonTypeRefId == 3) &&
+                                <div>
+                                    <InputWithHead
+                                        disabled={true}
+                                        className='ml-5'
+                                        placeholder='Other'
+                                        value={regChangeReviewData ?  regChangeReviewData.otherInfo : null}
+                                        style={{ maxWidth: '50%', minHeight: 60 }} />
 
-                            </div>
-                        }
+                                </div>
+                            }
 
-                    </Radio.Group>
-                </div> : null }
-
+                        </Radio.Group>
+                    </div> : null }
+                </div>
+                }
                 <div>
                     <InputWithHead heading={AppConstants.approvals} />
                     {(regChangeReviewData.approvals || []).map((item, index) =>(
