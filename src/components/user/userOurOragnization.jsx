@@ -536,7 +536,9 @@ class UserOurOragnization extends Component {
 
             }
             else {
-                message.error(ValidationConstants.requiredMessage);
+                if (tabKey == "1"){
+                    message.error(ValidationConstants.requiredMessage);
+                }
             }
         });
     }
