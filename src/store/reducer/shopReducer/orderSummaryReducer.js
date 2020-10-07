@@ -11,6 +11,8 @@ const initialState = {
     orderSummaryCurrentPage: 1,
     numberOfOrders: 0,
     valueOfOrders: 0,
+    orderSummaryListingActionObject: null,
+
 };
 
 function shopOrderSummaryState(state = initialState, action) {
@@ -35,7 +37,7 @@ function shopOrderSummaryState(state = initialState, action) {
 
         //// ///////shop order summary listing get API
         case ApiConstants.API_GET_SHOP_ORDER_SUMMARY_LISTING_LOAD:
-            return { ...state, onLoad: true, error: null };
+            return { ...state, onLoad: true, error: null, orderSummaryListingActionObject: action };
 
         case ApiConstants.API_GET_SHOP_ORDER_SUMMARY_LISTING_SUCCESS:
             let orderSummaryData = action.result
@@ -62,6 +64,10 @@ function shopOrderSummaryState(state = initialState, action) {
                 status: action.status,
                 error: null
             };
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.orderSummaryListingActionObject = null
+            return { ...state, onLoad: false };
 
         default:
             return state;

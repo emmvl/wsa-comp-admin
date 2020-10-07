@@ -73,6 +73,25 @@ function getSelectedTeam(managerSelectedId, managerArr) {
     }
 }
 
+function getNameWithNumber(name, number) {
+    let numberLength = new Array(number.length - 4).join('x') +
+        number.substr(number.length - 5, 4);
+    let newName = name + "-" + numberLength
+    return newName
+}
+
+function updateManagersData(result) {
+    if (result.length > 0) {
+        for (let i in result) {
+            let number = JSON.stringify(result[i].mobileNumber)
+            let name = result[i].firstName + result[i].lastName
+            let NameWithNumber = getNameWithNumber(name, number)
+            result[i].NameWithNumber = NameWithNumber
+        }
+    }
+    return result
+}
+
 // function generateSelectedTeamId(linkedEntityArr, teamArray) {
 //     let teamIds = [];
 //     for (let i in teamArray) {
@@ -91,8 +110,9 @@ function liveScoreMangerState(state = initialState, action) {
             return { ...state, onLoad: true, managerListActionObject: action };
 
         case ApiConstants.API_LIVE_SCORE_MANAGER_LIST_SUCCESS:
+            // let user_Data = action.result.userData ? action.result.userData : action.result
+            let user_Data = action.result.userData ? updateManagersData(action.result.userData) : updateManagersData(action.result)
 
-            let user_Data = action.result.userData ? action.result.userData : action.result
             return {
                 ...state,
                 onLoad: false,
@@ -187,12 +207,12 @@ function liveScoreMangerState(state = initialState, action) {
             return { ...state, onLoadSearch: true };
 
         case ApiConstants.API_LIVESCORE_MANAGER_SEARCH_SUCCESS:
-            // state.managerListResult = action.result ? action.result : state.managerSearchResult;
+            let managerResult = updateManagersData(action.result)
             return {
                 ...state,
                 onLoadSearch: false,
                 // managerSearchResult: action.result,
-                managerListResult: action.result,
+                managerListResult: managerResult,
                 status: action.status,
             };
 

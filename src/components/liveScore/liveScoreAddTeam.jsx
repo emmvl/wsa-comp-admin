@@ -417,7 +417,7 @@ if(x[0].charCodeAt()>=97)
                                 {/* {this.state.showOption ?  */}
                                 {managerListResult.map((item) => {
                                     return <Option key={item.id} value={JSON.stringify(item.id)}>
-                                        {item.firstName + " " + item.lastName}
+                                        {item.NameWithNumber}
                                     </Option>
                                 })
                                 }

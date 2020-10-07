@@ -501,7 +501,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         />
                     )}
                 </Form.Item>
-                <Form.Item >
+                <Form.Item className='formLineHeight'>
                     {getFieldDecorator('shortName', {
                         rules: [{ required: true, message: ValidationConstants.nameField[3] }],
                     })(
@@ -517,7 +517,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     )}
                 </Form.Item>
 
-                <Form.Item name="venueAddress">
+                <Form.Item className='formLineHeight' name="venueAddress">
                     <PlacesAutocomplete
                         defaultValue={defaultVenueAddress}
                         heading={AppConstants.venueSearch}
@@ -596,7 +596,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 </Form.Item>
 
 
-                <Form.Item >
+                <Form.Item className='formLineHeight'>
                     {getFieldDecorator('postcode')(
                         <InputWithHead
                             auto_complete="new-postcode"
@@ -848,7 +848,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, tableIndex, 'availabilities', 'add_TimeSlot')} className="input-heading-add-another pt-3">
                     + {AppConstants.add_TimeSlot}
                 </span>
-             {/* : null
+                {/* : null
             } */}
             </div>
         )

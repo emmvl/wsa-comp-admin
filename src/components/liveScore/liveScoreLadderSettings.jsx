@@ -169,12 +169,12 @@ class LiveScoreLadderSettings extends Component {
                         </div>
                     </div>
                 ))}
-                { (isAllDivisionChecked == false && allDivAdded == false)? 
-                 <div className="row" >
-                    <div className="col-sm" onClick={(e) => this.onChangeLadderSetting(null, null, "addLadder")}>
-                        <span className='input-heading-add-another pointer'>+ {AppConstants.addNewLadderScheme}</span>
-                    </div>
-                </div> : null}
+                { (isAllDivisionChecked == false && allDivAdded == false) ?
+                    <div className="row" >
+                        <div className="col-sm" onClick={(e) => this.onChangeLadderSetting(null, null, "addLadder")}>
+                            <span className='input-heading-add-another pointer'>+ {AppConstants.addNewLadderScheme}</span>
+                        </div>
+                    </div> : null}
                 {this.deleteConfirmModalView()}
                 {this.allDivisionModalView()}
             </div>
@@ -184,32 +184,32 @@ class LiveScoreLadderSettings extends Component {
 
     deleteConfirmModalView = () => {
         return (
-           <div>
-             <Modal
-              className="add-membership-type-modal"
-               title={AppConstants.ladderFormat}
-               visible={this.state.deleteModalVisible}
-               onOk={() => this.handleDeleteModal("ok")}
-               onCancel={() => this.handleDeleteModal("cancel")}>
-                 <p>{AppConstants.ladderRemoveMsg}</p>
-             </Modal>
-           </div>
-         );
+            <div>
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.ladderFormat}
+                    visible={this.state.deleteModalVisible}
+                    onOk={() => this.handleDeleteModal("ok")}
+                    onCancel={() => this.handleDeleteModal("cancel")}>
+                    <p>{AppConstants.ladderRemoveMsg}</p>
+                </Modal>
+            </div>
+        );
     }
 
     allDivisionModalView = () => {
-    return (
-        <div>
-          <Modal
-           className="add-membership-type-modal"
-            title={AppConstants.ladderFormat}
-            visible={this.state.allDivisionVisible}
-            onOk={() => this.handleAllDivisionModal("ok")}
-            onCancel={() => this.handleAllDivisionModal("cancel")}>
-              <p>{AppConstants.ladderAllDivisionRmvMsg}</p>
-          </Modal>
-        </div>
-      );
+        return (
+            <div>
+                <Modal
+                    className="add-membership-type-modal add-membership-type-modalLadder"
+                    title={AppConstants.ladderFormat}
+                    visible={this.state.allDivisionVisible}
+                    onOk={() => this.handleAllDivisionModal("ok")}
+                    onCancel={() => this.handleAllDivisionModal("cancel")}>
+                    <p>{AppConstants.ladderAllDivisionRmvMsg}</p>
+                </Modal>
+            </div>
+        );
     }
 
 
@@ -260,7 +260,7 @@ class LiveScoreLadderSettings extends Component {
 
     };
 
-    
+
     publicLadderLink = () => {
         let { organisationUniqueKey } = JSON.parse(localStorage.getItem('setOrganisationData'))
 
@@ -310,8 +310,8 @@ class LiveScoreLadderSettings extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"19"} />
-                <Loader visible={this.props.ladderSettingState.loader || 
-                            this.props.ladderSettingState.onLoad} />
+                <Loader visible={this.props.ladderSettingState.loader ||
+                    this.props.ladderSettingState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     {/* <Content> */}

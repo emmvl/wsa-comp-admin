@@ -150,15 +150,34 @@ class OrderSummary extends Component {
             affiliateOrgId: -1,
             postcode: "",
             searchText: "",
-            paymentMethod: -1
+            paymentMethod: -1,
+            offset: 0,
+            sortBy: null,
+            sortOrder: null,
         }
         this_obj = this
     }
 
 
-    componentDidMount() {
+    async componentDidMount() {
+        let { orderSummaryListingActionObject } = this.props.shopOrderSummaryState
         this.referenceCalls()
-        this.handleTableList(1);
+        if (orderSummaryListingActionObject) {
+            let params = orderSummaryListingActionObject.params
+            this.props.getOrderSummaryListingAction(params)
+            await this.setState({
+                offset: params.offset,
+                searchText: params.search,
+                yearRefId: params.year,
+                postcode: params.postcode,
+                affiliateOrgId: params.affiliate,
+                paymentMethod: params.paymentMethod,
+                sortOrder: params.order,
+                sortBy: params.sorterBy,
+            })
+        } else {
+            this.handleTableList(1);
+        }
     }
 
     referenceCalls = () => {
@@ -224,7 +243,7 @@ class OrderSummary extends Component {
     // on change search text
     onChangeSearchText = async (e) => {
         let value = e.target.value;
-        await this.setState({ searchText: e.target.value })
+        await this.setState({ searchText: e.target.value,offset: 0 })
         if (value == null || value == "") {
             this.handleTableList(1);
         }
@@ -232,6 +251,7 @@ class OrderSummary extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             this.handleTableList(1);
@@ -240,6 +260,7 @@ class OrderSummary extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
@@ -283,6 +304,7 @@ class OrderSummary extends Component {
                                         <Input className="product-reg-search-input"
                                             onChange={(e) => this.onChangeSearchText(e)}
                                             placeholder="Search..."
+                                            value={this.state.searchText}
                                             onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                             prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                                 onClick={() => this.onClickSearchIcon()}

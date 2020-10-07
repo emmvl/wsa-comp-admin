@@ -110,7 +110,7 @@
 }
 
 .notranslate.public-DraftEditor-content {
-    color: #000;
+    color: var(--app-1b1b34);
 }
 .orderSpace {
     padding-right: 3.9%;
