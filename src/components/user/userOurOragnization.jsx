@@ -803,7 +803,7 @@ class UserOurOragnization extends Component {
                     value={affiliate.phoneNo}
                     disabled={!this.state.isEditable}
                 />
-                <Form.Item >
+                {/* <Form.Item >
                     {getFieldDecorator('orgEmail', {
                         rules: [
                             {
@@ -820,7 +820,13 @@ class UserOurOragnization extends Component {
                             auto_complete='new-email'
                         />
                     )}
-                </Form.Item>
+                </Form.Item> */}
+                <InputWithHead heading={AppConstants.email} placeholder={AppConstants.email}
+                    onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
+                    value={affiliate.email}
+                    disabled={!this.state.isEditable}
+                    auto_complete='new-email'
+                />
             </div>
         )
     }

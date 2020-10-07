@@ -681,7 +681,7 @@ class RegistrationMembershipFee extends Component {
 
                                                     <Form.Item  >
                                                         {getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, {
-                                                            rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
+                                                            rules: [{ required: true, message: ValidationConstants.playerTypeRequired }]
                                                         })(
                                                             <Radio.Group className="reg-competition-radio"
                                                                 onChange={(e) => this.allowTeamRegistrationPlayer(e.target.value, index, 'allowTeamRegistrationTypeRefId')}

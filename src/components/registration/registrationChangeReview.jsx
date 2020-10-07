@@ -303,7 +303,15 @@ class RegistrationChangeReview extends Component {
             compOrganiserApproved: this.state.deRegData.compOrganiserApproved,
             affiliateApproved: this.state.deRegData.affiliateApproved
         }
-        reviewSaveData["approvals"] = obj;
+        //reviewSaveData["approvals"] = obj;
+        let isFromOrg = 1;
+        if(regChangeReviewData.regChangeTypeRefId == 2){
+            if(regChangeReviewData.isShowButton == 2){
+                isFromOrg = 2;
+            }
+        }
+        reviewSaveData["isFromOrg"] = isFromOrg;
+        reviewSaveData["orgRefTypeId"] = regChangeReviewData.orgRefTypeId;
         console.log("$$$$$$$$$$$$$$::" + JSON.stringify(reviewSaveData));
         
         this.props.saveRegistrationChangeReview(reviewSaveData);
@@ -312,7 +320,7 @@ class RegistrationChangeReview extends Component {
 
 
     ////modal view
-    acceptModalView(getFieldDecorator) {
+    acceptModalView() {
         const {reviewSaveData,regChangeReviewData} = this.props.registrationChangeState;
         return (
             <Modal
@@ -356,8 +364,8 @@ class RegistrationChangeReview extends Component {
         )
     }
 
-    declineModalView(getFieldDecorator) {
-        const {reviewSaveData} = this.props.registrationChangeState;
+    declineModalView() {
+        const {reviewSaveData, regChangeReviewData} = this.props.registrationChangeState;
         return (
             <Modal
                 title={"Decline"}
@@ -367,23 +375,14 @@ class RegistrationChangeReview extends Component {
                 okText={'Save'}
                 onOk = { () => this.declineModal("ok")}
                 centered={true}>
-                <InputWithHead heading={AppConstants.reasonWhyYourAreDecline} />
-                <Radio.Group className="reg-competition-radio"
-                    value={reviewSaveData.declineReasonRefId}
-                    onChange={(e) => this.updateRegistrationReview(e.target.value,"declineReasonRefId")}>
-                    <Radio value={1}>
-                        <span style={{whiteSpace: 'pre-wrap',display: 'inline-flex'}}>They have already taken the court for training, grading or a competition game</span>
-                    </Radio>
-                    <Radio value={2}>{'They owe monies'}</Radio>
-                    <Radio value={3}>{'Other'}</Radio>
-                    {reviewSaveData.declineReasonRefId == 3 ? 
-                    <InputWithHead
-                            placeholder={AppConstants.other}
-                            value={reviewSaveData.otherInfo}
-                            onChange={(e) => this.updateRegistrationReview(e.target.value,"otherInfo")}
-                        />
-                     : null}
-                </Radio.Group>
+               
+                {
+                    regChangeReviewData.regChangeTypeRefId == 1 ? 
+                     this.deRegisterDecline(reviewSaveData) : 
+                     (regChangeReviewData.isShowButton == 1 ? 
+                     this.transferFromDecline(reviewSaveData) : 
+                     this.transferToDecline(reviewSaveData))
+                }
 
             </Modal>
         )
@@ -419,9 +418,9 @@ class RegistrationChangeReview extends Component {
     }
 
     ////////form content view
-    contentView = (getFieldDecorator) => {
+    contentView = () => {
 
-        const { regChangeReviewData, deRegistionOption, reviewSaveData } = this.props.registrationChangeState
+        const { regChangeReviewData, deRegistionOption, transferOption } = this.props.registrationChangeState
         //console.log(reviewSaveData, 'reviewSaveData')
 
         return (
@@ -507,46 +506,82 @@ class RegistrationChangeReview extends Component {
                             value={regChangeReviewData ?  regChangeReviewData.regChangeType : null}
                         />
                 </div>
-
+                {regChangeReviewData.regChangeTypeRefId == 1 ?
                 <div>
-                    <InputWithHead heading={AppConstants.doTheySayForGame} />
-                    <Radio.Group
-                        disabled={true}
-                        className="reg-competition-radio"
-                        value={regChangeReviewData ?  ((regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0) ? 2 : 1)  : null}
-                    >
-                        <Radio value={1}>{'Yes'}</Radio>
-                        <Radio value={2}>{'No'}</Radio>
-                    </Radio.Group>
+                    <div>
+                        <InputWithHead heading={AppConstants.doTheySayForGame} />
+                        <Radio.Group
+                            disabled={true}
+                            className="reg-competition-radio"
+                            value={regChangeReviewData ?  ((regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0) ? 2 : 1)  : null}
+                        >
+                            <Radio value={1}>{'Yes'}</Radio>
+                            <Radio value={2}>{'No'}</Radio>
+                        </Radio.Group>
+                    </div>
+                    {regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0?
+                    <div>
+                        <InputWithHead heading={AppConstants.reasonToDeRegister} />
+                        <Radio.Group
+                            disabled={true}
+                            className="reg-competition-radio"
+                            value={regChangeReviewData ?  regChangeReviewData.reasonTypeRefId : null}
+                        >
+                            {isArrayNotEmpty(deRegistionOption) && deRegistionOption.map((item) => (
+                                <Radio key={item.id} value={item.id}>{item.value}</Radio>
+                            ))
+                            }
+                            {
+                                (regChangeReviewData.reasonTypeRefId == 5) &&
+                                <div>
+                                    <InputWithHead
+                                        disabled={true}
+                                        className='ml-5'
+                                        placeholder='Other'
+                                        value={regChangeReviewData ?  regChangeReviewData.otherInfo : null}
+                                        style={{ maxWidth: '50%', minHeight: 60 }} />
+
+                                </div>
+                            }
+
+                        </Radio.Group>
+                    </div> : null }
                 </div>
-                {regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0?
+                : 
                 <div>
-                    <InputWithHead heading={AppConstants.reasonToDeRegister} />
-                    <Radio.Group
-                        disabled={true}
-                        className="reg-competition-radio"
-                        value={regChangeReviewData ?  regChangeReviewData.reasonTypeRefId : null}
-                    >
-                        {isArrayNotEmpty(deRegistionOption) && deRegistionOption.map((item) => (
-                            <Radio key={item.id} value={item.id}>{item.value}</Radio>
-                        ))
-                        }
-                        {
-                            (regChangeReviewData.reasonTypeRefId == 5) &&
-                            <div>
-                                <InputWithHead
-                                    disabled={true}
-                                    className='ml-5'
-                                    placeholder='Other'
-                                    value={regChangeReviewData ?  regChangeReviewData.otherInfo : null}
-                                    style={{ maxWidth: '50%', minHeight: 60 }} />
+                    <InputWithHead heading={AppConstants.organisationName} placeholder={AppConstants.organisationName} 
+                    value={regChangeReviewData.transferOrgName} disabled={true}/>
+                    <InputWithHead heading={AppConstants.competition_name} placeholder={AppConstants.competition_name} 
+                    value={regChangeReviewData.transferCompName} disabled={true}/>
+                    {regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0?
+                    <div>
+                        <InputWithHead heading={AppConstants.reasonForTransfer} />
+                        <Radio.Group
+                            disabled={true}
+                            className="reg-competition-radio"
+                            value={regChangeReviewData ?  regChangeReviewData.reasonTypeRefId : null}
+                        >
+                            {isArrayNotEmpty(transferOption) && transferOption.map((item) => (
+                                <Radio key={item.id} value={item.id}>{item.value}</Radio>
+                            ))
+                            }
+                            {
+                                (regChangeReviewData.reasonTypeRefId == 3) &&
+                                <div>
+                                    <InputWithHead
+                                        disabled={true}
+                                        className='ml-5'
+                                        placeholder='Other'
+                                        value={regChangeReviewData ?  regChangeReviewData.otherInfo : null}
+                                        style={{ maxWidth: '50%', minHeight: 60 }} />
 
-                            </div>
-                        }
+                                </div>
+                            }
 
-                    </Radio.Group>
-                </div> : null }
-
+                        </Radio.Group>
+                    </div> : null }
+                </div>
+                }
                 <div>
                     <InputWithHead heading={AppConstants.approvals} />
                     {(regChangeReviewData.approvals || []).map((item, index) =>(
@@ -569,6 +604,78 @@ class RegistrationChangeReview extends Component {
                 </div>
             </div>
         );
+    }
+
+    deRegisterDecline = (reviewSaveData) =>{
+        return (
+            <div>
+                 <InputWithHead heading={AppConstants.reasonWhyYourAreDecline} />
+                 <Radio.Group className="reg-competition-radio"
+                    value={reviewSaveData.declineReasonRefId}
+                    onChange={(e) => this.updateRegistrationReview(e.target.value,"declineReasonRefId")}>
+                    <Radio value={1}>
+                        <span style={{whiteSpace: 'pre-wrap',display: 'inline-flex'}}>
+                                {AppConstants.theyAlreadyTakenCourt}</span>
+                    </Radio>
+                    <Radio value={2}>{AppConstants.theyOweMonies}</Radio>
+                    <Radio value={3}>{AppConstants.other}</Radio>
+                    {reviewSaveData.declineReasonRefId == 3 ? 
+                    <InputWithHead
+                            placeholder={AppConstants.other}
+                            value={reviewSaveData.otherInfo}
+                            onChange={(e) => this.updateRegistrationReview(e.target.value,"otherInfo")}
+                        />
+                        : null}
+                </Radio.Group>
+            </div>
+        )
+    }
+
+    transferFromDecline = (reviewSaveData) =>{
+        return (
+            <div>
+                  <InputWithHead heading={AppConstants.reasonWhyYourAreDeclineFromTransfer} />
+                  <Radio.Group className="reg-competition-radio"
+                    value={reviewSaveData.declineReasonRefId}
+                    onChange={(e) => this.updateRegistrationReview(e.target.value,"declineReasonRefId")}>
+                    <Radio value={1}>
+                        <span style={{whiteSpace: 'pre-wrap',display: 'inline-flex'}}>
+                                {AppConstants.theyAlreadyTakenCourt}</span>
+                    </Radio>
+                    <Radio value={2}>{AppConstants.theyOweMonies}</Radio>
+                    <Radio value={3}>{AppConstants.suspended}</Radio>
+                    <Radio value={4}>{AppConstants.other}</Radio>
+                    {reviewSaveData.declineReasonRefId == 4 ? 
+                    <InputWithHead
+                            placeholder={AppConstants.other}
+                            value={reviewSaveData.otherInfo}
+                            onChange={(e) => this.updateRegistrationReview(e.target.value,"otherInfo")}
+                        />
+                        : null}
+                </Radio.Group>
+            </div>
+        )
+    }
+
+    transferToDecline = (reviewSaveData) =>{
+        return (
+            <div>
+                 <InputWithHead heading={AppConstants.reasonWhyYourAreDeclineToTransfer} />
+                 <Radio.Group className="reg-competition-radio"
+                    value={reviewSaveData.declineReasonRefId}
+                    onChange={(e) => this.updateRegistrationReview(e.target.value,"declineReasonRefId")}>
+                    <Radio value={1}>{AppConstants.noTeamAvailable}</Radio>
+                    <Radio value={2}>{AppConstants.other}</Radio>
+                    {reviewSaveData.declineReasonRefId == 2 ? 
+                    <InputWithHead
+                            placeholder={AppConstants.other}
+                            value={reviewSaveData.otherInfo}
+                            onChange={(e) => this.updateRegistrationReview(e.target.value,"otherInfo")}
+                        />
+                        : null}
+                </Radio.Group>
+            </div>
+        )
     }
 
     //////footer view containing all the buttons

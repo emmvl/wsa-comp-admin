@@ -1626,6 +1626,12 @@ const AppConstants = {
   uploadBankAccnt: "Upload Bank Account",
   editBankAccount: "Edit Bank Account",
   registrationCloseDate: "Registration close date",
+  theyAlreadyTakenCourt: "They have already taken the court for training, grading or a competition game",
+  theyOweMonies: "They owe monies",
+  noTeamAvailable: "No team available",
+  suspended: "Suspended",
+  reasonWhyYourAreDeclineFromTransfer: "Reason why you are declining the request to transfer from your organisation",
+  reasonWhyYourAreDeclineToTransfer: "Reason why you are declining the request to transfer to you organisation",
 };
 
 export default AppConstants;

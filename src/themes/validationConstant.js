@@ -226,7 +226,8 @@ const ValidationConstants = {
     wpwPool4Required: "WPW pool4 is required",
     heroImageIsRequired: "Hero image is required",
     newYearFieldIsRequired: "New year field is required",
-    competitionStartEndDateIsRequired: "Competition Start and End date is requied"
+    competitionStartEndDateIsRequired: "Competition Start and End date is requied",
+    playerTypeRequired: "Please select the player type"
 };
 
 export default ValidationConstants;
