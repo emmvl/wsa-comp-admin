@@ -91,7 +91,6 @@ const columns = [
     title: "Division",
     dataIndex: "divisionName",
     key: "divisionName",
-    width: 120,
     render: (divisionName, record, index) => {
       return <div>{divisionName != null ? divisionName : ""}</div>;
     },

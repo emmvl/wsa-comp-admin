@@ -536,7 +536,9 @@ class UserOurOragnization extends Component {
 
             }
             else {
-                message.error(ValidationConstants.requiredMessage);
+                if (tabKey == "1") {
+                    message.error(ValidationConstants.requiredMessage);
+                }
             }
         });
     }
@@ -553,8 +555,8 @@ class UserOurOragnization extends Component {
         }
         formData.append("organisationId", getOrganisationData().organisationUniqueKey);
         formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
-        formData.append("termsAndConditions", termsAndConditionsValue);
-        formData.append("termsAndCondition", this.state.termsAndCondititionFile);
+        formData.append("termsAndConditions", termsAndConditionsValue ? termsAndConditionsValue : "");
+        formData.append("termsAndCondition", this.state.termsAndCondititionFile? this.state.termsAndCondititionFile : "");
 
         this.setState({ loading: true });
         this.props.updateTermsAndCondtionAction(formData);
