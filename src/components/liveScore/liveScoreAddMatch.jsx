@@ -821,7 +821,7 @@ class LiveScoreAddMatch extends Component {
                                     </Select>
                                 )}
                             </Form.Item>
-                            <span style={{ cursor: 'pointer' }} onClick={() => allDisabled === false ? this.showModal() : null} className="input-heading-add-another">
+                            <span style={{ cursor: 'pointer', paddingTop: 11 }} onClick={() => allDisabled === false ? this.showModal() : null} className="input-heading-add-another">
                                 + {AppConstants.addNewRound}
                             </span>
                         </div>

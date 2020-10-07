@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Layout, Button, Select, Breadcrumb, Form,Modal,Radio } from 'antd';
+import { Layout, Button, Select, Breadcrumb, Form, Modal, Radio } from 'antd';
 import './liveScore.css';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -71,8 +71,8 @@ class LiveScoreLadderAdjustment extends Component {
             this.setState({ getLoad: false })
         }
 
-        if(this.state.resetLoad == true && this.props.liveScoreLadderState.onResetLoad == false){
-            this.setState({resetLoad: false});
+        if (this.state.resetLoad == true && this.props.liveScoreLadderState.onResetLoad == false) {
+            this.setState({ resetLoad: false });
             history.push("/liveScoreLadderList")
         }
     }
@@ -169,18 +169,15 @@ class LiveScoreLadderAdjustment extends Component {
 
     }
 
-    confirmationModal(key , compUniqueKey , resetOptionId)
-    {
-        if (key=="show")
-        {
+    confirmationModal(key, compUniqueKey, resetOptionId) {
+        if (key == "show") {
             this.setState({
-                modalVisible:true,
+                modalVisible: true,
             })
         }
-        else if(key == "ok")
-        {
+        else if (key == "ok") {
             let divisionId = null;
-            if(this.state.resetOptionId == 1 ){
+            if (this.state.resetOptionId == 1) {
                 divisionId = this.state.divisionId
             }
 
@@ -191,23 +188,22 @@ class LiveScoreLadderAdjustment extends Component {
             }
             this.props.resetLadderAction(obj)
             this.setState({
-                modalVisible:false,
+                modalVisible: false,
                 compUniqueKey: compUniqueKey,
                 resetLoad: true
             })
-            
+
         }
-        else if(key == "cancel")
-        {
+        else if (key == "cancel") {
             this.setState({
-                modalVisible:false,
-                resetOptionId:1
+                modalVisible: false,
+                resetOptionId: 1
             })
         }
     }
     onChangeSetValue = (targetValue) => {
         this.setState({
-            resetOptionId:targetValue
+            resetOptionId: targetValue
         })
     }
     ////////form content view
@@ -218,7 +214,7 @@ class LiveScoreLadderAdjustment extends Component {
         let teamList = isArrayNotEmpty(teamResult) ? teamResult : []
 
         return (
-            <div className="content-view pt-4">
+            <div className="content-view pt-4 pb-3">
 
                 {addNewLadder.map((ladder, index) => (
                     <div className="inside-container-view">
@@ -315,27 +311,27 @@ class LiveScoreLadderAdjustment extends Component {
                 <div>
                     <span onClick={() => this.props.updateLadderSetting({ data: null, key: 'addLadderAdjustment' })} className='input-heading-add-another pointer'>+ {AppConstants.addNewAdjustment}</span>
                 </div>
-                <div>
+                <div style={{ paddingBottom: 24 }}>
                     <span onClick={() => this.confirmationModal("show", null)} className='input-heading-add-another pointer reset-ladder-font'>{AppConstants.resetLadder}</span>
                 </div>
 
-                <Modal 
+                <Modal
                     className="add-membership-type-modal"
                     title={AppConstants.resetLadder}
                     visible={this.state.modalVisible}
-                    onOk={() => this.confirmationModal("ok" , this.state.compUniqueKey, this.state.resetOptionId)}
-                    onCancel={() => this.confirmationModal("cancel" , null)}>
-                        <div>
-                            <p>{AppConstants.resetLadderConformation}</p>
-                            <Radio.Group
+                    onOk={() => this.confirmationModal("ok", this.state.compUniqueKey, this.state.resetOptionId)}
+                    onCancel={() => this.confirmationModal("cancel", null)}>
+                    <div>
+                        <p>{AppConstants.resetLadderConformation}</p>
+                        <Radio.Group
                             className="reg-competition-radio  customize-radio-text"
                             onChange={(e) => this.onChangeSetValue(e.target.value)}
                             value={this.state.resetOptionId}>
-                                <Radio value={1}>{AppConstants.selectedDivision}</Radio>
-                                <Radio value={2}>{AppConstants.fullReset}</Radio>
-                            </Radio.Group>
-                        </div>                
-                </Modal>	
+                            <Radio value={1}>{AppConstants.selectedDivision}</Radio>
+                            <Radio value={2}>{AppConstants.fullReset}</Radio>
+                        </Radio.Group>
+                    </div>
+                </Modal>
             </div>
         )
     };
@@ -398,7 +394,7 @@ class LiveScoreLadderAdjustment extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"11"} />
-                <Loader visible={this.props.liveScoreLadderState.onLoading || 
+                <Loader visible={this.props.liveScoreLadderState.onLoading ||
                     this.props.liveScoreLadderState.onResetLoad} />
                 <Layout>
                     {this.headerView()}

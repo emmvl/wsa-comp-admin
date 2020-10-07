@@ -2,6 +2,9 @@
 .paddingBottom56px{
   padding-bottom: 56px;
 }
+.formLineHeight .ant-form-item-control{
+line-height: 10px;
+}
 .multiDrawRow{
   width: 100%;
   margin-right: 0px;

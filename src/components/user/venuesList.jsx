@@ -103,7 +103,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners('contactNumber'),
     },
     {
-        title: '# of Courts',
+        title: '# Of Courts',
         dataIndex: 'noOfCourts',
         key: 'noOfCourts',
         sorter: true,

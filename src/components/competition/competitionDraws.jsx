@@ -1816,7 +1816,7 @@ class CompetitionDraws extends Component {
           menuHeading={AppConstants.competitions}
           menuName={AppConstants.competitions}
         />
-        <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
+        {/* <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} /> */}
         <Layout className="comp-dash-table-view">
           {this.headerView()}
           {this.dropdownView()}

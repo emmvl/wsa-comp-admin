@@ -753,7 +753,7 @@ const AppConstants = {
   addgrade: 'Add Grade',
 
   //new changes in venue
-  linkToHomeAffiliate: 'Link to Home Affiliate',
+  linkToHomeAffiliate: 'Link To Home Affiliate',
   addressOne: 'Address Line 1',
   addressTwo: 'Address Line 2',
   suburb: 'Suburb',
@@ -1048,7 +1048,7 @@ const AppConstants = {
     'If enabled, a list of all of the incidents that have occured on this day including injuries and disciplinary.',
   matchDurationMsg:
     'Game time only (in minutes). This time should exclude time for breaks.',
-  mainBreakMsg: 'Half time Break (in minutes).',
+  mainBreakMsg: 'Half time break (in minutes).',
   qtrBreatMsg: 'Break after 1st and 3rd quaters (in minutes).',
   teamAliasMsg: 'The name that is used for the Team on the draw and media.',
   managerNewMsg:
@@ -1491,7 +1491,7 @@ const AppConstants = {
   venueAddressDetailsError: "Please input venue address in details",
   venueAddressError: "Please select a venue from the venue search",
   venueAddressSelect: "Please select a venue from the venue search",
-  venueSearch: "Venue search",
+  venueSearch: "Venue Search",
   matchSheetsNoPrintError: "There is no match sheets to print.",
   selectTemplateTypeError: "Please select template type.",
   selectTemplateType: "Select template type",

@@ -480,7 +480,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         />
                     )}
                 </Form.Item>
-                <Form.Item >
+                <Form.Item className='formLineHeight'>
                     {getFieldDecorator('shortName', {
                         rules: [{ required: true, message: ValidationConstants.nameField[3] }],
                     })(
@@ -499,7 +499,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         />
                     )}
                 </Form.Item>
-                <Form.Item name="venueAddress">
+                <Form.Item className='formLineHeight' name="venueAddress">
                     <PlacesAutocomplete
                         heading={AppConstants.venueSearch}
                         required
@@ -535,7 +535,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 />
 
 
-                <Form.Item >
+                <Form.Item  >
                     {getFieldDecorator('suburb')(
                         <InputWithHead
                             auto_complete="new-suburb"
@@ -569,7 +569,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 </Form.Item>
 
 
-                <Form.Item >
+                <Form.Item className="formLineHeight" >
                     {getFieldDecorator('postcode')(
                         <InputWithHead
                             auto_complete="new-postcode"
