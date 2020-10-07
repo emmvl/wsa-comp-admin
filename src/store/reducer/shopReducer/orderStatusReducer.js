@@ -22,6 +22,7 @@ const initialState = {
     orderStatusTotalCount: 1,
     orderStatusCurrentPage: 1,
     orderDetails: defaultOrderObject,
+    orderStatusListActionObject: null,
 };
 
 ////making the object data for order detail 
@@ -59,7 +60,7 @@ function shopOrderStatusState(state = initialState, action) {
 
         //// /////order status listing  get API 
         case ApiConstants.API_GET_ORDER_STATUS_LISTING_LOAD:
-            return { ...state, onLoad: true, error: null };
+            return { ...state, onLoad: true, error: null, orderStatusListActionObject: action };
 
         case ApiConstants.API_GET_ORDER_STATUS_LISTING_SUCCESS:
             let orderStatusData = action.result
@@ -126,6 +127,11 @@ function shopOrderStatusState(state = initialState, action) {
             return {
                 ...state, error: null
             };
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.orderStatusListActionObject = null
+            return { ...state, onLoad: false };
+
         default:
             return state;
     }

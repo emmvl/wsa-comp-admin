@@ -176,11 +176,16 @@ class ShopOrderStatus extends Component {
             fulfilmentStatus: -1,
             product: -1,
             searchText: props.location.state ? props.location.state.orderId : "",
+            offset: 0,
+            sortBy: null,
+            sortOrder: null,
         }
         this_obj = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let { orderStatusListActionObject } = this.props.shopOrderStatusState
+        console.log("orderStatusListActionObject", orderStatusListActionObject)
         this.referenceCalls()
         let { yearRefId, searchText, paymentStatus, fulfilmentStatus, product } = this.state
         let params =
@@ -195,7 +200,30 @@ class ShopOrderStatus extends Component {
             order: "",
             sorterBy: ""
         }
-        this.props.getOrderStatusListingAction(params)
+        if (orderStatusListActionObject) {
+            params.limit = orderStatusListActionObject.params.limit
+            params.offset = orderStatusListActionObject.params.offset
+            params.search = orderStatusListActionObject.params.search
+            params.year = orderStatusListActionObject.params.year
+            params.paymentStatus = orderStatusListActionObject.params.paymentStatus
+            params.fulfilmentStatus = orderStatusListActionObject.params.fulfilmentStatus
+            params.product = orderStatusListActionObject.params.product
+            params.order = orderStatusListActionObject.params.order
+            params.sorterBy = orderStatusListActionObject.params.sorterBy
+            this.props.getOrderStatusListingAction(params)
+            await this.setState({
+                offset: params.offset,
+                searchText: params.search,
+                yearRefId: params.year,
+                paymentStatus: params.paymentStatus,
+                fulfilmentStatus: params.fulfilmentStatus,
+                product: params.product,
+                order: params.order,
+                sorterBy: params.sorterBy,
+            })
+        } else {
+            this.props.getOrderStatusListingAction(params)
+        }
     }
 
     referenceCalls = () => {
@@ -251,7 +279,7 @@ class ShopOrderStatus extends Component {
     // on change search text
     onChangeSearchText = async (e) => {
         let value = e.target.value;
-        await this.setState({ searchText: e.target.value })
+        await this.setState({ searchText: e.target.value,offset: 0 })
         if (value == null || value == "") {
             this.handleTableList(1);
         }
@@ -259,6 +287,7 @@ class ShopOrderStatus extends Component {
 
     // search key 
     onKeyEnterSearchText = (e) => {
+        this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             this.handleTableList(1);
@@ -267,6 +296,7 @@ class ShopOrderStatus extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
+        this.setState({ offset: 0 })
         if (this.state.searchText === null || this.state.searchText === "") {
         }
         else {
