@@ -35,21 +35,20 @@ const initialState = {
     registrationDetail: registrationObj,
     registrationSettings: [],
     membershipProductInfo: membershipProdInfoObj,
-    userRegDashboardListData: [], 
+    userRegDashboardListData: [],
     userRegDashboardListPage: 1,
     userRegDashboardListTotalCount: 1,
-    competitions:[],
+    competitions: [],
     membershipProductTypes: [],
-    membershipProducts:[],
+    membershipProducts: [],
     postalCodes: [],
-    feesPaid: 0
+    feesPaid: 0,
+    registrationListAction: null
 }
 
 
-function  endUserRegistrationReducer(state = initialState, action)
-{
-    switch(action.type)
-    {
+function endUserRegistrationReducer(state = initialState, action) {
+    switch (action.type) {
         case ApiConstants.API_END_USER_REGISTRATION_FAIL:
             return {
                 ...state,
@@ -108,7 +107,7 @@ function  endUserRegistrationReducer(state = initialState, action)
             };
 
         case ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD:
-            return { ...state, onUserRegDashboardLoad: true, error: null };
+            return { ...state, onUserRegDashboardLoad: true, error: null, registrationListAction: action };
 
         case ApiConstants.API_USER_REG_DASHBOARD_LIST_SUCCESS:
             let dashboardListData = action.result;
@@ -144,6 +143,10 @@ function  endUserRegistrationReducer(state = initialState, action)
                 error: action.error,
                 status: action.status
             };
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.registrationListAction = null
+            return { ...state, onLoad: false };
 
         default:
             return state;

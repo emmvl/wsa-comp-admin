@@ -141,16 +141,34 @@ class UserAffiliatesList extends Component {
             organisationTypeRefId: -1,
             statusRefId: -1,
             deleteLoading: false,
-            pageNo: 1
+            pageNo: 1,
+            sortBy: null,
+            sortOrder: null,
+            offsetData: 0
+
         }
         this_Obj = this;
         // this.props.getUreAction();
         this.referenceCalls(this.state.organisationId);
-        this.handleAffiliateTableList(1, this.state.organisationId, -1, -1, -1)
     }
 
-    componentDidMount() {
-        console.log("Component Did mount");
+    async componentDidMount() {
+        const { userAffiliateListAction } = this.props.userState
+        let page = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (userAffiliateListAction) {
+            let offsetData = userAffiliateListAction.payload.paging.offset
+            sortBy = userAffiliateListAction.sortBy
+            sortOrder = userAffiliateListAction.sortOrder
+            let affiliatedToOrgId = userAffiliateListAction.payload.affiliatedToOrgId
+            let organisationTypeRefId = userAffiliateListAction.payload.organisationTypeRefId
+            let statusRefId = userAffiliateListAction.payload.statusRefId
+
+            await this.setState({ offsetData, sortBy, sortOrder, affiliatedToOrgId, statusRefId, organisationTypeRefId })
+            page = Math.floor(offsetData / 10) + 1;
+        }
+        this.handleAffiliateTableList(page, this.state.organisationId, this.state.affiliatedToOrgId, this.state.organisationTypeRefId, this.state.statusRefId)
     }
 
     componentDidUpdate(nextProps) {
@@ -190,7 +208,7 @@ class UserAffiliatesList extends Component {
             statusRefId: statusRefId,
             paging: {
                 limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0)
+                offset: (page ? (10 * (page - 1)) : this.state.offsetData)
             },
             stateOrganisations: false,
         }
@@ -378,6 +396,7 @@ class UserAffiliatesList extends Component {
     }
 
     render() {
+        console.log(this.props.userState.userAffiliateListAction, 'userAffiliateListAction')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />

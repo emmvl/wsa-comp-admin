@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Button, Input, Icon, DatePicker, Modal } from "antd";
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Button, Input, Icon, DatePicker, Modal, Form } from "antd";
 import moment from "moment";
 
 import AppConstants from "themes/appConstants";
@@ -187,16 +187,41 @@ class UserTextualDashboard extends Component {
             deleteLoading: false,
             dobFrom: "-1",
             dobTo: "-1",
+            sortBy: null,
+            sortOrder: null,
+            offsetData: 0,
+            postCode: null
         };
 
         this_Obj = this;
     }
 
-    componentDidMount() {
+    async  componentDidMount() {
         const prevUrl = getPrevUrl();
+
+        const { userTextualDasboardListAction } = this.props.userState
+        let page = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (userTextualDasboardListAction) {
+            let offsetData = userTextualDasboardListAction.payload.paging.offset
+            sortBy = userTextualDasboardListAction.sortBy
+            sortOrder = userTextualDasboardListAction.sortOrder
+            let dobFrom = userTextualDasboardListAction.payload.dobFrom !== "-1" ? moment(userTextualDasboardListAction.payload.dobFrom).format("YYYY-MM-DD") : this.state.dobFrom
+            let dobTo = userTextualDasboardListAction.payload.dobTo !== "-1" ? moment(userTextualDasboardListAction.payload.dobTo).format("YYYY-MM-DD") : this.state.dobTo
+            let genderRefId = userTextualDasboardListAction.payload.genderRefId
+            let linkedEntityId = userTextualDasboardListAction.payload.linkedEntityId
+            let postalCode = userTextualDasboardListAction.payload.postCode == "-1" ? "" : userTextualDasboardListAction.payload.postCode
+            let roleId = userTextualDasboardListAction.payload.roleId
+            let searchText = userTextualDasboardListAction.payload.searchText
+            let yearRefId = userTextualDasboardListAction.payload.yearRefId
+            await this.setState({ offsetData, sortBy, sortOrder, dobFrom, dobTo, genderRefId, linkedEntityId, postalCode, roleId, searchText, yearRefId })
+            page = Math.floor(offsetData / 10) + 1;
+        }
+
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
             this.referenceCalls();
-            this.handleTextualTableList(1);
+            this.handleTextualTableList(page);
         } else {
             history.push("/");
         }
@@ -280,7 +305,7 @@ class UserTextualDashboard extends Component {
         } else {
             let newValue;
             if (key === "dobFrom" || key === "dobTo") {
-                newValue = moment(value, "YYYY-mm-dd");
+                newValue = value == null ? "-1" : moment(value, "YYYY-mm-dd");
             } else {
                 newValue = value;
             }
@@ -334,13 +359,15 @@ class UserTextualDashboard extends Component {
             roleId,
             genderRefId,
             linkedEntityId,
-            dobFrom: (dobFrom !== "-1" && !isNaN(dobFrom)) ? moment(dobFrom).format("YYYY-MM-DD") : "-1",
-            dobTo: (dobTo !== "-1" && !isNaN(dobTo)) ? moment(dobTo).format("YYYY-MM-DD") : "-1",
+            // dobFrom: (dobFrom !== "-1" && !isNaN(dobFrom)) ? moment(dobFrom).format("YYYY-MM-DD") : "-1",
+            dobFrom: (dobFrom !== "-1") ? moment(dobFrom).format("YYYY-MM-DD") : "-1",
+            // dobTo: (dobTo !== "-1" && !isNaN(dobTo)) ? moment(dobTo).format("YYYY-MM-DD") : "-1",
+            dobTo: (dobTo !== "-1") ? moment(dobTo).format("YYYY-MM-DD") : "-1",
             postCode: (postalCode !== "" && postalCode !== null) ? postalCode.toString() : "-1",
             searchText,
             paging: {
                 limit: 10,
-                offset: (page ? (10 * (page - 1)) : 0),
+                offset: (page ? (10 * (page - 1)) : this.state.offsetData),
             },
         };
 
@@ -393,6 +420,7 @@ class UserTextualDashboard extends Component {
                                     onChange={this.onChangeSearchText}
                                     placeholder="Search..."
                                     onKeyPress={this.onKeyEnterSearchText}
+                                    value={this.state.searchText}
                                     prefix={
                                         <Icon
                                             type="search"
@@ -570,6 +598,7 @@ class UserTextualDashboard extends Component {
                                     showTime={false}
                                     name="dobFrom"
                                     placeholder="dd-mm-yyyy"
+                                    value={this.state.dobFrom !== "-1" && moment(this.state.dobFrom, "YYYY-MM-DD")}
                                 />
                             </div>
                         </div>
@@ -585,6 +614,7 @@ class UserTextualDashboard extends Component {
                                     format="DD-MM-YYYY"
                                     showTime={false}
                                     name="dobTo"
+                                    value={this.state.dobTo !== "-1" && moment(this.state.dobTo, "YYYY-MM-DD")}
                                 />
                             </div>
                         </div>
@@ -649,6 +679,8 @@ class UserTextualDashboard extends Component {
     };
 
     render() {
+        console.log(this.props.userState.userTextualDasboardListAction, 'userTextualDasboardListAction')
+        console.log(this.state.dobFrom, 'dobFrom')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
@@ -658,13 +690,15 @@ class UserTextualDashboard extends Component {
                 <Layout>
                     {this.headerView()}
 
-                    <Content>
-                        {this.dropdownView()}
-                        {this.countView()}
-                        {this.contentView()}
-
-                        <Loader visible={this.props.userState.onExpOrgRegQuesLoad} />
-                    </Content>
+                    <Form
+                        autoComplete="off" >
+                        <Content>
+                            {this.dropdownView()}
+                            {this.countView()}
+                            {this.contentView()}
+                        </Content>
+                    </Form>
+                    <Loader visible={this.props.userState.onExpOrgRegQuesLoad} />
                 </Layout>
             </div>
         );

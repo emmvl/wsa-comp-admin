@@ -139,15 +139,37 @@ class RegistrationFormList extends Component {
         super(props);
         this.state = {
             yearRefId: 1,
-            offset: 0
+            offset: 0,
+            sortBy: null,
+            sortOrder: null
+
         }
         this_Obj = this
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
 
-    componentDidMount() {
-        this.handleMembershipTableList(1, this.state.yearRefId)
+    async componentDidMount() {
+
+        const { regFormListAction } = this.props.dashboardState
+        let page = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (regFormListAction) {
+            let offset = regFormListAction.offset
+            sortBy = regFormListAction.sortBy
+            sortOrder = regFormListAction.sortOrder
+            let yearRefId = regFormListAction.yearRefId
+
+            await this.setState({ offset, sortBy, sortOrder, yearRefId })
+            page = Math.floor(offset / 10) + 1;
+
+            this.handleMembershipTableList(page, yearRefId)
+        } else {
+            this.handleMembershipTableList(1, this.state.yearRefId)
+        }
+
+
     }
 
     handleMembershipTableList = (page, yearRefId) => {

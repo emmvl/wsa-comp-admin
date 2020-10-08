@@ -55,7 +55,7 @@ const columns = [
         key: 'name',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("registeredUser"),
-		render: (name, record) => (
+        render: (name, record) => (
             <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
                 <span className="input-heading-add-another pt-0">{name}</span>
             </NavLink>
@@ -118,14 +118,35 @@ class ReferFriend extends Component {
         this.state = {
             organisationId: getOrganisationData().organisationUniqueKey,
             yearRefId: -1,
-            pageNo: 1
+            pageNo: 1,
+            sortBy: null,
+            sortOrder: null
         }
         this_Obj = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+
+        const { userReferFriendListAction } = this.props.userState
+
         this.referenceCalls();
-        this.handleFriendTableList(1);
+
+        let pageNo = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (userReferFriendListAction) {
+            let offset = userReferFriendListAction.payload.paging.offset
+            sortBy = userReferFriendListAction.sortBy
+            sortOrder = userReferFriendListAction.sortOrder
+            let yearRefId = userReferFriendListAction.payload.yearRefId
+
+            pageNo = Math.floor(offset / 10) + 1;
+            await this.setState({ offset, sortBy, sortOrder, yearRefId, pageNo })
+
+            this.handleFriendTableList(pageNo);
+        } else {
+            this.handleFriendTableList(1);
+        }
     }
     componentDidUpdate(nextProps) {
 
@@ -218,7 +239,7 @@ class ReferFriend extends Component {
                         columns={columns}
                         dataSource={friendList}
                         pagination={false}
-                        loading={this.props.onLoad === true && true}
+                        loading={this.props.userState.onLoad}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

@@ -146,13 +146,14 @@ const initialState = {
     anyOrgAffiliateArr: [],
     any_club_Org_AffiliateArr: [],
     createVenue: null,
-    selectedTeamSeasonalInstalmentDates:[],
-    selectedSeasonalInstalmentDates:[],	
+    selectedTeamSeasonalInstalmentDates: [],
+    selectedSeasonalInstalmentDates: [],
     orgRegistrationId: null,
     associationChecked: false,
     clubChecked: false,
     anyOrgAssociationArr: [],
-    anyOrgClubArr: [],		   
+    anyOrgClubArr: [],
+    competitionListAction: null
 };
 
 /////function to append isselected values in default membership types array
@@ -1634,10 +1635,10 @@ function competitionFees(state = initialState, action) {
 
         // get the competition fees list in registration
         case ApiConstants.API_REG_COMPETITION_LIST_LOAD:
-            return { ...state, onLoad: true, error: null };
+            return { ...state, onLoad: true, error: null, competitionListAction: action };
 
         case ApiConstants.API_REG_COMPETITION_LIST_SUCCESS:
-            console.log("API_REG_COMPETITION_LIST_SUCCESS",state.selectedVenuesAdd, state.selectedVenues )
+            console.log("API_REG_COMPETITION_LIST_SUCCESS", state.selectedVenuesAdd, state.selectedVenues)
             let competitionListData = action.result;
             state.selectedVenuesAdd = null
             state.selectedVenues = []
@@ -2616,32 +2617,36 @@ function competitionFees(state = initialState, action) {
             };
 
         case ApiConstants.UPDATE_INSTALMENT_DATE:
-            console.log("UPDATE_INSTALMENT_DATE" + action.key +"%%%" + action.value);
-            if(action.key == "instalmentAddDate"){
+            console.log("UPDATE_INSTALMENT_DATE" + action.key + "%%%" + action.value);
+            if (action.key == "instalmentAddDate") {
                 addInstalmentDate(action.value)
             }
-            if(action.key == "instalmentRemoveDate"){
-                removeInstalmentDate(action.value)            
+            if (action.key == "instalmentRemoveDate") {
+                removeInstalmentDate(action.value)
             }
-            if(action.key == "instalmentDateupdate"){
-                updateInstalmentDate(action.value)            
+            if (action.key == "instalmentDateupdate") {
+                updateInstalmentDate(action.value)
             }
-            if(action.key == "seasonalTeaminstalmentAddDate"){
+            if (action.key == "seasonalTeaminstalmentAddDate") {
                 addSeasonalTeamInstalmentDate(action.value)
             }
-            if(action.key == "instalmentSeasonalTeamRemoveDate"){
-                removeSeasonalTeamInstalmentDate(action.value)            
+            if (action.key == "instalmentSeasonalTeamRemoveDate") {
+                removeSeasonalTeamInstalmentDate(action.value)
             }
-            if(action.key == "seasonalTeaminstalmentDateupdate"){
-                updateSeasonalTeamInstalmentDate(action.value)            
+            if (action.key == "seasonalTeaminstalmentDateupdate") {
+                updateSeasonalTeamInstalmentDate(action.value)
             }
-            if(action.key == "isSeasonalUponReg" || action.key == "isTeamSeasonalUponReg"){
+            if (action.key == "isSeasonalUponReg" || action.key == "isTeamSeasonalUponReg") {
                 state.competitionDetailData[action.key] = action.value;
             }
-			if(action.key == "teamSeasonalSchoolRegCode"){
+            if (action.key == "teamSeasonalSchoolRegCode") {
                 state.competitionDetailData[action.key] = action.value;
             }
-            return { ...state,  };    
+            return { ...state, };
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.competitionListAction = null
+            return { ...state, onLoad: false };
 
         default:
             return state;

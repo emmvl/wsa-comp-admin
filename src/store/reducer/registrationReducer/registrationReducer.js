@@ -92,10 +92,12 @@ const initialState = {
   reg_demoSetting: [],
   reg_NetballSetting: [],
   reg_QuestionsSetting: [],
-  teamRegistrationTableData:{
-    page:{},
-    teamRegistrations:[]
+  teamRegistrationTableData: {
+    page: {},
+    teamRegistrations: []
   },
+  teamRegListAction: null,
+  regMembershipListAction: null
 };
 
 
@@ -604,7 +606,7 @@ function registration(state = initialState, action) {
 
     //////get the membership fee list in registration
     case ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD:
-      return { ...state, onLoad: true, error: null };
+      return { ...state, onLoad: true, error: null, regMembershipListAction: action };
 
     case ApiConstants.API_REG_MEMBERSHIP_LIST_SUCCESS:
       let membershipListData = action.result;
@@ -1189,32 +1191,39 @@ function registration(state = initialState, action) {
         status: action.status, error: null
       };
 
-      case ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD:
-        return {
-            ...state,
-            onLoad: true
-        }
+    case ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_LOAD:
+      return {
+        ...state,
+        onLoad: true,
+        teamRegListAction: action
+      }
 
     case ApiConstants.API_GET_TEAM_REGISTRATIONS_DATA_SUCCESS:
-        return {
-            ...state,
-            onLoad: false,
-            teamRegistrationTableData: action.result,
-            status: action.status
-        }	 
+      return {
+        ...state,
+        onLoad: false,
+        teamRegistrationTableData: action.result,
+        status: action.status
+      }
 
-	  case ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_LOAD:
-        return {
-            ...state,
-            onLoad: true
-        }
+    case ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_LOAD:
+      return {
+        ...state,
+        onLoad: true
+      }
 
-      case ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_SUCCESS:
-        return {
-              ...state,
-              onLoad: false,
-              status: action.status         
-            }
+    case ApiConstants.API_EXPORT_TEAM_REGISTRATIONS_DATA_SUCCESS:
+      return {
+        ...state,
+        onLoad: false,
+        status: action.status
+      }
+
+    case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+      state.teamRegListAction = null
+      state.regMembershipListAction = null
+      return { ...state, onLoad: false };
+
     default:
       return state;
   }
