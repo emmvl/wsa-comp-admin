@@ -227,7 +227,8 @@ const ValidationConstants = {
     heroImageIsRequired: "Hero image is required",
     newYearFieldIsRequired: "New year field is required",
     competitionStartEndDateIsRequired: "Competition Start and End date is requied",
-    playerTypeRequired: "Please select the player type"
+    playerTypeRequired: "Please select the player type",
+    newMembershipDuplicteError: "Membership product is not same as another product you have selected"
 };
 
 export default ValidationConstants;
