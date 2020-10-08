@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Modal, Button, DatePicker,Tag } from "antd";
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, Modal, Button, DatePicker, Tag } from "antd";
 import "./product.scss";
 import { NavLink } from "react-router-dom";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -114,9 +114,9 @@ const columns = [
         key: "affiliatePortion",
         render: (affiliatePortion, record) => (
             affiliatePortion < 0 ?
-               <span style={{color:"red"}}>{ "(" + currencyFormat(affiliatePortion * -1) + ")"}</span> 
-               :
-               <span>{currencyFormat(affiliatePortion)}</span> 
+                <span style={{ color: "red" }}>{"(" + currencyFormat(affiliatePortion * -1) + ")"}</span>
+                :
+                <span>{currencyFormat(affiliatePortion)}</span>
         ),
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("ourPortion"),
@@ -193,19 +193,42 @@ class PaymentDashboard extends Component {
             offset: 0,
             userInfo: null,
             userId: -1,
-            registrationId: null
+            registrationId: null,
+            sortBy: null,
+            sortOrder: null
         };
         this_Obj = this;
 
     }
-    componentDidMount() {
-        let userInfo = this.props.location.state ? this.props.location.state.personal : null;
-        let registrationId = this.props.location.state ? this.props.location.state.registrationId : null;
-        this.setState({userInfo: userInfo, registrationId: registrationId});
-        let userId = userInfo != null ? userInfo.userId : -1;
-        let regId = registrationId!= null ? registrationId: '-1';
-        console.log("registrationId", registrationId);
-        this.handlePaymentTableList(1,userId, regId)
+    async componentDidMount() {
+        const { paymentDashboardListAction } = this.props.paymentState
+
+        let page = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (paymentDashboardListAction) {
+            let offset = paymentDashboardListAction.offset
+            sortBy = paymentDashboardListAction.sortBy
+            sortOrder = paymentDashboardListAction.sortOrder
+            let registrationId = paymentDashboardListAction.registrationId == null ? '-1' : paymentDashboardListAction.registrationId
+            let userId = paymentDashboardListAction.userId == null ? -1 : paymentDashboardListAction.userId
+
+            await this.setState({ offset, sortBy, sortOrder, registrationId, userId })
+            page = Math.floor(offset / 10) + 1;
+
+            this.handlePaymentTableList(page, userId, registrationId)
+        } else {
+
+            let userInfo = this.props.location.state ? this.props.location.state.personal : null;
+            let registrationId = this.props.location.state ? this.props.location.state.registrationId : null;
+            this.setState({ userInfo: userInfo, registrationId: registrationId });
+            let userId = userInfo != null ? userInfo.userId : -1;
+            let regId = registrationId != null ? registrationId : '-1';
+
+            this.handlePaymentTableList(1, userId, regId)
+        }
+
+
     }
 
     onExport() {
@@ -213,9 +236,9 @@ class PaymentDashboard extends Component {
     }
 
     clearFilterByUserId = () => {
-        this.setState({userInfo: null});
-        this.handlePaymentTableList(this.state.offset,-1, "-1")
-    } 
+        this.setState({ userInfo: null });
+        this.handlePaymentTableList(this.state.offset, -1, "-1")
+    }
 
     ///////view for breadcrumb
     headerView = () => {
@@ -232,12 +255,12 @@ class PaymentDashboard extends Component {
                         <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                             <div className="row">
                                 {this.state.userInfo &&
-                                    <div className="col-sm pt-1" style={{alignSelf: "center"}}>
-                                        <Tag 
-                                        closable 
-                                        color="volcano"
-                                        style={{paddingTop:"3px",height:"30px"}}
-                                        onClose={() => {this.clearFilterByUserId()}}
+                                    <div className="col-sm pt-1" style={{ alignSelf: "center" }}>
+                                        <Tag
+                                            closable
+                                            color="volcano"
+                                            style={{ paddingTop: "3px", height: "30px" }}
+                                            onClose={() => { this.clearFilterByUserId() }}
                                         >{tagName}</Tag>
                                     </div>
                                 }
@@ -286,7 +309,7 @@ class PaymentDashboard extends Component {
         console.log(date)
     }
 
-    handlePaymentTableList = (page,userId, regId) => {
+    handlePaymentTableList = (page, userId, regId) => {
         let { sortBy, sortOrder } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
@@ -382,7 +405,7 @@ class PaymentDashboard extends Component {
         let total = paymentState.paymentListTotalCount;
         console.log(paymentState)
         let userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
-        let regId = this.state.registrationId!= null ? this.state.registrationId: '-1';
+        let regId = this.state.registrationId != null ? this.state.registrationId : '-1';
         return (
 
             <div className="comp-dash-table-view mt-2">
@@ -401,7 +424,7 @@ class PaymentDashboard extends Component {
                         className="antd-pagination"
                         current={paymentState.paymentListPage}
                         total={total}
-                        onChange={(page) => this.handlePaymentTableList(page,userId, regId)}
+                        onChange={(page) => this.handlePaymentTableList(page, userId, regId)}
                     />
                 </div>
             </div>

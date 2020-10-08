@@ -135,7 +135,12 @@ const initialState = {
   coachDataLoad: false,
   coachActivityRoster: [],
   coachCurrentPage: null,
-  coachTotalCount: null
+  coachTotalCount: null,
+  userTextualDasboardListAction: null,
+  affiliateDirListAction: null,
+  userAffiliateListAction: null,
+  userFriendListAction: null,
+  userReferFriendListAction: null
 };
 
 function userReducer(state = initialState, action) {
@@ -189,7 +194,7 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.API_AFFILIATES_LISTING_LOAD:
-      return { ...state, onLoad: true };
+      return { ...state, onLoad: true, userAffiliateListAction: action };
 
     case ApiConstants.API_AFFILIATES_LISTING_SUCCESS:
       let data = action.result;
@@ -348,7 +353,7 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD:
-      return { ...state, onTextualLoad: true };
+      return { ...state, onTextualLoad: true, userTextualDasboardListAction: action };
 
     case ApiConstants.API_USER_DASHBOARD_TEXTUAL_SUCCESS:
       let textualData = action.result;
@@ -482,7 +487,7 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.API_USER_FRIEND_LOAD:
-      return { ...state, onLoad: true };
+      return { ...state, onLoad: true, userFriendListAction: action };
 
     case ApiConstants.API_USER_FRIEND_SUCCESS:
       let friendData = action.result;
@@ -496,7 +501,7 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.API_USER_REFER_FRIEND_LOAD:
-      return { ...state, onLoad: true };
+      return { ...state, onLoad: true, userReferFriendListAction: action };
 
     case ApiConstants.API_USER_REFER_FRIEND_SUCCESS:
       let referFriendData = action.result;
@@ -566,7 +571,7 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.API_AFFILIATE_DIRECTORY_LOAD:
-      return { ...state, onAffiliateDirLoad: true };
+      return { ...state, onAffiliateDirLoad: true, affiliateDirListAction: action };
 
     case ApiConstants.API_AFFILIATE_DIRECTORY_SUCCESS:
       let affiliateDirData = action.result;
@@ -795,7 +800,13 @@ function userReducer(state = initialState, action) {
         coachTotalCount: action.result.page.totalCount,
       };
 
-
+    case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+      state.userTextualDasboardListAction = null
+      state.affiliateDirListAction = null
+      state.userAffiliateListAction = null
+      state.userFriendListAction = null
+      state.userReferFriendListAction = null
+      return { ...state, onLoad: false };
 
     default:
       return state;

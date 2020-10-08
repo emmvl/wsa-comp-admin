@@ -102,7 +102,7 @@ const columns = [
         title: 'User Role',
         dataIndex: 'roles',
         key: 'roles',
-        sorter: false,
+        sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (roles, record) => {
             return (
@@ -152,18 +152,44 @@ class TeamRegistrations extends Component {
             competitionId: "",
             statusRefId: -1,
             searchText: '',
+            sortBy: null,
+            sortOrder: null,
         }
 
 
         this_Obj = this;
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+
+        const { teamRegListAction } = this.props.registrationState
+
         this.referenceCalls(this.state.organisationUniqueKey);
         this.setState({
             searchText: ''
         })
-        this.handleRegTableList(1);
+        let page = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (teamRegListAction) {
+            let offset = teamRegListAction.payload.paging.offset
+            sortBy = teamRegListAction.sortBy
+            sortOrder = teamRegListAction.sortOrder
+            let competitionUniqueKey = teamRegListAction.payload.competitionUniqueKey
+            let filterOrganisation = teamRegListAction.payload.filterOrganisation
+            let searchText = teamRegListAction.payload.searchText
+            let statusRefId = teamRegListAction.payload.statusRefId
+            let yearRefId = teamRegListAction.payload.yearRefId
+            await this.setState({ sortBy, sortOrder, competitionUniqueKey, filterOrganisation, searchText, statusRefId, yearRefId })
+            page = Math.floor(offset / 10) + 1;
+
+            this.handleRegTableList(page);
+        } else {
+            this.handleRegTableList(1);
+        }
+
+
+
     }
 
     handleRegTableList = (page) => {
@@ -314,6 +340,7 @@ class TeamRegistrations extends Component {
                                     onChange={(e) => this.onChangeSearchText(e)}
                                     placeholder="Search..."
                                     onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                    value={this.state.searchText}
                                     prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                         onClick={() => this.onClickSearchIcon()}
                                     />}

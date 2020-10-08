@@ -156,12 +156,38 @@ class RegistrationMembershipList extends Component {
         this.state = {
             yearRefId: 1,
             deleteLoading: false,
-            offset: 0
+            offset: 0,
+            sortBy: null,
+            sortOrder: null
+
         }
         this_Obj = this;
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
+    async componentDidMount() {
+
+        const { regMembershipListAction } = this.props.registrationState
+        routePermissionForOrgLevel(AppConstants.national, AppConstants.state)
+        let page = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (regMembershipListAction) {
+            let offset = regMembershipListAction.offset
+            sortBy = regMembershipListAction.sortBy
+            sortOrder = regMembershipListAction.sortOrder
+            let yearRefId = regMembershipListAction.yearRefId
+
+            await this.setState({ offset, sortBy, sortOrder, yearRefId })
+            page = Math.floor(offset / 10) + 1;
+
+            this.handleMembershipTableList(page, yearRefId)
+        } else {
+            this.handleMembershipTableList(1, this.state.yearRefId)
+        }
+
+
+    }
 
     componentDidUpdate(nextProps) {
         if (this.props.registrationState.onLoad === false && this.state.deleteLoading == true) {
@@ -170,11 +196,6 @@ class RegistrationMembershipList extends Component {
             })
             this.handleMembershipTableList(1, this.state.yearRefId)
         }
-    }
-
-    componentDidMount() {
-        routePermissionForOrgLevel(AppConstants.national, AppConstants.state)
-        this.handleMembershipTableList(1, this.state.yearRefId)
     }
 
     deleteProduct = (membershipProductId) => {

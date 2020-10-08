@@ -177,16 +177,38 @@ class RegistrationMainDashboard extends Component {
             competitionCreatorOrganisation: 0,
             compFeeStatus: 0,
             compName: "",
-            regStatus: false
+            regStatus: false,
+            sortBy: null,
+            sortOrder: null
+
         };
         this_Obj = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+
+        const { regDashboardListAction } = this.props.registrationDashboardState
+
         this.props.getOnlyYearListAction(this.props.appState.yearList)
         this.setState({ loading: true })
-        this.props.registrationMainDashboardListAction(this.state.year)
-        this.props.getAllCompetitionAction(this.state.year)
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (regDashboardListAction) {
+            sortBy = regDashboardListAction.sortBy
+            sortOrder = regDashboardListAction.sortOrder
+            let year = regDashboardListAction.yearRefId
+
+            await this.setState({ sortBy, sortOrder, year })
+
+            this.props.registrationMainDashboardListAction(year, sortBy, sortOrder)
+            this.props.getAllCompetitionAction(year)
+        } else {
+            this.props.registrationMainDashboardListAction(this.state.year, this.state.sortBy, this.state.sortOrder)
+            this.props.getAllCompetitionAction(this.state.year)
+        }
+
+
+
     }
 
     componentDidUpdate(nextProps) {
@@ -527,6 +549,7 @@ class RegistrationMainDashboard extends Component {
     };
 
     render() {
+        console.log(this.props.registrationDashboardState.regDashboardListAction, 'regDashboardListAction')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />

@@ -56,7 +56,7 @@ const columns = [
         key: 'name',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("registeredUser"),
-		render: (name, record) => (
+        render: (name, record) => (
             <NavLink to={{ pathname: "/userPersonal", state: { userId: record.userId } }}>
                 <span className="input-heading-add-another pt-0">{name}</span>
             </NavLink>
@@ -121,14 +121,32 @@ class PlayWithFriend extends Component {
         this.state = {
             organisationId: getOrganisationData().organisationUniqueKey,
             yearRefId: -1,
-            pageNo: 1
+            pageNo: 1,
+            sortBy: null,
+            sortOrder: null
         }
         this_Obj = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+
+        const { userFriendListAction } = this.props.userState
         this.referenceCalls();
-        this.handleFriendTableList(1);
+        let pageNo = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (userFriendListAction) {
+            let offset = userFriendListAction.payload.paging.offset
+            sortBy = userFriendListAction.sortBy
+            sortOrder = userFriendListAction.sortOrder
+            let yearRefId = userFriendListAction.payload.yearRefId
+            pageNo = Math.floor(offset / 10) + 1;
+            await this.setState({ offset, sortBy, sortOrder, yearRefId, pageNo })
+
+            this.handleFriendTableList(pageNo);
+        } else {
+            this.handleFriendTableList(1);
+        }
     }
     componentDidUpdate(nextProps) {
 
@@ -216,23 +234,23 @@ class PlayWithFriend extends Component {
         let total = userState.friendTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
-            <div className="table-responsive home-dash-table-view">
-                <Table className="home-dashboard-table"
-                    columns={columns}
-                    dataSource={friendList}
-                    pagination={false}
-                    loading={this.props.onLoad === true && true}
-                />
+                <div className="table-responsive home-dash-table-view">
+                    <Table className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={friendList}
+                        pagination={false}
+                        loading={this.props.userState.onLoad}
+                    />
+                </div>
+                <div className="d-flex justify-content-end">
+                    <Pagination
+                        className="antd-pagination"
+                        current={userState.friendPage}
+                        total={total}
+                        onChange={(page) => this.handleFriendTableList(page)}
+                    />
+                </div>
             </div>
-            <div className="d-flex justify-content-end">
-                <Pagination
-                    className="antd-pagination"
-                    current={userState.friendPage}
-                    total={total}
-                    onChange={(page) => this.handleFriendTableList(page)}
-                />
-            </div>
-        </div>
         )
     }
 

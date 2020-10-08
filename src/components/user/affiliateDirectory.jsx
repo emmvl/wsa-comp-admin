@@ -176,15 +176,32 @@ class AffiliateDirectory extends Component {
       deleteLoading: false,
       searchText: "",
       pageNo: 1,
+      offsetData: 0,
+      sortBy: null,
+      sortOrder: null
     };
     this_Obj = this;
     // this.props.getUreAction();
     this.referenceCalls(this.state.organisationId);
-    this.handleAffiliateTableList(1);
   }
 
-  componentDidMount() {
-    console.log("Component Did mount");
+  async componentDidMount() {
+    const { affiliateDirListAction } = this.props.userState
+    let page = 1
+    let sortBy = this.state.sortBy
+    let sortOrder = this.state.sortOrder
+    if (affiliateDirListAction) {
+      let offsetData = affiliateDirListAction.payload.paging.offset
+      sortBy = affiliateDirListAction.sortBy
+      sortOrder = affiliateDirListAction.sortOrder
+      let searchText = affiliateDirListAction.payload.searchText
+      let yearRefId = affiliateDirListAction.payload.yearRefId
+      let organisationTypeRefId = affiliateDirListAction.payload.organisationTypeRefId
+
+      await this.setState({ offsetData, sortBy, sortOrder, searchText, yearRefId, organisationTypeRefId })
+      page = Math.floor(offsetData / 10) + 1;
+    }
+    this.handleAffiliateTableList(page);
   }
 
   componentDidUpdate(nextProps) {
@@ -214,7 +231,7 @@ class AffiliateDirectory extends Component {
       searchText: this.state.searchText,
       paging: {
         limit: 10,
-        offset: page ? 10 * (page - 1) : 0,
+        offset: page ? 10 * (page - 1) : this.state.offsetData,
       },
     };
     this.props.getAffiliateDirectoryAction(filter, this.state.sortBy, this.state.sortOrder);
@@ -399,6 +416,7 @@ class AffiliateDirectory extends Component {
                     }
                     placeholder="Search..."
                     onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                    value={this.state.searchText}
                     prefix={
                       <Icon
                         type="search"
@@ -409,6 +427,7 @@ class AffiliateDirectory extends Component {
                         }}
                       />
                     }
+                    allowClear
                   />
                 </div>
               </div>
