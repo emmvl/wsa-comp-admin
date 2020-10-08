@@ -212,7 +212,7 @@ class LiveScoreAddManager extends Component {
 
                                 >{managerList.map((item) => {
                                     return <Option key={item.id} value={item.firstName + " " + item.lastName}>
-                                        {item.firstName + " " + item.lastName}
+                                        {item.NameWithNumber}
                                     </Option>
                                 })}
                                 </AutoComplete>
@@ -271,7 +271,7 @@ class LiveScoreAddManager extends Component {
                                 <InputWithHead
                                     auto_complete='new-password'
                                     type='text'
-                                    required={"required-field pb-0 pt-0"}
+                                    required={"required-field pb-0 pt-1"}
                                     heading={AppConstants.firstName}
                                     placeholder={AppConstants.firstName}
                                     onChange={(firstName) => this.props.liveScoreUpdateManagerDataAction(captializedString(firstName.target.value), 'firstName')}
@@ -292,7 +292,7 @@ class LiveScoreAddManager extends Component {
                                 <InputWithHead
                                     auto_complete='off'
                                     // type='text'
-                                    required={"required-field pb-0 pt-0"}
+                                    required={"required-field pb-0 pt-1"}
                                     heading={AppConstants.lastName}
                                     placeholder={AppConstants.lastName}
                                     onChange={(lastName) => this.props.liveScoreUpdateManagerDataAction(captializedString(lastName.target.value), 'lastName')}
@@ -325,7 +325,7 @@ class LiveScoreAddManager extends Component {
                                 <InputWithHead
                                     auto_complete='new-email'
                                     type='email'
-                                    required={"required-field pb-0 pt-0"}
+                                    required={"required-field pb-0 pt-1"}
                                     heading={AppConstants.emailAdd}
                                     placeholder={AppConstants.enterEmail}
                                     onChange={(email) => this.props.liveScoreUpdateManagerDataAction(email.target.value, 'email')}
@@ -346,7 +346,7 @@ class LiveScoreAddManager extends Component {
                                 <InputWithHead
                                     auto_complete='new-contact'
                                     // type='number'
-                                    required={"required-field pb-0 pt-0"}
+                                    required={"required-field pb-0 pt-1"}
                                     heading={AppConstants.contact_No}
                                     placeholder={AppConstants.enterContactNo}
                                     maxLength={10}
@@ -360,7 +360,7 @@ class LiveScoreAddManager extends Component {
                 <div className="row" >
                     <div className="col-sm" >
                         <InputWithHead heading={AppConstants.team}
-                            required={"required-field pb-0 pt-3"}
+                            required={"required-field pb-0 pt-4"}
                         />
                         <Form.Item className="slct-in-add-manager-livescore">
                             {getFieldDecorator(AppConstants.selectTeam, {
@@ -398,7 +398,7 @@ class LiveScoreAddManager extends Component {
         const { managerRadioBtn } = this.props.liveScoreMangerState
         return (
             <div className="content-view pb-0 pt-4 row">
-                <span className="applicable-to-heading ml-4">{AppConstants.managerHeading}</span>
+                <span className="applicable-to-heading ml-4 mr-3">{AppConstants.managerHeading}</span>
                 <Radio.Group
                     className="reg-competition-radio"
                     onChange={(e) => this.onButtonChage(e)}

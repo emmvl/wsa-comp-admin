@@ -1,6 +1,6 @@
 import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
-
+import history from "util/history";
 import ApiConstants from "themes/apiConstants";
 import { setAuthToken } from "util/sessionStorage";
 import UserAxiosApi from "store/http/userHttp/userAxiosApi";
@@ -771,6 +771,9 @@ export function* impersonationSaga(action) {
         result: result.result.data,
         status: result.status,
       });
+      if (action.payload.access == false) {
+        history.push('/')
+      }
     } else {
       yield call(failSaga, result);
     }

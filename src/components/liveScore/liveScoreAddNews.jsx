@@ -405,7 +405,7 @@ class LiveScoreAddNews extends Component {
                     >
                         {scorerList.map((item) => {
                             return <Option key={'scorer' + item.firstName} value={item.firstName}>
-                                {item.firstName + " " + item.lastName}
+                                {item.NameWithNumber}
                             </Option>
                         })}
                     </Select>

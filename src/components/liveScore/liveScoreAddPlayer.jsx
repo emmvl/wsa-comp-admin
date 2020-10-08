@@ -265,7 +265,7 @@ class LiveScoreAddPlayer extends Component {
 
                 {/* Profile Selection and check box row */}
 
-                <InputWithHead heading={AppConstants.profilePic} />
+                <InputWithHead heading={AppConstants.profilePic} required={"mb-1"} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -357,9 +357,9 @@ class LiveScoreAddPlayer extends Component {
     footerView = (isSubmitting) => {
         return (
             <div className="fluid-width">
-                <div className="footer-view">
+                <div className="footer-view" >
                     <div className="row">
-                        <div className="col-sm">
+                        <div className="col-sm" style={{ paddingLeft: 10 }}>
                             <div className="reg-add-save-button">
                                 <Button className="cancelBtnWidth" onClick={() => history.push(this.state.temaViewPlayer ? 'liveScoreTeamView' : '/liveScorePlayerList', { ...this.props.location.state })} type="cancel-button">{AppConstants.cancel}</Button>
                             </div>
@@ -367,7 +367,7 @@ class LiveScoreAddPlayer extends Component {
                         <div className="col-sm">
                             <div className="comp-buttons-view">
                                 <Form.Item >
-                                    <Button className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                    <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                         {AppConstants.save}
                                     </Button>
                                 </Form.Item>
@@ -375,7 +375,7 @@ class LiveScoreAddPlayer extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         );
     };
 

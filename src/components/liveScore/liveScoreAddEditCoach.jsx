@@ -404,14 +404,14 @@ class LiveScoreAddEditCoach extends Component {
             <div className="flud-widtih">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm-3 pl-3">
+                        <div className="col-sm-3">
                             <div className="reg-add-save-button">
                                 <NavLink to='/liveScoreCoaches'>
                                     <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>
                         </div>
-                        <div className="col-sm pr-3">
+                        <div className="col-sm ">
                             <div className="comp-buttons-view">
                                 <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
