@@ -5190,88 +5190,93 @@ class RegistrationCompetitionFee extends Component {
 
 
     return (
-      <div className="fees-view pt-5">
-        <span className="form-heading">{AppConstants.paymentOptions}</span>
-        {isSeasonal == false && isCasual == false && isTeamSeasonal == false && (
-          <span className="applicable-to-heading pt-0">
-            {AppConstants.please_Sel_Fee}
-          </span>
-        )}
-        {isSeasonal == true && (
-          <div className="inside-container-view">
-            <div className="contextualHelp-RowDirection">
-              <span className="form-heading">{AppConstants.seasonalFee}</span>
-              <div style={{ marginTop: 4 }}>
-                <CustumToolTip placement="top" background="#ff8237">
-                  <span>{AppConstants.paymentSeasonalFeeMsg}</span>
-                </CustumToolTip>
+      <div className="tab-formView">
+        <div>
+          <div className="fees-view pt-5">
+            <span className="form-heading">{AppConstants.paymentOptions}</span>
+            {isSeasonal == false && isCasual == false && isTeamSeasonal == false && (
+              <span className="applicable-to-heading pt-0">
+                {AppConstants.please_Sel_Fee}
+              </span>
+            )}
+            {isSeasonal == true && (
+              <div className="inside-container-view">
+                <div className="contextualHelp-RowDirection">
+                  <span className="form-heading">{AppConstants.seasonalFee}</span>
+                  <div style={{ marginTop: 4 }}>
+                    <CustumToolTip placement="top" background="#ff8237">
+                      <span>{AppConstants.paymentSeasonalFeeMsg}</span>
+                    </CustumToolTip>
+                  </div>
+                </div>
+                <Tree
+                  style={{ flexDirection: 'column' }}
+                  className="tree-government-rebate tree-selection-icon"
+                  checkable
+                  expandedKeys={['1', '5', '7', 'isSeasonalUponReg', '8']}
+                  //defaultCheckedKeys={[]}
+                  checkedKeys={selectedSeasonalFeeKey}
+                  onCheck={(e, info) => this.onChangeSeasonalFee(e)}
+                  disabled={paymentsDisable}
+                >
+                  {this.seasonalDataTree(seasonalPayment, selectedSeasonalInstalmentDates, selectedSeasonalFeeKey, "isSeasonalUponReg", isSeasonalUponReg)}
+                </Tree>
               </div>
-            </div>
-            <Tree
-              style={{ flexDirection: 'column' }}
-              className="tree-government-rebate tree-selection-icon"
-              checkable
-              expandedKeys={['1', '5', '7', 'isSeasonalUponReg', '8']}
-              //defaultCheckedKeys={[]}
-              checkedKeys={selectedSeasonalFeeKey}
-              onCheck={(e, info) => this.onChangeSeasonalFee(e)}
-              disabled={paymentsDisable}
-            >
-              {this.seasonalDataTree(seasonalPayment, selectedSeasonalInstalmentDates, selectedSeasonalFeeKey, "isSeasonalUponReg", isSeasonalUponReg)}
-            </Tree>
-          </div>
-        )}
-        {isCasual == true && (
-          <div className="inside-container-view">
-            <div className="contextualHelp-RowDirection">
-              <span className="form-heading">{AppConstants.singleGameFee}</span>
-              <div style={{ marginTop: 4 }}>
-                <CustumToolTip placement="top" background="#ff8237">
-                  <span>{AppConstants.paymentCausalFeeMsg}</span>
-                </CustumToolTip>
+            )}
+            {isCasual == true && (
+              <div className="inside-container-view">
+                <div className="contextualHelp-RowDirection">
+                  <span className="form-heading">{AppConstants.singleGameFee}</span>
+                  <div style={{ marginTop: 4 }}>
+                    <CustumToolTip placement="top" background="#ff8237">
+                      <span>{AppConstants.paymentCausalFeeMsg}</span>
+                    </CustumToolTip>
+                  </div>
+                </div>
+                <Tree
+                  style={{ flexDirection: 'column' }}
+                  className="tree-government-rebate tree-selection-icon"
+                  checkable
+                  //defaultExpandedKeys={[]}
+                  //defaultCheckedKeys={[]}
+                  expandedKeys={['1', '4', '8', '12']}
+                  checkedKeys={selectedCasualFeeKey}
+                  onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
+                  disabled={paymentsDisable}
+                >
+                  {this.casualDataTree(casualPayment)}
+                </Tree>
               </div>
-            </div>
-            <Tree
-              style={{ flexDirection: 'column' }}
-              className="tree-government-rebate tree-selection-icon"
-              checkable
-              //defaultExpandedKeys={[]}
-              //defaultCheckedKeys={[]}
-              expandedKeys={['1', '4', '8', '12']}
-              checkedKeys={selectedCasualFeeKey}
-              onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
-              disabled={paymentsDisable}
-            >
-              {this.casualDataTree(casualPayment)}
-            </Tree>
-          </div>
-        )}
-        {isTeamSeasonal == true && (
-          <div className="inside-container-view">
-            <div className="contextualHelp-RowDirection">
-              <span className="form-heading">{AppConstants.teamSeasonalFee}</span>
-              <div style={{ marginTop: 4 }}>
-                <CustumToolTip placement="top" background="#ff8237">
-                  <span>{AppConstants.paymentSeasonalFeeMsg}</span>
-                </CustumToolTip>
+            )}
+            {isTeamSeasonal == true && (
+              <div className="inside-container-view">
+                <div className="contextualHelp-RowDirection">
+                  <span className="form-heading">{AppConstants.teamSeasonalFee}</span>
+                  <div style={{ marginTop: 4 }}>
+                    <CustumToolTip placement="top" background="#ff8237">
+                      <span>{AppConstants.paymentSeasonalFeeMsg}</span>
+                    </CustumToolTip>
+                  </div>
+                </div>
+                <Tree
+                  style={{ flexDirection: 'column' }}
+                  className="tree-government-rebate tree-selection-icon"
+                  checkable
+                  expandedKeys={['1', '5', '7', '8']}
+                  //defaultCheckedKeys={[]}
+                  checkedKeys={selectedSeasonalTeamFeeKey}
+                  onCheck={(e) => this.onChangeSeasonalTeamFee(e)}
+                  disabled={paymentsDisable}
+                >
+                  {this.seasonalTeamDataTree(seasonalTeamPayment, selectedTeamSeasonalInstalmentDates, selectedSeasonalTeamFeeKey, "isTeamSeasonalUponReg", isTeamSeasonalUponReg, teamSeasonalSchoolRegCode)}
+                </Tree>
               </div>
-            </div>
-            <Tree
-              style={{ flexDirection: 'column' }}
-              className="tree-government-rebate tree-selection-icon"
-              checkable
-              expandedKeys={['1', '5', '7', '8']}
-              //defaultCheckedKeys={[]}
-              checkedKeys={selectedSeasonalTeamFeeKey}
-              onCheck={(e) => this.onChangeSeasonalTeamFee(e)}
-              disabled={paymentsDisable}
-            >
-              {this.seasonalTeamDataTree(seasonalTeamPayment, selectedTeamSeasonalInstalmentDates, selectedSeasonalTeamFeeKey, "isTeamSeasonalUponReg", isTeamSeasonalUponReg, teamSeasonalSchoolRegCode)}
-            </Tree>
+            )}
+            <div></div>
           </div>
-        )}
-        <div></div>
+        </div>       
       </div>
+      
     );
   };
 
@@ -6454,7 +6459,7 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                   </TabPane>
                   <TabPane tab={AppConstants.payments} key={'5'}>
-                    <div className="tab-formView">
+                    <div>
                       {this.paymentOptionsView(getFieldDecorator)}
                     </div>
                     {/* <div className="tab-formView">
