@@ -262,6 +262,7 @@ class DashboardLayout extends React.Component {
       organisationTypeRefId: -1,
       statusRefId: -1,
       paging: { limit: -1, offset: 0 },
+      stateOrganisations: false,
     });
     this.setState({ openImpersonationModal: true });
   };

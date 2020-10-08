@@ -136,6 +136,10 @@ const initialState = {
   coachActivityRoster: [],
   coachCurrentPage: null,
   coachTotalCount: null,
+  umpireActivityOnLoad: false,
+  umpireActivityList: [],
+  umpireActivityCurrentPage: 1,
+  umpireActivityTotalCount: 0,
   userTextualDasboardListAction: null,
   affiliateDirListAction: null,
   userAffiliateListAction: null,
@@ -798,6 +802,21 @@ function userReducer(state = initialState, action) {
         coachActivityRoster: action.result.activityRoster,
         coachCurrentPage: action.result.page.currentPage,
         coachTotalCount: action.result.page.totalCount,
+      };
+
+    ////Scorer
+    case ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_LOAD:
+      return { ...state, umpireActivityOnLoad: true };
+
+    case ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_SUCCESS:
+      console.log("action***", action.result)
+      let umpireActivityData = action.result
+      return {
+        ...state,
+        umpireActivityOnLoad: false,
+        umpireActivityList: isArrayNotEmpty(umpireActivityData.results) ? umpireActivityData.results : [],
+        umpireActivityCurrentPage: umpireActivityData.page.currentPage,
+        umpireActivityTotalCount: umpireActivityData.page.totalCount,
       };
 
     case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:

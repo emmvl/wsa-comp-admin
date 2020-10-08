@@ -28,7 +28,7 @@ import {
 } from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { getYearAndCompetitionAction } from '../../store/actions/appAction'
 import { getCommonRefData, addVenueAction, checkVenueDuplication } from '../../store/actions/commonAction/commonAction'
-import { getOrganisationAction } from '../../store/actions/userAction/userAction'
+import { getAffiliatesListingAction } from '../../store/actions/userAction/userAction'
 import history from '../../util/history'
 import ValidationConstants from "../../themes/validationConstant";
 import AppImages from '../../themes/appImages';
@@ -217,7 +217,15 @@ class CompetitionVenueAndTimesAdd extends Component {
         };
         this.myRef = React.createRef()
         this.props.getCommonRefData()
-        this.props.getOrganisationAction("organisationUniqueKey")
+        const organisationData = getOrganisationData();
+        this.props.getAffiliatesListingAction({
+            organisationId: organisationData.organisationUniqueKey,
+            affiliatedToOrgId: -1,
+            organisationTypeRefId: -1,
+            statusRefId: -1,
+            paging: { limit: -1, offset: 0 },
+            stateOrganisations: true,
+          });
 
     }
 
@@ -457,7 +465,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     contentView = (getFieldDecorator) => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
-        const { venueOrganisation } = this.props.userState
+        const { affiliateList } = this.props.userState
         return (
             <div className="content-view">
                 <span className="form-heading" >
@@ -612,7 +620,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                                     placeholder={'Select'}
                                     optionFilterProp="children"
                                 >
-                                    {venueOrganisation.length > 0 && venueOrganisation.map((item, index) => (
+                                    {affiliateList.length > 0 && affiliateList.map((item, index) => (
                                         < Option key={item.id} value={item.id}> {item.name}</Option>
                                     ))}
                                 </Select>
@@ -1019,7 +1027,7 @@ function mapDispatchToProps(dispatch) {
         getCommonRefData,
         addVenueAction,
         refreshVenueFieldsAction,
-        getOrganisationAction,
+        getAffiliatesListingAction,
         removeObjectAction,
         clearVenueDataAction,
         checkVenueDuplication,
