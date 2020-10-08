@@ -1632,7 +1632,8 @@ const AppConstants = {
   suspended: "Suspended",
   reasonWhyYourAreDeclineFromTransfer: "Reason why you are declining the request to transfer from your organisation",
   reasonWhyYourAreDeclineToTransfer: "Reason why you are declining the request to transfer to you organisation",
-  playerImport: "Player Import"
+  playerImport: "Player Import",
+  setMembershipProducts: "Set Membership Product(s)"
 };
 
 export default AppConstants;
