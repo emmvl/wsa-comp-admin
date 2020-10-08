@@ -58,7 +58,11 @@ class CompetitionReplicate extends Component {
                 }else{
                     await setOwn_competition(this.props.competitionDashboardState.competitionId);
                     await setOwnCompetitionYear(this.props.competitionDashboardState.yearRefId)
-                    history.push({pathname: "/competitionOpenRegForm",state: {fromReplicate: 1}})
+                    if(this.state.hasRegistration != 1){
+                        history.push({pathname: "/competitionOpenRegForm",state: {fromReplicate: 1}})
+                    }else{
+                        history.push("/registrationCompetitionFee", { id: this.props.competitionDashboardState.competitionId })
+                    }
                 } 
                 this.setState({buttonSave: null});
             }
