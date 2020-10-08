@@ -75,8 +75,10 @@ class DashboardLayout extends React.Component {
             )
             : null;
           await setImpersonationAffiliate(impersonationAffiliate);
-
           window.location.reload();
+          if (this.props.userState.impersonation && !this.state.impersonationLoad && this.state.impersonationAffiliateOrgId) {
+            history.push("/")
+          }
         }
       }
 

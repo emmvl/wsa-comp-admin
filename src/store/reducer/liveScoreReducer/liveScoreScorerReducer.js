@@ -62,6 +62,26 @@ function getTeamObj(teamSelectId, teamArr) {
     return teamObj;
 }
 
+
+function getNameWithNumber(name, number) {
+    let numberLength = new Array(number.length - 4).join('x') +
+        number.substr(number.length - 5, 4);
+    let newName = name + "-" + numberLength
+    return newName
+}
+
+function updateScorerData(result) {
+    if (result.length > 0) {
+        for (let i in result) {
+            let number = JSON.stringify(result[i].mobileNumber)
+            let name = result[i].firstName + result[i].lastName
+            let NameWithNumber = getNameWithNumber(name, number)
+            result[i].NameWithNumber = NameWithNumber
+        }
+    }
+    return result
+}
+
 function liveScoreScorerState(state = initialState, action) {
 
     switch (action.type) {
@@ -69,8 +89,7 @@ function liveScoreScorerState(state = initialState, action) {
             return { ...state, onLoad: true, scorerActionObject: action };
 
         case ApiConstants.API_LIVE_SCORE_SCORER_LIST_SUCCESS:
-            let scorerList = action.result.users ? action.result.users : action.result
-
+            let scorerList = action.result.users ? updateScorerData(action.result.users) : updateScorerData(action.result)
             // let teamData = getTeamData(scorerList.users)
             return {
                 ...state,
@@ -155,7 +174,6 @@ function liveScoreScorerState(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVESCORE_ASSIGN_MATCHES_SUCCESS:
-
             return {
                 ...state,
                 onLoad: false,
@@ -171,10 +189,8 @@ function liveScoreScorerState(state = initialState, action) {
             }
 
         case ApiConstants.API_LIVESCORE_ASSIGN_CHANGE_STATUS_SUCCESS:
-
             let index = action.index
             state.assignMatches[index][action.scorerKey] = action.result
-
             return {
                 ...state,
                 onLoad: false,
@@ -190,7 +206,6 @@ function liveScoreScorerState(state = initialState, action) {
 
             let indexValue = action.index
             state.assignMatches[indexValue][action.scorerKey] = null
-
             return {
                 ...state,
                 onLoad: false,
@@ -206,7 +221,7 @@ function liveScoreScorerState(state = initialState, action) {
                 onLoadSearch: true
             }
         case ApiConstants.API_LIVESCORE_SCORER_SEARCH_SUCCESS:
-            let searchdata = action.result
+            let searchdata = action.result ? updateScorerData(action.result) : []
             return {
                 ...state,
                 onLoadSearch: false,

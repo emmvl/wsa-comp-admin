@@ -256,7 +256,7 @@ class VenuesList extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
+            <div className="comp-player-grades-header-view-design" style={{ marginBottom: '12px' }} >
                 <div className="row" >
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
