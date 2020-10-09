@@ -74,7 +74,8 @@ function getSelectedTeam(managerSelectedId, managerArr) {
 }
 
 function getNameWithNumber(name, number) {
-    let numberLength = new Array(number.length - 4).join('x') +
+
+    let numberLength = number.length < 10 ? new Array(10 - 4).join('x') + number.substr(number - 5, 4) : new Array(number.length - 4).join('x') +
         number.substr(number.length - 5, 4);
     let newName = name + "-" + numberLength
     return newName
@@ -84,7 +85,7 @@ function updateManagersData(result) {
     if (result.length > 0) {
         for (let i in result) {
             let number = JSON.stringify(result[i].mobileNumber)
-            let name = result[i].firstName + result[i].lastName
+            let name = result[i].firstName + " " + result[i].lastName
             let NameWithNumber = getNameWithNumber(name, number)
             result[i].NameWithNumber = NameWithNumber
         }

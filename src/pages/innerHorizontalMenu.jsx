@@ -169,8 +169,6 @@ class InnerHorizontalMenu extends React.Component {
         let compList = isArrayNotEmpty(competitionList) ? competitionList : [];
         let { liveScoreCompIsParent } = this.state;
         const { yearList } = this.props.appState;
-        console.log(compList, 'compList')
-
         return (
             <div>
                 {menu === "competition" && (

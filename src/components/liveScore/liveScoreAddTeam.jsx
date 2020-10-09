@@ -77,7 +77,6 @@ class LiveScoreAddTeam extends Component {
 
         if (getLiveScoreCompetiton()) {
             if (this.state.isEdit == true) {
-
                 this.props.liveScoreGetTeamDataAction(this.state.teamId)
                 this.setState({ load: true })
             }
@@ -95,11 +94,9 @@ class LiveScoreAddTeam extends Component {
     }
     componentDidUpdate(nextProps) {
         let { teamManagerData } = this.props.liveScoreTeamState
-
-
         if (this.state.isEdit == true) {
             if (nextProps.liveScoreTeamState !== this.props.liveScoreTeamState) {
-                if (this.props.liveScoreTeamState.onLoad == false && this.state.load == true) {
+                if (this.props.liveScoreTeamState.teamLoad == false && this.state.load == true) {
                     this.setInitalFiledValue(teamManagerData)
                     this.setState({ load: false })
                 }
@@ -110,7 +107,6 @@ class LiveScoreAddTeam extends Component {
 
     ////set initial value for all validated fields
     setInitalFiledValue(data) {
-
         const { selectedManager } = this.props.liveScoreTeamState
         this.props.form.setFieldsValue({
             'teamName': data ? data.name : null,
@@ -183,7 +179,6 @@ class LiveScoreAddTeam extends Component {
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { teamManagerData, affilateList, divisionList, managerType, logoUrl } = this.props.liveScoreTeamState
-        console.log(teamManagerData, 'teamManagerData')
         // let name = teamManagerData.name
         let alias = teamManagerData ? teamManagerData.alias : null
         return (
@@ -236,7 +231,7 @@ if(x[0].charCodeAt()>=97)
                 <span className="form-err">{this.state.teanmNameError}</span>
 
                 <InputWithHead heading={AppConstants.teamLogo}
-                 required={"pt-3"} />
+                    required={"pt-3"} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">

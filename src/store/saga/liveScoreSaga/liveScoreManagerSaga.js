@@ -20,6 +20,7 @@ function* failSaga(result) {
 }
 
 function* errorSaga(error) {
+  console.log(error)
   yield put({
     type: ApiConstants.API_LIVE_SCORE_MANAGER_ERROR,
     error: error,
