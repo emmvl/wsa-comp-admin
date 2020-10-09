@@ -272,6 +272,11 @@ let AxiosApi = {
     var url = `/api/competitionfee/competitiondiscounttype/default`;
     return Method.dataGet(url, token);
   },
+  //Payment Methods
+  getPaymentMethods() {
+    var url = "/common/reference/PaymentMethod";
+    return Method.dataGet(url, token)
+  },
 
 
 };

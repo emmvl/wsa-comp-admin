@@ -323,8 +323,7 @@ let AxiosApi = {
     async postCompetitionPayment(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
-        var url = `/api/competitionfee/paymentoption?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}
-                    &affiliateOrgId=${affiliateOrgId}`
+        var url = `/api/competitionfee/paymentoption?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&affiliateOrgId=${affiliateOrgId}`
         return Method.dataPost(url, token, payload)
     },
 

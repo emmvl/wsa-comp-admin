@@ -137,11 +137,13 @@ function updatePaymentOption(value, index, key) {
 
 
 // update casual seasonal fee 
-function updatePaymentFeeOption(value, key) {
+function updatePaymentFeeOption(value, key, index, subKey) {
     const action = {
         type: ApiConstants.UPDATE_PAYMENTS_OPTIONS_COMPETITION_FEES,
         value: value,
-        key: key
+        key: key,
+        index: index,
+        subKey: subKey
     }
     return action;
 
@@ -154,11 +156,12 @@ function paymentFeeDeafault() {
     return action
 }
 
-function instalmentDateAction(value, key) {
+function instalmentDateAction(value, key, subKey) {
     const action = {
         type: ApiConstants.UPDATE_INSTALMENT_DATE,
         value: value,
-        key: key
+        key: key,
+        subKey: subKey
     }
     return action
 }
@@ -324,6 +327,13 @@ function removeCompetitionDivisionAction(payload) {
     };
     return action;
 }
+
+function paymentMethodsDefaultAction() {
+    const action = {
+        type: ApiConstants.API_GET_PAYMENT_METHOD_REF_LOAD,
+    }
+    return action
+}
 export {
     regCompetitionListAction,
     regCompetitionListDeleteAction,
@@ -355,5 +365,6 @@ export {
     getDefaultCompFeesLogoAction,
     onInviteesSearchAction,
     removeCompetitionDivisionAction,
-    instalmentDateAction
+    instalmentDateAction,
+    paymentMethodsDefaultAction
 };

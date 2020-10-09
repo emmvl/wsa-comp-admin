@@ -59,7 +59,8 @@ import {
   defaultCharity_voucherSaga,
   getDefaultCompFeesLogoSaga,
   inviteeSearchSaga,
-  deleteCompetitionDivisionSaga
+  deleteCompetitionDivisionSaga,
+  getPaymentMethodsDefaultSaga
 } from './registrationSaga/competitionFeeSaga';
 
 
@@ -560,4 +561,7 @@ export default function* rootSaga() {
 
   //replicate save service
   yield takeEvery(ApiConstants.API_REPLICATE_SAVE_LOAD, saveReplicateSaga);
+
+  //// Payment Methods
+  yield takeEvery(ApiConstants.API_GET_PAYMENT_METHOD_REF_LOAD, getPaymentMethodsDefaultSaga)
 }
