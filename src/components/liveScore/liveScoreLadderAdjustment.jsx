@@ -1,14 +1,18 @@
 import React, { Component } from "react"
 import { Layout, Button, Select, Breadcrumb, Form, Modal, Radio } from 'antd';
 import './liveScore.css';
-import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import InputWithHead from "../../customComponents/InputWithHead";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { updateLadderSetting, ladderAdjustmentPostData, ladderAdjustmentGetData, resetLadderAction } from '../../store/actions/LiveScoreAction/liveScoreLadderAction'
+import {
+    updateLadderSetting,
+    ladderAdjustmentPostData,
+    ladderAdjustmentGetData,
+    resetLadderAction
+} from '../../store/actions/LiveScoreAction/liveScoreLadderAction'
 import { isArrayNotEmpty } from "../../util/helpers";
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
@@ -33,6 +37,7 @@ class LiveScoreLadderAdjustment extends Component {
             resetOptionId: 1,
             resetLoad: false
         }
+        this.formRef = React.createRef();
     }
 
     componentDidMount() {
@@ -57,16 +62,17 @@ class LiveScoreLadderAdjustment extends Component {
                 this.props.getliveScoreTeams(id, this.state.divisionId)
 
                 if (this.props.location.state.divisionId) {
-                    this.props.ladderAdjustmentGetData({ uniqueKey: uniqueKey, divisionId: this.props.location.state.divisionId })
+                    this.props.ladderAdjustmentGetData({
+                        uniqueKey: uniqueKey,
+                        divisionId: this.props.location.state.divisionId
+                    })
                 }
                 // this.setInitalFiledValue()
                 this.setState({ loadding: false, getLoad: true })
             }
         }
 
-
         if (this.state.getLoad === true && this.props.liveScoreLadderState.onLoading === false) {
-            console.log("colled")
             this.setInitalFiledValue()
             this.setState({ getLoad: false })
         }
@@ -84,7 +90,7 @@ class LiveScoreLadderAdjustment extends Component {
             let teamId = `teamId${index}`
             let points = `points${index}`
             let adjustmentReason = `adjustmentReason${index}`
-            this.props.form.setFieldsValue({
+            this.formRef.current.setFieldsValue({
                 [teamId]: item.teamId ? item.teamId : undefined,
                 [points]: item.points,
                 [adjustmentReason]: item.adjustmentReason,
@@ -94,7 +100,6 @@ class LiveScoreLadderAdjustment extends Component {
 
     ///////view for breadcrumb
     headerView = () => {
-
         return (
             <div className="header-view">
                 <Header
@@ -120,7 +125,6 @@ class LiveScoreLadderAdjustment extends Component {
         this.props.getliveScoreTeams(this.state.competitionId, divisionId)
         this.props.ladderAdjustmentGetData({ uniqueKey: this.state.compUniqueKey, divisionId: divisionId })
         this.setState({ divisionId, getLoad: true })
-
     }
 
     dropdownView = () => {
@@ -139,9 +143,9 @@ class LiveScoreLadderAdjustment extends Component {
                                     alignItems: "center",
                                 }}
                             >
-                                <span className="year-select-heading ">
+                                <span className="year-select-heading">
                                     {AppConstants.division}:
-                                   </span>
+                               </span>
 
                                 <Select
                                     className="year-select"
@@ -149,13 +153,10 @@ class LiveScoreLadderAdjustment extends Component {
                                     onChange={(divisionId) => this.changeDivision(divisionId)}
                                     value={this.state.divisionId}
                                 >
-                                    {
-                                        divisionListArr.map((item, index) => {
-                                            return <Option key={"division" + item.id} value={item.id}>{item.name}</Option>
-                                        })
-                                    }
+                                    {divisionListArr.map((item, index) => {
+                                        return <Option key={"division" + item.id} value={item.id}>{item.name}</Option>
+                                    })}
                                 </Select>
-
                             </div>
                         </div>
                     </div>
@@ -166,7 +167,6 @@ class LiveScoreLadderAdjustment extends Component {
 
     deleteItem(index) {
         this.props.updateLadderSetting({ index: index, key: 'removeItem' })
-
     }
 
     confirmationModal(key, compUniqueKey, resetOptionId) {
@@ -201,118 +201,120 @@ class LiveScoreLadderAdjustment extends Component {
             })
         }
     }
+
     onChangeSetValue = (targetValue) => {
         this.setState({
             resetOptionId: targetValue
         })
     }
-    ////////form content view
-    contentView = (getFieldDecorator) => {
 
+    ////////form content view
+    contentView = () => {
         const { ladderData, teamResult } = this.props.liveScoreLadderState
         let addNewLadder = isArrayNotEmpty(ladderData) ? ladderData : [];
         let teamList = isArrayNotEmpty(teamResult) ? teamResult : []
 
         return (
             <div className="content-view pt-4 pb-3">
-
                 {addNewLadder.map((ladder, index) => (
                     <div className="inside-container-view">
-
-                        <div className="transfer-image-view pt-0 pointer" style={{ marginLeft: 'auto' }} onClick={() => this.deleteItem(index)}>
-                            <span className="user-remove-btn" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
+                        <div
+                            className="transfer-image-view pt-0 pointer"
+                            style={{ marginLeft: 'auto' }}
+                            onClick={() => this.deleteItem(index)}
+                        >
+                            <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                             <span className="user-remove-text">
                                 {AppConstants.remove}
                             </span>
                         </div>
 
-                        <div className="row pt-3" >
+                        <div className="row pt-3">
                             <div className='col-sm-3 division-table-field-view'>
                                 <InputWithHead
                                     required={"required-field pb-0"}
                                     heading={AppConstants.teamName}
                                 />
                             </div>
-                            <div className="col-sm" >
-
-                                <Form.Item >
-                                    {getFieldDecorator(`teamId${index}`, {
-                                        rules: [{ required: true, message: ValidationConstants.teamName }],
-                                    })(
-
-                                        <Select
-
-                                            placeholder={AppConstants.selectTeam}
-                                            style={{ width: "100%" }}
-                                            onChange={(teamId) => this.props.updateLadderSetting({ data: teamId, index: index, key: 'teamId' })}
-                                            // value={ladderData[index] ? ladderData[index].teamId : undefined}
-                                            showSearch
-                                            optionFilterProp="children"
-
-                                        >
-                                            {teamList.map((item, index) => (
-                                                < Option key={'teamList' + index} value={item.id} > {item.name}</Option>
-                                            ))
-                                            }
-                                        </Select>
-
-                                    )}
+                            <div className="col-sm">
+                                <Form.Item name={`teamId${index}`} rules={[{ required: true, message: ValidationConstants.teamName }]}>
+                                    <Select
+                                        placeholder={AppConstants.selectTeam}
+                                        style={{ width: "100%" }}
+                                        onChange={(teamId) => this.props.updateLadderSetting({
+                                            data: teamId,
+                                            index: index,
+                                            key: 'teamId'
+                                        })}
+                                        // value={ladderData[index] ? ladderData[index].teamId : undefined}
+                                        showSearch
+                                        optionFilterProp="children"
+                                    >
+                                        {teamList.map((item, index) => (
+                                            <Option key={'teamList' + index} value={item.id}> {item.name}</Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
-
                             </div>
                         </div>
 
-                        <div className="row pt-3" >
+                        <div className="row pt-3">
                             <div className='col-sm-3 division-table-field-view'>
                                 <InputWithHead required={"required-field pb-0"} heading={AppConstants.points} />
                             </div>
-                            <div className="col-sm" >
-                                <Form.Item >
-                                    {getFieldDecorator(`points${index}`, {
-                                        rules: [{ required: true, message: ValidationConstants.point }],
-                                    })(
-                                        <InputWithHead
-                                            auto_complete='off'
-                                            placeholder={AppConstants.points}
-                                            onChange={(e) => this.props.updateLadderSetting({ data: e.target.value, index: index, key: 'points' })}
+                            <div className="col-sm">
+                                <Form.Item name={`points${index}`} rules={[{ required: true, message: ValidationConstants.point }]}>
+                                    <InputWithHead
+                                        auto_complete='off'
+                                        placeholder={AppConstants.points}
+                                        onChange={(e) => this.props.updateLadderSetting({
+                                            data: e.target.value,
+                                            index: index,
+                                            key: 'points'
+                                        })}
                                         // value={ladderData[index] && ladderData[index].points}
-                                        />
-
-                                    )}
+                                    />
                                 </Form.Item>
                             </div>
                         </div>
 
-                        <div className="row pt-3" >
+                        <div className="row pt-3">
                             <div className='col-sm-3 division-table-field-view'>
                                 <InputWithHead required={"required-field pb-0"} heading={AppConstants.reasonForChange} />
                             </div>
-                            <div className="col-sm" >
-                                <Form.Item >
-                                    {getFieldDecorator(`adjustmentReason${index}`, {
-                                        rules: [{ required: true, message: ValidationConstants.reasonChange }],
-                                    })(
-                                        <InputWithHead
-                                            auto_complete='off'
-                                            placeholder={AppConstants.reasonForChange}
-                                            onChange={(e) => this.props.updateLadderSetting({ data: e.target.value, index: index, key: 'adjustmentReason' })}
+                            <div className="col-sm">
+                                <Form.Item name={`adjustmentReason${index}`} rules={[{ required: true, message: ValidationConstants.reasonChange }]}>
+                                    <InputWithHead
+                                        auto_complete='off'
+                                        placeholder={AppConstants.reasonForChange}
+                                        onChange={(e) => this.props.updateLadderSetting({
+                                            data: e.target.value,
+                                            index: index,
+                                            key: 'adjustmentReason'
+                                        })}
                                         // value={ladderData[index] && ladderData[index].reasonforChange}
-                                        />
-
-                                    )}
+                                    />
                                 </Form.Item>
                             </div>
                         </div>
                     </div>
                 ))}
 
-
-
                 <div>
-                    <span onClick={() => this.props.updateLadderSetting({ data: null, key: 'addLadderAdjustment' })} className='input-heading-add-another pointer'>+ {AppConstants.addNewAdjustment}</span>
+                    <span
+                        onClick={() => this.props.updateLadderSetting({ data: null, key: 'addLadderAdjustment' })}
+                        className='input-heading-add-another pointer'
+                    >
+                        + {AppConstants.addNewAdjustment}
+                    </span>
                 </div>
                 <div style={{ paddingBottom: 24 }}>
-                    <span onClick={() => this.confirmationModal("show", null)} className='input-heading-add-another pointer reset-ladder-font'>{AppConstants.resetLadder}</span>
+                    <span
+                        onClick={() => this.confirmationModal("show", null)}
+                        className='input-heading-add-another pointer reset-ladder-font'
+                    >
+                        {AppConstants.resetLadder}
+                    </span>
                 </div>
 
                 <Modal
@@ -338,8 +340,6 @@ class LiveScoreLadderAdjustment extends Component {
 
     //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
-
-
         return (
             <div className="fluid-width">
                 {!this.state.membershipIsUsed &&
@@ -348,13 +348,12 @@ class LiveScoreLadderAdjustment extends Component {
                             {/* <div className="col-sm">
                                 <div className="reg-add-save-button">
                                     <Button type="cancel-button">{AppConstants.cancel}</Button>
-
                                 </div>
                             </div> */}
                             <div className="col-sm">
                                 <div className="comp-buttons-view">
                                     <Button
-                                        className="publish-button save-draft-text" type="primary" htmlType="submit" >
+                                        className="publish-button save-draft-text" type="primary" htmlType="submit">
                                         {AppConstants.save}
                                     </Button>
                                 </div>
@@ -367,29 +366,17 @@ class LiveScoreLadderAdjustment extends Component {
     };
 
     ////Api call after on save click
-    onSaveClick = (e) => {
+    onSaveClick = (values) => {
         const { ladderData } = this.props.liveScoreLadderState
-        console.log(ladderData, 'ladderData')
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-
-                let body = {
-                    "competitionUniqueKey": this.state.compUniqueKey,
-                    "divisionId": this.state.divisionId,
-                    "adjustments": ladderData
-                }
-
-                this.props.ladderAdjustmentPostData({ body: body })
-
-            }
-        });
+        let body = {
+            "competitionUniqueKey": this.state.compUniqueKey,
+            "divisionId": this.state.divisionId,
+            "adjustments": ladderData
+        }
+        this.props.ladderAdjustmentPostData({ body: body })
     }
 
-
     render = () => {
-        const { getFieldDecorator } = this.props.form;
-
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
@@ -399,8 +386,8 @@ class LiveScoreLadderAdjustment extends Component {
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
-                    <Form autoComplete='off' onSubmit={this.onSaveClick} className="login-form">
-                        <div className="formView">{this.contentView(getFieldDecorator)}</div>
+                    <Form ref={this.formRef} autoComplete='off' onFinish={this.onSaveClick} className="login-form">
+                        <div className="formView">{this.contentView()}</div>
                         <Footer>
                             {this.footerView()}
                         </Footer>
@@ -422,9 +409,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         liveScoreLadderState: state.LiveScoreLadderState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreLadderAdjustment));
+
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreLadderAdjustment);

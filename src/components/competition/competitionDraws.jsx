@@ -76,6 +76,7 @@ const { Option } = Select;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
 const { RangePicker } = DatePicker;
+
 class CompetitionDraws extends Component {
   constructor(props) {
     super(props);
@@ -210,13 +211,12 @@ class CompetitionDraws extends Component {
               this.state.yearRefId,
               this.state.firstTimeCompId,
               venueId,
-              0, null, this.state.startDate, this.state.endDate, this.state.dateRangeCheck
+              0, null, this.state.startDate, this.state.endDate ,this.state.dateRangeCheck
             );
           }
         }
         if (divisionGradeNameList.length > 0) {
-          let competitionDivisionGradeId =
-            divisionGradeNameList[0].competitionDivisionGradeId;
+          let competitionDivisionGradeId = divisionGradeNameList[0].competitionDivisionGradeId;
           setDraws_division_grade(competitionDivisionGradeId);
           this.setState({ competitionDivisionGradeId });
         }
@@ -782,7 +782,8 @@ class CompetitionDraws extends Component {
                 className="year-select-heading"
                 disabled={this.state.firstTimeCompId == -1}
                 onChange={(e) => this.onDateRangeCheck(e.target.checked)}
-                checked={this.state.dateRangeCheck} >
+                checked={this.state.dateRangeCheck}
+              >
                 {"Date Range"}
               </Checkbox>
             </div>
@@ -1199,7 +1200,7 @@ class CompetitionDraws extends Component {
                             //  defaultValue={new}
                             onChange={(startDate) => this.onChangeStartDate(moment(startDate).format("YYYY-MM-DD"))}
                             value={moment(this.state.startDate)}
-                          // disabledDate={d => !d || d.isAfter(this.state.endDate)}
+                            // disabledDate={d => !d || d.isAfter(this.state.endDate)}
                           />
                         </div>
                       </div> */}
@@ -1357,7 +1358,7 @@ class CompetitionDraws extends Component {
                                 </div>
                               }
                             </div>
-                            :
+                          :
                             <div>
                               {this.state.firstTimeCompId == -1 &&
                                 <div class="comp-warning-info" style={{ paddingBottom: "40px" }}>{AppConstants.noFixturesMessage}</div>
@@ -1371,7 +1372,7 @@ class CompetitionDraws extends Component {
               </div>
             )}
         </div>
-      </div >
+      </div>
     );
   };
 
@@ -1424,7 +1425,7 @@ class CompetitionDraws extends Component {
           <div className="table-head-wrap">
             {/* Day name list */}
             <div className="tablehead-row">
-              <div className="sr-no empty-bx"></div>
+              <div className="sr-no empty-bx" />
 
               {dateItem.dateNewArray.length > 0 &&
                 dateItem.dateNewArray.map((item, index) => {
@@ -1443,7 +1444,7 @@ class CompetitionDraws extends Component {
             </div>
             {/* Times list */}
             <div className="tablehead-row">
-              <div className="sr-no empty-bx"></div>
+              <div className="sr-no empty-bx" />
 
               {dateItem.dateNewArray.length > 0 &&
                 dateItem.dateNewArray.map((item, index) => {
@@ -1454,7 +1455,8 @@ class CompetitionDraws extends Component {
                     dayMargin = 70;
                   }
                   return (
-                    <span key={"time" + index}
+                    <span
+                      key={"time" + index}
                       style={{
                         left: dayMargin,
                         fontSize: item.notInDraw !== false && 11,
@@ -1480,9 +1482,7 @@ class CompetitionDraws extends Component {
                 <div className="sr-no" style={{ height: 62 }}>
                   <div className="venueCourt-tex-div">
                     <span className="venueCourt-text">
-                      {courtData.venueShortName +
-                        '-' +
-                        courtData.venueCourtNumber}
+                      {courtData.venueShortName + '-' + courtData.venueCourtNumber}
                     </span>
                   </div>
                 </div>
@@ -1498,12 +1498,11 @@ class CompetitionDraws extends Component {
                       <span
                         style={{ left: leftMargin, top: topMargin }}
                         className={'border'}
-                      ></span>
+                      />
                       <div
                         className={'box purple-bg'}
                         style={{
-                          backgroundColor:
-                            this.checkColor(slotObject),
+                          backgroundColor: this.checkColor(slotObject),
                           left: leftMargin,
                           top: topMargin,
                           overflow: 'hidden',
@@ -1539,8 +1538,8 @@ class CompetitionDraws extends Component {
                               {slotObject.awayTeamName}
                             </span>
                           ) : (
-                              <span>Free</span>
-                            )}
+                            <span>Free</span>
+                          )}
                         </Swappable> :
                           <Swappable
                             id={
@@ -1570,8 +1569,8 @@ class CompetitionDraws extends Component {
                                 {slotObject.awayTeamName}
                               </span>
                             ) : (
-                                <span>Free</span>
-                              )}
+                              <span>Free</span>
+                            )}
                           </Swappable>}
                       </div>
                       {
@@ -1586,7 +1585,6 @@ class CompetitionDraws extends Component {
                             }}
                           >
                             <Menu
-
                               className="action-triple-dot-draws"
                               theme="light"
                               mode="horizontal"
@@ -1622,16 +1620,16 @@ class CompetitionDraws extends Component {
                                       />
                                     </div>
                                   ) : (
-                                      <div>
-                                        <img
-                                          className="dot-image"
-                                          src={AppImages.moreTripleDot}
-                                          alt=""
-                                          width="16"
-                                          height="10"
-                                        />
-                                      </div>
-                                    )
+                                    <div>
+                                      <img
+                                        className="dot-image"
+                                        src={AppImages.moreTripleDot}
+                                        alt=""
+                                        width="16"
+                                        height="10"
+                                      />
+                                    </div>
+                                  )
                                 }
                               >
                                 {slotObject.isLocked == 1 && (
@@ -1642,7 +1640,6 @@ class CompetitionDraws extends Component {
                                         slotObject.drawsId,
                                         "1",
                                         courtData.venueCourtId
-
                                       ) :
                                       this.unlockDraws(
                                         slotObject.drawsId,
@@ -1701,7 +1698,7 @@ class CompetitionDraws extends Component {
       <div className="fluid-width paddingBottom56px">
         <div className="row">
           <div className="col-sm-3">
-            <div className="reg-add-save-button"></div>
+            <div className="reg-add-save-button" />
           </div>
           <div className="col-sm">
             <div className="comp-buttons-view">
@@ -1773,24 +1770,23 @@ class CompetitionDraws extends Component {
           modalIsShowPart={this.state.publishPartModel.isShowPart}
           modalIsShowDivision={this.state.publishPartModel.publishPart.isShowDivision}
           modalIsShowRound={this.state.publishPartModel.publishPart.isShowRound}
-        ></DrawsPublishModel>
+        />
 
         <Modal
           className="add-membership-type-modal"
           title={AppConstants.regenerateDrawTitle}
           visible={this.state.drawGenerateModalVisible}
           onOk={() => this.handleGenerateDrawModal("ok")}
-          onCancel={() => this.handleGenerateDrawModal("cancel")}>
+          onCancel={() => this.handleGenerateDrawModal("cancel")}
+        >
           <Select
             className="year-select reg-filter-select-competition ml-2"
             onChange={(e) => this.setState({ generateRoundId: e })}
-            placeholder={'Round'}>
+            placeholder={'Round'}
+          >
             {(activeDrawsRoundsData || []).map((d, dIndex) => (
-              <Option key={d.roundId}
-                value={d.roundId} >{d.name}</Option>
-            ))
-            }
-
+              <Option key={d.roundId} value={d.roundId}>{d.name}</Option>
+            ))}
           </Select>
         </Modal>
         <Modal
@@ -1798,7 +1794,8 @@ class CompetitionDraws extends Component {
           title="Team Names"
           visible={this.state.publishModalVisible}
           onOk={() => this.handlePublishModal("ok")}
-          onCancel={() => this.handlePublishModal("cancel")}>
+          onCancel={() => this.handlePublishModal("cancel")}
+        >
           <div>
             <div>{AppConstants.publishModalInfo}</div>
             <div>{teamNames}</div>
@@ -1832,6 +1829,7 @@ class CompetitionDraws extends Component {
     );
   }
 }
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
@@ -1855,14 +1853,15 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
   return {
     appState: state.AppState,
     drawsState: state.CompetitionDrawsState,
     competitionModuleState: state.CompetitionModuleState,
   };
 }
+
 export default connect(
-  mapStatetoProps,
+  mapStateToProps,
   mapDispatchToProps
-)(Form.create()(CompetitionDraws));
+)(CompetitionDraws);

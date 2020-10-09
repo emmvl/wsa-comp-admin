@@ -73,7 +73,7 @@ function tableSort(key) {
         divisionId: this_obj.state.division === "All" ? "" : this_obj.state.division,
         venueId: this_obj.state.venue === "All" ? "" : this_obj.state.venue,
         orgId: this_obj.state.orgId,
-        roundId: this_obj.state.round === "All" ? "" : Array.isArray(this_obj.state.round) ? this_obj.state.round : [this_obj.state.round],
+        roundId: this_obj.state.round === "All" ? "" : [this_obj.state.round],
         pageData: body,
         sortBy,
         sortOrder,
@@ -610,30 +610,13 @@ class UmpireDashboard extends Component {
             liveScoreUmpire: (props.location && props.location.state && props.location.state.liveScoreUmpire) ? props.location.state.liveScoreUmpire : null,
             round: "All",
             offsetData: 0,
-            sortBy: null,
-            sortOrder: null,
         };
 
         this_obj = this;
     }
 
-    async componentDidMount() {
+    componentDidMount() {
         const prevUrl = getPrevUrl();
-        const { umpireDashboardListActionObject } = this.props.umpireDashboardState
-        // let offsetData = this.state.offsetData
-        let sortBy = this.state.sortBy
-        let sortOrder = this.state.sortOrder
-        if (umpireDashboardListActionObject) {
-            let offsetData = umpireDashboardListActionObject.pageData.paging.offset
-            sortBy = umpireDashboardListActionObject.sortBy
-            sortOrder = umpireDashboardListActionObject.sortOrder
-            let division = umpireDashboardListActionObject.divisionId == "" ? "All" : umpireDashboardListActionObject.divisionId
-            let round = umpireDashboardListActionObject.roundId == "" ? "All" : umpireDashboardListActionObject.roundId
-            let venue = umpireDashboardListActionObject.venueId == "" ? "All" : umpireDashboardListActionObject.venueId
-            await this.setState({ division, round, venue, offsetData, sortBy, sortOrder });
-            // page = Math.floor(offset / 10) + 1;
-        }
-
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
             let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
             let orgId = getOrganisationData().organisationId;
@@ -716,23 +699,24 @@ class UmpireDashboard extends Component {
                 const body = {
                     paging: {
                         limit: 10,
-                        offset: this.state.offsetData,
+                        offset: 0,
                     },
                 };
+
                 this.setState({ divisionLoad: false });
+
                 this.props.getUmpireDashboardList({
                     compId: this.state.selectedComp,
                     divisionId: this.state.division === "All" ? "" : this.state.division,
                     venueId: this.state.venue === "All" ? "" : this.state.venue,
                     orgId: this.state.orgId,
-                    roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
+                    roundId: this.state.round === "All" ? "" : [this.state.round],
                     pageData: body,
                     sortBy,
                     sortOrder,
                 });
 
                 this.props.umpireRoundListAction(this.state.selectedComp, this.state.division === "All" ? "" : this.state.division);
-
             }
         }
     }
@@ -773,7 +757,7 @@ class UmpireDashboard extends Component {
             divisionId: this.state.division === "All" ? "" : this.state.division,
             venueId: this.state.venue === "All" ? "" : this.state.venue,
             orgId: this.state.orgId,
-            roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
+            roundId: this.state.round === "All" ? "" : [this.state.round],
             pageData: body,
             sortBy,
             sortOrder,
@@ -854,9 +838,6 @@ class UmpireDashboard extends Component {
             division: "All",
             competitionObj: compObj,
             round: "All",
-            sortBy: "",
-            sortOrder: "",
-            offsetData: 0
         });
     };
 
@@ -874,7 +855,7 @@ class UmpireDashboard extends Component {
             divisionId: this.state.division === "All" ? "" : this.state.division,
             venueId: venueId === "All" ? "" : venueId,
             orgId: this.state.orgId,
-            roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
+            roundId: this.state.round === "All" ? "" : [this.state.round],
             pageData: body,
             sortBy,
             sortOrder,
@@ -899,7 +880,7 @@ class UmpireDashboard extends Component {
                 divisionId: divisionId === "All" ? "" : divisionId,
                 venueId: this.state.venue === "All" ? "" : this.state.venue,
                 orgId: this.state.orgId,
-                roundId: this.state.round === "All" ? "" : Array.isArray(this.state.round) ? this.state.round : [this.state.round],
+                roundId: this.state.round === "All" ? "" : [this.state.round],
                 pageData: body,
                 sortBy,
                 sortOrder,
@@ -934,7 +915,7 @@ class UmpireDashboard extends Component {
             sortOrder,
         });
 
-        this.setState({ round: roundId === "All" ? "All" : allRoundIds });
+        this.setState({ round: roundId });
     };
 
     onExport = () => {
@@ -1070,7 +1051,7 @@ class UmpireDashboard extends Component {
                     <div className="row reg-filter-row">
                         <div className="reg-col">
                             <div className="reg-filter-col-cont">
-                                <div className="year-select-heading" style={{ width: "145px" }}>
+                                <div className="year-select-heading" style={{ width: "157px" }}>
                                     {AppConstants.competition} :
                                 </div>
 
@@ -1091,7 +1072,7 @@ class UmpireDashboard extends Component {
 
                         <div className="reg-col1 ml-5">
                             <div className="reg-filter-col-cont">
-                                <div className="year-select-heading" style={{ width: "133px" }}>{AppConstants.venue} :</div>
+                                <div className="year-select-heading" style={{ width: "147px" }}>{AppConstants.venue} :</div>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     onChange={this.onVenueChange}
@@ -1125,7 +1106,7 @@ class UmpireDashboard extends Component {
 
                         <div className="reg-col1 ml-5">
                             <div className="reg-filter-col-cont">
-                                <div className="year-select-heading" style={{ width: "128px" }}>{AppConstants.round} :</div>
+                                <div className="year-select-heading">{AppConstants.round} :</div>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     onChange={this.onRoundChange}

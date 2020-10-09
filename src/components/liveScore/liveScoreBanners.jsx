@@ -69,19 +69,15 @@ class LiveScoreBanners extends Component {
     };
 
     componentDidMount() {
-        if (getLiveScoreCompetiton()) {
-            this.setState({ timeout: 3000 })
-            setTimeout(() => {
-                this.setState({ timeout: null })
-            }, 3000);
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            if (id !== null) {
-                this.props.getliveScoreBanners(id)
-            } else {
-                history.push('/liveScoreCompetitions')
-            }
+        this.setState({ timeout: 3000 })
+        setTimeout(() => {
+            this.setState({ timeout: null })
+        }, 3000);
+        const { id } = JSON.parse(getLiveScoreCompetiton())
+        if (id !== null) {
+            this.props.getliveScoreBanners(id)
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/')
         }
     }
 

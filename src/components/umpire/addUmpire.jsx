@@ -53,7 +53,7 @@ class AddUmpire extends Component {
             existingUmpireCoach_CheckBox: false,
             existingUmpireCheckBox: false
         }
-
+        this.formRef = React.createRef();
     }
 
     componentDidMount() {
@@ -91,7 +91,7 @@ class AddUmpire extends Component {
             if (this.state.loader === true && this.props.umpireState.onLoad === false) {
                 this.filterUmpireList()
                 if (this.state.isEdit === true) {
-                    this.setInitalFiledValue()
+                    this.setInitialFieldValue()
                     this.setState({
                         existingUmpireCoach_CheckBox: this.props.umpireState.umpireCoachCheckBox,
                         isUmpireCoach: this.props.umpireState.umpireCoachCheckBox,
@@ -112,14 +112,15 @@ class AddUmpire extends Component {
         }
     }
 
-    setSelectedAffiliateValue(affiliateId) {
-        this.props.form.setFieldsValue({
+    setSelectedAffiliateValue = (affiliateId) => {
+        this.formRef.current.setFieldsValue({
             'umpireAffiliateName': affiliateId
         })
     }
-    setInitalFiledValue() {
-        const { umpireData, affiliateId, umpireCoachCheckBox } = this.props.umpireState
-        this.props.form.setFieldsValue({
+
+    setInitialFieldValue = () => {
+        const { umpireData, affiliateId } = this.props.umpireState
+        this.formRef.current.setFieldsValue({
             'First Name': umpireData.firstName,
             'Last Name': umpireData.lastName,
             'Email Address': umpireData.email,
@@ -129,7 +130,7 @@ class AddUmpire extends Component {
 
     }
 
-    filterUmpireList() {
+    filterUmpireList = () => {
         const { umpireListResult } = this.props.umpireState
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
         for (let i in umpireList) {
@@ -153,7 +154,7 @@ class AddUmpire extends Component {
             })
         }
         setTimeout(() => {
-            this.setInitalFiledValue()
+            this.setInitialFieldValue()
         }, 300);
 
     }
@@ -181,81 +182,86 @@ class AddUmpire extends Component {
         )
     }
 
-    ////form view
-
-    umpireExistingRadioButton(getFieldDecorator) {
-        const { umpireListResult, onLoadSearch, affilateList, onAffiliateLoad, umpireCoachCheckBox } = this.props.umpireState
+    umpireExistingRadioButton = () => {
+        const { umpireListResult, onLoadSearch, affilateList, onAffiliateLoad } = this.props.umpireState
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
         let affilateData = isArrayNotEmpty(affilateList) ? affilateList : []
-        console.log(umpireCoachCheckBox)
         return (
             <div className="content-view pt-4">
                 <div className="row" >
                     <div className="col-sm" >
-                        <Form.Item>
+                        <Form.Item name={AppConstants.team} rules={[{ required: true, message: ValidationConstants.umpireSearch }]}>
                             <InputWithHead
                                 required={"required-field pb-0 pt-0"}
-                                heading={AppConstants.umpireSearch} />
-                            {getFieldDecorator(AppConstants.team, {
-                                rules: [{ required: true, message: ValidationConstants.umpireSearch }],
-                            })(
-
-                                <AutoComplete
-                                    loading={true}
-                                    style={{ width: "100%", height: '56px' }}
-                                    placeholder="Select User"
-                                    onSelect={(item, option) => {
-                                        const umpireId = JSON.parse(option.key)
-                                        this.props.umpireClear()
-                                        this.props.updateAddUmpireData(umpireId, 'umnpireSearch')
-                                        this.setState({ affiliateLoader: true, isUserNotFound: false })
-                                    }}
-                                    notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
-
-                                    onSearch={(value) => {
-                                        this.setState({ isUserNotFound: false, exsitingValue: value })
-                                        value ?
-                                            this.props.umpireSearchAction({ refRoleId: refRoleTypes('member'), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value, offset: 0 })
-                                            :
-                                            this.props.umpireListAction({ refRoleId: JSON.stringify([refRoleTypes('member')]), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, offset: 0 })
-
-                                    }}
-                                >{umpireList.map((item, index) => {
-                                    return <Option key={item.id} value={item.firstName + " " + item.lastName}>
+                                heading={AppConstants.umpireSearch}
+                            />
+                            <AutoComplete
+                                loading={true}
+                                style={{ width: "100%", height: '56px' }}
+                                placeholder="Select User"
+                                onSelect={(item, option) => {
+                                    const umpireId = JSON.parse(option.key)
+                                    this.props.umpireClear()
+                                    this.props.updateAddUmpireData(umpireId, 'umnpireSearch')
+                                    this.setState({ affiliateLoader: true, isUserNotFound: false })
+                                }}
+                                notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
+                                onSearch={(value) => {
+                                    this.setState({ isUserNotFound: false, exsitingValue: value })
+                                    if (value) {
+                                        this.props.umpireSearchAction({
+                                            refRoleId: refRoleTypes('member'),
+                                            entityTypes: entityTypes('COMPETITION'),
+                                            compId: this.state.competition_id,
+                                            userName: value,
+                                            offset: 0
+                                        })
+                                    } else {
+                                        this.props.umpireListAction({
+                                            refRoleId: JSON.stringify([refRoleTypes('member')]),
+                                            entityTypes: entityTypes('COMPETITION'),
+                                            compId: this.state.competition_id,
+                                            offset: 0
+                                        })
+                                    }
+                                }}
+                            >
+                                {umpireList.map((item) => (
+                                    <Option key={item.id} value={item.firstName + " " + item.lastName}>
                                         {item.firstName + " " + item.lastName}
                                     </Option>
-                                })}
-                                </AutoComplete>
-                            )}
-
+                                ))}
+                            </AutoComplete>
                         </Form.Item>
-                        <span style={{ color: 'red' }} >{(this.state.exsitingValue.length > 0 && (this.state.isUserNotFound || umpireList.length === 0)) && ValidationConstants.userNotFound}</span>
+                        <span style={{ color: 'red' }}>
+                            {(this.state.exsitingValue.length > 0 && (this.state.isUserNotFound || umpireList.length === 0)) && ValidationConstants.userNotFound}
+                        </span>
                     </div>
                 </div>
-                <div className="row" >
-                    <div className="col-sm" >
-                        <Form.Item className="slct-in-add-manager-livescore">
+                <div className="row">
+                    <div className="col-sm">
+                        <Form.Item
+                            name="umpireAffiliateName"
+                            rules={[{ required: true, message: ValidationConstants.organisationField }]}
+                            className="slct-in-add-manager-livescore"
+                        >
                             <InputWithHead
                                 required={"required-field pb-1"}
-                                heading={AppConstants.organisation} />
-                            {getFieldDecorator("umpireAffiliateName", {
-                                rules: [{ required: true, message: ValidationConstants.organisationField }],
-                            })(
-                                <Select
-                                    mode="multiple"
-                                    showSearch
-                                    placeholder={AppConstants.selectOrganisation}
-                                    style={{ width: "100%", }}
-                                    onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
-                                    notFoundContent={onAffiliateLoad === true ? <Spin size="small" /> : null}
-                                    optionFilterProp="children"
-                                >
-                                    {affilateData.map((item, index) => (
-                                        < Option value={item.id} >{item.name}</Option>
-                                    ))
-                                    }
-                                </Select>
-                            )}
+                                heading={AppConstants.organisation}
+                            />
+                            <Select
+                                mode="multiple"
+                                showSearch
+                                placeholder={AppConstants.selectOrganisation}
+                                style={{ width: "100%", }}
+                                onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
+                                notFoundContent={onAffiliateLoad === true ? <Spin size="small" /> : null}
+                                optionFilterProp="children"
+                            >
+                                {affilateData.map((item) => (
+                                    <Option value={item.id} key={item.id}>{item.name}</Option>
+                                ))}
+                            </Select>
                         </Form.Item>
                     </div>
                 </div>
@@ -278,131 +284,115 @@ class AddUmpire extends Component {
         )
     }
 
-    umpireNewRadioBtnView(getFieldDecorator) {
-        const { affilateList, umpireData } = this.props.umpireState
-        let affiliateListResult = isArrayNotEmpty(affilateList) ? affilateList : []
-        let hasError = this.state.hasError == true ? true : false
+    umpireNewRadioBtnView = () => {
+        const { affilateList } = this.props.umpireState
+        const { hasError } = this.state
+        const affiliateListResult = isArrayNotEmpty(affilateList) ? affilateList : []
         return (
             <div className="content-view pt-4">
-                <div className="row" >
-                    <div className="col-sm" >
-                        <Form.Item>
-                            {getFieldDecorator(AppConstants.firstName, {
-                                rules: [{ required: true, message: ValidationConstants.nameField[0] }],
-                            })(
-                                <InputWithHead
-                                    auto_complete='new-firstName'
-                                    required={"required-field pb-0 pt-0"}
-                                    heading={AppConstants.firstName}
-                                    placeholder={AppConstants.firstName}
-                                    onChange={(firstName) => this.props.updateAddUmpireData(captializedString(firstName.target.value), 'firstName')}
-                                    onBlur={(i) => this.props.form.setFieldsValue({
-                                        'First Name': captializedString(i.target.value)
-                                    })}
-                                />
-                            )}
-
+                <div className="row">
+                    <div className="col-sm">
+                        <Form.Item name={AppConstants.firstName} rules={[{ required: true, message: ValidationConstants.nameField[0] }]}>
+                            <InputWithHead
+                                auto_complete='new-firstName'
+                                required={"required-field pb-0 pt-0"}
+                                heading={AppConstants.firstName}
+                                placeholder={AppConstants.firstName}
+                                onChange={(firstName) => this.props.updateAddUmpireData(captializedString(firstName.target.value), 'firstName')}
+                                onBlur={(i) => this.formRef.current.setFieldsValue({
+                                    'First Name': captializedString(i.target.value)
+                                })}
+                            />
                         </Form.Item>
                     </div>
-                    <div className="col-sm" >
-                        <Form.Item>
-                            {getFieldDecorator(AppConstants.lastName, {
-                                rules: [{ required: true, message: ValidationConstants.nameField[1] }],
-                            })(
-                                <InputWithHead
-                                    auto_complete='off'
-                                    required={"required-field pb-0 pt-0"}
-                                    heading={AppConstants.lastName}
-                                    placeholder={AppConstants.lastName}
-                                    onChange={(lastName) => this.props.updateAddUmpireData(captializedString(lastName.target.value), 'lastName')}
-                                    onBlur={(i) => this.props.form.setFieldsValue({
-                                        'Last Name': captializedString(i.target.value)
-                                    })}
-                                />
-                            )}
+                    <div className="col-sm">
+                        <Form.Item name={AppConstants.lastName} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
+                            <InputWithHead
+                                auto_complete='off'
+                                required={"required-field pb-0 pt-0"}
+                                heading={AppConstants.lastName}
+                                placeholder={AppConstants.lastName}
+                                onChange={(lastName) => this.props.updateAddUmpireData(captializedString(lastName.target.value), 'lastName')}
+                                onBlur={(i) => this.formRef.current.setFieldsValue({
+                                    'Last Name': captializedString(i.target.value)
+                                })}
+                            />
                         </Form.Item>
                     </div>
                 </div>
 
-                <div className="row" >
-                    <div className="col-sm" >
-                        <Form.Item>
-                            {getFieldDecorator(AppConstants.emailAdd, {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: ValidationConstants.emailField[0]
-                                    },
-                                    {
-                                        type: "email",
-                                        pattern: new RegExp(AppConstants.emailExp),
-                                        message: ValidationConstants.email_validation
-                                    }
-                                ]
-                            })(
-                                <InputWithHead
-                                    auto_complete='new-email'
-                                    required={"required-field pb-0 pt-0"}
-                                    heading={AppConstants.emailAdd}
-                                    placeholder={AppConstants.enterEmail}
-                                    onChange={(email) => this.props.updateAddUmpireData(email.target.value, 'email')}
-                                    // value={umpireData.email}
-                                    disabled={this.state.isEdit === true && true}
-                                />
-                            )}
-                        </Form.Item>
-
-                    </div>
-                    <div className="col-sm" >
+                <div className="row">
+                    <div className="col-sm">
                         <Form.Item
+                            name={AppConstants.emailAdd}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: ValidationConstants.emailField[0]
+                                },
+                                {
+                                    type: "email",
+                                    pattern: new RegExp(AppConstants.emailExp),
+                                    message: ValidationConstants.email_validation
+                                }
+                            ]}
+                        >
+                            <InputWithHead
+                                auto_complete='new-email'
+                                required={"required-field pb-0 pt-0"}
+                                heading={AppConstants.emailAdd}
+                                placeholder={AppConstants.enterEmail}
+                                onChange={(email) => this.props.updateAddUmpireData(email.target.value, 'email')}
+                                // value={umpireData.email}
+                                disabled={this.state.isEdit === true && true}
+                            />
+                        </Form.Item>
+                    </div>
+                    <div className="col-sm">
+                        <Form.Item
+                            name={AppConstants.contactNO}
+                            rules={[{ required: true, message: ValidationConstants.contactField }]}
                             help={hasError && ValidationConstants.mobileLength}
                             validateStatus={hasError ? "error" : 'validating'}
                         >
-                            {getFieldDecorator(AppConstants.contactNO, {
-                                rules: [{ required: true, message: ValidationConstants.contactField }]
-                            })(
-                                <InputWithHead
-                                    auto_complete='new-contact'
-                                    required={"required-field pb-0 pt-0"}
-                                    heading={AppConstants.contactNO}
-                                    placeholder={AppConstants.enterContactNo}
-                                    maxLength={10}
-                                    onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
-                                />
-                            )}
+                            <InputWithHead
+                                auto_complete='new-contact'
+                                required="required-field pb-0 pt-0"
+                                heading={AppConstants.contactNO}
+                                placeholder={AppConstants.enterContactNo}
+                                maxLength={10}
+                                onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
+                            />
                         </Form.Item>
                     </div>
                 </div>
 
-
-                <div className="row" >
-                    <div className="col-sm" >
-                        <Form.Item className="slct-in-add-manager-livescore">
+                <div className="row">
+                    <div className="col-sm">
+                        <Form.Item
+                            name="umpireNewAffiliateName"
+                            rules={[{ required: true, message: ValidationConstants.organisationField }]}
+                            className="slct-in-add-manager-livescore"
+                        >
                             <InputWithHead
                                 required={"required-field pb-1"}
-                                heading={AppConstants.organisation} />
-                            {getFieldDecorator("umpireNewAffiliateName", {
-                                rules: [{ required: true, message: ValidationConstants.organisationField }],
-                            })(
-
-                                <Select
-                                    mode="multiple"
-                                    showSearch
-                                    placeholder={AppConstants.selectOrganisation}
-                                    style={{ width: "100%", }}
-                                    onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
-                                    // value={affiliateId}
-                                    optionFilterProp="children"
+                                heading={AppConstants.organisation}
+                            />
+                            <Select
+                                mode="multiple"
+                                showSearch
+                                placeholder={AppConstants.selectOrganisation}
+                                style={{ width: "100%", }}
+                                onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
+                                // value={affiliateId}
+                                optionFilterProp="children"
                                 // onSearch={(name) => this.props.getUmpireAffiliateList({ id: this.state.competition_id, name: name })}
                                 // notFoundContent={onAffiliateLoad == true ? <Spin size="small" /> : null}
-                                >
-                                    {affiliateListResult.map((item, index) => (
-                                        < Option value={item.id} >{item.name}</Option>
-                                    ))
-                                    }
-                                </Select>
-                            )}
-
+                            >
+                                {affiliateListResult.map((item) => (
+                                    < Option value={item.id} >{item.name}</Option>
+                                ))}
+                            </Select>
                         </Form.Item>
                     </div>
                 </div>
@@ -426,23 +416,22 @@ class AddUmpire extends Component {
         )
     }
 
-
-    onButtonChage(e) {
+    onButtonChange = (e) => {
         this.setState({ loader: true })
         this.props.updateAddUmpireData(e.target.value, 'umpireRadioBtn')
-        this.props.form.setFieldsValue({
+        this.formRef.current.setFieldsValue({
             'umpireAffiliateName': []
         })
     }
 
-    radioBtnContainer() {
+    radioBtnContainer = () => {
         const { umpireRadioBtn } = this.props.umpireState
         return (
             <div className="content-view pb-0 pt-4 row">
                 <span className="applicable-to-heading ml-4">{AppConstants.umpire}</span>
                 <Radio.Group
                     className="reg-competition-radio"
-                    onChange={(e) => this.onButtonChage(e)}
+                    onChange={this.onButtonChange}
                     value={umpireRadioBtn}
                 >
                     {/* radio button without tooltip */}
@@ -456,202 +445,176 @@ class AddUmpire extends Component {
         )
     }
 
-
-    ////form view
-    contentViewForAddUmpire = (getFieldDecorator) => {
+    contentViewForAddUmpire = () => {
         const { umpireRadioBtn } = this.props.umpireState
         return (
-            <div >
-
+            <div>
                 {this.radioBtnContainer()}
-                {umpireRadioBtn === 'new' ?
-                    this.umpireNewRadioBtnView(getFieldDecorator)
-                    :
-                    this.umpireExistingRadioButton(getFieldDecorator)}
-
+                {umpireRadioBtn === 'new' ? this.umpireNewRadioBtnView() : this.umpireExistingRadioButton()}
             </div>
         )
     }
 
-    contentViewForEditUmpire = (getFieldDecorator) => {
-        return (
-            <div >
-                {this.umpireNewRadioBtnView(getFieldDecorator)}
-            </div>
-        )
-    }
-    //////footer view containing all the buttons like save and cancel
-    footerView = (isSubmitting) => {
-        return (
-            <div className="flud-widtih">
-                <div className="footer-view umpire-space">
-                    <div className="row">
-                        <div className="col-sm-3">
-                            <div className="reg-add-save-button">
-                                <NavLink to='/umpire'>
-                                    <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
-                                </NavLink>
-                            </div>
+    contentViewForEditUmpire = () => (
+        <div>
+            {this.umpireNewRadioBtnView()}
+        </div>
+    )
+
+    footerView = (isSubmitting) => (
+        <div className="flud-widtih">
+            <div className="footer-view umpire-space">
+                <div className="row">
+                    <div className="col-sm-3">
+                        <div className="reg-add-save-button">
+                            <NavLink to="/umpire">
+                                <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
+                            </NavLink>
                         </div>
-                        <div className="col-sm">
-                            <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
-                                    {AppConstants.save}
-                                </Button>
-                            </div>
+                    </div>
+                    <div className="col-sm">
+                        <div className="comp-buttons-view">
+                            <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                {AppConstants.save}
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
-        );
-    };
+        </div>
+    );
 
-    onSaveClick = e => {
-        console.log(this.state.existingUmpireCheckBox, "****", this.state.existingUmpireCoach_CheckBox)
+    onSaveClick = () => {
         const { umpireData, affiliateId, umpireRadioBtn, exsitingUmpireId, umpireListResult } = this.props.umpireState
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
-        e.preventDefault();
+
         if (umpireRadioBtn === 'new') {
             if (umpireData.mobileNumber.length !== 10) {
-                this.props.form.validateFields((err, values) => { })
                 this.setState({
                     hasError: true
                 })
             } else {
-                this.props.form.validateFields((err, values) => {
-                    let body = ''
-                    if (!err) {
-                        if (umpireRadioBtn === 'new') {
-                            if (this.state.isEdit === true) {
-                                body = {
-                                    "id": umpireData.id,
-                                    "firstName": umpireData.firstName,
-                                    "lastName": umpireData.lastName,
-                                    "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
-                                    "email": umpireData.email,
-                                    "affiliates": umpireData.affiliates,
-                                }
-                            } else {
-                                body = {
-                                    "firstName": umpireData.firstName,
-                                    "lastName": umpireData.lastName,
-                                    "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
-                                    "email": umpireData.email,
-                                    "affiliates": umpireData.affiliates,
-
-                                }
-                            }
-                            if (this.state.isUmpire === false && this.state.isUmpireCoach === false) {
-                                message.config({ maxCount: 1, duration: 0.9 })
-                                message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
-                            }
-                            else {
-                                this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName, isEdit: this.state.isEdit }, this.state.isUmpire, this.state.isUmpireCoach)
-                            }
-                        } else if (umpireRadioBtn === 'existing') {
-                            body = {
-                                "id": exsitingUmpireId,
-                                "affiliates": umpireData.affiliates,
-                            }
-
-                            if (umpireList.length === 0) {
-                                this.setState({ isUserNotFound: true })
-                            }
-
-                            else if (this.state.existingUmpireCheckBox === false && this.state.existingUmpireCoach_CheckBox === false) {
-                                message.config({ maxCount: 1, duration: 0.9 })
-                                message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
-                            }
-                            else {
-                                this.setState({ isUserNotFound: false })
-                                this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName }, this.state.existingUmpireCheckBox, this.state.existingUmpireCoach_CheckBox)
-                            }
-                        }
-
-                    }
-                });
-            }
-        }
-        else {
-            this.props.form.validateFields((err, values) => {
                 let body = ''
-                if (!err) {
-                    if (umpireRadioBtn === 'new') {
-                        if (this.state.isEdit === true) {
-                            body = {
-                                "id": umpireData.id,
-                                "firstName": umpireData.firstName,
-                                "lastName": umpireData.lastName,
-                                "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
-                                "email": umpireData.email,
-                                "affiliates": umpireData.affiliates,
-                            }
-                        } else {
-                            body = {
-                                "firstName": umpireData.firstName,
-                                "lastName": umpireData.lastName,
-                                "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
-                                "email": umpireData.email,
-                                "affiliates": umpireData.affiliates,
-                            }
-                        }
-                        if (this.state.isUmpire === false && this.state.isUmpireCoach === false) {
-                            message.config({ maxCount: 1, duration: 0.9 })
-                            message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
-                        }
-                        else {
-                            this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName, isEdit: this.state.isEdit }, this.state.isUmpire, this.state.isUmpireCoach)
-                        }
-                    } else if (umpireRadioBtn === 'existing') {
+                if (umpireRadioBtn === 'new') {
+                    if (this.state.isEdit === true) {
                         body = {
-                            "id": exsitingUmpireId,
+                            "id": umpireData.id,
+                            "firstName": umpireData.firstName,
+                            "lastName": umpireData.lastName,
+                            "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
+                            "email": umpireData.email,
                             "affiliates": umpireData.affiliates,
                         }
+                    } else {
+                        body = {
+                            "firstName": umpireData.firstName,
+                            "lastName": umpireData.lastName,
+                            "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
+                            "email": umpireData.email,
+                            "affiliates": umpireData.affiliates,
 
-                        if (umpireList.length === 0) {
-                            this.setState({ isUserNotFound: true })
-                        }
-                        else if (this.state.existingUmpireCheckBox === false && this.state.existingUmpireCoach_CheckBox === false) {
-                            message.config({ maxCount: 1, duration: 0.9 })
-                            message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
-                        }
-                        else {
-                            this.setState({ isUserNotFound: false })
-                            this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName }, this.state.existingUmpireCheckBox, this.state.existingUmpireCoach_CheckBox)
                         }
                     }
+                    if (this.state.isUmpire === false && this.state.isUmpireCoach === false) {
+                        message.config({ maxCount: 1, duration: 0.9 })
+                        message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
+                    } else {
+                        this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName, isEdit: this.state.isEdit }, this.state.isUmpire, this.state.isUmpireCoach)
+                    }
+                } else if (umpireRadioBtn === 'existing') {
+                    body = {
+                        "id": exsitingUmpireId,
+                        "affiliates": umpireData.affiliates,
+                    }
 
+                    if (umpireList.length === 0) {
+                        this.setState({ isUserNotFound: true })
+                    } else if (this.state.existingUmpireCheckBox === false && this.state.existingUmpireCoach_CheckBox === false) {
+                        message.config({ maxCount: 1, duration: 0.9 })
+                        message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
+                    } else {
+                        this.setState({ isUserNotFound: false })
+                        this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName }, this.state.existingUmpireCheckBox, this.state.existingUmpireCoach_CheckBox)
+                    }
                 }
-            });
+            }
+        } else {
+            let body = ''
+            if (umpireRadioBtn === 'new') {
+                if (this.state.isEdit === true) {
+                    body = {
+                        "id": umpireData.id,
+                        "firstName": umpireData.firstName,
+                        "lastName": umpireData.lastName,
+                        "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
+                        "email": umpireData.email,
+                        "affiliates": umpireData.affiliates,
+                    }
+                } else {
+                    body = {
+                        "firstName": umpireData.firstName,
+                        "lastName": umpireData.lastName,
+                        "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
+                        "email": umpireData.email,
+                        "affiliates": umpireData.affiliates,
+                    }
+                }
+                if (this.state.isUmpire === false && this.state.isUmpireCoach === false) {
+                    message.config({ maxCount: 1, duration: 0.9 })
+                    message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
+                } else {
+                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName, isEdit: this.state.isEdit }, this.state.isUmpire, this.state.isUmpireCoach)
+                }
+            } else if (umpireRadioBtn === 'existing') {
+                body = {
+                    "id": exsitingUmpireId,
+                    "affiliates": umpireData.affiliates,
+                }
+
+                if (umpireList.length === 0) {
+                    this.setState({ isUserNotFound: true })
+                } else if (this.state.existingUmpireCheckBox === false && this.state.existingUmpireCoach_CheckBox === false) {
+                    message.config({ maxCount: 1, duration: 0.9 })
+                    message.error(ValidationConstants.pleaseSelectBetweenUmpireAndCoach)
+                } else {
+                    this.setState({ isUserNotFound: false })
+                    this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName }, this.state.existingUmpireCheckBox, this.state.existingUmpireCoach_CheckBox)
+                }
+            }
         }
     };
 
-    /////// render function 
+    /////// render function
     render() {
-        const { getFieldDecorator } = this.props.form
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <Loader visible={this.props.umpireState.onSaveLoad} />
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={this.state.screenName == 'umpireDashboard' ? '1' : "2"} />
+                <InnerHorizontalMenu menu="umpire" umpireSelectedKey={this.state.screenName === "umpireDashboard" ? "1" : "2"} />
                 <Layout>
                     {this.headerView()}
-                    <Form autoComplete='off' onSubmit={this.onSaveClick} className="login-form" noValidate="noValidate">
+                    <Form
+                        ref={this.formRef}
+                        autoComplete="off"
+                        onFinish={this.onSaveClick}
+                        className="login-form"
+                        noValidate="noValidate"
+                    >
                         <Content>
                             <div className="formView">
-                                {this.state.isEdit === true ? this.contentViewForEditUmpire(getFieldDecorator) : this.contentViewForAddUmpire(getFieldDecorator)}
+                                {this.state.isEdit === true ? this.contentViewForEditUmpire() : this.contentViewForAddUmpire()}
                             </div>
                         </Content>
                         <Footer>
                             {this.footerView()}
                         </Footer>
                     </Form>
-
                 </Layout>
             </div>
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireListAction,
@@ -663,9 +626,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         umpireState: state.UmpireState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(AddUmpire));
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddUmpire);

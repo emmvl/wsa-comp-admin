@@ -1,32 +1,31 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {
     Breadcrumb, Button, Layout, Select, Table, message,
 } from 'antd';
 
 import DashboardLayout from '../../pages/dashboardLayout';
 import AppConstants from '../../themes/appConstants';
-import { isArrayNotEmpty } from '../../util/helpers';
-import { fixtureCompetitionListAction } from '../../store/actions/LiveScoreAction/LiveScoreFixtureAction';
-import { getLiveScoreDivisionList } from '../../store/actions/LiveScoreAction/liveScoreDivisionAction';
-import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
-import { getMatchPrintTemplateType } from '../../store/actions/commonAction/commonAction';
-import { liveScoreMatchListAction } from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
-import { liveScoreGetMatchDetailInitiate } from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
-import { liveScoreMatchSheetPrintAction, liveScoreMatchSheetDownloadsAction } from '../../store/actions/LiveScoreAction/liveScoreMatchSheetAction';
+import {isArrayNotEmpty} from '../../util/helpers';
+import {fixtureCompetitionListAction} from '../../store/actions/LiveScoreAction/LiveScoreFixtureAction';
+import {getLiveScoreDivisionList} from '../../store/actions/LiveScoreAction/liveScoreDivisionAction';
+import {getliveScoreTeams} from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
+import {getMatchPrintTemplateType} from '../../store/actions/commonAction/commonAction';
+import {liveScoreMatchListAction} from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
+import {liveScoreGetMatchDetailInitiate} from '../../store/actions/LiveScoreAction/liveScoreMatchAction';
+import {liveScoreMatchSheetPrintAction, liveScoreMatchSheetDownloadsAction} from '../../store/actions/LiveScoreAction/liveScoreMatchSheetAction';
 import Loader from '../../customComponents/loader';
 import InputWithHead from '../../customComponents/InputWithHead';
 import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
 import LiveScoreMatchSheetPreviewModal from './matchsheets/LiveScoreMatchSheetPreviewModal';
-import { liveScore_MatchFormate } from '../../themes/dateformate';
-import { getLiveScoreCompetiton } from "../../util/sessionStorage";
-import history from "../../util/history";
+import {liveScore_MatchFormate} from '../../themes/dateformate';
+import {getLiveScoreCompetiton} from "../../util/sessionStorage";
 
 import './liveScore.css';
 
-const { Header, Content } = Layout;
-const { Option } = Select;
+const {Header, Content} = Layout;
+const {Option} = Select;
 
 const tableSort = (a, b, key) => {
     const stringA = JSON.stringify(a[key]);
@@ -57,16 +56,12 @@ class LiveScoreMatchSheet extends Component {
     }
 
     componentDidMount() {
-        if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton());
-            if (id !== undefined) {
-                this.props.getLiveScoreDivisionList(id);
-                this.setState({ onDivisionLoad: true, competitionId: id });
-                this.props.getMatchPrintTemplateType();
-                this.refreshDownloads();
-            }
-        } else {
-            history.push('/liveScoreCompetitions')
+        const { id } = JSON.parse(getLiveScoreCompetiton());
+        if (id !== undefined) {
+            this.props.getLiveScoreDivisionList(id);
+            this.setState({onDivisionLoad: true, competitionId: id});
+            this.props.getMatchPrintTemplateType();
+            this.refreshDownloads();
         }
     }
 
@@ -97,32 +92,32 @@ class LiveScoreMatchSheet extends Component {
 
         if (this.props.liveScoreMatchState !== nextProps.liveScoreMatchState) {
             if (this.props.liveScoreMatchState.isFetchingMatchList === false) {
-                if (this.props.liveScoreMatchState.liveScoreMatchList.length > 0) {
-                    const rounds = [];
-                    this.props.liveScoreMatchState.liveScoreMatchList.forEach((match) => {
-                        if (rounds.findIndex((round) => round.name === match.round.name) < 0) {
-                            rounds.push(match.round);
-                        }
-                    });
-                    this.setState({
-                        rounds,
-                    });
-                }
+                 if (this.props.liveScoreMatchState.liveScoreMatchList.length > 0) {
+                     const rounds = [];
+                     this.props.liveScoreMatchState.liveScoreMatchList.forEach((match) => {
+                         if (rounds.findIndex((round) => round.name === match.round.name) < 0) {
+                             rounds.push(match.round);
+                         }
+                     });
+                     this.setState({
+                         rounds,
+                     });
+                 }
             }
         }
     }
 
     onClickPreview = (matchId) => {
-        this.setState({ selectedMatchId: matchId });
+        this.setState({selectedMatchId: matchId});
         const match = this.props.liveScoreMatchState.liveScoreMatchList.find((m) => m.id === matchId);
 
-        this.setState({ selectedMatch: match });
+        this.setState({selectedMatch: match});
         this.showPreview(true);
         this.props.liveScoreGetMatchDetailInitiate(matchId, 1);
     };
 
     showPreview = (show) => {
-        this.setState({ showPreview: show });
+        this.setState({showPreview: show});
     };
 
     handleModalOk = () => {
@@ -131,7 +126,7 @@ class LiveScoreMatchSheet extends Component {
 
     handleModalCancel = () => {
         this.showPreview(false);
-        this.setState({ selectedMatchId: null });
+        this.setState({selectedMatchId: null});
     };
 
     printAll = () => {
@@ -144,15 +139,15 @@ class LiveScoreMatchSheet extends Component {
             filteredMatches = filteredMatches.filter((match) => match.round.name === selectedRound.name);
         }
 
-        if (this.state.selectedTemplateId !== null && filteredMatches.length > 0) {
-            this.props.liveScoreMatchSheetPrintAction(
+        if (this.state.selectedTemplateId !== null  && filteredMatches.length > 0) {
+            this.props.liveScoreMatchSheetPrintAction (
                 this.state.competitionId,
                 this.state.division === 'All' ? null : this.state.division,
                 this.state.selectedTeam === 'All' ? null : this.state.selectedTeam,
                 this.state.templateType,
                 this.state.selectedRound
-                    ? this.state.rounds.find((round) => round.id === this.state.selectedRound).name
-                    : null,
+                  ? this.state.rounds.find((round) => round.id === this.state.selectedRound).name
+                  : null,
             );
         } else if (filteredMatches.length === 0) {
             message.error(AppConstants.matchSheetsNoPrintError);
@@ -162,7 +157,7 @@ class LiveScoreMatchSheet extends Component {
     };
 
     onChangeTemplate(selectedTemplateId) {
-        const { commonReducerState } = this.props;
+        const {commonReducerState} = this.props;
         const templateType = commonReducerState.matchPrintTemplateType.find(type => type.id === selectedTemplateId);
 
         this.setState({
@@ -185,11 +180,11 @@ class LiveScoreMatchSheet extends Component {
     }
 
     onChangeTeam(selectedTeam) {
-        this.setState({ selectedTeam });
+        this.setState({selectedTeam});
     }
 
     onChangeRound(selectedRound) {
-        this.setState({ selectedRound });
+        this.setState({selectedRound});
     }
 
     fetchMatchList(divisionId, teamId) {
@@ -213,7 +208,7 @@ class LiveScoreMatchSheet extends Component {
     headerView = () => (
         <Header className="comp-venue-courts-header-view">
             <div className="row">
-                <div className="col-sm" style={{ display: 'flex', alignContent: 'center' }}>
+                <div className="col-sm" style={{display: 'flex', alignContent: 'center'}}>
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.matchSheets}</Breadcrumb.Item>
                     </Breadcrumb>
@@ -242,7 +237,7 @@ class LiveScoreMatchSheet extends Component {
             dataIndex: 'round',
             key: 'round',
             sorter: (a, b) => tableSort(a, b, "round"),
-            render: (round) => <span>{round.name}</span>
+            render: (round) =><span>{round.name}</span>
         },
         {
             title: '',
@@ -262,11 +257,11 @@ class LiveScoreMatchSheet extends Component {
 
     sheetTableHeading = () => {
         return (
-            <div className="pt-4 pb-4 d-flex align-items-center">
-                <div className="col-sm d-flex align-items-center" >
-                    <span className='home-dash-left-text'>{AppConstants.previews}</span>
-                </div>
-            </div>
+          <div className="pt-4 pb-4 d-flex align-items-center">
+              <div className="col-sm d-flex align-items-center" >
+                  <span className='home-dash-left-text'>{AppConstants.previews}</span>
+              </div>
+          </div>
         )
     };
 
@@ -283,7 +278,7 @@ class LiveScoreMatchSheet extends Component {
         }
 
         return (
-            <div className="formView mt-4" style={{ marginBottom: 20 }}>
+            <div className="formView mt-4" style={{marginBottom: 20}}>
                 {this.sheetTableHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table
@@ -303,7 +298,7 @@ class LiveScoreMatchSheet extends Component {
             dataIndex: 'id',
             key: 'id',
             sorter: (a, b) => tableSort(a, b, "id"),
-            render: (id) => <div style={{ minWidth: 80 }}>{id}</div>,
+            render: (id) => <div style={{minWidth: 80}}>{id}</div>,
         },
         {
             title: AppConstants.name,
@@ -332,20 +327,20 @@ class LiveScoreMatchSheet extends Component {
 
     downloadTableHeading = () => {
         return (
-            <div className="pt-4 pb-4 d-flex align-items-center">
-                <div className="col-sm d-flex align-items-center">
-                    <span className='home-dash-left-text'>{AppConstants.downloads}</span>
-                </div>
-                <div className="col-sm text-right" >
-                    <Button
-                        className="primary-add-comp-form mr-4 mr-lg-4 mr-md-0"
-                        type="primary"
-                        onClick={() => this.refreshDownloads()}
-                    >
-                        {AppConstants.refreshDownloads}
-                    </Button>
-                </div>
-            </div>
+          <div className="pt-4 pb-4 d-flex align-items-center">
+              <div className="col-sm d-flex align-items-center">
+                  <span className='home-dash-left-text'>{AppConstants.downloads}</span>
+              </div>
+              <div className="col-sm text-right" >
+                  <Button
+                    className="primary-add-comp-form mr-4 mr-lg-4 mr-md-0"
+                    type="primary"
+                    onClick={() => this.refreshDownloads()}
+                  >
+                      {AppConstants.refreshDownloads}
+                  </Button>
+              </div>
+          </div>
         )
     };
 
@@ -370,7 +365,7 @@ class LiveScoreMatchSheet extends Component {
 
     /// form content view
     contentView = () => {
-        const { liveScoreMatchSheetState, commonReducerState } = this.props;
+        const {liveScoreMatchSheetState, commonReducerState} = this.props;
         const division = isArrayNotEmpty(liveScoreMatchSheetState.allDivisionData)
             ? liveScoreMatchSheetState.allDivisionData
             : [];
@@ -386,13 +381,13 @@ class LiveScoreMatchSheet extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.division} />
+                            <InputWithHead heading={AppConstants.division}/>
 
                         </div>
                         <div className="col-sm">
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                                onChange={(division) => this.changeDivision({ division })}
+                                style={{width: '100%', paddingRight: 1, minWidth: 182}}
+                                onChange={(division) => this.changeDivision({division})}
                                 value={this.state.division}
                                 placeholder={AppConstants.selectDivision}
                             >
@@ -402,14 +397,14 @@ class LiveScoreMatchSheet extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="fluid-width" style={{ marginTop: 15 }}>
+                <div className="fluid-width" style={{marginTop: 15}}>
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.teams} />
+                            <InputWithHead heading={AppConstants.teams}/>
                         </div>
                         <div className="col-sm">
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(selectedTeam) => this.onChangeTeam(selectedTeam)}
                                 value={this.state.selectedTeam}
                                 placeholder={AppConstants.selectTeam}
@@ -421,14 +416,14 @@ class LiveScoreMatchSheet extends Component {
                     </div>
                 </div>
 
-                <div className="fluid-width" style={{ marginTop: 15 }}>
+                <div className="fluid-width" style={{marginTop: 15}}>
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.templateType} />
+                            <InputWithHead heading={AppConstants.templateType}/>
                         </div>
                         <div className="col-sm">
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
+                                style={{width: '100%', paddingRight: 1, minWidth: 182}}
                                 onChange={(selectedTemplateId) => this.onChangeTemplate(selectedTemplateId)}
                                 value={this.state.selectedTemplateId ?? AppConstants.selectTemplateType}
                                 placeholder={AppConstants.selectTemplateType}
@@ -440,29 +435,29 @@ class LiveScoreMatchSheet extends Component {
                     </div>
                 </div>
 
-                <div className="fluid-width" style={{ marginTop: 15 }}>
+                <div className="fluid-width" style={{marginTop: 15}}>
                     <div className="row">
                         <div className="col-sm">
-                            <InputWithHead heading={AppConstants.round} />
+                            <InputWithHead heading={AppConstants.round}/>
                         </div>
                         <div className="col-sm">
                             <Select
-                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
-                                onChange={(selectedRoundId) => this.onChangeRound(selectedRoundId)}
-                                value={this.state.selectedRound ?? AppConstants.selectRound}
-                                placeholder={AppConstants.selectTemplateType}
+                              style={{width: '100%', paddingRight: 1, minWidth: 182}}
+                              onChange={(selectedRoundId) => this.onChangeRound(selectedRoundId)}
+                              value={this.state.selectedRound ?? AppConstants.selectRound}
+                              placeholder={AppConstants.selectTemplateType}
                             >
                                 {this.state.rounds.length > 0 && this.state.rounds.map(
-                                    (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
+                                  (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
                             </Select>
                         </div>
                     </div>
                 </div>
-                <div className="fluid-width d-flex justify-content-end" style={{ marginTop: 25 }}>
+                <div className="fluid-width d-flex justify-content-end" style={{marginTop: 25}}>
                     <Button
-                        className="open-reg-button"
-                        type="primary"
-                        onClick={() => this.printAll()}
+                      className="open-reg-button"
+                      type="primary"
+                      onClick={() => this.printAll()}
                     >
                         {AppConstants.printAll}
                     </Button>
@@ -475,7 +470,7 @@ class LiveScoreMatchSheet extends Component {
     footerView = () => (
         <div className="fluid-width">
             <div className="match-sheet-footer-view">
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginRight: 15 }}>
+                <div style={{display: 'flex', justifyContent: 'flex-end', marginRight: 15}}>
                     <Button
                         className="open-reg-button mr-3"
                         type="primary"
@@ -490,9 +485,9 @@ class LiveScoreMatchSheet extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
-                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="22" />
+            <div className="fluid-width" style={{backgroundColor: '#f7fafc'}}>
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores}/>
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="22"/>
                 <Loader
                     visible={
                         this.props.liveScoreMatchSheetState.onDivisionLoad

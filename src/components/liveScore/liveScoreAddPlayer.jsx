@@ -15,7 +15,10 @@ import AppConstants from "../../themes/appConstants";
 import ValidationConstants from "../../themes/validationConstant";
 import AppImages from "../../themes/appImages";
 import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveScoreActions'
-import { liveScoreUpdatePlayerDataAction, liveScoreAddEditPlayerAction } from '../../store/actions/LiveScoreAction/liveScorePlayerAction'
+import {
+    liveScoreUpdatePlayerDataAction,
+    liveScoreAddEditPlayerAction
+} from '../../store/actions/LiveScoreAction/liveScorePlayerAction'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import moment from "moment";
@@ -25,7 +28,6 @@ import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { isArrayNotEmpty, captializedString, regexNumberExpression } from '../../util/helpers';
 import ImageLoader from '../../customComponents/ImageLoader'
-
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -48,11 +50,10 @@ class LiveScoreAddPlayer extends Component {
             teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id : null : null,
             timeout: null
         };
-
+        this.formRef = React.createRef();
     }
 
     componentDidMount() {
-
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.props.getliveScoreTeams(id)
@@ -83,7 +84,7 @@ class LiveScoreAddPlayer extends Component {
                 playerData.dateOfBirth = ""
 
                 if (teamsId) {
-                    this.props.form.setFieldsValue({
+                    this.formRef.current.setFieldsValue({
                         "team": teamsId
                     })
                 }
@@ -95,20 +96,18 @@ class LiveScoreAddPlayer extends Component {
 
     setInitalFiledValue() {
         const { playerData } = this.props.liveScorePlayerState
-        this.props.form.setFieldsValue({
+        this.formRef.current.setFieldsValue({
             'firstName': playerData.firstName,
             'lastName': playerData.lastName,
             "team": playerData.teamId ? playerData.teamId : this.state.teamId
         })
     }
 
-
     ////method to setimage
     setImage = (data) => {
         const { playerData } = this.props.liveScorePlayerState
 
         if (data.files[0] !== undefined) {
-
             this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]) })
             if (this.state.isEdit == true) {
                 playerData.photoUrl = null
@@ -151,59 +150,47 @@ class LiveScoreAddPlayer extends Component {
     };
 
     ////////form content view
-    contentView = (getFieldDecorator) => {
+    contentView = () => {
         const { playerData, teamResult } = this.props.liveScorePlayerState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
         return (
             <div className="content-view pt-0">
-
                 {/* First and Last name row */}
                 <div className='row'>
-                    <div className="col-sm" >
-                        <Form.Item >
-                            {getFieldDecorator('firstName', {
-                                rules: [{ required: true, message: ValidationConstants.nameField[0] }],
-                            })(
-                                <InputWithHead
-                                    auto_complete='new-password'
-                                    type='text'
-                                    required={"required-field pb-0"}
-                                    heading={AppConstants.firstName}
-                                    placeholder={AppConstants.enterFirstName}
-                                    onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(firstName.target.value), 'firstName')}
-                                    onBlur={(i) => this.props.form.setFieldsValue({
-                                        'firstName': captializedString(i.target.value)
-                                    })}
-                                />
-                            )}
+                    <div className="col-sm">
+                        <Form.Item name='firstName' rules={[{ required: true, message: ValidationConstants.nameField[0] }]}>
+                            <InputWithHead
+                                auto_complete='new-password'
+                                type='text'
+                                required={"required-field pb-0"}
+                                heading={AppConstants.firstName}
+                                placeholder={AppConstants.enterFirstName}
+                                onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(firstName.target.value), 'firstName')}
+                                onBlur={(i) => this.formRef.current.setFieldsValue({
+                                    'firstName': captializedString(i.target.value)
+                                })}
+                            />
                         </Form.Item>
-
                     </div>
-                    <div className="col-sm" >
-                        <Form.Item >
-                            {getFieldDecorator('lastName', {
-                                // normalize: (input) => captializedString(input),
-                                rules: [{ required: true, message: ValidationConstants.nameField[1] }],
-                            })(
-                                <InputWithHead
-                                    auto_complete='off'
-                                    required={"required-field pb-0"}
-                                    heading={AppConstants.lastName}
-                                    placeholder={AppConstants.enterLastName}
-                                    onChange={(lastName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(lastName.target.value), 'lastName')}
-                                    onBlur={(i) => this.props.form.setFieldsValue({
-                                        'lastName': captializedString(i.target.value)
-                                    })}
-                                />
-                            )}
+                    <div className="col-sm">
+                        <Form.Item name='lastName' rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
+                            <InputWithHead
+                                auto_complete='off'
+                                required={"required-field pb-0"}
+                                heading={AppConstants.lastName}
+                                placeholder={AppConstants.enterLastName}
+                                onChange={(lastName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(lastName.target.value), 'lastName')}
+                                onBlur={(i) => this.formRef.current.setFieldsValue({
+                                    'lastName': captializedString(i.target.value)
+                                })}
+                            />
                         </Form.Item>
-
                     </div>
                 </div>
 
                 {/* DOB and Contact No. row */}
-                <div className="row" >
-                    <div className="col-sm" >
+                <div className="row">
+                    <div className="col-sm">
                         <InputWithHead heading={AppConstants.dOB} />
                         <DatePicker
                             size="large"
@@ -214,10 +201,10 @@ class LiveScoreAddPlayer extends Component {
                             showTime={false}
                             name={'date'}
                             value={playerData.dateOfBirth && moment(playerData.dateOfBirth, "DD-MM-YYYY")}
-                        // value={playerData.dateOfBirth}
+                            // value={playerData.dateOfBirth}
                         />
                     </div>
-                    <div className="col-sm" >
+                    <div className="col-sm">
                         <InputWithHead
                             auto_complete='new-contact'
                             heading={AppConstants.contactNO}
@@ -230,8 +217,8 @@ class LiveScoreAddPlayer extends Component {
                 </div>
 
                 {/* PlayerId and Team Selection row */}
-                <div className="row" >
-                    <div className="col-sm" >
+                <div className="row">
+                    <div className="col-sm">
                         <InputWithHead
                             auto_complete='new-mnbId'
                             heading={AppConstants.playerId}
@@ -240,25 +227,20 @@ class LiveScoreAddPlayer extends Component {
                             value={playerData.mnbPlayerId}
                         />
                     </div>
-                    <div className="col-sm" >
+                    <div className="col-sm">
                         <InputWithHead required={"required-field"} heading={AppConstants.team} />
-                        <Form.Item>
-                            {getFieldDecorator('team', {
-                                rules: [{ required: true, message: ValidationConstants.teamName }]
-                            })(
-                                <Select
-                                    loading={this.props.liveScoreState.onLoad == true && true}
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={(teamId) => this.props.liveScoreUpdatePlayerDataAction(teamId, 'teamId')}
-                                    value={playerData.teamId}
-                                    placeholder={AppConstants.selectTeam}
-                                >
-                                    {isArrayNotEmpty(teamData) && teamData.map((item) => (
-                                        < Option value={item.id} > {item.name}</Option>
-                                    ))
-                                    }
-                                </Select>
-                            )}
+                        <Form.Item name='team' rules={[{ required: true, message: ValidationConstants.teamName }]}>
+                            <Select
+                                loading={this.props.liveScoreState.onLoad == true && true}
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                onChange={(teamId) => this.props.liveScoreUpdatePlayerDataAction(teamId, 'teamId')}
+                                value={playerData.teamId}
+                                placeholder={AppConstants.selectTeam}
+                            >
+                                {isArrayNotEmpty(teamData) && teamData.map((item) => (
+                                    <Option value={item.id}> {item.name}</Option>
+                                ))}
+                            </Select>
                         </Form.Item>
                     </div>
                 </div>
@@ -270,10 +252,10 @@ class LiveScoreAddPlayer extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-competition-logo-view" onClick={this.selectImage}>
-
                                 <ImageLoader
                                     timeout={this.state.timeout}
-                                    src={playerData.photoUrl ? playerData.photoUrl : this.state.profileImage} />
+                                    src={playerData.photoUrl ? playerData.photoUrl : this.state.profileImage}
+                                />
                             </div>
                             <input
                                 type="file"
@@ -286,7 +268,6 @@ class LiveScoreAddPlayer extends Component {
                                         this.setState({ timeout: null })
                                     }, 2000);
                                 }}
-
                             />
                             <span className="form-err">{this.state.imageError}</span>
                         </div>
@@ -297,14 +278,13 @@ class LiveScoreAddPlayer extends Component {
                             <Checkbox
                                 className="single-checkbox"
                                 defaultChecked={true}
-                            // onChange={e => this.onChange(e)}
+                                // onChange={e => this.onChange(e)}
                             >
                                 {AppConstants.useDefault}
                             </Checkbox>
                         </div> */}
                     </div>
                 </div>
-
             </div>
         );
     };
@@ -319,39 +299,35 @@ class LiveScoreAddPlayer extends Component {
             mnbPlayerId,
             teamId,
             competitionId,
-            photoUrl } = this.props.liveScorePlayerState.playerData
-
+            photoUrl
+        } = this.props.liveScorePlayerState.playerData
 
         let playerId = this.state.playerData ? this.state.playerData.playerId ? this.state.playerData.playerId : this.state.playerData.id ? this.state.playerData.id : '' : ''
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
+        let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
+        let selectedTeamId = teamId ? teamId : this.state.teamId ? this.state.teamId : this.props.location.state ? this.props.location.state.teamId : null
 
-                let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
+        let body = new FormData();
+        body.append('id', playerId ? playerId : 0)
+        body.append('firstName', firstName)
+        body.append('lastName', lastName);
+        body.append("dateOfBirth", dateOfBirth);
+        body.append("phoneNumber", regexNumberExpression(phoneNumber));
+        body.append("mnbPlayerId", mnbPlayerId);
+        body.append("teamId", selectedTeamId);
+        body.append("competitionId", id)
 
-                let selectedTeamId = teamId ? teamId : this.state.teamId ? this.state.teamId : this.props.location.state ? this.props.location.state.teamId : null
+        if (this.state.image) {
+            body.append("photo", this.state.image) //// this.props.location.state ? this.props.location.state.teamId
+        }
 
-                let body = new FormData();
-                body.append('id', playerId ? playerId : 0)
-                body.append('firstName', firstName)
-                body.append('lastName', lastName);
-                body.append("dateOfBirth", dateOfBirth);
-                body.append("phoneNumber", regexNumberExpression(phoneNumber));
-                body.append("mnbPlayerId", mnbPlayerId);
-                body.append("teamId", selectedTeamId);
-                body.append("competitionId", id)
+        this.props.liveScoreAddEditPlayerAction(body, playerId, {
+            teamId: selectedTeamId,
+            screen: this.props.location.state ? this.props.location.state.screen : null,
+            screenName: this.state.screenName
+        })
 
-                if (this.state.image) {
-                    body.append("photo", this.state.image) //// this.props.location.state ? this.props.location.state.teamId
-                }
-
-                this.props.liveScoreAddEditPlayerAction(body, playerId, { teamId: selectedTeamId, screen: this.props.location.state ? this.props.location.state.screen : null, screenName: this.state.screenName })
-
-                // this.props.liveScoreAddEditPlayerAction(playerData, playerId, this.state.image, this.state.temaViewPlayer, { teamId: playerData.teamId, screen: this.props.location.state ? this.props.location.state.screen : null, screenName: this.state.screenName })
-            }
-        });
+        // this.props.liveScoreAddEditPlayerAction(playerData, playerId, this.state.image, this.state.temaViewPlayer, { teamId: playerData.teamId, screen: this.props.location.state ? this.props.location.state.screen : null, screenName: this.state.screenName })
     }
-
 
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
@@ -361,12 +337,18 @@ class LiveScoreAddPlayer extends Component {
                     <div className="row">
                         <div className="col-sm" style={{ paddingLeft: 10 }}>
                             <div className="reg-add-save-button">
-                                <Button className="cancelBtnWidth" onClick={() => history.push(this.state.temaViewPlayer ? 'liveScoreTeamView' : '/liveScorePlayerList', { ...this.props.location.state })} type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button
+                                    className="cancelBtnWidth"
+                                    onClick={() => history.push(this.state.temaViewPlayer ? 'liveScoreTeamView' : '/liveScorePlayerList', { ...this.props.location.state })}
+                                    type="cancel-button"
+                                >
+                                    {AppConstants.cancel}
+                                </Button>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Form.Item >
+                                <Form.Item>
                                     <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                         {AppConstants.save}
                                     </Button>
@@ -381,30 +363,38 @@ class LiveScoreAddPlayer extends Component {
 
     /////main render method
     render() {
-        const { getFieldDecorator } = this.props.form;
-
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout
+                    menuHeading={AppConstants.liveScores}
+                    menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                />
                 <Loader visible={this.props.liveScorePlayerState.onLoad} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'fromTeamList' ? '3' : this.state.screenName == 'fromMatchList' ? '2' : "7"} />
+                <InnerHorizontalMenu
+                    menu={"liveScore"}
+                    liveScoreSelectedKey={this.state.screenName == 'fromTeamList' ? '3' : this.state.screenName == 'fromMatchList' ? '2' : "7"}
+                />
                 <Layout>
                     {this.headerView()}
                     <Form
+                        ref={this.formRef}
                         autoComplete='off'
-                        onSubmit={this.onSaveClick}
-                        noValidate="noValidate">
+                        onFinish={this.onSaveClick}
+                        noValidate="noValidate"
+                    >
                         <Content>
-                            <div className="formView">{this.contentView(getFieldDecorator)}</div>
+                            <div className="formView">{this.contentView()}</div>
                         </Content>
 
-                        <Footer >{this.footerView()}</Footer>
+                        <Footer>{this.footerView()}</Footer>
                     </Form>
                 </Layout>
             </div>
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getliveScoreDivisions,
@@ -414,13 +404,12 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         liveScoreState: state.LiveScoreState,
         liveScorePlayerState: state.LiveScorePlayerState,
         liveScoreTeamState: state.LiveScoreTeamState
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreAddPlayer));
 
-
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreAddPlayer);

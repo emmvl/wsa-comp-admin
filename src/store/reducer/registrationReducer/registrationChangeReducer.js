@@ -4,7 +4,6 @@ import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
 
 const initialState = {
     onLoad: false,
-    onChangeReviewLoad: false,
     error: null,
     result: null,
     status: 0,
@@ -70,9 +69,7 @@ const initialState = {
         declineReasonRefId:null,
         otherInfo:null,
         invoices: null
-    },
-    transferOrganisations: [],
-    transferCompetitions: []
+    }
 }
 
 
@@ -122,12 +119,6 @@ function regChangeReducer(state = initialState, action) {
                 }
             }
             else if(action.subKey == "transfer"){
-                if(action.key == "organisationId"){
-                    state.saveData.transfer.competitionId = null;
-                    let competitions = setCompetitions(action.value, state.transferOrganisations);
-                    state.transferCompetitions = competitions;
-                    state.reloadFormData = 1;
-                }
                 state.saveData.transfer[action.key] = action.value;
             }
             else{
@@ -157,19 +148,18 @@ function regChangeReducer(state = initialState, action) {
                 error: null
             }
         case ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_LOAD:
-            return {...state, onChangeReviewLoad: true}
+            return {...state, onLoad: true}
 
         case ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_SUCCESS:
             let regChangeReviewData = action.result;
             return {
                 ...state,
-                onChangeReviewLoad: false,
+                onLoad: false,
                 regChangeReviewData: regChangeReviewData,
                 status: action.status,
                 error: null
             }
-
-        case ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_LOAD:
+        case ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_SUCCESS:
             return {...state, onSaveLoad: true}
 
         case ApiConstants.API_SAVE_REGISTRATION_CHANGE_REVIEW_SUCCESS:
@@ -179,39 +169,8 @@ function regChangeReducer(state = initialState, action) {
                 status: action.status,
             }
 
-        case ApiConstants.API_GET_TRANSFER_COMPETITIONS_LOAD:
-            return {...state, onLoad: true}
-
-        case ApiConstants.API_GET_TRANSFER_COMPETITIONS_SUCCESS:
-            let transferOrgData = action.result;
-            return {
-                ...state,
-                onLoad: false,
-                transferOrganisations: transferOrgData,
-                status: action.status,
-            }
-    
-
         default:
             return state;
-    }
-}
-
-
-function setCompetitions(organisationId, organisations){
-    try {
-        let arr = [];
-        if(isArrayNotEmpty(organisations)){
-            let compData = organisations.find(x=>x.organisationId == organisationId);
-            if(compData!= undefined){
-                if(isArrayNotEmpty(compData.competitions)){
-                    arr.push(...compData.competitions);
-                }
-            }
-        }
-        return arr;
-    } catch (error) {
-        console.log("Error", error);
     }
 }
 
