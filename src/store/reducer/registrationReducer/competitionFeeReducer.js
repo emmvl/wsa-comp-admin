@@ -609,8 +609,7 @@ function checkSelectedPaymentMethods(paymentMethodArray, paymentMethodDefault, s
             "description": item.description
         }
         let obj = paymentMethodArray ? 
-        (paymentMethodArray.find(x=>x.paymentMethodRefId == item.id && 
-            x.feesTypeRefId == 4)) : null;
+        (paymentMethodArray.find(x=>x.paymentMethodRefId == item.id )) : null;
         if(obj){
             paymentMthObj.isChecked = true;
             paymentMthObj.paymentMethodId = obj.paymentMethodId;
@@ -1237,6 +1236,17 @@ function checkFeeType(feeArray) {
     }
 }
 
+function checkTeamChargeType(feeArray) {
+    for (let i in feeArray) {
+        if(feeArray[i].teamRegChargeTypeRefId == null || feeArray[i].teamRegChargeTypeRefId == 1){
+            return 1;
+        }
+        else {
+            return 2;
+        }
+    }
+}
+
 
 ///// check Fee Type ---- 
 
@@ -1426,7 +1436,8 @@ function createProductFeeArr(data) {
                         "mFees": mFeesSeasonal,
                         "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
                         "membershipGst": memberShipProductType[j].mSeasonalGst,
-                        "checkBoxOption": statusteamSeasonal.result.isTeamSeasonal
+                        "checkBoxOption": statusteamSeasonal.result.isTeamSeasonal,
+                        "teamRegChargeTypeRefId": statusteamSeasonal.result.teamRegChargeTypeRefId
                     }
                 } else {
                     type_object_team_seasonal = {
@@ -1448,7 +1459,8 @@ function createProductFeeArr(data) {
                         "mFees": Number(memberShipProductType[j].mSeasonalFee) + Number(memberShipProductType[j].mSeasonalGst),
                         "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
                         "membershipGst": memberShipProductType[j].mSeasonalGst,
-                        "checkBoxOption": statusRefId == 1 ? 1 : 0
+                        "checkBoxOption": statusRefId == 1 ? 1 : 0,
+                        "teamRegChargeTypeRefId": 1
                     }
                 }
 
@@ -1646,7 +1658,8 @@ function createProductFeeArr(data) {
                             "mFees": mFeesCasualPer,
                             "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
                             "membershipGst": memberShipProductType[k].mSeasonalGst,
-                            "checkBoxOption": statusTeamSeasonal.result.isTeamSeasonal
+                            "checkBoxOption": statusTeamSeasonal.result.isTeamSeasonal,
+                            "teamRegChargeTypeRefId": statusTeamSeasonal.result.teamRegChargeTypeRefId
                         }
                     } else {
                         type_object_team_seasonal = {
@@ -1669,7 +1682,8 @@ function createProductFeeArr(data) {
                             "mFees": Number(memberShipProductType[k].mSeasonalFee) + Number(memberShipProductType[k].mSeasonalGst),
                             "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
                             "membershipGst": memberShipProductType[k].mSeasonalGst,
-                            "checkBoxOption": statusRefId == 1 ? 1 : 0
+                            "checkBoxOption": statusRefId == 1 ? 1 : 0,
+                            "teamRegChargeTypeRefId": 1
                         }
                     }
 
@@ -1764,17 +1778,20 @@ function createProductFeeArr(data) {
         let isCasualFeeTypeAvailable = null
         let isSeasonalTeamFeeTypeAvailable = null
         let isCasualTeamFeeTypeAvailable = null
+        let teamRegChargeTypeRefId = null;
 
         if (product[i].isProductTypeALL == false) {
             isSeasonalFeeTypeAvailable = checkFeeType(alltypeArraySeasonal)
             isCasualFeeTypeAvailable = checkFeeType(alltypeArrayCasual)
             isSeasonalTeamFeeTypeAvailable = checkFeeType(allTypeTeamArraySeasonal)
             isCasualTeamFeeTypeAvailable = checkFeeType(allTypeTeamArrayCasual)
+            teamRegChargeTypeRefId = checkTeamChargeType(allTypeTeamArraySeasonal);
         } else {
             isSeasonalFeeTypeAvailable = checkFeeType(perTypeArraySeasonal)
             isCasualFeeTypeAvailable = checkFeeType(perTypeArrayCasual)
             isSeasonalTeamFeeTypeAvailable = checkFeeType(perTypeTeamArraySeasonal)
             isCasualTeamFeeTypeAvailable = checkFeeType(perTypeTeamArrayCasual)
+            teamRegChargeTypeRefId = checkTeamChargeType(perTypeTeamArraySeasonal);
         }
         let object = {
             "membershipProductName": product[i].membershipProductName,
@@ -1790,7 +1807,8 @@ function createProductFeeArr(data) {
             "isTeamSeasonal": (isSeasonalTeamFeeTypeAvailable == undefined ? false : isSeasonalTeamFeeTypeAvailable),
             "isTeamCasual": (isCasualTeamFeeTypeAvailable == undefined ? false : isCasualTeamFeeTypeAvailable),
             "isIndividualReg": (isSeasonalFeeTypeAvailable == true || isCasualFeeTypeAvailable == true) ? true : false,
-            "isTeamReg": (isSeasonalTeamFeeTypeAvailable == true || isCasualTeamFeeTypeAvailable == true) ? true : false
+            "isTeamReg": (isSeasonalTeamFeeTypeAvailable == true || isCasualTeamFeeTypeAvailable == true) ? true : false,
+            "teamRegChargeTypeRefId": teamRegChargeTypeRefId
         }
 
         productArray.push(object)
@@ -2536,7 +2554,7 @@ function competitionFees(state = initialState, action) {
                 // }
             }
             else if (action.key == "casualteamfee") {
-                state.selectedCasualFee[action.index][action.subKey] = action.value;
+                state.selectedCasualTeamFee[action.index][action.subKey] = action.value;
             }
             else if(action.key == "paymentmethods"){
                 state.selectedPaymentMethods[action.index][action.subKey] = action.value;
@@ -2654,8 +2672,13 @@ function competitionFees(state = initialState, action) {
             if (action.key == "isTeamReg") {
                 state.competitionFeesData[action.parentIndex]["isTeamSeasonal"] = action.data
                 state.competitionFeesData[action.parentIndex]["isTeamCasual"] = action.data
+                if(action.data == false){
+                    state.competitionFeesData[action.parentIndex]["teamRegChargeTypeRefId"] = null;
+                }
+                else{
+                    state.competitionFeesData[action.parentIndex]["teamRegChargeTypeRefId"] = 1;
+                }
             }
-
 
             state.competitionFeesData[action.parentIndex][action.key] = action.data
 
@@ -2674,6 +2697,14 @@ function competitionFees(state = initialState, action) {
                     state.competitionFeesData[action.parentIndex]["isTeamReg"] = true
                 else if (isSeasonal == false && isCasual == false)
                     state.competitionFeesData[action.parentIndex]["isTeamReg"] = false
+
+                if(isSeasonal == false){
+                    state.competitionFeesData[action.parentIndex]["teamRegChargeTypeRefId"] = null;
+                }
+                else if(isSeasonal == true){
+                    state.competitionFeesData[action.parentIndex]["teamRegChargeTypeRefId"] = 1;
+                }
+              
             }
 
             return {

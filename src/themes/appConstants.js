@@ -1639,7 +1639,9 @@ const AppConstants = {
   nominationFeeTeam: "Please note - The manager can choose to pay the nomination fee or can split it with the players at the time of registration",
   paymentMethods: "Payment Methods",
   singleGamePerTeamMember: "Single Game Fee per Team Member(inc GST)",
-  setMembershipProducts: "Set Membership Product(s)"
+  setMembershipProducts: "Set Membership Product(s)",
+  chargedForFullSeason: "Charged for Full Season",
+  chargedPerMatch: "Charged per Match"
 };
 
 export default AppConstants;
