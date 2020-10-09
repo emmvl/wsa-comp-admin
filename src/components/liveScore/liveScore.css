@@ -471,13 +471,6 @@
 .livescore-editor-news.col-sm {
     padding: 0 12px;
 }
-.one .ant-form-item-children {
-    line-height: 23px;
-}
-.formView.addTeam .has-error .ant-form-explain, .formView.addTeam .has-error .ant-form-split {
-    color: #f5222d;
-    margin-top: 2px;
-}
 @media(min-width: 768px) and (max-width: 1024px) {
     .live-score-edit-match-buttons {
         display: flex;

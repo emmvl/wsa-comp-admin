@@ -25,7 +25,7 @@ const initialState = {
         lineupSelectionDays: null,
         lineupSelectionHours: null,
         lineupSelectionMins: null,
-        gameTimeTrackingType: 0
+        gameTimeTrackingType:0
 
     },
     buzzerEnabled: false,
@@ -65,11 +65,7 @@ const initialState = {
     invitedAnyAssoc: [],
     invitedAnyClub: [],
     competitionInvitees: [],
-    gameTimeTrackingType: 0,
-    isInvitorsChanged: false,
-    radioSelectionArr: [],
-    invitedAnyAssocArr: [],
-    invitedAnyClubArr: []
+    gameTimeTrackingType: 0
 }
 
 
@@ -252,10 +248,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             state.otherSelected = []
             state.invitedAnyAssoc = []
             state.invitedAnyClub = []
-            state.radioSelectionArr = []
-            state.orgSelectionArr = []
-            state.invitedAnyAssocArr = []
-            state.invitedAnyClubArr = []
 
             if (compInvitees.length > 0) {
                 if (compInvitees.length === 1) {
@@ -263,10 +255,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                         if (compInvitees[0].inviteesRefId === 5 || compInvitees[0].inviteesRefId === 6) {
                             state.otherSelected = compInvitees[0].inviteesRefId
                             state.invitedTo = [compInvitees[0].inviteesRefId]
-                            state.radioSelectionArr = [compInvitees[0].inviteesRefId]
                         } else {
                             state.invitedTo = [compInvitees[0].inviteesRefId]
-                            state.radioSelectionArr = [compInvitees[0].inviteesRefId]
                             state.anyOrgArray = [compInvitees[0].inviteesRefId]
                             let anyOrgValue = getAnyOrgValue(payload.competitionInvitees, state.registrationInvitees)
                             let anyOrgArray = getanyOrgArray(anyOrgValue)
@@ -284,7 +274,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                                 assocArray.push(associationAffiliteObj)
                             }
                             state.invitedAnyAssoc = assocArray
-                            state.invitedAnyAssocArr = assocArray
                             let clubArray = []
                             for (let i in selectedOrganization.clubLeageOrg) {
                                 let clubAffiliteObj = {
@@ -293,7 +282,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                                 clubArray.push(clubAffiliteObj)
                             }
                             state.invitedAnyClub = clubArray
-                            state.invitedAnyClubArr = clubArray
                         }
                     }
                 } else {
@@ -304,10 +292,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                         if (affiliateValue == 2 || affiliateValue == 3) {
                             state.affiliateArray = [affiliateValue]
                             state.invitedTo = [affiliateValue]
-                            state.radioSelectionArr = [affiliateValue]
                         }
                         state.invitedTo = [affiliateValue]
-                        state.radioSelectionArr = [affiliateValue]
                     }
                     let anyOrgValue = getAnyOrgValue(payload.competitionInvitees, state.registrationInvitees)
 
@@ -315,7 +301,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
 
                     for (let i in anyOrgSelectedArr) {
                         state.invitedTo.push(anyOrgSelectedArr[i])
-                        state.radioSelectionArr.push(anyOrgSelectedArr[i])
                         state.anyOrgArray.push(anyOrgSelectedArr[i])
                     }
                     let anyOrgCheckBoxSelection = getCheckBoxSelection(payload.competitionInvitees)
@@ -334,7 +319,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     }
 
                     state.invitedAnyAssoc = assocArray
-                    state.invitedAnyAssocArr = assocArray
 
                     let clubArray = []
 
@@ -345,12 +329,10 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                         clubArray.push(clubAffiliteObj)
                     }
                     state.invitedAnyClub = clubArray
-                    state.invitedAnyClubArr = clubArray
                 }
 
             } else {
                 state.invitedTo = []
-                state.radioSelectionArr = []
                 state.associationChecked = false
                 state.clubChecked = false
                 state.associationLeague = []
@@ -360,8 +342,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 state.otherSelected = null
                 state.invitedAnyAssoc = []
                 state.invitedAnyClub = []
-                state.invitedAnyAssocArr = []
-                state.invitedAnyClubArr = []
             }
             return {
                 ...state,
@@ -369,7 +349,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 form: {
                     ...state.form,
                     id: payload.id,
-                    gameTimeTrackingType: payload.gameTimeTrackingType != null ? payload.gameTimeTrackingType : 0,
+                    gameTimeTrackingType: payload.gameTimeTrackingType  != null? payload.gameTimeTrackingType : 0,
                     competitionName: payload.longName,
                     shortName: payload.name,
                     competitionLogo: payload.logoUrl,

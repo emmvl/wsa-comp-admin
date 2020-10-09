@@ -1,8 +1,5 @@
 import React, { Component } from "react";
-import {
-    Layout, Breadcrumb, Modal, Button,
-    Form
-} from 'antd';
+import { Layout, Breadcrumb, Modal, Button } from 'antd';
 import './liveScore.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -12,14 +9,15 @@ import ReactPlayer from 'react-player'
 import { NavLink } from "react-router-dom";
 import history from '../../util/history'
 import {
-    newsNotificationAction, liveScoreDeleteNewsAction
+    newsNotificationAction,
+    liveScoreDeleteNewsAction
 } from "../../store/actions/LiveScoreAction/liveScoreNewsAction";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Loader from '../../customComponents/loader'
 import Tooltip from 'react-png-tooltip'
 import { getKeyForStateWideMessage } from '../../util/sessionStorage';
-import { EditorState, ContentState, convertFromHTML, convertFromRaw } from 'draft-js';
+import { EditorState, ContentState, convertFromRaw } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import htmlToDraft from 'html-to-draftjs';
 
@@ -67,7 +65,6 @@ class LiveScoreNewsView extends Component {
     };
 
     componentDidMount() {
-
         let newsData = this.state.newsItem;
 
         // let finalBody = newsData ? newsData.body ? JSON.parse(newsData.body) : "" : ""
@@ -77,7 +74,7 @@ class LiveScoreNewsView extends Component {
         //     editorState
         // })
 
-        const html = newsData ? newsData.body ? newsData.body : "" : "";
+        const html = newsData.body ? newsData.body : "";
         const contentBlock = htmlToDraft(html);
         if (contentBlock) {
             const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
@@ -85,13 +82,11 @@ class LiveScoreNewsView extends Component {
             this.setState({
                 editorState
             })
-
         }
     }
 
     componentDidUpdate(nextProps) {
         let newsState = this.props.liveScoreNewsState.notificationResult
-        console.log(newsState)
         let onLoad_2Data = this.props.liveScoreNewsState
         if (nextProps.newsState !== newsState) {
             if (onLoad_2Data.notifyLoad == false && this.state.getDataLoading == true) {
@@ -108,7 +103,6 @@ class LiveScoreNewsView extends Component {
                     })
                 }
             }
-
         }
     }
 
@@ -135,33 +129,34 @@ class LiveScoreNewsView extends Component {
     }
     // }
 
-
     ///////view for breadcrumb
     headerView = () => {
         let newsData = this.state.newsItem
         return (
-            <Header className="comp-venue-courts-header-view live-form-view-button-header" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <Header className="comp-venue-courts-header-view live-form-view-button-header">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.newsDetail}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }} >
+                    <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }}>
                         <NavLink to={{
                             pathname: "liveScoreAddNews",
                             state: { isEdit: true, item: this.state.newsItem, screenKey: this.state.screenKey }
                         }}>
-                            <Button className="primary-add-comp-form mr-5" type="primary">{AppConstants.edit}
+                            <Button className="primary-add-comp-form mr-5" type="primary">
+                                {AppConstants.edit}
                             </Button>
                         </NavLink>
-                        <Button className="primary-add-comp-form " onClick={() => this.showDeleteConfirm(newsData.id)} type="primary">{AppConstants.delete}</Button>
+                        <Button className="primary-add-comp-form " onClick={() => this.showDeleteConfirm(newsData.id)} type="primary">
+                            {AppConstants.delete}
+                        </Button>
                     </div>
                 </div>
-            </Header >
+            </Header>
         )
     }
-
 
     ////////form content view
     contentView = () => {
@@ -169,18 +164,19 @@ class LiveScoreNewsView extends Component {
         const { editorState } = this.state;
         return (
             <div className="content-view pt-4">
-                <InputWithHead heading={newsData ? newsData.title : history.push('/liveScoreCompetitions')} />
-                {(newsData && newsData.newsImage) && <img style={{ cursor: 'pointer' }} onClick={() => this.showModal(
-                    newsData.newsImage)}
+                <InputWithHead heading={newsData.title}/>
+                {newsData.newsImage && <img
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => this.showModal(newsData.newsImage)}
                     src={newsData ? newsData.newsImage : ''}
-                    height='100' width='100' />}
+                    height='100' width='100'
+                />}
 
                 {/* <span className="input-heading">{newsData.body}</span> */}
                 {/* <div className="input-heading" dangerouslySetInnerHTML={{ __html: newsData.body }}></div> */}
 
 
                 <div style={{ marginTop: -10 }}>
-
                     <Editor
                         toolbarHidden
                         editorState={editorState}
@@ -189,27 +185,23 @@ class LiveScoreNewsView extends Component {
                     />
                 </div>
 
-
-                {(newsData && newsData.newsVideo) && <div className='video-view mt-5'>
+                {newsData.newsVideo && <div className='video-view mt-5'>
                     <video style={{ cursor: 'pointer' }} onClick={() => this.showModal(newsData.newsVideo, true)}
-                        src={newsData ? newsData.newsVideo : ''} height='100' width='150' />
+                           src={newsData ? newsData.newsVideo : ''} height='100' width='150'/>
                 </div>}
             </div>
         )
     }
 
-    //// this method called insside modal view function to show content of the modal 
+    //// this method called inside modal view function to show content of the modal
     innerViewOfModal() {
-
         return (
-            <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center', }} >
-                {
-                    this.state.isVideo == true ?
-                        <ReactPlayer url={this.state.modaldata} playing={this.state.visible == true ? true : false} controls={true} />
-                        :
-                        <img src={this.state.modaldata} height='250' width='250' />
+            <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center', }}>
+                {this.state.isVideo == true ?
+                    <ReactPlayer url={this.state.modaldata} playing={this.state.visible == true} controls={true} />
+                :
+                    <img src={this.state.modaldata} height='250' width='250' />
                 }
-
             </div>
         )
     }
@@ -232,7 +224,6 @@ class LiveScoreNewsView extends Component {
         )
     }
 
-
     //////footer view containing all the buttons like submit and cancel
     footerView() {
         let newsDataArr = this.state.newsItem;
@@ -242,12 +233,21 @@ class LiveScoreNewsView extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <span style={{ cursor: "pointer" }} onClick={() => history.push('/liveScoreNewsList')} className="input-heading-add-another">{AppConstants.backToNews}</span>
+                                <span
+                                    style={{ cursor: "pointer" }}
+                                    onClick={() => history.push('/liveScoreNewsList')}
+                                    className="input-heading-add-another"
+                                >
+                                    {AppConstants.backToNews}
+                                </span>
                             </div>
                         </div>
                         <div className="col-sm">
-                            <div className="comp-buttons-view" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-                                {(newsDataArr && !newsDataArr.published_at) &&
+                            <div
+                                className="comp-buttons-view"
+                                style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}
+                            >
+                                {!newsDataArr.published_at &&
                                     // <div style={{ display: 'flex', flexDirection: 'row', paddingHorizontal: 50, }}>
                                     <div style={{ display: 'flex', flexDirection: 'row' }}>
                                         <Button
@@ -259,22 +259,19 @@ class LiveScoreNewsView extends Component {
                                             </Tooltip>
                                         </div>
                                     </div>
-
-
                                     // </div>
                                 }
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <Button className="open-reg-button" type="primary"
+                                    <Button
+                                        className="open-reg-button" type="primary"
                                         onClick={() => this.onSubmitNewsPublish(newsDataArr, false)}
                                     >
-                                        {(newsDataArr && !newsDataArr.published_at) ? AppConstants.publish_notify
-                                            : (newsDataArr && newsDataArr.isActive == 1 && newsDataArr.isNotification == 1) ?
+                                        {!newsDataArr.published_at ? AppConstants.publish_notify
+                                            : (newsDataArr.isActive == 1 && newsDataArr.isNotification == 1) ?
                                                 AppConstants.notifyAgain : AppConstants.notify
-
                                         }
-
                                     </Button>
-                                    <div  >
+                                    <div>
                                         <Tooltip background='#ff8237'>
                                             <span>{AppConstants.newsPublishNotifyMsg}</span>
                                         </Tooltip>
@@ -284,7 +281,7 @@ class LiveScoreNewsView extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     };
 
@@ -293,18 +290,20 @@ class LiveScoreNewsView extends Component {
         this.setState({ getDataLoading: true })
     }
 
-
     ////main render function
     render() {
         let stateWideMsg = getKeyForStateWideMessage()
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                {
-                    stateWideMsg ?
-                        <InnerHorizontalMenu menu={"liveScoreNews"} liveScoreNewsSelectedKey={"21"} />
-                        :
-                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"21"} />
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+                <DashboardLayout
+                    menuHeading={AppConstants.liveScores}
+                    menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                />
+                {stateWideMsg ?
+                    <InnerHorizontalMenu menu={"liveScoreNews"} liveScoreNewsSelectedKey={"21"} />
+                :
+                    <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"21"} />
                 }
                 <Loader visible={this.props.liveScoreNewsState.notifyLoad} />
                 <Layout>
@@ -336,4 +335,5 @@ function mapStateToProps(state) {
         liveScoreNewsState: state.LiveScoreNewsState,
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(LiveScoreNewsView));
+
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreNewsView);

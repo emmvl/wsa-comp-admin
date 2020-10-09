@@ -50,21 +50,11 @@ function saveRegistrationChangeReview(payload){
 
     return action;
 }
-
-function getTransferCompetitionsAction(payload){
-    const action = {
-        type: ApiConstants.API_GET_TRANSFER_COMPETITIONS_LOAD,
-        payload
-    }
-
-    return action;
-}
 export {
     updateRegistrationReviewAction,
     saveDeRegisterDataAction,
     updateDeregistrationData,
     getRegistrationChangeDashboard,
     getRegistrationChangeReview,
-    saveRegistrationChangeReview,
-    getTransferCompetitionsAction
+    saveRegistrationChangeReview
 };

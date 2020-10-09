@@ -211,8 +211,7 @@ const initialState = {
     highestSequence: null,
     onLoadMatch: false,
     umpireReserve: null,
-    umpireCoach: null,
-    matchListActionObject: null,
+    umpireCoach: null
 
 };
 
@@ -312,7 +311,6 @@ function liveScoreMatchReducer(state = initialState, action) {
                 onLoadMatch: true,
                 isFetchingMatchList: true,
                 liveScoreMatchListData: [],
-                matchListActionObject: action,
             };
 
         case ApiConstants.API_LIVE_SCORE_MATCH_LIST_SUCCESS:
@@ -785,10 +783,6 @@ function liveScoreMatchReducer(state = initialState, action) {
 
         case ApiConstants.API_ADD_LIVE_STREM_SUCCESS:
             state.matchDetails.match[0].livestreamURL = action.result.livestreamURL
-            return { ...state, onLoad: false };
-
-        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
-            state.matchListActionObject = null
             return { ...state, onLoad: false };
 
         default:

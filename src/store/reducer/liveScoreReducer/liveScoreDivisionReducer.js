@@ -19,8 +19,7 @@ const initialState = {
     totalCount: null,
     currentPage: null,
     positionTracking: "null",
-    recordGoalAttempts: "null",
-    divisionListActionObject: null,
+    recordGoalAttempts: "null"
 };
 
 function liveScoreDivisionState(state = initialState, action) {
@@ -114,7 +113,7 @@ function liveScoreDivisionState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_LOAD:
-            return { ...state, onLoad: true, divisionListActionObject: action };
+            return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_MAIN_DIVISION_LIST_SUCCESS:
             return {
@@ -125,10 +124,6 @@ function liveScoreDivisionState(state = initialState, action) {
                 currentPage: action.result.page.currentPage,
                 status: action.status,
             };
-
-        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
-            state.divisionListActionObject = null
-            return { ...state, onLoad: false };
 
         default:
             return state;

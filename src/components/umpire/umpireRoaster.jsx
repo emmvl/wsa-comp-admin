@@ -44,8 +44,7 @@ function tableSort(key) {
         }
     }
     this_obj.setState({ sortBy, sortOrder });
-    let rolIds = Array.isArray(this_obj.state.umpireRole) ? JSON.stringify(this_obj.state.umpireRole) : JSON.stringify([this_obj.state.umpireRole])
-    this_obj.props.umpireRoasterListAction(this_obj.state.selectedComp, this_obj.state.status, rolIds, body, sortBy, sortOrder)
+    this_obj.props.umpireRoasterListAction(this_obj.state.selectedComp, this_obj.state.status, JSON.stringify([this_obj.state.umpireRole]), body, sortBy, sortOrder)
 }
 /////function to sort table column
 // function tableSort(a, b, key) {
@@ -191,27 +190,12 @@ class UmpireRoaster extends Component {
             roasterLoad: false,
             compArray: [],
             offsetData: 0,
-            umpireRole: 15,
-            sortBy: null,
-            sortOrder: null
-
+            umpireRole: 15
         }
         this_obj = this
     }
 
-    async componentDidMount() {
-        const { umpireRosterListActionObject } = this.props.umpireRoasterdState
-        let sortBy = this.state.sortBy
-        let sortOrder = this.state.sortOrder
-        if (umpireRosterListActionObject) {
-            let offsetData = umpireRosterListActionObject.paginationBody.paging.offset
-            sortBy = umpireRosterListActionObject.sortBy
-            sortOrder = umpireRosterListActionObject.sortOrder
-            let status = umpireRosterListActionObject.status
-            let umpireRole = JSON.parse(umpireRosterListActionObject.refRoleId)
-            await this.setState({ sortBy, sortOrder, offsetData, status, umpireRole })
-        }
-
+    componentDidMount() {
         let { organisationId, } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
@@ -244,21 +228,15 @@ class UmpireRoaster extends Component {
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey
-
-                let sortBy = this.state.sortBy
-                let sortOrder = this.state.sortOrder
-                if (firstComp !== false) {
-                    const body =
-                    {
-                        "paging": {
-                            "limit": 10,
-                            "offset": this.state.offsetData
-                        }
+                const body =
+                {
+                    "paging": {
+                        "limit": 10,
+                        "offset": 0
                     }
-
-                    let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
-
-                    this.props.umpireRoasterListAction(firstComp, this.state.status, roleIds, body, sortBy, sortOrder)
+                }
+                if (firstComp !== false) {
+                    this.props.umpireRoasterListAction(firstComp, this.state.status, JSON.stringify([this.state.umpireRole]), body, sortBy, sortOrder)
                     this.setState({ selectedComp: firstComp, loading: false, competitionUniqueKey: compKey, compArray: compList })
                 } else {
                     this.setState({ loading: false })
@@ -273,11 +251,10 @@ class UmpireRoaster extends Component {
                 {
                     "paging": {
                         "limit": 10,
-                        "offset": this.state.offsetData
+                        "offset": 0
                     }
                 }
-                let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
-                this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, roleIds, body, sortBy, sortOrder)
+                this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, JSON.stringify([this.state.umpireRole]), body, sortBy, sortOrder)
                 this.setState({ roasterLoad: false })
             }
         }
@@ -354,8 +331,7 @@ class UmpireRoaster extends Component {
                 "offset": offset
             },
         }
-        let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
-        this.props.umpireRoasterListAction(this.state.selectedComp, roleIds, body, sortBy, sortOrder)
+        this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, JSON.stringify([this.state.umpireRole]), body, sortBy, sortOrder)
 
     }
 
@@ -364,7 +340,6 @@ class UmpireRoaster extends Component {
     contentView = () => {
         const { umpireRoasterList, umpireTotalCount } = this.props.umpireRoasterdState
         let umpireListResult = isArrayNotEmpty(umpireRoasterList) ? umpireRoasterList : []
-        console.log(this.props.umpireRoasterdState.umpireRosterListActionObject, 'umpireRosterListActionObject')
         return (
             <div className="comp-dash-table-view mt-0">
                 <div className="table-responsive home-dash-table-view">
@@ -425,8 +400,7 @@ class UmpireRoaster extends Component {
                 "offset": 0
             },
         }
-        let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
-        this.props.umpireRoasterListAction(selectedComp, this.state.status, roleIds, body, sortBy, sortOrder)
+        this.props.umpireRoasterListAction(selectedComp, this.state.status, JSON.stringify([this.state.umpireRole]), body, sortBy, sortOrder)
         this.setState({ selectedComp, competitionUniqueKey: compKey })
 
     }
@@ -442,8 +416,8 @@ class UmpireRoaster extends Component {
         }
 
         if (this.state.selectedComp) {
-            let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
-            this.props.umpireRoasterListAction(this.state.selectedComp, status, roleIds, body, sortBy, sortOrder)
+
+            this.props.umpireRoasterListAction(this.state.selectedComp, status, JSON.stringify([this.state.umpireRole]), body, sortBy, sortOrder)
 
         }
         this.setState({ status })
@@ -460,8 +434,7 @@ class UmpireRoaster extends Component {
         }
 
         if (this.state.selectedComp) {
-            let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
-            this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, roleIds, body, sortBy, sortOrder)
+            this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, JSON.stringify([umpireRole]), body, sortBy, sortOrder)
         }
         this.setState({ umpireRole })
     }
@@ -606,7 +579,7 @@ class UmpireRoaster extends Component {
                         {/* Comp List */}
                         <div className="reg-col" >
                             <div className="reg-filter-col-cont" style={{ width: "90%" }}>
-                                <span className='year-select-heading' style={{ width: '175px' }}>{AppConstants.competition}:</span>
+                                <span className='year-select-heading' style={{ width: '135px' }}>{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ minWidth: 200 }}
@@ -624,8 +597,8 @@ class UmpireRoaster extends Component {
 
                         {/* Venue List */}
                         <div className="reg-col1 ml-0" >
-                            <div className="reg-filter-col-cont ml-0 " style={{ width: "90%" }} >
-                                <span className='year-select-heading' style={{ width: '127px' }}>{AppConstants.status}:</span>
+                            <div className="reg-filter-col-cont ml-5 " style={{ width: "90%" }} >
+                                <span className='year-select-heading'>{AppConstants.status}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ minWidth: 160 }}
@@ -641,8 +614,8 @@ class UmpireRoaster extends Component {
                         </div>
                         {/* umpire role */}
                         <div className="reg-col1 ml-0" >
-                            <div className="reg-filter-col-cont ml-4" style={{ width: "90%" }}>
-                                <span className='year-select-heading' style={{ width: "102px" }}>{AppConstants.role}:</span>
+                            <div className="reg-filter-col-cont ml-5" style={{ width: "90%" }}>
+                                <span className='year-select-heading'>{AppConstants.role}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ minWidth: 160 }}

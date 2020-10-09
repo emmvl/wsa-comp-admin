@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Input, Icon } from "antd";
+import { Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import TreeLeaf from "./TreeLeaf";
 
@@ -98,8 +99,7 @@ class SideBar extends Component {
             placeholder="Search for articles..."
             onKeyPress={this.onKeyEnterSearchText}
             prefix={
-              <Icon
-                type="search"
+              <SearchOutlined
                 className="search-prefix-icon-style"
                 onClick={this.onClickSearchIcon}
               />

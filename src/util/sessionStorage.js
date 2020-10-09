@@ -156,8 +156,7 @@ const setUmpireCompId = umpireCompId => {
 }
 
 const clearUmpireStorage = () => {
-  let keysToRemove = ["umpireCompId", "umpireCompetitionData", "umpireCompetitionId",
-    "own_competition", 'Participating_competition', "Participate_year", 'own_year'];
+  let keysToRemove = ["umpireCompId", "umpireCompetitionData", "umpireCompetitionId"];
   for (let key of keysToRemove) {
     localStorage.removeItem(key);
   }

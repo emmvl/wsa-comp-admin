@@ -99,22 +99,4 @@ export function* saveRegistrationChangeReviewSaga(action) {
   }
 }
 
- ////// Get getTransferOrganisations
- export function* getTransferOrganisationsSaga(action) {
-  try {
-    const result = yield call(AxiosApi.getTransferOrganisationsData, action.payload);
-    if (result.status === 1) {
-      yield put({
-        type: ApiConstants.API_GET_TRANSFER_COMPETITIONS_SUCCESS,
-        result: result.result.data,
-        status: result.status
-      });
-    } else {
-      yield call(failSaga, result)
-    }
-  } catch (error) {
-    yield call(errorSaga, error)
-  }
-}
-
   
