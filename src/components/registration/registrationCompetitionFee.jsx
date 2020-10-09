@@ -3797,10 +3797,10 @@ class RegistrationCompetitionFee extends Component {
                   }
                 }
               }
-              finalPostData = [...feeSeasonalData];
+              
 
               if (fee_data[i].isTeamCasual == true) {
-                feeCasualTeamData = fee_data[i].seasonalTeam.allType;
+                feeCasualTeamData = fee_data[i].casualTeam.allType;
                 console.log("feeCasualTeamData", feeCasualTeamData);
                 for (let j in feeSeasonalData) {
                   for (let k in feeCasualTeamData) {
@@ -3822,7 +3822,7 @@ class RegistrationCompetitionFee extends Component {
                 }
               }
 
-             // finalPostData = [...feeCasualTeamData];
+              finalPostData = [...feeSeasonalData];
             } 
             else {
               feeSeasonalData = fee_data[i].seasonal.perType;
