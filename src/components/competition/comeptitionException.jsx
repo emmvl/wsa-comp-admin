@@ -1,4 +1,4 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import {
     Layout,
     Breadcrumb,
@@ -17,6 +17,7 @@ import AppConstants from "../../themes/appConstants";
 import moment from "moment";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import ValidationConstants from '../../themes/validationConstant'
 import { venueListAction, courtListAction } from '../../store/actions/commonAction/commonAction'
 import { updateCourtTimingsDrawsAction, getActiveRoundsAction } from "../../store/actions/competitionModuleAction/competitionDrawsAction"
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
@@ -50,7 +51,6 @@ class CompetitionException extends Component {
             drawGenerateModalVisible: false,
             generateRoundId: null
         };
-        this.formRef = createRef();
     }
 
     componentDidMount() {
@@ -75,7 +75,8 @@ class CompetitionException extends Component {
                 yearRefId, competitionId, organisationId
             })
             this.props.courtListAction(venueId)
-        } else {
+        }
+        else {
             history.push("/competitionDraws")
         }
     }
@@ -86,7 +87,7 @@ class CompetitionException extends Component {
         let courtListData = this.props.commonReducerState.courtList
         if (nextProps.commonReducerState !== this.props.commonReducerState) {
             if (nextProps.commonReducerState.courtListData !== courtListData) {
-                if (this.props.commonReducerState.courtLoad == false && this.state.courtLoad) {
+                if (this.props.commonReducerState.courtLoad == false && this.state.courtLoad)
                     if (courtListData.length > 0) {
                         let venueCourtId = courtListData[0].id
                         if (this.state.venueCourtId == null) {
@@ -95,7 +96,6 @@ class CompetitionException extends Component {
                             })
                         }
                     }
-                }
             }
         }
 
@@ -104,12 +104,14 @@ class CompetitionException extends Component {
                 this.setState({ exceptionUpdateLoad: false });
 
                 let competitionStatus = getOwn_competitionStatus();
-                if (competitionStatus != 2) {
+                if(competitionStatus != 2){
                     this.callGenerateDraw();
-                } else {
+                }
+                else{
                     this.props.getActiveRoundsAction(this.state.yearRefId, this.state.competitionId);
                     this.setState({ roundLoad: true });
                 }
+              
             }
         }
 
@@ -120,18 +122,23 @@ class CompetitionException extends Component {
             }
         }
 
-        if (this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false) {
-            this.setState({ roundLoad: false });
-            if (this.props.drawsState.activeDrawsRoundsData != null &&
-                this.props.drawsState.activeDrawsRoundsData.length > 0) {
-                this.setState({ drawGenerateModalVisible: true })
-            } else {
+        if (
+            this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false
+          ) {
+            this.setState({roundLoad: false});
+            if(this.props.drawsState.activeDrawsRoundsData!= null && 
+              this.props.drawsState.activeDrawsRoundsData.length > 0){
+                this.setState({drawGenerateModalVisible: true})
+              }
+              else{
                 this.callGenerateDraw();
                 // message.config({ duration: 0.9, maxCount: 1 });
                 // message.info(AppConstants.roundsNotAvailable);
-            }
-        }
+              }
+          }
+
     }
+
 
     ///////view for breadcrumb
     headerView = () => {
@@ -159,11 +166,14 @@ class CompetitionException extends Component {
         );
     };
 
+
+
     ////////form content view
-    contentView = () => {
+    contentView = (getFieldDecorator) => {
         return (
             <div className="content-view pt-4">
-                {this.exceptionView()}
+
+                {this.exceptionView(getFieldDecorator)}
             </div>
         );
     };
@@ -178,8 +188,11 @@ class CompetitionException extends Component {
         this.setState({ venueCourtId: courtID })
     }
 
+
+
     ////this method called after slecting Venue Change option from drop down
-    exceptionView() {
+    exceptionView(getFieldDecorator) {
+
         const { venueList, courtList } = this.props.commonReducerState
         const venueData = isArrayNotEmpty(venueList) ? venueList : []
         const courtData = isArrayNotEmpty(courtList) ? courtList : []
@@ -191,6 +204,7 @@ class CompetitionException extends Component {
                     {/* venue drop down view */}
                     <InputWithHead required={"required-field"} heading={AppConstants.venue} />
                     <div>
+
                         <Select
                             showSearch
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -198,14 +212,19 @@ class CompetitionException extends Component {
                             onChange={(venueId) => this.onChangeVenue(venueId)}
                             value={this.state.venueId}
                         >
+
                             {venueData.map((item) => {
                                 return (
-                                    <Option key={'venue' + item.id} value={item.venueId}>
+                                    <Option key={'venue' + item.id}
+                                        value={item.venueId}>
                                         {item.venueName}
+
                                     </Option>
                                 )
                             })}
                         </Select>
+
+
                     </div>
 
                     {/* court drop down view */}
@@ -218,14 +237,17 @@ class CompetitionException extends Component {
                     >
                         {courtData.map((item) => {
                             return (
-                                <Option key={'court' + item.id} value={item.id}>
+                                <Option key={'court' + item.id}
+                                    value={item.id}>
                                     {item.name}
                                 </Option>
                             )
                         })}
                     </Select>
 
+
                     <div className="row">
+
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead required={"required-field"} heading={AppConstants.date} />
 
@@ -237,7 +259,9 @@ class CompetitionException extends Component {
                                 onChange={(startDate) => this.onChangeDate(moment(startDate).format("YYYY-MM-DD"))}
                                 value={moment(this.state.matchDate)}
                             />
+
                         </div>
+
                     </div>
                 </div>
 
@@ -255,9 +279,11 @@ class CompetitionException extends Component {
                                 onChange={(endTime) => this.onChangeTime(endTime)}
                                 value={moment(this.state.time, "HH:mm")}
                             />
+
                         </div>
                     </div>
                 </div>
+
             </div>
         )
     }
@@ -267,6 +293,7 @@ class CompetitionException extends Component {
         this.setState({ time })
     }
 
+
     onChangeDate(value) {
         this.setState({ matchDate: value })
     }
@@ -275,10 +302,12 @@ class CompetitionException extends Component {
         if (this.state.venueCourtId == null) {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error("Please select court id")
-        } else {
+        }
+        else {
             let matchDate = moment(this.state.matchDate).format('YYYY-MM-DD') + " " + this.state.time
             var date = moment(this.state.time, "hh:mm:ss A").add(this.state.matchDuration, "minute")
-            let postObj = {
+            let postObj =
+            {
                 "drawsId": this.state.drawsId,
                 "venueCourtId": this.state.venueCourtId,
                 "matchDate": matchDate,
@@ -293,7 +322,7 @@ class CompetitionException extends Component {
                 orgId: null,
                 startDate: this.state.competitionId == "-1" ? this.state.startDate : null,
                 endDate: this.state.competitionId == "-1" ? this.state.endDate : null
-            }
+              }
             this.props.updateCourtTimingsDrawsAction(postObj, null, null, "exception", null, apiData)
             this.setState({ exceptionUpdateLoad: true });
         }
@@ -301,37 +330,41 @@ class CompetitionException extends Component {
 
     reGenerateDraw = () => {
         let competitionStatus = getOwn_competitionStatus();
-        if (competitionStatus == 2) {
-            this.props.getActiveRoundsAction(this.state.yearRefId, this.state.competitionId);
-            this.setState({ roundLoad: true });
-        } else {
-            this.callGenerateDraw();
+        if(competitionStatus == 2){
+          this.props.getActiveRoundsAction(this.state.yearRefId, this.state.competitionId);
+          this.setState({ roundLoad: true });
+        }
+        else{
+          this.callGenerateDraw();
         }
     }
 
     handleGenerateDrawModal =  (key) =>{
-        if (key == "ok") {
-            if (this.state.generateRoundId != null) {
-                this.callGenerateDraw();
-                this.setState({ drawGenerateModalVisible: false });
-            } else {
-                message.error("Please select round");
-            }
-        } else {
-            this.setState({ drawGenerateModalVisible: false });
+        if(key == "ok"){
+          if(this.state.generateRoundId!= null){
+            this.callGenerateDraw();
+            this.setState({drawGenerateModalVisible: false});
+          }
+          else{
+            message.error("Please select round");
+          }
         }
-    }
-
-    callGenerateDraw = () =>{
+        else{
+          this.setState({drawGenerateModalVisible: false});
+        }
+      }
+    
+      callGenerateDraw = () =>{
         let payload = {
-            yearRefId: this.state.yearRefId,
-            competitionUniqueKey: this.state.competitionId,
-            organisationId: getOrganisationData().organisationUniqueKey,
-            roundId: this.state.generateRoundId
+          yearRefId: this.state.yearRefId,
+          competitionUniqueKey: this.state.competitionId,
+          organisationId: getOrganisationData().organisationUniqueKey,
+          roundId: this.state.generateRoundId
         };
         this.props.generateDrawAction(payload);
         this.setState({ reGenerateDrawLoad: true });
-    }
+      }
+
 
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
@@ -357,28 +390,34 @@ class CompetitionException extends Component {
                     </div>
                 </div>
 
+                
                 <Modal
                     className="add-membership-type-modal"
                     title= {AppConstants.regenerateDrawTitle}
                     visible={this.state.drawGenerateModalVisible}
                     onOk={() => this.handleGenerateDrawModal("ok")}
-                    onCancel={() => this.handleGenerateDrawModal("cancel")}
-                >
+                    onCancel={() => this.handleGenerateDrawModal("cancel")}>
                     <Select
-                        className="year-select reg-filter-select-competition ml-2"
+                    className="year-select reg-filter-select-competition ml-2"
                         onChange={(e) => this.setState({generateRoundId: e})}
-                        placeholder={'Round'}
-                    >
+                        placeholder={'Round'}>
                         {(activeDrawsRoundsData || []).map((d, dIndex) => (
-                            <Option key={d.roundId} value={d.roundId} >{d.name}</Option>
-                        ))}
+                                <Option key={d.roundId} 
+                                value={d.roundId} >{d.name}</Option>
+                            ))
+                        }
+                    
                     </Select>
                 </Modal>
             </div>
         );
     };
 
+
+
+    /////main render method
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width">
                 <DashboardLayout
@@ -389,23 +428,20 @@ class CompetitionException extends Component {
                 <Layout>
                     {this.headerView()}
                     <Form
-                        ref={this.formRef}
                         autoComplete="off"
-                        onFinish={this.handleSubmit}
-                        noValidate="noValidate"
-                    >
+                        onSubmit={this.handleSubmit}
+                        noValidate="noValidate">
                         <Content>
-                            <div className="formView">{this.contentView()}</div>
+                            <div className="formView">{this.contentView(getFieldDecorator)}</div>
                             <Loader visible={this.props.competitionModuleState.drawGenerateLoad} />
                         </Content>
-                        <Footer>{this.footerView()}</Footer>
+                        <Footer >{this.footerView()}</Footer>
                     </Form>
                 </Layout>
             </div>
         );
     }
 }
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         venueListAction,
@@ -414,13 +450,14 @@ function mapDispatchToProps(dispatch) {
         generateDrawAction
     }, dispatch)
 }
-
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         commonReducerState: state.CommonReducerState,
         competitionModuleState: state.CompetitionModuleState,
         drawsState: state.CompetitionDrawsState,
     }
 }
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionException));
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompetitionException);
+
+

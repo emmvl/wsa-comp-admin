@@ -1,12 +1,10 @@
-import React from "react";
-import { Modal, Form, Button, Select } from "antd";
-
-import AppConstants from "../themes/appConstants";
+import React from 'react';
+import { Modal, DatePicker, Form, Button, Select } from 'antd';
+import InputWithHead from "./InputWithHead"
+import AppConstants from "../themes/appConstants"
 import ValidationConstants from '../themes/validationConstant';
-import InputWithHead from "./InputWithHead";
 
 const { Option } = Select;
-
 class CompetitionVenueModal extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +12,6 @@ class CompetitionVenueModal extends React.Component {
             competitionState: true,
             buttonClicked: ""
         }
-        this.formRef = React.createRef();
     }
 
     componentDidUpdate() {
@@ -28,22 +25,26 @@ class CompetitionVenueModal extends React.Component {
     }
 
     setFieldValues = () => {
-        if (this.formRef.current) {
-            this.formRef.current.setFieldsValue({
-                'selectedVenues': this.props.quickCompetitionState.postSelectedVenues,
-            });
-        }
+        this.props.form.setFieldsValue({
+            selectedVenues: this.props.quickCompetitionState.postSelectedVenues,
+        })
     }
 
     onOKsubmit = (e) => {
-        if (this.state.buttonClicked == "save") {
-            this.props.handleVenueOK()
-        } else if (this.state.buttonClicked == "next") {
-            this.props.handleVenueNext()
-        }
+        e.preventDefault();
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+                if (this.state.buttonClicked == "save") {
+                    this.props.handleVenueOK()
+                }
+                else if (this.state.buttonClicked == "next") {
+                    this.props.handleVenueNext()
+                }
+            }
+        })
     }
-
     render() {
+        const { getFieldDecorator } = this.props.form;
         const { modalTitle, handleVenueOK, onVenueCancel, onVenueBack, appState, onSelectValues, handleSearch, handleVenueNext } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
@@ -55,40 +56,47 @@ class CompetitionVenueModal extends React.Component {
                     onOk={handleVenueOK}
                     onCancel={onVenueCancel}
                     footer={
-                        <div style={{ display: "none" }} />
+                        <div style={{ display: "none" }}
+                        />
                     }
                 >
                     <Form
-                        ref={this.formRef}
                         autoComplete="off"
-                        onFinish={this.onOKsubmit}
-                        onFinishFailed={({errorFields}) => this.formRef.current.scrollToField(errorFields[0].name)}
-                        noValidate="noValidate"
-                    >
+                        onSubmit={this.onOKsubmit}
+                        noValidate="noValidate">
+
                         <div className="inside-container-view mt-3">
                             <div className="col-sm division" >
                                 <InputWithHead required={"required-field pb-0 pt-0 "} heading={AppConstants.venue} />
-                                <Form.Item name='selectedVenues' rules={[{ required: true, message: ValidationConstants.pleaseSelectvenue }]}>
-                                    <Select
-                                        mode="multiple"
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                        onChange={(venueSelection) => onSelectValues(venueSelection)}
-                                        placeholder={AppConstants.selectVenue}
-                                        filterOption={false}
-                                        // onBlur={() => console.log("called")}
-                                        onSearch={(value) => handleSearch(value)}
-                                    >
-                                        {appState.venueList.length > 0 && appState.venueList.map((item) => (
-                                            <Option key={item.id} value={item.id}>{item.name}</Option>
-                                        ))}
-                                    </Select>
+                                <Form.Item  >
+                                    {getFieldDecorator('selectedVenues', { rules: [{ required: true, message: ValidationConstants.pleaseSelectvenue }] })(
+                                        <Select
+                                            mode="multiple"
+                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                            onChange={(venueSelection) => onSelectValues(venueSelection)}
+                                            placeholder={AppConstants.selectVenue}
+                                            filterOption={false}
+                                            // onBlur={() => console.log("called")}
+                                            onSearch={(value) => handleSearch(value)}
+                                        >
+                                            {appState.venueList.length > 0 && appState.venueList.map((item) => {
+                                                return (
+                                                    <Option
+                                                        key={item.id}
+                                                        value={item.id}>
+                                                        {item.name}</Option>
+                                                )
+                                            })}
+                                        </Select>
+                                    )}
                                 </Form.Item>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-sm" style={{ display: "flex", width: "100%", paddingTop: 10 }}>
                                 <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
-                                    <Button className="cancelBtnWidth" type="cancel-button" onClick={onVenueBack} style={{ marginRight: '20px' }}>
+                                    <Button className="cancelBtnWidth" type="cancel-button" onClick={onVenueBack} style={{ marginRight: '20px' }}
+                                    >
                                         {AppConstants.back}
                                     </Button>
                                 </div>
@@ -109,4 +117,5 @@ class CompetitionVenueModal extends React.Component {
     }
 }
 
-export default CompetitionVenueModal;
+
+export default (Form.create()(CompetitionVenueModal));

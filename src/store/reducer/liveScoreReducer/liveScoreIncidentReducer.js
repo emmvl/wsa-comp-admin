@@ -38,6 +38,8 @@ const initialState = {
     team2_Name: null,
     team1Id: null,
     team2Id: null,
+    incidentListActionObject: null
+
 }
 
 function getTeamObj(teamSelectId, teamArr) {
@@ -128,7 +130,8 @@ function deleteSelectedMedia(mediaArray, mediaType) {
 function liveScoreIncidentState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_INCIDENT_LIST_LOAD:
-            return { ...state, onLoad: true }
+            console.log(action, 'liveScoreIncidentState')
+            return { ...state, onLoad: true, incidentListActionObject: action }
 
         case ApiConstants.API_LIVE_SCORE_INCIDENT_LIST_SUCCESS:
             const result = action.result
@@ -285,6 +288,10 @@ function liveScoreIncidentState(state = initialState, action) {
                 incidentTypeResult: action.result,
                 status: action.status
             }
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.incidentListActionObject = null
+            return { ...state, onLoad: false };
 
         default:
             return state

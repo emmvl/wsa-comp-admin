@@ -115,3 +115,23 @@ export function* umpireSearchSaga(action) {
         yield call(errorSaga, error)
     }
 }
+
+export function* umpireListDataSaga(action) {
+    try {
+        const result = yield call(UserAxiosApi.umpireList_Data, action.data);
+
+        if (result.status === 1) {
+
+            yield put({
+                type: ApiConstants.API_UMPIRE_MAIN_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                key: action.data.userName ? "userData" : "data"
+            });
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}

@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Button, Table, Pagination, Input, Menu } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Layout, Button, Table, Pagination, Input, Icon, Menu } from "antd";
 
 import "./liveScore.css";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -12,12 +11,13 @@ import AppConstants from "../../themes/appConstants";
 import scorerData from "../../mocks/managersList";
 import AppImages from "../../themes/appImages";
 import { liveScoreManagerListAction } from "../../store/actions/LiveScoreAction/liveScoreManagerAction";
-import { getLiveScoreCompetiton } from "../../util/sessionStorage";
+import { getLiveScoreCompetiton, getUserId } from "../../util/sessionStorage";
 import history from "../../util/history";
 import { userExportFilesAction } from "../../store/actions/appAction";
 import { teamListData } from "../../util/helpers";
 
 const { Content } = Layout;
+let userId = getUserId();
 let _this = null;
 
 function tableSort(key) {
@@ -118,8 +118,8 @@ const columns = [
                             </NavLink>
                         </div>
                     ) : (
-                        <span key={`managerName${i}` + item.entityId}>{item.name}</span>
-                    )
+                            <span key={`managerName${i}` + item.entityId}>{item.name}</span>
+                        )
                 ))}
             </div>
         ),
@@ -195,26 +195,37 @@ class LiveScoreManagerList extends Component {
             scorerTableData: scorerData.scorerData,
             searchText: '',
             competitionId: null,
-            offset: 0
+            offset: 0,
+            sortBy: null,
+            sortOrder: null,
         }
 
         _this = this;
     }
 
     componentDidMount() {
-
+        let { managerListActionObject } = this.props.liveScoreMangerState
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ competitionId: id })
             let offset = 0
-            this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, offset)
+            if (managerListActionObject) {
+                offset = managerListActionObject.offset
+                let searchText = managerListActionObject.searchText
+                let sortBy = managerListActionObject.sortBy
+                let sortOrder = managerListActionObject.sortOrder
+                this.setState({ offset, searchText, sortBy, sortOrder })
+                this.props.liveScoreManagerListAction(3, 1, id, searchText, offset, sortBy, sortOrder);
+            } else {
+                this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, offset)
+            }
         } else {
             history.push('/liveScoreCompetitions')
         }
     }
 
     /// Handle Page change
-    handlePageChange = (page) => {
+    handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
             offset
@@ -253,7 +264,7 @@ class LiveScoreManagerList extends Component {
                             current={currentPage}
                             total={totalCount}
                             defaultPageSize={10}
-                            onChange={this.handlePageChange}
+                            onChange={(page) => this.handlePageChnage(page)}
                         />
                     </div>
                 </div>
@@ -372,13 +383,15 @@ class LiveScoreManagerList extends Component {
                         <div className="comp-product-search-inp-width">
                             <Input
                                 className="product-reg-search-input"
-                                onChange={this.onChangeSearchText}
+                                onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
-                                onKeyPress={this.onKeyEnterSearchText}
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                value={this.state.searchText}
                                 prefix={
-                                    <SearchOutlined
+                                    <Icon
+                                        type="search"
                                         style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                        onClick={this.onClickSearchIcon}
+                                        onClick={() => this.onClickSearchIcon()}
                                     />
                                 }
                                 allowClear
@@ -401,7 +414,7 @@ class LiveScoreManagerList extends Component {
         }
     }
 
-    // search key
+    // search key 
     onKeyEnterSearchText = (e) => {
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;

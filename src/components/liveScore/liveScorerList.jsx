@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Layout, Breadcrumb, Button, Table, Pagination, Menu, Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { Layout, Breadcrumb, Button, Table, Pagination, Menu, Input, Icon } from "antd";
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -131,8 +130,8 @@ const columns = [
                             </NavLink>
                         </div>
                     ) : (
-                        <span>{item.name}</span>
-                    )
+                            <span>{item.name}</span>
+                        )
                 ))}
             </div>
         )
@@ -187,13 +186,17 @@ class LiveScorerList extends Component {
             year: "2020",
             scorerTableData: scorerData.scorerData,
             searchText: '',
-            competitionId: null
+            competitionId: null,
+            offset: 0,
+            sortBy: null,
+            sortOrder: null,
         }
 
         _this = this;
     }
 
     componentDidMount() {
+        let { scorerActionObject } = this.props.liveScoreScorerState
         const body = {
             "paging": {
                 "limit": 10,
@@ -322,13 +325,15 @@ class LiveScorerList extends Component {
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"
-                            onChange={this.onChangeSearchText}
+                            onChange={(e) => this.onChangeSearchText(e)}
                             placeholder="Search..."
-                            onKeyPress={this.onKeyEnterSearchText}
+                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            value={this.state.searchText}
                             prefix={
-                                <SearchOutlined
+                                <Icon
+                                    type="search"
                                     style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                    onClick={this.onClickSearchIcon}
+                                    onClick={() => this.onClickSearchIcon()}
                                 />
                             }
                             allowClear
@@ -359,7 +364,7 @@ class LiveScorerList extends Component {
         }
     }
 
-    // search key
+    // search key 
     onKeyEnterSearchText = (e) => {
         this.setState({ offset: 0 })
         let { sortBy, sortOrder } = this.state
@@ -422,14 +427,14 @@ class LiveScorerList extends Component {
                         current={scorerListCurrentPage}
                         total={scorerListTotalCount}
                         onChange={(page) => this.handlePagination(page)}
-                        // defaultPageSize={10}
+                    // defaultPageSize={10}
                     />
                 </div>
             </div>
         )
     }
 
-    /////// render function
+    /////// render function 
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>

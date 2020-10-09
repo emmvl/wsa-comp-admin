@@ -190,6 +190,8 @@ class LiveScoreDivisionList extends Component {
             competitionId: null,
             offset: 0,
             liveScoreCompIsParent: false,
+            sortBy: null,
+            sortOrder: null,
         }
         this_Obj = this;
     }
@@ -202,7 +204,18 @@ class LiveScoreDivisionList extends Component {
                 this.setState({ liveScoreCompIsParent: value })
             ))
             let offset = 0
-            this.props.getMainDivisionListAction(id, offset)
+            let { divisionListActionObject } = this.props.liveScoreDivisionState
+            console.log("divisionListActionObject", divisionListActionObject)
+            if (divisionListActionObject) {
+                let offset = divisionListActionObject.offset
+                let sortBy = divisionListActionObject.sortBy
+                let sortOrder = divisionListActionObject.sortOrder
+                this.setState({ offset, sortBy, sortOrder })
+                this.props.getMainDivisionListAction(id, offset, sortBy, sortOrder)
+            }
+            else {
+                this.props.getMainDivisionListAction(id, offset)
+            }
         } else {
             history.push('/liveScoreCompetitions')
         }

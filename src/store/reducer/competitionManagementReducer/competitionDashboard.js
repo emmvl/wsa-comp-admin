@@ -1,5 +1,5 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { isArrayNotEmpty } from "../../../util/helpers";
+import { deepCopyFunction, isArrayNotEmpty } from "../../../util/helpers";
 import ColorsArray from "../../../util/colorsArray";
 
 const replicateObj = {

@@ -53,8 +53,7 @@ class AddProduct extends Component {
             orgLevel: AppConstants.state,
             allDisabled: false
         }
-        props.clearProductReducer("productDetailData");
-        this.formRef = React.createRef();
+        props.clearProductReducer("productDetailData")
     }
 
 
@@ -100,7 +99,8 @@ class AddProduct extends Component {
     }
 
     //////post the product details
-    addProductPostAPI = (values) => {
+    addProductPostAPI = (e) => {
+        e.preventDefault();
         let { productDetailData } = JSON.parse(JSON.stringify(this.props.shopProductState));
         let description = JSON.parse(JSON.stringify(productDetailData.description))
         let orgData = getOrganisationData();
@@ -135,30 +135,33 @@ class AddProduct extends Component {
             productDetailData.variants = []
         }
         productDetailData.images = urls
-
-        let formData = new FormData();
-        formData.append('params', JSON.stringify(productDetailData));
-        if (isArrayNotEmpty(imagesFiles)) {
-            for (let i in imagesFiles)
-                formData.append("productPhotos", imagesFiles[i])
-        }
-        let affiliates = productDetailData.affiliates
-        let affiliatesNotSelected = Object.keys(affiliates).every(k => affiliates[k] === 0);
-        if (affiliatesNotSelected) {
-            message.error(ValidationConstants.pleaseSelectAffiliate);
-        } else {
-            this.props.addProductAction(formData);
-            this.setState({ loading: true });
-        }
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                let formData = new FormData();
+                formData.append('params', JSON.stringify(productDetailData));
+                if (isArrayNotEmpty(imagesFiles)) {
+                    for (let i in imagesFiles)
+                        formData.append("productPhotos", imagesFiles[i])
+                }
+                let affiliates = productDetailData.affiliates
+                let affiliatesNotSelected = Object.keys(affiliates).every(k => affiliates[k] === 0);
+                if (affiliatesNotSelected) {
+                    message.error(ValidationConstants.pleaseSelectAffiliate);
+                } else {
+                    this.props.addProductAction(formData);
+                    this.setState({ loading: true });
+                }
+            }
+        })
     }
 
     setDetailsFieldValue() {
         let { productDetailData } = this.props.shopProductState;
-        this.formRef.current.setFieldsValue({
+        this.props.form.setFieldsValue({
             productName: productDetailData.productName,
         });
         if (productDetailData.deliveryType === "shipping") {
-            this.formRef.current.setFieldsValue({
+            this.props.form.setFieldsValue({
                 width: productDetailData.width,
                 length: productDetailData.length,
                 height: productDetailData.height,
@@ -166,18 +169,19 @@ class AddProduct extends Component {
             });
         }
         if (productDetailData.inventoryTracking === true) {
-            this.formRef.current.setFieldsValue({
+            this.props.form.setFieldsValue({
                 quantity: productDetailData.quantity,
             });
         }
         let variants = productDetailData.variants
         if (productDetailData.variantsChecked === true) {
-            variants.length > 0 && variants.map((item, index) => {
-                let variantName = `variants${index}name`;
-                this.formRef.current.setFieldsValue({
-                    [variantName]: item.name
-                });
-            })
+            variants.length > 0 &&
+                variants.map((item, index) => {
+                    let variantName = `variants${index}name`;
+                    this.props.form.setFieldsValue({
+                        [variantName]: item.name
+                    });
+                })
         }
     }
 
@@ -365,7 +369,7 @@ class AddProduct extends Component {
         </>
     )
 
-    ///////on change varients name
+    ///////on change varients name 
     onVariantNameChange = (value) => {
         let varientNameIndex = 0
         this.props.onChangeProductDetails(value, 'variantName', varientNameIndex)
@@ -379,7 +383,7 @@ class AddProduct extends Component {
         this.setDetailsFieldValue();
     }
 
-    ///////on change varients name
+    ///////on change varients name 
     onVariantOptionOnChange = (value, key, index, subIndex) => {
         let { productDetailData } = this.props.shopProductState
         let varientOptions = productDetailData.variants[index].options
@@ -521,8 +525,9 @@ class AddProduct extends Component {
     }
 
     ////////form content view
-    contentView = () => {
+    contentView = (getFieldDecorator) => {
         let { productDetailData, typesProductList } = this.props.shopProductState
+        console.log("productDetailData", productDetailData)
         let affiliateArray = [
             { id: 1, name: AppConstants.direct },
             { id: 2, name: AppConstants.firstLevelAffiliatesAssociationLeague },
@@ -530,31 +535,36 @@ class AddProduct extends Component {
         ]
         return (
             <div className="content-view pt-4">
-                <Form.Item
-                    name="productName"
-                    rules={[
+                <Form.Item>
+                    {getFieldDecorator(
+                        `productName`,
                         {
-                            required: true,
-                            message: ValidationConstants.enterTitleOfTheProduct,
-                        },
-                    ]}
-                >
-                    <InputWithHead
-                        auto_complete='off'
-                        required={"required-field pb-0 pt-3"}
-                        heading={AppConstants.title}
-                        placeholder={AppConstants.enterTitle}
-                        onChange={(e) =>
-                            this.props.onChangeProductDetails(
-                                captializedString(e.target.value),
-                                'productName'
-                            )
+                            rules: [
+                                {
+                                    required: true,
+                                    message:
+                                        ValidationConstants.enterTitleOfTheProduct,
+                                },
+                            ],
                         }
-                        onBlur={(i) => this.formRef.current.setFieldsValue({
-                            'productName': captializedString(i.target.value)
-                        })}
-                        disabled={this.state.allDisabled}
-                    />
+                    )(
+                        <InputWithHead
+                            auto_complete='off'
+                            required={"required-field pb-0 pt-3"}
+                            heading={AppConstants.title}
+                            placeholder={AppConstants.enterTitle}
+                            onChange={(e) =>
+                                this.props.onChangeProductDetails(
+                                    captializedString(e.target.value),
+                                    'productName'
+                                )
+                            }
+                            onBlur={(i) => this.props.form.setFieldsValue({
+                                'productName': captializedString(i.target.value)
+                            })}
+                            disabled={this.state.allDisabled}
+                        />
+                    )}
                 </Form.Item>
 
                 <InputWithHead required={"pb-0"} heading={AppConstants.description}
@@ -692,7 +702,7 @@ class AddProduct extends Component {
     };
 
     ////////pricing content view
-    pricingView = () => {
+    pricingView = (getFieldDecorator) => {
         let { productDetailData } = this.props.shopProductState
         return (
             <div className="fees-view pt-5">
@@ -703,6 +713,7 @@ class AddProduct extends Component {
                             <InputWithHead
                                 auto_complete='off'
                                 heading={AppConstants.price}
+                                required={'pt-3'}
                                 placeholder={AppConstants.price}
                                 prefix="$"
                                 onChange={(e) =>
@@ -721,6 +732,7 @@ class AddProduct extends Component {
                                 auto_complete='off'
                                 heading={AppConstants.costPerItem}
                                 placeholder={AppConstants.costPerItem}
+                                required={'pt-3'}
                                 prefix="$"
                                 onChange={(e) =>
                                     this.props.onChangeProductDetails(
@@ -771,13 +783,13 @@ class AddProduct extends Component {
 
 
     ////////Inventory content view
-    inventoryView = () => {
+    inventoryView = (getFieldDecorator) => {
         let { productDetailData } = this.props.shopProductState
         return (
             <div className="fees-view pt-5">
                 <span className="form-heading">{AppConstants.inventory}</span>
                 <div className="fluid-width">
-                    <div className="pt-4">
+                    <div className="pt-4 mb-2">
                         <Checkbox
                             className="single-checkbox mt-0"
                             checked={productDetailData.inventoryTracking}
@@ -827,29 +839,33 @@ class AddProduct extends Component {
                         </div>
                         <div >
                             <span className="input-heading required-field" >{AppConstants.quantity}</span>
-                            <Form.Item
-                                name="quantity"
-                                rules={[
+                            <Form.Item>
+                                {getFieldDecorator(
+                                    `quantity`, /////static index=1 for now
                                     {
-                                        required: true,
-                                        message:
-                                        ValidationConstants.pleaseEnterQuantity,
-                                    },
-                                ]}
-                            >
-                                <InputNumber
-                                    style={{ width: 90 }}
-                                    formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                    parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                    onChange={(quantity) => this.props.onChangeProductDetails(
-                                        quantity,
-                                        'quantity'
-                                    )}
-                                    placeholder={AppConstants.quantity}
-                                    min={0}
-                                    type="number"
-                                    disabled={this.state.allDisabled}
-                                />
+                                        rules: [
+                                            {
+                                                required: true,
+                                                message:
+                                                    ValidationConstants.pleaseEnterQuantity,
+                                            },
+                                        ],
+                                    }
+                                )(
+                                    <InputNumber
+                                        style={{ width: 90 }}
+                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                        onChange={(quantity) => this.props.onChangeProductDetails(
+                                            quantity,
+                                            'quantity'
+                                        )}
+                                        placeholder={AppConstants.quantity}
+                                        min={0}
+                                        type="number"
+                                        disabled={this.state.allDisabled}
+                                    />
+                                )}
                             </Form.Item>
                         </div>
                     </>}
@@ -875,7 +891,7 @@ class AddProduct extends Component {
     };
 
     ////////Variants content view
-    variantsView = () => {
+    variantsView = (getFieldDecorator) => {
         let { productDetailData } = this.props.shopProductState
         let varientOptionArray = isArrayNotEmpty(productDetailData.variants) ? productDetailData.variants[0].options : []
         return (
@@ -895,21 +911,28 @@ class AddProduct extends Component {
                     {productDetailData.variantsChecked === true && <>
                         <div className="row">
                             <div className="col-sm-5">
-                                <Form.Item
-                                    name={`variants${0}name`}
-                                    rules={[{
-                                        required: true,
-                                        message: ValidationConstants.pleaseEnterVariantName,
-                                    }]}
-                                >
-                                    <InputWithHead
-                                        auto_complete="off"
-                                        required="required-field pb-0"
-                                        heading={AppConstants.variantName}
-                                        placeholder={AppConstants.variant_name}
-                                        onChange={(e) => this.onVariantNameChange(e.target.value)}
-                                        disabled={this.state.allDisabled}
-                                    />
+                                <Form.Item>
+                                    {getFieldDecorator(
+                                        `variants${0}name`, /////static index=1 for now
+                                        {
+                                            rules: [
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        ValidationConstants.pleaseEnterVariantName,
+                                                },
+                                            ],
+                                        }
+                                    )(
+                                        <InputWithHead
+                                            auto_complete='off'
+                                            required={"required-field pb-0"}
+                                            heading={AppConstants.variantName}
+                                            placeholder={AppConstants.variant_name}
+                                            onChange={(e) => this.onVariantNameChange(e.target.value)}
+                                            disabled={this.state.allDisabled}
+                                        />
+                                    )}
                                 </Form.Item>
                             </div>
                         </div>
@@ -1013,7 +1036,7 @@ class AddProduct extends Component {
     };
 
     ////////Shipping content view
-    shippingView = () => {
+    shippingView = (getFieldDecorator) => {
         let { productDetailData } = this.props.shopProductState
         return (
             <div className="fees-view pt-5">
@@ -1054,31 +1077,35 @@ class AddProduct extends Component {
                         />
                         <div className="row">
                             <div className="col-sm">
-                                <Form.Item
-                                    name="length"
-                                    rules={[
+                                <Form.Item>
+                                    {getFieldDecorator(
+                                        `length`,
                                         {
-                                            required: true,
-                                            message:
-                                            ValidationConstants.enterLengthOfTheProduct,
-                                        },
-                                    ]}
-                                >
-                                    <InputWithHead
-                                        auto_complete='off'
-                                        required={"required-field "}
-                                        placeholder={"Length"}
-                                        suffix="cm"
-                                        onChange={(e) =>
-                                            this.props.onChangeProductDetails(
-                                                Number(e.target.value).toFixed(2),
-                                                'length'
-                                            )
+                                            rules: [
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        ValidationConstants.enterLengthOfTheProduct,
+                                                },
+                                            ],
                                         }
-                                        type="number"
-                                        step="1.00"
-                                        disabled={this.state.allDisabled}
-                                    />
+                                    )(
+                                        <InputWithHead
+                                            auto_complete='off'
+                                            required={"required-field "}
+                                            placeholder={"Length"}
+                                            suffix="cm"
+                                            onChange={(e) =>
+                                                this.props.onChangeProductDetails(
+                                                    Number(e.target.value).toFixed(2),
+                                                    'length'
+                                                )
+                                            }
+                                            type="number"
+                                            step="1.00"
+                                            disabled={this.state.allDisabled}
+                                        />
+                                    )}
                                 </Form.Item>
                             </div>
                             <div className="col-sm-1 remove-cross-img-div">
@@ -1091,31 +1118,35 @@ class AddProduct extends Component {
                                 />
                             </div>
                             <div className="col-sm">
-                                <Form.Item
-                                    name="width"
-                                    rules={[
+                                <Form.Item>
+                                    {getFieldDecorator(
+                                        `width`,
                                         {
-                                            required: true,
-                                            message:
-                                            ValidationConstants.enterWidthOfTheProduct,
-                                        },
-                                    ]}
-                                >
-                                    <InputWithHead
-                                        auto_complete='off'
-                                        required={"required-field "}
-                                        placeholder={"Width"}
-                                        suffix="cm"
-                                        onChange={(e) =>
-                                            this.props.onChangeProductDetails(
-                                                Number(e.target.value).toFixed(2),
-                                                'width'
-                                            )
+                                            rules: [
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        ValidationConstants.enterWidthOfTheProduct,
+                                                },
+                                            ],
                                         }
-                                        type="number"
-                                        step="1.00"
-                                        disabled={this.state.allDisabled}
-                                    />
+                                    )(
+                                        <InputWithHead
+                                            auto_complete='off'
+                                            required={"required-field "}
+                                            placeholder={"Width"}
+                                            suffix="cm"
+                                            onChange={(e) =>
+                                                this.props.onChangeProductDetails(
+                                                    Number(e.target.value).toFixed(2),
+                                                    'width'
+                                                )
+                                            }
+                                            type="number"
+                                            step="1.00"
+                                            disabled={this.state.allDisabled}
+                                        />
+                                    )}
                                 </Form.Item>
                             </div>
                             <div className="col-sm-1 remove-cross-img-div">
@@ -1128,62 +1159,70 @@ class AddProduct extends Component {
                                 />
                             </div>
                             <div className="col-sm">
-                                <Form.Item
-                                    name="height"
-                                    rules={[
+                                <Form.Item>
+                                    {getFieldDecorator(
+                                        `height`,
                                         {
-                                            required: true,
-                                            message:
-                                            ValidationConstants.enterHeightOfTheProduct,
-                                        },
-                                    ]}
-                                >
-                                    <InputWithHead
-                                        auto_complete='off'
-                                        placeholder={"Height"}
-                                        required={"required-field "}
-                                        suffix="cm"
-                                        onChange={(e) =>
-                                            this.props.onChangeProductDetails(
-                                                Number(e.target.value).toFixed(2),
-                                                'height'
-                                            )
+                                            rules: [
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        ValidationConstants.enterHeightOfTheProduct,
+                                                },
+                                            ],
                                         }
-                                        type="number"
-                                        step="1.00"
-                                        disabled={this.state.allDisabled}
-                                    />
+                                    )(
+                                        <InputWithHead
+                                            auto_complete='off'
+                                            placeholder={"Height"}
+                                            required={"required-field "}
+                                            suffix="cm"
+                                            onChange={(e) =>
+                                                this.props.onChangeProductDetails(
+                                                    Number(e.target.value).toFixed(2),
+                                                    'height'
+                                                )
+                                            }
+                                            type="number"
+                                            step="1.00"
+                                            disabled={this.state.allDisabled}
+                                        />
+                                    )}
                                 </Form.Item>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-sm-4">
-                                <Form.Item
-                                    name="weight"
-                                    rules={[
+                                <Form.Item>
+                                    {getFieldDecorator(
+                                        `weight`,
                                         {
-                                            required: true,
-                                            message:
-                                            ValidationConstants.enterWeightOfTheProduct,
-                                        },
-                                    ]}
-                                >
-                                    <InputWithHead
-                                        auto_complete='off'
-                                        heading={AppConstants.dimensions}
-                                        required={"required-field "}
-                                        placeholder={"Weight"}
-                                        suffix="kg"
-                                        onChange={(e) =>
-                                            this.props.onChangeProductDetails(
-                                                Number(e.target.value).toFixed(2),
-                                                'weight'
-                                            )
+                                            rules: [
+                                                {
+                                                    required: true,
+                                                    message:
+                                                        ValidationConstants.enterWeightOfTheProduct,
+                                                },
+                                            ],
                                         }
-                                        type="number"
-                                        step="1.00"
-                                        disabled={this.state.allDisabled}
-                                    />
+                                    )(
+                                        <InputWithHead
+                                            auto_complete='off'
+                                            heading={AppConstants.dimensions}
+                                            required={"required-field "}
+                                            placeholder={"Weight"}
+                                            suffix="kg"
+                                            onChange={(e) =>
+                                                this.props.onChangeProductDetails(
+                                                    Number(e.target.value).toFixed(2),
+                                                    'weight'
+                                                )
+                                            }
+                                            type="number"
+                                            step="1.00"
+                                            disabled={this.state.allDisabled}
+                                        />
+                                    )}
                                 </Form.Item>
                             </div>
                         </div>
@@ -1224,27 +1263,26 @@ class AddProduct extends Component {
     };
 
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width">
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
                 <InnerHorizontalMenu menu={"shop"} shopSelectedKey={"2"} />
                 <Layout>
                     <Form
-                        ref={this.formRef}
                         autoComplete='off'
-                        onFinish={this.addProductPostAPI}
-                        noValidate="noValidate"
-                    >
+                        onSubmit={this.addProductPostAPI}
+                        noValidate="noValidate">
                         <Content >
                             {this.headerView()}
-                            <div className="formView">{this.contentView()}</div>
+                            <div className="formView">{this.contentView(getFieldDecorator)}</div>
                             <div className="formView">
                                 {this.state.allDisabled === true ? this.imageNonEditView() : this.imageView()}
                             </div>
-                            <div className="formView">{this.pricingView()}</div>
-                            <div className="formView">{this.inventoryView()}</div>
-                            <div className="formView">{this.variantsView()}</div>
-                            <div className="formView">{this.shippingView()}</div>
+                            <div className="formView">{this.pricingView(getFieldDecorator)}</div>
+                            <div className="formView">{this.inventoryView(getFieldDecorator)}</div>
+                            <div className="formView">{this.variantsView(getFieldDecorator)}</div>
+                            <div className="formView">{this.shippingView(getFieldDecorator)}</div>
                         </Content>
                         <Loader
                             visible={this.props.shopProductState.onLoad} />
@@ -1268,10 +1306,9 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         shopProductState: state.ShopProductState,
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddProduct);
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(AddProduct));

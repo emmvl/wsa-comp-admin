@@ -1,4 +1,4 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import {
     Layout,
     Breadcrumb,
@@ -8,6 +8,7 @@ import {
     Button,
     DatePicker,
     Table,
+    Tree,
     Radio,
     Tabs,
     Form,
@@ -48,6 +49,7 @@ import {
 } from "../../store/actions/appAction";
 import moment from "moment";
 import history from "../../util/history";
+import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import ValidationConstants from "../../themes/validationConstant";
 import { NavLink } from "react-router-dom"
 import {
@@ -107,7 +109,7 @@ class CompetitionOpenRegForm extends Component {
             competitionIsUsed: false,
             firstTimeCompId: "",
             organisationTypeRefId: 0,
-            isCreatorEdit: false, //////// user is owner of the competition than isCreatorEdit will be false
+            isCreatorEdit: false, //////// user is owner of the competition than isCreatorEdit will be false 
             isPublished: false,
             isRegClosed: false,
             permissionState: permissionObject,
@@ -123,17 +125,24 @@ class CompetitionOpenRegForm extends Component {
                     title: "Division Name",
                     dataIndex: "divisionName",
                     key: "divisionName",
-                    render: (divisionName, record, index) => (
-                        <Form.Item name={`divisionName${record.parentIndex}${index}`} rules={[{ required: true, message: ValidationConstants.divisionName }]}>
-                            <Input
-                                className="input-inside-table-fees"
-                                required={"required-field pt-0 pb-0"}
-                                setFieldsValue={divisionName}
-                                onChange={e => this.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
-                                disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
-                            />
-                        </Form.Item>
-                    )
+                    render: (divisionName, record, index) => {
+                        const { getFieldDecorator } = this.props.form;
+                        return (
+
+                            <Form.Item >
+                                {getFieldDecorator(`divisionName${record.parentIndex}${index}`, {
+                                    rules: [{ required: true, message: ValidationConstants.divisionName }],
+                                })(
+                                    <Input className="input-inside-table-fees"
+                                        required={"required-field pt-0 pb-0"}
+                                        setFieldsValue={divisionName}
+                                        onChange={e => this.divisionTableDataOnchange(e.target.value, record, index, "divisionName")}
+                                        disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
+                                    />
+                                )}
+                            </Form.Item>
+                        )
+                    }
                 },
                 {
                     title: "Gender Restriction",
@@ -142,9 +151,12 @@ class CompetitionOpenRegForm extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
+
                             <CustumToolTip placement="top" background='#ff8237'>
                                 <span>{AppConstants.genderRestrictionMsg}</span>
                             </CustumToolTip>
+
+
                         );
                     },
                     render: (genderRestriction, record, index) => (
@@ -154,7 +166,7 @@ class CompetitionOpenRegForm extends Component {
                                 disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
                                 checked={genderRestriction}
                                 onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "genderRestriction")}
-                            />
+                            ></Checkbox>
                         </div>
                     )
                 },
@@ -162,29 +174,34 @@ class CompetitionOpenRegForm extends Component {
                     dataIndex: "genderRefId",
                     key: AppUniqueId.div_gender_refid,
                     render: (genderRefId, record, index) => {
-                        return (record.genderRestriction &&
-                            <Form.Item
-                                name={`genderRefId${record.parentIndex}${index}`}
-                                rules={[{ required: true, message: ValidationConstants.genderRestriction }]}
-                            >
-                                <Select
-                                    className="division-age-select"
-                                    style={{ width: "100%", minWidth: 120, }}
-                                    onChange={genderRefId => this.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
-                                    setFieldsValue={genderRefId}
-                                    placeholder="Select"
-                                    disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
-                                >
-                                    {this.props.commonReducerState.genderDataEnum.map(item => (
-                                        <Option key={item.id} value={item.id}>
-                                            {item.description}
-                                        </Option>
-                                    ))}
-                                </Select>
+                        const { getFieldDecorator } = this.props.form;
+                        return (
+                            record.genderRestriction &&
+                            <Form.Item >
+                                {getFieldDecorator(`genderRefId${record.parentIndex}${index}`,
+                                    { rules: [{ required: true, message: ValidationConstants.genderRestriction }] })(
+                                        <Select
+                                            className='division-age-select'
+                                            style={{ width: "100%", minWidth: 120, }}
+                                            onChange={genderRefId => this.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
+                                            setFieldsValue={genderRefId}
+                                            placeholder={"Select"}
+                                            disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
+                                        >
+                                            {this.props.commonReducerState.genderDataEnum.map(item => {
+                                                return (
+                                                    <Option key={item.id} value={item.id}>
+                                                        {item.description}
+                                                    </Option>
+                                                );
+                                            })}
+                                        </Select>
+                                    )}
                             </Form.Item>
                         )
                     }
                 },
+
                 {
                     title: "Age Restriction",
                     dataIndex: "ageRestriction",
@@ -192,9 +209,12 @@ class CompetitionOpenRegForm extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
+
                             <CustumToolTip placement="top" background='#ff8237'>
                                 <span>{AppConstants.ageRestrictionMsg}</span>
                             </CustumToolTip>
+
+
                         );
                     },
                     render: (ageRestriction, record, index) => (
@@ -204,7 +224,7 @@ class CompetitionOpenRegForm extends Component {
                                 checked={ageRestriction}
                                 onChange={e => this.divisionTableDataOnchange(e.target.checked, record, index, "ageRestriction")}
                                 disabled={(this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
-                            />
+                            ></Checkbox>
                         </div>
                     )
                 },
@@ -213,57 +233,67 @@ class CompetitionOpenRegForm extends Component {
                     dataIndex: "fromDate",
                     key: AppUniqueId.div_ageres_fromdate,
                     width: "25%",
-                    render: (fromDate, record, index) => (
-                        <Form.Item
-                            name={`fromDate${record.parentIndex}${index}`}
-                            rules={[{ required: record.ageRestriction, message: ValidationConstants.pleaseSelectDOBFrom }]}
-                        >
-                            <DatePicker
-                                size="large"
-                                className="comp-venue-time-datepicker"
-                                style={{ width: "100%", minWidth: 135 }}
-                                onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "fromDate")}
-                                format="DD-MM-YYYY"
-                                showTime={false}
-                                placeholder="dd-mm-yyyy"
-                                disabled={(!record.ageRestriction || this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
-                                setFieldsValue={fromDate !== null && moment(fromDate)}
-                                disabledDate={d => !d || d.isSameOrAfter(record.toDate)}
-                            />
-                        </Form.Item>
-                    )
+                    render: (fromDate, record, index) => {
+                        const { getFieldDecorator } = this.props.form;
+                        return (
+                            <Form.Item >
+                                {getFieldDecorator(`fromDate${record.parentIndex}${index}`,
+                                    { rules: [{ required: record.ageRestriction, message: ValidationConstants.pleaseSelectDOBFrom }] })(
+                                        <DatePicker
+                                            size="large"
+                                            className="comp-venue-time-datepicker"
+                                            style={{ width: "100%", minWidth: 135 }}
+                                            onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "fromDate")}
+                                            format={"DD-MM-YYYY"}
+                                            showTime={false}
+                                            placeholder={"dd-mm-yyyy"}
+                                            disabled={(!record.ageRestriction || this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
+                                            setFieldsValue={fromDate !== null && moment(fromDate)}
+                                            disabledDate={d => !d || d.isSameOrAfter(record.toDate)
+                                            }
+                                        />
+                                    )}
+                            </Form.Item>
+                        )
+                    }
                 },
                 {
                     title: "DOB To",
                     dataIndex: "toDate",
                     width: "25%",
                     key: AppUniqueId.div_ageres_todate,
-                    render: (toDate, record, index) => (
-                        <Form.Item
-                            name={`toDate${record.parentIndex}${index}`}
-                            rules={[{ required: record.ageRestriction, message: ValidationConstants.PleaseSelectDOBTo }]}
-                        >
-                            <DatePicker
-                                size="large"
-                                className="comp-venue-time-datepicker"
-                                style={{ width: "100%", minWidth: 135 }}
-                                onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "toDate")}
-                                format="DD-MM-YYYY"
-                                placeholder="dd-mm-yyyy"
-                                showTime={false}
-                                disabled={(!record.ageRestriction || this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
-                                setFieldsValue={toDate !== null && moment(toDate)}
-                                disabledDate={d => moment(record.fromDate).isSameOrAfter(d, 'day')}
-                            />
-                        </Form.Item>
-                    )
+                    render: (toDate, record, index) => {
+                        const { getFieldDecorator } = this.props.form;
+                        return (
+                            <Form.Item >
+                                {getFieldDecorator(`toDate${record.parentIndex}${index}`,
+                                    { rules: [{ required: record.ageRestriction, message: ValidationConstants.PleaseSelectDOBTo }] })(
+                                        <DatePicker
+                                            size="large"
+                                            className="comp-venue-time-datepicker"
+                                            style={{ width: "100%", minWidth: 135 }}
+                                            onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "toDate")}
+                                            format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
+                                            showTime={false}
+                                            disabled={(!record.ageRestriction || this.state.competitionStatus == 1 || this.state.permissionState.divisionsDisable) ? true : false}
+                                            setFieldsValue={toDate !== null && moment(toDate)}
+                                            disabledDate={d => moment(record.fromDate).isSameOrAfter(d, 'day')
+                                            }
+                                        />
+                                    )}
+                            </Form.Item>
+                        )
+                    }
                 },
                 {
                     title: "",
                     dataIndex: "clear",
                     key: "clear",
                     render: (clear, record, index) => {
+                        // console.log(this.state.competitionStatus)
                         return (
+
                             <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: "pointer" }}>
                                 <img
                                     className="dot-image"
@@ -274,18 +304,20 @@ class CompetitionOpenRegForm extends Component {
                                     onClick={() => !this.state.permissionState.divisionsDisable ? this.addRemoveDivision(index, record, "remove") : null}
                                 />
                             </span>
+
+
                         )
                     }
                 }
             ],
             divisionState: false,
             nextButtonClicked: false
+
         };
         this_Obj = this;
         this.props.clearCompReducerDataAction("all")
-        this.formRef = createRef();
-    }
 
+    }
     componentDidUpdate(nextProps) {
         let competitionFeesState = this.props.competitionFeesState
         if (competitionFeesState.onLoad === false && this.state.loading === true) {
@@ -333,24 +365,33 @@ class CompetitionOpenRegForm extends Component {
             }
         }
         if (nextProps.appState !== this.props.appState) {
-            let competitionTypeList = this.props.appState.own_CompetitionArr
-            if (nextProps.appState.own_CompetitionArr !== competitionTypeList) {
+            let competitionTypeList = this.props.appState.all_own_CompetitionArr
+            if (nextProps.appState.all_own_CompetitionArr !== competitionTypeList) {
                 if (competitionTypeList.length > 0) {
-                    let screenKey = this.props.location.state ? this.props.location.state.screenKey : null
+                    let screenKey = this.props.location.state ? this.props.location.state.screenKey : null;
+                    let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null
                     let competitionId = null
                     let statusRefId = null
-                    if (screenKey == "compDashboard") {
+                    let competitionStatus = null
+                    if (screenKey == "compDashboard" || fromReplicate == 1) {
                         competitionId = getOwn_competition()
                         let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
                         statusRefId = compIndex > -1 ? competitionTypeList[compIndex].statusRefId : competitionTypeList[0].statusRefId
                         competitionId = compIndex > -1 ? competitionId : competitionTypeList[0].competitionId
-                    } else {
+                        competitionStatus = competitionTypeList[compIndex].competitionStatus
+                        setOwn_competitionStatus('')
+                        setOwn_competition('')
+                    }
+                    else {
                         competitionId = competitionTypeList[0].competitionId
                         statusRefId = competitionTypeList[0].statusRefId
+                        competitionStatus = competitionTypeList[0].competitionStatus
                     }
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
-                    setOwn_competitionStatus(statusRefId)
-                    setOwn_competition(competitionId)
+                    if (competitionStatus == 2) {
+                        setOwn_competitionStatus(statusRefId)
+                        setOwn_competition(competitionId)
+                    }
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
             }
@@ -426,7 +467,7 @@ class CompetitionOpenRegForm extends Component {
                     regInviteesDisable: true,
                     membershipDisable: true,
                     // divisionsDisable: hasRegistration == 1 ? true : false,
-                    divisionsDisable: false, // Updated for Comp Division Handling
+                    divisionsDisable: false, // Updated for Comp Division Handling																  
                     feesTableDisable: true,
                     paymentsDisable: false,
                     discountsDisable: true,
@@ -467,30 +508,39 @@ class CompetitionOpenRegForm extends Component {
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
-        let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
-
-        if (storedCompetitionId && yearId && propsData && compData) {
-            this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId, null, this.state.sourceModule)
-            this.setState({
-                yearRefId: JSON.parse(yearId),
-                firstTimeCompId: storedCompetitionId,
-                competitionStatus: storedCompetitionStatus,
-                getDataLoading: true
-            })
-        }
-        else if (yearId) {
+        let compData = this.props.appState.all_own_CompetitionArr.length > 0 ? this.props.appState.all_own_CompetitionArr : undefined;
+        let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
+        if(fromReplicate != 1){
+            if (storedCompetitionId && yearId && propsData && compData) {
+                this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId, null, this.state.sourceModule)
+                this.setState({
+                    yearRefId: JSON.parse(yearId),
+                    firstTimeCompId: storedCompetitionId,
+                    competitionStatus: storedCompetitionStatus,
+                    getDataLoading: true
+                })
+            }
+            else if (yearId) {
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
+                this.setState({
+                    yearRefId: JSON.parse(yearId)
+                });
+            }
+            else {
+                this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
+                setOwnCompetitionYear(1)
+            }
+        }else{
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
-                yearRefId: JSON.parse(yearId)
-            })
+                yearRefId: JSON.parse(yearId),
+                firstTimeCompId: storedCompetitionId
+            });
         }
-        else {
-            this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
-        }
+        
     }
 
-    ////all the api calls
+    ////alll the api calls
     apiCalls = (competitionId) => {
         this.props.getDefaultCompFeesLogoAction()
         this.props.competitionDiscountTypesAction()
@@ -515,7 +565,7 @@ class CompetitionOpenRegForm extends Component {
 
     setDetailsFieldValue() {
         let compFeesState = this.props.competitionFeesState
-        this.formRef.current.setFieldsValue({
+        this.props.form.setFieldsValue({
             competition_name: compFeesState.competitionDetailData.competitionName,
             numberOfRounds: compFeesState.competitionDetailData.noOfRounds,
             yearRefId: compFeesState.competitionDetailData.yearRefId,
@@ -530,7 +580,7 @@ class CompetitionOpenRegForm extends Component {
         discountData.map((item, index) => {
             let competitionMembershipProductTypeId = `competitionMembershipProductTypeId${index}`
             let membershipProductUniqueKey = `membershipProductUniqueKey${index}`
-            this.formRef.current.setFieldsValue({
+            this.props.form.setFieldsValue({
                 [competitionMembershipProductTypeId]: item.competitionMembershipProductTypeId,
                 [membershipProductUniqueKey]: item.membershipProductUniqueKey,
             })
@@ -547,7 +597,7 @@ class CompetitionOpenRegForm extends Component {
                 let genderRefId = `genderRefId${index}${divIndex}`
                 let fromDate = `fromDate${index}${divIndex}`
                 let toDate = `toDate${index}${divIndex}`
-                this.formRef.current.setFieldsValue({
+                this.props.form.setFieldsValue({
                     [divisionName]: divItem.divisionName,
                     [genderRefId]: divItem.genderRefId ? divItem.genderRefId : [],
                     [fromDate]: divItem.fromDate && moment(divItem.fromDate),
@@ -565,83 +615,97 @@ class CompetitionOpenRegForm extends Component {
         }
     }
 
-    saveAPIsActionCall = (values) => {
+    saveAPIsActionCall = (e) => {
+        e.preventDefault();
         let tabKey = this.state.competitionTabKey
         let compFeesState = this.props.competitionFeesState
         let competitionId = compFeesState.competitionId
         let postData = compFeesState.competitionDetailData
-        let nonPlayingDate = JSON.stringify(postData.nonPlayingDates)
-        let venue = JSON.stringify(compFeesState.postVenues)
-        let invitees = JSON.stringify(compFeesState.postInvitees)
-        if (tabKey == "1") {
-            if (compFeesState.competitionDetailData.competitionLogoUrl !== null) {
-                let formData = new FormData();
-                formData.append("competitionUniqueKey", competitionId);
-                formData.append("name", postData.competitionName);
-                formData.append("yearRefId", this.state.yearRefId);
-                formData.append("description", postData.description);
-                formData.append("competitionTypeRefId", postData.competitionTypeRefId);
-                formData.append("competitionFormatRefId", postData.competitionFormatRefId);
-                formData.append("finalTypeRefId", postData.finalTypeRefId);
-                formData.append("startDate", postData.startDate);
-                formData.append("endDate", postData.endDate);
-                if (postData.competitionFormatRefId == 4) {
-                    if (postData.noOfRounds !== null && postData.noOfRounds !== '') formData.append("noOfRounds", postData.noOfRounds);
-                }
-                if (postData.roundInDays !== null && postData.roundInDays !== '') formData.append("roundInDays", postData.roundInDays);
-                if (postData.roundInHours !== null && postData.roundInHours !== '') formData.append("roundInHours", postData.roundInHours);
-                if (postData.roundInMins !== null && postData.roundInMins !== '') formData.append("roundInMins", postData.roundInMins);
-                if (postData.minimunPlayers !== null && postData.minimunPlayers !== '') formData.append("minimunPlayers", postData.minimunPlayers);
-                if (postData.maximumPlayers !== null && postData.maximumPlayers !== '') formData.append("maximumPlayers", postData.maximumPlayers);
-                formData.append("venues", venue);
-                formData.append("registrationCloseDate", postData.registrationCloseDate);
-                formData.append("statusRefId", this.state.isPublished ? 2 : this.state.statusRefId);
-                formData.append("nonPlayingDates", nonPlayingDate);
-                formData.append("invitees", invitees);
-                formData.append("logoSetAsDefault", this.state.logoSetDefault)
-                formData.append("hasRegistration", 0);
-                if (this.state.logoSetDefault) {
-                    formData.append("organisationLogoId", compFeesState.defaultCompFeesOrgLogoData.id)
-                }
-                if (postData.logoIsDefault == true) {
-                    formData.append("competitionLogoId", postData.competitionLogoId ? postData.competitionLogoId : 0);
-                    formData.append("logoFileUrl", compFeesState.defaultCompFeesOrgLogo);
-                    formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
-                } else {
-                    if (this.state.image !== null) {
-                        formData.append("competition_logo", this.state.image)
-                        formData.append("competitionLogoId", postData.competitionLogoId ? postData.competitionLogoId : 0);
+        this.props.form.validateFields((err, values) => {
+            if (!err) {
+                let nonPlayingDate = JSON.stringify(postData.nonPlayingDates)
+                let venue = JSON.stringify(compFeesState.postVenues)
+                let invitees = JSON.stringify(compFeesState.postInvitees)
+                if (tabKey == "1") {
+                    if (compFeesState.competitionDetailData.competitionLogoUrl !== null) {
+                        let formData = new FormData();
+                        formData.append("competitionUniqueKey", competitionId);
+                        formData.append("name", postData.competitionName);
+                        formData.append("yearRefId", this.state.yearRefId);
+                        formData.append("description", postData.description);
+                        formData.append("competitionTypeRefId", postData.competitionTypeRefId);
+                        formData.append("competitionFormatRefId", postData.competitionFormatRefId);
+                        formData.append("finalTypeRefId", postData.finalTypeRefId);
+                        formData.append("startDate", postData.startDate);
+                        formData.append("endDate", postData.endDate);
+                        if (postData.competitionFormatRefId == 4) {
+                            if (postData.noOfRounds !== null && postData.noOfRounds !== '') formData.append("noOfRounds", postData.noOfRounds);
+                        }
+                        if (postData.roundInDays !== null && postData.roundInDays !== '') formData.append("roundInDays", postData.roundInDays);
+                        if (postData.roundInHours !== null && postData.roundInHours !== '') formData.append("roundInHours", postData.roundInHours);
+                        if (postData.roundInMins !== null && postData.roundInMins !== '') formData.append("roundInMins", postData.roundInMins);
+                        if (postData.minimunPlayers !== null && postData.minimunPlayers !== '') formData.append("minimunPlayers", postData.minimunPlayers);
+                        if (postData.maximumPlayers !== null && postData.maximumPlayers !== '') formData.append("maximumPlayers", postData.maximumPlayers);
+                        formData.append("venues", venue);
+                        formData.append("registrationCloseDate", postData.registrationCloseDate);
+                        formData.append("statusRefId", this.state.isPublished ? 2 : this.state.statusRefId);
+                        formData.append("nonPlayingDates", nonPlayingDate);
+                        formData.append("invitees", invitees);
+                        formData.append("logoSetAsDefault", this.state.logoSetDefault)
+                        formData.append("hasRegistration", 0);
+                        if (this.state.logoSetDefault) {
+                            formData.append("organisationLogoId", compFeesState.defaultCompFeesOrgLogoData.id)
+                        }
+                        if (postData.logoIsDefault == true) {
+                            formData.append("competitionLogoId", postData.competitionLogoId ? postData.competitionLogoId : 0);
+                            formData.append("logoFileUrl", compFeesState.defaultCompFeesOrgLogo);
+                            formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
+                        }
+                        else {
+                            if (this.state.image !== null) {
+                                formData.append("competition_logo", this.state.image)
+                                formData.append("competitionLogoId", postData.competitionLogoId ? postData.competitionLogoId : 0);
+                            } else {
+                                formData.append("competitionLogoId", postData.competitionLogoId ? postData.competitionLogoId : 0);
+                                formData.append("logoFileUrl", postData.competitionLogoUrl);
+                                // formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
+                            }
+                        }
+                        formData.append("logoIsDefault", postData.logoIsDefault)
+
+                        if(this.state.image){
+                            formData.append("uploadFileType",1);
+                        }
+
+                        this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id, this.state.sourceModule)
+                        this.setState({ loading: true, divisionState: true });
                     } else {
-                        formData.append("competitionLogoId", postData.competitionLogoId ? postData.competitionLogoId : 0);
-                        formData.append("logoFileUrl", postData.competitionLogoUrl);
-                        // formData.append("competition_logo", compFeesState.defaultCompFeesOrgLogo)
+                        message.error(ValidationConstants.competitionLogoIsRequired)
                     }
                 }
-                formData.append("logoIsDefault", postData.logoIsDefault)
-                this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id, this.state.sourceModule)
-                this.setState({ loading: true, divisionState: true });
-            } else {
-                message.error(ValidationConstants.competitionLogoIsRequired)
+                else if (tabKey == "2") {
+                    let divisionArrayData = compFeesState.competitionDivisionsData
+                    let finalDivisionArray = []
+                    for (let i in divisionArrayData) {
+                        finalDivisionArray = [...finalDivisionArray, ...divisionArrayData[i].divisions]
+                    }
+                    let payload = finalDivisionArray
+                    let finalDivisionPayload = {
+                        statusRefId: this.state.isPublished ? 2 : this.state.statusRefId,
+                        divisions: payload,
+                        sourceModule: this.state.sourceModule
+                    }
+                    if (this.checkDivisionEmpty(divisionArrayData) == true) {
+                        message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct)
+                    }
+                    else {
+                        this.props.saveCompetitionFeesDivisionAction(finalDivisionPayload, competitionId)
+                        this.setState({ loading: true })
+                    }
+
+                }
             }
-        } else if (tabKey == "2") {
-            let divisionArrayData = compFeesState.competitionDivisionsData
-            let finalDivisionArray = []
-            for (let i in divisionArrayData) {
-                finalDivisionArray = [...finalDivisionArray, ...divisionArrayData[i].divisions]
-            }
-            let payload = finalDivisionArray
-            let finalDivisionPayload = {
-                statusRefId: this.state.isPublished ? 2 : this.state.statusRefId,
-                divisions: payload,
-                sourceModule: this.state.sourceModule
-            }
-            if (this.checkDivisionEmpty(divisionArrayData) == true) {
-                message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct)
-            } else {
-                this.props.saveCompetitionFeesDivisionAction(finalDivisionPayload, competitionId)
-                this.setState({ loading: true })
-            }
-        }
+        });
     }
 
 
@@ -700,17 +764,23 @@ class CompetitionOpenRegForm extends Component {
     }
 
 
-    onCompetitionChange(competitionId, statusRefId) {
-        setOwn_competition(competitionId)
-        setOwn_competitionStatus(statusRefId)
+    onCompetitionChange(competitionId, statusRefId, competitionArray) {
+        let competititionIndex = competitionArray.findIndex((x) => x.competitionId == competitionId)
+        let competitionStatus = competitionArray[competititionIndex].competitionStatus
+        if (competitionStatus == 2) {
+            setOwn_competition(competitionId)
+            setOwn_competitionStatus(statusRefId)
+        }
         this.props.clearCompReducerDataAction("all")
         this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
-    }
 
+    }
     ///dropdown view containing all the dropdown of header
-    dropdownView = () => {
-        const { own_YearArr, own_CompetitionArr, } = this.props.appState
+    dropdownView = (
+        getFieldDecorator
+    ) => {
+        const { own_YearArr, all_own_CompetitionArr, } = this.props.appState
         return (
             <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
@@ -760,11 +830,11 @@ class CompetitionOpenRegForm extends Component {
                                 <Select
                                     name={"competition"}
                                     className="year-select reg-filter-select-competition ml-2"
-                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
+                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key, this.props.appState.all_own_CompetitionArr)
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {this.props.appState.own_CompetitionArr.map(item => {
+                                    {this.props.appState.all_own_CompetitionArr.map(item => {
                                         return (
                                             <Option key={item.statusRefId} value={item.competitionId}>
                                                 {item.competitionName}
@@ -811,7 +881,7 @@ class CompetitionOpenRegForm extends Component {
             fileInput.click();
         }
     }
-    /// add-edit non playing dates and name
+    /// add-edit non playing dates and name 
     updateNonPlayingNames(data, index, key) {
         let detailsData = this.props.competitionFeesState
         let array = detailsData.competitionDetailData.nonPlayingDates
@@ -911,7 +981,7 @@ class CompetitionOpenRegForm extends Component {
         this.setState({ logoSetDefault: value })
     }
 
-    // search venue
+    // search venue  
     handleSearch = (value, data) => {
         const filteredData = data.filter(memo => {
             return memo.name.toLowerCase().indexOf(value.toLowerCase()) > -1
@@ -922,7 +992,7 @@ class CompetitionOpenRegForm extends Component {
 
 
     ///////form content view - fee details
-    contentView = () => {
+    contentView = (getFieldDecorator) => {
         let roundsArray = this.props.competitionManagementState.fixtureTemplate;
         let appState = this.props.appState
         const { venueList, mainVenueList } = this.props.commonReducerState
@@ -932,18 +1002,24 @@ class CompetitionOpenRegForm extends Component {
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="content-view pt-4">
-                <Form.Item name="competition_name" rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}>
-                    <InputWithHead
-                        auto_complete="off"
-                        required={"required-field pb-0 "}
-                        heading={AppConstants.competition_name}
-                        placeholder={AppConstants.competition_name}
-                        onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(e.target.value), "competitionName")}
-                        disabled={(disabledStatus || compDetailDisable) ? true : false}
-                        onBlur={(i) => this.formRef.current.setFieldsValue({
-                            'competition_name': captializedString(i.target.value)
-                        })}
-                    />
+                <Form.Item >
+                    {getFieldDecorator('competition_name',
+                        {
+                            rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired }]
+                        })(
+                            <InputWithHead
+                                auto_complete="off"
+                                required={"required-field pb-0 "}
+                                heading={AppConstants.competition_name}
+                                placeholder={AppConstants.competition_name}
+                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(captializedString(
+                                    e.target.value), "competitionName")}
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
+                                onBlur={(i) => this.props.form.setFieldsValue({
+                                    'competition_name': captializedString(i.target.value)
+                                })}
+                            />
+                        )}
                 </Form.Item>
                 <InputWithHead required={"required-field pb-0 "} heading={AppConstants.competitionLogo} />
 
@@ -1017,23 +1093,31 @@ class CompetitionOpenRegForm extends Component {
 
                 <div style={{ marginTop: 15 }} >
                     <InputWithHead required={"required-field pb-0 "} heading={AppConstants.venue} />
-                    <Form.Item name="selectedVenues" rules={[{ required: true, message: ValidationConstants.pleaseSelectvenue }]}>
-                        <Select
-                            id={AppUniqueId.select_Venues}
-                            mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            onChange={venueSelection => {
-                                this.onSelectValues(venueSelection, detailsData)
-                            }}
-                            placeholder={AppConstants.selectVenue}
-                            filterOption={false}
-                            onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
-                            disabled={(disabledStatus || compDetailDisable) ? true : false}
-                        >
-                            {appState.venueList.length > 0 && appState.venueList.map((item) => (
-                                <Option key={item.id} value={item.id}>{item.name}</Option>
-                            ))}
-                        </Select>
+                    <Form.Item  >
+                        {getFieldDecorator('selectedVenues', { rules: [{ required: true, message: ValidationConstants.pleaseSelectvenue }] })(
+                            <Select
+                                id={AppUniqueId.select_Venues}
+                                mode="multiple"
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                onChange={venueSelection => {
+                                    this.onSelectValues(venueSelection, detailsData)
+
+                                }}
+                                placeholder={AppConstants.selectVenue}
+                                filterOption={false}
+                                onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+                                disabled={(disabledStatus || compDetailDisable) ? true : false}
+                            >
+                                {appState.venueList.length > 0 && appState.venueList.map((item) => {
+                                    return (
+                                        <Option
+                                            key={item.id}
+                                            value={item.id}>
+                                            {item.name}</Option>
+                                    )
+                                })}
+                            </Select>
+                        )}
                     </Form.Item>
                 </div>
                 {this.state.competitionStatus == 1 ?
@@ -1044,115 +1128,125 @@ class CompetitionOpenRegForm extends Component {
                     >
                         <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
                     </NavLink>
+
                 }
                 <span className="applicable-to-heading required-field">{AppConstants.typeOfCompetition}</span>
-                <Form.Item
-                    name='competitionTypeRefId'
-                    initialValue={1}
-                    rules={[{ required: true, message: ValidationConstants.pleaseSelectCompetitionType }]}
-                >
-                    <Radio.Group
-                        className="reg-competition-radio"
-                        onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
-                        setFieldsValue={detailsData.competitionTypeRefId}
-                        disabled={(disabledStatus || compDetailDisable) ? true : false}
-                    >
-                        {appState.typesOfCompetition.length > 0 && appState.typesOfCompetition.map(item => (
-                            <Radio key={item.id} value={item.id}> {item.description}</Radio>
-                        ))}
-                    </Radio.Group>
+                <Form.Item  >
+                    {getFieldDecorator('competitionTypeRefId', { initialValue: 1 }, { rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionType }] })(
+                        <Radio.Group
+                            className="reg-competition-radio"
+                            onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
+                            setFieldsValue={detailsData.competitionTypeRefId}
+                            disabled={(disabledStatus || compDetailDisable) ? true : false}
+                        >
+                            {appState.typesOfCompetition.length > 0 && appState.typesOfCompetition.map(item => {
+                                return (
+                                    <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                );
+                            })}
+                        </Radio.Group>
+                    )}
                 </Form.Item>
 
 
                 <span className="applicable-to-heading required-field">{AppConstants.competitionFormat}</span>
-                <Form.Item
-                    name='competitionFormatRefId'
-                    rules={[{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }]}
-                >
-                    <Radio.Group
-                        className="reg-competition-radio"
-                        onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionFormatRefId")}
-                        setFieldsValue={detailsData.competitionFormatRefId}
-                        disabled={(disabledStatus || compDetailDisable) ? true : false}
-                    >
-                        {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => (
-                            <div className="contextualHelp-RowDirection">
-                                <Radio key={item.id} value={item.id}>{item.description}</Radio>
+                <Form.Item  >
+                    {getFieldDecorator('competitionFormatRefId', { initialValue: 1 }, { rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }] })(
+                        <Radio.Group
+                            className="reg-competition-radio"
+                            onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionFormatRefId")}
+                            setFieldsValue={detailsData.competitionFormatRefId}
+                            disabled={(disabledStatus || compDetailDisable) ? true : false}
+                        >
+                            {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => {
+                                return (
+                                    <div className='contextualHelp-RowDirection' >
+                                        <Radio key={item.id} value={item.id}> {item.description}</Radio>
 
-                                <div style={{ marginLeft: -20, marginTop: -5 }}>
-                                    <CustumToolTip background='#ff8237'>
-                                        <span>{item.helpMsg}</span>
-                                    </CustumToolTip>
-                                </div>
-                            </div>
-                        ))}
-                    </Radio.Group>
+                                        <div style={{ marginLeft: -20, marginTop: -5 }}>
+                                            <CustumToolTip background='#ff8237'>
+                                                <span>{item.helpMsg}</span>
+                                            </CustumToolTip>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </Radio.Group>
+                    )}
                 </Form.Item>
-
                 <span className="applicable-to-heading required-field">{AppConstants.gradesOrPools}</span>
-                <Form.Item
-                    name="finalTypeRefId"
-                    initialValue={detailsData.competitionDetailData.finalTypeRefId}
-                    rules={[{ required: true, message: ValidationConstants.pleaseSelectGradesOrPools}]}
-                >
-                    <Radio.Group
-                        className="reg-competition-radio"
-                        onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "finalTypeRefId")}
-                        setFieldsValue={detailsData.competitionDetailData.finalTypeRefId}
-                    >
-                        <Radio value={1}>{AppConstants.grades}</Radio>
-                        <Radio value={2}>{AppConstants.pools}</Radio>
-                    </Radio.Group>
+                <Form.Item>
+                    {getFieldDecorator('finalTypeRefId', { initialValue: detailsData.competitionDetailData.finalTypeRefId },
+                        { rules: [{ required: true, message: ValidationConstants.pleaseSelectGradesOrPools }] })(
+                            <Radio.Group
+                                className="reg-competition-radio"
+                                onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "finalTypeRefId")}
+                                setFieldsValue={detailsData.competitionDetailData.finalTypeRefId}>
+                                <Radio value={1}>{AppConstants.grades}</Radio>
+                                <Radio value={2}>{AppConstants.pools}</Radio>
+                            </Radio.Group>
+                        )}
                 </Form.Item>
-
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.compStartDate} required={"required-field"} />
-                            <Form.Item name='startDate' rules={[{ required: true, message: ValidationConstants.startDateIsRequired }]}>
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    onChange={date => this.dateOnChangeFrom(date, "startDate")}
-                                    format={"DD-MM-YYYY"}
-                                    placeholder={"dd-mm-yyyy"}
-                                    showTime={false}
-                                    disabled={(disabledStatus || compDetailDisable) ? true : false}
-                                />
+                            <Form.Item >
+                                {getFieldDecorator('startDate',
+                                    { rules: [{ required: true, message: ValidationConstants.startDateIsRequired }] })(
+                                        <DatePicker
+                                            size="large"
+                                            style={{ width: "100%" }}
+                                            onChange={date => this.dateOnChangeFrom(date, "startDate")}
+                                            format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
+                                            showTime={false}
+                                            disabled={(disabledStatus || compDetailDisable) ? true : false}
+                                        />
+                                    )}
                             </Form.Item>
                         </div>
                         <div className="col-sm">
                             <InputWithHead heading={AppConstants.compCloseDate} required={"required-field"} />
-                            <Form.Item name='endDate' rules={[{ required: true, message: ValidationConstants.endDateIsRequired }]}>
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    onChange={date => this.dateOnChangeFrom(date, "endDate")}
-                                    format={"DD-MM-YYYY"}
-                                    placeholder={"dd-mm-yyyy"}
-                                    showTime={false}
-                                    disabledDate={d => !d || d.isBefore(detailsData.competitionDetailData.startDate)}
-                                    disabled={(disabledStatus || compDetailDisable) ? true : false}
-                                />
+                            <Form.Item >
+                                {getFieldDecorator('endDate',
+                                    { rules: [{ required: true, message: ValidationConstants.endDateIsRequired }] })(
+                                        <DatePicker
+                                            size="large"
+                                            style={{ width: "100%" }}
+                                            onChange={date => this.dateOnChangeFrom(date, "endDate")}
+                                            format={"DD-MM-YYYY"}
+                                            placeholder={"dd-mm-yyyy"}
+                                            showTime={false}
+                                            disabledDate={d => !d || d.isBefore(detailsData.competitionDetailData.startDate)}
+                                            disabled={(disabledStatus || compDetailDisable) ? true : false}
+                                        />
+                                    )}
                             </Form.Item>
                         </div>
+
                     </div>
                 </div>
                 {detailsData.competitionDetailData.competitionFormatRefId == 4 &&
                     <div>
                         <InputWithHead heading={AppConstants.numberOfRounds} required={"required-field"} />
-                        <Form.Item name='numberOfRounds' rules={[{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }]}>
-                            <Select
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                placeholder={AppConstants.selectRound}
-                                onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
-                                value={detailsData.competitionDetailData.noOfRounds}
-                                disabled={(disabledStatus || compDetailDisable) ? true : false}
-                            >
-                                {roundsArray.map(item => (
-                                    <Option key={item.noOfRounds} value={item.noOfRounds}>{item.noOfRounds}</Option>
-                                ))}
-                            </Select>
+                        <Form.Item >
+                            {getFieldDecorator('numberOfRounds',
+                                { rules: [{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }] })(
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        placeholder={AppConstants.selectRound}
+                                        onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
+                                        value={detailsData.competitionDetailData.noOfRounds}
+                                        disabled={(disabledStatus || compDetailDisable) ? true : false}
+                                    >
+                                        {roundsArray.map(item => {
+                                            return (
+                                                <Option key={item.noOfRounds} value={item.noOfRounds}>{item.noOfRounds}</Option>
+                                            );
+                                        })}
+                                    </Select>
+                                )}
                         </Form.Item>
                     </div>
                 }
@@ -1197,6 +1291,7 @@ class CompetitionOpenRegForm extends Component {
                         this.nonPlayingDateView(item, index))
                     }
                     <a>
+
                         <span onClick={() => !compDetailDisable ? this.addNonPlayingDate() : null} className="input-heading-add-another">
                             + {AppConstants.addAnotherNonPlayingDate}
                         </span>
@@ -1318,10 +1413,10 @@ class CompetitionOpenRegForm extends Component {
                                     </a>
                                 </div>
                             ) : (
-                                <span className="applicable-to-heading pt-0 pl-2">
-                                    {AppConstants.nonPlayerDivisionMessage}
-                                </span>
-                            )}
+                                    <span className="applicable-to-heading pt-0 pl-2">
+                                        {AppConstants.nonPlayerDivisionMessage}
+                                    </span>
+                                )}
                         </div>
                     </div>
                 ))}
@@ -1386,7 +1481,8 @@ class CompetitionOpenRegForm extends Component {
                                 <div className="comp-buttons-view">
                                     <Tooltip
                                         style={{ height: "100%" }}
-                                        onMouseEnter={() => this.setState({ tooltipVisiblePublish: true })}
+                                        onMouseEnter={() =>
+                                            this.setState({ tooltipVisiblePublish: true })}
                                         onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                         visible={this.state.tooltipVisiblePublish}
                                         title={AppConstants.statusPublishHover}>
@@ -1406,14 +1502,17 @@ class CompetitionOpenRegForm extends Component {
                                         </Button>
                                     </Tooltip>
                                     {tabKey == "2" &&
+
                                         <Button onClick={() => this.setState({ nextButtonClicked: true })} className="publish-button" type="primary" htmlType="submit" disabled={this.state.competitionStatus == 1 ? true : false} >{AppConstants.next}</Button>
+
                                     }
                                 </div>
                                 :
                                 <div className="comp-buttons-view">
                                     <Tooltip
                                         style={{ height: "100%" }}
-                                        onMouseEnter={() => this.setState({ tooltipVisiblePublish: allDisable })}
+                                        onMouseEnter={() =>
+                                            this.setState({ tooltipVisiblePublish: allDisable })}
                                         onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                         visible={this.state.tooltipVisiblePublish}
                                         title={ValidationConstants.compIsPublished}>
@@ -1454,34 +1553,29 @@ class CompetitionOpenRegForm extends Component {
     }
 
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu={"competition"} compSelectedKey={"3"} />
                 <Layout>
                     <Form
-                        ref={this.formRef}
                         autoComplete="off"
-                        onFinish={this.saveAPIsActionCall}
-                        onFinishFailed={(err) => {
-                            this.formRef.current.scrollToField(err.errorFields[0].name)
-                        }}
-                        initialValues={{
-                            competitionTypeRefId: 1,
-                            competitionFormatRefId: 1,
-                        }}
+                        onSubmit={this.saveAPIsActionCall}
                         noValidate="noValidate"
                     >
                         {this.headerView()}
-                        {this.dropdownView()}
+                        {this.dropdownView(
+                            getFieldDecorator
+                        )}
                         <Content>
                             <div className="tab-view">
                                 <Tabs activeKey={this.state.competitionTabKey} onChange={this.tabCallBack}>
                                     <TabPane tab={AppConstants.details} key="1">
-                                        <div className="tab-formView mt-5">{this.contentView()}</div>
+                                        <div className="tab-formView mt-5">{this.contentView(getFieldDecorator)}</div>
                                     </TabPane>
                                     <TabPane tab={AppConstants.divisions} key={"2"}>
-                                        <div className="tab-formView">{this.divisionsView()}</div>
+                                        <div className="tab-formView">{this.divisionsView(getFieldDecorator)}</div>
                                     </TabPane>
                                 </Tabs>
                             </div>
@@ -1497,7 +1591,6 @@ class CompetitionOpenRegForm extends Component {
         );
     }
 }
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         competitionFeeInit,
@@ -1528,7 +1621,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         competitionFeesState: state.CompetitionFeesState,
         appState: state.AppState,
@@ -1536,5 +1629,4 @@ function mapStateToProps(state) {
         competitionManagementState: state.CompetitionManagementState,
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(CompetitionOpenRegForm);
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionOpenRegForm));

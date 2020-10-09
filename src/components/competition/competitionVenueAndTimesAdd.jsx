@@ -35,6 +35,9 @@ import AppImages from '../../themes/appImages';
 import { captializedString } from '../../util/helpers';
 import PlacesAutocomplete from "./elements/PlaceAutoComplete";
 import Loader from "../../customComponents/loader";
+import {
+    getOrganisationData
+} from "../../util/sessionStorage"
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -79,16 +82,22 @@ class CompetitionVenueAndTimesAdd extends Component {
                     dataIndex: "venueCourtName",
                     key: "venueCourtName",
                     render: (courtName, record, index) => {
+                        const { getFieldDecorator } = this.props.form;
                         return (
-                            <Form.Item name={`venueCourtName${index}`} rules={[{ required: true, message: ValidationConstants.courtField[3] }]}>
-                                <Input
-                                    disabled={record.isDisabled}
-                                    required={"required-field pt-0 pb-0"}
-                                    className="input-inside-table-venue-court"
-                                    onChange={(courtName) => this.props.updateVenuAndTimeDataAction(courtName.target.value, index, 'venueCourtName', 'courtData')}
-                                    setFieldsValue={courtName}
-                                    placeholder={'Court Name'}
-                                />
+
+                            <Form.Item>
+                                {getFieldDecorator(`venueCourtName${index}`, {
+                                    rules: [{ required: true, message: ValidationConstants.courtField[3] }],
+                                })(
+                                    <Input
+                                        disabled={record.isDisabled}
+                                        required={"required-field pt-0 pb-0"}
+                                        className="input-inside-table-venue-court"
+                                        onChange={(courtName) => this.props.updateVenuAndTimeDataAction(courtName.target.value, index, 'venueCourtName', 'courtData')}
+                                        setFieldsValue={courtName}
+                                        placeholder={'Court Name'}
+                                    />
+                                )}
                             </Form.Item>
                         )
                     }
@@ -101,26 +110,29 @@ class CompetitionVenueAndTimesAdd extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
-
                             <Tooltip placement="bottom" background='#ff8237'>
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
-
-
                         );
                     },
 
                     render: (lat, record, index) => {
+                        const { getFieldDecorator } = this.props.form;
+                        // console.log(index, 'tooltipindex')
                         return (
                             // <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', height: index > 0 ? 0 : 150 }}>
                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
-                                <Form.Item name={`lat${index}`} rules={[{ required: true, message: ValidationConstants.courtField[1] }]}>
-                                    <Input
-                                        className="input-inside-table-venue-court"
-                                        onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
-                                        setFieldsValue={lat}
-                                        placeholder={'Longitude'}
-                                    />
+                                <Form.Item >
+                                    {getFieldDecorator(`lat${index}`, {
+                                        rules: [{ required: true, message: ValidationConstants.courtField[1] }],
+                                    })(
+                                        <Input
+                                            className="input-inside-table-venue-court"
+                                            onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
+                                            setFieldsValue={lat}
+                                            placeholder={'Longitude'}
+                                        />
+                                    )}
                                 </Form.Item>
                             </div>
                         )
@@ -133,25 +145,26 @@ class CompetitionVenueAndTimesAdd extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
-
                             <Tooltip placement="bottom" background='#ff8237'>
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
-
                         );
                     },
                     render: (lng, record, index) => {
+                        const { getFieldDecorator } = this.props.form;
                         return (
                             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
-                                <Form.Item name={`lng${index}`} rules={[{ required: true, message: ValidationConstants.courtField[2] }]}>
-                                    <Input
-                                        className="input-inside-table-venue-court"
-                                        onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
-                                        setFieldsValue={lng}
-                                        placeholder={'Latitude'}
-                                    />
+                                <Form.Item >
+                                    {getFieldDecorator(`lng${index}`, {
+                                        rules: [{ required: true, message: ValidationConstants.courtField[2] }],
+                                    })(
+                                        <Input className="input-inside-table-venue-court"
+                                            onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
+                                            setFieldsValue={lng}
+                                            placeholder={'Latitude'}
+                                        />
+                                    )}
                                 </Form.Item>
-
                             </div>
                         )
                     }
@@ -178,7 +191,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                             className="single-checkbox mt-1 d-flex justify-content-center"
                             defaultChecked={overideSlot}
                             onChange={e => this.overideVenueslotOnchange(e, index)}
-                        />
+                        ></Checkbox>
                         // </div>
                     )
                 },
@@ -205,7 +218,6 @@ class CompetitionVenueAndTimesAdd extends Component {
         this.myRef = React.createRef()
         this.props.getCommonRefData()
         const organisationData = getOrganisationData();
-        this.formRef = React.createRef();
         this.props.getAffiliatesListingAction({
             organisationId: organisationData.organisationUniqueKey,
             affiliatedToOrgId: -1,
@@ -216,6 +228,8 @@ class CompetitionVenueAndTimesAdd extends Component {
           });
 
     }
+
+
 
     removeTableObj(clear, record, index) {
         this.props.updateVenuAndTimeDataAction("", index, "remove")
@@ -236,6 +250,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     setHeaderValue = (screenNavigationKey) => {
+
         if (screenNavigationKey === AppConstants.venues)
             this.setState({ screenHeader: AppConstants.competitions });
         else if ((screenNavigationKey === AppConstants.competitionFees) ||
@@ -261,8 +276,10 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     setFormFieldValue = () => {
+
         let venueData = this.props.venueTimeState.venuData;
-        // this.formRef.current.setFieldsValue({
+        // console.log("setFormFieldValue" + JSON.stringify(venueData));
+        // this.props.form.setFieldsValue({
         //     name: venueData.venueName,
         //     addressOne: venueData.street1,
         //     suburb: venueData.suburb,
@@ -271,7 +288,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         // });
 
         venueData.venueCourts.map((item, index) => {
-            this.formRef.current.setFieldsValue({
+            this.props.form.setFieldsValue({
                 [`venueCourtName${index}`]: item.venueCourtName,
                 [`lat${index}`]: item.lat,
                 [`lng${index}`]: item.lng,
@@ -342,6 +359,10 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     getDisabledMinutes = (selectedHour, startTime) => {
+        // console.log("&&&&&&&&&&&" + startTime);
+        // console.log("selectedHour::" + startTime.split(":")[0]);
+        // console.log("Current Minute::" + startTime.split(":")[1]);
+        // console.log("*****selectedHour:::" + selectedHour);
         let hour = Number(startTime.split(":")[0]);
         let min = Number(startTime.split(":")[1]);
         var minutes = [];
@@ -360,6 +381,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     validateTime = (rule, value, callback, startTime, endTime, type) => {
+        //console.log("StartTime" + startTime + "EndTime::" + endTime + "Type::" + type);
         if (type == "end") {
             if (startTime > endTime) {
                 callback('End time should be greater than start time');
@@ -398,14 +420,14 @@ class CompetitionVenueAndTimesAdd extends Component {
     handlePlacesAutocomplete = (data) => {
         const { stateList } = this.props.commonReducerState;
         const address = data;
-
         this.props.checkVenueDuplication(address);
 
         if (!address.addressOne && !address.suburb) {
             this.setState({
                 venueAddressError: ValidationConstants.venueAddressDetailsError,
             })
-        } else {
+        }
+        else {
             this.setState({
                 venueAddressError: ''
             })
@@ -419,7 +441,7 @@ class CompetitionVenueAndTimesAdd extends Component {
             ? stateList.find((state) => state.name === address.state).id
             : null;
 
-        this.formRef.current.setFieldsValue({
+        this.props.form.setFieldsValue({
             stateRefId,
             addressOne: address.addressOne || null,
             suburb: address.suburb || null,
@@ -436,43 +458,54 @@ class CompetitionVenueAndTimesAdd extends Component {
         }
     };
 
+    onChangeLinkToAffiliate = (affiliateData) => {
+        this.props.updateVenuAndTimeDataAction(affiliateData, 'organisations', 'organisations')
+    }
     ////////form content view
-    contentView = () => {
+    contentView = (getFieldDecorator) => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
         const { affiliateList } = this.props.userState
         return (
             <div className="content-view">
-                <span className="form-heading">
+                <span className="form-heading" >
                     {AppConstants.venue}
                 </span>
-                <Form.Item name='name' rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
-                    <InputWithHead
-                        auto_complete="off"
-                        required={"required-field pt-0 pb-0"}
-                        heading={AppConstants.name}
-                        placeholder={AppConstants.name}
-                        onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(name.target.value), 'Venue', 'name')}
-                        setFieldsValue={venuData.name}
-                        onBlur={(i) => this.formRef.current.setFieldsValue({
-                            'name': captializedString(i.target.value)
-                        })}
-                    />
+                <Form.Item >
+                    {getFieldDecorator('name', {
+                        rules: [{ required: true, message: ValidationConstants.nameField[2] }],
+                    })(
+                        <InputWithHead
+                            auto_complete="off"
+                            required={"required-field pt-0 pb-0"}
+                            heading={AppConstants.name}
+                            placeholder={AppConstants.name}
+                            onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(name.target.value), 'Venue', 'name')}
+                            setFieldsValue={venuData.name}
+                            onBlur={(i) => this.props.form.setFieldsValue({
+                                'name': captializedString(i.target.value)
+                            })}
+                        />
+                    )}
                 </Form.Item>
-                <Form.Item name='shortName' rules={[{ required: true, message: ValidationConstants.nameField[3] }]}>
-                    <InputWithHead
-                        auto_complete="new-shortName"
-                        required={"required-field"}
-                        heading={AppConstants.short_Name}
-                        disabled={this.state.isUsed}
-                        placeholder={AppConstants.short_Name}
-                        maxLength={4}
-                        onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(name.target.value), 'Venue', 'shortName')}
-                        setFieldsValue={venuData.shortName}
-                        onBlur={(i) => this.formRef.current.setFieldsValue({
-                            'shortName': captializedString(i.target.value)
-                        })}
-                    />
+                <Form.Item className='formLineHeight'>
+                    {getFieldDecorator('shortName', {
+                        rules: [{ required: true, message: ValidationConstants.nameField[3] }],
+                    })(
+                        <InputWithHead
+                            auto_complete="new-shortName"
+                            required={"required-field"}
+                            heading={AppConstants.short_Name}
+                            disabled={this.state.isUsed}
+                            placeholder={AppConstants.short_Name}
+                            maxLength={4}
+                            onChange={(name) => this.props.updateVenuAndTimeDataAction(captializedString(name.target.value), 'Venue', 'shortName')}
+                            setFieldsValue={venuData.shortName}
+                            onBlur={(i) => this.props.form.setFieldsValue({
+                                'shortName': captializedString(i.target.value)
+                            })}
+                        />
+                    )}
                 </Form.Item>
                 <Form.Item className='formLineHeight' name="venueAddress">
                     <PlacesAutocomplete
@@ -487,16 +520,19 @@ class CompetitionVenueAndTimesAdd extends Component {
                         onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
-                <Form.Item name='addressOne'>
-                    <InputWithHead
-                        auto_complete="new-addressOne"
-                        required={"required-field pt-3 pb-0"}
-                        heading={AppConstants.addressOne}
-                        placeholder={AppConstants.addressOne}
-                        setFieldsValue={venuData.street1}
-                        readOnly
-                    />
+                <Form.Item >
+                    {getFieldDecorator('addressOne')(
+                        <InputWithHead
+                            auto_complete="new-addressOne"
+                            required={"required-field pt-3 pb-0"}
+                            heading={AppConstants.addressOne}
+                            placeholder={AppConstants.addressOne}
+                            setFieldsValue={venuData.street1}
+                            readOnly
+                        />
+                    )}
                 </Form.Item>
+
 
                 <InputWithHead
                     auto_complete="new-addressTwo"
@@ -506,15 +542,18 @@ class CompetitionVenueAndTimesAdd extends Component {
                     value={venuData.street2}
                 />
 
-                <Form.Item name='suburb'>
-                    <InputWithHead
-                        auto_complete="new-suburb"
-                        required={"required-field pt-3 pb-0"}
-                        heading={AppConstants.suburb}
-                        placeholder={AppConstants.suburb}
-                        setFieldsValue={venuData.suburb}
-                        readOnly
-                    />
+
+                <Form.Item  >
+                    {getFieldDecorator('suburb')(
+                        <InputWithHead
+                            auto_complete="new-suburb"
+                            required={"required-field pt-3 pb-0"}
+                            heading={AppConstants.suburb}
+                            placeholder={AppConstants.suburb}
+                            setFieldsValue={venuData.suburb}
+                            readOnly
+                        />
+                    )}
                 </Form.Item>
 
                 <InputWithHead
@@ -522,29 +561,34 @@ class CompetitionVenueAndTimesAdd extends Component {
                     heading={AppConstants.stateHeading}
                 />
 
-                <Form.Item name='stateRefId'>
-                    <Select
-                        style={{ width: "100%" }}
-                        placeholder={AppConstants.select}
-                        setFieldsValue={venuData.stateRefId}
-                        disabled
-                    >
-                        {stateList.length > 0 && stateList.map((item) => (
-                            <Option key={item.id} value={item.id}>{item.name}</Option>
-                        ))}
-                    </Select>
+                <Form.Item >
+                    {getFieldDecorator('stateRefId')(
+                        <Select
+                            style={{ width: "100%" }}
+                            placeholder={AppConstants.select}
+                            setFieldsValue={venuData.stateRefId}
+                            disabled
+                        >
+                            {stateList.length > 0 && stateList.map((item) => (
+                                < Option key={item.id} value={item.id}> {item.name}</Option>
+                            ))}
+                        </Select>
+                    )}
                 </Form.Item>
 
-                <Form.Item name='postcode'>
-                    <InputWithHead
-                        auto_complete="new-postcode"
-                        required={"required-field"}
-                        heading={AppConstants.postcode}
-                        placeholder={AppConstants.postcode}
-                        setFieldsValue={venuData.postalCode}
-                        maxLength={4}
-                        readOnly
-                    />
+
+                <Form.Item className="formLineHeight" >
+                    {getFieldDecorator('postcode')(
+                        <InputWithHead
+                            auto_complete="new-postcode"
+                            required={"required-field"}
+                            heading={AppConstants.postcode}
+                            placeholder={AppConstants.postcode}
+                            setFieldsValue={venuData.postalCode}
+                            maxLength={4}
+                            readOnly
+                        />
+                    )}
                 </Form.Item>
 
                 <InputWithHead
@@ -572,12 +616,12 @@ class CompetitionVenueAndTimesAdd extends Component {
                                     mode="multiple"
                                     showSearch
                                     style={{ width: "100%" }}
-                                    onChange={(affiliateData) => this.props.updateVenuAndTimeDataAction(affiliateData, 'organisations', 'organisations')}
-                                    placeholder={'Select '}
+                                    onChange={(affiliateData) => this.onChangeLinkToAffiliate(affiliateData)}
+                                    placeholder={'Select'}
                                     optionFilterProp="children"
                                 >
                                     {affiliateList.length > 0 && affiliateList.map((item, index) => (
-                                        <Option key={item.id} value={item.id}> {item.name}</Option>
+                                        < Option key={item.id} value={item.id}> {item.name}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -588,7 +632,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         );
     };
 
-    gameData(item, index) {
+    gameData(item, index, getFieldDecorator) {
         const { daysList } = this.props.commonReducerState
         return (
             <div className="row" key={"gameDay" + index}>
@@ -603,11 +647,19 @@ class CompetitionVenueAndTimesAdd extends Component {
                     >
                         {daysList.length > 0 && daysList.map((item) => (
                             < Option key={item.id} value={item.id}> {item.description}</Option>
-                        ))}
+                        ))
+                        }
                     </Select>
+
                 </div>
                 <div className="col-sm">
                     <InputWithHead heading={AppConstants.startTime} />
+                    {/* <Form.Item >
+                            {getFieldDecorator(`gstartTime${index}`, {
+                               validateTrigger: "onChange",
+                                rules: [{ required: true, message: ValidationConstants.courtField[6] },
+                                {validator: (rule, value, callback) => this.validateTime(rule, value, callback, item.startTime, item.endTime, 'start')}],
+                            })( */}
                     <TimePicker
                         key={"startTime"}
                         className="comp-venue-time-timepicker"
@@ -618,9 +670,17 @@ class CompetitionVenueAndTimesAdd extends Component {
                         // minuteStep={15}
                         use12Hours={false}
                     />
+                    {/* )}
+                    </Form.Item> */}
                 </div>
                 <div className="col-sm">
                     <InputWithHead heading={AppConstants.endTime} />
+                    {/* <Form.Item >
+                            {getFieldDecorator(`gendTime${index}`, {
+                               validateTrigger: "onChange",
+                                rules: [{ required: true, message: ValidationConstants.courtField[6] },
+                                {validator: (rule, value, callback) => this.validateTime(rule, value, callback, item.startTime, item.endTime, 'end')}],
+                            })( */}
                     <TimePicker
                         key={"endTime"}
                         disabledHours={() => this.getDisabledHours(item.startTime)}
@@ -633,10 +693,12 @@ class CompetitionVenueAndTimesAdd extends Component {
                         // minuteStep={15}
                         use12Hours={false}
                     />
+                    {/* )}
+                    </Form.Item> */}
                 </div>
                 <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.removeObjectAction(index, item, 'gameTimeslot')}>
                     <span className="user-remove-btn">
-                        <i className="fa fa-trash-o" aria-hidden="true" />
+                        <i className="fa fa-trash-o" aria-hidden="true"></i>
                     </span>
                     <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
                 </div>
@@ -653,14 +715,14 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     ///game day view
-    gameDayView = () => {
+    gameDayView = (getFieldDecorator) => {
         const { gameDays } = this.props.venueTimeState.venuData
         return (
             <div className="fees-view pt-5">
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }}>
                     <span className="form-heading">
                         {AppConstants.game_Days}
-                        <span className="required-field" style={{ fontSize: "14px" }} />
+                        <span className="required-field" style={{ fontSize: "14px" }}></span>
                     </span>
 
                     <div style={{ marginTop: -15, }}>
@@ -674,7 +736,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                 <div className="fluid-width">
                     {/* {this.gameData()} */}
                     {gameDays.map((item, index) => {
-                        return this.gameData(item, index)
+                        return this.gameData(item, index, getFieldDecorator)
                     })}
                 </div>
                 <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'gameDays')} className="input-heading-add-another">
@@ -684,7 +746,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         );
     };
 
-    expendedRowData(item, index, tableIndex) {
+    expendedRowData(item, index, tableIndex, getFieldDecorator) {
         const { daysList } = this.props.commonReducerState
         return (
             <div className="row" key={"available" + index}>
@@ -698,11 +760,18 @@ class CompetitionVenueAndTimesAdd extends Component {
                     >
                         {daysList.length > 0 && daysList.map((item) => (
                             < Option key={item.id} value={item.id}> {item.description}</Option>
-                        ))}
+                        ))
+                        }
                     </Select>
                 </div>
                 <div className="col-sm">
                     <InputWithHead required={"pt-1"} heading={AppConstants.startTime} />
+                    {/* <Form.Item >
+                            {getFieldDecorator(`startTime${index}${tableIndex}`, {
+                               validateTrigger: "onChange",
+                                rules: [{ required: true, message: ValidationConstants.courtField[6] },
+                                {validator: (rule, value, callback) => this.validateTime(rule, value, callback, item.startTime, item.endTime, 'start')}],
+                            })( */}
                     <TimePicker
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
@@ -712,9 +781,17 @@ class CompetitionVenueAndTimesAdd extends Component {
                         // minuteStep={15}
                         use12Hours={false}
                     />
+                    {/* )}
+                        </Form.Item> */}
                 </div>
                 <div className="col-sm">
                     <InputWithHead required={"pt-1"} heading={AppConstants.endTime} />
+                    {/* <Form.Item >
+                        {getFieldDecorator(`endTime${index}${tableIndex}`, {
+                           validateTrigger: "onChange",
+                            rules: [{ required: true, message: ValidationConstants.courtField[7] },
+                            {validator: (rule, value, callback) => this.validateTime(rule, value, callback, item.startTime, item.endTime, 'end')}],
+                        })( */}
                     <TimePicker
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
@@ -726,10 +803,12 @@ class CompetitionVenueAndTimesAdd extends Component {
                         // minuteStep={15}
                         use12Hours={false}
                     />
+                    {/* )}
+                    </Form.Item> */}
                 </div>
                 <div className="col-sm-2 delete-image-view pb-4" onClick={() => this.props.updateVenuAndTimeDataAction(null, index, 'removeButton', 'add_TimeSlot', tableIndex)}>
                     <span className="user-remove-btn">
-                        <i className="fa fa-trash-o" aria-hidden="true" />
+                        <i className="fa fa-trash-o" aria-hidden="true"></i>
                     </span>
                     <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
                 </div>
@@ -737,11 +816,12 @@ class CompetitionVenueAndTimesAdd extends Component {
         )
     }
 
-    expandedRowView = (item, tableIndex) => {
+    expandedRowView = (item, tableIndex, getFieldDecorator) => {
+
         return (
             <div className="comp-expanded-row-view inside-container-view mt-2">
                 {item.availabilities.map((item, index) => {
-                    return this.expendedRowData(item, index, tableIndex)
+                    return this.expendedRowData(item, index, tableIndex, getFieldDecorator)
                 })}
                 {/* {this.gameData(item, index)} */}
                 <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, tableIndex, 'availabilities', 'add_TimeSlot')} className="input-heading-add-another pt-3">
@@ -752,14 +832,15 @@ class CompetitionVenueAndTimesAdd extends Component {
     }
 
     //////court day view
-    courtView = () => {
+    courtView = (getFieldDecorator) => {
         let venueCourts = [...this.props.venueTimeState.venuData.venueCourts];
+        //console.log("venueCourts" + JSON.stringify(venueCourts));
         return (
             <div className="fees-view pt-5">
                 <div style={{ display: 'flex' }}>
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', }}>
                         <span className="form-heading">
-                            {AppConstants.courts} <span className="required-field" style={{ fontSize: "14px", paddingTop: '5px' }} />
+                            {AppConstants.courts} <span className="required-field" style={{ fontSize: "14px", paddingTop: '5px' }}></span>
                         </span>
                         <div style={{ marginTop: -15, }}>
                             <Tooltip background='#ff8237'>
@@ -778,8 +859,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                                     inputId="venueCourtUpload"
                                     inputStyle={{ display: 'none' }}
                                     parserOptions={papaparseOptions}
-                                    onFileLoaded={(e) => this.readVenueCourtCSV(e)}
-                                />
+                                    onFileLoaded={(e) => this.readVenueCourtCSV(e)} />
                             </div>
                         </div>
                     </Button>
@@ -794,7 +874,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                             pagination={false}
                             Divider=" false"
                             expandedRowKeys={this.props.venueTimeState.venuData.expandedRowKeys}
-                            expandedRowRender={(record, index) => this.expandedRowView(record, index)}
+                            expandedRowRender={(record, index) => this.expandedRowView(record, index, getFieldDecorator)}
                             expandIconAsCell={false}
                             expandIconColumnIndex={-1}
                             loading={this.state.loading == true && true}
@@ -809,6 +889,7 @@ class CompetitionVenueAndTimesAdd extends Component {
     };
 
     onAddVenue = (e) => {
+        e.preventDefault();
         let hasError = false;
         let venueAddressError = false;
 
@@ -823,58 +904,66 @@ class CompetitionVenueAndTimesAdd extends Component {
             venueAddressError = true;
         }
 
-        const { venuData } = this.props.venueTimeState
-        message.config({
-            duration: 3.5,
-            maxCount: 1,
-        });
-        if (venuData.venueCourts.length == 0) {
-            message.error(ValidationConstants.emptyAddCourtValidation);
-        }
-        if (venuData.gameDays.length == 0) {
-            message.error(ValidationConstants.emptyGameDaysValidation);
-        } else {
-            if (venuData.venueCourts.length == 0) {
-                message.error(ValidationConstants.emptyAddCourtValidation);
-                return;
-            }
-
-            venuData.venueCourts.map((item, index) => {
-                (item.availabilities || []).map((avItem, avIndex) => {
-                    if (avItem.startTime > avItem.endTime) {
-                        hasError = true;
-                    }
-                })
-            });
-
-            if (hasError) {
-                message.error(ValidationConstants.venueCourtEndTimeValidation);
-                return;
-            }
-
-            venuData.gameDays.map((item, index) => {
-                if (item.startTime > item.endTime) {
-                    hasError = true;
-                    // break;
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            if (!err) {
+                const { venuData } = this.props.venueTimeState
+                message.config({
+                    duration: 3.5,
+                    maxCount: 1,
+                });
+                if (venuData.venueCourts.length == 0) {
+                    message.error(ValidationConstants.emptyAddCourtValidation);
                 }
-            });
+                if (venuData.gameDays.length == 0) {
+                    message.error(ValidationConstants.emptyGameDaysValidation);
+                }
+                else {
 
-            if (hasError) {
-                message.error(ValidationConstants.gameDayEndTimeValidation);
-                return;
-            }
+                    if (venuData.venueCourts.length == 0) {
+                        message.error(ValidationConstants.emptyAddCourtValidation);
+                        return;
+                    }
 
-            if (venueAddressError) {
-                message.error(AppConstants.venueAddressSelect);
-                return;
-            }
+                    venuData.venueCourts.map((item, index) => {
+                        (item.availabilities || []).map((avItem, avIndex) => {
+                            if (avItem.startTime > avItem.endTime) {
+                                hasError = true;
+                            }
+                        })
+                    });
 
-            if (!hasError) {
-                venuData["screenNavigationKey"] = this.state.screenNavigationKey;
-                this.props.addVenueAction(venuData)
-                this.setState({ saveContraintLoad: true });
+                    if (hasError) {
+                        message.error(ValidationConstants.venueCourtEndTimeValidation);
+                        return;
+                    }
+
+                    venuData.gameDays.map((item, index) => {
+                        if (item.startTime > item.endTime) {
+                            hasError = true;
+                            // break;
+                        }
+                    });
+
+                    if (hasError) {
+                        message.error(ValidationConstants.gameDayEndTimeValidation);
+                        return;
+                    }
+
+                    if (venueAddressError) {
+                        message.error(AppConstants.venueAddressSelect);
+                        return;
+                    }
+
+                    if (!hasError) {
+                        venuData["screenNavigationKey"] = this.state.screenNavigationKey;
+                        //console.log("venuData" + JSON.stringify(venuData));
+                        this.props.addVenueAction(venuData)
+                        this.setState({ saveContraintLoad: true });
+                    }
+                }
             }
-        }
+        })
+
     }
 
     //////footer view containing all the buttons like submit and cancel
@@ -902,6 +991,8 @@ class CompetitionVenueAndTimesAdd extends Component {
     };
 
     render() {
+        const { getFieldDecorator } = this.props.form;
+        // console.log(this.props.venueTimeState.venuData, 'this.props.commonReducerState')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <Loader visible={this.props.commonReducerState.onLoad || this.props.venueTimeState.onLoad} />
@@ -913,18 +1004,13 @@ class CompetitionVenueAndTimesAdd extends Component {
                 <Layout>
                     {this.headerView()}
                     <Form
-                        ref={this.formRef}
                         autocomplete="off"
-                        onFinish={this.onAddVenue}
-                        onFinishFailed={(err) => {
-                            this.formRef.current.scrollToField(err.errorFields[0].name);
-                        }}
-                        noValidate="noValidate"
-                    >
+                        onSubmit={this.onAddVenue}
+                        noValidate="noValidate">
                         <Content>
-                            <div className="formView">{this.contentView()}</div>
-                            <div className="formView">{this.gameDayView()}</div>
-                            <div className="formView">{this.courtView()}</div>
+                            <div className="formView">{this.contentView(getFieldDecorator)}</div>
+                            <div className="formView">{this.gameDayView(getFieldDecorator)}</div>
+                            <div className="formView">{this.courtView(getFieldDecorator)}</div>
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>
@@ -933,7 +1019,6 @@ class CompetitionVenueAndTimesAdd extends Component {
         );
     }
 }
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateVenuAndTimeDataAction,
@@ -949,7 +1034,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         venueTimeState: state.VenueTimeState,
         appState: state.AppState,
@@ -957,5 +1042,5 @@ function mapStateToProps(state) {
         userState: state.UserState
     }
 }
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionVenueAndTimesAdd));
 
-export default connect(mapStateToProps, mapDispatchToProps)(CompetitionVenueAndTimesAdd);

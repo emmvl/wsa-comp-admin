@@ -1,17 +1,16 @@
 import React, { Component } from "react"
-import { NavLink } from "react-router-dom";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Layout, Button, Select, Breadcrumb, Form, Radio, } from 'antd';
-
 import './umpire.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import InputWithHead from "../../customComponents/InputWithHead";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
+import { NavLink } from "react-router-dom";
 import history from "util/history";
 
 const { Header, Footer, } = Layout
@@ -21,7 +20,6 @@ const allocatePools = [
     { id: 1, name: "Division" },
     { id: 2, name: "Grades" }
 ]
-
 class UmpireDivisions extends Component {
     constructor(props) {
         super(props)
@@ -60,7 +58,9 @@ class UmpireDivisions extends Component {
     //     this.setState({ selectedComp: data.comp })
     // }
 
+    ///////view for breadcrumb
     headerView = () => {
+
         return (
             <div className="header-view divisions">
                 <Header
@@ -88,9 +88,12 @@ class UmpireDivisions extends Component {
         let compKey = compID.competitionUniqueKey
 
         this.setState({ selectedComp, competitionUniqueKey: compKey })
+
     }
 
-    dropdownView = () => {
+
+
+    dropdownView = (getFieldDecorator) => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
         return (
             <div className="comp-venue-courts-dropdown-view mt-0 ">
@@ -117,10 +120,14 @@ class UmpireDivisions extends Component {
                                     value={this.state.selectedComp}
 
                                 >
-                                    {competition.map((item, index) => {
-                                        return <Option key={"comp" + index} value={item.id}>{item.longName}</Option>
-                                    })}
+                                    {
+                                        competition.map((item, index) => {
+                                            return <Option key={"comp" + index} value={item.id}>{item.longName}</Option>
+                                        })
+                                    }
+
                                 </Select>
+
                             </div>
                         </div>
                     </div>
@@ -133,16 +140,18 @@ class UmpireDivisions extends Component {
         this.setState({ umpPool: data.umpirePool })
     }
 
+
+
     contentView = () => {
         return (
             <div className="content-view pt-5">
                 <span className="text-heading-large">{AppConstants.allocatePools}</span>
                 <Radio.Group
                     className="reg-competition-radio"
-                    // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
-                    // onChange={e => this.setPools(e.target.value)}
-                    // setFieldsValue={detailsData.competitionTypeRefId}
-                    // disabled={compDetailDisable}
+                // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
+                // onChange={e => this.setPools(e.target.value)}
+                // setFieldsValue={detailsData.competitionTypeRefId}
+                // disabled={compDetailDisable}
                 >
                     {allocatePools.map((item, index) => {
                         return (
@@ -177,8 +186,8 @@ class UmpireDivisions extends Component {
                             placeholder={"Select"}
                             mode="multiple"
                             style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
-                            // onChange={umpirePool => this.onChangeUmpirePools({ key: "recordUmpire", data: umpirePool })}
-                            // value={this.state.umpPool}
+                        // onChange={umpirePool => this.onChangeUmpirePools({ key: "recordUmpire", data: umpirePool })}
+                        // value={this.state.umpPool}
                         >
                             <Option value={"aGrade"}>{'A Grade'}</Option>
                             <Option value={"bGrade"}>{'B Grade'}</Option>
@@ -196,8 +205,8 @@ class UmpireDivisions extends Component {
                             placeholder={"Select"}
                             mode="multiple"
                             style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
-                            // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
-                            // value={this.state.umpPool}
+                        // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
+                        // value={this.state.umpPool}
                         >
                             <Option value={"aGradea"}>{'A Grade'}</Option>
                             <Option value={"bGradeb"}>{'B Grade'}</Option>
@@ -215,8 +224,8 @@ class UmpireDivisions extends Component {
                             placeholder={"Select"}
                             mode="multiple"
                             style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
-                            // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
-                            // value={this.state.umpPool}
+                        // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
+                        // value={this.state.umpPool}
                         >
                             <Option value={"aGradeaa"}>{'A Grade'}</Option>
                             <Option value={"bGradebb"}>{'B Grade'}</Option>
@@ -234,8 +243,8 @@ class UmpireDivisions extends Component {
                             placeholder={"Select"}
                             mode="multiple"
                             style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
-                            // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
-                            // value={this.state.umpPool}
+                        // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
+                        // value={this.state.umpPool}
                         >
                             <Option value={"Gradeaa"}>{'A Grade'}</Option>
                             <Option value={"Gradebb"}>{'B Grade'}</Option>
@@ -243,6 +252,7 @@ class UmpireDivisions extends Component {
                         </Select>
                     </div>
                 </div>
+
 
                 {/* <span className="text-heading-large pt-5">{AppConstants.simultaneousMatchAllocations}</span> */}
                 {/* <div className="row  pt-3" >
@@ -295,12 +305,15 @@ class UmpireDivisions extends Component {
                         />
                     </div>
                 </div> */}
+
             </div>
         )
     }
 
+
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
+
         return (
             <div className="fluid-width">
 
@@ -328,9 +341,11 @@ class UmpireDivisions extends Component {
                 </div>
             </div>
         );
+
     }
 
     render = () => {
+        // const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
@@ -339,7 +354,7 @@ class UmpireDivisions extends Component {
                 <Layout>
                     {this.headerView()}
                     {this.dropdownView()}
-                    <Form autoComplete="off" onFinish={this.handleSubmit} className="login-form">
+                    <Form autoComplete='off' onSubmit={this.handleSubmit} className="login-form">
                         {/* <Form onSubmit={this.checkSubmit} noValidate="novalidate" className="login-form"> */}
                         <div className="formView">{this.contentView()}</div>
 
@@ -359,10 +374,9 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         umpireCompetitionState: state.UmpireCompetitionState
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(UmpireDivisions);
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(UmpireDivisions));

@@ -296,7 +296,7 @@ class CompetitionFixtures extends Component {
                         <Select
                             style={{ minWidth: 160 }}
                             name={'competition'}
-                            className="year-select"
+                            className="year-select reg-filter-select1 innerSelect-value-draws"
                             onChange={competitionId =>
                                 this.onCompetitionChange(competitionId)
                             }

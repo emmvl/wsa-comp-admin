@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Layout, Breadcrumb, Form, Select, Button, Radio, message } from 'antd';
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
+import AppImages from "../../themes/appImages";
+import { NavLink } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import history from '../../util/history'
@@ -9,10 +11,7 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from '../../customComponents/loader';
 import ValidationConstants from "../../themes/validationConstant";
 import Tooltip from 'react-png-tooltip'
-import {
-    saveDeRegisterDataAction,
-    updateDeregistrationData
-} from '../../store/actions/registrationAction/registrationChangeAction'
+import {saveDeRegisterDataAction,updateDeregistrationData, getTransferCompetitionsAction} from '../../store/actions/registrationAction/registrationChangeAction'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -32,69 +31,101 @@ class DeRegistration extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount(){
         let regData = this.props.location.state ? this.props.location.state.regData : null;
         let personal = this.props.location.state ? this.props.location.state.personal : null;
-        if (personal) {
-            this.setState({ userId: personal.userId });
+        if(personal){
+            this.setState({userId: personal.userId});
         }
-        this.setState({ regData, personal });
+        console.log("RegData::personal", regData, personal);
+        this.setState({regData, personal});
     }
 
-    componentDidUpdate(nextProps) {
+    componentDidUpdate(nextProps){
+
         let deRegisterState = this.props.deRegistrationState;
 
-        if (this.state.saveLoad == true && deRegisterState.onSaveLoad == false) {
-            history.push({ pathname: '/userPersonal', state: { tabKey: "5", userId: this.state.userId } });
+        if(this.state.saveLoad == true && deRegisterState.onSaveLoad == false){
+            history.push({pathname:'/userPersonal', state: {tabKey: "5", userId: this.state.userId}});
         }
     }
 
-    goBack = () => {
-        history.push({ pathname: '/userPersonal', state: { tabKey: "5", userId: this.state.userId } });
+    
+    goBack = () =>{
+        history.push({pathname:'/userPersonal', state: {tabKey: "5", userId: this.state.userId}});
     }
 
-    saveAPIsActionCall = (values) => {
-        let deRegisterState = this.props.deRegistrationState;
-        let saveData = JSON.parse(JSON.stringify(deRegisterState.saveData));
-        if (saveData.regChangeTypeRefId == 0 || saveData.regChangeTypeRefId == null) {
-            message.config({ duration: 0.9, maxCount: 1 });
-            message.error(ValidationConstants.deRegisterChangeTypeRequired);
-        } else if (saveData.deRegistrationOptionId == 2 && saveData.reasonTypeRefId == 0) {
-            message.config({ duration: 0.9, maxCount: 1 });
-            message.error(ValidationConstants.deRegisterReasonRequired);
-        } else {
-            let regData = this.state.regData;
-            let personal = this.state.personal;
-            saveData["userId"] = personal.userId;
-            saveData["organisationId"] = regData.organisationId;
-            saveData["competitionId"] = regData.competitionId;
-            saveData["membershipMappingId"] = regData.membershipMappingId;
-            saveData["teamId"] = regData.teamId;
-            saveData["divisionId"] = regData.divisionId;
-            saveData["registrationId"] = regData.registrationId;
-            this.props.saveDeRegisterDataAction(saveData);
-            this.setState({ saveLoad: true });
+    updateDeregistrationData = (value, key, subKey) =>{
+        if(key == "regChangeTypeRefId"){
+            if(value == 2){
+                this.getTransferOrgData();
+            }
         }
+        this.props.updateDeregistrationData(value, key, subKey)
+    }
+
+    getTransferOrgData = () =>{
+        let regData = this.state.regData;
+        let payload = {
+            competitionId: regData.competitionId,
+            membershipMappingId: regData.membershipMappingId
+        }
+        this.props.getTransferCompetitionsAction(payload);
+    }
+
+    saveAPIsActionCall = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            if(!err){
+                let deRegisterState = this.props.deRegistrationState;
+                let saveData = JSON.parse(JSON.stringify(deRegisterState.saveData));
+                if(saveData.regChangeTypeRefId == 0 || saveData.regChangeTypeRefId == null){
+                    message.config({ duration: 0.9, maxCount: 1 });
+                    message.error(ValidationConstants.deRegisterChangeTypeRequired);
+                }
+                else if(saveData.regChangeTypeRefId == 1 && saveData.deRegistrationOptionId == 2 && saveData.reasonTypeRefId == 0){
+                    message.config({ duration: 0.9, maxCount: 1 });
+                    message.error(ValidationConstants.deRegisterReasonRequired);
+                }
+                else if(saveData.regChangeTypeRefId == 2 && saveData.transfer.reasonTypeRefId == 0){
+                    message.config({ duration: 0.9, maxCount: 1 });
+                    message.error(ValidationConstants.transferReasonRequired);
+                }
+                else{
+                    let regData = this.state.regData;
+                    let personal = this.state.personal;
+                    saveData["userId"] = personal.userId;
+                    saveData["organisationId"] = regData.organisationId;
+                    saveData["competitionId"] = regData.competitionId;
+                    saveData["membershipMappingId"] = regData.membershipMappingId;
+                    saveData["teamId"] = regData.teamId;
+                    saveData["divisionId"] = regData.divisionId;
+                    saveData["registrationId"] = regData.registrationId;
+                    console.log("saveData::" + JSON.stringify(saveData));
+                    this.props.saveDeRegisterDataAction(saveData);
+                    this.setState({saveLoad: true});
+                }
+            }
+        })
     }
 
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <Header className="comp-venue-courts-header-view">
-                <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+            <Header className="comp-venue-courts-header-view" >
+                <div className="row" >
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
                         <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item
-                                className="breadcrumb-add">{AppConstants.registrationChange}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.registrationChange}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </Header>
+            </Header >
         )
     }
-
     ///checkDeRegistrationOption
     checkDeRegistrationOption = (subItem, selectedOption) => {
+        console.log(subItem, selectedOption)
         const { saveData, deRegistionOther } = this.props.deRegistrationState
         if (subItem.id == 5 && selectedOption == 5) {
             return (
@@ -103,7 +134,7 @@ class DeRegistration extends Component {
                         required={"pt-0"}
                         placeholder={AppConstants.other}
                         value={saveData.deRegisterOther}
-                        onChange={(e) => this.props.updateDeregistrationData(e.target.value, "deRegisterOther", 'deRegister')}
+                        onChange={(e) => this.updateDeregistrationData(e.target.value, "deRegisterOther", 'deRegister')}
                     />
                 </div>
             )
@@ -112,7 +143,8 @@ class DeRegistration extends Component {
 
     ////checkMainRegistrationOption
     checkMainRegistrationOption = (subItem, selectedOption) => {
-        const { saveData, deRegistionOption } = this.props.deRegistrationState
+        console.log(subItem, selectedOption)
+        const {saveData, deRegistionOption } = this.props.deRegistrationState
         if (subItem.id == 1 && selectedOption == 1) {
         } else if (subItem.id == 2 && selectedOption == 2) {
             return (
@@ -124,7 +156,7 @@ class DeRegistration extends Component {
                     <Radio.Group
                         className="reg-competition-radio"
                         onChange={(e) =>
-                            this.props.updateDeregistrationData(
+                            this.updateDeregistrationData(
                                 e.target.value,
                                 'reasonTypeRefId',
                                 'deRegister'
@@ -144,8 +176,10 @@ class DeRegistration extends Component {
                                     </div>
                                 )
                             }
+
                         )}
                     </Radio.Group>
+
                 </div>
             )
         }
@@ -161,7 +195,7 @@ class DeRegistration extends Component {
                         required={"pt-0"}
                         placeholder={AppConstants.other}
                         value={saveData.transafer.transferOther}
-                        onChange={(e) => this.props.updateDeregistrationData(e.target.value, "transferOther", 'transfer')}
+                        onChange={(e) => this.updateDeregistrationData(e.target.value, "transferOther", 'transfer')}
                     />
                 </div>
             )
@@ -169,8 +203,10 @@ class DeRegistration extends Component {
     }
 
     ///checkRegistrationOption
-    checkRegistrationOption = (subItem, selectedOption) => {
-        const { saveData, DeRegistionMainOption, transferOption } = this.props.deRegistrationState
+    checkRegistrationOption = (subItem, selectedOption, getFieldDecorator) => {
+        console.log(subItem, selectedOption)
+        const {saveData, DeRegistionMainOption, transferOption, transferOrganisations, 
+            transferCompetitions } = this.props.deRegistrationState
         if (subItem.id == 1 && selectedOption == 1) {
             return (
                 <div className="ml-5">
@@ -181,12 +217,13 @@ class DeRegistration extends Component {
                     <Radio.Group
                         className="reg-competition-radio"
                         onChange={(e) =>
-                            this.props.updateDeregistrationData(
+                            this.updateDeregistrationData(
                                 e.target.value,
                                 'deRegistrationOptionId',
                                 'deRegister'
                             )
                         }
+
                         value={saveData.deRegistrationOptionId}
                     >
                         {(DeRegistionMainOption || []).map(
@@ -194,32 +231,69 @@ class DeRegistration extends Component {
                                 return (
                                     <div key={"register" + index}>
                                         <Radio value={item.id}>{item.value}</Radio>
-                                        {this.checkMainRegistrationOption(item, saveData.deRegistrationOptionId)}
+                                        {this.checkMainRegistrationOption(
+                                            item,
+                                            saveData.deRegistrationOptionId
+                                        )}
                                     </div>
                                 )
                             }
+
                         )}
                     </Radio.Group>
+
                 </div>
             )
-        } else if (subItem.id == 2 && selectedOption == 2) {
+        }
+        else if (subItem.id == 2 && selectedOption == 2) {
             return (
                 <div className="ml-5">
-                    <InputWithHead
-                        style={{ width: "100%", paddingRight: 1 }}
-                        heading={AppConstants.organisationName}
-                        placeholder={AppConstants.organisationName}
-                        required={"required-field"}
-                        // onChange={(e) => this.onChangeSetParticipantValue(e, "competitionUniqueKey", index)}
-                    />
-
-                    <InputWithHead
-                        heading={AppConstants.competition_name}
-                        required={"required-field"}
-                        placeholder={AppConstants.competition_name}
-                        style={{ width: "100%", paddingRight: 1 }}
-                        // onChange={(e) => this.onChangeSetParticipantValue(e, "competitionUniqueKey", index)}
-                    />
+                    <InputWithHead heading={AppConstants.organisationName} required={"required-field"} />
+                    <Form.Item >
+                    {getFieldDecorator(`transferOrganisationId`, {
+                        rules: [{ required: true, message: ValidationConstants.organisationName }],
+                    })(
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: "100%", paddingRight: 1 }}
+                            required={"required-field pt-0 pb-0"}
+                            className="input-inside-table-venue-court team-mem_prod_type"
+                            onChange={(e) => this.updateDeregistrationData(e, "organisationId", "transfer")}
+                            setFieldsValue={saveData.transfer.organisationId}
+                            placeholder={'Organisation Name'}>
+                            {(transferOrganisations || []).map((org, cIndex) => (
+                                <Option key={org.organisationId} 
+                                value={org.organisationId} >{org.organisationName}</Option>
+                            ))
+                            }
+                        
+                        </Select>
+                    )}
+                </Form.Item>
+                <InputWithHead heading={AppConstants.competition_name} required={"required-field"} />
+                <Form.Item >
+                    {getFieldDecorator(`transferCompetitionId`, {
+                        rules: [{ required: true, message: ValidationConstants.competitionRequired }],
+                    })(
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            style={{ width: "100%", paddingRight: 1 }}
+                            required={"required-field pt-0 pb-0"}
+                            className="input-inside-table-venue-court team-mem_prod_type"
+                            onChange={(e) => this.updateDeregistrationData(e, "competitionId", "transfer")}
+                            setFieldsValue={saveData.transfer.competitionId}
+                            placeholder={'Competition Name'}>
+                        {(transferCompetitions || []).map((comp, cIndex) => (
+                                <Option key={comp.competitionId} 
+                                value={comp.competitionId} >{comp.competitionName}</Option>
+                            ))
+                            }
+                        
+                        </Select>
+                    )}
+                    </Form.Item>
 
                     <InputWithHead
                         required={"pt-3"}
@@ -228,7 +302,7 @@ class DeRegistration extends Component {
                     <Radio.Group
                         className="reg-competition-radio"
                         onChange={(e) =>
-                            this.props.updateDeregistrationData(
+                            this.updateDeregistrationData(
                                 e.target.value,
                                 'reasonTypeRefId',
                                 'transfer'
@@ -241,20 +315,27 @@ class DeRegistration extends Component {
                                 return (
                                     <div key={"transferOption" + index}>
                                         <Radio value={item.id}>{item.value}</Radio>
-                                        {this.checkTransferOption(item, saveData.transfer.reasonTypeRefId)}
+                                        {this.checkTransferOption(
+                                            item,
+                                            saveData.transfer.reasonTypeRefId
+                                        )}
                                     </div>
                                 )
                             }
+
                         )}
                     </Radio.Group>
+
                 </div>
             )
         }
+
     }
 
+
     ////////form content view
-    contentView = () => {
-        const { saveData, registrationSelection } = this.props.deRegistrationState
+    contentView = (getFieldDecorator) => {
+        const { saveData,registrationSelection} = this.props.deRegistrationState
         let regData = this.state.regData;
         let personal = this.state.personal;
         return (
@@ -265,75 +346,69 @@ class DeRegistration extends Component {
                     style={{ width: "100%", paddingRight: 1 }}
                     className="input-inside-table-venue-court team-mem_prod_type"
                     value={personal ? (personal.firstName + ' ' + personal.lastName) : ""}
-                    placeholder={'User Name'}
-                />
+                    placeholder={'User Name'}/>
+                        
+                    <InputWithHead
+                        disabled={true}
+                        style={{ width: "100%", paddingRight: 1 }}
+                        heading={AppConstants.organisationName} 
+                        className="input-inside-table-venue-court team-mem_prod_type"
+                        value={regData ? regData.affiliate : ""}
+                        placeholder={'Organisation Name'}/>
+                   
+                    <InputWithHead
+                        disabled={true}
+                        heading={AppConstants.competition_name}
+                        style={{ width: "100%", paddingRight: 1 }}
+                        className="input-inside-table-venue-court team-mem_prod_type"
+                        value={regData ? regData.competitionName : ""}
+                        placeholder={'Competition Name'}/>
+                
+                    <InputWithHead
+                        disabled={true}
+                        heading={AppConstants.membershipProduct}
+                        style={{ width: "100%", paddingRight: 1, marginBottom: 15 }}
+                        className="input-inside-table-venue-court team-mem_prod_type"
+                        value={(regData ? regData.membershipProduct : "") + " - " +(regData ? regData.membershipType : "")}
+                        placeholder={AppConstants.membershipProduct}/>
 
-                <InputWithHead
-                    disabled={true}
-                    style={{ width: "100%", paddingRight: 1 }}
-                    heading={AppConstants.organisationName}
-                    className="input-inside-table-venue-court team-mem_prod_type"
-                    value={regData ? regData.affiliate : ""}
-                    placeholder={'Organisation Name'}
-                />
-
-                <InputWithHead
-                    disabled={true}
-                    heading={AppConstants.competition_name}
-                    style={{ width: "100%", paddingRight: 1 }}
-                    className="input-inside-table-venue-court team-mem_prod_type"
-                    value={regData ? regData.competitionName : ""}
-                    placeholder={'Competition Name'}
-                />
-
-                <InputWithHead
-                    disabled={true}
-                    heading={AppConstants.membershipProduct}
-                    style={{ width: "100%", paddingRight: 1, marginBottom: 15 }}
-                    className="input-inside-table-venue-court team-mem_prod_type"
-                    value={(regData ? regData.membershipProduct : "") + " - " + (regData ? regData.membershipType : "")}
-                    placeholder={AppConstants.membershipProduct}
-                />
-
-                <InputWithHead
-                    disabled={true}
-                    heading={AppConstants.division}
-                    style={{ width: "100%", paddingRight: 1, marginBottom: 15 }}
-                    className="input-inside-table-venue-court team-mem_prod_type"
-                    value={regData ? regData.divisionName : ""}
-                    placeholder={AppConstants.division}
-                />
-
-                <InputWithHead
-                    disabled={true}
-                    heading={AppConstants.teamName}
-                    style={{ width: "100%", paddingRight: 1, marginTop: 15 }}
-                    className="input-inside-table-venue-court team-mem_prod_type"
-                    value={regData ? regData.teamName : ""}
-                    placeholder={AppConstants.teamName}
-                />
-
-                <InputWithHead
-                    disabled={true}
-                    heading={AppConstants.mobileNumber}
-                    placeholder={AppConstants.mobileNumber}
-                    value={personal ? (personal.mobileNumber) : ""}
-                />
-
-                <InputWithHead
-                    disabled={true}
-                    heading={AppConstants.emailAdd}
-                    placeholder={AppConstants.emailAdd}
-                    value={personal ? (personal.email) : ""}
-                />
-
-                <InputWithHead heading={AppConstants.whatRegistrationChange} />
+                    <InputWithHead
+                        disabled={true}
+                        heading={AppConstants.division}
+                        style={{ width: "100%", paddingRight: 1, marginBottom: 15 }}
+                        className="input-inside-table-venue-court team-mem_prod_type"
+                        value={regData ? regData.divisionName : ""}
+                        placeholder={AppConstants.division}/>
+        
+                    <InputWithHead
+                        disabled={true}
+                        heading={AppConstants.teamName}
+                        style={{ width: "100%", paddingRight: 1 , marginTop: 15}}
+                        className="input-inside-table-venue-court team-mem_prod_type"
+                        value={regData ? regData.teamName : ""}
+                        placeholder={AppConstants.teamName}/>
+            
+                    <InputWithHead
+                        disabled={true}
+                        heading={AppConstants.mobileNumber}
+                        placeholder={AppConstants.mobileNumber}
+                        value={personal ? (personal.mobileNumber) : ""}
+                    />
+                
+                    <InputWithHead
+                        disabled={true}
+                        heading={AppConstants.emailAdd}
+                        placeholder={AppConstants.emailAdd}
+                        value={personal ? (personal.email) : ""}
+                    />
+                  
+                <InputWithHead heading={AppConstants.whatRegistrationChange}/>
                 <div>
                     <Radio.Group
                         className="reg-competition-radio"
                         style={{ overflow: "visible" }}
                         onChange={(e) =>
-                            this.props.updateDeregistrationData(
+                            this.updateDeregistrationData(
                                 e.target.value,
                                 'regChangeTypeRefId',
                                 'deRegister'
@@ -344,7 +419,7 @@ class DeRegistration extends Component {
                             (item, index) => {
                                 return (
                                     <div key={"register" + index}>
-                                        <div className="contextualHelp-RowDirection">
+                                        <div className="contextualHelp-RowDirection" >
                                             <Radio value={item.id}>{item.value}</Radio>
                                             <div style={{ marginLeft: -20 }}>
                                                 <Tooltip placement='bottom' background="#ff8237">
@@ -352,14 +427,19 @@ class DeRegistration extends Component {
                                                 </Tooltip>
                                             </div>
                                         </div>
-                                        {this.checkRegistrationOption(item, saveData.regChangeTypeRefId)}
+                                        {this.checkRegistrationOption(
+                                            item,
+                                            saveData.regChangeTypeRefId,
+                                            getFieldDecorator
+                                        )}
                                     </div>
                                 )
                             }
                         )}
                     </Radio.Group>
                 </div>
-            </div>
+
+            </div >
         )
     }
 
@@ -367,15 +447,18 @@ class DeRegistration extends Component {
     footerView = () => {
         return (
             <div className="footer-view">
-                <div className="row">
+                <div className="row"> 
                     <div className="col-sm">
                         <div className="reg-add-save-button">
-                            <Button type="cancel-button" onClick={() => this.goBack()}>{AppConstants.cancel}</Button>
+                            <Button
+                                type="cancel-button"
+                                onClick={() => this.goBack()}>{AppConstants.cancel}</Button>
                         </div>
                     </div>
                     <div className="col-sm">
                         <div className="comp-buttons-view">
-                            <Button className="publish-button" type="primary" htmlType="submit">
+                            <Button className="publish-button" type="primary"
+                                htmlType="submit">
                                 {AppConstants.confirm}
                             </Button>
                         </div>
@@ -386,23 +469,24 @@ class DeRegistration extends Component {
     };
 
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
                 <Layout>
                     <Form
-                        onFinish={this.saveAPIsActionCall}
+                        onSubmit={this.saveAPIsActionCall}
                         noValidate="noValidate"
                     >
                         {this.headerView()}
                         <Content>
-                            <Loader visible={this.props.deRegistrationState.onSaveLoad}/>
+                            <Loader visible={this.props.deRegistrationState.onSaveLoad} />
                             <div className="formView">
-                                {this.contentView()}
+                                {this.contentView(getFieldDecorator)}
                             </div>
                         </Content>
                         <Footer>
-                            {this.footerView()}
+                            {this.footerView(getFieldDecorator)}
                         </Footer>
                     </Form>
                 </Layout>
@@ -414,14 +498,15 @@ class DeRegistration extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         saveDeRegisterDataAction,
-        updateDeregistrationData
+        updateDeregistrationData,
+        getTransferCompetitionsAction
     }, dispatch);
 }
 
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         deRegistrationState: state.RegistrationChangeState
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeRegistration);
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(DeRegistration));

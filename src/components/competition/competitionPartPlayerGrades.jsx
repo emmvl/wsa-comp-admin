@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Modal, Dropdown } from 'antd';
+import { Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Form, Modal, Dropdown } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -43,7 +43,7 @@ const menu = (
     <Menu>
         <Menu.Item onClick={() => this_obj.changeDivisionModal()}>
             Change Division
-        </Menu.Item>
+      </Menu.Item>
     </Menu>
 );
 
@@ -202,8 +202,7 @@ class CompetitionPartPlayerGrades extends Component {
                                             </Button>
                                         </NavLink>
                                     </div>
-                                </div>
-                            }
+                                </div>}
                             {this.state.divisionId != null &&
                                 <div className="col-sm">
                                     <div className="comp-dashboard-botton-view-mobile">
@@ -225,8 +224,7 @@ class CompetitionPartPlayerGrades extends Component {
                                             </Button>
                                         </NavLink>
                                     </div>
-                                </div>
-                            }
+                                </div>}
                         </div>
                     </div>
                 </div>
@@ -776,7 +774,7 @@ class CompetitionPartPlayerGrades extends Component {
         this.props.clearReducerCompPartPlayerGradingAction("commentList")
         {
             this.state.comment.length > 0 &&
-            this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
+                this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
         }
         this.setState({
             modalVisible: false,
@@ -835,8 +833,7 @@ class CompetitionPartPlayerGrades extends Component {
                                             <Button disabled={disableStatus} className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
                                                 + {AppConstants.createTeam}
                                             </Button>
-                                        </div>
-                                    }
+                                        </div>}
                                 </div>
                             </div>
                             {unassignedData.players && unassignedData.players.map((playerItem, playerIndex) => (
@@ -1042,7 +1039,11 @@ class CompetitionPartPlayerGrades extends Component {
                     <Content>
                         {this.dropdownView()}
                         {this.contentView()}
-                        <Loader visible={this.props.partPlayerGradingState.onLoad || this.props.appState.onLoad} />
+                        <Loader
+
+                            visible={
+                                this.props.partPlayerGradingState.onLoad || this.props.appState.onLoad
+                            } />
                     </Content>
 
                     <Footer>
@@ -1050,10 +1051,10 @@ class CompetitionPartPlayerGrades extends Component {
                     </Footer>
                 </Layout>
             </div>
+
         );
     }
 }
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getYearAndCompetitionParticipateAction,
@@ -1072,12 +1073,11 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         appState: state.AppState,
         partPlayerGradingState: state.CompetitionPartPlayerGradingState,
         registrationState: state.RegistrationState,
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(CompetitionPartPlayerGrades);
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionPartPlayerGrades));

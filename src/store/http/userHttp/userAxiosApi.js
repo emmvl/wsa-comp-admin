@@ -3,7 +3,7 @@ import { message } from "antd";
 import userHttp from "./userHttp";
 import history from "../../../util/history";
 import ValidationConstants from "../../../themes/validationConstant";
-import { getUserId, getAuthToken /* , getOrganisationData */ } from "../../../util/sessionStorage"
+import { getUserId, getAuthToken, getOrganisationData } from "../../../util/sessionStorage"
 
 let token = getAuthToken();
 let userId = getUserId();
@@ -86,9 +86,15 @@ let userHttpApi = {
     return Method.dataGet(url, token);
   },
 
-  async getVenueOrganisation() {
+  async getVenueOrganisation(key) {
+    console.log(key)
     let userId = await getUserId()
-    const url = `api/organisation?userId=${userId}`;
+    let organisationUniqueKey = await getOrganisationData().organisationUniqueKey
+    let url = `api/organisation?userId=${userId}`;
+    if (key) {
+      url += `&organisationUniqueKey=${organisationUniqueKey}`
+    }
+    console.log(url)
     return Method.dataGet(url, token)
   },
 
@@ -363,6 +369,44 @@ let userHttpApi = {
   getUserModuleIncidentData(payload) {
     const url = `api/user/activity/incident`;
     return Method.dataPost(url, token, payload);
+  },
+
+  getUserRoleData(userId) {
+    const url = `ure/byUserId?userId=${userId}`;
+    return Method.dataGet(url, token);
+  },
+
+  getScorerActivityData(payload, roleId, matchStatus) {
+    const url = `api/user/activity/roster?roleId=${roleId}&matchStatus=${matchStatus}`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  getUmpireData(payload, roleId, matchStatus) {
+    const url = `api/user/activity/roster?roleId=${roleId}&matchStatus=${matchStatus}`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  getCoachData(payload, roleId, matchStatus) {
+    const url = `api/user/activity/roster?roleId=${roleId}&matchStatus=${matchStatus}`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  umpireList_Data(data) {
+    let url = null
+    if (data.userName) {
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+    } else if (data.offset != null) {
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+    }
+    else {
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}`
+    }
+
+    if (data.sortBy && data.sortOrder) {
+      url += `&sortBy=${data.sortBy}&sortOrder=${data.sortOrder}`;
+    }
+
+    return Method.dataGet(url, localStorage.token);
   },
 }
 

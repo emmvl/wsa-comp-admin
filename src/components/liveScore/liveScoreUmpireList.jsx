@@ -1,36 +1,40 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Layout, Button, Table, Breadcrumb, Pagination, Input } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-
+import { Layout, Button, Table, Breadcrumb, Pagination, Input, Icon } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
+import { NavLink } from "react-router-dom";
 import { liveScoreUmpiresListAction } from '../../store/actions/LiveScoreAction/livescoreUmpiresAction'
 import history from "../../util/history";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getTime, liveScore_formateDate } from '../../themes/dateformate'
 import { exportFilesAction } from "../../store/actions/appAction"
 
+
 const { Content } = Layout;
 
+
+/////function to sort table column
 function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key])
     let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
 }
 
+
+
+////columens data
 const columns = [
     {
-        title: 'Date',
+        title: 'Date', 
         dataIndex: 'match',
         key: 'match',
         sorter: (a, b) => tableSort(a, b, "match"),
         render: (match) =>
-            <span>{match ? liveScore_formateDate(match.startTime) : ""}</span>
+            <span  >{match ? liveScore_formateDate(match.startTime) : ""}</span>
     },
     {
         title: 'Time',
@@ -38,7 +42,7 @@ const columns = [
         key: 'match',
         sorter: (a, b) => tableSort(a, b, "match"),
         render: (match) =>
-            <span>{match ? getTime(match.startTime) : ""}</span>
+            <span  >{match ? getTime(match.startTime) : ""}</span>
     },
     {
         title: 'Match',
@@ -65,6 +69,7 @@ const columns = [
             <span className="input-heading-add-another pt-0">{umpire1FullName}</span>
         </NavLink>
     },
+
     {
         title: 'First Umpire Club',
         dataIndex: 'umpire1Club',
@@ -95,10 +100,10 @@ const columns = [
     },
 ];
 
+
 class LiveScoreUmpireList extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             searchText: "",
             competitionId: null
@@ -106,9 +111,11 @@ class LiveScoreUmpireList extends Component {
     }
 
     componentDidMount() {
+
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
-            const body = {
+            const body =
+            {
                 "paging": {
                     "limit": 10,
                     "offset": 0
@@ -123,15 +130,19 @@ class LiveScoreUmpireList extends Component {
         this.setState({ competitionId: id })
     }
 
-    handleUmpireTableList = (page, competitionId) => {
+    handleUmpireTableList(page, competitionId) {
+
         let offset = page ? 10 * (page - 1) : 0
-        const body = {
+        const body =
+        {
             "paging": {
                 "limit": 10,
                 "offset": offset
             },
-        };
+        }
+
         this.props.liveScoreUmpiresListAction(competitionId, body)
+
     }
 
     // on change search text
@@ -139,23 +150,26 @@ class LiveScoreUmpireList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value == "") {
-            const body = {
+            const body =
+            {
                 "paging": {
                     "limit": 10,
                     "offset": 0
                 },
                 "search": e.target.value
-            };
+            }
+
             this.props.liveScoreUmpiresListAction(id, body)
         }
     }
 
-    // search key
+    // search key 
     onKeyEnterSearchText = (e) => {
-        const code = e.keyCode || e.which;
+        var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
-            const body = {
+            const body =
+            {
                 "paging": {
                     "limit": 10,
                     "offset": 0
@@ -165,19 +179,20 @@ class LiveScoreUmpireList extends Component {
             this.props.liveScoreUmpiresListAction(id, body)
         }
     }
-
     // on click of search icon
     onClickSearchIcon = () => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (this.state.searchText == null || this.state.searchText == "") {
-        } else {
-            const body = {
+        }
+        else {
+            const body =
+            {
                 "paging": {
                     "limit": 10,
                     "offset": 0
                 },
                 "search": this.state.searchText
-            };
+            }
             this.props.liveScoreUmpiresListAction(id, body)
         }
     }
@@ -199,6 +214,7 @@ class LiveScoreUmpireList extends Component {
                         </Breadcrumb>
                     </div>
 
+
                     <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
                         <div className="row">
                             <div className="col-sm">
@@ -212,7 +228,8 @@ class LiveScoreUmpireList extends Component {
                                         justifyContent: "flex-end"
                                     }}
                                 >
-                                    <Button onClick={this.onExport} className="primary-add-comp-form" type="primary">
+                                   
+                                    <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -226,63 +243,57 @@ class LiveScoreUmpireList extends Component {
                                     </Button>
                                 </div>
                             </div>
-                            <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: "100%",
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}
-                                >
-                                    <NavLink
-                                        to={{
+                               <div className="col-sm">
+                                    <div
+                                        className="comp-dashboard-botton-view-mobile"
+                                        style={{
+                                            width: "100%",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "flex-end"
+                                        }}
+                                    >
+                                        <NavLink to={{ 
                                             pathname: `/liveScoreUmpireImport`,
                                             state: { screenName: 'liveScoreUmpireList' }
-                                        }}
-                                        className="text-decoration-none"
-                                    >
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            <div className="row">
-                                                <div className="col-sm">
-                                                    <img
-                                                        src={AppImages.import}
-                                                        alt=""
-                                                        className="export-image"
-                                                    />
-                                                    {AppConstants.import}
+                                        }} className="text-decoration-none">
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                <div className="row">
+                                                    <div className="col-sm">
+                                                        <img 
+                                                            src={AppImages.import}
+                                                            alt=""
+                                                            className="export-image"
+                                                        />
+                                                        {AppConstants.import}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </Button>
-                                    </NavLink>
+                                            </Button>
+                                        </NavLink>
+                                    </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
                 {/* search box */}
                 <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }} >
-                    <div className="comp-product-search-inp-width" >
-                        <Input
-                            className="product-reg-search-input"
-                            onChange={this.onChangeSearchText}
-                            placeholder="Search..."
-                            onKeyPress={this.onKeyEnterSearchText}
-                            prefix={
-                                <SearchOutlined
-                                    style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                    onClick={this.onClickSearchIcon}
-                                />
-                            }
-                            allowClear
-                        />
-                    </div>
-                </div>
+                                        <div className="comp-product-search-inp-width" >
+                                            <Input className="product-reg-search-input"
+                                                onChange={(e) => this.onChangeSearchText(e)}
+                                                placeholder="Search..."
+                                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                                    onClick={() => this.onClickSearchIcon()}
+                                                />}
+                                                allowClear
+                                            />
+                                        </div>
+                                    </div>
             </div>
         )
     }
+
 
     ////////tableView view for Umpire list
     tableView = () => {
@@ -311,8 +322,8 @@ class LiveScoreUmpireList extends Component {
                             flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "flex-end"
-                        }}
-                    />
+                        }} >
+                    </div>
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
@@ -332,11 +343,7 @@ class LiveScoreUmpireList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
-                    menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"6"} />
                 <Layout>
                     {this.headerView()}
@@ -358,6 +365,5 @@ function mapStateToProps(state) {
         liveScoreUmpiresState: state.LiveScoreUmpiresState
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreUmpireList);
+export default connect(mapStateToProps, mapDispatchToProps)((LiveScoreUmpireList));
 

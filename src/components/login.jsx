@@ -17,7 +17,7 @@ import AppUniqueId from "../themes/appUniqueId";
 const { Content } = Layout;
 const loginFormSchema = Yup.object().shape({
   userName: Yup.string().min(2, 'Username must be at least 2 characters').required('Username is required'),
-  password: Yup.string().min(5, 'Too Short!').required('Password is required')
+  password: Yup.string().min(8, 'Password must be 8 characters').required('Password is required')
 });
 
 class Login extends Component {
@@ -41,7 +41,7 @@ class Login extends Component {
     return (
       <div className="content-view">
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <img src={AppImages.netballLogo1} alt=""/>
+          <img src={AppImages.netballLogo1} alt="" />
         </div>
 
         <InputWithHead
@@ -109,7 +109,7 @@ class Login extends Component {
 
     return (
       <div className="fluid-width">
-        <img src={AppImages.loginImage} className="bg" alt=""/>
+        <img src={AppImages.loginImage} className="bg" alt="" />
 
         <Layout>
           <Content className="container" style={{ zIndex: 15 }}>
@@ -128,54 +128,54 @@ class Login extends Component {
                 }}
               >
                 {({
-                    values,
-                    errors,
-                    touched,
-                    handleChange,
-                    handleBlur,
-                    handleSubmit,
-                    isSubmitting,
-                    setFieldValue
-                  }) => (
-                  <Form onFinish={handleSubmit}>
-                    <div className="auth-form" style={{ zIndex: 15 }}>
-                      {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
-                    </div>
-                  </Form>
-                )}
+                  values,
+                  errors,
+                  touched,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  isSubmitting,
+                  setFieldValue
+                }) => (
+                    <Form onSubmit={handleSubmit}>
+                      <div className="auth-form" style={{ zIndex: 15 }}>
+                        {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
+                      </div>
+                    </Form>
+                  )}
               </Formik>
             ) : (
-              <div className="auth-form" style={{ fontSize: 14, textAlign: 'center', zIndex: 15 }}>
-                {!loginState.result.tfaEnabled && loginState.result.qrCode && (
-                  <>
-                    <img src={loginState.result.qrCode} alt="" />
+                <div className="auth-form" style={{ fontSize: 14, textAlign: 'center', zIndex: 15 }}>
+                  {!loginState.result.tfaEnabled && loginState.result.qrCode && (
+                    <>
+                      <img src={loginState.result.qrCode} alt="" />
 
-                    <p>Scan QR code with your authenticator.</p>
-                  </>
-                )}
+                      <p>Scan QR code with your authenticator.</p>
+                    </>
+                  )}
 
-                <div className="qr-code-form">
-                  <InputWithHead
-                    type="number"
-                    heading={AppConstants.qrCodeHeader}
-                    placeholder={AppConstants.qrCodeHeader}
-                    onChange={this.onChangeCode}
-                    value={code}
-                  />
+                  <div className="qr-code-form">
+                    <InputWithHead
+                      type="number"
+                      heading={AppConstants.qrCodeHeader}
+                      placeholder={AppConstants.qrCodeHeader}
+                      onChange={this.onChangeCode}
+                      value={code}
+                    />
 
-                  <Button
-                    className="open-reg-button"
-                    type="primary"
-                    disabled={code.length !== 6 || loginState.onLoad}
-                    onClick={this.submitCode}
-                  >
-                    {AppConstants.submit}
-                  </Button>
+                    <Button
+                      className="open-reg-button"
+                      type="primary"
+                      disabled={code.length !== 6 || loginState.onLoad}
+                      onClick={this.submitCode}
+                    >
+                      {AppConstants.submit}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <Loader visible={loginState.onLoad}/>
+            <Loader visible={loginState.onLoad} />
           </Content>
         </Layout>
       </div>

@@ -6,8 +6,8 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import {getLadderFormatAction, saveLadderFormatAction, updateLadderFormatAction} from
-        "../../store/actions/competitionModuleAction/ladderFormatAction";
+import {getLadderFormatAction, saveLadderFormatAction, updateLadderFormatAction} from 
+                "../../store/actions/competitionModuleAction/ladderFormatAction";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import history from "../../util/history";
@@ -110,7 +110,7 @@ class CompetitionLadder extends Component {
     apiCalls = (competitionId, yearRefId) => {
         console.log("Api Callse" + competitionId);
         let payload = {
-            yearRefId: yearRefId,
+            yearRefId: yearRefId, 
             competitionUniqueKey: competitionId,
             organisationId: this.state.organisationId
         }
@@ -128,19 +128,20 @@ class CompetitionLadder extends Component {
         this.setState({ firstTimeCompId: null, yearRefId: yearId })
     }
 
-    // on Competition change
-    onCompetitionChange(competitionId) {
+     // on Competition change
+     onCompetitionChange(competitionId) {
         console.log("competitionId::" + competitionId);
         setOwn_competition(competitionId);
-        let payload = {
-            yearRefId: this.state.yearRefId,
-            competitionUniqueKey: competitionId,
-            organisationId: this.state.organisationId
-        }
-        this.props.getLadderFormatAction(payload);
-        this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
-    }
-
+       let payload = {
+           yearRefId: this.state.yearRefId, 
+           competitionUniqueKey: competitionId,
+           organisationId: this.state.organisationId
+       }
+       this.props.getLadderFormatAction(payload);
+       this.setState({ getDataLoading: true, firstTimeCompId: competitionId })
+   }
+   
+    
     handleEditModal = (flag, key, index) => {
         this.setState({
             editModalVisible: flag,
@@ -173,13 +174,15 @@ class CompetitionLadder extends Component {
     handleAllDivisionModal = (flag, key, index, ladderFormat) => {
         this.setState({
             allDivisionVisible: flag
-
+            
         });
 
         if(key == "ok"){
             this.performAllDivisionOperation(true,ladderFormat,index);
         }
     }
+   
+
 
     onChange(e, ladderFormat, ladder, index) {
         console.log('checked = ', e);
@@ -198,12 +201,12 @@ class CompetitionLadder extends Component {
         ladderFormat[index].selectedDivisions = a;
 
         ladderFormat[index].selectedDivisions = e;
-
+        
         let schemeName =  ladder.schemeName;
         console.log("schemeName::" +schemeName);
         let remainingFormatDiv =  ladderFormat.
-        filter(x=>x.schemeName!= schemeName);
-
+                    filter(x=>x.schemeName!= schemeName); 
+        
         for(let remDiv in remainingFormatDiv)
         {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
@@ -280,12 +283,12 @@ class CompetitionLadder extends Component {
     deleteLadderFormat = (ladderFormat, index) => {
         let removedLadder = ladderFormat[index];
         let remainingFormatDiv =  ladderFormat.
-        filter(x=>x.schemeName!= removedLadder.schemeName);
-
+                    filter(x=>x.schemeName!= removedLadder.schemeName); 
+        
         for(let remDiv in remainingFormatDiv)
         {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
-
+      
             for(let i in removedLadder.selectedDivisions){
                 for(let j in itemDivisions){
                     if(itemDivisions[j].competitionMembershipProductDivisionId === removedLadder.selectedDivisions[i])
@@ -343,10 +346,10 @@ class CompetitionLadder extends Component {
         this.props.updateLadderFormatAction(arr, "ladderFormat", index);
     }
 
-    saveLadderFormats = () => {
+    saveLadderFormats = () =>{
         this.setState({buttonPressed: "save"});
         let ladderFormat = [...this.props.ladderFormatState.ladderFormats];
-
+       
         for(let item in ladderFormat)
         {
             const selectedDivisions = ladderFormat[item].selectedDivisions;
@@ -356,7 +359,7 @@ class CompetitionLadder extends Component {
             for(let j in selectedDivisions)
             {
                 let matchDivisions = divisions.
-                find(x=>x.competitionMembershipProductDivisionId === selectedDivisions[j]);
+                    find(x=>x.competitionMembershipProductDivisionId === selectedDivisions[j]);
                 if(matchDivisions!= "")
                 {
                     let obj = {
@@ -365,7 +368,7 @@ class CompetitionLadder extends Component {
                     }
                     obj.competitionFormatDivisionId = matchDivisions.competitionFormatDivisionId;
                     obj.competitionMembershipProductDivisionId = matchDivisions.competitionMembershipProductDivisionId;
-                    divArr.push(obj);
+                    divArr.push(obj);  
                 }
             }
 
@@ -414,7 +417,7 @@ class CompetitionLadder extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {own_YearArr.length > 0 && own_YearArr.map(item => {
+                                     {own_YearArr.length > 0 && own_YearArr.map(item => {
                                         return (
                                             <Option key={"yearRefId" + item.id} value={item.id}>
                                                 {item.description}
@@ -439,7 +442,7 @@ class CompetitionLadder extends Component {
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
+                                   {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
                                         return (
                                             <Option key={"competition" + item.competitionId} value={item.competitionId}>
                                                 {item.competitionName}
@@ -458,116 +461,116 @@ class CompetitionLadder extends Component {
 
     ////////form content view
     contentView = () => {
-
+ 
         let schemeData = this.props.ladderFormatState.ladderSchemeDefaults;
         let ladderFormat = this.props.ladderFormatState.ladderFormats;
         let isAllDivisionChecked = this.props.ladderFormatState.isAllDivisionChecked;
         return (
             <div className="content-view pt-4" style={{paddingBottom: '0px'}}>
-
-                {(ladderFormat || []).map((ladder, index) => (
-                    <div className="inside-container-view" style={{paddingTop:"14px"}}>
-                        <div style={{display:"flex"}}>
-                            <InputWithHead heading={AppConstants.ladderFormatScheme} />
-                            <div className="transfer-image-view pt-0 pointer" style = {{marginLeft:'auto'}} onClick ={ () => this.deleteModal(index)}>
-                                <span className="user-remove-btn" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
-                                <span className="user-remove-text">
+    
+               {(ladderFormat || []).map((ladder, index) => (
+                <div className="inside-container-view" style={{paddingTop:"14px"}}>
+                    <div style={{display:"flex"}}>
+                        <InputWithHead heading={AppConstants.ladderFormatScheme} />
+                        <div className="transfer-image-view pt-0 pointer" style = {{marginLeft:'auto'}} onClick ={ () => this.deleteModal(index)}>
+                            <span className="user-remove-btn" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
+                            <span className="user-remove-text">
                                 {AppConstants.remove}
                             </span>
-                            </div>
-                            {this.deleteConfirmModalView(ladderFormat)}
                         </div>
-                        {!ladder.isEditted ?
-                            <div>
-                                <Select
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={(e) => this.onChangeSchemeName(e, "ladderFormat",index, ladderFormat, schemeData )}
-                                    value={ladder.schemeName}>
-                                    {(schemeData || []).map((item, schemeIndex) => (
-                                        <Option  key={item.schemeName} value={item.schemeName}>{item.schemeName}</Option>
-                                    ))}
-                                </Select>
-                            </div> :
-                            <InputWithHead placeholder={AppConstants.ladderFormatScheme}
-                                           value={ladder.schemeName}
-                                           onChange={(e)=> this.onUpdateSchemeName(e, ladderFormat, index)}></InputWithHead>
-                        }
-
-                        <Checkbox className="single-checkbox pt-2" defaultChecked={isAllDivisionChecked}  onChange={(e) => this.onChangeAllDivision(e, ladderFormat,index)}>{AppConstants.allDivisions}</Checkbox>
-                        {!isAllDivisionChecked ?
-                            <div className="fluid-width" >
-                                <div className="row" >
-                                    <div className="col-sm">
-                                        <Select
-                                            mode="multiple"
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            onChange={(e) =>this.onChange(e, ladderFormat, ladder, index)}
-                                            value={ladder.selectedDivisions}>
-                                            {(ladder.divisions || []).map((division, divIndex)  => (
-                                                <Option key={division.competitionMembershipProductDivisionId}
-                                                        disabled={division.isDisabled}  value={division.competitionMembershipProductDivisionId}>
-                                                    {division.divisionsName}
-                                                </Option>
-                                            ))}
-                                        </Select>
-                                    </div>
-                                </div>
-                                {this.allDivisionModalView(ladderFormat)}
-                            </div> : null}
-                        <div className="inside-container-view" >
-                            <div className="table-responsive">
-                                <div style={{display: 'flex', paddingLeft: '10px'}}>
-                                    <div style={{width: '89%'}}><InputWithHead heading={"Result type/Byes"} /></div>
-                                    <div><InputWithHead heading={"Points"} /></div>
-                                </div>
-                                {(ladder.resultTypes || []).map((res, resIndex) => (
-                                    <div style={{display: 'flex', paddingLeft: '10px'}}>
-                                        <div style={{width: '89%'}}><InputWithHead heading={res.description} /></div>
-                                        <div>
-                                            <InputWithHead className="input-inside-table-fees" value={res.points}
-                                                           placeholder={"Points"} disabled = {!ladder.isEditted}
-                                                           onChange={(e) => this.onChangeResultType(e, index, ladderFormat, resIndex)}>
-                                            </InputWithHead>
-                                        </div>
-                                    </div>
+                        {this.deleteConfirmModalView(ladderFormat)}
+                    </div>
+                    {!ladder.isEditted ? 
+                        <div>
+                            <Select
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                onChange={(e) => this.onChangeSchemeName(e, "ladderFormat",index, ladderFormat, schemeData )}
+                                value={ladder.schemeName}>
+                                {(schemeData || []).map((item, schemeIndex) => (
+                                    <Option  key={item.schemeName} value={item.schemeName}>{item.schemeName}</Option>
                                 ))}
-                                {!ladder.isEditted ?
-                                    <div style={{ display: 'flex', justifyContent: "flex-end", paddingTop: '10px', paddingRight:'6px' }}>
-                                        <Button className="open-reg-button" type="primary" style={{height: '34px'}}
-                                                onClick={()=> this.handleEditModal(true, "show", index, ladderFormat)}>{AppConstants.edit}</Button>
-                                        {this.editModalView(ladderFormat)}
-                                    </div>
-                                    : null}
-                                {/* <Table className="fees-table" columns={columns} dataSource={data} pagination={false} Divider=" false" /> */}
-                            </div>
+                            </Select>
+                        </div> : 
+                        <InputWithHead placeholder={AppConstants.ladderFormatScheme}
+                        value={ladder.schemeName}
+                        onChange={(e)=> this.onUpdateSchemeName(e, ladderFormat, index)}></InputWithHead>
+                    }
+
+                <Checkbox className="single-checkbox pt-2" defaultChecked={isAllDivisionChecked}  onChange={(e) => this.onChangeAllDivision(e, ladderFormat,index)}>{AppConstants.allDivisions}</Checkbox> 
+                {!isAllDivisionChecked ? 
+                <div className="fluid-width" >
+                    <div className="row" >
+                        <div className="col-sm">
+                            <Select
+                                mode="multiple"
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                onChange={(e) =>this.onChange(e, ladderFormat, ladder, index)}
+                                value={ladder.selectedDivisions}>   
+                                {(ladder.divisions || []).map((division, divIndex)  => (
+                                <Option key={division.competitionMembershipProductDivisionId} 
+                                    disabled={division.isDisabled}  value={division.competitionMembershipProductDivisionId}>
+                                        {division.divisionsName} 
+                                    </Option>
+                                ))}
+                            </Select>
                         </div>
                     </div>
-                ))}
-                { !isAllDivisionChecked ?
-                    <div className="row" >
-                        <div className="col-sm" onClick={(e) => this.onClickAddLadder(e, ladderFormat)}>
-                            <span className='input-heading-add-another pointer'>+ {AppConstants.addNewLadderScheme}</span>
+                    {this.allDivisionModalView(ladderFormat)}
+                </div> : null}
+                    <div className="inside-container-view" >
+                        <div className="table-responsive">
+                            <div style={{display: 'flex', paddingLeft: '10px'}}>
+                                <div style={{width: '89%'}}><InputWithHead heading={"Result type/Byes"} /></div>
+                                <div><InputWithHead heading={"Points"} /></div>
+                            </div>
+                            {(ladder.resultTypes || []).map((res, resIndex) => (
+                                <div style={{display: 'flex', paddingLeft: '10px'}}>
+                                    <div style={{width: '89%'}}><InputWithHead heading={res.description} /></div>
+                                    <div>
+                                        <InputWithHead className="input-inside-table-fees" value={res.points} 
+                                            placeholder={"Points"} disabled = {!ladder.isEditted}
+                                            onChange={(e) => this.onChangeResultType(e, index, ladderFormat, resIndex)}>
+                                        </InputWithHead>
+                                    </div>
+                                </div>
+                            ))}
+                        {!ladder.isEditted ?
+                        <div style={{ display: 'flex', justifyContent: "flex-end", paddingTop: '10px', paddingRight:'6px' }}>
+                                <Button className="open-reg-button" type="primary" style={{height: '34px'}}
+                                    onClick={()=> this.handleEditModal(true, "show", index, ladderFormat)}>{AppConstants.edit}</Button>
+                             {this.editModalView(ladderFormat)}
                         </div>
-                    </div> : null
+                        : null}
+                            {/* <Table className="fees-table" columns={columns} dataSource={data} pagination={false} Divider=" false" /> */}
+                        </div>
+                    </div>
+                </div>
+                ))}
+                { !isAllDivisionChecked ? 
+                 <div className="row" >
+                    <div className="col-sm" onClick={(e) => this.onClickAddLadder(e, ladderFormat)}>
+                        <span className='input-heading-add-another pointer'>+ {AppConstants.addNewLadderScheme}</span>
+                    </div>
+                </div> : null
                 }
             </div>
-
+            
         )
     }
 
     editModalView = (ladderFormat) => {
         return (
             <div>
-                <Modal
-                    title="Ladder Format"
-                    visible={this.state.editModalVisible}
-                    onOk={() => this.handleEditModal(false, "ok")}
-                    onCancel={() => this.handleEditModal(false, "cancel")}>
-                    <p>Do you want to edit the existing Result Types?</p>
-                </Modal>
-                {this.schemeModalView(ladderFormat)}
+              <Modal
+                title="Ladder Format"
+                visible={this.state.editModalVisible}
+                onOk={() => this.handleEditModal(false, "ok")}
+                onCancel={() => this.handleEditModal(false, "cancel")}>
+                <p>Do you want to edit the existing Result Types?</p>
+              </Modal>
+              {this.schemeModalView(ladderFormat)}
             </div>
-        );
+          );
     }
 
     schemeModalView = (ladderFormat) => {
@@ -575,17 +578,17 @@ class CompetitionLadder extends Component {
         let schemeName = (scheme!= null && scheme!= undefined) ? scheme.schemeName : null;
         return (
             <div>
-                <Modal
-                    title="Ladder Format"
-                    visible={this.state.schemeModalVisible}
-                    onOk={() => this.handleSchemeModal(false, "ok", this.state.currentIndex, ladderFormat)}
-                    onCancel={() => this.handleSchemeModal(false, "cancel", this.state.currentIndex, ladderFormat)}>
-                    <InputWithHead heading={AppConstants.ladderFormatScheme} placeholder={AppConstants.ladderFormatScheme}
-                                   value={schemeName}
-                                   onChange={(e)=> this.onUpdateSchemeName(e, ladderFormat, this.state.currentIndex)}></InputWithHead>
-                </Modal>
+              <Modal
+                title="Ladder Format"
+                visible={this.state.schemeModalVisible}
+                onOk={() => this.handleSchemeModal(false, "ok", this.state.currentIndex, ladderFormat)}
+                onCancel={() => this.handleSchemeModal(false, "cancel", this.state.currentIndex, ladderFormat)}>
+                  <InputWithHead heading={AppConstants.ladderFormatScheme} placeholder={AppConstants.ladderFormatScheme}
+                        value={schemeName} 
+                        onChange={(e)=> this.onUpdateSchemeName(e, ladderFormat, this.state.currentIndex)}></InputWithHead>
+              </Modal>
             </div>
-        );
+          );
     }
 
     allDivisionModalView = (ladderFormat) => {
@@ -677,12 +680,14 @@ class CompetitionLadder extends Component {
                         {this.footerView()}
                     </Footer>
                 </Layout>
+               
             </div>
+
         );
     }
 }
-
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch)
+{
     return bindActionCreators({
         getLadderFormatAction,
         saveLadderFormatAction,
@@ -690,13 +695,14 @@ function mapDispatchToProps(dispatch) {
         getYearAndCompetitionOwnAction,
         clearYearCompetitionAction,
     }, dispatch);
+
 }
 
-function mapStateToProps(state){
+function mapStatetoProps(state){
     return {
         ladderFormatState: state.LadderFormatState,
         appState: state.AppState
     }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(CompetitionLadder);
+export default connect(mapStatetoProps,mapDispatchToProps)(Form.create()(CompetitionLadder));

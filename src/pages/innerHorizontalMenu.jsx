@@ -14,6 +14,7 @@ import { innerHorizontalCompetitionListAction, updateInnerHorizontalData, initia
 import { getLiveScoreCompetiton, getLiveScoreUmpireCompitionData } from '../util/sessionStorage';
 import history from "../util/history";
 import { getOnlyYearListAction } from "../store/actions/appAction";
+import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
 
 const { SubMenu } = Menu;
 const { Option } = Select;
@@ -143,7 +144,7 @@ class InnerHorizontalMenu extends React.Component {
                 break;
             }
         }
-
+        this.props.clearDataOnCompChangeAction()
         localStorage.setItem("LiveScoreCompetition", JSON.stringify(compObj));
         history.push("/liveScoreDashboard");
     };
@@ -155,6 +156,7 @@ class InnerHorizontalMenu extends React.Component {
         // localStorage.setItem("LiveScoreCompetition", undefined);
         localStorage.setItem("yearId", yearId);
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'));
+        this.props.clearDataOnCompChangeAction()
         this.props.innerHorizontalCompetitionListAction(organisationId, yearId, this.props.innerHorizontalState.competitionList);
 
         history.push("/liveScoreDashboard");
@@ -392,6 +394,7 @@ class InnerHorizontalMenu extends React.Component {
                                 defaultSelectedKeys={['1']}
                                 style={{ lineHeight: '64px' }}
                                 selectedKeys={[this.props.liveScoreSelectedKey]}
+                                onClick={() => this.props.clearDataOnCompChangeAction()}
                             >
                                 <Menu.Item key="1">
                                     <NavLink to="/liveScoreDashboard">
@@ -608,6 +611,7 @@ class InnerHorizontalMenu extends React.Component {
                         defaultSelectedKeys={['1']}
                         style={{ lineHeight: '64px' }}
                         selectedKeys={[this.props.umpireSelectedKey]}
+                        onClick={() => this.props.clearDataOnCompChangeAction()}
                     >
                         <Menu.Item key="1">
                             <NavLink to="/umpireDashboard">
@@ -867,7 +871,8 @@ function mapDispatchToProps(dispatch) {
         innerHorizontalCompetitionListAction,
         getOnlyYearListAction,
         updateInnerHorizontalData,
-        initializeCompData
+        initializeCompData,
+        clearDataOnCompChangeAction,
     }, dispatch)
 }
 

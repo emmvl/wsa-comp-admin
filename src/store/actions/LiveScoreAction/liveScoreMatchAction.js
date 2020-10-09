@@ -121,7 +121,7 @@ function changePlayerLineUpAction(data) {
 }
 
 function changeMatchBulkScore(value, key, index) {
-    return  {
+    return {
         type: ApiConstants.CHANGE_BULK_MATCH_SCORE,
         value,
         key,
@@ -137,7 +137,7 @@ function bulkScoreUpdate(data) {
 }
 
 function onCancelBulkScoreUpdate() {
-    return  {
+    return {
         type: ApiConstants.BULK_SCORE_UPDATE_CANCEL,
     };
 }
@@ -146,6 +146,12 @@ function liveScoreAddLiveStreamAction(data) {
     return {
         type: ApiConstants.API_ADD_LIVE_STREM_LOAD,
         data,
+    };
+}
+
+function clearDataOnCompChangeAction() {
+    return {
+        type: ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE,
     };
 }
 
@@ -167,5 +173,6 @@ export {
     changeMatchBulkScore,
     bulkScoreUpdate,
     onCancelBulkScoreUpdate,
-    liveScoreAddLiveStreamAction
+    liveScoreAddLiveStreamAction,
+    clearDataOnCompChangeAction,
 };

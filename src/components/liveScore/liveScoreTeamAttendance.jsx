@@ -1,15 +1,13 @@
 import React, { Component } from "react";
+import { Layout, Breadcrumb, Button, Table, Select, Pagination, Input, Icon, message } from 'antd';
 import { NavLink } from 'react-router-dom';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-import { Layout, Breadcrumb, Button, Table, Select, Pagination, Input, message } from 'antd';
-import { SearchOutlined } from "@ant-design/icons";
-
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { liveScoreTeamAttendanceListAction } from '../../store/actions/LiveScoreAction/liveScoreTeamAttendanceAction'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { liveScore_formateDateTime } from '../../themes/dateformate'
 import history from "../../util/history";
@@ -40,7 +38,8 @@ function tableSort(key) {
 
     this_Obj.setState({ sortBy, sortOrder });
     let { limit, offset, competitionId, searchText, selectStatus } = this_Obj.state
-    const body = {
+    const body =
+    {
         "paging": {
             "limit": limit,
             "offset": offset
@@ -49,12 +48,13 @@ function tableSort(key) {
         "sortBy": sortBy,
         "sortOrder": sortOrder
     }
-    this_Obj.props.liveScoreTeamAttendanceListAction(competitionId, body, selectStatus)
+    this_Obj.props.liveScoreTeamAttendanceListAction(competitionId, body, selectStatus, this_Obj.state.selectedDivision == "All" ? '' : this_Obj.state.selectedDivision, this_Obj.state.selectedRound == "All" ? "" : this_Obj.state.selectedRound)
 }
 
 const columns = [
+
     {
-        title: 'Match Id',
+        title: 'Match ID',
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
@@ -66,6 +66,7 @@ const columns = [
             }}>
                 <span className="input-heading-add-another pt-0">{matchId}</span>
             </NavLink>
+
     },
     {
         title: 'Start Time',
@@ -74,7 +75,7 @@ const columns = [
         sorter: true,
         onHeaderCell: () => listeners("startTime"),
         render: (teamName) =>
-            <span>{liveScore_formateDateTime(teamName)}</span>
+            <span >{liveScore_formateDateTime(teamName)}</span>
     },
     {
         title: 'Team',
@@ -83,7 +84,8 @@ const columns = [
         sorter: true,
         onHeaderCell: () => listeners("playerTeamName"),
         render: (playerTeamName) =>
-            <span>{playerTeamName}</span>
+            <span >{playerTeamName}</span>
+
     },
     {
         title: 'Player ID',
@@ -99,9 +101,10 @@ const columns = [
         sorter: true,
         onHeaderCell: () => listeners("firstName"),
         render: (firstName, record) =>
-            <span className="input-heading-add-another pt-0" onClick={() => this_Obj.checkUserId(record)}>
-                {firstName}
-            </span>
+            <span className="input-heading-add-another pt-0"
+                onClick={() => this_Obj.checkUserId(record)}
+            >{firstName}</span>
+
     },
     {
         title: 'Last Name',
@@ -110,14 +113,16 @@ const columns = [
         sorter: true,
         onHeaderCell: () => listeners("lastName"),
         render: (lastName, record) =>
-            <span className="input-heading-add-another pt-0" onClick={() => this_Obj.checkUserId(record)}>
-                {lastName}
-            </span>
+
+            <span className="input-heading-add-another pt-0"
+                onClick={() => this_Obj.checkUserId(record)}
+            >{lastName}</span>
+
     },
     {
         title: 'Division',
-        dataIndex: 'divisionName',
-        key: 'divisionName',
+        dataIndex: 'divisionGradeName',
+        key: 'divisionGradeName',
         sorter: true,
         onHeaderCell: () => listeners("division"),
     },
@@ -138,6 +143,7 @@ const columns = [
 ];
 
 const borrowedColumns = [
+
     {
         title: 'Match ID',
         dataIndex: 'matchId',
@@ -151,6 +157,7 @@ const borrowedColumns = [
             }}>
                 <span className="input-heading-add-another pt-0">{matchId}</span>
             </NavLink>
+
     },
     {
         title: 'Start Time',
@@ -159,7 +166,7 @@ const borrowedColumns = [
         sorter: true,
         onHeaderCell: () => listeners("startTime"),
         render: (teamName) =>
-            <span>{liveScore_formateDateTime(teamName)}</span>
+            <span >{liveScore_formateDateTime(teamName)}</span>
     },
     {
         title: 'Team',
@@ -168,7 +175,8 @@ const borrowedColumns = [
         sorter: true,
         onHeaderCell: () => listeners("playerTeamName"),
         render: (playerTeamName) =>
-            <span>{playerTeamName}</span>
+            <span >{playerTeamName}</span>
+
     },
     {
         title: 'Borrowing Team',
@@ -177,7 +185,8 @@ const borrowedColumns = [
         sorter: true,
         onHeaderCell: () => listeners("name"),
         render: (name) =>
-            <span>{name}</span>
+            <span >{name}</span>
+
     },
     {
         title: 'Player ID',
@@ -194,6 +203,7 @@ const borrowedColumns = [
         onHeaderCell: () => listeners("firstName"),
         render: (firstName) =>
             <span className="input-heading-add-another pt-0">{firstName}</span>
+
     },
     {
         title: 'Last Name',
@@ -202,7 +212,9 @@ const borrowedColumns = [
         sorter: true,
         onHeaderCell: () => listeners("lastName"),
         render: (lastName) =>
+
             <span className="input-heading-add-another pt-0">{lastName}</span>
+
     },
     {
         title: 'Division',
@@ -250,6 +262,8 @@ class LiveScoreTeamAttendance extends Component {
         this_Obj = this
     }
 
+
+    // componentDidMount
     async componentDidMount() {
         let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
         if (getLiveScoreCompetiton()) {
@@ -282,7 +296,7 @@ class LiveScoreTeamAttendance extends Component {
         if (nextProps.liveScoreTeamAttendanceState !== this.props.liveScoreTeamAttendanceState) {
             if (this.props.liveScoreTeamAttendanceState.onDivisionLoad === false && this.state.divisionLoad === true) {
                 this.props.liveScoreRoundListAction(this.state.competitionId, this.state.selectedDivision == 'All' ? "" : this.state.selectedDivision)
-                this.setState({ divisionLoad: false })
+                this.setState({ divisionLoad: false, roundLoad: true })
             }
         }
         if (nextProps.roundList !== roundList) {
@@ -313,16 +327,17 @@ class LiveScoreTeamAttendance extends Component {
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
             if (this.state.selectStatus === 'All') {
-                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
+                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, roundSelect == "All" ? "" : roundSelect)
             } else {
-                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus)
+                this.props.liveScoreTeamAttendanceListAction(id, paginationBody, this.state.selectStatus, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, roundSelect == "All" ? "" : roundSelect)
             }
+
         } else {
             history.pushState('/')
         }
     }
 
-    onChangeStatus = (status) => {
+    onChangeStatus(status) {
         let { searchText, sortBy, sortOrder } = this.state
         this.setState({ selectStatus: status })
         const paginationBody = {
@@ -336,13 +351,14 @@ class LiveScoreTeamAttendance extends Component {
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (status === 'All') {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status)
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, this.state.selectedRound == "All" ? '' : this.state.selectedRound)
         } else {
-            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status)
+            this.props.liveScoreTeamAttendanceListAction(id, paginationBody, status, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, this.state.selectedRound == "All" ? '' : this.state.selectedRound)
         }
     }
 
-    onExport = () => {
+    onExport() {
+
         let url
         if (this.state.selectStatus === 'All') {
             url = AppConstants.teamAttendanceExport + this.state.competitionId
@@ -359,36 +375,53 @@ class LiveScoreTeamAttendance extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
-            const body = {
-                paging: {
-                    limit: 10,
-                    offset: 0
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
                 },
-                search: e.target.value,
-                sortBy: sortBy,
-                sortOrder: sortOrder
+                "search": e.target.value,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
             }
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, this.state.selectedRound == "All" ? '' : this.state.selectedRound)
+
         }
     }
 
-    // search key
+    // search key 
     onKeyEnterSearchText = (e) => {
         this.setState({ offset: 0 })
         let { sortBy, sortOrder } = this.state
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
-            const body = {
-                paging: {
-                    limit: 10,
-                    offset: 0
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
                 },
-                search: e.target.value,
-                sortBy: sortBy,
-                sortOrder: sortOrder
+                "search": e.target.value,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
             }
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, this.state.selectedRound == "All" ? '' : this.state.selectedRound)
+        }
+    }
+
+    checkUserId(record) {
+        if (record.userId == null) {
+            message.config({ duration: 1.5, maxCount: 1 })
+            message.warn(ValidationConstants.playerMessage)
+        } else {
+            history.push("/userPersonal", {
+                userId: record.userId,
+                screenKey: "livescore",
+                screen: "/liveScorePlayerList"
+            })
         }
     }
 
@@ -411,26 +444,29 @@ class LiveScoreTeamAttendance extends Component {
         let { searchText, sortBy, sortOrder } = this.state
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (searchText === null || searchText === "") {
-        } else {
-            const body = {
-                paging: {
-                    limit: 10,
-                    offset: 0
+        }
+        else {
+            const body =
+            {
+                "paging": {
+                    "limit": 10,
+                    "offset": 0
                 },
-                search: searchText,
-                sortBy: sortBy,
-                sortOrder: sortOrder
-            };
-            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus)
+                "search": searchText,
+                "sortBy": sortBy,
+                "sortOrder": sortOrder
+            }
+            this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision == "All" ? '' : this.state.selectedDivision, this.state.selectedRound == "All" ? '' : this.state.selectedRound)
         }
     }
+
 
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-drop-down-view">
-                <div className="row">
-                    <div className="col-sm" style={{ alignSelf: 'center' }}>
+            <div className="comp-player-grades-header-drop-down-view ">
+                < div className="row" >
+                    <div className="col-sm" style={{ alignSelf: 'center' }} >
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.teamAttendane}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -442,20 +478,21 @@ class LiveScoreTeamAttendance extends Component {
                         justifyContent: "flex-end",
                     }}>
                         <div className="row">
+
                             <div className="col-sm">
                                 <Select
                                     className="year-select reg-filter-select1"
                                     style={{ display: "flex", justifyContent: "flex-end", minWidth: 140 }}
-                                    onChange={this.onChangeStatus}
-                                    value={this.state.selectStatus}
-                                >
+                                    onChange={(selectStatus) => this.onChangeStatus(selectStatus)}
+                                    value={this.state.selectStatus} >
                                     <Option value={"All"}>{'All'}</Option>
                                     <Option value={"Borrowed"}>{'Borrowed Player'}</Option>
                                     <Option value={"Did Not Play"}>{'Did Not Play'}</Option>
                                     <Option value={"Played"}>{'Played'}</Option>
                                 </Select>
                             </div>
-                            <div className="col-sm" style={{ display: "flex" }}>
+                            <div className="col-sm"
+                                style={{ display: "flex" }}>
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
@@ -465,9 +502,8 @@ class LiveScoreTeamAttendance extends Component {
                                         alignSelf: 'center',
                                         alignItems: "flex-end",
                                         justifyContent: "flex-end"
-                                    }}
-                                >
-                                    <Button onClick={this.onExport} className="primary-add-comp-form" type="primary">
+                                    }} >
+                                    <Button onClick={() => this.onExport()} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
@@ -484,22 +520,18 @@ class LiveScoreTeamAttendance extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div >
+                </div >
                 {/* search box */}
-                {/* <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }}>
+                {/* <div className="col-sm pt-3 ml-3 " style={{ display: "flex", justifyContent: 'flex-end', }} >
                     <div className="comp-product-search-inp-width" >
-                        <Input
-                            className="product-reg-search-input"
-                            onChange={this.onChangeSearchText}
+                        <Input className="product-reg-search-input"
+                            onChange={(e) => this.onChangeSearchText(e)}
                             placeholder="Search..."
-                            onKeyPress={this.onKeyEnterSearchText}
-                            prefix={
-                                <SearchOutlined
-                                    style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                    onClick={this.onClickSearchIcon}
-                                />
-                            }
+                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                onClick={() => this.onClickSearchIcon()}
+                            />}
                             allowClear
                         />
                     </div>
@@ -508,18 +540,20 @@ class LiveScoreTeamAttendance extends Component {
         )
     }
 
-    onChangeDivision = (division) => {
-        this.props.liveScoreRoundListAction(this.state.competitionId, division == 'All' ? "" : division)
-        this.setState({ selectedDivision: division, selectedRound: 'All' })
+    onChangeDivision(division) {
+        this.props.liveScoreRoundListAction(this.state.competitionId, division == 'All' ? "" : division, this.state.selectedRound)
+        this.setState({ selectedDivision: division, selectedRound: 'All', roundLoad: true })
     }
 
-    onChangeRound = (roundName) => {
+    onChangeRound(roundName) {
+        this.handleTablePagination(0, roundName)
         this.setState({ selectedRound: roundName })
     }
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let { divisionList, roundList } = this.props.liveScoreTeamAttendanceState
+        console.log(divisionList, 'divisionList')
         let divisionListArr = isArrayNotEmpty(divisionList) ? divisionList : []
         let roundListArr = isArrayNotEmpty(roundList) ? roundList : []
         return (
@@ -555,7 +589,7 @@ class LiveScoreTeamAttendance extends Component {
                                 <Option value={'All'}>{'All'}</Option>
                                 {
                                     roundListArr.map((item) => {
-                                        return <Option key={"round" + item.id} value={item.name}>{item.name}</Option>
+                                        return <Option key={"round" + item.id} value={item.id}>{item.name}</Option>
                                     })
                                 }
                             </Select>
@@ -564,9 +598,8 @@ class LiveScoreTeamAttendance extends Component {
 
                     <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end', alignItems: "center" }}>
                         <div className="comp-product-search-inp-width pb-3">
-                            <Input
-                                className="product-reg-search-input"
-                                onChange={this.onChangeSearchText}
+                            <Input className="product-reg-search-input"
+                                onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
                                 onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                 value={this.state.searchText}
@@ -581,6 +614,8 @@ class LiveScoreTeamAttendance extends Component {
             </div>
         )
     }
+
+
 
     ////////form content view
     contentView = () => {
@@ -604,21 +639,18 @@ class LiveScoreTeamAttendance extends Component {
                         className="antd-pagination"
                         current={teamAttendancePage}
                         total={total}
-                        onChange={this.handleTablePagination}
+                        onChange={(page) => this.handleTablePagination(page)}
                     />
                 </div>
             </div>
         )
     }
 
+    /////// render function 
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
-                    menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                />
+                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"14"} />
                 <Layout>
                     {this.headerView()}
@@ -631,7 +663,6 @@ class LiveScoreTeamAttendance extends Component {
         );
     }
 }
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScoreTeamAttendanceListAction,
@@ -640,13 +671,11 @@ function mapDispatchToProps(dispatch) {
         liveScoreRoundListAction,
     }, dispatch)
 }
-
 function mapStateToProps(state) {
     return {
         liveScoreTeamAttendanceState: state.LiveScoreTeamAttendanceState
     }
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreTeamAttendance);
 
 

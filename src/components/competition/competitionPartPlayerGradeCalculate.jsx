@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Button, Table, Select, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Input, Button, Table, Select, Form, Tooltip } from 'antd';
 import { NavLink } from 'react-router-dom';
 import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -410,7 +410,6 @@ class CompetitionPartPlayerGradeCalculate extends Component {
         );
     }
 }
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getYearAndCompetitionParticipateAction,
@@ -427,5 +426,4 @@ function mapStatetoProps(state) {
         partPlayerGradingState: state.CompetitionPartPlayerGradingState
     }
 }
-
-export default connect(mapStatetoProps, mapDispatchToProps)(CompetitionPartPlayerGradeCalculate);
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionPartPlayerGradeCalculate));

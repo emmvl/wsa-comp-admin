@@ -1,14 +1,13 @@
 import React, { Component } from "react";
-import { NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Layout, Button, Breadcrumb, Input, Modal, Pagination } from 'antd';
-import { SearchOutlined } from "@ant-design/icons";
-
+import { Layout, Button, Breadcrumb, Input, Icon, Select, Modal, Pagination } from 'antd';
 import './shop.css';
+import { NavLink } from 'react-router-dom';
 import DashboardLayout from "../../pages/dashboardLayout";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import AppConstants from "../../themes/appConstants";
+import AppImages from "../../themes/appImages";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import ShopSingleProductComponent from "../../customComponents/shopSingleProductComponent";
@@ -30,6 +29,7 @@ class ListProducts extends Component {
             deleteLoading: false,
         }
     }
+
 
     componentDidMount() {
         this.props.clearProductReducer("productListingData")
@@ -85,7 +85,7 @@ class ListProducts extends Component {
         }
     }
 
-    // search key
+    // search key 
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
@@ -98,7 +98,8 @@ class ListProducts extends Component {
     // on click of search icon
     onClickSearchIcon = () => {
         if (this.state.searchText === null || this.state.searchText === "") {
-        } else {
+        }
+        else {
             let { sorterBy, order, searchText, limit } = this.state
             this.setState({ offset: 0 })
             this.props.getProductListingAction(sorterBy, order, 0, searchText, limit)
@@ -110,26 +111,24 @@ class ListProducts extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm d-flex align-items-center">
+                    <div
+                        className="col-sm d-flex align-items-center"
+                    >
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">
                                 {AppConstants.products}
                             </Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm d-flex align-items-center justify-content-end mr-5">
-                        <div className="comp-product-search-inp-width">
-                            <Input
-                                className="product-reg-search-input"
-                                onChange={this.onChangeSearchText}
+                    <div className="col-sm d-flex align-items-center justify-content-end mr-5"  >
+                        <div className="comp-product-search-inp-width" >
+                            <Input className="product-reg-search-input"
+                                onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
-                                onKeyPress={this.onKeyEnterSearchText}
-                                prefix={
-                                    <SearchOutlined
-                                        className="search-prefix-icon-style"
-                                        onClick={this.onClickSearchIcon}
-                                    />
-                                }
+                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                prefix={<Icon type="search" className="search-prefix-icon-style"
+                                    onClick={() => this.onClickSearchIcon()}
+                                />}
                                 allowClear
                             />
                         </div>
@@ -144,15 +143,13 @@ class ListProducts extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
-                    <div className="row">
+                    <div className="row" >
                         <div className="col-sm">
                             <div className="com-year-select-heading-view">
                             </div>
                         </div>
-                        <div
-                            className="col-sm d-flex align-items-center justify-content-end shop-add-product-btn-div"
-                            onClick={() => this.props.clearProductReducer("productDetailData")}
-                        >
+                        <div className="col-sm d-flex align-items-center justify-content-end shop-add-product-btn-div"
+                            onClick={() => this.props.clearProductReducer("productDetailData")}>
                             <NavLink
                                 to={{ pathname: `/addProduct` }}
                                 className="text-decoration-none"
@@ -210,6 +207,7 @@ class ListProducts extends Component {
     };
 
     render() {
+        console.log("shopProductState", this.props.shopProductState)
         return (
             <div className="fluid-width" >
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
@@ -220,7 +218,11 @@ class ListProducts extends Component {
                         {this.dropdownView()}
                         {this.contentView()}
                     </Content>
-                    <Loader visible={this.props.shopProductState.onLoad} />
+                    <Loader
+                        visible={
+                            this.props.shopProductState.onLoad
+                        }
+                    />
                 </Layout>
             </div>
         );
@@ -235,10 +237,9 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         shopProductState: state.ShopProductState,
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(ListProducts);
+export default connect(mapStatetoProps, mapDispatchToProps)((ListProducts));

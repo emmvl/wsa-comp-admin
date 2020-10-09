@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Button, Table, Select, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Input, Button, Table, Select, Form, Tooltip } from 'antd';
 import { NavLink } from 'react-router-dom';
 import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -327,8 +327,7 @@ class CompetitionPlayerGradeCalculate extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table
-                        className="home-dashboard-table"
+                    <Table className="home-dashboard-table"
                         columns={columns}
                         dataSource={playerGradingTableData}
                         pagination={false}
@@ -411,10 +410,10 @@ class CompetitionPlayerGradeCalculate extends Component {
                     </Footer>
                 </Layout>
             </div>
+
         );
     }
 }
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getYearAndCompetitionOwnAction,
@@ -425,11 +424,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         appState: state.AppState,
         partPlayerGradingState: state.CompetitionPartPlayerGradingState
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(CompetitionPlayerGradeCalculate);
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionPlayerGradeCalculate));

@@ -17,13 +17,12 @@ import Loader from "customComponents/loader";
 function Profile(props) {
   const {
     userState,
+    form,
     userPhotoUpdateAction,
     userDetailUpdateAction,
   } = props;
 
   const [user, setUser] = useState(userState.userProfile);
-
-  const [form] = Form.useForm();
 
   useEffect(() => {
     if (userState.userProfile.photoUrl) {
@@ -46,27 +45,31 @@ function Profile(props) {
   );
 
   const handleSubmit = useCallback(
-    (values) => {
-      form.validateFields().then(values => {
-        const { photo, photoUrl, ...restUserProperty } = user;
+    (e) => {
+      e.preventDefault();
 
-        const isChangedData =
-          user.firstName !== userState.userProfile.firstName ||
-          user.lastName !== userState.userProfile.lastName ||
-          user.mobileNumber !== userState.userProfile.mobileNumber ||
-          user.email !== userState.userProfile.email;
+      form.validateFields((err) => {
+        if (!err) {
+          const { photo, photoUrl, ...restUserProperty } = user;
 
-        if (photo && photoUrl) {
-          let formData = new FormData();
-          formData.append("profile_photo", photo);
-          userPhotoUpdateAction(
-            formData,
-            isChangedData ? restUserProperty : null
-          );
-        } else if (isChangedData) {
-          userDetailUpdateAction(restUserProperty);
+          const isChangedData =
+            user.firstName !== userState.userProfile.firstName ||
+            user.lastName !== userState.userProfile.lastName ||
+            user.mobileNumber !== userState.userProfile.mobileNumber ||
+            user.email !== userState.userProfile.email;
+
+          if (photo && photoUrl) {
+            let formData = new FormData();
+            formData.append("profile_photo", photo);
+            userPhotoUpdateAction(
+              formData,
+              isChangedData ? restUserProperty : null
+            );
+          } else if (isChangedData) {
+            userDetailUpdateAction(restUserProperty);
+          }
         }
-      }).catch((err) => console.log('err: ', err));
+      });
     },
     [
       form,
@@ -113,7 +116,7 @@ function Profile(props) {
 
   return (
     <div className="inside-table-view">
-      <Form form={form} colon={false} onFinish={handleSubmit}>
+      <Form colon={false} onSubmit={handleSubmit}>
         <div className="fluid-width">
           <div className="d-flex justify-content-center">
             <div className="reg-competition-logo-view" onClick={selectImage}>
@@ -232,4 +235,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Profile);
+)(Form.create()(Profile));

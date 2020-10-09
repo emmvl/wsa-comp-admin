@@ -1,4 +1,4 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import { Layout, Breadcrumb, Select, Checkbox, Button, Radio, Form, Modal, message, Tooltip, DatePicker, } from 'antd';
 import './competition.css';
 import { NavLink } from 'react-router-dom';
@@ -61,11 +61,11 @@ class CompetitionFormat extends Component {
             buttonClicked: ""
         }
 
-        this.formRef = createRef();
         this.referenceApiCalls();
     }
 
     componentDidMount() {
+        console.log("Component Did mount");
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
@@ -91,9 +91,12 @@ class CompetitionFormat extends Component {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
             setOwnCompetitionYear(1)
         }
+
+
     }
 
     componentDidUpdate(nextProps) {
+        console.log("componentDidUpdate");
         try {
             let competitionFormatState = this.props.competitionFormatState;
             let competitionModuleState = this.props.competitionModuleState;
@@ -106,6 +109,7 @@ class CompetitionFormat extends Component {
                 }
             }
             if (nextProps.appState !== this.props.appState) {
+
                 let competitionList = this.props.appState.own_CompetitionArr;
                 if (nextProps.appState.own_CompetitionArr !== competitionList) {
                     if (competitionList.length > 0) {
@@ -175,7 +179,6 @@ class CompetitionFormat extends Component {
 
                     this.setState({ loading: false });
                 }
-
                 if (competitionModuleState.status == 5 && competitionModuleState.drawGenerateLoad == false) {
                     this.setState({ loading: false });
                     message.error(ValidationConstants.drawsMessage[0]);
@@ -209,9 +212,11 @@ class CompetitionFormat extends Component {
         catch (error) {
             console.log("ERROr" + error);
         }
+
     }
 
     apiCalls = (competitionId, yearRefId) => {
+        console.log("Api Callse");
         let payload = {
             yearRefId: yearRefId,
             competitionUniqueKey: competitionId,
@@ -251,16 +256,17 @@ class CompetitionFormat extends Component {
     }
 
     setFormFieldValue = () => {
+        console.log("setFormFieldValue");
         let formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
         let competitionFormatDivision = formatList.competionFormatDivisions;
 
-        this.formRef.current.setFieldsValue({
+        this.props.form.setFieldsValue({
             [`competitionFormatRefId`]: formatList.competitionFormatRefId,
             [`matchTypeRefId`]: formatList.matchTypeRefId
         });
 
         (competitionFormatDivision || []).map((item, index) => {
-            this.formRef.current.setFieldsValue({
+            this.props.form.setFieldsValue({
                 [`matchDuration${index}`]: item.matchDuration,
                 [`mainBreak${index}`]: item.mainBreak,
                 [`qtrBreak${index}`]: item.qtrBreak,
@@ -270,6 +276,7 @@ class CompetitionFormat extends Component {
     }
 
     onChange(e, competitionFormatDivisions, index) {
+        console.log('checked = ', e);
         let removedDivisions = [];
         let selectDivs = competitionFormatDivisions[index].selectedDivisions;
         for (let k in selectDivs) {
@@ -283,11 +290,13 @@ class CompetitionFormat extends Component {
 
         let a = competitionFormatDivisions[index].selectedDivisions.filter(x => false);
         competitionFormatDivisions[index].selectedDivisions = a;
+
         competitionFormatDivisions[index].selectedDivisions = e;
 
         let competitionFormatTemplateId = competitionFormatDivisions[index].competitionFormatTemplateId;
+        console.log("competitionFormatTemplateId::" + competitionFormatTemplateId);
         let remainingFormatDiv = competitionFormatDivisions.
-        filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
+            filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
 
         for (let remDiv in remainingFormatDiv) {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
@@ -317,6 +326,7 @@ class CompetitionFormat extends Component {
     };
 
     addCompetitionFormatDivision(data) {
+
         this.props.updateCompetitionFormatAction(data, 'addCompetitionFormatDivisions');
     }
 
@@ -330,10 +340,11 @@ class CompetitionFormat extends Component {
     }
 
     deleteCompetitionFormatDivision = (competionFormatDivisions, index) => {
+
         let removedFormat = competionFormatDivisions[index];
 
         let remainingFormatDiv = competionFormatDivisions.
-        filter(x => x.competitionFormatTemplateId != removedFormat.competitionFormatTemplateId);
+            filter(x => x.competitionFormatTemplateId != removedFormat.competitionFormatTemplateId);
 
         for (let remDiv in remainingFormatDiv) {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
@@ -347,6 +358,7 @@ class CompetitionFormat extends Component {
             }
         }
 
+        // console.log("*******" + JSON.stringify(competionFormatDivisions));
         competionFormatDivisions.splice(index, 1);
         this.props.updateCompetitionFormatAction(competionFormatDivisions, 'competionFormatDivisions');
     }
@@ -376,8 +388,8 @@ class CompetitionFormat extends Component {
 
         this.props.updateCompetitionFormatAction(id, fieldName);
     }
-
     onChangeSetCompFormatDivisionValue = (id, fieldName, competitionFormatDivisions, index) => {
+        console.log("fieldName::" + fieldName + ":::" + id);
         if (fieldName == "matchDuration") {
             competitionFormatDivisions[index].matchDuration = id;
         }
@@ -390,6 +402,7 @@ class CompetitionFormat extends Component {
         else if (fieldName == "timeBetweenGames") {
             competitionFormatDivisions[index].timeBetweenGames = id;
         }
+
 
         this.props.updateCompetitionFormatAction(competitionFormatDivisions, 'competionFormatDivisions');
     }
@@ -411,6 +424,7 @@ class CompetitionFormat extends Component {
     }
 
     onChangeAllDivision = (e, competionFormatDivisions, index) => {
+        console.log("onChangeAllDivision::" + index);
         this.setState({
             currentIndex: index
         });
@@ -431,14 +445,17 @@ class CompetitionFormat extends Component {
 
 
     performAllDivisionOperation = (checkedVal, competionFormatDivisions, index) => {
+        console.log("performAllDivisionOperation::" + index + "::" + checkedVal);
         let allDivObj = Object.assign(competionFormatDivisions[index]);
         allDivObj.selectedDivisions = [];
         for (let i in allDivObj.divisions) {
             allDivObj.divisions[i].isDisabled = false;
         }
 
+        console.log("allDivObj::" + JSON.stringify(allDivObj));
         let arr = [];
         arr.push(allDivObj);
+        console.log("newList::" + JSON.stringify(arr));
 
         this.props.updateCompetitionFormatAction(checkedVal, "allDivision");
         this.props.updateCompetitionFormatAction(arr, 'competionFormatDivisions');
@@ -470,54 +487,69 @@ class CompetitionFormat extends Component {
         this.setState({ loading: true });
     }
 
+
     saveCompetitionFormats = (e) => {
-        this.setState({ buttonPressed: "save" });
-        let formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
-        let competitionFormatDivision = formatList.competionFormatDivisions;
-        formatList.organisationId = this.state.organisationId;
+        e.preventDefault();
+        this.props.form.validateFieldsAndScroll((err, values) => {
+            console.log("err::" + err);
+            if (!err) {
+                this.setState({ buttonPressed: "save" });
+                let formatList = Object.assign(this.props.competitionFormatState.competitionFormatList);
+                let competitionFormatDivision = formatList.competionFormatDivisions;
+                formatList.organisationId = this.state.organisationId;
 
-        if (formatList.isDefault == null)
-            formatList.isDefault = 0;
+                if (formatList.isDefault == null)
+                    formatList.isDefault = 0;
 
-        for (let item in competitionFormatDivision) {
-            let isFinal = competitionFormatDivision[item]["isFinal"];
-            if (isFinal && formatList.competitionFormatRefId != 1) {
-                this.setState({ isFinalAvailable: true });
-            }
-
-            let competitionFormatTemplateId = competitionFormatDivision[item].competitionFormatTemplateId;
-            if (competitionFormatTemplateId < 0)
-                competitionFormatDivision[item].competitionFormatTemplateId = 0;
-
-            const selectedDivisions = competitionFormatDivision[item].selectedDivisions;
-            let divisions = competitionFormatDivision[item].divisions;
-            let divArr = [];
-
-            for (let j in selectedDivisions) {
-                let matchDivisions = divisions.find(x => x.competitionMembershipProductDivisionId === selectedDivisions[j]);
-                if (matchDivisions != "") {
-                    let obj = {
-                        competitionFormatDivisionId: 0,
-                        competitionMembershipProductDivisionId: 0
+                for (let item in competitionFormatDivision) {
+                    console.log("item.isFinal::" + formatList.competitionFormatRefId);
+                    let isFinal = competitionFormatDivision[item]["isFinal"];
+                    if (isFinal && formatList.competitionFormatRefId != 1) {
+                        console.log("***********************");
+                        this.setState({ isFinalAvailable: true });
                     }
-                    obj.competitionFormatDivisionId = matchDivisions.competitionFormatDivisionId;
-                    obj.competitionMembershipProductDivisionId = matchDivisions.competitionMembershipProductDivisionId;
-                    divArr.push(obj);
+
+                    let competitionFormatTemplateId = competitionFormatDivision[item].competitionFormatTemplateId;
+                    if (competitionFormatTemplateId < 0)
+                        competitionFormatDivision[item].competitionFormatTemplateId = 0;
+
+                    const selectedDivisions = competitionFormatDivision[item].selectedDivisions;
+                    let divisions = competitionFormatDivision[item].divisions;
+                    let divArr = [];
+
+                    for (let j in selectedDivisions) {
+                        let matchDivisions = divisions.
+                            find(x => x.competitionMembershipProductDivisionId === selectedDivisions[j]);
+                        if (matchDivisions != "") {
+                            let obj = {
+                                competitionFormatDivisionId: 0,
+                                competitionMembershipProductDivisionId: 0
+                            }
+                            obj.competitionFormatDivisionId = matchDivisions.competitionFormatDivisionId;
+                            obj.competitionMembershipProductDivisionId = matchDivisions.competitionMembershipProductDivisionId;
+                            divArr.push(obj);
+                        }
+                    }
+
+                    competitionFormatDivision[item].divisions = divArr;
                 }
+
+                // let payload = {
+                //     yearRefId: this.state.yearRefId, 
+                //     competitionUniqueKey: this.state.firstTimeCompId,
+                //     organisationId: this.state.organisationId
+                // }
+                // this.props.generateDrawAction(payload);
+
+                this.props.saveCompetitionFormatAction(formatList);
+                this.setState({ loading: true });
+                console.log("SAVE Format::" + JSON.stringify(formatList));
             }
+            else {
+                message.error(ValidationConstants.requiredMessage);
+            }
+        });
 
-            competitionFormatDivision[item].divisions = divArr;
-        }
-
-        // let payload = {
-        //     yearRefId: this.state.yearRefId,
-        //     competitionUniqueKey: this.state.firstTimeCompId,
-        //     organisationId: this.state.organisationId
-        // }
-        // this.props.generateDrawAction(payload);
-
-        this.props.saveCompetitionFormatAction(formatList);
-        this.setState({ loading: true });
     }
 
     // Non playing dates view
@@ -588,6 +620,7 @@ class CompetitionFormat extends Component {
     }
 
     updateNonPlayingNames(data, index, key) {
+        console.log("data", data)
         if (key == "date") {
             let obj = {
                 data: moment(data).format("YYYY-MM-DD"),
@@ -677,6 +710,7 @@ class CompetitionFormat extends Component {
                                 </Select>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -684,7 +718,7 @@ class CompetitionFormat extends Component {
     }
 
     ////////form content view
-    contentView = () => {
+    contentView = (getFieldDecorator) => {
         let data = this.props.competitionFormatState.competitionFormatList;
         // console.log("!!!!!!!!!!!!" + JSON.stringify(data.competitionName));
         let appState = this.props.appState;
@@ -696,27 +730,30 @@ class CompetitionFormat extends Component {
                 <InputWithHead
                     id={AppUniqueId.compnameTextbox}
                     disabled={disabledStatus} heading={AppConstants.competition_name} placeholder={AppConstants.competition_name}
-                    value={data.competitionName} onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}
-                />
+                    value={data.competitionName} onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionName')}  ></InputWithHead>
                 <div style={{ marginTop: 15 }}>
                     <InputWithHead headingId={AppUniqueId.comp_Format_Type} heading={AppConstants.competitionFormat} required={"required-field"} />
-                    <Form.Item name='competitionFormatRefId' rules={[{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }]}>
-                        <Radio.Group
-                            className="reg-competition-radio"
-                            onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionFormatRefId')}
-                            setFieldsValue={data.competitionFormatRefId}
-                            disabled={disabledStatus}
-                        >
-                            <div className="fluid-width">
-                                <div className="row">
-                                    {(appState.competitionFormatTypes || []).map(item => (
-                                        <div className="col-sm">
-                                            <Radio key={item.id} value={item.id}> {item.description}</Radio>
-                                        </div>
-                                    ))}
+                    <Form.Item >
+                        {getFieldDecorator('competitionFormatRefId', {
+                            rules: [{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }],
+                        })(
+                            <Radio.Group className="reg-competition-radio" onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionFormatRefId')}
+                                setFieldsValue={data.competitionFormatRefId}
+                                disabled={disabledStatus}
+                            >
+                                <div className="fluid-width" >
+                                    <div className="row" >
+                                        {(appState.competitionFormatTypes || []).map(item => {
+                                            return (
+                                                <div className="col-sm" >
+                                                    <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                 </div>
-                            </div>
-                        </Radio.Group>
+                            </Radio.Group>
+                        )}
                     </Form.Item>
                 </div>
                 {/* <Checkbox className="single-checkbox pt-3" defaultChecked={false} onChange={(e) => this.onChange(e)}>{AppConstants.use_default_competitionFormat}</Checkbox> */}
@@ -732,22 +769,25 @@ class CompetitionFormat extends Component {
                 </Select> */}
 
                 <InputWithHead heading={AppConstants.matchType} required={"required-field"} headingId={AppUniqueId.matchType_Selection_dpdn} />
-                <Form.Item name="matchTypeRefId" rules={[{ required: true, message: ValidationConstants.matchTypeRequired }]}>
-                    <Select
-                        disabled={disabledStatus}
-                        id={AppUniqueId.matchType_Selection_dpdn}
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
-                        value={data.matchTypeRefId}
-                    >
-                        {(appState.matchTypes || []).map((item, index) => {
-                            if (item.name !== "SINGLE") {
-                                return (
-                                    <Option key={item.id} value={item.id}>{item.description}</Option>
-                                )
-                            }
-                        })}
-                    </Select>
+                <Form.Item>
+                    {getFieldDecorator('matchTypeRefId', {
+                        rules: [{ required: true, message: ValidationConstants.matchTypeRequired }],
+                    })(
+                        <Select
+                            disabled={disabledStatus}
+                            id={AppUniqueId.matchType_Selection_dpdn}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
+                            value={data.matchTypeRefId}>
+                            {(appState.matchTypes || []).map((item, index) => {
+                                if (item.name !== "SINGLE") {
+                                    return (
+                                        <Option key={item.id} value={item.id}>{item.description}</Option>
+                                    )
+                                }
+                            })}
+                        </Select>
+                    )}
                 </Form.Item>
                 {data.competitionFormatRefId == 4 ?
                     <div>
@@ -847,7 +887,7 @@ class CompetitionFormat extends Component {
                                             value={item.selectedDivisions}>
                                             {(item.divisions || []).map((division, divIndex) => (
                                                 <Option key={division.competitionMembershipProductDivisionId + divIndex}
-                                                        disabled={division.isDisabled} value={division.competitionMembershipProductDivisionId}>
+                                                    disabled={division.isDisabled} value={division.competitionMembershipProductDivisionId}>
                                                     {division.divisionsName}
                                                 </Option>
                                             ))}
@@ -859,86 +899,94 @@ class CompetitionFormat extends Component {
                             </div> : null}
                         </div>
 
-                        <div className="fluid-width">
-                            <div className="row">
-                                <div className="col-sm-3">
-                                    <Form.Item
-                                        name={`matchDuration${index}`}
-                                        rules={[{
-                                            required: true, pattern: new RegExp("^[1-9][0-9]*$"),
-                                            message: ValidationConstants.matchDuration
-                                        }]}
-                                    >
-                                        <InputWithHead
-                                            auto_complete="off"
-                                            id={AppUniqueId.match_Duration}
-                                            heading={AppConstants.matchDuration}
-                                            disabled={disabledStatus}
-                                            required={"required-field"}
-                                            placeholder={AppConstants.mins}
-                                            setFieldsValue={item.matchDuration}
-                                            onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'matchDuration', data.competionFormatDivisions, index)}
-                                        />
+                        <div className="fluid-width" >
+                            <div className="row" >
+                                <div className="col-sm-3" >
+                                    <Form.Item >
+                                        {getFieldDecorator(`matchDuration${index}`, {
+                                            rules: [{
+                                                required: true, pattern: new RegExp("^[1-9][0-9]*$"),
+                                                message: ValidationConstants.matchDuration
+                                            }]
+                                        })(
+                                            <InputWithHead
+                                                auto_complete="off"
+                                                id={AppUniqueId.match_Duration}
+                                                heading={AppConstants.matchDuration}
+                                                disabled={disabledStatus}
+                                                required={"required-field"}
+                                                placeholder={AppConstants.mins}
+                                                setFieldsValue={item.matchDuration}
+                                                onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'matchDuration',
+                                                    data.competionFormatDivisions, index)}></InputWithHead>
+                                        )}
                                     </Form.Item>
                                 </div>
-                                {(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) && (
-                                    <div className="col-sm-3">
-                                        <Form.Item name={`mainBreak${index}`} rules={[{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }]}>
-                                            <InputWithHead
-                                                auto_complete="off"
-                                                disabled={disabledStatus}
-                                                heading={AppConstants.mainBreak}
-                                                required={(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? "required-field" : null}
-                                                placeholder={AppConstants.mins}
-                                                setFieldsValue={item.mainBreak}
-                                                onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'mainBreak', data.competionFormatDivisions, index)}
-                                            />
+                                {(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ?
+                                    <div className="col-sm-3" >
+                                        <Form.Item >
+                                            {getFieldDecorator(`mainBreak${index}`, {
+                                                rules: [{ required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false), message: ValidationConstants.mainBreak }]
+                                            })(
+                                                <InputWithHead
+                                                    auto_complete="off"
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.mainBreak}
+                                                    required={(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? "required-field" : null}
+                                                    placeholder={AppConstants.mins}
+                                                    setFieldsValue={item.mainBreak}
+                                                    onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'mainBreak',
+                                                        data.competionFormatDivisions, index)}></InputWithHead>
+                                            )}
+                                        </Form.Item>
+
+                                    </div>
+                                    : null}
+                                {data.matchTypeRefId == 3 ?
+                                    <div className="col-sm-3" >
+                                        <Form.Item >
+                                            {getFieldDecorator(`qtrBreak${index}`, {
+                                                rules: [{ required: (data.matchTypeRefId == 3 ? true : false), message: ValidationConstants.qtrBreak }]
+                                            })(
+                                                <InputWithHead
+                                                    auto_complete="off"
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.qtrBreak} placeholder={AppConstants.mins}
+                                                    required={(data.matchTypeRefId == 3) ? "required-field" : null}
+                                                    setFieldsValue={item.qtrBreak}
+                                                    onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'qtrBreak',
+                                                        data.competionFormatDivisions, index)}></InputWithHead>
+                                            )}
                                         </Form.Item>
                                     </div>
-                                )}
-                                {data.matchTypeRefId == 3 && (
-                                    <div className="col-sm-3">
-                                        <Form.Item name={`qtrBreak${index}`} rules={[{ required: (data.matchTypeRefId == 3 ? true : false), message: ValidationConstants.qtrBreak }]}>
-                                            <InputWithHead
-                                                auto_complete="off"
-                                                disabled={disabledStatus}
-                                                heading={AppConstants.qtrBreak} placeholder={AppConstants.mins}
-                                                required={(data.matchTypeRefId == 3) ? "required-field" : null}
-                                                setFieldsValue={item.qtrBreak}
-                                                onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'qtrBreak', data.competionFormatDivisions, index)}
-                                            />
+                                    : null}
+                                {data.timeslotGenerationRefId != 2 ?
+                                    <div className="col-sm-3" >
+                                        <Form.Item >
+                                            {getFieldDecorator(`timeBetweenGames${index}`, {
+                                                rules: [{ required: true, message: ValidationConstants.timeBetweenGames }]
+                                            })(
+                                                <InputWithHead
+                                                    auto_complete="new-timeBetweenGames"
+                                                    headingId={AppUniqueId.timeBetween_Matches}
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins}
+                                                    required={"required-field"}
+                                                    setFieldsValue={item.timeBetweenGames}
+                                                    onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'timeBetweenGames',
+                                                        data.competionFormatDivisions, index)}></InputWithHead>
+                                            )}
                                         </Form.Item>
                                     </div>
-                                )}
-                                {data.timeslotGenerationRefId != 2 && (
-                                    <div className="col-sm-3">
-                                        <Form.Item name={`timeBetweenGames${index}`} rules={[{ required: true, message: ValidationConstants.timeBetweenGames }]}>
-                                            <InputWithHead
-                                                auto_complete="new-timeBetweenGames"
-                                                headingId={AppUniqueId.timeBetween_Matches}
-                                                disabled={disabledStatus}
-                                                heading={AppConstants.timeBetweenMatches} placeholder={AppConstants.mins}
-                                                required={"required-field"}
-                                                setFieldsValue={item.timeBetweenGames}
-                                                onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'timeBetweenGames', data.competionFormatDivisions, index)}
-                                            />
-                                        </Form.Item>
-                                    </div>
-                                )}
+                                    : null}
                             </div>
                         </div>
-                        {data.competitionFormatRefId != 1 && (
+                        {
+                            data.competitionFormatRefId != 1 &&
                             <div>
-                                <Checkbox
-                                    disabled={disabledStatus}
-                                    className="single-checkbox pt-2"
-                                    checked={item.isFinal}
-                                    onChange={(e) => this.onChangeFinal(e, data.competionFormatDivisions, index)}
-                                >
-                                    {AppConstants.applyFinalFormat}
-                                </Checkbox>
+                                <Checkbox disabled={disabledStatus} className="single-checkbox pt-2" checked={item.isFinal} onChange={(e) => this.onChangeFinal(e, data.competionFormatDivisions, index)}>{AppConstants.applyFinalFormat}</Checkbox>
                             </div>
-                        )}
+                        }
                     </div>
                 ))
                 }
@@ -989,6 +1037,7 @@ class CompetitionFormat extends Component {
         let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
         let isPublished = this.state.competitionStatus == 1 ? true : false
         let finalAvailable = this.checkFinalAvailable()
+        console.log(finalAvailable)
         return (
             <div className="fluid-width" >
                 <div className="footer-view">
@@ -1030,6 +1079,7 @@ class CompetitionFormat extends Component {
                                     </Tooltip>
 
                                     <Button
+                                        id={AppUniqueId.compformat_next_btn}
                                         htmlType='submit'
                                         disabled={isPublished}
                                         onClick={() => this.setState({ buttonClicked: "next" })}
@@ -1038,6 +1088,7 @@ class CompetitionFormat extends Component {
                                     >
                                         {AppConstants.next}
                                     </Button>
+
                                 </div>
                                 : <div className="comp-buttons-view">
                                     <Tooltip
@@ -1100,15 +1151,17 @@ class CompetitionFormat extends Component {
                     title={AppConstants.regenerateDrawTitle}
                     visible={this.state.drawGenerateModalVisible}
                     onOk={() => this.handleGenerateDrawModal("ok")}
-                    onCancel={() => this.handleGenerateDrawModal("cancel")}
-                >
+                    onCancel={() => this.handleGenerateDrawModal("cancel")}>
                     <Select
                         className="year-select reg-filter-select-competition ml-2"
                         onChange={(e) => this.setState({ generateRoundId: e })}
                         placeholder={'Round'}>
-                        {(activeDrawsRoundsData || []).map((d) => (
-                            <Option key={d.roundId} value={d.roundId}>{d.name}</Option>
-                        ))}
+                        {(activeDrawsRoundsData || []).map((d, dIndex) => (
+                            <Option key={d.roundId}
+                                value={d.roundId} >{d.name}</Option>
+                        ))
+                        }
+
                     </Select>
                 </Modal>
             </div>
@@ -1132,6 +1185,7 @@ class CompetitionFormat extends Component {
     }
 
     render() {
+        const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
@@ -1139,18 +1193,13 @@ class CompetitionFormat extends Component {
                 <Layout>
                     {this.headerView()}
                     <Form
-                        ref={this.formRef}
                         autocomplete="off"
-                        onFinish={this.saveCompetitionFormats}
-                        onFinishFailed={(err) => {
-                            this.formRef.current.scrollToField(err.errorFields[0].name)
-                        }}
-                        noValidate="noValidate"
-                    >
+                        onSubmit={this.saveCompetitionFormats}
+                        noValidate="noValidate">
                         <Content>
                             {this.dropdownView()}
                             <div className="formView">
-                                {this.contentView()}
+                                {this.contentView(getFieldDecorator)}
                             </div>
                             <Loader visible={this.state.loading} />
                         </Content>
@@ -1160,6 +1209,7 @@ class CompetitionFormat extends Component {
                     </Form>
                 </Layout>
             </div>
+
         );
     }
 }
@@ -1178,9 +1228,10 @@ function mapDispatchToProps(dispatch) {
         getEnhancedRoundRobinAction,
         getActiveRoundsAction
     }, dispatch);
+
 }
 
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         competitionFormatState: state.CompetitionFormatState,
         appState: state.AppState,
@@ -1188,5 +1239,4 @@ function mapStateToProps(state) {
         drawsState: state.CompetitionDrawsState,
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(CompetitionFormat);
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionFormat));

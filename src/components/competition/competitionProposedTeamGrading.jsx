@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Select, Tag, Input, message, Tooltip, Menu, Modal } from 'antd';
+import { Layout, Breadcrumb, Form, Button, Table, Select, Tag, Input, message, Tooltip, Menu, Modal } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import CommentModal from "../../customComponents/commentModal";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -79,6 +79,7 @@ const columns = [
             //         </Option>
             //     })}
             //     </Select>
+
             //     )
             <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
                 <Select className="select-inside-team-grades-table"
@@ -704,7 +705,7 @@ class CompetitionProposedTeamGrading extends Component {
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        //className={record => record.isActive == 0 ? "disabled-row" : "home-dashboard-table"}
+                        //className={record => record.isActive == 0 ? "disabled-row" : "home-dashboard-table"} 
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={proposedTeamGradingData}
@@ -723,14 +724,14 @@ class CompetitionProposedTeamGrading extends Component {
                     value={this.state.comment}
                     commentLoad={commentLoad}
                     commentList={commentList}
-                    // owner={this.state.commentsCreatedBy}
-                    // OwnCreatedComment={this.state.commentsCreatedOn}
-                    // ownnerComment={this.state.comments}
-                    // affilate={this.state.responseCommentsCreatedBy}
-                    // affilateCreatedComment={this.state.responseCommentsCreatedOn}
-                    // affilateComment={this.state.responseComments}
-                    // finalGradeId={this.state.finalGradeId}
-                    // proposedGradeID={this.state.proposedGradeID}
+                // owner={this.state.commentsCreatedBy}
+                // OwnCreatedComment={this.state.commentsCreatedOn}
+                // ownnerComment={this.state.comments}
+                // affilate={this.state.responseCommentsCreatedBy}
+                // affilateCreatedComment={this.state.responseCommentsCreatedOn}
+                // affilateComment={this.state.responseComments}
+                // finalGradeId={this.state.finalGradeId}
+                // proposedGradeID={this.state.proposedGradeID}
                 />
 
                 <Modal
@@ -843,7 +844,6 @@ class CompetitionProposedTeamGrading extends Component {
         );
     }
 }
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getYearAndCompetitionOwnAction,
@@ -865,14 +865,14 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         appState: state.AppState,
         ownTeamGradingState: state.CompetitionOwnTeamGradingState,
         registrationState: state.RegistrationState,
         commonReducerState: state.CommonReducerState,
         partPlayerGradingState: state.CompetitionPartPlayerGradingState,
+
     }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(CompetitionProposedTeamGrading);
+export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionProposedTeamGrading));

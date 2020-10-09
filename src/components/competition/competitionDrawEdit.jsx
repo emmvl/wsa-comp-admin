@@ -118,6 +118,7 @@ class CompetitionDrawEditOld extends Component {
         }
 
         if (this.state.updateLoad == true && this.props.drawsState.updateLoad == false) {
+            console.log("*********************************");
             this.setState({ updateLoad: false })
             this.reGenerateDraw();
         }
@@ -188,6 +189,7 @@ class CompetitionDrawEditOld extends Component {
         this.setState({ venueLoad: true });
     }
 
+
     onChange = e => {
         this.setState({
             value: e.target.value
@@ -195,6 +197,7 @@ class CompetitionDrawEditOld extends Component {
     };
 
     onSwap(source, target) {
+
         let sourceIndexArray = source.split(':');
         let targetIndexArray = target.split(':');
 
@@ -203,10 +206,12 @@ class CompetitionDrawEditOld extends Component {
         let sourceZIndex = sourceIndexArray[2];
         let sourceID = sourceIndexArray[3];
 
+
         let targetXIndex = targetIndexArray[0];
         let targetYIndex = targetIndexArray[1];
         let targetZIndex = targetIndexArray[2];
         let targetID = targetIndexArray[3];
+
 
         let drawData = this.props.drawsState.getStaticDrawsData;
 
@@ -215,8 +220,14 @@ class CompetitionDrawEditOld extends Component {
 
         var customSourceObject = null
         var customTargetObject = null
+        console.log("Source===", source)
+        console.log("Target===", target)
+        // console.log("Source",sourceObejct)
+        // console.log("Target",targetObject)
 
         // if (targetObject.drawsId !== sourceObejct.drawsId) {
+        //     console.log('called207')
+
         //     if (sourceZIndex == 0) {
         //         if (targetZIndex == 0) {
         //             customSourceObject = {
@@ -235,6 +246,7 @@ class CompetitionDrawEditOld extends Component {
         //                 isLocked: 1
         //             };
         //         }
+
         //     } else {
         //         if (targetZIndex == 0) {
         //             customSourceObject = {
@@ -253,6 +265,7 @@ class CompetitionDrawEditOld extends Component {
         //                 isLocked: 1
         //             };
         //         }
+
         //     }
         //     if (targetZIndex == 0) {
         //         if (sourceZIndex == 0) {
@@ -315,6 +328,8 @@ class CompetitionDrawEditOld extends Component {
                 draws: [customSourceObject, customTargetObject]
             };
 
+
+
             this.props.updateCompetitionDraws(
                 postObject,
                 sourceIndexArray,
@@ -327,6 +342,7 @@ class CompetitionDrawEditOld extends Component {
     }
 
     saveAPIsActionCall() {
+        console.log('called')
         if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error(ValidationConstants.pleaseSelectCompetition)
@@ -439,7 +455,7 @@ class CompetitionDrawEditOld extends Component {
                         <div className="reg-filter-col-cont"  >
                             <span className="year-select-heading">
                                 {AppConstants.competition}:
-                            </span>
+            </span>
                             <Select
                                 name={'competition'}
                                 className="year-select reg-filter-select1 ml-2"
@@ -475,7 +491,7 @@ class CompetitionDrawEditOld extends Component {
                     >
                         <span className="year-select-heading">
                             {AppConstants.division}:
-                        </span>
+            </span>
                         <Select
                             style={{ minWidth: 160 }}
                             name={'competition'}
@@ -535,6 +551,7 @@ class CompetitionDrawEditOld extends Component {
 
     ////////form content view
     contentView = () => {
+
         return (
             <div className="comp-draw-content-view">
                 <div className="row comp-draw-list-top-head">
@@ -552,7 +569,7 @@ class CompetitionDrawEditOld extends Component {
                                 >
                                     <span className="year-select-heading">
                                         {AppConstants.venue}:
-                                    </span>
+                  </span>
                                     <Select
                                         className="year-select"
                                         placeholder="Select"
@@ -582,7 +599,7 @@ class CompetitionDrawEditOld extends Component {
                                 >
                                     <span className="year-select-heading">
                                         {AppConstants.round}:
-                                    </span>
+                  </span>
                                     <Select
                                         className="year-select"
                                         style={{ minWidth: 100 }}
@@ -711,7 +728,7 @@ class CompetitionDrawEditOld extends Component {
                                                     <span
                                                         className={'border huge-border'}
                                                         style={{ top: topMargin, left: leftMargin }}
-                                                    />
+                                                    ></span>
                                                     <div
                                                         className={
                                                             'small-undraggable-box'
@@ -732,7 +749,7 @@ class CompetitionDrawEditOld extends Component {
                                                             top: topMarginHomeTeam,
                                                             left: leftMargin
                                                         }}
-                                                    />
+                                                    ></span>
                                                     <div
                                                         className={
                                                             'box purple-box' + ' purple-bg'
@@ -762,7 +779,7 @@ class CompetitionDrawEditOld extends Component {
                                                     <span
                                                         className={'border'}
                                                         style={{ top: topMarginAwayTeam, left: leftMargin }}
-                                                    />
+                                                    ></span>
                                                     <div
                                                         className={
                                                             'box purple-box ' +
@@ -840,7 +857,6 @@ class CompetitionDrawEditOld extends Component {
             </div>
         );
     };
-
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
@@ -868,7 +884,6 @@ class CompetitionDrawEditOld extends Component {
         );
     }
 }
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
@@ -887,15 +902,14 @@ function mapDispatchToProps(dispatch) {
     );
 }
 
-function mapStateToProps(state) {
+function mapStatetoProps(state) {
     return {
         appState: state.AppState,
         drawsState: state.CompetitionDrawsState,
         competitionModuleState: state.CompetitionModuleState
     };
 }
-
 export default connect(
-    mapStateToProps,
+    mapStatetoProps,
     mapDispatchToProps
-)(CompetitionDrawEditOld);
+)(Form.create()(CompetitionDrawEditOld));
