@@ -94,10 +94,9 @@ class LiveScoreAddTeam extends Component {
 
     componentDidUpdate(nextProps) {
         let { teamManagerData } = this.props.liveScoreTeamState
-
         if (this.state.isEdit == true) {
             if (nextProps.liveScoreTeamState !== this.props.liveScoreTeamState) {
-                if (this.props.liveScoreTeamState.onLoad == false && this.state.load == true) {
+                if (this.props.liveScoreTeamState.teamLoad == false && this.state.load == true) {
                     this.setInitalFiledValue(teamManagerData)
                     this.setState({ load: false })
                 }
@@ -211,7 +210,7 @@ class LiveScoreAddTeam extends Component {
                 <span className="form-err">{this.state.teanmNameError}</span>
 
                 <InputWithHead heading={AppConstants.teamLogo}
-                 required={"pt-3"} />
+                    required={"pt-3"} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
