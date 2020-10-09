@@ -883,7 +883,7 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    liveScoreAttendanceList(competitionId, payload, select_status, divisionId, roundId) {
+    liveScoreAttendanceList(competitionId, payload, select_status) {
         let url
         const body =
         {
@@ -898,12 +898,6 @@ let LiveScoreAxiosApi = {
         }
         if (payload.sortBy && payload.sortOrder) {
             url += `&sortBy=${payload.sortBy}&sortOrder=${payload.sortOrder}`;
-        }
-        if (divisionId) {
-            url += `&divisionId=${divisionId}`
-        }
-        if (roundId) {
-            url += `&roundIds=${roundId}`
         }
         return Method.dataPost(url, token, body)
     },

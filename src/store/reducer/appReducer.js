@@ -35,7 +35,6 @@ const initialState = {
   selectedYear: 1,
   own_YearArr: [],
   own_CompetitionArr: [],
-  all_own_CompetitionArr: [],
   participate_CompetitionArr: [],
   participate_YearArr: [],
   searchVenueList: [],
@@ -420,12 +419,10 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_OWN_COMPETITION_SUCCESS:
-      console.log(action.competetionListResult)
       return {
         ...state,
         onLoad: false,
-        own_CompetitionArr: action.competetionListResult.published,
-        all_own_CompetitionArr: action.competetionListResult.all,
+        own_CompetitionArr: action.competetionListResult,
         own_YearArr: action.yearList,
         status: action.status,
       };
@@ -489,11 +486,9 @@ function appState(state = initialState, action) {
       else if (action.key == "all") {
         state.participate_CompetitionArr = []
         state.own_CompetitionArr = []
-        state.all_own_CompetitionArr = []
       }
       else {
         state.own_CompetitionArr = []
-        state.all_own_CompetitionArr = []
       }
       return { ...state }
 

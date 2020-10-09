@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Layout, Button, Table, Select, Menu, Icon, Pagination, message } from "antd";
+import { Input, Layout, Button, Table, Select, Menu, Pagination, message } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
@@ -10,10 +11,9 @@ import ValidationConstants from "themes/validationConstant";
 import { entityTypes } from "util/entityTypes";
 import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
-import { refRoleTypes } from "util/refRoles";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
-import { umpireMainListAction } from "store/actions/umpireAction/umpireAction";
+import { umpireListAction } from "store/actions/umpireAction/umpireAction";
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
@@ -53,10 +53,7 @@ function checkUmpireUserRoll(rolesArr, key) {
         }
     }
     return isUmpire
-
 }
-
-
 
 function tableSort(key) {
     let sortBy = key;
@@ -70,14 +67,13 @@ function tableSort(key) {
     }
 
     this_obj.setState({ sortBy, sortOrder });
-    this_obj.props.umpireMainListAction({
+    this_obj.props.umpireListAction({
         refRoleId: JSON.stringify([15, 20]),
         entityTypes: entityTypes("COMPETITION"),
         compId: this_obj.state.selectedComp,
         offset: this_obj.state.offsetData,
         sortBy,
         sortOrder,
-        userName: this_obj.state.searchText
     })
 }
 
@@ -229,36 +225,18 @@ class Umpire extends Component {
             competitionUniqueKey: null,
             compArray: [],
             offsetData: 0,
-            sortBy: null,
-            sortOrder: null
-
         };
 
         this_obj = this;
     }
 
-    async  componentDidMount() {
-
-        const { umpireListActionObject } = this.props.umpireState
-        let sortBy = this.state.sortBy
-        let sortOrder = this.state.sortOrder
-        if (umpireListActionObject) {
-            let offsetData = umpireListActionObject.offset
-            let searchText = umpireListActionObject.userName ? umpireListActionObject.userName : ""
-            sortBy = umpireListActionObject.sortBy
-            sortOrder = umpireListActionObject.sortOrder
-            await this.setState({ sortBy, sortOrder, offsetData, searchText })
-        }
-
+    componentDidMount() {
         let { organisationId } = JSON.parse(localStorage.getItem("setOrganisationData"));
         this.setState({ loading: true });
         this.props.umpireCompetitionListAction(null, null, organisationId, "USERS");
     }
 
     componentDidUpdate(nextProps) {
-
-
-
         const { sortBy, sortOrder } = this.state;
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
             if (this.state.loading === true && this.props.umpireCompetitionState.onLoad === false) {
@@ -285,17 +263,14 @@ class Umpire extends Component {
                 }
 
                 let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
-                let sortBy = this.state.sortBy
-                let sortOrder = this.state.sortOrder
                 if (firstComp !== false) {
-                    this.props.umpireMainListAction({
+                    this.props.umpireListAction({
                         refRoleId: JSON.stringify([15, 20]),
                         entityTypes: entityTypes("COMPETITION"),
                         compId: firstComp,
-                        offset: this.state.offsetData,
+                        offset: 0,
                         sortBy,
                         sortOrder,
-                        userName: this.state.searchText,
                     });
                     this.setState({
                         selectedComp: firstComp,
@@ -330,20 +305,19 @@ class Umpire extends Component {
             offsetData: offset,
         });
 
-        this.props.umpireMainListAction({
+        this.props.umpireListAction({
             refRoleId: JSON.stringify([15, 20]),
             entityTypes: entityTypes("COMPETITION"),
             compId: this.state.selectedComp,
             offset,
             sortBy,
             sortOrder,
-            userName: this.state.searchText,
         });
     };
 
     contentView = () => {
-        const { umpireList_Data, totalCount_Data, currentPage_Data } = this.props.umpireState;
-        let umpireListResult = isArrayNotEmpty(umpireList_Data) ? umpireList_Data : [];
+        const { umpireList, totalCount, currentPage } = this.props.umpireState;
+        let umpireListResult = isArrayNotEmpty(umpireList) ? umpireList : [];
         return (
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
@@ -372,8 +346,8 @@ class Umpire extends Component {
                     <div className="d-flex justify-content-end">
                         <Pagination
                             className="antd-pagination"
-                            current={currentPage_Data}
-                            total={totalCount_Data}
+                            current={currentPage}
+                            total={totalCount}
                             // defaultPageSize={10}
                             onChange={this.handlePageChange}
                         />
@@ -401,14 +375,13 @@ class Umpire extends Component {
 
         let compKey = compID.competitionUniqueKey;
 
-        this.props.umpireMainListAction({
+        this.props.umpireListAction({
             refRoleId: JSON.stringify([15, 20]),
             entityTypes: entityTypes("COMPETITION"),
             compId: selectedComp,
             offset: 0,
             sortBy,
             sortOrder,
-            userName: this.state.searchText,
         });
 
         this.setState({ selectedComp, competitionUniqueKey: compKey });
@@ -420,7 +393,7 @@ class Umpire extends Component {
 
         const { sortBy, sortOrder } = this.state;
         if (e.target.value === null || e.target.value === "") {
-            this.props.umpireMainListAction({
+            this.props.umpireListAction({
                 refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
@@ -438,7 +411,7 @@ class Umpire extends Component {
         const { sortBy, sortOrder } = this.state;
         const code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
-            this.props.umpireMainListAction({
+            this.props.umpireListAction({
                 refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
@@ -456,7 +429,7 @@ class Umpire extends Component {
         const { sortBy, sortOrder } = this.state;
         if (this.state.searchText === null || this.state.searchText === "") {
         } else {
-            this.props.umpireMainListAction({
+            this.props.umpireListAction({
                 refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
                 compId: this.state.selectedComp,
@@ -611,10 +584,8 @@ class Umpire extends Component {
                                 onChange={this.onChangeSearchText}
                                 placeholder="Search..."
                                 onKeyPress={this.onKeyEnterSearchText}
-                                value={this.state.searchText}
                                 prefix={
-                                    <Icon
-                                        type="search"
+                                    <SearchOutlined
                                         style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                         onClick={this.onClickSearchIcon}
                                     />
@@ -651,7 +622,7 @@ class Umpire extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
-        umpireMainListAction,
+        umpireListAction,
         userExportFilesAction,
     }, dispatch);
 }

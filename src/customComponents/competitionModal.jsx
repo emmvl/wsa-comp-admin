@@ -1,9 +1,10 @@
 import React from 'react';
 import { Modal, DatePicker, Form, Button } from 'antd';
-import InputWithHead from "./InputWithHead"
-import AppConstants from "../themes/appConstants"
+
+import AppConstants from "../themes/appConstants";
 import ValidationConstants from '../themes/validationConstant';
-import { captializedString } from "../util/helpers"
+import { captializedString } from "../util/helpers";
+import InputWithHead from "./InputWithHead";
 
 class CompetitionModal extends React.Component {
     constructor(props) {
@@ -12,6 +13,7 @@ class CompetitionModal extends React.Component {
             competitionState: true,
             buttonClicked: ""
         }
+        this.formRef = React.createRef();
     }
 
     componentDidUpdate() {
@@ -25,28 +27,23 @@ class CompetitionModal extends React.Component {
     }
 
     setFieldValues = () => {
-        this.props.form.setFieldsValue({
-            compName: this.props.competitionName,
-            date: this.props.selectedDate
-        })
+        if (this.formRef.current) {
+            this.formRef.current.setFieldsValue({
+                compName: this.props.competitionName,
+                date: this.props.selectedDate
+            });
+        }
     }
 
-    onOKsubmit = (e) => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                console.log(this.state.buttonClicked)
-                if (this.state.buttonClicked == "save") {
-                    this.props.handleOK()
-                }
-                else {
-                    this.props.handleCompetitionNext()
-                }
-            }
-        })
+    onOKsubmit = (values) => {
+        if (this.state.buttonClicked == "save") {
+            this.props.handleOK()
+        } else {
+            this.props.handleCompetitionNext()
+        }
     }
+
     render() {
-        const { getFieldDecorator } = this.props.form;
         const { modalTitle, handleOK, onCancel, competitionChange, updateDate, onCompetitionBack, selectedDate, handleCompetitionNext } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
@@ -58,36 +55,31 @@ class CompetitionModal extends React.Component {
                     onOk={handleOK}
                     onCancel={onCancel}
                     footer={
-                        <div style={{ display: "none" }}
-                        />
+                        <div style={{ display: "none" }} />
                     }
                 >
                     <Form
+                        ref={this.formRef}
                         autoComplete="off"
-                        onSubmit={this.onOKsubmit}
-                        noValidate="noValidate">
-
+                        onFinish={this.onOKsubmit}
+                        onFinishFailed={({errorFields}) => this.formRef.current.scrollToField(errorFields[0].name)}
+                        noValidate="noValidate"
+                    >
                         {/* <div style={{ display: 'flex' }}>
                             < span style={{ fontSize: 16 }} className={`comment-heading`}>{'"Enter competition Name"'} {" "} {'or'}{" "}   {'Select an existing competition'}   </span>
                         </div> */}
                         <div className="inside-container-view mt-3">
-                            < div className="col-sm pl-0 pb-2">
-                                <Form.Item
-                                >
-                                    {getFieldDecorator(`compName`, {
-                                        rules: [{ required: true, message: ValidationConstants.competitionNameIsRequired },
-                                        ],
-                                    })(
-                                        <InputWithHead
-                                            required={"required-field pt-0"}
-                                            heading={AppConstants.competition_name}
-                                            placeholder={"Enter competition Name"}
-                                            onChange={(e) => competitionChange(e)}
-                                            onBlur={(i) => this.props.form.setFieldsValue({
-                                                'compName': captializedString(i.target.value)
-                                            })}
-                                        ></InputWithHead>
-                                    )}
+                            <div className="col-sm pl-0 pb-2">
+                                <Form.Item name='compName' rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}>
+                                    <InputWithHead
+                                        required={"required-field pt-0"}
+                                        heading={AppConstants.competition_name}
+                                        placeholder={"Enter competition Name"}
+                                        onChange={(e) => competitionChange(e)}
+                                        onBlur={(i) => this.formRef.current.setFieldsValue({
+                                            'compName': captializedString(i.target.value)
+                                        })}
+                                    />
                                 </Form.Item>
                             </div>
                             <div className="col-sm pl-0 pb-2">
@@ -95,21 +87,15 @@ class CompetitionModal extends React.Component {
                                     required={"required-field"}
                                     heading={AppConstants.competitionStartDate}
                                 />
-                                <Form.Item
-                                >
-                                    {getFieldDecorator(`date`, {
-                                        rules: [{ required: true, message: ValidationConstants.dateField },
-                                        ],
-                                    })(
-                                        <DatePicker
-                                            size="large"
-                                            style={{ width: "100%" }}
-                                            onChange={date => updateDate(date)}
-                                            format={"DD-MM-YYYY"}
-                                            placeholder={"dd-mm-yyyy"}
-                                            showTime={false}
-                                        />
-                                    )}
+                                <Form.Item name='date' rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                                    <DatePicker
+                                        size="large"
+                                        style={{ width: "100%" }}
+                                        onChange={date => updateDate(date)}
+                                        format={"DD-MM-YYYY"}
+                                        placeholder={"dd-mm-yyyy"}
+                                        showTime={false}
+                                    />
                                 </Form.Item>
                             </div>
                         </div>
@@ -117,8 +103,7 @@ class CompetitionModal extends React.Component {
                             <div className="col-sm" style={{ display: "flex", width: "100%", paddingTop: 10 }}>
                                 <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
                                     {/* <Button onClick={() => this.props.addVenueAction(venuData)} className="open-reg-button" type="primary"> */}
-                                    <Button className="cancelBtnWidth" type="cancel-button" onClick={onCancel} style={{ marginRight: '20px' }}
-                                    >
+                                    <Button className="cancelBtnWidth" type="cancel-button" onClick={onCancel} style={{ marginRight: '20px' }}>
                                         {AppConstants.back}
                                     </Button>
                                 </div>
@@ -133,11 +118,10 @@ class CompetitionModal extends React.Component {
                             </div>
                         </div>
                     </Form>
-                </Modal >
-            </div >
+                </Modal>
+            </div>
         )
     }
 }
 
-
-export default (Form.create()(CompetitionModal));
+export default CompetitionModal;

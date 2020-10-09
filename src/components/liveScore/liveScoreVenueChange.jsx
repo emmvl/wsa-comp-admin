@@ -16,7 +16,12 @@ import './liveScore.css';
 import moment from "moment";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { liveScoreUpdateVenueChange, searchCourtList, clearFilter, onChangeVenueSaveAction } from '../../store/actions/LiveScoreAction/liveScoreVenueChamgeAction'
+import {
+    liveScoreUpdateVenueChange,
+    searchCourtList,
+    clearFilter,
+    onChangeVenueSaveAction
+} from '../../store/actions/LiveScoreAction/liveScoreVenueChamgeAction'
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton } from '../../util/sessionStorage'
 import { getCompetitionVenuesList } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
@@ -36,6 +41,7 @@ class LiveScoreVenueChange extends Component {
             comptitionId: null,
             saveLoad: false
         };
+        this.formRef = React.createRef();
     }
 
     componentDidMount() {
@@ -50,7 +56,6 @@ class LiveScoreVenueChange extends Component {
         } else {
             history.push('/liveScoreCompetitions')
         }
-
     }
 
     componentDidUpdate(nextProps) {
@@ -63,7 +68,7 @@ class LiveScoreVenueChange extends Component {
     }
 
     setInitialValues() {
-        this.props.form.setFieldsValue({
+        this.formRef.current.setFieldsValue({
             'changeMatchDate': "",
             'startTime': "",
             'endDate': "",
@@ -74,7 +79,6 @@ class LiveScoreVenueChange extends Component {
             'venueTo': []
         })
     }
-
 
     ///////view for breadcrumb
     headerView = () => {
@@ -98,14 +102,12 @@ class LiveScoreVenueChange extends Component {
         );
     };
 
-
-
     ////////form content view
-    contentView = (getFieldDecorator) => {
+    contentView = () => {
         return (
             <div className="content-view pt-4">
                 {/* <span className='text-heading-large' >{AppConstants.whatDoWantDO}</span> */}
-                {this.venueChangeView(getFieldDecorator)}
+                {this.venueChangeView()}
             </div>
         );
     };
@@ -115,7 +117,6 @@ class LiveScoreVenueChange extends Component {
             return memo.name.toLowerCase().indexOf(value.toLowerCase()) > -1
         })
         this.props.searchCourtList(filteredData, key)
-
     };
 
     onSearchVenue(searchValue) {
@@ -126,21 +127,20 @@ class LiveScoreVenueChange extends Component {
 
     onChangeVenue(venueId) {
         this.props.liveScoreUpdateVenueChange(venueId, "venueId")
-        this.props.form.setFieldsValue({
+        this.formRef.current.setFieldsValue({
             'courts': [],
         })
     }
 
     onChangeToVenue(venueId) {
         this.props.liveScoreUpdateVenueChange(venueId, "changeToVenueId")
-        this.props.form.setFieldsValue({
+        this.formRef.current.setFieldsValue({
             'courtTo': [],
         })
     }
 
-
     ////this method called after slecting Venue Change option from drop down
-    venueChangeView(getFieldDecorator) {
+    venueChangeView() {
         const { venueChangeData, venueData, courtData, mainCourtList } = this.props.liveScoreVenueChangeState
         let venueList = isArrayNotEmpty(venueData) ? venueData : []
         let courtList = isArrayNotEmpty(courtData) ? courtData : []
@@ -148,52 +148,41 @@ class LiveScoreVenueChange extends Component {
             <div>
                 {/* start time date and time picker row */}
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span className='text-heading-large mt-0 mb-0' >{AppConstants.changeMatchCriteria}</span>
+                    <span className='text-heading-large mt-0 mb-0'>{AppConstants.changeMatchCriteria}</span>
                     <Tooltip background='#ff8237'>
                         <span>{AppConstants.courtChangeMsg}</span>
                     </Tooltip>
                 </div>
 
                 <div className="fluid-width CornerView">
-
                     <div className="row">
-
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead required={"required-field"} heading={AppConstants.startDate} />
-                            <Form.Item>
-                                {getFieldDecorator("changeMatchDate", {
-                                    rules: [{ required: true, message: ValidationConstants.dateField }],
-                                })(
-                                    <DatePicker
-                                        size="large"
-                                        style={{ width: "100%" }}
-                                        format={"DD-MM-YYYY"}
-                                        placeholder={"dd-mm-yyyy"}
-                                        showTime={false}
-                                        onChange={(startDate) => this.props.liveScoreUpdateVenueChange(startDate, "startDate")}
+                            <Form.Item name='changeMatchDate' rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                                <DatePicker
+                                    size="large"
+                                    style={{ width: "100%" }}
+                                    format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
+                                    showTime={false}
+                                    onChange={(startDate) => this.props.liveScoreUpdateVenueChange(startDate, "startDate")}
                                     // value={venueChangeData.startDate}
-
-                                    />
-                                )}
+                                />
                             </Form.Item>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead required={"required-field"} heading={AppConstants.startTime} />
-                            <Form.Item>
-                                {getFieldDecorator("startTime", {
-                                    rules: [{ required: true, message: ValidationConstants.timeField }],
-                                })(
-                                    <TimePicker
-                                        className="comp-venue-time-timepicker"
-                                        style={{ width: "100%" }}
-                                        defaultOpenValue={moment("00:00", "hh:mm")}
-                                        format={"hh:mm"}
-                                        use12Hours={false}
-                                        placeholder={"Select Time"}
-                                        onChange={(startTime) => this.props.liveScoreUpdateVenueChange(startTime, "startTime")}
+                            <InputWithHead required={"required-field"} heading={AppConstants.startTime}/>
+                            <Form.Item name='startTime' rules={[{ required: true, message: ValidationConstants.timeField }]}>
+                                <TimePicker
+                                    className="comp-venue-time-timepicker"
+                                    style={{ width: "100%" }}
+                                    defaultOpenValue={moment("00:00", "hh:mm")}
+                                    format={"hh:mm"}
+                                    use12Hours={false}
+                                    placeholder={"Select Time"}
+                                    onChange={(startTime) => this.props.liveScoreUpdateVenueChange(startTime, "startTime")}
                                     // value={venueChangeData.startTime}
-                                    />
-                                )}
+                                />
                             </Form.Item>
                         </div>
                     </div>
@@ -205,39 +194,31 @@ class LiveScoreVenueChange extends Component {
                     <div className="row">
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead required={"required-field"} heading={AppConstants.endDate} />
-                            <Form.Item>
-                                {getFieldDecorator("endDate", {
-                                    rules: [{ required: true, message: ValidationConstants.dateField }],
-                                })(
-                                    <DatePicker
-                                        size="large"
-                                        style={{ width: "100%" }}
-                                        format={"DD-MM-YYYY"}
-                                        placeholder={"dd-mm-yyyy"}
-                                        showTime={false}
-                                        name={'registrationOepn'}
-                                        onChange={(endDate) => this.props.liveScoreUpdateVenueChange(endDate, "endDate")}
+                            <Form.Item name='endDate' rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                                <DatePicker
+                                    size="large"
+                                    style={{ width: "100%" }}
+                                    format={"DD-MM-YYYY"}
+                                    placeholder={"dd-mm-yyyy"}
+                                    showTime={false}
+                                    name={'registrationOepn'}
+                                    onChange={(endDate) => this.props.liveScoreUpdateVenueChange(endDate, "endDate")}
                                     // value={venueChangeData.endDate}
-                                    />
-                                )}
+                                />
                             </Form.Item>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <InputWithHead required={"required-field"} heading={AppConstants.endTime} />
-                            <Form.Item>
-                                {getFieldDecorator("endTime", {
-                                    rules: [{ required: true, message: ValidationConstants.timeField }],
-                                })(
-                                    <TimePicker
-                                        className="comp-venue-time-timepicker"
-                                        style={{ width: "100%" }}
-                                        defaultOpenValue={moment("00:00", "HH:mm")}
-                                        format={"HH:mm"}
-                                        placeholder={"Select Time"}
-                                        onChange={(endTime) => this.props.liveScoreUpdateVenueChange(endTime, "endTime")}
+                            <Form.Item name='endTime' rules={[{ required: true, message: ValidationConstants.timeField }]}>
+                                <TimePicker
+                                    className="comp-venue-time-timepicker"
+                                    style={{ width: "100%" }}
+                                    defaultOpenValue={moment("00:00", "HH:mm")}
+                                    format={"HH:mm"}
+                                    placeholder={"Select Time"}
+                                    onChange={(endTime) => this.props.liveScoreUpdateVenueChange(endTime, "endTime")}
                                     // value={venueChangeData.endTime}
-                                    />
-                                )}
+                                />
                             </Form.Item>
                         </div>
                     </div>
@@ -246,145 +227,120 @@ class LiveScoreVenueChange extends Component {
                 {/* venue drop down view */}
                 <InputWithHead required={"required-field"} heading={AppConstants.venue} />
                 <div>
-                    <Form.Item>
-                        {getFieldDecorator("venues", {
-                            rules: [{ required: true, message: ValidationConstants.venueField }],
-                        })(
-                            <Select
-                                showSearch
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                placeholder={AppConstants.selectVenue}
-                                onChange={(venueId) => this.onChangeVenue(venueId)}
-                                // value={venueChangeData.venueId}
-                                optionFilterProp="children"
-                                onSearch={(e) => this.onSearchVenue(e)}>
-
-                                {venueList.map((item) => {
-                                    return (
-                                        <Option key={'venue' + item.id}
-                                            value={item.venueId}>
-                                            {item.venueName}
-
-                                        </Option>
-                                    )
-                                })}
-
-                            </Select>
-                        )}
-                    </Form.Item>
-
-                </div>
-
-                {/* court drop down view */}
-                <InputWithHead required={"required-field pb-0"} heading={AppConstants.court} />
-                <Form.Item className="form-conr space">
-                    {getFieldDecorator("courts", {
-                        rules: [{ required: true, message: ValidationConstants.court }],
-                    })(
+                    <Form.Item name='venues' rules={[{ required: true, message: ValidationConstants.venueField }]}>
                         <Select
-                            mode='multiple'
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, paddingTop: 0, marginTop: 0 }}
-                            placeholder={AppConstants.selectCourt}
-                            onChange={(courtId) => {
-                                this.props.liveScoreUpdateVenueChange(courtId, "courtId")
-                                this.props.clearFilter('court_1')
-                            }}
-                            // value={venueChangeData.courtId}
-                            onSearch={(value) => { this.handleSearch(value, mainCourtList, 'court_1') }}
-                            filterOption={false}
+                            showSearch
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            placeholder={AppConstants.selectVenue}
+                            onChange={(venueId) => this.onChangeVenue(venueId)}
+                            // value={venueChangeData.venueId}
+                            optionFilterProp="children"
+                            onSearch={(e) => this.onSearchVenue(e)}
                         >
-                            {courtList.map((item) => {
+                            {venueList.map((item) => {
                                 return (
-                                    <Option key={'court' + item.venueCourtId}
-                                        value={item.venueCourtId}>
-                                        {item.name}
+                                    <Option key={'venue' + item.id} value={item.venueId}>
+                                        {item.venueName}
                                     </Option>
                                 )
                             })}
                         </Select>
-                    )}
-                </Form.Item>
+                    </Form.Item>
+                </div>
 
+                {/* court drop down view */}
+                <InputWithHead required={"required-field pb-0"} heading={AppConstants.court}/>
+                <Form.Item name='courts' rules={[{ required: true, message: ValidationConstants.court }]} className="form-conr space">
+                    <Select
+                        mode='multiple'
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182, paddingTop: 0, marginTop: 0 }}
+                        placeholder={AppConstants.selectCourt}
+                        onChange={(courtId) => {
+                            this.props.liveScoreUpdateVenueChange(courtId, "courtId")
+                            this.props.clearFilter('court_1')
+                        }}
+                        // value={venueChangeData.courtId}
+                        onSearch={(value) => {
+                            this.handleSearch(value, mainCourtList, 'court_1')
+                        }}
+                        filterOption={false}
+                    >
+                        {courtList.map((item) => {
+                            return (
+                                <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
+                                    {item.name}
+                                </Option>
+                            )
+                        })}
+                    </Select>
+                </Form.Item>
             </div>
         )
     }
 
-    changeToView(getFieldDecorator) {
+    changeToView() {
         const { venueChangeData, venueData, courtDataForChange, mainCourtList } = this.props.liveScoreVenueChangeState
         let venueList = isArrayNotEmpty(venueData) ? venueData : []
         let courtList = isArrayNotEmpty(courtDataForChange) ? courtDataForChange : []
 
         return (
             <div className="content-view mt-5">
-
                 {/* venue drop down view */}
-                <span className='text-heading-large' >{'Change To'}</span>
+                <span className='text-heading-large'>{'Change To'}</span>
                 <InputWithHead required={"required-field"} heading={AppConstants.venue} />
                 <div>
-                    <Form.Item>
-                        {getFieldDecorator("venueTo", {
-                            rules: [{ required: true, message: ValidationConstants.venueField }],
-                        })(
-                            <Select
-                                showSearch
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                placeholder={AppConstants.selectVenue}
-                                onChange={(venueId) => this.onChangeToVenue(venueId)}
-                                // value={venueChangeData.changeToVenueId}
-                                optionFilterProp="children"
-                                onSearch={(e) => this.onSearchVenue(e)}>
-                                {venueList.map((item) => {
-                                    return (
-                                        <Option key={'venue' + item.id}
-                                            value={item.venueId}>
-                                            {item.venueName}
-                                        </Option>
-                                    )
-                                })}
-
-                            </Select>
-                        )}
+                    <Form.Item name='venueTo' rules={[{ required: true, message: ValidationConstants.venueField }]}>
+                        <Select
+                            showSearch
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            placeholder={AppConstants.selectVenue}
+                            onChange={(venueId) => this.onChangeToVenue(venueId)}
+                            // value={venueChangeData.changeToVenueId}
+                            optionFilterProp="children"
+                            onSearch={(e) => this.onSearchVenue(e)}
+                        >
+                            {venueList.map((item) => {
+                                return (
+                                    <Option key={'venue' + item.id} value={item.venueId}>
+                                        {item.venueName}
+                                    </Option>
+                                )
+                            })}
+                        </Select>
                     </Form.Item>
-
                 </div>
 
                 {/* court drop down view */}
                 <InputWithHead required={"required-field"} heading={AppConstants.court} />
                 <div>
-                    <Form.Item>
-                        {getFieldDecorator("courtTo", {
-                            rules: [{ required: true, message: ValidationConstants.court }],
-                        })(
-                            <Select
-                                // mode='multiple'
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                placeholder={AppConstants.selectCourt}
-                                onChange={(courtId) => {
-                                    this.props.liveScoreUpdateVenueChange(courtId, "changeToCourtId")
-                                    this.props.clearFilter('court_2')
-                                }}
-                                // value={venueChangeData.changeToCourtId}
-                                onSearch={(value) => { this.handleSearch(value, mainCourtList, 'court_2') }}
-                                filterOption={false}
-                            >
-                                {courtList.map((item) => {
-                                    return (
-                                        <Option key={'court' + item.venueCourtId}
-                                            value={item.venueCourtId}>
-                                            {item.name}
-                                        </Option>
-                                    )
-                                })}
-                            </Select>
-                        )}
+                    <Form.Item name='courtTo' rules={[{ required: true, message: ValidationConstants.court }]}>
+                        <Select
+                            // mode='multiple'
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            placeholder={AppConstants.selectCourt}
+                            onChange={(courtId) => {
+                                this.props.liveScoreUpdateVenueChange(courtId, "changeToCourtId")
+                                this.props.clearFilter('court_2')
+                            }}
+                            // value={venueChangeData.changeToCourtId}
+                            onSearch={(value) => {
+                                this.handleSearch(value, mainCourtList, 'court_2')
+                            }}
+                            filterOption={false}
+                        >
+                            {courtList.map((item) => {
+                                return (
+                                    <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
+                                        {item.name}
+                                    </Option>
+                                )
+                            })}
+                        </Select>
                     </Form.Item>
                 </div>
-
             </div>
         )
     }
-
-
 
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
@@ -394,7 +350,9 @@ class LiveScoreVenueChange extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button className="cancelBtnWidth" onClick={() => history.push('/liveScoreDashboard')} type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button className="cancelBtnWidth" onClick={() => history.push('/liveScoreDashboard')} type="cancel-button">
+                                    {AppConstants.cancel}
+                                </Button>
                             </div>
                         </div>
                         <div className="col-sm">
@@ -410,7 +368,6 @@ class LiveScoreVenueChange extends Component {
         );
     };
 
-
     date_formate(date, time) {
         let startDate = moment(date).format("YYYY-MMM-DD")
         let startTime = moment(time).format("HH:mm")
@@ -419,41 +376,36 @@ class LiveScoreVenueChange extends Component {
         return formatedStartDate
     }
 
-
     handleSubmit = e => {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-
-                let details = this.props.liveScoreVenueChangeState.venueChangeData
-                let startDateTime = this.date_formate(details.startDate, details.startTime)
-                let endDateTime = this.date_formate(details.endDate, details.endTime)
-                this.props.onChangeVenueSaveAction(details, startDateTime, endDateTime, this.state.comptitionId)
-                this.setState({ saveLoad: true })
-
-            }
-        })
+        let details = this.props.liveScoreVenueChangeState.venueChangeData
+        let startDateTime = this.date_formate(details.startDate, details.startTime)
+        let endDateTime = this.date_formate(details.endDate, details.endTime)
+        this.props.onChangeVenueSaveAction(details, startDateTime, endDateTime, this.state.comptitionId)
+        this.setState({ saveLoad: true })
     }
-
 
     /////main render method
     render() {
-        const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width">
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout
+                    menuHeading={AppConstants.liveScores}
+                    menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"13"} />
                 <Layout>
                     <Loader visible={this.props.liveScoreVenueChangeState.onLoad} />
                     {this.headerView()}
                     <Form
-                        onSubmit={this.handleSubmit}
+                        ref={this.formRef}
+                        onFinish={this.handleSubmit}
                         noValidate="noValidate">
                         <Content>
-                            <div className="formView">{this.contentView(getFieldDecorator)}</div>
-                            <div className="formView">{this.changeToView(getFieldDecorator)}</div>
+                            <div className="formView">{this.contentView()}</div>
+                            <div className="formView">{this.changeToView()}</div>
                         </Content>
-                        <Footer >{this.footerView()}</Footer>
+                        <Footer>{this.footerView()}</Footer>
                     </Form>
                 </Layout>
 
@@ -467,6 +419,7 @@ class LiveScoreVenueChange extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         liveScoreUpdateVenueChange,
@@ -476,12 +429,11 @@ function mapDispatchToProps(dispatch) {
         onChangeVenueSaveAction
     }, dispatch)
 }
-function mapStatetoProps(state) {
+
+function mapStateToProps(state) {
     return {
         liveScoreVenueChangeState: state.LiveScoreVenueChangeState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreVenueChange));
 
-
-
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreVenueChange);

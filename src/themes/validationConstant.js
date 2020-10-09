@@ -228,6 +228,7 @@ const ValidationConstants = {
     newYearFieldIsRequired: "New year field is required",
     competitionStartEndDateIsRequired: "Competition Start and End date is requied",
     playerTypeRequired: "Please select the player type",
+    pleaseSelectePaymentMethods: "Please select payment methods",
     newMembershipDuplicteError: "Membership product is not same as another product you have selected"
 };
 

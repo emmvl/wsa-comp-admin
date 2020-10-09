@@ -4,10 +4,11 @@ import ApiConstants from '../../../themes/apiConstants';
 import { message } from "antd";
 import history from "../../../util/history";
 import CommonAxiosApi from "../../http/commonHttp/commonAxiosApi";
-import { setUmpireCompitionData, getLiveScoreUmpireCompitionData, setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData } from '../../../util/sessionStorage'
+import { setUmpireCompitionData, getLiveScoreUmpireCompitionData } from '../../../util/sessionStorage'
 
 export function* liveScoreSettingSaga({ payload }) {
     try {
+
         const result = yield call(LiveScoreAxiosApi.liveScoreSettingView, payload)
         if (result.status === 1) {
             yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_SUCCESS, payload: result.result.data })
@@ -28,33 +29,24 @@ export function* liveScoreSettingSaga({ payload }) {
 
 export function* liveScorePostSaga({ payload }) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreSettingPost, payload)
 
-        if (payload.screenName == 'umpireDashboard') {
+        const result = yield call(LiveScoreAxiosApi.liveScoreSettingPost, payload)
+        if (payload.screenName === 'umpireDashboard') {
             setUmpireCompitionData(JSON.stringify(result.result.data))
         } else {
             localStorage.setItem("LiveScoreCompetition", JSON.stringify(result.result.data))
-            if (getLiveScoreUmpireCompitionData()) {
-                const { id } = JSON.parse(getLiveScoreUmpireCompitionData())
-                if (payload.competitionId == id) {
-                    setLiveScoreUmpireCompition(result.result.data.id);
-                    setUmpireCompitionData(JSON.stringify(result.result.data))
-                }
-            } else {
-                setLiveScoreUmpireCompition(result.result.data.id);
-                setLiveScoreUmpireCompitionData(JSON.stringify(result.result.data));
+            const { id } = JSON.parse(getLiveScoreUmpireCompitionData())
+            if (payload.competitionId === id) {
+                setUmpireCompitionData(JSON.stringify(result.result.data))
             }
         }
-
         if (result.status === 1) {
-
             yield put({
                 type: ApiConstants.LiveScore_SETTING_SUCCESS,
                 payload: result.result.data,
                 status: result.status,
             });
             message.success(payload.isEdit === 'edit' ? 'Successfully Updated' : 'Successfully Saved')
-
             if (payload.screenName == 'umpireDashboard') {
                 history.push('/umpireDashboard')
             } else {
@@ -67,8 +59,10 @@ export function* liveScorePostSaga({ payload }) {
             setTimeout(() => {
                 message.error(msg)
             }, 800)
+
         }
     } catch (e) {
+
         yield put({ type: ApiConstants.LiveScore_SETTING_VIEW_ERROR, payloads: e })
     }
 }

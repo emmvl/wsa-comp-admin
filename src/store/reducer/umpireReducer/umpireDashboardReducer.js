@@ -15,7 +15,6 @@ const initialState = {
     allRoundList: [],
     allRoundIds: null,
     currentPage: 1,
-    umpireDashboardListActionObject: null
 };
 
 function getHighestSequence(roundArr) {
@@ -44,7 +43,7 @@ function getAllRoundName(data, roundId) {
 function umpireDashboardState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_LOAD:
-            return { ...state, onLoad: true, umpireDashboardListActionObject: action.data };
+            return { ...state, onLoad: true };
 
         case ApiConstants.API_GET_UMPIRE_DASHBOARD_LIST_SUCCESS:
             return {
@@ -135,10 +134,6 @@ function umpireDashboardState(state = initialState, action) {
             let allRoundName = getAllRoundName(state.allRoundList, action.data);
             state.allRoundIds = allRoundName;
             return { ...state };
-
-        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
-            state.umpireDashboardListActionObject = null
-            return { ...state, onLoad: false };
 
         default:
             return state;

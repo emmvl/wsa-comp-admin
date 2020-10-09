@@ -419,4 +419,21 @@ export function* deleteCompetitionDivisionSaga(action) {
     }
 }
 
+/////// Payment Methods
+export function* getPaymentMethodsDefaultSaga(action) {
+    try {
+        const paymentMethods = yield call(commonAxiosApi.getPaymentMethods, action);
+        if (paymentMethods.status === 1) {
+            yield put({
+                type: ApiConstants.API_GET_PAYMENT_METHOD_REF_SUCCESS,
+                result: paymentMethods.result.data,
+                status: paymentMethods.status
+            });
+        } else {
+            yield call(failSaga, paymentMethods)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
 

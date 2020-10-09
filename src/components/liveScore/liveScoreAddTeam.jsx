@@ -49,7 +49,7 @@ class LiveScoreAddTeam extends Component {
             managerData: [],
             selectedFile: null,
             profileImage: AppImages.circleImage,
-            //add 
+            //add
             competitionSelection: AppConstants.selectComptition,
             divisionSelection: AppConstants.selectDivision,
             affiliateSelection: AppConstants.selectAffiliate,
@@ -70,19 +70,18 @@ class LiveScoreAddTeam extends Component {
             progress: 0,
             key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
         };
-
+        this.formRef = React.createRef();
     }
 
     componentDidMount() {
-
         if (getLiveScoreCompetiton()) {
             if (this.state.isEdit == true) {
                 this.props.liveScoreGetTeamDataAction(this.state.teamId)
                 this.setState({ load: true })
-            }
-            else {
+            } else {
                 this.props.liveScoreAddTeamform({ key: 'addTeam' })
             }
+
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ loaclCompetitionID: id })
             this.props.liveScoreGetDivision(id)
@@ -92,6 +91,7 @@ class LiveScoreAddTeam extends Component {
             history.push('/liveScoreCompetitions')
         }
     }
+
     componentDidUpdate(nextProps) {
         let { teamManagerData } = this.props.liveScoreTeamState
         if (this.state.isEdit == true) {
@@ -102,22 +102,19 @@ class LiveScoreAddTeam extends Component {
                 }
             }
         }
-
     }
 
     ////set initial value for all validated fields
     setInitalFiledValue(data) {
         const { selectedManager } = this.props.liveScoreTeamState
-        this.props.form.setFieldsValue({
-            'teamName': data ? data.name : null,
-            'teamAlias': data ? data.alias : null,
-            'division': data ? data.divisionId : null,
-            'affiliate': data ? data.competitionOrganisation ? data.competitionOrganisation.name : "" : "",
-            'managerId': selectedManager
-
+        this.formRef.current.setFieldsValue({
+            teamName: data ? data.name : null,
+            teamAlias: data ? data.alias : null,
+            division: data ? data.divisionId : null,
+            affiliate: (data && data.competitionOrganisation) ? data.competitionOrganisation.name : "",
+            managerId: selectedManager
         })
     }
-
 
     setImage = (data) => {
         if (data.files[0] !== undefined) {
@@ -137,12 +134,10 @@ class LiveScoreAddTeam extends Component {
         }
     }
 
-
     onRadioSwitch(e) {
         this.props.liveScoreAddTeamform({ key: 'managerType', data: e.target.value })
         this.setState({ load: true })
     }
-
 
     ///////view for breadcrumb
     headerView = () => {
@@ -170,48 +165,36 @@ class LiveScoreAddTeam extends Component {
     radioBtnGroup(e) {
         const { selectedManager } = this.props.liveScoreTeamState
         this.props.liveScoreAddTeamform({ key: 'managerType', data: e.target.value })
-        this.props.form.setFieldsValue({
+        this.formRef.current.setFieldsValue({
             'managerId': selectedManager
         })
     }
 
-
     ////////form content view
-    contentView = (getFieldDecorator) => {
+    contentView = () => {
         const { teamManagerData, affilateList, divisionList, managerType, logoUrl } = this.props.liveScoreTeamState
         // let name = teamManagerData.name
         let alias = teamManagerData ? teamManagerData.alias : null
         return (
             <div className="content-view pt-4 pb-4">
-                <Form.Item>
-                    {getFieldDecorator('teamName', {
-                        rules: [{ required: true, message: ValidationConstants.teamName }],
-                    })(
-                        <InputWithHead
-                            auto_complete='off'
-                            required={"required-field pb-0 pt-0"}
-                            heading={AppConstants.teamName}
-                            placeholder={AppConstants.enterTeamName}
-                            onChange={(event) => {
-                                this.props.liveScoreAddTeamform({ key: 'name', data: captializedString(event.target.value) })
-                            }
-                            }
-                            // value={captializedString(name)}
-                            onBlur={(i) => this.props.form.setFieldsValue({
-                                'teamName': captializedString(i.target.value)
-                            })}
-                        />
-                    )}
-
-                    {/* var x="ebe";
-if(x[0].charCodeAt()>=97)
-    x[0]=x[0].toUpperCase(); */}
-
+                <Form.Item name='teamName' rules={[{ required: true, message: ValidationConstants.teamName }]}>
+                    <InputWithHead
+                        auto_complete='off'
+                        required={"required-field pb-0 pt-0"}
+                        heading={AppConstants.teamName}
+                        placeholder={AppConstants.enterTeamName}
+                        onChange={(event) => {
+                            this.props.liveScoreAddTeamform({
+                                key: 'name',
+                                data: captializedString(event.target.value)
+                            })
+                        }}
+                        // value={captializedString(name)}
+                        onBlur={(i) => this.formRef.current.setFieldsValue({
+                            'teamName': captializedString(i.target.value)
+                        })}
+                    />
                 </Form.Item>
-                {/* <Form.Item>
-                    {getFieldDecorator('teamAlias', {
-                        rules: [{ required: true, message: "Team Alias is required" }],
-                    })( */}
                 <InputWithHead
                     auto_complete='off'
                     heading={"Team Alias"}
@@ -220,14 +203,10 @@ if(x[0].charCodeAt()>=97)
                     conceptulHelpMsg={AppConstants.teamAliasMsg}
                     onChange={(event) => {
                         this.props.liveScoreAddTeamform({ key: 'alias', data: captializedString(event.target.value) })
-                    }
-                    }
+                    }}
                     value={alias}
                 />
 
-                {/* )}
-
-                </Form.Item> */}
                 <span className="form-err">{this.state.teanmNameError}</span>
 
                 <InputWithHead heading={AppConstants.teamLogo}
@@ -236,10 +215,10 @@ if(x[0].charCodeAt()>=97)
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-competition-logo-view" onClick={this.selectImage}>
-
                                 <ImageLoader
                                     timeout={this.state.timeout}
-                                    src={teamManagerData ? teamManagerData.logoUrl ? teamManagerData.logoUrl : AppImages.circleImage : AppImages.circleImage} />
+                                    src={(teamManagerData && teamManagerData.logoUrl) ? teamManagerData.logoUrl : AppImages.circleImage}
+                                />
                             </div>
                             <input
                                 type="file"
@@ -251,7 +230,8 @@ if(x[0].charCodeAt()>=97)
                                     setTimeout(() => {
                                         this.setState({ timeout: null })
                                     }, 2000);
-                                }} />
+                                }}
+                            />
                             <span className="form-err">{this.state.imageError}</span>
                         </div>
                         <div
@@ -273,59 +253,49 @@ if(x[0].charCodeAt()>=97)
                     </div>
                 </div>
 
-                <div className="row" >
-
-                    <div className="col-sm" >
+                <div className="row">
+                    <div className="col-sm">
                         <InputWithHead required={"required-field"} heading={AppConstants.division} />
-                        <Form.Item>
-                            {getFieldDecorator("division", {
-                                rules: [{ required: true, message: ValidationConstants.divisionField }],
-                            })(
-                                <Select
-                                    showSearch
-                                    optionFilterProp="children"
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={divisionSelection => {
-                                        this.props.liveScoreAddTeamform({ key: 'divisionId', data: divisionSelection })
-                                    }}
-                                    // value={teamManagerData.divisionId}
-                                    placeholder={"Select Division"}  >
-                                    {divisionList.map((item) => (
-                                        <Option key={item.id} value={item.id} > {item.name}</Option>
-                                    ))}
-                                </Select>
-                            )}
+                        <Form.Item name='division' rules={[{ required: true, message: ValidationConstants.divisionField }]}>
+                            <Select
+                                showSearch
+                                optionFilterProp="children"
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                onChange={divisionSelection => {
+                                    this.props.liveScoreAddTeamform({ key: 'divisionId', data: divisionSelection })
+                                }}
+                                // value={teamManagerData.divisionId}
+                                placeholder={"Select Division"}
+                            >
+                                {divisionList.map((item) => (
+                                    <Option key={item.id} value={item.id}> {item.name}</Option>
+                                ))}
+                            </Select>
                         </Form.Item>
-
                     </div>
                 </div>
 
                 <InputWithHead required={"required-field"} heading={AppConstants.affiliate} />
                 <div>
-                    <Form.Item>
-                        {getFieldDecorator('affiliate', {
-                            rules: [{ required: true, message: ValidationConstants.affiliateField }],
-                        })(
-
-                            <Select
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                onChange={affiliateId => {
-                                    this.props.liveScoreAddTeamform({ key: 'organisationId', data: affiliateId })
-                                }}
-                                // value={teamManagerData.divisionId}
-                                placeholder={"Select Affiliate"}  >
-                                {affilateList.map((item) => {
-                                    return <Option key={item.id} value={item.id}>
-                                        {item.name}
-                                    </Option>
-                                })}
-                            </Select>
-                        )}
+                    <Form.Item name='affiliate' rules={[{ required: true, message: ValidationConstants.affiliateField }]}>
+                        <Select
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            onChange={affiliateId => {
+                                this.props.liveScoreAddTeamform({ key: 'organisationId', data: affiliateId })
+                            }}
+                            // value={teamManagerData.divisionId}
+                            placeholder={"Select Affiliate"}
+                        >
+                            {affilateList.map((item) => {
+                                return <Option key={item.id} value={item.id}>
+                                    {item.name}
+                                </Option>
+                            })}
+                        </Select>
                     </Form.Item>
-
                 </div>
 
-                <div className="row" >
+                <div className="row">
                     <span required={"required-field"} className="applicable-to-heading ml-4 mb-3">{AppConstants.manager}</span>
                     {/* <InputWithHead required={"required-field ml-4"} heading={AppConstants.managerHeading} /> */}
 
@@ -336,10 +306,11 @@ if(x[0].charCodeAt()>=97)
                         }}
                         value={managerType}
                     >
-                        <div className="row ml-2" style={{ marginTop: 18 }} >
-
+                        <div className="row ml-2" style={{ marginTop: 18 }}>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>{AppConstants.new}</Radio>
+                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>
+                                    {AppConstants.new}
+                                </Radio>
                                 <div style={{ marginLeft: -10, width: 50 }}>
                                     <Tooltip background='#ff8237'>
                                         <span>{AppConstants.teamNewMsg}</span>
@@ -348,9 +319,11 @@ if(x[0].charCodeAt()>=97)
                             </div>
 
                             <div style={{ display: 'flex', alignItems: 'center', marginLeft: -15 }}>
-                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>{AppConstants.existing} </Radio>
+                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>
+                                    {AppConstants.existing}
+                                </Radio>
                                 <div style={{ marginLeft: -10 }}>
-                                    <Tooltip background='#ff8237' >
+                                    <Tooltip background='#ff8237'>
                                         <span>{AppConstants.teamExsitingMsg}</span>
                                     </Tooltip>
                                 </div>
@@ -358,71 +331,56 @@ if(x[0].charCodeAt()>=97)
                         </div>
                     </Radio.Group>
                 </div>
-                {managerType == 'new' && this.managerNewRadioBtnView(getFieldDecorator)}
-                {managerType == 'existing' && this.managerExistingRadioBtnView(getFieldDecorator)}
+                {managerType == 'new' && this.managerNewRadioBtnView()}
+                {managerType == 'existing' && this.managerExistingRadioBtnView()}
             </div>
         )
     };
 
-    managerExistingRadioBtnView(getFieldDecorator) {
+    managerExistingRadioBtnView() {
         let grade = this.state.managerData
         const { selectedManager } = this.props.liveScoreTeamState
         const { managerListResult } = this.props.liveScoreMangerState
         return (
-            <div >
-                <InputWithHead heading={AppConstants.managerSearch}
-                    required={"required-field pb-0"} />
+            <div>
+                <InputWithHead heading={AppConstants.managerSearch} required={"required-field pb-0"} />
                 <div>
-                    <Form.Item>
-                        {getFieldDecorator("managerId", {
-                            rules: [{ required: true, message: ValidationConstants.searchManager }]
-                        })(
-                            <Select
-                                showSearch
-                                mode="multiple"
-                                placeholder={AppConstants.searchManager}
-                                style={{ width: "100%", }}
-                                onChange={(e) => {
-                                    this.props.liveScoreAddTeamform({ key: 'userIds', data: e })
-                                    this.props.liveScoreClear()
-                                    // this.setState({ showOption: false })
-                                }}
-                                onSearch={(value) => {
-                                    value ?
-                                        this.props.liveScoreManagerSearch(value, this.state.loaclCompetitionID)
-                                        :
-                                        this.props.liveScoreManagerListAction(5, 1, this.state.loaclCompetitionID)
-                                }}
-                                onBlur={() => this.props.liveScoreManagerListAction(5, 1, this.state.loaclCompetitionID)}
-                                optionFilterProp="children"
-
+                    <Form.Item name='managerId' rules={[{ required: true, message: ValidationConstants.searchManager }]}>
+                        <Select
+                            showSearch
+                            mode="multiple"
+                            placeholder={AppConstants.searchManager}
+                            style={{ width: "100%", }}
+                            onChange={(e) => {
+                                this.props.liveScoreAddTeamform({ key: 'userIds', data: e })
+                                this.props.liveScoreClear()
+                                // this.setState({ showOption: false })
+                            }}
+                            onSearch={(value) => {
+                                value
+                                    ? this.props.liveScoreManagerSearch(value, this.state.loaclCompetitionID)
+                                    : this.props.liveScoreManagerListAction(5, 1, this.state.loaclCompetitionID)
+                            }}
+                            onBlur={() => this.props.liveScoreManagerListAction(5, 1, this.state.loaclCompetitionID)}
+                            optionFilterProp="children"
                             // onSearch={(value) => {
-
                             //     this.setState({ showOption: true })
-
                             //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
                             //         return data.firstName.indexOf(value) > -1
                             //     })
-                            //     
                             //     this.props.liveScoreManagerFilter(filteredData)
-
                             // }}
                             // value={selectedManager}
-                            >
-
-                                {/* {this.state.showOption ?  */}
-                                {managerListResult.map((item) => {
-                                    return <Option key={item.id} value={JSON.stringify(item.id)}>
-                                        {item.NameWithNumber}
-                                    </Option>
-                                })
-                                }
-                                {/* : null} */}
-
-                            </Select>
-                        )}
+                        >
+                            {/* {this.state.showOption ?  */}
+                            {managerListResult.map((item) => {
+                                return <Option key={item.id} value={JSON.stringify(item.id)}>
+                                    {item.firstName + " " + item.lastName}
+                                </Option>
+                            })}
+                            {/* : null} */}
+                        </Select>
                     </Form.Item>
-
                 </div>
             </div>
         )
@@ -435,128 +393,119 @@ if(x[0].charCodeAt()>=97)
                 hasError: false
             })
             this.props.liveScoreAddTeamform({ key: 'mobileNumber', data: regexNumberExpression(number) })
-        }
-
-        else if (number.length < 10) {
+        } else if (number.length < 10) {
             this.props.liveScoreAddTeamform({ key: 'mobileNumber', data: regexNumberExpression(number) })
             this.setState({
                 hasError: true
             })
         }
         setTimeout(() => {
-            this.props.form.setFieldsValue({
+            this.formRef.current.setFieldsValue({
                 'contactNo': teamManagerData.mobileNumber,
             })
         }, 500);
     }
 
-
-
-    managerNewRadioBtnView(getFieldDecorator) {
+    managerNewRadioBtnView() {
         const { teamManagerData } = this.props.liveScoreTeamState
         let hasError = this.state.hasError == true ? true : false
         return (
             <div>
-                <div className="row" >
-                    <div className="col-sm" >
-                        <Form.Item>
-                            {getFieldDecorator('firstName', {
-                                rules: [{ required: true, message: ValidationConstants.nameField[0] }],
-                            })(<InputWithHead
+                <div className="row">
+                    <div className="col-sm">
+                        <Form.Item name='firstName' rules={[{ required: true, message: ValidationConstants.nameField[0] }]}>
+                            <InputWithHead
                                 auto_complete='new-password'
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.enterFirstName}
                                 onChange={(event) => {
-                                    this.props.liveScoreAddTeamform({ key: 'firstName', data: captializedString(event.target.value) })
-
+                                    this.props.liveScoreAddTeamform({
+                                        key: 'firstName',
+                                        data: captializedString(event.target.value)
+                                    })
                                 }}
                                 // value={teamManagerData.firstName}
-                                onBlur={(i) => this.props.form.setFieldsValue({
+                                onBlur={(i) => this.formRef.current.setFieldsValue({
                                     'firstName': captializedString(i.target.value)
                                 })}
                             />
-                            )}
                         </Form.Item>
                         <span className="form-err">{this.state.firstNameError}</span>
                     </div>
-                    <div className="col-sm" >
-                        <Form.Item>
-                            {getFieldDecorator('lastName', {
-                                rules: [{ required: true, message: ValidationConstants.nameField[1] }],
-                            })(
-                                <InputWithHead
-                                    auto_complete='off'
-                                    required={"required-field pt-0 pb-0"}
-                                    heading={AppConstants.lastName}
-                                    placeholder={AppConstants.enterLastName}
-                                    onChange={(event) => {
-                                        this.props.liveScoreAddTeamform({ key: 'lastName', data: captializedString(event.target.value) })
-                                    }}
-                                    // value={teamManagerData.lastName}
-                                    onBlur={(i) => this.props.form.setFieldsValue({
-                                        'lastName': captializedString(i.target.value)
-                                    })}
-                                />
-                            )}
+                    <div className="col-sm">
+                        <Form.Item name='lastName' rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
+                            <InputWithHead
+                                auto_complete='off'
+                                required={"required-field pt-0 pb-0"}
+                                heading={AppConstants.lastName}
+                                placeholder={AppConstants.enterLastName}
+                                onChange={(event) => {
+                                    this.props.liveScoreAddTeamform({
+                                        key: 'lastName',
+                                        data: captializedString(event.target.value)
+                                    })
+                                }}
+                                // value={teamManagerData.lastName}
+                                onBlur={(i) => this.formRef.current.setFieldsValue({
+                                    'lastName': captializedString(i.target.value)
+                                })}
+                            />
                         </Form.Item>
 
                         <span className="form-err">{this.state.lastNameError}</span>
-
                     </div>
                 </div>
 
-                <div className="row" >
-                    <div className="col-sm" >
-                        <Form.Item>
-                            {getFieldDecorator("email", {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: ValidationConstants.emailField[0]
-                                    },
-                                    {
-                                        type: "email",
-                                        pattern: new RegExp(AppConstants.emailExp),
-                                        message: ValidationConstants.email_validation
-                                    }
-                                ],
-                            })(
-                                <InputWithHead
-                                    auto_complete='new-email'
-                                    required={"required-field pt-0 pb-0"}
-                                    heading={AppConstants.emailAdd}
-                                    placeholder={AppConstants.enterEmail}
-                                    onChange={(event) => {
-                                        this.props.liveScoreAddTeamform({ key: 'email', data: event.target.value })
-                                    }}
+                <div className="row">
+                    <div className="col-sm">
+                        <Form.Item
+                            name='email'
+                            rules={[
+                                {
+                                    required: true,
+                                    message: ValidationConstants.emailField[0]
+                                },
+                                {
+                                    type: "email",
+                                    pattern: new RegExp(AppConstants.emailExp),
+                                    message: ValidationConstants.email_validation
+                                }
+                            ]}
+                        >
+                            <InputWithHead
+                                auto_complete='new-email'
+                                required={"required-field pt-0 pb-0"}
+                                heading={AppConstants.emailAdd}
+                                placeholder={AppConstants.enterEmail}
+                                onChange={(event) => {
+                                    this.props.liveScoreAddTeamform({ key: 'email', data: event.target.value })
+                                }}
                                 // value={teamManagerData.email}
-                                />
-                            )}
+                            />
                         </Form.Item>
 
                         <span className="form-err">{this.state.emailAddressError}</span>
                     </div>
-                    <div className="col-sm" >
+                    <div className="col-sm">
                         <Form.Item
+                            name="contactNo"
+                            rules={[{ required: true, message: ValidationConstants.contactField }]}
                             help={hasError && ValidationConstants.mobileLength}
                             validateStatus={hasError ? "error" : 'validating'}
                         >
-                            {getFieldDecorator("contactNo", {
-                                rules: [{ required: true, message: ValidationConstants.contactField }]
-                            })(<InputWithHead
+                            <InputWithHead
                                 auto_complete='new-contact'
                                 required={"required-field pt-0 pb-0"}
                                 heading={AppConstants.contactNO}
                                 placeholder={AppConstants.enterContactNo}
                                 maxLength={10}
                                 onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
-                            // value={teamManagerData.mobileNumber}
-                            />)}
+                                // value={teamManagerData.mobileNumber}
+                            />
                         </Form.Item>
 
                         <span className="form-err">{this.state.contactNoError}</span>
-
                     </div>
                 </div>
             </div>
@@ -571,12 +520,15 @@ if(x[0].charCodeAt()>=97)
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button onClick={() => history.push('/liveScoreTeam')} className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button onClick={() => history.push('/liveScoreTeam')} className="cancelBtnWidth" type="cancel-button">
+                                    {AppConstants.cancel}
+                                </Button>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button onClick={this.handleSubmit} className="publish-button save-draft-text" type="primary" htmlType="submit" disabled={isSubmitting}>
+                                <Button onClick={this.handleSubmit} className="publish-button save-draft-text"
+                                        type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -592,152 +544,147 @@ if(x[0].charCodeAt()>=97)
         const {
             mobileNumber,
         } = this.props.liveScoreTeamState.teamManagerData
-        e.preventDefault();
+
         if (this.props.liveScoreTeamState.managerType === 'new' && mobileNumber.length !== 10) {
-            this.props.form.validateFields((err, values) => {
-            })
             this.setState({
                 hasError: true
             })
         } else {
-            this.props.form.validateFields((err, values) => {
-                if (!err) {
-                    const {
-                        name,
-                        alias,
-                        logoUrl,
-                        teamLogo,
-                        divisionId,
-                        organisationId,
-                        userIds,
-                        firstName,
-                        lastName,
-                        mobileNumber,
-                        email,
-                    } = this.props.liveScoreTeamState.teamManagerData
-                    let isCheked = this.props.liveScoreTeamState
-                    let usersArray = JSON.stringify(userIds)
-                    if (this.props.liveScoreTeamState.managerType === 'existing') {
-                        const formData = new FormData();
+            const {
+                name,
+                alias,
+                logoUrl,
+                teamLogo,
+                divisionId,
+                organisationId,
+                userIds,
+                firstName,
+                lastName,
+                mobileNumber,
+                email,
+            } = this.props.liveScoreTeamState.teamManagerData
+            let isCheked = this.props.liveScoreTeamState
+            let usersArray = JSON.stringify(userIds)
+            if (this.props.liveScoreTeamState.managerType === 'existing') {
+                const formData = new FormData();
 
-                        if (this.state.teamId !== null) {
-                            formData.append('id', this.state.teamId)
-                        }
-
-                        formData.append('name', captializedString(name))
-
-                        if (alias) {
-                            formData.append('alias', captializedString(alias))
-                        }
-
-                        if (this.state.image) {
-                            formData.append('logo', this.state.image)
-                            if (this.props.liveScoreTeamState.teamLogo) {
-                                formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
-                            }
-                        } else if (this.props.liveScoreTeamState.teamLogo) {
-                            formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
-                        }
-
-                        formData.append('competitionId', id)
-                        formData.append('organisationId', organisationId)
-                        formData.append('divisionId', divisionId)
-                        formData.append('userIds', usersArray)
-
-                        if (firstName && lastName && mobileNumber && email) {
-                            formData.append('firstName', firstName)
-                            formData.append('lastName', lastName)
-                            formData.append('mobileNumber', regexNumberExpression(mobileNumber))
-                            formData.append('email', email)
-                        }
-                        this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
-
-                    }
-                    else if (this.props.liveScoreTeamState.managerType === 'new') {
-                        const formData = new FormData();
-                        if (this.state.teamId) {
-                            formData.append('id', this.state.teamId)
-                        }
-                        formData.append('name', name)
-                        if (alias) {
-                            formData.append('alias', alias)
-                        }
-                        if (this.state.image) {
-                            formData.append('logo', this.state.image)
-                            if (this.props.liveScoreTeamState.teamLogo) {
-                                formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
-                            }
-                        } else if (this.props.liveScoreTeamState.teamLogo) {
-                            formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
-                        }
-                        formData.append('competitionId', id)
-                        formData.append('organisationId', organisationId)
-                        formData.append('divisionId', divisionId)
-                        formData.append('firstName', firstName)
-                        formData.append('lastName', lastName)
-                        formData.append('mobileNumber', regexNumberExpression(mobileNumber))
-                        formData.append('email', email)
-                        if (userIds.length > 0) {
-                            formData.append('userIds', usersArray)
-                        }
-
-                        this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
-                    }
-                    else {
-                        // message.config({ duration: 0.9, maxCount: 1 })
-                        // message.error('Please select manager section.')
-                        const formData = new FormData();
-                        if (this.state.teamId) {
-                            formData.append('id', this.state.teamId)
-                        }
-                        formData.append('name', name)
-                        if (alias) {
-                            formData.append('alias', alias)
-                        }
-                        if (this.state.image) {
-                            formData.append('logo', this.state.image)
-                            if (this.props.liveScoreTeamState.teamLogo) {
-                                formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
-                            }
-                        } else if (this.props.liveScoreTeamState.teamLogo) {
-                            formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
-                        }
-                        formData.append('competitionId', id)
-                        formData.append('organisationId', organisationId)
-                        formData.append('divisionId', divisionId)
-                        this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
-                    }
+                if (this.state.teamId !== null) {
+                    formData.append('id', this.state.teamId)
                 }
-            });
+
+                formData.append('name', captializedString(name))
+
+                if (alias) {
+                    formData.append('alias', captializedString(alias))
+                }
+
+                if (this.state.image) {
+                    formData.append('logo', this.state.image)
+                    if (this.props.liveScoreTeamState.teamLogo) {
+                        formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                    }
+                } else if (this.props.liveScoreTeamState.teamLogo) {
+                    formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                }
+
+                formData.append('competitionId', id)
+                formData.append('organisationId', organisationId)
+                formData.append('divisionId', divisionId)
+                formData.append('userIds', usersArray)
+
+                if (firstName && lastName && mobileNumber && email) {
+                    formData.append('firstName', firstName)
+                    formData.append('lastName', lastName)
+                    formData.append('mobileNumber', regexNumberExpression(mobileNumber))
+                    formData.append('email', email)
+                }
+                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
+            } else if (this.props.liveScoreTeamState.managerType === 'new') {
+                const formData = new FormData();
+                if (this.state.teamId) {
+                    formData.append('id', this.state.teamId)
+                }
+                formData.append('name', name)
+                if (alias) {
+                    formData.append('alias', alias)
+                }
+                if (this.state.image) {
+                    formData.append('logo', this.state.image)
+                    if (this.props.liveScoreTeamState.teamLogo) {
+                        formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                    }
+                } else if (this.props.liveScoreTeamState.teamLogo) {
+                    formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                }
+                formData.append('competitionId', id)
+                formData.append('organisationId', organisationId)
+                formData.append('divisionId', divisionId)
+                formData.append('firstName', firstName)
+                formData.append('lastName', lastName)
+                formData.append('mobileNumber', regexNumberExpression(mobileNumber))
+                formData.append('email', email)
+                if (userIds.length > 0) {
+                    formData.append('userIds', usersArray)
+                }
+
+                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
+            } else {
+                // message.config({ duration: 0.9, maxCount: 1 })
+                // message.error('Please select manager section.')
+                const formData = new FormData();
+                if (this.state.teamId) {
+                    formData.append('id', this.state.teamId)
+                }
+                formData.append('name', name)
+                if (alias) {
+                    formData.append('alias', alias)
+                }
+                if (this.state.image) {
+                    formData.append('logo', this.state.image)
+                    if (this.props.liveScoreTeamState.teamLogo) {
+                        formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                    }
+                } else if (this.props.liveScoreTeamState.teamLogo) {
+                    formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
+                }
+                formData.append('competitionId', id)
+                formData.append('organisationId', organisationId)
+                formData.append('divisionId', divisionId)
+                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
+            }
         }
     }
 
     /////main render method
     render() {
-        const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout
+                    menuHeading={AppConstants.liveScores}
+                    menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                />
                 <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"3"} />
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     <Form
+                        ref={this.formRef}
                         autoComplete="off"
-                        onSubmit={this.handleSubmit}
-                        noValidate="noValidate">
+                        onFinish={this.handleSubmit}
+                        noValidate="noValidate"
+                    >
                         <Content>
-                            <div className="formView">{this.contentView(getFieldDecorator)}</div>
+                            <div className="formView">{this.contentView()}</div>
                         </Content>
-                        <Footer >{this.footerView()}</Footer>
+                        <Footer>{this.footerView()}</Footer>
                     </Form>
-
-
                 </Layout>
             </div>
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getliveScoreDivisions,
@@ -753,13 +700,12 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         liveScoreTeamState: state.LiveScoreTeamState,
         liveScoreState: state.LiveScoreState,
         liveScoreMangerState: state.LiveScoreMangerState
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreAddTeam));
 
-
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreAddTeam);

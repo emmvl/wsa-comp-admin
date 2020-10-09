@@ -9,8 +9,8 @@ import {
   Pagination,
   Modal,
   Input,
-  Icon,
 } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import "./user.css";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { NavLink } from "react-router-dom";
@@ -205,7 +205,6 @@ class AffiliateDirectory extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    console.log("Component componentDidUpdate");
     let userState = this.props.userState;
     if (userState.onLoad === false && this.state.loading === true) {
       if (!userState.error) {
@@ -216,7 +215,7 @@ class AffiliateDirectory extends Component {
     }
   }
 
-  referenceCalls = (organisationId) => {
+  referenceCalls = () => {
     this.props.getOnlyYearListAction();
   };
 
@@ -237,7 +236,7 @@ class AffiliateDirectory extends Component {
     this.props.getAffiliateDirectoryAction(filter, this.state.sortBy, this.state.sortOrder);
   };
 
-  naviageToAffiliate = (e) => {
+  navigateToAffiliate = (e) => {
     this.props.history.push("/userEditAffiliates", {
       affiliateOrgId: e.affiliateOrgId,
       orgTypeRefId: e.organisationTypeRefId,
@@ -295,7 +294,6 @@ class AffiliateDirectory extends Component {
               <Breadcrumb.Item className="breadcrumb-add">
                 {AppConstants.affiliateDirectory}
               </Breadcrumb.Item>
-
             </Breadcrumb>
           </div>
           <div
@@ -418,8 +416,7 @@ class AffiliateDirectory extends Component {
                     onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                     value={this.state.searchText}
                     prefix={
-                      <Icon
-                        type="search"
+                      <SearchOutlined
                         style={{
                           color: "rgba(0,0,0,.25)",
                           height: 16,
@@ -498,11 +495,11 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
   return {
     userState: state.UserState,
     appState: state.AppState,
   };
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)(AffiliateDirectory);
+export default connect(mapStateToProps, mapDispatchToProps)(AffiliateDirectory);

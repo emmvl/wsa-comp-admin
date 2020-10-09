@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 import {
     Layout,
     Input,
@@ -12,15 +13,15 @@ import {
     Form
 } from "antd";
 import moment from "moment";
-import { NavLink } from "react-router-dom";
+import { Formik } from "formik";
+import * as Yup from 'yup';
+
 import "./product.scss";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { Formik } from "formik";
-import * as Yup from 'yup';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -103,7 +104,6 @@ const columns = [
             </Select>
         )
     },
-
     {
         title: "Total",
         dataIndex: "total",
@@ -288,7 +288,7 @@ class ProductAddRegistration extends Component {
                                 name={'registrationOepn'}
                             />
                             {errors.registrationOepn && touched.registrationOepn && (
-                                < span className="form-err">{errors.registrationOepn}</span>
+                                <span className="form-err">{errors.registrationOepn}</span>
                             )}
                         </div>
                         <div className="col-sm">
@@ -305,7 +305,7 @@ class ProductAddRegistration extends Component {
                                 name={'registrationClose'}
                             />
                             {errors.registrationClose && touched.registrationClose && (
-                                < span className="form-err">{errors.registrationClose}</span>
+                                <span className="form-err">{errors.registrationClose}</span>
                             )}
                         </div>
                     </div>
@@ -592,10 +592,11 @@ class ProductAddRegistration extends Component {
                 <TreeNode
                     title={this.makeSubVoucherNode(inItem)}
                     key={`${catIndex}-${scatIndex}`}
-                ></TreeNode>
+                />
             );
         });
     }
+
     makeSubVoucherNode(item) {
         return <span>{item.title}</span>;
     }
@@ -626,7 +627,6 @@ class ProductAddRegistration extends Component {
                         validationSchema={productAddRegistrationSchema}
                         onSubmit={(values, { setSubmitting }) => {
                             setSubmitting(false);
-                            console.log(values)
                         }}
                     >
                         {({
@@ -639,27 +639,27 @@ class ProductAddRegistration extends Component {
                             isSubmitting,
                             setFieldValue
                         }) => (
-                                <Form onSubmit={handleSubmit}>
+                            <Form onFinish={handleSubmit}>
+                                <Content>
+                                    <div className="formView">
+                                        {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
+                                    </div>
 
-                                    <Content>
-                                        <div className="formView">
-                                            {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
-                                        </div>
+                                    <div className="formView">{this.feesView()}</div>
 
-                                        <div className="formView">{this.feesView()}</div>
+                                    <div className="formView">{this.discountView()}</div>
 
-                                        <div className="formView">{this.discountView()}</div>
+                                    <div className="formView">{this.vouchersView()}</div>
+                                </Content>
 
-                                        <div className="formView">{this.vouchersView()}</div>
-                                    </Content>
-
-                                    <Footer>{this.footerView(isSubmitting)}</Footer>
-                                </Form>)}
+                                <Footer>{this.footerView(isSubmitting)}</Footer>
+                            </Form>
+                        )}
                     </Formik>
                 </Layout>
-
             </div>
         );
     }
 }
+
 export default ProductAddRegistration;
