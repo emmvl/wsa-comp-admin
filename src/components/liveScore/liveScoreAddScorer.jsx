@@ -166,7 +166,7 @@ class LiveScoreAddScorer extends Component {
 
                                 >{scorer_list.map((item) => {
                                     return <Option key={item.id} value={item.firstName + " " + item.lastName}>
-                                        {item.firstName + " " + item.lastName}
+                                        {item.NameWithNumber}
                                     </Option>
                                 })}
                                 </AutoComplete>
@@ -369,7 +369,7 @@ class LiveScoreAddScorer extends Component {
                     onChange={(e) => this.onButtonChange(e)}
                     value={scorerRadioBtn}
                 >
-                    <div className="row ml-2" style={{ marginTop: 18 }} >
+                    <div className="row ml-4" style={{ marginTop: 18 }} >
                         {/* <Radio value={"new"}>{AppConstants.new}</Radio>
                         <Radio value={"existing"}>{AppConstants.existing} </Radio> */}
 
@@ -444,14 +444,14 @@ class LiveScoreAddScorer extends Component {
             <div className="fluid-width">
                 <div className="footer-view">
                     <div className="row">
-                        <div className="col-sm-3 pl-3">
+                        <div className="col-sm-3">
                             <div className="reg-add-save-button">
                                 <NavLink to='/liveScorerList'>
                                     <Button className="cancelBtnWidth" onClick={() => history.push('/liveScorerList')} type="cancel-button">{AppConstants.cancel}</Button>
                                 </NavLink>
                             </div>
                         </div>
-                        <div className="col-sm pr-3">
+                        <div className="col-sm">
                             <div className="comp-buttons-view">
                                 <Button className="publish-button save-draft-text mr-0" type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}

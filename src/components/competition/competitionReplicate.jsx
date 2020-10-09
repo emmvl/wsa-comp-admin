@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Checkbox, Select, DatePicker,Form } from 'antd';
+import { Layout, Breadcrumb, Button, Checkbox, Select, DatePicker,Form, message } from 'antd';
 import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -15,18 +15,23 @@ import {
     searchVenueList,
     clearFilter,
 } from "../../store/actions/appAction";
-import { updateReplicateSaveObjAction,
-    replicateSaveAction } from "../../store/actions/competitionModuleAction/competitionDashboardAction"
+import { 
+    updateReplicateSaveObjAction,
+    replicateSaveAction,
+    getOldMembershipProductsByCompIdAction,
+    getNewMembershipProductByYearAction 
+} from "../../store/actions/competitionModuleAction/competitionDashboardAction"
 import {
     setOwnCompetitionYear,
     getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
-    setOwn_competitionStatus,
+    setOwn_competitionStatus,getOrganisationData
 } from "../../util/sessionStorage";
 import ValidationConstants from "../../themes/validationConstant";
 import Loader from '../../customComponents/loader';
+import App from "App";
 
 
 const { Header, Footer, Content } = Layout;
@@ -38,7 +43,8 @@ class CompetitionReplicate extends Component {
         super(props);
         this.state = {
             yearRefId: 1,
-            buttonSave: null
+            buttonSave: null,
+            hasRegistration: 0
         }
 
         this.getRefernce()
@@ -46,11 +52,18 @@ class CompetitionReplicate extends Component {
 
     async componentDidUpdate(nextProps){
         try{
-            if(this.props.competitionDashboardState.replicateSaved && this.state.buttonSave == "save"){
-                //await localStorage.removeItem("own_competition")
-                await setOwn_competition(this.props.competitionDashboardState.competitionId);
-                await setOwnCompetitionYear(this.props.competitionDashboardState.yearRefId)
-                history.push({pathname: "/competitionOpenRegForm",state: {fromReplicate: 1}})
+            if(!this.props.competitionDashboardState.replicateSaveOnLoad && this.state.buttonSave == "save"){
+                if(this.props.competitionDashboardState.status == 4){
+                    message.error(this.props.competitionDashboardState.replicateSaveErrorMessage);
+                }else{
+                    await setOwn_competition(this.props.competitionDashboardState.competitionId);
+                    await setOwnCompetitionYear(this.props.competitionDashboardState.yearRefId)
+                    if(this.state.hasRegistration != 1){
+                        history.push({pathname: "/competitionOpenRegForm",state: {fromReplicate: 1}})
+                    }else{
+                        history.push("/registrationCompetitionFee", { id: this.props.competitionDashboardState.competitionId })
+                    }
+                } 
                 this.setState({buttonSave: null});
             }
         }catch(ex){
@@ -98,8 +111,63 @@ class CompetitionReplicate extends Component {
         this.onChangeReplicateValue(dates[1],"details","competitionEndDate");
     }
 
-    onChangeReplicateValue = (data,key,subKey) => {
-        this.props.updateReplicateSaveObjAction(data,key,subKey);
+    onChangeReplicateValue = (data,key,subKey,index) => {
+        this.props.updateReplicateSaveObjAction(data,key,subKey,index);
+        if(subKey == "oldCompetitionId"){
+            this.setHasRegistration(data);
+        }
+        if(subKey == "newYearRefId"){
+            this.getNewMembershipProducts(data)
+        }
+    }
+
+    setHasRegistration = (competitionId) => {
+        try{
+            const { all_own_CompetitionArr, } = this.props.appState;
+            let competition = all_own_CompetitionArr.find(x => x.competitionId == competitionId);
+            if(competition){
+                this.setState({hasRegistration: competition.hasRegistration});
+                if(competition.hasRegistration == 1){
+                    this.onChangeReplicateValue(null,"details","newYearRefId");
+                    this.props.form.setFieldsValue({
+                        [`newYearRefId`]: null
+                    });
+                    let payload = {
+                        competitionUniqueKey: competition.competitionId,
+                        organisationUniqueKey: getOrganisationData().organisationUniqueKey
+                    }
+                    this.props.getOldMembershipProductsByCompIdAction(payload);
+                }
+            }
+        }catch(ex){
+            console.log("Error in setHasRegistration::"+ex);
+        }
+    }
+
+    getNewMembershipProducts = (yearRefId) => {
+        try{
+            if(this.state.hasRegistration == 1){
+                let payload = {
+                    yearRefId: yearRefId,
+                    organisationUniqueKey: getOrganisationData().organisationUniqueKey
+                }
+                this.props.getNewMembershipProductByYearAction(payload)
+            }
+        }catch(ex){
+            console.log("Error in getNewMembershipProducts::"+ex)
+        }
+    }
+
+    checkDuplicateNewMembershipProduct = (replicateSave) => {
+        try{
+            var membershipProducts = replicateSave.membershipProducts.map(function(item){ return item.newProducts.membershipProductUniqueKey });
+            var isDuplicate = membershipProducts.some(function(item, index){ 
+                return membershipProducts.indexOf(item) != index 
+            });
+            return isDuplicate;
+        }catch(ex){
+            console.log("Error in checkDuplicateNewMembershipProduct::"+ex);
+        }
     }
 
     saveRelicate = (e) => {
@@ -108,6 +176,13 @@ class CompetitionReplicate extends Component {
             const { replicateSave } = this.props.competitionDashboardState;
             this.props.form.validateFieldsAndScroll((err, values) => {
                 if(!err){
+                    if(this.state.hasRegistration == 1){
+                        let checkDuplicate = this.checkDuplicateNewMembershipProduct(replicateSave);
+                        if(checkDuplicate){
+                            message.error(ValidationConstants.newMembershipDuplicteError);
+                            return;
+                        }
+                    }
                     this.setState({buttonSave: "save"});
                     this.props.replicateSaveAction(replicateSave);
                 }
@@ -120,7 +195,7 @@ class CompetitionReplicate extends Component {
     ////////form content view
     contentView = (getFieldDecorator) => {
         const { own_YearArr, all_own_CompetitionArr, } = this.props.appState;
-        const { replicateSave } = this.props.competitionDashboardState;
+        const { replicateSave,oldMembershipProducs,newMembershipProducs } = this.props.competitionDashboardState;
         return (
             <div className="content-view pt-5 ">
                 <span className='form-heading'>{AppConstants.replicateWhichCompetition}</span>
@@ -234,6 +309,38 @@ class CompetitionReplicate extends Component {
                         </div>
                     </div>
                 </div>
+                
+                {this.state.hasRegistration == 1 && (
+                    <div>
+                        <span className='form-heading pt-4' style={{fontSize: "16px"}}>{AppConstants.setMembershipProducts}</span>
+                        {(oldMembershipProducs || []).map((oldProduct,oldProductIndex) => (
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <InputWithHead heading={oldProduct.membershipProductName}/>
+                                </div>
+                                <div className="col-sm">
+                                    <Form.Item >
+                                        {getFieldDecorator(`membershipProductUniqueKey`, {
+                                            rules: [{ required: true,message: ValidationConstants.newYearFieldIsRequired}],
+                                        })(
+                                            <Select
+                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                onChange={(membershipProductUniqueKey) => this.onChangeReplicateValue(membershipProductUniqueKey,"membershipProducts",null,oldProductIndex)}
+                                                setFieldsValue={replicateSave.details.newYearRefId} >
+                                                {(newMembershipProducs || []).map(item => (
+                                                    <Option key={item.membershipProductUniqueKey} value={item.membershipProductUniqueKey}>
+                                                        {item.membershipProductName}
+                                                    </Option>
+                                                ))}
+                                            </Select>
+                                        )}
+                                    </Form.Item>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+                
 
                 <div className="row pt-4" >
                     <div className="col-sm" >
@@ -423,7 +530,9 @@ class CompetitionReplicate extends Component {
                         <Footer>
                             {this.footerView()}
                         </Footer>
-                        <Loader visible={this.props.competitionDashboardState.replicateSaveOnLoad } />
+                        <Loader visible={this.props.competitionDashboardState.oldMembershipOnLoad ||
+                            this.props.competitionDashboardState.newMembershipOnLoad ||
+                            this.props.competitionDashboardState.replicateSaveOnLoad } />
                     </Form>
                 </Layout>
             </div>
@@ -437,7 +546,9 @@ function mapDispatchToProps(dispatch) {
         getYearListAction,
         getYearAndCompetitionOwnAction,
         updateReplicateSaveObjAction,
-        replicateSaveAction
+        replicateSaveAction,
+        getOldMembershipProductsByCompIdAction,
+        getNewMembershipProductByYearAction
     }, dispatch);
 
 }

@@ -524,6 +524,19 @@ let AxiosApi = {
     getTransferOrganisationsData(payload) {
         var url = `/api/transfer/competitions?`;
         return Method.dataPost(url, token, payload);
+    },
+    async getOldMembershipProductsByCompId(payload){
+        let competitionUniqueKey = payload.competitionUniqueKey;
+        let organisationUniqueKey = payload.organisationUniqueKey;
+        var url = `api/competitionfee/membership?competitionUniqueKey=${competitionUniqueKey}&organisationUniqueKey=${organisationUniqueKey}`
+        return Method.dataGet(url, token);
+    },
+
+    async getNewMembershipProductsByYear(payload){
+        let yearRefId = payload.yearRefId;
+        let organisationUniqueKey = payload.organisationUniqueKey;
+        var url = `api/membershipproduct/all/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}`
+        return Method.dataGet(url, token);
     }
 };
 

@@ -31,7 +31,8 @@ import {
   getUserRole,
   getScorerData,
   getUmpireData,
-  getCoachData
+  getCoachData,
+  getUmpireActivityListAction,
 } from "../../store/actions/userAction/userAction";
 import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -1283,6 +1284,14 @@ class UserModulePersonalDetail extends Component {
       this.handleHistoryTableList(1, userId);
     } else if (tabKey === "7") {
       this.handleIncidentableList(1, userId, competition, yearRefId);
+    } else if (tabKey === "8") {
+      let payload = {
+        "paging": {
+          "limit": 10,
+          "offset": 0
+        }
+      }
+      // this.props.getUmpireActivityListAction(payload, JSON.stringify([15]), userId);
     }
   };
 
@@ -2356,6 +2365,7 @@ class UserModulePersonalDetail extends Component {
     let stripeConnected = this.stripeConnected()
     let userEmail = this.userEmail()
     let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
+    let { umpireActivityOnLoad, umpireActivityList, umpireActivityCurrentPage, umpireActivityTotalCount } = this.props.userState;
     return (
       <div
         className="comp-dash-table-view mt-2"
@@ -2379,7 +2389,7 @@ class UserModulePersonalDetail extends Component {
         </div>
 
 
-        <div className="transfer-image-view mb-3">
+        {/* <div className="transfer-image-view mb-3">
 
           {stripeConnected ?
             <Button
@@ -2404,21 +2414,22 @@ class UserModulePersonalDetail extends Component {
           }
 
         </div>
-
+ */}
 
         <div className="table-responsive home-dash-table-view">
           <Table
             className="home-dashboard-table"
             columns={umpireActivityColumn}
-            dataSource={umpireActivityData}
+            dataSource={umpireActivityList}
             pagination={false}
+            loading={umpireActivityOnLoad == true && true}
           />
         </div>
         <div className="d-flex justify-content-end ">
           <Pagination
             className="antd-pagination pb-3"
-          // current={userState.incidentCurrentPage}
-          // total={total}
+            current={umpireActivityCurrentPage}
+            total={umpireActivityTotalCount}
           // onChange={(page) =>
           //   this.hanleIncidentTableList(
           //     page,
@@ -2563,7 +2574,8 @@ function mapDispatchToProps(dispatch) {
       getScorerData,
       getUmpireData,
       getCoachData,
-      getStripeLoginLinkAction
+      getStripeLoginLinkAction,
+      getUmpireActivityListAction,
     },
     dispatch
   );

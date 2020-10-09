@@ -25,9 +25,8 @@ const initialState = {
     subTotalGst: 0,
     paymentListData: [],
     paymentListPage: 1,
-    paymentListTotalCount: 1
-
-
+    paymentListTotalCount: 1,
+    paymentDashboardListAction: null
 }
 
 
@@ -236,7 +235,7 @@ function stripe(state = initialState, action) {
 
         ///payment listing 
         case ApiConstants.API_PAYMENT_TYPE_LIST_LOAD:
-            return { ...state, onLoad: true }
+            return { ...state, onLoad: true, paymentDashboardListAction: action }
 
         case ApiConstants.API_PAYMENT_TYPE_LIST_SUCCESS:
             let paymentData = action.result;
@@ -257,6 +256,10 @@ function stripe(state = initialState, action) {
                 ...state,
                 onExportLoad: false,
             }
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.paymentDashboardListAction = null
+            return { ...state, onLoad: false };
 
         default:
             return state;

@@ -187,14 +187,14 @@ class LiveScoreAddTeam extends Component {
         // let name = teamManagerData.name
         let alias = teamManagerData ? teamManagerData.alias : null
         return (
-            <div className="content-view pt-4">
+            <div className="content-view pt-4 pb-4">
                 <Form.Item>
                     {getFieldDecorator('teamName', {
                         rules: [{ required: true, message: ValidationConstants.teamName }],
                     })(
                         <InputWithHead
                             auto_complete='off'
-                            required={"required-field pb-0"}
+                            required={"required-field pb-0 pt-0"}
                             heading={AppConstants.teamName}
                             placeholder={AppConstants.enterTeamName}
                             onChange={(event) => {
@@ -235,7 +235,8 @@ if(x[0].charCodeAt()>=97)
                 </Form.Item> */}
                 <span className="form-err">{this.state.teanmNameError}</span>
 
-                <InputWithHead heading={AppConstants.teamLogo} />
+                <InputWithHead heading={AppConstants.teamLogo}
+                 required={"pt-3"} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -330,7 +331,7 @@ if(x[0].charCodeAt()>=97)
                 </div>
 
                 <div className="row" >
-                    <span required={"required-field"} className="applicable-to-heading ml-4">{AppConstants.manager}</span>
+                    <span required={"required-field"} className="applicable-to-heading ml-4 mb-3">{AppConstants.manager}</span>
                     {/* <InputWithHead required={"required-field ml-4"} heading={AppConstants.managerHeading} /> */}
 
                     <Radio.Group

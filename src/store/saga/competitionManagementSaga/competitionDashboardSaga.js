@@ -103,10 +103,51 @@ export function* saveReplicateSaga(action){
                 result: result.result.data,
                 status: result.status,
             });
+        }else if(result.status === 4){
+            yield put({
+                type: ApiConstants.API_REPLICATE_SAVE_SUCCESS,
+                result: result.result.data.message,
+                status: result.status,
+            });
         } else {
             yield call(failSaga, result)
         }
     } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* getOldMembershipProductsByCompId(action){
+    try{
+        const result = yield call(RegistrationAxiosApi.getOldMembershipProductsByCompId,action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_OLD_MEMBERSHIP_PRODUCTS_BY_COMP_ID_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        }else {
+            yield call(failSaga, result)
+        }
+    }catch(error){
+        yield call(errorSaga, error)
+    }
+}
+
+
+export function* getNewMembershipProductsByYear(action){
+    try{
+        const result = yield call(RegistrationAxiosApi.getNewMembershipProductsByYear,action.payload);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_NEW_MEMBERSHIP_PRODUCTS_BY_YEAR_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        }else {
+            yield call(failSaga, result)
+        }
+    }catch(error){
         yield call(errorSaga, error)
     }
 }

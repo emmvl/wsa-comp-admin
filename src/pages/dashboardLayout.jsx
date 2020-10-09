@@ -75,8 +75,10 @@ class DashboardLayout extends React.Component {
             )
             : null;
           await setImpersonationAffiliate(impersonationAffiliate);
-
           window.location.reload();
+          if (this.props.userState.impersonation && !this.state.impersonationLoad && this.state.impersonationAffiliateOrgId) {
+            history.push("/")
+          }
         }
       }
 
@@ -260,6 +262,7 @@ class DashboardLayout extends React.Component {
       organisationTypeRefId: -1,
       statusRefId: -1,
       paging: { limit: -1, offset: 0 },
+      stateOrganisations: false,
     });
     this.setState({ openImpersonationModal: true });
   };

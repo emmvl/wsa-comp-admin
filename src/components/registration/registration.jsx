@@ -125,25 +125,25 @@ const columns = [
         title: "Paid By",
         dataIndex: "paidBy",
         key: "paidBy",
-        render: (paidBy, record, index) => { 
-          return(
-          <div>
-            {record.userId == record.paidByUserId ? 'Self' :
-            <NavLink
-                      to={{
-                          pathname: `/userPersonal`,
-                          state: {
-                              userId: record.paidByUserId,
-                              tabKey: "registration"
-                          },
-                      }}
-                  >
-                      <span className="input-heading-add-another pt-0">{paidBy}</span>
-            </NavLink>}
-            </div>
+        render: (paidBy, record, index) => {
+            return (
+                <div>
+                    {record.userId == record.paidByUserId ? 'Self' :
+                        <NavLink
+                            to={{
+                                pathname: `/userPersonal`,
+                                state: {
+                                    userId: record.paidByUserId,
+                                    tabKey: "registration"
+                                },
+                            }}
+                        >
+                            <span className="input-heading-add-another pt-0">{paidBy}</span>
+                        </NavLink>}
+                </div>
             )
         },
-      },
+    },
     {
         title: "Fee (incl. GST)",
         dataIndex: "fee",
@@ -223,11 +223,63 @@ class Registration extends Component {
         // this.props.getOnlyYearListAction(this.props.appState.yearList);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+
+        const { registrationListAction } = this.props.userRegistrationState
+        let page = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
         const prevUrl = getPrevUrl();
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
             this.referenceCalls(this.state.organisationId);
-            this.handleRegTableList(1);
+
+            if (registrationListAction) {
+                let offset = registrationListAction.payload.paging.offset
+                sortBy = registrationListAction.sortBy
+                sortOrder = registrationListAction.sortOrder
+                let affiliate = registrationListAction.payload.affiliate
+                let competitionUniqueKey = registrationListAction.payload.competitionUniqueKey
+                let dobFrom = registrationListAction.payload.dobFrom !== "-1" ? moment(registrationListAction.payload.dobFrom).format("YYYY-MM-DD") : this.state.dobFrom
+                let dobTo = registrationListAction.payload.dobTo !== "-1" ? moment(registrationListAction.payload.dobTo).format("YYYY-MM-DD") : this.state.dobTo
+                let genderRefId = registrationListAction.payload.genderRefId
+                let membershipProductId = registrationListAction.payload.membershipProductId
+                let membershipProductTypeId = registrationListAction.payload.membershipProductTypeId
+                let paymentId = registrationListAction.payload.paymentId
+                let paymentStatusRefId = registrationListAction.payload.paymentStatusRefId
+                let postalCode = registrationListAction.payload.postalCode == "-1" ? "" : registrationListAction.payload.postalCode
+                let regFrom = registrationListAction.payload.regFrom !== "-1" ? moment(registrationListAction.payload.regFrom).format("YYYY-MM-DD") : this.state.regFrom
+                let regTo = registrationListAction.payload.regTo !== "-1" ? moment(registrationListAction.payload.regTo).format("YYYY-MM-DD") : this.state.regTo
+                let searchText = registrationListAction.payload.searchText
+                let yearRefId = registrationListAction.payload.yearRefId
+
+                await this.setState({
+                    offset,
+                    sortBy,
+                    sortOrder,
+                    affiliate,
+                    competitionUniqueKey,
+                    dobFrom,
+                    dobTo,
+                    genderRefId,
+                    membershipProductId,
+                    membershipProductTypeId,
+                    paymentId,
+                    paymentStatusRefId,
+                    postalCode,
+                    regFrom,
+                    regTo,
+                    searchText,
+                    yearRefId
+                })
+                page = Math.floor(offset / 10) + 1;
+
+                this.handleRegTableList(page);
+            } else {
+                this.handleRegTableList(1);
+            }
+
+
+
         } else {
             history.push("/");
         }
@@ -258,8 +310,10 @@ class Registration extends Component {
             organisationUniqueKey: organisationId,
             yearRefId,
             competitionUniqueKey,
-            dobFrom: (dobFrom !== "-1" && !isNaN(dobFrom)) ? moment(dobFrom).format("YYYY-MM-DD") : "-1",
-            dobTo: (dobTo !== "-1" && !isNaN(dobTo)) ? moment(dobTo).format("YYYY-MM-DD") : "-1",
+            // dobFrom: (dobFrom !== "-1" && !isNaN(dobFrom)) ? moment(dobFrom).format("YYYY-MM-DD") : "-1",
+            dobFrom: (dobFrom !== "-1") ? moment(dobFrom).format("YYYY-MM-DD") : "-1",
+            // dobTo: (dobTo !== "-1" && !isNaN(dobTo)) ? moment(dobTo).format("YYYY-MM-DD") : "-1",
+            dobTo: (dobTo !== "-1") ? moment(dobTo).format("YYYY-MM-DD") : "-1",
             membershipProductTypeId,
             genderRefId,
             postalCode: (postalCode !== "" && postalCode !== null) ? postalCode.toString() : "-1",
@@ -268,8 +322,10 @@ class Registration extends Component {
             paymentId,
             paymentStatusRefId,
             searchText,
-            regFrom: (regFrom !== "-1" && !isNaN(regFrom)) ? moment(regFrom).format("YYYY-MM-DD") : "-1",
-            regTo: (regTo !== "-1" && !isNaN(regTo)) ? moment(regTo).format("YYYY-MM-DD") : "-1",
+            // regFrom: (regFrom !== "-1" && !isNaN(regFrom)) ? moment(regFrom).format("YYYY-MM-DD") : "-1",
+            regFrom: (regFrom !== "-1") ? moment(regFrom).format("YYYY-MM-DD") : "-1",
+            // regTo: (regTo !== "-1" && !isNaN(regTo)) ? moment(regTo).format("YYYY-MM-DD") : "-1",
+            regTo: (regTo !== "-1") ? moment(regTo).format("YYYY-MM-DD") : "-1",
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0),
@@ -307,7 +363,7 @@ class Registration extends Component {
         } else {
             let newValue;
             if (key === "dobFrom" || key === "dobTo" || key === "regFrom" || key === "regTo") {
-                newValue = moment(value, "YYYY-mm-dd");
+                newValue = value == null ? "-1" : moment(value, "YYYY-mm-dd");
             } else {
                 newValue = value;
             }
@@ -399,6 +455,7 @@ class Registration extends Component {
                                 onChange={(e) => this.onChangeSearchText(e)}
                                 placeholder="Search..."
                                 onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                value={this.state.searchText}
                                 prefix={
                                     <Icon
                                         type="search"
@@ -491,6 +548,7 @@ class Registration extends Component {
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
                                     name="dobFrom"
+                                    value={this.state.dobFrom !== "-1" && moment(this.state.dobFrom, "YYYY-MM-DD")}
                                 />
                             </div>
                         </div>
@@ -506,6 +564,7 @@ class Registration extends Component {
                                     format="DD-MM-YYYY"
                                     showTime={false}
                                     name="dobTo"
+                                    value={this.state.dobTo !== "-1" && moment(this.state.dobTo, "YYYY-MM-DD")}
                                 />
                             </div>
                         </div>
@@ -641,6 +700,7 @@ class Registration extends Component {
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
                                     name="regFrom"
+                                    value={this.state.regFrom !== "-1" && moment(this.state.regFrom, "YYYY-MM-DD")}
                                 />
                             </div>
                         </div>
@@ -656,6 +716,7 @@ class Registration extends Component {
                                     format="DD-MM-YYYY"
                                     showTime={false}
                                     name="regTo"
+                                    value={this.state.regTo !== "-1" && moment(this.state.regTo, "YYYY-MM-DD")}
                                 />
                             </div>
                         </div>
@@ -721,6 +782,7 @@ class Registration extends Component {
     };
 
     render() {
+        console.log(this.props.userRegistrationState.registrationListAction, 'registrationListAction')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />

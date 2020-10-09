@@ -387,6 +387,14 @@ function getCoachData(payload, roleId, matchStatus) {
   return action
 }
 
+function getUmpireActivityListAction(payload, roleId, userId) {
+  const action = {
+    type: ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_LOAD,
+    payload, roleId, userId
+  };
+  return action
+}
+
 
 
 export {
@@ -437,5 +445,6 @@ export {
   getUserRole,
   getScorerData,
   getUmpireData,
-  getCoachData
+  getCoachData,
+  getUmpireActivityListAction,
 }

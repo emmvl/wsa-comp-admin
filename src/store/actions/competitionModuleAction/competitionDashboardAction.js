@@ -34,12 +34,13 @@ function deleteCompetitionAction(competitionId,targetValue) {
     return action;
 }
 
-function updateReplicateSaveObjAction(data,key,subKey){
+function updateReplicateSaveObjAction(data,key,subKey,index){
     const action = {
         type: ApiConstants.UPDATE_REPLICATE_SAVE_OBJ,
         data: data,
         key: key,
-        subKey: subKey
+        subKey: subKey,
+        index: index
     }
     return action;
 }
@@ -52,11 +53,29 @@ function replicateSaveAction(replicateSave){
     return action;
 }
 
+function getOldMembershipProductsByCompIdAction(payload){
+    const action = {
+        type: ApiConstants.API_OLD_MEMBERSHIP_PRODUCTS_BY_COMP_ID_LOAD,
+        payload: payload
+    }
+    return action;
+}
+
+function getNewMembershipProductByYearAction(payload){
+    const action = {
+        type: ApiConstants.API_NEW_MEMBERSHIP_PRODUCTS_BY_YEAR_LOAD,
+        payload: payload
+    }
+    return action;
+}
+
 export {
     competitionDashboardAction,
     fixtureTemplateRoundsAction,
     updateCompetitionStatus,
     deleteCompetitionAction,
     updateReplicateSaveObjAction,
-    replicateSaveAction
+    replicateSaveAction,
+    getOldMembershipProductsByCompIdAction,
+    getNewMembershipProductByYearAction
 }

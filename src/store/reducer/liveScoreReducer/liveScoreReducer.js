@@ -17,6 +17,25 @@ const initialState = {
     scorerListResult: [],
 };
 
+function getNameWithNumber(name, number) {
+    let numberLength = new Array(number.length - 4).join('x') +
+        number.substr(number.length - 5, 4);
+    let newName = name + "-" + numberLength
+    return newName
+}
+
+function updateScorerData(result) {
+    if (result.length > 0) {
+        for (let i in result) {
+            let number = JSON.stringify(result[i].mobileNumber)
+            let name = result[i].firstName + result[i].lastName
+            let NameWithNumber = getNameWithNumber(name, number)
+            result[i].NameWithNumber = NameWithNumber
+        }
+    }
+    return result
+}
+
 function LiveScoreState(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_LIVE_SCORE_DIVISION_LOAD:
@@ -45,10 +64,11 @@ function LiveScoreState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_GET_SCORER_LIST_SUCCESS:
+            let result = action.result ? updateScorerData(action.result) : []
             return {
                 ...state,
                 onLoad: false,
-                scorerListResult: action.result,
+                scorerListResult: result,
             };
 
         default:
