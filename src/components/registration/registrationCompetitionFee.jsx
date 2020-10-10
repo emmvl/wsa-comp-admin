@@ -529,8 +529,8 @@ const playerSeasonalTableAssociation = [
   },
   {
     title: 'Association Nomination Fees (excl. GST)',
-    dataIndex: 'nominationFees',
-    key: 'nominationFees',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
     render: (fee, record, index) => (
       <Input
         prefix="$"
@@ -552,8 +552,8 @@ const playerSeasonalTableAssociation = [
   },
   {
     title: 'GST',
-    dataIndex: 'nominationGST',
-    key: 'nominationGST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
     render: (gst, record, index) => (
       <Input
         prefix="$"
@@ -786,8 +786,8 @@ const playercasualTableAssociation = [
   },
   {
     title: 'Association Nomination Fees (excl. GST)',
-    dataIndex: 'nominationFees',
-    key: 'nominationFees',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
     render: (fee, record, index) => (
       <Input
         prefix="$"
@@ -809,8 +809,8 @@ const playercasualTableAssociation = [
   },
   {
     title: 'GST',
-    dataIndex: 'nominationGST',
-    key: 'nominationGST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
     render: (gst, record, index) => (
       <Input
         prefix="$"
@@ -1041,8 +1041,8 @@ const playerSeasonalTableClub = [
   },
   {
     title: 'Club Nomination Fees (excl. GST)',
-    dataIndex: 'nominationFees',
-    key: 'nominationFees',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
     render: (fee, record, index) => (
       <Input
         prefix="$"
@@ -1064,8 +1064,8 @@ const playerSeasonalTableClub = [
   },
   {
     title: 'GST',
-    dataIndex: 'nominationGST',
-    key: 'nominationGST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
     render: (gst, record, index) => (
       <Input
         prefix="$"
@@ -1298,8 +1298,8 @@ const playercasualTableClub = [
   },
   {
     title: 'Club Nomination Fees (excl. GST)',
-    dataIndex: 'nominationFees',
-    key: 'nominationFees',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
     render: (fee, record, index) => (
       <Input
         prefix="$"
@@ -1321,8 +1321,8 @@ const playercasualTableClub = [
   },
   {
     title: 'GST',
-    dataIndex: 'nominationGST',
-    key: 'nominationGST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
     render: (gst, record, index) => (
       <Input
         prefix="$"
@@ -1512,6 +1512,7 @@ const playerSeasonalTableTeamAssociation = [
     dataIndex: 'nominationFees',
     key: 'nominationFees',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         disabled={true}
@@ -1528,6 +1529,10 @@ const playerSeasonalTableTeamAssociation = [
           )
         }
       />
+      ) : 
+      (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'} />
+      )
     ),
   },
   {
@@ -1535,6 +1540,7 @@ const playerSeasonalTableTeamAssociation = [
     dataIndex: 'nominationGST',
     key: 'nominationGST',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         disabled={true}
@@ -1551,13 +1557,18 @@ const playerSeasonalTableTeamAssociation = [
           )
         }
       />
+      ) : 
+      (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'} />
+      )
     ),
   },
   {
     title: 'Association Nomination Fees (excl. GST)',
-    dataIndex: 'nominationFees',
-    key: 'nominationFees',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -1574,13 +1585,18 @@ const playerSeasonalTableTeamAssociation = [
           )
         }
       />
+      ) : 
+      (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'} />
+      )
     ),
   },
   {
     title: 'GST',
-    dataIndex: 'nominationGST',
-    key: 'nominationGST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -1597,6 +1613,10 @@ const playerSeasonalTableTeamAssociation = [
           )
         }
       />
+      ) : 
+      (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'} />
+      )
     ),
   },
   {
@@ -1622,11 +1642,7 @@ const playerSeasonalTableTeamAssociation = [
           }
         />
       ) : (
-          <Input
-            disabled={true}
-            className="input-inside-table-fees"
-            value={'N/A'}
-          />
+          <Input disabled={true} className="input-inside-table-fees" value={'N/A'} />
         ),
   },
   {
@@ -1795,6 +1811,7 @@ const playerSeasonalTableTeamClub = [
     dataIndex: 'nominationFees',
     key: 'nominationFees',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         disabled={true}
@@ -1811,6 +1828,9 @@ const playerSeasonalTableTeamClub = [
           )
         }
       />
+      ):(
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+      )
     ),
   },
   {
@@ -1818,6 +1838,7 @@ const playerSeasonalTableTeamClub = [
     dataIndex: 'nominationGST',
     key: 'nominationGST',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         disabled={true}
@@ -1834,13 +1855,17 @@ const playerSeasonalTableTeamClub = [
           )
         }
       />
+      ):(
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+      )
     ),
   },
   {
     title: 'Club Nomination Fees (excl. GST)',
-    dataIndex: 'nominationFees',
-    key: 'nominationFees',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -1857,13 +1882,17 @@ const playerSeasonalTableTeamClub = [
           )
         }
       />
+      ):(
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+      )
     ),
   },
   {
     title: 'GST',
-    dataIndex: 'nominationGST',
-    key: 'nominationGST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -1880,6 +1909,9 @@ const playerSeasonalTableTeamClub = [
           )
         }
       />
+      ):(
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+      )
     ),
   },
   {
@@ -1905,11 +1937,7 @@ const playerSeasonalTableTeamClub = [
           }
         />
       ) : (
-          <Input
-            disabled={true}
-            className="input-inside-table-fees"
-            value={'N/A'}
-          />
+          <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
         ),
   },
   {
@@ -2078,6 +2106,7 @@ const playerSeasoTeamTable = [
     dataIndex: 'nominationFees',
     key: 'nominationFees',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2094,6 +2123,10 @@ const playerSeasoTeamTable = [
           )
         }
       />
+      ) :
+      (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2101,6 +2134,7 @@ const playerSeasoTeamTable = [
     dataIndex: 'nominationGST',
     key: 'nominationGST',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2117,6 +2151,9 @@ const playerSeasoTeamTable = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2255,6 +2292,7 @@ const playerCasualTableTeamAssociation = [
     dataIndex: 'nominationFees',
     key: 'nominationFees',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         disabled={true}
@@ -2271,6 +2309,9 @@ const playerCasualTableTeamAssociation = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2278,6 +2319,7 @@ const playerCasualTableTeamAssociation = [
     dataIndex: 'nominationGST',
     key: 'nominationGST',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         disabled={true}
@@ -2294,13 +2336,17 @@ const playerCasualTableTeamAssociation = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
     title: 'Association Nomination Fees (excl. GST)',
-    dataIndex: 'nominationFees',
-    key: 'nominationFees',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2317,13 +2363,17 @@ const playerCasualTableTeamAssociation = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
     title: 'GST',
-    dataIndex: 'nominationGST',
-    key: 'nominationGST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2340,6 +2390,9 @@ const playerCasualTableTeamAssociation = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2347,6 +2400,7 @@ const playerCasualTableTeamAssociation = [
     dataIndex: 'fee',
     key: 'fee',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         type="number"
         disabled={true}
@@ -2362,6 +2416,9 @@ const playerCasualTableTeamAssociation = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2369,6 +2426,7 @@ const playerCasualTableTeamAssociation = [
     dataIndex: 'gst',
     key: 'gst',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         type="number"
@@ -2385,6 +2443,9 @@ const playerCasualTableTeamAssociation = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2392,6 +2453,7 @@ const playerCasualTableTeamAssociation = [
     dataIndex: 'affiliateFee',
     key: 'affiliateFee',
     render: (affiliateFee, record, index) => (
+      affiliateFee != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2408,6 +2470,9 @@ const playerCasualTableTeamAssociation = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2415,6 +2480,7 @@ const playerCasualTableTeamAssociation = [
     dataIndex: 'affiliateGst',
     key: 'affiliateGst',
     render: (affiliateGst, record, index) => (
+      affiliateGst != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2431,6 +2497,9 @@ const playerCasualTableTeamAssociation = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2439,11 +2508,9 @@ const playerCasualTableTeamAssociation = [
     key: 'total',
     render: (total) => (
       <Input
-        style={{ width: 95 }}
-        prefix="$"
-        className="input-inside-table-fees"
-        value={total}
         disabled={true}
+        className="input-inside-table-fees"
+        value={'N/A'}
       />
     ),
   },
@@ -2510,6 +2577,7 @@ const playerCasualTableTeamClub = [
     dataIndex: 'nominationFees',
     key: 'nominationFees',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         disabled={true}
@@ -2526,6 +2594,9 @@ const playerCasualTableTeamClub = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2533,6 +2604,7 @@ const playerCasualTableTeamClub = [
     dataIndex: 'nominationGST',
     key: 'nominationGST',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         disabled={true}
@@ -2549,13 +2621,17 @@ const playerCasualTableTeamClub = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
     title: 'Club Nomination Fees (excl. GST)',
-    dataIndex: 'nominationFees',
-    key: 'nominationFees',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2572,13 +2648,17 @@ const playerCasualTableTeamClub = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
     title: 'GST',
-    dataIndex: 'nominationGST',
-    key: 'nominationGST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2595,6 +2675,9 @@ const playerCasualTableTeamClub = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2602,6 +2685,7 @@ const playerCasualTableTeamClub = [
     dataIndex: 'fee',
     key: 'fee',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         type="number"
@@ -2618,6 +2702,9 @@ const playerCasualTableTeamClub = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2625,6 +2712,7 @@ const playerCasualTableTeamClub = [
     dataIndex: 'gst',
     key: 'gst',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         type="number"
@@ -2641,6 +2729,9 @@ const playerCasualTableTeamClub = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2648,6 +2739,7 @@ const playerCasualTableTeamClub = [
     dataIndex: 'affiliateFee',
     key: 'affiliateFee',
     render: (affiliateFee, record, index) => (
+      affiliateFee != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2664,6 +2756,9 @@ const playerCasualTableTeamClub = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2671,6 +2766,7 @@ const playerCasualTableTeamClub = [
     dataIndex: 'affiliateGst',
     key: 'affiliateGst',
     render: (affiliateGst, record, index) => (
+      affiliateGst != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2687,6 +2783,9 @@ const playerCasualTableTeamClub = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
 
@@ -2696,12 +2795,10 @@ const playerCasualTableTeamClub = [
     key: 'total',
     render: (total) => (
       <Input
-        style={{ width: 95 }}
-        prefix="$"
-        className="input-inside-table-fees"
-        value={total}
-        disabled={true}
-      />
+      disabled={true}
+      className="input-inside-table-fees"
+      value={'N/A'}
+    />
     ),
   },
 ];
@@ -2767,6 +2864,7 @@ const playerCasualTeamTable = [
     dataIndex: 'nominationFees',
     key: 'nominationFees',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2783,6 +2881,9 @@ const playerCasualTeamTable = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2790,6 +2891,7 @@ const playerCasualTeamTable = [
     dataIndex: 'nominationGST',
     key: 'nominationGST',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2806,6 +2908,9 @@ const playerCasualTeamTable = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2813,6 +2918,7 @@ const playerCasualTeamTable = [
     dataIndex: 'fee',
     key: 'fee',
     render: (fee, record, index) => (
+      fee != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2829,6 +2935,9 @@ const playerCasualTeamTable = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2836,6 +2945,7 @@ const playerCasualTeamTable = [
     dataIndex: 'gst',
     key: 'gst',
     render: (gst, record, index) => (
+      gst != null ? (
       <Input
         prefix="$"
         disabled={this_Obj.state.permissionState.allDisable}
@@ -2852,6 +2962,9 @@ const playerCasualTeamTable = [
           )
         }
       />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -2860,11 +2973,9 @@ const playerCasualTeamTable = [
     key: 'total',
     render: (total) => (
       <Input
-        style={{ width: 95 }}
-        prefix="$"
-        className="input-inside-table-fees"
-        value={total}
         disabled={true}
+        className="input-inside-table-fees"
+        value={'N/A'}
       />
     ),
   },
