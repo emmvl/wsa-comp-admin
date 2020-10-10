@@ -57,6 +57,7 @@ const initialState = {
     venueAddressDuplication: false,
     regChangeTypes: [],
     venueListActionObject: null,
+    membershipPaymentOptions: []
 };
 
 
@@ -468,6 +469,18 @@ function commonReducerState(state = initialState, action) {
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.venueListActionObject = null
             return { ...state, onLoad: false };
+
+
+        case ApiConstants.API_MEMBERSHIP_PAYMENT_OPTIONS_LOAD:
+            return {...state, onLoad: true,};
+
+        case ApiConstants.API_MEMBERSHIP_PAYMENT_OPTIONS_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                membershipPaymentOptions: isArrayNotEmpty(action.result) ? action.result : [],
+                status: action.status
+            };
 
         default:
             return state;

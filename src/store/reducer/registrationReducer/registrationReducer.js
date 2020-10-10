@@ -685,6 +685,7 @@ function registration(state = initialState, action) {
       state.membershipProductId = action.result.membershipproduct.membershipProductId;
       let feesDeafultobj1 = {
         membershipProductId: state.membershipProductId,
+        paymentOptionRefId: action.result.membershipproduct.paymentOptionRefId ? action.result.membershipproduct.paymentOptionRefId : 1, 
         membershipFees: feesDataObject(action.result, action.result.membershipproduct.membershipProductName)
       };
       state.membershipProductFeesTableData = feesDeafultobj1;
@@ -710,6 +711,7 @@ function registration(state = initialState, action) {
         allMembershipData.membershipproduct.membershipProductId;
       let feesDeafultobj = {
         membershipProductId: state.membershipProductId,
+        paymentOptionRefId: allMembershipData.membershipproduct.paymentOptionRefId ? allMembershipData.membershipproduct.paymentOptionRefId : 1,
         membershipFees: feesDataObject(allMembershipData, membershipProductName)
       };
       state.membershipProductFeesTableData = feesDeafultobj;

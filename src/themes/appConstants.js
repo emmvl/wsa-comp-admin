@@ -1641,7 +1641,10 @@ const AppConstants = {
   singleGamePerTeamMember: "Single Game Fee per Team Member(inc GST)",
   setMembershipProducts: "Set Membership Product(s)",
   chargedForFullSeason: "Charged for Full Season",
-  chargedPerMatch: "Charged per Match"
+  chargedPerMatch: "Charged per Match",
+  membershipPaymentOptions: "MembershipPaymentOption",
+  membershipFeesPaymentOptions: "Membership Fee Payment Options",
+  whenPaymentsRequired: "When Payments are Required"
 };
 
 export default AppConstants;
