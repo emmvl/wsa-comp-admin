@@ -6713,6 +6713,8 @@ class RegistrationCompetitionFee extends Component {
     let isTeamSeasonal = this.checkIsTeamSeasonal(feeDetails);
     let isTeamCasual = this.checkIsTeamCasual(feeDetails);
 
+   // console.log("isSeasonal", isSeasonal, isCasual, isTeamSeasonal,isTeamCasual )
+
     let selectedSeasonalFee = this.props.competitionFeesState.SelectedSeasonalFee;
     let selectedCasualFee = this.props.competitionFeesState.selectedCasualFee;
     let selectedSeasonalTeamFee = this.props.competitionFeesState.selectedSeasonalTeamFee;
@@ -6751,11 +6753,13 @@ class RegistrationCompetitionFee extends Component {
                     {item.description}
                   </Checkbox>
                 </div>
-              ))}
+              ))
+              }
           </div>
           <div className="inside-container-view pt-5">
             <span className="form-heading">{AppConstants.paymentOptions}</span>
-            {isSeasonal == false && isCasual == false && isTeamSeasonal == false && (
+            {isSeasonal == false && isCasual == false && isTeamSeasonal == false &&
+            isTeamCasual == false &&(
               <span className="applicable-to-heading pt-0">
                 {AppConstants.please_Sel_Fee}
               </span>

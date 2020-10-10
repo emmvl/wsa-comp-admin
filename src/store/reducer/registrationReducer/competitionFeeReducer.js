@@ -420,7 +420,6 @@ function discountDataObject(data) {
 // get selected casual fee payment option key
 function checkSelectedCasualFee(paymentData, casualFee, selectedCasualFee, selectedCasualFeeKey) {
     selectedCasualFeeKey = []
-    console.log("casualFee", casualFee);
     //if (paymentData) {
         for(let item of casualFee){
             let paymentOptObj = {
@@ -494,7 +493,8 @@ function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasona
         //         selectedSeasonalFee.push( paymentDataArray[i])
         //     }
         // }
-        if(instalmentDates.length > 0){
+
+        if(instalmentDates!= null && instalmentDates.length > 0){
             for(let i in instalmentDates){
                 if (instalmentDates[i].feesTypeRefId == 2) {
                     selectedSeasonalInstalmentDates.push(instalmentDates[i]);
@@ -550,7 +550,7 @@ function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSea
         //         selectedSeasonalTeamFee.push(paymentDataArray[i])
         //     }
         // }
-        if(instalmentdates.length > 0){
+        if(instalmentdates!= null && instalmentdates.length > 0){
             for (let i in instalmentdates) {
                 if (instalmentdates[i].feesTypeRefId == 3) {
                     selectedTeamSeasonalInstalmentDates.push(instalmentdates[i])
@@ -619,6 +619,7 @@ function checkSelectedPaymentMethods(paymentMethodArray, paymentMethodDefault, s
             selectedPaymentMethods.push(paymentMthObj);
         }
     }
+
 
     return {
         selectedPaymentMethods
@@ -2165,9 +2166,6 @@ function competitionFees(state = initialState, action) {
                 error: null
             };
 
-
-
-
         ///////get the venue list in the first tab
         case ApiConstants.API_REG_FORM_VENUE_SUCCESS:
             let venue = action.result
@@ -2335,6 +2333,24 @@ function competitionFees(state = initialState, action) {
             let divisionGetSucces_Data = getDivisionTableData(detailsSuccessData)
             state.competitionDivisionsData = divisionGetSucces_Data
             state.onLoad = false
+
+            if(state.selectedPaymentMethods.length == 0){
+                let selectedCasualFee = checkSelectedCasualFee(null, state.casualPaymentDefault, state.selectedCasualFee, null)
+                let selectedSeasonalFee = checkSelectedSeasonalFee(null, state.seasonalPaymentDefault, state.SelectedSeasonalFee, null, null,state.selectedSeasonalInstalmentDates)
+                let selectedSeasonalTeamFee = checkSelectedSeasonalTeamFee(null, state.seasonalTeamPaymentDefault, state.selectedSeasonalTeamFee, null,null,null)
+                let selectedCasualTeamFee = checkSelectedCasualTeamFee(null, state.casualPaymentDefault, state.selectedCasualTeamFee)
+                let selectedPaymentMethods = checkSelectedPaymentMethods(null, state.paymentMethodsDefault, state.selectedPaymentMethods)
+
+                state.selectedCasualFee = selectedCasualFee.selectedCasualFee;
+                state.selectedSeasonalFee = selectedSeasonalFee.selectedSeasonalFee;
+                state.selectedSeasonalTeamFee = selectedSeasonalTeamFee.selectedSeasonalTeamFee;
+                state.selectedCasualTeamFee = selectedCasualTeamFee.selectedCasualTeamFee;
+                state.selectedPaymentMethods = selectedPaymentMethods.selectedPaymentMethods;
+
+
+            }
+            
+            
             return {
                 ...state,
                 status: action.status,
@@ -2496,7 +2512,7 @@ function competitionFees(state = initialState, action) {
 
         /// update payment option in competiton fee
         case ApiConstants.UPDATE_PAYMENTS_OPTIONS_COMPETITION_FEES:
-            console.log("action", action);
+            //console.log("action", action);
             if (action.key == "casualfee") {
                 state.selectedCasualFee[action.index][action.subKey] = action.value;
                 // state.selectedCasualFeeKey = action.value;
@@ -2509,7 +2525,7 @@ function competitionFees(state = initialState, action) {
                     state.SelectedSeasonalFee[action.index][action.subKey] = action.value;
 
                     let paymentOptionRefId = state.SelectedSeasonalFee[action.index]["paymentOptionRefId"];
-                    console.log("paymentOptionRefId", paymentOptionRefId);
+                   // console.log("paymentOptionRefId", paymentOptionRefId);
                     if(paymentOptionRefId == 5){
                         state.competitionDetailData.isSeasonalUponReg = true;
                     }
@@ -3041,7 +3057,7 @@ function competitionFees(state = initialState, action) {
                 updatedVenue['contactNumber'] = venueSuccess.contactNumber
                 state.venueList.push(updatedVenue)
                 state.selectedVenuesAdd = "Add"
-                console.log("state.selectedVenues", state.selectedVenues);
+               // console.log("state.selectedVenues", state.selectedVenues);
                 state.selectedVenues.push(venueSuccess.venueId)
                 state.createVenue = action.result
                
@@ -3100,8 +3116,7 @@ function competitionFees(state = initialState, action) {
             };
 
         case ApiConstants.UPDATE_INSTALMENT_DATE:
-            console.log("UPDATE_INSTALMENT_DATE" + action.key +"%%%" + JSON.stringify(action.value) +
-            "***" + action.subKey);
+         
             if(action.key == "instalmentAddDate" && action.subKey == "seasonalfee"){
                 addInstalmentDate(action.value)
             }
