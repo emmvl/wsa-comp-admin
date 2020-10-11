@@ -361,7 +361,6 @@ class MultifieldDrawsNew extends Component {
                     venueId: JSON.parse(venueId),
                     roundId: JSON.parse(roundId),
                     roundTime: roundTime,
-                    competitionDivisionGradeId: JSON.parse(competitionDivisionGradeId),
                     venueLoad: false,
                 });
             } else {
@@ -1686,7 +1685,7 @@ class MultifieldDrawsNew extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.draws} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
                 <Layout className="comp-dash-table-view">
                     {this.headerView()}

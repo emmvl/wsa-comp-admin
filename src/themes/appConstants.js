@@ -753,7 +753,7 @@ const AppConstants = {
   addgrade: 'Add Grade',
 
   //new changes in venue
-  linkToHomeAffiliate: 'Link to Home Affiliate',
+  linkToHomeAffiliate: 'Link To Home Affiliate',
   addressOne: 'Address Line 1',
   addressTwo: 'Address Line 2',
   suburb: 'Suburb',
@@ -1048,7 +1048,7 @@ const AppConstants = {
     'If enabled, a list of all of the incidents that have occured on this day including injuries and disciplinary.',
   matchDurationMsg:
     'Game time only (in minutes). This time should exclude time for breaks.',
-  mainBreakMsg: 'Half time Break (in minutes).',
+  mainBreakMsg: 'Half time break (in minutes).',
   qtrBreatMsg: 'Break after 1st and 3rd quaters (in minutes).',
   teamAliasMsg: 'The name that is used for the Team on the draw and media.',
   managerNewMsg:
@@ -1491,7 +1491,7 @@ const AppConstants = {
   venueAddressDetailsError: "Please input venue address in details",
   venueAddressError: "Please select a venue from the venue search",
   venueAddressSelect: "Please select a venue from the venue search",
-  venueSearch: "Venue search",
+  venueSearch: "Venue Search",
   matchSheetsNoPrintError: "There is no match sheets to print.",
   selectTemplateTypeError: "Please select template type.",
   selectTemplateType: "Select template type",
@@ -1576,7 +1576,7 @@ const AppConstants = {
   oneHasPreference: "Which one has preference:",
   divisioAndGrades: "Division and Grades",
   combine: "Combine",
-  whatRegistrationChange: "what registration change do you",
+  whatRegistrationChange: "What registration change do you",
   registrationChangeRef: "RegistrationChange",
   reasonWhyYourAreDecline: "Reason why you are declining the request for de-registration?",
   whoPayUmpire: "Who pays Umpires",
@@ -1620,7 +1620,7 @@ const AppConstants = {
   poolSettingsWhoPlaysWho: "Pool Settings - Who Plays Who",
   mailBodyText: `Hi,\n \nPlease use the following discount Code when you register in order to have your fee waived.`,
   fixtureTemplate: "Fixture Template",
-  reasonForTransfer: "Reasons(s) for wanting to transfer.",
+  reasonForTransfer: "Reason for Transfer",
   registrationCloseDate: "Registration close date",
   filterDates: "Filter Dates",
   uploadBankAccnt: "Upload Bank Account",
@@ -1632,6 +1632,19 @@ const AppConstants = {
   suspended: "Suspended",
   reasonWhyYourAreDeclineFromTransfer: "Reason why you are declining the request to transfer from your organisation",
   reasonWhyYourAreDeclineToTransfer: "Reason why you are declining the request to transfer to you organisation",
+  playerImport: "Import Players",
+  teamSingleGameFee: "Team Single Game Fee",
+  atPointOfRegistration: "At point of Registration",
+  nominationFee: "Nomination Fee",
+  nominationFeeTeam: "Please note - The manager can choose to pay the nomination fee or can split it with the players at the time of registration",
+  paymentMethods: "Payment Methods",
+  singleGamePerTeamMember: "Single Game Fee per Team Member(inc GST)",
+  setMembershipProducts: "Set Membership Product(s)",
+  chargedForFullSeason: "Charged for Full Season",
+  chargedPerMatch: "Charged per Match",
+  membershipPaymentOptions: "MembershipPaymentOption",
+  membershipFeesPaymentOptions: "Membership Fee Payment Options",
+  whenPaymentsRequired: "When Payments are Required"
 };
 
 export default AppConstants;

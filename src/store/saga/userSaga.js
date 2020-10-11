@@ -1,10 +1,11 @@
 import { put, call, takeEvery } from "redux-saga/effects";
 import { message } from "antd";
-
+import history from "util/history";
 import ApiConstants from "themes/apiConstants";
 import { setAuthToken } from "util/sessionStorage";
 import UserAxiosApi from "store/http/userHttp/userAxiosApi";
 import CommonAxiosApi from "store/http/axiosApi";
+import livescoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
 
 function* failSaga(result) {
   yield put({
@@ -771,6 +772,9 @@ export function* impersonationSaga(action) {
         result: result.result.data,
         status: result.status,
       });
+      if (action.payload.access == false) {
+        history.push('/')
+      }
     } else {
       yield call(failSaga, result);
     }
@@ -892,6 +896,24 @@ function* getCoachSaga(action) {
 }
 
 
+// Get the umpire Activity Data
+function* getUmpireActivityListSaga(action) {
+  try {
+    const result = yield call(livescoreAxiosApi.getUmpireActivityList, action.payload, action.roleId, action.userId);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
@@ -937,4 +959,5 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_GET_SCORER_ACTIVITY_LOAD, getScorerActivitySaga);
   yield takeEvery(ApiConstants.API_GET_UMPIRE_DATA_LOAD, getUmpireSaga);
   yield takeEvery(ApiConstants.API_GET_COACH_DATA_LOAD, getCoachSaga);
+  yield takeEvery(ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_LOAD, getUmpireActivityListSaga);
 }

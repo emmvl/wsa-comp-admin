@@ -331,35 +331,11 @@ class RegistrationChangeReview extends Component {
                 okText={'Save'}
                 onOk = { () => this.acceptModal("ok")}
                 centered={true}>
-                <Radio.Group className="reg-competition-radio"
-                    value={reviewSaveData.refundTypeRefId}
-                    onChange={(e) => this.updateRegistrationReview(e.target.value,"refundTypeRefId")}>
-                    <Radio  value={1}>{'Refund full amount'}</Radio>
-                    {reviewSaveData.refundTypeRefId == 1 ? 
-                        <Table
-                            className="refund-table"
-                            columns={refundFullAmountColumns}
-                            dataSource={regChangeReviewData.invoices}
-                            pagination={false}
-                        />
-                    : null } 
-                    <Radio  value={2}>{'Refund partial payment'}</Radio>
-                    {reviewSaveData.refundTypeRefId == 2 ? 
-                        <Table
-                            className="refund-table"
-                            columns={refundPartialAmountColumns}
-                            dataSource={regChangeReviewData.invoices}
-                            pagination={false}
-                        />
-                    : null } 
-                    {/* {reviewSaveData.refundTypeRefId == 2 ? 
-                    <InputWithHead
-                            placeholder={AppConstants.refundAmount}
-                            value={reviewSaveData.refundAmount}
-                            onChange={(e) => this.updateRegistrationReview(e.target.value,"refundAmount")}
-                        />
-                        : null } */}
-                </Radio.Group>
+                {
+                    regChangeReviewData.isShowButton == 1 ? 
+                    this.deRegisterApprove(reviewSaveData, regChangeReviewData) :
+                    this.transferApprove()
+                }
             </Modal>
         )
     }
@@ -606,6 +582,48 @@ class RegistrationChangeReview extends Component {
         );
     }
 
+    deRegisterApprove = (reviewSaveData, regChangeReviewData) =>{
+        return (
+            <Radio.Group className="reg-competition-radio"
+                value={reviewSaveData.refundTypeRefId}
+                onChange={(e) => this.updateRegistrationReview(e.target.value,"refundTypeRefId")}>
+                <Radio  value={1}>{'Refund full amount'}</Radio>
+                {reviewSaveData.refundTypeRefId == 1 ? 
+                    <Table
+                        className="refund-table"
+                        columns={refundFullAmountColumns}
+                        dataSource={regChangeReviewData.invoices}
+                        pagination={false}
+                    />
+                : null } 
+                <Radio  value={2}>{'Refund partial payment'}</Radio>
+                {reviewSaveData.refundTypeRefId == 2 ? 
+                    <Table
+                        className="refund-table"
+                        columns={refundPartialAmountColumns}
+                        dataSource={regChangeReviewData.invoices}
+                        pagination={false}
+                    />
+                : null } 
+                {/* {reviewSaveData.refundTypeRefId == 2 ? 
+                <InputWithHead
+                        placeholder={AppConstants.refundAmount}
+                        value={reviewSaveData.refundAmount}
+                        onChange={(e) => this.updateRegistrationReview(e.target.value,"refundAmount")}
+                    />
+                    : null } */}
+            </Radio.Group>
+        )
+    }
+
+    transferApprove = () =>{
+        return (
+            <div>
+                <p>Are you approve to transfer?</p>
+            </div>
+        )
+    }
+
     deRegisterDecline = (reviewSaveData) =>{
         return (
             <div>
@@ -689,11 +707,11 @@ class RegistrationChangeReview extends Component {
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
                                 <Button type="cancel-button" onClick = {() => this.goBack()} >{
-                                isShowButton == 1 ? AppConstants.cancel : AppConstants.back
+                                isShowButton >= 1 ? AppConstants.cancel : AppConstants.back
                                 }</Button>
                             </div>
                         </div>
-                        {isShowButton == 1 ? 
+                        {isShowButton >= 1 ? 
                         <div className="col-sm" >
                             <div className="comp-buttons-view">
                                 <Button onClick={() => this.acceptModal("show")} className="user-approval-button mr-3" type="primary" htmlType="submit" >

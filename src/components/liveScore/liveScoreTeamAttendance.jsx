@@ -88,7 +88,7 @@ const columns = [
 
     },
     {
-        title: 'Player Id',
+        title: 'Player ID',
         dataIndex: 'playerId',
         key: 'playerId',
         sorter: true,
@@ -145,7 +145,7 @@ const columns = [
 const borrowedColumns = [
 
     {
-        title: 'Match Id',
+        title: 'Match ID',
         dataIndex: 'matchId',
         key: 'matchId',
         sorter: true,
@@ -189,7 +189,7 @@ const borrowedColumns = [
 
     },
     {
-        title: 'Player Id',
+        title: 'Player ID',
         dataIndex: 'playerId',
         key: 'playerId',
         sorter: true,

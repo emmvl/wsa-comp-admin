@@ -28,20 +28,8 @@ const replicateObj = {
                 "timeslots": 1
             }
 		}
-	},
-	"membershipProducts":[
-		{
-			"competitionMembershipProductId": 0,
-			"membershipProductUniqueKey":"",
-			"membershipProductTypes":[
-				{
-					"competitionMembershipProductId":0,
-					"competitionMembershipProductTypeId":1,
-					"membershipProductTypeMappingId":22
-				}
-			]
-		}
-	]
+    },
+    "membershipProducts": []
 }
 
 const fixtures = {
@@ -50,6 +38,18 @@ const fixtures = {
     "teams": null,
     "venuePreferneces": null,
     "timeslots": null
+}
+
+const membershipProductObj = {
+    "newProducts":{
+        "membershipProductUniqueKey": null,
+        "membershipProductTypes":[]
+    },
+    "oldProducts":{
+        "competitionMembershipProductId": null,
+        "membershipProductUniqueKey": null,
+        "membershipProductTypes":[]
+    }
 }
 
 
@@ -66,7 +66,12 @@ const initialState = {
     replicateSaveOnLoad: false,
     replicateSaved: false,
     competitionId: null,
-    yearRefId: null
+    yearRefId: null,
+    oldMembershipProducs: [],
+    oldMembershipOnLoad: null,
+    newMembershipOnLoad: false,
+    newMembershipProducs: [],
+    replicateSaveErrorMessage: null
 };
 
 
@@ -106,6 +111,52 @@ function genratePaticipatingArray(dashboardList) {
     }
     return participatingComptitions
 
+}
+
+function setMembershipProducts(state,payload){
+    try{
+        let replicateSaveTemp = state.replicateSave;
+        let membershipProductTemp = deepCopyFunction(membershipProductObj)
+        let newMembershipProduct = state.newMembershipProducs.find(x => x.membershipProductUniqueKey == payload.newMembershipProductUniqueKey);
+        if(newMembershipProduct){
+            //set new prouducts object
+            membershipProductTemp.newProducts.membershipProductUniqueKey = payload.newMembershipProductUniqueKey;
+            let newMembershipProuductTypes = [];
+            for(let productType of newMembershipProduct.membershipProductTypes){
+                let obj = {
+                    membershipProductTypeMappingId: productType.membershipProductTypeMappingId,
+					productTypeName: productType.membershipProductTypeName,
+					isDefault: productType.isDefault,
+					isPlayer: productType.isPlaying
+                }
+                newMembershipProuductTypes.push(obj);
+            }
+            membershipProductTemp.newProducts.membershipProductTypes = newMembershipProuductTypes;
+
+            //set old product objects
+            let oldMembershipProduct = state.oldMembershipProducs[payload.oldProductIndex];
+            membershipProductTemp.oldProducts.competitionMembershipProductId = oldMembershipProduct.competitionMembershipProductId;
+            membershipProductTemp.oldProducts.membershipProductUniqueKey = oldMembershipProduct.membershipProductUniqueKey;
+            let oldMembershipProuductTypes = [];
+            for(let productType of oldMembershipProduct.membershipProductTypes){
+                let obj = {
+                    competitionMembershipProductId: productType.competitionMembershipProductId,
+					competitionMembershipProductTypeId: productType.competitionMembershipProductTypeId,
+                    membershipProductTypeMappingId: productType.membershipProductTypeMappingId,
+					productTypeName: productType.membershipProductTypeName,
+					isDefault: productType.isDefault,
+					isPlayer: productType.isPlaying
+                }
+                oldMembershipProuductTypes.push(obj);
+            }
+            membershipProductTemp.oldProducts.membershipProductTypes = oldMembershipProuductTypes;
+
+            replicateSaveTemp.membershipProducts[payload.oldProductIndex] = membershipProductTemp;
+            console.log("replicate",replicateSaveTemp);
+        }
+    }catch(ex){
+        console.log("Error in setMembershipProducts::"+ex);
+    }
 }
 
 function CompetitionDashboardState(state = initialState, action) {
@@ -173,6 +224,7 @@ function CompetitionDashboardState(state = initialState, action) {
             let replicateData = action.data;
             let replicateKey = action.key;
             let replicateSubKey = action.subKey;
+            let oldProductIndex = action.index;
             if(replicateKey == "details"){
                 state.replicateSave[replicateKey][replicateSubKey] = replicateData;
             }else if(replicateKey == "replicateSettings"){
@@ -199,6 +251,12 @@ function CompetitionDashboardState(state = initialState, action) {
                 }else{
                     state.replicateSave.details.replicateSettings[replicateKey][replicateSubKey] = replicateData;
                 }
+            }else if(replicateKey == "membershipProducts"){
+                let payload = {
+                    newMembershipProductUniqueKey: replicateData,
+                    oldProductIndex: oldProductIndex
+                }
+                setMembershipProducts(state,payload);
             }
             return{
                 ...state
@@ -213,9 +271,34 @@ function CompetitionDashboardState(state = initialState, action) {
                 ...state,
                 status: action.status,
                 replicateSaveOnLoad: false,
-                competitionId: responseData.competitionId,
-                yearRefId: responseData.yearRefId,
+                competitionId: action.status == 1 ? responseData.competitionId : null,
+                yearRefId: action.status == 1 ? responseData.yearRefId : null,
+                replicateSaveErrorMessage: action.status == 4 ? responseData : null,
                 replicateSaved: true 
+            }
+
+        case ApiConstants.API_OLD_MEMBERSHIP_PRODUCTS_BY_COMP_ID_LOAD: 
+            return {...state,oldMembershipOnLoad: true}
+
+        case ApiConstants.API_OLD_MEMBERSHIP_PRODUCTS_BY_COMP_ID_SUCCESS: 
+            let oldMemResponseData = action.result[0].membershipProducts;
+            return{
+                ...state,
+                status: action.status,
+                oldMembershipOnLoad: false,
+                oldMembershipProducs: oldMemResponseData
+            }
+
+        case ApiConstants.API_NEW_MEMBERSHIP_PRODUCTS_BY_YEAR_LOAD: 
+            return {...state,newMembershipOnLoad: true}
+
+        case ApiConstants.API_NEW_MEMBERSHIP_PRODUCTS_BY_YEAR_SUCCESS: 
+            let newMemResponseData = action.result[0].membershipProducts;
+            return{
+                ...state,
+                status: action.status,
+                newMembershipOnLoad: false,
+                newMembershipProducs: newMemResponseData
             }
 
         default:

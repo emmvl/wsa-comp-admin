@@ -1408,6 +1408,11 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, data);
     },
 
+    getUmpireActivityList(payload, roleId, userId) {
+        const url = `roster/umpireActivity?roleIds=${roleId}&userId=${userId}`;
+        return Method.dataPost(url, token, payload);
+    },
+
 };
 
 const Method = {

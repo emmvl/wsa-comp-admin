@@ -19,7 +19,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getAllowTeamRegistrationTypeAction } from '../../store/actions/commonAction/commonAction';
+import { getAllowTeamRegistrationTypeAction,membershipPaymentOptionAction } from '../../store/actions/commonAction/commonAction';
 import {
     regGetMembershipProductDetailsAction,
     regSaveMembershipProductDetailsAction,
@@ -214,6 +214,7 @@ class RegistrationMembershipFee extends Component {
         this.props.getCommonDiscountTypeTypeAction()
         this.props.membershipProductDiscountTypesAction()
         this.props.getAllowTeamRegistrationTypeAction()
+        this.props.membershipPaymentOptionAction()
     }
 
 
@@ -681,7 +682,7 @@ class RegistrationMembershipFee extends Component {
 
                                                     <Form.Item  >
                                                         {getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, {
-                                                            rules: [{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]
+                                                            rules: [{ required: true, message: ValidationConstants.playerTypeRequired }]
                                                         })(
                                                             <Radio.Group className="reg-competition-radio"
                                                                 onChange={(e) => this.allowTeamRegistrationPlayer(e.target.value, index, 'allowTeamRegistrationTypeRefId')}
@@ -802,48 +803,72 @@ class RegistrationMembershipFee extends Component {
 
     ////fees view inside the content
     feesView = (getFieldDecorator) => {
-        let data = this.props.registrationState.membershipProductFeesTableData
+        let data = this.props.registrationState.membershipProductFeesTableData;
         let feesData = data ? data.membershipFees.length > 0 ? data.membershipFees : [] : []
         return (
-            <div className="fees-view pt-5">
-                <span className="form-heading">{AppConstants.membershipFees}</span>
-                {feesData.length > 0 && feesData.map((item, index) => (
-                    <div className="inside-container-view" key={"feesData" + index}>
-                        <div className="table-responsive">
-                            <Table
-                                className="fees-table"
-                                columns={columns}
-                                dataSource={[item]}
-                                pagination={false}
-                                Divider="false"
-                            />
-                        </div>
-                        <span className="applicable-to-heading">
-                            {AppConstants.applyMembershipFee}
-                        </span>
-                        <Radio.Group
-                            className="reg-competition-radio"
-                            onChange={e => this.membershipFeeApplyRadio(e.target.value, index)}
-                            defaultValue={item.membershipProductFeesTypeRefId}
-                            disabled={this.state.membershipIsUsed}
-                        >
-                            {this.props.appState.membershipProductFeesTypes.map((item, typeindex) => {
-                                return (
+            <div>
+                <div className="tab-formView fees-view pt-5">
+                    <span className="form-heading">{AppConstants.membershipFees}</span>
+                    {feesData.length > 0 && feesData.map((item, index) => (
+                        <div className="inside-container-view" key={"feesData" + index}>
+                            <div className="table-responsive">
+                                <Table
+                                    className="fees-table"
+                                    columns={columns}
+                                    dataSource={[item]}
+                                    pagination={false}
+                                    Divider="false"
+                                />
+                            </div>
+                            <span className="applicable-to-heading">
+                                {AppConstants.applyMembershipFee}
+                            </span>
+                            <Radio.Group
+                                className="reg-competition-radio"
+                                onChange={e => this.membershipFeeApplyRadio(e.target.value, index)}
+                                defaultValue={item.membershipProductFeesTypeRefId}
+                                disabled={this.state.membershipIsUsed}
+                            >
+                                {this.props.appState.membershipProductFeesTypes.map((item, typeindex) => {
+                                    return (
 
-                                    <div className='row' key={"membershipProductFeesTypes" + typeindex} >
-                                        <Radio key={"validityRefId" + typeindex} value={item.id}> {item.description}</Radio>
+                                        <div className='row' key={"membershipProductFeesTypes" + typeindex} >
+                                            <Radio key={"validityRefId" + typeindex} value={item.id}> {item.description}</Radio>
 
-                                        <div style={{ marginLeft: -18, }}>
-                                            <Tooltip background='#ff8237'>
-                                                <span>{item.helpMsg}</span>
-                                            </Tooltip>
+                                            <div style={{ marginLeft: -18, }}>
+                                                <Tooltip background='#ff8237'>
+                                                    <span>{item.helpMsg}</span>
+                                                </Tooltip>
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
-                        </Radio.Group>
-                    </div>
-                ))}
+                                    );
+                                })}
+                            </Radio.Group>
+                        </div>
+                    ))}
+                </div>
+                <div className="tab-formView fees-view pt-5">
+                    <span className="form-heading">{AppConstants.membershipFeesPaymentOptions}</span>
+                    <span style={{
+                        fontSize: "13px",
+                        fontWeight: "500",
+                        fontFamily: "inter-medium, sans-serif"
+                    }}>{AppConstants.whenPaymentsRequired}</span>
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        //onChange={e => this.membershipFeeApplyRadio(e.target.value)}
+                        defaultValue={data?.paymentOptionRefId}
+                        disabled={this.state.membershipIsUsed}
+                    >
+                        {this.props.commonReducerState.membershipPaymentOptions.map((item, typeindex) => {
+                            return (
+                                <div className='row pl-2' key={"paymentOptionRefId" + typeindex} >
+                                    <Radio key={"paymentOptionRefId" + typeindex} value={item.id}> {item.description}</Radio>
+                                </div>
+                            );
+                        })}
+                    </Radio.Group>
+                </div>
             </div>
         );
     };
@@ -1454,7 +1479,7 @@ class RegistrationMembershipFee extends Component {
                                         <div className="tab-formView mt-5">{this.contentView(getFieldDecorator)}</div>
                                     </TabPane>
                                     <TabPane tab={AppConstants.fees} key="2">
-                                        <div className="tab-formView">{this.feesView(getFieldDecorator)}</div>
+                                        <div >{this.feesView(getFieldDecorator)}</div>
                                     </TabPane>
                                     <TabPane tab={AppConstants.discount} key="3">
                                         <div className="tab-formView">{this.discountView(getFieldDecorator)}</div>
@@ -1479,7 +1504,7 @@ function mapDispatchToProps(dispatch) {
         membershipFeesTableInputChangeAction, getCommonDiscountTypeTypeAction, membershipProductDiscountTypesAction,
         addNewMembershipTypeAction, addRemoveDiscountAction, updatedDiscountDataAction,
         membershipFeesApplyRadioAction, onChangeAgeCheckBoxAction, updatedMembershipTypeDataAction,
-        removeCustomMembershipTypeAction, regMembershipListDeleteAction, getAllowTeamRegistrationTypeAction
+        removeCustomMembershipTypeAction, regMembershipListDeleteAction, getAllowTeamRegistrationTypeAction,membershipPaymentOptionAction
     }, dispatch)
 }
 

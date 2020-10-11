@@ -30,7 +30,7 @@ function tableSort(key) {
             "limit": 10,
             "offset": _this.state.offset
         },
-        "searchText": _this.state.searchtext
+        "search": _this.state.searchText
     };
 
     let sortBy = key;
@@ -44,7 +44,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
     _this.setState({ sortBy, sortOrder });
-    _this.props.liveScoreScorerListAction(_this.state.competitionId, 4, body, undefined, sortBy, sortOrder);
+    _this.props.liveScoreScorerListAction(_this.state.competitionId, 4, body, _this.state.searchText, sortBy, sortOrder);
 }
 
 const listeners = (key) => ({
@@ -185,7 +185,7 @@ class LiveScorerList extends Component {
         this.state = {
             year: "2020",
             scorerTableData: scorerData.scorerData,
-            searchtext: '',
+            searchText: '',
             competitionId: null,
             offset: 0,
             sortBy: null,
@@ -202,7 +202,7 @@ class LiveScorerList extends Component {
                 "limit": 10,
                 "offset": 0
             },
-            "searchText": ""
+            "search": ""
         };
 
         if (getLiveScoreCompetiton()) {
@@ -215,9 +215,9 @@ class LiveScorerList extends Component {
                     let sortBy = scorerActionObject.sortBy
                     let sortOrder = scorerActionObject.sortOrder
                     this.setState({ searchText, sortBy, sortOrder })
-                    this.props.liveScoreScorerListAction(id, 4, body, undefined, sortBy, sortOrder);
+                    this.props.liveScoreScorerListAction(id, 4, body, searchText, sortBy, sortOrder);
                 } else {
-                    this.props.liveScoreScorerListAction(id, 4, body);
+                    this.props.liveScoreScorerListAction(id, 4, body, this.state.searchText, this.state.sortBy, this.state.sortOrder);
                 }
             } else {
                 history.push('/');
@@ -229,17 +229,17 @@ class LiveScorerList extends Component {
 
     handlePagination(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        let { searchtext, sortBy, sortOrder } = this.state
+        let { searchText, sortBy, sortOrder } = this.state
         const body = {
             "paging": {
                 "limit": 10,
                 "offset": offset
             },
-            "searchText": searchtext,
+            "search": searchText,
             "sortBy": sortBy,
             "sortOrder": sortOrder
         }
-        this.props.liveScoreScorerListAction(id, 4, body)
+        this.props.liveScoreScorerListAction(id, 4, body, searchText, sortBy, sortOrder)
     }
 
     // on Export
@@ -347,7 +347,7 @@ class LiveScorerList extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        this.setState({ searchText: e.target.value,offset: 0 })
+        this.setState({ searchText: e.target.value, offset: 0 })
         let { sortBy, sortOrder } = this.state
         if (e.target.value == null || e.target.value == "") {
             const body = {
@@ -360,7 +360,7 @@ class LiveScorerList extends Component {
                 "sortOrder": sortOrder
             }
 
-            this.props.liveScoreScorerListAction(id, 4, body, e.target.value)
+            this.props.liveScoreScorerListAction(id, 4, body, e.target.value, sortBy, sortOrder)
         }
     }
 
@@ -380,7 +380,7 @@ class LiveScorerList extends Component {
                 "sortBy": sortBy,
                 "sortOrder": sortOrder
             }
-            this.props.liveScoreScorerListAction(id, 4, body, this.state.searchText)
+            this.props.liveScoreScorerListAction(id, 4, body, this.state.searchText, sortBy, sortOrder)
         }
     }
 
@@ -400,7 +400,7 @@ class LiveScorerList extends Component {
                 "sortBy": sortBy,
                 "sortOrder": sortOrder
             }
-            this.props.liveScoreScorerListAction(id, 4, body, searchText)
+            this.props.liveScoreScorerListAction(id, 4, body, searchText, sortBy, sortOrder)
         }
     }
 

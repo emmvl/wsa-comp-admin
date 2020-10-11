@@ -169,8 +169,6 @@ class InnerHorizontalMenu extends React.Component {
         let compList = isArrayNotEmpty(competitionList) ? competitionList : [];
         let { liveScoreCompIsParent } = this.state;
         const { yearList } = this.props.appState;
-        console.log(compList, 'compList')
-
         return (
             <div>
                 {menu === "competition" && (
@@ -254,7 +252,9 @@ class InnerHorizontalMenu extends React.Component {
                             <Menu.Item key="18">
                                 {/* <a href="https://comp-management-test.firebaseapp.com/competitions-draws.html">Draws</a> */}
                                 <NavLink to="/competitionDraws">
-                                    <span id={AppUniqueId.draws_subtab}>Draws</span>
+                                    {/* <span id={AppUniqueId.draws_subtab}>Draws</span> */}
+                                    <span >Draws</span>
+
                                 </NavLink>
                             </Menu.Item>
                             {/*

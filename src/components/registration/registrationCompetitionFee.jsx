@@ -55,6 +55,7 @@ import {
   getDefaultCompFeesLogoAction,
   clearCompReducerDataAction,
   onInviteesSearchAction,
+  paymentMethodsDefaultAction
 } from '../../store/actions/registrationAction/competitionFeeAction';
 import {
   competitionFeeInit,
@@ -139,7 +140,7 @@ const playerSeasoTable = [
     ),
   },
   {
-    title: 'Membership GST',
+    title: 'GST',
     dataIndex: 'membershipGst',
     key: 'membershipGst',
     render: (membershipGst, record) => (
@@ -149,6 +150,60 @@ const playerSeasoTable = [
         disabled={true}
         value={membershipGst}
       />
+    ),
+  },
+  {
+    title: 'Nomination Fees (excl. GST)',
+    dataIndex: 'nominationFees',
+    key: 'nominationFees',
+    render: (fee, record, index) => (
+      fee != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationFees',
+            'seasonal'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'nominationGST',
+    key: 'nominationGST',
+    render: (gst, record, index) => (
+      gst != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationGST',
+            'seasonal'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -175,7 +230,7 @@ const playerSeasoTable = [
     ),
   },
   {
-    title: 'Competition GST',
+    title: 'GST',
     dataIndex: 'gst',
     key: 'gst',
     render: (gst, record, index) => (
@@ -258,7 +313,7 @@ const playercasualTable = [
     ),
   },
   {
-    title: 'Membership GST',
+    title: 'GST',
     dataIndex: 'membershipGst',
     key: 'membershipGst',
     render: (membershipGst, record) => (
@@ -270,6 +325,22 @@ const playercasualTable = [
       />
     ),
   },
+  // {
+  //   title: 'Nomination Fees (excl. GST)',
+  //   dataIndex: 'nominationFees',
+  //   key: 'nominationFees',
+  //   render: (fee, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'GST',
+  //   dataIndex: 'nominationGST',
+  //   key: 'nominationGST',
+  //   render: (gst, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
   {
     title: 'Competition Fees (excl. GST)',
     dataIndex: 'fee',
@@ -294,7 +365,7 @@ const playercasualTable = [
     ),
   },
   {
-    title: 'Competition GST',
+    title: 'GST',
     dataIndex: 'gst',
     key: 'gst',
     render: (gst, record, index) => (
@@ -376,7 +447,7 @@ const playerSeasonalTableAssociation = [
     ),
   },
   {
-    title: 'Membership GST',
+    title: 'GST',
     dataIndex: 'membershipGst',
     key: 'membershipGst',
     render: (membershipGst, record) => (
@@ -386,6 +457,114 @@ const playerSeasonalTableAssociation = [
         disabled={true}
         value={membershipGst}
       />
+    ),
+  },
+  {
+    title: 'Nomination Fees (excl. GST)',
+    dataIndex: 'nominationFees',
+    key: 'nominationFees',
+    render: (fee, record, index) => (
+      fee != null ? (
+      <Input
+        prefix="$"
+        disabled={true}
+        type="number"
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationFees',
+            'seasonal'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'nominationGST',
+    key: 'nominationGST',
+    render: (gst, record, index) => (
+      gst!= null ? (
+      <Input
+        prefix="$"
+        disabled={true}
+        type="number"
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationGST',
+            'seasonal'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'Association Nomination Fees (excl. GST)',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
+    render: (fee, record, index) => (
+      fee != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affNominationFees',
+            'seasonal'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
+    render: (gst, record, index) => (
+      gst!= null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affNominationGST',
+            'seasonal'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -412,7 +591,7 @@ const playerSeasonalTableAssociation = [
     ),
   },
   {
-    title: 'Competition GST',
+    title: 'GST',
     dataIndex: 'gst',
     key: 'gst',
     render: (gst, record, index) => (
@@ -458,7 +637,7 @@ const playerSeasonalTableAssociation = [
     ),
   },
   {
-    title: 'Association GST',
+    title: 'GST',
     dataIndex: 'affiliateGst',
     key: 'affiliateGst',
     render: (affiliateGst, record, index) => (
@@ -541,7 +720,7 @@ const playercasualTableAssociation = [
     ),
   },
   {
-    title: 'Membership GST',
+    title: 'GST',
     dataIndex: 'membershipGst',
     key: 'membershipGst',
     render: (membershipGst, record) => (
@@ -553,6 +732,38 @@ const playercasualTableAssociation = [
       />
     ),
   },
+  // {
+  //   title: 'Nomination Fees (excl. GST)',
+  //   dataIndex: 'nominationFees',
+  //   key: 'nominationFees',
+  //   render: (fee, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'GST',
+  //   dataIndex: 'nominationGST',
+  //   key: 'nominationGST',
+  //   render: (gst, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'Association Nomination Fees (excl. GST)',
+  //   dataIndex: 'affNominationFees',
+  //   key: 'affNominationFees',
+  //   render: (fee, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'GST',
+  //   dataIndex: 'affNominationGST',
+  //   key: 'affNominationGST',
+  //   render: (gst, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
   {
     title: 'Competition Fees (excl. GST)',
     dataIndex: 'fee',
@@ -704,7 +915,7 @@ const playerSeasonalTableClub = [
     ),
   },
   {
-    title: 'Membership GST',
+    title: 'GST',
     dataIndex: 'membershipGst',
     key: 'membershipGst',
     render: (membershipGst, record) => (
@@ -714,6 +925,114 @@ const playerSeasonalTableClub = [
         disabled={true}
         value={membershipGst}
       />
+    ),
+  },
+  {
+    title: 'Nomination Fees (excl. GST)',
+    dataIndex: 'nominationFees',
+    key: 'nominationFees',
+    render: (fee, record, index) => (
+      fee!= null ? (
+      <Input
+        prefix="$"
+        disabled={true}
+        type="number"
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationFees',
+            'seasonal'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'nominationGST',
+    key: 'nominationGST',
+    render: (gst, record, index) => (
+      gst!= null ? (
+      <Input
+        prefix="$"
+        disabled={true}
+        type="number"
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationGST',
+            'seasonal'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'Club Nomination Fees (excl. GST)',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
+    render: (fee, record, index) => (
+      fee!= null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affNominationFees',
+            'seasonal'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
+    render: (gst, record, index) => (
+      gst!= null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affNominationGST',
+            'seasonal'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
     ),
   },
   {
@@ -740,7 +1059,7 @@ const playerSeasonalTableClub = [
     ),
   },
   {
-    title: 'Competition GST',
+    title: 'GST',
     dataIndex: 'gst',
     key: 'gst',
     render: (gst, record, index) => (
@@ -786,7 +1105,7 @@ const playerSeasonalTableClub = [
     ),
   },
   {
-    title: 'Club GST',
+    title: 'GST',
     dataIndex: 'affiliateGst',
     key: 'affiliateGst',
     render: (affiliateGst, record, index) => (
@@ -869,7 +1188,7 @@ const playercasualTableClub = [
     ),
   },
   {
-    title: 'Membership GST',
+    title: 'GST',
     dataIndex: 'membershipGst',
     key: 'membershipGst',
     render: (membershipGst, record) => (
@@ -881,6 +1200,38 @@ const playercasualTableClub = [
       />
     ),
   },
+  // {
+  //   title: 'Nomination Fees (excl. GST)',
+  //   dataIndex: 'nominationFees',
+  //   key: 'nominationFees',
+  //   render: (fee, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'GST',
+  //   dataIndex: 'nominationGST',
+  //   key: 'nominationGST',
+  //   render: (gst, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'Club Nomination Fees (excl. GST)',
+  //   dataIndex: 'affNominationFees',
+  //   key: 'affNominationFees',
+  //   render: (fee, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'GST',
+  //   dataIndex: 'affNominationGST',
+  //   key: 'affNominationGST',
+  //   render: (gst, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
   {
     title: 'Competition fees (excl. GST)',
     dataIndex: 'fee',
@@ -905,7 +1256,7 @@ const playercasualTableClub = [
     ),
   },
   {
-    title: 'Competition GST',
+    title: 'GST',
     dataIndex: 'gst',
     key: 'gst',
     render: (gst, record, index) => (
@@ -951,7 +1302,7 @@ const playercasualTableClub = [
     ),
   },
   {
-    title: 'Club GST',
+    title: 'GST',
     dataIndex: 'affiliateGst',
     key: 'affiliateGst',
     render: (affiliateGst, record, index) => (
@@ -1034,7 +1385,7 @@ const playerSeasonalTableTeamAssociation = [
     ),
   },
   {
-    title: 'Membership GST',
+    title: 'GST',
     dataIndex: 'membershipGst',
     key: 'membershipGst',
     render: (membershipGst, record) => (
@@ -1044,6 +1395,118 @@ const playerSeasonalTableTeamAssociation = [
         disabled={true}
         value={membershipGst}
       />
+    ),
+  },
+  {
+    title: 'Nomination Fees (excl. GST)',
+    dataIndex: 'nominationFees',
+    key: 'nominationFees',
+    render: (fee, record, index) => (
+      fee != null ? (
+      <Input
+        prefix="$"
+        disabled={true}
+        type="number"
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationFees',
+            'seasonalTeam'
+          )
+        }
+      />
+      ) : 
+      (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'} />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'nominationGST',
+    key: 'nominationGST',
+    render: (gst, record, index) => (
+      gst != null ? (
+      <Input
+        prefix="$"
+        disabled={true}
+        type="number"
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationGST',
+            'seasonalTeam'
+          )
+        }
+      />
+      ) : 
+      (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'} />
+      )
+    ),
+  },
+  {
+    title: 'Association Nomination Fees (excl. GST)',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
+    render: (fee, record, index) => (
+      fee != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affNominationFees',
+            'seasonalTeam'
+          )
+        }
+      />
+      ) : 
+      (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'} />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
+    render: (gst, record, index) => (
+      gst != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affNominationGST',
+            'seasonalTeam'
+          )
+        }
+      />
+      ) : 
+      (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'} />
+      )
     ),
   },
   {
@@ -1069,15 +1532,11 @@ const playerSeasonalTableTeamAssociation = [
           }
         />
       ) : (
-          <Input
-            disabled={true}
-            className="input-inside-table-fees"
-            value={'N/A'}
-          />
+          <Input disabled={true} className="input-inside-table-fees" value={'N/A'} />
         ),
   },
   {
-    title: 'Competition GST',
+    title: 'GST',
     dataIndex: 'gst',
     key: 'gst',
     render: (gst, record, index) =>
@@ -1137,7 +1596,7 @@ const playerSeasonalTableTeamAssociation = [
         ),
   },
   {
-    title: 'Association GST',
+    title: 'GST',
     dataIndex: 'affiliateGst',
     key: 'affiliateGst',
     render: (affiliateGst, record, index) =>
@@ -1225,7 +1684,7 @@ const playerSeasonalTableTeamClub = [
     ),
   },
   {
-    title: 'Membership GST',
+    title: 'GST',
     dataIndex: 'membershipGst',
     key: 'membershipGst',
     render: (membershipGst, record) => (
@@ -1235,6 +1694,114 @@ const playerSeasonalTableTeamClub = [
         disabled={true}
         value={membershipGst}
       />
+    ),
+  },
+  {
+    title: 'Nomination Fees (excl. GST)',
+    dataIndex: 'nominationFees',
+    key: 'nominationFees',
+    render: (fee, record, index) => (
+      fee != null ? (
+      <Input
+        prefix="$"
+        disabled={true}
+        type="number"
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationFees',
+            'seasonalTeam'
+          )
+        }
+      />
+      ):(
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'nominationGST',
+    key: 'nominationGST',
+    render: (gst, record, index) => (
+      gst != null ? (
+      <Input
+        prefix="$"
+        disabled={true}
+        type="number"
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationGST',
+            'seasonalTeam'
+          )
+        }
+      />
+      ):(
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+      )
+    ),
+  },
+  {
+    title: 'Club Nomination Fees (excl. GST)',
+    dataIndex: 'affNominationFees',
+    key: 'affNominationFees',
+    render: (fee, record, index) => (
+      fee != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affNominationFees',
+            'seasonalTeam'
+          )
+        }
+      />
+      ):(
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'affNominationGST',
+    key: 'affNominationGST',
+    render: (gst, record, index) => (
+      gst != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affNominationGST',
+            'seasonalTeam'
+          )
+        }
+      />
+      ):(
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+      )
     ),
   },
   {
@@ -1260,15 +1827,11 @@ const playerSeasonalTableTeamClub = [
           }
         />
       ) : (
-          <Input
-            disabled={true}
-            className="input-inside-table-fees"
-            value={'N/A'}
-          />
+          <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
         ),
   },
   {
-    title: 'Competition GST',
+    title: 'GST',
     dataIndex: 'gst',
     key: 'gst',
     render: (gst, record, index) =>
@@ -1328,7 +1891,7 @@ const playerSeasonalTableTeamClub = [
         ),
   },
   {
-    title: 'Club GST',
+    title: 'GST',
     dataIndex: 'affiliateGst',
     key: 'affiliateGst',
     render: (affiliateGst, record, index) =>
@@ -1429,6 +1992,61 @@ const playerSeasoTeamTable = [
     ),
   },
   {
+    title: 'Nomination Fees (excl. GST)',
+    dataIndex: 'nominationFees',
+    key: 'nominationFees',
+    render: (fee, record, index) => (
+      fee != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationFees',
+            'seasonalTeam'
+          )
+        }
+      />
+      ) :
+      (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'nominationGST',
+    key: 'nominationGST',
+    render: (gst, record, index) => (
+      gst != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'nominationGST',
+            'seasonalTeam'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
     title: 'Competition Fees (excl. GST)',
     dataIndex: 'fee',
     key: 'fee',
@@ -1459,7 +2077,7 @@ const playerSeasoTeamTable = [
         ),
   },
   {
-    title: 'Competition GST',
+    title: 'GST',
     dataIndex: 'gst',
     key: 'gst',
     render: (gst, record, index) =>
@@ -1502,6 +2120,571 @@ const playerSeasoTeamTable = [
     ),
   },
 ];
+
+const playerCasualTableTeamAssociation = [
+  {
+    title: 'Membership Type',
+    dataIndex: 'membershipProductTypeName',
+    key: 'membershipProductTypeName',
+    render: (membershipProductTypeName) => (
+      <Input
+        className="input-inside-table-fees"
+        disabled={true}
+        value={membershipProductTypeName}
+      />
+    ),
+  },
+
+  {
+    title: 'Division',
+    dataIndex: 'division',
+    key: 'division',
+    render: (division, record) => (
+      <Input
+        className="input-inside-table-fees"
+        disabled={true}
+        value={
+          record.competitionMembershipProductDivisionId
+            ? record.divisionName
+            : 'N/A'
+        }
+      />
+    ),
+  },
+  {
+    title: 'Membership Fees (excl. GST)',
+    dataIndex: 'membershipCasual',
+    key: 'membershipCasual',
+    render: (membershipCasual, record) => (
+      <Input
+        prefix="$"
+        className="input-inside-table-fees"
+        disabled={true}
+        value={membershipCasual}
+      />
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'membershipGst',
+    key: 'membershipGst',
+    render: (membershipGst, record) => (
+      <Input
+        prefix="$"
+        className="input-inside-table-fees"
+        disabled={true}
+        value={membershipGst}
+      />
+    ),
+  },
+  // {
+  //   title: 'Nomination Fees (excl. GST)',
+  //   dataIndex: 'nominationFees',
+  //   key: 'nominationFees',
+  //   render: (fee, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'GST',
+  //   dataIndex: 'nominationGST',
+  //   key: 'nominationGST',
+  //   render: (gst, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'Association Nomination Fees (excl. GST)',
+  //   dataIndex: 'affNominationFees',
+  //   key: 'affNominationFees',
+  //   render: (fee, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'GST',
+  //   dataIndex: 'affNominationGST',
+  //   key: 'affNominationGST',
+  //   render: (gst, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  {
+    title: 'Competition Fees (excl. GST)',
+    dataIndex: 'fee',
+    key: 'fee',
+    render: (fee, record, index) => (
+      fee != null ? (
+      <Input
+        type="number"
+        disabled={true}
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'fee',
+            'casualTeam'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'gst',
+    key: 'gst',
+    render: (gst, record, index) => (
+      gst != null ? (
+      <Input
+        prefix="$"
+        type="number"
+        disabled={true}
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'gst',
+            'casualTeam'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'Association Fees (excl. GST)',
+    dataIndex: 'affiliateFee',
+    key: 'affiliateFee',
+    render: (affiliateFee, record, index) => (
+      affiliateFee != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={affiliateFee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affiliateFee',
+            'casualTeam'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'affiliateGst',
+    key: 'affiliateGst',
+    render: (affiliateGst, record, index) => (
+      affiliateGst != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={affiliateGst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affiliateGst',
+            'casualTeam'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'Total',
+    dataIndex: 'total',
+    key: 'total',
+    render: (total) => (
+      <Input
+        disabled={true}
+        className="input-inside-table-fees"
+        value={'N/A'}
+      />
+    ),
+  },
+];
+
+const playerCasualTableTeamClub = [
+  {
+    title: 'Membership Type',
+    dataIndex: 'membershipProductTypeName',
+    key: 'membershipProductTypeName',
+    render: (membershipProductTypeName) => (
+      <Input
+        className="input-inside-table-fees"
+        disabled={true}
+        value={membershipProductTypeName}
+      />
+    ),
+  },
+
+  {
+    title: 'Division',
+    dataIndex: 'division',
+    key: 'division',
+    render: (division, record) => (
+      <Input
+        className="input-inside-table-fees"
+        disabled={true}
+        value={
+          record.competitionMembershipProductDivisionId
+            ? record.divisionName
+            : 'N/A'
+        }
+      />
+    ),
+  },
+  {
+    title: 'Membership Fees (excl. GST)',
+    dataIndex: 'membershipCasual',
+    key: 'membershipCasual',
+    render: (membershipCasual, record) => (
+      <Input
+        prefix="$"
+        className="input-inside-table-fees"
+        disabled={true}
+        value={membershipCasual}
+      />
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'membershipGst',
+    key: 'membershipGst',
+    render: (membershipGst, record) => (
+      <Input
+        prefix="$"
+        className="input-inside-table-fees"
+        disabled={true}
+        value={membershipGst}
+      />
+    ),
+  },
+  {
+    title: 'Nomination Fees (excl. GST)',
+    dataIndex: 'nominationFees',
+    key: 'nominationFees',
+    render: (fee, record, index) => (
+      <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+    ),
+  },
+  // {
+  //   title: 'GST',
+  //   dataIndex: 'nominationGST',
+  //   key: 'nominationGST',
+  //   render: (gst, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'Club Nomination Fees (excl. GST)',
+  //   dataIndex: 'affNominationFees',
+  //   key: 'affNominationFees',
+  //   render: (fee, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  // {
+  //   title: 'GST',
+  //   dataIndex: 'affNominationGST',
+  //   key: 'affNominationGST',
+  //   render: (gst, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'}/>
+  //   ),
+  // },
+  {
+    title: 'Competition fees (excl. GST)',
+    dataIndex: 'fee',
+    key: 'fee',
+    render: (fee, record, index) => (
+      fee != null ? (
+      <Input
+        prefix="$"
+        type="number"
+        disabled={true}
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'fee',
+            'casualTeam'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'gst',
+    key: 'gst',
+    render: (gst, record, index) => (
+      gst != null ? (
+      <Input
+        prefix="$"
+        type="number"
+        disabled={true}
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'gst',
+            'casualTeam'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'Club fees (excl. GST)',
+    dataIndex: 'affiliateFee',
+    key: 'affiliateFee',
+    render: (affiliateFee, record, index) => (
+      affiliateFee != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={affiliateFee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affiliateFee',
+            'casualTeam'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'affiliateGst',
+    key: 'affiliateGst',
+    render: (affiliateGst, record, index) => (
+      affiliateGst != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={affiliateGst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'affiliateGst',
+            'casualTeam'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+
+  {
+    title: 'Total',
+    dataIndex: 'total',
+    key: 'total',
+    render: (total) => (
+      <Input
+      disabled={true}
+      className="input-inside-table-fees"
+      value={'N/A'}
+    />
+    ),
+  },
+];
+
+const playerCasualTeamTable = [
+  {
+    title: 'Membership Type',
+    dataIndex: 'membershipProductTypeName',
+    key: 'membershipProductTypeName',
+    render: (membershipProductTypeName) => (
+      <Input
+        className="input-inside-table-fees"
+        disabled={true}
+        value={membershipProductTypeName}
+      />
+    ),
+  },
+
+  {
+    title: 'Division',
+    dataIndex: 'division',
+    key: 'division',
+    render: (division, record) => (
+      <Input
+        className="input-inside-table-fees"
+        disabled={true}
+        value={
+          record.competitionMembershipProductDivisionId
+            ? record.divisionName
+            : 'N/A'
+        }
+      />
+    ),
+  },
+  {
+    title: 'Membership Fees (excl. GST)',
+    dataIndex: 'membershipCasual',
+    key: 'membershipCasual',
+    render: (membershipCasual, record) => (
+      <Input
+        prefix="$"
+        className="input-inside-table-fees"
+        disabled={true}
+        value={membershipCasual}
+      />
+    ),
+  },
+  {
+    title: 'GST',
+    dataIndex: 'membershipGst',
+    key: 'membershipGst',
+    render: (membershipGst, record) => (
+      <Input
+        prefix="$"
+        className="input-inside-table-fees"
+        disabled={true}
+        value={membershipGst}
+      />
+    ),
+  },
+  // {
+  //   title: 'Nomination Fees (excl. GST)',
+  //   dataIndex: 'nominationFees',
+  //   key: 'nominationFees',
+  //   render: (fee, record, index) => (
+  //     <Input disabled={true} className="input-inside-table-fees" value={'N/A'} />
+  //   ),
+  // },
+  // {
+  //   title: 'GST',
+  //   dataIndex: 'nominationGST',
+  //   key: 'nominationGST',
+  //   render: (gst, record, index) => (
+  //     <Input
+  //     disabled={true}
+  //     className="input-inside-table-fees"
+  //     value={'N/A'}
+  //   />
+  //   ),
+  // },
+  {
+    title: 'Competition Fees (excl. GST)',
+    dataIndex: 'fee',
+    key: 'fee',
+    render: (fee, record, index) => (
+      fee != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={fee}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'fee',
+            'casualTeam'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'Competition GST',
+    dataIndex: 'gst',
+    key: 'gst',
+    render: (gst, record, index) => (
+      gst != null ? (
+      <Input
+        prefix="$"
+        disabled={this_Obj.state.permissionState.allDisable}
+        type="number"
+        className="input-inside-table-fees"
+        value={gst}
+        onChange={(e) =>
+          this_Obj.onChangeDetails(
+            e.target.value,
+            index,
+            record,
+            'gst',
+            'casualTeam'
+          )
+        }
+      />
+      ) : (
+        <Input disabled={true} className="input-inside-table-fees" value={'N/A'}  />
+      )
+    ),
+  },
+  {
+    title: 'Total',
+    dataIndex: 'total',
+    key: 'total',
+    render: (total) => (
+      <Input
+        disabled={true}
+        className="input-inside-table-fees"
+        value={'N/A'}
+      />
+    ),
+  },
+];
+
 
 const permissionObject = {
   compDetailDisable: false,
@@ -2059,6 +3242,7 @@ class RegistrationCompetitionFee extends Component {
     this.props.getVenuesTypeAction("all");
     this.props.registrationRestrictionTypeAction();
     this.props.fixtureTemplateRoundsAction();
+    this.props.paymentMethodsDefaultAction();
     if (competitionId !== null) {
       let hasRegistration = 1;
       this.props.getAllCompetitionFeesDeatilsAction(
@@ -2081,12 +3265,23 @@ class RegistrationCompetitionFee extends Component {
     let selectedCasualPaymentArr = this.props.competitionFeesState.selectedCasualFee;
     let SelectedSeasonalPaymentArr = this.props.competitionFeesState.SelectedSeasonalFee;
     let selectedSeasonalTeamPaymentArr = this.props.competitionFeesState.selectedSeasonalTeamFee;
+    let selectedCasualTeamPaymentArr = this.props.competitionFeesState.selectedCasualTeamFee;
+    let selectedPaymentMethods = this.props.competitionFeesState.selectedPaymentMethods;
+
+    selectedCasualPaymentArr = selectedCasualPaymentArr.filter(x=>x.isChecked == true);
+    SelectedSeasonalPaymentArr = SelectedSeasonalPaymentArr.filter(x=>x.isChecked == true);
+    selectedSeasonalTeamPaymentArr = selectedSeasonalTeamPaymentArr.filter(x=>x.isChecked == true);
+    selectedCasualTeamPaymentArr = selectedCasualTeamPaymentArr.filter(x=>x.isChecked == true);
+    selectedPaymentMethods = selectedPaymentMethods.filter(x=>x.isChecked == true);
+
     let selectedSeasonalInstalmentDates = this.props.competitionFeesState.selectedSeasonalInstalmentDates;
     let selectedTeamSeasonalInstalmentDates = this.props.competitionFeesState.selectedTeamSeasonalInstalmentDates;
+
     let paymentOptionData = selectedCasualPaymentArr.concat(
-      SelectedSeasonalPaymentArr, selectedSeasonalTeamPaymentArr
+      SelectedSeasonalPaymentArr, selectedSeasonalTeamPaymentArr, selectedCasualTeamPaymentArr
     );
     paymentDataArr.paymentOptions = paymentOptionData;
+    paymentDataArr.paymentMethods = selectedPaymentMethods;
     let charityTitle = this.props.competitionFeesState.charityTitle;
     let charityDescription = this.props.competitionFeesState.charityDescription;
     let postCharityRoundUpData = JSON.parse(
@@ -2104,12 +3299,15 @@ class RegistrationCompetitionFee extends Component {
     paymentDataArr["isSeasonalUponReg"] = isSeasonalUponReg != undefined ? isSeasonalUponReg : false;
     paymentDataArr["isTeamSeasonalUponReg"] = isTeamSeasonalUponReg != undefined ? isTeamSeasonalUponReg : false;
     paymentDataArr["teamSeasonalSchoolRegCode"] = teamSeasonalSchoolRegCode != undefined ? teamSeasonalSchoolRegCode : null;
-    let selectedSeasonalFeeKey = this.props.competitionFeesState.SelectedSeasonalFeeKey;
-    let selectedSeasonalTeamFeeKey = this.props.competitionFeesState.selectedSeasonalTeamFeeKey;
-
+ 
     // selectedSeasonalFeeKey
 
-    if (selectedSeasonalFeeKey.includes("6") || selectedSeasonalFeeKey.includes(6) || selectedSeasonalFeeKey.includes("7") || selectedSeasonalFeeKey.includes(7)) {
+    if(!selectedPaymentMethods.find(x=>x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)){
+      message.error(ValidationConstants.pleaseSelectePaymentMethods);
+      return;
+    }
+
+    if (SelectedSeasonalPaymentArr.find(x=>x.paymentOptionRefId == 5)) {
       if (selectedSeasonalInstalmentDates.length == 0) {
         message.error(ValidationConstants.pleaseProvideInstalmentDate);
         return;
@@ -2125,7 +3323,7 @@ class RegistrationCompetitionFee extends Component {
 
     // selectedSeasonalTeamFeeKey
 
-    if (selectedSeasonalTeamFeeKey.includes("6") || selectedSeasonalTeamFeeKey.includes(6) || selectedSeasonalTeamFeeKey.includes("7") || selectedSeasonalTeamFeeKey.includes(7)) {
+    if (selectedSeasonalTeamPaymentArr.find(x=>x.paymentOptionRefId == 5)) {
       if (selectedTeamSeasonalInstalmentDates.length == 0) {
         message.error(ValidationConstants.pleaseProvideInstalmentDate);
         return;
@@ -2138,13 +3336,15 @@ class RegistrationCompetitionFee extends Component {
         }
       }
     }
-    if (selectedSeasonalTeamFeeKey.includes("8") || selectedSeasonalTeamFeeKey.includes(8)) {
+    if (selectedSeasonalTeamPaymentArr.find(x=>x.paymentOptionRefId == 8)) {
       if (paymentDataArr.teamSeasonalSchoolRegCode.length == 0) {
         message.error(ValidationConstants.pleaseFillRegistration);
         this.setState({ loading: false });
         return;
       }
     }
+
+    console.log("paymentDataArr" + JSON.stringify(paymentDataArr));
     this.setState({ loading: true });
     this.props.competitionPaymentApi(paymentDataArr, competitionId, this.state.affiliateOrgId);
   };
@@ -2356,13 +3556,18 @@ class RegistrationCompetitionFee extends Component {
         let feeSeasonalData = [];
         let feeCasualData = [];
         let feeSeasonalTeamData = [];
+        let feeCasualTeamData = [];
         let finalpostarray = [];
         // console.log("fee_data::" + JSON.stringify(fee_data));
         for (let i in fee_data) {
-          if (fee_data[i].isSeasonal == true && fee_data[i].isCasual == true) {
+          if (fee_data[i].isSeasonal == true && fee_data[i].isCasual == true) 
+          {
             if (fee_data[i].isAllType == 'allDivisions') {
               feeSeasonalData = fee_data[i].seasonal.allType;
               feeCasualData = fee_data[i].casual.allType;
+
+              console.log("feeSeasonalData", feeSeasonalData);
+              console.log("feeCasualData", feeCasualData);
 
               for (let j in feeSeasonalData) {
                 for (let k in feeCasualData) {
@@ -2374,41 +3579,67 @@ class RegistrationCompetitionFee extends Component {
                     feeSeasonalData[j]['casualGST'] = feeCasualData[k].gst;
                     feeSeasonalData[j]['seasonalFees'] = feeSeasonalData[j].fee;
                     feeSeasonalData[j]['seasonalGST'] = feeSeasonalData[j].gst;
-                    feeSeasonalData[j]['affiliateCasualFees'] =
-                      feeCasualData[k].affiliateFee;
-                    feeSeasonalData[j]['affiliateCasualGST'] =
-                      feeCasualData[k].affiliateGst;
-                    feeSeasonalData[j]['affiliateSeasonalFees'] =
-                      feeSeasonalData[j].affiliateFee;
-                    feeSeasonalData[j]['affiliateSeasonalGST'] =
-                      feeSeasonalData[j].affiliateGst;
+                    feeSeasonalData[j]['affiliateCasualFees'] = feeCasualData[k].affiliateFee;
+                    feeSeasonalData[j]['affiliateCasualGST'] = feeCasualData[k].affiliateGst;
+                    feeSeasonalData[j]['affiliateSeasonalFees'] = feeSeasonalData[j].affiliateFee;
+                    feeSeasonalData[j]['affiliateSeasonalGST'] = feeSeasonalData[j].affiliateGst;
+
+                    feeSeasonalData[j]['nominationSeasonalFee'] = feeSeasonalData[j].nominationFees;
+                    feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
+                    feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
+                    feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
+
                     break;
                   }
                 }
               }
               if (fee_data[i].isTeamSeasonal == true) {
                 feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
+                console.log("feeSeasonalTeamData", feeSeasonalTeamData);
                 for (let j in feeSeasonalData) {
                   for (let k in feeSeasonalTeamData) {
                     if (
                       feeSeasonalData[j].competitionMembershipProductTypeId ==
                       feeSeasonalTeamData[k].competitionMembershipProductTypeId
                     ) {
-                      feeSeasonalData[j]['teamSeasonalFees'] =
-                        feeSeasonalTeamData[k].fee;
-                      feeSeasonalData[j]['teamSeasonalGST'] =
-                        feeSeasonalTeamData[k].gst;
-                      feeSeasonalData[j]['affiliateTeamSeasonalFees'] =
-                        feeSeasonalTeamData[k].affiliateFee;
-                      feeSeasonalData[j]['affiliateTeamSeasonalGST'] =
-                        feeSeasonalTeamData[k].affiliateGst;
+                      feeSeasonalData[j]['teamSeasonalFees'] = feeSeasonalTeamData[k].fee;
+                      feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[k].gst;
+                      feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[k].affiliateFee;
+                      feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[k].affiliateGst;
+
+                      feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
+                      feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
+                      feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
+                      feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[k].affNominationGST;
                       break;
                     }
                   }
                 }
               }
+              
+
+              if (fee_data[i].isTeamCasual == true) {
+                feeCasualTeamData = fee_data[i].casualTeam.allType;
+                console.log("feeCasualTeamData", feeCasualTeamData);
+                for (let j in feeSeasonalData) {
+                  for (let k in feeCasualTeamData) {
+                    if (
+                      feeSeasonalData[j].competitionMembershipProductTypeId ==
+                      feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                    ) {
+                      feeSeasonalData[j]['teamCasualFees'] = feeCasualTeamData[k].fee;
+                      feeSeasonalData[j]['teamCasualGST'] = feeCasualTeamData[k].gst;
+                      feeSeasonalData[j]['affiliateTeamCasualFees'] = feeCasualTeamData[k].affiliateFee;
+                      feeSeasonalData[j]['affiliateTeamCasualGST'] = feeCasualTeamData[k].affiliateGst;
+                      break;
+                    }
+                  }
+                }
+              }
+
               finalPostData = [...feeSeasonalData];
-            } else {
+            } 
+            else {
               feeSeasonalData = fee_data[i].seasonal.perType;
               feeCasualData = fee_data[i].casual.perType;
 
@@ -2426,6 +3657,11 @@ class RegistrationCompetitionFee extends Component {
                     feeSeasonalData[j]['affiliateCasualGST'] = feeCasualData[j].affiliateGst;
                     feeSeasonalData[j]['affiliateSeasonalFees'] = feeSeasonalData[j].affiliateFee;
                     feeSeasonalData[j]['affiliateSeasonalGST'] = feeSeasonalData[j].affiliateGst;
+                    feeSeasonalData[j]['nominationSeasonalFee'] = feeSeasonalData[j].nominationFees;
+                    feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
+					          feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
+                    feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
+
                     break;
                   }
                 }
@@ -2438,22 +3674,44 @@ class RegistrationCompetitionFee extends Component {
                       feeSeasonalData[j].competitionMembershipProductTypeId ==
                       feeSeasonalTeamData[k].competitionMembershipProductTypeId
                     ) {
-                      feeSeasonalData[j]['teamSeasonalFees'] =
-                        feeSeasonalTeamData[j].fee;
-                      feeSeasonalData[j]['teamSeasonalGST'] =
-                        feeSeasonalTeamData[j].gst;
-                      feeSeasonalData[j]['affiliateTeamSeasonalFees'] =
-                        feeSeasonalTeamData[j].affiliateFee;
-                      feeSeasonalData[j]['affiliateTeamSeasonalGST'] =
-                        feeSeasonalTeamData[j].affiliateGst;
+                      feeSeasonalData[j]['teamSeasonalFees'] = feeSeasonalTeamData[j].fee;
+                      feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
+                      feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
+                      feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
+                      feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
+                      feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
+                      feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
+                      feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
                       break;
                     }
                   }
                 }
               }
+
+              if (fee_data[i].isTeamCasual == true) {
+                feeCasualTeamData = fee_data[i].casualTeam.perType;
+                console.log("feeCasualTeamData", feeCasualTeamData);
+                for (let j in feeSeasonalData) {
+                  for (let k in feeCasualTeamData) {
+                    if (
+                      feeSeasonalData[j].competitionMembershipProductTypeId ==
+                      feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                    ) {
+                      feeSeasonalData[j]['teamCasualFees'] = feeCasualTeamData[j].fee;
+                      feeSeasonalData[j]['teamCasualGST'] = feeCasualTeamData[j].gst;
+                      feeSeasonalData[j]['affiliateTeamCasualFees'] = feeCasualTeamData[j].affiliateFee;
+                      feeSeasonalData[j]['affiliateTeamCasualGST'] = feeCasualTeamData[j].affiliateGst;
+
+                      break;
+                    }
+                  }
+                }
+              }
+
               finalPostData = [...feeSeasonalData];
             }
-          } else if (
+          } 
+          else if (
             fee_data[i].isSeasonal == true &&
             fee_data[i].isCasual == false
           ) {
@@ -2468,37 +3726,66 @@ class RegistrationCompetitionFee extends Component {
                       feeSeasonalData[j].competitionMembershipProductTypeId ==
                       feeSeasonalTeamData[k].competitionMembershipProductTypeId
                     ) {
-                      feeSeasonalData[j]['seasonalFees'] =
-                        feeSeasonalData[j].fee;
-                      feeSeasonalData[j]['seasonalGST'] =
-                        feeSeasonalData[j].gst;
-                      feeSeasonalData[j]['affiliateSeasonalFees'] =
-                        feeSeasonalData[j].affiliateFee;
-                      feeSeasonalData[j]['affiliateSeasonalGST'] =
-                        feeSeasonalData[j].affiliateGst;
-                      feeSeasonalData[j]['teamSeasonalFees'] =
-                        feeSeasonalTeamData[k].fee;
-                      feeSeasonalData[j]['teamSeasonalGST'] =
-                        feeSeasonalTeamData[k].gst;
-                      feeSeasonalData[j]['affiliateTeamSeasonalFees'] =
-                        feeSeasonalTeamData[k].affiliateFee;
-                      feeSeasonalData[j]['affiliateTeamSeasonalGST'] =
-                        feeSeasonalTeamData[k].affiliateGst;
+                      feeSeasonalData[j]['seasonalFees'] = feeSeasonalData[j].fee;
+                      feeSeasonalData[j]['seasonalGST'] = feeSeasonalData[j].gst;
+                      feeSeasonalData[j]['affiliateSeasonalFees'] = feeSeasonalData[j].affiliateFee;
+                      feeSeasonalData[j]['affiliateSeasonalGST'] = feeSeasonalData[j].affiliateGst;
+                      feeSeasonalData[j]['teamSeasonalFees'] = feeSeasonalTeamData[k].fee;
+                      feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[k].gst;
+                      feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[k].affiliateFee;
+                      feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[k].affiliateGst;
+                      feeSeasonalData[j]['nominationSeasonalFee'] = feeSeasonalData[j].nominationFees;
+                      feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
+				              feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
+                      feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
+                      feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
+                      feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
+                      feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
+                      feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[k].affNominationGST;
+
                       break;
                     }
                   }
                 }
+              } 
 
-                finalPostData = [...feeSeasonalData];
-              } else {
+              if (fee_data[i].isTeamCasual == true) {
+                feeCasualTeamData = fee_data[i].casualTeam.allType;
+                console.log("feeCasualTeamData", feeCasualTeamData);
+                for (let j in feeSeasonalData) {
+                  for (let k in feeCasualTeamData) {
+                    if (
+                      feeSeasonalData[j].competitionMembershipProductTypeId ==
+                      feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                    ) {
+                      feeSeasonalData[j]['teamCasualFees'] = feeCasualTeamData[k].fee;
+                      feeSeasonalData[j]['teamCasualGST'] = feeCasualTeamData[k].gst;
+                      feeSeasonalData[j]['affiliateTeamCasualFees'] = feeCasualTeamData[k].affiliateFee;
+                      feeSeasonalData[j]['affiliateTeamCasualGST'] = feeCasualTeamData[k].affiliateGst;
+
+                      break;
+                    }
+                  }
+                }
+              }
+
+              if(fee_data[i].isTeamSeasonal == false) {
                 finalPostData = [...feeSeasonalData];
                 finalPostData.map((item) => {
                   item['seasonalFees'] = item.fee;
                   item['seasonalGST'] = item.gst;
                   item['affiliateSeasonalFees'] = item.affiliateFee;
                   item['affiliateSeasonalGST'] = item.affiliateGst;
+                  item['nominationSeasonalFee'] = item.nominationFees;
+                  item['nominationSeasonalGST'] = item.nominationGST;
+                  item['affNominationSeasonalFee'] = item.affNominationFees;
+                  item['affNominationSeasonalGST'] = item.affNominationGST;
                 });
               }
+              else{
+                finalPostData = [...feeSeasonalData];
+              }
+
             } else {
               feeSeasonalData = fee_data[i].seasonal.perType;
 
@@ -2510,39 +3797,67 @@ class RegistrationCompetitionFee extends Component {
                       feeSeasonalData[j].competitionMembershipProductTypeId ==
                       feeSeasonalTeamData[k].competitionMembershipProductTypeId
                     ) {
-                      feeSeasonalData[j]['seasonalFees'] =
-                        feeSeasonalData[j].fee;
-                      feeSeasonalData[j]['seasonalGST'] =
-                        feeSeasonalData[j].gst;
-                      feeSeasonalData[j]['affiliateSeasonalFees'] =
-                        feeSeasonalData[j].affiliateFee;
-                      feeSeasonalData[j]['affiliateSeasonalGST'] =
-                        feeSeasonalData[j].affiliateGst;
-                      feeSeasonalData[j]['teamSeasonalFees'] =
-                        feeSeasonalTeamData[j].fee;
-                      feeSeasonalData[j]['teamSeasonalGST'] =
-                        feeSeasonalTeamData[j].gst;
-                      feeSeasonalData[j]['affiliateTeamSeasonalFees'] =
-                        feeSeasonalTeamData[j].affiliateFee;
-                      feeSeasonalData[j]['affiliateTeamSeasonalGST'] =
-                        feeSeasonalTeamData[j].affiliateGst;
+                      feeSeasonalData[j]['seasonalFees'] = feeSeasonalData[j].fee;
+                      feeSeasonalData[j]['seasonalGST'] = feeSeasonalData[j].gst;
+                      feeSeasonalData[j]['affiliateSeasonalFees'] = feeSeasonalData[j].affiliateFee;
+                      feeSeasonalData[j]['affiliateSeasonalGST'] = feeSeasonalData[j].affiliateGst;
+                      feeSeasonalData[j]['teamSeasonalFees'] = feeSeasonalTeamData[j].fee;
+                      feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
+                      feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
+                      feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
+                      feeSeasonalData[j]['nominationSeasonalFee'] = feeSeasonalData[j].nominationFees;
+                      feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
+				              feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
+                      feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
+                      feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
+                      feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
+                      feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
+                      feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
                       break;
                     }
                   }
                 }
+              } 
 
-                finalPostData = [...feeSeasonalData];
-              } else {
+              if (fee_data[i].isTeamCasual == true) {
+                feeCasualTeamData = fee_data[i].casualTeam.perType;
+                console.log("feeCasualTeamData", feeCasualTeamData);
+                for (let j in feeSeasonalData) {
+                  for (let k in feeCasualTeamData) {
+                    if (
+                      feeSeasonalData[j].competitionMembershipProductTypeId ==
+                      feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                    ) {
+                      feeSeasonalData[j]['teamCasualFees'] = feeCasualTeamData[j].fee;
+                      feeSeasonalData[j]['teamCasualGST'] = feeCasualTeamData[j].gst;
+                      feeSeasonalData[j]['affiliateTeamCasualFees'] = feeCasualTeamData[j].affiliateFee;
+                      feeSeasonalData[j]['affiliateTeamCasualGST'] = feeCasualTeamData[j].affiliateGst;
+
+                      break;
+                    }
+                  }
+                }
+              }
+
+              if(fee_data[i].isTeamSeasonal == false) {
                 finalPostData = [...feeSeasonalData];
                 finalPostData.map((item) => {
                   item['seasonalFees'] = item.fee;
                   item['seasonalGST'] = item.gst;
                   item['affiliateSeasonalFees'] = item.affiliateFee;
                   item['affiliateSeasonalGST'] = item.affiliateGst;
+                  item['nominationSeasonalFee'] = item.nominationFees;
+                  item['nominationSeasonalGST'] = item.nominationGST;
+                  item['affNominationSeasonalFee'] = item.affNominationFees;
+                  item['affNominationSeasonalGST'] = item.affNominationGST;
                 });
               }
+              else{
+                finalPostData = [...feeSeasonalData];
+              }
             }
-          } else if (
+          } 
+          else if (
             fee_data[i].isSeasonal == false &&
             fee_data[i].isCasual == true
           ) {
@@ -2559,33 +3874,56 @@ class RegistrationCompetitionFee extends Component {
                     ) {
                       feeCasualData[j]['casualFees'] = feeCasualData[j].fee;
                       feeCasualData[j]['casualGST'] = feeCasualData[j].gst;
-                      feeCasualData[j]['affiliateCasualFees'] =
-                        feeCasualData[j].affiliateFee;
-                      feeCasualData[j]['affiliateCasualGST'] =
-                        feeCasualData[j].affiliateGst;
-                      feeCasualData[j]['teamSeasonalFees'] =
-                        feeSeasonalTeamData[k].fee;
-                      feeCasualData[j]['teamSeasonalGST'] =
-                        feeSeasonalTeamData[k].gst;
-                      feeCasualData[j]['affiliateTeamSeasonalFees'] =
-                        feeSeasonalTeamData[k].affiliateFee;
-                      feeCasualData[j]['affiliateTeamSeasonalGST'] =
-                        feeSeasonalTeamData[k].affiliateGst;
+                      feeCasualData[j]['affiliateCasualFees'] = feeCasualData[j].affiliateFee;
+                      feeCasualData[j]['affiliateCasualGST'] = feeCasualData[j].affiliateGst;
+                      feeCasualData[j]['teamSeasonalFees'] = feeSeasonalTeamData[k].fee;
+                      feeCasualData[j]['teamSeasonalGST'] = feeSeasonalTeamData[k].gst;
+                      feeCasualData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[k].affiliateFee;
+                      feeCasualData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[k].affiliateGst;
+                      feeCasualData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
+                      feeCasualData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
+                      feeCasualData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
+                      feeCasualData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[k].affNominationGST;
                       break;
                     }
                   }
                 }
-                finalPostData = [...feeCasualData];
-              } else {
+              } 
+
+              if (fee_data[i].isTeamCasual == true) {
+                feeCasualTeamData = fee_data[i].casualTeam.allType;
+                console.log("feeCasualTeamData", feeCasualTeamData);
+                for (let j in feeCasualData) {
+                  for (let k in feeCasualTeamData) {
+                    if (
+                      feeCasualData[j].competitionMembershipProductTypeId ==
+                      feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                    ) {
+                        feeCasualData[j]['teamCasualFees'] = feeCasualTeamData[k].fee;
+                        feeCasualData[j]['teamCasualGST'] = feeCasualTeamData[k].gst;
+                        feeCasualData[j]['affiliateTeamCasualFees'] = feeCasualTeamData[k].affiliateFee;
+                        feeCasualData[j]['affiliateTeamCasualGST'] = feeCasualTeamData[k].affiliateGst;
+                      break;
+                    }
+                  }
+                }
+              }
+
+              if(fee_data[i].isTeamSeasonal == false){
                 finalPostData = [...feeCasualData];
                 finalPostData.map((item) => {
                   item['casualFees'] = item.fee;
                   item['casualGST'] = item.gst;
                   item['affiliateCasualFees'] = item.affiliateFee;
                   item['affiliateCasualGST'] = item.affiliateGst;
+
                 });
               }
-            } else {
+              else{
+                finalPostData = [...feeCasualData];
+              }
+            } 
+            else {
               feeCasualData = fee_data[i].casual.perType;
 
               if (fee_data[i].isTeamSeasonal == true) {
@@ -2598,25 +3936,43 @@ class RegistrationCompetitionFee extends Component {
                     ) {
                       feeCasualData[j]['casualFees'] = feeCasualData[j].fee;
                       feeCasualData[j]['casualGST'] = feeCasualData[j].gst;
-                      feeCasualData[j]['affiliateCasualFees'] =
-                        feeCasualData[j].affiliateFee;
-                      feeCasualData[j]['affiliateCasualGST'] =
-                        feeCasualData[j].affiliateGst;
-                      feeCasualData[j]['teamSeasonalFees'] =
-                        feeSeasonalTeamData[j].fee;
-                      feeCasualData[j]['teamSeasonalGST'] =
-                        feeSeasonalTeamData[j].gst;
-                      feeCasualData[j]['affiliateTeamSeasonalFees'] =
-                        feeSeasonalTeamData[j].affiliateFee;
-                      feeCasualData[j]['affiliateTeamSeasonalGST'] =
-                        feeSeasonalTeamData[j].affiliateGst;
+                      feeCasualData[j]['affiliateCasualFees'] = feeCasualData[j].affiliateFee;
+                      feeCasualData[j]['affiliateCasualGST'] = feeCasualData[j].affiliateGst;
+                      feeCasualData[j]['teamSeasonalFees'] = feeSeasonalTeamData[j].fee;
+                      feeCasualData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
+                      feeCasualData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
+                      feeCasualData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
+                      feeCasualData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
+                      feeCasualData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
+                      feeCasualData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
+                      feeCasualData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
                       break;
                     }
                   }
                 }
+              } 
 
-                finalPostData = [...feeCasualData];
-              } else {
+              if (fee_data[i].isTeamCasual == true) {
+                feeCasualTeamData = fee_data[i].casualTeam.perType;
+                console.log("feeCasualTeamData", feeCasualTeamData);
+                for (let j in feeCasualData) {
+                  for (let k in feeCasualTeamData) {
+                    if (
+                      feeCasualData[j].competitionMembershipProductTypeId ==
+                      feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                    ) {
+                        feeCasualData[j]['teamCasualFees'] = feeCasualTeamData[j].fee;
+                        feeCasualData[j]['teamCasualGST'] = feeCasualTeamData[j].gst;
+                        feeCasualData[j]['affiliateTeamCasualFees'] = feeCasualTeamData[j].affiliateFee;
+                        feeCasualData[j]['affiliateTeamCasualGST'] = feeCasualTeamData[j].affiliateGst;
+                        
+                      break;
+                    }
+                  }
+                }
+              }
+
+              if (fee_data[i].isTeamSeasonal == false) {
                 finalPostData = [...feeCasualData];
                 finalPostData.map((item) => {
                   item['casualFees'] = item.fee;
@@ -2625,11 +3981,16 @@ class RegistrationCompetitionFee extends Component {
                   item['affiliateCasualGST'] = item.affiliateGst;
                 });
               }
+              else{
+                finalPostData = [...feeCasualData];
+              }
             }
-          } else if (
+          } 
+          else if (
             fee_data[i].isSeasonal == false &&
             fee_data[i].isCasual == false &&
-            fee_data[i].isTeamSeasonal == true
+            (fee_data[i].isTeamSeasonal == true && 
+              fee_data[i].isTeamCasual == false )
           ) {
             if (fee_data[i].isAllType == 'allDivisions') {
               feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
@@ -2642,17 +4003,104 @@ class RegistrationCompetitionFee extends Component {
               item['teamSeasonalGST'] = item.gst;
               item['affiliateTeamSeasonalFees'] = item.affiliateFee;
               item['affiliateTeamSeasonalGST'] = item.affiliateGst;
+              item['nominationTeamSeasonalFee'] = item.nominationFees;
+              item['nominationTeamSeasonalGST'] = item.nominationGST;
+              item['affNominationTeamSeasonalFee'] = item.affNominationFees;
+              item['affNominationTeamSeasonalGST'] = item.affNominationGST;
             });
-          } else {
-            // alert("check fees")
-
           }
+          else if (
+            fee_data[i].isSeasonal == false &&
+            fee_data[i].isCasual == false &&
+            (fee_data[i].isTeamSeasonal == false && 
+              fee_data[i].isTeamCasual == true )
+          ) {
+            if (fee_data[i].isAllType == 'allDivisions') {
+              feeCasualTeamData = fee_data[i].casualTeam.allType;
+            } else {
+              feeCasualTeamData = fee_data[i].casualTeam.perType;
+            }
+            finalPostData = [...feeCasualTeamData];
+            finalPostData.map((item) => {
+              item['teamCasualFees'] = item.fee;
+              item['teamCasualGST'] = item.gst;
+              item['affiliateTeamCasualFees'] = item.affiliateFee;
+              item['affiliateTeamCasualGST'] = item.affiliateGst;
+            });
+          }
+          else if (
+            fee_data[i].isSeasonal == false &&
+            fee_data[i].isCasual == false &&
+            (fee_data[i].isTeamSeasonal == true && 
+              fee_data[i].isTeamCasual == true )
+          ) {
+
+            if (fee_data[i].isAllType == 'allDivisions') {
+              feeCasualTeamData = fee_data[i].casualTeam.allType;
+              feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
+
+              for (let j in feeSeasonalTeamData) {
+                for (let k in feeCasualTeamData) {
+                  if (
+                    feeSeasonalTeamData[j].competitionMembershipProductTypeId ==
+                    feeCasualTeamData[k].competitionMembershipProductTypeId
+                  ) {
+                      feeSeasonalTeamData[j]['teamCasualFees'] = feeCasualTeamData[k].fee;
+                      feeSeasonalTeamData[j]['teamCasualGST'] = feeCasualTeamData[k].gst;
+                      feeSeasonalTeamData[j]['affiliateTeamCasualFees'] = feeCasualTeamData[k].affiliateFee;
+                      feeSeasonalTeamData[j]['affiliateTeamCasualGST'] = feeCasualTeamData[k].affiliateGst;
+                      feeSeasonalTeamData[j]['teamSeasonalFees'] = feeSeasonalTeamData[j].fee;
+                      feeSeasonalTeamData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
+                      feeSeasonalTeamData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
+                      feeSeasonalTeamData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
+                      feeSeasonalTeamData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
+                      feeSeasonalTeamData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
+                      feeSeasonalTeamData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
+                      feeSeasonalTeamData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
+                    break;
+                  }
+                }
+              }
+             
+            } else {
+              feeCasualTeamData = fee_data[i].casualTeam.perType;
+              feeSeasonalTeamData = fee_data[i].seasonalTeam.perType;
+              for (let j in feeSeasonalTeamData) {
+                for (let k in feeCasualTeamData) {
+                  if (
+                    feeSeasonalTeamData[j].competitionMembershipProductTypeId ==
+                    feeCasualTeamData[k].competitionMembershipProductTypeId
+                  ) {
+                      feeSeasonalTeamData[j]['teamCasualFees'] = feeCasualTeamData[j].fee;
+                      feeSeasonalTeamData[j]['teamCasualGST'] = feeCasualTeamData[j].gst;
+                      feeSeasonalTeamData[j]['affiliateTeamCasualFees'] = feeCasualTeamData[j].affiliateFee;
+                      feeSeasonalTeamData[j]['affiliateTeamCasualGST'] = feeCasualTeamData[j].affiliateGst;
+                      feeSeasonalTeamData[j]['teamSeasonalFees'] = feeSeasonalTeamData[j].fee;
+                      feeSeasonalTeamData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
+                      feeSeasonalTeamData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
+                      feeSeasonalTeamData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
+                      feeSeasonalTeamData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
+                      feeSeasonalTeamData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
+                      feeSeasonalTeamData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
+                      feeSeasonalTeamData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
+                    break;
+                  }
+                }
+              }
+            }
+
+            finalPostData = [...feeSeasonalTeamData];
+          }
+
+
           if (finalPostData != null && finalPostData.length > 0 && (fee_data[i].isSeasonal == true || fee_data[i].isCasual == true ||
-            fee_data[i].isTeamSeasonal == true)) {
+            fee_data[i].isTeamSeasonal == true || fee_data[i].isTeamCasual == false)) {
             finalPostData.map((item, index) => {
               finalPostData[index]["isSeasonal"] = fee_data[i].isSeasonal;
               finalPostData[index]["isCasual"] = fee_data[i].isCasual;
               finalPostData[index]["isTeamSeasonal"] = fee_data[i].isTeamSeasonal;
+              finalPostData[index]["isTeamCasual"] = fee_data[i].isTeamCasual;
+              finalPostData[index]["teamRegChargeTypeRefId"] = fee_data[i].teamRegChargeTypeRefId;
             })
 
             let modifyArr = [...finalpostarray, ...finalPostData];
@@ -2660,7 +4108,7 @@ class RegistrationCompetitionFee extends Component {
           }
         }
 
-        // console.log("finalpostarray"+ JSON.stringify(finalpostarray));
+         console.log("finalpostarray"+ JSON.stringify(finalpostarray));
 
         if (finalpostarray.length > 0) {
           this.props.saveCompetitionFeeSection(finalpostarray, competitionId, this.state.affiliateOrgId);
@@ -2898,11 +4346,6 @@ class RegistrationCompetitionFee extends Component {
     });
   };
 
-
-
-
-
-
   divisionTableDataOnchange(checked, record, index, keyword) {
     this.props.divisionTableDataOnchangeAction(checked, record, index, keyword);
     this.setState({ divisionState: true });
@@ -2960,253 +4403,82 @@ class RegistrationCompetitionFee extends Component {
     return <span>{item.description}</span>;
   }
 
-  // for creation casual fee tree parent data
-  casualDataTree = (tree) => {
-    const { TreeNode } = Tree;
-    return tree.map((item, catIndex) => {
-      return (
-        <TreeNode
-          title={this.casualDataNode(item)}
-          key={item.id}
-          defaultCheckedKeys={'Government Rebate'}
-        >
-          {this.showSubCasualDataNode(item, catIndex)}
-        </TreeNode>
-      );
-    });
-  };
-  // for getting casual fee tree parent name
-  casualDataNode = (item) => {
-    return <span>{item.description}</span>;
-  };
-  // for creation casual fee tree child data
-  showSubCasualDataNode(item, catIndex) {
-    const { TreeNode } = Tree;
-    return item.subReferences.map((inItem, scatIndex) => {
-      return (
-        <TreeNode
-          title={this.makeSubCasualDataNode(inItem)}
-          key={inItem.id}
-        ></TreeNode>
-      );
-    });
-  }
-  // for getting casual fee tree child name
-  makeSubCasualDataNode(item) {
-    return <span>{item.description}</span>;
-  }
-
-  // for creation seasonal fee tree parent data
-  seasonalDataTree = (seasonalPaymentDefaultArray, selectedSeasonalInstalmentDatesArray, selectedSeasonalFeeKey, uponRegKey,
-    isSeasonalUponReg) => {
-    const { TreeNode } = Tree;
-    return seasonalPaymentDefaultArray.map((seasonalPaymentDefaultArrayItem) => {
-      return (
-        <TreeNode
-          className={"tree-node-parent-description-seasonal"}
-          title={this.SeasonsalDataNode(seasonalPaymentDefaultArrayItem)}
-          key={seasonalPaymentDefaultArrayItem.id}
-        >
-          {this.SeasonalDataAdvancedNode(seasonalPaymentDefaultArrayItem, selectedSeasonalInstalmentDatesArray, selectedSeasonalFeeKey, uponRegKey,
-            isSeasonalUponReg)}
-
-        </TreeNode>
-      );
-    });
-  };
-  // for getting seasonal fee tree parent name
-  SeasonsalDataNode = (seasonalPaymentDefaultArrayItem) => {
-    return <span>{seasonalPaymentDefaultArrayItem.description}</span>;
-  };
-  // / for creation seasonal fee tree child data
-  SeasonalDataAdvancedNode(seasonalPaymentDefaultArrayItem, selectedSeasonalInstalmentDatesArray, selectedSeasonalFeeKey, uponRegKey,
-    isSeasonalUponReg) {
-    const { TreeNode } = Tree;
-    return seasonalPaymentDefaultArrayItem.subReferences.map((subreferencesArrayItem) => {
-      return (
-        <TreeNode
-          title={this.SeasonalTreeSubAdvancedNode(subreferencesArrayItem.description)}
-          key={subreferencesArrayItem.id}
-          className="custom-seasonaltree"
-        >
-          {(selectedSeasonalFeeKey.includes("6") || selectedSeasonalFeeKey.includes(6) || selectedSeasonalFeeKey.includes("7") || selectedSeasonalFeeKey.includes(7)) ? this.instalmentDate() : null}
-          {(selectedSeasonalFeeKey.includes("6") || selectedSeasonalFeeKey.includes(6) || selectedSeasonalFeeKey.includes("7") || selectedSeasonalFeeKey.includes(7)) ? this.instalmentUponReg(uponRegKey, isSeasonalUponReg) : null}
-          {selectedSeasonalFeeKey.includes("6") || selectedSeasonalFeeKey.includes(6) || selectedSeasonalFeeKey.includes("7") || selectedSeasonalFeeKey.includes(7) ? this.showInstalmentDate(selectedSeasonalInstalmentDatesArray, selectedSeasonalFeeKey) : null}
-          {selectedSeasonalFeeKey.includes("6") || selectedSeasonalFeeKey.includes(6) || selectedSeasonalFeeKey.includes("7") || selectedSeasonalFeeKey.includes(7) ? this.addInstalmentDateBtn(selectedSeasonalInstalmentDatesArray) : null}
-        </TreeNode>
-      );
-    });
+  instalmentDate() {
+    return (
+      <div className="breadcrumb-add pb-2" style={{ fontSize: 16, cursor: "default" }}>
+          {AppConstants.instalmentDate}
+      </div>
+    );
   }
 
   instalmentUponReg(key, value) {
-    const { TreeNode } = Tree;
     return (
-      <TreeNode title={this.uponRegCheckBox(value, key)}
-        checkable={false}
-        className="customize-subtree-start upon-reg">
-      </TreeNode>
-    );
-  }
-
-  uponRegCheckBox(value, key) {
-    return (
-      <div>
+      <div className="pt-4 pb-4">
         <Switch onChange={(e) => this.props.instalmentDateAction(e, key)} checked={value} style={{ marginRight: 10 }} />
-        {AppConstants.uponRegistration}
-      </div>
-    )
-  }
-
-  instalmentDate() {
-    const { TreeNode } = Tree;
-    return (
-      <TreeNode title={
-        <div className="breadcrumb-add" style={{ fontSize: 16, cursor: "default" }}>
-          {AppConstants.instalmentDate}
-        </div>
-      }
-        key={"instalmentDate"} checkable={false}
-        className="customize-subtree-start">
-
-      </TreeNode>
+      {AppConstants.uponRegistration}
+    </div>
     );
   }
 
-  showInstalmentDate(selectedSeasonalInstalmentDatesArray, selectedSeasonalFeeKey) {
-    const { TreeNode } = Tree;
+  showInstalmentDate(selectedSeasonalInstalmentDatesArray, key) {
     return selectedSeasonalInstalmentDatesArray.map((selectedSeasonalInstalmentDatesArrayItem, index) => {
       return (
-        <TreeNode title={this.getInstalmentDate(selectedSeasonalInstalmentDatesArray, selectedSeasonalInstalmentDatesArrayItem, index, selectedSeasonalFeeKey)}
-          key={"index"} checkable={false}
-          className='customize-subtree-middle'
-        >
-        </TreeNode>
-      );
-    });
-  }
-  showSeasonalTeamInstalmentDate(selectedSeasonalTeamInstalmentDatesArray) {
-    const { TreeNode } = Tree;
-    return selectedSeasonalTeamInstalmentDatesArray.map((selectedSeasonalTeamInstalmentDatesArrayItem) => {
-      return (
-        <TreeNode title={this.getSeasonalTeamDate(selectedSeasonalTeamInstalmentDatesArray, selectedSeasonalTeamInstalmentDatesArrayItem)} key={"index"} checkable={false}
-          className="customize-subtree-middle">
-        </TreeNode>
+        this.getInstalmentDate(selectedSeasonalInstalmentDatesArray, selectedSeasonalInstalmentDatesArrayItem, index, key)
       );
     });
   }
 
+  
+  getInstalmentDate(selectedSeasonalInstalmentDatesArray, selectedSeasonalInstalmentDatesArrayItem, index, key) {
+    let removeObj = {
+      selectedSeasonalInstalmentDatesArray: selectedSeasonalInstalmentDatesArray,
+      selectedSeasonalInstalmentDatesArrayItem: selectedSeasonalInstalmentDatesArrayItem,
+      index: index
+    }
+    let instalmentDate = selectedSeasonalInstalmentDatesArrayItem.instalmentDate
+    return (
+      <div className="pt-3">
+        <DatePicker
+          placeholder={"dd-mm-yyyy"}
+          format={'DD-MM-YYYY'}
+          showTime={false}
+          onChange={(e) => this.instalmentPaymentDateChange(e, selectedSeasonalInstalmentDatesArrayItem, key)}
+          value={(instalmentDate == "") ? null : moment(instalmentDate, 'YYYY-MM-DD')} />
 
-  instalmentPaymentDateChange(instalmentDate, selectedSeasonalInstalmentDatesArrayItem) {
+        <span style={{ marginLeft: 8, cursor: 'pointer' }}>
+          <img
+            className="dot-image"
+            src={AppImages.redCross}
+            alt=""
+            width="16"
+            height="16"
+            onClick={(e) => this.props.instalmentDateAction(removeObj, "instalmentRemoveDate", key)}
+          />
+        </span>
+      </div>
+    );
+  }
+
+  instalmentPaymentDateChange(instalmentDate, selectedSeasonalInstalmentDatesArrayItem, key) {
     let obj = {
       instalmentDate: (moment(instalmentDate).format("YYYY-MM-DD")),
       selectedSeasonalInstalmentDatesArrayItem: selectedSeasonalInstalmentDatesArrayItem,
     }
     if (instalmentDate !== null && instalmentDate !== "") {
-      this.props.instalmentDateAction(obj, 'instalmentDateupdate');
+      this.props.instalmentDateAction(obj, 'instalmentDateupdate', key);
     }
   }
 
-  seasonalTeaminstalmentPaymentDateChange(seasonalTeamInstalmentDate, selectedSeasonalTeamInstalmentDatesArrayItem) {
-    let obj = {
-      seasonalTeamInstalmentDate: (moment(seasonalTeamInstalmentDate).format("YYYY-MM-DD")),
-      selectedSeasonalTeamInstalmentDatesArrayItem: selectedSeasonalTeamInstalmentDatesArrayItem,
-    }
-    if (seasonalTeamInstalmentDate !== null && seasonalTeamInstalmentDate !== "") {
-      this.props.instalmentDateAction(obj, 'seasonalTeaminstalmentDateupdate');
-    }
-  }
-
-
-
-  getInstalmentDate(selectedSeasonalInstalmentDatesArray, selectedSeasonalInstalmentDatesArrayItem, index, selectedSeasonalFeeKey) {
-    let removeObj = {
-      selectedSeasonalInstalmentDatesArray: selectedSeasonalInstalmentDatesArray,
-      selectedSeasonalInstalmentDatesArrayItem: selectedSeasonalInstalmentDatesArrayItem,
-      index: index,
-      selectedSeasonalFeeKey: selectedSeasonalFeeKey
-    }
-    let instalmentDate = selectedSeasonalInstalmentDatesArrayItem.instalmentDate
+  addInstalmentDateBtn(selectedSeasonalInstalmentDatesArray, key) {
     return (
-      <div>
-        <DatePicker
-          placeholder={"dd-mm-yyyy"}
-          format={'DD-MM-YYYY'}
-          showTime={false}
-          onChange={(e) => this.instalmentPaymentDateChange(e, selectedSeasonalInstalmentDatesArrayItem)}
-          value={(instalmentDate == "") ? null : moment(instalmentDate, 'YYYY-MM-DD')} />
-
-        <span style={{ marginLeft: 8, cursor: 'pointer' }}>
-          <img
-            className="dot-image"
-            src={AppImages.redCross}
-            alt=""
-            width="16"
-            height="16"
-            onClick={(e) => this.props.instalmentDateAction(removeObj, "instalmentRemoveDate")}
-          />
-        </span>
-      </div>
-    );
-  }
-
-  getSeasonalTeamDate(selectedSeasonalTeamInstalmentDatesArray, selectedSeasonalTeamInstalmentDatesArrayItem) {
-    let removeObj = {
-      selectedSeasonalTeamInstalmentDatesArray: selectedSeasonalTeamInstalmentDatesArray,
-      selectedSeasonalTeamInstalmentDatesArrayItem: selectedSeasonalTeamInstalmentDatesArrayItem
-    }
-    let instalmentDate = selectedSeasonalTeamInstalmentDatesArrayItem.instalmentDate
-    return (
-      <div>
-        <DatePicker
-          placeholder={"dd-mm-yyyy"}
-          format={'DD-MM-YYYY'}
-          showTime={false}
-          onChange={(e) => this.seasonalTeaminstalmentPaymentDateChange(e, selectedSeasonalTeamInstalmentDatesArrayItem)}
-          value={(instalmentDate == "") ? null : moment(instalmentDate, 'YYYY-MM-DD')} />
-
-        <span style={{ marginLeft: 8, cursor: 'pointer' }}>
-          <img
-            className="dot-image"
-            src={AppImages.redCross}
-            alt=""
-            width="16"
-            height="16"
-            onClick={(e) => this.props.instalmentDateAction(removeObj, "instalmentSeasonalTeamRemoveDate")}
-          />
-        </span>
-      </div>
-    );
-  }
-
-  addInstalmentDateBtn(selectedSeasonalInstalmentDatesArray) {
-    const { TreeNode } = Tree;
-    return (
-      <TreeNode
-        title={
-          <span style={{ cursor: 'pointer', paddingTop: 0 }} onClick={(e) => this.props.instalmentDateAction(selectedSeasonalInstalmentDatesArray, "instalmentAddDate")} className="input-heading-add-another">
+      <span style={{ cursor: 'pointer', paddingTop: 0 }} 
+        onClick={(e) => this.props.instalmentDateAction(selectedSeasonalInstalmentDatesArray, "instalmentAddDate", key)} className="input-heading-add-another pt-4">
             {AppConstants.addInstalmentDate}
-          </span>
-        }
-        key={"button"} checkable={false}
-        className='customize-subtree-end'>
-      </TreeNode>
+      </span>
     );
   }
 
-  teamSeasonalRegistrationcode(seasonalPaymentDefaultArrayItem, selectedSeasonalTeamFeeKey, teamSeasonalSchoolRegCode) {
-    if (selectedSeasonalTeamFeeKey.includes("8") || selectedSeasonalTeamFeeKey.includes(8)) {
-      const { TreeNode } = Tree;
-      return (
-        <TreeNode
-          title={this.teamSeasonalRegistrationTitle(teamSeasonalSchoolRegCode)} key={"teamSeasonalSchoolRegCode"} checkable={false}
-          className={"registrationcode-input"}
-        >
-        </TreeNode>
-      );
-    }
-
-  }
-  teamSeasonalRegistrationTitle(teamSeasonalSchoolRegCode) {
+  teamSeasonalRegistrationcode(teamSeasonalSchoolRegCode) {
     return (
       <div className={"input-reg-text"}>
         <InputWithHead
@@ -3224,75 +4496,6 @@ class RegistrationCompetitionFee extends Component {
 
   regCodeChange = (value, key) => {
     this.props.instalmentDateAction(value, key);
-  }
-
-  seasonalTeamaddButton(selectedSeasonalTeamInstalmentDatesArray) {
-    const { TreeNode } = Tree;
-    return (
-      <TreeNode
-        title={
-          <span style={{ cursor: 'pointer', paddingTop: 0, marginBottom: 20 }} onClick={(e) => this.props.instalmentDateAction(selectedSeasonalTeamInstalmentDatesArray, "seasonalTeaminstalmentAddDate")} className="input-heading-add-another">
-            {AppConstants.addInstalmentDate}
-          </span>
-        }
-        key={"button"} checkable={false}
-        className="customize-subtree-end">
-      </TreeNode>
-    );
-  }
-
-
-  // / for getting seasonal fee tree child name
-  SeasonalTreeSubAdvancedNode(description) {
-    return <span>{description}</span>;
-  }
-
-  // for creation seasonal team fee tree parent data
-  seasonalTeamDataTree = (seasonalTeamPaymentDefaultArray, selectedSeasonalTeamInstalmentDatesArray, selectedSeasonalTeamFeeKey, uponRegKey,
-    isTeamSeasonalUponReg, teamSeasonalSchoolRegCode) => {
-    const { TreeNode } = Tree;
-    return seasonalTeamPaymentDefaultArray.map((seasonalTeamPaymentDefaultArrayItem, catIndex) => {
-      return (
-        <TreeNode
-          className={selectedSeasonalTeamFeeKey.includes("8") || selectedSeasonalTeamFeeKey.includes(8) ? "tree-node-parent-description" : null}
-          title={this.SeasonsalTeamDataNode(seasonalTeamPaymentDefaultArrayItem.description)}
-          key={seasonalTeamPaymentDefaultArrayItem.id}>
-          {seasonalTeamPaymentDefaultArrayItem.id != 8 ? this.SeasonalTeamDataAdvancedNode(seasonalTeamPaymentDefaultArrayItem, selectedSeasonalTeamInstalmentDatesArray, selectedSeasonalTeamFeeKey, uponRegKey,
-            isTeamSeasonalUponReg) : null}
-          {seasonalTeamPaymentDefaultArrayItem.id == 8 ? this.teamSeasonalRegistrationcode(seasonalTeamPaymentDefaultArrayItem, selectedSeasonalTeamFeeKey, teamSeasonalSchoolRegCode) : null}
-        </TreeNode>
-      );
-    });
-  };
-
-  // / for creation seasonal team fee tree child data
-  SeasonalTeamDataAdvancedNode(seasonalTeamPaymentDefaultArrayItem, selectedSeasonalTeamInstalmentDatesArray, selectedSeasonalTeamFeeKey, uponRegKey,
-    isTeamSeasonalUponReg) {
-    const { TreeNode } = Tree;
-    return seasonalTeamPaymentDefaultArrayItem.subReferences.map((subReferencesArrayItem) => {
-      return (
-        <TreeNode
-          title={this.SeasonalTeamTreeSubAdvancedNode(subReferencesArrayItem.description)}
-          key={subReferencesArrayItem.id}
-          className="custom-seasonaltree"
-        >
-          {selectedSeasonalTeamFeeKey.includes("6") || selectedSeasonalTeamFeeKey.includes(6) || selectedSeasonalTeamFeeKey.includes("7") || selectedSeasonalTeamFeeKey.includes(7) ? this.instalmentDate() : null}
-          {selectedSeasonalTeamFeeKey.includes("6") || selectedSeasonalTeamFeeKey.includes(6) || selectedSeasonalTeamFeeKey.includes("7") || selectedSeasonalTeamFeeKey.includes(7) ? this.instalmentUponReg(uponRegKey, isTeamSeasonalUponReg) : null}
-          {selectedSeasonalTeamFeeKey.includes("6") || selectedSeasonalTeamFeeKey.includes(6) || selectedSeasonalTeamFeeKey.includes("7") || selectedSeasonalTeamFeeKey.includes(7) ? this.showSeasonalTeamInstalmentDate(selectedSeasonalTeamInstalmentDatesArray) : null}
-          {selectedSeasonalTeamFeeKey.includes("6") || selectedSeasonalTeamFeeKey.includes(6) || selectedSeasonalTeamFeeKey.includes("7") || selectedSeasonalTeamFeeKey.includes(7) ? this.seasonalTeamaddButton(selectedSeasonalTeamInstalmentDatesArray) : null}
-        </TreeNode>
-      );
-    });
-  }
-
-  // for getting seasonal fee tree parent name
-  SeasonsalTeamDataNode = (description) => {
-    return <span>{description}</span>;
-  };
-
-  // / for getting seasonal team fee tree child name
-  SeasonalTeamTreeSubAdvancedNode(description) {
-    return <span>{description}</span>;
   }
 
 
@@ -4389,6 +5592,23 @@ class RegistrationCompetitionFee extends Component {
     }
   }
 
+  casualFeesTeamOnOrgTLevel() {
+    let isCreatorEdit = this.state.isCreatorEdit;
+    let orgLevel = this.getOrgLevelForFeesTable();
+    console.log("seasonalFeesTeamOnOrgTLevel", orgLevel + "::isCreatorEdit" + isCreatorEdit);
+    if (isCreatorEdit && orgLevel == AppConstants.association) {
+      return playerCasualTableTeamAssociation;
+    } else if (isCreatorEdit && orgLevel == AppConstants.club) {
+      return playerCasualTableTeamClub;
+    } else if (isCreatorEdit && orgLevel == AppConstants.anyAssociation) {
+      return playerCasualTableTeamAssociation;
+    } else if (isCreatorEdit && orgLevel == AppConstants.anyClub) {
+      return playerCasualTableTeamClub;
+    } else {
+      return playerCasualTeamTable;
+    }
+  }
+
   casualFeesOnOrgLevel() {
     let isCreatorEdit = this.state.isCreatorEdit;
     let orgLevel = this.getOrgLevelForFeesTable();
@@ -4558,6 +5778,23 @@ class RegistrationCompetitionFee extends Component {
                     : item.seasonalTeam.allType
                   ).length > 0 && (
                       <div style={{ marginTop: 25 }}>
+                        <div style={{ marginTop: 15 }}>
+                          <Checkbox
+                            checked={item.isTeamReg}
+                            className="single-checkbox"
+                            style={{ fontSize: '16px' }}
+                            disabled={feesTableDisable}
+                            onChange={(e) => {
+                              this.props.checkUncheckcompetitionFeeSction(
+                                e.target.checked,
+                                index,
+                                'isTeamReg'
+                              );
+                            }}
+                          >
+                            {AppConstants.teamRegistration}
+                          </Checkbox>
+                        </div>
                         <div style={{ marginTop: 5 }}>
                           <Checkbox
                             checked={item.isTeamSeasonal}
@@ -4572,16 +5809,44 @@ class RegistrationCompetitionFee extends Component {
                               );
                             }}
                           >
-                            {AppConstants.teamRegistration}
+                            {AppConstants.teamSeasonalFee}
                           </Checkbox>
                         </div>
-
+                        {item.isTeamSeasonal == 1 && 
+                        <div style={{ marginTop: 5 }}>
+                          <Radio.Group
+                            className="reg-competition-radio"
+                            onChange={(e) => this.props.checkUncheckcompetitionFeeSction(e.target.value,
+                                index,'teamRegChargeTypeRefId')}
+                            value={item.teamRegChargeTypeRefId}
+                            disabled={feesTableDisable}
+                          >
+                            <div className="fluid-width">
+                              <div className="row">
+                                <div className="col-sm-3">
+                                  <div className="contextualHelp-RowDirection">
+                                    <Radio value={1}>
+                                      {AppConstants.chargedForFullSeason}
+                                    </Radio>
+                                  </div>
+                                </div>
+                                <div
+                                  className="col-sm-2"
+                                  style={{ display: 'flex', alignItems: 'center' }}
+                                >
+                                  <div className="contextualHelp-RowDirection">
+                                    <Radio value={2}>
+                                      {AppConstants.chargedPerMatch}
+                                    </Radio>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </Radio.Group>
+                        </div> 
+                        }
                         {item.isTeamSeasonal && (
                           <div className="table-responsive mt-2">
-                            <div className="comp-fee-sub-heading-txt">
-                              {' '}
-                              {AppConstants.seasonalFee}
-                            </div>
                             <Table
                               className="fees-table"
                               columns={this.seasonalFeesTeamOnOrgTLevel()}
@@ -4595,6 +5860,39 @@ class RegistrationCompetitionFee extends Component {
                             />
                           </div>
                         )}
+
+                        <div style={{ marginTop: 10 }}>
+                          <Checkbox
+                          checked={item.isTeamCasual}
+                          className="single-checkbox"
+                          disabled={feesTableDisable}
+                          onChange={(e) =>
+                            this.props.checkUncheckcompetitionFeeSction(
+                            e.target.checked,
+                            index,
+                            'isTeamCasual'
+                            )
+                          }
+                          >
+                          {AppConstants.singleGamePerTeamMember}
+                          </Checkbox>
+                        </div>
+                        {item.isTeamCasual && (
+                          <div className="table-responsive mt-2">
+                          <Table
+                            className="fees-table"
+                            columns={this.casualFeesTeamOnOrgTLevel()}
+                            dataSource={
+                            item.isAllType != 'allDivisions'
+                              ? item.casualTeam.perType
+                              : item.casualTeam.allType
+                            }
+                            pagination={false}
+                            Divider="false"
+                          />
+                          </div>
+                        )}
+                       
                       </div>
                     )}
                 </div>
@@ -5112,21 +6410,9 @@ class RegistrationCompetitionFee extends Component {
   };
 
 
-  //on change of casual fee payment option
-  onChangeCasualFee(itemValue, paymentData) {
-    //console.log("itemValue", itemValue);
-    this.props.updatePaymentFeeOption(itemValue, 'casualfee');
-  }
-  //on change of Seasonal fee payment option
-  onChangeSeasonalFee(itemValue) {
-
-    this.props.updatePaymentFeeOption(itemValue, 'seasonalfee');
-  }
-
-  //on change of Seasonal Team fee payment option
-  onChangeSeasonalTeamFee(itemValue) {
-
-    this.props.updatePaymentFeeOption(itemValue, 'seasonalteamfee');
+  onChangePaymentOptionFee(itemValue, index, key, subKey) {
+    console.log("itemValue",itemValue);
+    this.props.updatePaymentFeeOption(itemValue, key, index, subKey);
   }
 
 
@@ -5152,6 +6438,17 @@ class RegistrationCompetitionFee extends Component {
     return isSeasonalValue;
   };
 
+  checkIsTeamCasual = (feeDetails) => {
+    let isCasualValue = false;
+    for (let i in feeDetails) {
+      if (feeDetails[i].isTeamCasual) {
+        isCasualValue = true;
+        break;
+      }
+    }
+    return isCasualValue;
+  };
+
   checkIsCasual = (feeDetails) => {
     let isCasuallValue = false;
     for (let i in feeDetails) {
@@ -5171,14 +6468,19 @@ class RegistrationCompetitionFee extends Component {
     let isSeasonal = this.checkIsSeasonal(feeDetails);
     let isCasual = this.checkIsCasual(feeDetails);
     let isTeamSeasonal = this.checkIsTeamSeasonal(feeDetails);
-    let casualPayment = this.props.competitionFeesState.casualPaymentDefault;
-    let seasonalPayment = this.props.competitionFeesState.seasonalPaymentDefault;
-    let seasonalTeamPayment = this.props.competitionFeesState.seasonalTeamPaymentDefault;
-    let paymentData = this.props.competitionFeesState.competitionPaymentsData;
-    let selectedSeasonalFeeKey = this.props.competitionFeesState.SelectedSeasonalFeeKey;
-    //let selectedSeasonalFee = this.props.competitionFeesState.SelectedSeasonalFee;
-    let selectedCasualFeeKey = this.props.competitionFeesState.selectedCasualFeeKey;
-    let selectedSeasonalTeamFeeKey = this.props.competitionFeesState.selectedSeasonalTeamFeeKey;
+    let isTeamCasual = this.checkIsTeamCasual(feeDetails);
+
+   // console.log("isSeasonal", isSeasonal, isCasual, isTeamSeasonal,isTeamCasual )
+
+    let selectedSeasonalFee = this.props.competitionFeesState.SelectedSeasonalFee;
+    let selectedCasualFee = this.props.competitionFeesState.selectedCasualFee;
+    let selectedSeasonalTeamFee = this.props.competitionFeesState.selectedSeasonalTeamFee;
+    let selectedCasualTeamFee = this.props.competitionFeesState.selectedCasualTeamFee;
+    let selectedPaymentMethods = this.props.competitionFeesState.selectedPaymentMethods;
+    // console.log("selectedSeasonalFee", selectedSeasonalFee);
+    // console.log("selectedPaymentMethods", selectedPaymentMethods);
+    // console.log("selectedCasualFee", selectedCasualFee);
+
     let isSeasonalUponReg = competitionDetailData.isSeasonalUponReg != undefined ? competitionDetailData.isSeasonalUponReg : false;
     let isTeamSeasonalUponReg = competitionDetailData.isTeamSeasonalUponReg != undefined ? competitionDetailData.isTeamSeasonalUponReg : false;
     let teamSeasonalSchoolRegCode = competitionDetailData.teamSeasonalSchoolRegCode != undefined ? competitionDetailData.teamSeasonalSchoolRegCode : null;
@@ -5190,88 +6492,176 @@ class RegistrationCompetitionFee extends Component {
 
 
     return (
-      <div className="fees-view pt-5">
-        <span className="form-heading">{AppConstants.paymentOptions}</span>
-        {isSeasonal == false && isCasual == false && isTeamSeasonal == false && (
-          <span className="applicable-to-heading pt-0">
-            {AppConstants.please_Sel_Fee}
-          </span>
-        )}
-        {isSeasonal == true && (
-          <div className="inside-container-view">
+      <div className="tab-formView">
+        <div>
+        <div className="inside-container-view">
             <div className="contextualHelp-RowDirection">
-              <span className="form-heading">{AppConstants.seasonalFee}</span>
-              <div style={{ marginTop: 4 }}>
-                <CustumToolTip placement="top" background="#ff8237">
-                  <span>{AppConstants.paymentSeasonalFeeMsg}</span>
-                </CustumToolTip>
-              </div>
+              <span className="form-heading">{AppConstants.paymentMethods}</span>
             </div>
-            <Tree
-              style={{ flexDirection: 'column' }}
-              className="tree-government-rebate tree-selection-icon"
-              checkable
-              expandedKeys={['1', '5', '7', 'isSeasonalUponReg', '8']}
-              //defaultCheckedKeys={[]}
-              checkedKeys={selectedSeasonalFeeKey}
-              onCheck={(e, info) => this.onChangeSeasonalFee(e)}
-              disabled={paymentsDisable}
-            >
-              {this.seasonalDataTree(seasonalPayment, selectedSeasonalInstalmentDates, selectedSeasonalFeeKey, "isSeasonalUponReg", isSeasonalUponReg)}
-            </Tree>
+
+              {(selectedPaymentMethods || []).map((item, index) =>(
+                <div className="pt-4">
+                  <Checkbox
+                    checked={item.isChecked}
+                    onChange={(e) => this.onChangePaymentOptionFee(e.target.checked,index, "paymentmethods", "isChecked")}
+                    className="single-checkbox mt-1"
+                    disabled={paymentsDisable}
+                  >
+                    {item.description}
+                  </Checkbox>
+                </div>
+              ))
+              }
           </div>
-        )}
-        {isCasual == true && (
-          <div className="inside-container-view">
-            <div className="contextualHelp-RowDirection">
-              <span className="form-heading">{AppConstants.singleGameFee}</span>
-              <div style={{ marginTop: 4 }}>
-                <CustumToolTip placement="top" background="#ff8237">
-                  <span>{AppConstants.paymentCausalFeeMsg}</span>
-                </CustumToolTip>
+          <div className="inside-container-view pt-5">
+            <span className="form-heading">{AppConstants.paymentOptions}</span>
+            {isSeasonal == false && isCasual == false && isTeamSeasonal == false &&
+            isTeamCasual == false &&(
+              <span className="applicable-to-heading pt-0">
+                {AppConstants.please_Sel_Fee}
+              </span>
+            )}
+            <div className="inside-container-view">
+              <div className="contextualHelp-RowDirection">
+                <span className="form-heading">{AppConstants.nominationFee}</span>
+                {/* <div style={{ marginTop: 4 }}>
+                  <CustumToolTip placement="top" background="#ff8237">
+                    <span>{AppConstants.paymentSeasonalFeeMsg}</span>
+                  </CustumToolTip>
+                </div> */}
               </div>
+              <Radio.Group
+                className="reg-competition-radio"
+                value={1}
+                disabled={paymentsDisable}
+                >
+                <Radio value={1}>{AppConstants.atPointOfRegistration}</Radio>
+                <div className="pl-2">
+                  {AppConstants.nominationFeeTeam}
+                </div>
+              </Radio.Group>
             </div>
-            <Tree
-              style={{ flexDirection: 'column' }}
-              className="tree-government-rebate tree-selection-icon"
-              checkable
-              //defaultExpandedKeys={[]}
-              //defaultCheckedKeys={[]}
-              expandedKeys={['1', '4', '8', '12']}
-              checkedKeys={selectedCasualFeeKey}
-              onCheck={(e) => this.onChangeCasualFee(e, paymentData)}
-              disabled={paymentsDisable}
-            >
-              {this.casualDataTree(casualPayment)}
-            </Tree>
-          </div>
-        )}
-        {isTeamSeasonal == true && (
-          <div className="inside-container-view">
-            <div className="contextualHelp-RowDirection">
-              <span className="form-heading">{AppConstants.teamSeasonalFee}</span>
-              <div style={{ marginTop: 4 }}>
-                <CustumToolTip placement="top" background="#ff8237">
-                  <span>{AppConstants.paymentSeasonalFeeMsg}</span>
-                </CustumToolTip>
+            {isSeasonal == true && (
+              <div className="inside-container-view">
+                <div className="contextualHelp-RowDirection">
+                  <span className="form-heading">{AppConstants.seasonalFee}</span>
+                  <div style={{ marginTop: 4 }}>
+                    <CustumToolTip placement="top" background="#ff8237">
+                      <span>{AppConstants.paymentSeasonalFeeMsg}</span>
+                    </CustumToolTip>
+                  </div>
+                </div>
+                {(selectedSeasonalFee || []).map((item, index) =>(
+                  <div className="pt-4">
+                    <Checkbox
+                      checked={item.isChecked}
+                      onChange={(e) => this.onChangePaymentOptionFee(e.target.checked,index, "seasonalfee", "isChecked")}
+                      className="single-checkbox mt-1"
+                      disabled={paymentsDisable}
+                    >
+                      {item.description}
+                    </Checkbox>
+                    {item.paymentOptionRefId == 5 && item.isChecked ? 
+                        <div className="inside-container-view ml-5">
+                          {this.instalmentDate()}
+                          {this.instalmentUponReg("isSeasonalUponReg", isSeasonalUponReg)}
+                          {this.showInstalmentDate(selectedSeasonalInstalmentDates, "seasonalfee")}
+                          {this.addInstalmentDateBtn(selectedSeasonalInstalmentDates, "seasonalfee") }
+                      </div> : null
+                      }
+                  </div>
+                ))}
+                
               </div>
-            </div>
-            <Tree
-              style={{ flexDirection: 'column' }}
-              className="tree-government-rebate tree-selection-icon"
-              checkable
-              expandedKeys={['1', '5', '7', '8']}
-              //defaultCheckedKeys={[]}
-              checkedKeys={selectedSeasonalTeamFeeKey}
-              onCheck={(e) => this.onChangeSeasonalTeamFee(e)}
-              disabled={paymentsDisable}
-            >
-              {this.seasonalTeamDataTree(seasonalTeamPayment, selectedTeamSeasonalInstalmentDates, selectedSeasonalTeamFeeKey, "isTeamSeasonalUponReg", isTeamSeasonalUponReg, teamSeasonalSchoolRegCode)}
-            </Tree>
+            )}
+            {isCasual == true && (
+              <div className="inside-container-view">
+                <div className="contextualHelp-RowDirection">
+                  <span className="form-heading">{AppConstants.singleGameFee}</span>
+                  <div style={{ marginTop: 4 }}>
+                    <CustumToolTip placement="top" background="#ff8237">
+                      <span>{AppConstants.paymentCausalFeeMsg}</span>
+                    </CustumToolTip>
+                  </div>
+                </div>
+                {(selectedCasualFee || []).map((item, index) =>(
+                  <div className="pt-4">
+                    <Checkbox
+                      checked={item.isChecked}
+                      onChange={(e) => this.onChangePaymentOptionFee(e.target.checked,index, "casualfee", "isChecked")}
+                      className="single-checkbox mt-1"
+                      disabled={paymentsDisable}
+                    >
+                      {item.description}
+                    </Checkbox>
+                  </div>
+                ))}
+              </div>
+            )}
+            {isTeamSeasonal == true && (
+              <div className="inside-container-view">
+                <div className="contextualHelp-RowDirection">
+                  <span className="form-heading">{AppConstants.teamSeasonalFee}</span>
+                  <div style={{ marginTop: 4 }}>
+                    <CustumToolTip placement="top" background="#ff8237">
+                      <span>{AppConstants.paymentSeasonalFeeMsg}</span>
+                    </CustumToolTip>
+                  </div>
+                </div>
+                {(selectedSeasonalTeamFee || []).map((item, index) =>(
+                  <div className="pt-4">
+                    <Checkbox
+                      checked={item.isChecked}
+                      onChange={(e) => this.onChangePaymentOptionFee(e.target.checked,index, "seasonalteamfee", "isChecked")}
+                      className="single-checkbox mt-1"
+                      disabled={paymentsDisable}
+                    >
+                      {item.description}
+                    </Checkbox>
+                    {item.paymentOptionRefId == 5 && item.isChecked ? 
+                        <div className="inside-container-view ml-5">
+                          {this.instalmentDate()}
+                          {this.instalmentUponReg("isTeamSeasonalUponReg", isTeamSeasonalUponReg)}
+                          {this.showInstalmentDate(selectedTeamSeasonalInstalmentDates, "seasonalteamfee")}
+                          {this.addInstalmentDateBtn(selectedTeamSeasonalInstalmentDates, "seasonalteamfee") }
+                      </div> : ""
+                      }
+                      {item.paymentOptionRefId == 8 && item.isChecked  ? 
+                        this.teamSeasonalRegistrationcode(teamSeasonalSchoolRegCode) : null
+                      }
+                  </div>
+                ))}
+              </div>
+            )}
+            {isTeamCasual == true && (
+              <div className="inside-container-view">
+                <div className="contextualHelp-RowDirection">
+                  <span className="form-heading">{AppConstants.teamSingleGameFee}</span>
+                  <div style={{ marginTop: 4 }}>
+                    <CustumToolTip placement="top" background="#ff8237">
+                      <span>{AppConstants.paymentCausalFeeMsg}</span>
+                    </CustumToolTip>
+                  </div>
+                </div>
+                {(selectedCasualTeamFee || []).map((item, index) =>(
+                  <div className="pt-4">
+                    <Checkbox
+                      checked={item.isChecked}
+                      onChange={(e) => this.onChangePaymentOptionFee(e.target.checked,index, "casualteamfee", "isChecked")}
+                      className="single-checkbox mt-1"
+                      disabled={paymentsDisable}
+                    >
+                      {item.description}
+                    </Checkbox>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div></div>
           </div>
-        )}
-        <div></div>
+        </div>       
       </div>
+      
     );
   };
 
@@ -6454,7 +7844,7 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                   </TabPane>
                   <TabPane tab={AppConstants.payments} key={'5'}>
-                    <div className="tab-formView">
+                    <div>
                       {this.paymentOptionsView(getFieldDecorator)}
                     </div>
                     {/* <div className="tab-formView">
@@ -6526,6 +7916,7 @@ function mapDispatchToProps(dispatch) {
       registrationRestrictionTypeAction,
       fixtureTemplateRoundsAction,
       instalmentDateAction,
+      paymentMethodsDefaultAction
     },
     dispatch
   );

@@ -310,7 +310,7 @@ class Routes extends React.Component {
         />
         <PrivateRoute
           path="/competitionDraws"
-          component={lazyLoad(CompetitionDraws)}
+          component={lazyLoad(MultifieldDrawsNew)}
         />
         <PrivateRoute
           path="/competitionDrawEdit"
@@ -823,7 +823,7 @@ class Routes extends React.Component {
 
         <PrivateRoute
           path="/multiDraws"
-          component={lazyLoad(MultifieldDrawsNew)}
+          component={lazyLoad(CompetitionDraws)}
         />
         <Route path="/" component={lazyLoad(NotFound)} />
 

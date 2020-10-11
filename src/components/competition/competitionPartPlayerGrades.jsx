@@ -196,7 +196,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                             alt=""
                                                             className="export-image"
                                                         />
-                                                        {AppConstants.import}
+                                                        {AppConstants.playerImport}
                                                     </div>
                                                 </div>
                                             </Button>

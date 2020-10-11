@@ -234,13 +234,43 @@ class RegistrationCompetitionList extends Component {
             deleteLoading: false,
             userRole: "",
             searchText: '',
-            offset: 0
+            offset: 0,
+            sortBy: null,
+            sortOrder: null
+
         };
         this_Obj = this;
         this.props.CLEAR_OWN_COMPETITION_DATA()
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
+
+    async componentDidMount() {
+
+        const { competitionListAction } = this.props.competitionFeesState
+
+        checkUserRole().then((value) => (
+            this.setState({ userRole: value })
+        ))
+        let page = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (competitionListAction) {
+            let offset = competitionListAction.offset
+            sortBy = competitionListAction.sortBy
+            sortOrder = competitionListAction.sortOrder
+            let yearRefId = competitionListAction.yearRefId
+            let searchText = competitionListAction.searchText
+
+            await this.setState({ offset, sortBy, sortOrder, yearRefId, searchText })
+            page = Math.floor(offset / 10) + 1;
+
+            this.handleCompetitionTableList(page, yearRefId, searchText)
+        } else {
+
+            this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText)
+        }
+    }
 
     componentDidUpdate(nextProps) {
         if (this.props.competitionFeesState.onLoad === false && this.state.deleteLoading === true) {
@@ -249,13 +279,6 @@ class RegistrationCompetitionList extends Component {
             })
             this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText)
         }
-    }
-
-    componentDidMount() {
-        checkUserRole().then((value) => (
-            this.setState({ userRole: value })
-        ))
-        this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText)
     }
 
     deleteProduct = (competitionId) => {
@@ -363,6 +386,7 @@ class RegistrationCompetitionList extends Component {
                                     onChange={(e) => this.onChangeSearchText(e)}
                                     placeholder="Search..."
                                     onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                    value={this.state.searchText}
                                     prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                         onClick={() => this.onClickSearchIcon()}
                                     />}

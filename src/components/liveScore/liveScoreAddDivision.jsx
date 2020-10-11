@@ -165,7 +165,8 @@ class LiveScoreAddDivision extends Component {
                 </div>
                 <div className="row" >
                     <div className="col-sm" >
-                        <InputWithHead heading={AppConstants.positionTracking} />
+                        <InputWithHead heading={AppConstants.positionTracking}
+                            required={"pb-3 pt-3"}                        />
                         <Form.Item>
                             {getFieldDecorator("positionTracking",)(
                                 <Select
@@ -185,7 +186,9 @@ class LiveScoreAddDivision extends Component {
                 </div>
                 <div className="row" >
                     <div className="col-sm" >
-                        <InputWithHead heading={AppConstants.recordGoalAttempt} />
+                        <InputWithHead heading={AppConstants.recordGoalAttempt} 
+                        required={"pb-3 pt-3"}
+                        />
                         <Form.Item>
                             {getFieldDecorator("recordGoalAttempts")(
                                 <Select

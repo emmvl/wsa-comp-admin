@@ -25,7 +25,7 @@ import {
 } from '../../store/actions/competitionModuleAction/venueTimeAction'
 import { getYearAndCompetitionAction } from '../../store/actions/appAction'
 import { getCommonRefData, addVenueAction, checkVenueDuplication } from '../../store/actions/commonAction/commonAction'
-import { getOrganisationAction } from "../../store/actions/userAction/userAction";
+import { getAffiliatesListingAction } from "../../store/actions/userAction/userAction";
 import history from '../../util/history'
 import ValidationConstants from "../../themes/validationConstant";
 import AppImages from "../../themes/appImages";
@@ -194,7 +194,15 @@ class CompetitionVenueAndTimesEdit extends Component {
         };
         this_Obj = this;
         this.props.getCommonRefData()
-        this.props.getOrganisationAction("organisationUniqueKey")
+        const organisationData = getOrganisationData();
+        this.props.getAffiliatesListingAction({
+            organisationId: organisationData.organisationUniqueKey,
+            affiliatedToOrgId: -1,
+            organisationTypeRefId: -1,
+            statusRefId: -1,
+            paging: { limit: -1, offset: 0 },
+            stateOrganisations: true,
+          });
 
     }
 
@@ -313,7 +321,7 @@ class CompetitionVenueAndTimesEdit extends Component {
         let venueData = this.props.venueTimeState.venuData;
         let isVenueMapped = venueData.isVenueMapped;
         let affiliateData = venueData.affiliateData;
-        let venueOrganisation = this.props.userState.venueOrganisation;
+        let venueOrganisation = this.props.userState.affiliateList;
         let organisationId = getOrganisationData().organisationUniqueKey;
         if (venueOrganisation != null && venueOrganisation.length > 0) {
             venueOrganisation.map((item, index) => {
@@ -501,7 +509,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         />
                     )}
                 </Form.Item>
-                <Form.Item >
+                <Form.Item className='formLineHeight'>
                     {getFieldDecorator('shortName', {
                         rules: [{ required: true, message: ValidationConstants.nameField[3] }],
                     })(
@@ -517,7 +525,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     )}
                 </Form.Item>
 
-                <Form.Item name="venueAddress">
+                <Form.Item className='formLineHeight' name="venueAddress">
                     <PlacesAutocomplete
                         defaultValue={defaultVenueAddress}
                         heading={AppConstants.venueSearch}
@@ -596,7 +604,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 </Form.Item>
 
 
-                <Form.Item >
+                <Form.Item className='formLineHeight'>
                     {getFieldDecorator('postcode')(
                         <InputWithHead
                             auto_complete="new-postcode"
@@ -848,7 +856,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                 <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, tableIndex, 'availabilities', 'add_TimeSlot')} className="input-heading-add-another pt-3">
                     + {AppConstants.add_TimeSlot}
                 </span>
-             {/* : null
+                {/* : null
             } */}
             </div>
         )
@@ -1065,7 +1073,7 @@ function mapDispatchToProps(dispatch) {
         getCommonRefData,
         addVenueAction,
         refreshVenueFieldsAction,
-        getOrganisationAction,
+        getAffiliatesListingAction,
         removeObjectAction,
         venueByIdAction,
         clearVenueDataAction,

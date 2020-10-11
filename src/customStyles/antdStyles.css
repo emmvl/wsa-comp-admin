@@ -297,6 +297,7 @@
 
 .ant-time-picker-input {
   height: 44px;
+  color: var(--app-1b1b34);
 }
 
 /* antd table overrided styles */
@@ -529,6 +530,9 @@ textarea.ant-input {
 .add-membership-type-modal .ant-btn-primary {
   background-color: var(--app-color);
   border-color: var(--app-color);
+}
+.add-membership-type-modalLadder .ant-modal-footer{
+  padding:10px 18px
 }
 
 .ant-spin {

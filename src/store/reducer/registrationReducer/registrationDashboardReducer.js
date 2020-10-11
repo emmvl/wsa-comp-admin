@@ -13,6 +13,8 @@ const initialState = {
     competitionTypeList: [],
     ownedRegistrations: [],////////ownedRegistrations main dashboard listing
     participatingInRegistrations: [], ////////participatingInRegistrations main dashboard listing
+    regFormListAction: null,
+    regDashboardListAction: null
 };
 
 ///// Generate owned Registrations Array
@@ -55,7 +57,7 @@ function registrationDashboard(state = initialState, action) {
     switch (action.type) {
         //////get the Dashboard list in registration
         case ApiConstants.API_REG_DASHBOARD_LIST_LOAD:
-            return { ...state, onLoad: true, error: null };
+            return { ...state, onLoad: true, error: null, regFormListAction: action };
 
         case ApiConstants.API_REG_DASHBOARD_LIST_SUCCESS:
             let dashboardListData = action.result;
@@ -118,7 +120,7 @@ function registrationDashboard(state = initialState, action) {
 
         /////////////////registration main dashboard listing owned and participate registration
         case ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_LOAD:
-            return { ...state, onLoad: true, error: null };
+            return { ...state, onLoad: true, error: null, regDashboardListAction: action };
 
         case ApiConstants.API_GET_REGISTRATION_MAIN_DASHBOARD_LISTING_SUCCESS:
             let ownRegArray = generateOwnedRegistrations(action.result)
@@ -131,6 +133,11 @@ function registrationDashboard(state = initialState, action) {
                 status: action.status,
                 error: null
             };
+
+        case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
+            state.regFormListAction = null
+            state.regDashboardListAction = null
+            return { ...state, onLoad: false };
 
         default:
             return state;

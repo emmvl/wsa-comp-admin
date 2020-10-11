@@ -65,6 +65,7 @@ const initialState = {
     totalTeams: null,
     livescoreTeamActionObject: null,
     teamCurrentPage: 1,
+    teamLoad: false
 };
 
 function getManagerId(managerData) {
@@ -254,7 +255,7 @@ function LiveScoreTeamState(state = initialState, action) {
             return { ...state, onLoad: false };
 
         case ApiConstants.API_LIVE_SCORE_GET_TEAM_LOAD:
-            return { ...state, onLoad: true };
+            return { ...state, onLoad: true, teamLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_GET_TEAM_SUCCESS:
             state.teamManagerData = action.result.team.length > 0 ? action.result.team[0] : null;
@@ -263,7 +264,7 @@ function LiveScoreTeamState(state = initialState, action) {
             state.teamManagerData["userIds"] = managerId;
             state.selectedManager = managerId;
             state.managerType = action.result.managers.length > 0 ? "existing" : null;
-            return { ...state, onLoad: false };
+            return { ...state, onLoad: false, teamLoad: false };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD:
             return { ...state, onLoad: true, livescoreTeamActionObject: action };
