@@ -229,7 +229,9 @@ const ValidationConstants = {
     competitionStartEndDateIsRequired: "Competition Start and End date is requied",
     playerTypeRequired: "Please select the player type",
     pleaseSelectePaymentMethods: "Please select payment methods",
-    newMembershipDuplicteError: "Membership product is not same as another product you have selected"
+    newMembershipDuplicteError: "Membership product is not same as another product you have selected",
+    yearIsRequired: "Year is required",
+    membershipProductIsRequired1: "Membership Product is required"
 };
 
 export default ValidationConstants;
