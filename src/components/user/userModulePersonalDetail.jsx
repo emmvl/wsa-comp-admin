@@ -38,10 +38,9 @@ import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 import moment from "moment";
 import history from "../../util/history";
-import { liveScore_formateDate } from "../../themes/dateformate";
+import { liveScore_MatchFormate, liveScore_formateDate, getTime } from "../../themes/dateformate";
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
-import { liveScore_MatchFormate } from '../../themes/dateformate'
 import StripeKeys from "../stripe/stripeKeys";
 import { getStripeLoginLinkAction } from "../../store/actions/stripeAction/stripeAction";
 
@@ -51,6 +50,30 @@ function tableSort(a, b, key) {
   let stringB = JSON.stringify(b[key]);
   return stringA.localeCompare(stringB);
 }
+
+function umpireActivityTableSort(key) {
+  let sortBy = key;
+  let sortOrder = null;
+  if (this_Obj.state.sortBy !== key) {
+    sortOrder = 'ASC';
+  } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+    sortOrder = 'DESC';
+  } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+    sortBy = sortOrder = null;
+  }
+  const payload =
+  {
+    "paging": {
+      "limit": 10,
+      "offset": this_Obj.state.umpireActivityOffset
+    }
+  }
+  this_Obj.setState({ UmpireActivityListSortBy: sortBy, UmpireActivityListSortOrder: sortOrder });
+
+  this_Obj.props.getUmpireActivityListAction(payload, JSON.stringify([15]), this_Obj.state.userId, sortBy, sortOrder);
+
+}
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -850,60 +873,95 @@ const columnsIncident = [
   },
 ];
 
+//listeners for sorting
+const listeners = (key) => ({
+  onClick: () => umpireActivityTableSort(key),
+});
+
 const umpireActivityColumn = [
   {
     title: 'Match Id',
     dataIndex: 'matchId',
     key: 'matchId',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
     title: 'Date',
     dataIndex: 'date',
     key: 'date',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (date, record) => <span>{record?.match?.startTime ? liveScore_formateDate(record.match.startTime) : ""}</span>
   },
   {
     title: 'Time',
     dataIndex: 'time',
     key: 'time',
-    sorter: true,
+    // sorter: true,
+    render: (time, record) => <span>{record?.match?.startTime ? getTime(record.match.startTime) : ""}</span>
   },
   {
     title: 'Competition',
     dataIndex: 'competition',
     key: 'competition',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (date, record) => <span>{record?.match?.competition ? record.match.competition.longName : ""}</span>
   },
   {
     title: 'Affiliate',
     dataIndex: 'affiliate',
     key: 'affiliate',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (affiliate, record) => {
+      let organisationArray = record.user.userRoleEntities.length > 0 && this_Obj.getOrganisationArray(record.user.userRoleEntities, record.roleId)
+      return (
+        <div>
+          {organisationArray.length > 0 && organisationArray.map((item, index) => {
+            console.log(item)
+            return (
+              <span key={`organisationName` + index} className='multi-column-text-aligned'>{
+
+                item.competitionOrganisation && item.competitionOrganisation.name}</span>
+            )
+          })
+          }
+        </div>)
+    },
   },
   {
     title: 'Home',
     dataIndex: 'home',
     key: 'home',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (home, record) => <span>{record?.match?.team1 ? record.match.team1.name : ""}</span>
   },
   {
     title: 'Away',
     dataIndex: 'away',
     key: 'away',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (away, record) => <span>{record?.match?.team2 ? record.match.team2.name : ""}</span>
   },
   {
     title: 'Amount',
     dataIndex: 'amount',
     key: 'amount',
-    sorter: true,
+    // sorter: true,
+    // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (amount, record) => <span>{"N/A"}</span>
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
-    sorter: true,
+    // sorter: true,
+    // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (status, record) => <span>{"N/A"}</span>
   },
 ]
 
@@ -1018,7 +1076,10 @@ class UserModulePersonalDetail extends Component {
       competitions: [],
       teams: [],
       divisions: [],
-      stripeDashBoardLoad: false
+      stripeDashBoardLoad: false,
+      umpireActivityOffset: 0,
+      UmpireActivityListSortBy: null,
+      UmpireActivityListSortOrder: null
     };
   }
 
@@ -1124,6 +1185,20 @@ class UserModulePersonalDetail extends Component {
     this.props.getUserModulePersonalDetailsAction(payload);
     this.props.getUserModulePersonalByCompetitionAction(payload);
   };
+
+  getOrganisationArray(data, roleId) {
+    let orgArray = []
+    if (data.length > 0) {
+      for (let i in data) {
+        if (data[i].roleId == roleId == 19 ? 15 : roleId) {
+          orgArray.push(data[i])
+          return orgArray
+        }
+      }
+    }
+    return orgArray
+
+  }
 
   onChangeYear = (value) => {
     let userState = this.props.userState;
@@ -1291,7 +1366,7 @@ class UserModulePersonalDetail extends Component {
           "offset": 0
         }
       }
-      // this.props.getUmpireActivityListAction(payload, JSON.stringify([15]), userId);
+      this.props.getUmpireActivityListAction(payload, JSON.stringify([15]), userId, this.state.UmpireActivityListSortBy, this.state.UmpireActivityListSortOrder);
     }
   };
 
@@ -1348,6 +1423,19 @@ class UserModulePersonalDetail extends Component {
       },
     };
     this.props.getUserHistoryAction(filter);
+  };
+
+  ////pagination handling for umpire activity table list
+  handleUmpireActivityTableList = (page, userId) => {
+    let offset = page ? 10 * (page - 1) : 0
+    this.setState({ umpireActivityOffset: offset })
+    let payload = {
+      "paging": {
+        "limit": 10,
+        "offset": offset,
+      }
+    }
+    this.props.getUmpireActivityListAction(payload, JSON.stringify([15]), userId, this.state.UmpireActivityListSortBy, this.state.UmpireActivityListSortOrder);
   };
 
   viewRegForm = async (item) => {
@@ -2430,14 +2518,12 @@ class UserModulePersonalDetail extends Component {
             className="antd-pagination pb-3"
             current={umpireActivityCurrentPage}
             total={umpireActivityTotalCount}
-          // onChange={(page) =>
-          //   this.hanleIncidentTableList(
-          //     page,
-          //     this.state.userId,
-          //     this.state.competition,
-          //     this.state.yearRefId
-          //   )
-          // }
+            onChange={(page) =>
+              this.handleUmpireActivityTableList(
+                page,
+                this.state.userId
+              )
+            }
           />
         </div>
       </div>

@@ -158,7 +158,8 @@ function userReducer(state = initialState, action) {
         userPhotoUpdate: false,
         userPasswordUpdate: false,
         error: action.error,
-        status: action.status
+        status: action.status,
+        umpireActivityOnLoad: false,
       };
 
     case ApiConstants.API_USER_ERROR:
@@ -170,7 +171,8 @@ function userReducer(state = initialState, action) {
         userPhotoUpdate: false,
         userPasswordUpdate: false,
         error: action.error,
-        status: action.status
+        status: action.status,
+        umpireActivityOnLoad: false,
       };
 
     // get Role Entity List for current user
@@ -804,7 +806,7 @@ function userReducer(state = initialState, action) {
         coachTotalCount: action.result.page.totalCount,
       };
 
-    ////Scorer
+    ////umpire activity list
     case ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_LOAD:
       return { ...state, umpireActivityOnLoad: true };
 

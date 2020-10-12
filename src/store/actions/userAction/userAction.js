@@ -387,10 +387,10 @@ function getCoachData(payload, roleId, matchStatus) {
   return action
 }
 
-function getUmpireActivityListAction(payload, roleId, userId) {
+function getUmpireActivityListAction(payload, roleId, userId, sortBy, sortOrder) {
   const action = {
     type: ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_LOAD,
-    payload, roleId, userId
+    payload, roleId, userId, sortBy, sortOrder
   };
   return action
 }
