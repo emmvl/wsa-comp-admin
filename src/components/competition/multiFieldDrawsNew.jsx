@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import { Layout, Button, Breadcrumb, Popover, Menu, Select, DatePicker, Checkbox, Form, message, Spin } from "antd";
+import { Layout, Button, Breadcrumb, Tooltip, Popover, Menu, Select, DatePicker, Checkbox, Form, message, Spin, Modal } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import history from "../../util/history";
 import { NavLink } from 'react-router-dom';
+import DrawsPublishModel from '../../customComponents/drawsPublishModel'
 import _ from "lodash";
 import '../../../node_modules/react-grid-layout/css/styles.css'
 import '../../../node_modules/react-resizable/css/styles.css'
-import InputWithHead from "../../customComponents/InputWithHead";
 import loadjs from 'loadjs';
 import moment from 'moment';
 import AppImages from "../../themes/appImages";
@@ -65,6 +65,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Footer, Content } = Layout;
 const { SubMenu } = Menu;
+const { confirm } = Modal;
 // const venueStaticData = [{ name: "Venue 1", checked: true }, { name: "Venue 2", checked: true }, { name: "Venue 3", checked: true }, { name: "Venue 4", checked: false },
 // { name: "Venue 1", checked: true }, { name: "Venue 2", checked: true }, { name: "Venue 3", checked: true }, { name: "Venue 4", checked: false }]
 // const compStaticData = [{ name: "Monday Night Social", checked: true }, { name: "NSW State Age", checked: true }, { name: "NWA Winter", checked: true },
@@ -114,6 +115,8 @@ class MultifieldDrawsNew extends Component {
             selectedDateRange: null,
             startDate: new Date(),
             endDate: new Date(),
+            changeDateLoad: false,
+            dateRangeCheck: false,
             allVenueChecked: true,
             allCompChecked: true,
             allDivisionChecked: true,
@@ -1680,6 +1683,255 @@ class MultifieldDrawsNew extends Component {
             </div>
         )
     }
+    callGenerateDraw = () => {
+        let payload = {
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.firstTimeCompId,
+            organisationId: getOrganisationData().organisationUniqueKey,
+            roundId: this.state.generateRoundId
+        };
+        this.props.generateDrawAction(payload);
+        this.setState({ venueLoad: true });
+    }
+
+    reGenerateDraw = () => {
+        let competitionStatus = getOwn_competitionStatus();
+        if (competitionStatus == 2) {
+            this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+            this.setState({ roundLoad: true });
+        }
+        else {
+            this.callGenerateDraw();
+        }
+
+    };
+
+    check = () => {
+        if (
+            this.state.firstTimeCompId == null ||
+            this.state.firstTimeCompId == ''
+        ) {
+            message.config({ duration: 0.9, maxCount: 1 });
+            message.error(ValidationConstants.pleaseSelectCompetition);
+        } else if (this.state.venueId == null && this.state.venueId == '') {
+            message.config({ duration: 0.9, maxCount: 1 });
+            message.error(ValidationConstants.pleaseSelectVenue);
+        } else {
+            this.setState({ visible: true })
+            //this.props.publishDraws(this.state.firstTimeCompId);
+        }
+    };
+
+    openModel = (props, e) => {
+        let this_ = this;
+        confirm({
+            title: 'You have teams ‘Not in Draw’. Would you still like to proceed?',
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            maskClosable: true,
+            mask: true,
+            onOk() {
+                this_.check();
+            },
+            onCancel() {
+                console.log('cancel');
+            },
+        });
+    };
+
+    //////footer view containing all the buttons like publish and regenerate draws
+    footerView = () => {
+        let publishStatus = this.props.drawsState.publishStatus;
+        let isTeamNotInDraws = this.props.drawsState.isTeamInDraw;
+        let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
+        let isPublish = this.state.competitionStatus == 1 ? true : false;
+        let teamNames = this.props.drawsState.teamNames;
+        return (
+            <div className="fluid-width paddingBottom56px">
+                <div className="row">
+                    <div className="col-sm-3">
+                        <div className="reg-add-save-button"></div>
+                    </div>
+                    <div className="col-sm">
+                        <div className="comp-buttons-view">
+                            {/* <NavLink to="/competitionFormat"> */}
+                            <Button
+                                className="open-reg-button"
+                                type="primary"
+                                disabled={isPublish}
+                                onClick={() => this.reGenerateDraw()}
+                            >
+                                {AppConstants.regenerateDraw}
+                            </Button>
+                            <div>
+                                <Loader
+                                    visible={this.props.competitionModuleState.drawGenerateLoad}
+                                />
+                            </div>
+                            {/* </NavLink> */}
+                        </div>
+                    </div>
+                    <div>
+                        <div className="comp-buttons-view">
+                            <Tooltip
+                                style={{ height: '100%' }}
+                                onMouseEnter={() =>
+                                    this.setState({
+                                        tooltipVisibleDelete: isPublish ? true : false,
+                                    })
+                                }
+                                onMouseLeave={() =>
+                                    this.setState({ tooltipVisibleDelete: false })
+                                }
+                                visible={this.state.tooltipVisibleDelete}
+                                title={AppConstants.statusPublishHover}
+                            >
+                                <Button
+                                    className="open-reg-button"
+                                    type="primary"
+                                    htmlType="submit"
+                                    style={{ height: (isPublish || publishStatus == 1) && "100%", borderRadius: (isPublish || publishStatus == 1) && 6 }}
+                                    onClick={() =>
+                                        isTeamNotInDraws == 1
+                                            ? this.openModel(this.props)
+                                            : this.check()
+                                    }
+                                    disabled={this.state.competitionStatus == 1 || publishStatus == 1 ? true : false}
+                                >
+                                    {AppConstants.publish}
+                                </Button>
+                            </Tooltip>
+                        </div>
+                    </div>
+                    {/* </div> */}
+                </div>
+                <DrawsPublishModel
+                    publishVisible={this.state.visible}
+                    divisionGradeNameList={this.props.drawsState.divisionGradeNameList}
+                    getDrawsRoundsData={this.props.drawsState.getDrawsRoundsData}
+                    modelCheckDivision={e => this.checkDivision(e)}
+                    modelCheckRound={e => this.checkRound(e)}
+                    modelCancel={this.handleCancel}
+                    modelRadio={this.onChangeRadio}
+                    modalPublish={(e) => this.publishDraw()}
+                    modalDivisions={(e) => this.onSelectDivisionsValues(e)}
+                    modalRounds={(e) => this.onSelectRoundValues(e)}
+                    modalRadioValue={this.state.value}
+                    modalIsShowPart={this.state.publishPartModel.isShowPart}
+                    modalIsShowDivision={this.state.publishPartModel.publishPart.isShowDivision}
+                    modalIsShowRound={this.state.publishPartModel.publishPart.isShowRound}
+                ></DrawsPublishModel>
+
+                <Modal
+                    className="add-membership-type-modal"
+                    title={AppConstants.regenerateDrawTitle}
+                    visible={this.state.drawGenerateModalVisible}
+                    onOk={() => this.handleGenerateDrawModal("ok")}
+                    onCancel={() => this.handleGenerateDrawModal("cancel")}>
+                    <Select
+                        className="year-select reg-filter-select-competition ml-2"
+                        onChange={(e) => this.setState({ generateRoundId: e })}
+                        placeholder={'Round'}>
+                        {(activeDrawsRoundsData || []).map((d, dIndex) => (
+                            <Option key={d.roundId}
+                                value={d.roundId} >{d.name}</Option>
+                        ))
+                        }
+
+                    </Select>
+                </Modal>
+                <Modal
+                    className="add-membership-type-modal"
+                    title="Team Names"
+                    visible={this.state.publishModalVisible}
+                    onOk={() => this.handlePublishModal("ok")}
+                    onCancel={() => this.handlePublishModal("cancel")}>
+                    <div>
+                        <div>{AppConstants.publishModalInfo}</div>
+                        <div>{teamNames}</div>
+                        <div>{AppConstants.publishModalConfirmationMsg}</div>
+                    </div>
+                </Modal>
+            </div>
+        );
+    };
+
+    checkDivision = e => {
+        if (e.target.checked) {
+            this.state.publishPartModel.publishPart.isShowDivision = true;
+        }
+        else {
+            this.state.publishPartModel.publishPart.isShowDivision = false;
+            this.onSelectDivisionsValues(null)
+        }
+        this.setState({
+            publishPart: this.state.publishPartModel.publishPart
+        })
+    }
+
+    checkRound = e => {
+        if (e.target.checked) {
+            this.state.publishPartModel.publishPart.isShowRound = true;
+        }
+        else {
+            this.state.publishPartModel.publishPart.isShowRound = false;
+            this.onSelectRoundValues(null)
+        }
+        this.setState({
+            publishPart: this.state.publishPartModel.publishPart
+        })
+    }
+
+    handleCancel = e => {
+        this.setState({
+            visible: false,
+        });
+        this.state.publishPartModel.publishPart.isShowRound = false;
+        this.state.publishPartModel.publishPart.isShowDivision = false;
+        this.state.publishPartModel.isShowPart = false;
+        this.state.value = 1;
+    };
+
+    onChangeRadio = e => {
+        this.setState({
+            value: e.target.value,
+        });
+        if (e.target.value == 2) {
+            this.state.publishPartModel.isShowPart = true;
+            this.setState({
+                publishPartModel: this.state.publishPartModel
+            })
+        }
+        else {
+            this.state.publishPartModel.isShowPart = false;
+        }
+    };
+
+    publishDraw = () => {
+        let payload = {
+            isPartial: this.state.publishPartModel.isShowPart,
+            divisions: [],
+            rounds: []
+        }
+        if (this.state.publishPartModel.isShowPart == true) {
+            payload.divisions = this.state.selectedDivisions;
+            payload.rounds = this.state.selectedRounds
+        }
+        this.props.publishDraws(this.state.firstTimeCompId, '', payload);
+        this.setState({ visible: false, changeStatus: true })
+    }
+
+    onSelectDivisionsValues = (e) => {
+        this.setState({ selectedDivisions: e })
+    }
+
+    onSelectRoundValues = (e) => {
+        this.setState({ selectedRounds: e })
+    }
+
+
+
 
     ////main render method
     render() {
@@ -1690,7 +1942,7 @@ class MultifieldDrawsNew extends Component {
                 <Layout className="comp-dash-table-view">
                     {this.headerView()}
                     <Content>{this.contentView()}</Content>
-                    <Footer></Footer>
+                    <Footer>{this.footerView()}</Footer>
                     <Loader visible={this.props.drawsState.updateLoad || this.props.competitionModuleState.drawGenerateLoad} />
                 </Layout>
             </div>
