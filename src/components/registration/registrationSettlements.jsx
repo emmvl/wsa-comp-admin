@@ -360,8 +360,8 @@ class RegistrationSettlements extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"5"} />
+                <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
+                <InnerHorizontalMenu menu={"finance"} finSelectedKey={"3"} />
                 <Layout >
                     {this.headerView()}
                     <Content>

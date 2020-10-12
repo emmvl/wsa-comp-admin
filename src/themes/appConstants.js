@@ -1644,7 +1644,8 @@ const AppConstants = {
   chargedPerMatch: "Charged per Match",
   membershipPaymentOptions: "MembershipPaymentOption",
   membershipFeesPaymentOptions: "Membership Fee Payment Options",
-  whenPaymentsRequired: "When Payments are Required"
+  whenPaymentsRequired: "When Payments are Required",
+  Communication: "Communication"
 };
 
 export default AppConstants;

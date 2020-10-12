@@ -575,8 +575,8 @@ class RegistrationPayments extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"4"} />
+                <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
+                <InnerHorizontalMenu menu={"finance"} finSelectedKey={"2"} />
                 <Layout className="reg-payment-layout-view">
                     {this.headerView()}
                     {this.stripeView()}

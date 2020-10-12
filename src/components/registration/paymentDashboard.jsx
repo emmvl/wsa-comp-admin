@@ -435,10 +435,10 @@ class PaymentDashboard extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout
-                    menuHeading={AppConstants.registration}
-                    menuName={AppConstants.registration}
+                    menuHeading={AppConstants.finance}
+                    menuName={AppConstants.finance}
                 />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"8"} />
+                <InnerHorizontalMenu menu={"finance"} finSelectedKey={"1"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

@@ -218,8 +218,8 @@ class DashboardLayout extends React.Component {
       case AppConstants.liveScores:
         return AppImages.liveScoreIcon;
 
-      case AppConstants.events:
-        return AppImages.eventsIcon;
+      case AppConstants.Communication:
+        return AppImages.chatIcon;
 
       case AppConstants.shop:
         return AppImages.shopIcon;
@@ -472,19 +472,18 @@ class DashboardLayout extends React.Component {
                                 </NavLink>
                               </div>
                             </li>
-
-                            <li className={menuName === AppConstants.events ? "active" : ""} style={{ display: showRoleLevelPermision(this.state.userRoleId, 'events') ? 'visible' : 'none' }}>
+                            <li className={menuName === AppConstants.Communication ? "active" : ""} style={{ display: showRoleLevelPermision(this.state.userRoleId, 'events') ? 'visible' : 'none' }}>
                               <div className="events-menu menu-wrap">
                                 <a href="#">
                                   <span className="icon" />
-                                  {AppConstants.events}
+                                  {AppConstants.Communication}
                                 </a>
                               </div>
                             </li>
 
                             <li className={menuName === AppConstants.shop ? "active" : ""} style={{ display: showRoleLevelPermision(this.state.userRoleId, 'shop') ? 'visible' : 'none' }}>
                               <div className="shop-menu menu-wrap">
-                                <NavLink to="/shopDashboard">
+                                <NavLink to="/orderSummary">
                                   <span className="icon" />
                                   {AppConstants.shop}
                                 </NavLink>
@@ -502,10 +501,12 @@ class DashboardLayout extends React.Component {
 
                             <li className={menuName === AppConstants.finance ? "active" : ""} style={{ display: showRoleLevelPermision(this.state.userRoleId, 'finance') ? 'visible' : 'none' }}>
                               <div className="finance-menu menu-wrap">
-                                <a href="#">
-                                  <span className="icon" />
-                                  {AppConstants.finance}
-                                </a>
+                                <NavLink to="/paymentDashboard">
+                                  <a href="#">
+                                    <span className="icon" />
+                                    {AppConstants.finance}
+                                  </a>
+                                </NavLink>
                               </div>
                             </li>
                           </ul>
