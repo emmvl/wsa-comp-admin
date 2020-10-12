@@ -230,6 +230,12 @@ const columnsPlayer = [
     sorter: (a, b) => tableSort(a, b, "away"),
   },
   {
+    title: "Borrowed Player",
+    dataIndex: "borrowdPlayer",
+    key: "borrowdPlayer",
+    sorter: (a, b) => tableSort(a, b, "borrowdPlayer"),
+  },
+  {
     title: "Result",
     dataIndex: "teamScore",
     key: "teamScore",

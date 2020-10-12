@@ -100,10 +100,20 @@ const columns = [
         key: 'firstName',
         sorter: true,
         onHeaderCell: () => listeners("firstName"),
-        render: (firstName, record) =>
-            <span className="input-heading-add-another pt-0"
-                onClick={() => this_Obj.checkUserId(record)}
-            >{firstName}</span>
+        render: (firstName, record) => {
+            return (
+                <>
+                    {
+                        record.status == 'Borrowed' ?
+                            <span>{firstName}</span>
+                            :
+                            <span className="input-heading-add-another pt-0"
+                                onClick={() => this_Obj.checkUserId(record)}
+                            >{firstName}</span>
+                    }
+                </>
+            )
+        }
 
     },
     {
@@ -112,11 +122,22 @@ const columns = [
         key: 'lastName',
         sorter: true,
         onHeaderCell: () => listeners("lastName"),
-        render: (lastName, record) =>
+        render: (lastName, record) => {
+            return (
+                <>
+                    {
+                        record.status == 'Borrowed' ?
+                            <span>{lastName}</span>
+                            :
+                            <span className="input-heading-add-another pt-0"
+                                onClick={() => this_Obj.checkUserId(record)}
+                            >{lastName}</span>
+                    }
+                </>
+            )
+        }
 
-            <span className="input-heading-add-another pt-0"
-                onClick={() => this_Obj.checkUserId(record)}
-            >{lastName}</span>
+
 
     },
     {
@@ -202,7 +223,7 @@ const borrowedColumns = [
         sorter: true,
         onHeaderCell: () => listeners("firstName"),
         render: (firstName) =>
-            <span className="input-heading-add-another pt-0">{firstName}</span>
+            <span >{firstName}</span>
 
     },
     {
@@ -213,7 +234,7 @@ const borrowedColumns = [
         onHeaderCell: () => listeners("lastName"),
         render: (lastName) =>
 
-            <span className="input-heading-add-another pt-0">{lastName}</span>
+            <span >{lastName}</span>
 
     },
     {

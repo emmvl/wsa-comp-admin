@@ -50,8 +50,6 @@ async function routePermissionForOrgLevel(orgLevel1, orgLevel2) {
         history.push('./')
     }
 }
-
-
 const registrationsInviteesObject = {
     [AppConstants.firstlevelAffiliate]: 2,
     [AppConstants.secondlevelAffiliate]: 3,
@@ -80,4 +78,102 @@ async function checkLivScoreCompIsParent() {
     }
 }
 
-export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel, checkRegistrationType, checkLivScoreCompIsParent }
+async function checkUserAccess() {
+    let orgItem = await getOrganisationData()
+    let userRoleId = orgItem ? orgItem.userRoleId : 2
+    if (userRoleId == 2) {
+        return "admin"
+    }
+    else if (userRoleId == 11) {
+        return "umpire"
+    }
+    else if (userRoleId == 13) {
+        return "finance"
+    }
+    else {
+        return "admin"
+    }
+
+}
+
+function showRoleLevelPermision(userRoleId, menuName) {
+
+    if (menuName == 'user') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            case 11: return true
+                break;
+            case 13: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName == 'registration') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            case 13: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName == 'competitions') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName == 'liveScores') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName == 'events') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName == 'shop') {
+
+        switch (userRoleId) {
+            case 2: return true
+            case 13: return true
+            default: return false
+
+        }
+    } else if (menuName == 'umpires') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            case 11: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName == 'finance') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            case 13: return true
+                break;
+            default: return false
+
+        }
+    }
+
+}
+
+export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel, checkRegistrationType, checkLivScoreCompIsParent, checkUserAccess, showRoleLevelPermision }
