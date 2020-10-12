@@ -209,7 +209,7 @@ class CompetitionReplicate extends Component {
                                 <div className="col-sm" >
                                 <Form.Item >
                                     {getFieldDecorator(`oldYearRefId`, {
-                                        rules: [{ required: true}],
+                                        rules: [{ required: true,message: ValidationConstants.yearIsRequired}],
                                     })(
                                         <Select
                                             style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
@@ -236,7 +236,7 @@ class CompetitionReplicate extends Component {
                                 <div className="col-sm" >
                                     <Form.Item >
                                         {getFieldDecorator(`oldCompetitionId`, {
-                                            rules: [{ required: true}],
+                                            rules: [{ required: true,message: ValidationConstants.competitionNameIsRequired}],
                                         })(
                                             <Select
                                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -268,7 +268,7 @@ class CompetitionReplicate extends Component {
                             <div className="col-sm" >
                                 <Form.Item >
                                     {getFieldDecorator(`newYearRefId`, {
-                                        rules: [{ required: true,message: ValidationConstants.newYearFieldIsRequired}],
+                                        rules: [{ required: true,message: ValidationConstants.yearIsRequired}],
                                     })(
                                         <Select
                                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -321,7 +321,7 @@ class CompetitionReplicate extends Component {
                                 <div className="col-sm">
                                     <Form.Item >
                                         {getFieldDecorator(`membershipProductUniqueKey`, {
-                                            rules: [{ required: true,message: ValidationConstants.newYearFieldIsRequired}],
+                                            rules: [{ required: true,message: ValidationConstants.membershipProductIsRequired1}],
                                         })(
                                             <Select
                                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -374,7 +374,7 @@ class CompetitionReplicate extends Component {
                             <div className="col-sm" >
                             <Form.Item >
                                 {getFieldDecorator(`registrationCloseDate`, {
-                                    rules: [{ required: true,message: ValidationConstants.competitionStartEndDateIsRequired}],
+                                    rules: [{ required: true,message: ValidationConstants.registrationCloseDateIsRequired}],
                                 })(
                                     <DatePicker
                                         size="large"

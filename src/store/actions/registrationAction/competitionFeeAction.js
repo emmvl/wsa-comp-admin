@@ -334,6 +334,8 @@ function paymentMethodsDefaultAction() {
     }
     return action
 }
+
+
 export {
     regCompetitionListAction,
     regCompetitionListDeleteAction,

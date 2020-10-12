@@ -1576,7 +1576,7 @@ const AppConstants = {
   oneHasPreference: "Which one has preference:",
   divisioAndGrades: "Division and Grades",
   combine: "Combine",
-  whatRegistrationChange: "what registration change do you",
+  whatRegistrationChange: "What registration change do you",
   registrationChangeRef: "RegistrationChange",
   reasonWhyYourAreDecline: "Reason why you are declining the request for de-registration?",
   whoPayUmpire: "Who pays Umpires",
@@ -1620,7 +1620,7 @@ const AppConstants = {
   poolSettingsWhoPlaysWho: "Pool Settings - Who Plays Who",
   mailBodyText: `Hi,\n \nPlease use the following discount Code when you register in order to have your fee waived.`,
   fixtureTemplate: "Fixture Template",
-  reasonForTransfer: "Reasons(s) for wanting to transfer.",
+  reasonForTransfer: "Reason for Transfer",
   registrationCloseDate: "Registration close date",
   filterDates: "Filter Dates",
   uploadBankAccnt: "Upload Bank Account",
@@ -1635,11 +1635,16 @@ const AppConstants = {
   playerImport: "Import Players",
   teamSingleGameFee: "Team Single Game Fee",
   atPointOfRegistration: "At point of Registration",
-  nominationFee: "NominationFee",
+  nominationFee: "Nomination Fee",
   nominationFeeTeam: "Please note - The manager can choose to pay the nomination fee or can split it with the players at the time of registration",
   paymentMethods: "Payment Methods",
   singleGamePerTeamMember: "Single Game Fee per Team Member(inc GST)",
-  setMembershipProducts: "Set Membership Product(s)"
+  setMembershipProducts: "Set Membership Product(s)",
+  chargedForFullSeason: "Charged for Full Season",
+  chargedPerMatch: "Charged per Match",
+  membershipPaymentOptions: "MembershipPaymentOption",
+  membershipFeesPaymentOptions: "Membership Fee Payment Options",
+  whenPaymentsRequired: "When Payments are Required"
 };
 
 export default AppConstants;

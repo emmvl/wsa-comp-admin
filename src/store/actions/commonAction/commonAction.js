@@ -274,6 +274,13 @@ function registrationChangeType(){
     return action;
 }
 
+function membershipPaymentOptionAction() {
+    const action = {
+        type: ApiConstants.API_MEMBERSHIP_PAYMENT_OPTIONS_LOAD,
+    };
+
+    return action;
+}
 
 export {
     timeSlotInit,
@@ -307,5 +314,6 @@ export {
     registrationPaymentStatusAction,
     getMatchPrintTemplateType,
     checkVenueDuplication,
-    registrationChangeType
+    registrationChangeType,
+    membershipPaymentOptionAction
 }
