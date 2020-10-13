@@ -231,9 +231,16 @@ const columnsPlayer = [
   },
   {
     title: "Borrowed Player",
-    dataIndex: "borrowdPlayer",
-    key: "borrowdPlayer",
-    sorter: (a, b) => tableSort(a, b, "borrowdPlayer"),
+    dataIndex: "borrowedPlayerStatus",
+    key: "borrowedPlayerStatus",
+    sorter: (a, b) => tableSort(a, b, "borrowedPlayerStatus"),
+    render: (borrowedPlayerStatus, record, index) => {
+      return (
+        <div>
+          {borrowedPlayerStatus == "Borrowed" ? "Yes" : "No"}
+        </div>
+      );
+    },
   },
   {
     title: "Result",

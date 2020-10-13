@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Select, Button, Form, message } from 'antd';
+import { Layout, Breadcrumb, Select, Button, Form, message, Tooltip } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -773,38 +773,47 @@ class CompetitionQuickCompetition extends Component {
                                                     'fixtureBorder'
                                                 }
                                             ></span>
-                                            <div
-                                                className={
-                                                    'fixtureBox'
-                                                }
-                                                style={{
-                                                    backgroundColor: slotObject.colorCode,
-                                                    left: leftMargin, top: topMargin, overflow: "hidden",
-                                                    whiteSpace: "nowrap",
-                                                }}
+                                            <Tooltip
+                                                arrowPointAtCenter
+                                                placement='top'
+                                                className="comp-player-table-tag2"
+                                                style={{ height: '100%', }}
+                                                title={slotObject.drawsId && slotObject.divisionName + "-" + slotObject.gradeName}
                                             >
-                                                <CompetitionSwappable
-                                                    id={index.toString() + ':' + slotIndex.toString()}
-                                                    content={1}
-                                                    swappable={true}
-                                                    onSwap={(source, target,) => {
-                                                        console.log(source, target)
-                                                        return (
-                                                            this.onSwap(
-                                                                source,
-                                                                target,
-                                                            ))
+                                                <div
+                                                    className={
+                                                        'fixtureBox'
+                                                    }
+                                                    style={{
+                                                        backgroundColor: slotObject.colorCode,
+                                                        left: leftMargin, top: topMargin, overflow: "hidden",
+                                                        whiteSpace: "nowrap",
                                                     }}
                                                 >
-                                                    {slotObject.drawsId != null ? (
-                                                        <span>
-                                                            {slotObject.divisionName + "-" + slotObject.gradeName}
-                                                        </span>
-                                                    ) : (
-                                                            <span>Free</span>
-                                                        )}
-                                                </CompetitionSwappable>
-                                            </div>
+
+                                                    <CompetitionSwappable
+                                                        id={index.toString() + ':' + slotIndex.toString()}
+                                                        content={1}
+                                                        swappable={true}
+                                                        onSwap={(source, target,) => {
+                                                            console.log(source, target)
+                                                            return (
+                                                                this.onSwap(
+                                                                    source,
+                                                                    target,
+                                                                ))
+                                                        }}
+                                                    >
+                                                        {slotObject.drawsId != null ? (
+                                                            <span>
+                                                                {slotObject.divisionName + "-" + slotObject.gradeName}
+                                                            </span>
+                                                        ) : (
+                                                                <span>Free</span>
+                                                            )}
+                                                    </CompetitionSwappable>
+                                                </div>
+                                            </Tooltip>
                                         </div>
                                     );
                                 })}
