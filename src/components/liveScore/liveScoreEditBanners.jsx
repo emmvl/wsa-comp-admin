@@ -7,7 +7,11 @@ import AppConstants from "../../themes/appConstants";
 import ValidationConstants from "../../themes/validationConstant";
 import history from "../../util/history";
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
-import { liveScoreAddBanner, liveScoreAddBannerUpdate, clearEditBannerAction } from "../../store/actions/LiveScoreAction/liveScoreBannerAction";
+import {
+    liveScoreAddBanner,
+    liveScoreAddBannerUpdate,
+    clearEditBannerAction
+} from "../../store/actions/LiveScoreAction/liveScoreBannerAction";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -37,8 +41,9 @@ class LiveScoreEditBanners extends Component {
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             isAddBanner: this.props.location.state ? this.props.location.state.isAddBanner : null,
             load: false
-        }
-        this.props.clearEditBannerAction()
+        };
+        this.props.clearEditBannerAction();
+        this.formRef = React.createRef();
     }
 
     componentDidMount() {
@@ -106,14 +111,8 @@ class LiveScoreEditBanners extends Component {
         )
     }
 
-    handleSubmit = e => {
-        e.preventDefault();
-
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                this.onUploadButton()
-            }
-        });
+    handleSubmit = values => {
+        this.onUploadButton()
     };
 
     onUploadButton = () => {
@@ -147,7 +146,7 @@ class LiveScoreEditBanners extends Component {
     };
 
     ////////form content view
-    contentView = (getFieldDecorator) => {
+    contentView = () => {
         const { bannerLink, format } = this.props.liveScoreBannerState
         const bannerImage = this.props.location.state ? this.props.location.state.tableRecord.bannerUrl : null
 
@@ -164,30 +163,31 @@ class LiveScoreEditBanners extends Component {
                 />
                 <div>
                     <div className="row">
-                        <div className="col-sm" >
+                        <div className="col-sm">
                             <span className="user-contact-heading">{AppConstants.uploadImage}</span>
                             <div onClick={this.selectImage}>
-                                {/* <label>
-                                </label> */}
+                                {/* <label></label> */}
                             </div>
-                            <Form.Item>
-                                {getFieldDecorator('bannerImage', {
-                                    rules: [{ required: bannerImage ? false : true, message: ValidationConstants.bannerImage }]
-                                })(
-                                    <input
-                                        required={"pb-0"}
-                                        type="file"
-                                        id="user-pic"
-                                        // style={{ display: 'none' }}
-                                        onChange={(evt) => {
-                                            this.setImage(evt.target)
-                                            this.setState({ timeout: 1000 })
-                                            setTimeout(() => {
-                                                this.setState({ timeout: null })
-                                            }, 1000);
-                                        }}
-                                    />
-                                )}
+                            <Form.Item
+                                name='bannerImage'
+                                rules={[{
+                                    required: bannerImage ? false : true,
+                                    message: ValidationConstants.bannerImage
+                                }]}
+                            >
+                                <input
+                                    required="pb-0"
+                                    type="file"
+                                    id="user-pic"
+                                    // style={{ display: 'none' }}
+                                    onChange={(evt) => {
+                                        this.setImage(evt.target)
+                                        this.setState({ timeout: 1000 })
+                                        setTimeout(() => {
+                                            this.setState({ timeout: null })
+                                        }, 1000);
+                                    }}
+                                />
                             </Form.Item>
                             <span className="form-err">{this.state.imageError}</span>
                         </div>
@@ -229,13 +229,13 @@ class LiveScoreEditBanners extends Component {
                     </div> */}
                 </div>
 
-                {this.chekboxes(getFieldDecorator)}
+                {this.chekboxes()}
             </div>
         )
     }
 
     //check box
-    chekboxes = (getFieldDecorator) => {
+    chekboxes = () => {
         const { showOnHome, showOnDraws, showOnLadder, showOnNews, showOnChat, format } = this.props.liveScoreBannerState
         const isSquare = format === 'Square';
 
@@ -357,13 +357,15 @@ class LiveScoreEditBanners extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button className="cancelBtnWidth" onClick={() => history.push('/liveScoreBanners')} type="cancel-button">{AppConstants.cancel}</Button>
+                                <Button className="cancelBtnWidth" onClick={() => history.push('/liveScoreBanners')} type="cancel-button">
+                                    {AppConstants.cancel}
+                                </Button>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
                                 <Button className="publish-button save-draft-text"
-                                    type="primary" htmlType="submit" disabled={isSubmitting}>
+                                        type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -375,27 +377,27 @@ class LiveScoreEditBanners extends Component {
     };
 
     render() {
-        const { getFieldDecorator } = this.props.form
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }}>
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
                 <Loader visible={this.props.liveScoreBannerState.onLoad} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"20"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="20" />
                 <Layout>
                     {this.headerView()}
                     <Form
-                        onSubmit={this.handleSubmit}
+                        ref={this.formRef}
+                        onFinish={this.handleSubmit}
                         className="login-form"
                         noValidate="noValidate"
                     >
                         <Content>
                             <div className="formView pt-3">
                                 {this.state.bannerImg && this.removeBtn()}
-                                {this.contentView(getFieldDecorator)}
+                                {this.contentView()}
                             </div>
                         </Content>
 
@@ -417,4 +419,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(LiveScoreEditBanners));
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreEditBanners);

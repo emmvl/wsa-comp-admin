@@ -5,7 +5,7 @@ import AppImages from "../themes/appImages";
 
 
 class ImageLoader extends Component {
-    /////// render function 
+    /////// render function
     render() {
         return (
             <div>
@@ -33,7 +33,7 @@ class ImageLoader extends Component {
                                     height={this.props.height ? null : '120'}
                                     width={this.props.width ? null : '120'}
                                     style={{ borderRadius: this.props.borderRadius ? null : 60, marginLeft: 0 }}
-                                    name={'image'}
+                                    name="image"
                                     onError={ev => {
                                         ev.target.src = AppImages.circleImage;
                                     }}

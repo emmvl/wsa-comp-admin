@@ -1,26 +1,23 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Select, Input, Modal, Icon, Checkbox } from 'antd';
-import './umpire.css';
-import { NavLink } from 'react-router-dom';
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import DashboardLayout from "../../pages/dashboardLayout";
-import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { isArrayNotEmpty } from "../../util/helpers";
-import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
-import { refRoleTypes } from '../../util/refRoles'
-import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from '../../util/sessionStorage'
-import ValidationConstants from "../../themes/validationConstant";
-import history from "../../util/history";
+import { NavLink } from "react-router-dom";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Layout, Button, Table, Select, Input, Modal, Checkbox } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+
+import AppConstants from "themes/appConstants";
+import { isArrayNotEmpty } from "util/helpers";
+import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
+import InnerHorizontalMenu from "pages/innerHorizontalMenu";
+import DashboardLayout from "pages/dashboardLayout";
+
+import "./umpire.css";
 
 const { Content, Footer } = Layout;
 const { Option } = Select;
 const { confirm } = Modal
 let this_obj = null;
 
-/////function to sort table column
 function tableSort(a, b, key) {
     let stringA = JSON.stringify(a[key])
     let stringB = JSON.stringify(b[key])
@@ -28,59 +25,45 @@ function tableSort(a, b, key) {
 }
 
 const columns = [
-
     {
-        title: 'First Name',
-        dataIndex: 'firstName',
-        key: 'First Name',
-        sorter: (a, b) => tableSort(a, b, 'firstName'),
-        render: (firstName) => <span className="input-heading-add-another pt-0" >{firstName}</span>
-
-
+        title: "First Name",
+        dataIndex: "firstName",
+        key: "First Name",
+        sorter: (a, b) => tableSort(a, b, "firstName"),
+        render: (firstName) => <span className="input-heading-add-another pt-0">{firstName}</span>
     },
     {
-        title: 'Last Name',
-        dataIndex: 'lastName',
-        key: 'Last Name',
+        title: "Last Name",
+        dataIndex: "lastName",
+        key: "Last Name",
         sorter: (a, b) => tableSort(a, b, "lastName"),
-        render: (lastName) => <span className="input-heading-add-another pt-0" >{lastName}</span>
-
-
+        render: (lastName) => <span className="input-heading-add-another pt-0">{lastName}</span>
     },
     {
-        title: 'Match ID',
-        dataIndex: 'matchId',
-        key: 'matchId',
+        title: "Match ID",
+        dataIndex: "matchId",
+        key: "matchId",
         sorter: (a, b) => tableSort(a, b, "matchId"),
-        render: (matchId) => <span className="input-heading-add-another pt-0" >{matchId}</span>
-
+        render: (matchId) => <span className="input-heading-add-another pt-0">{matchId}</span>
     },
     {
-        title: 'Verified By',
-        dataIndex: 'verifiedBy',
-        key: 'verifiedBy',
+        title: "Verified By",
+        dataIndex: "verifiedBy",
+        key: "verifiedBy",
         sorter: (a, b) => tableSort(a, b, "verifiedBy"),
     },
     {
-        title: 'Make Payment',
-        dataIndex: 'makePayment',
-        key: 'makePayment',
+        title: "Make Payment",
+        dataIndex: "makePayment",
+        key: "makePayment",
         sorter: (a, b) => tableSort(a, b, "makePayment"),
     },
     {
         title: "Pay",
-        dataIndex: 'pay',
-        key: 'pay',
-        render: () =>
-            <Checkbox
-                className="single-checkbox"
-                defaultChecked={false}
-            >
-            </Checkbox>
-
+        dataIndex: "pay",
+        key: "pay",
+        render: () => <Checkbox className="single-checkbox" defaultChecked={false} />
     }
-
-
 ];
 
 const data = [
@@ -100,9 +83,9 @@ const data = [
         "verifiedBy": "",
         "makePayment": "Unpaid",
     }
-]
+];
 
-class umpirePayments extends Component {
+class UmpirePayments extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -111,7 +94,7 @@ class umpirePayments extends Component {
             selectedComp: null,
             loading: false,
             competitionUniqueKey: null,
-            year: '2019',
+            year: "2019",
             roasterLoad: false,
             compArray: []
         }
@@ -119,9 +102,9 @@ class umpirePayments extends Component {
     }
 
     componentDidMount() {
-        let { organisationId, } = JSON.parse(localStorage.getItem('setOrganisationData'))
+        let { organisationId, } = JSON.parse(localStorage.getItem("setOrganisationData"))
         this.setState({ loading: true })
-        this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
+        this.props.umpireCompetitionListAction(null, null, organisationId, "USERS")
     }
 
     componentDidUpdate(nextProps) {
@@ -130,48 +113,37 @@ class umpirePayments extends Component {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
                 let compData = compList.length > 0 && compList[0]
-
                 this.setState({ selectedComp: firstComp, loading: false })
             }
         }
-
     }
 
-
-    ////////form content view
-    contentView = () => {
-
-        return (
-            <div className="comp-dash-table-view mt-4">
-                <div className="table-responsive home-dash-table-view">
-                    <Table
-                        // loading={this.props.umpireRoasterdState.onLoad}
-                        className="home-dashboard-table"
-                        columns={columns}
-                        dataSource={data}
-                        pagination={false}
-                        rowKey={(record, index) => "umpirePayments" + record.matchId + index}
-                    />
-                </div>
+    contentView = () => (
+        <div className="comp-dash-table-view mt-4">
+            <div className="table-responsive home-dash-table-view">
+                <Table
+                    // loading={this.props.umpireRoasterdState.onLoad}
+                    className="home-dashboard-table"
+                    columns={columns}
+                    dataSource={data}
+                    pagination={false}
+                    rowKey={(record, index) => "umpirePayments" + record.matchId + index}
+                />
             </div>
-        )
-    }
+        </div>
+    );
 
+    onChangeComp = (compID) => {
+        let selectedComp = compID.comp;
+        this.setState({ selectedComp });
+    };
 
-
-    onChangeComp(compID) {
-        let selectedComp = compID.comp
-
-        this.setState({ selectedComp })
-
-    }
-
-    showConfirm = (record) => {
+    showConfirm = () => {
         confirm({
-            title: 'Are you sure you want to make payments?',
-            okText: 'Yes',
-            okType: 'danger',
-            cancelText: 'No',
+            title: "Are you sure you want to make payments?",
+            okText: "Yes",
+            okType: "danger",
+            cancelText: "No",
             mask: true,
             maskClosable: true,
             onOk() {
@@ -181,170 +153,156 @@ class umpirePayments extends Component {
 
             },
         });
-    }
+    };
 
+    headerView = () => (
+        <div className="comp-player-grades-header-drop-down-view mt-4">
+            <div className="fluid-width">
+                <div className="row">
+                    <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                        <span className="form-heading">
+                            {AppConstants.umpirePayments}
+                        </span>
+                    </div>
 
-
-    ///////view for breadcrumb
-    headerView = () => {
-        let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-        return (
-            <div className="comp-player-grades-header-drop-down-view mt-4">
-                <div className="fluid-width">
-                    <div className="row">
-                        <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
-                            <span className="form-heading">
-                                {AppConstants.umpirePayments}
-                            </span>
-                        </div>
-
-                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
-                            <div className="row">
-
-                                <div className="col-sm pt-1">
-                                    <div
-                                        className="comp-product-search-inp-width"
-                                    >
-                                        <Input className="product-reg-search-input"
-                                            // onChange={(e) => this.onChangeSearchText(e)}
-                                            placeholder="Search..."
-                                            // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                            // onClick={() => this.onClickSearchIcon()}
-                                            />}
-                                            allowClear
-                                        />
-                                    </div>
+                    <div
+                        className="col-sm-8"
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "flex-end",
+                            width: "100%"
+                        }}
+                    >
+                        <div className="row">
+                            <div className="col-sm pt-1">
+                                <div className="comp-product-search-inp-width">
+                                    <Input
+                                        className="product-reg-search-input"
+                                        // onChange={(e) => this.onChangeSearchText(e)}
+                                        placeholder="Search..."
+                                        // onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                        prefix={
+                                            <SearchOutlined
+                                                style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                                // onClick={this.onClickSearchIcon}
+                                           />
+                                        }
+                                        allowClear
+                                    />
                                 </div>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </div >
-        );
-    };
+            </div>
+        </div>
+    );
 
-    ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
 
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
-                <div className="fluid-width" >
+                <div className="fluid-width">
                     <div className="row">
-
                         {/* year List */}
-
-                        {/* <div className="reg-col" >
+                        {/* <div className="reg-col">
                             <div className="reg-filter-col-cont">
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
                                     // style={{ minWidth: 200 }}
                                     value={this.state.year}
                                 >
-                                    <Option value={'2019'}>{'2019'}</Option>
-                                    <Option value={'2020'}>{'2020'}</Option>
+                                    <Option value="2019">2019</Option>
+                                    <Option value="2020">2020</Option>
                                 </Select>
                             </div>
                         </div> */}
 
                         {/* competition List */}
-                        <div className="col-sm-3" >
-                            <div className="reg-filter-col-cont" >
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                        <div className="col-sm-3">
+                            <div className="reg-filter-col-cont">
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-3"
                                     style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
                                 >
-                                    {
-                                        competition.map((item) => {
-                                            return <Option key={"competition" + item.id} value={item.id}>{item.longName}</Option>
-                                        })
-                                    }
-
+                                    {competition.map((item) => (
+                                        <Option key={"competition" + item.id} value={item.id}>{item.longName}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
 
-                        <div className="col-sm" >
-                            <div className="comp-dashboard-botton-view-mobile"
+                        <div className="col-sm">
+                            <div
+                                className="comp-dashboard-botton-view-mobile"
                                 style={{
                                     width: "96.5%",
                                     display: "flex",
                                     flexDirection: "column",
                                     alignItems: "flex-end",
                                     justifyContent: "flex-end",
-                                    alignContent:"center"
+                                    alignContent: "center"
                                 }}
                             >
-                                {/* <Button
-                                    type="primary"
-                                    className="primary-add-comp-form umpire-btn-width"
-                                >{AppConstants.bulkPayment}
+                                {/* <Button type="primary" className="primary-add-comp-form umpire-btn-width">
+                                    {AppConstants.bulkPayment}
                                 </Button> */}
 
-                                {/* <div className='single-checkbox-width'> */}
-                                    <Checkbox
-                                        className="single-checkbox"
-                                        defaultChecked={false}
-                                    >
-                                        {'All'}
-                                    </Checkbox>
+                                {/* <div className="single-checkbox-width"> */}
+                                <Checkbox className="single-checkbox" defaultChecked={false}>
+                                    All
+                                </Checkbox>
                                 {/* </div> */}
                             </div>
-
-
-
                         </div>
-
                     </div>
                 </div>
             </div>
         )
     }
 
-    //////footer view containing all the buttons like submit and cancel
-    footerView = () => {
-        return (
-            <div className="fluid-width paddingBottom56px" >
-                <div className="row" >
-                    <div className="col-sm-3" >
-                        <div className="reg-add-save-button">
-                            {/* <NavLink to="/competitionPlayerGrades"> */}
-                            <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.cancel}</Button>
-                            {/* </NavLink> */}
-                        </div>
-                    </div>
-                    <div className="col-sm">
-                        <div className="comp-buttons-view">
-                            <Button
-                                className="publish-button save-draft-text"
-                                type="primary"
-                            >{AppConstants.save}
-                            </Button>
-                            {/* <NavLink to="/competitionCourtAndTimesAssign"> */}
-                            <Button onClick={() => this.showConfirm()} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.submit}</Button>
-                            {/* </NavLink> */}
-                        </div>
+    footerView = () => (
+        <div className="fluid-width paddingBottom56px">
+            <div className="row">
+                <div className="col-sm-3">
+                    <div className="reg-add-save-button">
+                        {/* <NavLink to="/competitionPlayerGrades"> */}
+                        <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
+                        {/* </NavLink> */}
                     </div>
                 </div>
-            </div >
-        )
-    }
-
-
-
+                <div className="col-sm">
+                    <div className="comp-buttons-view">
+                        <Button className="publish-button save-draft-text" type="primary">
+                            {AppConstants.save}
+                        </Button>
+                        {/* <NavLink to="/competitionCourtAndTimesAssign"> */}
+                        <Button
+                            onClick={this.showConfirm}
+                            className="publish-button margin-top-disabled-button"
+                            type="primary"
+                        >
+                            {AppConstants.submit}
+                        </Button>
+                        {/* </NavLink> */}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"7"} />
+                <InnerHorizontalMenu menu="umpire" umpireSelectedKey="7" />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -359,16 +317,18 @@ class umpirePayments extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction
-    }, dispatch)
+    }, dispatch);
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         umpireCompetitionState: state.UmpireCompetitionState
-    }
+    };
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((umpirePayments));
+
+export default connect(mapStateToProps, mapDispatchToProps)(UmpirePayments);
 

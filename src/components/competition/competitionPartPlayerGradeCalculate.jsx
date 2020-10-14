@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Button, Table, Select, Form, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Input, Button, Table, Select, Tooltip } from 'antd';
 import { NavLink } from 'react-router-dom';
 import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -48,7 +48,7 @@ const columns = [
         title: 'Players',
         dataIndex: 'playerCount',
         key: 'playerCount',
-        render: playerCount => <Input disabled={true} className="input-inside-player-grades-table-for-grade" value={playerCount} />,
+        render: playerCount => <Input disabled className="input-inside-player-grades-table-for-grade" value={playerCount} />,
         sorter: (a, b) => tableSort(a, b, "playerCount")
     },
     {
@@ -67,7 +67,7 @@ const columns = [
         title: '# Teams',
         dataIndex: 'noOfTeams',
         key: 'noOfTeams',
-        render: noOfTeams => <Input disabled={true} className="input-inside-player-grades-table-for-grade" value={noOfTeams} />,
+        render: noOfTeams => <Input disabled className="input-inside-player-grades-table-for-grade" value={noOfTeams} />,
         sorter: (a, b) => tableSort(a, b, "noOfTeams")
     },
     {
@@ -75,7 +75,7 @@ const columns = [
         dataIndex: 'extraPlayers',
         key: 'extraPlayers',
         width: '20%',
-        render: extraPlayers => <Input disabled={true} className="input-inside-player-grades-table-for-grade" value={extraPlayers} />,
+        render: extraPlayers => <Input disabled className="input-inside-player-grades-table-for-grade" value={extraPlayers} />,
         sorter: (a, b) => tableSort(a, b, "extraPlayers")
     },
     // {
@@ -189,15 +189,15 @@ class CompetitionPartPlayerGradeCalculate extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGradingToggle}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGradingToggle}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -261,13 +261,13 @@ class CompetitionPartPlayerGradeCalculate extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm" >
-                            <div className="com-year-select-heading-view pb-3" >
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm">
+                            <div className="com-year-select-heading-view pb-3">
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
-                                    name={"yearRefId"}
+                                    name="yearRefId"
                                     className="year-select reg-filter-select-year ml-2"
                                     style={{ width: 90 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
@@ -283,15 +283,15 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" >
+                        <div className="col-sm pb-3">
                             <div style={{
                                 width: "fit-content", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50
-                            }} >
+                            }}>
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
-                                    name={"competition"}
+                                    name="competition"
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)
                                     }
@@ -307,8 +307,8 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignItems: 'center ' }} >
-                            <NavLink to="/competitionPartPlayerGrades" >
+                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignItems: 'center ' }}>
+                            <NavLink to="/competitionPartPlayerGrades">
                                 <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
                             </NavLink>
                         </div>
@@ -354,10 +354,10 @@ class CompetitionPartPlayerGradeCalculate extends Component {
     footerView = () => {
         let isPublished = this.state.competitionStatus == 1 ? true : false
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="comp-player-grades-footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
+                    <div className="row">
+                        <div className="col-sm">
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 <Tooltip
                                     style={{ height: '100%' }}
@@ -392,9 +392,9 @@ class CompetitionPartPlayerGradeCalculate extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"14"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey={"14"} />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -410,6 +410,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getYearAndCompetitionParticipateAction,
@@ -426,4 +427,5 @@ function mapStatetoProps(state) {
         partPlayerGradingState: state.CompetitionPartPlayerGradingState
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionPartPlayerGradeCalculate));
+
+export default connect(mapStatetoProps, mapDispatchToProps)(CompetitionPartPlayerGradeCalculate);

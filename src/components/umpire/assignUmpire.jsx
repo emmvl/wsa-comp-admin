@@ -75,7 +75,7 @@ const column = [
             pathname: '/liveScoreMatchDetails',
             state: { matchId: id, umpireKey: 'umpire', screenName: 'umpireList' }
         }} >
-            <span class="input-heading-add-another pt-0" >{id}</span>
+            <span className="input-heading-add-another pt-0" >{id}</span>
         </NavLink>
     },
     {
@@ -119,14 +119,14 @@ const column = [
             return (
                 <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                        <span class="pt-0 "
+                        <span className="pt-0 "
                             style={{ color: checkUmpireRosterStatus(user1) }}
                         >{user1 && (user1.firstName + " " + user1.lastName)}</span>
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <span style={{ textDecoration: "underline" }}
                             onClick={() => this_obj.onChangeStatus(index, record, "user1", statusText, user1)}
-                            class="input-heading-add-another pt-0" >{statusText}</span>
+                            className="input-heading-add-another pt-0">{statusText}</span>
                     </div>
                 </div>
             )
@@ -143,12 +143,12 @@ const column = [
                 <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
                         <span style={{ color: checkUmpireRosterStatus(user2) }}
-                            class="pt-0 " >{user2 && (user2.firstName + " " + user2.lastName)}</span>
+                            className="pt-0">{user2 && (user2.firstName + " " + user2.lastName)}</span>
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <span style={{ textDecoration: "underline" }}
                             onClick={() => this_obj.onChangeStatus(index, record, "user2", statusText, user2)}
-                            class="input-heading-add-another pt-0" >{statusText}</span>
+                            className="input-heading-add-another pt-0">{statusText}</span>
                     </div>
                 </div>
             )
@@ -240,13 +240,13 @@ class AssignUmpire extends Component {
                             </span>
                         </div>
                     </div>
-                    <div style={{ display: "flex", justifyContent: 'space-between', }} >
-                        {/* <div className="mt-5" > */}
+                    <div style={{ display: "flex", justifyContent: 'space-between', }}>
+                        {/* <div className="mt-5"> */}
                         {/* <div style={{
                             width: "100%", display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
-                        }} > */}
+                        }}> */}
                         {/* <span className='year-select-heading'>{AppConstants.competition}:</span>
                             <Select
                                 className="year-select"
@@ -275,7 +275,7 @@ class AssignUmpire extends Component {
                         {/* </div> */}
                     </div>
                 </div>
-            </div >
+            </div>
         );
     };
 
@@ -313,7 +313,7 @@ class AssignUmpire extends Component {
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "flex-end"
-                        }} >
+                        }}>
                         {/* <div className="col-sm">
                             <div className="reg-add-save-button">
                                 <span style={{ cursor: "pointer" }}
@@ -343,7 +343,7 @@ class AssignUmpire extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"2"} />
+                <InnerHorizontalMenu menu="umpire" umpireSelectedKey="2" />
                 <Layout>
                     {this.headerView()}
                     <Content>

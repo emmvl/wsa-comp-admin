@@ -35,9 +35,7 @@ function tableSort(key) {
     } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    console.log(sortBy, sortOrder)
-    const body =
-    {
+    const body = {
         "paging": {
             "limit": 10,
             "offset": this_obj.state.offsetData
@@ -91,14 +89,12 @@ const columns = [
             return (
                 <div>
                     {organisationArray.length > 0 && organisationArray.map((item, index) => {
-                        console.log(item)
                         return (
-                            <span key={`organisationName` + index} className='multi-column-text-aligned'>{
-
-                                item.competitionOrganisation && item.competitionOrganisation.name}</span>
+                            <span key={`organisationName` + index} className='multi-column-text-aligned'>
+                                {item.competitionOrganisation && item.competitionOrganisation.name}
+                            </span>
                         )
-                    })
-                    }
+                    })}
                 </div>)
         },
     },
@@ -113,7 +109,7 @@ const columns = [
                 <NavLink to={{
                     pathname: '/liveScoreMatchDetails',
                     state: { matchId: matchId, umpireKey: 'umpire' }
-                }} >
+                }}>
                     <span className="input-heading-add-another pt-0">{matchId}</span>
                 </NavLink>
             )
@@ -364,7 +360,6 @@ class UmpireRoaster extends Component {
     contentView = () => {
         const { umpireRoasterList, umpireTotalCount } = this.props.umpireRoasterdState
         let umpireListResult = isArrayNotEmpty(umpireRoasterList) ? umpireRoasterList : []
-        console.log(this.props.umpireRoasterdState.umpireRosterListActionObject, 'umpireRosterListActionObject')
         return (
             <div className="comp-dash-table-view mt-0">
                 <div className="table-responsive home-dash-table-view">
@@ -385,7 +380,7 @@ class UmpireRoaster extends Component {
                             flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "flex-end"
-                        }} >
+                        }}>
                     </div>
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -548,12 +543,12 @@ class UmpireRoaster extends Component {
                             </div>
                         </div>
                     </div>
-                    {/* <div className="mt-5" style={{ display: "flex", width: 'fit-content' }} >
+                    {/* <div className="mt-5" style={{ display: "flex", width: 'fit-content' }}>
                         <div style={{
                             width: "100%", display: "flex",
                             flexDirection: "row",
                             alignItems: "center", marginRight: 50,
-                        }} >
+                        }}>
                             <span className='year-select-heading'>{AppConstants.competition}:</span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"
@@ -574,7 +569,7 @@ class UmpireRoaster extends Component {
                             width: "100%", display: "flex",
                             flexDirection: "row",
                             alignItems: "center", marginRight: 50,
-                        }} >
+                        }}>
                             <span className='year-select-heading'>{AppConstants.status}:</span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"
@@ -582,7 +577,7 @@ class UmpireRoaster extends Component {
                                 onChange={(status) => this.onChangeStatus(status)}
                                 value={this.state.status}
                             >
-                                <Option value={'All'}>{'All'}</Option>
+                                <Option value="All">All</Option>
                                 <Option value={'YES'}>{'Accepted'}</Option>
                                 <Option value={'NO'}>{'Declined'}</Option>
                                 <Option value={'NONE'}>{'No Response'}</Option>
@@ -591,7 +586,7 @@ class UmpireRoaster extends Component {
 
                     </div> */}
                 </div>
-            </div >
+            </div>
         );
     };
 
@@ -601,10 +596,10 @@ class UmpireRoaster extends Component {
 
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
-                <div className="fluid-width" >
-                    <div className="row reg-filter-row" >
+                <div className="fluid-width">
+                    <div className="row reg-filter-row">
                         {/* Comp List */}
-                        <div className="reg-col" >
+                        <div className="reg-col">
                             <div className="reg-filter-col-cont" style={{ width: "90%" }}>
                                 <span className='year-select-heading' style={{ width: '175px' }}>{AppConstants.competition}:</span>
                                 <Select
@@ -613,18 +608,16 @@ class UmpireRoaster extends Component {
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
                                 >
-                                    {
-                                        competition.map((item) => {
-                                            return <Option key={"competition" + item.id} value={item.id}>{item.longName}</Option>
-                                        })
-                                    }
+                                    {competition.map((item) => {
+                                        return <Option key={"competition" + item.id} value={item.id}>{item.longName}</Option>
+                                    })}
                                 </Select>
                             </div>
                         </div>
 
                         {/* Venue List */}
-                        <div className="reg-col1 ml-0" >
-                            <div className="reg-filter-col-cont ml-0 " style={{ width: "90%" }} >
+                        <div className="reg-col1 ml-0">
+                            <div className="reg-filter-col-cont ml-0" style={{ width: "90%" }}>
                                 <span className='year-select-heading' style={{ width: '127px' }}>{AppConstants.status}:</span>
                                 <Select
                                     className="year-select reg-filter-select1"
@@ -632,7 +625,7 @@ class UmpireRoaster extends Component {
                                     onChange={(status) => this.onChangeStatus(status)}
                                     value={this.state.status}
                                 >
-                                    <Option value={'All'}>{'All'}</Option>
+                                    <Option value="All">All</Option>
                                     <Option value={'YES'}>{'Accepted'}</Option>
                                     <Option value={'NO'}>{'Declined'}</Option>
                                     <Option value={'NONE'}>{'No Response'}</Option>
@@ -640,7 +633,7 @@ class UmpireRoaster extends Component {
                             </div>
                         </div>
                         {/* umpire role */}
-                        <div className="reg-col1 ml-0" >
+                        <div className="reg-col1 ml-0">
                             <div className="reg-filter-col-cont ml-4" style={{ width: "90%" }}>
                                 <span className='year-select-heading' style={{ width: "102px" }}>{AppConstants.role}:</span>
                                 <Select
@@ -655,7 +648,6 @@ class UmpireRoaster extends Component {
                                 </Select>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -666,9 +658,9 @@ class UmpireRoaster extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"3"} />
+                <InnerHorizontalMenu menu="umpire" umpireSelectedKey="3" />
                 <Layout>
                     {this.headerView()}
                     <Content>

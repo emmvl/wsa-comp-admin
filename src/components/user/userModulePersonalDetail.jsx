@@ -862,27 +862,24 @@ const columnsIncident = [
         <>
           {
             record.teamDeletedAt ?
-              <span className="desc-text-style side-bar-profile-data" >{teamName}</span>
+              <span className="desc-text-style side-bar-profile-data">{teamName}</span>
               :
               <NavLink to={{
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: record, screenName: 'userPersonal', screenKey: this_Obj.state.screenKey }
               }}>
-                <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{teamName}</span>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data">{teamName}</span>
               </NavLink>
-
           }
         </>
       )
     }
-
   },
   {
     title: 'Type',
     dataIndex: 'incidentTypeName',
     key: 'incidentTypeName',
     sorter: (a, b) => a.incidentTypeName.localeCompare(b.incidentTypeName),
-
   },
 ];
 
@@ -933,15 +930,14 @@ const umpireActivityColumn = [
       return (
         <div>
           {organisationArray.length > 0 && organisationArray.map((item, index) => {
-            console.log(item)
             return (
-              <span key={`organisationName` + index} className='multi-column-text-aligned'>{
-
-                item.competitionOrganisation && item.competitionOrganisation.name}</span>
+              <span key={`organisationName` + index} className='multi-column-text-aligned'>
+                {item.competitionOrganisation && item.competitionOrganisation.name}
+              </span>
             )
-          })
-          }
-        </div>)
+          })}
+        </div>
+      )
     },
   },
   {
@@ -1097,14 +1093,12 @@ class UserModulePersonalDetail extends Component {
   }
 
   componentWillMount() {
-    //  console.log("componentWillMount")
     let competition = this.getEmptyCompObj();
     this.setState({ competition: competition });
     this.props.getOnlyYearListAction();
   }
 
   async componentDidMount() {
-    //console.log("componentDidMount")
     if (
       this.props.location.state != null &&
       this.props.location.state != undefined
@@ -1112,7 +1106,6 @@ class UserModulePersonalDetail extends Component {
       let userId = this.props.location.state.userId;
       let screenKey = this.props.location.state.screenKey;
       let screen = this.props.location.state.screen;
-      // console.log("****((((((" + this.props.location.state.tabKey);
       let tabKey =
         this.props.location.state.tabKey != undefined
           ? this.props.location.state.tabKey
@@ -1136,8 +1129,6 @@ class UserModulePersonalDetail extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    // console.log("Component componentDidUpdate");
-
     let userState = this.props.userState;
     let personal = userState.personalData;
     if (userState.onLoad === false && this.state.loading === true) {
@@ -1163,7 +1154,6 @@ class UserModulePersonalDetail extends Component {
       //     }
       //     years.push(obj);
       // });
-      // console.log("personal.competitions::" + JSON.stringify(personal.competitions));
       let yearRefId = -1;
       this.setState({ yearRefId: -1 });
       if (
@@ -1189,7 +1179,6 @@ class UserModulePersonalDetail extends Component {
   }
 
   apiCalls = (userId) => {
-    console.log("apiCalls::" + userId);
     let payload = {
       userId: userId,
       organisationId: getOrganisationData().organisationUniqueKey,
@@ -1230,7 +1219,6 @@ class UserModulePersonalDetail extends Component {
   generateCompInfo = (competitions, yearRefId) => {
     let teams = [];
     let divisions = [];
-    //  console.log("competitions::" + JSON.stringify(competitions));
     (competitions || []).map((item, index) => {
       if (item.teams != null && item.teams.length > 0) {
         (item.teams || []).map((i, ind) => {
@@ -1338,7 +1326,6 @@ class UserModulePersonalDetail extends Component {
   };
 
   onChangeTab = (key) => {
-    console.log("onChangeTab::" + key);
     this.setState({ tabKey: key, isRegistrationForm: false });
     this.tabApiCalls(
       key,
@@ -1551,7 +1538,7 @@ class UserModulePersonalDetail extends Component {
               </span>
             </div>
             <Select
-              name={"yearRefId"}
+              name="yearRefId"
               className="user-prof-filter-select"
               style={{ width: "100%", paddingRight: 1, paddingTop: "15px" }}
               onChange={(yearRefId) => this.onChangeYear(yearRefId)}
@@ -2201,7 +2188,7 @@ class UserModulePersonalDetail extends Component {
             ) : null}
           </div>
         ))}
-        {registrationForm.length == 0 ? (
+        {registrationForm.length === 0 ? (
           <div>{AppConstants.noInformationProvided}</div>
         ) : null}
         <div className="row" style={{ marginTop: "50px" }}>
@@ -2244,9 +2231,9 @@ class UserModulePersonalDetail extends Component {
             }}
           >
             <Breadcrumb separator=" > ">
-              {/* <NavLink to="/userGraphicalDashboard" >
-                            <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item>
-                        </NavLink> */}
+              {/* <NavLink to="/userGraphicalDashboard">
+                <Breadcrumb.Item separator=" > " className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item>
+              </NavLink> */}
               <NavLink to="/userTextualDashboard">
                 <div className="breadcrumb-add">{AppConstants.userProfile}</div>
               </NavLink>
@@ -2505,7 +2492,7 @@ class UserModulePersonalDetail extends Component {
               type="primary"
               className="open-reg-button"
             >
-              <a href={stripeConnectURL} class="stripe-connect">
+              <a href={stripeConnectURL} className="stripe-connect">
                 <span>
                   {AppConstants.uploadBankAccnt}
                 </span>
@@ -2567,7 +2554,7 @@ class UserModulePersonalDetail extends Component {
           menuHeading={AppConstants.user}
           menuName={AppConstants.user}
         />
-        <InnerHorizontalMenu menu={"user"} userSelectedKey={"1"} />
+        <InnerHorizontalMenu menu="user" userSelectedKey="1" />
         <Layout className="live-score-player-profile-layout">
           <Content className="live-score-player-profile-content">
             <div className="fluid-width">
@@ -2607,11 +2594,11 @@ class UserModulePersonalDetail extends Component {
                           scorerActivityRoster.length > 0 &&
                           this.scorerActivityView()}
                         {/* {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()} */}
-                        {activityPlayerList.length == 0 &&
-                          activityManagerList.length == 0 &&
-                          scorerActivityRoster.length == 0 &&
-                          coachActivityRoster.length == 0 &&
-                          umpireActivityRoster.length == 0 &&
+                        {activityPlayerList.length === 0 &&
+                          activityManagerList.length === 0 &&
+                          scorerActivityRoster.length === 0 &&
+                          coachActivityRoster.length === 0 &&
+                          umpireActivityRoster.length === 0 &&
                           this.noDataAvailable()}
                       </TabPane>
                       <TabPane tab={AppConstants.statistics} key="2">

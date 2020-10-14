@@ -34,7 +34,7 @@ class AppRegistrationSuccess extends Component{
                             flexDirection: 'column', height: '450px'}}>
                 <div className="form-heading">Thank You!</div>
                 <div>
-                    <img src={AppImages.successTick}  height="120" width="120"/>
+                    <img src={AppImages.successTick}  height="120" width="120" />
                 </div>
                 <div className="form-heading">Your Registration is successfull</div>
             </div>

@@ -21,10 +21,11 @@ class CommentModal extends React.Component {
                         <Loader
                             visible={
                                 commentLoad
-                            } />
+                            }
+                        />
                         {commentList.length > 0 && commentList.map((commentItem, commentIndex) => {
                             return (
-                                <div className="col-sm pl-0 pb-2" >
+                                <div className="col-sm pl-0 pb-2">
                                     < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{commentItem.createdByName}{" "}{"("}{commentItem.organisationName}{")"}{" "}</span>
                                     < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{"("}{moment(commentItem.createdOn).format("DD-MM-YYYY HH:mm")}{")"}{" "}{":"}{"   "}</span>
                                     < span className={`comment-heading`}>{commentItem.comment}</span>
@@ -81,10 +82,9 @@ class CommentModal extends React.Component {
                         />
                     </div>
                 </Modal >
-            </div >
+            </div>
         )
     }
 }
-
 
 export default CommentModal;

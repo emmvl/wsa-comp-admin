@@ -80,17 +80,17 @@ class QuickCompetitionInvitations extends Component {
 
     showPropsConfirm = (key) => {
         if(key == "cancel")
-            this.setState({modalVisible:false}); 
+            this.setState({modalVisible:false});
         else
-            this.setState({modalVisible:true}); 
-	   
+            this.setState({modalVisible:true});
+
     }
 
 
     ValidateProceed = () => {
         const {mergeCompetitionTypeSelection} = this.props.quickCompetitionState
-        const typeSelection = mergeCompetitionTypeSelection == null ? " " :mergeCompetitionTypeSelection;     
-        
+        const typeSelection = mergeCompetitionTypeSelection == null ? " " :mergeCompetitionTypeSelection;
+
         let payload = {
             "registrationCompetitionId": this.state.selectedMergeComptition,
             "quickCompetitionId": this.state.competitionId,
@@ -98,7 +98,7 @@ class QuickCompetitionInvitations extends Component {
             "playerOptionId": typeSelection.playerMismatch == 0 ? null :this.state.playerOptionId,
             "divisionGradeOptionId": typeSelection.divisionGradesMismatch == 0 ? null : this.state.divisionGradeOptionId,
             "venueOptionId": typeSelection.venueMismatch == 0 ? null :this.state.venueOptionId,
-			"compNameOptionId":this.state.compNameOptionId,											   
+			"compNameOptionId":this.state.compNameOptionId,
         }
 
         this.props.mergeCompetitionProceed(payload)
@@ -123,14 +123,14 @@ class QuickCompetitionInvitations extends Component {
 		else if(key == "competitionName"){
             this.setState({compNameOptionId:value});
         }
-    } 
+    }
 
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <Header className="comp-venue-courts-header-view" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <Header className="comp-venue-courts-header-view">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.quickCompetition2}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -144,10 +144,10 @@ class QuickCompetitionInvitations extends Component {
     mergeExistingCompetition = (subItem, seletedOption) => {
         const { mergeCompetitionList,mergeCompetitionTypeSelection } = this.props.quickCompetitionState
         const mergeCompetitionSelection = mergeCompetitionTypeSelection == null ? "" : mergeCompetitionTypeSelection
-       
+
         if (subItem.id == 2 && seletedOption == 2) {
             return (
-                <div>                   
+                <div>
                     <div className="pt-4 pl-4">
                         <Select
                             style={{ width: '100%', paddingRight: 1, minWidth: 182, maxWidth: 300 }}
@@ -165,7 +165,7 @@ class QuickCompetitionInvitations extends Component {
                                     </Option>
                                 );
                             })}
-                        </Select> 
+                        </Select>
                     </div>
                     <Modal
                         className="add-membership-type-modal"
@@ -182,7 +182,7 @@ class QuickCompetitionInvitations extends Component {
                                     {AppConstants.differencesBetween +" "}
                                     {mergeCompetitionSelection.quickCompetition + " "+"and" +" "}
                                     {mergeCompetitionSelection.registrationCompetition + '.'} {AppConstants.oneHasPreference}
-                                </div>                               
+                                </div>
                             </div>
                             {mergeCompetitionSelection.divisionGradesMismatch == 1 &&
                                 <div>
@@ -197,9 +197,9 @@ class QuickCompetitionInvitations extends Component {
                                                 'divisioAndGrades'
                                             )}
                                     value={this.state.divisionGradeOptionId}
-                                    >                                   
-                                        <Radio  value ={1} >{mergeCompetitionSelection.quickCompetition}</Radio> 
-                                        <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>                          
+                                    >
+                                        <Radio  value ={1}>{mergeCompetitionSelection.quickCompetition}</Radio>
+                                        <Radio  value ={2}>{mergeCompetitionSelection.registrationCompetition}</Radio>
                                     </Radio.Group>
                                 </div>
                             }
@@ -216,9 +216,9 @@ class QuickCompetitionInvitations extends Component {
                                                 'teams'
                                             )}
                                         value={this.state.teamOptionId}
-                                    >                                   
-                                        <Radio  value ={1} >{mergeCompetitionSelection.quickCompetition}</Radio> 
-                                        <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>                    
+                                    >
+                                        <Radio  value ={1}>{mergeCompetitionSelection.quickCompetition}</Radio>
+                                        <Radio  value ={2}>{mergeCompetitionSelection.registrationCompetition}</Radio>
                                     </Radio.Group>
                                 </div>
                             }
@@ -235,10 +235,10 @@ class QuickCompetitionInvitations extends Component {
                                                 'players'
                                             )}
                                         value={this.state.playerOptionId}
-                                    >                                   
-                                        <Radio  value ={1} >{mergeCompetitionSelection.quickCompetition}</Radio> 
-                                        <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>
-                                        <Radio  value ={3} >{AppConstants.combine}</Radio>
+                                    >
+                                        <Radio  value ={1}>{mergeCompetitionSelection.quickCompetition}</Radio>
+                                        <Radio  value ={2}>{mergeCompetitionSelection.registrationCompetition}</Radio>
+                                        <Radio  value ={3}>{AppConstants.combine}</Radio>
                                     </Radio.Group>
                                 </div>
                             }
@@ -254,14 +254,14 @@ class QuickCompetitionInvitations extends Component {
                                                 e.target.value,
                                                 'venues'
                                             )}
-                                        value={this.state.venueOptionId}                                        
-                                    >                                   
-                                        <Radio  value ={1} >{mergeCompetitionSelection.quickCompetition}</Radio> 
-                                        <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>
+                                        value={this.state.venueOptionId}
+                                    >
+                                        <Radio  value ={1}>{mergeCompetitionSelection.quickCompetition}</Radio>
+                                        <Radio  value ={2}>{mergeCompetitionSelection.registrationCompetition}</Radio>
                                     </Radio.Group>
-                                </div>   
-                            }    
-                            <div>                      
+                                </div>
+                            }
+                            <div>
                                 <div  className='popup-text-color'>
                                     {AppConstants.competitionName}
                                 </div>
@@ -273,15 +273,15 @@ class QuickCompetitionInvitations extends Component {
                                             'competitionName'
                                         )}
                                 value={this.state.compNameOptionId}
-                                >                                   
-                                    <Radio  value ={1} >{mergeCompetitionSelection.quickCompetition}</Radio> 
-                                    <Radio  value ={2} >{mergeCompetitionSelection.registrationCompetition}</Radio>                          
+                                >
+                                    <Radio  value ={1}>{mergeCompetitionSelection.quickCompetition}</Radio>
+                                    <Radio  value ={2}>{mergeCompetitionSelection.registrationCompetition}</Radio>
                                 </Radio.Group>
-                            </div>  							  
+                            </div>
                         </div>
                     </Modal>
                 </div>
-               
+
             )
 
         }
@@ -297,7 +297,7 @@ class QuickCompetitionInvitations extends Component {
         const { teamPlayerArray, selectedTeamPlayer, importModalVisible, importPlayer } = this.props.quickCompetitionState
         return (
             <div className="content-view pt-5 mt-0 ">
-                <span className='form-heading'>{AppConstants.how_Add_teams_players}</span>
+                <span className="form-heading">{AppConstants.how_Add_teams_players}</span>
                 <Radio.Group
                     className="reg-competition-radio"
                     onChange={(e) =>
@@ -342,15 +342,15 @@ class QuickCompetitionInvitations extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="footer-view">
-                    <div className="row" >
-                        <div className="col-sm-3" >
+                    <div className="row">
+                        <div className="col-sm-3">
                             <div className="reg-add-save-button">
-                                <Button className="cancelBtnWidth" type="cancel-button" htmlType="submit" onClick={() => this.onBackButton()} >{AppConstants.back}</Button>
+                                <Button className="cancelBtnWidth" type="cancel-button" htmlType="submit" onClick={() => this.onBackButton()}>{AppConstants.back}</Button>
                             </div>
                         </div>
-                        <div className="col-sm-9" >
+                        <div className="col-sm-9">
                             <div className="comp-buttons-view">
                                 <Button className="save-draft-text" type="save-draft-text" onClick={() => this.onCompFormatPress()}>{AppConstants.saveAsDraft}</Button>
                                 <Button className="open-reg-button" type="primary" onClick={() => this.onCompFormatPress()}>{AppConstants.addCompetitionFormat}</Button>
@@ -364,7 +364,6 @@ class QuickCompetitionInvitations extends Component {
 
     onCompFormatPress() {
         const { selectedTeamPlayer, } = this.props.quickCompetitionState
-        console.log(selectedTeamPlayer, this.state.importPlayer)
         if (selectedTeamPlayer !== 0 || this.state.importPlayer == 1) {
             if (this.state.selectedMergeComptition !== null && selectedTeamPlayer == 2) {
                 let payload = {
@@ -398,14 +397,11 @@ class QuickCompetitionInvitations extends Component {
         }
     }
 
-
-
     render() {
-        console.log(this.state.mergeValidateVisible)
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"2"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="2" />
                 <Layout>
                     {this.headerView()}
                     <Content>

@@ -1,22 +1,21 @@
 import React, { Component } from "react";
-import { Input, Layout, Button, Table, Select, Menu, Icon, Pagination } from 'antd';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Input, Layout, Button, Table, Select, Menu, Pagination } from 'antd';
+import { SearchOutlined } from "@ant-design/icons";
+import moment from "moment";
+import { isEmptyArray } from "formik";
+
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import Loader from '../../customComponents/loader';
-import history from "../../util/history";
-import { isArrayNotEmpty } from "../../util/helpers";
 import { getOrderSummaryListingAction, exportOrderSummaryAction } from "../../store/actions/shopAction/orderSummaryAction";
 import { currencyFormat } from "../../util/currencyFormat";
-import moment from "moment";
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { getAffiliateToOrganisationAction } from "../../store/actions/userAction/userAction";
 import { getOrganisationData } from "../../util/sessionStorage";
-import { isEmptyArray } from "formik";
 import InputWithHead from "../../customComponents/InputWithHead";
 
 const { Content } = Layout
@@ -42,8 +41,7 @@ function tableSort(key) {
     this_obj.setState({ sortBy, sortOrder });
     let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this_obj.state
     let page = this_obj.props.shopOrderSummaryState.orderSummaryCurrentPage
-    let params =
-    {
+    let params = {
         limit: 10,
         offset: (page ? (10 * (page - 1)) : 0),
         search: searchText,
@@ -81,7 +79,7 @@ const columns = [
             //     pathname: `/userPersonal`,
             //     state: { userId: record.userId, screenKey: 'registration', screen: "/registration" }
             // }}>
-            <span className="input-heading-add-another pt-0" >{name}</span>
+            <span className="input-heading-add-another pt-0">{name}</span>
         // </NavLink>
     },
     {
@@ -109,7 +107,7 @@ const columns = [
                 pathname: `/orderStatus`,
                 state: { orderId: id }
             }}>
-                <span className="input-heading-add-another pt-0" >{id}</span>
+                <span className="input-heading-add-another pt-0">{id}</span>
             </NavLink>
     },
     {
@@ -139,7 +137,6 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
-
 ]
 
 class OrderSummary extends Component {
@@ -157,7 +154,6 @@ class OrderSummary extends Component {
         }
         this_obj = this
     }
-
 
     async componentDidMount() {
         let { orderSummaryListingActionObject } = this.props.shopOrderSummaryState
@@ -188,8 +184,7 @@ class OrderSummary extends Component {
 
     handleTableList = (page) => {
         let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod, sortOrder, sortBy } = this.state
-        let params =
-        {
+        let params = {
             limit: 10,
             offset: (page ? (10 * (page - 1)) : 0),
             search: searchText,
@@ -203,38 +198,31 @@ class OrderSummary extends Component {
         this.props.getOrderSummaryListingAction(params)
     }
 
-
     onChangeDropDownValue = async (value, key) => {
-        if (key == "yearRefId") {
+        if (key === "yearRefId") {
             await this.setState({ yearRefId: value });
             this.handleTableList(1);
-        }
-        else if (key == "affiliateOrgId") {
+        } else if (key === "affiliateOrgId") {
             await this.setState({ affiliateOrgId: value });
             this.handleTableList(1);
-        }
-        else if (key == "postcode") {
+        } else if (key === "postcode") {
             const regex = /,/gi;
             let canCall = false;
             let newVal = value.toString().split(',');
             newVal.map((x, index) => {
-                console.log("Val::" + x + "**" + x.length);
-                if (Number(x.length) % 4 == 0 && x.length > 0) {
+                if (Number(x.length) % 4 === 0 && x.length > 0) {
                     canCall = true;
-                }
-                else {
+                } else {
                     canCall = false;
                 }
             })
             await this.setState({ postcode: value });
             if (canCall) {
                 this.handleTableList(1);
-            }
-            else if (value.length == 0) {
+            } else if (value.length === 0) {
                 this.handleTableList(1);
             }
-        }
-        else if (key == "paymentMethod") {
+        } else if (key === "paymentMethod") {
             await this.setState({ paymentMethod: value });
             this.handleTableList(1);
         }
@@ -249,10 +237,10 @@ class OrderSummary extends Component {
         }
     }
 
-    // search key 
+    // search key
     onKeyEnterSearchText = (e) => {
         this.setState({ offset: 0 })
-        var code = e.keyCode || e.which;
+        const code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             this.handleTableList(1);
         }
@@ -262,8 +250,7 @@ class OrderSummary extends Component {
     onClickSearchIcon = () => {
         this.setState({ offset: 0 })
         if (this.state.searchText === null || this.state.searchText === "") {
-        }
-        else {
+        } else {
             this.handleTableList(1);
         }
     }
@@ -272,8 +259,7 @@ class OrderSummary extends Component {
     onExport = () => {
         let { yearRefId, affiliateOrgId, postcode, searchText, paymentMethod } = this.state
         let { orderSummaryCurrentPage } = this.props.shopOrderSummaryState
-        let params =
-        {
+        let params = {
             limit: 10,
             offset: (orderSummaryCurrentPage ? (10 * (orderSummaryCurrentPage - 1)) : 0),
             search: searchText,
@@ -299,16 +285,20 @@ class OrderSummary extends Component {
                         </div>
                         <div className="row">
                             <div className="col-sm pt-1">
-                                <div style={{ display: "flex", justifyContent: 'flex-end' }} >
-                                    <div className="comp-product-search-inp-width" >
-                                        <Input className="product-reg-search-input"
-                                            onChange={(e) => this.onChangeSearchText(e)}
+                                <div style={{ display: "flex", justifyContent: 'flex-end' }}>
+                                    <div className="comp-product-search-inp-width">
+                                        <Input
+                                            className="product-reg-search-input"
+                                            onChange={this.onChangeSearchText}
                                             placeholder="Search..."
+                                            onKeyPress={this.onKeyEnterSearchText}
                                             value={this.state.searchText}
-                                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                            prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                                onClick={() => this.onClickSearchIcon()}
-                                            />}
+                                            prefix={
+                                                <SearchOutlined
+                                                    style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                                    onClick={this.onClickSearchIcon}
+                                                />
+                                            }
                                             allowClear
                                         />
                                     </div>
@@ -343,7 +333,7 @@ class OrderSummary extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     }
 
@@ -368,17 +358,17 @@ class OrderSummary extends Component {
         ]
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view orderSpace">
-                <div className="fluid-width" >
-                    <div className="row reg-filter-row" >
-
-                        <div className="reg-col col-md-3 col-sm-6" >
+                <div className="fluid-width">
+                    <div className="row reg-filter-row">
+                        <div className="reg-col col-md-3 col-sm-6">
                             <div className="reg-filter-col-cont">
                                 <div className='year-select-heading'>{AppConstants.year} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                                     value={this.state.yearRefId}
-                                    className="year-select reg-filter-select" >
+                                    className="year-select reg-filter-select"
+                                >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {this.props.appState.yearList.map(item => {
                                         return (
@@ -387,20 +377,19 @@ class OrderSummary extends Component {
                                             </Option>
                                         );
                                     })}
-
                                 </Select>
                             </div>
                         </div>
 
-
-                        <div className="reg-col col-md-3 col-sm-6" >
+                        <div className="reg-col col-md-3 col-sm-6">
                             <div className="reg-filter-col-cont">
                                 <div className='year-select-heading'>{AppConstants.affiliate} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     className="year-select reg-filter-select"
                                     onChange={affiliateOrgId => this.onChangeDropDownValue(affiliateOrgId, "affiliateOrgId")}
-                                    value={this.state.affiliateOrgId}>
+                                    value={this.state.affiliateOrgId}
+                                >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(uniqueValues || []).map((org, index) => (
                                         <Option key={org.organisationId} value={org.organisationId}>{org.name}</Option>
@@ -409,8 +398,8 @@ class OrderSummary extends Component {
                             </div>
                         </div>
 
-                        <div className="reg-col col-md-3 col-sm-6" >
-                            <div className="reg-filter-col-cont" >
+                        <div className="reg-col col-md-3 col-sm-6">
+                            <div className="reg-filter-col-cont">
                                 <div className='year-select-heading' style={{ width: 95 }}>{AppConstants.postCode} :</div>
                                 <div style={{ width: '76%' }}>
                                     <InputWithHead
@@ -423,14 +412,15 @@ class OrderSummary extends Component {
                             </div>
                         </div>
 
-                        <div className="reg-col col-md-3 col-sm-6 no-padding-right" >
-                            <div className="reg-filter-col-cont" >
+                        <div className="reg-col col-md-3 col-sm-6 no-padding-right">
+                            <div className="reg-filter-col-cont">
                                 <div className='year-select-heading'>{AppConstants.payment} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     onChange={paymentMethod => this.onChangeDropDownValue(paymentMethod, "paymentMethod")}
                                     value={this.state.paymentMethod}
-                                    className="year-select reg-filter-select" >
+                                    className="year-select reg-filter-select"
+                                >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {paymentData.map((item, index) => (
                                         <Option key={item.value} value={item.value}>{item.name}</Option>
@@ -440,24 +430,23 @@ class OrderSummary extends Component {
                         </div>
                     </div>
                 </div>
-
             </div>
         )
     }
 
-    noOfRegisteredUmpires() {
+    noOfRegisteredUmpires = () => {
         let { numberOfOrders, valueOfOrders } = this.props.shopOrderSummaryState
         return (
             <div className="comp-dash-table-view">
                 <div>
                     <div className="row">
-                        <div className="col-sm-6" >
+                        <div className="col-sm-6">
                             <div className="registration-count">
                                 <div className="reg-payment-paid-reg-text">{AppConstants.numberOfOrders}</div>
                                 <div className="reg-payment-price-text">{numberOfOrders}</div>
                             </div>
                         </div>
-                        <div className="col-sm-6" >
+                        <div className="col-sm-6">
                             <div className="registration-count">
                                 <div className="reg-payment-paid-reg-text">{AppConstants.valueOfOrders}</div>
                                 <div className="reg-payment-price-text">{currencyFormat(valueOfOrders)} </div>
@@ -471,7 +460,6 @@ class OrderSummary extends Component {
 
     contentView = () => {
         let { onLoad, orderSummaryListingData, orderSummaryTotalCount, orderSummaryCurrentPage } = this.props.shopOrderSummaryState
-        console.log("this.props.shopOrderSummaryState", this.props.shopOrderSummaryState)
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
@@ -483,7 +471,6 @@ class OrderSummary extends Component {
                         pagination={false}
                         rowKey={(record, index) => "orderSummaryListingData" + record.id + index}
                     />
-
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
@@ -495,14 +482,13 @@ class OrderSummary extends Component {
                 </div>
             </div>
         )
-
     }
 
-    render = () => {
+    render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
-                <InnerHorizontalMenu menu={"shop"} shopSelectedKey={"3"} />
+                <InnerHorizontalMenu menu="shop" shopSelectedKey="3" />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -525,11 +511,12 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStatToProps(state) {
     return {
         shopOrderSummaryState: state.ShopOrderSummaryState,
         userState: state.UserState,
         appState: state.AppState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((OrderSummary));
+
+export default connect(mapStatToProps, mapDispatchToProps)(OrderSummary);

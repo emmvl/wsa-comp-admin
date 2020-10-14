@@ -1,19 +1,19 @@
 import React, { Component } from "react";
-import { Layout, Button, Checkbox, Select, Breadcrumb, InputNumber, Form, Modal, message } from 'antd';
-import './shop.css';
 import { NavLink } from 'react-router-dom';
-import DashboardLayout from "../../pages/dashboardLayout";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Loader from '../../customComponents/loader';
+import { Layout, Button, Select, Breadcrumb, Form, Modal } from 'antd';
+
+import './shop.css';
+import AppConstants from "../../themes/appConstants";
+import AppImages from "../../themes/appImages";
 import history from "../../util/history";
-import InputWithHead from "../../customComponents/InputWithHead";
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
-import { getOrderDetailsAction, clearOrderStatusReducer } from '../../store/actions/shopAction/orderStatusAction';
+import { isArrayNotEmpty } from "../../util/helpers";
 import { currencyFormat } from "../../util/currencyFormat";
+import { getOrderDetailsAction, clearOrderStatusReducer } from '../../store/actions/shopAction/orderStatusAction';
+import Loader from '../../customComponents/loader';
+import DashboardLayout from "../../pages/dashboardLayout";
+import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -26,6 +26,7 @@ const orderFulfilmentData = [
     { name: "Awaiting Pick Up", value: "Awaiting Pick Up" },
     { name: "Picked Up", value: "Picked Up" }
 ]
+
 class OrderDetails extends Component {
     constructor(props) {
         super(props);
@@ -34,7 +35,6 @@ class OrderDetails extends Component {
         }
         props.clearOrderStatusReducer("orderDetails")
     }
-
 
     componentDidMount() {
         window.scrollTo(0, 0)
@@ -55,9 +55,7 @@ class OrderDetails extends Component {
     headerView = () => {
         return (
             <div className="header-view">
-                <Header
-                    className="form-header-view header-transaparent"
-                >
+                <Header className="form-header-view header-transaparent">
                     <Breadcrumb separator=">">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.orderDetails}
@@ -69,9 +67,8 @@ class OrderDetails extends Component {
     };
 
     ////////form content view
-    contentView = (getFieldDecorator) => {
+    contentView = () => {
         let { orderDetails } = this.props.shopOrderStatusState
-        console.log("orderDetails", orderDetails)
         return (
             <div className="content-view pt-4">
                 <div className="d-flex row align-items-center">
@@ -86,7 +83,7 @@ class OrderDetails extends Component {
                                     <img
                                         src={isArrayNotEmpty(item.product.images) ? item.product.images[0].url : AppImages.squareImage}
                                         className="order-details-product-image"
-                                        name={'image'}
+                                        name="image"
                                         onError={ev => {
                                             ev.target.src = AppImages.squareImage;
                                         }}
@@ -107,12 +104,12 @@ class OrderDetails extends Component {
                         )
                     })
                 }
-            </div >
+            </div>
         );
     };
 
     ////////billing and address view
-    addressView = (getFieldDecorator) => {
+    addressView = () => {
         let { orderDetails } = this.props.shopOrderStatusState
         return (
             <div className="fees-view pt-4">
@@ -160,12 +157,12 @@ class OrderDetails extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     };
 
     ////////order fulfilment view view
-    fulfilmentView = (getFieldDecorator) => {
+    fulfilmentView = () => {
         return (
             <div className="fees-view pt-4">
                 <span className="form-heading">{AppConstants.orderFulfilment}</span>
@@ -177,23 +174,21 @@ class OrderDetails extends Component {
                     placeholder="Select"
                 >
                     {orderFulfilmentData.map(
-                        (item, index) => {
-                            return (
-                                <Option
-                                    key={'orderFulfilmentData' + item.value + index}
-                                    value={item.value}
-                                >
-                                    {item.name}
-                                </Option>
-                            );
-                        }
+                        (item, index) => (
+                            <Option
+                                key={'orderFulfilmentData' + item.value + index}
+                                value={item.value}
+                            >
+                                {item.name}
+                            </Option>
+                        )
                     )}
                 </Select>
-            </div >
+            </div>
         );
     };
 
-    //////footer view containing all the buttons 
+    //////footer view containing all the buttons
     footerView = () => {
         return (
             <div className="footer-view order-detail-button-view">
@@ -208,8 +203,7 @@ class OrderDetails extends Component {
                     </div>
                     <div className="col-sm">
                         <div className="comp-buttons-view">
-                            <Button className="open-reg-button" type="primary"
-                                htmlType="submit">
+                            <Button className="open-reg-button" type="primary" htmlType="submit">
                                 {AppConstants.capturePayment}
                             </Button>
                         </div>
@@ -220,25 +214,25 @@ class OrderDetails extends Component {
     };
 
     render() {
-        const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width">
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
-                <InnerHorizontalMenu menu={"shop"} shopSelectedKey={"5"} />
+                <InnerHorizontalMenu menu="shop" shopSelectedKey="5" />
                 <Layout>
                     <Form
                         autoComplete='off'
-                        // onSubmit={this.addProductPostAPI}
-                        noValidate="noValidate">
-                        <Content >
+                        // onFinish={this.addProductPostAPI}
+                        noValidate="noValidate"
+                    >
+                        <Content>
                             {this.headerView()}
-                            <div className="formView">{this.contentView(getFieldDecorator)}</div>
-                            <div className="formView">{this.addressView(getFieldDecorator)}</div>
-                            <div className="formView">{this.fulfilmentView(getFieldDecorator)}</div>
+                            <div className="formView">{this.contentView()}</div>
+                            <div className="formView">{this.addressView()}</div>
+                            <div className="formView">{this.fulfilmentView()}</div>
                         </Content>
 
-                        <Loader
-                            visible={this.props.shopOrderStatusState.onLoad} />
+                        <Loader visible={this.props.shopOrderStatusState.onLoad} />
+
                         <Footer>{this.footerView()}</Footer>
                     </Form>
                 </Layout>
@@ -254,9 +248,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         shopOrderStatusState: state.ShopOrderStatusState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(OrderDetails));
+
+export default connect(mapStateToProps, mapDispatchToProps)(OrderDetails);

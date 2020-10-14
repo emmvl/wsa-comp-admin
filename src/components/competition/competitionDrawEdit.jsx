@@ -118,7 +118,6 @@ class CompetitionDrawEditOld extends Component {
         }
 
         if (this.state.updateLoad == true && this.props.drawsState.updateLoad == false) {
-            console.log("*********************************");
             this.setState({ updateLoad: false })
             this.reGenerateDraw();
         }
@@ -189,7 +188,6 @@ class CompetitionDrawEditOld extends Component {
         this.setState({ venueLoad: true });
     }
 
-
     onChange = e => {
         this.setState({
             value: e.target.value
@@ -197,7 +195,6 @@ class CompetitionDrawEditOld extends Component {
     };
 
     onSwap(source, target) {
-
         let sourceIndexArray = source.split(':');
         let targetIndexArray = target.split(':');
 
@@ -206,12 +203,10 @@ class CompetitionDrawEditOld extends Component {
         let sourceZIndex = sourceIndexArray[2];
         let sourceID = sourceIndexArray[3];
 
-
         let targetXIndex = targetIndexArray[0];
         let targetYIndex = targetIndexArray[1];
         let targetZIndex = targetIndexArray[2];
         let targetID = targetIndexArray[3];
-
 
         let drawData = this.props.drawsState.getStaticDrawsData;
 
@@ -220,14 +215,8 @@ class CompetitionDrawEditOld extends Component {
 
         var customSourceObject = null
         var customTargetObject = null
-        console.log("Source===", source)
-        console.log("Target===", target)
-        // console.log("Source",sourceObejct)
-        // console.log("Target",targetObject)
 
         // if (targetObject.drawsId !== sourceObejct.drawsId) {
-        //     console.log('called207')
-
         //     if (sourceZIndex == 0) {
         //         if (targetZIndex == 0) {
         //             customSourceObject = {
@@ -246,7 +235,6 @@ class CompetitionDrawEditOld extends Component {
         //                 isLocked: 1
         //             };
         //         }
-
         //     } else {
         //         if (targetZIndex == 0) {
         //             customSourceObject = {
@@ -265,7 +253,6 @@ class CompetitionDrawEditOld extends Component {
         //                 isLocked: 1
         //             };
         //         }
-
         //     }
         //     if (targetZIndex == 0) {
         //         if (sourceZIndex == 0) {
@@ -306,7 +293,6 @@ class CompetitionDrawEditOld extends Component {
         //     }
         // } else {
         if (targetObject.drawsId == sourceObejct.drawsId) {
-            console.log('called207')
             customSourceObject = {
                 drawsId: sourceObejct.drawsId,
                 // roundId: this.state.roundId,
@@ -328,8 +314,6 @@ class CompetitionDrawEditOld extends Component {
                 draws: [customSourceObject, customTargetObject]
             };
 
-
-
             this.props.updateCompetitionDraws(
                 postObject,
                 sourceIndexArray,
@@ -342,7 +326,6 @@ class CompetitionDrawEditOld extends Component {
     }
 
     saveAPIsActionCall() {
-        console.log('called')
         if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error(ValidationConstants.pleaseSelectCompetition)
@@ -422,7 +405,7 @@ class CompetitionDrawEditOld extends Component {
             <div className="row">
                 <div className="col-sm-3">
                     <div className="year-select-heading-view">
-                        <div className="reg-filter-col-cont"  >
+                        <div className="reg-filter-col-cont">
                             <span className="year-select-heading">{AppConstants.draws}:</span>
                             <Select
                                 name={'yearRefId'}
@@ -452,10 +435,10 @@ class CompetitionDrawEditOld extends Component {
                             marginRight: 50
                         }}
                     >
-                        <div className="reg-filter-col-cont"  >
+                        <div className="reg-filter-col-cont">
                             <span className="year-select-heading">
                                 {AppConstants.competition}:
-            </span>
+                            </span>
                             <Select
                                 name={'competition'}
                                 className="year-select reg-filter-select1 ml-2"
@@ -491,7 +474,7 @@ class CompetitionDrawEditOld extends Component {
                     >
                         <span className="year-select-heading">
                             {AppConstants.division}:
-            </span>
+                        </span>
                         <Select
                             style={{ minWidth: 160 }}
                             name={'competition'}
@@ -551,7 +534,6 @@ class CompetitionDrawEditOld extends Component {
 
     ////////form content view
     contentView = () => {
-
         return (
             <div className="comp-draw-content-view">
                 <div className="row comp-draw-list-top-head">
@@ -569,7 +551,7 @@ class CompetitionDrawEditOld extends Component {
                                 >
                                     <span className="year-select-heading">
                                         {AppConstants.venue}:
-                  </span>
+                                    </span>
                                     <Select
                                         className="year-select"
                                         placeholder="Select"
@@ -599,7 +581,7 @@ class CompetitionDrawEditOld extends Component {
                                 >
                                     <span className="year-select-heading">
                                         {AppConstants.round}:
-                  </span>
+                                    </span>
                                     <Select
                                         className="year-select"
                                         style={{ minWidth: 100 }}
@@ -651,7 +633,6 @@ class CompetitionDrawEditOld extends Component {
         let topMarginHomeTeam = 36;
         let topMarginAwayTeam = 84;
         let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray) ? this.props.drawsState.legendsArray : []
-        console.log(this.props.drawsState.getStaticDrawsData)
         return (
             <div className="draggable-wrap draw-data-table">
                 <div className="scroll-bar">
@@ -667,7 +648,7 @@ class CompetitionDrawEditOld extends Component {
                                     dateMargin = 70;
                                 }
                                 return (
-                                    <span style={{ left: dateMargin }} >
+                                    <span style={{ left: dateMargin }}>
                                         {item.notInDraw == false ? getDayName(item.date) : ""}
                                     </span>
                                 );
@@ -728,7 +709,7 @@ class CompetitionDrawEditOld extends Component {
                                                     <span
                                                         className={'border huge-border'}
                                                         style={{ top: topMargin, left: leftMargin }}
-                                                    ></span>
+                                                    />
                                                     <div
                                                         className={
                                                             'small-undraggable-box'
@@ -749,7 +730,7 @@ class CompetitionDrawEditOld extends Component {
                                                             top: topMarginHomeTeam,
                                                             left: leftMargin
                                                         }}
-                                                    ></span>
+                                                    />
                                                     <div
                                                         className={
                                                             'box purple-box' + ' purple-bg'
@@ -768,7 +749,7 @@ class CompetitionDrawEditOld extends Component {
                                                                 ':0:' + slotObject.competitionDivisionGradeId
                                                             }
                                                             content={1}
-                                                            swappable={true}
+                                                            swappable
                                                             onSwap={(source, target) =>
                                                                 this.onSwap(source, target)
                                                             }
@@ -779,7 +760,7 @@ class CompetitionDrawEditOld extends Component {
                                                     <span
                                                         className={'border'}
                                                         style={{ top: topMarginAwayTeam, left: leftMargin }}
-                                                    ></span>
+                                                    />
                                                     <div
                                                         className={
                                                             'box purple-box ' +
@@ -799,7 +780,7 @@ class CompetitionDrawEditOld extends Component {
                                                                 ':1:' + slotObject.competitionDivisionGradeId
                                                             }
                                                             content={1}
-                                                            swappable={true}
+                                                            swappable
                                                             onSwap={(source, target) =>
                                                                 this.onSwap(source, target)
                                                             }
@@ -838,7 +819,7 @@ class CompetitionDrawEditOld extends Component {
                     </div>
                     {/* <div className="col-sm-9">
                         <div className="comp-buttons-view">
-                            <Button className="open-reg-button" type="primary" onClick={() => this.saveAPIsActionCall()} disabled={publishStatus == 0 ? false : true} >
+                            <Button className="open-reg-button" type="primary" onClick={() => this.saveAPIsActionCall()} disabled={publishStatus == 0 ? false : true}>
                                 {AppConstants.save_publish}
                             </Button>
                         </div>
@@ -857,6 +838,7 @@ class CompetitionDrawEditOld extends Component {
             </div>
         );
     };
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
@@ -884,6 +866,7 @@ class CompetitionDrawEditOld extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
@@ -902,14 +885,15 @@ function mapDispatchToProps(dispatch) {
     );
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         drawsState: state.CompetitionDrawsState,
         competitionModuleState: state.CompetitionModuleState
     };
 }
+
 export default connect(
-    mapStatetoProps,
+    mapStateToProps,
     mapDispatchToProps
-)(Form.create()(CompetitionDrawEditOld));
+)(CompetitionDrawEditOld);

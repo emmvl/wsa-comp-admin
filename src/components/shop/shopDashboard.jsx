@@ -62,55 +62,55 @@ class ShopDashboard extends Component {
             <div className="comp-player-grades-header-drop-down-view mt-4"style={{ paddingTop:'0px'}}>
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-4 pt-1" >
+                        <div className="col-sm-4 pt-1">
                             <span className="form-heading">
                                 {AppConstants.shop}
                             </span>
                         </div>
-                        {/* <div className="col-sm pt-1" >
-                            <div className="row reg-filter-row" >
-                                <div className="reg-col" >
+                        {/* <div className="col-sm pt-1">
+                            <div className="row reg-filter-row">
+                                <div className="reg-col">
                                     <div className="reg-filter-col-cont">
                                         <div className='year-select-heading pl-5 '>{AppConstants.year}</div>
                                         <Select
                                             style={{ minWidth: 160 }}
                                             value={"2020"}
-                                            className="year-select shop-filter-select" >
+                                            className="year-select shop-filter-select">
                                             <Option key={"year"} value="year">{"2020"}</Option>
 
                                         </Select>
                                     </div>
                                 </div>
 
-                                <div className="reg-col" >
+                                <div className="reg-col">
                                     <div className="reg-filter-col-cont">
                                         <div className='year-select-heading pl-3 pr-4'>{AppConstants.productTypes}</div>
                                         <Select
                                             style={{ minWidth: 160 }}
-                                            value={"All"}
-                                            className="year-select shop-filter-select" >
-                                            <Option key={"all"} value="all">{"All"}</Option>
-
+                                            value="All"
+                                            className="year-select shop-filter-select"
+                                        >
+                                            <Option key="all" value="all">All</Option>
                                         </Select>
                                     </div>
                                 </div>
 
-                                <div className="reg-col" >
+                                <div className="reg-col">
                                     <div className="reg-filter-col-cont">
                                         <div className='year-select-heading pl-3 pr-4'>{AppConstants.affiliate}</div>
                                         <Select
                                             style={{ minWidth: 160 }}
-                                            value={"All"}
-                                            className="year-select shop-filter-select" >
-                                            <Option key={"all"} value="all">{"All"}</Option>
-
+                                            value="All"
+                                            className="year-select shop-filter-select"
+                                        >
+                                            <Option key="all" value="all">All</Option>
                                         </Select>
                                     </div>
                                 </div>
                             </div>
                         </div> */}
-                    </div >
-                </div >
+                    </div>
+                </div>
             </div>
         );
     }
@@ -119,51 +119,48 @@ class ShopDashboard extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
-                <div className="fluid-width" >
-                    <div className="row reg-filter-row" style={{ marginLeft:'0px'}} >
-
-                        <div className="reg-col" >
+                <div className="fluid-width">
+                    <div className="row reg-filter-row" style={{ marginLeft:'0px'}}>
+                        <div className="reg-col">
                             <div className="reg-filter-col-cont">
                                 <div className='year-select-heading'>{AppConstants.year} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
-                                    value={"2020"}
-                                    className="year-select shop-filter-select" >
-                                    <Option key={"year"} value="year">{"2020"}</Option>
-
+                                    value="2020"
+                                    className="year-select shop-filter-select"
+                                >
+                                    <Option key="year" value="year">2020</Option>
                                 </Select>
                             </div>
                         </div>
 
-                        <div className="reg-col mr-5" >
+                        <div className="reg-col mr-5">
                             <div className="reg-filter-col-cont">
                                 <div className='year-select-heading' style={{width: 200}}>{AppConstants.productType} :</div>
                                 <Select
                                     style={{ minWidth: 115 }}
-                                    value={"All"}
-                                    className="year-select reg-filter-select1 ml-2" >
-                                    <Option key={"all"} value="all">{"All"}</Option>
-
+                                    value="All"
+                                    className="year-select reg-filter-select1 ml-2"
+                                >
+                                    <Option key="all" value="all">All</Option>
                                 </Select>
                             </div>
                         </div>
 
-                        <div className="reg-col" >
+                        <div className="reg-col">
                             <div className="reg-filter-col-cont">
                                 <div className='year-select-heading'>{AppConstants.affiliate} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
-                                    value={"All"}
-                                    className="year-select reg-filter-select1 ml-2" >
-                                    <Option key={"all"} value="all">{"All"}</Option>
-
+                                    value="All"
+                                    className="year-select reg-filter-select1 ml-2"
+                                >
+                                    <Option key="all" value="all">All</Option>
                                 </Select>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
         )
     }
@@ -171,28 +168,27 @@ class ShopDashboard extends Component {
     contentView = () => {
         return (
             <div className="comp-dash-table-view mt-2">
-
                 <div className="row pt-4">
-                    <div className="col-sm-6" >
-                        <div className="home-dash-white-box-view pt-3 pb-3" >
-                            <div className="row" >
-                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
+                    <div className="col-sm-6">
+                        <div className="home-dash-white-box-view pt-3 pb-3">
+                            <div className="row">
+                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                                     <span className="reg-payment-price-text">{"$"}{" "}{"400.20"}</span>
                                 </div>
-                                <div className="col-sm-6"  >
+                                <div className="col-sm-6">
                                     <span className="input-heading pb-0 pt-2" style={{ fontSize: 15 }}>{"Today"}</span>
                                     <span className="input-heading pt-0" style={{ fontSize: 15 }}>{"2 Orders"}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="col-sm-6" >
-                        <div className="home-dash-white-box-view pt-3 pb-3" >
-                            <div className="row" >
-                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
+                    <div className="col-sm-6">
+                        <div className="home-dash-white-box-view pt-3 pb-3">
+                            <div className="row">
+                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                                     <span className="reg-payment-price-text">{"$"}{" "}{"4,400.20"}</span>
                                 </div>
-                                <div className="col-sm-6"  >
+                                <div className="col-sm-6">
                                     <span className="input-heading pb-0 pt-2" style={{ fontSize: 15 }}>{"Past 7 days"}</span>
                                     <span className="input-heading pt-0" style={{ fontSize: 15 }}>{"10 Orders"}</span>
                                 </div>
@@ -201,13 +197,13 @@ class ShopDashboard extends Component {
                     </div>
                 </div>
                 <div className="row pt-4">
-                    <div className="col-sm-6" >
-                        <div className="home-dash-white-box-view pt-3 pb-3" >
-                            <div className="row" >
-                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
+                    <div className="col-sm-6">
+                        <div className="home-dash-white-box-view pt-3 pb-3">
+                            <div className="row">
+                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                                     <span className="reg-payment-price-text">{"$"}{" "}{"21,400.20"}</span>
                                 </div>
-                                <div className="col-sm-6"  >
+                                <div className="col-sm-6">
                                     <span className="input-heading pb-0 pt-2" style={{ fontSize: 15 }}>{"Past 30 days"}</span>
                                     <span className="input-heading pt-0" style={{ fontSize: 15 }}>{"12 Orders"}</span>
                                 </div>
@@ -215,13 +211,13 @@ class ShopDashboard extends Component {
                         </div>
                     </div>
 
-                    <div className="col-sm-6" >
-                        <div className="home-dash-white-box-view pt-3 pb-3" >
-                            <div className="row" >
-                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }} >
+                    <div className="col-sm-6">
+                        <div className="home-dash-white-box-view pt-3 pb-3">
+                            <div className="row">
+                                <div className="col-sm-6" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                                     <span className="reg-payment-price-text">{"$"}{" "}{"20,400.20"}</span>
                                 </div>
-                                <div className="col-sm-6"  >
+                                <div className="col-sm-6">
                                     <span className="input-heading pb-0 pt-2" style={{ fontSize: 15 }}>{"Past 90 days"}</span>
                                     <span className="input-heading pt-0" style={{ fontSize: 15 }}>{"22 Orders"}</span>
                                 </div>
@@ -229,10 +225,10 @@ class ShopDashboard extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="row"  >
-                    <div className="col-sm" >
-                        <div className="chart-container-view" >
-                            <div className="col-sm-9"  >
+                <div className="row">
+                    <div className="col-sm">
+                        <div className="chart-container-view">
+                            <div className="col-sm-9">
                                 <span style={{ fontSize: 15, fontWeight: 500 }}>{AppConstants.topSellers}</span>
                                 <canvas
                                     style={{ display: "block", justifycontent: "center" }}
@@ -247,14 +243,11 @@ class ShopDashboard extends Component {
         )
     }
 
-
-
     render() {
-
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
-                <InnerHorizontalMenu menu={"shop"} shopSelectedKey={"1"} />
+                <InnerHorizontalMenu menu="shop" shopSelectedKey="1" />
                 <Layout>
                     <Content className="comp-dash-table-view">
                         {this.headerView()}
@@ -262,6 +255,7 @@ class ShopDashboard extends Component {
                         {this.contentView()}
                         {/* <div className="formView">{this.productTypes()}</div> */}
                     </Content>
+
                     <Footer>
 
                     </Footer>
@@ -277,10 +271,9 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
-
-
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((ShopDashboard));
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShopDashboard);

@@ -29,7 +29,7 @@ class TimeSlotModal extends React.Component {
                         <Loader visible={onTimeslotLoad} />
                         {timeslots.length > 0 && timeslots.map((item, index) => {
                             return (
-                                < div className="row " key={"timevalue" + index} >
+                                < div className="row " key={"timevalue" + index}>
                                     <div className="col-sm">
                                         <InputWithHead heading={index == 0 ? AppConstants.dayOfTheWeek : " "} />
                                         <Select
@@ -39,7 +39,7 @@ class TimeSlotModal extends React.Component {
                                             placeholder="Select Week Day"
                                         >
                                             {weekDays.length > 0 && weekDays.map((item, index) => (
-                                                < Option key={"weekdays" + index} value={item.id}> {item.description}</Option>
+                                                <Option key={"weekdays" + index} value={item.id}> {item.description}</Option>
                                             ))
                                             }
                                         </Select>
@@ -49,7 +49,7 @@ class TimeSlotModal extends React.Component {
                                             return (
 
                                                 <div className="row" key={"timevalue" + timeIndex}>
-                                                    <div className={"col-sm"} >
+                                                    <div className={"col-sm"}>
                                                         <InputWithHead heading={index == 0 && timeIndex == 0 ? AppConstants.startTime : ' '} />
                                                         <TimePicker
                                                             key={"startTime"}
@@ -79,13 +79,13 @@ class TimeSlotModal extends React.Component {
                                                 </div>
                                             )
                                         })}
-                                        <span className='input-heading-add-another' onClick={() => addStartTime(index)} > + {AppConstants.add_TimeSlot}</span>
+                                        <span className='input-heading-add-another' onClick={() => addStartTime(index)}> + {AppConstants.add_TimeSlot}</span>
                                     </div>
                                     {timeslots.length > 1 &&
                                         <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => removetimeSlotDay(index)}>
                                             <a className="transfer-image-view">
                                                 <span className="user-remove-btn">
-                                                    <i className="fa fa-trash-o" aria-hidden="true"></i>
+                                                    <i className="fa fa-trash-o" aria-hidden="true" />
                                                 </span>
                                             </a>
                                         </div>
@@ -104,17 +104,17 @@ class TimeSlotModal extends React.Component {
                                 </Button>
                             </div>
                             <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-end" }}>
-                                <Button className="publish-button save-draft-text" type="primary" onClick={() => timeSlotOK()} >
+                                <Button className="publish-button save-draft-text" type="primary" onClick={() => timeSlotOK()}>
                                     {AppConstants.save}
                                 </Button>
-                                <Button className="publish-button" type="primary" onClick={() => handleTimeslotNext()} >
+                                <Button className="publish-button" type="primary" onClick={() => handleTimeslotNext()}>
                                     {AppConstants.next}
                                 </Button>
                             </div>
                         </div>
                     </div>
                 </Modal >
-            </div >
+            </div>
         )
     }
 }

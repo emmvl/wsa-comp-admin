@@ -85,7 +85,7 @@ const columns = [
                 }
             >
                 <Menu.Item key={'1'}>
-                    <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }} >
+                    <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }}>
                         <span>Edit</span>
                     </NavLink>
                 </Menu.Item>
@@ -217,7 +217,7 @@ class LiveScoreTeamView extends Component {
 
     ////view for profile image
     profileImageView = () => {
-        // let data = this.state.data 
+        // let data = this.state.data
         let data = this.props.location ? this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : null : null : null
         const { teamData, managerData, managerList } = this.props.liveScoreTeamState
         const { name, logoUrl } = teamData ? teamData : ''
@@ -341,7 +341,7 @@ class LiveScoreTeamView extends Component {
         let roleId = (userRoleId == 11 || userRoleId == 13) ? true : false
         return (
             <div className="row ">
-                <div className="col-sm" >
+                <div className="col-sm">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.players}</Breadcrumb.Item>
                     </Breadcrumb>
@@ -443,11 +443,11 @@ class LiveScoreTeamView extends Component {
         )
     }
 
-    //////// tableView 
+    //////// tableView
     tableView = () => {
         const { playerList } = this.props.liveScoreTeamState
         return (
-            <div >
+            <div>
                 <div className="inside-table-view mt-4" >
                     {this.addPlayerView()}
 
@@ -459,7 +459,7 @@ class LiveScoreTeamView extends Component {
                     </div>
 
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -483,13 +483,12 @@ class LiveScoreTeamView extends Component {
                         :
                         <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={screenName === 'fromMatchList' ? '2' : screenName === 'liveScoreDashboard' ? "1" : screenName === 'fromPlayerList' ? '7' : '3'} />
                 }
-
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
-                        <div className="fluid-width" >
-                            <div className="row" >
-                                <div className="col-sm-3" style={{ marginBottom: "6%" }} >
+                        <div className="fluid-width">
+                            <div className="row">
+                                <div className="col-sm-3" style={{ marginBottom: "6%" }}>
                                     {this.profileImageView()}
                                 </div>
                                 <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
@@ -500,7 +499,7 @@ class LiveScoreTeamView extends Component {
                         </div>
                     </Content>
                 </Layout>
-            </div >
+            </div>
         );
     }
 }

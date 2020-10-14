@@ -93,8 +93,8 @@ const columns = [
                         <div>
                             <div style={{display: "flex",justifyContent:"space-between"}}>
                                 <div>{transferCompOrgName}</div>
-                                {transferCompOrgName && 
-                                <div className="transfer-status">{record.tCompOrgStatus == 0 ? "("+record.tCompOrgApproved+")" : 
+                                {transferCompOrgName &&
+                                <div className="transfer-status">{record.tCompOrgStatus == 0 ? "("+record.tCompOrgApproved+")" :
                                     <div>
                                         {record.tCompOrgStatus!= 3 ?
                                             <div style={{color: getColor(record,"tCompOrgApproved")}}>&#x2714;</div>
@@ -120,8 +120,8 @@ const columns = [
                         <div>
                             <div style={{display: "flex",justifyContent:"space-between"}}>
                                 <div>{transferAffOrgName}</div>
-                                {transferAffOrgName && 
-                                <div className="transfer-status">{record.tAffStatus == 0 ? "("+record.tAffApproved+")" : 
+                                {transferAffOrgName &&
+                                <div className="transfer-status">{record.tAffStatus == 0 ? "("+record.tAffApproved+")" :
                                     <div>
                                         {record.tAffStatus!= 3 ?
                                             <div style={{color: getColor(record,"tAffApproved")}}>&#x2714;</div>
@@ -177,10 +177,10 @@ const columns = [
                         <div>
                             <div style={{display: "flex",justifyContent:"space-between"}}>
                                 <div>{compOrganiserApproved!= 'N/A' && compOrganiserApproved!= 'P' ? currencyFormat(compOrganiserApproved) : compOrganiserApproved}</div>
-                                {compOrganiserApproved!= "N/A" && compOrganiserApproved!= 'P' ? 
+                                {compOrganiserApproved!= "N/A" && compOrganiserApproved!= 'P' ?
                                 <div>
                                     {
-                                        record.compOrgApprovedStatus != 3 ? 
+                                        record.compOrgApprovedStatus != 3 ?
                                         <div style={{color: getColor(record,"compOrganiserApproved")}}>&#x2714;</div>
                                         :
                                         <div style={{color: "red"}}>&#x2718;</div>
@@ -205,14 +205,14 @@ const columns = [
                                 <div>{affiliateApproved!= 'N/A' && affiliateApproved!= 'P' ? currencyFormat(affiliateApproved) : affiliateApproved}</div>
                                 {affiliateApproved!= 'N/A' && affiliateApproved!= 'P' ?
                                 <div>
-                                    {record.affiliateApprovedStatus != 3 ? 
+                                    {record.affiliateApprovedStatus != 3 ?
                                         <div style={{color: getColor(record,"affiliateApproved")}}>&#x2714;</div>
                                         :
                                         <div style={{color: "red"}}>&#x2718;</div>
                                     }
                                 </div> : ""
                                 }
-                            </div> 
+                            </div>
                         </div>
                     )
                 }
@@ -228,9 +228,9 @@ const columns = [
                         <div>
                             <div style={{display: "flex",justifyContent:"space-between"}}>
                                 <div>{stateApproved != 'N/A' && stateApproved != 'P' ? currencyFormat(stateApproved) : stateApproved}</div>
-                                {stateApproved!= 'N/A' && stateApproved != 'P'? 
+                                {stateApproved!= 'N/A' && stateApproved != 'P'?
                                 <div>
-                                    {record.stateApprovedStatus != 3 ? 
+                                    {record.stateApprovedStatus != 3 ?
                                         <div style={{color: getColor(record,"stateApproved")}}>&#x2714;</div>
                                         :
                                         <div style={{color: "red"}}>&#x2718;</div>
@@ -258,7 +258,7 @@ const columns = [
                     mode="horizontal"
                     style={{ lineHeight: '25px' }}
                 >
-                    {record.statusRefId == 1 ? 
+                    {record.statusRefId == 1 ?
                     <Menu.SubMenu
                         key="sub1"
                         style={{ borderBottomStyle: "solid", borderBottom: 0 }}
@@ -272,7 +272,7 @@ const columns = [
                     </Menu.SubMenu>
                     : null}
                 </Menu>
-                
+
             }
         ]
     }
@@ -405,11 +405,9 @@ class RegistrationChange extends Component {
 
         this.handleRegChangeList(1);
     };
-    
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-       // console.log("this.props.regChangeState", this.props.regChangeState);
         const {regChangeCompetitions} = this.props.regChangeState;
         const {regChangeTypes} = this.props.commonReducerState;
         let competitionList;
@@ -422,7 +420,7 @@ class RegistrationChange extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
-                    <div className="row" >
+                    <div className="row">
                         <div className="col-sm pb-3">
                             <div className="com-year-select-heading-view">
                                 <span className="year-select-heading">{AppConstants.year}:</span>
@@ -555,7 +553,7 @@ class RegistrationChange extends Component {
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}
                 />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"9"} />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="9" />
                 <Layout>
                     {this.headerView()}
                     <Content>

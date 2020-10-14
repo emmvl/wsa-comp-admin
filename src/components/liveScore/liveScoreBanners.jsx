@@ -276,9 +276,9 @@ class LiveScoreBanners extends Component {
     render() {
         let { bannerResult } = this.props.liveScoreBannerState
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"20"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="20" />
                 <Layout>
                     {this.headerView()}
 

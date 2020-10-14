@@ -195,7 +195,7 @@ class InnerHorizontalMenu extends React.Component {
                         <SubMenu
                             key="sub1"
                             title={
-                                <span id={AppUniqueId.own_comp_tab} >Own Competitions</span>
+                                <span id={AppUniqueId.own_comp_tab}>Own Competitions</span>
                             }
                         >
                             <Menu.Item key="2">

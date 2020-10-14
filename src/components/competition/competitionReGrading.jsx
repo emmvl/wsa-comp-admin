@@ -92,31 +92,28 @@ class CompetitionReGrading extends Component {
         }
     }
 
-
     onChange = e => {
-        console.log('radio checked', e.target.value);
         this.setState({
             value: e.target.value,
         });
     };
 
-
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
-                            {/* < Breadcrumb.Item className="breadcrumb-product">Draw</Breadcrumb.Item> */}
-                            < Breadcrumb.Item className="breadcrumb-product">{AppConstants.re_grading}</Breadcrumb.Item>
-                            < Breadcrumb.Item className="breadcrumb-add">{AppConstants.step1}</Breadcrumb.Item>
+                            {/* <Breadcrumb.Item className="breadcrumb-product">Draw</Breadcrumb.Item> */}
+                            <Breadcrumb.Item className="breadcrumb-product">{AppConstants.re_grading}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.step1}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
 
                 </div>
 
-            </div >
+            </div>
 
         )
     }
@@ -125,9 +122,9 @@ class CompetitionReGrading extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm" >
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm">
                             <div className="com-year-select-heading-view" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
@@ -140,12 +137,12 @@ class CompetitionReGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm">
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50
-                            }} >
+                            }}>
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select"
@@ -157,12 +154,12 @@ class CompetitionReGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm">
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center"
-                            }} >
+                            }}>
                                 <span className='year-select-heading'>{AppConstants.division}:</span>
                                 <Select
                                     className="year-select"
@@ -174,12 +171,12 @@ class CompetitionReGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm">
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center"
-                            }} >
+                            }}>
                                 <span className='year-select-heading'>{AppConstants.grade}:</span>
                                 <Select
                                     className="year-select"
@@ -187,11 +184,11 @@ class CompetitionReGrading extends Component {
                                     onChange={(grade) => this.setState({ grade })}
                                     value={this.state.grade}
                                 >
-                                    <Option value={"all"}>{AppConstants.all}</Option>
+                                    <Option value="all">{AppConstants.all}</Option>
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }} >
+                        <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end" }}>
                             <span className='year-select-heading'>{AppConstants.gradetoggle}</span>
                         </div>
                     </div>
@@ -223,13 +220,13 @@ class CompetitionReGrading extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="comp-player-grades-footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
+                    <div className="row">
+                        <div className="col-sm">
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button>
-                                <NavLink to="/competitionReGradingStep2" >
+                                <NavLink to="/competitionReGradingStep2">
                                     <Button className="open-reg-button" type="primary">{AppConstants.next}</Button>
                                 </NavLink>
                             </div>
@@ -243,9 +240,9 @@ class CompetitionReGrading extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"13"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey={"13"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

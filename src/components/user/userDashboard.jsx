@@ -78,9 +78,7 @@ class UserDashboard extends Component {
         this.chartRefGender = React.createRef();
     }
 
-
     onChange = e => {
-        console.log('radio checked', e.target.value);
         this.setState({
             value: e.target.value,
         });
@@ -216,11 +214,11 @@ class UserDashboard extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <Header className="comp-player-grades-header-view container mb-n3" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <Header className="comp-player-grades-header-view container mb-n3">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add">{AppConstants.users}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.users}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
@@ -231,11 +229,11 @@ class UserDashboard extends Component {
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
-            <div >
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm-3" >
-                            <div className="com-year-select-heading-view" >
+            <div>
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm-3">
+                            <div className="com-year-select-heading-view">
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     className="year-select"
@@ -247,12 +245,12 @@ class UserDashboard extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm">
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
-                            }} >
+                            }}>
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select"
@@ -260,7 +258,7 @@ class UserDashboard extends Component {
                                     onChange={(competition) => this.setState({ competition })}
                                     value={this.state.competition}
                                 >
-                                    <Option value={"all"}>{AppConstants.all}</Option>
+                                    <Option value="all">{AppConstants.all}</Option>
                                 </Select>
                             </div>
                         </div>
@@ -273,10 +271,10 @@ class UserDashboard extends Component {
     ////////form content view
     contentView = () => {
         return (
-            <div >
-                <div className="row" >
-                    <div className="col-sm-6" >
-                        <div className="chart-container-view mt-4" >
+            <div>
+                <div className="row">
+                    <div className="col-sm-6">
+                        <div className="chart-container-view mt-4">
                             <span style={{ fontSize: 15, fontWeight: 500 }}>{AppConstants.ages}</span>
                             <canvas
                                 id="myChart"
@@ -284,8 +282,8 @@ class UserDashboard extends Component {
                             />
                         </div>
                     </div>
-                    <div className="col-sm-6" >
-                        <div className="chart-container-view mt-4"  >
+                    <div className="col-sm-6">
+                        <div className="chart-container-view mt-4">
                             <span style={{ fontSize: 15, fontWeight: 500 }}>{AppConstants.roles}</span>
                             <canvas
                                 id="myChart2"
@@ -294,9 +292,9 @@ class UserDashboard extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="row" >
-                    <div className="col-sm-6" >
-                        <div className="chart-container-view" >
+                <div className="row">
+                    <div className="col-sm-6">
+                        <div className="chart-container-view">
                             <span style={{ fontSize: 15, fontWeight: 500 }}>{AppConstants.competitions}</span>
                             <canvas
                                 id="myChart"
@@ -304,8 +302,8 @@ class UserDashboard extends Component {
                             />
                         </div>
                     </div>
-                    <div className="col-sm-6" >
-                        <div className="chart-container-view"  >
+                    <div className="col-sm-6">
+                        <div className="chart-container-view">
                             <span style={{ fontSize: 15, fontWeight: 500 }}>{AppConstants.genders}</span>
                             <canvas
                                 id="myChart2"
@@ -315,10 +313,9 @@ class UserDashboard extends Component {
                     </div>
                 </div>
 
-                <div className="user-dashboard-table-view" >
+                <div className="user-dashboard-table-view">
                     <div className="table-responsive home-dash-table-view">
-                        <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false}
-                        />
+                        <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false} />
                     </div>
                 </div>
             </div>
@@ -328,10 +325,10 @@ class UserDashboard extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div >
+            <div>
                 <div className="comp-player-grades-footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
+                    <div className="row">
+                        <div className="col-sm">
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 {/* <Button className="save-draft-text" type="save-draft-text">Save Draft</Button>
                                 <Button className="open-reg-button" type="primary">Finalise</Button> */}
@@ -343,12 +340,11 @@ class UserDashboard extends Component {
         )
     }
 
-
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"user"} userSelectedKey={"1"} />
+                <InnerHorizontalMenu menu="user" userSelectedKey="1" />
                 <Layout>
                     {this.headerView()}
                     <Content className="container">
@@ -364,4 +360,5 @@ class UserDashboard extends Component {
         );
     }
 }
+
 export default UserDashboard;

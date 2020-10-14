@@ -35,8 +35,8 @@ const columns = [
         key: 'balance_transaction',
         sorter: false,
         render: (balance_transaction, record) => (
-            <NavLink to={{ pathname: `/registrationPayoutTransaction`, state: { id: record.id } }} >
-                <span style={{ color: "#ff8237" }} >{balance_transaction}</span>
+            <NavLink to={{ pathname: `/registrationPayoutTransaction`, state: { id: record.id } }}>
+                <span style={{ color: "#ff8237" }}>{balance_transaction}</span>
             </NavLink>
         )
     },
@@ -96,10 +96,10 @@ const columns = [
     //                 }
     //             >
     //                 <Menu.Item key="1">
-    //                     <span >Full Refund</span>
+    //                     <span>Full Refund</span>
     //                 </Menu.Item>
-    //                 <Menu.Item key="2" >
-    //                     <span >Partial Refund</span>
+    //                 <Menu.Item key="2">
+    //                     <span>Partial Refund</span>
     //                 </Menu.Item>
     //             </SubMenu>
     //         </Menu>
@@ -137,15 +137,15 @@ class RegistrationSettlements extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            // <div className="comp-player-grades-header-view-design" >
-            //     <div className="row" >
-            //         <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            // <div className="comp-player-grades-header-view-design">
+            //     <div className="row">
+            //         <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
             //             <Breadcrumb separator=" > ">
             //                 <Breadcrumb.Item className="breadcrumb-add">{AppConstants.payouts}</Breadcrumb.Item>
             //             </Breadcrumb>
             //         </div>
             //     </div>
-            // </div >
+            // </div>
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row">
@@ -187,7 +187,7 @@ class RegistrationSettlements extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -198,19 +198,15 @@ class RegistrationSettlements extends Component {
         let ending_before = null
         if (key == "next") {
             ///move forward
-            console.log("move forward")
             page = parseInt(page) + 1
             let id = (stripePayoutList[stripePayoutList.length - 1]['id']);
-            console.log("id", id)
             starting_after = id
             ending_before = null
         }
         if (key == "Previous") {
             //////move backward
-            console.log("move backward")
             page = parseInt(page) - 1
             let id = (stripePayoutList[0]['id']);
-            console.log("id", id)
             starting_after = null
             ending_before = id
         }
@@ -224,14 +220,12 @@ class RegistrationSettlements extends Component {
         let lastPage = Math.ceil(parseInt(totalCount) / 10)
         if (lastPage == currentPage) {
             return false
-        }
-        else {
+        } else {
             return true
         }
     }
 
     payoutListView = () => {
-        console.log("stripeState", this.props.stripeState)
         let stripePayoutList = this.props.stripeState.stripePayoutList
         let previousEnabled = this.props.stripeState.stripePayoutListPage == 1 ? false : true
         let nextEnabled = this.checkNextEnabled()
@@ -269,9 +263,9 @@ class RegistrationSettlements extends Component {
 
     dropdownView = () => {
         return (
-            <div className="row" >
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.year} />
+            <div className="row">
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.year} />
                     <Select
                         className="reg-payment-select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
@@ -285,8 +279,8 @@ class RegistrationSettlements extends Component {
                         <Option value={"2016"}>{AppConstants.year2016}</Option>
                     </Select>
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.competition} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.competition} />
 
                     <Select
                         className="reg-payment-select"
@@ -294,7 +288,7 @@ class RegistrationSettlements extends Component {
                         onChange={(competition) => this.setState({ competition })}
                         value={this.state.competition}
                     >
-                        <Option value={"all"}>{AppConstants.all}</Option>
+                        <Option value="all">{AppConstants.all}</Option>
                         <Option value={"2020"}>{AppConstants.year2020}</Option>
                         <Option value={"2019"}>{AppConstants.year2019}</Option>
                         <Option value={"2018"}>{AppConstants.year2018}</Option>
@@ -302,15 +296,15 @@ class RegistrationSettlements extends Component {
                         <Option value={"2016"}>{AppConstants.year2016}</Option>
                     </Select>
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.paymentFor} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
                     <Select
                         className="reg-payment-select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                         onChange={(paymentFor) => this.setState({ paymentFor })}
                         value={this.state.paymentFor}
                     >
-                        <Option value={"all"}>{AppConstants.all}</Option>
+                        <Option value="all">{AppConstants.all}</Option>
                         <Option value={"2020"}>{AppConstants.year2020}</Option>
                         <Option value={"2019"}>{AppConstants.year2019}</Option>
                         <Option value={"2018"}>{AppConstants.year2018}</Option>
@@ -318,29 +312,28 @@ class RegistrationSettlements extends Component {
                         <Option value={"2016"}>{AppConstants.year2016}</Option>
                     </Select>
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.dateFrom} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
                         style={{ width: "100%", minWidth: 160 }}
                         onChange={date => this.dateOnChangeFrom(date)}
-                        format={'DD-MM-YYYY'}
+                        format="DD-MM-YYYY"
                         showTime={false}
-                        placeholder={"dd-mm-yyyy"}
+                        placeholder="dd-mm-yyyy"
                     />
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.dateTo} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
                         style={{ width: "100%", minWidth: 160 }}
                         onChange={date => this.dateOnChangeTo(date)}
-                        format={'DD-MM-YYYY'}
+                        format="DD-MM-YYYY"
                         showTime={false}
-                        placeholder={"dd-mm-yyyy"}
-
+                        placeholder="dd-mm-yyyy"
                     />
                 </div>
             </div>
@@ -359,9 +352,9 @@ class RegistrationSettlements extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
-                <InnerHorizontalMenu menu={"finance"} finSelectedKey={"3"} />
+                <InnerHorizontalMenu menu="finance" finSelectedKey="3" />
                 <Layout >
                     {this.headerView()}
                     <Content>

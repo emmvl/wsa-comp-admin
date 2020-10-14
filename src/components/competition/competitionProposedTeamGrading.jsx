@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Form, Button, Table, Select, Tag, Input, message, Tooltip, Menu, Modal } from 'antd';
+import { Layout, Breadcrumb, Button, Table, Select, Tag, Input, message, Tooltip, Menu, Modal } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import CommentModal from "../../customComponents/commentModal";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -79,7 +79,6 @@ const columns = [
             //         </Option>
             //     })}
             //     </Select>
-
             //     )
             <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
                 <Select className="select-inside-team-grades-table"
@@ -535,15 +534,15 @@ class CompetitionProposedTeamGrading extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add"> {AppConstants.finalTeamGrading}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add"> {AppConstants.finalTeamGrading}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -589,13 +588,13 @@ class CompetitionProposedTeamGrading extends Component {
         let disableStatus = this.state.competitionStatus == 1 ? true : false
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm" >
-                            <div className="com-year-select-heading-view pb-3" >
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm">
+                            <div className="com-year-select-heading-view pb-3">
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
-                                    name={"yearRefId"}
+                                    name="yearRefId"
                                     className="year-select reg-filter-select-year ml-2"
                                     style={{ width: 90 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
@@ -611,12 +610,12 @@ class CompetitionProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" >
+                        <div className="col-sm pb-3">
                             <div style={{
                                 width: "fit-content", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
-                            }} >
+                            }}>
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select reg-filter-select-competition ml-2"
@@ -633,12 +632,12 @@ class CompetitionProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" >
+                        <div className="col-sm pb-3">
                             <div style={{
                                 width: "fit-content", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center"
-                            }} >
+                            }}>
                                 <span className='year-select-heading'>{AppConstants.division}:</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
@@ -658,12 +657,12 @@ class CompetitionProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" >
+                        <div className="col-sm pb-3">
                             <div style={{
                                 width: "fit-content", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center"
-                            }} >
+                            }}>
                                 <span className='year-select-heading'>{AppConstants.grade}:</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
@@ -679,10 +678,10 @@ class CompetitionProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        {/* <div className="col-sm" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
+                        {/* <div className="col-sm" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
                             <span className='comp-grading-final-text ml-1' >{AppConstants.final}</span>
                         </div> */}
-                        {/* <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }} >
+                        {/* <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
                             <Button className="primary-add-comp-form" type="primary"
                             // onClick={this.addNewGrade}
                             >
@@ -705,7 +704,7 @@ class CompetitionProposedTeamGrading extends Component {
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        //className={record => record.isActive == 0 ? "disabled-row" : "home-dashboard-table"} 
+                        //className={record => record.isActive == 0 ? "disabled-row" : "home-dashboard-table"}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={proposedTeamGradingData}
@@ -724,14 +723,14 @@ class CompetitionProposedTeamGrading extends Component {
                     value={this.state.comment}
                     commentLoad={commentLoad}
                     commentList={commentList}
-                // owner={this.state.commentsCreatedBy}
-                // OwnCreatedComment={this.state.commentsCreatedOn}
-                // ownnerComment={this.state.comments}
-                // affilate={this.state.responseCommentsCreatedBy}
-                // affilateCreatedComment={this.state.responseCommentsCreatedOn}
-                // affilateComment={this.state.responseComments}
-                // finalGradeId={this.state.finalGradeId}
-                // proposedGradeID={this.state.proposedGradeID}
+                    // owner={this.state.commentsCreatedBy}
+                    // OwnCreatedComment={this.state.commentsCreatedOn}
+                    // ownnerComment={this.state.comments}
+                    // affilate={this.state.responseCommentsCreatedBy}
+                    // affilateCreatedComment={this.state.responseCommentsCreatedOn}
+                    // affilateComment={this.state.responseComments}
+                    // finalGradeId={this.state.finalGradeId}
+                    // proposedGradeID={this.state.proposedGradeID}
                 />
 
                 <Modal
@@ -774,9 +773,9 @@ class CompetitionProposedTeamGrading extends Component {
     footerView = () => {
         let isPublished = this.state.competitionStatus == 1 ? true : false
         return (
-            <div className="fluid-width paddingBottom56px" >
-                <div className="row" >
-                    <div className="col-sm-3" >
+            <div className="fluid-width paddingBottom56px">
+                <div className="row">
+                    <div className="col-sm-3">
                         <div className="reg-add-save-button">
                             <Button className="cancelBtnWidth" type="cancel-button"
                                 onClick={() => this.cancelCall()}
@@ -784,7 +783,7 @@ class CompetitionProposedTeamGrading extends Component {
                             </Button>
                         </div>
                     </div>
-                    <div className="col-sm" >
+                    <div className="col-sm">
                         {this.state.divisionId != null &&
                             <div className="comp-buttons-view">
                                 <Button
@@ -792,7 +791,9 @@ class CompetitionProposedTeamGrading extends Component {
                                     className="publish-button save-draft-text"
                                     disabled={isPublished}
                                     onClick={() => this.submitApiCall("save")}
-                                    type="primary">{AppConstants.save}
+                                    type="primary"
+                                >
+                                    {AppConstants.save}
                                 </Button>
                                 <Tooltip
                                     style={{ height: '100%' }}
@@ -827,9 +828,9 @@ class CompetitionProposedTeamGrading extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"5"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="5" />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -844,6 +845,7 @@ class CompetitionProposedTeamGrading extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getYearAndCompetitionOwnAction,
@@ -865,14 +867,14 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         ownTeamGradingState: state.CompetitionOwnTeamGradingState,
         registrationState: state.RegistrationState,
         commonReducerState: state.CommonReducerState,
         partPlayerGradingState: state.CompetitionPartPlayerGradingState,
-
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionProposedTeamGrading));
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionProposedTeamGrading);

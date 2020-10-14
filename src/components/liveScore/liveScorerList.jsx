@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Layout, Breadcrumb, Button, Table, Pagination, Menu, Input, Icon } from "antd";
+import { Layout, Breadcrumb, Button, Table, Pagination, Menu, Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -130,8 +131,8 @@ const columns = [
                             </NavLink>
                         </div>
                     ) : (
-                            <span>{item.name}</span>
-                        )
+                        <span>{item.name}</span>
+                    )
                 ))}
             </div>
         )
@@ -325,15 +326,14 @@ class LiveScorerList extends Component {
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"
-                            onChange={(e) => this.onChangeSearchText(e)}
+                            onChange={this.onChangeSearchText}
                             placeholder="Search..."
-                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            onKeyPress={this.onKeyEnterSearchText}
                             value={this.state.searchText}
                             prefix={
-                                <Icon
-                                    type="search"
+                                <SearchOutlined
                                     style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                    onClick={() => this.onClickSearchIcon()}
+                                    onClick={this.onClickSearchIcon}
                                 />
                             }
                             allowClear
@@ -364,7 +364,7 @@ class LiveScorerList extends Component {
         }
     }
 
-    // search key 
+    // search key
     onKeyEnterSearchText = (e) => {
         this.setState({ offset: 0 })
         let { sortBy, sortOrder } = this.state
@@ -427,14 +427,14 @@ class LiveScorerList extends Component {
                         current={scorerListCurrentPage}
                         total={scorerListTotalCount}
                         onChange={(page) => this.handlePagination(page)}
-                    // defaultPageSize={10}
+                        // defaultPageSize={10}
                     />
                 </div>
             </div>
         )
     }
 
-    /////// render function 
+    /////// render function
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
@@ -443,7 +443,7 @@ class LiveScorerList extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="5" />
                 <Layout>
                     {this.headerView()}
                     <Content>

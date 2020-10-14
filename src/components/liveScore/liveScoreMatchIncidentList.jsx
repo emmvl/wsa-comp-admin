@@ -255,7 +255,7 @@ class LiveScoreIncidentList extends Component {
                             flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "flex-end"
-                        }} >
+                        }}>
                     </div>
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -275,7 +275,7 @@ class LiveScoreIncidentList extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"17"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

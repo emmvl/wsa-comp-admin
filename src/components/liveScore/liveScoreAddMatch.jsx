@@ -17,7 +17,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import ValidationConstants from "../../themes/validationConstant";
-import moment, { utc } from "moment";
+import moment from "moment";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getliveScoreDivisions } from '../../store/actions/LiveScoreAction/liveScoreActions'
@@ -34,10 +34,12 @@ import {
 } from '../../store/actions/LiveScoreAction/liveScoreMatchAction'
 import { liveScoreScorerListAction } from '../../store/actions/LiveScoreAction/liveScoreScorerAction';
 import InputWithHead from "../../customComponents/InputWithHead";
-import { liveScoreCreateRoundAction, liveScoreRoundListAction } from '../../store/actions/LiveScoreAction/liveScoreRoundAction'
+import {
+    liveScoreCreateRoundAction,
+    liveScoreRoundListAction
+} from '../../store/actions/LiveScoreAction/liveScoreRoundAction'
 import history from "../../util/history";
-import { getCompetitonId, getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
-import { formateTime, liveScore_formateDate, formatDateTime } from '../../themes/dateformate'
+import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
 import { getVenuesTypeAction } from "../../store/actions/appAction"
 import Loader from '../../customComponents/loader'
 import { getliveScoreScorerList } from '../../store/actions/LiveScoreAction/liveScoreAction';
@@ -51,10 +53,8 @@ import { refRoleTypes } from '../../util/refRoles'
 import { umpireListAction } from "../../store/actions/umpireAction/umpireAction"
 import { liveScoreGetMatchDetailInitiate } from "../../store/actions/LiveScoreAction/liveScoreMatchAction";
 
-
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
-
 
 class LiveScoreAddMatch extends Component {
     constructor(props) {
@@ -78,11 +78,11 @@ class LiveScoreAddMatch extends Component {
             allDisabled: false,  ///////allDisabled===false==>>>it is editable,,,,,,,,allDisabled===true===>>>cannot edit the field.
             screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
         }
-        this.props.clearMatchAction()
+        this.props.clearMatchAction();
+        this.formRef = React.createRef();
     }
 
     componentDidMount() {
-
         if (getUmpireCompetitonData() || getLiveScoreCompetiton()) {
             if (this.state.umpireKey == 'umpire') {
                 const { id } = JSON.parse(getUmpireCompetitonData())
@@ -95,12 +95,16 @@ class LiveScoreAddMatch extends Component {
                     this.props.getLiveScoreDivisionList(id)
                     this.props.getliveScoreScorerList(id, 4)
                     this.props.liveScoreClubListAction(id)
-                    this.props.umpireListAction({ refRoleId: JSON.stringify([15, 20]), entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
+                    this.props.umpireListAction({
+                        refRoleId: JSON.stringify([15, 20]),
+                        entityTypes: entityTypes('COMPETITION'),
+                        compId: id,
+                        offset: null,
+                    })
                     this.setState({ loadvalue: true, allDisabled: true })
                 } else {
                     history.push('/liveScoreCompetitions')
                 }
-
             } else {
                 if (getLiveScoreCompetiton()) {
                     const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -111,13 +115,17 @@ class LiveScoreAddMatch extends Component {
                     this.props.getLiveScoreDivisionList(id)
                     this.props.getliveScoreScorerList(id, 4)
                     this.props.liveScoreClubListAction(id)
-                    this.props.umpireListAction({ refRoleId: JSON.stringify([15, 20]), entityTypes: entityTypes('COMPETITION'), compId: id, offset: null })
+                    this.props.umpireListAction({
+                        refRoleId: JSON.stringify([15, 20]),
+                        entityTypes: entityTypes('COMPETITION'),
+                        compId: id,
+                        offset: null,
+                    })
                     this.setState({ loadvalue: true, allDisabled: false })
                 } else {
                     history.push('/liveScoreCompetitions')
                 }
             }
-
 
             if (this.state.isEdit == true) {
                 let isLineUpEnable = null
@@ -134,7 +142,6 @@ class LiveScoreAddMatch extends Component {
                     const { lineupSelectionEnabled, status } = JSON.parse(getLiveScoreCompetiton())
                     isLineUpEnable = lineupSelectionEnabled
                     match_status = status
-
                 }
 
                 if (isLineUpEnable == 1) {
@@ -144,22 +151,19 @@ class LiveScoreAddMatch extends Component {
                     this.setState({ isLineUp: 0 })
                     this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 0)
                 }
-
             } else {
                 this.props.liveScoreUpdateMatchAction('', "addMatch")
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            history.push('/liveScoreCompetitions');
         }
     }
 
     componentDidUpdate(nextProps) {
-
         let { addEditMatch, start_date, start_time, displayTime } = this.props.liveScoreMatchState
 
         if (this.state.isEdit == true) {
             if (nextProps.liveScoreMatchState !== this.props.liveScoreMatchState) {
-
                 if (this.props.liveScoreMatchState.matchLoad == false && this.state.loadvalue == true) {
                     // const { id } = JSON.parse(getLiveScoreCompetiton())
                     let division = this.props.liveScoreMatchState.matchData.divisionId
@@ -167,7 +171,6 @@ class LiveScoreAddMatch extends Component {
                     this.props.getliveScoreTeams(this.state.compId, division)
                     this.props.liveScoreRoundListAction(this.state.compId, division)
                     this.setState({ loadvalue: false })
-
                 }
             }
         }
@@ -176,7 +179,7 @@ class LiveScoreAddMatch extends Component {
             if (this.props.liveScoreMatchState.roundLoad == false && this.state.roundLoad == true) {
                 this.setState({ roundLoad: false })
                 let addedRound = this.props.liveScoreMatchState.addEditMatch.roundId
-                this.props.form.setFieldsValue({
+                this.formRef.current.setFieldsValue({
                     'round': addedRound,
                 })
             }
@@ -188,7 +191,7 @@ class LiveScoreAddMatch extends Component {
         let formated_date = moment(start_date).format("DD-MM-YYYY")
         let time_formate = moment(displayTime).format("HH:mm");
 
-        this.props.form.setFieldsValue({
+        this.formRef.current.setFieldsValue({
             'date': moment(start_date, "DD-MM-YYYY"),
             'time': moment(time_formate, "HH:mm"),
             'division': data.division ? data.division.name : "",
@@ -206,7 +209,6 @@ class LiveScoreAddMatch extends Component {
             'extraTimeMainBreak': data.extraTimeType === 'FOUR_QUARTERS' ? data.extraTimeMainBreak : data.extraTimeBreak,
             'extraTimeqtrBreak': data.extraTimeType === 'FOUR_QUARTERS' ? data.extraTimeBreak : null,
         })
-
     }
 
     ////method to show modal view after click
@@ -231,7 +233,6 @@ class LiveScoreAddMatch extends Component {
         });
     };
 
-
     onCreateRound = () => {
         let { addEditMatch, highestSequence } = this.props.liveScoreMatchState
         let sequence = (highestSequence == -Infinity ? 0 : highestSequence) + 1
@@ -243,29 +244,26 @@ class LiveScoreAddMatch extends Component {
     }
 
     ////modal view
-    ModalView(getFieldDecorator) {
+    ModalView() {
         return (
             <Modal
                 title={AppConstants.round}
                 visible={this.state.visible}
-                onOk={this.state.createRound.length == 0 ? this.handleSubmit : this.onCreateRound}
+                onOk={this.state.createRound.length === 0 ? this.handleSubmit : this.onCreateRound}
                 onCancel={this.handleCancel}
                 onChange={(createRound) => this.props.liveScoreUpdateMatchAction(createRound, "")}
                 okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
-                okText={'Save'}
-                centered={true}
+                okText="Save"
+                centered
             >
-                <Form.Item>
-                    {getFieldDecorator('addRound', {
-                        rules: [{ required: false, message: ValidationConstants.roundField }]
-                    })(
-                        <InputWithHead
-                            required={"required-field pb-0 pt-0"}
-                            heading={AppConstants.round}
-                            placeholder={AppConstants.round}
-                            // value={this.state.createRound}
-                            onChange={(e) => this.setState({ createRound: e.target.value })} />
-                    )}
+                <Form.Item name="addRound" rules={[{ required: false, message: ValidationConstants.roundField }]}>
+                    <InputWithHead
+                        required="required-field pb-0 pt-0"
+                        heading={AppConstants.round}
+                        placeholder={AppConstants.round}
+                        // value={this.state.createRound}
+                        onChange={(e) => this.setState({ createRound: e.target.value })}
+                    />
                 </Form.Item>
             </Modal>
         )
@@ -277,7 +275,6 @@ class LiveScoreAddMatch extends Component {
     }
 
     forefeitedTeamResult = () => {
-
         let { addEditMatch, matchData, start_date, start_time, matchResult, forfietedTeam } = this.props.liveScoreMatchState
 
         let date = new Date()
@@ -286,12 +283,9 @@ class LiveScoreAddMatch extends Component {
         let endMatchDateTime = moment(endMatchDate + " " + endMatchTime);
         let formatEndMatchDate = new Date(endMatchDateTime).toISOString()
         let matchStatus = 'ENDED'
-
         let match_date_ = start_date ? moment(start_date, "DD-MM-YYYY") : null
         let startDate = match_date_ ? moment(match_date_).format("YYYY-MMM-DD") : null
         let start = start_time ? moment(start_time).format("HH:mm") : null
-
-
         let datetimeA = moment(startDate + " " + start);
         let formated__Date = new Date(datetimeA).toISOString()
 
@@ -306,21 +300,17 @@ class LiveScoreAddMatch extends Component {
                 let team1resultId = matchResult[4].id
                 let team2resultId = matchResult[3].id
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
-
             } else if (forfietedTeam == 'team2') {
                 this.setState({ forfeitVisible: false })
                 let team1resultId = matchResult[3].id
                 let team2resultId = matchResult[4].id
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
-
             } else if (forfietedTeam == 'both') {
                 this.setState({ forfeitVisible: false })
                 let team1resultId = matchResult[5].id
                 let team2resultId = matchResult[5].id
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
-
             }
-
         } else {
             message.config({
                 duration: 1.5,
@@ -328,11 +318,10 @@ class LiveScoreAddMatch extends Component {
             });
             message.error(ValidationConstants.pleaseSelectTeam)
         }
-
     }
 
     ////modal view
-    forfietModalView(getFieldDecorator) {
+    forfietModalView() {
         let { addEditMatch, forfietedTeam } = this.props.liveScoreMatchState
 
         return (
@@ -343,35 +332,30 @@ class LiveScoreAddMatch extends Component {
                 onCancel={() => this.onModalCancel()}
                 // onChange={(createRound) => this.props.liveScoreUpdateMatchAction(createRound, "")}
                 okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
-                okText={'Save'}
-                centered={true}
+                okText="Save"
+                centered
             >
-                <div className="col-sm" >
-                    <InputWithHead required={"required-field"} heading={AppConstants.whichTeamForfieted} />
+                <div className="col-sm">
+                    <InputWithHead required="required-field" heading={AppConstants.whichTeamForfieted} />
 
                     <Select
                         showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={(value) => this.props.liveScoreUpdateMatchAction(value, "forfietedTeam")}
                         value={forfietedTeam ? forfietedTeam : undefined}
-                        placeholder={'Select Team'}
+                        placeholder="Select Team"
                         optionFilterProp="children"
                     >
-                        <Option key={'team1'} value={'team1'} > {addEditMatch.team1.name}</Option>
-                        <Option key={'team2'} value={'team2'} > {addEditMatch.team2.name}</Option>
-                        <Option key={'both'} value={'both'} > {'Both'}</Option>
+                        <Option key={'team1'} value={'team1'}> {addEditMatch.team1.name}</Option>
+                        <Option key={'team2'} value={'team2'}> {addEditMatch.team2.name}</Option>
+                        <Option key={'both'} value={'both'}> {'Both'}</Option>
                     </Select>
-
-
                 </div>
             </Modal>
-
-
         )
     }
 
     abandonReasonResult = () => {
-
         let { addEditMatch, matchData, start_date, start_time, matchResult, abandoneReason } = this.props.liveScoreMatchState
         let date = new Date()
         let endMatchDate = moment(date).format("YYYY-MMM-DD")
@@ -379,12 +363,9 @@ class LiveScoreAddMatch extends Component {
         let endMatchDateTime = moment(endMatchDate + " " + endMatchTime);
         let formatEndMatchDate = new Date(endMatchDateTime).toISOString()
         let matchStatus = 'ENDED'
-
         let match_date_ = start_date ? moment(start_date, "DD-MM-YYYY") : null
         let startDate = match_date_ ? moment(match_date_).format("YYYY-MMM-DD") : null
         let start = start_time ? moment(start_time).format("HH:mm") : null
-
-
         let datetimeA = moment(startDate + " " + start);
         let formated__Date = new Date(datetimeA).toISOString()
 
@@ -399,15 +380,12 @@ class LiveScoreAddMatch extends Component {
                 let team1resultId = matchResult[7].id
                 let team2resultId = matchResult[7].id
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
-
             } else if (abandoneReason == 'notPlayed') {
                 this.setState({ abandonVisible: false })
                 let team1resultId = matchResult[8].id
                 let team2resultId = matchResult[8].id
                 this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
-
             }
-
         } else {
             message.config({
                 duration: 1.5,
@@ -415,7 +393,6 @@ class LiveScoreAddMatch extends Component {
             });
             message.error(ValidationConstants.selectAbandonMatchReason)
         }
-
     }
 
     abandonMatchView() {
@@ -428,24 +405,23 @@ class LiveScoreAddMatch extends Component {
                 onCancel={() => this.onModalCancel()}
                 // onChange={(createRound) => this.props.liveScoreUpdateMatchAction(createRound, "")}
                 okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
-                okText={'Save'}
-                centered={true}
+                okText="Save"
+                centered
             >
-                <div className="col-sm" >
-                    <InputWithHead required={"required-field"} heading={AppConstants.matchAbandoned} />
+                <div className="col-sm">
+                    <InputWithHead required="required-field" heading={AppConstants.matchAbandoned} />
 
                     <Select
                         showSearch
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={(value) => this.props.liveScoreUpdateMatchAction(value, "abandoneReason")}
                         value={abandoneReason ? abandoneReason : undefined}
-                        placeholder={'Select Reason'}
+                        placeholder="Select Reason"
                         optionFilterProp="children"
                     >
-                        <Option key={'Incomplete'} value={'Incomplete'} > {'Incomplete'}</Option>
-                        <Option key={'notPlayed'} value={'notPlayed'} > {'Not Played'}</Option>
+                        <Option key="Incomplete" value="Incomplete">Incomplete</Option>
+                        <Option key="notPlayed" value="notPlayed">Not Played</Option>
                     </Select>
-
                 </div>
             </Modal>
         )
@@ -455,20 +431,24 @@ class LiveScoreAddMatch extends Component {
     headerView = () => {
         return (
             <div className="header-view">
-                <Header className="form-header-view" style={{
-                    backgroundColor: "transparent",
-                    display: "flex",
-                    alignItems: "center",
-
-                }} >
-                    <div className="row" >
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                <Header
+                    className="form-header-view"
+                    style={{
+                        backgroundColor: "transparent",
+                        display: "flex",
+                        alignItems: "center",
+                    }}
+                >
+                    <div className="row">
+                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                             <Breadcrumb separator=" > ">
-                                <Breadcrumb.Item className="breadcrumb-add">{this.state.isEdit == true ? AppConstants.editMatch : AppConstants.addMatch}</Breadcrumb.Item>
+                                <Breadcrumb.Item className="breadcrumb-add">
+                                    {this.state.isEdit == true ? AppConstants.editMatch : AppConstants.addMatch}
+                                </Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
                     </div>
-                </Header >
+                </Header>
             </div>
         )
     }
@@ -481,71 +461,57 @@ class LiveScoreAddMatch extends Component {
     }
 
     /// Duration & Break View
-    duration_break = (getFieldDecorator) => {
+    duration_break = () => {
         let { addEditMatch } = this.props.liveScoreMatchState
         let { allDisabled } = this.state
         return (
-
             <div className="row">
                 <div className="col-sm">
-
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <InputWithHead required={"required-field"} heading={AppConstants.matchDuration} />
-                        <Tooltip background='#ff8237'>
+                        <InputWithHead required="required-field" heading={AppConstants.matchDuration} />
+                        <Tooltip background="#ff8237">
                             <span>{AppConstants.matchDurationMsg}</span>
                         </Tooltip>
                     </div>
 
-                    <Form.Item>
-                        {getFieldDecorator('matchDuration', {
-                            rules: [{ required: true, message: ValidationConstants.durationField }]
-                        })(
-                            <InputNumber
-                                // value={addEditMatch.matchDuration}
-                                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "matchDuration")}
-                                placeholder={'0'}
-                                disabled={allDisabled}
-                            />
-                        )}
+                    <Form.Item name='matchDuration' rules={[{ required: true, message: ValidationConstants.durationField }]}>
+                        <InputNumber
+                            // value={addEditMatch.matchDuration}
+                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                            onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "matchDuration")}
+                            placeholder={'0'}
+                            disabled={allDisabled}
+                        />
                     </Form.Item>
                 </div>
                 <div className="col-sm">
-
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <InputWithHead required={"required-field"} heading={AppConstants.mainBreak} />
-                        <Tooltip background='#ff8237'>
+                        <InputWithHead required="required-field" heading={AppConstants.mainBreak} />
+                        <Tooltip background="#ff8237">
                             <span>{AppConstants.mainBreakMsg}</span>
                         </Tooltip>
                     </div>
-                    <Form.Item>
-                        {getFieldDecorator('mainBreak', {
-                            rules: [{ required: true, message: ValidationConstants.durationField }]
-                        })(
-                            <InputNumber
-                                // value={addEditMatch.mainBreakDuration}
-                                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                onChange={(mainBreakDuration) => this.props.liveScoreUpdateMatchAction(mainBreakDuration, "mainBreakDuration")}
-                                placeholder={'0'}
-                                disabled={allDisabled}
-                            />
-                        )}
+                    <Form.Item name='mainBreak' rules={[{ required: true, message: ValidationConstants.durationField }]}>
+                        <InputNumber
+                            // value={addEditMatch.mainBreakDuration}
+                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                            onChange={(mainBreakDuration) => this.props.liveScoreUpdateMatchAction(mainBreakDuration, "mainBreakDuration")}
+                            placeholder={'0'}
+                            disabled={allDisabled}
+                        />
                     </Form.Item>
                 </div>
-                {addEditMatch.type == "FOUR_QUARTERS" && <div className="col-sm">
-
-                    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <InputWithHead required={"required-field"} heading={AppConstants.qtrBreak} />
-                        <Tooltip background='#ff8237'>
-                            <span>{AppConstants.qtrBreatMsg}</span>
-                        </Tooltip>
-                    </div>
-                    <Form.Item>
-                        {getFieldDecorator('qtrBreak', {
-                            rules: [{ required: true, message: ValidationConstants.durationField }]
-                        })(
+                {addEditMatch.type == "FOUR_QUARTERS" && (
+                    <div className="col-sm">
+                        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                            <InputWithHead required="required-field" heading={AppConstants.qtrBreak} />
+                            <Tooltip background="#ff8237">
+                                <span>{AppConstants.qtrBreatMsg}</span>
+                            </Tooltip>
+                        </div>
+                        <Form.Item name='qtrBreak' rules={[{ required: true, message: ValidationConstants.durationField }]}>
                             <InputNumber
                                 // value={addEditMatch.qtrBreak}
                                 formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -554,20 +520,14 @@ class LiveScoreAddMatch extends Component {
                                 placeholder={'0'}
                                 disabled={allDisabled}
                             />
-                        )}
-                    </Form.Item>
-                </div>}
+                        </Form.Item>
+                    </div>
+                )}
             </div>
         );
     }
 
-    handleSubmit = e => {
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-
-            }
-        });
+    handleSubmit = values => {
     };
 
     selectDivision(divisionId) {
@@ -579,22 +539,21 @@ class LiveScoreAddMatch extends Component {
     }
 
     setUmpireClub(clubId) {
-
         this.props.liveScoreUpdateMatchAction(clubId, 'umpireClubId')
     }
 
-    ///// On Court Seatch
+    ///// On Court Search
     onSearchCourts(value, key) {
         this.props.searchFilterAction(value, key)
     }
+
     onSearchTeams(value, key) {
         // const { id } = JSON.parse(getLiveScoreCompetiton())
         // this.props.onTeamSearch(id, this.state.selectedDivision ,value, key)
     }
 
-
     //// Form View
-    contentView = (getFieldDecorator) => {
+    contentView = () => {
         let { addEditMatch, divisionList, roundList, teamResult, recordUmpireType, scorer1, scorer2, umpire1Name, umpire2Name, umpire1TextField, umpire2TextField, umpire1Orag, umpire2Orag, umpireReserve, umpireCoach } = this.props.liveScoreMatchState
         let { venueData, clubListData } = this.props.liveScoreMatchState
         const { scorerListResult } = this.props.liveScoreState
@@ -604,101 +563,88 @@ class LiveScoreAddMatch extends Component {
         let { allDisabled } = this.state
         return (
             <div className="content-view pt-4">
-                <div className="row" >
-                    <div className="col-sm" >
-                        <InputWithHead required={"required-field"} heading={AppConstants.date} />
+                <div className="row">
+                    <div className="col-sm">
+                        <InputWithHead required="required-field" heading={AppConstants.date} />
 
-                        <Form.Item>
-                            {getFieldDecorator('date', {
-                                rules: [{ required: true, message: ValidationConstants.dateField }]
-                            })(
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    onChange={(date) => this.props.liveScoreUpdateMatchAction(date, "start_date")}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    name={'registrationOepn'}
-                                    placeholder={"dd-mm-yyyy"}
-                                    disabled={allDisabled}
-                                />
-                            )}
+                        <Form.Item name='date' rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                            <DatePicker
+                                size="large"
+                                style={{ width: "100%" }}
+                                onChange={(date) => this.props.liveScoreUpdateMatchAction(date, "start_date")}
+                                format="DD-MM-YYYY"
+                                showTime={false}
+                                name={'registrationOepn'}
+                                placeholder="dd-mm-yyyy"
+                                disabled={allDisabled}
+                            />
                         </Form.Item>
                     </div>
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.startTime} />
-                        <Form.Item>
-                            {getFieldDecorator('time', {
-                                rules: [{ required: true, message: ValidationConstants.dateField }]
-                            })(
-                                <TimePicker
-                                    className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
-                                    onChange={(time) => this.props.liveScoreUpdateMatchAction(time, 'start_time')}
-                                    format={"HH:mm"}
-                                    placeholder='Select Time'
-                                    defaultOpenValue={moment("00:00", "HH:mm")}
-                                    use12Hours={false}
-                                    disabled={allDisabled}
-                                />
-                            )}
+                        <Form.Item name='time' rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                            <TimePicker
+                                className="comp-venue-time-timepicker"
+                                style={{ width: "100%" }}
+                                onChange={(time) => this.props.liveScoreUpdateMatchAction(time, 'start_time')}
+                                format={"HH:mm"}
+                                placeholder='Select Time'
+                                defaultOpenValue={moment("00:00", "HH:mm")}
+                                use12Hours={false}
+                                disabled={allDisabled}
+                            />
                         </Form.Item>
                     </div>
                 </div>
 
-                <div className="row" >
-                    <div className="col-sm" >
-                        <InputWithHead required={"required-field"} heading={AppConstants.division} />
-                        <Form.Item>
-                            {getFieldDecorator('division', {
-                                rules: [{ required: true, message: ValidationConstants.divisionField }]
-                            })(
-                                <Select
-                                    showSearch
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={(divisionName) => this.selectDivision(divisionName)}
-                                    // value={addEditMatch.divisionId}
-                                    placeholder={'Select Division'}
-                                    optionFilterProp="children"
-                                    disabled={allDisabled}
-                                >
-                                    {isArrayNotEmpty(divisionList) && divisionList.map((item) => (
-                                        <Option key={item.id} value={item.id} > {item.name}</Option>
-                                    ))
-                                    }
-                                </Select>
-                            )}
+                <div className="row">
+                    <div className="col-sm">
+                        <InputWithHead required="required-field" heading={AppConstants.division} />
+                        <Form.Item name='division' rules={[{ required: true, message: ValidationConstants.divisionField }]}>
+                            <Select
+                                showSearch
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                onChange={(divisionName) => this.selectDivision(divisionName)}
+                                // value={addEditMatch.divisionId}
+                                placeholder={'Select Division'}
+                                optionFilterProp="children"
+                                disabled={allDisabled}
+                            >
+                                {isArrayNotEmpty(divisionList) && divisionList.map((item) => (
+                                    <Option key={item.id} value={item.id}> {item.name}</Option>
+                                ))}
+                            </Select>
                         </Form.Item>
-
                     </div>
                     <div className="col-sm">
-                        <InputWithHead required={"required-field"} heading={AppConstants.type} />
-                        <Form.Item>
-                            {getFieldDecorator('type', {
-                                rules: [{ required: true, message: ValidationConstants.typeField }]
-                            })(
-                                <Select
-                                    loading={addEditMatch.team1 && false}
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={(type) => this.props.liveScoreUpdateMatchAction(type, 'type')}
-                                    // value={addEditMatch.type}
-                                    placeholder={'Select Type'}
-                                    disabled={allDisabled}
-                                >
-                                    {/* <Option value={'SINGLE'}> Single</Option> */}
-                                    <Option value={"TWO_HALVES"}>Halves</Option>
-                                    <Option value={"FOUR_QUARTERS"}>Quarters</Option>
-                                </Select>
-                            )}
+                        <InputWithHead required="required-field" heading={AppConstants.type} />
+                        <Form.Item name='type' rules={[{ required: true, message: ValidationConstants.typeField }]}>
+                            <Select
+                                loading={addEditMatch.team1 && false}
+                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                onChange={(type) => this.props.liveScoreUpdateMatchAction(type, 'type')}
+                                // value={addEditMatch.type}
+                                placeholder={'Select Type'}
+                                disabled={allDisabled}
+                            >
+                                {/* <Option value={'SINGLE'}> Single</Option> */}
+                                <Option value={"TWO_HALVES"}>Halves</Option>
+                                <Option value={"FOUR_QUARTERS"}>Quarters</Option>
+                            </Select>
                         </Form.Item>
                     </div>
                 </div>
 
-                <div className="row" >
-                    <div className="col-sm" >
-                        <InputWithHead value={addEditMatch.competition.name} disabled={true} heading={AppConstants.competition} placeholder={AppConstants.competition} />
+                <div className="row">
+                    <div className="col-sm">
+                        <InputWithHead
+                            value={addEditMatch.competition.name}
+                            disabled
+                            heading={AppConstants.competition}
+                            placeholder={AppConstants.competition}
+                        />
                     </div>
-                    <div className="col-sm" >
+                    <div className="col-sm">
                         <InputWithHead heading={AppConstants.matchID} />
                         <InputNumber
                             formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '')}
@@ -710,140 +656,116 @@ class LiveScoreAddMatch extends Component {
                         />
                     </div>
                 </div>
-                {addEditMatch.divisionId &&
-                    <div className="row" >
-                        <div className="col-sm-6" >
-                            <InputWithHead required={"required-field"} heading={AppConstants.homeTeam} />
-                            <Form.Item>
-                                {getFieldDecorator('home', {
-                                    rules: [{ required: true, message: ValidationConstants.homeField }]
-                                })(
-                                    <Select
-                                        showSearch
-                                        className="reg-form-multiple-select"
-                                        placeholder='Select Home Team'
-                                        style={{ width: "100%" }}
-                                        onChange={(homeTeam) => this.props.liveScoreUpdateMatchAction(homeTeam, "team1id")}
-                                        // value={addEditMatch.team1Id ? addEditMatch.team1Id : ''}
-                                        // onSearch={(e) => this.onSearchTeams(e, "homeTeam")}
-                                        optionFilterProp="children"
-                                        disabled={allDisabled}
-                                    >
-                                        {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
-                                            < Option value={item.id} > {item.name}</Option>
-                                        ))
-                                        }
-                                    </Select>
-                                )}
-                            </Form.Item>
-                        </div>
-                        <div className="col-sm-6" >
-                            <InputWithHead required={"required-field"} heading={AppConstants.awayTeam} />
-                            <Form.Item>
-                                {getFieldDecorator('away', {
-                                    rules: [{ required: true, message: ValidationConstants.awayField }]
-                                })(
-                                    <Select
-                                        showSearch
-                                        onSearch={(e) => this.onSearchTeams(e, "awayTeam")}
-                                        disabled={allDisabled}
-                                        optionFilterProp="children"
-                                        className="reg-form-multiple-select"
-                                        placeholder={'Select Away Team'}
-                                        style={{ width: "100%", }}
-                                        onChange={(awayTeam) => this.props.liveScoreUpdateMatchAction(awayTeam, "team2id")}
-                                    // value={addEditMatch.team2Id ? addEditMatch.team2Id : ''}
-                                    >
-                                        {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
-                                            < Option value={item.id} > {item.name}</Option>
-                                        ))
-                                        }
-
-                                    </Select>
-                                )}
-                            </Form.Item>
-                        </div>
-                    </div>
-                }
-
-                <div className="row" >
-                    <div className="col-sm-6" >
-                        <InputWithHead required={"required-field"} heading={AppConstants.venue} />
-                        <Form.Item>
-                            {getFieldDecorator('venue', {
-                                rules: [{ required: true, message: ValidationConstants.venueField }]
-                            })(
+                {addEditMatch.divisionId && (
+                    <div className="row">
+                        <div className="col-sm-6">
+                            <InputWithHead required="required-field" heading={AppConstants.homeTeam} />
+                            <Form.Item name='home' rules={[{ required: true, message: ValidationConstants.homeField }]}>
                                 <Select
                                     showSearch
                                     className="reg-form-multiple-select"
-                                    placeholder={AppConstants.selectVenue}
-                                    style={{ width: "100%", }}
-                                    onChange={(venueId) => this.props.liveScoreUpdateMatchAction(venueId, "venueId")}
-                                    // value={addEditMatch.venueCourtId}
-                                    onSearch={(e) => this.onSearchCourts(e, "courts")}
+                                    placeholder='Select Home Team'
+                                    style={{ width: "100%" }}
+                                    onChange={(homeTeam) => this.props.liveScoreUpdateMatchAction(homeTeam, "team1id")}
+                                    // value={addEditMatch.team1Id ? addEditMatch.team1Id : ''}
+                                    // onSearch={(e) => this.onSearchTeams(e, "homeTeam")}
                                     optionFilterProp="children"
                                     disabled={allDisabled}
                                 >
-                                    {venueData && venueData.map((item) => {
-                                        return (
-                                            <Option key={'venue' + item.id}
-                                                value={item.venueCourtId}>
-                                                {item.name}
-                                            </Option>
-                                        )
-                                    })}
-
+                                    {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
+                                        <Option value={item.id}> {item.name}</Option>
+                                    ))}
                                 </Select>
-                            )}
+                            </Form.Item>
+                        </div>
+                        <div className="col-sm-6">
+                            <InputWithHead required="required-field" heading={AppConstants.awayTeam} />
+                            <Form.Item name='away' rules={[{ required: true, message: ValidationConstants.awayField }]}>
+                                <Select
+                                    showSearch
+                                    onSearch={(e) => this.onSearchTeams(e, "awayTeam")}
+                                    disabled={allDisabled}
+                                    optionFilterProp="children"
+                                    className="reg-form-multiple-select"
+                                    placeholder={'Select Away Team'}
+                                    style={{ width: "100%", }}
+                                    onChange={(awayTeam) => this.props.liveScoreUpdateMatchAction(awayTeam, "team2id")}
+                                // value={addEditMatch.team2Id ? addEditMatch.team2Id : ''}
+                                >
+                                    {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
+                                        <Option value={item.id}> {item.name}</Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </div>
+                    </div>
+                )}
+
+                <div className="row">
+                    <div className="col-sm-6">
+                        <InputWithHead required="required-field" heading={AppConstants.venue} />
+                        <Form.Item name='venue' rules={[{ required: true, message: ValidationConstants.venueField }]}>
+                            <Select
+                                showSearch
+                                className="reg-form-multiple-select"
+                                placeholder={AppConstants.selectVenue}
+                                style={{ width: "100%", }}
+                                onChange={(venueId) => this.props.liveScoreUpdateMatchAction(venueId, "venueId")}
+                                // value={addEditMatch.venueCourtId}
+                                onSearch={(e) => this.onSearchCourts(e, "courts")}
+                                optionFilterProp="children"
+                                disabled={allDisabled}
+                            >
+                                {venueData && venueData.map((item) => (
+                                    <Option key={'venue' + item.id} value={item.venueCourtId}>
+                                        {item.name}
+                                    </Option>
+                                ))}
+                            </Select>
                         </Form.Item>
                     </div>
-                    {
-                        addEditMatch.divisionId &&
-                        <div className="col-sm-6" >
-                            <InputWithHead required={"required-field"} heading={AppConstants.round} />
-                            <Form.Item>
-                                {getFieldDecorator('round', {
-                                    rules: [{ required: true, message: ValidationConstants.roundField }]
-                                })(
-                                    <Select
-                                        //   mode="multiple"
-                                        showSearch
-                                        onChange={(round) => this.props.liveScoreUpdateMatchAction(round, "roundId")}
-                                        placeholder={'Select Round'}
-                                        style={{ width: "100%", }}
-                                        // value={addEditMatch.roundId ? addEditMatch.roundId : ''}
-                                        optionFilterProp="children"
-                                        disabled={allDisabled}
-                                    >
-                                        {isArrayNotEmpty(roundList) && roundList.map((item) => (
-                                            < Option value={item.id} > {item.name}</Option>
-                                        ))
-                                        }
-                                    </Select>
-                                )}
+                    {addEditMatch.divisionId && (
+                        <div className="col-sm-6">
+                            <InputWithHead required="required-field" heading={AppConstants.round} />
+                            <Form.Item name='round' rules={[{ required: true, message: ValidationConstants.roundField }]}>
+                                <Select
+                                    // mode="multiple"
+                                    showSearch
+                                    onChange={(round) => this.props.liveScoreUpdateMatchAction(round, "roundId")}
+                                    placeholder={'Select Round'}
+                                    style={{ width: "100%", }}
+                                    // value={addEditMatch.roundId ? addEditMatch.roundId : ''}
+                                    optionFilterProp="children"
+                                    disabled={allDisabled}
+                                >
+                                    {isArrayNotEmpty(roundList) && roundList.map((item) => (
+                                        <Option value={item.id}> {item.name}</Option>
+                                    ))}
+                                </Select>
                             </Form.Item>
-                            <span style={{ cursor: 'pointer', paddingTop: 11 }} onClick={() => allDisabled === false ? this.showModal() : null} className="input-heading-add-another">
+                            <span
+                                style={{ cursor: 'pointer', paddingTop: 11 }}
+                                onClick={() => allDisabled === false ? this.showModal() : null}
+                                className="input-heading-add-another"
+                            >
                                 + {AppConstants.addNewRound}
                             </span>
                         </div>
-                    }
+                    )}
                 </div>
-                {this.duration_break(getFieldDecorator)}
+                {this.duration_break()}
 
-                {this.finalFieldsView(getFieldDecorator)}
+                {this.finalFieldsView()}
 
                 {/* Umpire */}
 
                 {recordUmpireType == 'NONE' ?
                     null :
-                    recordUmpireType == 'USERS' ?
+                    recordUmpireType == 'USERS' ? (
                         <div>
-                            <div className="row" >
-                                <div className="col-sm" >
-
-                                    <InputWithHead
-                                        heading={AppConstants.umpire1Name}
-                                    />
+                            <div className="row">
+                                <div className="col-sm">
+                                    <InputWithHead heading={AppConstants.umpire1Name} />
                                     <Select
                                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                         onChange={(umpire1Name) => this.props.liveScoreUpdateMatchAction(umpire1Name, 'umpire1NameSelection')}
@@ -854,12 +776,9 @@ class LiveScoreAddMatch extends Component {
                                             <option key={item.id} value={item.id}>{item.firstName + " " + item.lastName}</option>
                                         ))}
                                     </Select>
-
                                 </div>
-                                <div className="col-sm" >
-                                    <InputWithHead
-                                        heading={AppConstants.umpire2Name}
-                                    />
+                                <div className="col-sm">
+                                    <InputWithHead heading={AppConstants.umpire2Name} />
                                     <Select
                                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                         onChange={(umpire2Name) => this.props.liveScoreUpdateMatchAction(umpire2Name, 'umpire2NameSelection')}
@@ -874,12 +793,9 @@ class LiveScoreAddMatch extends Component {
                             </div>
                             {/* Umpire Reserve and Umpire Coach dpdn */}
 
-                            <div className="row" >
-                                <div className="col-sm" >
-
-                                    <InputWithHead
-                                        heading={AppConstants.umpireReserve}
-                                    />
+                            <div className="row">
+                                <div className="col-sm">
+                                    <InputWithHead heading={AppConstants.umpireReserve} />
                                     <Select
                                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                         onChange={(umpireReserve) => this.props.liveScoreUpdateMatchAction(umpireReserve, 'umpireReserve')}
@@ -890,12 +806,9 @@ class LiveScoreAddMatch extends Component {
                                             <option key={item.id} value={item.id}>{item.firstName + " " + item.lastName}</option>
                                         ))}
                                     </Select>
-
                                 </div>
-                                <div className="col-sm" >
-                                    <InputWithHead
-                                        heading={AppConstants.umpireCoach}
-                                    />
+                                <div className="col-sm">
+                                    <InputWithHead heading={AppConstants.umpireCoach} />
                                     <Select
                                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                         placeholder={'Select Umpire Coach'}
@@ -908,79 +821,81 @@ class LiveScoreAddMatch extends Component {
                                     </Select>
                                 </div>
                             </div>
-
                         </div>
-                        :
-                        recordUmpireType == 'NAMES' ?
-                            <div>
-                                <div className="row" >
-                                    <div className="col-sm" >
-
-                                        <InputWithHead
-                                            type='text'
-                                            heading={AppConstants.umpire1Name}
-                                            // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1') }}
-                                            // value={addEditMatch.umpire1}
-                                            onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1TextField') }}
-                                            value={umpire1TextField ? umpire1TextField : undefined}
-                                            placeholder={AppConstants.enterUmpire1name} />
-
+                    ) : (
+                            recordUmpireType == 'NAMES' && (
+                                <div>
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                type='text'
+                                                heading={AppConstants.umpire1Name}
+                                                // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1') }}
+                                                // value={addEditMatch.umpire1}
+                                                onChange={(e) => {
+                                                    this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire1TextField')
+                                                }}
+                                                value={umpire1TextField ? umpire1TextField : undefined}
+                                                placeholder={AppConstants.enterUmpire1name}
+                                            />
+                                        </div>
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                heading={AppConstants.umpire2Name}
+                                                // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2') }}
+                                                // value={addEditMatch.umpire2}
+                                                onChange={(e) => {
+                                                    this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2TextField')
+                                                }}
+                                                value={umpire2TextField}
+                                                placeholder={AppConstants.enterUmpire2name}
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="col-sm" >
-                                        <InputWithHead
-                                            heading={AppConstants.umpire2Name}
-                                            // onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2') }}
-                                            // value={addEditMatch.umpire2}
-                                            onChange={(e) => { this.props.liveScoreUpdateMatchAction(captializedString(e.target.value), 'umpire2TextField') }}
-                                            value={umpire2TextField}
-                                            placeholder={AppConstants.enterUmpire2name} />
+
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <InputWithHead heading={AppConstants.umpire1Club} />
+                                            <Select
+                                                // mode='multiple'
+                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                // onChange={(umpire1Club) => this.setUmpireClub(umpire1Club)}
+                                                onChange={(umpire1Orag) => {
+                                                    this.props.liveScoreUpdateMatchAction(umpire1Orag, 'umpire1Orag')
+                                                }}
+                                                value={umpire1Orag ? umpire1Orag : undefined}
+                                                placeholder={'Select Umpire 1 Organisation'}
+                                            >
+                                                {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
+                                                    <Option key={item.id} value={item.id}> {item.name}</Option>
+                                                ))}
+                                            </Select>
+                                        </div>
+                                        <div className="col-sm">
+                                            <InputWithHead heading={AppConstants.umpire2Club} />
+                                            <Select
+                                                // mode='multiple'
+                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                // onChange={(umpire2Club) => this.setUmpireClub(umpire2Club)}
+                                                onChange={(umpire2Orag) => {
+                                                    this.props.liveScoreUpdateMatchAction(umpire2Orag, 'umpire2Orag')
+                                                }}
+                                                value={umpire2Orag ? umpire2Orag : undefined}
+                                                placeholder={'Select Umpire 2 Organisation'}
+                                            >
+                                                {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
+                                                    <option key={item.id} value={item.id}>{item.name}</option>
+                                                ))}
+                                            </Select>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div className="row" >
-                                    <div className="col-sm" >
-                                        <InputWithHead heading={AppConstants.umpire1Club} />
-                                        <Select
-                                            // mode='multiple'
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            // onChange={(umpire1Club) => this.setUmpireClub(umpire1Club)}
-                                            onChange={(umpire1Orag) => { this.props.liveScoreUpdateMatchAction(umpire1Orag, 'umpire1Orag') }}
-                                            value={umpire1Orag ? umpire1Orag : undefined}
-                                            placeholder={'Select Umpire 1 Organisation'}
-                                        >
-
-                                            {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
-                                                <Option key={item.id} value={item.id} > {item.name}</Option>
-                                            ))
-                                            }
-                                        </Select>
-                                    </div>
-                                    <div className="col-sm" >
-                                        <InputWithHead heading={AppConstants.umpire2Club} />
-                                        <Select
-                                            // mode='multiple'
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            // onChange={(umpire2Club) => this.setUmpireClub(umpire2Club)}
-                                            onChange={(umpire2Orag) => { this.props.liveScoreUpdateMatchAction(umpire2Orag, 'umpire2Orag') }}
-                                            value={umpire2Orag ? umpire2Orag : undefined}
-                                            placeholder={'Select Umpire 2 Organisation'}
-                                        >
-                                            {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
-                                                <option key={item.id} value={item.id}>{item.name}</option>
-                                            ))}
-                                        </Select>
-                                    </div>
-                                </div>
-                            </div>
-                            :
-                            null
+                            )
+                        )
                 }
 
-
-
-
-                <div className="row" >
-                    <div className="col-sm-6" >
+                <div className="row">
+                    <div className="col-sm-6">
                         <InputWithHead heading={AppConstants.scorer1} />
                         <Select
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -990,17 +905,16 @@ class LiveScoreAddMatch extends Component {
                             value={scorer1 ? scorer1 : undefined}
                             disabled={allDisabled}
                         >
-                            {scorerListResult.map((item) => {
-                                return <Option key={'venue' + item.id} value={item.id}>
+                            {scorerListResult.map((item) => (
+                                <Option key={'venue' + item.id} value={item.id}>
                                     {item.NameWithNumber}
                                 </Option>
-                            })}
+                            ))}
                         </Select>
                     </div>
 
-                    {
-                        this.state.scoringType !== 'SINGLE' &&
-                        <div className="col-sm-6" >
+                    {this.state.scoringType !== 'SINGLE' && (
+                        <div className="col-sm-6">
                             <InputWithHead heading={AppConstants.scorer2} />
                             <Select
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -1009,24 +923,24 @@ class LiveScoreAddMatch extends Component {
                                 value={scorer2 ? scorer2 : undefined}
                                 disabled={allDisabled}
                             >
-                                {scorerListResult.map((item) => {
-                                    return <Option key={'venue' + item.id} value={item.id}>
+                                {scorerListResult.map((item) => (
+                                    <Option key={'venue' + item.id} value={item.id}>
                                         {item.NameWithNumber}
                                     </Option>
-                                })}
+                                ))}
                             </Select>
                         </div>
-                    }
+                    )}
                 </div>
 
-                {
-                    this.state.isEdit == true && <div className="row" >
-                        <div className="col-sm" >
+                {this.state.isEdit == true && (
+                    <div className="row">
+                        <div className="col-sm">
                             <InputWithHead
                                 heading={AppConstants.homeTeamFinalScore}
                                 placeholder={AppConstants.enterHomeTeamFinalScore}
                                 onChange={(event) => this.props.liveScoreUpdateMatchAction(event.target.value, "team1Score")}
-                                name={"team1Score"}
+                                name="team1Score"
                                 value={addEditMatch.team1Score}
                                 disabled={allDisabled}
                             />
@@ -1036,19 +950,17 @@ class LiveScoreAddMatch extends Component {
                                 heading={AppConstants.awayTeamFinalScore}
                                 placeholder={AppConstants.enterAwayTeamFinalScore}
                                 onChange={(event) => this.props.liveScoreUpdateMatchAction(event.target.value, "team2Score")}
-                                name={"team2Score"}
+                                name="team2Score"
                                 value={addEditMatch.team2Score}
                                 disabled={allDisabled}
                             />
                         </div>
                     </div>
+                )}
 
-
-                }
-
-                {
-                    this.state.isEdit == true && <div className="row" >
-                        <div className="col-sm-6" >
+                {this.state.isEdit == true && (
+                    <div className="row">
+                        <div className="col-sm-6">
                             <InputWithHead heading={AppConstants.resultStatus} />
                             <Select
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -1063,26 +975,22 @@ class LiveScoreAddMatch extends Component {
                             </Select>
                         </div>
                     </div>
-
-
-                }
-
-            </div >
+                )}
+            </div>
         )
     }
 
-
-    finalFieldsView(getFieldDecorator) {
+    finalFieldsView() {
         const { addEditMatch } = this.props.liveScoreMatchState
 
         return (
-            <div >
-
-                <Checkbox style={{
-                    display: "-ms-flexbox",
-                    flexDirection: "column",
-                    justifyContent: "center"
-                }}
+            <div>
+                <Checkbox
+                    style={{
+                        display: "-ms-flexbox",
+                        flexDirection: "column",
+                        justifyContent: "center"
+                    }}
                     className="single-checkbox mt-5"
                     onChange={(e) => this.props.liveScoreUpdateMatchAction(e.target.checked, 'isFinals')}
                     checked={addEditMatch.isFinals}
@@ -1091,19 +999,13 @@ class LiveScoreAddMatch extends Component {
                     {AppConstants.finalMatch}
                 </Checkbox>
 
-                {
-                    addEditMatch.isFinals &&
+                {addEditMatch.isFinals && (
                     <div>
-                        <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }} >{AppConstants.extra_Time}</span>
+                        <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }}>{AppConstants.extra_Time}</span>
 
-
-                        <div className="row" >
-                            <div className="col-sm" >
+                        <div className="row">
+                            <div className="col-sm">
                                 <InputWithHead heading={AppConstants.extraTimeType} />
-                                {/* <Form.Item>
-        {getFieldDecorator('extraTimeType', {
-            rules: [{ required: true, message: ValidationConstants.extraTimeType }]
-        })( */}
                                 <Select
                                     showSearch
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -1113,23 +1015,15 @@ class LiveScoreAddMatch extends Component {
                                     value={addEditMatch.extraTimeType ? addEditMatch.extraTimeType : undefined}
                                     disabled={this.state.umpireKey === 'umpire' ? true : false}
                                 >
-                                    <Option key={'SINGLE_PERIOD'} value={'SINGLE_PERIOD'} > {'Single Period'}</Option>
-                                    <Option key={'TWO_HALVES'} value={'TWO_HALVES'} > {'Halves'}</Option>
-                                    <Option key={'FOUR_QUARTERS'} value={'FOUR_QUARTERS'} > {'Quarters'}</Option>
+                                    <Option key={'SINGLE_PERIOD'} value={'SINGLE_PERIOD'}> {'Single Period'}</Option>
+                                    <Option key={'TWO_HALVES'} value={'TWO_HALVES'}> {'Halves'}</Option>
+                                    <Option key={'FOUR_QUARTERS'} value={'FOUR_QUARTERS'}> {'Quarters'}</Option>
                                 </Select>
-
-                                {/* )}
-    </Form.Item> */}
-
                             </div>
 
-                            <div className="col-sm" >
+                            <div className="col-sm">
                                 <InputWithHead heading={AppConstants.extraTimeDuration} />
 
-                                {/* <Form.Item>
-        {getFieldDecorator('extraTimeDuration', {
-            rules: [{ required: true, message: ValidationConstants.durationField }]
-        })( */}
                                 <InputNumber
                                     formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                     parser={value => value.replace(/\$\s?|(,*)/g, '')}
@@ -1138,17 +1032,10 @@ class LiveScoreAddMatch extends Component {
                                     value={addEditMatch.extraTimeDuration}
                                     disabled={this.state.umpireKey === 'umpire' ? true : false}
                                 />
-                                {/* )}
-    </Form.Item> */}
-
                             </div>
 
-                            <div className="col-sm" >
+                            <div className="col-sm">
                                 <InputWithHead heading={AppConstants.extraTimeMainBreak} />
-                                {/* <Form.Item>
-        {getFieldDecorator('extraTimeMainBreak', {
-            rules: [{ required: true, message: ValidationConstants.durationField }]
-        })( */}
                                 <InputNumber
                                     formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                     parser={value => value.replace(/\$\s?|(,*)/g, '')}
@@ -1157,15 +1044,10 @@ class LiveScoreAddMatch extends Component {
                                     value={addEditMatch.extraTimeMainBreak}
                                     disabled={this.state.umpireKey === 'umpire' ? true : false}
                                 />
-                                {/* )}
-    </Form.Item> */}
-
-
                             </div>
 
-                            {
-                                addEditMatch.extraTimeType === 'FOUR_QUARTERS' &&
-                                <div className="col-sm" >
+                            {addEditMatch.extraTimeType === 'FOUR_QUARTERS' && (
+                                <div className="col-sm">
                                     <InputWithHead heading={AppConstants.extraTimeqtrBreak} />
                                     <InputNumber
                                         formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
@@ -1174,55 +1056,41 @@ class LiveScoreAddMatch extends Component {
                                         onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeqtrBreak")}
                                         value={addEditMatch.extraTimeqtrBreak}
                                     />
-
                                 </div>
-                            }
+                            )}
                         </div>
 
-                        <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }} >{AppConstants.extraTime}</span>
+                        <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }}>{AppConstants.extraTime}</span>
 
                         <InputWithHead heading={AppConstants.extraTimeIfDraw2} />
 
                         <Radio.Group
                             className="reg-competition-radio"
-
                             onChange={(e) => this.props.liveScoreUpdateMatchAction(e.target.value, 'extraTimeWinByGoals')}
                             value={addEditMatch.extraTimeWinByGoals}
                             disabled={this.state.umpireKey === 'umpire' ? true : false}
                         >
-
                             <Radio key={1} value={1}>{'1st Goal Wins'}</Radio>
                             <Radio key={2} value={2}>{'2nd Goal Wins'}</Radio>
-                            <Radio key={0} value={0}>{'None'}</Radio>
-
+                            <Radio key={0} value={0}>None</Radio>
                         </Radio.Group>
                     </div>
-                }
-
+                )}
             </div>
         );
     }
 
     endMatchResult() {
-
         let { addEditMatch, matchData, start_date, start_time, matchResult } = this.props.liveScoreMatchState
-
-
         let date = new Date()
         let endMatchDate = moment(date).format("YYYY-MMM-DD")
         let endMatchTime = moment(date).format("HH:mm")
         let endMatchDateTime = moment(endMatchDate + " " + endMatchTime);
         let formatEndMatchDate = new Date(endMatchDateTime).toISOString()
         let matchStatus = 'ENDED'
-
-
-
         let match_date_ = start_date ? moment(start_date, "DD-MM-YYYY") : null
         let startDate = match_date_ ? moment(match_date_).format("YYYY-MMM-DD") : null
         let start = start_time ? moment(start_time).format("HH:mm") : null
-
-
-
         let datetimeA = moment(startDate + " " + start);
         let formated__Date = new Date(datetimeA).toISOString()
 
@@ -1233,477 +1101,465 @@ class LiveScoreAddMatch extends Component {
             let team1resultId = matchResult[0].id
             let team2resultId = matchResult[1].id
             this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
-
         } else if (Number(addEditMatch.team1Score) < Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[1].id
             let team2resultId = matchResult[0].id
             this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
-
         } else if (Number(addEditMatch.team1Score) == Number(addEditMatch.team2Score)) {
             let team1resultId = matchResult[2].id
             let team2resultId = matchResult[2].id
             this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, formatEndMatchDate, this.state.umpireKey)
-
         }
-
     }
 
     ////create match post method
-    addMatchDetails = (e) => {
+    addMatchDetails = () => {
+        let { addEditMatch, matchData, start_date, start_time, start_post_date, umpire1Orag, umpire1TextField, umpire2Orag, umpire2TextField, umpire1Name, umpire2Name, scorer1, scorer2, recordUmpireType, matchUmpireId_1, matchUmpireId_2, scorerRosterId_1, scorerRosterId_2, umpireRosterId_1, umpireRosterId_2, team1id, team2id, matchResult, umpireReserve, umpireCoach } = this.props.liveScoreMatchState
+        let match_date_ = moment(start_date, "DD-MM-YYYY")
+        let startDate = moment(match_date_).format("YYYY-MMM-DD")
+        let start = moment(start_time).format("HH:mm")
 
-        e.preventDefault();
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                let { addEditMatch, matchData, start_date, start_time, start_post_date, umpire1Orag, umpire1TextField, umpire2Orag, umpire2TextField, umpire1Name, umpire2Name, scorer1, scorer2, recordUmpireType, matchUmpireId_1, matchUmpireId_2, scorerRosterId_1, scorerRosterId_2, umpireRosterId_1, umpireRosterId_2, team1id, team2id, matchResult, umpireReserve, umpireCoach } = this.props.liveScoreMatchState
-                let match_date_ = moment(start_date, "DD-MM-YYYY")
-                let startDate = moment(match_date_).format("YYYY-MMM-DD")
-                let start = moment(start_time).format("HH:mm")
+        let datetimeA = moment(startDate + " " + start);
+        let formated__Date = new Date(datetimeA).toISOString()
 
-                let datetimeA = moment(startDate + " " + start);
-                let formated__Date = new Date(datetimeA).toISOString()
+        matchData.startTime = formated__Date
 
-                matchData.startTime = formated__Date
+        let umpireData
+        let scorerData
+        let umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2, umpireReserve_obj, umpireCoach_obj
 
-                let umpireData
-                let scorerData
-                let umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2, umpireReserve_obj, umpireCoach_obj
-
-                if (recordUmpireType == 'NAMES') {
-
-                    if (matchUmpireId_1) {
-                        umpire_1_Obj = {
-                            matchId: this.state.matchId,
-                            organisationId: umpire1Orag,
-                            umpireName: umpire1TextField,
-                            umpireType: recordUmpireType,
-                            sequence: 1,
-                            matchUmpiresId: matchUmpireId_1
-                        }
-                    } else {
-                        umpire_1_Obj = {
-                            matchId: this.state.matchId,
-                            organisationId: umpire1Orag,
-                            umpireName: umpire1TextField,
-                            umpireType: recordUmpireType,
-                            sequence: 1,
-                        }
-
-                    }
-
-                    if (matchUmpireId_2) {
-                        umpire_2_Obj = {
-                            matchId: this.state.matchId,
-                            organisationId: umpire2Orag,
-                            umpireName: umpire2TextField,
-                            umpireType: recordUmpireType,
-                            sequence: 2,
-                            matchUmpiresId: matchUmpireId_2
-                        }
-                    } else {
-                        umpire_2_Obj = {
-                            matchId: this.state.matchId,
-                            organisationId: umpire2Orag,
-                            umpireName: umpire2TextField,
-                            umpireType: recordUmpireType,
-                            sequence: 2,
-                        }
-
-                    }
-
-                    if (scorerRosterId_1) {
-                        scorers_1 = {
-                            matchId: this.state.matchId,
-                            teamId: team1id,
-                            userId: scorer1,
-                            roleId: 4,
-                            rosterId: scorerRosterId_1
-                        }
-
-                    } else {
-                        scorers_1 = {
-                            matchId: this.state.matchId,
-                            teamId: team1id,
-                            userId: scorer1,
-                            roleId: 4,
-                        }
-                    }
-
-                    if (scorerRosterId_2) {
-                        scorers_2 = {
-                            matchId: this.state.matchId,
-                            teamId: team2id,
-                            userId: scorer2,
-                            roleId: 4,
-                            rosterId: scorerRosterId_2
-                        }
-
-                    } else {
-                        scorers_2 = {
-                            matchId: this.state.matchId,
-                            teamId: team2id,
-                            userId: scorer2,
-                            roleId: 4,
-                        }
-
-                    }
-
-
-
-                    if (this.state.scoringType === 'SINGLE') {
-                        if (scorer1) {
-                            scorerData = [scorers_1]
-
-                        }
-
-                    } else {
-                        if (scorer1 && scorer2) {
-                            scorerData = [scorers_1, scorers_2]
-
-                        } else if (scorer1) {
-                            scorerData = [scorers_1]
-
-                        } else if (scorer2) {
-                            scorerData = [scorers_2]
-
-                        }
-
-                    }
-
-                    if (umpire1TextField && umpire2TextField) {
-                        umpireData = [umpire_1_Obj, umpire_2_Obj]
-
-                    } else if (umpire1TextField) {
-                        umpireData = [umpire_1_Obj]
-
-                    } else if (umpire2TextField) {
-                        umpireData = [umpire_2_Obj]
-
-                    }
-
-                    umpireReserve_obj = {
-                        matchId: this.state.matchId,
-                        roleId: 19,
-                        userId: umpireReserve
-                    }
-                    umpireCoach_obj = {
-                        matchId: this.state.matchId,
-                        roleId: 20,
-                        userId: umpireCoach
-                    }
-
-
-                    // umpireData = [umpire_1_Obj, umpire_2_Obj]
-
-                } else if (recordUmpireType == 'USERS') {
-                    umpireReserve_obj = {
-                        matchId: this.state.matchId,
-                        roleId: 19,
-                        userId: umpireReserve
-                    }
-                    umpireCoach_obj = {
-                        matchId: this.state.matchId,
-                        roleId: 20,
-                        userId: umpireCoach
-                    }
-                    if (umpireRosterId_1) {
-                        umpire_1_Obj = {
-                            matchId: this.state.matchId,
-                            userId: umpire1Name,
-                            roleId: 15,
-                            rosterId: umpireRosterId_1
-                        }
-                    } else {
-                        umpire_1_Obj = {
-                            matchId: this.state.matchId,
-                            userId: umpire1Name,
-                            roleId: 15,
-                        }
-                    }
-                    if (umpireRosterId_2) {
-                        umpire_2_Obj = {
-                            matchId: this.state.matchId,
-                            userId: umpire2Name,
-                            roleId: 15,
-                            rosterId: umpireRosterId_2
-                        }
-                    } else {
-                        umpire_2_Obj = {
-                            matchId: this.state.matchId,
-                            userId: umpire2Name,
-                            roleId: 15,
-                        }
-                    }
-                    if (scorerRosterId_1) {
-                        scorers_1 = {
-                            matchId: this.state.matchId,
-                            teamId: team1id,
-                            userId: scorer1,
-                            roleId: 4,
-                            rosterId: scorerRosterId_1
-                        }
-                    } else {
-                        scorers_1 = {
-                            matchId: this.state.matchId,
-                            teamId: team1id,
-                            userId: scorer1,
-                            roleId: 4,
-                        }
-                    }
-                    if (scorerRosterId_2) {
-                        scorers_2 = {
-                            matchId: this.state.matchId,
-                            teamId: team2id,
-                            userId: scorer2,
-                            roleId: 4,
-                            rosterId: scorerRosterId_2
-                        }
-                    } else {
-                        scorers_2 = {
-                            matchId: this.state.matchId,
-                            teamId: team2id,
-                            userId: scorer2,
-                            roleId: 4,
-                        }
-                    }
-                    if (this.state.scoringType === 'SINGLE') {
-                        if (scorers_1) {
-                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
-                        } else {
-                            umpireData = [umpire_1_Obj, umpire_2_Obj]
-                        }
-
-                    } else {
-                        if (umpire1Name && umpire2Name && scorer1 && scorer2) {
-                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2]
-
-                        } else if (umpire1Name && umpire2Name && scorer1) {
-                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
-
-                        } else if (umpire1Name && umpire2Name && scorer2) {
-                            umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_2]
-
-                        } else if (umpire1Name && scorer1 && scorer2) {
-                            umpireData = [umpire_1_Obj, scorers_1, scorers_2]
-
-                        } else if (umpire2Name && scorer1 && scorer2) {
-                            umpireData = [umpire_2_Obj, scorers_1, scorers_2]
-
-                        } else if (umpire1Name && scorer1) {
-                            umpireData = [umpire_1_Obj, scorers_1]
-
-                        } else if (umpire2Name && scorer1) {
-                            umpireData = [umpire_2_Obj, scorers_1]
-
-                        } else if (umpire1Name && scorer2) {
-                            umpireData = [umpire_1_Obj, scorers_2]
-
-                        } else if (umpire2Name && scorer2) {
-                            umpireData = [umpire_2_Obj, scorers_2]
-
-                        } else if (umpire1Name && umpire2Name) {
-                            umpireData = [umpire_1_Obj, umpire_2_Obj]
-
-                        } else if (umpire1Name) {
-                            umpireData = [umpire_1_Obj]
-
-                        } else if (umpire2Name) {
-                            umpireData = [umpire_2_Obj]
-
-                        } else if (scorer1 && scorer2) {
-                            umpireData = [scorers_1, scorers_2]
-
-                        } else if (scorer1) {
-                            umpireData = [scorers_1]
-
-                        } else if (scorer2) {
-                            umpireData = [scorers_2]
-                        }
-                    }
-                    if (umpireReserve) {
-                        umpireData.push(umpireReserve_obj)
-                    }
-                    if (umpireCoach) {
-                        umpireData.push(umpireCoach_obj)
-                    }
+        if (recordUmpireType == 'NAMES') {
+            if (matchUmpireId_1) {
+                umpire_1_Obj = {
+                    matchId: this.state.matchId,
+                    organisationId: umpire1Orag,
+                    umpireName: umpire1TextField,
+                    umpireType: recordUmpireType,
+                    sequence: 1,
+                    matchUmpiresId: matchUmpireId_1
                 }
-
-                if (recordUmpireType === null) {
-
-                    if (scorerRosterId_1) {
-                        if (this.state.isEdit) {
-                            scorers_1 = {
-                                matchId: this.state.matchId,
-                                teamId: team1id,
-                                userId: scorer1,
-                                roleId: 4,
-                                rosterId: scorerRosterId_1
-                            }
-                        } else {
-                            scorers_1 = {
-                                matchId: 0,
-                                teamId: team1id,
-                                userId: scorer1,
-                                roleId: 4,
-                                rosterId: scorerRosterId_1
-                            }
-                        }
-                    } else {
-                        if (this.state.isEdit) {
-                            scorers_1 = {
-                                matchId: this.state.matchId,
-                                teamId: team1id,
-                                userId: scorer1,
-                                roleId: 4,
-                            }
-                        } else {
-                            scorers_1 = {
-                                matchId: 0,
-                                teamId: team1id,
-                                userId: scorer1,
-                                roleId: 4,
-                            }
-                        }
-                    }
-
-                    if (scorerRosterId_2) {
-                        if (this.state.isEdit) {
-                            scorers_2 = {
-                                matchId: this.state.matchId,
-                                teamId: team2id,
-                                userId: scorer2,
-                                roleId: 4,
-                                rosterId: scorerRosterId_2
-                            }
-                        } else {
-                            scorers_2 = {
-                                matchId: 0,
-                                teamId: team2id,
-                                userId: scorer2,
-                                roleId: 4,
-                                rosterId: scorerRosterId_2
-                            }
-                        }
-                    } else {
-                        if (this.state.isEdit) {
-                            scorers_2 = {
-                                matchId: this.state.matchId,
-                                teamId: team2id,
-                                userId: scorer2,
-                                roleId: 4,
-                            }
-                        } else {
-                            scorers_2 = {
-                                matchId: 0,
-                                teamId: team2id,
-                                userId: scorer2,
-                                roleId: 4,
-                            }
-                        }
-                    }
-
-                    if (scorer1 && scorer2) {
-                        umpireData = [scorers_1, scorers_2]
-
-                    } else if (scorer1) {
-                        umpireData = [scorers_1]
-
-                    } else if (scorer2) {
-                        umpireData = [scorers_2]
-
-                    }
-
-
+            } else {
+                umpire_1_Obj = {
+                    matchId: this.state.matchId,
+                    organisationId: umpire1Orag,
+                    umpireName: umpire1TextField,
+                    umpireType: recordUmpireType,
+                    sequence: 1,
                 }
-
-                let matchStatus = null;
-                let team1resultId = null;
-                let team2resultId = null;
-                if (matchData.id != 0) {
-                    if (Number(addEditMatch.team1Score) > Number(addEditMatch.team2Score)) {
-                        team1resultId = matchResult[0].id
-                        team2resultId = matchResult[1].id
-
-                    } else if (Number(addEditMatch.team1Score) < Number(addEditMatch.team2Score)) {
-                        team1resultId = matchResult[1].id
-                        team2resultId = matchResult[0].id
-
-                    } else if (Number(addEditMatch.team1Score) == Number(addEditMatch.team2Score)) {
-                        team1resultId = matchResult[2].id
-                        team2resultId = matchResult[2].id
-
-                    }
-                    matchStatus = addEditMatch.matchStatus === "0" ? null : addEditMatch.matchStatus;
-                    matchData["resultStatus"] = addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus
-                }
-
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType, this.state.screenName)
             }
-        });
-    }
 
+            if (matchUmpireId_2) {
+                umpire_2_Obj = {
+                    matchId: this.state.matchId,
+                    organisationId: umpire2Orag,
+                    umpireName: umpire2TextField,
+                    umpireType: recordUmpireType,
+                    sequence: 2,
+                    matchUmpiresId: matchUmpireId_2
+                }
+            } else {
+                umpire_2_Obj = {
+                    matchId: this.state.matchId,
+                    organisationId: umpire2Orag,
+                    umpireName: umpire2TextField,
+                    umpireType: recordUmpireType,
+                    sequence: 2,
+                }
+            }
+
+            if (scorerRosterId_1) {
+                scorers_1 = {
+                    matchId: this.state.matchId,
+                    teamId: team1id,
+                    userId: scorer1,
+                    roleId: 4,
+                    rosterId: scorerRosterId_1
+                }
+            } else {
+                scorers_1 = {
+                    matchId: this.state.matchId,
+                    teamId: team1id,
+                    userId: scorer1,
+                    roleId: 4,
+                }
+            }
+
+            if (scorerRosterId_2) {
+                scorers_2 = {
+                    matchId: this.state.matchId,
+                    teamId: team2id,
+                    userId: scorer2,
+                    roleId: 4,
+                    rosterId: scorerRosterId_2
+                }
+            } else {
+                scorers_2 = {
+                    matchId: this.state.matchId,
+                    teamId: team2id,
+                    userId: scorer2,
+                    roleId: 4,
+                }
+            }
+
+            if (this.state.scoringType === 'SINGLE') {
+                if (scorer1) {
+                    scorerData = [scorers_1]
+                }
+            } else {
+                if (scorer1 && scorer2) {
+                    scorerData = [scorers_1, scorers_2]
+                } else if (scorer1) {
+                    scorerData = [scorers_1]
+                } else if (scorer2) {
+                    scorerData = [scorers_2]
+                }
+            }
+
+            if (umpire1TextField && umpire2TextField) {
+                umpireData = [umpire_1_Obj, umpire_2_Obj]
+            } else if (umpire1TextField) {
+                umpireData = [umpire_1_Obj]
+
+            } else if (umpire2TextField) {
+                umpireData = [umpire_2_Obj]
+
+            }
+            umpireReserve_obj = {
+                matchId: this.state.matchId,
+                roleId: 19,
+                userId: umpireReserve
+            }
+            umpireCoach_obj = {
+                matchId: this.state.matchId,
+                roleId: 20,
+                userId: umpireCoach
+            }
+
+            // umpireData = [umpire_1_Obj, umpire_2_Obj]
+        } else if (recordUmpireType == 'USERS') {
+            umpireReserve_obj = {
+                matchId: this.state.matchId,
+                roleId: 19,
+                userId: umpireReserve
+            }
+            umpireCoach_obj = {
+                matchId: this.state.matchId,
+                roleId: 20,
+                userId: umpireCoach
+            }
+            if (umpireRosterId_1) {
+                umpire_1_Obj = {
+                    matchId: this.state.matchId,
+                    userId: umpire1Name,
+                    roleId: 15,
+                    rosterId: umpireRosterId_1
+                }
+            } else {
+                umpire_1_Obj = {
+                    matchId: this.state.matchId,
+                    userId: umpire1Name,
+                    roleId: 15,
+                }
+            }
+            if (umpireRosterId_2) {
+                umpire_2_Obj = {
+                    matchId: this.state.matchId,
+                    userId: umpire2Name,
+                    roleId: 15,
+                    rosterId: umpireRosterId_2
+                }
+            } else {
+                umpire_2_Obj = {
+                    matchId: this.state.matchId,
+                    userId: umpire2Name,
+                    roleId: 15,
+                }
+            }
+            if (scorerRosterId_1) {
+                scorers_1 = {
+                    matchId: this.state.matchId,
+                    teamId: team1id,
+                    userId: scorer1,
+                    roleId: 4,
+                    rosterId: scorerRosterId_1
+                }
+            } else {
+                scorers_1 = {
+                    matchId: this.state.matchId,
+                    teamId: team1id,
+                    userId: scorer1,
+                    roleId: 4,
+                }
+            }
+            if (scorerRosterId_2) {
+                scorers_2 = {
+                    matchId: this.state.matchId,
+                    teamId: team2id,
+                    userId: scorer2,
+                    roleId: 4,
+                    rosterId: scorerRosterId_2
+                }
+            } else {
+                scorers_2 = {
+                    matchId: this.state.matchId,
+                    teamId: team2id,
+                    userId: scorer2,
+                    roleId: 4,
+                }
+            }
+            if (this.state.scoringType === 'SINGLE') {
+                if (scorers_1) {
+                    umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
+                } else {
+                    umpireData = [umpire_1_Obj, umpire_2_Obj]
+                }
+            } else {
+                if (umpire1Name && umpire2Name && scorer1 && scorer2) {
+                    umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1, scorers_2]
+                } else if (umpire1Name && umpire2Name && scorer1) {
+                    umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_1]
+                } else if (umpire1Name && umpire2Name && scorer2) {
+                    umpireData = [umpire_1_Obj, umpire_2_Obj, scorers_2]
+                } else if (umpire1Name && scorer1 && scorer2) {
+                    umpireData = [umpire_1_Obj, scorers_1, scorers_2]
+                } else if (umpire2Name && scorer1 && scorer2) {
+                    umpireData = [umpire_2_Obj, scorers_1, scorers_2]
+                } else if (umpire1Name && scorer1) {
+                    umpireData = [umpire_1_Obj, scorers_1]
+                } else if (umpire2Name && scorer1) {
+                    umpireData = [umpire_2_Obj, scorers_1]
+                } else if (umpire1Name && scorer2) {
+                    umpireData = [umpire_1_Obj, scorers_2]
+                } else if (umpire2Name && scorer2) {
+                    umpireData = [umpire_2_Obj, scorers_2]
+                } else if (umpire1Name && umpire2Name) {
+                    umpireData = [umpire_1_Obj, umpire_2_Obj]
+                } else if (umpire1Name) {
+                    umpireData = [umpire_1_Obj]
+                } else if (umpire2Name) {
+                    umpireData = [umpire_2_Obj]
+                } else if (scorer1 && scorer2) {
+                    umpireData = [scorers_1, scorers_2]
+                } else if (scorer1) {
+                    umpireData = [scorers_1]
+                } else if (scorer2) {
+                    umpireData = [scorers_2]
+                }
+            }
+            if (umpireReserve) {
+                umpireData.push(umpireReserve_obj)
+            }
+            if (umpireCoach) {
+                umpireData.push(umpireCoach_obj)
+            }
+        }
+
+        if (recordUmpireType === null) {
+            if (scorerRosterId_1) {
+                if (this.state.isEdit) {
+                    scorers_1 = {
+                        matchId: this.state.matchId,
+                        teamId: team1id,
+                        userId: scorer1,
+                        roleId: 4,
+                        rosterId: scorerRosterId_1
+                    }
+                } else {
+                    scorers_1 = {
+                        matchId: 0,
+                        teamId: team1id,
+                        userId: scorer1,
+                        roleId: 4,
+                        rosterId: scorerRosterId_1
+                    }
+                }
+            } else {
+                if (this.state.isEdit) {
+                    scorers_1 = {
+                        matchId: this.state.matchId,
+                        teamId: team1id,
+                        userId: scorer1,
+                        roleId: 4,
+                    }
+                } else {
+                    scorers_1 = {
+                        matchId: 0,
+                        teamId: team1id,
+                        userId: scorer1,
+                        roleId: 4,
+                    }
+                }
+            }
+
+            if (scorerRosterId_2) {
+                if (this.state.isEdit) {
+                    scorers_2 = {
+                        matchId: this.state.matchId,
+                        teamId: team2id,
+                        userId: scorer2,
+                        roleId: 4,
+                        rosterId: scorerRosterId_2
+                    }
+                } else {
+                    scorers_2 = {
+                        matchId: 0,
+                        teamId: team2id,
+                        userId: scorer2,
+                        roleId: 4,
+                        rosterId: scorerRosterId_2
+                    }
+                }
+            } else {
+                if (this.state.isEdit) {
+                    scorers_2 = {
+                        matchId: this.state.matchId,
+                        teamId: team2id,
+                        userId: scorer2,
+                        roleId: 4,
+                    }
+                } else {
+                    scorers_2 = {
+                        matchId: 0,
+                        teamId: team2id,
+                        userId: scorer2,
+                        roleId: 4,
+                    }
+                }
+            }
+
+            if (scorer1 && scorer2) {
+                umpireData = [scorers_1, scorers_2]
+            } else if (scorer1) {
+                umpireData = [scorers_1]
+            } else if (scorer2) {
+                umpireData = [scorers_2]
+            }
+        }
+
+        let matchStatus = null;
+        let team1resultId = null;
+        let team2resultId = null;
+        if (matchData.id != 0) {
+            if (Number(addEditMatch.team1Score) > Number(addEditMatch.team2Score)) {
+                team1resultId = matchResult[0].id
+                team2resultId = matchResult[1].id
+            } else if (Number(addEditMatch.team1Score) < Number(addEditMatch.team2Score)) {
+                team1resultId = matchResult[1].id
+                team2resultId = matchResult[0].id
+            } else if (Number(addEditMatch.team1Score) == Number(addEditMatch.team2Score)) {
+                team1resultId = matchResult[2].id
+                team2resultId = matchResult[2].id
+            }
+            matchStatus = addEditMatch.matchStatus === "0" ? null : addEditMatch.matchStatus;
+            matchData["resultStatus"] = addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus
+        }
+
+        this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType, this.state.screenName)
+
+    }
 
     //////footer view containing all the buttons like save and cancel
     footerView = (isSubmitting) => {
         return (
             <div className="fluid-width">
-                {!this.state.membershipIsUsed &&
+                {!this.state.membershipIsUsed && (
                     <div className="footer-view">
                         <div className="row">
                             <div className="col-sm-10 col-md-9">
                                 <div className="reg-add-save-button p-0">
-                                    <Button className="cancelBtnWidth mr-2 mb-3" onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')} type="cancel-button">{AppConstants.cancel}</Button>
-                                    {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ forfeitVisible: true })} type="cancel-button">{AppConstants.forfiet}</Button>}
-                                    {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.setState({ abandonVisible: true })} type="cancel-button">{AppConstants.abandon}</Button>}
-                                    {this.state.isEdit == true && <Button className="button-spacing-style ml-2 mr-2" onClick={() => this.endMatchResult()} type="cancel-button">{AppConstants.endMatch}</Button>}
+                                    <Button
+                                        className="cancelBtnWidth mr-2 mb-3"
+                                        onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : this.state.key == 'umpireRoaster' ? 'umpireRoaster' : this.state.umpireKey == 'umpire' ? 'umpireDashboard' : '/liveScoreMatches')}
+                                        type="cancel-button"
+                                    >
+                                        {AppConstants.cancel}
+                                    </Button>
+                                    {this.state.isEdit == true && (
+                                        <Button
+                                            className="button-spacing-style ml-2 mr-2"
+                                            onClick={() => this.setState({ forfeitVisible: true })}
+                                            type="cancel-button"
+                                        >
+                                            {AppConstants.forfiet}
+                                        </Button>
+                                    )}
+                                    {this.state.isEdit == true && (
+                                        <Button
+                                            className="button-spacing-style ml-2 mr-2"
+                                            onClick={() => this.setState({ abandonVisible: true })}
+                                            type="cancel-button"
+                                        >
+                                            {AppConstants.abandon}
+                                        </Button>
+                                    )}
+                                    {this.state.isEdit == true && (
+                                        <Button
+                                            className="button-spacing-style ml-2 mr-2"
+                                            onClick={() => this.endMatchResult()}
+                                            type="cancel-button"
+                                        >
+                                            {AppConstants.endMatch}
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                             <div className="col-sm-2 col-md-3">
                                 <div className="comp-buttons-view mt-0">
                                     <Button
                                         className="publish-button save-draft-text mr-0" type="primary" htmlType="submit"
-                                        disabled={this.props.liveScoreMatchState.onLoad} >
+                                        disabled={this.props.liveScoreMatchState.onLoad}
+                                    >
                                         {AppConstants.save}
                                     </Button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                }
+                )}
             </div>
         )
     };
 
     /////// render function
     render() {
-        const { getFieldDecorator } = this.props.form
         let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                {
-                    this.state.umpireKey ?
-                        <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                        :
-                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                }
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+                {this.state.umpireKey ? (
+                    <DashboardLayout
+                        menuHeading={AppConstants.umpires}
+                        menuName={AppConstants.umpires}
+                    />
+                ) : (
+                        <DashboardLayout
+                            menuHeading={AppConstants.liveScores}
+                            menuName={AppConstants.liveScores}
+                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                        />
+                    )}
 
-                {
-                    this.state.umpireKey ?
-                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen == 'umpireList' ? "2" : "1"} />
-                        :
-                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.key == 'dashboard' ? '1' : "2"} />
-                }
+                {this.state.umpireKey ? (
+                    <InnerHorizontalMenu menu="umpire" umpireSelectedKey={screen == 'umpireList' ? "2" : "1"} />
+                ) : (
+                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.key == 'dashboard' ? '1' : '2'} />
+                    )}
+
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
+
                 <Layout>
                     {this.headerView()}
 
                     <Form
-                        autoComplete='off'
-                        onSubmit={this.addMatchDetails} className="login-form">
+                        ref={this.formRef}
+                        autoComplete="off"
+                        onFinish={this.addMatchDetails}
+                        className="login-form"
+                    >
                         <Content>
                             <div className="formView">
-                                {this.contentView(getFieldDecorator)}
-                                {this.ModalView(getFieldDecorator)}
-                                {this.forfietModalView(getFieldDecorator)}
+                                {this.contentView()}
+                                {this.ModalView()}
+                                {this.forfietModalView()}
                                 {this.abandonMatchView()}
                             </div>
                         </Content>
@@ -1711,12 +1567,12 @@ class LiveScoreAddMatch extends Component {
                             {this.footerView()}
                         </Footer>
                     </Form>
-
                 </Layout>
-            </div>
+            </div >
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getliveScoreDivisions,
@@ -1738,11 +1594,10 @@ function mapDispatchToProps(dispatch) {
         ladderSettingGetMatchResultAction,
         umpireListAction,
         liveScoreGetMatchDetailInitiate
-
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         liveScoreState: state.LiveScoreState,
         liveScoreMatchState: state.LiveScoreMatchState,
@@ -1751,4 +1606,5 @@ function mapStatetoProps(state) {
         umpireState: state.UmpireState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(LiveScoreAddMatch));
+
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreAddMatch);

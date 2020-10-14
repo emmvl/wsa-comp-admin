@@ -184,22 +184,21 @@ class RegistrationFormList extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.registrationForm}</Breadcrumb.Item>
-
                         </Breadcrumb>
                         <div style={{ marginTop: 8 }}>
-                            <Tooltip background='#ff8237'>
+                            <Tooltip background="#ff8237">
                                 <span>{AppConstants.regFormDashBoardMsg}</span>
                             </Tooltip>
                         </div>
                     </div>
                 </div>
 
-            </div >
+            </div>
 
         )
     }
@@ -212,13 +211,13 @@ class RegistrationFormList extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view" >
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm-2">
+                            <div className="com-year-select-heading-view">
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
-                                    name={"yearRefId"}
+                                    name="yearRefId"
                                     className="year-select reg-filter-select-year ml-2"
                                     style={{ width: 90 }}
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
@@ -284,9 +283,9 @@ class RegistrationFormList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"3"} />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="3" />
                 <Layout>
                     {this.headerView()}
                     <Content>

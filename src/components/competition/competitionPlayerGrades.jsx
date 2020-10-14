@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Form, Modal, Dropdown, message } from 'antd';
+import { Layout, Breadcrumb, Checkbox, Button, Menu, Select, Tag, Modal, Dropdown, message } from 'antd';
 import { NavLink } from 'react-router-dom';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -46,7 +46,7 @@ const menu = (
     <Menu>
         <Menu.Item onClick={() => this_obj.changeDivisionModal()}>
             Change Division
-      </Menu.Item>
+        </Menu.Item>
     </Menu>
 );
 
@@ -156,13 +156,13 @@ class CompetitionPlayerGrades extends Component {
     headerView = () => {
         return (
             <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGrading}</Breadcrumb.Item>
                         </Breadcrumb>
                         <div style={{ marginTop: 10 }}>
-                            <Tooltip placement="top" background='#ff8237'>
+                            <Tooltip placement="top" background="#ff8237">
                                 <span>{AppConstants.playerGradingMsg}</span>
                             </Tooltip>
                         </div>
@@ -207,7 +207,8 @@ class CompetitionPlayerGrades extends Component {
                                             </Button>
                                         </NavLink>
                                     </div>
-                                </div>}
+                                </div>
+                            }
                             {this.state.divisionId != null &&
                                 <div className="col-sm">
                                     <div className="comp-dashboard-botton-view-mobile">
@@ -230,11 +231,12 @@ class CompetitionPlayerGrades extends Component {
                                             </Button>
                                         </NavLink>
                                     </div>
-                                </div>}
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -276,7 +278,7 @@ class CompetitionPlayerGrades extends Component {
     handleOk = e => {
         {
             this.state.newTeam.length > 0 &&
-                this.props.addNewTeamAction(this.state.firstTimeCompId, this.state.divisionId, this.state.newTeam)
+            this.props.addNewTeamAction(this.state.firstTimeCompId, this.state.divisionId, this.state.newTeam)
         }
         this.setState({
             visible: false,
@@ -303,17 +305,14 @@ class CompetitionPlayerGrades extends Component {
             (teamItem.players || []).map((item, ind) => {
                 item["isChecked"] = checked;
             })
-            //console.log("assignedData::" + JSON.stringify(assignedData));
             this.props.addOrRemovePlayerForChangeDivisionAction(assignedData, key);
-        }
-        else if (key == "unAssigned") {
+        } else if (key == "unAssigned") {
             let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
             unassignedData["isChecked"] = checked;
 
             (unassignedData.players || []).map((item, ind) => {
                 item["isChecked"] = checked;
             })
-            //console.log("assignedData::" + JSON.stringify(assignedData));
             this.props.addOrRemovePlayerForChangeDivisionAction(unassignedData, key);
         }
     }
@@ -421,14 +420,14 @@ class CompetitionPlayerGrades extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm" >
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm">
                             <div className="com-year-select-heading-view pb-3" >
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     id={AppUniqueId.PlayerGradingYear_dpdn}
-                                    name={"yearRefId"}
+                                    name="yearRefId"
                                     style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
@@ -449,11 +448,11 @@ class CompetitionPlayerGrades extends Component {
                                 width: "fit-content", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
-                            }} >
+                            }}>
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
                                     id={AppUniqueId.PlayerGradingCompetition_dpdn}
-                                    name={"competition"}
+                                    name="competition"
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
@@ -468,13 +467,13 @@ class CompetitionPlayerGrades extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="row" >
+                        <div className="row">
                             <div className="col-sm pb-3" >
                                 <div className="col-sm" style={{
                                     width: "100%", display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center"
-                                }} >
+                                }}>
                                     <span className='year-select-heading'>{AppConstants.division}:</span>
                                     <Select
                                         id={AppUniqueId.PlayerGradingDivisionName_dpdn}
@@ -495,23 +494,23 @@ class CompetitionPlayerGrades extends Component {
                                     </Select>
                                 </div>
                             </div>
-                            <div className="col-sm-2 pb-3" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
+                            <div className="col-sm-2 pb-3" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
                                 <span className='comp-grading-final-text'>{AppConstants.open}</span>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignSelf: "center" }} >
+                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignSelf: "center" }}>
                             <NavLink to="/competitionPlayerGradeCalculate" >
                                 <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
                             </NavLink>
                             <div style={{ marginTop: 4 }}>
-                                <Tooltip placement="top" background='#ff8237'>
+                                <Tooltip placement="top" background="#ff8237">
                                     <span>{AppConstants.playerGradingToggleMsg}</span>
                                 </Tooltip>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -527,17 +526,13 @@ class CompetitionPlayerGrades extends Component {
                 return;
             }
             else if (source.droppableId !== destination.droppableId) {
-                console.log(unassignedPlayerData, assignedPlayerData, source, destination,
-                    'called1')
                 let teamId = destination !== null && destination.droppableId == 0 ? null : JSON.parse(destination.droppableId)
                 let sourceTeamID = source !== null && source.droppableId == 0 ? null : JSON.parse(source.droppableId)
                 if (teamId !== null) {
                     if (sourceTeamID == null) {
-                        console.log("called A")
                         playerId = unassignedPlayerData.players[source.index].playerId
                     }
                     else {
-                        console.log("called B")
                         for (let i in assignedPlayerData) {
                             if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
                                 playerId = assignedPlayerData[i].players[source.index].playerId
@@ -546,7 +541,6 @@ class CompetitionPlayerGrades extends Component {
                     }
                 }
                 else {
-                    console.log('called2')
                     for (let i in assignedPlayerData) {
                         if (JSON.parse(source.droppableId) == assignedPlayerData[i].teamId) {
                             playerId = assignedPlayerData[i].players[source.index].playerId
@@ -607,20 +601,20 @@ class CompetitionPlayerGrades extends Component {
                     (
                         <Droppable
                             isDropDisabled={disableStatus}
-                            droppableId={`${teamItem.teamId}`} key={`${teamItem.teamId}`} >
+                            droppableId={`${teamItem.teamId}`} key={`${teamItem.teamId}`}>
                             {(provided, snapshot) => (
                                 <div
                                     ref={provided.innerRef}
                                     className="player-grading-droppable-view"
                                 >
                                     <div className="player-grading-droppable-heading-view" >
-                                        <div className="row" >
+                                        <div className="row">
                                             <Checkbox
                                                 id={AppUniqueId.playgrad_newTeam_chkbx}
                                                 disabled={disableStatus}
                                                 className="single-checkbox mt-1 check-box-player"
                                                 checked={teamItem.isChecked}
-                                                onChange={e => this.onChangeParentDivCheckbox(e.target.checked, teamIndex, "assigned")} >
+                                                onChange={e => this.onChangeParentDivCheckbox(e.target.checked, teamIndex, "assigned")}>
                                             </Checkbox>
                                             <div className="col-sm d-flex align-items-center">
                                                 <span className="player-grading-haeding-team-name-text">{teamItem.teamName}</span>
@@ -629,7 +623,9 @@ class CompetitionPlayerGrades extends Component {
                                             </div>
                                             <div className="col-sm d-flex justify-content-end ">
                                                 {(teamItem.gradeRefId == null || teamItem.gradeRefId == 0) ?
-                                                    <img className="comp-player-table-img team-delete-link" src={AppImages.deleteImage}
+                                                    <img
+                                                        className="comp-player-table-img team-delete-link"
+                                                        src={AppImages.deleteImage}
                                                         alt="" height="20" width="20"
                                                         style={{ cursor: "pointer" }}
                                                         onClick={() => disableStatus == false && this.onClickDeleteTeam(teamItem, teamIndex)}
@@ -657,14 +653,14 @@ class CompetitionPlayerGrades extends Component {
                                                             {...provided.dragHandleProps}
                                                             className="player-grading-draggable-view"
                                                         >
-                                                            <div className="row" >
+                                                            <div className="row">
                                                                 <Checkbox
                                                                     disabled={disableStatus}
                                                                     checked={playerItem.isChecked}
                                                                     className="single-checkbox mt-1 check-box-player"
-                                                                    onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")} >
+                                                                    onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")}>
                                                                 </Checkbox>
-                                                                <div className="col-sm d-flex align-items-center"  >
+                                                                <div className="col-sm d-flex align-items-center">
 
                                                                     {disableStatus == false ?
                                                                         <NavLink to={{
@@ -716,9 +712,13 @@ class CompetitionPlayerGrades extends Component {
                                                                                 )
                                                                             })}
                                                                         </div>
-                                                                        <img aria-disabled={"true"} className="comp-player-table-img" src={
-                                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
-                                                                                AppImages.commentEmpty} alt="" height="20" width="20"
+                                                                        <img
+                                                                            aria-disabled={"true"}
+                                                                            className="comp-player-table-img"
+                                                                            src={playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty}
+                                                                            alt=""
+                                                                            height="20"
+                                                                            width="20"
                                                                             style={{ cursor: "pointer" }}
                                                                             onClick={() => disableStatus == false && this.onClickComment(playerItem, teamIndex)}
                                                                         />
@@ -783,7 +783,7 @@ class CompetitionPlayerGrades extends Component {
         this.props.clearReducerCompPartPlayerGradingAction("commentList")
         {
             this.state.comment.length > 0 &&
-                this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
+            this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
         }
         this.setState({
             modalVisible: false,
@@ -841,15 +841,15 @@ class CompetitionPlayerGrades extends Component {
                             ref={provided.innerRef}
                             className="player-grading-droppable-view">
                             <div className="player-grading-droppable-heading-view">
-                                <div className="row" >
+                                <div className="row">
                                     <Checkbox
                                         disabled={disableStatus}
                                         id={AppUniqueId.PlayerGrading_unassigned_Player_CheckBox}
                                         className="single-checkbox mt-1 check-box-player"
                                         checked={unassignedData.isChecked}
-                                        onChange={e => this.onChangeParentDivCheckbox(e.target.checked, 0, "unAssigned")} >
+                                        onChange={e => this.onChangeParentDivCheckbox(e.target.checked, 0, "unAssigned")}>
                                     </Checkbox>
-                                    <div className="col-sm d-flex align-items-center"  >
+                                    <div className="col-sm d-flex align-items-center">
                                         <span className="player-grading-haeding-team-name-text">{AppConstants.unassigned}</span>
                                         <span className="player-grading-haeding-player-count-text ml-2">
                                             {unassignedData.players.length > 1 ? unassignedData.players.length + " Players" : unassignedData.players.length + " Player"}
@@ -860,9 +860,8 @@ class CompetitionPlayerGrades extends Component {
                                             <Button id={AppUniqueId.PlayerGrading_CreateTeam} disabled={disableStatus} className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
                                                 + {AppConstants.createTeam}
                                             </Button>
-
-                                        </div>}
-
+                                        </div>
+                                    }
                                 </div>
                             </div>
                             {unassignedData.players && unassignedData.players.map((playerItem, playerIndex) => (
@@ -878,14 +877,14 @@ class CompetitionPlayerGrades extends Component {
                                             {...provided.dragHandleProps}
                                             className="player-grading-draggable-view">
 
-                                            <div className="row" >
+                                            <div className="row">
                                                 <Checkbox
                                                     disabled={disableStatus}
                                                     checked={playerItem.isChecked}
                                                     className="single-checkbox mt-1 check-box-player"
-                                                    onChange={e => this.onChangeChildDivCheckbox(e.target.checked, 0, playerIndex, "unAssigned")} >
+                                                    onChange={e => this.onChangeChildDivCheckbox(e.target.checked, 0, playerIndex, "unAssigned")}>
                                                 </Checkbox>
-                                                <div className="col-sm d-flex align-items-center"  >
+                                                <div className="col-sm d-flex align-items-center">
                                                     {disableStatus == false ?
                                                         <NavLink to={{
                                                             pathname: `/userPersonal`,
@@ -936,9 +935,12 @@ class CompetitionPlayerGrades extends Component {
                                                                 )
                                                             })}
                                                         </div>
-                                                        <img className="comp-player-table-img" src={
-                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
-                                                                AppImages.commentEmpty} alt="" height="20" width="20"
+                                                        <img
+                                                            className="comp-player-table-img"
+                                                            src={playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty}
+                                                            alt=""
+                                                            height="20"
+                                                            width="20"
                                                             style={{ cursor: "pointer" }}
                                                             onClick={() => disableStatus == false && this.onClickComment(playerItem, null)}
                                                         />
@@ -965,7 +967,7 @@ class CompetitionPlayerGrades extends Component {
                     onOk={() => this.handleOk()}
                     onCancel={() => this.handleCancel()}
                 >
-                    <div >
+                    <div>
                         <InputWithHead
                             auto_complete="off"
                             id={AppUniqueId.PlayerGrading_addTeamName}
@@ -1015,7 +1017,7 @@ class CompetitionPlayerGrades extends Component {
                     </div>
 
                 </Modal>
-            </div >
+            </div>
         )
     }
 
@@ -1025,7 +1027,6 @@ class CompetitionPlayerGrades extends Component {
     contentView = () => {
         return (
             <div className="comp-dash-table-view mt-2">
-
                 <DragDropContext
                     onDragEnd={this.onDragEnd}>
                     <div className="d-flex flex-row justify-content-between">
@@ -1042,13 +1043,12 @@ class CompetitionPlayerGrades extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width paddingBottom56px" >
-
-                <div className="row" >
-                    <div className="col-sm-3 mt-3" >
+            <div className="fluid-width paddingBottom56px">
+                <div className="row">
+                    <div className="col-sm-3 mt-3">
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionOpenRegForm">
-                                <Button disabled={this.state.competitionStatus == 1 ? true : false} className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button disabled={this.state.competitionStatus == 1 ? true : false} className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -1064,24 +1064,18 @@ class CompetitionPlayerGrades extends Component {
         )
     }
 
-
     render() {
-        console.log(this.state.competitionStatus)
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"4"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="4" />
                 <Layout>
                     {this.headerView()}
 
                     <Content>
                         {this.dropdownView()}
                         {this.contentView()}
-                        <Loader
-
-                            visible={
-                                this.props.partPlayerGradingState.onLoad || this.props.appState.onLoad
-                            } />
+                        <Loader visible={this.props.partPlayerGradingState.onLoad || this.props.appState.onLoad} />
                     </Content>
 
                     <Footer>
@@ -1089,10 +1083,10 @@ class CompetitionPlayerGrades extends Component {
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getYearAndCompetitionOwnAction,
@@ -1111,11 +1105,12 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         partPlayerGradingState: state.CompetitionPartPlayerGradingState,
         registrationState: state.RegistrationState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionPlayerGrades));
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionPlayerGrades);

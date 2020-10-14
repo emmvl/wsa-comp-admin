@@ -27,7 +27,7 @@ class UserModuleMedical extends Component{
         }
         this_Obj = this;
         let userId = 877;
-       
+
     }
 
     componentDidMount(){
@@ -37,7 +37,6 @@ class UserModuleMedical extends Component{
     }
 
     componentDidUpdate(nextProps){
-        console.log("Component componentDidUpdate");
        let userState = this.props.userState;
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
@@ -49,22 +48,21 @@ class UserModuleMedical extends Component{
     }
 
     apiCalls = (userId) => {
-        console.log("apiCalls::" + userId);
         this.props.getUserModuleMedicalInfoAction(userId);
     };
 
      ///////view for breadcrumb
      headerView = () => {
         return (
-            <Header className="comp-player-grades-header-view container mb-n3" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <Header className="comp-player-grades-header-view container mb-n3">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add">{AppConstants.medical}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.medical}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </Header >
+            </Header>
         )
     }
 
@@ -72,8 +70,7 @@ class UserModuleMedical extends Component{
         let userState = this.props.userState;
         let medical = userState.medicalData;
         return (
-            <div  className="content-view pt-4" style={{fontSize: '14px'}}>
-              
+            <div className="content-view pt-4" style={{fontSize: '14px'}}>
                 {(medical || []).map((item, index) => (
                     <div>
                         <div>Existing Medical Conditions: {item.existingMedicalCondition}</div>
@@ -95,7 +92,6 @@ class UserModuleMedical extends Component{
                                 <Button className="open-reg-button" type="primary" style={{marginRight: '20px'}} onClick={() =>  history.push('/userTextualDashboard')}>
                                     {AppConstants.cancel}
                                 </Button>
-                               
                             </div>
                         </div>
                     </div>
@@ -106,9 +102,9 @@ class UserModuleMedical extends Component{
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"userModule"} userModuleSelectedKey={"4"} />
+                <InnerHorizontalMenu menu="userModule" userModuleSelectedKey="4" />
                 <Layout>
                     {this.headerView()}
                     <Content className="container">

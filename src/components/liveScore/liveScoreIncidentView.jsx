@@ -58,19 +58,20 @@ class LiveScoreIncidentView extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <Header className="comp-venue-courts-header-view live-form-view-button-header" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <Header className="comp-venue-courts-header-view live-form-view-button-header">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.incidentDetails}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }} >
+                    <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }}>
                         <NavLink to={{
                             pathname: '/liveScoreAddIncident',
                             state: { isEdit: true, tableRecord: this.state.incidentItem, umpireKey: this.state.umpireKey }
                         }}>
-                            <Button className="primary-add-comp-form" type="primary">{AppConstants.edit}
+                            <Button className="primary-add-comp-form" type="primary">
+                                {AppConstants.edit}
                             </Button>
                         </NavLink>
                     </div>
@@ -80,13 +81,13 @@ class LiveScoreIncidentView extends Component {
     }
 
 
-    //// this method called insside modal view function to show content of the modal 
+    //// this method called insside modal view function to show content of the modal
     innerViewOfModal() {
         return (
             <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center', }} onClick={this.showModal}>
                 {
                     this.state.isVideo == true ?
-                        <ReactPlayer playing={this.state.visible == true ? true : false} url={this.state.modaldata} controls={true} />
+                        <ReactPlayer playing={this.state.visible == true ? true : false} url={this.state.modaldata} controls />
                         :
                         <img src={this.state.modaldata} height='250' width='250' />
                 }
@@ -105,7 +106,7 @@ class LiveScoreIncidentView extends Component {
                 onCancel={this.handleCancel}
                 cancelButtonProps={{ style: { display: 'none' } }}
                 okButtonProps={{ style: { display: 'none' } }}
-                centered={true}
+                centered
             >
                 {this.innerViewOfModal()}
             </Modal>
@@ -115,81 +116,77 @@ class LiveScoreIncidentView extends Component {
     // Detail List
     detailsView = () => {
         let DATA = this.state.incidentItem
-        console.log(DATA, 'DATA~~~~')
         return (
-            <div className="row p-4" >
-                <div className="col-sm" >
+            <div className="row p-4">
+                <div className="col-sm">
                     <div><span className="year-select-heading">Incident Data</span></div>
                     <div className="pt-2"><span className="side-bar-profile-data">{liveScore_formateDate(DATA.incidentTime)}</span>
                     </div>
                 </div>
 
-                <div className="col-sm" >
+                <div className="col-sm">
                     <div><span className="year-select-heading">Time</span></div>
                     <div className="pt-2"><span className="side-bar-profile-data">{getTime(DATA.incidentTime)}</span>
                     </div>
                 </div>
-                <div className="col-sm" >
+                <div className="col-sm">
                     <div><span className="year-select-heading">Match Id</span></div>
                     <div className="pt-2"><span className="side-bar-profile-data">{DATA.matchId}</span>
                     </div>
                 </div>
-                <div className="col-sm" >
+                <div className="col-sm">
                     <div><span className="year-select-heading">Incident Type</span></div>
                     <div className="pt-2"><span className="side-bar-profile-data">{DATA.incidentType.name}</span>
                     </div>
                 </div>
             </div>
-
         )
     }
+
     mediaView = () => {
         let array = this.state.incidentItem.incidentPlayers
         let mediaPlayer = isArrayNotEmpty(this.state.incidentItem.incidentMediaList) ? this.state.incidentItem.incidentMediaList : []
 
         return (
             <div className="col-sm pt-3 pb-3 mt-5">
-                <div className="row " >
+                <div className="row">
                     <div className="col-sm-2">
                         <div className="year-select-heading">
                             <span>{AppConstants.playerHeading}</span>
                         </div>
                     </div>
 
-                    <div className="col-sm-10" >
-                        {array.map((item) => {
-                            return <div className="side-bar-profile-data">
+                    <div className="col-sm-10">
+                        {array.map((item) => (
+                            <div className="side-bar-profile-data">
                                 <span>{item.player.firstName} {item.player.lastName}</span>
                             </div>
-                        }
-                        )}
+                        ))}
                     </div>
                 </div>
-                <div className="row mt-2 " >
+                <div className="row mt-2">
                     <div className="col-sm-2">
                         <div className="year-select-heading">
                             <span>{AppConstants.description}</span>
                         </div>
                     </div>
 
-                    <div className="col-sm-10" >
-                        {array.map((item) => {
-                            return <div className="side-bar-profile-data">
+                    <div className="col-sm-10">
+                        {array.map((item) => (
+                            <div className="side-bar-profile-data">
                                 <span>{this.state.incidentItem.description}</span>
                             </div>
-                        }
-                        )}
+                        ))}
                     </div>
                 </div>
-                <div className="row mt-5" >
+                <div className="row mt-5">
                     <div className="col-sm-2">
                         <div className="year-select-heading">
                             <span>{AppConstants.photos}</span>
                         </div>
                     </div>
 
-
-                    <div className="col-sm-10" >
+                    <div className="col-sm-10">
                         <div className="row pl-3">
                             {mediaPlayer.map((item) => {
                                 var str = item.mediaType;
@@ -201,18 +198,14 @@ class LiveScoreIncidentView extends Component {
                                             :
                                             <img className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl} height='70' width='70' />
                                     }
-
                                 </div>
-                            }
-                            )}
+                            })}
                         </div>
-
                     </div>
                 </div>
             </div>
         )
     }
-
 
     ////main render method
     render() {
@@ -247,4 +240,4 @@ class LiveScoreIncidentView extends Component {
         );
     }
 }
-export default LiveScoreIncidentView 
+export default LiveScoreIncidentView

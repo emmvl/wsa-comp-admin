@@ -106,29 +106,25 @@ class CompetitionReGradingStep2 extends Component {
         }
     }
 
-
     onChange = e => {
-        console.log('radio checked', e.target.value);
         this.setState({
             value: e.target.value,
         });
     };
 
-
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-product">{AppConstants.finalisedDraw}</Breadcrumb.Item>
-                            < Breadcrumb.Item className="breadcrumb-add">{AppConstants.step2}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-product">{AppConstants.finalisedDraw}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.step2}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </div >
-
+            </div>
         )
     }
 
@@ -136,10 +132,10 @@ class CompetitionReGradingStep2 extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view" >
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm-2">
+                            <div className="com-year-select-heading-view">
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     className="year-select"
@@ -151,12 +147,12 @@ class CompetitionReGradingStep2 extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-8" >
+                        <div className="col-sm-8">
                             <div style={{
                                 width: "100%", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50
-                            }} >
+                            }}>
                                 <span className='year-select-heading'>{AppConstants.competition_name}:</span>
                                 <Select
                                     className="year-select"
@@ -194,10 +190,10 @@ class CompetitionReGradingStep2 extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="comp-player-grades-footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
+                    <div className="row">
+                        <div className="col-sm">
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button>
                                 <Button className="open-reg-button" type="primary">{AppConstants.confirm}</Button>
@@ -212,9 +208,9 @@ class CompetitionReGradingStep2 extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"13"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey={"13"} />
                 <Layout>
                     {this.headerView()}
 

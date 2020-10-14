@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Button, Table, Pagination, Input, Icon, Menu } from "antd";
+import { Layout, Button, Table, Pagination, Input, Menu } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import "./liveScore.css";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -11,13 +12,12 @@ import AppConstants from "../../themes/appConstants";
 import scorerData from "../../mocks/managersList";
 import AppImages from "../../themes/appImages";
 import { liveScoreManagerListAction } from "../../store/actions/LiveScoreAction/liveScoreManagerAction";
-import { getLiveScoreCompetiton, getUserId } from "../../util/sessionStorage";
+import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import history from "../../util/history";
 import { userExportFilesAction } from "../../store/actions/appAction";
 import { teamListData } from "../../util/helpers";
 
 const { Content } = Layout;
-let userId = getUserId();
 let _this = null;
 
 function tableSort(key) {
@@ -118,8 +118,8 @@ const columns = [
                             </NavLink>
                         </div>
                     ) : (
-                            <span key={`managerName${i}` + item.entityId}>{item.name}</span>
-                        )
+                        <span key={`managerName${i}` + item.entityId}>{item.name}</span>
+                    )
                 ))}
             </div>
         ),
@@ -225,7 +225,7 @@ class LiveScoreManagerList extends Component {
     }
 
     /// Handle Page change
-    handlePageChnage(page) {
+    handlePageChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
             offset
@@ -264,7 +264,7 @@ class LiveScoreManagerList extends Component {
                             current={currentPage}
                             total={totalCount}
                             defaultPageSize={10}
-                            onChange={(page) => this.handlePageChnage(page)}
+                            onChange={this.handlePageChange}
                         />
                     </div>
                 </div>
@@ -383,15 +383,14 @@ class LiveScoreManagerList extends Component {
                         <div className="comp-product-search-inp-width">
                             <Input
                                 className="product-reg-search-input"
-                                onChange={(e) => this.onChangeSearchText(e)}
+                                onChange={this.onChangeSearchText}
                                 placeholder="Search..."
-                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                onKeyPress={this.onKeyEnterSearchText}
                                 value={this.state.searchText}
                                 prefix={
-                                    <Icon
-                                        type="search"
+                                    <SearchOutlined
                                         style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                        onClick={() => this.onClickSearchIcon()}
+                                        onClick={this.onClickSearchIcon}
                                     />
                                 }
                                 allowClear
@@ -414,7 +413,7 @@ class LiveScoreManagerList extends Component {
         }
     }
 
-    // search key 
+    // search key
     onKeyEnterSearchText = (e) => {
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
@@ -444,7 +443,7 @@ class LiveScoreManagerList extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"4"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout>
                     {this.headerView()}
                     <Content>

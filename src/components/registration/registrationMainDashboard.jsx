@@ -115,7 +115,7 @@ const columnsOwned = [
         render: divisions => {
             let divisionList = isArrayNotEmpty(divisions) ? divisions : []
             return (
-                < span key={"owned1"} >
+                < span key={"owned1"}>
                     {
                         divisionList.map(item => (
                             <Tag
@@ -323,7 +323,7 @@ class RegistrationMainDashboard extends Component {
                 <div className="row">
                     <div className="col-sm-2">
                         <div className="year-select-heading-view pb-3">
-                            <div className="reg-filter-col-cont"  >
+                            <div className="reg-filter-col-cont">
                                 <span className="year-select-heading">
                                     {AppConstants.year}:</span>
                                 <Select
@@ -333,14 +333,14 @@ class RegistrationMainDashboard extends Component {
                                     value={this.state.year}
                                 >
                                     {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                        < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
+                                        <Option key={"yearlist" + yearIndex} value={item.id}> {item.name}</Option>
                                     ))
                                     }
                                 </Select>
                             </div>
                         </div>
                     </div>
-                    <div className="col-sm pb-3" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }} >
+                    <div className="col-sm pb-3" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }}>
                         <Button
                             className="open-reg-button"
                             type="primary"
@@ -492,7 +492,7 @@ class RegistrationMainDashboard extends Component {
 
                             </span>
                             {/* <div style={{ marginTop: -10 }}>
-                                <Tooltip placement="top" background='#ff8237'>
+                                <Tooltip placement="top" background="#ff8237">
                                     <span>{AppConstants.ownedCompetitionMsg}</span>
                                 </Tooltip>
                             </div> */}
@@ -528,7 +528,6 @@ class RegistrationMainDashboard extends Component {
 
     ////////ownedView view for competition
     ownedView = () => {
-        console.log(this.props.registrationDashboardState)
         return (
             <div className="comp-dash-table-view" style={{ paddingBottom: 100 }}>
                 <div className="table-responsive home-dash-table-view">
@@ -549,11 +548,10 @@ class RegistrationMainDashboard extends Component {
     };
 
     render() {
-        console.log(this.props.registrationDashboardState.regDashboardListAction, 'regDashboardListAction')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"1"} />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="1" />
                 <Layout>
                     <Content>
                         {this.dropdownView()}

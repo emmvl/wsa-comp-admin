@@ -215,7 +215,7 @@ const MatchSheetTemplate = (props) => {
                     <Text style={styles.associationName}>{organisation.name || 'Association'}</Text>
                     <Text style={styles.templateType}>{templateType} Scoresheet</Text>
                 </View>
-                <Image style={styles.logo} src={organisation.logoUrl || "https://img.icons8.com/color/myspace"}/>
+                <Image style={styles.logo} src={organisation.logoUrl || "https://img.icons8.com/color/myspace"} />
             </View>
             <View style={styles.matchInfo}>
                 <View style={styles.infoContentLeft}>

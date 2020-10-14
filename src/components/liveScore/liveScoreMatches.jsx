@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { NavLink } from "react-router-dom";
-import { Input, Layout, message, Breadcrumb, Button, Table, Pagination, Icon, Select } from "antd";
+import { Input, Layout, message, Breadcrumb, Button, Table, Pagination, Select } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import "./liveScore.css";
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
@@ -39,8 +40,7 @@ function tableSort(key) {
 var _this = null
 function setMatchResult(record) {
     if (record.team1ResultId !== null) {
-        if (record.team1ResultId === 4 || record.team1ResultId === 6 || record.team2ResultId === 6 ||
-            record.team2ResultId === 4) {
+        if (record.team1ResultId === 4 || record.team1ResultId === 6 || record.team2ResultId === 6 || record.team2ResultId === 4) {
             return "Forfeit";
         } else if (record.team1ResultId === 8 || record.team1ResultId === 9) {
             return "Abandoned";
@@ -118,8 +118,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team1.name}</span>
             </NavLink>
         ) : (
-                <span>{team1.name}</span>
-            )
+            <span>{team1.name}</span>
+        )
     },
     {
         title: 'Away',
@@ -137,8 +137,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team2.name}</span>
             </NavLink>
         ) : (
-                <span>{team2.name}</span>
-            )
+            <span>{team2.name}</span>
+        )
     },
     {
         title: 'Venue',
@@ -231,7 +231,7 @@ class LiveScoreMatchesList extends Component {
             let selectedRound = matchListActionObject.roundName ? matchListActionObject.roundName : "All"
             sortBy = matchListActionObject.sortBy
             sortOrder = matchListActionObject.sortOrder
-            await this.setState({ offset, searchText, selectedDivision, selectedDivision, selectedRound, sortBy, sortOrder })
+            await this.setState({ offset, searchText, selectedDivision, selectedRound, sortBy, sortOrder })
             page = Math.floor(offset / 10) + 1;
         }
 
@@ -243,9 +243,7 @@ class LiveScoreMatchesList extends Component {
             } else {
                 history.push("/liveScoreCompetitions")
             }
-
         } else {
-
             if (getLiveScoreCompetiton()) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 this.setState({ competitionId: id })
@@ -271,14 +269,13 @@ class LiveScoreMatchesList extends Component {
             <NavLink to={{
                 pathname: screenName,
                 state: { matchId: data, umpireKey: this.state.umpireKey }
-            }} >
-                <span className="input-heading-add-another pt-0" >{data}</span>
+            }}>
+                <span className="input-heading-add-another pt-0">{data}</span>
             </NavLink>
         )
     }
 
     handleMatchTableList(page, competitionID, sortBy, sortOrder) {
-        console.log("page", page, sortBy, sortOrder)
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset })
         let start = 1
@@ -298,7 +295,7 @@ class LiveScoreMatchesList extends Component {
         }
     }
 
-    // search key 
+    // search key
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
         this.setState({ offset: 0 })
@@ -340,8 +337,8 @@ class LiveScoreMatchesList extends Component {
                         ) : setMatchResult(records)}
                     </div>
                 ) : (
-                        <span className="white-space-nowrap">{setMatchResult(records)}</span>
-                    )}
+                    <span className="white-space-nowrap">{setMatchResult(records)}</span>
+                )}
             </div>
         )
     }
@@ -353,7 +350,7 @@ class LiveScoreMatchesList extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.matchList}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -463,15 +460,17 @@ class LiveScoreMatchesList extends Component {
                 </div>
                 {/* <div className="mt-5" style={{ display: "flex", justifyContent: 'flex-end' }}>
                     <div className="comp-product-search-inp-width">
-                        <Input className="product-reg-search-input"
-                            onChange={(e) => this.onChangeSearchText(e)}
+                        <Input
+                            className="product-reg-search-input"
+                            onChange={this.onChangeSearchText}
                             placeholder="Search..."
-                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                            prefix={<Icon
-                                type="search"
-                                style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                onClick={() => this.onClickSearchIcon()}
-                            />}
+                            onKeyPress={this.onKeyEnterSearchText}
+                            prefix={
+                                <SearchOutlined
+                                    style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={this.onClickSearchIcon}
+                                />
+                            }
                             allowClear
                         />
                     </div>
@@ -506,7 +505,7 @@ class LiveScoreMatchesList extends Component {
                         rowKey={(record, index) => record.id + index}
                     />
                 </div>
-                <div className="d-flex justify-content-end" >
+                <div className="d-flex justify-content-end">
                     <Pagination
                         className="antd-pagination"
                         current={liveScoreMatchListPage}
@@ -594,7 +593,7 @@ class LiveScoreMatchesList extends Component {
     onChangeDivision(division) {
         this.setState({ selectedDivision: division, selectedRound: 'All' })
         let offset = 0;
-        let start = 1
+        let start = 1;
         const { competitionId, searchText, selectedRound, sortBy, sortOrder } = this.state;
 
         setTimeout(() => {
@@ -629,12 +628,10 @@ class LiveScoreMatchesList extends Component {
                                 onChange={(divisionId) => this.onChangeDivision(divisionId)}
                                 value={this.state.selectedDivision}
                             >
-                                <Option value={'All'}>{'All'}</Option>
-                                {
-                                    divisionListArr.map((item, index) => {
-                                        return <Option key={"division" + item.id} value={item.id}>{item.name}</Option>
-                                    })
-                                }
+                                <Option value="All">All</Option>
+                                {divisionListArr.map((item) => (
+                                    <Option key={"division" + item.id} value={item.id}>{item.name}</Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
@@ -647,12 +644,10 @@ class LiveScoreMatchesList extends Component {
                                 onChange={(roundName) => this.onChangeRound(roundName)}
                                 value={this.state.selectedRound}
                             >
-                                <Option value={'All'}>{'All'}</Option>
-                                {
-                                    roundListArr.map((item) => {
-                                        return <Option key={"round" + item.id} value={item.name}>{item.name}</Option>
-                                    })
-                                }
+                                <Option value="All">All</Option>
+                                {roundListArr.map((item) => (
+                                    <Option key={"round" + item.id} value={item.name}>{item.name}</Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
@@ -661,13 +656,16 @@ class LiveScoreMatchesList extends Component {
                         <div className="comp-product-search-inp-width pb-3">
                             <Input
                                 className="product-reg-search-input"
-                                onChange={(e) => this.onChangeSearchText(e)}
+                                onChange={this.onChangeSearchText}
                                 placeholder="Search..."
                                 value={this.state.searchText}
-                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                    onClick={() => this.onClickSearchIcon()}
-                                />}
+                                onKeyPress={this.onKeyEnterSearchText}
+                                prefix={
+                                    <SearchOutlined
+                                        style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                        onClick={this.onClickSearchIcon}
+                                    />
+                                }
                                 allowClear
                             />
                         </div>
@@ -683,18 +681,18 @@ class LiveScoreMatchesList extends Component {
                 {this.state.umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                        <DashboardLayout
-                            menuHeading={AppConstants.liveScores}
-                            menuName={AppConstants.liveScores}
-                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                        />
-                    )}
+                    <DashboardLayout
+                        menuHeading={AppConstants.liveScores}
+                        menuName={AppConstants.liveScores}
+                        onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                    />
+                )}
 
                 {this.state.umpireKey ? (
-                    <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"1"} />
+                    <InnerHorizontalMenu menu="umpire" umpireSelectedKey="1" />
                 ) : (
-                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"2"} />
-                    )}
+                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="2" />
+                )}
 
                 <Layout>
                     {this.headerView()}

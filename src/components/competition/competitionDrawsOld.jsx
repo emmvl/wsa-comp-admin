@@ -24,38 +24,35 @@ class CompetitionDraws extends Component {
         loadjs('assets/js/custom.js');
     }
 
-
     onChange = e => {
-        console.log('radio checked', e.target.value);
         this.setState({
             value: e.target.value,
         });
     };
 
-
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <Header className="comp-draws-header-view mt-4" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <Header className="comp-draws-header-view mt-4">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb style={{
                             display: 'flex', lignItems: 'center', alignSelf: 'center'
                         }} separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add"> {AppConstants.draws}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add"> {AppConstants.draws}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </Header >
+            </Header>
         )
     }
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
-            <div className="row" >
-                <div className="col-sm-3" >
-                    <div className="year-select-heading-view" >
+            <div className="row">
+                <div className="col-sm-3">
+                    <div className="year-select-heading-view">
                         <span className='year-select-heading'>{AppConstants.draws}:</span>
                         <Select
                             className="year-select"
@@ -70,12 +67,12 @@ class CompetitionDraws extends Component {
                         </Select>
                     </div>
                 </div>
-                <div className="col-sm-3" >
+                <div className="col-sm-3">
                     <div style={{
                         width: "100%", display: "flex",
                         flexDirection: "row",
                         alignItems: "center", marginRight: 50,
-                    }} >
+                    }}>
                         <span className='year-select-heading'>{AppConstants.competition}:</span>
                         <Select
                             className="year-select"
@@ -99,14 +96,15 @@ class CompetitionDraws extends Component {
             <div className="comp-draw-content-view">
                 <div className="row comp-draw-list-top-head">
                     <div className="col-sm-10">
-                        <span className='form-heading'>{AppConstants.draws}</span>
-                        <div className="row"  >
-                            <div className="col-sm-5 mr-0" >
+                        <span className="form-heading">{AppConstants.draws}</span>
+                        <div className="row">
+                            <div className="col-sm-5 mr-0">
                                 <div style={{
-                                    width: "100%", display: "flex",
+                                    width: "100%",
+                                    display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
-                                }} >
+                                }}>
                                     <span className='year-select-heading'>{AppConstants.venue}:</span>
                                     <Select
                                         className="year-select"
@@ -118,13 +116,13 @@ class CompetitionDraws extends Component {
                                     </Select>
                                 </div>
                             </div>
-                            <div className="col-sm-7 pl-0" >
-                                <div className="col-sm-4" >
+                            <div className="col-sm-7 pl-0">
+                                <div className="col-sm-4">
                                     <div style={{
                                         width: "100%", display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
-                                    }} >
+                                    }}>
                                         <span className='year-select-heading'>{AppConstants.round}:</span>
                                         <Select
                                             className="year-select"
@@ -137,7 +135,7 @@ class CompetitionDraws extends Component {
                                     </div>
 
                                 </div>
-                                <div className="col-sm-8" >
+                                <div className="col-sm-8">
                                     <div style={{
                                         display: "flex",
                                         flexDirection: "row",
@@ -151,17 +149,17 @@ class CompetitionDraws extends Component {
                         </div>
                     </div>
                     <div className="col-sm-2 comp-draw-edit-btn-view">
-                        <NavLink to="/competitionDrawEdit" >
+                        <NavLink to="/competitionDrawEdit">
                             <Button className="live-score-edit" type="primary">{AppConstants.edit}</Button>
                         </NavLink>
                     </div>
                 </div>
                 {this.dragableView()}
-            </div >
+            </div>
         )
     }
 
-    //////the gragable content view inside the container    
+    //////the gragable content view inside the container
     dragableView = () => {
         return (
             <div className="draggable-wrap draw-data-table">
@@ -201,12 +199,12 @@ class CompetitionDraws extends Component {
                                 Na
                                  </span>
                         </div>
-                        <span className="border left-135"></span>
-                        <div className="box left-135 purple-bg" >
+                        <span className="border left-135" />
+                        <div className="box left-135 purple-bg">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
-                                 </span>
+                            </span>
                         </div>
 
                         <span className="border left-245"></span>
@@ -734,15 +732,15 @@ class CompetitionDraws extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="footer-view">
-                    <div className="row" >
+                    <div className="row">
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
                                 <Button type="cancel-button">{AppConstants.cancel}</Button>
                             </div>
                         </div>
-                        <div className="col-sm-9" >
+                        <div className="col-sm-9">
                             <div className="comp-buttons-view">
                                 <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveAsDraft}</Button>
                                 <Button className="open-reg-button" type="primary">{AppConstants.publish}</Button>
@@ -756,9 +754,9 @@ class CompetitionDraws extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"18"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey={"18"} />
                 <Layout className="container">
                     <div className="comp-draw-head-content-view">
                         {this.headerView()}

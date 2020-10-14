@@ -28,11 +28,11 @@ class RegistrationWizardModel extends React.Component {
                     onCancel={onCancel}
                     cancelButtonProps={{ style: { display: 'none' } }}
                     okButtonProps={{ style: { display: "none" } }}
-                    maskClosable={true}
+                    maskClosable
                 >
                     <div className="col-sm pl-0 pb-2">
 
-                        <div className="reg-filter-col-cont"  >
+                        <div className="reg-filter-col-cont">
                             <span className="year-select-heading">
                                 {AppConstants.competition}:
                                 </span>
@@ -44,7 +44,7 @@ class RegistrationWizardModel extends React.Component {
                             >
                                 {wizardCompetition.length > 0 && wizardCompetition.map((item, index) => {
                                     return (
-                                        < Option key={"Comp" + index} value={item.competitionId}> {item.competitionName}</Option>
+                                        <Option key={"Comp" + index} value={item.competitionId}> {item.competitionName}</Option>
                                     );
                                 })}
                             </Select>
@@ -52,9 +52,9 @@ class RegistrationWizardModel extends React.Component {
                     </div>
 
                     <div className="wizard_div" style={{ minHeight: stripeConnected ? 100 : 140, marginTop: 20 }}>
-                        <div className="row" >
+                        <div className="row">
                             <div className="col-sm  pl-0 pb-2">
-                                <div className="col-sm-6 " style={{ display: "flex", justifyContent: 'flex-start' }}>
+                                <div className="col-sm-6" style={{ display: "flex", justifyContent: 'flex-start' }}>
                                     <span className={`comment-heading`}>
                                         {"Step"}
                                     </span>
@@ -71,7 +71,7 @@ class RegistrationWizardModel extends React.Component {
                             <div className="row" style={{ width: "100%" }}>
 
                                 <div className="col-sm-1 serialView pb-2">
-                                    <span className={`comment-heading`} >
+                                    <span className={`comment-heading`}>
                                         {"1"}{" "}
                                     </span>
                                 </div>
@@ -79,7 +79,7 @@ class RegistrationWizardModel extends React.Component {
                                     <span className={`comment-heading`}>
                                         {AppConstants.setup} {" "}
                                     </span>
-                                    <a href={stripeConnectURL} class="stripe-connect">
+                                    <a href={stripeConnectURL} className="stripe-connect">
                                         <span className={`comment-heading`} style={{ textDecoration: "underline", cursor: 'pointer', color: "#FF8237" }}>
                                             {AppConstants.setupStripe}
                                         </span>
@@ -90,7 +90,7 @@ class RegistrationWizardModel extends React.Component {
                         }
                         <div className="row" style={{ width: "100%" }}>
                             <div className="col-sm-1 serialView pb-2 ">
-                                <span className={`comment-heading`} >
+                                <span className={`comment-heading`}>
                                     {!stripeConnected ? "2" : "1"}{" "}
                                 </span>
                             </div>
@@ -103,7 +103,7 @@ class RegistrationWizardModel extends React.Component {
                                     {AppConstants.competitionFees}
                                 </span>
                             </div>
-                            <div className="col-sm-1 tickView pb-2 pl-0" >
+                            <div className="col-sm-1 tickView pb-2 pl-0">
                                 {competitionStatus == true &&
                                     <img
                                         src={AppImages.tick}
@@ -115,7 +115,7 @@ class RegistrationWizardModel extends React.Component {
                         </div>
                         <div className="row" style={{ width: "100%" }}>
                             <div className="col-sm-1 serialView pb-2">
-                                <span className={`comment-heading`} >
+                                <span className={`comment-heading`}>
                                     {!stripeConnected ? "3" : "2"} {" "}
                                 </span>
                             </div>
@@ -147,7 +147,7 @@ class RegistrationWizardModel extends React.Component {
                         </div>
                     </div>
                 </Modal >
-            </div >
+            </div>
         )
     }
 }

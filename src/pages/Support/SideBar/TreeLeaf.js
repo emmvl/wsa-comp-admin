@@ -36,7 +36,7 @@ const TreeLeaf = ({
     <div className="side-bar-item">
       <ul onClick={() => onShow(content.id)}>
         {content.article === 'Home'
-          ? <i className="fa fa-home"/>
+          ? <i className="fa fa-home" />
           : (
             <i
               className={`fa ${content.subArticles.length > 0

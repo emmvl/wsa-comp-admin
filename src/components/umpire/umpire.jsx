@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Layout, Button, Table, Select, Menu, Icon, Pagination, message } from "antd";
+import { Input, Layout, Button, Table, Select, Menu, Pagination, message } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
@@ -10,7 +11,6 @@ import ValidationConstants from "themes/validationConstant";
 import { entityTypes } from "util/entityTypes";
 import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
-import { refRoleTypes } from "util/refRoles";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
 import { umpireMainListAction } from "store/actions/umpireAction/umpireAction";
@@ -53,10 +53,7 @@ function checkUmpireUserRoll(rolesArr, key) {
         }
     }
     return isUmpire
-
 }
-
-
 
 function tableSort(key) {
     let sortBy = key;
@@ -613,8 +610,7 @@ class Umpire extends Component {
                                 onKeyPress={this.onKeyEnterSearchText}
                                 value={this.state.searchText}
                                 prefix={
-                                    <Icon
-                                        type="search"
+                                    <SearchOutlined
                                         style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                         onClick={this.onClickSearchIcon}
                                     />
