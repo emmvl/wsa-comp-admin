@@ -28,7 +28,7 @@ import { connect } from 'react-redux'
 import history from "../../util/history";
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { isArrayNotEmpty, captializedString } from "../../util/helpers";
-import { getLiveScoreCompetiton } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
 import { liveScorePlayerListAction } from '../../store/actions/LiveScoreAction/liveScorePlayerAction'
 import Loader from '../../customComponents/loader'
 import ImageLoader from '../../customComponents/ImageLoader'
@@ -59,31 +59,61 @@ class LiveScoreAddIncident extends Component {
             matchId: this.props.location.state ? this.props.location.state.matchId : null,
             matchDetails: this.props.location.state ? this.props.location.state.matchDetails : null,
             crossImageIcon: false,
-            crossVideoIcon: false
+            crossVideoIcon: false,
+            umpireKey: this.props.location ? this.props.location.state ? this.props.location.state.umpireKey : null : null,
+            screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
         }
         this.formRef = createRef();
     }
 
     componentDidMount() {
-        if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            const { incidentData } = this.props.liveScoreIncidentState
-            this.props.liveScoreIncidentTypeAction();
-            if (id !== null) {
-                this.props.getliveScoreTeams(id);
-            }
 
-            if (this.state.isEdit === true) {
-                this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isEdit");
-                this.setInitialFieldValue();
+        if (this.state.umpireKey === 'umpire') {
+
+            if (getUmpireCompetitonData()) {
+                const { id } = JSON.parse(getUmpireCompetitonData())
+                const { incidentData } = this.props.liveScoreIncidentState
+                this.props.liveScoreIncidentTypeAction();
                 if (id !== null) {
-                    this.props.liveScorePlayerListAction(id, incidentData.teamId);
+                    this.props.getliveScoreTeams(id);
+                }
+
+                if (this.state.isEdit === true) {
+                    this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isEdit")
+                    this.setInitialFieldValue()
+                    if (id !== null) {
+
+                        this.props.liveScorePlayerListAction(id, incidentData.teamId);
+                    }
+                } else {
+                    this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isAdd")
                 }
             } else {
-                this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isAdd");
+                history.push('/umpireDashboard')
             }
+
         } else {
-            history.push('/liveScoreCompetitions');
+            if (getLiveScoreCompetiton()) {
+                const { id } = JSON.parse(getLiveScoreCompetiton())
+                const { incidentData } = this.props.liveScoreIncidentState
+                this.props.liveScoreIncidentTypeAction();
+                if (id !== null) {
+                    this.props.getliveScoreTeams(id);
+                }
+
+                if (this.state.isEdit === true) {
+                    this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isEdit")
+                    this.setInitialFieldValue()
+                    if (id !== null) {
+
+                        this.props.liveScorePlayerListAction(id, incidentData.teamId);
+                    }
+                } else {
+                    this.props.liveScoreUpdateIncidentData(this.state.tableRecord, "isAdd")
+                }
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         }
     }
 
@@ -199,13 +229,29 @@ class LiveScoreAddIncident extends Component {
     }
 
     setTeamId(teamId) {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (id !== null) {
-            this.props.liveScorePlayerListAction(id, teamId);
+
+        if (this.state.umpireKey) {
+
+            if (getUmpireCompetitonData()) {
+                const { id } = JSON.parse(getUmpireCompetitonData())
+                this.props.liveScorePlayerListAction(id, teamId);
+                this.props.liveScoreUpdateIncidentData(null, "clearPyarIds")
+                this.setInitialFieldValue()
+                this.props.liveScoreUpdateIncidentData(teamId, "teamId")
+            }
+
+        } else {
+
+            if (getLiveScoreCompetiton()) {
+                const { id } = JSON.parse(getLiveScoreCompetiton())
+                this.props.liveScorePlayerListAction(id, teamId);
+                this.props.liveScoreUpdateIncidentData(null, "clearPyarIds")
+                this.setInitialFieldValue()
+                this.props.liveScoreUpdateIncidentData(teamId, "teamId")
+            }
         }
-        this.props.liveScoreUpdateIncidentData(null, "clearPyarIds")
-        this.setInitialFieldValue()
-        this.props.liveScoreUpdateIncidentData(teamId, "teamId")
+
+
     }
 
     //// Form View
@@ -291,18 +337,18 @@ class LiveScoreAddIncident extends Component {
                                     <Option value={team2Id}> {team2_Name}</Option>
                                 </Select>
                             ) : (
-                                <Select
-                                    className="reg-form-multiple-select"
-                                    placeholder='Select Home Team'
-                                    style={{ width: "100%" }}
-                                    onChange={(teamId) => this.setTeamId(teamId)}
-                                    // value={incidentData.teamId ? incidentData.teamId : ''}
-                                    optionFilterProp="children"
-                                >
-                                    <Option value={team1_Id}> {team_1}</Option>
-                                    <Option value={team2_Id}> {team_2}</Option>
-                                </Select>
-                            )}
+                                    <Select
+                                        className="reg-form-multiple-select"
+                                        placeholder='Select Home Team'
+                                        style={{ width: "100%" }}
+                                        onChange={(teamId) => this.setTeamId(teamId)}
+                                        // value={incidentData.teamId ? incidentData.teamId : ''}
+                                        optionFilterProp="children"
+                                    >
+                                        <Option value={team1_Id}> {team_1}</Option>
+                                        <Option value={team2_Id}> {team_2}</Option>
+                                    </Select>
+                                )}
                         </Form.Item>
                     </div>
                 </div>
@@ -346,7 +392,7 @@ class LiveScoreAddIncident extends Component {
                                 placeholder={AppConstants.selectIncident}
                                 style={{ width: "100%", }}
                                 onChange={(incident) => this.props.liveScoreUpdateIncidentData(incident, "injury")}
-                                // value={incidentData.injury ? incidentData.injury : undefined}
+                            // value={incidentData.injury ? incidentData.injury : undefined}
                             >
                                 {isArrayNotEmpty(incidentTypeResult) && incidentTypeResult.map((item) => (
                                     <Option value={item.id}>{item.name}</Option>
@@ -512,16 +558,21 @@ class LiveScoreAddIncident extends Component {
 
     onSaveClick = e => {
         const { incidentData, incidentId, incidentMediaIds } = this.props.liveScoreIncidentState;
-        // let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("DD-MM-YYYY") : null
-        // let startDate = date ? moment(date, 'DD-MM-YYYY') : null
-        // let time_formate = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
-        // let startTime = time_formate ? moment(time_formate, "HH:mm") : null
+        let compId = null
 
-        const { id } = JSON.parse(getLiveScoreCompetiton());
-        // let date = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("YYYY-MMM-DD") : moment(incidentData.date).format("YYYY-MMM-DD");
+        if (this.state.umpireKey == 'umpire') {
+            if (getUmpireCompetitonData()) {
+                const { id } = JSON.parse(getUmpireCompetitonData());
+                compId = id
+            }
+
+        } else {
+            const { id } = JSON.parse(getLiveScoreCompetiton());
+            compId = id
+        }
+
         let date = incidentData.date ? moment(incidentData.date).format("YYYY-MMM-DD") : this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("YYYY-MMM-DD") : null
         let time = incidentData.date ? moment(incidentData.time).format("HH:mm") : this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : null
-        // let time = this.state.matchDetails ? moment(this.state.matchDetails.match[0].startTime).format("HH:mm") : moment(incidentData.time).format("HH:mm");
         let startDateTime = moment(date + " " + time);
         let formatDateTime = new Date(startDateTime).toISOString();
         let mediaArry;
@@ -545,7 +596,7 @@ class LiveScoreAddIncident extends Component {
             body = {
                 matchId: incidentData.mnbMatchId,
                 teamId: incidentData.teamId,
-                competitionId: id,
+                competitionId: compId,
                 incidentTime: formatDateTime,
                 description: incidentData.description,
                 incidentTypeId: incidentData.injury,
@@ -556,7 +607,7 @@ class LiveScoreAddIncident extends Component {
                 // matchId: incidentData.mnbMatchId,
                 matchId: this.state.matchId,
                 teamId: incidentData.teamId,
-                competitionId: id,
+                competitionId: compId,
                 incidentTime: formatDateTime,
                 description: incidentData.description,
                 incidentTypeId: incidentData.injury,
@@ -571,6 +622,8 @@ class LiveScoreAddIncident extends Component {
                 mediaArry: mediaArry,
                 key: 'media',
                 incidentMediaIds,
+                umpireKey: this.state.umpireKey
+
             });
         } else {
             this.props.liveScoreAddEditIncident({
@@ -580,20 +633,34 @@ class LiveScoreAddIncident extends Component {
                 mediaArry: mediaArry,
                 key: 'media',
                 incidentMediaIds,
+                umpireKey: this.state.umpireKey
+
             });
         }
     };
 
     render() {
+        const { umpireKey } = this.state
+        let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
-                    menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                />
 
-                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="17" />
+                {
+                    umpireKey ?
+                        <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
+                        :
+                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                }
+
+
+
+                {
+                    umpireKey ?
+                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen == 'umpireList' ? "2" : "1"} />
+                        :
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
+                }
+
 
                 <Loader visible={this.props.liveScoreIncidentState.loading} />
 

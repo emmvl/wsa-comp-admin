@@ -350,6 +350,8 @@ class LiveScoreTeam extends Component {
     };
 
     render() {
+        const { screenKey } = this.props.liveScoreTeamState
+        console.log(this.props.liveScoreTeamState.screenKey, 'liveScoreTeamState')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout

@@ -34,7 +34,7 @@ import {
 import Loader from '../../customComponents/loader'
 // import LoaderImg from 'react-loader-spinner'
 import { setTimeout } from "timers";
-import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import ImageLoader from '../../customComponents/ImageLoader'
 import { isArrayNotEmpty, captializedString, regexNumberExpression } from '../../util/helpers';
 import Tooltip from 'react-png-tooltip'
@@ -69,26 +69,50 @@ class LiveScoreAddTeam extends Component {
             loading: false,
             progress: 0,
             key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
+            screenName: this.props.location.state ? this.props.location.state.screenName : null,
+            screenKey: this.props.location.state ? this.props.location.state.screenKey : null,
         };
         this.formRef = React.createRef();
     }
 
     componentDidMount() {
-        if (getLiveScoreCompetiton()) {
-            if (this.state.isEdit == true) {
-                this.props.liveScoreGetTeamDataAction(this.state.teamId);
-                this.setState({ load: true });
-            } else {
-                this.props.liveScoreAddTeamform({ key: 'addTeam' });
-            }
 
-            const { id } = JSON.parse(getLiveScoreCompetiton());
-            this.setState({ localCompetitionID: id });
-            this.props.liveScoreGetDivision(id);
-            this.props.liveScoreGetAffiliate({ id, name: '' });
-            this.props.liveScoreManagerListAction(5, 1, id);
+        if (this.state.screenKey == 'umpire') {
+            if (getUmpireCompetitonData()) {
+                if (this.state.isEdit == true) {
+
+                    this.props.liveScoreGetTeamDataAction(this.state.teamId)
+                    this.setState({ load: true })
+                }
+                else {
+                    this.props.liveScoreAddTeamform({ key: 'addTeam' })
+                }
+                const { id } = JSON.parse(getUmpireCompetitonData())
+                this.setState({ loaclCompetitionID: id })
+                this.props.liveScoreGetDivision(id)
+                this.props.liveScoreGetAffiliate({ id, name: '' })
+                this.props.liveScoreManagerListAction(5, 1, id)
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         } else {
-            history.push('/liveScoreCompetitions');
+            if (getLiveScoreCompetiton()) {
+                if (this.state.isEdit == true) {
+
+                    this.props.liveScoreGetTeamDataAction(this.state.teamId)
+                    this.setState({ load: true })
+                }
+                else {
+                    this.props.liveScoreAddTeamform({ key: 'addTeam' })
+                }
+                const { id } = JSON.parse(getLiveScoreCompetiton())
+                this.setState({ loaclCompetitionID: id })
+                this.props.liveScoreGetDivision(id)
+                this.props.liveScoreGetAffiliate({ id, name: '' })
+                this.props.liveScoreManagerListAction(5, 1, id)
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         }
     }
 
@@ -365,14 +389,14 @@ class LiveScoreAddTeam extends Component {
                             }}
                             onBlur={() => this.props.liveScoreManagerListAction(5, 1, this.state.localCompetitionID)}
                             optionFilterProp="children"
-                            // onSearch={(value) => {
-                            //     this.setState({ showOption: true })
-                            //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
-                            //         return data.firstName.indexOf(value) > -1
-                            //     })
-                            //     this.props.liveScoreManagerFilter(filteredData)
-                            // }}
-                            // value={selectedManager}
+                        // onSearch={(value) => {
+                        //     this.setState({ showOption: true })
+                        //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
+                        //         return data.firstName.indexOf(value) > -1
+                        //     })
+                        //     this.props.liveScoreManagerFilter(filteredData)
+                        // }}
+                        // value={selectedManager}
                         >
                             {/* {this.state.showOption ?  */}
                             {managerListResult.map((item) => (
@@ -483,7 +507,7 @@ class LiveScoreAddTeam extends Component {
                                 onChange={(event) => {
                                     this.props.liveScoreAddTeamform({ key: 'email', data: event.target.value })
                                 }}
-                                // value={teamManagerData.email}
+                            // value={teamManagerData.email}
                             />
                         </Form.Item>
 
@@ -503,7 +527,7 @@ class LiveScoreAddTeam extends Component {
                                 placeholder={AppConstants.enterContactNo}
                                 maxLength={10}
                                 onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
-                                // value={teamManagerData.mobileNumber}
+                            // value={teamManagerData.mobileNumber}
                             />
                         </Form.Item>
 
@@ -530,7 +554,7 @@ class LiveScoreAddTeam extends Component {
                         <div className="col-sm">
                             <div className="comp-buttons-view">
                                 <Button onClick={this.handleSubmit} className="publish-button save-draft-text"
-                                        type="primary" htmlType="submit" disabled={isSubmitting}>
+                                    type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -542,7 +566,15 @@ class LiveScoreAddTeam extends Component {
     };
 
     handleSubmit = e => {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
+        let compId = null
+        if (this.state.screenKey == 'umpire') {
+            const { id } = JSON.parse(getUmpireCompetitonData())
+            compId = id
+        } else {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            compId = id
+        }
+
         const {
             mobileNumber,
         } = this.props.liveScoreTeamState.teamManagerData
@@ -589,7 +621,7 @@ class LiveScoreAddTeam extends Component {
                     formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                 }
 
-                formData.append('competitionId', id)
+                formData.append('competitionId', compId)
                 formData.append('organisationId', organisationId)
                 formData.append('divisionId', divisionId)
                 formData.append('userIds', usersArray)
@@ -600,7 +632,8 @@ class LiveScoreAddTeam extends Component {
                     formData.append('mobileNumber', regexNumberExpression(mobileNumber))
                     formData.append('email', email)
                 }
-                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
+                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey)
+
             } else if (this.props.liveScoreTeamState.managerType === 'new') {
                 const formData = new FormData();
                 if (this.state.teamId) {
@@ -618,7 +651,7 @@ class LiveScoreAddTeam extends Component {
                 } else if (this.props.liveScoreTeamState.teamLogo) {
                     formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                 }
-                formData.append('competitionId', id)
+                formData.append('competitionId', compId)
                 formData.append('organisationId', organisationId)
                 formData.append('divisionId', divisionId)
                 formData.append('firstName', firstName)
@@ -629,7 +662,8 @@ class LiveScoreAddTeam extends Component {
                     formData.append('userIds', usersArray)
                 }
 
-                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
+                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey)
+
             } else {
                 // message.config({ duration: 0.9, maxCount: 1 })
                 // message.error('Please select manager section.')
@@ -649,24 +683,35 @@ class LiveScoreAddTeam extends Component {
                 } else if (this.props.liveScoreTeamState.teamLogo) {
                     formData.append('logoUrl', this.props.liveScoreTeamState.teamLogo)
                 }
-                formData.append('competitionId', id)
+                formData.append('competitionId', compId)
                 formData.append('organisationId', organisationId)
                 formData.append('divisionId', divisionId)
-                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key)
+                this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey)
+
             }
         }
     }
 
     /////main render method
     render() {
+        const { screenName } = this.state
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
-                    menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                />
-                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="3" />
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+
+
+                {
+                    screenName == 'userPersonal' ?
+                        <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
+                        :
+                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                }
+
+                {
+                    screenName == 'userPersonal' ?
+                        <InnerHorizontalMenu menu={"user"} userSelectedKey={"1"} />
+                        :
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"3"} />
+                }
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout>
                     {this.headerView()}
@@ -682,7 +727,7 @@ class LiveScoreAddTeam extends Component {
                         <Footer>{this.footerView()}</Footer>
                     </Form>
                 </Layout>
-            </div>
+            </div >
         );
     }
 }

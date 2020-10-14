@@ -155,17 +155,19 @@ function* liveScoreAffiliateSaga(action) {
 }
 
 function* addTeamLiveScoreSaga(action) {
+  console.log(action, 'addTeamLiveScoreSaga')
   try {
     const result = yield call(LiveScoreAxiosApi.liveScoreAddNewTeam, action.payload);
 
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_LIVE_SCORE_ADD_TEAM_SUCCESS,
+        screenKey: action.screenKey
       });
 
       message.success(action.teamId ? "Team has been updated Successfully" : "Team has been created Successfully.");
 
-      history.push(action.key ? "liveScoreDashboard" : "/liveScoreTeam");
+      history.push(action.key ? "liveScoreDashboard" : action.screenKey == 'umpire' ? 'umpire' : "/liveScoreTeam");
     } else {
       yield call(failSaga, result);
     }

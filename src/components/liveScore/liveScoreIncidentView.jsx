@@ -25,7 +25,8 @@ class LiveScoreIncidentView extends Component {
             modaldata: '',
             isVideo: false,
             incidentItem: props.location.state.item,
-            screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null
+            screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
+            umpireKey: this.props.location ? this.props.location.state ? this.props.location.state.umpireKey : null : null,
         };
     }
 
@@ -67,7 +68,7 @@ class LiveScoreIncidentView extends Component {
                     <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }}>
                         <NavLink to={{
                             pathname: '/liveScoreAddIncident',
-                            state: { isEdit: true, tableRecord: this.state.incidentItem }
+                            state: { isEdit: true, tableRecord: this.state.incidentItem, umpireKey: this.state.umpireKey }
                         }}>
                             <Button className="primary-add-comp-form" type="primary">
                                 {AppConstants.edit}
@@ -208,10 +209,25 @@ class LiveScoreIncidentView extends Component {
 
     ////main render method
     render() {
+        let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.screenName == 'dashboard' ? "1" : "17"} />
+
+                {
+                    this.state.umpireKey ?
+                        <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
+                        :
+                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                }
+
+
+
+                {
+                    this.state.umpireKey ?
+                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen == 'umpireList' ? "2" : "1"} />
+                        :
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'dashboard' ? "1" : "17"} />
+                }
                 <Layout>
                     {this.headerView()}
                     <Content>

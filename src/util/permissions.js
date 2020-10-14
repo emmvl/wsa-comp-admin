@@ -115,8 +115,6 @@ function showRoleLevelPermision(userRoleId, menuName) {
         switch (userRoleId) {
             case 2: return true
                 break;
-            case 13: return true
-                break;
             default: return false
 
         }
@@ -148,7 +146,6 @@ function showRoleLevelPermision(userRoleId, menuName) {
 
         switch (userRoleId) {
             case 2: return true
-            case 13: return true
             default: return false
 
         }
@@ -176,4 +173,11 @@ function showRoleLevelPermision(userRoleId, menuName) {
 
 }
 
-export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel, checkRegistrationType, checkLivScoreCompIsParent, checkUserAccess, showRoleLevelPermision }
+function getUserRoleId() {
+    let orgItem = getOrganisationData()
+    let userRoleId = orgItem ? orgItem.userRoleId : 2
+
+    return userRoleId
+}
+
+export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel, checkRegistrationType, checkLivScoreCompIsParent, checkUserAccess, showRoleLevelPermision, getUserRoleId }

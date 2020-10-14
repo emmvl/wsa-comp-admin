@@ -15,7 +15,7 @@ import { getLiveScoreCompetiton, getLiveScoreUmpireCompitionData } from '../util
 import history from "../util/history";
 import { getOnlyYearListAction } from "../store/actions/appAction";
 import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
-import { checkUserAccess } from '../util/permissions'
+import { getUserRoleId } from '../util/permissions'
 
 const { SubMenu } = Menu;
 const { Option } = Select;
@@ -34,13 +34,13 @@ class InnerHorizontalMenu extends React.Component {
             yearId: null,
             yearLoading: false,
             defaultYear: null,
-            userAccessPermission: ""
+            userAccessPermission: "",
+            userRoleId: getUserRoleId()
         };
     }
 
     async componentDidMount() {
-        let userAccessPermission = await checkUserAccess()
-        this.setState({ userAccessPermission })
+
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             let yearRefId = localStorage.getItem("yearId")
@@ -172,7 +172,7 @@ class InnerHorizontalMenu extends React.Component {
         let compList = isArrayNotEmpty(competitionList) ? competitionList : [];
         let { liveScoreCompIsParent } = this.state;
         const { yearList } = this.props.appState;
-        const { userAccessPermission } = this.state
+        const { userRoleId } = this.state
 
         return (
             <div>
@@ -303,7 +303,7 @@ class InnerHorizontalMenu extends React.Component {
                     </Menu>
                 )}
 
-                {(menu === "registration" && userAccessPermission == 'admin') && (
+                {menu === "registration" && (
                     <Menu
                         theme="light"
                         mode="horizontal"
@@ -364,43 +364,6 @@ class InnerHorizontalMenu extends React.Component {
                             </Menu.Item>
                         </SubMenu>
 
-                        {/* <Menu.Item key="9">De-registration forms</Menu.Item> */}
-                    </Menu>
-                )}
-
-                {(menu === "registration" && userAccessPermission == 'finance') && (
-                    <Menu
-                        theme="light"
-                        mode="horizontal"
-                        defaultSelectedKeys={['1']}
-                        style={{ lineHeight: '64px' }}
-                        selectedKeys={[this.props.regSelectedKey]}
-                        onClick={() => this.props.clearDataOnCompChangeAction()}
-                    >
-
-                        <SubMenu
-                            key="sub2"
-                            title={
-                                <span>Payments</span>
-                            }
-                        >
-                            <Menu.Item key="8">
-                                <NavLink to="/paymentDashboard">
-                                    <span>Payment Dashboard</span>
-                                </NavLink>
-                            </Menu.Item>
-                            <Menu.Item key="4">
-                                <NavLink to="/registrationPayments">
-                                    <span>Payment Gateway</span>
-                                </NavLink>
-                                {/* <a href="https://comp-management-test.firebaseapp.com/payment-dashboard.html">Payments</a> */}
-                            </Menu.Item>
-                            <Menu.Item key="5">
-                                <NavLink to="/registrationSettlements">
-                                    <span>Payouts</span>
-                                </NavLink>
-                            </Menu.Item>
-                        </SubMenu>
                         {/* <Menu.Item key="9">De-registration forms</Menu.Item> */}
                     </Menu>
                 )}
@@ -787,7 +750,7 @@ class InnerHorizontalMenu extends React.Component {
                     </Menu>
                 )}
 
-                {(menu === "home" && userAccessPermission == 'admin') && (
+                {(menu === "home" && userRoleId == 2) && (
                     <Menu
                         theme="light"
                         mode="horizontal"

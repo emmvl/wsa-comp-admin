@@ -205,6 +205,7 @@ class LiveScoreMatchDetails extends Component {
         this.umpireScore_View = this.umpireScore_View.bind(this);
         this.team_View = this.team_View.bind(this);
         this_ = this;
+
     }
 
     componentDidMount() {
@@ -474,6 +475,8 @@ class LiveScoreMatchDetails extends Component {
         const length = match ? match.length : 0;
         let isMatchStatus = length > 0 && match[0].matchStatus === "ENDED";
 
+        console.log(this.state.screenName, 'this.state.screenName')
+
         return (
             <div className="p-4">
                 <div className="row">
@@ -515,7 +518,7 @@ class LiveScoreMatchDetails extends Component {
                                 >
                                     <NavLink to={{
                                         pathname: '/liveScoreAddIncident',
-                                        state: { matchId: this.state.matchId, matchDetails: matchDetails }
+                                        state: { matchId: this.state.matchId, matchDetails: matchDetails, umpireKey: this.state.umpireKey, screenName: this.state.screenName }
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addIncident}
@@ -557,7 +560,8 @@ class LiveScoreMatchDetails extends Component {
                                             isEdit: true,
                                             matchId: this.state.matchId,
                                             key: this.state.key,
-                                            umpireKey: this.state.umpireKey
+                                            umpireKey: this.state.umpireKey,
+                                            screenName: this.state.screenName
                                         }
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
@@ -2023,6 +2027,8 @@ class LiveScoreMatchDetails extends Component {
     }
 
     render() {
+        console.log(this.props.location.state, 'umpireKey')
+        let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <Loader
@@ -2044,7 +2050,7 @@ class LiveScoreMatchDetails extends Component {
 
                 {
                     this.state.umpireKey ?
-                        <InnerHorizontalMenu menu="umpire" umpireSelectedKey="1" />
+                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen == 'umpireList' ? "2" : "1"} />
                         :
                         <InnerHorizontalMenu
                             menu="liveScore"

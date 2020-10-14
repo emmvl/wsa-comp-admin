@@ -12,7 +12,7 @@ import AppImages from "../../themes/appImages";
 import { liveScoreIncidentList } from '../../store/actions/LiveScoreAction/liveScoreIncidentAction'
 import { liveScore_MatchFormate } from '../../themes/dateformate'
 import history from "../../util/history";
-import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
 import ValidationConstants from "../../themes/validationConstant";
 
@@ -50,7 +50,7 @@ const columns = [
         render: (incidentTime, record) =>
             <NavLink to={{
                 pathname: "/liveScoreIncidentView",
-                state: { item: record, screenName: 'incident' }
+                state: { item: record, screenName: 'incident', umpireKey: this_Obj.props.liveScoreIncidentState.umpireKey }
             }}>
                 <span className="input-heading-add-another pt-0">{liveScore_MatchFormate(incidentTime)}</span>
             </NavLink>
@@ -64,7 +64,7 @@ const columns = [
         render: (matchId, record) =>
             <NavLink to={{
                 pathname: "/liveScoreMatchDetails",
-                state: { matchId: matchId, screenName: 'incident' }
+                state: { matchId: matchId, screenName: 'incident', umpireKey: this_Obj.props.liveScoreIncidentState.umpireKey }
             }}>
                 <span className="input-heading-add-another pt-0">{matchId}</span>
             </NavLink>
@@ -120,20 +120,20 @@ class LiveScoreIncidentList extends Component {
             limit: 10,
             sortBy: null,
             sortOrder: null,
+            screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
         };
         this_Obj = this
     }
 
     componentDidMount() {
 
-        const { incidentListActionObject } = this.props.liveScoreIncidentState
+        const { incidentListActionObject, umpireKey } = this.props.liveScoreIncidentState
         let sortBy = this.state.sortBy
         let sortOrder = this.state.sortOrder
 
-        if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            if (id !== null) {
-
+        if (umpireKey) {
+            if (getUmpireCompetitonData()) {
+                const { id } = JSON.parse(getUmpireCompetitonData())
                 if (incidentListActionObject) {
                     let offset = incidentListActionObject.offset
                     let searchText = incidentListActionObject.search
@@ -145,13 +145,27 @@ class LiveScoreIncidentList extends Component {
                     let { searchText, limit, offset, sortBy, sortOrder } = this.state
                     this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder);
                 }
+            } else {
+                history.push('/umpireDashboard')
+            }
 
-
+        } else {
+            if (getLiveScoreCompetiton()) {
+                const { id } = JSON.parse(getLiveScoreCompetiton())
+                if (incidentListActionObject) {
+                    let offset = incidentListActionObject.offset
+                    let searchText = incidentListActionObject.search
+                    sortBy = incidentListActionObject.sortBy
+                    sortOrder = incidentListActionObject.sortOrder
+                    this.setState({ sortBy, sortOrder, offset, searchText })
+                    this.props.liveScoreIncidentList(id, searchText, 10, offset, sortBy, sortOrder);
+                } else {
+                    let { searchText, limit, offset, sortBy, sortOrder } = this.state
+                    this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder);
+                }
             } else {
                 history.push('/liveScoreCompetitions')
             }
-        } else {
-            history.push('/liveScoreCompetitions')
         }
     }
 
@@ -166,42 +180,79 @@ class LiveScoreIncidentList extends Component {
 
     // on change search text
     onChangeSearchText = (e) => {
-        const { id } = JSON.parse(getLiveScoreCompetiton())
+        const { umpireKey } = this.props.liveScoreIncidentState
+        let compId = null
+        if (umpireKey) {
+            const { id } = JSON.parse(getUmpireCompetitonData())
+            compId = id
+        } else {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            compId = id
+        }
+
+
         let { limit, sortBy, sortOrder } = this.state
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
-            this.props.liveScoreIncidentList(id, e.target.value, limit, 0, sortBy, sortOrder);
+            this.props.liveScoreIncidentList(compId, e.target.value, limit, 0, sortBy, sortOrder);
         }
     }
 
     // search key
     onKeyEnterSearchText = (e) => {
+
+        const { umpireKey } = this.props.liveScoreIncidentState
+        let compId = null
+        if (umpireKey) {
+            const { id } = JSON.parse(getUmpireCompetitonData())
+            compId = id
+        } else {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            compId = id
+        }
+
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         let { limit, sortBy, sortOrder } = this.state
-        const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
-            this.props.liveScoreIncidentList(id, e.target.value, limit, 0, sortBy, sortOrder);
+            this.props.liveScoreIncidentList(compId, e.target.value, limit, 0, sortBy, sortOrder);
         }
     }
 
     // on click of search icon
     onClickSearchIcon = () => {
         this.setState({ offset: 0 })
-        const { id } = JSON.parse(getLiveScoreCompetiton())
+        const { umpireKey } = this.props.liveScoreIncidentState
+        let compId = null
+        if (umpireKey) {
+            const { id } = JSON.parse(getUmpireCompetitonData())
+            compId = id
+        } else {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            compId = id
+        }
+
         let { searchText, limit, sortBy, sortOrder } = this.state
         if (searchText === null || searchText === "") {
         } else {
-            this.props.liveScoreIncidentList(id, searchText, limit, 0, sortBy, sortOrder);
+            this.props.liveScoreIncidentList(compId, searchText, limit, 0, sortBy, sortOrder);
         }
     }
 
     handleTableChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
-        const { id } = JSON.parse(getLiveScoreCompetiton())
         let { searchText, limit, sortBy, sortOrder } = this.state
         this.setState({ offset: offset })
-        this.props.liveScoreIncidentList(id, searchText, limit, offset, sortBy, sortOrder);
+        const { umpireKey } = this.props.liveScoreIncidentState
+        let compId = null
+        if (umpireKey) {
+            const { id } = JSON.parse(getUmpireCompetitonData())
+            compId = id
+        } else {
+            const { id } = JSON.parse(getLiveScoreCompetiton())
+            compId = id
+        }
+        this.props.liveScoreIncidentList(compId, searchText, limit, offset, sortBy, sortOrder);
     }
 
     ///////view for breadcrumb
@@ -353,14 +404,27 @@ class LiveScoreIncidentList extends Component {
     };
 
     render() {
+        const { umpireKey } = this.props.liveScoreIncidentState
+        let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout
-                    menuHeading={AppConstants.liveScores}
-                    menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                />
-                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"17"} />
+
+
+                {
+                    umpireKey ?
+                        <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
+                        :
+                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                }
+
+                {
+                    umpireKey ?
+                        <InnerHorizontalMenu menu="umpire" umpireSelectedKey={screen == 'umpireList' ? "2" : "1"} />
+                        :
+                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"17"} />
+                }
+
+
                 <Layout>
                     {this.headerView()}
                     <Content>
