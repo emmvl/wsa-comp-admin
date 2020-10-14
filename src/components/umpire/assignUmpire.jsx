@@ -5,7 +5,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
-import { getUmpireCompId, setUmpireCompId,getUmpireCompetiton } from '../../util/sessionStorage'
+import { getUmpireCompId, setUmpireCompId, getUmpireCompetiton } from '../../util/sessionStorage'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { connect } from 'react-redux';
@@ -73,7 +73,7 @@ const column = [
         sorter: (a, b) => tableSort(a, b, "id"),
         render: (id) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
-            state: { matchId: id, umpireKey: 'umpire' }
+            state: { matchId: id, umpireKey: 'umpire', screenName: 'umpireList' }
         }} >
             <span class="input-heading-add-another pt-0" >{id}</span>
         </NavLink>

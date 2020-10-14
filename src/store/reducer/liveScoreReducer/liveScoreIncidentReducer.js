@@ -270,12 +270,14 @@ function liveScoreIncidentState(state = initialState, action) {
             return { ...state, loading: true }
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS:
+            console.log(action, 'API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS')
             return {
                 ...state,
                 loading: false,
                 success: true,
                 successResult: action.result,
-                status: action.status
+                status: action.status,
+                umpireKey: action.umpireKey
             }
 
         case ApiConstants.API_LIVE_SCORE_INCIDENT_TYPE_LOAD:

@@ -96,6 +96,7 @@ function* liveScoreAddMatchSaga(action) {
 
 // Add Match
 function* liveScoreCreateMatchSaga(action) {
+  console.log(action, 'liveScoreCreateMatchSaga')
   try {
     const result = yield call(
       LiveScoreAxiosApi.liveScoreCreateMatch,
@@ -120,7 +121,7 @@ function* liveScoreCreateMatchSaga(action) {
       });
 
       if (action.umpireKey) {
-        history.push({ pathname: "/umpireDashboard" });
+        history.push({ pathname: action.screenName == 'umpireList' ? "umpire" : "/umpireDashboard" });
       } else {
         history.push(action.key === "dashboard" ? "liveScoreDashboard" : action.key === "umpireRoaster" ? "umpireRoaster" : "/liveScoreMatches");
       }

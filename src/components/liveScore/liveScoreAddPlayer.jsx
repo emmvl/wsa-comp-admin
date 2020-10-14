@@ -21,7 +21,7 @@ import { bindActionCreators } from 'redux';
 import moment from "moment";
 import history from '../../util/history'
 import Loader from '../../customComponents/loader'
-import { getLiveScoreCompetiton } from '../../util/sessionStorage'
+import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import { getliveScoreTeams } from '../../store/actions/LiveScoreAction/liveScoreTeamAction'
 import { isArrayNotEmpty, captializedString, regexNumberExpression } from '../../util/helpers';
 import ImageLoader from '../../customComponents/ImageLoader'
@@ -46,51 +46,96 @@ class LiveScoreAddPlayer extends Component {
             temaViewPlayer: props.location.state ? props.location.state.temaViewPlayer ? props.location.state.temaViewPlayer : null : null,
             screenName: props.location.state ? props.location.state.screenName : null,
             teamId: props.location.state ? props.location.state.tableRecord ? props.location.state.tableRecord.id : null : null,
-            timeout: null
+            timeout: null,
+            screenKey: this.props.location.state ? this.props.location.state.screenKey : null,
         };
 
     }
 
     componentDidMount() {
+        const { screenKey } = this.state
 
-        if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.props.getliveScoreTeams(id)
+        if (screenKey == 'umpire') {
+            if (getUmpireCompetitonData()) {
+                const { id } = JSON.parse(getUmpireCompetitonData())
+                this.props.getliveScoreTeams(id)
 
-            if (this.state.isEdit == true) {
-                if (this.props.location.state.screen === 'editTeam') {
-                    this.props.liveScoreUpdatePlayerDataAction({
-                        playerId: this.state.playerData.mnbPlayerId,
-                        firstName: this.state.playerData.firstName,
-                        lastName: this.state.playerData.lastName,
-                        profilePicture: this.state.playerData.photoUrl,
-                        phoneNumber: this.state.playerData.phoneNumber,
-                        dob: this.state.playerData.dateOfBirth,
-                        team: this.state.playerData.teamId,
-                        division: { id: 1 }
-                    }, 'editplayerScreen')
+                if (this.state.isEdit == true) {
+                    if (this.props.location.state.screen === 'editTeam') {
+                        this.props.liveScoreUpdatePlayerDataAction({
+                            playerId: this.state.playerData.mnbPlayerId,
+                            firstName: this.state.playerData.firstName,
+                            lastName: this.state.playerData.lastName,
+                            profilePicture: this.state.playerData.photoUrl,
+                            phoneNumber: this.state.playerData.phoneNumber,
+                            dob: this.state.playerData.dateOfBirth,
+                            team: this.state.playerData.teamId,
+                            division: { id: 1 }
+                        }, 'editplayerScreen')
+                    } else {
+                        this.props.liveScoreUpdatePlayerDataAction(this.state.playerData, 'editplayerScreen')
+                    }
+
+                    this.setInitalFiledValue()
                 } else {
-                    this.props.liveScoreUpdatePlayerDataAction(this.state.playerData, 'editplayerScreen')
-                }
+                    this.props.liveScoreUpdatePlayerDataAction('', 'addplayerScreen')
+                    let teamsId = this.state.teamId ? this.state.teamId : this.props.location.state ? this.props.location.state.teamId : null
+                    const { playerData } = this.props.liveScorePlayerState
 
-                this.setInitalFiledValue()
+                    playerData.phoneNumber = ""
+                    playerData.dateOfBirth = ""
+
+                    if (teamsId) {
+                        this.props.form.setFieldsValue({
+                            "team": teamsId
+                        })
+                    }
+                }
             } else {
-                this.props.liveScoreUpdatePlayerDataAction('', 'addplayerScreen')
-                let teamsId = this.state.teamId ? this.state.teamId : this.props.location.state ? this.props.location.state.teamId : null
-                const { playerData } = this.props.liveScorePlayerState
-
-                playerData.phoneNumber = ""
-                playerData.dateOfBirth = ""
-
-                if (teamsId) {
-                    this.props.form.setFieldsValue({
-                        "team": teamsId
-                    })
-                }
+                history.push('/')
             }
         } else {
-            history.push('/liveScoreCompetitions')
+            if (getLiveScoreCompetiton()) {
+                const { id } = JSON.parse(getLiveScoreCompetiton())
+                this.props.getliveScoreTeams(id)
+
+                if (this.state.isEdit == true) {
+                    if (this.props.location.state.screen === 'editTeam') {
+                        this.props.liveScoreUpdatePlayerDataAction({
+                            playerId: this.state.playerData.mnbPlayerId,
+                            firstName: this.state.playerData.firstName,
+                            lastName: this.state.playerData.lastName,
+                            profilePicture: this.state.playerData.photoUrl,
+                            phoneNumber: this.state.playerData.phoneNumber,
+                            dob: this.state.playerData.dateOfBirth,
+                            team: this.state.playerData.teamId,
+                            division: { id: 1 }
+                        }, 'editplayerScreen')
+                    } else {
+                        this.props.liveScoreUpdatePlayerDataAction(this.state.playerData, 'editplayerScreen')
+                    }
+
+                    this.setInitalFiledValue()
+                } else {
+                    this.props.liveScoreUpdatePlayerDataAction('', 'addplayerScreen')
+                    let teamsId = this.state.teamId ? this.state.teamId : this.props.location.state ? this.props.location.state.teamId : null
+                    const { playerData } = this.props.liveScorePlayerState
+
+                    playerData.phoneNumber = ""
+                    playerData.dateOfBirth = ""
+
+                    if (teamsId) {
+                        this.props.form.setFieldsValue({
+                            "team": teamsId
+                        })
+                    }
+                }
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
         }
+
+
     }
 
     setInitalFiledValue() {
@@ -327,7 +372,14 @@ class LiveScoreAddPlayer extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
 
-                let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
+                let compId = null
+                if (this.state.screenKey == 'umpire') {
+                    const { id } = JSON.parse(getUmpireCompetitonData())
+                    compId = id
+                } else {
+                    let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'))
+                    compId = id
+                }
 
                 let selectedTeamId = teamId ? teamId : this.state.teamId ? this.state.teamId : this.props.location.state ? this.props.location.state.teamId : null
 
@@ -339,7 +391,7 @@ class LiveScoreAddPlayer extends Component {
                 body.append("phoneNumber", regexNumberExpression(phoneNumber));
                 body.append("mnbPlayerId", mnbPlayerId);
                 body.append("teamId", selectedTeamId);
-                body.append("competitionId", id)
+                body.append("competitionId", compId)
 
                 if (this.state.image) {
                     body.append("photo", this.state.image) //// this.props.location.state ? this.props.location.state.teamId
@@ -382,12 +434,26 @@ class LiveScoreAddPlayer extends Component {
     /////main render method
     render() {
         const { getFieldDecorator } = this.props.form;
-
+        const { screenKey } = this.state
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+
+
+                {
+                    screenKey == 'umpire' ?
+                        <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
+                        :
+                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                }
+
+                {
+                    screenKey == 'umpire' ?
+                        <InnerHorizontalMenu menu={"user"} userSelectedKey={"1"} />
+                        :
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'fromTeamList' ? '3' : this.state.screenName == 'fromMatchList' ? '2' : "7"} />
+                }
                 <Loader visible={this.props.liveScorePlayerState.onLoad} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'fromTeamList' ? '3' : this.state.screenName == 'fromMatchList' ? '2' : "7"} />
+
                 <Layout>
                     {this.headerView()}
                     <Form

@@ -18,7 +18,7 @@ import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import { getOrganisationData } from "../../util/sessionStorage";
 import moment from "moment"
-import { checkUserAccess } from '../../util/permissions'
+import { getUserRoleId } from '../../util/permissions'
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -267,7 +267,7 @@ class HomeDashboard extends Component {
             updateActionBoxLoad: false,
             actions: null,
             orgChange: this.props.location.state ? this.props.location.state.orgChange : null,
-            userAccessPermission: ''
+            userRoleId: getUserRoleId()
         }
 
         this_Obj = this;
@@ -276,8 +276,7 @@ class HomeDashboard extends Component {
 
 
     async componentDidMount() {
-        let userAccessPermission = await checkUserAccess()
-        this.setState({ userAccessPermission })
+
         this.props.getRoleAction()
         this.props.getUreAction()
         console.log(this.state.orgChange, this.props.location)
@@ -481,7 +480,7 @@ class HomeDashboard extends Component {
     /////competition Overview 
     compOverview = () => {
         const { userCount, registrationCount, liveScoreCompetitionCount, registrationCompetitionCount } = this.props.homeDashboardState
-        const { userAccessPermission } = this.state
+        const { userRoleId } = this.state
         return (
             <div>
                 {this.compOverviewHeading()}
@@ -535,7 +534,7 @@ class HomeDashboard extends Component {
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalRegistrations}</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
-                                    onClick={() => (userAccessPermission == 'admin' || userAccessPermission == 'finance') && history.push(userAccessPermission == 'finance' ? "paymentDashboard" : "/registration")}  >
+                                    onClick={() => (userRoleId == 2) && history.push("/registration")}  >
 
                                     <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true"></i></a>
 
@@ -564,7 +563,7 @@ class HomeDashboard extends Component {
                                     <span className="reg-payment-paid-reg-text">{AppConstants.totalCompetitions}</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
-                                    onClick={() => userAccessPermission == 'admin' && history.push("/competitionDashboard")}  >
+                                    onClick={() => userRoleId == 2 && history.push("/competitionDashboard")}  >
                                     <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true"></i></a>
                                 </div>
                             </div>
@@ -592,7 +591,7 @@ class HomeDashboard extends Component {
                                     <span className="reg-payment-paid-reg-text">{AppConstants.livescoreCompetitions}</span>
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
-                                    onClick={() => userAccessPermission == 'admin' && history.push("/liveScoreCompetitions")}  >
+                                    onClick={() => userRoleId == 2 && history.push("/liveScoreCompetitions")}  >
 
                                     <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true"></i></a>
 

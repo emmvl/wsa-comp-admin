@@ -136,7 +136,7 @@ const columnsInvite = [
             <NavLink
                 to={{
                     pathname: "/liveScoreMatchDetails",
-                    state: { matchId: id, umpireKey: "umpire" },
+                    state: { matchId: id, umpireKey: "umpire", screenName: "umpireDashboard" },
                 }}
             >
                 <span className="input-heading-add-another pt-0">{id}</span>
@@ -376,7 +376,7 @@ const columns = [
             <NavLink
                 to={{
                     pathname: "/liveScoreMatchDetails",
-                    state: { matchId: id, umpireKey: "umpire" }
+                    state: { matchId: id, umpireKey: "umpire", screenName: "umpireDashboard" }
                 }}
             >
                 <span className="input-heading-add-another pt-0">{id}</span>

@@ -76,6 +76,7 @@ class LiveScoreAddMatch extends Component {
             compId: null,
             scoringType: null,
             allDisabled: false,  ///////allDisabled===false==>>>it is editable,,,,,,,,allDisabled===true===>>>cannot edit the field.
+            screenName: props.location.state ? props.location.state.screenName ? props.location.state.screenName : null : null,
         }
         this.props.clearMatchAction()
     }
@@ -1635,7 +1636,7 @@ class LiveScoreAddMatch extends Component {
                     matchData["resultStatus"] = addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus
                 }
 
-                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType)
+                this.props.liveScoreCreateMatchAction(matchData, this.state.compId, this.state.key, this.state.isEdit, team1resultId, team2resultId, matchStatus, null, this.state.umpireKey, umpireData, scorerData, recordUmpireType, this.state.screenName)
             }
         });
     }
@@ -1675,6 +1676,7 @@ class LiveScoreAddMatch extends Component {
     /////// render function
     render() {
         const { getFieldDecorator } = this.props.form
+        let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
                 {
@@ -1686,7 +1688,7 @@ class LiveScoreAddMatch extends Component {
 
                 {
                     this.state.umpireKey ?
-                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"1"} />
+                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen == 'umpireList' ? "2" : "1"} />
                         :
                         <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.key == 'dashboard' ? '1' : "2"} />
                 }

@@ -37,7 +37,7 @@ function liveScoreUpdateMatchAction(data, key, contentType) {
     };
 }
 
-function liveScoreCreateMatchAction(data, competitionId, key, isEdit, team1resultId, team2resultId, matchStatus, endTime, umpireKey, umpireArr, scorerData, recordUmpireType) {
+function liveScoreCreateMatchAction(data, competitionId, key, isEdit, team1resultId, team2resultId, matchStatus, endTime, umpireKey, umpireArr, scorerData, recordUmpireType, screenName) {
     return {
         type: ApiConstants.API_LIVE_SCORE_CREATE_MATCH_LOAD,
         data,
@@ -52,6 +52,7 @@ function liveScoreCreateMatchAction(data, competitionId, key, isEdit, team1resul
         umpireArr,
         scorerData,
         recordUmpireType,
+        screenName
     };
 }
 

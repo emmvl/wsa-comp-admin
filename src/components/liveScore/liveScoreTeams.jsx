@@ -362,10 +362,29 @@ class LiveScoreTeam extends Component {
 
     ////main render method
     render() {
+        const { screenKey } = this.props.liveScoreTeamState
+        console.log(this.props.liveScoreTeamState.screenKey, 'liveScoreTeamState')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"3"} />
+
+                {
+                    screenKey == 'umpire' ?
+                        <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user}
+                        />
+                        :
+                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+
+                }
+
+                {
+                    screenKey == 'umpire' ?
+                        <InnerHorizontalMenu menu="umpire" umpireSelectedKey="2" />
+                        :
+                        <InnerHorizontalMenu menu={"user"} userSelectedKey={"1"} />
+
+                }
+
+
                 <Layout>
                     {this.headerView()}
                     <Content>
