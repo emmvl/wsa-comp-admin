@@ -578,7 +578,7 @@ class LiveScoreCompetitions extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     };
 
@@ -634,7 +634,7 @@ class LiveScoreCompetitions extends Component {
             >
                 <div className="col-sm-2">
                     <div className="year-select-heading-view pb-3">
-                        <div className="reg-filter-col-cont"  >
+                        <div className="reg-filter-col-cont">
                             <span className="year-select-heading">
                                 {AppConstants.year}:</span>
                             <Select
@@ -644,7 +644,7 @@ class LiveScoreCompetitions extends Component {
                                 value={this.state.year}
                             >
                                 {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                    < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
+                                    <Option key={"yearlist" + yearIndex} value={item.id}> {item.name}</Option>
                                 ))
                                 }
                             </Select>
@@ -691,7 +691,7 @@ class LiveScoreCompetitions extends Component {
                 {this.ownedView()}
                 {this.partHeaderView()}
                 {this.participatedView()}
-            </div >
+            </div>
         );
     }
 }

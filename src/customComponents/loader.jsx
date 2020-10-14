@@ -4,7 +4,7 @@ import { Modal, Spin } from "antd";
 
 
 class Loader extends Component {
-    /////// render function 
+    /////// render function
     render() {
         return (
             <Modal
@@ -14,14 +14,14 @@ class Loader extends Component {
                 // onCancel={this.handleCancel}
                 cancelButtonProps={{ style: { display: 'none' } }}
                 okButtonProps={{ style: { display: 'none' } }}
-                centered={true}
+                centered
                 width={0}
                 height={0}
                 closable={false}
                 footer={null}
 
             >
-                <Spin tip="Loading..."  delay={this.props.delay}/>
+                <Spin tip="Loading..."  delay={this.props.delay} />
 
             </Modal>
         );

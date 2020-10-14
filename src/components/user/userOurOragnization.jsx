@@ -1,48 +1,44 @@
 import React, { Component } from "react";
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from "redux";
 import {
     Layout, Breadcrumb, Button, Select, Form, Modal,
     Checkbox, message, Tabs, Table, Radio, Input
 } from 'antd';
+// import CustomToolTip from 'react-png-tooltip';
+
 import './user.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import { NavLink } from 'react-router-dom';
 import AppImages from "../../themes/appImages"
-import { bindActionCreators } from "redux";
 import history from "../../util/history";
-import { connect } from 'react-redux';
 import {
     getAffiliateToOrganisationAction, saveAffiliateAction, updateOrgAffiliateAction,
     getUreAction, getRoleAction, getAffiliateOurOrganisationIdAction,
     getOrganisationPhotoAction, saveOrganisationPhotoAction, deleteOrganisationPhotoAction,
     deleteOrgContact, updateCharityValue, updateCharityAction, updateTermsAndCondtionAction
-} from
-    "../../store/actions/userAction/userAction";
+} from "../../store/actions/userAction/userAction";
 import ValidationConstants from "../../themes/validationConstant";
 import { getCommonRefData, getPhotoTypeAction } from '../../store/actions/commonAction/commonAction';
 import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import ImageLoader from '../../customComponents/ImageLoader'
-import CustumToolTip from 'react-png-tooltip';
 import { captializedString } from "../../util/helpers"
-
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
 const { TextArea } = Input;
-const phoneRegExp = /^((\\+[1,9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 var _this = null
 const columns = [
-
     {
         dataIndex: 'photoUrl',
         key: 'photoUrl',
         render: (photoUrl, record) => {
-
             return (
                 <div>
                     {_this.state.isEditable && _this.photosRemoveBtnView(record)}
@@ -53,7 +49,7 @@ const columns = [
     },
 ]
 
-class UserOurOragnization extends Component {
+class UserOurOrganization extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -84,13 +80,11 @@ class UserOurOragnization extends Component {
         this.props.getCommonRefData();
         this.props.getRoleAction();
         //this.props.getUreAction();
-
-
         //this.addContact();
+        this.formRef = React.createRef();
     }
 
     async componentDidMount() {
-        //  console.log("Component Did mount");
         if (this.props.location.state != null && this.props.location.state != undefined) {
             let isEditable = this.props.location.state.isEditable;
             let affiliateOrgId = this.props.location.state.affiliateOrgId;
@@ -108,9 +102,7 @@ class UserOurOragnization extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        // console.log("Component componentDidUpdate");
         let userState = this.props.userState;
-        let commonState = this.props.commonReducerState;
         let affiliateTo = this.props.userState.affiliateTo;
         let obj = { organisationId: this.state.organisationId }
         if (userState.onLoad === false && this.state.loading === true) {
@@ -120,11 +112,9 @@ class UserOurOragnization extends Component {
                 })
             }
             if (userState.status == 1 && this.state.buttonPressed == "save") {
-                console.log("&&&&&&&&&&&&&&&&&&&&&&&&" + userState.status + "&&&&&" + this.state.isSameUserEmailChanged)
                 if (this.state.isSameUserEmailChanged) {
                     this.logout();
-                }
-                else {
+                } else {
                     history.push('/userAffiliatesList');
                 }
             }
@@ -141,13 +131,10 @@ class UserOurOragnization extends Component {
         if (this.state.buttonPressed == "cancel") {
             if (this.state.sourcePage == "DIR") {
                 history.push('/affiliateDirectory');
-            }
-            else {
+            } else {
                 history.push('/userAffiliatesList');
             }
-
         }
-
 
         if (nextProps.userState.affiliateTo != affiliateTo) {
             if (userState.affiliateToOnLoad == false) {
@@ -168,8 +155,6 @@ class UserOurOragnization extends Component {
                 this.setFormFieldValue();
             }
         }
-
-
     }
 
     logout = () => {
@@ -179,7 +164,6 @@ class UserOurOragnization extends Component {
         } catch (error) {
             console.log("Error" + error);
         }
-
     };
 
     referenceCalls = (organisationId) => {
@@ -194,8 +178,7 @@ class UserOurOragnization extends Component {
 
     setFormFieldValue = () => {
         let affiliate = this.props.userState.affiliateOurOrg;
-        //console.log("setFormFieldValue" + JSON.stringify(affiliate));
-        this.props.form.setFieldsValue({
+        this.formRef.current.setFieldsValue({
             name: affiliate.name,
             addressOne: affiliate.street1,
             suburb: affiliate.suburb,
@@ -205,7 +188,6 @@ class UserOurOragnization extends Component {
         })
 
         let contacts = affiliate.contacts;
-        // console.log("contacts::" + contacts);
         if (contacts == null || contacts == undefined || contacts == "") {
             this.addContact();
         }
@@ -215,14 +197,14 @@ class UserOurOragnization extends Component {
         }
 
         // (contacts || []).map((item, index) => {
-        //     this.props.form.setFieldsValue({
+        //     this.formRef.current.setFieldsValue({
         //         [`firstName${index}`]: item.firstName,
         //         [`lastName${index}`]: item.lastName,
         //         [`email${index}`]: item.email,
         //     });
         //     let permissions = item.permissions;
         //     permissions.map((perm, permIndex) => {
-        //         this.props.form.setFieldsValue({
+        //         this.formRef.current.setFieldsValue({
         //             [`permissions${index}`]: perm.roleId,
         //         });
         //     })
@@ -260,8 +242,7 @@ class UserOurOragnization extends Component {
         if (key == "ok") {
             this.removeContact(this.state.currentIndex);
             this.setState({ deleteModalVisible: false });
-        }
-        else {
+        } else {
             this.setState({ deleteModalVisible: false });
         }
     }
@@ -284,7 +265,7 @@ class UserOurOragnization extends Component {
 
     updateContactFormFields = (contacts) => {
         contacts.map((item, index) => {
-            this.props.form.setFieldsValue({
+            this.formRef.current.setFieldsValue({
                 [`firstName${index}`]: item.firstName,
                 [`lastName${index}`]: item.lastName,
                 [`email${index}`]: item.email,
@@ -294,8 +275,8 @@ class UserOurOragnization extends Component {
                 this.setState({ isSameUserEmailId: item.email });
             }
             let permissions = item.permissions;
-            permissions.map((perm, permIndex) => {
-                this.props.form.setFieldsValue({
+            permissions.map((perm) => {
+                this.formRef.current.setFieldsValue({
                     [`permissions${index}`]: perm.roleId,
                 });
             })
@@ -318,30 +299,24 @@ class UserOurOragnization extends Component {
             }
             permissions.push(obj);
             contact.permissions = permissions;
-
-        }
-        else if (key == "email") {
+        } else if (key == "email") {
             if (contact.isSameUser && contact.userId != 0) {
                 if (val != this.state.isSameUserEmailId) {
                     this.setState({ isSameUserEmailChanged: true });
-                }
-                else {
+                } else {
                     this.setState({ isSameUserEmailChanged: false });
                 }
             }
             contact[key] = val;
-        }
-        else {
+        } else {
             contact[key] = val;
         }
 
         this.props.updateOrgAffiliateAction(contacts, "contacts");
     };
 
-
     setImage = (data) => {
         if (data.files[0] !== undefined) {
-            console.log("*****" + JSON.stringify(data.files[0]));
             this.setState({ image: data.files[0] })
             this.props.updateOrgAffiliateAction(URL.createObjectURL(data.files[0]), "logoUrl");
             this.props.updateOrgAffiliateAction(data.files[0], "organisationLogo");
@@ -359,7 +334,6 @@ class UserOurOragnization extends Component {
     }
 
     logoIsDefaultOnchange = (value, key) => {
-        console.log("value::" + value + "Key::" + key);
         this.props.updateOrgAffiliateAction(value, key);
     }
 
@@ -370,7 +344,6 @@ class UserOurOragnization extends Component {
         if (!!fileInput) {
             fileInput.click();
         }
-
     }
 
     setPhotosImage = (data) => {
@@ -393,7 +366,7 @@ class UserOurOragnization extends Component {
     editPhotos = async (record) => {
         await this.setState({ tableRecord: record, isEditView: true });
 
-        this.props.form.setFieldsValue({
+        this.formRef.current.setFieldsValue({
             photoTypeRefId: record.photoTypeRefId
         })
     }
@@ -456,91 +429,74 @@ class UserOurOragnization extends Component {
         this.props.updateCharityValue(value, index, key);
     }
 
-    saveAffiliate = (e) => {
-        e.preventDefault();
+    saveAffiliate = (values) => {
         let tabKey = this.state.organisationTabKey;
-        this.props.form.validateFields((err, values) => {
-            console.log("err::" + err);
-            if (!err) {
-                if (tabKey == "1") {
-                    console.log("**" + JSON.stringify(this.state.image));
-                    let affiliate = this.props.userState.affiliateOurOrg;
+        if (tabKey == "1") {
+            let affiliate = this.props.userState.affiliateOurOrg;
 
-                    if (affiliate.contacts == null || affiliate.contacts == undefined || affiliate.contacts.length == 0) {
-                        message.error(ValidationConstants.affiliateContactRequired[0]);
-                    }
-                    else {
+            if (affiliate.contacts == null || affiliate.contacts == undefined || affiliate.contacts.length === 0) {
+                message.error(ValidationConstants.affiliateContactRequired[0]);
+            } else {
+                let data = affiliate.contacts.find(x => x.permissions.find(y => y.roleId == 2));
+                if (data == undefined || data == null || data == "") {
+                    message.error(ValidationConstants.affiliateContactRequired[0]);
+                } else {
+                    let contacts = JSON.stringify(affiliate.contacts);
 
-                        let data = affiliate.contacts.find(x => x.permissions.find(y => y.roleId == 2));
-                        if (data == undefined || data == null || data == "") {
-                            message.error(ValidationConstants.affiliateContactRequired[0]);
-                        }
-                        else {
-                            let contacts = JSON.stringify(affiliate.contacts);
-
-                            let formData = new FormData();
-
-                            if (this.state.image != null) {
-                                affiliate.organisationLogo = this.state.image;
-                                affiliate.organisationLogoId = 0;
-                            }
-                            // let termsAndConditionsValue = null;
-                            // if(affiliate.termsAndConditionsRefId == 1){
-                            //     termsAndConditionsValue = affiliate.termsAndConditionsLink;
-                            // }
-                            // if(this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2){
-                            //     termsAndConditionsValue = affiliate.termsAndConditionsFile;
-                            // }
-
-                            formData.append("email", affiliate.email);
-                            formData.append("organisationLogo", this.state.image);
-                            formData.append("organisationLogoId", affiliate.organisationLogoId);
-                            formData.append("affiliateId", affiliate.affiliateId);
-                            formData.append("affiliateOrgId", affiliate.affiliateOrgId)
-                            formData.append("organisationTypeRefId", affiliate.organisationTypeRefId)
-                            formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
-                            formData.append("organisationId", getOrganisationData().organisationUniqueKey);
-                            formData.append("name", affiliate.name);
-                            formData.append("street1", affiliate.street1);
-                            formData.append("street2", affiliate.street2);
-                            formData.append("suburb", affiliate.suburb);
-                            formData.append("phoneNo", affiliate.phoneNo);
-                            formData.append("city", affiliate.city);
-                            formData.append("postalCode", affiliate.postalCode);
-                            formData.append("stateRefId", affiliate.stateRefId);
-                            formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
-                            formData.append("logoIsDefault", affiliate.logoIsDefault == true ? 1 : 0);
-                            formData.append("contacts", contacts);
-                            // formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
-                            // formData.append("termsAndConditions", termsAndConditionsValue);
-                            // formData.append("organisationLogo", this.state.termsAndCondititionFile);
-                            // formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
-
-                            this.setState({ loading: true });
-                            this.props.saveAffiliateAction(formData);
-                        }
-                    }
-                }
-                else if (tabKey == "2") {
-                    let tableRowData = this.state.tableRecord;
                     let formData = new FormData();
-                    formData.append("organisationPhoto", this.state.orgPhotosImgSend);
-                    formData.append("organisationPhotoId", tableRowData.id);
-                    formData.append("photoTypeRefId", tableRowData.photoTypeRefId);
-                    formData.append("photoUrl", tableRowData.photoUrl);
+
+                    if (this.state.image != null) {
+                        affiliate.organisationLogo = this.state.image;
+                        affiliate.organisationLogoId = 0;
+                    }
+                    // let termsAndConditionsValue = null;
+                    // if(affiliate.termsAndConditionsRefId == 1){
+                    //     termsAndConditionsValue = affiliate.termsAndConditionsLink;
+                    // }
+                    // if(this.state.termsAndCondititionFile == null && affiliate.termsAndConditionsRefId == 2){
+                    //     termsAndConditionsValue = affiliate.termsAndConditionsFile;
+                    // }
+
+                    formData.append("email", affiliate.email);
+                    formData.append("organisationLogo", this.state.image);
+                    formData.append("organisationLogoId", affiliate.organisationLogoId);
+                    formData.append("affiliateId", affiliate.affiliateId);
+                    formData.append("affiliateOrgId", affiliate.affiliateOrgId)
+                    formData.append("organisationTypeRefId", affiliate.organisationTypeRefId)
+                    formData.append("affiliatedToOrgId", affiliate.affiliatedToOrgId);
                     formData.append("organisationId", getOrganisationData().organisationUniqueKey);
+                    formData.append("name", affiliate.name);
+                    formData.append("street1", affiliate.street1);
+                    formData.append("street2", affiliate.street2);
+                    formData.append("suburb", affiliate.suburb);
+                    formData.append("phoneNo", affiliate.phoneNo);
+                    formData.append("city", affiliate.city);
+                    formData.append("postalCode", affiliate.postalCode);
+                    formData.append("stateRefId", affiliate.stateRefId);
+                    formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
+                    formData.append("logoIsDefault", affiliate.logoIsDefault == true ? 1 : 0);
+                    formData.append("contacts", contacts);
+                    // formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
+                    // formData.append("termsAndConditions", termsAndConditionsValue);
+                    // formData.append("organisationLogo", this.state.termsAndCondititionFile);
+                    // formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
 
                     this.setState({ loading: true });
-                    this.props.saveOrganisationPhotoAction(formData);
+                    this.props.saveAffiliateAction(formData);
                 }
+            }
+        } else if (tabKey == "2") {
+            let tableRowData = this.state.tableRecord;
+            let formData = new FormData();
+            formData.append("organisationPhoto", this.state.orgPhotosImgSend);
+            formData.append("organisationPhotoId", tableRowData.id);
+            formData.append("photoTypeRefId", tableRowData.photoTypeRefId);
+            formData.append("photoUrl", tableRowData.photoUrl);
+            formData.append("organisationId", getOrganisationData().organisationUniqueKey);
 
-            }
-            else {
-                if (tabKey == "1") {
-                    message.error(ValidationConstants.requiredMessage);
-                }
-            }
-        });
+            this.setState({ loading: true });
+            this.props.saveOrganisationPhotoAction(formData);
+        }
     }
 
     updateTermsAndCondition = () => {
@@ -572,11 +528,9 @@ class UserOurOragnization extends Component {
             charityRoundUp: charityRoundUpArr,
             charity: affiliate.charity
         }
-        console.log("updateCharity::" + JSON.stringify(payload));
         this.setState({ loading: true });
         this.props.updateCharityAction(payload);
     }
-
 
     ///////view for breadcrumb
     headerView = () => {
@@ -586,25 +540,25 @@ class UserOurOragnization extends Component {
                     backgroundColor: "transparent",
                     display: "flex",
                     alignItems: "center",
-                }} >
+                }}>
                     {this.state.sourcePage == "AFF" ?
                         <Breadcrumb separator=" > ">
-                            <NavLink to="/userAffiliatesList" >
+                            <NavLink to="/userAffiliatesList">
                                 <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.affiliates}</Breadcrumb.Item>
                             </NavLink>
                             {/* <Breadcrumb.Item className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item> */}
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.ourOrganisation}</Breadcrumb.Item>
                         </Breadcrumb> :
-                        <NavLink to="/affiliatedirectory" >
+                        <NavLink to="/affiliatedirectory">
                             <span className="breadcrumb-product">{AppConstants.affiliates}</span>
                         </NavLink>}
-                </Header >
+                </Header>
             </div>
         )
     }
 
     ////////form content view
-    contentView = (getFieldDecorator) => {
+    contentView = () => {
         let affiliateToData = this.props.userState.affiliateTo;
         let affiliate = this.props.userState.affiliateOurOrg;
         const { stateList } = this.props.commonReducerState;
@@ -613,27 +567,21 @@ class UserOurOragnization extends Component {
                 affiliate.organisationTypeRefId = affiliateToData.organisationTypes[0].id;
         }
 
-        console.log("affiliate.logoUrl::" + affiliate.logoUrl);
-
         return (
             <div className="content-view pt-4">
-                <Form.Item >
-                    {getFieldDecorator('name', {
-                        rules: [{ required: true, message: ValidationConstants.nameField[2] }],
-                    })(
-                        <InputWithHead
-                            auto_complete='off'
-                            required={"required-field pt-0 pb-0"}
-                            heading={AppConstants.organisationName}
-                            placeholder={AppConstants.organisationName}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
-                            //value={affiliate.name}
-                            disabled={!this.state.isEditable}
-                            setFieldsValue={affiliate.name}
-                        />
-                    )}
+                <Form.Item name='name' rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
+                    <InputWithHead
+                        auto_complete='off'
+                        required="required-field pt-0 pb-0"
+                        heading={AppConstants.organisationName}
+                        placeholder={AppConstants.organisationName}
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
+                        // value={affiliate.name}
+                        disabled={!this.state.isEditable}
+                        setFieldsValue={affiliate.name}
+                    />
                 </Form.Item>
-                <InputWithHead required={"required-field pb-0 "} heading={AppConstants.organisationLogo} />
+                <InputWithHead required="required-field pb-0" heading={AppConstants.organisationLogo} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -647,7 +595,7 @@ class UserOurOragnization extends Component {
                                         type="image"
                                         disabled={!this.state.isEditable}
                                         style={{ borderRadius: 60 }}
-                                        name={'image'}
+                                        name="image"
                                         onError={ev => {
                                             ev.target.src = AppImages.circleImage;
                                         }}
@@ -660,7 +608,6 @@ class UserOurOragnization extends Component {
                                 style={{ display: 'none' }}
                                 onChange={(evt) => this.setImage(evt.target)}
                             />
-
                         </div>
                         <div
                             className="col-sm"
@@ -687,20 +634,19 @@ class UserOurOragnization extends Component {
                             >
                                 {AppConstants.saveAsDefault}
                             </Checkbox>} */}
-
                         </div>
                     </div>
                 </div>
-                <div className="row" >
-                    <div className="col-sm" >
+                <div className="row">
+                    <div className="col-sm">
                         <InputWithHead heading={AppConstants.organisationType} />
                     </div>
                     <div className="col-sm" style={{ display: "flex", alignItems: "center" }}>
                         <InputWithHead heading={affiliate.organisationTypeRefName} />
                     </div>
                 </div>
-                <div className="row" >
-                    <div className="col-sm" >
+                <div className="row">
+                    <div className="col-sm">
                         <InputWithHead heading={AppConstants.affilatedTo} />
                     </div>
                     <div className="col-sm" style={{ display: "flex", alignItems: "center" }}>
@@ -708,21 +654,18 @@ class UserOurOragnization extends Component {
                     </div>
                 </div>
 
-                <Form.Item >
-                    {getFieldDecorator('addressOne', {
-                        rules: [{ required: true, message: ValidationConstants.addressField[2] }],
-                    })(
-                        <InputWithHead required={"required-field pt-0 pb-0"}
-                            auto_complete='new-addressOne'
-                            heading={AppConstants.addressOne}
-                            placeholder={AppConstants.addressOne}
-                            name={AppConstants.addressOne}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-                            //value={affiliate.street1}
-                            disabled={!this.state.isEditable}
-                            setFieldsValue={affiliate.street1}
-                        />
-                    )}
+                <Form.Item name='addressOne' rules={[{ required: true, message: ValidationConstants.addressField[2] }]}>
+                    <InputWithHead
+                        required="required-field pt-0 pb-0"
+                        auto_complete='new-addressOne'
+                        heading={AppConstants.addressOne}
+                        placeholder={AppConstants.addressOne}
+                        name={AppConstants.addressOne}
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
+                        // value={affiliate.street1}
+                        disabled={!this.state.isEditable}
+                        setFieldsValue={affiliate.street1}
+                    />
                 </Form.Item>
 
                 <InputWithHead
@@ -734,66 +677,52 @@ class UserOurOragnization extends Component {
                     disabled={!this.state.isEditable}
                 />
 
-                <Form.Item >
-                    {getFieldDecorator("suburb", {
-                        rules: [{ required: true, message: ValidationConstants.suburbField[0] }],
-                    })(
-                        <InputWithHead
-                            auto_complete='new-suburb'
-                            required={"required-field pt-3 pb-0"}
-                            heading={AppConstants.suburb}
-                            placeholder={AppConstants.suburb}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
-                            //value={affiliate.suburb}
-                            setFieldsValue={affiliate.suburb}
-                            disabled={!this.state.isEditable}
-                        />
-                    )}
+                <Form.Item name='suburb' rules={[{ required: true, message: ValidationConstants.suburbField[0] }]}>
+                    <InputWithHead
+                        auto_complete='new-suburb'
+                        required="required-field pt-3 pb-0"
+                        heading={AppConstants.suburb}
+                        placeholder={AppConstants.suburb}
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
+                        // value={affiliate.suburb}
+                        setFieldsValue={affiliate.suburb}
+                        disabled={!this.state.isEditable}
+                    />
                 </Form.Item>
 
                 <InputWithHead
-                    required={"required-field"}
+                    required="required-field"
                     heading={AppConstants.stateHeading}
                 />
 
-                <Form.Item >
-                    {getFieldDecorator("stateRefId", {
-                        rules: [{ required: true, message: ValidationConstants.stateField[0] }],
-                    })(
-                        <Select
-                            style={{ width: "100%" }}
-                            placeholder={AppConstants.select}
-                            onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-                            //value={affiliate.stateRefId}
-                            setFieldsValue={affiliate.stateRefId}
-                            disabled={!this.state.isEditable}
+                <Form.Item name='stateRefId' rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
+                    <Select
+                        style={{ width: "100%" }}
+                        placeholder={AppConstants.select}
+                        onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
+                        // value={affiliate.stateRefId}
+                        setFieldsValue={affiliate.stateRefId}
+                        disabled={!this.state.isEditable}
 
-                        >
-                            {stateList.length > 0 && stateList.map((item) => (
-                                < Option value={item.id}> {item.name}</Option>
-                            ))
-                            }
-                        </Select>
-                    )}
+                    >
+                        {stateList.length > 0 && stateList.map((item) => (
+                            <Option value={item.id}> {item.name}</Option>
+                        ))}
+                    </Select>
                 </Form.Item>
 
-
-                <Form.Item >
-                    {getFieldDecorator('postcode', {
-                        rules: [{ required: true, message: ValidationConstants.postCodeField[0] }],
-                    })(
-                        <InputWithHead
-                            auto_complete='new-postalCode'
-                            required={"required-field"}
-                            heading={AppConstants.postcode}
-                            placeholder={AppConstants.postcode}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
-                            //value={affiliate.postalCode}
-                            setFieldsValue={affiliate.postalCode}
-                            maxLength={4}
-                            disabled={!this.state.isEditable}
-                        />
-                    )}
+                <Form.Item name='postcode' rules={[{ required: true, message: ValidationConstants.postCodeField[0] }]}>
+                    <InputWithHead
+                        auto_complete='new-postalCode'
+                        required="required-field"
+                        heading={AppConstants.postcode}
+                        placeholder={AppConstants.postcode}
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
+                        // value={affiliate.postalCode}
+                        setFieldsValue={affiliate.postalCode}
+                        maxLength={4}
+                        disabled={!this.state.isEditable}
+                    />
                 </Form.Item>
 
                 <InputWithHead
@@ -805,25 +734,29 @@ class UserOurOragnization extends Component {
                     value={affiliate.phoneNo}
                     disabled={!this.state.isEditable}
                 />
-                {/* <Form.Item >
-                    {getFieldDecorator('orgEmail', {
-                        rules: [
-                            {
-                                type: "email",
-                                pattern: new RegExp(AppConstants.emailExp),
-                                message: ValidationConstants.email_validation
-                            }
-                        ],
-                    })(
-                        <InputWithHead heading={AppConstants.email} placeholder={AppConstants.email}
-                            onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
-                            value={affiliate.email}
-                            disabled={!this.state.isEditable}
-                            auto_complete='new-email'
-                        />
-                    )}
-                </Form.Item> */}
-                <InputWithHead heading={AppConstants.email} placeholder={AppConstants.email}
+                {/*
+                <Form.Item
+                    name='orgEmail'
+                    rules={[{
+                        type: "email",
+                        pattern: new RegExp(AppConstants.emailExp),
+                        message: ValidationConstants.email_validation
+                    }]}
+                >
+                    <InputWithHead
+                        heading={AppConstants.email}
+                        placeholder={AppConstants.email}
+                        onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
+                        value={affiliate.email}
+                        disabled={!this.state.isEditable}
+                        auto_complete='new-email'
+                    />
+                </Form.Item>
+                */}
+
+                <InputWithHead
+                    heading={AppConstants.email}
+                    placeholder={AppConstants.email}
                     onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
                     value={affiliate.email}
                     disabled={!this.state.isEditable}
@@ -833,8 +766,7 @@ class UserOurOragnization extends Component {
         )
     }
 
-    contacts = (getFieldDecorator) => {
-        let userState = this.props.userState;
+    contacts = () => {
         let affiliate = this.props.userState.affiliateOurOrg;
         let roles = this.props.userState.roles.filter(x => x.applicableToWeb == 1);
         return (
@@ -842,13 +774,13 @@ class UserOurOragnization extends Component {
                 <span className="form-heading">{AppConstants.contacts}</span>
                 {(affiliate.contacts || []).map((item, index) => (
                     <div className="prod-reg-inside-container-view pt-4" key={"Contact" + (index + 1)}>
-                        <div className="row" >
-                            <div className="col-sm" >
+                        <div className="row">
+                            <div className="col-sm">
                                 <span className="user-contact-heading">{AppConstants.contact + (index + 1)}</span>
                             </div>
-                            {(!this.state.isEditable || affiliate.contacts.length == 1) ? null :
+                            {(!this.state.isEditable || affiliate.contacts.length === 1) ? null :
                                 <div className="transfer-image-view pointer" onClick={() => this.deleteContact(index)}>
-                                    <span class="user-remove-btn" ><i class="fa fa-trash-o" aria-hidden="true"></i></span>
+                                    <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                                     <span className="user-remove-text">
                                         {AppConstants.remove}
                                     </span>
@@ -856,24 +788,21 @@ class UserOurOragnization extends Component {
                             }
                         </div>
 
-                        <Form.Item >
-                            {getFieldDecorator(`firstName${index}`, {
-                                rules: [{ required: true, message: ValidationConstants.nameField[0] }]
-                            })(
-                                <InputWithHead
-                                    auto_complete='new-firstName'
-                                    required={"required-field pt-0 pb-0"}
-                                    heading={AppConstants.firstName}
-                                    placeholder={AppConstants.firstName}
-                                    onChange={(e) => this.onChangeContactSetValue(e.target.value, "firstName", index)}
-                                    //value={item.firstName}
-                                    setFieldsValue={item.firstName}
-                                    disabled={!this.state.isEditable}
-                                />
-                            )}
+                        <Form.Item name={`firstName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[0] }]}>
+                            <InputWithHead
+                                auto_complete='new-firstName'
+                                required="required-field pt-0 pb-0"
+                                heading={AppConstants.firstName}
+                                placeholder={AppConstants.firstName}
+                                onChange={(e) => this.onChangeContactSetValue(e.target.value, "firstName", index)}
+                                // value={item.firstName}
+                                setFieldsValue={item.firstName}
+                                disabled={!this.state.isEditable}
+                            />
                         </Form.Item>
 
-                        <InputWithHead heading={AppConstants.middleName}
+                        <InputWithHead
+                            heading={AppConstants.middleName}
                             placeholder={AppConstants.middleName}
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "middleName", index)}
                             value={item.middleName}
@@ -881,56 +810,48 @@ class UserOurOragnization extends Component {
                             auto_complete='new-middleName'
                         />
 
-
-                        <Form.Item >
-                            {getFieldDecorator(`lastName${index}`, {
-                                rules: [{ required: true, message: ValidationConstants.nameField[1] }],
-                            })(
-                                <InputWithHead required={"required-field pt-0 pb-0"}
-                                    heading={AppConstants.lastName} placeholder={AppConstants.lastName}
-                                    onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index)}
-                                    setFieldsValue={item.lastName}
-                                    disabled={!this.state.isEditable}
-                                    auto_complete='new-lastName'
-                                />
-                            )}
+                        <Form.Item name={`lastName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
+                            <InputWithHead
+                                required="required-field pt-0 pb-0"
+                                heading={AppConstants.lastName} placeholder={AppConstants.lastName}
+                                onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index)}
+                                setFieldsValue={item.lastName}
+                                disabled={!this.state.isEditable}
+                                auto_complete='new-lastName'
+                            />
                         </Form.Item>
 
-                        <Form.Item >
-                            {getFieldDecorator(`email${index}`, {
-                                rules: [
-                                    {
-                                        required: true,
-                                        message: ValidationConstants.emailField[0]
-                                    },
-                                    {
-                                        type: "email",
-                                        pattern: new RegExp(AppConstants.emailExp),
-                                        message: ValidationConstants.email_validation
-                                    }
-                                ],
-                            })(
-                                <InputWithHead
-                                    auto_complete='new-email'
-                                    required={"required-field pt-0 pb-0"}
-                                    heading={AppConstants.email}
-                                    placeholder={AppConstants.email}
-                                    disabled={!item.isSameUser}
-                                    onChange={(e) => this.onChangeContactSetValue(e.target.value, "email", index)}
-                                    //value={item.email}
-                                    setFieldsValue={item.email}
-                                    disabled={!this.state.isEditable}
-                                />
-                            )}
+                        <Form.Item name={`email${index}`} rules={[
+                            {
+                                required: true,
+                                message: ValidationConstants.emailField[0]
+                            },
+                            {
+                                type: "email",
+                                pattern: new RegExp(AppConstants.emailExp),
+                                message: ValidationConstants.email_validation
+                            }
+                        ]}>
+                            <InputWithHead
+                                auto_complete='new-email'
+                                required="required-field pt-0 pb-0"
+                                heading={AppConstants.email}
+                                placeholder={AppConstants.email}
+                                disabled={!item.isSameUser}
+                                onChange={(e) => this.onChangeContactSetValue(e.target.value, "email", index)}
+                                // value={item.email}
+                                setFieldsValue={item.email}
+                                disabled={!this.state.isEditable}
+                            />
                         </Form.Item>
-                        {(item.isSameUser && this.state.isSameUserEmailChanged) ?
+                        {(item.isSameUser && this.state.isSameUserEmailChanged) && (
                             <div className="same-user-validation">
                                 {ValidationConstants.emailField[2]}
                             </div>
-                            : null}
+                        )}
 
-
-                        <InputWithHead heading={AppConstants.phoneNumber}
+                        <InputWithHead
+                            heading={AppConstants.phoneNumber}
                             placeholder={AppConstants.phoneNumber}
                             onChange={(e) => this.onChangeContactSetValue(e.target.value, "mobileNumber", index)}
                             value={item.mobileNumber}
@@ -938,62 +859,57 @@ class UserOurOragnization extends Component {
                             disabled={!this.state.isEditable}
                             auto_complete='new-phoneNumber'
                         />
-                        {this.state.isEditable &&
+                        {this.state.isEditable && (
                             <div>
                                 <InputWithHead
                                     heading={AppConstants.permissionLevel}
                                     conceptulHelp
                                     conceptulHelpMsg={AppConstants.ourOrgPermissionLevelMsg}
-                                    marginTop={5} />
-                                <Form.Item >
-                                    {getFieldDecorator(`permissions${index}`, {
-                                        rules: [{ required: true, message: ValidationConstants.rolesField[0] }],
-                                    })(
-                                        <Select
-                                            style={{ width: "100%", paddingRight: 1 }}
-                                            onChange={(e) => this.onChangeContactSetValue(e, "roles", index)}
-                                            setFieldsValue={item.roleId}
-                                        >
-                                            {(roles || []).map((role, index) => (
-                                                <Option key={role.id} value={role.id}>{role.description}</Option>
-                                            ))}
-                                        </Select>
-                                    )}
+                                    marginTop={5}
+                                />
+                                <Form.Item name={`permissions${index}`} rules={[{ required: true, message: ValidationConstants.rolesField[0] }]}>
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1 }}
+                                        onChange={(e) => this.onChangeContactSetValue(e, "roles", index)}
+                                        setFieldsValue={item.roleId}
+                                    >
+                                        {(roles || []).map((role, index) => (
+                                            <Option key={role.id} value={role.id}>{role.description}</Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
-                            </div>}
-                    </div >
+                            </div>
+                        )}
+                    </div>
                 ))}
                 {this.deleteConfirmModalView()}
-                {this.state.isEditable &&
+                {this.state.isEditable && (
                     <div className="transfer-image-view mt-2 pointer" onClick={() => this.addContact()}>
                         <span className="user-remove-text">
                             + {AppConstants.addContact}
                         </span>
                     </div>
-                }
-                {/* {
-                    (userState.error && userState.status == 4) ?
-                        <div style={{ color: 'red' }}>{userState.error.result.data.message}</div> : null
-                } */}
-            </div >
+                )}
+                {/* {(userState.error && userState.status == 4) && (
+                    <div style={{ color: 'red' }}>{userState.error.result.data.message}</div>
+                )} */}
+            </div>
         )
     }
 
-    termsAndConditionsView = (getFieldDecorator) => {
-        let userState = this.props.userState;
+    termsAndConditionsView = () => {
         let affiliate = this.props.userState.affiliateOurOrg;
-        console.log("affiliate::", affiliate);
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.termsAndConditions}</span>
                 <Radio.Group
                     className="reg-competition-radio"
                     onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsRefId")}
-                    value={affiliate.termsAndConditionsRefId}>
+                    value={affiliate.termsAndConditionsRefId}
+                >
                     <Radio value={2}>{AppConstants.fileUploadPdf}</Radio>
-                    {affiliate.termsAndConditionsRefId == 2 &&
-                        <div className=" pl-5 pb-5 pt-4">
-
+                    {affiliate.termsAndConditionsRefId === 2 && (
+                        <div className="pl-5 pb-5 pt-4">
                             <label className="pt-2">
                                 <input
                                     style={{ cursor: "pointer" }}
@@ -1014,16 +930,16 @@ class UserOurOragnization extends Component {
                             <div className="pt-4">
                                 <div className="row">
                                     <div className="col-sm" style={{ whiteSpace: 'break-spaces' }}>
-                                        <a className="user-reg-link" href={affiliate.termsAndConditions} target='_blank' >
+                                        <a className="user-reg-link" href={affiliate.termsAndConditions} target='_blank' rel="noopener noreferrer">
                                             {affiliate.termsAndConditionsFile}
                                         </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    }
+                    )}
                     <Radio value={1}>{AppConstants.link}</Radio>
-                    {affiliate.termsAndConditionsRefId == 1 &&
+                    {affiliate.termsAndConditionsRefId === 1 && (
                         <div className=" pl-5 pb-5">
                             <InputWithHead
                                 auto_complete='new-termsAndConditions'
@@ -1032,10 +948,9 @@ class UserOurOragnization extends Component {
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "termsAndConditionsLink")}
                             />
                         </div>
-                    }
+                    )}
                 </Radio.Group>
-
-            </div >
+            </div>
         )
     }
 
@@ -1046,7 +961,8 @@ class UserOurOragnization extends Component {
                     title="Affiliate"
                     visible={this.state.deleteModalVisible}
                     onOk={() => this.removeModalHandle("ok")}
-                    onCancel={() => this.removeModalHandle("cancel")}>
+                    onCancel={() => this.removeModalHandle("cancel")}
+                >
                     <p>Are you sure you want to remove the contact?.</p>
                 </Modal>
             </div>
@@ -1056,17 +972,18 @@ class UserOurOragnization extends Component {
     ////// Photos//////
     photosHeaderView = () => {
         return (
-            <Header className="comp-venue-courts-header-view" style={{ paddingLeft: '4%', paddingRight: '4%', paddingTop: '3%' }} >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <Header className="comp-venue-courts-header-view" style={{ paddingLeft: '4%', paddingRight: '4%', paddingTop: '3%' }}>
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.photos}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
-                    {this.state.isEditable &&
-                        <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }} >
-                            <Button className="primary-add-comp-form " type="primary" onClick={() => this.addPhoto()}>{"+" + AppConstants.addPhoto}</Button>
-                        </div>}
+                    {this.state.isEditable && (
+                        <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }}>
+                            <Button className="primary-add-comp-form" type="primary" onClick={() => this.addPhoto()}>{"+" + AppConstants.addPhoto}</Button>
+                        </div>
+                    )}
                 </div>
             </Header >
         )
@@ -1075,15 +992,15 @@ class UserOurOragnization extends Component {
     photosEditHeaderView = () => {
         const id = this.state.tableRecord.id;
         return (
-            <Header className="comp-venue-courts-header-view" style={{ paddingLeft: '4%', paddingRight: '4%', paddingTop: '3%' }} >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <Header className="comp-venue-courts-header-view" style={{ paddingLeft: '4%', paddingRight: '4%', paddingTop: '3%' }}>
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{id != 0 ? AppConstants.editPhoto : AppConstants.addPhoto}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </Header >
+            </Header>
         )
     }
 
@@ -1097,7 +1014,8 @@ class UserOurOragnization extends Component {
                     columns={columns}
                     dataSource={orgPhotosList}
                     showHeader={false}
-                    pagination={false} />
+                    pagination={false}
+                />
             </div>
         )
     }
@@ -1138,7 +1056,8 @@ class UserOurOragnization extends Component {
                         width
                         borderRadius
                         timeout={this.state.timeout}
-                        src={photosUrl} />
+                        src={photosUrl}
+                    />
                 </div>
                 <div className="row">
                     <div className="col-sm pt-1">
@@ -1150,7 +1069,7 @@ class UserOurOragnization extends Component {
         )
     };
 
-    photosAddEditView = (getFieldDecorator) => {
+    photosAddEditView = () => {
         const photoUrl = this.state.tableRecord != null ? this.state.tableRecord.photoUrl : null;
         const { photoTypeData } = this.props.commonReducerState;
         return (
@@ -1161,48 +1080,42 @@ class UserOurOragnization extends Component {
                     width
                     borderRadius
                     timeout={this.state.timeout}
-                    src={photoUrl ? photoUrl : this.state.orgPhotosImg} />
+                    src={photoUrl ? photoUrl : this.state.orgPhotosImg}
+                />
                 <div>
                     <div className="row">
-                        <div className="col-sm" >
+                        <div className="col-sm">
                             <span className="user-contact-heading required-field">{AppConstants.uploadImage}</span>
                             <div onClick={this.onSelectPhotos}>
                             </div>
-                            <Form.Item>
-                                {getFieldDecorator('photosImage', {
-                                    rules: [{ required: photoUrl ? false : true, message: ValidationConstants.organisationPhotoRequired }]
-                                })(
-                                    <input
-                                        required={"pb-0"}
-                                        type="file"
-                                        id="photos-pic"
-                                        onChange={(evt) => {
-                                            this.setPhotosImage(evt.target)
-                                            this.setState({ timeout: 1000 })
-                                            setTimeout(() => {
-                                                this.setState({ timeout: null })
-                                            }, 1000);
-                                        }} />
-                                )}
+                            <Form.Item name='photosImage' rules={[{ required: photoUrl ? false : true, message: ValidationConstants.organisationPhotoRequired }]}>
+                                <input
+                                    required="pb-0"
+                                    type="file"
+                                    id="photos-pic"
+                                    onChange={(evt) => {
+                                        this.setPhotosImage(evt.target)
+                                        this.setState({ timeout: 1000 })
+                                        setTimeout(() => {
+                                            this.setState({ timeout: null })
+                                        }, 1000);
+                                    }}
+                                />
                             </Form.Item>
                             <span className="form-err">{this.state.imageError}</span>
                         </div>
                         <div className="col-sm pt-1">
-                            <InputWithHead heading={AppConstants.category} required={"required-field"} />
-                            <Form.Item>
-                                {getFieldDecorator('photoTypeRefId', {
-                                    rules: [{ required: true, message: ValidationConstants.photoTypeRequired }]
-                                })(
-                                    <Select
-                                        style={{ width: "100%", paddingRight: 1 }}
-                                        onChange={(e) => this.setOrgPhotoValue(e)}
-                                        setFieldsValue={this.state.tableRecord.photoTypeRefId}
-                                    >
-                                        {(photoTypeData || []).map((photo, index) => (
-                                            <Option key={photo.id} value={photo.id}>{photo.description}</Option>
-                                        ))}
-                                    </Select>
-                                )}
+                            <InputWithHead heading={AppConstants.category} required="required-field" />
+                            <Form.Item name='photoTypeRefId' rules={[{ required: true, message: ValidationConstants.photoTypeRequired }]}>
+                                <Select
+                                    style={{ width: "100%", paddingRight: 1 }}
+                                    onChange={(e) => this.setOrgPhotoValue(e)}
+                                    setFieldsValue={this.state.tableRecord.photoTypeRefId}
+                                >
+                                    {(photoTypeData || []).map((photo, index) => (
+                                        <Option key={photo.id} value={photo.id}>{photo.description}</Option>
+                                    ))}
+                                </Select>
                             </Form.Item>
                         </div>
                     </div>
@@ -1228,7 +1141,6 @@ class UserOurOragnization extends Component {
                         <Button onClick={() => this.removePhoto()} className="primary-add-comp-form ml-5" type="primary">
                             {AppConstants.remove}
                         </Button>
-
                     </div>
                 </div>
             </div>
@@ -1243,15 +1155,18 @@ class UserOurOragnization extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button type="cancel-button"
-                                    onClick={() => this.cancelEditView()}>
-                                    {AppConstants.cancel}</Button>
+                                <Button type="cancel-button" onClick={() => this.cancelEditView()}>
+                                    {AppConstants.cancel}
+                                </Button>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}
-                                    onClick={() => this.setState({ buttonPressed: "savePhotos" })}>
+                                <Button
+                                    className="user-approval-button" type="primary" htmlType="submit"
+                                    disabled={isSubmitting}
+                                    onClick={() => this.setState({ buttonPressed: "savePhotos" })}
+                                >
                                     {tableRecord.id == 0 ? AppConstants.add : AppConstants.updateAffiliates}
                                 </Button>
                             </div>
@@ -1269,7 +1184,8 @@ class UserOurOragnization extends Component {
                     title="Organisation Photos"
                     visible={this.state.orgPhotoModalVisible}
                     onOk={() => this.deleteOrgPhotoModalHandle("ok")}
-                    onCancel={() => this.deleteOrgPhotoModalHandle("cancel")}>
+                    onCancel={() => this.deleteOrgPhotoModalHandle("cancel")}
+                >
                     <p>Are you sure you want to remove the organisation photo?</p>
                 </Modal>
             </div>
@@ -1277,32 +1193,29 @@ class UserOurOragnization extends Component {
     }
 
     //////charity voucher view
-    charityVoucherView = (getFieldDecorator) => {
-
+    charityVoucherView = () => {
         let affiliate = this.props.userState.affiliateOurOrg;
         let charityRoundUp = affiliate.charityRoundUp;
         let checkCharityArray = affiliate.charity;
         return (
             <div className="advanced-setting-view pt-5">
                 {/* <div className="contextualHelp-RowDirection">
-            <span className="form-heading">{AppConstants.charityRoundUp}</span>
-            <div style={{ marginTop: 4 }}>
-                <CustumToolTip placement="top" background="#ff8237">
-                    <span>{AppConstants.charityRoundUpMsg}</span>
-                </CustumToolTip>
-            </div>
-            </div> */}
+                    <span className="form-heading">{AppConstants.charityRoundUp}</span>
+                    <div style={{ marginTop: 4 }}>
+                        <CustomToolTip placement="top" background="#ff8237">
+                            <span>{AppConstants.charityRoundUpMsg}</span>
+                        </CustomToolTip>
+                    </div>
+                </div> */}
                 {(checkCharityArray || []).map((item, index) => (
                     <div>
-                        {/* <Form.Item>
-                {getFieldDecorator('charityTitle', {
-                    rules: [
-                    {
-                        required: true,
-                        message: ValidationConstants.charityTitleNameIsRequired,
-                    },
-                    ],
-                })( */}
+                        {/* <Form.Item
+                            name='charityTitle'
+                            rules={[{
+                                required: true,
+                                message: ValidationConstants.charityTitleNameIsRequired,
+                            }]}
+                        > */}
                         <InputWithHead
                             auto_complete='new-title'
                             heading={AppConstants.title}
@@ -1310,29 +1223,24 @@ class UserOurOragnization extends Component {
                             value={item.name}
                             onChange={(e) => this.onChangesetCharity(captializedString(e.target.value), index, 'name')}
                         />
-                        {/* )}
-                </Form.Item> */}
+                        {/* </Form.Item> */}
                         <InputWithHead heading={AppConstants.description} />
-                        {/* <Form.Item>
-                {getFieldDecorator('charityDescription', {
-                    rules: [
-                    {
-                        required: true,
-                        message: ValidationConstants.charityDescriptionIsRequired,
-                    },
-                    ],
-                })( */}
+                        {/* <Form.Item
+                            name='charityDescription'
+                            rules={[{
+                                required: true,
+                                message: ValidationConstants.charityDescriptionIsRequired,
+                            }]}
+                        > */}
                         <TextArea
                             placeholder={AppConstants.addCharityDescription}
                             value={item.description}
                             allowClear
                             onChange={(e) => this.onChangesetCharity(e.target.value, index, 'description')}
                         />
-                        {/* )}
-                </Form.Item> */}
+                        {/* </Form.Item> */}
                     </div>
-                ))
-                }
+                ))}
                 <div className="inside-container-view">
                     <span className="form-heading">{AppConstants.roundUp}</span>
                     {charityRoundUp.map((item, index) => {
@@ -1341,15 +1249,14 @@ class UserOurOragnization extends Component {
                                 <Checkbox
                                     className="single-checkbox mt-3"
                                     checked={item.isSelected}
-                                    onChange={(e) => this.onChangesetCharity(e.target.checked, index, 'charityRoundUp')}>
+                                    onChange={(e) => this.onChangesetCharity(e.target.checked, index, 'charityRoundUp')}
+                                >
                                     {item.description}
                                 </Checkbox>
                             </div>
                         );
                     })}
                 </div>
-
-
             </div>
         );
     };
@@ -1363,38 +1270,54 @@ class UserOurOragnization extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="reg-add-save-button">
-                                <Button type="cancel-button"
-                                    onClick={() => this.setState({ buttonPressed: "cancel" })}>
-                                    {AppConstants.cancel}</Button>
+                                <Button type="cancel-button" onClick={() => this.setState({ buttonPressed: "cancel" })}>
+                                    {AppConstants.cancel}
+                                </Button>
                             </div>
                         </div>
-                        {this.state.isEditable &&
+                        {this.state.isEditable && (
                             <div className="col-sm">
-                                {this.state.organisationTabKey == "1" &&
+                                {this.state.organisationTabKey === "1" && (
                                     <div className="comp-buttons-view">
-                                        <Button className="user-approval-button" type="primary" htmlType="submit" disabled={isSubmitting}
-                                            onClick={() => this.setState({ buttonPressed: "save" })}>
+                                        <Button
+                                            className="user-approval-button"
+                                            type="primary"
+                                            htmlType="submit"
+                                            disabled={isSubmitting}
+                                            onClick={() => this.setState({ buttonPressed: "save" })}
+                                        >
                                             {AppConstants.updateAffiliates}
                                         </Button>
                                     </div>
-                                }
-                                {this.state.organisationTabKey == "3" &&
+                                )}
+                                {this.state.organisationTabKey === "3" && (
                                     <div className="comp-buttons-view">
-                                        <Button className="user-approval-button" type="primary" htmlType="button" disabled={isSubmitting}
-                                            onClick={() => this.updateTermsAndCondition()}>
+                                        <Button
+                                            className="user-approval-button"
+                                            type="primary"
+                                            htmlType="button"
+                                            disabled={isSubmitting}
+                                            onClick={() => this.updateTermsAndCondition()}
+                                        >
                                             {AppConstants.updateAffiliates}
                                         </Button>
                                     </div>
-                                }
-                                {this.state.organisationTabKey == "4" &&
+                                )}
+                                {this.state.organisationTabKey === "4" && (
                                     <div className="comp-buttons-view">
-                                        <Button className="user-approval-button" type="primary" htmlType="button" disabled={isSubmitting}
-                                            onClick={() => this.updateCharity()}>
+                                        <Button
+                                            className="user-approval-button"
+                                            type="primary"
+                                            htmlType="button"
+                                            disabled={isSubmitting}
+                                            onClick={() => this.updateCharity()}
+                                        >
                                             {AppConstants.updateAffiliates}
                                         </Button>
                                     </div>
-                                }
-                            </div>}
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -1403,42 +1326,46 @@ class UserOurOragnization extends Component {
 
     render() {
         let userState = this.props.userState;
-        const { getFieldDecorator } = this.props.form;
         const photoUrl = this.state.tableRecord != null ? this.state.tableRecord.photoUrl : null;
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"user"} userSelectedKey={"3"} />
+                <InnerHorizontalMenu menu="user" userSelectedKey="3" />
                 <Layout>
                     {this.headerView()}
                     <Form
+                        ref={this.formRef}
                         autocomplete="off"
-                        onSubmit={this.saveAffiliate}
-                        noValidate="noValidate">
+                        onFinish={this.saveAffiliate}
+                        onFinishFailed={(err) => {
+                            this.formRef.current.scrollToField(err.errorFields[0].name);
+                            message.error(ValidationConstants.requiredMessage);
+                        }}
+                        noValidate="noValidate"
+                    >
                         <Content>
                             <div className="tab-view">
                                 <Tabs activeKey={this.state.organisationTabKey} onChange={this.tabCallBack}>
                                     <TabPane tab={AppConstants.general} key="1">
-                                        <div className="tab-formView mt-5" >
-                                            {this.contentView(getFieldDecorator)}
+                                        <div className="tab-formView mt-5">
+                                            {this.contentView()}
                                         </div>
-                                        <div className="tab-formView mt-5" >
-                                            {this.contacts(getFieldDecorator)}
+                                        <div className="tab-formView mt-5">
+                                            {this.contacts()}
                                         </div>
                                     </TabPane>
                                     <TabPane tab={AppConstants.photos} key="2">
                                         <div>{AppConstants.orgPhotosText}</div>
-                                        <div className="tab-formView mt-5" >
+                                        <div className="tab-formView mt-5">
                                             {!this.state.isEditView ?
                                                 <div>
-
                                                     {this.photosHeaderView()}
                                                     {this.photosListView()}
                                                 </div> :
                                                 <div>
                                                     {this.photosEditHeaderView()}
                                                     {(photoUrl || this.state.orgPhotosImg) && this.photosEditViewRemoveBtnView()}
-                                                    {this.photosAddEditView(getFieldDecorator)}
+                                                    {this.photosAddEditView()}
                                                 </div>
                                             }
                                         </div>
@@ -1448,27 +1375,25 @@ class UserOurOragnization extends Component {
                                         {this.orgPhotoDeleteConfirmModalView()}
                                     </TabPane>
                                     <TabPane tab={AppConstants.termsAndCond} key="3">
-                                        <div className="tab-formView mt-5" >
-                                            {this.termsAndConditionsView(getFieldDecorator)}
+                                        <div className="tab-formView mt-5">
+                                            {this.termsAndConditionsView()}
                                         </div>
                                     </TabPane>
                                     {((getOrganisationData().organisationTypeRefId == 2 && this.state.sourcePage != "DIR") ||
-                                        (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) &&
+                                        (this.state.organisationTypeRefId == 2 && this.state.sourcePage == "DIR")) && (
                                         <TabPane tab={AppConstants.charity} key="4">
-                                            <div className="tab-formView mt-5" >
-                                                {this.charityVoucherView(getFieldDecorator)}
+                                            <div className="tab-formView mt-5">
+                                                {this.charityVoucherView()}
                                             </div>
                                         </TabPane>
-                                    }
+                                    )}
                                 </Tabs>
                             </div>
                             <Loader visible={userState.onLoad} />
                         </Content>
-                        {(this.state.organisationTabKey == "1" || this.state.organisationTabKey == "3" ||
-                            this.state.organisationTabKey == "4") ?
+                        {(this.state.organisationTabKey == "1" || this.state.organisationTabKey == "3" || this.state.organisationTabKey == "4") && (
                             <Footer>{this.footerView()}</Footer>
-                            : null
-                        }
+                        )}
                     </Form>
                 </Layout>
             </div>
@@ -1493,7 +1418,6 @@ function mapDispatchToProps(dispatch) {
         updateCharityValue,
         updateCharityAction, updateTermsAndCondtionAction
     }, dispatch);
-
 }
 
 function mapStateToProps(state) {
@@ -1504,4 +1428,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(UserOurOragnization));
+export default connect(mapStateToProps, mapDispatchToProps)(UserOurOrganization);

@@ -111,7 +111,7 @@ class UmpirePayout extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -136,11 +136,11 @@ class UmpirePayout extends Component {
                     <span className="reg-payment-paid-reg-text pt-2">{AppConstants.totalPages + " - " + currentPage}</span>
                 </div>
                 <div className="d-flex justify-content-end " style={{ paddingBottom: 100 }}>
-                    <div className="pagination-button-div" >
+                    <div className="pagination-button-div">
                         <span style={!previousEnabled ? { color: "#9b9bad" } : null}
                             className="pagination-button-text">{AppConstants.previous}</span>
                     </div>
-                    <div className="pagination-button-div" >
+                    <div className="pagination-button-div">
                         <span style={!previousEnabled ? { color: "#9b9bad" } : null}
                             className="pagination-button-text">{AppConstants.next}</span>
                     </div>
@@ -151,24 +151,24 @@ class UmpirePayout extends Component {
 
     dropdownView = () => {
         return (
-            <div className="row" >
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.year} />
+            <div className="row">
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.year} />
                     <Select
                         className="reg-payment-select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
                         onChange={(year) => this.setState({ year })}
                         value={this.state.year}
                     >
-                        <Option value={"2020"}>{AppConstants.year2020}</Option>
-                        <Option value={"2019"}>{AppConstants.year2019}</Option>
-                        <Option value={"2018"}>{AppConstants.year2018}</Option>
-                        <Option value={"2017"}>{AppConstants.year2017}</Option>
-                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                        <Option value="2020">{AppConstants.year2020}</Option>
+                        <Option value="2019">{AppConstants.year2019}</Option>
+                        <Option value="2018">{AppConstants.year2018}</Option>
+                        <Option value="2017">{AppConstants.year2017}</Option>
+                        <Option value="2016">{AppConstants.year2016}</Option>
                     </Select>
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.competition} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.competition} />
 
                     <Select
                         className="reg-payment-select"
@@ -176,53 +176,52 @@ class UmpirePayout extends Component {
                         onChange={(competition) => this.setState({ competition })}
                         value={this.state.competition}
                     >
-                        <Option value={"all"}>{AppConstants.all}</Option>
-                        <Option value={"2020"}>{AppConstants.year2020}</Option>
-                        <Option value={"2019"}>{AppConstants.year2019}</Option>
-                        <Option value={"2018"}>{AppConstants.year2018}</Option>
-                        <Option value={"2017"}>{AppConstants.year2017}</Option>
-                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                        <Option value="all">{AppConstants.all}</Option>
+                        <Option value="2020">{AppConstants.year2020}</Option>
+                        <Option value="2019">{AppConstants.year2019}</Option>
+                        <Option value="2018">{AppConstants.year2018}</Option>
+                        <Option value="2017">{AppConstants.year2017}</Option>
+                        <Option value="2016">{AppConstants.year2016}</Option>
                     </Select>
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.paymentFor} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
                     <Select
                         className="reg-payment-select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                         onChange={(paymentFor) => this.setState({ paymentFor })}
                         value={this.state.paymentFor}
                     >
-                        <Option value={"all"}>{AppConstants.all}</Option>
-                        <Option value={"2020"}>{AppConstants.year2020}</Option>
-                        <Option value={"2019"}>{AppConstants.year2019}</Option>
-                        <Option value={"2018"}>{AppConstants.year2018}</Option>
-                        <Option value={"2017"}>{AppConstants.year2017}</Option>
-                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                        <Option value="all">{AppConstants.all}</Option>
+                        <Option value="2020">{AppConstants.year2020}</Option>
+                        <Option value="2019">{AppConstants.year2019}</Option>
+                        <Option value="2018">{AppConstants.year2018}</Option>
+                        <Option value="2017">{AppConstants.year2017}</Option>
+                        <Option value="2016">{AppConstants.year2016}</Option>
                     </Select>
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.dateFrom} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
                         style={{ width: "100%", minWidth: 160 }}
                         // onChange={date => this.dateOnChangeFrom(date)}
-                        format={'DD-MM-YYYY'}
+                        format="DD-MM-YYYY"
                         showTime={false}
-                        placeholder={"dd-mm-yyyy"}
+                        placeholder="dd-mm-yyyy"
                     />
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.dateTo} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
                         style={{ width: "100%", minWidth: 160 }}
                         // onChange={date => this.dateOnChangeTo(date)}
-                        format={'DD-MM-YYYY'}
+                        format="DD-MM-YYYY"
                         showTime={false}
-                        placeholder={"dd-mm-yyyy"}
-
+                        placeholder="dd-mm-yyyy"
                     />
                 </div>
             </div>
@@ -241,9 +240,9 @@ class UmpirePayout extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"8"} />
+                <InnerHorizontalMenu menu="umpire" umpireSelectedKey="8" />
                 <Layout >
                     {this.headerView()}
                     <Content>

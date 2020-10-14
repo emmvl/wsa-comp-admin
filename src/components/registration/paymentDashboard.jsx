@@ -295,13 +295,12 @@ class PaymentDashboard extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     };
     ///setting the available from date
     dateOnChangeFrom = date => {
         // this.setState({ endDate: moment(date).utc().toISOString() })
-        console.log(date)
     }
 
     ////setting the available to date
@@ -321,9 +320,9 @@ class PaymentDashboard extends Component {
     };
     dropdownView = () => {
         return (
-            <div className="row pb-5" >
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.year} />
+            <div className="row pb-5">
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.year} />
                     <Select
                         className="reg-payment-select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
@@ -337,8 +336,8 @@ class PaymentDashboard extends Component {
                         <Option value={"2016"}>{AppConstants.year2016}</Option>
                     </Select>
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.competition} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.competition} />
 
                     <Select
                         className="reg-payment-select"
@@ -346,7 +345,7 @@ class PaymentDashboard extends Component {
                         onChange={(competition) => this.setState({ competition })}
                         value={this.state.competition}
                     >
-                        <Option value={"all"}>{AppConstants.all}</Option>
+                        <Option value="all">{AppConstants.all}</Option>
                         <Option value={"2020"}>{AppConstants.year2020}</Option>
                         <Option value={"2019"}>{AppConstants.year2019}</Option>
                         <Option value={"2018"}>{AppConstants.year2018}</Option>
@@ -354,15 +353,15 @@ class PaymentDashboard extends Component {
                         <Option value={"2016"}>{AppConstants.year2016}</Option>
                     </Select>
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.paymentFor} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
                     <Select
                         className="reg-payment-select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                         onChange={(paymentFor) => this.setState({ paymentFor })}
                         value={this.state.paymentFor}
                     >
-                        <Option value={"all"}>{AppConstants.all}</Option>
+                        <Option value="all">{AppConstants.all}</Option>
                         <Option value={"2020"}>{AppConstants.year2020}</Option>
                         <Option value={"2019"}>{AppConstants.year2019}</Option>
                         <Option value={"2018"}>{AppConstants.year2018}</Option>
@@ -370,29 +369,28 @@ class PaymentDashboard extends Component {
                         <Option value={"2016"}>{AppConstants.year2016}</Option>
                     </Select>
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.dateFrom} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
                         style={{ width: "100%", minWidth: 160 }}
                         onChange={date => this.dateOnChangeFrom(date)}
-                        format={'DD-MM-YYYY'}
+                        format="DD-MM-YYYY"
                         showTime={false}
-                        placeholder={"dd-mm-yyyy"}
+                        placeholder="dd-mm-yyyy"
                     />
                 </div>
-                <div className="col-sm" >
-                    <InputWithHead required={"pt-0"} heading={AppConstants.dateTo} />
+                <div className="col-sm">
+                    <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
                         style={{ width: "100%", minWidth: 160 }}
                         onChange={date => this.dateOnChangeTo(date)}
-                        format={'DD-MM-YYYY'}
+                        format="DD-MM-YYYY"
                         showTime={false}
-                        placeholder={"dd-mm-yyyy"}
-
+                        placeholder="dd-mm-yyyy"
                     />
                 </div>
             </div>
@@ -403,7 +401,6 @@ class PaymentDashboard extends Component {
     contentView = () => {
         const { paymentState } = this.props;
         let total = paymentState.paymentListTotalCount;
-        console.log(paymentState)
         let userId = this.state.userInfo != null ? this.state.userInfo.userId : -1;
         let regId = this.state.registrationId != null ? this.state.registrationId : '-1';
         return (
@@ -438,7 +435,7 @@ class PaymentDashboard extends Component {
                     menuHeading={AppConstants.finance}
                     menuName={AppConstants.finance}
                 />
-                <InnerHorizontalMenu menu={"finance"} finSelectedKey={"1"} />
+                <InnerHorizontalMenu menu="finance" finSelectedKey="1" />
                 <Layout>
                     {this.headerView()}
                     <Content>

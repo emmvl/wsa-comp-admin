@@ -180,7 +180,7 @@ const columnsTodaysMatch = [
         render: (id) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
             state: { matchId: id, key: 'dashboard' }
-        }} >
+        }}>
             <span className="input-heading-add-another pt-0" >{id}</span>
         </NavLink>
     },
@@ -203,7 +203,7 @@ const columnsTodaysMatch = [
             <NavLink to={{
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team1, key: 'dashboard' }
-            }} >
+            }}>
                 <span className="input-heading-add-another pt-0" >{team1.name}</span>
             </NavLink>
 
@@ -217,7 +217,7 @@ const columnsTodaysMatch = [
             <NavLink to={{
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team2, key: 'dashboard' }
-            }} >
+            }}>
                 <span className="input-heading-add-another pt-0" >{team2.name}</span>
             </NavLink>
     },
@@ -246,7 +246,7 @@ const columnsTodaysMatch = [
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
                 state: { matchId: records.id, key: 'dashboard' }
-            }} ><span nowrap className="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
+            }}><span nowrap className="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
     }, {
         title: "Umpire",
         dataIndex: 'umpires',
@@ -256,7 +256,7 @@ const columnsTodaysMatch = [
 
             isArrayNotEmpty(umpires) && umpires.map((item) => (
                 <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)}
-                    // className="desc-text-style side-bar-profile-data" 
+                    // className="desc-text-style side-bar-profile-data"
                     className='multi-column-text-aligned'
                 >{item.umpireName}</span>
             ))
@@ -313,7 +313,7 @@ const columnsTodaysMatch_1 = [
         render: (id) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
             state: { matchId: id, key: 'dashboard' }
-        }} >
+        }}>
             <span className="input-heading-add-another pt-0" >{id}</span>
         </NavLink>
     },
@@ -336,7 +336,7 @@ const columnsTodaysMatch_1 = [
             <NavLink to={{
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team1, key: 'dashboard' }
-            }} >
+            }}>
                 <span className="input-heading-add-another pt-0" >{team1.name}</span>
             </NavLink>
 
@@ -350,7 +350,7 @@ const columnsTodaysMatch_1 = [
             <NavLink to={{
                 pathname: '/liveScoreTeamView',
                 state: { tableRecord: team2, key: 'dashboard' }
-            }} >
+            }}>
                 <span className="input-heading-add-another pt-0" >{team2.name}</span>
             </NavLink>
     },
@@ -379,7 +379,7 @@ const columnsTodaysMatch_1 = [
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
                 state: { matchId: records.id, key: 'dashboard' }
-            }} ><span nowrap className="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
+            }}><span nowrap className="input-heading-add-another pt-0" >{setMatchResult(records)} </span></NavLink>
     }, {
         title: "Umpire",
         dataIndex: 'umpires',
@@ -389,7 +389,7 @@ const columnsTodaysMatch_1 = [
 
             isArrayNotEmpty(umpires) && umpires.map((item, index) => (
                 <span key={record.id + index} style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)}
-                    // className="desc-text-style side-bar-profile-data" 
+                    // className="desc-text-style side-bar-profile-data"
                     className='multi-column-text-aligned'
                 >{item.umpireName}</span>
             ))
@@ -664,7 +664,7 @@ class LiveScoreDashboard extends Component {
     // matchHeading = () => {
     //     return (
     //         <div className="row text-view">
-    //             <div className="col-sm" >
+    //             <div className="col-sm">
     //                 <span className='home-dash-left-text'>{AppConstants.todaysMatch}</span>
     //             </div>
 
@@ -685,9 +685,9 @@ class LiveScoreDashboard extends Component {
         return (
             <div className="row text-view">
 
-                <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
+                <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
                     <span className='home-dash-left-text'>{AppConstants.todaysMatch}</span>
-                    <Tooltip background='#ff8237'>
+                    <Tooltip background="#ff8237">
                         <span>{AppConstants.todayMatchMsg}</span>
                     </Tooltip>
                 </div>
@@ -785,9 +785,9 @@ class LiveScoreDashboard extends Component {
     incidentHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }} >
+                <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }}>
                     <span className='home-dash-left-text'>{AppConstants.todaysIncidents}</span>
-                    <Tooltip background='#ff8237'>
+                    <Tooltip background="#ff8237">
                         <span>{AppConstants.todayIncidentMsg}</span>
                     </Tooltip>
                 </div>
@@ -809,9 +809,9 @@ class LiveScoreDashboard extends Component {
     addNewsHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
+                <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
                     <span className='home-dash-left-text'>{AppConstants.activeNews}</span>
-                    <Tooltip background='#ff8237'>
+                    <Tooltip background="#ff8237">
                         <span>{AppConstants.activeNewsMsg}</span>
                     </Tooltip>
 
@@ -853,9 +853,9 @@ class LiveScoreDashboard extends Component {
     playersToPayHeading = () => {
         return (
             <div className="row text-view">
-                <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }} >
+                <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }}>
                     <span className='home-dash-left-text'>{AppConstants.playersToPay}</span>
-                    <Tooltip background='#ff8237'>
+                    <Tooltip background="#ff8237">
                         <span>{AppConstants.playersToPayMsg}</span>
                     </Tooltip>
                 </div>
@@ -912,9 +912,9 @@ class LiveScoreDashboard extends Component {
     }
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"1"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" />
                 <Layout>
                     <Content >
                         {this.addNewsView()}
@@ -923,7 +923,7 @@ class LiveScoreDashboard extends Component {
                         {this.incidenceView()}
                     </Content>
                 </Layout>
-            </div >
+            </div>
         );
     }
 }

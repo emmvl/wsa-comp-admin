@@ -5,7 +5,7 @@ class AllLegendComponent extends React.Component {
     render() {
         const { allLegendArray } = this.props
         return (
-            <div >
+            <div>
                 {allLegendArray.length > 0 && allLegendArray.map((item, index) => {
                     return (
                         <div key={index + "legend"} className="all-legend-main-div">
@@ -15,9 +15,9 @@ class AllLegendComponent extends React.Component {
                             <div className="d-flex" style={{ paddingLeft: 40 }}>
                                 {item.legendArray.map((subItem, subIndex) => {
                                     return (
-                                        <div key={subIndex + "subLegend"} className="legend-color-text-div" >
+                                        <div key={subIndex + "subLegend"} className="legend-color-text-div">
                                             <div>
-                                                <div className="legend-color-div" style={{ backgroundColor: subItem.colorCode }} >
+                                                <div className="legend-color-div" style={{ backgroundColor: subItem.colorCode }}>
                                                 </div>
                                             </div>
                                             <div className="legend-text-div">

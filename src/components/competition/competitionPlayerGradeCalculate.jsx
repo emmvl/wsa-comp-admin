@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Button, Table, Select, Form, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Input, Button, Table, Select, Tooltip } from 'antd';
 import { NavLink } from 'react-router-dom';
 import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -50,7 +50,7 @@ const columns = [
         title: 'Players',
         dataIndex: 'playerCount',
         key: 'playerCount',
-        render: playerCount => <Input disabled={true} className="input-inside-player-grades-table-for-grade" value={playerCount} />,
+        render: playerCount => <Input disabled className="input-inside-player-grades-table-for-grade" value={playerCount} />,
         sorter: (a, b) => tableSort(a, b, "playerCount")
     },
     {
@@ -69,14 +69,14 @@ const columns = [
         title: '# Teams',
         dataIndex: 'noOfTeams',
         key: 'noOfTeams',
-        render: noOfTeams => <Input disabled={true} className="input-inside-player-grades-table-for-grade" value={noOfTeams} />,
+        render: noOfTeams => <Input disabled className="input-inside-player-grades-table-for-grade" value={noOfTeams} />,
         sorter: (a, b) => tableSort(a, b, "noOfTeams")
     },
     {
         title: 'Extra Players',
         dataIndex: 'extraPlayers',
         key: 'extraPlayers',
-        render: extraPlayers => <Input disabled={true} className="input-inside-player-grades-table-for-grade" value={extraPlayers} />,
+        render: extraPlayers => <Input disabled className="input-inside-player-grades-table-for-grade" value={extraPlayers} />,
         sorter: (a, b) => tableSort(a, b, "extraPlayers")
     },
     // {
@@ -192,15 +192,15 @@ class CompetitionPlayerGradeCalculate extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGradingToggle}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGradingToggle}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -226,13 +226,13 @@ class CompetitionPlayerGradeCalculate extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm-3" >
-                            <div className="com-year-select-heading-view pb-3" >
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm-3">
+                            <div className="com-year-select-heading-view pb-3">
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
-                                    name={"yearRefId"}
+                                    name="yearRefId"
                                     style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
@@ -248,16 +248,16 @@ class CompetitionPlayerGradeCalculate extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-6 pb-3" >
+                        <div className="col-sm-6 pb-3">
                             <div style={{
                                 width: "fit-content", display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center", marginRight: 50
-                            }} >
+                            }}>
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
                                     // style={{ minWidth: 200 }}
-                                    name={"competition"}
+                                    name="competition"
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
@@ -272,8 +272,8 @@ class CompetitionPlayerGradeCalculate extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignItems: 'center' }} >
-                            <NavLink to="/competitionPlayerGrades" >
+                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignItems: 'center' }}>
+                            <NavLink to="/competitionPlayerGrades">
                                 <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
                             </NavLink>
                         </div>
@@ -327,7 +327,8 @@ class CompetitionPlayerGradeCalculate extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table"
+                    <Table
+                        className="home-dashboard-table"
                         columns={columns}
                         dataSource={playerGradingTableData}
                         pagination={false}
@@ -356,10 +357,10 @@ class CompetitionPlayerGradeCalculate extends Component {
     footerView = () => {
         let isPublished = this.state.competitionStatus == 1 ? true : false
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="comp-player-grades-footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
+                    <div className="row">
+                        <div className="col-sm">
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
 
@@ -396,9 +397,9 @@ class CompetitionPlayerGradeCalculate extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"4"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="4" />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -410,10 +411,10 @@ class CompetitionPlayerGradeCalculate extends Component {
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getYearAndCompetitionOwnAction,
@@ -424,10 +425,11 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         partPlayerGradingState: state.CompetitionPartPlayerGradingState
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionPlayerGradeCalculate));
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionPlayerGradeCalculate);

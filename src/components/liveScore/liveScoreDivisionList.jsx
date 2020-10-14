@@ -205,7 +205,6 @@ class LiveScoreDivisionList extends Component {
             ))
             let offset = 0
             let { divisionListActionObject } = this.props.liveScoreDivisionState
-            console.log("divisionListActionObject", divisionListActionObject)
             if (divisionListActionObject) {
                 let offset = divisionListActionObject.offset
                 let sortBy = divisionListActionObject.sortBy
@@ -384,7 +383,7 @@ class LiveScoreDivisionList extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"9"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="9" />
                 <Layout>
                     {this.headerView()}
                     <Content>

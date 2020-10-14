@@ -6,11 +6,10 @@ import { currencyFormat } from "../util/currencyFormat";
 import { isArrayNotEmpty } from "../util/helpers";
 import { getOrganisationData } from '../util/sessionStorage';
 import { Carousel } from 'react-responsive-carousel';
-import styles from "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 
 const { SubMenu } = Menu;
 class ShopSingleProductComponent extends React.Component {
-
     /////check product is for parent or for affiliate
     isParentCreator = (creatorOrgKey) => {
         let orgData = getOrganisationData();
@@ -21,7 +20,6 @@ class ShopSingleProductComponent extends React.Component {
             return false
         }
     }
-
 
     productItemPriceCheck = (productItem) => {
         let price = 0
@@ -39,7 +37,7 @@ class ShopSingleProductComponent extends React.Component {
     render() {
         const { productItem, editOnclick, deleteOnclick, viewOnclick } = this.props
         return (
-            <div className="shop-single-prd-main-view mt-3" >
+            <div className="shop-single-prd-main-view mt-3">
                 <div className="product-menu-option-view">
                     <Menu
                         className="action-triple-dot-submenu"
@@ -61,12 +59,12 @@ class ShopSingleProductComponent extends React.Component {
                             }
                         >
                             {this.isParentCreator(productItem.organisationUniqueKey) &&
-                                <Menu.Item onClick={editOnclick} >
+                                <Menu.Item onClick={editOnclick}>
                                     <span>Edit</span>
                                 </Menu.Item>
                             }
                             {this.isParentCreator(productItem.organisationUniqueKey) &&
-                                <Menu.Item onClick={deleteOnclick} >
+                                <Menu.Item onClick={deleteOnclick}>
                                     <span>Delete</span>
                                 </Menu.Item>
                             }
@@ -79,12 +77,12 @@ class ShopSingleProductComponent extends React.Component {
                     </Menu>
                 </div>
                 <div className="product-img-view">
-                    <div >
+                    <div>
                         <Carousel
                             showStatus={false}
                             showThumbs={false}
-                            infiniteLoop={true}
-                            showArrows={true}
+                            infiniteLoop
+                            showArrows
                         >
                             {isArrayNotEmpty(productItem.images) && productItem.images.map(
                                 (item, index) => {
@@ -100,7 +98,7 @@ class ShopSingleProductComponent extends React.Component {
                     </div>
                     {/* <img
                         src={isArrayNotEmpty(productItem.images) ? productItem.images[0].url : AppImages.squareImage}
-                        name={'image'}
+                        name="image"
                         className="product-img"
                         onError={ev => {
                             ev.target.src = AppImages.squareImage;
@@ -111,7 +109,7 @@ class ShopSingleProductComponent extends React.Component {
                     <span className="product-name">{productItem.productName}</span>
                     <span className="product-price-text-style">{" From " + this.productItemPriceCheck(productItem)}</span>
                     <span className="product-type-grey-text">{productItem.type ? productItem.type : "N/A"}</span>
-                    <div className="mt-3" >
+                    <div className="mt-3">
                         {productItem && isArrayNotEmpty(productItem.variants) && productItem.variants.map((subItem, subIndex) => {
                             let optionCount = subItem ? subItem.options.length : 0
                             let checkOptionDisplayCount = optionCount <= 3 ? 2 : 1
@@ -121,7 +119,7 @@ class ShopSingleProductComponent extends React.Component {
                                         {subItem && isArrayNotEmpty(subItem.options) && subItem.options.map((subItemOption, subIndexOption) => {
                                             return (
                                                 subIndexOption <= checkOptionDisplayCount && <div className="d-flex flex-row" key={"options" + subIndexOption}>
-                                                    <div className="col-sm-3 pl-0" >
+                                                    <div className="col-sm-3 pl-0">
                                                         <span className="product-grey-detail-text">{subItemOption.optionName ? subItemOption.optionName : ""}</span>
                                                     </div>
                                                     <div className="col-sm-9">

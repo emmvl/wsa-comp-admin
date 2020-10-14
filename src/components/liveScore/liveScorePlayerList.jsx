@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Icon, Layout, Button, Table, Pagination, Spin, message, Menu, Modal } from "antd";
+import { Input, Layout, Button, Table, Pagination, Spin, message, Menu, Modal } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import "./liveScore.css";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -13,7 +14,6 @@ import {
     playerListWithPaginationAction,
     liveScoreDeletePlayerAction
 } from "../../store/actions/LiveScoreAction/liveScorePlayerAction";
-
 import { liveScore_formateDate } from "../../themes/dateformate";
 import history from "../../util/history";
 import { getLiveScoreCompetiton } from "../../util/sessionStorage";
@@ -58,8 +58,8 @@ const columns = [
                 profilePicture ? (
                     <img className="user-image" src={profilePicture} alt="" height="70" width="70" />
                 ) : (
-                        <span>{AppConstants.noImage}</span>
-                    )
+                    <span>{AppConstants.noImage}</span>
+                )
             )
         }
     },
@@ -144,8 +144,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team.name}</span>
             </NavLink>
         ) : (
-                <span>{team.name}</span>
-            )
+            <span>{team.name}</span>
+        )
     },
     {
         title: 'Contact No',
@@ -178,11 +178,8 @@ const columns = [
                     <Menu.Item key="2" onClick={() => {
                         _this.showDeleteConfirm(record.playerId);
                     }}>
-
                         <span>Delete</span>
                     </Menu.Item>
-
-
                 </Menu.SubMenu>
             </Menu>
         )
@@ -204,7 +201,6 @@ class LiveScorePlayerList extends Component {
 
     componentDidMount() {
         let { playerListActionObject } = this.props.liveScorePlayerState
-        console.log("playerListActionObject", playerListActionObject)
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             this.setState({ competitionId: id })
@@ -228,13 +224,11 @@ class LiveScorePlayerList extends Component {
     }
 
     // Delete player
-
     deletePlayer = (playerId) => {
         this.props.liveScoreDeletePlayerAction(playerId, this.state.competitionId, this.state.offset)
     }
 
     showDeleteConfirm = (playerId) => {
-
         let this_ = this
         confirm({
             title: 'Are you sure you want to delete this player?',
@@ -243,16 +237,14 @@ class LiveScorePlayerList extends Component {
             cancelText: 'No',
             onOk() {
                 this_.deletePlayer(playerId)
-
             },
             onCancel() {
             },
         });
     }
 
-
     /// Handle Page change
-    handlePageChnage(page) {
+    handlePageChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
         let { sortBy, sortOrder } = this.state
         this.setState({
@@ -274,7 +266,7 @@ class LiveScorePlayerList extends Component {
                         columns={columns}
                         dataSource={result}
                         pagination={false}
-                    // rowKey={(record) => record.playerId}
+                        rowKey={(record) => record.playerId}
                     />
                 </div>
                 <div className="comp-dashboard-botton-view-mobile">
@@ -294,7 +286,7 @@ class LiveScorePlayerList extends Component {
                             className="antd-pagination"
                             current={currentPage}
                             total={totalCount}
-                            onChange={(page) => this.handlePageChnage(page)}
+                            onChange={this.handlePageChange}
                         />
                     </div>
                 </div>
@@ -311,7 +303,7 @@ class LiveScorePlayerList extends Component {
         }
     }
 
-    // search key 
+    // search key
     onKeyEnterSearchText = (e) => {
         let { sortBy, sortOrder, searchText, competitionId } = this.state
         this.setState({ offset: 0 })
@@ -331,12 +323,12 @@ class LiveScorePlayerList extends Component {
         }
     }
 
-    onExport() {
+    onExport = () => {
         let url = AppConstants.exportUrl + `competitionId=${this.state.competitionId}`
         this.props.exportFilesAction(url)
     }
 
-    checkUserId(record) {
+    checkUserId = (record) => {
         if (record.userId == null) {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
@@ -384,7 +376,7 @@ class LiveScorePlayerList extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <NavLink to={`/liveScoreAddPlayer`} className="text-decoration-none">
+                                        <NavLink to="/liveScoreAddPlayer" className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 + {AppConstants.addPlayer}
                                             </Button>
@@ -403,7 +395,7 @@ class LiveScorePlayerList extends Component {
                                         }}
                                     >
                                         <Button
-                                            onClick={() => this.onExport()}
+                                            onClick={this.onExport}
                                             className="primary-add-comp-form"
                                             type="primary"
                                         >
@@ -431,7 +423,7 @@ class LiveScorePlayerList extends Component {
                                             justifyContent: "flex-end"
                                         }}
                                     >
-                                        <NavLink to={`/liveScorerPlayerImport`} className="text-decoration-none">
+                                        <NavLink to="/liveScorerPlayerImport" className="text-decoration-none">
                                             <Button className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
@@ -454,15 +446,14 @@ class LiveScorePlayerList extends Component {
                         <div className="comp-product-search-inp-width">
                             <Input
                                 className="product-reg-search-input"
-                                onChange={(e) => this.onChangeSearchText(e)}
+                                onChange={this.onChangeSearchText}
                                 placeholder="Search..."
-                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                                 value={this.state.searchText}
+                                onKeyPress={this.onKeyEnterSearchText}
                                 prefix={
-                                    <Icon
-                                        type="search"
+                                    <SearchOutlined
                                         style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                        onClick={() => this.onClickSearchIcon()}
+                                        onClick={this.onClickSearchIcon}
                                     />
                                 }
                                 allowClear
@@ -474,7 +465,7 @@ class LiveScorePlayerList extends Component {
         );
     };
 
-    loaderView() {
+    loaderView = () => {
         return (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Spin size="small" tip="Loading..." />
@@ -490,7 +481,7 @@ class LiveScorePlayerList extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"7"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="7" />
                 <Layout>
                     {getLiveScoreCompetiton() && this.headerView()}
                     <Content>

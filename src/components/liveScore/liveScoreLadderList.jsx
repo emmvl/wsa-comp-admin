@@ -145,8 +145,8 @@ class LiveScoreLadderList extends Component {
         let { liveScoreCompIsParent } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
-                < div className="row" >
-                    <div className="col-sm" >
+                < div className="row">
+                    <div className="col-sm">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.competitionladders}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -183,8 +183,8 @@ class LiveScoreLadderList extends Component {
                         </div>
                     </div>}
 
-                </div >
-            </div >
+                </div>
+            </div>
         )
     }
 
@@ -237,7 +237,7 @@ class LiveScoreLadderList extends Component {
 
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="reg-filter-col-cont"  >
+                <div className="reg-filter-col-cont">
                     {/* <span className='year-select-heading'>{AppConstants.filterByDivision}:</span> */}
                     {/* {grade.length > 0 && <Select
                         className="year-select reg-filter-select1 ml-2"
@@ -333,9 +333,9 @@ class LiveScoreLadderList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"11"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="11" />
                 <Layout>
                     {this.headerView()}
                     <Content>

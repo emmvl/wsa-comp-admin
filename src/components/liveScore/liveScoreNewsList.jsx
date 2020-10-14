@@ -252,12 +252,12 @@ class LiveScoreNewsList extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width paddingBottom56px" >
-                <div className="row" >
-                    <div className="col-sm-3 mt-5" >
+            <div className="fluid-width paddingBottom56px">
+                <div className="row">
+                    <div className="col-sm-3 mt-5">
                         <div className="reg-add-save-button">
                             <NavLink to="/liveScoreCompetitions">
-                                <Button className="cancelBtnWidth" type="cancel-button"  >{AppConstants.back}</Button>
+                                <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -278,7 +278,7 @@ class LiveScoreNewsList extends Component {
                     stateWideMsg ?
                         <InnerHorizontalMenu menu={"liveScoreNews"} liveScoreNewsSelectedKey={"21"} />
                         :
-                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"21"} />
+                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"21"} />
                 }
                 <Layout>
                     {this.headerView()}

@@ -70,34 +70,31 @@ class LiveScoreSocialSheet extends Component {
     }
 
 
-    ///Match details 
+    ///Match details
     matchDetailsContainer = (result) => {
 
         return (
-            <div className="content-view pt-4 pb-0 " >
-                <div className="drop-reverse" >
-                    <div className="col-sm "
-                    >
+            <div className="content-view pt-4 pb-0">
+                <div className="drop-reverse">
+                    <div className="col-sm">
                         <div className="row pl-1 pr-1">
                             <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-start' }}>
                                 <div>
                                     <span style={{ display: 'flex', }} className="live-score-profile-user-name">Brisban City Netball Association</span>
                                     <span style={{ display: 'flex', }} className="live-score-profile-user-name">Social Scoresheet</span>
                                 </div>
-
                             </div>
                             <div className="col-sm" style={{ display: "flex", justifyContent: 'flex-end' }}>
                                 <img
                                     src={AppImages.squareImage}
                                     height="80"
                                     width="80"
-                                    name={'image'}
+                                    name="image"
                                     onError={ev => {
                                         ev.target.src = AppImages.squareImage;
                                     }}
                                 />
                             </div>
-
                         </div>
                     </div>
 
@@ -112,7 +109,7 @@ class LiveScoreSocialSheet extends Component {
     roundAndteamsContainer = () => {
         return (
             <div className="match-details-rl-padding row mt-5">
-                <div className="col-sm" style={{ flexDirection: "column", display: "flex" }} >
+                <div className="col-sm" style={{ flexDirection: "column", display: "flex" }}>
                     <div className="pl-5" style={{ display: "flex", flexDirection: "column" }}>
                         <span className='year-select-heading'>Round 1</span>
                         <span className='year-select-heading mt-2'>Venue : John Fisher Court 1</span>
@@ -126,7 +123,7 @@ class LiveScoreSocialSheet extends Component {
 
                     </div>
                 </div>
-                <div className="col-sm" style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
+                <div className="col-sm" style={{ flexDirection: "column", display: "flex", alignContent: "center" }}>
                     <div className="pl-5" style={{ display: "flex", flexDirection: "column" }}>
                         <span className='year-select-heading'>Date: 08/06/2020</span>
                         <span className='year-select-heading mt-2'>Time : 10:00am</span>
@@ -150,12 +147,12 @@ class LiveScoreSocialSheet extends Component {
     progressiveScoreContainer = () => {
         return (
             <div className="row match-details-rl-padding  mt-5" style={{ display: "flex", flexDirection: "row" }}>
-                <div className="col-sm"  >
-                    <div className="progressive-container" >
+                <div className="col-sm">
+                    <div className="progressive-container">
                         {
                             this.centerPassArray.map((item) => {
                                 return (
-                                    // <div className="progressive-container" >
+                                    // <div className="progressive-container">
                                     <span className='year-select-heading pl-2'>{item}</span>
                                     // </div>
                                 )
@@ -165,18 +162,15 @@ class LiveScoreSocialSheet extends Component {
                     </div>
                 </div>
 
-                <div className="col-sm"  >
-                    <div className="progressive-container" >
-                        {
-                            this.centerPassArray.map((item) => {
-                                return (
-                                    // <div  >
-                                    <span className='year-select-heading pl-2'>{item}</span>
-                                    // </div>
-                                )
-                            })
-                        }
-
+                <div className="col-sm">
+                    <div className="progressive-container">
+                        {this.centerPassArray.map((item) => {
+                            return (
+                                // <div>
+                                <span className='year-select-heading pl-2'>{item}</span>
+                                // </div>
+                            )
+                        })}
                     </div>
                 </div>
             </div>

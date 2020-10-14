@@ -153,7 +153,6 @@ class ProductRegistrationClub extends Component {
 
 
     onChange = e => {
-        console.log('radio checked', e.target.value);
         this.setState({
             value: e.target.value,
         });
@@ -174,7 +173,7 @@ class ProductRegistrationClub extends Component {
                         <Option value={"2019"}>{AppConstants.year2019}</Option>
                     </Select>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -184,7 +183,7 @@ class ProductRegistrationClub extends Component {
         let tableData = this.state.value === "playingMember" ? playingMemberData : nonPlayingMemberData
         return (
             <div className="fees-view pt-0">
-                <div >
+                <div>
                     <Radio.Group onChange={this.onChange} value={this.state.value} defaultValue={"playingMember"}>
                         <Radio value={"playingMember"}>{AppConstants.playingMember}</Radio>
                         <Radio value={"nonPlayingMember"}>{AppConstants.nonPlayingMember}</Radio>
@@ -203,13 +202,13 @@ class ProductRegistrationClub extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="footer-view">
-                    {/* <div className="row" >
+                    {/* <div className="row">
                         <div className="col-sm" style={{ display: 'flex', alignItems: "flex-start" }}>
                             <Button type="cancel-button">Cancel</Button>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm">
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 <Button className="save-draft-text" type="save-draft-text">Save as Draft</Button>
                                 <Button className="publish-button" type="primary">Publish</Button>
@@ -221,12 +220,11 @@ class ProductRegistrationClub extends Component {
         )
     }
 
-
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} />
+                <InnerHorizontalMenu menu="registration" />
                 <Layout>
                     {this.headerView()}
 

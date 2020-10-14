@@ -15,7 +15,6 @@ class Swappable extends Component {
 
   drag(ev, customFunc = null) {
     ev.dataTransfer.setData('src', ev.target.id);
-    // console.log(ev.target.parentNode, 'TARGET DRAGSTART');
 
     this.setState({
       initialParentNode: ev.target.parentNode
@@ -23,7 +22,6 @@ class Swappable extends Component {
   }
 
   dragEnd(ev, customFunc = null) {
-    // console.log(ev.target.parentNode, 'TARGET DRAGEND');
     if (customFunc && ev.target.parentNode != this.state.initialParentNode) {
       this.props.customFunc();
     }
@@ -44,10 +42,6 @@ class Swappable extends Component {
     let target = document.getElementById(dragableId);
     let targetParent = target.parentNode;
 
-    // console.log(src.parentNode.id, 'dragged element');
-    // console.log(srcParent, 'parent of dragged');
-    // console.log(target.parentNode.id, 'element to be swapped');
-
     swappable
       ? this.swapElements(src, target, srcParent, targetParent)
       : this.transferElement(src, dropzoneId);
@@ -61,8 +55,6 @@ class Swappable extends Component {
       srcParent.appendChild(target);
       this.props.onSwap(src.id, target.id);
     }
-    // console.log(src.id, 'source');
-    // console.log(target.id, 'target');
   }
 
   transferElement(src, dropzoneId) {

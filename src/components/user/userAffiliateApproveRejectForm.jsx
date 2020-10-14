@@ -23,9 +23,9 @@ class UserAffiliateApproveRejectForm extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <Header className="user-affiliate-header-view " >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <Header className="user-affiliate-header-view">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.affiliateApproveReject}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -34,7 +34,6 @@ class UserAffiliateApproveRejectForm extends Component {
             </Header>
         )
     }
-
 
     ////////form content view
     contentView = () => {
@@ -66,7 +65,7 @@ class UserAffiliateApproveRejectForm extends Component {
                     width: "100%", display: "flex",
                     flexDirection: "row",
                     alignItems: "center", marginLeft: 7
-                }} >
+                }}>
                     <span className='year-select-heading'>{AppConstants.organisationType}</span>
                     <Select
                         className="year-select"
@@ -82,7 +81,7 @@ class UserAffiliateApproveRejectForm extends Component {
                     width: "100%", display: "flex",
                     flexDirection: "row",
                     alignItems: "center", marginLeft: 7
-                }} >
+                }}>
                     <span className='year-select-heading'>{AppConstants.affiliatedTo}</span>
                     <Select
                         className="year-select"
@@ -103,7 +102,7 @@ class UserAffiliateApproveRejectForm extends Component {
     currentView = () => {
         return (
             <div>
-                <span className='form-heading'>{AppConstants.current}</span>
+                <span className="form-heading">{AppConstants.current}</span>
                 <div className="inside-container-view">
                     <HeadDescription heading={AppConstants.name} desc={"Collaroy Netball Club"} />
                     <HeadDescription heading={AppConstants.address} desc={"Abott Road Curl Curl"} />
@@ -122,7 +121,7 @@ class UserAffiliateApproveRejectForm extends Component {
     pendingView = () => {
         return (
             <div>
-                <span className='form-heading'>{AppConstants.pendingForApproval}</span>
+                <span className="form-heading">{AppConstants.pendingForApproval}</span>
                 <div className="inside-container-view">
                     <HeadDescription heading={AppConstants.name} desc={"Collaroy Netball Club"} />
                     <HeadDescription heading={AppConstants.address} desc={"Abott Road Curl Curl"} />
@@ -137,15 +136,15 @@ class UserAffiliateApproveRejectForm extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="footer-view">
-                    <div className="row" >
+                    <div className="row">
                         <div className="col-sm-3">
                             <div className="reg-add-save-button">
                                 <Button type="cancel-button">Cancel</Button>
                             </div>
                         </div>
-                        <div className="col-sm-9" >
+                        <div className="col-sm-9">
                             <div className="comp-buttons-view">
                                 <Button className="save-draft-text" type="save-draft-text">Reject</Button>
                                 <Button className="open-reg-button" type="primary">Approve</Button>
@@ -157,15 +156,11 @@ class UserAffiliateApproveRejectForm extends Component {
         )
     }
 
-
-
-
-
     render() {
         return (
-            <div className="container-fluid" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="container-fluid" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"user"} userSelectedKey={"3"} />
+                <InnerHorizontalMenu menu="user" userSelectedKey="3" />
                 <Layout>
                     {this.headerView()}
                     <Content>

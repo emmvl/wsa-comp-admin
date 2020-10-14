@@ -115,7 +115,7 @@ const columns = [
                             }
                         >
                             <Menu.Item key="1">
-                                <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: record.membershipProductId } }} >
+                                <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: record.membershipProductId } }}>
                                     <span >Edit</span>
                                 </NavLink>
                             </Menu.Item>
@@ -137,7 +137,7 @@ const columns = [
                             }
                         >
                             <Menu.Item key="1">
-                                <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: record.membershipProductId } }} >
+                                <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: record.membershipProductId } }}>
                                     <span >View</span>
                                 </NavLink>
                             </Menu.Item>
@@ -234,15 +234,15 @@ class RegistrationMembershipList extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.membershipFees}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -256,10 +256,10 @@ class RegistrationMembershipList extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width" >
+                <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view pb-3" >
+                        <div className="col-sm-2">
+                            <div className="com-year-select-heading-view pb-3">
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     className="year-select reg-filter-select-year ml-2"
@@ -286,7 +286,7 @@ class RegistrationMembershipList extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -320,9 +320,9 @@ class RegistrationMembershipList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"6"} />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="6" />
                 <Layout>
                     {this.headerView()}
                     <Content>

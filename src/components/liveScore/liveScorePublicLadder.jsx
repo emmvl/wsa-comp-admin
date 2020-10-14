@@ -134,38 +134,35 @@ class LiveScorePublicLadder extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add"> {AppConstants.competitionladders}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add"> {AppConstants.competitionladders}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
     componentDidMount() {
-        // let compParams =  this.props.location.search.split("?competitionId=")
-        // let compKey  = compParams[1]
+        // let compParams = this.props.location.search.split("?competitionId=")
+        // let compKey = compParams[1]
         // this.setState({ loadding: true , competitionId: 1 , competitionUniqueKey :compKey})
         // this.props.getLiveScoreDivisionList(1, "20b91f98-3f12-41c1-aeeb-70c9d6f4fa3d")
-         
-      
+
         // this.getCompDetails().then((res) => {
-        // //    let params = url.split("?");;
-          
+        //     let params = url.split("?");;
         //     let resp = res? JSON.parse(res) : null
         //     // let compKey = resp && resp.uniqueKey ? resp.uniqueKey :"20b91f98-3f12-41c1-aeeb-70c9d6f4fa3d"
         //     let compId = resp ? resp.id : 1
         //     this.setState({ competitionId: compId , competitionUniqueKey :compKey})
         //     this.props.getLiveScoreDivisionList(compId, compKey)
-           
         // })
 
-        let orgParam =  this.props.location.search.split("?organisationId=")
-        let orgId  =  orgParam[1]
+        let orgParam = this.props.location.search.split("?organisationId=")
+        let orgId = orgParam[1]
 
         this.setState({ onCompLoad: true })
         this.props.fixtureCompetitionListAction(orgId)
@@ -186,7 +183,6 @@ class LiveScorePublicLadder extends Component {
     //         }
     //     }
     // }
-
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreFixturCompState !== this.props.liveScoreFixturCompState) {
@@ -233,30 +229,28 @@ class LiveScorePublicLadder extends Component {
     let division =isArrayNotEmpty(liveScoreLadderState.liveScoreLadderDivisionData) ? liveScoreLadderState.liveScoreLadderDivisionData : []
     return (
         <div className="comp-player-grades-header-drop-down-view">
-            <div className="row" >
-                <div className="col-sm-4" >
-                    <div className="com-year-select-heading-view" >
+            <div className="row">
+                <div className="col-sm-4">
+                    <div className="com-year-select-heading-view">
                         <span className='year-select-heading'>{AppConstants.competition}:</span>
                         <Select
                             className="year-select"
                             style={{ minWidth: 160 }}
                             onChange={(comp) => this.onChangeComp({ comp })}
                             value={this.state.selectedComp}
-                        >{
-                                competition.map((item) => {
-                                    return <Option value={item.id}>{item.longName}</Option>
-                                })
-                            }
-
+                        >
+                            {competition.map((item) => {
+                                return <Option value={item.id}>{item.longName}</Option>
+                            })}
                         </Select>
                     </div>
                 </div>
-                <div className="col-sm-2" >
+                <div className="col-sm-2">
                     <div style={{
                         width: "100%", display: "flex",
                         flexDirection: "row",
                         alignItems: "center", marginRight: 50
-                    }} >
+                    }}>
                         <span className='year-select-heading'>{AppConstants.division}:</span>
                         <Select
                             className="year-select"
@@ -296,13 +290,13 @@ class LiveScorePublicLadder extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout 
-                    menuHeading={AppConstants.liveScores} 
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+                <DashboardLayout
+                    menuHeading={AppConstants.liveScores}
                     isManuNotVisible = {true}
                 // menuName={AppConstants.liveScores}
                  />
-                {/* <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"11"} /> */}
+                {/* <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="11" /> */}
                 <Layout>
                     {this.headerView()}
                     <Content>

@@ -537,8 +537,8 @@ class DashboardLayout extends React.Component {
               onChange={this.handleImpersonationOrg}
               placeholder="Organisation"
               showSearch
-              filterOption={(input, option) =>
-                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              filterOption={(input, data) =>
+                data.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               loading={this.props.userState.onLoad}
             >

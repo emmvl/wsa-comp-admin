@@ -116,24 +116,20 @@ class RegistrationList extends Component {
         }
     }
 
-
     onChange = e => {
-        console.log('radio checked', e.target.value);
         this.setState({
             value: e.target.value,
         });
     };
 
-
-
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view" style={{ marginTop: 15 }}>
-                <div className="fluid-width" >
+                <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" >
-                            <div className="com-year-select-heading-view" >
+                        <div className="col-sm">
+                            <div className="com-year-select-heading-view">
                                 <span className='year-select-heading'>{AppConstants.year}:</span>
                                 <Select
                                     className="year-select"
@@ -145,8 +141,8 @@ class RegistrationList extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
-                            <div className="com-year-select-heading-view" >
+                        <div className="col-sm">
+                            <div className="com-year-select-heading-view">
                                 <span className='year-select-heading'>{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select"
@@ -154,12 +150,12 @@ class RegistrationList extends Component {
                                     onChange={(competition) => this.setState({ competition })}
                                     value={this.state.competition}
                                 >
-                                    <Option value={"all"}>{AppConstants.all}</Option>
+                                    <Option value="all">{AppConstants.all}</Option>
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
-                            <div className="com-year-select-heading-view" >
+                        <div className="col-sm">
+                            <div className="com-year-select-heading-view">
                                 <span className='year-select-heading'>{AppConstants.product}:</span>
                                 <Select
                                     className="year-select"
@@ -171,8 +167,8 @@ class RegistrationList extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm" >
-                            <div className="com-year-select-heading-view" >
+                        <div className="col-sm">
+                            <div className="com-year-select-heading-view">
                                 <span className='year-select-heading'>{AppConstants.dOB}:</span>
                                 <Select
                                     className="year-select"
@@ -207,10 +203,10 @@ class RegistrationList extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="comp-player-grades-footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
+                    <div className="row">
+                        <div className="col-sm">
                             <div className="comp-buttons-view">
                                 {/* <Button className="save-draft-text" type="save-draft-text">Save Draft</Button>
                                 <Button className="open-reg-button" type="primary">Grade and Name Teams</Button> */}
@@ -226,9 +222,9 @@ class RegistrationList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"1"} />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="1" />
                 <Layout>
                     <Content>
                         {this.dropdownView()}

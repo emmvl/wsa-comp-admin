@@ -442,7 +442,6 @@ class LiveScoreMatchDetails extends Component {
 
     // method to show modal view after click
     showModal = (livestreamURL,) => {
-        console.log(livestreamURL);
         this.setState({
             visible: true,
             liveStreamLink: livestreamURL
@@ -479,22 +478,21 @@ class LiveScoreMatchDetails extends Component {
             <div className="p-4">
                 <div className="row">
                     <div className="col-sm-12 col-md-4 col-lg-4">
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
-                            <span className="form-heading pb-0" >
+                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                            <span className="form-heading pb-0">
                                 {length >= 1 ? match ? match[0].team1.name : '' : ''}
                             </span>
-                            <span className="input-heading-add-another pt-2 pl-1 pr-1" > vs </span>
-                            <span className="form-heading pb-0" >
+                            <span className="input-heading-add-another pt-2 pl-1 pr-1"> vs </span>
+                            <span className="form-heading pb-0">
                                 {length >= 1 ? match ? match[0].team2.name : '' : ''}
                             </span>
                         </div>
-                        <div className="col-sm-2" >
+                        <div className="col-sm-2">
                             <span className='year-select-heading' >{'#' + this.state.matchId}</span>
                         </div>
                     </div>
                     <div className="col-sm-12 col-md-8 col-lg-8 pr-5 pl-5 d-flex flex-row justify-content-end w-100">
                         <div className="row align-items-center">
-
                             <div className="col-sm">
                                 <div className="d-flex align-items-center year-select-heading">
                                     <Switch
@@ -566,7 +564,6 @@ class LiveScoreMatchDetails extends Component {
                                             + {AppConstants.edit}
                                         </Button>
                                     </NavLink>
-
                                 </div>
                             </div>
                             <div className="col-sm pt-2">
@@ -602,14 +599,11 @@ class LiveScoreMatchDetails extends Component {
                                             {AppConstants.delete}
                                         </Button>
                                     </Tooltip>
-
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         )
     };
@@ -637,11 +631,11 @@ class LiveScoreMatchDetails extends Component {
             <div className="row mt-4 mr-0 ml-0 pr-4 pl-4">
                 <div className="col-sm-12 col-md-6 col-lg-3 mt-3">
                     <div className="match-score-detail">
-                        <span className="event-time-start-text" >{AppConstants.umpireName}</span>
+                        <span className="event-time-start-text">{AppConstants.umpireName}</span>
                     </div>
-                    <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }} >
+                    <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }}>
                         {UmpireData.map((item, index) => (
-                            <span key={`umpire_${index}`} className="desc-text-style side-bar-profile-data pt-2" >
+                            <span key={`umpire_${index}`} className="desc-text-style side-bar-profile-data pt-2">
                                 {`U${index + 1}`}: {item.umpireName}
                             </span>
                         ))}
@@ -649,23 +643,23 @@ class LiveScoreMatchDetails extends Component {
                 </div>
                 <div className="col-sm-12 col-md-6 col-lg-3 mt-3">
                     <div className="match-score-detail">
-                        <span className="event-time-start-text" >{AppConstants.umpireClubName}</span>
+                        <span className="event-time-start-text">{AppConstants.umpireClubName}</span>
                     </div>
-                    <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }} >
+                    <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }}>
                         {UmpireData.map((item, index) => (
                             <div key={`umpire_club_data_${index}`}>
                                 {isArrayNotEmpty(item.competitionOrganisations)
                                     && item.competitionOrganisations.map((item, index) => (
-                                        <span key={`umpire_club_${index}`} className="inbox-name-text pt-2" >
+                                        <span key={`umpire_club_${index}`} className="inbox-name-text pt-2">
                                             {item.name}
                                         </span>
                                     ))}
                             </div>
                         ))}
                     </div>
-                    <div style={{ display: "flex", alignContent: "center" }} >
+                    <div style={{ display: "flex", alignContent: "center" }}>
                         {UmpireData.map((item, index) => (
-                            <span key={`umpire_data_${index}`} className="inbox-name-text pt-2" >
+                            <span key={`umpire_data_${index}`} className="inbox-name-text pt-2">
                                 {item.umpire2Club && item.umpire2Club.name}
                             </span>
                         ))}
@@ -673,28 +667,28 @@ class LiveScoreMatchDetails extends Component {
                 </div>
                 <div className="col-sm-12 col-md-6 col-lg-3 mt-3">
                     <div className="match-score-detail">
-                        <span className="event-time-start-text" >{AppConstants.scorerName}</span>
+                        <span className="event-time-start-text">{AppConstants.scorerName}</span>
                     </div>
-                    <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >
+                    <div style={{ display: "flex", alignContent: "center" }}>
+                        <span className="inbox-name-text pt-2">
                             S1: {length >= 1 && match && match[0].scorer1 ? match[0].scorer1.firstName + ' ' + match[0].scorer1.lastName : ''}
                         </span>
                     </div>
-                    {scoreType !== 'SINGLE' && <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >
+                    {scoreType !== 'SINGLE' && <div style={{ display: "flex", alignContent: "center" }}>
+                        <span className="inbox-name-text pt-2">
                             S2: {length >= 1 && match && match[0].scorer2 ? match[0].scorer2.firstName + ' ' + match[0].scorer2.lastName : ''}
                         </span>
                     </div>}
                 </div>
                 <div className="col-sm-12 col-md-6 col-lg-3 mt-3">
                     <div className="match-score-detail">
-                        <span className="event-time-start-text" >{AppConstants.score}</span>
+                        <span className="event-time-start-text">{AppConstants.score}</span>
                     </div>
-                    <div style={{ display: "flex", alignContent: "center" }} >
-                        <span className="inbox-name-text pt-2" >{length >= 1 ? this.setMatchStatus(match) : ""}</span>
+                    <div style={{ display: "flex", alignContent: "center" }}>
+                        <span className="inbox-name-text pt-2">{length >= 1 ? this.setMatchStatus(match) : ""}</span>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     };
 
@@ -711,8 +705,8 @@ class LiveScoreMatchDetails extends Component {
             },
             {
                 title: 'Period 1',
-                children: competition?.positionTracking ?
-                    [{
+                children: competition?.positionTracking ? [
+                    {
                         title: 'Position',
                         key: 'position1',
                         width: 150,
@@ -768,206 +762,204 @@ class LiveScoreMatchDetails extends Component {
                                         this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
                                 />
                             ) : (
-                                    <Checkbox
-                                        defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
-                                        onChange={
-                                            (e) =>
-                                                this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
-                                        }
-                                    />
-                                )
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
+                                    onChange={
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
+                                    }
+                                />
+                            )
                     },
-                    ] :
-                    [
-                        //     {
-                        //     title: 'Position',
-                        //     key: 'position1',
-                        //     width: 150,
-                        //     render: (p, row) => (
-                        //         <Select
-                        //             className="year-select reg-filter-select1 table-cell-select"
-                        //             size="small"
-                        //             style={{ width: '100%' }}
-                        //             defaultValue={this.getAttendanceValue(row.playerId, 1, 'positionId')}
-                        //             onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
-                        //         >
-                        //             {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                        //                 <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
-                        //             ))}
-                        //         </Select>
-                        //     )
-                        // },
-                        {
-                            title: 'Goals',
-                            key: 'goals1',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
+                ] : [
+                    // {
+                    //     title: 'Position',
+                    //     key: 'position1',
+                    //     width: 150,
+                    //     render: (p, row) => (
+                    //         <Select
+                    //             className="year-select reg-filter-select1 table-cell-select"
+                    //             size="small"
+                    //             style={{ width: '100%' }}
+                    //             defaultValue={this.getAttendanceValue(row.playerId, 1, 'positionId')}
+                    //             onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
+                    //         >
+                    //             {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                    //                 <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                    //             ))}
+                    //         </Select>
+                    //     )
+                    // },
+                    {
+                        title: 'Goals',
+                        key: 'goals1',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss1',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss1',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                        key: 'sec1',
+                        width: 60,
+                        render: (p, row) =>
+                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                <InputNumber
+                                    size="small"
+                                    type="number"
+                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
+                                    onChange={(value) =>
+                                        this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
+                                />
+                            ) : (
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
+                                    onChange={
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
+                                    }
+                                />
                             )
-                        },
-                        {
-                            title: 'Miss',
-                            key: 'miss1',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: 'P Miss',
-                            key: 'pmiss1',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                            key: 'sec1',
-                            width: 60,
-                            render: (p, row) =>
-                                competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                    <InputNumber
-                                        size="small"
-                                        type="number"
-                                        defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
-                                        onChange={(value) =>
-                                            this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
-                                    />
-                                ) : (
-                                        <Checkbox
-                                            defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
-                                            onChange={
-                                                (e) =>
-                                                    this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
-                                            }
-                                        />
-                                    )
-                        },
-                    ]
+                    },
+                ]
             },
             {
                 title: 'Period 2',
-                children: competition?.positionTracking ?
-                    [
-                        {
-                            title: 'Position',
-                            key: 'position2',
-                            width: 150,
-                            render: (p, row) => (
-                                <Select
-                                    className="year-select reg-filter-select1 table-cell-select"
+                children: competition?.positionTracking ? [
+                    {
+                        title: 'Position',
+                        key: 'position2',
+                        width: 150,
+                        render: (p, row) => (
+                            <Select
+                                className="year-select reg-filter-select1 table-cell-select"
+                                size="small"
+                                style={{ width: '100%' }}
+                                defaultValue={this.getAttendanceValue(row.playerId, 2, 'positionId')}
+                                onChange={
+                                    (value) =>
+                                        this.setAttendance(team, row.playerId, 2, 'positionId', value)
+                                }
+                            >
+                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                    <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
+                                ))}
+                            </Select>
+                        )
+                    },
+                    {
+                        title: 'Goals',
+                        key: 'goals2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: competition ?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                        key: 'sec2',
+                        width: 60,
+                        render: (p, row) =>
+                            competition ?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                <InputNumber
                                     size="small"
-                                    style={{ width: '100%' }}
-                                    defaultValue={this.getAttendanceValue(row.playerId, 2, 'positionId')}
+                                    type="number"
+                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
+                                    onChange={(value) =>
+                                        this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
+                                />
+                            ) : (
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
                                     onChange={
-                                        (value) =>
-                                            this.setAttendance(team, row.playerId, 2, 'positionId', value)
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
                                     }
-                                >
-                                    {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                        <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
-                                    ))}
-                                </Select>
+                                />
                             )
-                        },
-                        {
-                            title: 'Goals',
-                            key: 'goals2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
+                    },
+                ] : [
+                    {
+                        title: 'Goals',
+                        key: 'goals2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                        key: 'sec2',
+                        width: 60,
+                        render: (p, row) =>
+                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                <InputNumber
+                                    min={0}
+                                    size="small"
+                                    type="number"
+                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
+                                    onChange={(value) =>
+                                        this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
+                                />
+                            ) : (
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
+                                    onChange={
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
+                                    }
+                                />
                             )
-                        },
-                        {
-                            title: 'Miss',
-                            key: 'miss2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: 'P Miss',
-                            key: 'pmiss2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                            key: 'sec2',
-                            width: 60,
-                            render: (p, row) =>
-                                competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                    <InputNumber
-                                        size="small"
-                                        type="number"
-                                        defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                        onChange={(value) =>
-                                            this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
-                                    />
-                                ) : (
-                                        <Checkbox
-                                            defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
-                                            onChange={
-                                                (e) =>
-                                                    this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                                            }
-                                        />
-                                    )
-                        },
-                    ] : [
-                        {
-                            title: 'Goals',
-                            key: 'goals2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: 'Miss',
-                            key: 'miss2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: 'P Miss',
-                            key: 'pmiss2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                            key: 'sec2',
-                            width: 60,
-                            render: (p, row) =>
-                                competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                    <InputNumber
-                                        min={0}
-                                        size="small"
-                                        type="number"
-                                        defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                        onChange={(value) =>
-                                            this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
-                                    />
-                                ) : (
-                                        <Checkbox
-                                            defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
-                                            onChange={
-                                                (e) =>
-                                                    this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                                            }
-                                        />
-                                    )
-                        },
-                    ],
+                    },
+                ],
             },
             {
                 title: 'Period 3',
@@ -1028,69 +1020,67 @@ class LiveScoreMatchDetails extends Component {
                                     type="number"
                                     min={0}
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 3)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 3, value)}
+                                />
+                            ) : (
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 3, 'isPlaying')}
+                                    onChange={
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
+                                    }
+                                />
+                            )
+                    },
+                ] : [
+                    {
+                        title: 'Goals',
+                        key: 'goals3',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss3',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss3',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                        key: 'sec3',
+                        width: 60,
+                        render: (p, row) =>
+                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                <InputNumber
+                                    size="small"
+                                    type="number"
+                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 3)}
                                     onChange={(value) =>
                                         this.setMinuteTrackingData(teamId, row.playerId, 3, value)}
                                 />
                             ) : (
-                                    <Checkbox
-                                        defaultChecked={this.getAttendanceValue(row.playerId, 3, 'isPlaying')}
-                                        onChange={
-                                            (e) =>
-                                                this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
-                                        }
-                                    />
-                                )
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 3, 'isPlaying')}
+                                    onChange={
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
+                                    }
+                                />
+                            )
                     },
-                ] : [
-
-                        {
-                            title: 'Goals',
-                            key: 'goals3',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: 'Miss',
-                            key: 'miss3',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: 'P Miss',
-                            key: 'pmiss3',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                            key: 'sec3',
-                            width: 60,
-                            render: (p, row) =>
-                                competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                    <InputNumber
-                                        size="small"
-                                        type="number"
-                                        defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 3)}
-                                        onChange={(value) =>
-                                            this.setMinuteTrackingData(teamId, row.playerId, 3, value)}
-                                    />
-                                ) : (
-                                        <Checkbox
-                                            defaultChecked={this.getAttendanceValue(row.playerId, 3, 'isPlaying')}
-                                            onChange={
-                                                (e) =>
-                                                    this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
-                                            }
-                                        />
-                                    )
-                        },
-                    ],
+                ],
             },
             {
                 title: 'Period 4',
@@ -1106,8 +1096,7 @@ class LiveScoreMatchDetails extends Component {
                                 style={{ width: '100%' }}
                                 defaultValue={this.getAttendanceValue(row.playerId, 4, 'positionId')}
                                 onChange={
-                                    (value) =>
-                                        this.setAttendance(team, row.playerId, 4, 'positionId', value)
+                                    (value) => this.setAttendance(team, row.playerId, 4, 'positionId', value)
                                 }
                             >
                                 {this.props.liveScoreGamePositionState.positionList.map((position) => (
@@ -1154,14 +1143,14 @@ class LiveScoreMatchDetails extends Component {
                                         this.setMinuteTrackingData(teamId, row.playerId, 4, value)}
                                 />
                             ) : (
-                                    <Checkbox
-                                        defaultChecked={this.getAttendanceValue(row.playerId, 4, 'isPlaying')}
-                                        onChange={
-                                            (e) =>
-                                                this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
-                                        }
-                                    />
-                                )
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 4, 'isPlaying')}
+                                    onChange={
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
+                                    }
+                                />
+                            )
                     },
                     {
                         title: 'Miss',
@@ -1190,98 +1179,98 @@ class LiveScoreMatchDetails extends Component {
                                     type="number"
                                 />
                             ) : (
-                                    <Checkbox
-                                        onChange={
-                                            (e) =>
-                                                this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                                        }
-                                    />
-                                )
+                                <Checkbox
+                                    onChange={
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
+                                    }
+                                />
+                            )
                     },
                 ] : [
-                        {
-                            title: 'Goals',
-                            key: 'goals4',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
+                    {
+                        title: 'Goals',
+                        key: 'goals4',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number"/>
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss4',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss4',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                        key: 'sec4',
+                        width: 60,
+                        render: (p, row) =>
+                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                <InputNumber
+                                    size="small"
+                                    type="number"
+                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 4)}
+                                    onChange={(value) =>
+                                        this.setMinuteTrackingData(teamId, row.playerId, 4, value)}
+                                />
+                            ) : (
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 4, 'isPlaying')}
+                                    onChange={
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
+                                    }
+                                />
                             )
-                        },
-                        {
-                            title: 'Miss',
-                            key: 'miss4',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: 'P Miss',
-                            key: 'pmiss4',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                            key: 'sec4',
-                            width: 60,
-                            render: (p, row) =>
-                                competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                    <InputNumber
-                                        size="small"
-                                        type="number"
-                                        defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 4)}
-                                        onChange={(value) =>
-                                            this.setMinuteTrackingData(teamId, row.playerId, 4, value)}
-                                    />
-                                ) : (
-                                        <Checkbox
-                                            defaultChecked={this.getAttendanceValue(row.playerId, 4, 'isPlaying')}
-                                            onChange={
-                                                (e) =>
-                                                    this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
-                                            }
-                                        />
-                                    )
-                        },
-                        // {
-                        //     title: 'Miss',
-                        //     key: 'miss2',
-                        //     width: 60,
-                        //     render: () => (
-                        //         <Input size="small" type="number" />
-                        //     )
-                        // },
-                        // {
-                        //     title: 'P Miss',
-                        //     key: 'pmiss2',
-                        //     width: 60,
-                        //     render: () => (
-                        //         <Input size="small" type="number" />
-                        //     )
-                        // },
-                        // {
-                        //     title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        //     key: 'sec2',
-                        //     width: 60,
-                        //     render: (p, row) =>
-                        //         competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                        //             <Input
-                        //                 size="small"
-                        //                 type="number"
-                        //             />
-                        //         ) : (
-                        //                 <Checkbox
-                        //                     onChange={
-                        //                         (e) =>
-                        //                             this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                        //                     }
-                        //                 />
-                        //             )
-                        // },
-                    ],
+                    },
+                    // {
+                    //     title: 'Miss',
+                    //     key: 'miss2',
+                    //     width: 60,
+                    //     render: () => (
+                    //         <Input size="small" type="number" />
+                    //     )
+                    // },
+                    // {
+                    //     title: 'P Miss',
+                    //     key: 'pmiss2',
+                    //     width: 60,
+                    //     render: () => (
+                    //         <Input size="small" type="number" />
+                    //     )
+                    // },
+                    // {
+                    //     title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                    //     key: 'sec2',
+                    //     width: 60,
+                    //     render: (p, row) =>
+                    //         competition?.attendanceRecordingPeriod === 'MINUTE' ? (
+                    //             <Input
+                    //                 size="small"
+                    //                 type="number"
+                    //             />
+                    //         ) : (
+                    //             <Checkbox
+                    //                 onChange={
+                    //                     (e) =>
+                    //                         this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
+                    //                 }
+                    //             />
+                    //         )
+                    // },
+                ],
             },
             // {
             //     title: 'Period 3',
@@ -1339,13 +1328,13 @@ class LiveScoreMatchDetails extends Component {
             //                 competition?.attendanceRecordingPeriod === 'MINUTE' ? (
             //                     <Input size="small" type="number" />
             //                 ) : (
-            //                         <Checkbox
-            //                             onChange={
-            //                                 (e) =>
-            //                                     this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
-            //                             }
-            //                         />
-            //                     )
+            //                     <Checkbox
+            //                         onChange={
+            //                             (e) =>
+            //                                 this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
+            //                         }
+            //                     />
+            //                 )
             //         },
             //     ],
             // },
@@ -1405,13 +1394,13 @@ class LiveScoreMatchDetails extends Component {
             //                 competition?.attendanceRecordingPeriod === 'MINUTE' ? (
             //                     <Input size="small" type="number" />
             //                 ) : (
-            //                         <Checkbox
-            //                             onChange={
-            //                                 (e) =>
-            //                                     this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
-            //                             }
-            //                         />
-            //                     )
+            //                     <Checkbox
+            //                         onChange={
+            //                             (e) =>
+            //                                 this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
+            //                         }
+            //                     />
+            //                 )
             //         },
             //     ],
             // },
@@ -1425,8 +1414,8 @@ class LiveScoreMatchDetails extends Component {
             },
             {
                 title: 'Period 1',
-                children: competition?.positionTracking ?
-                    [{
+                children: competition?.positionTracking ? [
+                    {
                         title: 'Position',
                         key: 'position1',
                         width: 150,
@@ -1482,209 +1471,207 @@ class LiveScoreMatchDetails extends Component {
                                         this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
                                 />
                             ) : (
-                                    <Checkbox
-                                        defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
-                                        onChange={
-                                            (e) =>
-                                                this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
-                                        }
-                                    />
-                                )
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
+                                    onChange={
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
+                                    }
+                                />
+                            )
                     },
-                    ] :
-                    [
-                        //     {
-                        //     title: 'Position',
-                        //     key: 'position1',
-                        //     width: 150,
-                        //     render: (p, row) => (
-                        //         <Select
-                        //             className="year-select reg-filter-select1 table-cell-select"
-                        //             size="small"
-                        //             style={{ width: '100%' }}
-                        //             defaultValue={this.getAttendanceValue(row.playerId, 1, 'positionId')}
-                        //             onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
-                        //         >
-                        //             {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                        //                 <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
-                        //             ))}
-                        //         </Select>
-                        //     )
-                        // },
-                        {
-                            title: 'Goals',
-                            key: 'goals1',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
+                ] : [
+                    // {
+                    //     title: 'Position',
+                    //     key: 'position1',
+                    //     width: 150,
+                    //     render: (p, row) => (
+                    //         <Select
+                    //             className="year-select reg-filter-select1 table-cell-select"
+                    //             size="small"
+                    //             style={{ width: '100%' }}
+                    //             defaultValue={this.getAttendanceValue(row.playerId, 1, 'positionId')}
+                    //             onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
+                    //         >
+                    //             {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                    //                 <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                    //             ))}
+                    //         </Select>
+                    //     )
+                    // },
+                    {
+                        title: 'Goals',
+                        key: 'goals1',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss1',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss1',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                        key: 'sec1',
+                        width: 60,
+                        render: (p, row) =>
+                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                <InputNumber
+                                    size="small"
+                                    type="number"
+                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
+                                    onChange={(value) =>
+                                        this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
+                                />
+                            ) : (
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
+                                    onChange={
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
+                                    }
+                                />
                             )
-                        },
-                        {
-                            title: 'Miss',
-                            key: 'miss1',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: 'P Miss',
-                            key: 'pmiss1',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                            key: 'sec1',
-                            width: 60,
-                            render: (p, row) =>
-                                competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                    <InputNumber
-                                        size="small"
-                                        type="number"
-                                        defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
-                                        onChange={(value) =>
-                                            this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
-                                    />
-                                ) : (
-                                        <Checkbox
-                                            defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
-                                            onChange={
-                                                (e) =>
-                                                    this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
-                                            }
-                                        />
-                                    )
-                        },
-                    ]
+                    },
+                ]
             },
             {
                 title: 'Period 2',
-                children: competition?.positionTracking ?
-                    [
-                        {
-                            title: 'Position',
-                            key: 'position2',
-                            width: 150,
-                            render: (p, row) => (
-                                <Select
-                                    className="year-select reg-filter-select1 table-cell-select"
+                children: competition?.positionTracking ? [
+                    {
+                        title: 'Position',
+                        key: 'position2',
+                        width: 150,
+                        render: (p, row) => (
+                            <Select
+                                className="year-select reg-filter-select1 table-cell-select"
+                                size="small"
+                                style={{ width: '100%' }}
+                                defaultValue={this.getAttendanceValue(row.playerId, 2, 'positionId')}
+                                onChange={
+                                    (value) =>
+                                        this.setAttendance(team, row.playerId, 2, 'positionId', value)
+                                }
+                            >
+                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                    <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
+                                ))}
+                            </Select>
+                        )
+                    },
+                    {
+                        title: 'Goals',
+                        key: 'goals2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                        key: 'sec2',
+                        width: 60,
+                        render: (p, row) =>
+                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                <InputNumber
                                     size="small"
-                                    style={{ width: '100%' }}
-                                    defaultValue={this.getAttendanceValue(row.playerId, 2, 'positionId')}
+                                    type="number"
+                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
+                                    onChange={(value) =>
+                                        this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
+                                />
+                            ) : (
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
                                     onChange={
-                                        (value) =>
-                                            this.setAttendance(team, row.playerId, 2, 'positionId', value)
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
                                     }
-                                >
-                                    {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                        <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
-                                    ))}
-                                </Select>
+                                />
                             )
-                        },
-                        {
-                            title: 'Goals',
-                            key: 'goals2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
+                    },
+                ] : [
+                    {
+                        title: 'Goals',
+                        key: 'goals2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'Miss',
+                        key: 'miss2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: 'P Miss',
+                        key: 'pmiss2',
+                        width: 60,
+                        render: () => (
+                            <Input size="small" type="number" />
+                        )
+                    },
+                    {
+                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
+                        key: 'sec2',
+                        width: 60,
+                        render: (p, row) =>
+                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
+                                <InputNumber
+                                    min={0}
+                                    size="small"
+                                    type="number"
+                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
+                                    onChange={(value) =>
+                                        this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
+                                />
+                            ) : (
+                                <Checkbox
+                                    defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
+                                    onChange={
+                                        (e) =>
+                                            this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
+                                    }
+                                />
                             )
-                        },
-                        {
-                            title: 'Miss',
-                            key: 'miss2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: 'P Miss',
-                            key: 'pmiss2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                            key: 'sec2',
-                            width: 60,
-                            render: (p, row) =>
-                                competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                    <InputNumber
-                                        size="small"
-                                        type="number"
-                                        defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                        onChange={(value) =>
-                                            this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
-                                    />
-                                ) : (
-                                        <Checkbox
-                                            defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
-                                            onChange={
-                                                (e) =>
-                                                    this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                                            }
-                                        />
-                                    )
-                        },
-                    ] : [
-                        {
-                            title: 'Goals',
-                            key: 'goals2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: 'Miss',
-                            key: 'miss2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: 'P Miss',
-                            key: 'pmiss2',
-                            width: 60,
-                            render: () => (
-                                <Input size="small" type="number" />
-                            )
-                        },
-                        {
-                            title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                            key: 'sec2',
-                            width: 60,
-                            render: (p, row) =>
-                                competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                    <InputNumber
-                                        min={0}
-                                        size="small"
-                                        type="number"
-                                        defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                        onChange={(value) =>
-                                            this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
-                                    />
-                                ) : (
-                                        <Checkbox
-                                            defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
-                                            onChange={
-                                                (e) =>
-                                                    this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                                            }
-                                        />
-                                    )
-                        },
-                    ],
+                    },
+                ],
             },
         ];
-        console.log(match)
+
         return (
             <Table
                 className="home-dashboard-table attendance-table"
@@ -1694,7 +1681,7 @@ class LiveScoreMatchDetails extends Component {
                 scroll={{ x: '100%' }}
                 pagination={false}
                 loading={this.props.liveScoreGamePositionState.onLoad}
-            // rowKey={(record) => record.id}
+                // rowKey={(record) => record.id}
             />
         )
     }
@@ -1716,23 +1703,30 @@ class LiveScoreMatchDetails extends Component {
 
         return (
             <div className="row mt-5 ml-0 mr-0 mb-5">
-                <div className={this.state.teamAttendance ? 'col-12' : 'col-6 col-md-6 col-sm-12'}
-                    style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
+                <div
+                    className={this.state.teamAttendance ? 'col-12' : 'col-6 col-md-6 col-sm-12'}
+                    style={{ flexDirection: "column", display: "flex", alignContent: "center" }}
+                >
                     <div className="d-flex flex-column align-items-center justify-content-center">
-                        <img className="user-image" src={length >= 1 && match ? match[0].team1.logoUrl : ''}
-                            alt="" height="80" width="80" />
+                        <img
+                            className="user-image"
+                            src={length >= 1 && match ? match[0].team1.logoUrl : ''}
+                            alt=""
+                            height="80"
+                            width="80"
+                        />
                         <span className="live-score-profile-user-name match-details-team-name">
                             {length >= 1 ? match ? match[0].team1.name : '' : ''}
                         </span>
-                        <span className='year-select-heading' >{AppConstants.homeTeam}</span>
+                        <span className='year-select-heading'>{AppConstants.homeTeam}</span>
                     </div>
 
                     <div className="mt-2">
                         <div className="row text-view pl-4 pr-4">
-                            <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
+                            <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
                                 <span className='home-dash-left-text'>{AppConstants.players}</span>
                             </div>
-                            <div className="col-sm text-right align-items-center" >
+                            <div className="col-sm text-right align-items-center">
                                 {this.state.teamAttendance &&
                                     <Button
                                         className="primary-add-comp-form mr-4"
@@ -1752,11 +1746,12 @@ class LiveScoreMatchDetails extends Component {
                             </div>
                         </div>
                         <div>
-                            {this.state.teamAttendance && <div className="col-12">
-                                {this.teamPlayersStatus(team1PlayersData, 'team1', match[0]?.team1?.id)}
-                            </div>
-                            }
-                            {!this.state.teamAttendance &&
+                            {this.state.teamAttendance && (
+                                <div className="col-12">
+                                    {this.teamPlayersStatus(team1PlayersData, 'team1', match[0]?.team1?.id)}
+                                </div>
+                            )}
+                            {!this.state.teamAttendance && (
                                 <div className="col-12">
                                     <Table
                                         className="home-dashboard-table pt-2"
@@ -1766,15 +1761,22 @@ class LiveScoreMatchDetails extends Component {
                                         scroll={{ x: '100%' }}
                                     />
                                 </div>
-                            }
+                            )}
                         </div>
                     </div>
                 </div>
-                <div className={this.state.teamAttendance ? 'col-12 mt-5' : 'col-6 col-md-6 col-sm-12'}
-                    style={{ flexDirection: "column", display: "flex", alignContent: "center" }} >
+                <div
+                    className={this.state.teamAttendance ? 'col-12 mt-5' : 'col-6 col-md-6 col-sm-12'}
+                    style={{ flexDirection: "column", display: "flex", alignContent: "center" }}
+                >
                     <div className="d-flex flex-column align-items-center justify-content-center">
-                        <img className="user-image" src={length >= 1 && match ? match[0].team2.logoUrl : ''}
-                            alt="" height="80" width="80" />
+                        <img
+                            className="user-image"
+                            src={length >= 1 && match ? match[0].team2.logoUrl : ''}
+                            alt=""
+                            height="80"
+                            width="80"
+                        />
                         <span className="live-score-profile-user-name match-details-team-name">
                             {length >= 1 && match ? match[0].team2.name : ''}
                         </span>
@@ -1783,10 +1785,10 @@ class LiveScoreMatchDetails extends Component {
 
                     <div className="mt-2">
                         <div className="row text-view pl-4 pr-4">
-                            <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }} >
+                            <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
                                 <span className='home-dash-left-text'>{AppConstants.players}</span>
                             </div>
-                            <div className="col-sm text-right align-items-center" >
+                            <div className="col-sm text-right align-items-center">
                                 {this.state.teamAttendance &&
                                     <Button
                                         className="primary-add-comp-form mr-4"
@@ -1806,12 +1808,11 @@ class LiveScoreMatchDetails extends Component {
                             </div>
                         </div>
                         <div>
-                            {this.state.teamAttendance &&
+                            {this.state.teamAttendance ? (
                                 <div className="col-12">
                                     {this.teamPlayersStatus(team2PlayersData, 'team2', match[0]?.team2?.id)}
                                 </div>
-                            }
-                            {!this.state.teamAttendance &&
+                            ) : (
                                 <div className="col-12">
                                     <Table
                                         className="home-dashboard-table pt-2"
@@ -1821,7 +1822,7 @@ class LiveScoreMatchDetails extends Component {
                                         scroll={{ x: '100%' }}
                                     />
                                 </div>
-                            }
+                            )}
                         </div>
                     </div>
                 </div>
@@ -1868,7 +1869,7 @@ class LiveScoreMatchDetails extends Component {
                 onCancel={this.handleCancel}
                 cancelButtonProps={{ style: { display: 'none' } }}
                 okButtonProps={{ style: { display: 'none' } }}
-                centered={true}
+                centered
                 footer={null}
             >
                 <InputWithHead
@@ -1978,11 +1979,11 @@ class LiveScoreMatchDetails extends Component {
                     onCancel={this.handleAddPlayerCancel}
                     cancelButtonProps={{ style: { display: 'none' } }}
                     okButtonProps={{ style: { display: 'none' } }}
-                    centered={true}
+                    centered
                     footer={null}
                 >
                     <AutoComplete
-                        loading={true}
+                        loading
                         style={{ width: "100%", height: '56px' }}
                         placeholder="Add Player"
                         onSelect={(item, option) => {
@@ -1995,11 +1996,11 @@ class LiveScoreMatchDetails extends Component {
                             }
                         }}
                     >
-                        {searchResultData.length > 0 && searchResultData.map((item) => {
-                            return <Option key={item.playerId} value={item.playerId.toString()}>
+                        {searchResultData.length > 0 && searchResultData.map((item) => (
+                            <Option key={item.playerId} value={item.playerId.toString()}>
                                 {item.firstName + " " + item.lastName}
                             </Option>
-                        })}
+                        ))}
                     </AutoComplete>
                     <div
                         className="comp-dashboard-botton-view-mobile"
@@ -2043,10 +2044,10 @@ class LiveScoreMatchDetails extends Component {
 
                 {
                     this.state.umpireKey ?
-                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"1"} />
+                        <InnerHorizontalMenu menu="umpire" umpireSelectedKey="1" />
                         :
                         <InnerHorizontalMenu
-                            menu={"liveScore"}
+                            menu="liveScore"
                             liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
                         />
                 }
@@ -2061,7 +2062,7 @@ class LiveScoreMatchDetails extends Component {
                         {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && this.state.umpireKey === 'umpire')) && this.AddPlayerModalView()}
                     </Content>
                 </Layout>
-            </div >
+            </div>
         );
     }
 }

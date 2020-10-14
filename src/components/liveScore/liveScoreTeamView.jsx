@@ -83,7 +83,7 @@ const columns = [
                 }
             >
                 <Menu.Item key={'1'}>
-                    <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }} >
+                    <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }}>
                         <span>Edit</span>
                     </NavLink>
                 </Menu.Item>
@@ -166,7 +166,7 @@ class LiveScoreTeamView extends Component {
 
     ////view for profile image
     profileImageView = () => {
-        // let data = this.state.data 
+        // let data = this.state.data
         let data = this.props.location ? this.props.location.state ? this.props.location.state.tableRecord ? this.props.location.state.tableRecord : null : null : null
         const { teamData, managerData, managerList } = this.props.liveScoreTeamState
         const { name, logoUrl } = teamData ? teamData : ''
@@ -288,7 +288,7 @@ class LiveScoreTeamView extends Component {
         const { mobileNumber, email } = managerData ? managerData : ''
         return (
             <div className="row ">
-                <div className="col-sm" >
+                <div className="col-sm">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.players}</Breadcrumb.Item>
                     </Breadcrumb>
@@ -388,37 +388,37 @@ class LiveScoreTeamView extends Component {
         )
     }
 
-    //////// tableView 
+    //////// tableView
     tableView = () => {
         const { playerList } = this.props.liveScoreTeamState
         return (
-            <div >
+            <div>
                 <div className="inside-table-view mt-4" >
                     {this.addPlayerView()}
 
                     <div className="table-responsive home-dash-table-view mt-3">
                         <Table
-                            //  loading={this.props.liveScoreTeamState.onLoad} 
+                            //  loading={this.props.liveScoreTeamState.onLoad}
                             className="home-dashboard-table" columns={columns}
                             dataSource={playerList} pagination={false} />
                     </div>
 
                 </div>
-            </div >
+            </div>
         )
     }
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName === 'fromMatchList' ? '2' : this.state.screenName === 'liveScoreDashboard' ? "1" : this.state.screenName === 'fromPlayerList' ? '7' : '3'} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.screenName === 'fromMatchList' ? '2' : this.state.screenName === 'liveScoreDashboard' ? "1" : this.state.screenName === 'fromPlayerList' ? '7' : '3'} />
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
-                        <div className="fluid-width" >
-                            <div className="row" >
-                                <div className="col-sm-3" style={{ marginBottom: "6%" }} >
+                        <div className="fluid-width">
+                            <div className="row">
+                                <div className="col-sm-3" style={{ marginBottom: "6%" }}>
                                     {this.profileImageView()}
                                 </div>
                                 <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
@@ -429,7 +429,7 @@ class LiveScoreTeamView extends Component {
                         </div>
                     </Content>
                 </Layout>
-            </div >
+            </div>
         );
     }
 }

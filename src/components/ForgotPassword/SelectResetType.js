@@ -21,7 +21,7 @@ function SelectResetType(props) {
     <div className="auth-form text-center" style={{ fontSize: 14, zIndex: 15 }}>
       <div className="content-view">
         <div className="d-flex justify-content-center">
-          <img src={AppImages.netballLogo1} alt=""/>
+          <img src={AppImages.netballLogo1} alt="" />
         </div>
 
         <p className="mt-4" style={{ fontSize: 18 }}>

@@ -44,7 +44,7 @@ class MultifieldDraws extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row ">
-                    <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }} >
+                    <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.draws}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -121,9 +121,9 @@ class MultifieldDraws extends Component {
           key={l.i}
           data-grid={l}
         >
-          
-            
-          
+
+
+
           {l.whiteArea.map(() => {
             return (
               <Popover content={content} trigger={"click"}>
@@ -139,7 +139,7 @@ class MultifieldDraws extends Component {
               </Popover>
             );
           })}
-          
+
         </div>
       );
     });
@@ -263,7 +263,7 @@ class MultifieldDraws extends Component {
               margin={[10, 10]}
               onLayoutChange={this.onLayoutChange}
               {...this.props}
-              preventCollision={true}
+              preventCollision
               compactType={null}
               rowHeight={30}
             >
@@ -272,20 +272,20 @@ class MultifieldDraws extends Component {
           </div>
         </div>
         <div className="mt-5" style={{ display: "flex", flexDirection: 'row', paddingLeft: 50 }}>
-                    {lagendsArray.map((subItem) => {
-                        return (
-                            <div className="legend-color-text-div" >
-                                <div>
-                                    <div className="legend-color-div" style={{ backgroundColor: subItem.colorCode }} >
-                                    </div>
-                                </div>
-                                <div className="legend-text-div">
-                                    <span className="legend-text">{subItem.divisionName}-{subItem.gradeName}</span>
-                                </div>
+            {lagendsArray.map((subItem) => {
+                return (
+                    <div className="legend-color-text-div">
+                        <div>
+                            <div className="legend-color-div" style={{ backgroundColor: subItem.colorCode }}>
                             </div>
-                        )
-                    })}
-                </div>
+                        </div>
+                        <div className="legend-text-div">
+                            <span className="legend-text">{subItem.divisionName}-{subItem.gradeName}</span>
+                        </div>
+                    </div>
+                )
+            })}
+        </div>
       </div>
     );
   }
@@ -311,7 +311,7 @@ class MultifieldDraws extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     };
 

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { NavLink } from "react-router-dom";
 import {
     Layout,
     Input,
@@ -12,15 +13,15 @@ import {
     Form
 } from "antd";
 import moment from "moment";
-import { NavLink } from "react-router-dom";
+import { Formik } from "formik";
+import * as Yup from 'yup';
+
 import "./product.scss";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import { Formik } from "formik";
-import * as Yup from 'yup';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -63,8 +64,8 @@ const columns = [
             <DatePicker
                 className="date-picker-inside-table-fees"
                 onChange={date => this_Obj.dateOnChangeFrom(date)}
-                format={"DD-MM-YYYY"}
-                placeholder={"dd-mm-yyyy"}
+                format="DD-MM-YYYY"
+                placeholder="dd-mm-yyyy"
                 showTime={false}
                 defaultValue={moment()}
             />
@@ -79,8 +80,8 @@ const columns = [
             <DatePicker
                 className="date-picker-inside-table-fees"
                 onChange={date => this_Obj.dateOnChangeTo(date)}
-                format={"DD-MM-YYYY"}
-                placeholder={"dd-mm-yyyy"}
+                format="DD-MM-YYYY"
+                placeholder="dd-mm-yyyy"
                 showTime={false}
                 defaultValue={moment()}
             />
@@ -103,7 +104,6 @@ const columns = [
             </Select>
         )
     },
-
     {
         title: "Total",
         dataIndex: "total",
@@ -241,7 +241,7 @@ class ProductAddRegistration extends Component {
 
                 <Checkbox
                     className="single-checkbox"
-                    defaultChecked={true}
+                    defaultChecked
                     onChange={e => this.onChange(e)}
                 >
                     {AppConstants.level1_Affiliate_Associations}
@@ -250,7 +250,7 @@ class ProductAddRegistration extends Component {
                 <div style={{ marginTop: 5 }}>
                     <Checkbox
                         className="single-checkbox"
-                        defaultChecked={true}
+                        defaultChecked
                         onChange={e => this.onChange(e)}
                     >
                         {AppConstants.Level2_Affiliate_Clubs}
@@ -282,13 +282,13 @@ class ProductAddRegistration extends Component {
                                 size="large"
                                 style={{ width: "100%" }}
                                 onChange={date => this.dateOnChangeFrom(date)}
-                                format={"DD-MM-YYYY"}
-                                placeholder={"dd-mm-yyyy"}
+                                format="DD-MM-YYYY"
+                                placeholder="dd-mm-yyyy"
                                 showTime={false}
                                 name={'registrationOepn'}
                             />
                             {errors.registrationOepn && touched.registrationOepn && (
-                                < span className="form-err">{errors.registrationOepn}</span>
+                                <span className="form-err">{errors.registrationOepn}</span>
                             )}
                         </div>
                         <div className="col-sm">
@@ -299,19 +299,19 @@ class ProductAddRegistration extends Component {
                                 disabledDate={this.disabledDate}
                                 disabledTime={this.disabledTime}
                                 onChange={date => this.dateOnChangeTo(date)}
-                                format={"DD-MM-YYYY"}
-                                placeholder={"dd-mm-yyyy"}
+                                format="DD-MM-YYYY"
+                                placeholder="dd-mm-yyyy"
                                 showTime={false}
                                 name={'registrationClose'}
                             />
                             {errors.registrationClose && touched.registrationClose && (
-                                < span className="form-err">{errors.registrationClose}</span>
+                                <span className="form-err">{errors.registrationClose}</span>
                             )}
                         </div>
                     </div>
                     <Checkbox
                         className="single-checkbox pt-3"
-                        defaultChecked={true}
+                        defaultChecked
                         onChange={e => this.onChange(e)}
                     >
                         {AppConstants.mandateAgeRestrictions}
@@ -342,7 +342,7 @@ class ProductAddRegistration extends Component {
                 </div>
                 <Checkbox
                     className="gst-single-checkbox"
-                    defaultChecked={true}
+                    defaultChecked
                     onChange={e => this.onChange(e)}
                 >
                     {AppConstants.addGst10}
@@ -363,10 +363,10 @@ class ProductAddRegistration extends Component {
                     onChange={applyTo => this.setState({ applyTo })}
                     value={this.state.applyTo}
                 >
-                    <Option value={"clubFees"} disabled={true}>
+                    <Option value={"clubFees"} disabled>
                         {AppConstants.clubFees}
                     </Option>
-                    <Option value={"associationFees"} disabled={true}>
+                    <Option value={"associationFees"} disabled>
                         {AppConstants.associationFees}
                     </Option>
                     <Option value={"stateFees"}>{AppConstants.stateFees}</Option>
@@ -376,7 +376,7 @@ class ProductAddRegistration extends Component {
                 <div className="prod-reg-inside-container-view">
                     <Checkbox
                         className="single-checkbox pt-3"
-                        defaultChecked={true}
+                        defaultChecked
                         onChange={e => this.onChange(e)}
                     >
                         {AppConstants.discountCode}
@@ -391,7 +391,7 @@ class ProductAddRegistration extends Component {
                         <div className="col-9" style={{ minWidth: 150 }}>
                             <InputWithHead
                                 heading={AppConstants.description}
-                                placeholder={AppConstants.gernalDiscount}
+                                placeholder={AppConstants.generalDiscount}
                             />
                         </div>
                     </div>
@@ -407,8 +407,8 @@ class ProductAddRegistration extends Component {
                                     size="large"
                                     style={{ width: "100%" }}
                                     onChange={date => this.dateOnChangeFrom(date)}
-                                    format={"DD-MM-YYYY"}
-                                    placeholder={"dd-mm-yyyy"}
+                                    format="DD-MM-YYYY"
+                                    placeholder="dd-mm-yyyy"
                                     showTime={false}
                                 />
                             </div>
@@ -420,8 +420,8 @@ class ProductAddRegistration extends Component {
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.dateOnChangeTo(date)}
-                                    format={"DD-MM-YYYY"}
-                                    placeholder={"dd-mm-yyyy"}
+                                    format="DD-MM-YYYY"
+                                    placeholder="dd-mm-yyyy"
                                     showTime={false}
                                 />
                             </div>
@@ -432,7 +432,7 @@ class ProductAddRegistration extends Component {
                 <div className="prod-reg-inside-container-view">
                     <Checkbox
                         className="single-checkbox pt-3"
-                        defaultChecked={true}
+                        defaultChecked
                         onChange={e => this.onChange(e)}
                     >
                         {AppConstants.earlyDiscount}
@@ -459,8 +459,8 @@ class ProductAddRegistration extends Component {
                                     size="large"
                                     style={{ width: "100%" }}
                                     onChange={date => this.dateOnChangeFrom(date)}
-                                    format={"DD-MM-YYYY"}
-                                    placeholder={"dd-mm-yyyy"}
+                                    format="DD-MM-YYYY"
+                                    placeholder="dd-mm-yyyy"
                                     showTime={false}
                                 />
                             </div>
@@ -469,11 +469,11 @@ class ProductAddRegistration extends Component {
                                 <DatePicker
                                     size="large"
                                     style={{ width: "100%" }}
-                                    placeholder={"dd-mm-yyyy"}
+                                    placeholder="dd-mm-yyyy"
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.dateOnChangeTo(date)}
-                                    format={"DD-MM-YYYY"}
+                                    format="DD-MM-YYYY"
                                     showTime={false}
                                 />
                             </div>
@@ -484,7 +484,7 @@ class ProductAddRegistration extends Component {
                 <div className="prod-reg-inside-container-view">
                     <Checkbox
                         className="single-checkbox pt-3"
-                        defaultChecked={true}
+                        defaultChecked
                         onChange={e => this.onChange(e)}
                     >
                         {AppConstants.familyDiscount}
@@ -592,10 +592,11 @@ class ProductAddRegistration extends Component {
                 <TreeNode
                     title={this.makeSubVoucherNode(inItem)}
                     key={`${catIndex}-${scatIndex}`}
-                ></TreeNode>
+                />
             );
         });
     }
+
     makeSubVoucherNode(item) {
         return <span>{item.title}</span>;
     }
@@ -607,7 +608,7 @@ class ProductAddRegistration extends Component {
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}
                 />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"1"} />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="1" />
                 <Layout>
                     {this.headerView()}
                     <Formik
@@ -626,7 +627,6 @@ class ProductAddRegistration extends Component {
                         validationSchema={productAddRegistrationSchema}
                         onSubmit={(values, { setSubmitting }) => {
                             setSubmitting(false);
-                            console.log(values)
                         }}
                     >
                         {({
@@ -639,27 +639,27 @@ class ProductAddRegistration extends Component {
                             isSubmitting,
                             setFieldValue
                         }) => (
-                                <Form onSubmit={handleSubmit}>
+                            <Form onFinish={handleSubmit}>
+                                <Content>
+                                    <div className="formView">
+                                        {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
+                                    </div>
 
-                                    <Content>
-                                        <div className="formView">
-                                            {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
-                                        </div>
+                                    <div className="formView">{this.feesView()}</div>
 
-                                        <div className="formView">{this.feesView()}</div>
+                                    <div className="formView">{this.discountView()}</div>
 
-                                        <div className="formView">{this.discountView()}</div>
+                                    <div className="formView">{this.vouchersView()}</div>
+                                </Content>
 
-                                        <div className="formView">{this.vouchersView()}</div>
-                                    </Content>
-
-                                    <Footer>{this.footerView(isSubmitting)}</Footer>
-                                </Form>)}
+                                <Footer>{this.footerView(isSubmitting)}</Footer>
+                            </Form>
+                        )}
                     </Formik>
                 </Layout>
-
             </div>
         );
     }
 }
+
 export default ProductAddRegistration;
