@@ -63,7 +63,7 @@ const columns = [
         dataIndex: 'teamName',
         key: 'teamName',
         render: (teamName, record, index) => <Input className="input-inside-team-grades-table"
-            disabled={this_obj.state.competitionStatus == 1 ? true : false}
+            disabled={this_obj.state.competitionStatus == 1}
             onChange={e => this_obj.props.onchangeCompPartProposedTeamGradingData(e.target.value, index, "teamName")}
             placeholder={"Team Name"}
             value={teamName}
@@ -115,7 +115,7 @@ const columns = [
         key: 'proposedGradeRefId',
         render: (proposedGradeRefId, record, index) =>
             <Select className="select-inside-team-grades-table"
-                disabled={this_obj.state.competitionStatus == 1 ? true : false}
+                disabled={this_obj.state.competitionStatus == 1}
                 onChange={proposedGradeRefId => this_obj.props.onchangeCompPartProposedTeamGradingData(proposedGradeRefId, index, "proposedGradeRefId")}
                 value={proposedGradeRefId}
             >
@@ -155,7 +155,7 @@ const columns = [
             <Menu className="action-triple-dot-submenu" theme="light" mode="horizontal" style={{ lineHeight: "25px" }}>
                 <SubMenu
                     key="sub1"
-                    disabled={this_obj.state.competitionStatus == 1 ? true : false}
+                    disabled={this_obj.state.competitionStatus == 1}
                     title={
                         <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                     }
@@ -245,7 +245,7 @@ class CompetitionPartProposedTeamGrading extends Component {
     }
 
     handleChangeDivision = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             let payload = {
                 competitionDivisionId: this.state.competitionDivisionId,
                 teamId: this.state.teamId,
@@ -338,7 +338,7 @@ class CompetitionPartProposedTeamGrading extends Component {
     submitApiCall = (buttonClicked) => {
         let proposedTeamGradingData = this.props.ownTeamGradingState.getPartProposedTeamGradingData
         let isError = false;
-        if (buttonClicked == "submit") {
+        if (buttonClicked === "submit") {
             proposedTeamGradingData.map((item) => {
                 if ((item.proposedGradeRefId == 0 || item.proposedGradeRefId == null || item.proposedGradeRefId == "" ||
                     item.proposedGradeRefId == undefined)) {
@@ -383,7 +383,7 @@ class CompetitionPartProposedTeamGrading extends Component {
 
     ///////view for breadcrumb
     headerView = () => {
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         return (
             <div className="comp-player-grades-header-view-design" >
                 <div className="row">
@@ -521,7 +521,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                     <div className="com-year-select-heading-view" >
                                         <span className='year-select-heading'>{AppConstants.division}:</span>
                                         <Select
-                                            disabled={this.state.competitionStatus == 1 ? true : false}
+                                            disabled={this.state.competitionStatus == 1}
                                             style={{ minWidth: 120 }}
                                             className="year-select reg-filter-select1 ml-2"
                                             onChange={(divisionId) => this.onDivisionChange(divisionId)}
@@ -565,7 +565,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                         columns={columns}
                         dataSource={getPartProposedTeamGradingData}
                         pagination={false}
-                        loading={this.props.ownTeamGradingState.onLoad == true && true}
+                        loading={this.props.ownTeamGradingState.onLoad && true}
                     />
                 </div>
                 <CommentModal
@@ -621,7 +621,7 @@ class CompetitionPartProposedTeamGrading extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        let isPublished = this.state.competitionStatus == 1 ? true : false
+        let isPublished = this.state.competitionStatus == 1
         return (
             <div className="fluid-width paddingBottom56px" >
                 {/* <div className="comp-player-grades-footer-view"> */}
@@ -640,7 +640,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                     style={{ height: '100%' }}
                                     onMouseEnter={() =>
                                         this.setState({
-                                            tooltipVisibleSave: isPublished ? true : false,
+                                            tooltipVisibleSave: isPublished,
                                         })
                                     }
                                     onMouseLeave={() =>
@@ -660,7 +660,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                     style={{ height: '100%' }}
                                     onMouseEnter={() =>
                                         this.setState({
-                                            tooltipVisibleDelete: isPublished ? true : false,
+                                            tooltipVisibleDelete: isPublished,
                                         })
                                     }
                                     onMouseLeave={() =>

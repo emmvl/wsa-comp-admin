@@ -192,7 +192,7 @@ class ProductAddRegistration extends Component {
                 >
                     <Breadcrumb separator=" > ">
                         <NavLink to="/registration">
-                            <Breadcrumb.Item separator=">" className="breadcrumb-product">
+                            <Breadcrumb.Item separator=" > " className="breadcrumb-product">
                                 {AppConstants.products}
                             </Breadcrumb.Item>
                         </NavLink>
@@ -285,7 +285,7 @@ class ProductAddRegistration extends Component {
                                 format="DD-MM-YYYY"
                                 placeholder="dd-mm-yyyy"
                                 showTime={false}
-                                name={'registrationOepn'}
+                                name="registrationOepn"
                             />
                             {errors.registrationOepn && touched.registrationOepn && (
                                 <span className="form-err">{errors.registrationOepn}</span>

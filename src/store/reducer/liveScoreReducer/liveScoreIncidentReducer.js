@@ -100,7 +100,7 @@ function removeMediaId(mediaArr, mediaType) {
     if (index > -1) {
         ids = mediaArr[index].id
     }
-    return { ids: ids, index: index }
+    return { ids: ids, index }
 }
 
 function getMediaUrl(mediaArray, mediaType) {
@@ -164,10 +164,10 @@ function liveScoreIncidentState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_INCIDENT_DATA:
 
-            if (action.key == "teamId") {
+            if (action.key === "teamId") {
                 state.incidentData['teamId'] = action.data
 
-            } else if (action.key == "playerId") {
+            } else if (action.key === "playerId") {
                 let playerObj = getPlayerObj(action.data, state.playerResult)
                 state.incidentData['player'] = playerObj
                 state.incidentData['playerIds'] = action.data

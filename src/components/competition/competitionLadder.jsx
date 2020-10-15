@@ -72,7 +72,7 @@ class CompetitionLadder extends Component {
 
         if(nextProps.ladderFormatState != ladderFormatState)
         {
-            if (ladderFormatState.onLoad == false && this.state.getDataLoading == true) {
+            if (ladderFormatState.onLoad == false && this.state.getDataLoading) {
                 this.setState({
                     getDataLoading: false,
                 })
@@ -95,7 +95,7 @@ class CompetitionLadder extends Component {
             this.setState({ loading: false });
             if(!ladderFormatState.error)
             {
-                if (this.state.buttonPressed == "save" ) {
+                if (this.state.buttonPressed === "save" ) {
                     history.push('/competitionFormat');
                 }
             }
@@ -104,7 +104,7 @@ class CompetitionLadder extends Component {
 
     apiCalls = (competitionId, yearRefId) => {
         let payload = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: this.state.organisationId
         }
@@ -138,13 +138,13 @@ class CompetitionLadder extends Component {
         this.setState({
             editModalVisible: flag,
         });
-        if(key == "show")
+        if(key === "show")
         {
             this.setState({
                 currentIndex: index
             })
         }
-        if(key == "ok"){
+        if(key === "ok"){
             this.setState({
                 schemeModalVisible: true
             })
@@ -156,7 +156,7 @@ class CompetitionLadder extends Component {
         this.setState({
             schemeModalVisible: flag,
         });
-        if(key == "ok"){
+        if(key === "ok"){
             ladderFormat[index].isEditted = true;
             ladderFormat[index].ladderSchemeId = 0;
             this.props.updateLadderFormatAction(ladderFormat, "ladderFormat", index);
@@ -169,7 +169,7 @@ class CompetitionLadder extends Component {
 
         });
 
-        if(key == "ok"){
+        if(key === "ok"){
             this.performAllDivisionOperation(true,ladderFormat,index);
         }
     }
@@ -255,7 +255,7 @@ class CompetitionLadder extends Component {
         this.setState({
             deleteModalVisible: flag
         });
-        if(key == "ok"){
+        if(key === "ok"){
             this.deleteLadderFormat(ladderFormat,index);
         }
     }
@@ -597,7 +597,7 @@ class CompetitionLadder extends Component {
         return (
             <div className="fees-view pt-5" style={{marginTop: '0px'}}>
                 <span className="form-heading">{AppConstants.ladderAdjustment}</span>
-                <span className='input-heading-add-another'>+ {AppConstants.addNewAdjustment}</span>
+                <span className="input-heading-add-another">+ {AppConstants.addNewAdjustment}</span>
 
                 <div className="transfer-image-view">
                     <img src={AppImages.transfer} alt="" height="45" width="45" />

@@ -173,7 +173,7 @@ class ReferFriend extends Component {
     }
 
     onChangeDropDownValue = async (value, key) => {
-        if (key == "yearRefId")
+        if (key === "yearRefId")
             await this.setState({ yearRefId: value });
 
         this.handleFriendTableList(1);

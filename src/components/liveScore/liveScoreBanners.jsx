@@ -118,7 +118,7 @@ class LiveScoreBanners extends Component {
             <div className="content-view">
                 <Table
                     className="home-dashboard-table"
-                    loading={this.props.liveScoreBannerState.onLoad == true && true}
+                    loading={this.props.liveScoreBannerState.onLoad && true}
                     columns={columns}
                     dataSource={bannerResult}
                     showHeader={false}

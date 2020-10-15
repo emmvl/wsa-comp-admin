@@ -203,7 +203,7 @@ class RegistrationFormList extends Component {
         )
     }
     onYearChange = (yearRefId) => {
-        this.setState({ yearRefId: yearRefId, })
+        this.setState({ yearRefId, })
         this.handleMembershipTableList(1, yearRefId)
     }
 

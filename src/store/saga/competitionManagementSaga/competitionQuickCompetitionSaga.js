@@ -92,7 +92,7 @@ export function* saveQuickCompDivisionSaga(action) {
 }
 
 
-////////////Create quick competition 
+////////////Create quick competition
 export function* createQuickComptitionSaga(action) {
     try {
         const result = yield call(AxiosApi.createQuickComptition, action.year, action.comptitionName, action.competitionDate);
@@ -217,7 +217,7 @@ export function* updateQuickCompetitionSaga(action) {
     try {
         const result = yield call(AxiosApi.updateQuickCompetition, action.payload);
         if (result.status === 1) {
-            if (action.buttonPressed == "AddTeam") {
+            if (action.buttonPressed === "AddTeam") {
                 const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.payload.competitionId);
                 if (detailResult.status === 1) {
                     yield put({
@@ -228,7 +228,7 @@ export function* updateQuickCompetitionSaga(action) {
                         competitionId: action.payload.competitionId,
                         competitionName: action.payload.competitionName
                     });
-                    if (action.buttonPressed == "AddTeam") {
+                    if (action.buttonPressed === "AddTeam") {
                         history.push('/quickCompetitionInvitations', { competitionUniqueKey: action.payload.competitionId, year: action.year, importPlayer: JSON.stringify(detailResult.result.data.importPlayer) })
                     }
                 }

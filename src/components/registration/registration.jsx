@@ -553,11 +553,11 @@ class Registration extends Component {
                             <div className="reg-filter-col-cont">
                                 <div className="year-select-heading">{AppConstants.dobTo}</div>
                                 <DatePicker
-                                    size="large"
-                                    placeholder="dd-mm-yyyy"
+                                    size="default"
                                     className="year-select reg-filter-select"
                                     onChange={e => this.onChangeDropDownValue(e, "dobTo")}
                                     format="DD-MM-YYYY"
+                                    placeholder="dd-mm-yyyy"
                                     showTime={false}
                                     name="dobTo"
                                     value={this.state.dobTo !== "-1" && moment(this.state.dobTo, "YYYY-MM-DD")}
@@ -705,11 +705,11 @@ class Registration extends Component {
                             <div className="reg-filter-col-cont">
                                 <div className="year-select-heading">{AppConstants.Regto}</div>
                                 <DatePicker
-                                    size="large"
-                                    placeholder="dd-mm-yyyy"
+                                    size="default"
                                     className="year-select reg-filter-select"
                                     onChange={e => this.onChangeDropDownValue(e, "regTo")}
                                     format="DD-MM-YYYY"
+                                    placeholder="dd-mm-yyyy"
                                     showTime={false}
                                     name="regTo"
                                     value={this.state.regTo !== "-1" && moment(this.state.regTo, "YYYY-MM-DD")}

@@ -19,7 +19,7 @@ import moment from "moment";
 import ValidationConstants from '../../themes/validationConstant'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { formatDateTime } from '../../themes/dateformate'
+// import { formatDateTime } from '../../themes/dateformate';
 import {
     BulkMatchPushBackAction,
     liveScoreBringForwardAction,
@@ -72,7 +72,7 @@ class LiveScoreBulkChange extends Component {
     }
 
     componentDidUpdate() {
-        if (this.state.loading == true && this.props.liveScoreBulkMatchState.onLoad == false) {
+        if (this.state.loading && this.props.liveScoreBulkMatchState.onLoad == false) {
             this.props.liveScoreUpdateBulkAction(AppConstants.selectOption, 'refreshPage')
             this.setInitalFiledValue()
             this.setState({ loading: false })
@@ -99,9 +99,9 @@ class LiveScoreBulkChange extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
-                            {isEdit == true ? AppConstants.editNews : AppConstants.bulkMatchChange}
+                            {isEdit ? AppConstants.editNews : AppConstants.bulkMatchChange}
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </Header>
@@ -115,10 +115,10 @@ class LiveScoreBulkChange extends Component {
         return (
             <div>
                 {/* date picker row */}
-                <span className='text-heading-large mt-5 mb-0'>{AppConstants.whichMatchChange}</span>
+                <span className="text-heading-large mt-5 mb-0">{AppConstants.whichMatchChange}</span>
                 <div>
                     <InputWithHead heading={AppConstants.matchOnDate} required="required-field" />
-                    <Form.Item name='changeMatchDate' rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                    <Form.Item name="changeMatchDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                         <DatePicker
                             size="large"
                             style={{ width: "100%" }}
@@ -126,7 +126,7 @@ class LiveScoreBulkChange extends Component {
                             format="DD-MM-YYYY"
                             placeholder="dd-mm-yyyy"
                             showTime={false}
-                            name={'registrationOepn'}
+                            name="registrationOepn"
                         />
                     </Form.Item>
                 </div>
@@ -141,7 +141,7 @@ class LiveScoreBulkChange extends Component {
                                 style={{ width: "100%" }}
                                 defaultOpenValue={moment("00:00", "hh:mm A")}
                                 defaultValue={moment()}
-                                format={"hh:mm A"}
+                                format="hh:mm A"
                                 minuteStep={15}
                                 use12Hours
                             />
@@ -152,7 +152,7 @@ class LiveScoreBulkChange extends Component {
                                 style={{ width: "100%" }}
                                 defaultOpenValue={moment("00:00", "hh:mm A")}
                                 defaultValue={moment()}
-                                format={"hh:mm A"}
+                                format="hh:mm A"
                                 minuteStep={15}
                                 use12Hours
                             />
@@ -164,23 +164,21 @@ class LiveScoreBulkChange extends Component {
                 <InputWithHead heading={AppConstants.byVenue} />
                 <div>
                     <InputWithHead heading={AppConstants.matchOnDate} required="required-field" />
-                    <Form.Item name='changeMatchVenue' rules={[{ required: true, message: ValidationConstants.venueField }]}>
+                    <Form.Item name="changeMatchVenue" rules={[{ required: true, message: ValidationConstants.venueField }]}>
                         <Select
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            onChange={venueSelection => this.setState({ venueSelection })}
+                            // onChange={venueSelection => this.setState({ venueSelection })}
                             placeholder={AppConstants.selectVenue}
                             className="reg-form-multiple-select"
                             // onChange={(venueId) => this.props.liveScoreUpdateMatchAction(venueId, "venueId")}
                             onChange={(venueId) => this.props.liveScoreUpdateBulkAction(venueId, "venueId")}
                             // value={selected_Option.venueId}
                         >
-                            {venueData && venueData.map((item) => {
-                                return (
-                                    <Option key={'venue' + item.id} value={item.venueId}>
-                                        {item.venueName}
-                                    </Option>
-                                )
-                            })}
+                            {venueData && venueData.map((item) => (
+                                <Option key={'venue' + item.id} value={item.venueId}>
+                                    {item.venueName}
+                                </Option>
+                            ))}
                         </Select>
                     </Form.Item>
                 </div>
@@ -189,7 +187,7 @@ class LiveScoreBulkChange extends Component {
     }
 
     initialPageView = () => {
-        const { selectedOption } = this.props.liveScoreBulkMatchState
+        // const { selectedOption } = this.props.liveScoreBulkMatchState
         return (
             <div>
                 <Form.Item name='optionData' rules={[{ required: true, message: ValidationConstants.pleaseSelect }]}>
@@ -199,11 +197,11 @@ class LiveScoreBulkChange extends Component {
                         // value={selectedOption}
                         placeholder={AppConstants.selectOption}
                     >
-                        <Option value={"pushBack"}>{'Push Back'}</Option>
-                        <Option value={"bringForward"}>{'Bring Forward'}</Option>
-                        <Option value={"abandonMatch"}>{'Abandon Matches'}</Option>
-                        <Option value={"endMatch"}>{'End Matches'}</Option>
-                        <Option value={"doubleHeader"}>{'Double Header'}</Option>
+                        <Option value="pushBack">Push Back</Option>
+                        <Option value="bringForward">Bring Forward</Option>
+                        <Option value="abandonMatch">Abandon Matches</Option>
+                        <Option value="endMatch">End Matches</Option>
+                        <Option value="doubleHeader">Double Header</Option>
                     </Select>
                 </Form.Item>
             </div>
@@ -226,11 +224,11 @@ class LiveScoreBulkChange extends Component {
                 </div>
 
                 {this.initialPageView()}
-                {selectedOption == 'pushBack' && this.pushBackView()}
-                {selectedOption == 'endMatch' && this.endMatchedView()}
-                {selectedOption == 'doubleHeader' && this.doublwHeaderView()}
-                {selectedOption == 'bringForward' && this.bringForwardView()}
-                {selectedOption == 'abandonMatch' && this.abandondMatchesView()}
+                {selectedOption === 'pushBack' && this.pushBackView()}
+                {selectedOption === 'endMatch' && this.endMatchedView()}
+                {selectedOption === 'doubleHeader' && this.doublwHeaderView()}
+                {selectedOption === 'bringForward' && this.bringForwardView()}
+                {selectedOption === 'abandonMatch' && this.abandondMatchesView()}
             </div>
         );
     };
@@ -255,8 +253,8 @@ class LiveScoreBulkChange extends Component {
                     value={bulkRadioBtn}
                 >
                     <div className="row">
-                        <Radio value={"fixedDuration"}>{AppConstants.fixedDuration}</Radio>
-                        <Radio value={"specificTime"}>{AppConstants.specificTime} </Radio>
+                        <Radio value="fixedDuration">{AppConstants.fixedDuration}</Radio>
+                        <Radio value="specificTime">{AppConstants.specificTime} </Radio>
                     </div>
                 </Radio.Group>
             </div>
@@ -319,7 +317,8 @@ class LiveScoreBulkChange extends Component {
                             defaultOpenValue={moment("00:00", "HH:mm")}
                             defaultValue={moment()}
                             onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "optionalTime")}
-                            format={"HH:mm"}
+                            onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'optionalTime')}
+                            format="HH:mm"
                             minuteStep={15}
                             use12Hours={false}
                             value={data.optionalTime}
@@ -351,12 +350,12 @@ class LiveScoreBulkChange extends Component {
         return (
             <div>
                 {/* start time date and time picker row */}
-                <span className='text-heading-large mt-5 mb-0'>{AppConstants.changeMatchCriteria}</span>
+                <span className="text-heading-large mt-5 mb-0">{AppConstants.changeMatchCriteria}</span>
                 <InputWithHead heading={AppConstants.startTime} required="required-field" />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <Form.Item name='startDate' rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                            <Form.Item name="startDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
                                     size="large"
                                     style={{ width: "100%" }}
@@ -370,16 +369,17 @@ class LiveScoreBulkChange extends Component {
                             </Form.Item>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <Form.Item name='startTime' rules={[{ required: true, message: ValidationConstants.timeField }]}>
+                            <Form.Item name="startTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
                                     style={{ width: "100%" }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
-                                    format={"HH:mm"}
+                                    format="HH:mm"
                                     // minuteStep={15}
-                                    placeholder={"Select Time"}
+                                    placeholder="Select Time"
                                     use12Hours={false}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "startTime")}
+                                    onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'startTime')}
                                     // value={pushBackData.startTime}
                                 />
                             </Form.Item>
@@ -392,30 +392,31 @@ class LiveScoreBulkChange extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <Form.Item name='endDate' rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                            <Form.Item name="endDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
                                     size="large"
                                     style={{ width: "100%" }}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
-                                    name={'registrationOepn'}
+                                    name="registrationOepn"
                                     onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
                                     // value={pushBackData.endDate}
                                 />
                             </Form.Item>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <Form.Item name='endTime' rules={[{ required: true, message: ValidationConstants.timeField }]}>
+                            <Form.Item name="endTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
                                     style={{ width: "100%" }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
-                                    format={"HH:mm"}
+                                    format="HH:mm"
                                     // minuteStep={15}
-                                    placeholder={"Select Time"}
+                                    placeholder="Select Time"
                                     use12Hours={false}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
+                                    onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'endTime')}
                                     // value={pushBackData.endTime}
                                 />
                             </Form.Item>
@@ -439,14 +440,11 @@ class LiveScoreBulkChange extends Component {
                         optionFilterProp="children"
                         onSearch={(e) => this.onSearchVenue(e)}
                     >
-                        {venueData && venueData.map((item) => {
-                            return (
-                                <Option key={'venue' + item.venueId}
-                                        value={item.venueId}>
-                                    {item.venueName}
-                                </Option>
-                            )
-                        })}
+                        {venueData && venueData.map((item) => (
+                            <Option key={'venue' + item.venueId} value={item.venueId}>
+                                {item.venueName}
+                            </Option>
+                        ))}
                     </Select>
                 </div>
 
@@ -467,27 +465,24 @@ class LiveScoreBulkChange extends Component {
                         }}
                         filterOption={false}
                     >
-                        {pushCourtData && pushCourtData.map((item) => {
-                            return (
-                                <Option key={'court' + item.venueCourtId}
-                                        value={item.venueCourtId}>
-                                    {item.name}
-                                </Option>
-                            )
-                        })}
+                        {pushCourtData && pushCourtData.map((item) => (
+                            <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
+                                {item.name}
+                            </Option>
+                        ))}
                     </Select>
                 </div>
 
                 {/* Push back options */}
                 <div className="fluid-width">
-                    <span className='text-heading-large mt-5 mb-0'>{AppConstants.pushBack}</span>
+                    <span className="text-heading-large mt-5 mb-0">{AppConstants.pushBack}</span>
                     {this.radioBtnContainer()}
 
-                    {bulkRadioBtn == 'fixedDuration' && this.fixedDurationView(pushBackData)}
+                    {bulkRadioBtn === 'fixedDuration' && this.fixedDurationView(pushBackData)}
                 </div>
 
                 {/* or to this time date and time picker row */}
-                {bulkRadioBtn == 'specificTime' && this.specificTimeViw(pushBackData)}
+                {bulkRadioBtn === 'specificTime' && this.specificTimeViw(pushBackData)}
             </div>
         )
     }
@@ -499,7 +494,7 @@ class LiveScoreBulkChange extends Component {
         return (
             <div>
                 {/* start time date and time picker row */}
-                <span className='text-heading-large mt-5 mb-0'>{AppConstants.changeMatchCriteria}</span>
+                <span className="text-heading-large mt-5 mb-0">{AppConstants.changeMatchCriteria}</span>
                 <InputWithHead heading={AppConstants.startTime} required="required-field" />
                 <div className="fluid-width">
                     <div className="row">
@@ -517,16 +512,17 @@ class LiveScoreBulkChange extends Component {
                             </Form.Item>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <Form.Item name='forwardTime' rules={[{ required: true, message: ValidationConstants.timeField }]}>
+                            <Form.Item name="forwardTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
                                     style={{ width: "100%" }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
-                                    onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "startTime")}
-                                    format={"HH:mm"}
+                                    onChange={(time) => this.props.liveScoreUpdateBulkAction(time, 'startTime')}
+                                    onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'startTime')}
+                                    format="HH:mm"
                                     // value={bringForwardData.startTime}
                                     // minuteStep={15}
-                                    placeholder={"Select Time"}
+                                    placeholder="Select Time"
                                     use12Hours={false}
                                 />
                             </Form.Item>
@@ -548,7 +544,7 @@ class LiveScoreBulkChange extends Component {
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
-                                    name={'registrationOepn'}
+                                    name="registrationOepn"
                                 />
                             </Form.Item>
                         </div>
@@ -559,8 +555,9 @@ class LiveScoreBulkChange extends Component {
                                     style={{ width: "100%" }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
-                                    format={"HH:mm"}
-                                    placeholder={"Select Time"}
+                                    onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'endTime')}
+                                    format="HH:mm"
+                                    placeholder="Select Time"
                                     // value={bringForwardData.endTime}
                                     // minuteStep={15}
                                     use12Hours={false}
@@ -586,14 +583,11 @@ class LiveScoreBulkChange extends Component {
                         optionFilterProp="children"
                         onSearch={(e) => this.onSearchVenue(e)}
                     >
-                        {venueData && venueData.map((item) => {
-                            return (
-                                <Option key={'venue' + item.venueId}
-                                        value={item.venueId}>
-                                    {item.venueName}
-                                </Option>
-                            )
-                        })}
+                        {venueData && venueData.map((item) => (
+                            <Option key={'venue' + item.venueId} value={item.venueId}>
+                                {item.venueName}
+                            </Option>
+                        ))}
                     </Select>
                 </div>
 
@@ -614,24 +608,21 @@ class LiveScoreBulkChange extends Component {
                         }}
                         filterOption={false}
                     >
-                        {bringCourtData && bringCourtData.map((item) => {
-                            return (
-                                <Option key={'court' + item.venueCourtId}
-                                        value={item.venueCourtId}>
-                                    {item.name}
-                                </Option>
-                            )
-                        })}
+                        {bringCourtData && bringCourtData.map((item) => (
+                            <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
+                                {item.name}
+                            </Option>
+                        ))}
                     </Select>
                 </div>
 
                 {/* bring forward options */}
                 <div className="fluid-width">
-                    <span className='text-heading-large mt-5 mb-0'>{AppConstants.bringForward}</span>
+                    <span className="text-heading-large mt-5 mb-0">{AppConstants.bringForward}</span>
                     {this.radioBtnContainer()}
-                    {bulkRadioBtn == 'fixedDuration' && this.fixedDurationView(bringForwardData)}
+                    {bulkRadioBtn === 'fixedDuration' && this.fixedDurationView(bringForwardData)}
                 </div>
-                {bulkRadioBtn == 'specificTime' && this.specificTimeViw(bringForwardData)}
+                {bulkRadioBtn === 'specificTime' && this.specificTimeViw(bringForwardData)}
             </div>
         )
     }
@@ -644,7 +635,7 @@ class LiveScoreBulkChange extends Component {
         return (
             <div>
                 {/* start time date and time picker row */}
-                <span className='text-heading-large mt-5 mb-0'>{AppConstants.changeMatchCriteria}</span>
+                <span className="text-heading-large mt-5 mb-0">{AppConstants.changeMatchCriteria}</span>
                 <InputWithHead heading={AppConstants.startTime} required="required-field" />
                 <div className="fluid-width">
                     <div className="row">
@@ -667,10 +658,11 @@ class LiveScoreBulkChange extends Component {
                                     className="comp-venue-time-timepicker"
                                     style={{ width: "100%" }}
                                     defaultOpenValue={moment("00:00", "hh:mm")}
-                                    format={"hh:mm"}
+                                    format="hh:mm"
                                     // minuteStep={15}
-                                    placeholder={"Select Time"}
+                                    placeholder="Select Time"
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "startTime")}
+                                    onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'startTime')}
                                     // value={endMatchData.startTime}
                                     use12Hours={false}
                                 />
@@ -684,28 +676,29 @@ class LiveScoreBulkChange extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <Form.Item name='endDate' rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                            <Form.Item name="endDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
                                     size="large"
                                     style={{ width: "100%" }}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
-                                    name={'registrationOepn'}
+                                    name="registrationOepn"
                                     onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
                                     // value={endMatchData.endDate}
                                 />
                             </Form.Item>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <Form.Item name='endTime' rules={[{ required: true, message: ValidationConstants.timeField }]}>
+                            <Form.Item name="endTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
                                     style={{ width: "100%" }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
-                                    format={"HH:mm"}
-                                    placeholder={"Select Time"}
+                                    format="HH:mm"
+                                    placeholder="Select Time"
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
+                                    onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'endTime')}
                                     // value={endMatchData.endTime}
                                     // minuteStep={15}
                                     use12Hours={false}
@@ -730,14 +723,11 @@ class LiveScoreBulkChange extends Component {
                         optionFilterProp="children"
                         onSearch={(e) => this.onSearchVenue(e)}
                     >
-                        {venueData && venueData.map((item) => {
-                            return (
-                                <Option key={'venue' + item.venueId}
-                                        value={item.venueId}>
-                                    {item.venueName}
-                                </Option>
-                            )
-                        })}
+                        {venueData && venueData.map((item) => (
+                            <Option key={'venue' + item.venueId} value={item.venueId}>
+                                {item.venueName}
+                            </Option>
+                        ))}
                     </Select>
                 </div>
 
@@ -758,14 +748,11 @@ class LiveScoreBulkChange extends Component {
                         }}
                         filterOption={false}
                     >
-                        {endCourtData && endCourtData.map((item) => {
-                            return (
-                                <Option key={'court' + item.venueCourtId}
-                                        value={item.venueCourtId}>
-                                    {item.name}
-                                </Option>
-                            )
-                        })}
+                        {endCourtData && endCourtData.map((item) => (
+                            <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
+                                {item.name}
+                            </Option>
+                        ))}
                     </Select>
                 </div>
 
@@ -781,14 +768,11 @@ class LiveScoreBulkChange extends Component {
                             showSearch
                             optionFilterProp="children"
                         >
-                            {roundResult.map((item) => {
-                                return (
-                                    <Option key={'round' + item.id}
-                                            value={item.id}>
-                                        {item.name}
-                                    </Option>
-                                )
-                            })}
+                            {roundResult.map((item) => (
+                                <Option key={'round' + item.id} value={item.id}>
+                                    {item.name}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
                 </div>
@@ -816,14 +800,11 @@ class LiveScoreBulkChange extends Component {
                             // value={doubleHeaderResult.round_1}
                             placeholder={AppConstants.selectRoundOne}
                         >
-                            {roundResult.map((item) => {
-                                return (
-                                    <Option key={'round' + item.name}
-                                            value={item.name}>
-                                        {item.name}
-                                    </Option>
-                                )
-                            })}
+                            {roundResult.map((item) => (
+                                <Option key={'round' + item.name} value={item.name}>
+                                    {item.name}
+                                </Option>
+                            ))}
                         </Select>
                     </Form.Item>
                 </div>
@@ -840,14 +821,11 @@ class LiveScoreBulkChange extends Component {
                             showSearch
                             optionFilterProp="children"
                         >
-                            {roundResult.map((item) => {
-                                return (
-                                    <Option key={'round' + item.name}
-                                            value={item.name}>
-                                        {item.name}
-                                    </Option>
-                                )
-                            })}
+                            {roundResult.map((item) => (
+                                <Option key={'round' + item.name} value={item.name}>
+                                    {item.name}
+                                </Option>
+                            ))}
                         </Select>
                     </Form.Item>
                 </div>
@@ -865,7 +843,7 @@ class LiveScoreBulkChange extends Component {
             <div>
                 <div>
                     {/* start time date and time picker row */}
-                    <span className='text-heading-large mt-5 mb-0'>{AppConstants.changeMatchCriteria}</span>
+                    <span className="text-heading-large mt-5 mb-0">{AppConstants.changeMatchCriteria}</span>
                     <InputWithHead heading={AppConstants.startTime} required="required-field" />
                     <div className="fluid-width">
                         <div className="row">
@@ -877,7 +855,7 @@ class LiveScoreBulkChange extends Component {
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
                                         showTime={false}
-                                        name={'registrationOepn'}
+                                        name="registrationOepn"
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "startDate")}
                                         // value={abandonData.startDate}
                                     />
@@ -888,11 +866,12 @@ class LiveScoreBulkChange extends Component {
                                     className="comp-venue-time-timepicker"
                                     style={{ width: "100%" }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
-                                    format={"HH:mm"}
+                                    format="HH:mm"
                                     // minuteStep={15}
-                                    placeholder={"Select Time"}
+                                    placeholder="Select Time"
                                     use12Hours={false}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "startTime")}
+                                    onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'startTime')}
                                     value={abandonData.startTime}
                                 />
                             </div>
@@ -904,14 +883,14 @@ class LiveScoreBulkChange extends Component {
                     <div className="fluid-width">
                         <div className="row">
                             <div className="col-sm" style={{ marginTop: 5 }}>
-                                <Form.Item name='endDate' rules={[{ required: true, message: ValidationConstants.dateField }]}>
+                                <Form.Item name="endDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                     <DatePicker
                                         size="large"
                                         style={{ width: "100%" }}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
                                         showTime={false}
-                                        name={'registrationOepn'}
+                                        name="registrationOepn"
                                         onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
                                         // value={abandonData.endDate}
                                     />
@@ -922,11 +901,12 @@ class LiveScoreBulkChange extends Component {
                                     className="comp-venue-time-timepicker"
                                     style={{ width: "100%" }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
-                                    format={"HH:mm"}
+                                    format="HH:mm"
                                     // minuteStep={15}
-                                    placeholder={"Select Time"}
+                                    placeholder="Select Time"
                                     use12Hours={false}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
+                                    onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'endTime')}
                                     value={abandonData.endTime}
                                 />
                             </div>
@@ -949,14 +929,11 @@ class LiveScoreBulkChange extends Component {
                             optionFilterProp="children"
                             onSearch={(e) => this.onSearchVenue(e)}
                         >
-                            {venueData && venueData.map((item) => {
-                                return (
-                                    <Option key={'venue' + item.venueId}
-                                            value={item.venueId}>
-                                        {item.venueName}
-                                    </Option>
-                                )
-                            })}
+                            {venueData && venueData.map((item) => (
+                                <Option key={'venue' + item.venueId} value={item.venueId}>
+                                    {item.venueName}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
 
@@ -977,14 +954,11 @@ class LiveScoreBulkChange extends Component {
                             }}
                             filterOption={false}
                         >
-                            {abandonCourtData && abandonCourtData.map((item) => {
-                                return (
-                                    <Option key={'court' + item.venueCourtId}
-                                            value={item.venueCourtId}>
-                                        {item.name}
-                                    </Option>
-                                )
-                            })}
+                            {abandonCourtData && abandonCourtData.map((item) => (
+                                <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
+                                    {item.name}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
 
@@ -1003,20 +977,17 @@ class LiveScoreBulkChange extends Component {
                                 showSearch
                                 optionFilterProp="children"
                             >
-                                {roundResult.map((item) => {
-                                    return (
-                                        <Option key={'round' + item.id}
-                                                value={item.id}>
-                                            {item.name}
-                                        </Option>
-                                    )
-                                })}
+                                {roundResult.map((item) => (
+                                    <Option key={'round' + item.id} value={item.id}>
+                                        {item.name}
+                                    </Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
 
                 </div>
-                <span className='text-heading-large mt-5 mb-0'>{AppConstants.abandon}</span>
+                <span className="text-heading-large mt-5 mb-0">{AppConstants.abandon}</span>
                 <InputWithHead heading={AppConstants.selectReason} required="required-field" />
                 <div>
                     <Form.Item name='reason' rules={[{ required: true, message: ValidationConstants.selectReason }]}>
@@ -1027,14 +998,11 @@ class LiveScoreBulkChange extends Component {
                             onChange={(resultType) => this.props.liveScoreUpdateBulkAction(resultType, "resultType")}
                             // value={abandonData.resultType ? abandonData.resultType : []}
                         >
-                            {/* {isArrayNotEmpty(matchResult) && matchResult.map((item, index) => {
-                                return (
-                                    <Option key={item.id}
-                                        value={item.id}>
-                                        {item.code}
-                                    </Option>
-                                )
-                            })} */}
+                            {/* {isArrayNotEmpty(matchResult) && matchResult.map((item, index) => (
+                                <Option key={item.id} value={item.id}>
+                                    {item.code}
+                                </Option>
+                            ))} */}
                             <Option value={'8'}>{'Incomplete'}</Option>
                             <Option value={'9'}>{'Not Played'}</Option>
                         </Select>
@@ -1055,7 +1023,7 @@ class LiveScoreBulkChange extends Component {
             bulkRadioBtn
         } = this.props.liveScoreBulkMatchState
 
-        if (selectedOption == 'pushBack') {
+        if (selectedOption === 'pushBack') {
             let startDate = moment(pushBackData.startDate).format("YYYY-MMM-DD")
             let startTime = moment(pushBackData.startTime).format("HH:mm")
             let postStartDate = moment(startDate + " " + startTime);
@@ -1067,7 +1035,7 @@ class LiveScoreBulkChange extends Component {
 
             let formatedNewDate = ''
 
-            if (bulkRadioBtn == 'fixedDuration') {
+            if (bulkRadioBtn === 'fixedDuration') {
                 if (pushBackData.hours == "" && pushBackData.minutes == "" && pushBackData.seconds == "") {
                     message.config({ duration: 0.9, maxCount: 1 })
                     message.error(ValidationConstants.selectMinuteHourSecond)
@@ -1075,7 +1043,7 @@ class LiveScoreBulkChange extends Component {
                     this.props.BulkMatchPushBackAction(pushBackData, formatedStartDate, formatedEndDate, bulkRadioBtn, formatedNewDate)
                     this.setState({ loading: true })
                 }
-            } else if (bulkRadioBtn == 'specificTime') {
+            } else if (bulkRadioBtn === 'specificTime') {
                 if (pushBackData.optionalDate == "" || pushBackData.optionalTime == "") {
                     message.config({ duration: 0.9, maxCount: 1 })
                     message.error(ValidationConstants.specificTime)
@@ -1091,7 +1059,7 @@ class LiveScoreBulkChange extends Component {
                 this.props.BulkMatchPushBackAction(pushBackData, formatedStartDate, formatedEndDate, bulkRadioBtn, formatedNewDate)
                 this.setState({ loading: true })
             }
-        } else if (selectedOption == 'bringForward') {
+        } else if (selectedOption === 'bringForward') {
             let startDate = moment(bringForwardData.startDate).format("YYYY-MMM-DD")
             let startTime = moment(bringForwardData.startTime).format("HH:mm")
             let postStartDate = moment(startDate + " " + startTime);
@@ -1104,7 +1072,7 @@ class LiveScoreBulkChange extends Component {
 
             let formatedNewDate = ''
 
-            if (bulkRadioBtn == 'fixedDuration') {
+            if (bulkRadioBtn === 'fixedDuration') {
                 if (bringForwardData.hours == "" && bringForwardData.minutes == "" && bringForwardData.seconds == "") {
                     message.config({ duration: 0.9, maxCount: 1 })
                     message.error(ValidationConstants.selectMinuteHourSecond)
@@ -1112,7 +1080,7 @@ class LiveScoreBulkChange extends Component {
                     this.props.liveScoreBringForwardAction(null, bringForwardData, formatedStartDate, formatedEndDate, bulkRadioBtn, formatedNewDate)
                     this.setState({ loading: true })
                 }
-            } else if (bulkRadioBtn == 'specificTime') {
+            } else if (bulkRadioBtn === 'specificTime') {
                 if (bringForwardData.optionalDate == "" || bringForwardData.optionalTime == "") {
                     message.config({ duration: 0.9, maxCount: 1 })
                     message.error(ValidationConstants.specificTime)
@@ -1129,7 +1097,7 @@ class LiveScoreBulkChange extends Component {
                 this.props.liveScoreBringForwardAction(null, bringForwardData, formatedStartDate, formatedEndDate, bulkRadioBtn, formatedNewDate)
                 this.setState({ loading: true })
             }
-        } else if (selectedOption == 'endMatch') {
+        } else if (selectedOption === 'endMatch') {
             let startDate = moment(endMatchData.startDate).format("YYYY-MMM-DD")
             let startTime = moment(endMatchData.startTime).format("HH:mm")
             let postStartDate = moment(startDate + " " + startTime);
@@ -1141,10 +1109,10 @@ class LiveScoreBulkChange extends Component {
 
             this.props.liveScoreEndMatchesdAction(endMatchData, formatedStartDate, formatedEndDate)
             this.setState({ loading: true })
-        } else if (selectedOption == 'doubleHeader') {
+        } else if (selectedOption === 'doubleHeader') {
             this.props.liveScoreDoubleHeaderAction(doubleHeaderResult)
             this.setState({ loading: true })
-        } else if (selectedOption == 'abandonMatch') {
+        } else if (selectedOption === 'abandonMatch') {
             // let formatedStartDate = formatDateTime(abandonData.startDate, abandonData.startTime)
             // let formatedEndDate = formatDateTime(abandonData.endDate, abandonData.endTime)
 

@@ -103,7 +103,7 @@ function liveScoreNewsState(state = initialState, action) {
 
             state.addEditNews = news_data
             state.addEditNews["author"] = news_data.author ? news_data.author : authorData ? authorData.longName : ''
-            
+
 
             state.news_expire_date = news_data.news_expire_date ? moment(news_data.news_expire_date).format("YYYY-MM-DD") : ""
             // state.news_expire_date = moment(news_data.news_expire_date).format("YYYY-MM-DD")
@@ -152,13 +152,13 @@ function liveScoreNewsState(state = initialState, action) {
 
                 state[action.key] = action.data
 
-            } else if (action.key == "body") {
+            } else if (action.key === "body") {
                 state.newsBody = action.data
             }
-            else if (action.key == "allOrg" || action.key == "indivisualOrg") {
+            else if (action.key === "allOrg" || action.key === "indivisualOrg") {
                 state[action.key] = action.data
             }
-            else if (action.key == "newsImage" || action.key == "newsVideo") {
+            else if (action.key === "newsImage" || action.key === "newsVideo") {
                 state[action.key] = action.data
             }
             else {

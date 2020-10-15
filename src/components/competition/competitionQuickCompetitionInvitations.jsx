@@ -46,7 +46,7 @@ class QuickCompetitionInvitations extends Component {
         if (competitionId && importPlayerValue) {
             this.props.getMergeCompetitionAction()
             this.setState({
-                competitionId: competitionId,
+                competitionId,
                 yearRefId: year,
                 importPlayer: importPlayerValue
 
@@ -59,7 +59,7 @@ class QuickCompetitionInvitations extends Component {
 
     componentDidUpdate(nextprops) {
         let mergeValidateState = this.props.quickCompetitionState.mergeValidate
-        if (this.props.quickCompetitionState.onInvitationLoad == false && this.state.invitationLoad == true) {
+        if (this.props.quickCompetitionState.onInvitationLoad == false && this.state.invitationLoad) {
             if (nextprops.mergeValidateState != this.props.quickCompetitionState.mergeValidate) {
                 this.setState({
                     mergeValidateVisible: mergeValidateState
@@ -70,7 +70,7 @@ class QuickCompetitionInvitations extends Component {
                 invitationLoad: false
             })
         }
-        if (this.props.quickCompetitionState.onInvitationLoad == false && this.state.onProcessMergeCompetition == true) {
+        if (this.props.quickCompetitionState.onInvitationLoad == false && this.state.onProcessMergeCompetition) {
             this.setState({
                 onProcessMergeCompetition: false
             })
@@ -79,7 +79,7 @@ class QuickCompetitionInvitations extends Component {
     }
 
     showPropsConfirm = (key) => {
-        if(key == "cancel")
+        if(key === "cancel")
             this.setState({modalVisible:false});
         else
             this.setState({modalVisible:true});
@@ -108,19 +108,19 @@ class QuickCompetitionInvitations extends Component {
         })
     }
     competitionTypeSelection = (value,key) =>{
-        if(key == "divisioAndGrades"){
+        if(key === "divisioAndGrades"){
             this.setState({divisionGradeOptionId:value});
         }
-        else if(key == "teams"){
+        else if(key === "teams"){
             this.setState({teamOptionId:value});
         }
-        else if(key == "players"){
+        else if(key === "players"){
             this.setState({playerOptionId:value});
         }
-        else if(key == "venues"){
+        else if(key === "venues"){
             this.setState({venueOptionId:value});
         }
-		else if(key == "competitionName"){
+		else if(key === "competitionName"){
             this.setState({compNameOptionId:value});
         }
     }
@@ -312,7 +312,7 @@ class QuickCompetitionInvitations extends Component {
                         (item, index) => {
                             return (
                                 <div key={"playerArray" + index}>
-                                    <Radio disabled={item.id == 1 && this.state.importPlayer == 1 ? true : false} value={item.id}>{item.value}</Radio>
+                                    <Radio disabled={item.id == 1 && this.state.importPlayer == 1} value={item.id}>{item.value}</Radio>
                                     {this.mergeExistingCompetition(
                                         item,
                                         selectedTeamPlayer

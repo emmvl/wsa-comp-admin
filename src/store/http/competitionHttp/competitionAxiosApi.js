@@ -31,7 +31,7 @@ let CompetitionAxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
             // organisationId: organisationUniqueKey
             organisationId: organisationUniqueKey
@@ -46,7 +46,7 @@ let CompetitionAxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey
 
@@ -61,9 +61,9 @@ let CompetitionAxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
-            divisionId: divisionId,
+            divisionId,
             organisationId: organisationUniqueKey,
             gradeRefId: gradeRefId
         };
@@ -87,9 +87,9 @@ let CompetitionAxiosApi = {
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
-            divisionId: divisionId,
+            divisionId,
             organisationId: organisationUniqueKey,
         };
         var url = `api/proposedteamgrading?userId=${userId}`
@@ -123,7 +123,7 @@ let CompetitionAxiosApi = {
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey
         };
@@ -131,7 +131,7 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    //////competition part player grading get API 
+    //////competition part player grading get API
     async getCompPartPlayerGrading(yearRefId, competitionId, divisionId) {
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
@@ -145,14 +145,14 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    ////competition draws get 
+    ////competition draws get
     async getCompetitionDraws(yearRefId, competitionId, venueId, roundId, orgId, startDate, endDate) {
 
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey,
             filterOrganisationId: orgId != null ? orgId : -1,
@@ -160,19 +160,19 @@ let CompetitionAxiosApi = {
             endDate: endDate,
             // organisationId: "sd-gdf45df-09486-sdg5sfd-546sdf",
             venueId: venueId,
-            roundId: roundId
+            roundId
         };
         var url = `/api/draws?userId=${userId}`
         return Method.dataPost(url, token, body);
     },
 
-    ////////competition draws rounds 
+    ////////competition draws rounds
     async getDrawsRounds(yearRefId, competitionId) {
         let userId = await getUserId()
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey
             // organisationId: "sd-gdf45df-09486-sdg5sfd-546sdf"
@@ -198,7 +198,7 @@ let CompetitionAxiosApi = {
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey
         };
@@ -229,7 +229,7 @@ let CompetitionAxiosApi = {
         let payload = {
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey,
-            yearRefId: yearRefId,
+            yearRefId,
             publishToLivescore: publishToLivescore
         }
         var url = `/api/teamgrading/summary/publish?userId=${userId}`;
@@ -257,7 +257,7 @@ let CompetitionAxiosApi = {
         return Method.dataPut(url, token, body);
     },
 
-    /// Save Draws 
+    /// Save Draws
     async saveDrawsApi(yearId, competitionId, drawsId) {
         let userId = await getUserId()
         let body = {
@@ -275,9 +275,9 @@ let CompetitionAxiosApi = {
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
-            divisionId: divisionId,
+            divisionId,
             organisationId: organisationUniqueKey,
         };
         var url = `/api/competitiongrades?userId=${userId}`
@@ -290,7 +290,7 @@ let CompetitionAxiosApi = {
         return Method.dataPut(url, token, body);
     },
 
-    // add new team  in part player grading 
+    // add new team  in part player grading
     async addCompetitionTeam(competitionId, divisionId, name) {
         let orgItem = await getOrganisationData()
         let userId = await getUserId()
@@ -330,7 +330,7 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, payload);
     },
 
-    //player grading comment 
+    //player grading comment
     async playerGradingComment(competitionId, divisionId, comment, playerId) {
         let userId = await getUserId()
         let orgItem = await getOrganisationData()
@@ -346,7 +346,7 @@ let CompetitionAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    //player grading comment 
+    //player grading comment
     async playerGradingSummaryComment(year, competitionId, divisionId, gradingOrgId, comment) {
         let userId = await getUserId()
         let orgItem = await getOrganisationData()
@@ -605,12 +605,12 @@ let CompetitionAxiosApi = {
         var url = `/api/quickcompetition/import/player`;
         return Method.dataPost(url, token, body);
     },
-    ////////competition draws rounds 
+    ////////competition draws rounds
     async getActiveDrawsRounds(yearRefId, competitionId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: organisationUniqueKey
         };
@@ -644,7 +644,7 @@ let CompetitionAxiosApi = {
       var url = `/api/competition/delete?competitionId=${competitionId}&deleteOptionId=${targetValue}`;
       return Method.dataDelete(url, token);
     },
-    
+
     async replicateSave(replicateData){
         var url = `api/replicate/review`
         return Method.dataPost(url, token, replicateData)

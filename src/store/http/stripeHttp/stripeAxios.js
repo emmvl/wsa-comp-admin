@@ -118,7 +118,7 @@ let AxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    //get payment list 
+    //get payment list
     async getPaymentList(offset, sortBy, sortOrder, userId, registrationId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -127,7 +127,7 @@ let AxiosApi = {
             userId: userId,
             registrationId: registrationId,
             paging: {
-                offset: offset,
+                offset,
                 limit: 10
             }
         };
@@ -142,13 +142,13 @@ let AxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         var url
-        if (key == "paymentDashboard") {
+        if (key === "paymentDashboard") {
             url = `/api/payments/dashboard/export?organisationUniqueKey=${organisationUniqueKey}`;
         }
-        else if (key == "payout") {
+        else if (key === "payout") {
             url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=payout`
         }
-        else if (key == "transfer") {
+        else if (key === "transfer") {
             url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=transfer`
         }
         return Method.dataGetDownload(url, token, key);

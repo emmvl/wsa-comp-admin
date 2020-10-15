@@ -154,7 +154,7 @@ class MultifieldDrawsNew extends Component {
         let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
         let changeStatus = this.props.drawsState.changeStatus
 
-        if (this.state.venueLoad == true && this.props.drawsState.updateLoad == false) {
+        if (this.state.venueLoad && this.props.drawsState.updateLoad == false) {
             if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
                 if (venueData.length > 0) {
                     let venueId = this.state.firstTimeCompId == -1 || this.state.filterDates ? this.state.venueId : venueData[0].id;
@@ -299,7 +299,7 @@ class MultifieldDrawsNew extends Component {
         }
 
         if (nextProps.drawsState.changeStatus != changeStatus) {
-            if (this.props.drawsState.changeStatus == false && this.state.changeStatus == true) {
+            if (this.props.drawsState.changeStatus == false && this.state.changeStatus) {
                 let statusRefId = this.props.drawsState.publishStatus
                 setOwn_competitionStatus(statusRefId)
                 message.success("Draws published to live scores successfully");
@@ -310,7 +310,7 @@ class MultifieldDrawsNew extends Component {
                 }
             }
         }
-        if (this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false) {
+        if (this.state.roundLoad && this.props.drawsState.onActRndLoad == false) {
             this.setState({ roundLoad: false });
             if (this.props.drawsState.activeDrawsRoundsData != null &&
                 this.props.drawsState.activeDrawsRoundsData.length > 0) {
@@ -468,20 +468,20 @@ class MultifieldDrawsNew extends Component {
     }
 
     changeAllVenueStatus = (value, key) => {
-        if (key == "venue") {
+        if (key === "venue") {
             this.props.checkBoxOnChange(value, "allCompetitionVenues")
             this.setState({ allVenueChecked: value })
-        } else if (key == 'competition') {
+        } else if (key === 'competition') {
             this.props.checkBoxOnChange(value, "allCompetition")
             this.setState({ allCompChecked: value })
-        } else if (key == "org") {
+        } else if (key === "org") {
             this.props.checkBoxOnChange(value, "allOrganisation")
             this.setState({ allOrgChecked: value })
 
-        } else if (key == 'allDivisionChecked') {
+        } else if (key === 'allDivisionChecked') {
             this.props.checkBoxOnChange(value, "allDivisionChecked")
             this.setState({ allDivisionChecked: value })
-        } else if (key == 'singleCompDivisionCheked') {
+        } else if (key === 'singleCompDivisionCheked') {
             this.props.checkBoxOnChange(value, "singleCompDivisionCheked")
             this.setState({ singleCompDivisionCheked: value })
         }
@@ -684,7 +684,7 @@ class MultifieldDrawsNew extends Component {
     };
 
     checkDisplayCountList = (array, showAllStatus) => {
-        if (array.length >= 5 && showAllStatus == true) {
+        if (array.length >= 5 && showAllStatus) {
             return array.length
         } else if (array.length > 0 && showAllStatus == false) {
             return 5
@@ -694,13 +694,13 @@ class MultifieldDrawsNew extends Component {
     }
 
     changeShowAllStatus = (key) => {
-        if (key == "venue") {
+        if (key === "venue") {
             this.setState({ showAllVenue: !this.state.showAllVenue })
-        } else if (key == "comp") {
+        } else if (key === "comp") {
             this.setState({ showAllComp: !this.state.showAllComp })
-        } else if (key == "division") {
+        } else if (key === "division") {
             this.setState({ showAllDivision: !this.state.showAllDivision })
-        } else if (key == "org") {
+        } else if (key === "org") {
             this.setState({ showAllOrg: !this.state.showAllOrg })
         }
     }
@@ -771,7 +771,7 @@ class MultifieldDrawsNew extends Component {
         let checkCompetitionFalse = this.state.firstTimeCompId == "-1" ? this.checkAllCompetitionData(this.props.drawsState.drawsCompetitionArray, "competitionName") : []
         let checkVenueFalse = this.checkAllCompetitionData(this.props.drawsState.competitionVenues, "id")
         let checkOrganisationFalse = this.checkAllCompetitionData(this.props.drawsState.drawOrganisations, "organisationUniqueKey")
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         if (!checkDivisionFalse.includes(slot.competitionDivisionGradeId)) {
             if (!checkCompetitionFalse.includes(slot.competitionName)) {
                 if (!checkVenueFalse.includes(slot.venueId)) {
@@ -855,7 +855,7 @@ class MultifieldDrawsNew extends Component {
                             <Select
                                 className="year-select reg-filter-select1"
                                 style={{ maxWidth: 150, minWidth: 150 }}
-                                disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? true : false}
+                                disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates}
                                 onChange={(roundId) => this.onRoundsChange(roundId)}
                                 value={this.state.roundId}
                             >
@@ -896,7 +896,7 @@ class MultifieldDrawsNew extends Component {
                                 checked={this.state.filterDates}
                                 // onChange={(e) => this.setState({ filterDates: e.target.checked })}
                                 onChange={(e) => this.onDateRangeCheck(e.target.checked)}
-                                disabled={this.state.firstTimeCompId == "-1" ? true : false}
+                                disabled={this.state.firstTimeCompId == "-1"}
                                 // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.checked, "associationChecked")}
                             >
                                 {AppConstants.filterDates}
@@ -967,7 +967,7 @@ class MultifieldDrawsNew extends Component {
                             className="input-heading-add-another pt-4"
                             onClick={() => this.changeShowAllStatus("venue")}
                         >
-                            {showAllVenue == true ? AppConstants.hide : AppConstants.showAll}
+                            {showAllVenue ? AppConstants.hide : AppConstants.showAll}
                         </span>
                     )}
                 </div>
@@ -1031,7 +1031,7 @@ class MultifieldDrawsNew extends Component {
                             className="input-heading-add-another pt-4"
                             onClick={() => this.changeShowAllStatus("comp")}
                         >
-                            {showAllComp == true ? AppConstants.hide : AppConstants.showAll}
+                            {showAllComp ? AppConstants.hide : AppConstants.showAll}
                         </span>
                     )}
                 </div>
@@ -1126,7 +1126,7 @@ class MultifieldDrawsNew extends Component {
                                 className="input-heading-add-another pt-4"
                                 onClick={() => this.changeShowAllStatus("division")}
                             >
-                                {showAllDivision == true ? AppConstants.hide : AppConstants.showAll}
+                                {showAllDivision ? AppConstants.hide : AppConstants.showAll}
                             </span>
                         )}
                     </div>
@@ -1162,7 +1162,7 @@ class MultifieldDrawsNew extends Component {
                                 className="input-heading-add-another pt-4"
                                 onClick={() => this.changeShowAllStatus("division")}
                             >
-                                {showAllDivision == true ? AppConstants.hide : AppConstants.showAll}
+                                {showAllDivision ? AppConstants.hide : AppConstants.showAll}
                             </span>
                         )}
                     </div>
@@ -1225,7 +1225,7 @@ class MultifieldDrawsNew extends Component {
                             className="input-heading-add-another pt-4"
                             onClick={() => this.changeShowAllStatus("org")}
                         >
-                            {showAllOrg == true ? AppConstants.hide : AppConstants.showAll}
+                            {showAllOrg ? AppConstants.hide : AppConstants.showAll}
                         </span>
                     )}
                 </div>
@@ -1391,7 +1391,7 @@ class MultifieldDrawsNew extends Component {
     }
 
     draggableView = (dateItem) => {
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         var dateMargin = 25;
         var dayMargin = 25;
         let topMargin = 0;
@@ -1729,7 +1729,7 @@ class MultifieldDrawsNew extends Component {
         let publishStatus = this.props.drawsState.publishStatus;
         let isTeamNotInDraws = this.props.drawsState.isTeamInDraw;
         let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
-        let isPublish = this.state.competitionStatus == 1 ? true : false;
+        let isPublish = this.state.competitionStatus == 1;
         let teamNames = this.props.drawsState.teamNames;
         return (
             <div className="fluid-width paddingBottom56px">
@@ -1762,7 +1762,7 @@ class MultifieldDrawsNew extends Component {
                                 style={{ height: '100%' }}
                                 onMouseEnter={() =>
                                     this.setState({
-                                        tooltipVisibleDelete: isPublish ? true : false,
+                                        tooltipVisibleDelete: isPublish,
                                     })
                                 }
                                 onMouseLeave={() =>
@@ -1781,7 +1781,7 @@ class MultifieldDrawsNew extends Component {
                                             ? this.openModel(this.props)
                                             : this.check()
                                     }
-                                    disabled={this.state.competitionStatus == 1 || publishStatus == 1 ? true : false}
+                                    disabled={this.state.competitionStatus == 1 || publishStatus == 1}
                                 >
                                     {AppConstants.publish}
                                 </Button>
@@ -1897,7 +1897,7 @@ class MultifieldDrawsNew extends Component {
             divisions: [],
             rounds: []
         }
-        if (this.state.publishPartModel.isShowPart == true) {
+        if (this.state.publishPartModel.isShowPart) {
             payload.divisions = this.state.selectedDivisions;
             payload.rounds = this.state.selectedRounds
         }

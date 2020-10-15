@@ -292,6 +292,7 @@ class LiveScoreAddIncident extends Component {
                             className="comp-venue-time-timepicker"
                             style={{ width: "100%" }}
                             onChange={(time) => this.props.liveScoreUpdateIncidentData(time, 'time')}
+                            onBlur={(e) => this.props.liveScoreUpdateIncidentData(e.target.value && moment(e.target.value, "HH:mm"), 'time')}
                             format="HH:mm"
                             placeholder="Select Time"
                             defaultOpenValue={moment("00:00", "HH:mm")}
@@ -337,18 +338,18 @@ class LiveScoreAddIncident extends Component {
                                     <Option value={team2Id}> {team2_Name}</Option>
                                 </Select>
                             ) : (
-                                    <Select
-                                        className="reg-form-multiple-select"
-                                        placeholder='Select Home Team'
-                                        style={{ width: "100%" }}
-                                        onChange={(teamId) => this.setTeamId(teamId)}
-                                        // value={incidentData.teamId ? incidentData.teamId : ''}
-                                        optionFilterProp="children"
-                                    >
-                                        <Option value={team1_Id}> {team_1}</Option>
-                                        <Option value={team2_Id}> {team_2}</Option>
-                                    </Select>
-                                )}
+                                <Select
+                                    className="reg-form-multiple-select"
+                                    placeholder='Select Home Team'
+                                    style={{ width: "100%" }}
+                                    onChange={(teamId) => this.setTeamId(teamId)}
+                                    // value={incidentData.teamId ? incidentData.teamId : ''}
+                                    optionFilterProp="children"
+                                >
+                                    <Option value={team1_Id}> {team_1}</Option>
+                                    <Option value={team2_Id}> {team_2}</Option>
+                                </Select>
+                            )}
                         </Form.Item>
                     </div>
                 </div>
@@ -392,7 +393,7 @@ class LiveScoreAddIncident extends Component {
                                 placeholder={AppConstants.selectIncident}
                                 style={{ width: "100%", }}
                                 onChange={(incident) => this.props.liveScoreUpdateIncidentData(incident, "injury")}
-                            // value={incidentData.injury ? incidentData.injury : undefined}
+                                // value={incidentData.injury ? incidentData.injury : undefined}
                             >
                                 {isArrayNotEmpty(incidentTypeResult) && incidentTypeResult.map((item) => (
                                     <Option value={item.id}>{item.name}</Option>
@@ -500,7 +501,7 @@ class LiveScoreAddIncident extends Component {
 
                         <div style={{ position: 'absolute', bottom: 71, left: 150 }}>
                             {(this.state.crossVideoIcon || incidentData.addVideo) && (
-                                <span className='user-remove-btn pl-2' style={{ cursor: 'pointer' }}>
+                                <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                     <img
                                         className="dot-image"
                                         src={AppImages.redCross}
@@ -560,7 +561,7 @@ class LiveScoreAddIncident extends Component {
         const { incidentData, incidentId, incidentMediaIds } = this.props.liveScoreIncidentState;
         let compId = null
 
-        if (this.state.umpireKey == 'umpire') {
+        if (this.state.umpireKey === 'umpire') {
             if (getUmpireCompetitonData()) {
                 const { id } = JSON.parse(getUmpireCompetitonData());
                 compId = id
@@ -656,7 +657,7 @@ class LiveScoreAddIncident extends Component {
 
                 {
                     umpireKey ?
-                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen == 'umpireList' ? "2" : "1"} />
+                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
                         :
                         <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
                 }

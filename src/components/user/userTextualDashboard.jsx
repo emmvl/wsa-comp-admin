@@ -417,7 +417,7 @@ class UserTextualDashboard extends Component {
 
                 <div className="col-sm search-flex">
                     <div className="row">
-                        <div style={{ marginRight: "25px", marginTop: "-14px" }}>
+                        <div style={{ marginRight: 25, marginTop: -12 }}>
                             <div className="reg-product-search-inp-width">
                                 <Input
                                     className="product-reg-search-input"

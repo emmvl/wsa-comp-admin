@@ -237,7 +237,7 @@ const columnsPlayer = [
     render: (borrowedPlayerStatus, record, index) => {
       return (
         <div>
-          {borrowedPlayerStatus == "Borrowed" ? "Yes" : "No"}
+          {borrowedPlayerStatus === "Borrowed" ? "Yes" : "No"}
         </div>
       );
     },
@@ -1251,7 +1251,7 @@ class UserModulePersonalDetail extends Component {
     this.setState({
       competitions: competitions,
       competition: competition,
-      yearRefId: yearRefId,
+      yearRefId,
       teams: teams,
       divisions: divisions,
     });
@@ -1339,7 +1339,7 @@ class UserModulePersonalDetail extends Component {
     let payload = {
       userId: userId,
       competitionId: competition.competitionUniqueKey,
-      yearRefId: yearRefId,
+      yearRefId,
     };
     if (tabKey == "1") {
       this.hanleActivityTableList(1, userId, competition, "player", yearRefId);
@@ -1386,18 +1386,18 @@ class UserModulePersonalDetail extends Component {
       competitionId: competition.competitionUniqueKey,
       organisationId: getOrganisationData().organisationUniqueKey,
       userId: this.state.userId,
-      yearRefId: yearRefId,
+      yearRefId,
       paging: {
         limit: 10,
         offset: page ? 10 * (page - 1) : 0,
       },
     };
-    if (key == "player") this.props.getUserModuleActivityPlayerAction(filter);
-    if (key == "parent") this.props.getUserModuleActivityParentAction(filter);
-    if (key == "manager") this.props.getUserModuleActivityManagerAction(filter);
-    if (key == "scorer") this.props.getScorerData(filter, 4, "ENDED");
-    if (key == "umpire") this.props.getUmpireData(filter, 15, "ENDED");
-    if (key == "umpireCoach") this.props.getCoachData(filter, 20, "ENDED");
+    if (key === "player") this.props.getUserModuleActivityPlayerAction(filter);
+    if (key === "parent") this.props.getUserModuleActivityParentAction(filter);
+    if (key === "manager") this.props.getUserModuleActivityManagerAction(filter);
+    if (key === "scorer") this.props.getScorerData(filter, 4, "ENDED");
+    if (key === "umpire") this.props.getUmpireData(filter, 15, "ENDED");
+    if (key === "umpireCoach") this.props.getCoachData(filter, 20, "ENDED");
   };
 
   handleRegistrationTableList = (page, userId, competition, yearRefId) => {
@@ -1405,7 +1405,7 @@ class UserModulePersonalDetail extends Component {
       competitionId: competition.competitionUniqueKey,
       userId: userId,
       organisationId: getOrganisationData().organisationUniqueKey,
-      yearRefId: yearRefId,
+      yearRefId,
       paging: {
         limit: 10,
         offset: page ? 10 * (page - 1) : 0,
@@ -1643,7 +1643,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsPlayer}
             dataSource={activityPlayerList}
             pagination={false}
-            loading={userState.activityPlayerOnLoad == true && true}
+            loading={userState.activityPlayerOnLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end ">
@@ -1684,7 +1684,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsParent}
             dataSource={activityParentList}
             pagination={false}
-            loading={userState.activityParentOnLoad == true && true}
+            loading={userState.activityParentOnLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -1724,7 +1724,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsScorer}
             dataSource={activityScorerList}
             pagination={false}
-            loading={userState.activityScorerOnLoad == true && true}
+            loading={userState.activityScorerOnLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -1765,7 +1765,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsManager}
             dataSource={activityManagerList}
             pagination={false}
-            loading={userState.activityManagerOnLoad == true && true}
+            loading={userState.activityManagerOnLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -1831,7 +1831,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsPersonalAddress}
             dataSource={personalByCompData}
             pagination={false}
-            loading={userState.onPersonLoad == true && true}
+            loading={userState.onPersonLoad && true}
           />
         </div>
         {primaryContacts != null && primaryContacts.length > 0 && (
@@ -1848,7 +1848,7 @@ class UserModulePersonalDetail extends Component {
                 columns={columnsPersonalPrimaryContacts}
                 dataSource={primaryContacts}
                 pagination={false}
-                loading={userState.onPersonLoad == true && true}
+                loading={userState.onPersonLoad && true}
               />
             </div>
           </div>
@@ -1867,7 +1867,7 @@ class UserModulePersonalDetail extends Component {
                 columns={columnsPersonalChildContacts}
                 dataSource={childContacts}
                 pagination={false}
-                loading={userState.onPersonLoad == true && true}
+                loading={userState.onPersonLoad && true}
               />
             </div>
           </div>
@@ -1881,7 +1881,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsPersonalEmergency}
             dataSource={userState.personalEmergency}
             pagination={false}
-            loading={userState.onPersonLoad == true && true}
+            loading={userState.onPersonLoad && true}
           />
         </div>
         <div className="row ">
@@ -2053,7 +2053,7 @@ class UserModulePersonalDetail extends Component {
                 {item.isDisability}
               </div>
             </div>
-            {item.isDisability == "Yes" ? (
+            {item.isDisability === "Yes" ? (
               <div
                 className="comp-dash-table-view mt-2"
                 style={{ paddingLeft: "0px" }}
@@ -2087,7 +2087,7 @@ class UserModulePersonalDetail extends Component {
             dataSource={userRegistrationList}
             pagination={false}
             loading={
-              this.props.userState.userRegistrationOnLoad == true && true
+              this.props.userState.userRegistrationOnLoad && true
             }
           />
         </div>
@@ -2132,7 +2132,7 @@ class UserModulePersonalDetail extends Component {
               ) : null}
             {item.registrationSettingsRefId == 7 ? (
               <div>
-                {item.contentValue == "No" ? (
+                {item.contentValue === "No" ? (
                   <div className="applicable-to-text">{item.contentValue}</div>
                 ) : (
                     <div className="table-responsive home-dash-table-view">
@@ -2281,7 +2281,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsHistory}
             dataSource={userHistoryList}
             pagination={false}
-            loading={userHistoryLoad == true && true}
+            loading={userHistoryLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -2367,7 +2367,7 @@ class UserModulePersonalDetail extends Component {
             columns={coachColumn}
             dataSource={activityCoachList}
             pagination={false}
-            loading={userState.coachDataLoad == true && true}
+            loading={userState.coachDataLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -2408,7 +2408,7 @@ class UserModulePersonalDetail extends Component {
             columns={umpireColumn}
             dataSource={activityUmpireList}
             pagination={false}
-            loading={userState.umpireDataLoad == true && true}
+            loading={userState.umpireDataLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -2510,7 +2510,7 @@ class UserModulePersonalDetail extends Component {
             columns={umpireActivityColumn}
             dataSource={umpireActivityList}
             pagination={false}
-            loading={umpireActivityOnLoad == true && true}
+            loading={umpireActivityOnLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end ">

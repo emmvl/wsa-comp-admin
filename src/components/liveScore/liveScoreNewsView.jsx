@@ -89,13 +89,13 @@ class LiveScoreNewsView extends Component {
         let newsState = this.props.liveScoreNewsState.notificationResult
         let onLoad_2Data = this.props.liveScoreNewsState
         if (nextProps.newsState !== newsState) {
-            if (onLoad_2Data.notifyLoad == false && this.state.getDataLoading == true) {
+            if (onLoad_2Data.notifyLoad == false && this.state.getDataLoading) {
                 if (newsState !== []) {
-                    history.push(this.state.id == "dashboard" ? "/liveScoreDashboard" : './liveScoreNewsList')
-                    // history.push(this.state.id == "dashboard" && "/liveScoreDashboard")
+                    history.push(this.state.id === "dashboard" ? "/liveScoreDashboard" : './liveScoreNewsList')
+                    // history.push(this.state.id === "dashboard" && "/liveScoreDashboard")
                 }
             }
-            if (onLoad_2Data.onLoad_2 == false && this.state.deleteLoading == true) {
+            if (onLoad_2Data.onLoad_2 == false && this.state.deleteLoading) {
                 if (this.props.liveScoreNewsState.deleteNews !== []) {
                     history.push({
                         pathname: '/liveScoreNewsList',
@@ -207,8 +207,8 @@ class LiveScoreNewsView extends Component {
     innerViewOfModal() {
         return (
             <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center', }}>
-                {this.state.isVideo == true ?
-                    <ReactPlayer url={this.state.modaldata} playing={this.state.visible == true} controls />
+                {this.state.isVideo ?
+                    <ReactPlayer url={this.state.modaldata} playing={this.state.visible} controls />
                 :
                     <img src={this.state.modaldata} height='250' width='250' />
                 }

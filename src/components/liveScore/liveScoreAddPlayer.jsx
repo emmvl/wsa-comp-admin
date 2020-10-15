@@ -62,7 +62,7 @@ class LiveScoreAddPlayer extends Component {
                 const { id } = JSON.parse(getUmpireCompetitonData())
                 this.props.getliveScoreTeams(id)
 
-                if (this.state.isEdit == true) {
+                if (this.state.isEdit) {
                     if (this.props.location.state.screen === 'editTeam') {
                         this.props.liveScoreUpdatePlayerDataAction({
                             playerId: this.state.playerData.mnbPlayerId,
@@ -101,7 +101,7 @@ class LiveScoreAddPlayer extends Component {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 this.props.getliveScoreTeams(id)
 
-                if (this.state.isEdit == true) {
+                if (this.state.isEdit) {
                     if (this.props.location.state.screen === 'editTeam') {
                         this.props.liveScoreUpdatePlayerDataAction({
                             playerId: this.state.playerData.mnbPlayerId,
@@ -155,7 +155,7 @@ class LiveScoreAddPlayer extends Component {
 
         if (data.files[0] !== undefined) {
             this.setState({ image: data.files[0], profileImage: URL.createObjectURL(data.files[0]) })
-            if (this.state.isEdit == true) {
+            if (this.state.isEdit) {
                 playerData.photoUrl = null
             }
         }
@@ -185,9 +185,9 @@ class LiveScoreAddPlayer extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
-                            {this.state.isEdit == true ? AppConstants.editPlayer : AppConstants.addPlayer}
+                            {this.state.isEdit ? AppConstants.editPlayer : AppConstants.addPlayer}
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </Header>
@@ -210,7 +210,7 @@ class LiveScoreAddPlayer extends Component {
                             <InputWithHead
                                 auto_complete='new-password'
                                 type='text'
-                                required={"required-field pb-0"}
+                                required="required-field pb-0"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.enterFirstName}
                                 onChange={(firstName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(firstName.target.value), 'firstName')}
@@ -223,8 +223,8 @@ class LiveScoreAddPlayer extends Component {
                     <div className="col-sm">
                         <Form.Item name='lastName' rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
                             <InputWithHead
-                                auto_complete='off'
-                                required={"required-field pb-0"}
+                                auto_complete="off"
+                                required="required-field pb-0"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.enterLastName}
                                 onChange={(lastName) => this.props.liveScoreUpdatePlayerDataAction(captializedString(lastName.target.value), 'lastName')}
@@ -249,7 +249,7 @@ class LiveScoreAddPlayer extends Component {
                             showTime={false}
                             name={'date'}
                             value={playerData.dateOfBirth && moment(playerData.dateOfBirth, "DD-MM-YYYY")}
-                        // value={playerData.dateOfBirth}
+                            // value={playerData.dateOfBirth}
                         />
                     </div>
                     <div className="col-sm">
@@ -279,7 +279,7 @@ class LiveScoreAddPlayer extends Component {
                         <InputWithHead required="required-field" heading={AppConstants.team} />
                         <Form.Item name='team' rules={[{ required: true, message: ValidationConstants.teamName }]}>
                             <Select
-                                loading={this.props.liveScoreState.onLoad == true && true}
+                                loading={this.props.liveScoreState.onLoad && true}
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(teamId) => this.props.liveScoreUpdatePlayerDataAction(teamId, 'teamId')}
                                 value={playerData.teamId}

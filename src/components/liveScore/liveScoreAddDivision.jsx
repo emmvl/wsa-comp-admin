@@ -56,7 +56,7 @@ class LiveScoreAddDivision extends Component {
                         <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                             <Breadcrumb separator=" > ">
                                 <Breadcrumb.Item className="breadcrumb-add">
-                                    {isEdit == true ? AppConstants.editDivision : AppConstants.addDivision}
+                                    {isEdit ? AppConstants.editDivision : AppConstants.addDivision}
                                 </Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
@@ -67,7 +67,7 @@ class LiveScoreAddDivision extends Component {
     }
 
     componentDidMount() {
-        if (this.state.isEdit == true) {
+        if (this.state.isEdit) {
             this.props.liveScoreUpdateDivisionAction(this.state.tableData, 'isEditDivision')
             this.setState({ loader: true })
             this.setInitalFiledValue()
@@ -78,8 +78,8 @@ class LiveScoreAddDivision extends Component {
     }
 
     componentDidUpdate() {
-        if (this.state.load == true && this.props.liveScoreDivisionState.onLoad == false) {
-            if (this.state.loader == true) {
+        if (this.state.load && this.props.liveScoreDivisionState.onLoad == false) {
+            if (this.state.loader) {
                 this.setInitalFiledValue()
                 this.setState({ loader: false })
             }

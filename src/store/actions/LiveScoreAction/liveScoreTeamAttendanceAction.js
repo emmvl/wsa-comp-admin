@@ -1,21 +1,15 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-function liveScoreTeamAttendanceListAction(competitionId, body, status, divisionId, roundId) {
-    const action = {
+function liveScoreTeamAttendanceListAction(competitionId, body, select_status, divisionId, roundId) {
+    return {
         type: ApiConstants.API_LIVE_SCORE_TEAM_ATTENDANCE_LIST_LOAD,
-        competitionId: competitionId,
-        body: body,
-        select_status: status,
-        divisionId: divisionId,
-        roundId: roundId
+        competitionId,
+        body,
+        select_status,
+        divisionId,
+        roundId
     }
-    console.log(action)
-    return action
 }
-
-
-
-
 
 export {
     liveScoreTeamAttendanceListAction,

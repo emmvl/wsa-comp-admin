@@ -88,8 +88,8 @@ function makeDetailDataObject(data) {
             ]
         }
     ]
-    productData['variantsChecked'] = isArrayNotEmpty(productData.variants) ? true : false
-    productData['taxApplicable'] = productData.tax > 0 ? true : false
+    productData['variantsChecked'] = isArrayNotEmpty(productData.variants)
+    productData['taxApplicable'] = productData.tax > 0
     productData["variants"] = isArrayNotEmpty(productData.variants) ? productData.variants : defaultVariant
     return productData
 }
@@ -129,7 +129,7 @@ function shopProductState(state = initialState, action) {
             };
 
 
-        /////////product listing get API 
+        /////////product listing get API
         case ApiConstants.API_GET_SHOP_PRODUCT_LISTING_LOAD:
             return { ...state, onLoad: true, error: null };
 
@@ -144,7 +144,7 @@ function shopProductState(state = initialState, action) {
                 error: null
             };
 
-        //////////Add product 
+        //////////Add product
         case ApiConstants.API_ADD_SHOP_PRODUCT_LOAD:
             return { ...state, onLoad: true, error: null };
 
@@ -185,7 +185,7 @@ function shopProductState(state = initialState, action) {
             }
             else if (action.key === "variantsChecked") {
                 state.productDetailData.variantsChecked = action.data
-                if (action.data == true) {
+                if (action.data) {
                     let firstVariantOptionPrice = state.productDetailData.variants[0].options[0].properties.price
                     if (firstVariantOptionPrice == 0) {
                         state.productDetailData.variants[0].options[0].properties.price = state.productDetailData.price
@@ -213,7 +213,7 @@ function shopProductState(state = initialState, action) {
                 error: null
             };
 
-        //////////////////delete product from the product listing API 
+        //////////////////delete product from the product listing API
         case ApiConstants.API_DELETE_SHOP_PRODUCT_LOAD:
             return { ...state, onLoad: true, error: null };
 

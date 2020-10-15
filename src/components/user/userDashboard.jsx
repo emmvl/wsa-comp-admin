@@ -356,7 +356,6 @@ class UserDashboard extends Component {
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }

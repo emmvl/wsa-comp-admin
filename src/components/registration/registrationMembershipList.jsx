@@ -190,7 +190,7 @@ class RegistrationMembershipList extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        if (this.props.registrationState.onLoad === false && this.state.deleteLoading == true) {
+        if (this.props.registrationState.onLoad === false && this.state.deleteLoading) {
             this.setState({
                 deleteLoading: false,
             })
@@ -302,7 +302,7 @@ class RegistrationMembershipList extends Component {
                         columns={columns}
                         dataSource={registrationState.regMembershipFeeListData}
                         pagination={false}
-                        loading={this.props.registrationState.onLoad == true && true}
+                        loading={this.props.registrationState.onLoad && true}
                         rowKey={(record, index) => record.membershipProductId + index}
                     />
                 </div>

@@ -15,8 +15,8 @@ function liveScoreScorerListAction(competitionId, roleId, body, search, sortBy, 
 function liveScoreScorerUpdate(data, key) {
     return {
         type: ApiConstants.API_LIVE_SCORE_UPDATE_SCORER,
-        data: data,
-        key: key,
+        data,
+        key,
     };
 }
 

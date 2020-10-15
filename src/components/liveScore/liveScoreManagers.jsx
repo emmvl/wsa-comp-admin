@@ -175,7 +175,7 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: "./liveScoreAssignMatch",
-                                state: { record: record }
+                                state: { record }
                             }}
                         >
                             <span>Assign to match</span>

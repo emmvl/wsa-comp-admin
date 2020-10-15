@@ -222,7 +222,7 @@ class LiveScoreAddManager extends Component {
     managerNewRadioBtnView() {
         const { managerData, teamId, teamResult } = this.props.liveScoreMangerState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
-        let hasError = this.state.hasError == true;
+        let hasError = this.state.hasError;
         return (
             <div className="content-view pt-4">
                 <div className="row">

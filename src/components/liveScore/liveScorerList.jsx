@@ -166,7 +166,7 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: "./liveScoreAssignMatch",
-                                state: { record: record }
+                                state: { record }
                             }}
                         >
                             <span>Assign to match</span>
@@ -417,7 +417,7 @@ class LiveScorerList extends Component {
                         columns={columns}
                         dataSource={dataSource}
                         pagination={false}
-                        loading={this.props.liveScoreScorerState.onLoad == true ? true : false}
+                        loading={this.props.liveScoreScorerState.onLoad}
                         rowKey={(record) => "scorerData" + record.id}
                     />
                 </div>

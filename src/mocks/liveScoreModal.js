@@ -9,7 +9,6 @@ function getPlayerListData(data) {
 }
 
 function getPlayerListObject(data) {
-    console.log('datadata', data)
     return {
         playerId: data.id,
         firstName: data.firstName,

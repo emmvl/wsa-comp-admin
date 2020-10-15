@@ -232,7 +232,7 @@ class RegistrationMembershipFee extends Component {
             let membershipTypesData = JSON.parse(JSON.stringify(this.props.registrationState.getDefaultMembershipProductTypes));
             let finalMembershipTypes = []
             membershipTypesData.map((item) => {
-                if (item.isMemebershipType == true) {
+                if (item.isMemebershipType) {
                     if (item.membershipProductTypeRefId > 0) {
                         delete item['membershipProductTypeRefName']
                     }
@@ -645,7 +645,7 @@ class RegistrationMembershipFee extends Component {
                                                     <Radio.Group
                                                         className="reg-competition-radio"
                                                         onChange={(e) => this.allowTeamRegistrationPlayer(e.target.value, index, 'allowTeamRegistrationTypeRefId')}
-                                                        setFieldsValue={item.allowTeamRegistrationTypeRefId}
+                                                        value={item.allowTeamRegistrationTypeRefId}
                                                         disabled={this.state.membershipIsUsed}
                                                     >
                                                         {(allowTeamRegistration || []).map((fix) => (
@@ -673,7 +673,7 @@ class RegistrationMembershipFee extends Component {
                 >
                     <InputWithHead
                         auto_complete="new-membershipTypeName"
-                        required={"pt-0 mt-0"}
+                        required="pt-0 mt-0"
                         heading={AppConstants.membershipTypeName}
                         placeholder={AppConstants.pleaseEnterMembershipTypeName}
                         onChange={(e) => this.setState({ newNameMembershipType: e.target.value })}

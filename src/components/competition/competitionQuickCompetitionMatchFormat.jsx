@@ -75,7 +75,7 @@ class QuickCompetitionMatchFormat extends Component {
             let competitionFormatState = this.props.competitionFormatState;
             let competitionModuleState = this.props.competitionModuleState;
             if (nextProps.competitionFormatState != competitionFormatState) {
-                if (competitionFormatState.onLoad == false && this.state.getDataLoading == true) {
+                if (competitionFormatState.onLoad == false && this.state.getDataLoading) {
                     this.setState({
                         getDataLoading: false,
                     })
@@ -96,7 +96,7 @@ class QuickCompetitionMatchFormat extends Component {
                 if (competitionFormatState.onLoad == false && this.state.loading === true) {
                     this.setState({ loading: false });
                     if (!competitionFormatState.error) {
-                        if (this.state.buttonPressed == "save") {
+                        if (this.state.buttonPressed === "save") {
                             if (this.state.isFinalAvailable) {
                                 history.push('/competitionFinals');
                             } else {
@@ -144,7 +144,7 @@ class QuickCompetitionMatchFormat extends Component {
 
     apiCalls = (competitionId, yearRefId) => {
         let payload = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: this.state.organisationId
         }
@@ -247,7 +247,7 @@ class QuickCompetitionMatchFormat extends Component {
         this.setState({
             deleteModalVisible: flag
         });
-        if (key == "ok") {
+        if (key === "ok") {
             this.deleteCompetitionFormatDivision(competionFormatDivisions, index);
         }
     }
@@ -272,19 +272,19 @@ class QuickCompetitionMatchFormat extends Component {
     onChangeSetValue = (id, fieldName) => {
         let data = this.props.competitionFormatState.competitionFormatList;
         let fixtureTemplateId = null;
-        if (fieldName == "noOfRounds") {
+        if (fieldName === "noOfRounds") {
             // data.fixtureTemplates.map((item, index) => {
             //     if (item.noOfRounds == id) {
             //         fixtureTemplateId = item.id;
             //     }
             // });
             // this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
-        } else if (fieldName == "competitionFormatRefId") {
+        } else if (fieldName === "competitionFormatRefId") {
             if (id != 4) {
                 this.props.updateCompetitionFormatAction(null, "noOfRounds");
                 // this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
             }
-        } else if (fieldName == "matchTypeRefId") {
+        } else if (fieldName === "matchTypeRefId") {
             this.setFormFieldValue();
             // this.setState({matchTypeRefStateId: id})
         }
@@ -293,13 +293,13 @@ class QuickCompetitionMatchFormat extends Component {
     }
 
     onChangeSetCompFormatDivisionValue = (id, fieldName, competitionFormatDivisions, index) => {
-        if (fieldName == "matchDuration") {
+        if (fieldName === "matchDuration") {
             competitionFormatDivisions[index].matchDuration = id;
-        } else if (fieldName == "mainBreak") {
+        } else if (fieldName === "mainBreak") {
             competitionFormatDivisions[index].mainBreak = id;
-        } else if (fieldName == "qtrBreak") {
+        } else if (fieldName === "qtrBreak") {
             competitionFormatDivisions[index].qtrBreak = id;
-        } else if (fieldName == "timeBetweenGames") {
+        } else if (fieldName === "timeBetweenGames") {
             competitionFormatDivisions[index].timeBetweenGames = id;
         }
         this.props.updateCompetitionFormatAction(competitionFormatDivisions, 'competionFormatDivisions');
@@ -309,7 +309,7 @@ class QuickCompetitionMatchFormat extends Component {
         this.setState({
             allDivisionVisible: flag
         });
-        if (key == "ok") {
+        if (key === "ok") {
             this.performAllDivisionOperation(true, competionFormatDivisions, index);
         }
     }
@@ -505,7 +505,7 @@ class QuickCompetitionMatchFormat extends Component {
                         <Radio.Group
                             className="reg-competition-radio"
                             onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionFormatRefId')}
-                            setFieldsValue={data.competitionFormatRefId}
+                            value={data.competitionFormatRefId}
                         >
                             <div className="fluid-width">
                                 <div className="row">
@@ -694,7 +694,7 @@ class QuickCompetitionMatchFormat extends Component {
                                             heading={AppConstants.matchDuration}
                                             required="required-field"
                                             placeholder={AppConstants.mins}
-                                            setFieldsValue={item.matchDuration}
+                                            value={item.matchDuration}
                                             onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'matchDuration', data.competionFormatDivisions, index)}
                                         />
                                     </Form.Item>
@@ -704,7 +704,7 @@ class QuickCompetitionMatchFormat extends Component {
                                         <Form.Item
                                             name={`mainBreak${index}`}
                                             rules={[{
-                                                required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false),
+                                                required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3)),
                                                 message: ValidationConstants.mainBreak
                                             }]}
                                         >
@@ -713,7 +713,7 @@ class QuickCompetitionMatchFormat extends Component {
                                                 heading={AppConstants.mainBreak}
                                                 required={(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? "required-field" : null}
                                                 placeholder={AppConstants.mins}
-                                                setFieldsValue={item.mainBreak}
+                                                value={item.mainBreak}
                                                 onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'mainBreak', data.competionFormatDivisions, index)}
                                             />
                                         </Form.Item>
@@ -724,7 +724,7 @@ class QuickCompetitionMatchFormat extends Component {
                                         <Form.Item
                                             name={`qtrBreak${index}`}
                                             rules={[{
-                                                required: (data.matchTypeRefId == 3 ? true : false),
+                                                required: (data.matchTypeRefId == 3),
                                                 message: ValidationConstants.qtrBreak
                                             }]}
                                         >
@@ -733,7 +733,7 @@ class QuickCompetitionMatchFormat extends Component {
                                                 heading={AppConstants.qtrBreak}
                                                 placeholder={AppConstants.mins}
                                                 required={(data.matchTypeRefId == 3) ? "required-field" : null}
-                                                setFieldsValue={item.qtrBreak}
+                                                value={item.qtrBreak}
                                                 onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'qtrBreak', data.competionFormatDivisions, index)}
                                             />
                                         </Form.Item>
@@ -750,7 +750,7 @@ class QuickCompetitionMatchFormat extends Component {
                                                 heading={AppConstants.timeBetweenMatches}
                                                 placeholder={AppConstants.mins}
                                                 required="required-field"
-                                                setFieldsValue={item.timeBetweenGames}
+                                                value={item.timeBetweenGames}
                                                 onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'timeBetweenGames', data.competionFormatDivisions, index)}
                                             />
                                         </Form.Item>
@@ -873,7 +873,7 @@ class QuickCompetitionMatchFormat extends Component {
                     {this.headerView()}
                     <Form
                         ref={this.formRef}
-                        autocomplete="off"
+                        autoComplete="off"
                         onFinish={this.saveCompetitionFormats}
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name);

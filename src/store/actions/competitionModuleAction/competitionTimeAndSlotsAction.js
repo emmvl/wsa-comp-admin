@@ -6,7 +6,7 @@ function getCompetitionWithTimeSlots(year, competitionId, alldata) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD,
         year: year,
-        competitionId: competitionId,
+        competitionId,
         alldata: alldata
     }
     return action;
@@ -15,10 +15,10 @@ function getCompetitionWithTimeSlots(year, competitionId, alldata) {
 function addRemoveTimeSlot(index, item, key, parentIndex) {
     const action = {
         type: ApiConstants.Api_ADD_REMOVE_TIME_SLOT_TABLE,
-        index: index,
-        item: item,
-        key: key,
-        parentIndex: parentIndex
+        index,
+        item,
+        key,
+        parentIndex
 
     }
     return action
@@ -49,11 +49,11 @@ function UpdateTimeSlotsDataManual(value, key, contentType, index, mainId, id, p
     };
 }
 
-// post time slot Data 
+// post time slot Data
 function addTimeSlotDataPost(payload) {
     const action = {
         type: ApiConstants.API_COMPETITION_TIMESLOT_POST_LOAD,
-        payload: payload
+        payload
     }
     return action
 }

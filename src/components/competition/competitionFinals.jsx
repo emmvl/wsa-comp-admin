@@ -88,7 +88,7 @@ class CompetitionFinals extends Component {
         let competitionFinalsState = this.props.competitionFinalsState;
         let competitionModuleState = this.props.competitionModuleState;
         if (nextProps.competitionFinalsState != competitionFinalsState) {
-            if (competitionFinalsState.onLoad == false && this.state.getDataLoading == true) {
+            if (competitionFinalsState.onLoad == false && this.state.getDataLoading) {
                 this.setState({
                     getDataLoading: false,
                 })
@@ -114,7 +114,7 @@ class CompetitionFinals extends Component {
             if (competitionFinalsState.onLoad == false && this.state.loading === true) {
                 this.setState({ loading: false });
                 if (!competitionFinalsState.error) {
-                    if (this.state.buttonPressed == "save") {
+                    if (this.state.buttonPressed === "save") {
                         if (competitionFinalsState.status == 4) {
                             message.error(competitionFinalsState.errorMessage);
                         } else {
@@ -153,7 +153,7 @@ class CompetitionFinals extends Component {
             }
         }
 
-        if (this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false) {
+        if (this.state.roundLoad && this.props.drawsState.onActRndLoad == false) {
             this.setState({ roundLoad: false });
             if (this.props.drawsState.activeDrawsRoundsData != null &&
                 this.props.drawsState.activeDrawsRoundsData.length > 0) {
@@ -174,7 +174,7 @@ class CompetitionFinals extends Component {
 
     apiCalls = (competitionId, yearRefId) => {
         let payload = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: this.state.organisationId
         }
@@ -264,7 +264,7 @@ class CompetitionFinals extends Component {
     }
 
     onChangeSetValue = (id, fieldName, index, subIndex) => {
-        if (index == "venueList") {
+        if (index === "venueList") {
             let obj = {
                 venueListArray: fieldName,
                 venueList: "venueList"
@@ -277,7 +277,7 @@ class CompetitionFinals extends Component {
     }
 
     handleGenerateDrawModal = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             if (this.state.generateRoundId != null) {
                 this.callGenerateDraw();
                 this.setState({ drawGenerateModalVisible: false });
@@ -507,7 +507,7 @@ class CompetitionFinals extends Component {
         const {finalTypeRefId } = this.props.competitionFinalsState;
         let appState = this.props.appState;
         let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         let detailsData = this.props.competitionFeesState
         return (
             <div>
@@ -581,7 +581,7 @@ class CompetitionFinals extends Component {
                                         >
                                             <Select
                                                 disabled={disabledStatus}
-                                                setFieldsValue={data.finalsFixtureTemplateRefId}
+                                                value={data.finalsFixtureTemplateRefId}
                                                 onChange={(e) => this.onChangeSetValue(e, 'finalsFixtureTemplateRefId', index)}
                                             >
                                                 {(finalFixtureTemplateData || []).map((fix, fixIndex) => (
@@ -596,7 +596,7 @@ class CompetitionFinals extends Component {
                                         >
                                             <Select
                                                 disabled={disabledStatus}
-                                                setFieldsValue={data.poolTopRefId}
+                                                value={data.poolTopRefId}
                                                 onChange={(e) => this.onChangeSetValue(e, 'poolTopRefId', index)}
                                             >
                                                 {(this.getFinalFixtureTemplateData(data.hasTop4) || []).map((fix, fixIndex) => (
@@ -627,7 +627,7 @@ class CompetitionFinals extends Component {
                                             id={AppUniqueId.final_Match_Type_dpdn}
                                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                             onChange={(matchType) => this.onChangeSetValue(matchType, 'finalsMatchTypeRefId', index)}
-                                            setFieldsValue={data.finalsMatchTypeRefId}
+                                            value={data.finalsMatchTypeRefId}
                                         >
                                             {(appState.matchTypes || []).map((item, index) => {
                                                 if (item.name !== "SINGLE") {
@@ -656,7 +656,7 @@ class CompetitionFinals extends Component {
                                                         heading={AppConstants.matchDuration}
                                                         required="required-field"
                                                         placeholder={AppConstants.mins}
-                                                        setFieldsValue={data.matchDuration}
+                                                        value={data.matchDuration}
                                                         onChange={(e) => this.onChangeSetValue(e.target.value, 'matchDuration', index)}
                                                     />
                                                 </Form.Item>
@@ -674,7 +674,7 @@ class CompetitionFinals extends Component {
                                                             heading={AppConstants.mainBreak}
                                                             required="required-field"
                                                             placeholder={AppConstants.mins}
-                                                            setFieldsValue={data.mainBreak}
+                                                            value={data.mainBreak}
                                                             onChange={(e) => this.onChangeSetValue(e.target.value, 'mainBreak', index)}
                                                         />
                                                     </Form.Item>
@@ -693,7 +693,7 @@ class CompetitionFinals extends Component {
                                                             heading={AppConstants.qtrBreak}
                                                             required="required-field"
                                                             placeholder={AppConstants.mins}
-                                                            setFieldsValue={data.qtrBreak}
+                                                            value={data.qtrBreak}
                                                             onChange={(e) => this.onChangeSetValue(e.target.value, 'qtrBreak', index)}
                                                         />
                                                     </Form.Item>
@@ -712,7 +712,7 @@ class CompetitionFinals extends Component {
                                                             heading={AppConstants.betweenGames}
                                                             required="required-field"
                                                             placeholder={AppConstants.mins}
-                                                            setFieldsValue={data.timeBetweenGames}
+                                                            value={data.timeBetweenGames}
                                                             onChange={(e) => this.onChangeSetValue(e.target.value, 'timeBetweenGames', index)}
                                                         />
                                                     </Form.Item>
@@ -757,7 +757,7 @@ class CompetitionFinals extends Component {
                                                                 <Select
                                                                     disabled={disabledStatus}
                                                                     style={{ marginBottom: "20px" }}
-                                                                    setFieldsValue={whoPlaysWhoItem.wpwPool1}
+                                                                    value={whoPlaysWhoItem.wpwPool1}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool1', index, whoPlaysWhoIndex)}
                                                                 >
                                                                     {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
@@ -775,7 +775,7 @@ class CompetitionFinals extends Component {
                                                                 <Select
                                                                     disabled={disabledStatus}
                                                                     style={{ marginBottom: "20px" }}
-                                                                    setFieldsValue={whoPlaysWhoItem.wpwPool2}
+                                                                    value={whoPlaysWhoItem.wpwPool2}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool2', index, whoPlaysWhoIndex)}
                                                                 >
                                                                     {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
@@ -792,7 +792,7 @@ class CompetitionFinals extends Component {
                                                             >
                                                                 <Select
                                                                     disabled={disabledStatus}
-                                                                    setFieldsValue={whoPlaysWhoItem.wpwPool3}
+                                                                    value={whoPlaysWhoItem.wpwPool3}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool3', index, whoPlaysWhoIndex)}
                                                                 >
                                                                 {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
@@ -809,7 +809,7 @@ class CompetitionFinals extends Component {
                                                             >
                                                                 <Select
                                                                     disabled={disabledStatus}
-                                                                    setFieldsValue={whoPlaysWhoItem.wpwPool4}
+                                                                    value={whoPlaysWhoItem.wpwPool4}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool4', index, whoPlaysWhoIndex)}
                                                                 >
                                                                     {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
@@ -843,7 +843,7 @@ class CompetitionFinals extends Component {
         // let venueList = this.props.competitionFinalsState.competitionVenuesList;
         let appState = this.props.appState;
         let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         // let detailsData = this.props.competitionFeesState
         return (
             <div>
@@ -861,7 +861,7 @@ class CompetitionFinals extends Component {
                                 id={AppUniqueId.applyToRefId_radiobtn}
                                 className="reg-competition-radio"
                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'applyToRefId', index)}
-                                setFieldsValue={data.applyToRefId}
+                                value={data.applyToRefId}
                             >
                                 {(applyToData || []).map((app) => (
                                     <Radio key={app.id} value={app.id}>{app.description}</Radio>
@@ -879,7 +879,7 @@ class CompetitionFinals extends Component {
                                 id={AppUniqueId.finals_extratimetype_dpdn}
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(matchType) => this.onChangeSetValue(matchType, 'extraTimeMatchTypeRefId', index)}
-                                setFieldsValue={data.extraTimeMatchTypeRefId}
+                                value={data.extraTimeMatchTypeRefId}
                             >
                                 {(appState.matchTypes || []).map((item) => (
                                     <Option key={item.id} value={item.id}>{item.description}</Option>
@@ -903,7 +903,7 @@ class CompetitionFinals extends Component {
                                             heading={AppConstants.extraTimeDuration}
                                             required="required-field"
                                             placeholder={AppConstants.mins}
-                                            setFieldsValue={data.extraTimeDuration}
+                                            value={data.extraTimeDuration}
                                             onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDuration', index)}
                                         />
                                     </Form.Item>
@@ -920,7 +920,7 @@ class CompetitionFinals extends Component {
                                                 heading={AppConstants.extraTimeMainBreak}
                                                 required="required-field"
                                                 placeholder={AppConstants.mins}
-                                                setFieldsValue={data.extraTimeMainBreak}
+                                                value={data.extraTimeMainBreak}
                                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeMainBreak', index)}
                                             />
                                         </Form.Item>
@@ -937,7 +937,7 @@ class CompetitionFinals extends Component {
                                                 disabled={disabledStatus}
                                                 heading={AppConstants.extraTimeBreak}
                                                 placeholder={AppConstants.mins}
-                                                setFieldsValue={data.extraTimeBreak}
+                                                value={data.extraTimeBreak}
                                                 required="required-field"
                                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeBreak', index)}
                                             />
@@ -955,7 +955,7 @@ class CompetitionFinals extends Component {
                                                 disabled={disabledStatus}
                                                 heading={AppConstants.beaforeExtraTime}
                                                 placeholder={AppConstants.mins}
-                                                setFieldsValue={data.beforeExtraTime}
+                                                value={data.beforeExtraTime}
                                                 required="required-field"
                                                 onChange={(e) => this.onChangeSetValue(e.target.value, 'beforeExtraTime', index)}
                                             />
@@ -979,7 +979,7 @@ class CompetitionFinals extends Component {
                                     id={AppUniqueId.extratime_ifDraw_radiobtn}
                                     className="reg-competition-radio"
                                     onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
-                                    setFieldsValue={data.extraTimeDrawRefId}
+                                    value={data.extraTimeDrawRefId}
                                 >
                                     {(extraTimeDrawData || []).map((ex, exIndex) => (
                                         <Radio key={ex.id} value={ex.id}>{ex.description}</Radio>
@@ -997,7 +997,7 @@ class CompetitionFinals extends Component {
     footerView = () => {
         let finalsList = this.props.competitionFinalsState.competitionFinalsList;
         let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
-        let isPublished = this.state.competitionStatus == 1 ? true : false
+        let isPublished = this.state.competitionStatus == 1
         return (
             <div className="fluid-width">
                 {finalsList != null && finalsList.length > 0 && (
@@ -1023,7 +1023,7 @@ class CompetitionFinals extends Component {
                                         style={{ height: '100%' }}
                                         onMouseEnter={() =>
                                             this.setState({
-                                                tooltipVisibleDelete: isPublished ? true : false,
+                                                tooltipVisibleDelete: isPublished,
                                             })
                                         }
                                         onMouseLeave={() =>
@@ -1085,7 +1085,7 @@ class CompetitionFinals extends Component {
 
                     <Form
                         ref={this.formRef}
-                        autocomplete="off"
+                        autoComplete="off"
                         onFinish={this.saveCompetitionFinals}
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name)

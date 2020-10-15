@@ -266,7 +266,7 @@ const columnsTodaysMatch = [
         key: 'scorer1Status',
         sorter: (a, b, scorer1Status) => checkSorting(a, b, scorer1Status),
         render: (scorer1Status) =>
-            <span>{scorer1Status ? scorer1Status.status == "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
+            <span>{scorer1Status ? scorer1Status.status === "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
 
     }, {
         title: "Scorer 2",
@@ -274,7 +274,7 @@ const columnsTodaysMatch = [
         key: 'scorer2Status',
         sorter: (a, b, scorer2Status) => checkSorting(a, b, scorer2Status),
         render: (scorer2Status, record) =>
-            <span >{record.competition.scoringType == 'SINGLE' ? "" : scorer2Status ? scorer2Status.status == "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
+            <span >{record.competition.scoringType == 'SINGLE' ? "" : scorer2Status ? scorer2Status.status === "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
     },
     {
         title: "Player Att. Team A",
@@ -399,7 +399,7 @@ const columnsTodaysMatch_1 = [
         key: 'scorer1Status',
         sorter: (a, b) => tableSort(a, b, "scorer1Status"),
         render: (scorer1Status) =>
-            <span>{scorer1Status ? scorer1Status.status == "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
+            <span>{scorer1Status ? scorer1Status.status === "YES" ? "Accepted" : "Not Accepted" : "Not Set"}</span>
 
     },
     {

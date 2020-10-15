@@ -73,7 +73,7 @@ import { NavLink } from 'react-router-dom';
 import Loader from '../../customComponents/loader';
 import { /* getUserId, */ getOrganisationData } from '../../util/sessionStorage';
 import { getAffiliateToOrganisationAction } from '../../store/actions/userAction/userAction';
-import CustumToolTip from 'react-png-tooltip';
+import CustomToolTip from 'react-png-tooltip';
 import { registrationRestrictionTypeAction } from '../../store/actions/commonAction/commonAction';
 import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 
@@ -2750,7 +2750,7 @@ class RegistrationCompetitionFee extends Component {
                                 <Input
                                     className="input-inside-table-fees"
                                     required="required-field pt-0 pb-0"
-                                    setFieldsValue={divisionName}
+                                    value={divisionName}
                                     onChange={(e) =>
                                         this.divisionTableDataOnchange(
                                             e.target.value,
@@ -2772,9 +2772,9 @@ class RegistrationCompetitionFee extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
-                            <CustumToolTip placement="bottom" background="#ff8237">
+                            <CustomToolTip placement="bottom" background="#ff8237">
                                 <span>{AppConstants.genderRestrictionMsg}</span>
-                            </CustumToolTip>
+                            </CustomToolTip>
                         );
                     },
                     render: (genderRestriction, record, index) => (
@@ -2819,7 +2819,7 @@ class RegistrationCompetitionFee extends Component {
                                                 'genderRefId'
                                             )
                                         }
-                                        setFieldsValue={genderRefId}
+                                        value={genderRefId}
                                         placeholder="Select"
                                         disabled={this.state.permissionState.divisionsDisable}
                                     >
@@ -2841,9 +2841,9 @@ class RegistrationCompetitionFee extends Component {
                     filterDropdown: true,
                     filterIcon: () => {
                         return (
-                            <CustumToolTip placement="bottom" background="#ff8237">
+                            <CustomToolTip placement="bottom" background="#ff8237">
                                 <span>{AppConstants.ageRestrictionMsg}</span>
-                            </CustumToolTip>
+                            </CustomToolTip>
                         );
                     },
                     render: (ageRestriction, record, index) => (
@@ -2878,7 +2878,7 @@ class RegistrationCompetitionFee extends Component {
                                 }]}
                             >
                                 <DatePicker
-                                    size="large"
+                                    size="default"
                                     placeholder="dd-mm-yyyy"
                                     className="comp-venue-time-datepicker"
                                     style={{ width: '100%', minWidth: 135 }}
@@ -2893,7 +2893,7 @@ class RegistrationCompetitionFee extends Component {
                                     format="DD-MM-YYYY"
                                     showTime={false}
                                     disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
-                                    setFieldsValue={fromDate !== null && moment(fromDate)}
+                                    value={fromDate !== null && moment(fromDate)}
                                     disabledDate={(d) => !d || d.isSameOrAfter(record.toDate)}
                                 />
                             </Form.Item>
@@ -2916,7 +2916,7 @@ class RegistrationCompetitionFee extends Component {
                                 }]}
                             >
                                 <DatePicker
-                                    size="large"
+                                    size="default"
                                     placeholder="dd-mm-yyyy"
                                     className="comp-venue-time-datepicker"
                                     style={{ width: '100%', minWidth: 135 }}
@@ -2931,7 +2931,7 @@ class RegistrationCompetitionFee extends Component {
                                     format="DD-MM-YYYY"
                                     showTime={false}
                                     disabled={!record.ageRestriction || this.state.permissionState.divisionsDisable}
-                                    setFieldsValue={toDate !== null && moment(toDate)}
+                                    value={toDate !== null && moment(toDate)}
                                     // disabledDate={d => !d || d.isSameOrBefore(record.fromDate)}
                                     disabledDate={(d) => moment(record.fromDate).isSameOrAfter(d, 'day')}
                                 />
@@ -2986,7 +2986,7 @@ class RegistrationCompetitionFee extends Component {
             this.setState({ loading: false });
             if (!competitionFeesState.error) {
                 window.scrollTo(0, 0);
-                let competitionTabKey = this.state.isCreatorEdit == true && this.state.competitionTabKey == "4"
+                let competitionTabKey = this.state.isCreatorEdit && this.state.competitionTabKey == "4"
                     ? "6"
                     : JSON.stringify(JSON.parse(this.state.competitionTabKey) + 1);
                 this.setState({
@@ -3003,13 +3003,13 @@ class RegistrationCompetitionFee extends Component {
             ) {
                 history.push('/registrationCompetitionList');
             }
-            if (this.state.buttonPressed == "register") {
+            if (this.state.buttonPressed === "register") {
                 this.navigateToRegistrationForm()
             }
         }
 
         if (nextProps.competitionFeesState !== competitionFeesState) {
-            if (competitionFeesState.getCompAllDataOnLoad === false && this.state.getDataLoading == true) {
+            if (competitionFeesState.getCompAllDataOnLoad === false && this.state.getDataLoading) {
                 let registrationInviteesRefId = 7;
                 let inviteeArray = competitionFeesState.competitionDetailData.invitees;
                 if (isArrayNotEmpty(inviteeArray)) {
@@ -3145,7 +3145,7 @@ class RegistrationCompetitionFee extends Component {
         let orgData = getOrganisationData();
         let competitionId = this.props.location.state ? this.props.location.state.id : null;
         let affiliateOrgId = this.props.location.state ? this.props.location.state.affiliateOrgId : null;
-        this.setState({ organisationTypeRefId: orgData.organisationTypeRefId, affiliateOrgId: affiliateOrgId });
+        this.setState({ organisationTypeRefId: orgData.organisationTypeRefId, affiliateOrgId });
         this.apiCalls(competitionId, orgData.organisationUniqueKey, affiliateOrgId);
         this.setDetailsFieldValue();
         let checkVenueScreen = this.props.location.state && this.props.location.state.venueScreen
@@ -3193,11 +3193,11 @@ class RegistrationCompetitionFee extends Component {
         let selectedCasualTeamPaymentArr = this.props.competitionFeesState.selectedCasualTeamFee;
         let selectedPaymentMethods = this.props.competitionFeesState.selectedPaymentMethods;
 
-        selectedCasualPaymentArr = selectedCasualPaymentArr.filter(x => x.isChecked == true);
-        SelectedSeasonalPaymentArr = SelectedSeasonalPaymentArr.filter(x => x.isChecked == true);
-        selectedSeasonalTeamPaymentArr = selectedSeasonalTeamPaymentArr.filter(x => x.isChecked == true);
-        selectedCasualTeamPaymentArr = selectedCasualTeamPaymentArr.filter(x => x.isChecked == true);
-        selectedPaymentMethods = selectedPaymentMethods.filter(x => x.isChecked == true);
+        selectedCasualPaymentArr = selectedCasualPaymentArr.filter(x => x.isChecked);
+        SelectedSeasonalPaymentArr = SelectedSeasonalPaymentArr.filter(x => x.isChecked);
+        selectedSeasonalTeamPaymentArr = selectedSeasonalTeamPaymentArr.filter(x => x.isChecked);
+        selectedCasualTeamPaymentArr = selectedCasualTeamPaymentArr.filter(x => x.isChecked);
+        selectedPaymentMethods = selectedPaymentMethods.filter(x => x.isChecked);
 
         let selectedSeasonalInstalmentDates = this.props.competitionFeesState.selectedSeasonalInstalmentDates;
         let selectedTeamSeasonalInstalmentDates = this.props.competitionFeesState.selectedTeamSeasonalInstalmentDates;
@@ -3273,7 +3273,7 @@ class RegistrationCompetitionFee extends Component {
 
     ////check the division objects does not contain empty division array
     checkDivisionEmpty(data) {
-        if (isArrayNotEmpty(data) == true) {
+        if (isArrayNotEmpty(data)) {
             for (let i in data) {
                 if (data[i].divisions.length === 0) {
                     return true;
@@ -3320,7 +3320,7 @@ class RegistrationCompetitionFee extends Component {
         );
 
         let discountBody = {
-            competitionId: competitionId,
+            competitionId,
             statusRefId: this.state.statusRefId,
             competitionDiscounts: [
                 {
@@ -3372,7 +3372,7 @@ class RegistrationCompetitionFee extends Component {
                     this.props.regSaveCompetitionFeeDiscountAction(discountBody, competitionId, this.state.affiliateOrgId);
                     this.setState({ loading: true });
                 } else {
-                    if (this.checkDivisionEmpty(divisionArrayData) == true) {
+                    if (this.checkDivisionEmpty(divisionArrayData)) {
                         message.config({ duration: 0.9, maxCount: 1 })
                         message.error(ValidationConstants.pleaseFillDivisionBeforePublishing);
                     } else if (fee_data.length === 0) {
@@ -3381,7 +3381,6 @@ class RegistrationCompetitionFee extends Component {
                 }
             }
         }
-
     };
 
     setDetailsFieldValue() {
@@ -3453,8 +3452,8 @@ class RegistrationCompetitionFee extends Component {
         let finalpostarray = [];
 
         for (let i in fee_data) {
-            if (fee_data[i].isSeasonal == true && fee_data[i].isCasual == true) {
-                if (fee_data[i].isAllType == 'allDivisions') {
+            if (fee_data[i].isSeasonal && fee_data[i].isCasual) {
+                if (fee_data[i].isAllType === 'allDivisions') {
                     feeSeasonalData = fee_data[i].seasonal.allType;
                     feeCasualData = fee_data[i].casual.allType;
 
@@ -3481,7 +3480,7 @@ class RegistrationCompetitionFee extends Component {
                             }
                         }
                     }
-                    if (fee_data[i].isTeamSeasonal == true) {
+                    if (fee_data[i].isTeamSeasonal) {
                         feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeSeasonalTeamData) {
@@ -3503,7 +3502,7 @@ class RegistrationCompetitionFee extends Component {
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual == true) {
+                    if (fee_data[i].isTeamCasual) {
                         feeCasualTeamData = fee_data[i].casualTeam.allType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeCasualTeamData) {
@@ -3549,7 +3548,7 @@ class RegistrationCompetitionFee extends Component {
                             }
                         }
                     }
-                    if (fee_data[i].isTeamSeasonal == true) {
+                    if (fee_data[i].isTeamSeasonal) {
                         feeSeasonalTeamData = fee_data[i].seasonalTeam.perType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeSeasonalTeamData) {
@@ -3571,7 +3570,7 @@ class RegistrationCompetitionFee extends Component {
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual == true) {
+                    if (fee_data[i].isTeamCasual) {
                         feeCasualTeamData = fee_data[i].casualTeam.perType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeCasualTeamData) {
@@ -3592,11 +3591,11 @@ class RegistrationCompetitionFee extends Component {
 
                     finalPostData = [...feeSeasonalData];
                 }
-            } else if (fee_data[i].isSeasonal == true && fee_data[i].isCasual == false) {
-                if (fee_data[i].isAllType == 'allDivisions') {
+            } else if (fee_data[i].isSeasonal && fee_data[i].isCasual == false) {
+                if (fee_data[i].isAllType === 'allDivisions') {
                     feeSeasonalData = fee_data[i].seasonal.allType;
 
-                    if (fee_data[i].isTeamSeasonal == true) {
+                    if (fee_data[i].isTeamSeasonal) {
                         feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeSeasonalTeamData) {
@@ -3627,7 +3626,7 @@ class RegistrationCompetitionFee extends Component {
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual == true) {
+                    if (fee_data[i].isTeamCasual) {
                         feeCasualTeamData = fee_data[i].casualTeam.allType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeCasualTeamData) {
@@ -3664,7 +3663,7 @@ class RegistrationCompetitionFee extends Component {
                 } else {
                     feeSeasonalData = fee_data[i].seasonal.perType;
 
-                    if (fee_data[i].isTeamSeasonal == true) {
+                    if (fee_data[i].isTeamSeasonal) {
                         feeSeasonalTeamData = fee_data[i].seasonalTeam.perType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeSeasonalTeamData) {
@@ -3694,7 +3693,7 @@ class RegistrationCompetitionFee extends Component {
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual == true) {
+                    if (fee_data[i].isTeamCasual) {
                         feeCasualTeamData = fee_data[i].casualTeam.perType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeCasualTeamData) {
@@ -3729,11 +3728,11 @@ class RegistrationCompetitionFee extends Component {
                         finalPostData = [...feeSeasonalData];
                     }
                 }
-            } else if (fee_data[i].isSeasonal == false && fee_data[i].isCasual == true) {
-                if (fee_data[i].isAllType == 'allDivisions') {
+            } else if (fee_data[i].isSeasonal == false && fee_data[i].isCasual) {
+                if (fee_data[i].isAllType === 'allDivisions') {
                     feeCasualData = fee_data[i].casual.allType;
 
-                    if (fee_data[i].isTeamSeasonal == true) {
+                    if (fee_data[i].isTeamSeasonal) {
                         feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
                         for (let j in feeCasualData) {
                             for (let k in feeSeasonalTeamData) {
@@ -3759,7 +3758,7 @@ class RegistrationCompetitionFee extends Component {
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual == true) {
+                    if (fee_data[i].isTeamCasual) {
                         feeCasualTeamData = fee_data[i].casualTeam.allType;
                         for (let j in feeCasualData) {
                             for (let k in feeCasualTeamData) {
@@ -3791,7 +3790,7 @@ class RegistrationCompetitionFee extends Component {
                 } else {
                     feeCasualData = fee_data[i].casual.perType;
 
-                    if (fee_data[i].isTeamSeasonal == true) {
+                    if (fee_data[i].isTeamSeasonal) {
                         feeSeasonalTeamData = fee_data[i].seasonalTeam.perType;
                         for (let j in feeCasualData) {
                             for (let k in feeSeasonalTeamData) {
@@ -3817,7 +3816,7 @@ class RegistrationCompetitionFee extends Component {
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual == true) {
+                    if (fee_data[i].isTeamCasual) {
                         feeCasualTeamData = fee_data[i].casualTeam.perType;
                         for (let j in feeCasualData) {
                             for (let k in feeCasualTeamData) {
@@ -3851,9 +3850,9 @@ class RegistrationCompetitionFee extends Component {
             } else if (
                 fee_data[i].isSeasonal == false &&
                 fee_data[i].isCasual == false &&
-                (fee_data[i].isTeamSeasonal == true && fee_data[i].isTeamCasual == false)
+                (fee_data[i].isTeamSeasonal && fee_data[i].isTeamCasual == false)
             ) {
-                if (fee_data[i].isAllType == 'allDivisions') {
+                if (fee_data[i].isAllType === 'allDivisions') {
                     feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
                 } else {
                     feeSeasonalTeamData = fee_data[i].seasonalTeam.perType;
@@ -3872,9 +3871,9 @@ class RegistrationCompetitionFee extends Component {
             } else if (
                 fee_data[i].isSeasonal == false &&
                 fee_data[i].isCasual == false &&
-                (fee_data[i].isTeamSeasonal == false && fee_data[i].isTeamCasual == true)
+                (fee_data[i].isTeamSeasonal == false && fee_data[i].isTeamCasual)
             ) {
-                if (fee_data[i].isAllType == 'allDivisions') {
+                if (fee_data[i].isAllType === 'allDivisions') {
                     feeCasualTeamData = fee_data[i].casualTeam.allType;
                 } else {
                     feeCasualTeamData = fee_data[i].casualTeam.perType;
@@ -3889,9 +3888,9 @@ class RegistrationCompetitionFee extends Component {
             } else if (
                 fee_data[i].isSeasonal == false &&
                 fee_data[i].isCasual == false &&
-                (fee_data[i].isTeamSeasonal == true && fee_data[i].isTeamCasual == true)
+                (fee_data[i].isTeamSeasonal && fee_data[i].isTeamCasual)
             ) {
-                if (fee_data[i].isAllType == 'allDivisions') {
+                if (fee_data[i].isAllType === 'allDivisions') {
                     feeCasualTeamData = fee_data[i].casualTeam.allType;
                     feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
 
@@ -3950,9 +3949,9 @@ class RegistrationCompetitionFee extends Component {
             if (
                 finalPostData != null &&
                 finalPostData.length > 0 &&
-                (fee_data[i].isSeasonal == true
-                    || fee_data[i].isCasual == true
-                    || fee_data[i].isTeamSeasonal == true
+                (fee_data[i].isSeasonal
+                    || fee_data[i].isCasual
+                    || fee_data[i].isTeamSeasonal
                     || fee_data[i].isTeamCasual == false)
             ) {
                 finalPostData.map((item, index) => {
@@ -3987,10 +3986,10 @@ class RegistrationCompetitionFee extends Component {
         // let invitees = compFeesState.postInvitees
         let invitees = [];
         let anyOrgAffiliateArr = []
-        if (compFeesState.associationChecked == true && compFeesState.anyOrgAssociationArr[0].inviteesOrg.length > 0) {
+        if (compFeesState.associationChecked && compFeesState.anyOrgAssociationArr[0].inviteesOrg.length > 0) {
             anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgAssociationArr)
         }
-        if (compFeesState.clubChecked == true && compFeesState.anyOrgClubArr[0].inviteesOrg.length > 0) {
+        if (compFeesState.clubChecked && compFeesState.anyOrgClubArr[0].inviteesOrg.length > 0) {
             anyOrgAffiliateArr = anyOrgAffiliateArr.concat(compFeesState.anyOrgClubArr)
         }
         if (compFeesState.affiliateArray != null && compFeesState.affiliateArray.length > 0) {
@@ -4038,7 +4037,7 @@ class RegistrationCompetitionFee extends Component {
                 if (this.state.logoSetDefault) {
                     formData.append('organisationLogoId', compFeesState.defaultCompFeesOrgLogoData.id);
                 }
-                if (postData.logoIsDefault == true) {
+                if (postData.logoIsDefault) {
                     formData.append('competitionLogoId', postData.competitionLogoId ? postData.competitionLogoId : 0);
                     formData.append('logoFileUrl', compFeesState.defaultCompFeesOrgLogo);
                     formData.append('competition_logo', compFeesState.defaultCompFeesOrgLogo);
@@ -4129,7 +4128,7 @@ class RegistrationCompetitionFee extends Component {
                     : postData.registrationRestrictionTypeRefId,
             };
 
-            if (this.checkDivisionEmpty(divisionArrayData) == true) {
+            if (this.checkDivisionEmpty(divisionArrayData)) {
                 message.error(ValidationConstants.pleaseAddDivisionForMembershipProduct);
             } else {
                 this.props.saveCompetitionFeesDivisionAction(
@@ -4165,13 +4164,11 @@ class RegistrationCompetitionFee extends Component {
 
     AffiliatesLevel = (tree) => {
         const { TreeNode } = Tree;
-        return tree.map((item, catIndex) => {
-            return (
-                <TreeNode title={this.advancedNode(item)} key={item.id}>
-                    {this.showSubAdvancedNode(item, catIndex)}
-                </TreeNode>
-            );
-        });
+        return tree.map((item, catIndex) => (
+            <TreeNode title={this.advancedNode(item)} key={item.id}>
+                {this.showSubAdvancedNode(item, catIndex)}
+            </TreeNode>
+        ));
     };
 
     advancedNode = (item) => {
@@ -4191,15 +4188,13 @@ class RegistrationCompetitionFee extends Component {
 
     showSubAdvancedNode(item, catIndex) {
         const { TreeNode } = Tree;
-        return item.subReferences.map((inItem) => {
-            return (
-                <TreeNode
-                    title={this.makeSubAdvancedNode(inItem)}
-                    key={inItem.id}
-                    disabled={this.disableInviteeNode(inItem)}
-                />
-            );
-        });
+        return item.subReferences.map((inItem) => (
+            <TreeNode
+                title={this.makeSubAdvancedNode(inItem)}
+                key={inItem.id}
+                disabled={this.disableInviteeNode(inItem)}
+            />
+        ));
     }
 
     makeSubAdvancedNode(item) {
@@ -4239,7 +4234,7 @@ class RegistrationCompetitionFee extends Component {
         let removeObj = {
             selectedSeasonalInstalmentDatesArray: selectedSeasonalInstalmentDatesArray,
             selectedSeasonalInstalmentDatesArrayItem: selectedSeasonalInstalmentDatesArrayItem,
-            index: index
+            index
         }
         let instalmentDate = selectedSeasonalInstalmentDatesArrayItem.instalmentDate
         return (
@@ -4293,7 +4288,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="input-reg-text">
                 <InputWithHead
                     auto_complete="new-membershipTypeName"
-                    // required={"pt-0 mt-0"}
+                    // required="pt-0 mt-0"
                     heading={AppConstants.enterCode}
                     placeholder={AppConstants.enterCode}
                     style={{ width: "100%", background: "white", height: 48 }}
@@ -4309,70 +4304,66 @@ class RegistrationCompetitionFee extends Component {
     }
 
     ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: 'transparent',
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Breadcrumb separator=">">
-                        <Breadcrumb.Item className="breadcrumb-add">
-                            {AppConstants.competitionFees}
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
-                </Header>
-            </div>
-        );
-    };
+    headerView = () => (
+        <div className="header-view">
+            <Header
+                className="form-header-view"
+                style={{
+                    backgroundColor: 'transparent',
+                    display: 'flex',
+                    alignItems: 'center',
+                }}
+            >
+                <Breadcrumb separator=" > ">
+                    <Breadcrumb.Item className="breadcrumb-add">
+                        {AppConstants.competitionFees}
+                    </Breadcrumb.Item>
+                </Breadcrumb>
+            </Header>
+        </div>
+    );
 
-    dropdownView = () => {
-        return (
-            <div className="comp-venue-courts-dropdown-view mt-0">
-                <div className="fluid-width">
-                    <div className="row">
-                        <div className="col-sm">
-                            <div
-                                style={{
-                                    width: 'fit-content',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                }}
+    dropdownView = () => (
+        <div className="comp-venue-courts-dropdown-view mt-0">
+            <div className="fluid-width">
+                <div className="row">
+                    <div className="col-sm">
+                        <div
+                            style={{
+                                width: 'fit-content',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <span className="year-select-heading required-field">
+                                {AppConstants.year}:
+                            </span>
+                            <Form.Item
+                                name="yearRefId"
+                                initialValue={1}
+                                rules={[{
+                                    required: true,
+                                    message: ValidationConstants.pleaseSelectYear,
+                                }]}
                             >
-                                <span className="year-select-heading required-field">
-                                    {AppConstants.year}:
-                                </span>
-                                <Form.Item
-                                    name="yearRefId"
-                                    initialValue={1}
-                                    rules={[{
-                                        required: true,
-                                        message: ValidationConstants.pleaseSelectYear,
-                                    }]}
+                                <Select
+                                    className="year-select reg-filter-select1 ml-2"
+                                    style={{ maxWidth: 80 }}
                                 >
-                                    <Select
-                                        className="year-select reg-filter-select1 ml-2"
-                                        style={{ maxWidth: 80 }}
-                                    >
-                                        {this.props.appState.yearList.map((item) => (
-                                            <Option key={'yearRefId' + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        ))}
-                                    </Select>
-                                </Form.Item>
-                            </div>
+                                    {this.props.appState.yearList.map((item) => (
+                                        <Option key={'yearRefId' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
                         </div>
                     </div>
                 </div>
             </div>
-        );
-    };
+        </div>
+    );
 
     setImage = (data, key) => {
         if (data.files[0] !== undefined) {
@@ -4438,7 +4429,7 @@ class RegistrationCompetitionFee extends Component {
     updateNonPlayingNames(data, index, key) {
         let detailsData = this.props.competitionFeesState;
         let array = detailsData.competitionDetailData.nonPlayingDates;
-        if (key == 'name') {
+        if (key === 'name') {
             array[index].name = data;
         } else {
             array[index].nonPlayingDate = data;
@@ -4465,7 +4456,7 @@ class RegistrationCompetitionFee extends Component {
                     <div className="col-sm">
                         <DatePicker
                             className="comp-dashboard-botton-view-mobile"
-                            size="large"
+                            size="default"
                             placeholder="dd-mm-yyyy"
                             style={{ width: '100%' }}
                             onChange={(date) => this.updateNonPlayingNames(date, index, 'date')}
@@ -4580,10 +4571,9 @@ class RegistrationCompetitionFee extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-0"
+                        required="required-field pb-1"
                         heading={AppConstants.competition_name}
                         placeholder={AppConstants.competition_name}
-                        // setFieldsValue={}
                         // value={detailsData.competitionDetailData.competitionName}
                         onChange={(e) =>
                             this.props.add_editcompetitionFeeDeatils(captializedString(
@@ -4597,8 +4587,9 @@ class RegistrationCompetitionFee extends Component {
                         })}
                     />
                 </Form.Item>
+
                 <InputWithHead
-                    required="required-field pb-0"
+                    required="required-field pb-1"
                     heading={AppConstants.competitionLogo}
                 />
 
@@ -4658,7 +4649,7 @@ class RegistrationCompetitionFee extends Component {
                                 </Checkbox>
                             )}
 
-                            {this.state.isSetDefaul == true && (
+                            {this.state.isSetDefaul && (
                                 <Checkbox
                                     className="single-checkbox ml-0"
                                     checked={this.state.logoSetDefault}
@@ -4677,7 +4668,7 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                 </div>
 
-                <InputWithHead required="required-field pb-0" heading={AppConstants.heroImageForCompetition} />
+                <InputWithHead required="required-field pb-1" heading={AppConstants.heroImageForCompetition} />
                 <div className="reg-competition-hero-image-view" onClick={this.selectHeroImage}>
                     <div style={{ overflow: "hidden", minHeight: "150px", maxHeight: "287px" }}>
                         <img
@@ -4723,7 +4714,7 @@ class RegistrationCompetitionFee extends Component {
                     </span>
                 </div>
 
-                <InputWithHead heading={AppConstants.description} />
+                <InputWithHead required="pb-1" heading={AppConstants.description} />
                 <TextArea
                     placeholder={AppConstants.addShortNotes_registering}
                     allowClear
@@ -4739,7 +4730,7 @@ class RegistrationCompetitionFee extends Component {
 
                 <div style={{ marginTop: 15 }}>
                     <InputWithHead
-                        required="required-field pb-0"
+                        required="required-field pb-1"
                         heading={AppConstants.venue}
                     />
                     <Form.Item
@@ -4786,7 +4777,7 @@ class RegistrationCompetitionFee extends Component {
                         </span>
                     </NavLink>
                 )}
-                <span className="applicable-to-heading required-field">
+                <span className="applicable-to-heading required-field pb-1">
                     {AppConstants.typeOfCompetition}
                 </span>
                 <Form.Item
@@ -4805,7 +4796,7 @@ class RegistrationCompetitionFee extends Component {
                                 'competitionTypeRefId'
                             )
                         }
-                        setFieldsValue={detailsData.competitionTypeRefId}
+                        value={detailsData.competitionTypeRefId}
                         disabled={compDetailDisable}
                     >
                         {appState.typesOfCompetition.length > 0 && appState.typesOfCompetition.map((item) => (
@@ -4817,7 +4808,7 @@ class RegistrationCompetitionFee extends Component {
                     </Radio.Group>
                 </Form.Item>
 
-                <span className="applicable-to-heading required-field">
+                <span className="applicable-to-heading required-field pb-1">
                     {AppConstants.competitionFormat}
                 </span>
                 <Form.Item
@@ -4836,8 +4827,7 @@ class RegistrationCompetitionFee extends Component {
                                 'competitionFormatRefId'
                             )
                         }
-                        // setFieldsValue={1}
-                        setFieldsValue={detailsData.competitionFormatRefId}
+                        value={detailsData.competitionFormatRefId}
                         disabled={compDetailDisable}
                     >
                         {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map((item) => (
@@ -4847,21 +4837,22 @@ class RegistrationCompetitionFee extends Component {
                                     {item.description}
                                 </Radio>
 
-                                <div style={{ marginLeft: -20, marginTop: -5 }}>
-                                    <CustumToolTip background="#ff8237">
+                                <div style={{ marginLeft: -25, marginTop: 0 }}>
+                                    <CustomToolTip background="#ff8237">
                                         <span>{item.helpMsg}</span>
-                                    </CustumToolTip>
+                                    </CustomToolTip>
                                 </div>
                             </div>
                         ))}
                     </Radio.Group>
                 </Form.Item>
+
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
                                 heading={AppConstants.compStartDate}
-                                required="required-field"
+                                required="required-field pb-1"
                             />
                             <Form.Item
                                 name="startDate"
@@ -4871,7 +4862,7 @@ class RegistrationCompetitionFee extends Component {
                                 }]}
                             >
                                 <DatePicker
-                                    size="large"
+                                    size="default"
                                     placeholder="dd-mm-yyyy"
                                     style={{ width: '100%' }}
                                     onChange={(date) =>
@@ -4887,7 +4878,7 @@ class RegistrationCompetitionFee extends Component {
                         <div className="col-sm">
                             <InputWithHead
                                 heading={AppConstants.compCloseDate}
-                                required="required-field"
+                                required="required-field pb-1"
                             />
                             <Form.Item
                                 name="endDate"
@@ -4897,7 +4888,7 @@ class RegistrationCompetitionFee extends Component {
                                 }]}
                             >
                                 <DatePicker
-                                    size="large"
+                                    size="default"
                                     placeholder="dd-mm-yyyy"
                                     style={{ width: '100%' }}
                                     onChange={(date) => this.dateOnChangeFrom(date, 'endDate')}
@@ -4915,7 +4906,7 @@ class RegistrationCompetitionFee extends Component {
                     <div>
                         <InputWithHead
                             heading={AppConstants.numberOfRounds}
-                            required="required-field"
+                            required="required-field pb-1"
                         />
                         <Form.Item
                             name="numberOfRounds"
@@ -4943,10 +4934,10 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                 )}
                 {/* </div> */}
-                <InputWithHead heading={AppConstants.timeBetweenRounds} />
+                <InputWithHead required="pb-1" heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div className="col-sm">
                             <InputWithHead
                                 auto_complete="off"
                                 placeholder={AppConstants.days}
@@ -4992,7 +4983,7 @@ class RegistrationCompetitionFee extends Component {
                 </div>
                 <InputWithHead
                     heading={AppConstants.registration_close}
-                    required="required-field"
+                    required="required-field pb-1"
                 />
                 <Form.Item
                     name="registrationCloseDate"
@@ -5002,7 +4993,7 @@ class RegistrationCompetitionFee extends Component {
                     }]}
                 >
                     <DatePicker
-                        size="large"
+                        size="default"
                         placeholder="dd-mm-yyyy"
                         style={{ width: '100%' }}
                         onChange={(date) =>
@@ -5016,7 +5007,7 @@ class RegistrationCompetitionFee extends Component {
                 </Form.Item>
 
                 <div className="inside-container-view pt-4">
-                    <InputWithHead heading={AppConstants.nonPlayingDates} />
+                    <InputWithHead required="pb-1" heading={AppConstants.nonPlayingDates} />
                     {detailsData.competitionDetailData.nonPlayingDates && detailsData.competitionDetailData.nonPlayingDates.map(
                         (item, index) => this.nonPlayingDateView(item, index)
                     )}
@@ -5031,10 +5022,11 @@ class RegistrationCompetitionFee extends Component {
                         </span>
                     </a>
                 </div>
-                <InputWithHead heading={AppConstants.playerInEachTeam} />
+
+                <InputWithHead required="pb-1" heading={AppConstants.playerInEachTeam} />
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div className="col-sm">
                             <InputWithHead
                                 auto_complete="off"
                                 placeholder={AppConstants.minNumber}
@@ -5048,7 +5040,7 @@ class RegistrationCompetitionFee extends Component {
                                 disabled={compDetailDisable}
                             />
                         </div>
-                        <div className="col-sm" style={{ marginTop: 5 }}>
+                        <div className="col-sm">
                             <InputWithHead
                                 auto_complete="off"
                                 placeholder={AppConstants.maxNumber}
@@ -5202,7 +5194,7 @@ class RegistrationCompetitionFee extends Component {
                                 {item.membershipProductName}
                                 <span className="requiredSpan">*</span>
                             </span>
-                            {item.isPlayingStatus == true ? (
+                            {item.isPlayingStatus ? (
                                 <div>
                                     <div className="table-responsive">
                                         <Table
@@ -5408,9 +5400,9 @@ class RegistrationCompetitionFee extends Component {
                                                 {AppConstants.allDivisions}
                                             </Radio>
                                             <div style={{ marginLeft: -10 }}>
-                                                <CustumToolTip background="#ff8237">
+                                                <CustomToolTip background="#ff8237">
                                                     <span>{AppConstants.allDivisionsMsg}</span>
-                                                </CustumToolTip>
+                                                </CustomToolTip>
                                             </div>
                                         </div>
                                     </div>
@@ -5423,9 +5415,9 @@ class RegistrationCompetitionFee extends Component {
                                                 {AppConstants.perDivision}
                                             </Radio>
                                             <div style={{ marginLeft: -20 }}>
-                                                <CustumToolTip background="#ff8237">
+                                                <CustomToolTip background="#ff8237">
                                                     <span>{AppConstants.perDivisionMsg}</span>
-                                                </CustumToolTip>
+                                                </CustomToolTip>
                                             </div>
                                         </div>
                                     </div>
@@ -5466,7 +5458,7 @@ class RegistrationCompetitionFee extends Component {
                                     {AppConstants.seasonalFee}
                                 </Checkbox>
                             </div>
-                            {item.isSeasonal == true && (
+                            {item.isSeasonal && (
                                 <div className="table-responsive mt-2">
                                     <Table
                                         className="fees-table"
@@ -5794,7 +5786,7 @@ class RegistrationCompetitionFee extends Component {
         let clubAffilites = detailsData.clubAffilites;
         const { associationLeague, clubSchool, associationChecked, clubChecked } = this.props.competitionFeesState;
         let regInviteesDisable = this.state.permissionState.regInviteesDisable;
-        if (subItem.id == 7 && associationChecked == true) {
+        if (subItem.id == 7 && associationChecked) {
             return (
                 <div>
                     <Select
@@ -5834,7 +5826,7 @@ class RegistrationCompetitionFee extends Component {
                     </Select>
                 </div>
             );
-        } else if (subItem.id == 8 && clubChecked == true) {
+        } else if (subItem.id == 8 && clubChecked) {
             return (
                 <div>
                     <Select
@@ -5908,7 +5900,7 @@ class RegistrationCompetitionFee extends Component {
                         value={affiliateSelected}
                     >
                         {(invitees || []).map( (item, index) =>
-                            index == 0 && (
+                            index === 0 && (
                                 <div>
                                     {item.subReferences.length === 0 ? (
                                         <Radio value={item.id}>{item.description}</Radio>
@@ -5920,9 +5912,9 @@ class RegistrationCompetitionFee extends Component {
                                                         {item.description}
                                                     </div>
                                                     <div style={{ marginTop: 2 }}>
-                                                        <CustumToolTip background="#ff8237">
+                                                        <CustomToolTip background="#ff8237">
                                                             <span>{item.helpMsg}</span>
-                                                        </CustumToolTip>
+                                                        </CustomToolTip>
                                                     </div>
                                                 </div>
                                             )}
@@ -5982,7 +5974,7 @@ class RegistrationCompetitionFee extends Component {
                         disabled={regInviteesDisable}
                     >
                         {(invitees || []).map((item, index) =>
-                            index == 1 && (
+                            index === 1 && (
                                 <div>
                                     {item.subReferences.length === 0 ? (
                                         <Radio value={item.id}>{item.description}</Radio>
@@ -5993,9 +5985,9 @@ class RegistrationCompetitionFee extends Component {
                                                     {item.description}
                                                 </div>
                                                 <div style={{ marginTop: 2 }}>
-                                                    <CustumToolTip background="#ff8237">
+                                                    <CustomToolTip background="#ff8237">
                                                         <span>{item.helpMsg}</span>
-                                                    </CustumToolTip>
+                                                    </CustomToolTip>
                                                 </div>
                                             </div>
                                             {/* {item.subReferences.map((subItem) => (
@@ -6074,9 +6066,9 @@ class RegistrationCompetitionFee extends Component {
                                         <div className="contextualHelp-RowDirection">
                                             <Radio value={item.id}>{item.description}</Radio>
                                             <div style={{ marginLeft: -20, marginTop: 2 }}>
-                                                <CustumToolTip background="#ff8237">
+                                                <CustomToolTip background="#ff8237">
                                                     <span>{item.helpMsg}</span>
-                                                </CustumToolTip>
+                                                </CustomToolTip>
                                             </div>
                                         </div>
                                     ) : (
@@ -6119,7 +6111,7 @@ class RegistrationCompetitionFee extends Component {
     checkIsSeasonal = (feeDetails) => {
         let isSeasonalValue = false;
         for (let i in feeDetails) {
-            if (feeDetails[i].isSeasonal == true) {
+            if (feeDetails[i].isSeasonal) {
                 isSeasonalValue = true;
                 break;
             }
@@ -6152,7 +6144,7 @@ class RegistrationCompetitionFee extends Component {
     checkIsCasual = (feeDetails) => {
         let isCasualValue = false;
         for (let i in feeDetails) {
-            if (feeDetails[i].isCasual == true) {
+            if (feeDetails[i].isCasual) {
                 isCasualValue = true;
                 break;
             }
@@ -6217,9 +6209,9 @@ class RegistrationCompetitionFee extends Component {
                             <div className="contextualHelp-RowDirection">
                                 <span className="form-heading">{AppConstants.nominationFee}</span>
                                 {/* <div style={{ marginTop: 4 }}>
-                                    <CustumToolTip placement="top" background="#ff8237">
+                                    <CustomToolTip placement="top" background="#ff8237">
                                         <span>{AppConstants.paymentSeasonalFeeMsg}</span>
-                                    </CustumToolTip>
+                                    </CustomToolTip>
                                 </div> */}
                             </div>
                             <Radio.Group
@@ -6231,14 +6223,14 @@ class RegistrationCompetitionFee extends Component {
                                 <div className="pl-2">{AppConstants.nominationFeeTeam}</div>
                             </Radio.Group>
                         </div>
-                        {isSeasonal == true && (
+                        {isSeasonal && (
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.seasonalFee}</span>
                                     <div style={{ marginTop: 4 }}>
-                                        <CustumToolTip placement="top" background="#ff8237">
+                                        <CustomToolTip placement="top" background="#ff8237">
                                             <span>{AppConstants.paymentSeasonalFeeMsg}</span>
-                                        </CustumToolTip>
+                                        </CustomToolTip>
                                     </div>
                                 </div>
                                 {(selectedSeasonalFee || []).map((item, index) => (
@@ -6263,14 +6255,14 @@ class RegistrationCompetitionFee extends Component {
                                 ))}
                             </div>
                         )}
-                        {isCasual == true && (
+                        {isCasual && (
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.singleGameFee}</span>
                                     <div style={{ marginTop: 4 }}>
-                                        <CustumToolTip placement="top" background="#ff8237">
+                                        <CustomToolTip placement="top" background="#ff8237">
                                             <span>{AppConstants.paymentCausalFeeMsg}</span>
-                                        </CustumToolTip>
+                                        </CustomToolTip>
                                     </div>
                                 </div>
                                 {(selectedCasualFee || []).map((item, index) => (
@@ -6287,14 +6279,14 @@ class RegistrationCompetitionFee extends Component {
                                 ))}
                             </div>
                         )}
-                        {isTeamSeasonal == true && (
+                        {isTeamSeasonal && (
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.teamSeasonalFee}</span>
                                     <div style={{ marginTop: 4 }}>
-                                        <CustumToolTip placement="top" background="#ff8237">
+                                        <CustomToolTip placement="top" background="#ff8237">
                                             <span>{AppConstants.paymentSeasonalFeeMsg}</span>
-                                        </CustumToolTip>
+                                        </CustomToolTip>
                                     </div>
                                 </div>
                                 {(selectedSeasonalTeamFee || []).map((item, index) => (
@@ -6322,14 +6314,14 @@ class RegistrationCompetitionFee extends Component {
                                 ))}
                             </div>
                         )}
-                        {isTeamCasual == true && (
+                        {isTeamCasual && (
                             <div className="inside-container-view">
                                 <div className="contextualHelp-RowDirection">
                                     <span className="form-heading">{AppConstants.teamSingleGameFee}</span>
                                     <div style={{ marginTop: 4 }}>
-                                        <CustumToolTip placement="top" background="#ff8237">
+                                        <CustomToolTip placement="top" background="#ff8237">
                                             <span>{AppConstants.paymentCausalFeeMsg}</span>
-                                        </CustumToolTip>
+                                        </CustomToolTip>
                                     </div>
                                 </div>
                                 {(selectedCasualTeamFee || []).map((item, index) => (
@@ -6364,9 +6356,9 @@ class RegistrationCompetitionFee extends Component {
                 <div className="contextualHelp-RowDirection">
                     <span className="form-heading">{AppConstants.charityRoundUp}</span>
                     <div style={{ marginTop: 4 }}>
-                        <CustumToolTip placement="top" background="#ff8237">
+                        <CustomToolTip placement="top" background="#ff8237">
                             <span>{AppConstants.charityRoundUpMsg}</span>
-                        </CustumToolTip>
+                        </CustomToolTip>
                     </div>
                 </div>
                 <div className="inside-container-view">
@@ -6558,7 +6550,7 @@ class RegistrationCompetitionFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
-                                        size="large"
+                                        size="default"
                                         placeholder="dd-mm-yyyy"
                                         style={{ width: '100%' }}
                                         onChange={(date) => this.onChangeDiscountAvailableFrom(date, index)}
@@ -6571,7 +6563,7 @@ class RegistrationCompetitionFee extends Component {
                                 <div className="col-sm">
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
-                                        size="large"
+                                        size="default"
                                         placeholder="dd-mm-yyyy"
                                         style={{ width: '100%' }}
                                         disabledDate={this.disabledDate}
@@ -6644,7 +6636,7 @@ class RegistrationCompetitionFee extends Component {
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
                                         placeholder="dd-mm-yyyy"
-                                        size="large"
+                                        size="default"
                                         style={{ width: '100%' }}
                                         onChange={(date) => this.onChangeDiscountAvailableFrom(date, index)}
                                         format="DD-MM-YYYY"
@@ -6657,7 +6649,7 @@ class RegistrationCompetitionFee extends Component {
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
                                         placeholder="dd-mm-yyyy"
-                                        size="large"
+                                        size="default"
                                         style={{ width: '100%' }}
                                         disabledDate={this.disabledDate}
                                         disabledTime={this.disabledTime}
@@ -6784,7 +6776,7 @@ class RegistrationCompetitionFee extends Component {
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
                                         placeholder="dd-mm-yyyy"
-                                        size="large"
+                                        size="default"
                                         style={{ width: '100%' }}
                                         onChange={(date) => this.onChangeDiscountAvailableFrom(date, index)}
                                         format="DD-MM-YYYY"
@@ -6797,7 +6789,7 @@ class RegistrationCompetitionFee extends Component {
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
                                         placeholder="dd-mm-yyyy"
-                                        size="large"
+                                        size="default"
                                         style={{ width: '100%' }}
                                         disabledDate={this.disabledDate}
                                         disabledTime={this.disabledTime}
@@ -6978,9 +6970,9 @@ class RegistrationCompetitionFee extends Component {
                 <div className="contextualHelp-RowDirection">
                     <span className="form-heading">{AppConstants.discounts}</span>
                     <div style={{ marginTop: 4 }}>
-                        <CustumToolTip placement="bottom" background="#ff8237">
+                        <CustomToolTip placement="bottom" background="#ff8237">
                             <span>{AppConstants.discountMsg}</span>
-                        </CustumToolTip>
+                        </CustomToolTip>
                     </div>
                 </div>
                 {discountData.length > 0 && discountData.map((item, index) => (
@@ -7227,7 +7219,7 @@ class RegistrationCompetitionFee extends Component {
                                         style={{ height: '100%' }}
                                         onMouseEnter={() =>
                                             this.setState({
-                                                tooltipVisibleDraft: isPublished ? true : false,
+                                                tooltipVisibleDraft: isPublished,
                                             })
                                         }
                                         onMouseLeave={() =>
@@ -7280,7 +7272,6 @@ class RegistrationCompetitionFee extends Component {
                                                     buttonPressed: tabKey == '6' ? 'publish' : 'next',
                                                 })
                                             }
-                                            style={{ height: 48, width: 92.5 }}
                                         >
                                             {tabKey === '6' && isPublished
                                                 ? AppConstants.publish

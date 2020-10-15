@@ -11,7 +11,7 @@ function getYearAction() {
 function generateDrawAction(payload){
     const action = {
         type: ApiConstants.API_GENERATE_DRAW_LOAD,
-        payload: payload
+        payload
     };
 
     return action;

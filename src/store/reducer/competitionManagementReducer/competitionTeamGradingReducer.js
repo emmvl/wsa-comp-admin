@@ -214,12 +214,12 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 error: null
             }
 
-        ////////competition own final team grading data on Change table 
+        ////////competition own final team grading data on Change table
         case ApiConstants.ONCHANGE_COMPETITION_OWN_PROPOSED_TEAM_GRADING_DATA:
             let finalGradingOnChangeData = JSON.parse(JSON.stringify(state.getCompOwnProposedTeamGradingData));
             let finalGrades = state.compFinalTeamGradingFinalGradesData;
             let obj = finalGrades.find(x => x.gradeRefId == action.value);
-            if (action.key == "sortOrder") {
+            if (action.key === "sortOrder") {
                 //finalGradingOnChangeData[action.index][action.key] = action.value == 1 ? action.value - 1 : action.value + 1;
                 let oldval = finalGradingOnChangeData[action.index][action.key];
                 finalGradingOnChangeData[action.index][action.key] = (oldval > action.value) ? action.value - 1 : action.value + 1;
@@ -228,7 +228,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                     x.sortOrder = index + 1;
                 })
             }
-            else if (action.key == "actionType") {
+            else if (action.key === "actionType") {
                 if (action.value == "IsActive") {
                     finalGradingOnChangeData[action.index][action.key] = action.value;
                     finalGradingOnChangeData[action.index]["isActive"] = 0;
@@ -307,10 +307,10 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
                 error: null
             }
 
-        ////////competition participate in proposed team grading data on Change table 
+        ////////competition participate in proposed team grading data on Change table
         case ApiConstants.ONCHANGE_COMPETITION_PART_PROPOSED_TEAM_GRADING_DATA:
             let partProposedTeamGradingOnchangeData = JSON.parse(JSON.stringify(state.getPartProposedTeamGradingData))
-            if (action.key == "proposedGradeRefId") {
+            if (action.key === "proposedGradeRefId") {
                 partProposedTeamGradingOnchangeData[action.index]["proposedGradeRefId"] = action.value
             }
             if (action.key == "teamName") {
@@ -383,7 +383,7 @@ function CompetitionOwnTeamGrading(state = initialState, action) {
             }
 
 
-        ////////competition own team grading summary listing  data on Change table 
+        ////////competition own team grading summary listing  data on Change table
         case ApiConstants.ONCHANGE_COMPETITION_TEAM_GRADING_SUMMARY_DATA:
             let ownTeamGradingSummaryGetTableData = JSON.parse(JSON.stringify(state.ownTeamGradingSummaryGetData))
             if (action.key == "ownTeamGradingSummaryGetData") {

@@ -295,7 +295,7 @@ class AddUmpire extends Component {
                     <div className="col-sm">
                         <Form.Item name={AppConstants.lastName} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
                             <InputWithHead
-                                auto_complete='off'
+                                auto_complete="off"
                                 required="required-field pb-0 pt-0"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
@@ -374,7 +374,7 @@ class AddUmpire extends Component {
                                 // value={affiliateId}
                                 optionFilterProp="children"
                                 // onSearch={(name) => this.props.getUmpireAffiliateList({ id: this.state.competition_id, name: name })}
-                                // notFoundContent={onAffiliateLoad == true ? <Spin size="small" /> : null}
+                                // notFoundContent={onAffiliateLoad ? <Spin size="small" /> : null}
                             >
                                 {affiliateListResult.map((item) => (
                                     <Option value={item.id}>{item.name}</Option>

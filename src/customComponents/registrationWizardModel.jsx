@@ -104,7 +104,7 @@ class RegistrationWizardModel extends React.Component {
                                 </span>
                             </div>
                             <div className="col-sm-1 tickView pb-2 pl-0">
-                                {competitionStatus == true &&
+                                {competitionStatus &&
                                     <img
                                         src={AppImages.tick}
                                         alt=""
@@ -121,7 +121,7 @@ class RegistrationWizardModel extends React.Component {
                             </div>
                             <div className="col-sm-10 setupView pb-2 ">
 
-                                <span disabled={publishStatus == 2 ? true : false} className={`comment-heading`}>
+                                <span disabled={publishStatus == 2} className={`comment-heading`}>
                                     {AppConstants.createPublish} {" "}
                                 </span>
 
@@ -132,7 +132,7 @@ class RegistrationWizardModel extends React.Component {
 
                             </div>
                             <div className="col-sm-1 tickView pb-2 pl-0">
-                                {registrationStatus == true &&
+                                {registrationStatus &&
                                     <img
                                         src={AppImages.tick}
                                         alt=""
