@@ -286,10 +286,10 @@ function userReducer(state = initialState, action) {
         state.affiliateOurOrg.charityRoundUp[action.index].isSelected = action.value
       }
 
-      if (action.key == "name") {
+      if (action.key === "name") {
         state.affiliateOurOrg["charity"][action.index][action.key] = action.value
       }
-      if (action.key == "description") {
+      if (action.key === "description") {
         state.affiliateOurOrg["charity"][action.index][action.key] = action.value
       }
 

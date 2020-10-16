@@ -242,7 +242,7 @@ class LiveScoreIncidentList extends Component {
     handleTableChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
         let { searchText, limit, sortBy, sortOrder } = this.state
-        this.setState({ offset: offset })
+        this.setState({ offset })
         const { umpireKey } = this.props.liveScoreIncidentState
         let compId = null
         if (umpireKey) {

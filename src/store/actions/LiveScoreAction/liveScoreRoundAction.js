@@ -16,7 +16,7 @@ function liveScoreCreateRoundAction(roundName, sequence, competitionID, division
         roundName: roundName,
         sequence: sequence,
         competitionID: competitionID,
-        divisionId: divisionId
+        divisionId
     };
     return action;
 }
@@ -32,4 +32,4 @@ export {
     liveScoreRoundListAction,
     liveScoreCreateRoundAction,
     clearRoundData
-} 
+}

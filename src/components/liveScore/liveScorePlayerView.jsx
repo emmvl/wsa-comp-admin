@@ -278,7 +278,7 @@ class LiveScorePlayerView extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.screenName == 'dashboard' ? "1" : this.state.screenName == 'incident' ? '17' : "7"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.screenName === 'dashboard' ? "1" : this.state.screenName === 'incident' ? '17' : "7"} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
                         <div className="fluid-width">

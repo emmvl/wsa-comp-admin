@@ -21,7 +21,7 @@ function LiveScoreGoalState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_GOAL_LIST_SUCCESS:
             let result = action.result.result
             var goalListResult
-            if (action.goalType == 'By Match') {
+            if (action.goalType === 'By Match') {
                 goalListResult = liveScoreGoalModal.getGoalListData(result)
             } else {
                 goalListResult = liveScoreGoalModal.getGoalTypeAllData(result)

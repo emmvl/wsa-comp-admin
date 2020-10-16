@@ -171,7 +171,7 @@ let LiveScoreAxiosApi = {
 
         let payload = {
             competitionId: compKey,
-            divisionId: divisionId
+            divisionId
         }
 
         let url = `/teams/ladder/web`
@@ -979,7 +979,7 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body)
     },
 
-    // Unassign status 
+    // Unassign status
     unAssignMatcheStatus(records) {
         const url = `/roster/admin?id=${records.rosterId}&category=Scoring`
         return Method.dataDelete(url, token)
@@ -1047,7 +1047,7 @@ let LiveScoreAxiosApi = {
         return Method.dataGetDownload(url, localStorage.token);
     },
 
-    //// venue Change 
+    //// venue Change
     venueChangeApi(competitionId, details, start, end) {
         let courtArray = JSON.stringify(details.courtId)
         let url = `/matches/bulk/courts?competitionId=${competitionId}&startTime=${start}&endTime=${end}&fromCourtIds=${courtArray}&toCourtId=${details.changeToCourtId}`

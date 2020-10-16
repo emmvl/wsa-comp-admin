@@ -190,7 +190,7 @@ class RegistrationForm extends Component {
                 this.setFieldDecoratorValues()
                 this.setState({
                     onRegistrationLoad: false,
-                    isPublished: registrationState.registrationFormData[0].statusRefId == 2 ? true : false
+                    isPublished: registrationState.registrationFormData[0].statusRefId == 2
                 })
             }
         }
@@ -481,8 +481,8 @@ class RegistrationForm extends Component {
 
     onChangeSetValue = (value, index) => {
         let obj = {
-            value: value,
-            index: index
+            value,
+            index
         }
         this.props.updateRegistrationForm(obj, "addHardshipCodeValueChange")
     }
@@ -688,7 +688,7 @@ class RegistrationForm extends Component {
                                         {AppConstants.trainingVenue}
                                     </Checkbox>
                                 </div>
-                                {defaultChecked.venueVisible == true && (
+                                {defaultChecked.venueVisible && (
                                     <div className="col-sm">
                                         <Select
                                             name={"trainingVenueId"}
@@ -812,7 +812,7 @@ class RegistrationForm extends Component {
     replyContactDetailsView = () => {
         let defaultChecked = this.props.registrationState.defaultChecked
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
-        let hasError = this.state.hasError == true ? true : false
+        let hasError = this.state.hasError
         return (
             <div className="fees-view">
                 <div className='row ml-1' style={{ display: 'flex', alignItems: 'center' }}>
@@ -1270,7 +1270,7 @@ class RegistrationForm extends Component {
                             message: ValidationConstants.DisclaimerLinkIsRequired
                         }]}>
                             <InputWithHead
-                                required={"required-field pb-0"}
+                                required="required-field pb-0"
                                 heading={AppConstants.disclaimerLink}
                                 placeholder={AppConstants.disclaimerLink}
                                 onChange={(e) => this.disclamerText(e.target.value, index, "disclaimerLink")}
@@ -1496,7 +1496,7 @@ class RegistrationForm extends Component {
                             <div className="comp-buttons-view">
                                 <Tooltip
                                     style={{ height: "100%" }}
-                                    onMouseEnter={() => this.setState({ tooltipVisibleDraft: statusRefId == 2 ? true : false })}
+                                    onMouseEnter={() => this.setState({ tooltipVisibleDraft: statusRefId == 2 })}
                                     onMouseLeave={() => this.setState({ tooltipVisibleDraft: false })}
                                     visible={this.state.tooltipVisibleDraft}
                                     title={ValidationConstants.compRegHaveBeenSent}
@@ -1505,7 +1505,7 @@ class RegistrationForm extends Component {
                                         className="save-draft-text"
                                         type="save-draft-text"
                                         htmlType="submit"
-                                        disabled={statusRefId == 2 ? true : false}
+                                        disabled={statusRefId == 2}
                                         onClick={() => this.setState({ statusRefId: 1 })}
                                     >
                                         {AppConstants.saveAsDraft}
@@ -1519,7 +1519,7 @@ class RegistrationForm extends Component {
                                     {AppConstants.preview}
                                 </Button>
                                 {/* <Tooltip style={{ height: "100%" }}
-                                    onMouseEnter={() => this.setState({ tooltipVisiblePublish: statusRefId == 2 ? true : false })}
+                                    onMouseEnter={() => this.setState({ tooltipVisiblePublish: statusRefId == 2 })}
                                     onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                     visible={this.state.tooltipVisiblePublish}
                                     title={ValidationConstants.compRegHaveBeenSent}> */}
@@ -1528,7 +1528,7 @@ class RegistrationForm extends Component {
                                     htmlType="submit"
                                     type="primary"
                                     onClick={() => this.setState({ statusRefId: 2 })}
-                                    // disabled={statusRefId == 2 ? true : false}
+                                    // disabled={statusRefId == 2}
                                     // style={{ height: statusRefId == 2 ? "100%" : null, borderRadius: statusRefId == 2 ? 5 : null }}
                                 >
                                     {statusRefId == 2 ? AppConstants.update : AppConstants.openRegistrations}

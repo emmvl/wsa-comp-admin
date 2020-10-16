@@ -203,7 +203,7 @@ class VenuesList extends Component {
     handleVenuesTableList = (page, searchText) => {
         const offset = (page ? (10 * (page - 1)) : 0);
         const filter = {
-            searchText: searchText,
+            searchText,
             organisationId: getOrganisationData().organisationUniqueKey,
             paging: {
                 limit: 10,

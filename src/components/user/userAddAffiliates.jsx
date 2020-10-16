@@ -6,7 +6,7 @@ import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
-import * as Yup from "yup";
+// import * as Yup from "yup";
 import { bindActionCreators } from "redux";
 import history from "../../util/history";
 import { connect } from "react-redux";
@@ -24,15 +24,15 @@ import Loader from "../../customComponents/loader";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-const phoneRegExp = /^((\\+[1,9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+// const phoneRegExp = /^((\\+[1,9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-const userAddAffiliatesSchema = Yup.object().shape({
-  name: Yup.string().required("Name is Required"),
-  phone: Yup.string()
-    .matches(phoneRegExp, "Please Enter Valid Phone Number")
-    .required("Phone Number is Required"),
-  address: Yup.string().required("Address is Required"),
-});
+// const userAddAffiliatesSchema = Yup.object().shape({
+//   name: Yup.string().required("Name is Required"),
+//   phone: Yup.string()
+//     .matches(phoneRegExp, "Please Enter Valid Phone Number")
+//     .required("Phone Number is Required"),
+//   address: Yup.string().required("Address is Required"),
+// });
 
 class UserAddAffiliates extends Component {
   constructor(props) {
@@ -69,20 +69,17 @@ class UserAddAffiliates extends Component {
         });
       }
 
-      if (userState.status == 1 && this.state.buttonPressed == "save") {
+      if (userState.status == 1 && this.state.buttonPressed === "save") {
         history.push("/userAffiliatesList");
       }
     }
-    if (this.state.buttonPressed == "cancel") {
+    if (this.state.buttonPressed === "cancel") {
       history.push("/userAffiliatesList");
     }
 
     if (nextProps.userState.affiliateTo != affiliateTo) {
       if (userState.affiliateToOnLoad == false) {
-        if (
-          affiliateTo.organisationName != "" &&
-          affiliateTo.organisationTypeRefId != 0
-        ) {
+        if (affiliateTo.organisationName != "" && affiliateTo.organisationTypeRefId != 0) {
           this.setState({
             loggedInuserOrgTypeRefId: affiliateTo.organisationTypeRefId,
             organisationName: affiliateTo.organisationName,
@@ -101,28 +98,18 @@ class UserAddAffiliates extends Component {
     if (key === AppConstants.organisationTypeRefId) {
       if (
         !(
-          (this.state.loggedInuserOrgTypeRefId == 1 &&
-            (val == 3 || val == 4)) ||
+          (this.state.loggedInuserOrgTypeRefId == 1 && (val == 3 || val == 4)) ||
           (this.state.loggedInuserOrgTypeRefId == 2 && val == 4)
         )
       ) {
-        this.props.updateNewAffiliateAction(
-          val,
-          AppConstants.affiliatedToOrgId
-        );
+        this.props.updateNewAffiliateAction(val, AppConstants.affiliatedToOrgId);
 
         let orgVal = this.state.organisationId;
         let name = getOrganisationData().name;
-        this.props.updateNewAffiliateAction(
-          orgVal,
-          AppConstants.affiliatedToOrgId
-        );
+        this.props.updateNewAffiliateAction(orgVal, AppConstants.affiliatedToOrgId);
         this.props.updateNewAffiliateAction(name, "affiliatedToOrgName");
       } else {
-        this.props.updateNewAffiliateAction(
-          null,
-          AppConstants.affiliatedToOrgId
-        );
+        this.props.updateNewAffiliateAction(null, AppConstants.affiliatedToOrgId);
         this.props.updateNewAffiliateAction(null, "affiliatedToOrgName");
         this.formRef.current.setFieldsValue({
           affiliatedToOrgId: null,
@@ -158,7 +145,7 @@ class UserAddAffiliates extends Component {
   };
 
   removeModalHandle = (key) => {
-    if (key == "ok") {
+    if (key === "ok") {
       this.removeContact(this.state.currentIndex);
       this.setState({ deleteModalVisible: false });
     } else {
@@ -176,7 +163,7 @@ class UserAddAffiliates extends Component {
   onChangeContactSetValue = (val, key, index) => {
     let contacts = this.props.userState.affiliate.affiliate.contacts;
     let contact = contacts[index];
-    if (key == "roles") {
+    if (key === "roles") {
       let permissions = [];
       let obj = {
         userRoleEntityId: 0,
@@ -251,7 +238,7 @@ class UserAddAffiliates extends Component {
         >
           <Breadcrumb separator=" > ">
             <NavLink to="/userAffiliatesList">
-              <Breadcrumb.Item separator=">" className="breadcrumb-product">
+              <Breadcrumb.Item separator=" > " className="breadcrumb-product">
                 {AppConstants.affiliates}
               </Breadcrumb.Item>
             </NavLink>
@@ -278,6 +265,7 @@ class UserAddAffiliates extends Component {
     return (
       <div className="content-view pt-4">
         <InputWithHead
+          required="pb-1"
           heading={AppConstants.organisationType}
           conceptulHelp
           conceptulHelpMsg={AppConstants.orgTypeMsg}
@@ -296,6 +284,7 @@ class UserAddAffiliates extends Component {
             </Option>
           ))}
         </Select>
+
         {!(
           (this.state.loggedInuserOrgTypeRefId == 1 &&
             (affiliate.organisationTypeRefId == 3 ||
@@ -359,30 +348,29 @@ class UserAddAffiliates extends Component {
         <Form.Item name='name' rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
           <InputWithHead
             auto_complete="new-name"
-            required="required-field pt-0 pb-0"
+            required="required-field pt-0 pb-1"
             heading={AppConstants.name}
             placeholder={AppConstants.name}
             onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
-            // value={affiliate.name}
-            setFieldsValue={affiliate.name}
+            value={affiliate.name}
           />
         </Form.Item>
 
         <Form.Item name='addressOne' rules={[{ required: true, message: ValidationConstants.addressField[2] }]}>
           <InputWithHead
-            required="required-field pt-0 pb-0"
+            required="required-field pb-1"
             auto_complete="new-address"
             heading={AppConstants.addressOne}
             placeholder={AppConstants.addressOne}
             name={AppConstants.addressOne}
             onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-            // value={affiliate.street1}
-            setFieldsValue={affiliate.street1}
+            value={affiliate.street1}
           />
         </Form.Item>
 
         <InputWithHead
           auto_complete="new-addressTwo"
+          required="pb-1"
           heading={AppConstants.addressTwo}
           placeholder={AppConstants.addressTwo}
           onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
@@ -392,17 +380,16 @@ class UserAddAffiliates extends Component {
         <Form.Item name='suburb' rules={[{ required: true, message: ValidationConstants.suburbField[0] }]}>
           <InputWithHead
             auto_complete="new-suburb"
-            required="required-field pt-3 pb-0"
+            required="required-field pb-1"
             heading={AppConstants.suburb}
             placeholder={AppConstants.suburb}
             onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
-            // value={affiliate.suburb}
-            setFieldsValue={affiliate.suburb}
+            value={affiliate.suburb}
           />
         </Form.Item>
 
         <InputWithHead
-          required="required-field"
+          required="required-field pb-1"
           heading={AppConstants.stateHeading}
         />
 
@@ -411,8 +398,7 @@ class UserAddAffiliates extends Component {
             style={{ width: "100%" }}
             placeholder={AppConstants.select}
             onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-            // value={affiliate.stateRefId}
-            setFieldsValue={affiliate.stateRefId}
+            value={affiliate.stateRefId}
           >
             {stateList.length > 0 && stateList.map((item) => (
               <Option value={item.id}> {item.name}</Option>
@@ -423,20 +409,20 @@ class UserAddAffiliates extends Component {
         <Form.Item name='postcode' rules={[{ required: true, message: ValidationConstants.postCodeField[0] }]}>
           <InputWithHead
             auto_complete="new-postCode"
-            required="required-field"
+            required="required-field pb-1"
             heading={AppConstants.postcode}
             placeholder={AppConstants.postcode}
             onChange={(e) =>
               this.onChangeSetValue(e.target.value, "postalCode")
             }
-            // value={affiliate.postalCode}
-            setFieldsValue={affiliate.postalCode}
+            value={affiliate.postalCode}
             maxLength={4}
           />
         </Form.Item>
 
         <InputWithHead
           maxLength={10}
+          required="pb-1"
           heading={AppConstants.phoneNumber}
           placeholder={AppConstants.phoneNumber}
           onChange={(e) => this.onChangeSetValue(e.target.value, "phoneNo")}
@@ -457,6 +443,7 @@ class UserAddAffiliates extends Component {
     return (
       <div className="discount-view pt-5">
         <span className="form-heading">{AppConstants.contacts}</span>
+
         {(affiliate.contacts || []).map((item, index) => (
           <div
             className="prod-reg-inside-container-view pt-4"
@@ -482,7 +469,7 @@ class UserAddAffiliates extends Component {
             <Form.Item name={`firstName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[0] }]}>
               <InputWithHead
                 auto_complete="new-firstName"
-                required="required-field pt-0 pb-0"
+                required="required-field pt-0 pb-1"
                 heading={AppConstants.firstName}
                 placeholder={AppConstants.firstName}
                 onChange={(e) =>
@@ -493,11 +480,13 @@ class UserAddAffiliates extends Component {
                   )
                 }
                 // value={item.firstName}
-                setFieldsValue={item.firstName}
+                value={item.firstName}
               />
             </Form.Item>
 
             <InputWithHead
+              auto_complete="new-middleName"
+              required="pb-1"
               heading={AppConstants.middleName}
               placeholder={AppConstants.middleName}
               onChange={(e) =>
@@ -508,12 +497,12 @@ class UserAddAffiliates extends Component {
                 )
               }
               value={item.middleName}
-              auto_complete="new-middleName"
             />
 
             <Form.Item name={`lastName${index}`} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
               <InputWithHead
-                required="required-field pt-0 pb-0"
+                auto_complete="new-lastName"
+                required="required-field pb-1"
                 heading={AppConstants.lastName}
                 placeholder={AppConstants.lastName}
                 onChange={(e) =>
@@ -523,8 +512,7 @@ class UserAddAffiliates extends Component {
                     index
                   )
                 }
-                setFieldsValue={item.lastName}
-                auto_complete="new-lastName"
+                value={item.lastName}
               />
             </Form.Item>
 
@@ -544,17 +532,19 @@ class UserAddAffiliates extends Component {
             >
               <InputWithHead
                 auto_complete="new-email"
-                required="required-field pt-0 pb-0"
+                required="required-field pb-1"
                 heading={AppConstants.email}
                 placeholder={AppConstants.email}
                 onChange={(e) =>
                   this.onChangeContactSetValue(e.target.value, "email", index)
                 }
-                setFieldsValue={item.email}
+                value={item.email}
               />
             </Form.Item>
 
             <InputWithHead
+              auto_complete="off"
+              required="pb-1"
               heading={AppConstants.phoneNumber}
               maxLength={10}
               placeholder={AppConstants.phoneNumber}
@@ -566,10 +556,10 @@ class UserAddAffiliates extends Component {
                 )
               }
               value={item.mobileNumber}
-              auto_complete="off"
             />
 
             <InputWithHead
+              required="pb-1"
               heading={AppConstants.permissionLevel}
               conceptulHelp
               conceptulHelpMsg={AppConstants.addAffiliatePermissionLevelMsg}
@@ -588,7 +578,7 @@ class UserAddAffiliates extends Component {
                 onChange={(e) =>
                   this.onChangeContactSetValue(e, "roles", index)
                 }
-                setFieldsValue={item.roleId}
+                value={item.roleId}
               >
                 {(roles || []).map((role, index) => (
                   <Option key={role.id} value={role.id}>
@@ -599,18 +589,21 @@ class UserAddAffiliates extends Component {
             </Form.Item>
           </div>
         ))}
+
         {this.deleteConfirmModalView()}
+
         <div
           className="transfer-image-view mt-2 pointer"
           onClick={() => this.addContact()}
         >
           <span className="user-remove-text">+ {AppConstants.addContact}</span>
         </div>
-        {userState.error && userState.status == 4 ? (
+
+        {userState.error && userState.status == 4 && (
           <div style={{ color: "red" }}>
             {userState.error.result.data.message}
           </div>
-        ) : null}
+        )}
       </div>
     );
   };

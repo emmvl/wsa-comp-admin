@@ -149,7 +149,7 @@ class UmpireImport extends Component {
                     alignItems: "center",
                 }}
             >
-                <Breadcrumb separator=">">
+                <Breadcrumb separator=" > ">
                     <Breadcrumb.Item className="breadcrumb-add">
                         {this.state.screenName === "umpireDashboard" ? AppConstants.assignUmpireToMatch : AppConstants.importUmpire}
                     </Breadcrumb.Item>

@@ -9,7 +9,6 @@ function BulkMatchPushBackAction(pushBackData, start_Date, end_Date, bulkRadioBt
         bulkRadioBtn,
         formatedNewDate
     };
-    console.log(action, 'BulkMatchPushBackAction')
     return action;
 }
 
@@ -17,7 +16,7 @@ function liveScoreBringForwardAction(competitionID, data, start_Date, end_Date, 
     const action = {
         type: ApiConstants.API_LIVE_SCORE_BULK_BRING_FORWARD_LOAD,
         competitionID: competitionID,
-        data: data,
+        data,
         start_Date,
         end_Date,
         bulkRadioBtn,
@@ -31,7 +30,7 @@ function liveScoreBringForwardAction(competitionID, data, start_Date, end_Date, 
 function liveScoreEndMatchesdAction(data, start_Date, end_Date) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_BULK_END_MATCHES_LOAD,
-        data: data,
+        data,
         start_Date,
         end_Date
     };
@@ -48,8 +47,8 @@ function liveScoreBulkMatchAction() {
 function liveScoreUpdateBulkAction(data, key) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_UPDATE_BULK,
-        data: data,
-        key: key
+        data,
+        key
     };
     return action;
 }
@@ -58,7 +57,7 @@ function liveScoreDoubleHeaderAction(competitionID, data) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_BULK_DOUBLE_HEADER_LOAD,
         competitionID: competitionID,
-        data: data
+        data
     };
     return action;
 }

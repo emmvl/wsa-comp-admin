@@ -67,7 +67,7 @@ const initialState = {
     mergeValidate: false,
     validateMessage: "",
     newSelectedCompetition: "",
-    mergeCompetitionTypeSelection:null				  
+    mergeCompetitionTypeSelection:null
 };
 var gradeColorArray = [];
 const lightGray = '#999999';
@@ -201,7 +201,7 @@ function setupDateObjectArray(dateArray, drawObject) {
     var tempDateArray = JSON.parse(JSON.stringify(dateArray))
     let defaultDateObject = {
         date: drawObject.matchDate,
-        notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1 ? true : false
+        notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1
     }
     for (let i in dateArray) {
         if (isDateSame(dateArray[i].date, drawObject.matchDate)) {
@@ -451,7 +451,7 @@ function checkTimeSlotId(timeSlotData) {
     return timeSlot_ID
 }
 
-//create Timeslot Data 
+//create Timeslot Data
 function createTimeslotData(dataArr) {
     let updatedtimeSlotArr = []
     if (dataArr.length > 0) {
@@ -460,7 +460,7 @@ function createTimeslotData(dataArr) {
             for (let i in data) {
                 let matchUpdatedTimeSlot = data[i]
                 let timeSlotStatusData = checkTimeSlotStatus(matchUpdatedTimeSlot, updatedtimeSlotArr)
-                if (timeSlotStatusData.status == true) {
+                if (timeSlotStatusData.status) {
                     let timeslotUpdatedArrayValue = {
                         "startTime": matchUpdatedTimeSlot.startTime,
                         "sortOrder": matchUpdatedTimeSlot.sortOrder,
@@ -493,14 +493,14 @@ function QuickCompetitionState(state = initialState, action) {
     switch (action.type) {
         ////Competition name and venues update
         case ApiConstants.API_UPDATE_QUICKCOMPETITION_COMPETITION:
-            if (action.key == 'add') {
+            if (action.key === 'add') {
                 state.competitionName = action.value
             }
-            if (action.key == "clear") {
+            if (action.key === "clear") {
                 state.competitionName = ""
                 state.competitionDate = null
             }
-            if (action.key == 'allData') {
+            if (action.key === 'allData') {
                 state.selectedVenues = []
                 state.timeSlot = []
                 state.division = []
@@ -513,7 +513,7 @@ function QuickCompetitionState(state = initialState, action) {
                 state.importPlayer = false
                 state.postSelectedVenues = []
             }
-            if (action.key == 'date') {
+            if (action.key === 'date') {
                 state.competitionDate = moment(action.value).format("YYYY-MM-DD")
             }
             return {
@@ -522,18 +522,18 @@ function QuickCompetitionState(state = initialState, action) {
 
         ////Competition name and venues update
         case ApiConstants.Update_QuickCompetition_Data:
-            if (action.key == "venues") {
+            if (action.key === "venues") {
                 state.quickComptitionDetails.competitionVenues = createCompetitionVenuesData(JSON.parse(JSON.stringify(action.item)))
                 state.selectedVenues = action.item
             }
-            if (action.key == "competitionName") {
+            if (action.key === "competitionName") {
                 state.quickComptitionDetails.competitionName = action.item
             }
             return { ...state, onLoad: true };
 
         // update quick competition timeslot
         case ApiConstants.API_UPDATE_QUICKCOMPETITION_TIMESLOT:
-            if (action.key == "add") {
+            if (action.key === "add") {
                 let timeSlotobject = {
                     "competitionVenueTimeslotsDayTimeId": 0,
                     "dayRefId": 1,
@@ -544,26 +544,26 @@ function QuickCompetitionState(state = initialState, action) {
                 }
                 state.timeSlot.push(timeSlotobject)
             }
-            if (action.key == "addStartTime") {
+            if (action.key === "addStartTime") {
                 let startTimeObject = {
                     "startTime": "00:00",
                     "sortOrder": 0,
                 }
                 state.timeSlot[action.index].startTime.push(startTimeObject)
             }
-            if (action.key == "remove") {
+            if (action.key === "remove") {
                 state.timeSlot.splice(action.index, 1)
             }
-            if (action.key == "removeStartTime") {
+            if (action.key === "removeStartTime") {
                 state.timeSlot[action.index].startTime.splice(action.timeindex, 1)
             }
-            if (action.key == "changeTime") {
+            if (action.key === "changeTime") {
                 state.timeSlot[action.index].startTime[action.timeindex].startTime = action.value
             }
-            if (action.key == "day") {
+            if (action.key === "day") {
                 state.timeSlot[action.index].dayRefId = action.value
             }
-            if (action.key == "swapTimeslot") {
+            if (action.key === "swapTimeslot") {
                 state.timeSlot = JSON.parse(JSON.stringify(state.postTimeslotData))
             }
             return {
@@ -571,7 +571,7 @@ function QuickCompetitionState(state = initialState, action) {
             }
         // update quick competition division
         case ApiConstants.API_UPDATE_QUICKCOMPETITION_Division:
-            if (action.key == "addDivision") {
+            if (action.key === "addDivision") {
                 let divisionObject = {
                     "competitionDivisionId": 0,
                     "divisionName": "",
@@ -585,7 +585,7 @@ function QuickCompetitionState(state = initialState, action) {
                 }
                 state.division.push(divisionObject)
             }
-            if (action.key == "addGrade") {
+            if (action.key === "addGrade") {
                 let gradeObject = {
                     "competitionDivisionGradeId": 0,
                     "gradeName": "",
@@ -608,7 +608,7 @@ function QuickCompetitionState(state = initialState, action) {
             if (action.key == "gradeName") {
                 state.division[action.index].grades[action.gradeIndex].gradeName = action.value
             }
-            if (action.key == "swap") {
+            if (action.key === "swap") {
                 state.division = JSON.parse(JSON.stringify(state.postDivisionData))
             }
             return {
@@ -799,7 +799,7 @@ function QuickCompetitionState(state = initialState, action) {
             }
 
         case ApiConstants.API_UPDATE_QUICKCOMPETITION_INVITATIONS:
-            if (action.key == "selectedTeamPlayer") {
+            if (action.key === "selectedTeamPlayer") {
                 state.selectedTeamPlayer = action.value
                 if (action.value == 1) {
                     state.importModalVisible = true
@@ -818,7 +818,7 @@ function QuickCompetitionState(state = initialState, action) {
             }
 
         case ApiConstants.QUICKCOMP_IMPORT_DATA_CLEAN:
-            if (action.key == "all") {
+            if (action.key === "all") {
                 state.selectedTeamPlayer = 0
                 state.mergeValidate = false
                 state.teamsImportData = []
@@ -889,7 +889,7 @@ function QuickCompetitionState(state = initialState, action) {
                 ...state,
                 onInvitationLoad: false,
                 error: null,
-				mergeCompetitionTypeSelection:action.result,		
+				mergeCompetitionTypeSelection:action.result,
                 mergeValidate: action.validateSuccess,
                 validateMessage: action.result.message
             }

@@ -98,7 +98,7 @@ async function checkUserAccess() {
 
 function showRoleLevelPermision(userRoleId, menuName) {
 
-    if (menuName == 'user') {
+    if (menuName === 'user') {
 
         switch (userRoleId) {
             case 2: return true
@@ -110,7 +110,7 @@ function showRoleLevelPermision(userRoleId, menuName) {
             default: return false
 
         }
-    } else if (menuName == 'registration') {
+    } else if (menuName === 'registration') {
 
         switch (userRoleId) {
             case 2: return true
@@ -118,7 +118,7 @@ function showRoleLevelPermision(userRoleId, menuName) {
             default: return false
 
         }
-    } else if (menuName == 'competitions') {
+    } else if (menuName === 'competitions') {
 
         switch (userRoleId) {
             case 2: return true
@@ -126,7 +126,7 @@ function showRoleLevelPermision(userRoleId, menuName) {
             default: return false
 
         }
-    } else if (menuName == 'liveScores') {
+    } else if (menuName === 'liveScores') {
 
         switch (userRoleId) {
             case 2: return true
@@ -134,7 +134,7 @@ function showRoleLevelPermision(userRoleId, menuName) {
             default: return false
 
         }
-    } else if (menuName == 'events') {
+    } else if (menuName === 'events') {
 
         switch (userRoleId) {
             case 2: return true
@@ -142,7 +142,7 @@ function showRoleLevelPermision(userRoleId, menuName) {
             default: return false
 
         }
-    } else if (menuName == 'shop') {
+    } else if (menuName === 'shop') {
 
         switch (userRoleId) {
             case 2: return true

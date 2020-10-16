@@ -81,7 +81,7 @@ class ImportTeamPlayerModal extends React.Component {
             if (this.props.quickCompetitionState.onLoad == false && this.state.loading === true) {
                 this.setState({ loading: false });
                 if (!this.props.quickCompetitionState.error && this.props.quickCompetitionState.status == 1) {
-                    if (this.state.buttonPressed == "upload") {
+                    if (this.state.buttonPressed === "upload") {
                         if (teamsImportData.length === 0) {
                             this.setState({ isProceed: 0 });
                             this.props.updateSelectedTeamPlayer("", "importModalVisible")

@@ -338,7 +338,7 @@ class LiveScoreTeamView extends Component {
         const { name, logoUrl, id } = teamData ? teamData : ''
         const { mobileNumber, email } = managerData ? managerData : ''
         const { userRoleId } = this.state
-        let roleId = (userRoleId == 11 || userRoleId == 13) ? true : false
+        let roleId = (userRoleId == 11 || userRoleId == 13)
         return (
             <div className="row ">
                 <div className="col-sm">
@@ -390,7 +390,7 @@ class LiveScoreTeamView extends Component {
     ///////view for breadcrumb
     headerView = () => {
         const { userRoleId } = this.state
-        let roleId = (userRoleId == 11 || userRoleId == 13) ? true : false
+        let roleId = (userRoleId == 11 || userRoleId == 13)
         return (
             <div className="row mt-5">
 
@@ -453,7 +453,7 @@ class LiveScoreTeamView extends Component {
 
                     <div className="table-responsive home-dash-table-view mt-3">
                         <Table
-                            //  loading={this.props.liveScoreTeamState.onLoad} 
+                            //  loading={this.props.liveScoreTeamState.onLoad}
                             className="home-dashboard-table" columns={this.state.userRoleId == 2 ? columns : columns_2}
                             dataSource={playerList} pagination={false} />
                     </div>

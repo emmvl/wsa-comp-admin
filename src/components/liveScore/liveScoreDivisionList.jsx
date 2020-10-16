@@ -222,12 +222,12 @@ class LiveScoreDivisionList extends Component {
 
     onPageChange(page) {
         let offset = page ? 10 * (page - 1) : 0;
-        this.setState({ offset: offset })
+        this.setState({ offset })
         this.props.getMainDivisionListAction(this.state.competitionId, offset, this.state.sortBy, this.state.sortOrder)
     }
 
     checkValue = (data) => {
-        if (data == true) {
+        if (data) {
             return "Yes"
         }
         else if (data == false) {
@@ -248,7 +248,7 @@ class LiveScoreDivisionList extends Component {
                 <div className="table-responsive home-dash-table-view">
                     <Table
                         className="home-dashboard-table"
-                        columns={liveScoreCompIsParent == true ? columns : participateColumns}
+                        columns={liveScoreCompIsParent ? columns : participateColumns}
                         dataSource={divisionList}
                         pagination={false}
                         loading={this.props.liveScoreDivisionState.onLoad === true && true}

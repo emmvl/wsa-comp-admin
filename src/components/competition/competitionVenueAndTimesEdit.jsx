@@ -98,7 +98,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                                     required="required-field pt-0 pb-0"
                                     className="input-inside-table-fees"
                                     onChange={(courtName) => this.props.updateVenuAndTimeDataAction(courtName.target.value, index, 'venueCourtName', 'courtData')}
-                                    setFieldsValue={courtName}
+                                    value={courtName}
                                     placeholder="Court Name"
                                 />
                             </Form.Item>
@@ -119,7 +119,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                                     className="input-inside-table-venue-court"
                                     // disabled={record.isDisabled}
                                     onChange={(lat) => this.props.updateVenuAndTimeDataAction(lat.target.value, index, 'lat', 'courtData')}
-                                    setFieldsValue={lat}
+                                    value={lat}
                                     placeholder="Longitude"
                                 />
                             </Form.Item>
@@ -140,7 +140,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                                     className="input-inside-table-venue-court"
                                     // disabled={record.isDisabled}
                                     onChange={(lng) => this.props.updateVenuAndTimeDataAction(lng.target.value, index, 'lng', 'courtData')}
-                                    setFieldsValue={lng}
+                                    value={lng}
                                     placeholder="Latitude"
                                 />
                             </Form.Item>
@@ -234,12 +234,12 @@ class CompetitionVenueAndTimesEdit extends Component {
 
     componentDidUpdate(nextProps) {
         let competitionList = this.props.appState.competitionList
-        if (this.state.saveContraintLoad == true && this.props.venueTimeState.onLoad == false) {
+        if (this.state.saveContraintLoad && this.props.venueTimeState.onLoad == false) {
             this.navigateTo();
         }
 
         if (nextProps.venueTimeState !== this.props.venueTimeState) {
-            if (this.props.venueTimeState.venueEditOnLoad === false && this.state.getDataLoading == true) {
+            if (this.props.venueTimeState.venueEditOnLoad === false && this.state.getDataLoading) {
                 this.setState({
                     getDataLoading: false
                 });
@@ -314,7 +314,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             venueOrganisation.map((item, index) => {
                 // let affiliate = affiliateData.find(x=>x == item.id);
                 // if (affiliate != null && affiliate != undefined) {
-                //     item["isDisabled"] = isVenueMapped == true ? true : false;
+                //     item["isDisabled"] = isVenueMapped;
                 // } else {
                 //     item["isDisabled"] = false;
                 // }
@@ -375,7 +375,7 @@ class CompetitionVenueAndTimesEdit extends Component {
     }
 
     validateTime = (rule, value, callback, startTime, endTime, type) => {
-        if (type == "end") {
+        if (type === "end") {
             if (startTime > endTime) {
                 callback('End time should be greater than start time');
                 return;
@@ -483,7 +483,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.name}
                         onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'name')}
-                        setFieldsValue={venuData.name}
+                        value={venuData.name}
                     />
                 </Form.Item>
 
@@ -499,7 +499,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         disabled={this.state.isUsed || !this.state.isCreator}
                         placeholder={AppConstants.short_Name}
                         onChange={(name) => this.props.updateVenuAndTimeDataAction(name.target.value, 'Venue', 'shortName')}
-                        setFieldsValue={venuData.shortName}
+                        value={venuData.shortName}
                     />
                 </Form.Item>
 
@@ -526,7 +526,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.addressOne}
                         placeholder={AppConstants.addressOne}
                         onChange={(street1) => this.props.updateVenuAndTimeDataAction(street1.target.value, 'Venue', 'street1')}
-                        setFieldsValue={venuData.street1}
+                        value={venuData.street1}
                         disabled={this.state.isUsed || !this.state.isCreator}
                     />
                 </Form.Item>
@@ -547,7 +547,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.suburb}
                         placeholder={AppConstants.suburb}
                         onChange={(suburb) => this.props.updateVenuAndTimeDataAction(suburb.target.value, 'Venue', 'suburb')}
-                        setFieldsValue={venuData.suburb}
+                        value={venuData.suburb}
                         disabled={this.state.isUsed || !this.state.isCreator}
                     />
                 </Form.Item>
@@ -562,7 +562,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         style={{ width: "100%" }}
                         placeholder={AppConstants.select}
                         onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
-                        setFieldsValue={venuData.stateRefId}
+                        value={venuData.stateRefId}
                         disabled={this.state.isUsed || !this.state.isCreator}
                     >
                         {stateList.length > 0 && stateList.map((item) => (
@@ -578,7 +578,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         heading={AppConstants.postcode}
                         placeholder={AppConstants.postcode}
                         onChange={(postalCode) => this.props.updateVenuAndTimeDataAction(postalCode.target.value, 'Venue', 'postalCode')}
-                        setFieldsValue={venuData.postalCode}
+                        value={venuData.postalCode}
                         maxLength={4}
                         disabled={this.state.isUsed || !this.state.isCreator}
                     />
@@ -627,6 +627,12 @@ class CompetitionVenueAndTimesEdit extends Component {
         );
     };
 
+    onTimeChange = (time, index, field) => {
+        if (time !== null && time !== undefined) {
+            this.updateVenuAndTimeDataAction(time.format("HH:mm"), index, field, 'gameTimeslot');
+        }
+    };
+
     gameData(item, index) {
         const { daysList } = this.props.commonReducerState
         return (
@@ -653,7 +659,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                         key="startTime"
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
-                        onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'startTime', "gameTimeslot")}
+                        onChange={(time) => this.onTimeChange(time, index, 'startTime')}
+                        onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'startTime')}
                         value={moment(item.startTime, "HH:mm")}
                         format="HH:mm"
                         // minuteStep={15}
@@ -669,7 +676,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                         disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
-                        onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "gameTimeslot")}
+                        onChange={(time) => this.onTimeChange(time, index, 'endTime')}
+                        onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'endTime')}
                         value={moment(item.endTime, "HH:mm")}
                         format="HH:mm"
                         // minuteStep={15}
@@ -716,6 +724,12 @@ class CompetitionVenueAndTimesEdit extends Component {
         );
     };
 
+    onAddTimeChange = (time, index, tableIndex, field) => {
+        if (time !== null && time !== undefined) {
+            this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, field, 'addTimeSlotField', tableIndex);
+        }
+    };
+
     expendedRowData(item, index, tableIndex) {
         const { daysList } = this.props.commonReducerState
         return (
@@ -740,7 +754,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                         disabled={item.isDisabled}
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
-                        onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'startTime', "addTimeSlotField", tableIndex)}
+                        onChange={(time) => this.onAddTimeChange(time, index, tableIndex,'startTime')}
+                        onBlur={(e) => this.onAddTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, tableIndex, 'startTime')}
                         value={moment(item.startTime, "HH:mm")}
                         format="HH:mm"
                         // minuteStep={15}
@@ -755,7 +770,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                         disabledHours={() => this.getDisabledHours(item.startTime)}
                         disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
                         style={{ width: "100%" }}
-                        onChange={(time) => time !== null && this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, 'endTime', "addTimeSlotField", tableIndex)}
+                        onChange={(time) => this.onAddTimeChange(time, index, tableIndex,'endTime')}
+                        onBlur={(e) => this.onAddTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, tableIndex, 'endTime')}
                         value={moment(item.endTime, "HH:mm")}
                         format="HH:mm"
                         // minuteStep={15}
@@ -770,7 +786,6 @@ class CompetitionVenueAndTimesEdit extends Component {
                         <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
                     </div>
                 )}
-
             </div>
         )
     }
@@ -838,7 +853,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                             expandedRowRender={(record, index) => this.expandedRowView(record, index)}
                             expandIconAsCell={false}
                             expandIconColumnIndex={-1}
-                            loading={this.state.loading == true && true}
+                            loading={this.state.loading && true}
                         />
                     </div>
                     {/* {!this.state.isUsed ? */}
@@ -968,7 +983,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     {this.headerView()}
                     <Form
                         ref={this.formRef}
-                        autocomplete="off"
+                        autoComplete="off"
                         onFinish={this.onAddVenue}
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name);

@@ -36,9 +36,9 @@ class CompetitionVenueModal extends React.Component {
     }
 
     onOKsubmit = (e) => {
-        if (this.state.buttonClicked == "save") {
+        if (this.state.buttonClicked === "save") {
             this.props.handleVenueOK()
-        } else if (this.state.buttonClicked == "next") {
+        } else if (this.state.buttonClicked === "next") {
             this.props.handleVenueNext()
         }
     }

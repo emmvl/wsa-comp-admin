@@ -24,11 +24,11 @@ function tableSort(a, b, key) {
 }
 
 function matchResultImag(result) {
-    if (result == "Final") {
+    if (result === "Final") {
         return AppImages.greenDot
-    } else if (result == "Draft") {
+    } else if (result === "Draft") {
         return AppImages.purpleDot
-    } else if (result == "In Dispute") {
+    } else if (result === "In Dispute") {
         return AppImages.redDot
     } else {
         return AppImages.greenDot
@@ -226,7 +226,7 @@ class LiveScoreSeasonFixture extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreFixtureCompState !== this.props.liveScoreFixtureCompState) {
-            if (this.state.onCompLoad == true && this.props.liveScoreFixtureCompState.onLoad == false) {
+            if (this.state.onCompLoad && this.props.liveScoreFixtureCompState.onLoad == false) {
                 let firstComp = this.props.liveScoreFixtureCompState.comptitionList && this.props.liveScoreFixtureCompState.comptitionList[0].id
                 this.props.getLiveScoreDivisionList(firstComp)
                 this.setState({ selectedComp: firstComp, onCompLoad: false, onDivisionLoad: true })
@@ -234,7 +234,7 @@ class LiveScoreSeasonFixture extends Component {
         }
 
         if (this.props.liveScoreMatchState !== nextProps.liveScoreMatchState) {
-            if (this.props.liveScoreMatchState.onLoad == false && this.state.onDivisionLoad == true) {
+            if (this.props.liveScoreMatchState.onLoad == false && this.state.onDivisionLoad) {
                 if (this.props.liveScoreMatchState.divisionList.length > 0) {
                     let division = this.props.liveScoreMatchState.divisionList[0].id
                     this.setState({ onDivisionLoad: false, division })

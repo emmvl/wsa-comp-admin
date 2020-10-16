@@ -226,7 +226,7 @@ class LiveScorePlayerProfile extends Component {
                         <div className="fluid-width" style={{ marginTop: 10 }}>
                             <div className="row">
                                 <div className="col-sm">
-                                    <span className='input-heading-add-another'>+ {AppConstants.addAnotherDetail}</span>
+                                    <span className="input-heading-add-another">+ {AppConstants.addAnotherDetail}</span>
                                 </div>
                                 <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", paddingTop: 8 }}>
                                     <Button className='primary-reg-live-score' type='primary'>{AppConstants.register}</Button>

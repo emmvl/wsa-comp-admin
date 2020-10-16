@@ -402,16 +402,15 @@ class LiveScoreMatchDetails extends Component {
     };
 
     playingView(record, value, index, key) {
-        this.props.changePlayerLineUpAction(
-            {
-                record: record,
-                value: value,
-                matchId: this.state.matchId,
-                competitionId: this.state.competitionId,
-                teamId: record.teamId,
-                index: index,
-                key: key
-            })
+        this.props.changePlayerLineUpAction({
+            record,
+            value,
+            matchId: this.state.matchId,
+            competitionId: this.state.competitionId,
+            teamId: record.teamId,
+            index,
+            key
+        })
     }
 
     onChange = e => {
@@ -762,8 +761,7 @@ class LiveScoreMatchDetails extends Component {
                                     size="small"
                                     type="number"
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
-                                    onChange={(value) =>
-                                        this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
                                 />
                             ) : (
                                 <Checkbox
@@ -828,8 +826,7 @@ class LiveScoreMatchDetails extends Component {
                                     size="small"
                                     type="number"
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
-                                    onChange={(value) =>
-                                        this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
                                 />
                             ) : (
                                 <Checkbox
@@ -901,8 +898,7 @@ class LiveScoreMatchDetails extends Component {
                                     size="small"
                                     type="number"
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                    onChange={(value) =>
-                                        this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
                                 />
                             ) : (
                                 <Checkbox
@@ -950,8 +946,7 @@ class LiveScoreMatchDetails extends Component {
                                     size="small"
                                     type="number"
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                    onChange={(value) =>
-                                        this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
                                 />
                             ) : (
                                 <Checkbox
@@ -1071,8 +1066,7 @@ class LiveScoreMatchDetails extends Component {
                                     size="small"
                                     type="number"
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 3)}
-                                    onChange={(value) =>
-                                        this.setMinuteTrackingData(teamId, row.playerId, 3, value)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 3, value)}
                                 />
                             ) : (
                                 <Checkbox
@@ -1143,8 +1137,7 @@ class LiveScoreMatchDetails extends Component {
                                     size="small"
                                     type="number"
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 4)}
-                                    onChange={(value) =>
-                                        this.setMinuteTrackingData(teamId, row.playerId, 4, value)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 4, value)}
                                 />
                             ) : (
                                 <Checkbox
@@ -1226,8 +1219,7 @@ class LiveScoreMatchDetails extends Component {
                                     size="small"
                                     type="number"
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 4)}
-                                    onChange={(value) =>
-                                        this.setMinuteTrackingData(teamId, row.playerId, 4, value)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 4, value)}
                                 />
                             ) : (
                                 <Checkbox
@@ -1471,8 +1463,7 @@ class LiveScoreMatchDetails extends Component {
                                     size="small"
                                     type="number"
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
-                                    onChange={(value) =>
-                                        this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
                                 />
                             ) : (
                                 <Checkbox
@@ -1537,8 +1528,7 @@ class LiveScoreMatchDetails extends Component {
                                     size="small"
                                     type="number"
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
-                                    onChange={(value) =>
-                                        this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
                                 />
                             ) : (
                                 <Checkbox
@@ -1610,8 +1600,7 @@ class LiveScoreMatchDetails extends Component {
                                     size="small"
                                     type="number"
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                    onChange={(value) =>
-                                        this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
                                 />
                             ) : (
                                 <Checkbox
@@ -1659,8 +1648,7 @@ class LiveScoreMatchDetails extends Component {
                                     size="small"
                                     type="number"
                                     defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                    onChange={(value) =>
-                                        this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
+                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
                                 />
                             ) : (
                                 <Checkbox
@@ -1679,7 +1667,7 @@ class LiveScoreMatchDetails extends Component {
         return (
             <Table
                 className="home-dashboard-table attendance-table"
-                columns={match?.type == 'TWO_HALVES' ? columns2 : columns}
+                columns={match?.type === 'TWO_HALVES' ? columns2 : columns}
                 dataSource={data}
                 size="small"
                 scroll={{ x: '100%' }}
@@ -1857,7 +1845,7 @@ class LiveScoreMatchDetails extends Component {
                 livestreamURL: this.state.liveStreamLink
             };
 
-            this.props.liveScoreAddLiveStreamAction({ body: body });
+            this.props.liveScoreAddLiveStreamAction({ body });
         }
 
         this.setState({ visible: false, liveStreamLink: '' });
@@ -1877,7 +1865,7 @@ class LiveScoreMatchDetails extends Component {
                 footer={null}
             >
                 <InputWithHead
-                    auto_complete='off'
+                    auto_complete="off"
                     // heading={AppConstants.liveStreamlink}
                     placeholder={AppConstants.liveStreamlink}
                     value={this.state.liveStreamLink}
@@ -2050,7 +2038,7 @@ class LiveScoreMatchDetails extends Component {
 
                 {
                     this.state.umpireKey ?
-                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen == 'umpireList' ? "2" : "1"} />
+                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
                         :
                         <InnerHorizontalMenu
                             menu="liveScore"

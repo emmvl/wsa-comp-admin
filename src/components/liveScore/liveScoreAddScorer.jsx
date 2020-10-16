@@ -78,8 +78,8 @@ class LiveScoreAddScorer extends Component {
 
     componentDidUpdate(nextProps) {
         // if(this.props.liveScoreScorerState.scorerData !== this.props.liveScoreScorerState.scorerData){
-        // if (this.state.load == true && this.props.liveScoreScorerState.onLoad == false) {
-        // if (this.state.isEdit == true) {
+        // if (this.state.load && this.props.liveScoreScorerState.onLoad == false) {
+        // if (this.state.isEdit) {
         //     // this.setInitalFiledValue()
         // }
         // this.setState({ load: false, loader: false })
@@ -187,7 +187,7 @@ class LiveScoreAddScorer extends Component {
                                 heading={AppConstants.team}
                             />
                                 <Select
-                                    loading={this.props.liveScoreState.onLoad == true && true}
+                                    loading={this.props.liveScoreState.onLoad && true}
                                     mode="multiple"
                                     showSearch
                                     placeholder={AppConstants.selectTeam}
@@ -229,7 +229,7 @@ class LiveScoreAddScorer extends Component {
     }
 
     scorerNewRadioBtnView() {
-        let hasError = this.state.hasError == true ? true : false
+        let hasError = this.state.hasError
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -251,7 +251,7 @@ class LiveScoreAddScorer extends Component {
                     <div className="col-sm">
                         <Form.Item name={AppConstants.lastName} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
                             <InputWithHead
-                                auto_complete='off'
+                                auto_complete="off"
                                 required="required-field pb-0 pt-0"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
@@ -315,7 +315,7 @@ class LiveScoreAddScorer extends Component {
                         <InputWithHead heading={AppConstants.team} required={"required-field pb-0 pt-3"} />
                         <Form.Item className="slct-in-add-manager-livescore">
                             <Select
-                                loading={this.props.liveScoreTeamState.onLoad == true && true}
+                                loading={this.props.liveScoreTeamState.onLoad && true}
                                 mode="multiple"
                                 placeholder={AppConstants.selectTeam}
                                 style={{ width: "100%", }}
@@ -487,7 +487,7 @@ class LiveScoreAddScorer extends Component {
                         <Content>
                             <div className="formView">
                                 {/* {this.contentView(getFieldDecorator)} */}
-                                {this.state.isEdit == true ? this.contentViewForEditManager() : this.contentViewForAddManager()}
+                                {this.state.isEdit ? this.contentViewForEditManager() : this.contentViewForAddManager()}
                             </div>
                         </Content>
                         <Footer>

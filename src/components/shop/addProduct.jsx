@@ -231,7 +231,7 @@ class AddProduct extends Component {
     affiliateOnChange = (value, name) => {
         let { productDetailData } = this.props.shopProductState
         let affiliatePostObject = productDetailData.affiliates
-        let assignedValue = value == true ? 1 : 0
+        let assignedValue = value ? 1 : 0
         switch (name) {
             case AppConstants.direct:
                 affiliatePostObject.direct = assignedValue
@@ -465,7 +465,7 @@ class AddProduct extends Component {
 
     onChangeShippingCheckBox = async (e) => {
         await this.props.onChangeProductDetails(
-            e.target.checked == true ? "shipping" : "",
+            e.target.checked ? "shipping" : "",
             'deliveryType'
         );
         this.setDetailsFieldValue();
@@ -478,7 +478,7 @@ class AddProduct extends Component {
                 <Header
                     className="form-header-view header-transaparent"
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.productDetails}
                         </Breadcrumb.Item>
@@ -493,7 +493,7 @@ class AddProduct extends Component {
         return (
             <div className="fluid-width mt-3 shop-decription-editor-main-div">
                 <div className="livescore-editor-news col-sm"
-                    style={allDisabled == true ? { backgroundColor: "#f5f5f5" } : null}>
+                    style={allDisabled ? { backgroundColor: "#f5f5f5" } : null}>
                     <Editor
                         editorState={editorState}
                         editorClassName="newsDetailEditor"
@@ -540,7 +540,7 @@ class AddProduct extends Component {
                     ]}
                 >
                     <InputWithHead
-                        auto_complete='off'
+                        auto_complete="off"
                         required={"required-field pb-0 pt-3"}
                         heading={AppConstants.title}
                         placeholder={AppConstants.enterTitle}
@@ -590,7 +590,7 @@ class AddProduct extends Component {
                     )}
                 </Select>
                 {
-                    this.state.orgLevel == "state" &&
+                    this.state.orgLevel === "state" &&
                     <span className="input-heading-add-another" onClick={this.addAnotherProductType}>+{AppConstants.addType}</span>
                 }
                 <Modal
@@ -601,7 +601,7 @@ class AddProduct extends Component {
                     onCancel={this.handleCancel}
                 >
                     <InputWithHead
-                        required={"pt-0 mt-0"}
+                        required="pt-0 mt-0"
                         heading={AppConstants.addType}
                         placeholder={ValidationConstants.pleaseEnterProductType}
                         onChange={(e) => this.setState({ newProductType: e.target.value })}
@@ -616,7 +616,7 @@ class AddProduct extends Component {
                         <div key={"affiliateArray" + index}>
                             <Checkbox
                                 className="single-checkbox mt-3"
-                                checked={this.checkedAffiliates(item.name) === 1 ? true : false}
+                                checked={this.checkedAffiliates(item.name) === 1}
                                 disabled={this.checkAffiliateDisable(item)}
                                 onChange={(e) =>
                                     this.affiliateOnChange(e.target.checked, item.name)
@@ -701,7 +701,7 @@ class AddProduct extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <InputWithHead
-                                auto_complete='off'
+                                auto_complete="off"
                                 heading={AppConstants.price}
                                 required={'pt-3'}
                                 placeholder={AppConstants.price}
@@ -719,7 +719,7 @@ class AddProduct extends Component {
                         </div>
                         <div className="col-sm">
                             <InputWithHead
-                                auto_complete='off'
+                                auto_complete="off"
                                 heading={AppConstants.costPerItem}
                                 placeholder={AppConstants.costPerItem}
                                 required={'pt-3'}
@@ -798,7 +798,7 @@ class AddProduct extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <InputWithHead
-                                    auto_complete='off'
+                                    auto_complete="off"
                                     heading={AppConstants.skuHeader}
                                     placeholder={AppConstants.StockKeepingUnit}
                                     onChange={(e) =>
@@ -813,7 +813,7 @@ class AddProduct extends Component {
                             </div>
                             <div className="col-sm">
                                 <InputWithHead
-                                    auto_complete='off'
+                                    auto_complete="off"
                                     heading={AppConstants.barcodeHeading}
                                     placeholder={AppConstants.barcode}
                                     onChange={(e) =>
@@ -858,7 +858,7 @@ class AddProduct extends Component {
                     <div className="pt-5">
                         <Checkbox
                             className="single-checkbox mt-0"
-                            checked={productDetailData.availableIfOutOfStock === 1 ? true : false}
+                            checked={productDetailData.availableIfOutOfStock === 1}
                             onChange={(e) =>
                                 this.props.onChangeProductDetails(
                                     e.target.checked === true ? 1 : 0,
@@ -908,8 +908,8 @@ class AddProduct extends Component {
                                     ]}
                                 >
                                     <InputWithHead
-                                        auto_complete='off'
-                                        required={"required-field pb-0"}
+                                        auto_complete="off"
+                                        required="required-field pb-0"
                                         heading={AppConstants.variantName}
                                         placeholder={AppConstants.variant_name}
                                         onChange={(e) => this.onVariantNameChange(e.target.value)}
@@ -924,7 +924,7 @@ class AddProduct extends Component {
                                 <div className="row"  >
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_complete='off'
+                                            auto_complete="off"
                                             heading={AppConstants.option}
                                             placeholder={AppConstants.option}
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "optionName", 0, subIndex)}
@@ -934,7 +934,7 @@ class AddProduct extends Component {
                                     </div>
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_complete='off'
+                                            auto_complete="off"
                                             heading={AppConstants.price}
                                             placeholder={AppConstants.price}
                                             prefix="$"
@@ -946,7 +946,7 @@ class AddProduct extends Component {
                                     </div>
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_complete='off'
+                                            auto_complete="off"
                                             heading={AppConstants.cost}
                                             placeholder={AppConstants.cost}
                                             prefix="$"
@@ -958,7 +958,7 @@ class AddProduct extends Component {
                                     </div>
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_complete='off'
+                                            auto_complete="off"
                                             heading={AppConstants.sku}
                                             placeholder={AppConstants.sku}
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "skuCode", 0, subIndex)}
@@ -968,7 +968,7 @@ class AddProduct extends Component {
                                     </div>
                                     <div className="col-sm">
                                         <InputWithHead
-                                            auto_complete='off'
+                                            auto_complete="off"
                                             heading={AppConstants.barcode}
                                             placeholder={AppConstants.barcode}
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "barcode", 0, subIndex)}
@@ -1027,7 +1027,7 @@ class AddProduct extends Component {
                     <div className="col-sm-4">
                         <Checkbox
                             className="single-checkbox mt-3"
-                            checked={productDetailData.deliveryType == "shipping" ? true : false}
+                            checked={productDetailData.deliveryType === "shipping"}
                             onChange={(e) => this.onChangeShippingCheckBox(e)}
                             disabled={this.state.allDisabled}
                         >
@@ -1037,10 +1037,10 @@ class AddProduct extends Component {
                     <div className="col-sm-8">
                         <Checkbox
                             className="single-checkbox mt-3"
-                            checked={productDetailData.deliveryType == "pickup" ? true : false}
+                            checked={productDetailData.deliveryType === "pickup"}
                             onChange={(e) =>
                                 this.props.onChangeProductDetails(
-                                    e.target.checked == true ? "pickup" : "",
+                                    e.target.checked ? "pickup" : "",
                                     'deliveryType'
                                 )
                             }
@@ -1051,7 +1051,7 @@ class AddProduct extends Component {
                     </div>
                 </div>
                 {
-                    productDetailData.deliveryType == "shipping" && <>
+                    productDetailData.deliveryType === "shipping" && <>
                         <span className="form-heading mt-5">{AppConstants.productDimensionsWeight}</span>
                         <InputWithHead
                             heading={AppConstants.dimensions}
@@ -1070,7 +1070,7 @@ class AddProduct extends Component {
                                     ]}
                                 >
                                     <InputWithHead
-                                        auto_complete='off'
+                                        auto_complete="off"
                                         required={"required-field "}
                                         placeholder={"Length"}
                                         suffix="cm"
@@ -1107,7 +1107,7 @@ class AddProduct extends Component {
                                     ]}
                                 >
                                     <InputWithHead
-                                        auto_complete='off'
+                                        auto_complete="off"
                                         required="required-field"
                                         placeholder={"Width"}
                                         suffix="cm"
@@ -1144,7 +1144,7 @@ class AddProduct extends Component {
                                     ]}
                                 >
                                     <InputWithHead
-                                        auto_complete='off'
+                                        auto_complete="off"
                                         placeholder={"Height"}
                                         required={"required-field "}
                                         suffix="cm"
@@ -1174,7 +1174,7 @@ class AddProduct extends Component {
                                     ]}
                                 >
                                     <InputWithHead
-                                        auto_complete='off'
+                                        auto_complete="off"
                                         heading={AppConstants.dimensions}
                                         required={"required-field "}
                                         placeholder={"Weight"}

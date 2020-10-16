@@ -14,7 +14,7 @@ function getMatchListSettings(data) {
 }
 
 function getData(data) {
-   
+
     return {
         id: data.id,
         team1Score: data.team1Score,
@@ -28,7 +28,7 @@ function getData(data) {
         // startTime: moment(data.startTime).format("DD/MM/YYYY hh:mm"),
         // startTime: liveScore_formateDate(data.startTime),
         startTime: data.startTime,
-        type: data.type == 'FOUR_QUARTERS' ? 'Quarters' : data.type == 'TWO_HALVES' ? 'Halves' : data.type == 'SINGLE' ? 'Single' : data.type,
+        type: data.type === 'FOUR_QUARTERS' ? 'Quarters' : data.type === 'TWO_HALVES' ? 'Halves' : data.type === 'SINGLE' ? 'Single' : data.type,
         matchDuration: data.matchDuration,
         breakDuration: data.breakDuration,
         qtrBreak: data.type == "FOUR_QUARTERS" ? data.breakDuration : "",
@@ -74,7 +74,7 @@ function team1(data) {
         clubId: data.clubId,
         gameTimeTrackingOverride: data.gameTimeTrackingOverride,
         positionTracking: data.positionTracking,
-     
+
     }
 }
 
@@ -90,7 +90,7 @@ function team2(data) {
         clubId: data.clubId,
         gameTimeTrackingOverride: data.gameTimeTrackingOverride,
         positionTracking: data.positionTracking,
-       
+
     }
 }
 

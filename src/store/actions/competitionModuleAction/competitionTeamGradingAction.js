@@ -4,21 +4,21 @@ import ApiConstants from "../../../themes/apiConstants";
 function getCompOwnProposedTeamGradingAction(yearRefId, competitionId, divisionId, gradeRefId) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_OWN_PROPOSED_TEAM_GRADING_LIST_LOAD,
-        yearRefId: yearRefId,
-        competitionId: competitionId,
-        divisionId: divisionId,
+        yearRefId,
+        competitionId,
+        divisionId,
         gradeRefId: gradeRefId
     }
     return action;
 }
 
-//////competition own final team grading data on Change table 
+//////competition own final team grading data on Change table
 function onchangeCompOwnFinalTeamGradingData(value, index, key) {
     const action = {
         type: ApiConstants.ONCHANGE_COMPETITION_OWN_PROPOSED_TEAM_GRADING_DATA,
-        value: value,
-        index: index,
-        key: key
+        value,
+        index,
+        key
     }
     return action;
 }
@@ -27,7 +27,7 @@ function onchangeCompOwnFinalTeamGradingData(value, index, key) {
 function saveOwnFinalTeamGradingDataAction(payload) {
     const action = {
         type: ApiConstants.API_SAVE_COMPETITION_OWN_FINAL_TEAM_GRADING_LOAD,
-        payload: payload
+        payload
     }
     return action;
 }
@@ -36,7 +36,7 @@ function saveOwnFinalTeamGradingDataAction(payload) {
 function clearTeamGradingReducerDataAction(key) {
     const action = {
         type: ApiConstants.OWN_COMP_TEAM_GRADING_CLEARING_PARTICULAR_REDUCER_DATA,
-        key: key
+        key
     }
     return action;
 }
@@ -45,20 +45,20 @@ function clearTeamGradingReducerDataAction(key) {
 function getCompPartProposedTeamGradingAction(yearRefId, competitionId, divisionId) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_PART_PROPOSED_TEAM_GRADING_LIST_LOAD,
-        yearRefId: yearRefId,
-        competitionId: competitionId,
-        divisionId: divisionId,
+        yearRefId,
+        competitionId,
+        divisionId,
     }
     return action;
 }
 
-//////competition partcipate in proposed team grading on Change table 
+//////competition partcipate in proposed team grading on Change table
 function onchangeCompPartProposedTeamGradingData(value, index, key) {
     const action = {
         type: ApiConstants.ONCHANGE_COMPETITION_PART_PROPOSED_TEAM_GRADING_DATA,
-        value: value,
-        index: index,
-        key: key
+        value,
+        index,
+        key
     }
     return action;
 }
@@ -67,7 +67,7 @@ function onchangeCompPartProposedTeamGradingData(value, index, key) {
 function savePartProposedTeamGradingDataAction(payload) {
     const action = {
         type: ApiConstants.API_SAVE_COMPETITION_PART_PROPOSED_TEAM_GRADING_LOAD,
-        payload: payload
+        payload
     }
     return action;
 }
@@ -76,8 +76,8 @@ function savePartProposedTeamGradingDataAction(payload) {
 function getTeamGradingSummaryAction(yearRefId, competitionId) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_OWN_TEAM_GRADING_SUMMARY_LIST_LOAD,
-        yearRefId: yearRefId,
-        competitionId: competitionId,
+        yearRefId,
+        competitionId,
     }
     return action;
 }
@@ -106,9 +106,9 @@ function publishGradeTeamSummaryAction(yearRefId, competitionId,publishToLivesco
 function onchangeTeamGradingSummaryData(value, index, key) {
     const action = {
         type: ApiConstants.ONCHANGE_COMPETITION_TEAM_GRADING_SUMMARY_DATA,
-        value: value,
-        index: index,
-        key: key
+        value,
+        index,
+        key
     }
     return action;
 }
@@ -118,9 +118,9 @@ function onchangeTeamGradingSummaryData(value, index, key) {
 function getCompFinalGradesListAction(yearRefId, competitionId, divisionId) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_FINAL_GRADES_LIST_LOAD,
-        yearRefId: yearRefId,
-        competitionId: competitionId,
-        divisionId: divisionId,
+        yearRefId,
+        competitionId,
+        divisionId,
     }
     return action;
 }
@@ -240,5 +240,5 @@ export {
     exportFinalPlayersAction,
     exportProposedTeamsAction,
     exportProposedPlayersAction,
-    changeDivisionTeamAction							  
-}                   
+    changeDivisionTeamAction
+}

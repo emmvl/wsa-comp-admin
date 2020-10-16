@@ -44,7 +44,7 @@ class UmpirePaymentSetting extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
-            if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
+            if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
 
@@ -73,7 +73,7 @@ class UmpirePaymentSetting extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.umpirePaymentSetting}
                         </Breadcrumb.Item>
@@ -338,7 +338,7 @@ class UmpirePaymentSetting extends Component {
                             placeholder={"Name"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'name',
                                 subkey: "byPoolInputFeilds"
                             })}
@@ -347,14 +347,14 @@ class UmpirePaymentSetting extends Component {
                     </div>
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             heading={AppConstants.umpireRate}
                             placeholder={"Umpire Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpireRate',
                                 subkey: "byPoolInputFeilds"
                             })}
@@ -364,14 +364,14 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             heading={AppConstants.umpireResRate}
                             placeholder={"Umpire Reserve Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpReserveRate',
                                 subkey: "byPoolInputFeilds"
                             })}
@@ -381,14 +381,14 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             heading={AppConstants.umpireCoachrate}
                             placeholder={"Umpire Coach Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpCoachRate',
                                 subkey: "byPoolInputFeilds"
                             })}
@@ -397,7 +397,7 @@ class UmpirePaymentSetting extends Component {
                     </div>
 
                     {/* <div className="col-sm-1 umpire-delete-image-view">
-                        <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removePoolItem', index: index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
+                        <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removePoolItem', index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                     </div> */}
                 </div>
             </div>
@@ -472,7 +472,7 @@ class UmpirePaymentSetting extends Component {
                             placeholder={"Name"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'name',
                                 subkey: "inputFieldsAffiliateOrgByPool"
                             })}
@@ -481,14 +481,14 @@ class UmpirePaymentSetting extends Component {
                     </div>
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             heading={AppConstants.umpireRate}
                             placeholder={"Umpire Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpireRate',
                                 subkey: "inputFieldsAffiliateOrgByPool"
                             })}
@@ -498,14 +498,14 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             heading={AppConstants.umpireResRate}
                             placeholder={"Umpire Reserve Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpReserveRate',
                                 subkey: "inputFieldsAffiliateOrgByPool"
                             })}
@@ -515,14 +515,14 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             heading={AppConstants.umpireCoachrate}
                             placeholder={"Umpire Coach Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpCoachRate',
                                 subkey: "inputFieldsAffiliateOrgByPool"
                             })}
@@ -531,7 +531,7 @@ class UmpirePaymentSetting extends Component {
                     </div>
 
                     {/* <div className="col-sm-1 umpire-delete-image-view">
-                        <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeinputFieldsAffiliateOrgByPool', index: index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
+                        <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeinputFieldsAffiliateOrgByPool', index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                     </div> */}
                 </div>
             </div>
@@ -638,11 +638,11 @@ class UmpirePaymentSetting extends Component {
                         </div>
                         <div className='col-sm-4 pt-5'>
                             <InputWithHead
-                                auto_complete='off'
+                                auto_complete="off"
                                 type='number'
                                 onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                     value: e.target.value,
-                                    index: index,
+                                    index,
                                     key: 'fee',
                                     subkey: "feeField"
                                 })}
@@ -652,7 +652,7 @@ class UmpirePaymentSetting extends Component {
                             />
                         </div>
                         {/* <div className="col-sm-1 umpire-delete-image-view">
-                            <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItemPool', index: index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
+                            <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItemPool', index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                         </div> */}
                     </div>
                 ))}
@@ -675,11 +675,11 @@ class UmpirePaymentSetting extends Component {
                         </div>
                         <div className='col-sm-4 pt-5'>
                             <InputWithHead
-                                auto_complete='off'
+                                auto_complete="off"
                                 type='number'
                                 onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                     value: e.target.value,
-                                    index: index,
+                                    index,
                                     key: 'fee',
                                     subkey: "feeFieldAffiliae"
                                 })}
@@ -689,7 +689,7 @@ class UmpirePaymentSetting extends Component {
                             />
                         </div>
                         {/* <div className="col-sm-1 umpire-delete-image-view">
-                            <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItemPoolAffiliate', index: index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
+                            <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItemPoolAffiliate', index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                         </div> */}
                     </div>
                 ))}
@@ -716,7 +716,7 @@ class UmpirePaymentSetting extends Component {
                             placeholder={"Name"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'name'
                             })}
                             value={inputFieldArray[index].name}
@@ -724,7 +724,7 @@ class UmpirePaymentSetting extends Component {
                     </div>
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             step=".01"
@@ -732,7 +732,7 @@ class UmpirePaymentSetting extends Component {
                             placeholder={"Umpire Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpireRate'
                             })}
                             value={inputFieldArray[index].umpireRate}
@@ -741,14 +741,14 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             heading={AppConstants.umpireResRate}
                             placeholder={"Umpire Reserve Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpReserveRate'
                             })}
                             value={inputFieldArray[index].umpReserveRate}
@@ -757,14 +757,14 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             heading={AppConstants.umpireCoachrate}
                             placeholder={"Umpire Coach Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpCoachRate'
                             })}
                             value={inputFieldArray[index].umpCoachRate}
@@ -772,7 +772,7 @@ class UmpirePaymentSetting extends Component {
                     </div>
 
                     {/* <div className="col-sm-1 umpire-delete-image-view">
-                        <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItem', index: index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
+                        <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItem', index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                     </div> */}
                 </div>
             </div>
@@ -791,7 +791,7 @@ class UmpirePaymentSetting extends Component {
                             placeholder={"Name"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'name',
                                 subkey: "inputFieldAffiliate"
                             })}
@@ -800,14 +800,14 @@ class UmpirePaymentSetting extends Component {
                     </div>
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             heading={AppConstants.umpireRate}
                             placeholder={"Umpire Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpireRate',
                                 subkey: "inputFieldAffiliate"
                             })}
@@ -817,14 +817,14 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             heading={AppConstants.umpireResRate}
                             placeholder={"Umpire Reserve Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpReserveRate',
                                 subkey: "inputFieldAffiliate"
                             })}
@@ -834,14 +834,14 @@ class UmpirePaymentSetting extends Component {
 
                     <div className='col-sm input-width'>
                         <InputWithHead
-                            auto_complete='off'
+                            auto_complete="off"
                             prefix="$"
                             type="number"
                             heading={AppConstants.umpireCoachrate}
                             placeholder={"Umpire Coach Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
-                                index: index,
+                                index,
                                 key: 'umpCoachRate',
                                 subkey: "inputFieldAffiliate"
                             })}
@@ -850,7 +850,7 @@ class UmpirePaymentSetting extends Component {
                     </div>
 
                     {/* <div className="col-sm-1 umpire-delete-image-view">
-                        <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItemAffiliate', index: index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
+                        <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'removeItemAffiliate', index })} className="user-remove-btn mt-3"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                     </div> */}
                 </div>
             </div>
@@ -883,7 +883,7 @@ class UmpirePaymentSetting extends Component {
                             style={{ width: "100%" }}
                             defaultOpenValue={moment("00:00", "HH:mm")}
                             defaultValue={moment()}
-                            format={"HH:mm"}
+                            format="HH:mm"
                         />
                     </div>
                 </div>

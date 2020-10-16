@@ -3,7 +3,7 @@ import ApiConstants from "../../../themes/apiConstants";
 function venueConstraintListAction(yearRefId, competitionUniqueKey, organisationId) {
     const action = {
         type: ApiConstants.API_VENUE_CONSTRAINTS_LIST_LOAD,
-        yearRefId: yearRefId,
+        yearRefId,
         competitionUniqueKey: competitionUniqueKey,
         organisationId: organisationId
     };
@@ -13,7 +13,7 @@ function venueConstraintListAction(yearRefId, competitionUniqueKey, organisation
 function updateVenuListAction(data) {
     const action = {
         type: ApiConstants.API_UPDATE_COMPETITION_LIST,
-        data: data
+        data
     };
 
     return action;
@@ -22,11 +22,11 @@ function updateVenuListAction(data) {
 function updateVenuAndTimeDataAction(data, index, key, contentType, tableIndex) {
     const action = {
         type: ApiConstants.API_UPDATE_VENUE_TIME_DATA,
-        data: data,
-        index: index,
-        key: key,
+        data,
+        index,
+        key,
         contentType: contentType,
-        tableIndex: tableIndex
+        tableIndex
     };
 
     return action;
@@ -35,7 +35,7 @@ function updateVenuAndTimeDataAction(data, index, key, contentType, tableIndex) 
 function refreshVenueFieldsAction(data) {
     const action = {
         type: ApiConstants.API_REFRESH_VENUE_FIELDS,
-        data: data
+        data
     };
 
     return action;
@@ -44,11 +44,11 @@ function refreshVenueFieldsAction(data) {
 function updateVenueConstraintsData(data, index, key, contentType, tableIndex) {
     const action = {
         type: ApiConstants.API_UPDATE_VENUE_CONSTRAINTS_DATA,
-        data: data,
-        index: index,
-        key: key,
+        data,
+        index,
+        key,
         contentType: contentType,
-        tableIndex: tableIndex
+        tableIndex
     };
     return action;
 }
@@ -56,7 +56,7 @@ function updateVenueConstraintsData(data, index, key, contentType, tableIndex) {
 function venueConstraintPostAction(data) {
     const action = {
         type: ApiConstants.API_VENUE_CONSTRAINT_POST_LOAD,
-        data: data
+        data
     };
     return action;
 }
@@ -64,16 +64,16 @@ function venueConstraintPostAction(data) {
 function clearVenueTimesDataAction(competitionId) {
     const action = {
         type: ApiConstants.CLEAR_VENUE_TIMES_DATA,
-        competitionId: competitionId
+        competitionId
     };
     return action;
 }
 function removePrefencesObjectAction(index, data, key) {
     const action = {
         type: ApiConstants.DELETE_PREFENCE_OBJECT,
-        index: index,
-        data: data,
-        key: key
+        index,
+        data,
+        key
     };
     return action;
 }
@@ -81,9 +81,9 @@ function removePrefencesObjectAction(index, data, key) {
 function removeObjectAction(index, data, key) {
     const action = {
         type: ApiConstants.DELETE_PREFENCE_OBJECT_ADD_VENUE,
-        index: index,
-        data: data,
-        key: key
+        index,
+        data,
+        key
     }
     return action
 }
@@ -91,7 +91,7 @@ function removeObjectAction(index, data, key) {
 function venueByIdAction(data) {
     const action = {
         type: ApiConstants.API_VENUE_BY_ID_LOAD,
-        data: data
+        data
     };
     return action;
 }
@@ -99,7 +99,7 @@ function venueByIdAction(data) {
 function clearVenueDataAction(dataName) {
     const action = {
         type: ApiConstants.API_CLEARING_VENUE_DATA,
-        dataName: dataName
+        dataName
     };
     return action;
 }

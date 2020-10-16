@@ -169,7 +169,7 @@ class CompetitionPartPlayerGrades extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <div className="comp-dashboard-botton-view-mobile">
-                                    <Dropdown disabled={this.state.competitionStatus == 1 ? true : false} overlay={menu} placement="bottomLeft">
+                                    <Dropdown disabled={this.state.competitionStatus == 1} overlay={menu} placement="bottomLeft">
                                         <Button className="primary-add-comp-form" type="primary">
                                             <div className="row">
                                                 <div className="col-sm">
@@ -188,7 +188,7 @@ class CompetitionPartPlayerGrades extends Component {
                                             pathname: `/competitionPlayerImport`,
                                             state: { divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId, screenNavigationKey: 'ProposedPlayerGrading' }
                                         }}>
-                                            <Button disabled={this.state.competitionStatus == 1 ? true : false} className="primary-add-comp-form" type="primary">
+                                            <Button disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
                                                         <img
@@ -211,7 +211,7 @@ class CompetitionPartPlayerGrades extends Component {
                                             pathname: `/competitionTeamsImport`,
                                             state: { competitionId: this.state.firstTimeCompId, screenNavigationKey: 'ProposedPlayerGrading' }
                                         }}>
-                                            <Button disabled={this.state.competitionStatus == 1 ? true : false} className="primary-add-comp-form" type="primary">
+                                            <Button disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
                                                 <div className="row">
                                                     <div className="col-sm">
                                                         <img
@@ -288,7 +288,7 @@ class CompetitionPartPlayerGrades extends Component {
 
     onChangeParentDivCheckbox = (checked, teamIndex, key) => {
 
-        if (key == "assigned") {
+        if (key === "assigned") {
             let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
             let teamItem = assignedData[teamIndex];
             teamItem["isChecked"] = checked;
@@ -297,7 +297,7 @@ class CompetitionPartPlayerGrades extends Component {
                 item["isChecked"] = checked;
             })
             this.props.addOrRemovePlayerForChangeDivisionAction(assignedData, key);
-        } else if (key == "unAssigned") {
+        } else if (key === "unAssigned") {
             let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
             unassignedData["isChecked"] = checked;
 
@@ -309,7 +309,7 @@ class CompetitionPartPlayerGrades extends Component {
     }
 
     onChangeChildDivCheckbox = (checked, teamIndex, playerIndex, key) => {
-        if (key == "assigned") {
+        if (key === "assigned") {
             let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData;
             let teamItem = assignedData[teamIndex];
             // teamItem["isChecked"] = checked;
@@ -329,7 +329,7 @@ class CompetitionPartPlayerGrades extends Component {
             }
             this.props.addOrRemovePlayerForChangeDivisionAction(assignedData, key);
         }
-        else if (key == "unAssigned") {
+        else if (key === "unAssigned") {
             let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
             //teamItem["isChecked"] = checked;
             unassignedData.players[playerIndex]["isChecked"] = checked;
@@ -351,7 +351,7 @@ class CompetitionPartPlayerGrades extends Component {
     }
 
     changePlayerDivision = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             let res = {
                 competitionUniqueKey: this.state.firstTimeCompId,
                 organisationUniqueKey: null,
@@ -466,7 +466,7 @@ class CompetitionPartPlayerGrades extends Component {
                                 }}>
                                     <span className='year-select-heading'>{AppConstants.division}:</span>
                                     <Select
-                                        disabled={this.state.competitionStatus == 1 ? true : false}
+                                        disabled={this.state.competitionStatus == 1}
                                         style={{ minWidth: 120 }}
                                         className="year-select reg-filter-select1 ml-2"
                                         onChange={(divisionId) => this.onDivisionChange(divisionId)}
@@ -575,7 +575,7 @@ class CompetitionPartPlayerGrades extends Component {
 
     //////for the assigned teams on the left side of the view port
     assignedView = () => {
-        let disableStatus = this.state.competitionStatus == 1 ? true : false
+        let disableStatus = this.state.competitionStatus == 1
         let assignedData = this.props.partPlayerGradingState.assignedPartPlayerGradingListData
         let commentList = this.props.partPlayerGradingState.playerCommentList
         let commentLoad = this.props.partPlayerGradingState.commentLoad
@@ -805,7 +805,7 @@ class CompetitionPartPlayerGrades extends Component {
         let divisionData = this.props.registrationState.allDivisionsData.filter(x => x.competitionMembershipProductDivisionId != null);
         let commentList = this.props.partPlayerGradingState.playerCommentList
         let commentLoad = this.props.partPlayerGradingState.commentLoad
-        let disableStatus = this.state.competitionStatus == 1 ? true : false
+        let disableStatus = this.state.competitionStatus == 1
         return (
             <div>
                 <Droppable isDropDisabled={disableStatus} droppableId={'0'}>
@@ -936,7 +936,7 @@ class CompetitionPartPlayerGrades extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required={"pt-0 mt-0"}
+                        required="pt-0 mt-0"
                         heading={AppConstants.addTeam}
                         placeholder={AppConstants.pleaseEnterteamName}
                         onChange={(e) => this.setState({ newTeam: e.target.value })}
@@ -1012,14 +1012,14 @@ class CompetitionPartPlayerGrades extends Component {
                     <div className="col-sm-3 mt-3">
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionDashboard">
-                                <Button disabled={this.state.competitionStatus == 1 ? true : false} className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
+                                <Button disabled={this.state.competitionStatus == 1} className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
                     <div className="col-sm mt-3">
                         <div className="comp-finals-button-view">
                             <NavLink to="/competitionPartProposedTeamGrading">
-                                <Button disabled={this.state.competitionStatus == 1 ? true : false} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                                <Button disabled={this.state.competitionStatus == 1} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
                             </NavLink>
                         </div>
                     </div>

@@ -86,8 +86,8 @@ class LiveScoreIncidentView extends Component {
         return (
             <div className="comp-dashboard-botton-view-mobile" style={{ display: 'flex', justifyContent: 'center', }} onClick={this.showModal}>
                 {
-                    this.state.isVideo == true ?
-                        <ReactPlayer playing={this.state.visible == true ? true : false} url={this.state.modaldata} controls />
+                    this.state.isVideo ?
+                        <ReactPlayer playing={this.state.visible} url={this.state.modaldata} controls />
                         :
                         <img src={this.state.modaldata} height='250' width='250' />
                 }
@@ -120,7 +120,8 @@ class LiveScoreIncidentView extends Component {
             <div className="row p-4">
                 <div className="col-sm">
                     <div><span className="year-select-heading">Incident Data</span></div>
-                    <div className="pt-2"><span className="side-bar-profile-data">{liveScore_formateDate(DATA.incidentTime)}</span>
+                    <div className="pt-2">
+                        <span className="side-bar-profile-data">{liveScore_formateDate(DATA.incidentTime)}</span>
                     </div>
                 </div>
 
@@ -193,7 +194,7 @@ class LiveScoreIncidentView extends Component {
                                 var res = str.split("/", 1);
                                 return <div className="side-bar-profile-data">
                                     {
-                                        res == "video" ?
+                                        res === "video" ?
                                             <video className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, true)} src={item.mediaUrl} height='70' width='70' />
                                             :
                                             <img className='col-sum m-2 ' style={{ cursor: 'pointer', }} onClick={() => this.showModal(item.mediaUrl, false)} src={item.mediaUrl} height='70' width='70' />
@@ -224,9 +225,9 @@ class LiveScoreIncidentView extends Component {
 
                 {
                     this.state.umpireKey ?
-                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen == 'umpireList' ? "2" : "1"} />
+                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
                         :
-                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'dashboard' ? "1" : "17"} />
+                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName === 'dashboard' ? "1" : "17"} />
                 }
                 <Layout>
                     {this.headerView()}

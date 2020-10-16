@@ -240,7 +240,7 @@ export function* publishDraws(action) {
                 competitionId: action.competitionId,
                 status: result.status,
             });
-            if (action.key == "edit") {
+            if (action.key === "edit") {
                 history.push('/competitionDraws')
             }
         } else {

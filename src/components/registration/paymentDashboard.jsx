@@ -135,7 +135,7 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners("status"),
         render: paymentStatus => (
-            <span>{paymentStatus == "pending" ? "Not Paid" : "Paid"}</span>
+            <span>{paymentStatus === "pending" ? "Not Paid" : "Paid"}</span>
 
         ),
 
@@ -312,7 +312,7 @@ class PaymentDashboard extends Component {
         let { sortBy, sortOrder } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
-            offset: offset,
+            offset,
             userId: userId,
             registrationId: regId
         })
@@ -413,7 +413,7 @@ class PaymentDashboard extends Component {
                         columns={columns}
                         dataSource={paymentState.paymentListData}
                         pagination={false}
-                        loading={this.props.paymentState.onLoad == true && true}
+                        loading={this.props.paymentState.onLoad && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">

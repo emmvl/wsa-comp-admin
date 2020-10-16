@@ -11,7 +11,7 @@ function timeSlotInit() {
 function getCommonRefData(data) {
     const action = {
         type: ApiConstants.API_GET_COMMON_REF_DATA_LOAD,
-        data: data
+        data
     };
 
     return action;
@@ -20,7 +20,7 @@ function getCommonRefData(data) {
 function addVenueAction(data) {
     const action = {
         type: ApiConstants.API_ADD_VENUE_LOAD,
-        data: data
+        data
     };
 
     return action;
@@ -36,7 +36,7 @@ function venueListAction() {
     return action;
 }
 
-//////get the grades reference data 
+//////get the grades reference data
 function gradesReferenceListAction() {
     const action = {
         type: ApiConstants.API_GRADES_REFERENCE_LIST_LOAD,

@@ -61,12 +61,12 @@ class LiveScoreAddEditCoach extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        if (this.state.loader == true && nextProps.liveScoreCoachState.onLoad == false) {
+        if (this.state.loader && nextProps.liveScoreCoachState.onLoad == false) {
             this.setInitalFiledValue()
             this.setState({ loader: false })
         }
         if (this.props.liveScoreCoachState !== nextProps.liveScoreCoachState) {
-            if (this.state.teamLoad == true) {
+            if (this.state.teamLoad) {
                 const { teamId } = this.props.liveScoreCoachState
                 this.setSelectedTeamValue(teamId)
                 this.setState({ teamLoad: false })
@@ -126,7 +126,7 @@ class LiveScoreAddEditCoach extends Component {
                         <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                             <Breadcrumb separator=" > ">
                                 <Breadcrumb.Item className="breadcrumb-add">
-                                    {isEdit == true ? AppConstants.editCoach : AppConstants.addCoach}
+                                    {isEdit ? AppConstants.editCoach : AppConstants.addCoach}
                                 </Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
@@ -181,7 +181,7 @@ class LiveScoreAddEditCoach extends Component {
     }
 
     coachNewRadioBtnView() {
-        let hasError = this.state.hasError == true ? true : false
+        let hasError = this.state.hasError
         const { coachdata, teamId, teamResult } = this.props.liveScoreCoachState
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
         return (
@@ -244,7 +244,7 @@ class LiveScoreAddEditCoach extends Component {
                                 placeholder={AppConstants.enterEmail}
                                 onChange={(email) => this.props.liveScoreUpdateCoach(email.target.value, 'email')}
                                 // value={coachdata.email}
-                                disabled={this.state.isEdit == true && true}
+                                disabled={this.state.isEdit && true}
                             />
                         </Form.Item>
                     </div>
@@ -263,7 +263,7 @@ class LiveScoreAddEditCoach extends Component {
                                 required="required-field pb-0 pt-0"
                                 heading={AppConstants.contact_No}
                                 placeholder={AppConstants.enterContactNo}
-                                setFieldsValue={AppConstants.contactNO}
+                                value={AppConstants.contactNO}
                                 maxLength={10}
                                 onChange={(mobileNumber) => this.getNumber(mobileNumber.target.value)}
                             />
@@ -280,7 +280,7 @@ class LiveScoreAddEditCoach extends Component {
                             className="slct-in-add-manager-livescore"
                         >
                             <Select
-                                // loading={this.props.liveScoreState.onLoad == true && true}
+                                // loading={this.props.liveScoreState.onLoad && true}
                                 mode="multiple"
                                 placeholder={AppConstants.selectTeam}
                                 style={{ width: "100%" }}
@@ -323,7 +323,7 @@ class LiveScoreAddEditCoach extends Component {
                                     this.props.liveScoreUpdateCoach(ManagerId, 'coachSearch')
                                     this.setState({ teamLoad: true })
                                 }}
-                                notFoundContent={onLoadSearch == true ? <Spin size="small" /> : null}
+                                notFoundContent={onLoadSearch ? <Spin size="small" /> : null}
                                 onSearch={(value) => {
                                     // value
                                     //     ? this.props.liveScoreManagerSearch(value, this.state.conpetitionId)
@@ -352,7 +352,7 @@ class LiveScoreAddEditCoach extends Component {
                                 heading={AppConstants.team}
                             />
                             <Select
-                                // loading={this.props.liveScoreState.onLoad == true && true}
+                                // loading={this.props.liveScoreState.onLoad && true}
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectTeam}
@@ -415,7 +415,7 @@ class LiveScoreAddEditCoach extends Component {
             } else {
                 let body = ''
                 if (coachRadioBtn == 'new') {
-                    if (this.state.isEdit == true) {
+                    if (this.state.isEdit) {
                         body = {
                             "id": coachdata.id,
                             "firstName": coachdata.firstName,
@@ -445,7 +445,7 @@ class LiveScoreAddEditCoach extends Component {
         } else {
             let body = ''
             if (coachRadioBtn == 'new') {
-                if (this.state.isEdit == true) {
+                if (this.state.isEdit) {
                     body = {
                         "id": coachdata.id,
                         "firstName": coachdata.firstName,
@@ -499,7 +499,7 @@ class LiveScoreAddEditCoach extends Component {
                     >
                         <Content>
                             <div className="formView">
-                                {this.state.isEdit == true ? this.contentViewForEditCoach() : this.contentViewForAddCoach()}
+                                {this.state.isEdit ? this.contentViewForEditCoach() : this.contentViewForAddCoach()}
                                 {/* {this.coachView(getFieldDecorator)} */}
                             </div>
                         </Content>

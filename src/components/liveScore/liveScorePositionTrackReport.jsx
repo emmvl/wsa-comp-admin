@@ -636,7 +636,7 @@ class LiveScorePositionTrackReport extends Component {
                 "offset": offset
             }
         }
-        this.setState({ offset: offset })
+        this.setState({ offset })
         this.props.liveScorePositionTrackingAction({
             compId: this.state.competitionId,
             aggregate: this.state.aggregate,

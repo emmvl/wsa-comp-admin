@@ -81,7 +81,7 @@ class CompetitionDrawEditOld extends Component {
                 }
             }
         }
-        if (this.state.venueLoad == true && this.props.drawsState.updateLoad == false) {
+        if (this.state.venueLoad && this.props.drawsState.updateLoad == false) {
             if (nextProps.drawsState !== this.props.drawsState) {
                 if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
                     if (venueData.length > 0) {
@@ -117,7 +117,7 @@ class CompetitionDrawEditOld extends Component {
             }
         }
 
-        if (this.state.updateLoad == true && this.props.drawsState.updateLoad == false) {
+        if (this.state.updateLoad && this.props.drawsState.updateLoad == false) {
             this.setState({ updateLoad: false })
             this.reGenerateDraw();
         }

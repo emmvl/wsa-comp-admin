@@ -151,7 +151,7 @@ const columns = [
                 state: {
                   affiliateOrgId: e.affiliateOrgId,
                   orgTypeRefId: e.organisationTypeRefId,
-                  isEditable: e.isEditable == 1 ? true : false,
+                  isEditable: e.isEditable == 1,
                   sourcePage: "DIR",
                   organisationTypeRefId: e.organisationTypeRefId,
                 },
@@ -244,13 +244,13 @@ class AffiliateDirectory extends Component {
   };
 
   onChangeDropDownValue = async (value, key) => {
-    if (key == "yearRefId") {
+    if (key === "yearRefId") {
       await this.setState({ yearRefId: value });
       this.handleAffiliateTableList(1);
-    } else if (key == "organisationTypeRefId") {
+    } else if (key === "organisationTypeRefId") {
       await this.setState({ organisationTypeRefId: value });
       this.handleAffiliateTableList(1);
-    } else if (key == "searchText") {
+    } else if (key === "searchText") {
       await this.setState({ searchText: value });
       if (value == null || value == "") {
         this.handleAffiliateTableList(1);

@@ -67,7 +67,7 @@ class UserEditAffiliates extends Component {
         let affiliateOrgId = this.props.location.state.affiliateOrgId;
         //let orgTypeRefId = this.props.location.state.orgTypeRefId;
         this.setState({
-            affiliateOrgId: affiliateOrgId,
+            affiliateOrgId,
         });
         this.apiCalls(affiliateOrgId);
     }
@@ -81,7 +81,7 @@ class UserEditAffiliates extends Component {
                     loading: false,
                 });
 
-                if (userState.status == 1 && this.state.buttonPressed == "save") {
+                if (userState.status == 1 && this.state.buttonPressed === "save") {
                     if (this.state.isSameUserEmailChanged) {
                         this.logout();
                     } else {
@@ -90,7 +90,7 @@ class UserEditAffiliates extends Component {
                 }
             }
         }
-        if (this.state.buttonPressed == "cancel") {
+        if (this.state.buttonPressed === "cancel") {
             history.push("/userAffiliatesList");
         }
 
@@ -110,7 +110,7 @@ class UserEditAffiliates extends Component {
         if (nextProps.userState !== userState) {
             if (
                 userState.affiliateOnLoad === false &&
-                this.state.getDataLoading == true
+                this.state.getDataLoading
             ) {
                 this.setState({
                     getDataLoading: false,
@@ -200,7 +200,7 @@ class UserEditAffiliates extends Component {
     };
 
     removeModalHandle = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             this.removeContact(this.state.currentIndex);
             this.setState({ deleteModalVisible: false });
         } else {
@@ -235,7 +235,7 @@ class UserEditAffiliates extends Component {
                 [`email${index}`]: item.email,
             });
 
-            item["isSameUser"] = getUserId() == item.userId ? true : false;
+            item["isSameUser"] = getUserId() == item.userId;
             if (item.userId == getUserId()) {
                 this.setState({ isSameUserEmailId: item.email });
             }
@@ -251,7 +251,7 @@ class UserEditAffiliates extends Component {
     onChangeContactSetValue = (val, key, index) => {
         let contacts = this.props.userState.affiliateEdit.contacts;
         let contact = contacts[index];
-        if (key == "roles") {
+        if (key === "roles") {
             let userRoleEntityId = 0;
             const userRoleEntity = contact.permissions.find((x) => x);
             if (
@@ -268,7 +268,7 @@ class UserEditAffiliates extends Component {
             };
             permissions.push(obj);
             contact.permissions = permissions;
-        } else if (key == "email") {
+        } else if (key === "email") {
             if (contact.isSameUser && contact.userId != 0) {
                 if (val != this.state.isSameUserEmailId) {
                     this.setState({ isSameUserEmailChanged: true });
@@ -380,7 +380,7 @@ class UserEditAffiliates extends Component {
                 >
                     <Breadcrumb separator=" > ">
                         <NavLink to="/userAffiliatesList">
-                            <Breadcrumb.Item separator=">" className="breadcrumb-product">
+                            <Breadcrumb.Item separator=" > " className="breadcrumb-product">
                                 {AppConstants.affiliates}
                             </Breadcrumb.Item>
                         </NavLink>
@@ -463,7 +463,7 @@ class UserEditAffiliates extends Component {
                         >
                             <Select
                                 style={{ width: "100%", paddingRight: 1 }}
-                                setFieldsValue={affiliate.affiliatedToOrgId}
+                                value={affiliate.affiliatedToOrgId}
                                 onChange={(e) =>
                                     this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)
                                 }
@@ -497,7 +497,7 @@ class UserEditAffiliates extends Component {
                         placeholder={AppConstants.name}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
                         // value={affiliate.name}
-                        setFieldsValue={affiliate.name}
+                        value={affiliate.name}
                     />
                 </Form.Item>
                 <Form.Item
@@ -511,7 +511,7 @@ class UserEditAffiliates extends Component {
                         name={AppConstants.addressOne}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
                         // value={affiliate.street1}
-                        setFieldsValue={affiliate.street1}
+                        value={affiliate.street1}
                         auto_complete="new-addressOne"
                     />
                 </Form.Item>
@@ -535,7 +535,7 @@ class UserEditAffiliates extends Component {
                         placeholder={AppConstants.suburb}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
                         // value={affiliate.suburb}
-                        setFieldsValue={affiliate.suburb}
+                        value={affiliate.suburb}
                     />
                 </Form.Item>
 
@@ -550,7 +550,7 @@ class UserEditAffiliates extends Component {
                         placeholder={AppConstants.select}
                         onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                         // value={affiliate.stateRefId}
-                        setFieldsValue={affiliate.stateRefId}
+                        value={affiliate.stateRefId}
                     >
                         {stateList.length > 0 && stateList.map((item) => (
                             <Option value={item.id}>{item.name}</Option>
@@ -568,7 +568,7 @@ class UserEditAffiliates extends Component {
                             this.onChangeSetValue(e.target.value, "postalCode")
                         }
                         // value={affiliate.postalCode}
-                        setFieldsValue={affiliate.postalCode}
+                        value={affiliate.postalCode}
                         maxLength={4}
                     />
                 </Form.Item>
@@ -637,7 +637,7 @@ class UserEditAffiliates extends Component {
                                     )
                                 }
                                 // value={item.firstName}
-                                setFieldsValue={item.firstName}
+                                value={item.firstName}
                             />
                         </Form.Item>
 
@@ -671,7 +671,7 @@ class UserEditAffiliates extends Component {
                                         index
                                     )
                                 }
-                                setFieldsValue={item.lastName}
+                                value={item.lastName}
                             />
                         </Form.Item>
 
@@ -692,7 +692,7 @@ class UserEditAffiliates extends Component {
                                     this.onChangeContactSetValue(e.target.value, "email", index)
                                 }
                                 // value={item.email}
-                                setFieldsValue={item.email}
+                                value={item.email}
                             />
                         </Form.Item>
                         {item.isSameUser && this.state.isSameUserEmailChanged && (
@@ -729,7 +729,7 @@ class UserEditAffiliates extends Component {
                                 onChange={(e) =>
                                     this.onChangeContactSetValue(e, "roles", index)
                                 }
-                                setFieldsValue={item.roleId}
+                                value={item.roleId}
                             >
                                 {(roles || []).map((role, index) => (
                                     <Option key={role.id} value={role.id}>
@@ -892,7 +892,7 @@ class UserEditAffiliates extends Component {
                     {this.headerView()}
                     <Form
                         ref={this.formRef}
-                        autocomplete="off"
+                        autoComplete="off"
                         onFinish={this.saveAffiliate}
                         onFinishFailed={() => {
                             message.error(ValidationConstants.requiredMessage);

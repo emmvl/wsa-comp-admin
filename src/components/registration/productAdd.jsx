@@ -109,7 +109,7 @@ class ProductAdd extends Component {
                     backgroundColor: 'transparent', display: 'flex',
                     alignItems: 'center'
                 }}>
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-product">Products</Breadcrumb.Item>
                         <Breadcrumb.Item className="breadcrumb-add">Add</Breadcrumb.Item>
                     </Breadcrumb>
@@ -305,7 +305,7 @@ class ProductAdd extends Component {
                     <div className="table-responsive">
                         <Table className="fees-table" columns={columns} dataSource={data} pagination={false} Divider="false" />
                     </div>
-                    <span className='input-heading-add-another'>+ Add Another Division</span>
+                    <span className="input-heading-add-another">+ Add Another Division</span>
                     <Checkbox className="gst-single-checkbox" defaultChecked onChange={(e) => this.onChange(e)}>Prices include GST (10%)</Checkbox>
                 </div>
 
@@ -313,7 +313,7 @@ class ProductAdd extends Component {
                     <div className="table-responsive">
                         <Table className="fees-table" columns={columns} dataSource={data} pagination={false} />
                     </div>
-                    <span className='input-heading-add-another'>+ Add Another Division</span>
+                    <span className="input-heading-add-another">+ Add Another Division</span>
                     <Checkbox className="gst-single-checkbox" defaultChecked onChange={(e) => this.onChange(e)}>Prices include GST (10%)</Checkbox>
                 </div>
             </div>
@@ -496,7 +496,7 @@ class ProductAdd extends Component {
                     <Checkbox className="single-checkbox mt-1" defaultChecked onChange={(e) => this.onChange(e)}>Disclaimers</Checkbox>
                     <span className='input-heading'>Disclaimer Link</span>
                     <Input className="input" placeholder="Disclaimer Link" />
-                    <span className='input-heading-add-another'>+ Add Another Disclaimer Link</span>
+                    <span className="input-heading-add-another">+ Add Another Disclaimer Link</span>
                 </div>
             </div>
         )

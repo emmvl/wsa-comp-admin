@@ -141,7 +141,7 @@ class UserProfileEdit extends Component {
             }
         }
         let userState = this.props.userState;
-        if (userState.onUpUpdateLoad == false && this.state.saveLoad == true) {
+        if (userState.onUpUpdateLoad == false && this.state.saveLoad) {
             this.setState({ saveLoad: false })
             if (userState.status === 1) {
                 if (this.state.isSameUserEmailChanged) {
@@ -246,7 +246,7 @@ class UserProfileEdit extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {this.state.titleLabel}
                         </Breadcrumb.Item>
@@ -271,7 +271,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
                                 name={'firstName'}
-                                setFieldsValue={userData.firstName}
+                                value={userData.firstName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "firstName")}
                             />
                         </Form.Item>
@@ -284,7 +284,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
                                 name={'lastName'}
-                                setFieldsValue={userData.lastName}
+                                value={userData.lastName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "lastName")}
                             />
                         </Form.Item>
@@ -323,7 +323,7 @@ class UserProfileEdit extends Component {
                                 required="required-field"
                                 heading={AppConstants.contactMobile}
                                 placeholder={AppConstants.contactMobile}
-                                setFieldsValue={userData.mobileNumber}
+                                value={userData.mobileNumber}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "mobileNumber")}
                                 maxLength={10}
                             />
@@ -349,7 +349,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.contactEmail}
                                 placeholder={AppConstants.contactEmail}
                                 name={'email'}
-                                setFieldsValue={userData.email}
+                                value={userData.email}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
                             />
                         </Form.Item>
@@ -442,7 +442,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
                                 name={'firstName'}
-                                setFieldsValue={userData.firstName}
+                                value={userData.firstName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "firstName")}
                             />
                         </Form.Item>
@@ -455,7 +455,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
                                 name={'lastName'}
-                                setFieldsValue={userData.lastName}
+                                value={userData.lastName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "lastName")}
                             />
                         </Form.Item>
@@ -533,7 +533,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.contactEmail}
                                 placeholder={AppConstants.contactEmail}
                                 name={'email'}
-                                setFieldsValue={userData.email}
+                                value={userData.email}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
                             />
                         </Form.Item>
@@ -548,7 +548,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.contactMobile}
                                 placeholder={AppConstants.contactMobile}
                                 name={'mobileNumber'}
-                                setFieldsValue={userData.mobileNumber}
+                                value={userData.mobileNumber}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "mobileNumber")}
                             />
                         </Form.Item>
@@ -574,7 +574,7 @@ class UserProfileEdit extends Component {
                                 heading={AppConstants.emergencyContactName}
                                 placeholder={AppConstants.emergencyContactName}
                                 name={'emergencyContactName'}
-                                setFieldsValue={userData.emergencyContactName}
+                                value={userData.emergencyContactName}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "emergencyContactName")}
                             />
                         </Form.Item>
@@ -588,7 +588,7 @@ class UserProfileEdit extends Component {
                                 placeholder={AppConstants.emergencyContactMobile}
                                 name={'emergencyContactNumber'}
                                 maxLength={10}
-                                setFieldsValue={userData.emergencyContactNumber}
+                                value={userData.emergencyContactNumber}
                                 onChange={(e) => this.onChangeSetValue(e.target.value, "emergencyContactNumber")}
                             />
                         </Form.Item>
@@ -612,7 +612,7 @@ class UserProfileEdit extends Component {
                                 <Radio.Group
                                     className="reg-competition-radio"
                                     onChange={(e) => this.onChangeSetValue(e.target.value, "genderRefId")}
-                                    setFieldsValue={userData.genderRefId}>
+                                    value={userData.genderRefId}>
                                     {(genderData || []).map((gender) => (
                                         <Radio key={gender.id} value={gender.id}>{gender.description}</Radio>
                                     ))}

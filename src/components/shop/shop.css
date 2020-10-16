@@ -6,7 +6,7 @@
     flex-direction: row;
     justify-content: flex-start;
     flex-wrap: wrap;
-    
+
 }
 .width-95{
     display: flex;
@@ -124,7 +124,7 @@
     font-size: 13px;
     color: var(--app-4c4c6d);
     font-weight: 500;
-    font-family: inter-medium;
+    font-family: inter-medium, sans-serif;
     font-stretch: normal;
     font-style: normal;
     line-height: 2.54;
@@ -181,7 +181,7 @@
         flex: 0 0 50%;
         max-width: 50%;
     }
-} 
+}
 
 
 

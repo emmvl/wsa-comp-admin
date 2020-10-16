@@ -86,7 +86,6 @@ function Password(props) {
               className="publish-button"
               type="primary"
               htmlType="submit"
-              style={{ height: 48, width: 92.5 }}
             >
               {AppConstants.save}
             </Button>

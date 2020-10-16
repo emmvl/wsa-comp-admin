@@ -8,7 +8,7 @@
     /* white-space: initial; */
     /* word-wrap: break-word; */
     /* float: left; */
-    clear: both; 
+    clear: both;
     padding-right: 15px;
     /* margin-left: 70px; */
     padding-left: 15px;
@@ -37,7 +37,7 @@
     font-size: 13px;
     color: var(--app-4c4c6d);
     font-weight: 500;
-    font-family: inter-medium;
+    font-family: inter-medium, sans-serif;
     padding-left: 10px;
     white-space: nowrap;
     word-wrap: break-word;
@@ -47,12 +47,12 @@
        display: table;
        margin: 30px 50px 10px 50px;
        justify-content: center;
-       float: left; 
+       float: left;
 }
 
 .legend-text-div{
-    text-overflow: ellipsis; 
-overflow: hidden; 
+    text-overflow: ellipsis;
+overflow: hidden;
 white-space: nowrap;
 padding-right: 10px;
 }
@@ -63,7 +63,7 @@ padding-right: 10px;
     /* white-space: initial; */
     /* word-wrap: break-word; */
     /* float: left; */
-    clear: both; 
+    clear: both;
     padding-right: 15px;
     /* margin-left: 70px; */
     padding-left: 15px;

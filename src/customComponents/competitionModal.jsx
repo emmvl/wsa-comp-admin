@@ -36,7 +36,7 @@ class CompetitionModal extends React.Component {
     }
 
     onOKsubmit = (values) => {
-        if (this.state.buttonClicked == "save") {
+        if (this.state.buttonClicked === "save") {
             this.props.handleOK()
         } else {
             this.props.handleCompetitionNext()

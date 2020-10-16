@@ -38,7 +38,7 @@ function homeReducer(state = initialState, action) {
 
 
         case ApiConstants.clearHomeDashboardData:
-            if (action.key == "user") {
+            if (action.key === "user") {
                 state.userCount = null
                 state.registrationCount = null
                 state.liveScoreCompetitionCount = null

@@ -61,7 +61,7 @@ class CompetitionPlayerImport extends Component {
         let divisionId = this.props.location.state.divisionId;
         let competitionId = this.props.location.state.competitionId;
         let screenNavigationKey = this.props.location.state.screenNavigationKey;
-        this.setState({ divisionId: divisionId, competitionId: competitionId, screenNavigationKey: screenNavigationKey })
+        this.setState({ divisionId, competitionId, screenNavigationKey: screenNavigationKey })
     }
 
     componentDidUpdate(nextProps) {

@@ -56,7 +56,7 @@ const columns = [
         dataIndex: 'minimumPlayers',
         key: 'minimumPlayers',
         render: (minimumPlayers, record, index) => <Input
-            disabled={this_Obj.state.competitionStatus == 1 ? true : false}
+            disabled={this_Obj.state.competitionStatus == 1}
             className="input-inside-player-grades-table-for-grade"
             value={minimumPlayers}
             onChange={(e) => this_Obj.props.onchangeCompPartPlayerGradingSummaryData(e.target.value, index, "minimumPlayers")} />,
@@ -329,7 +329,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                         columns={columns}
                         dataSource={playerGradingTableData}
                         pagination={false}
-                        loading={this.props.partPlayerGradingState.onLoad == true && true}
+                        loading={this.props.partPlayerGradingState.onLoad && true}
                     />
                 </div>
                 {/* <PlayerCommentModal
@@ -352,7 +352,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        let isPublished = this.state.competitionStatus == 1 ? true : false
+        let isPublished = this.state.competitionStatus == 1
         return (
             <div className="fluid-width">
                 <div className="comp-player-grades-footer-view">
@@ -363,7 +363,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                                     style={{ height: '100%' }}
                                     onMouseEnter={() =>
                                         this.setState({
-                                            tooltipVisibleDelete: isPublished ? true : false,
+                                            tooltipVisibleDelete: isPublished,
                                         })
                                     }
                                     onMouseLeave={() =>

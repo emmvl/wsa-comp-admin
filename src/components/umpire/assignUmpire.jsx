@@ -52,10 +52,10 @@ function checkUmpireAssignStatus(data) {
 ////check for roster status so that bass the color of the umpire name
 function checkUmpireRosterStatus(data) {
     let rosterStatus = data ? data.rosterStatus : "N/A"
-    if (rosterStatus == "Yes") {
+    if (rosterStatus === "Yes") {
         return AppColor.umpireTextGreen;
     }
-    if (rosterStatus == "No") {
+    if (rosterStatus === "No") {
         return AppColor.umpireTextRed;
     }
     else {
@@ -180,7 +180,7 @@ class AssignUmpire extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
-            if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
+            if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
                 if (getUmpireCompetiton()) {
@@ -208,10 +208,10 @@ class AssignUmpire extends Component {
             "userId": umpireUserId,
             "rosterId": userData ? userData.rosterId : null
         }
-        if (statusText == "Assign") {
+        if (statusText === "Assign") {
             this.props.assignUmpireAction(assignBody, index, umpireKey)
         }
-        if (statusText == "Unassign") {
+        if (statusText === "Unassign") {
             this.props.unassignUmpireAction(userData.rosterId, index, umpireKey)
         }
 
@@ -298,7 +298,7 @@ class AssignUmpire extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={onLoad == true && true}
+                        loading={onLoad && true}
                         className="home-dashboard-table"
                         columns={this.state.columns}
                         dataSource={assignUmpireList}

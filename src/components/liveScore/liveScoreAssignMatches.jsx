@@ -183,7 +183,7 @@ class LiveScoreAssignMatch extends Component {
                 filter: '',
                 competitionId: 0,
                 teamID: null,
-                // columns: scoringType == "SINGLE" ? columns1 : columns2,
+                // columns: scoringType === "SINGLE" ? columns1 : columns2,
                 columns: columns2,
                 lodding: false,
                 scoring_Type: scoringType
@@ -216,7 +216,7 @@ class LiveScoreAssignMatch extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreScorerState.teamResult !== this.props.liveScoreScorerState.teamResult) {
-            if (this.state.lodding == true && this.props.liveScoreScorerState.onLoad == false) {
+            if (this.state.lodding && this.props.liveScoreScorerState.onLoad == false) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 const body = {
                     "paging": {
@@ -333,7 +333,7 @@ class LiveScoreAssignMatch extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={matcheList.onLoad == true && true}
+                        loading={matcheList.onLoad && true}
                         className="home-dashboard-table"
                         columns={this.state.columns}
                         dataSource={matcheList.assignMatches}

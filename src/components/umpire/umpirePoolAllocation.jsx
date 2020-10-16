@@ -59,7 +59,7 @@ class UmpirePoolAllocation extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
-            if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
+            if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
 

@@ -100,7 +100,7 @@ class CompetitionException extends Component {
         }
 
         if (nextProps.drawsState != drawsState) {
-            if (drawsState.updateLoad == false && this.state.exceptionUpdateLoad == true) {
+            if (drawsState.updateLoad == false && this.state.exceptionUpdateLoad) {
                 this.setState({ exceptionUpdateLoad: false });
 
                 let competitionStatus = getOwn_competitionStatus();
@@ -114,13 +114,13 @@ class CompetitionException extends Component {
         }
 
         if (nextProps.competitionModuleState != competitionModuleState) {
-            if (competitionModuleState.drawGenerateLoad == false && this.state.reGenerateDrawLoad == true) {
+            if (competitionModuleState.drawGenerateLoad == false && this.state.reGenerateDrawLoad) {
                 this.setState({ reGenerateDrawLoad: false });
                 history.push('/competitionDraws');
             }
         }
 
-        if (this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false) {
+        if (this.state.roundLoad && this.props.drawsState.onActRndLoad == false) {
             this.setState({ roundLoad: false });
             if (this.props.drawsState.activeDrawsRoundsData != null &&
                 this.props.drawsState.activeDrawsRoundsData.length > 0) {
@@ -149,7 +149,7 @@ class CompetitionException extends Component {
                         display: 'flex',
                         lignItems: 'center',
                         alignSelf: 'center'
-                    }} separator=">">
+                    }} separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.exception}
                         </Breadcrumb.Item>
@@ -178,7 +178,7 @@ class CompetitionException extends Component {
         this.setState({ venueCourtId: courtID })
     }
 
-    ////this method called after slecting Venue Change option from drop down
+    ////this method called after selecting Venue Change option from drop down
     exceptionView() {
         const { venueList, courtList } = this.props.commonReducerState
         const venueData = isArrayNotEmpty(venueList) ? venueList : []
@@ -198,31 +198,27 @@ class CompetitionException extends Component {
                             onChange={(venueId) => this.onChangeVenue(venueId)}
                             value={this.state.venueId}
                         >
-                            {venueData.map((item) => {
-                                return (
-                                    <Option key={'venue' + item.id} value={item.venueId}>
-                                        {item.venueName}
-                                    </Option>
-                                )
-                            })}
+                            {venueData.map((item) => (
+                                <Option key={'venue' + item.id} value={item.venueId}>
+                                    {item.venueName}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
 
                     {/* court drop down view */}
-                    <InputWithHead required={"required-field pb-0"} heading={AppConstants.court} />
+                    <InputWithHead required="required-field pb-0" heading={AppConstants.court} />
                     <Select
                         style={{ width: "100%", paddingRight: 1, minWidth: 182, paddingTop: 0, marginTop: 0 }}
                         placeholder={AppConstants.selectCourt}
                         value={this.state.venueCourtId}
                         onChange={(venueCourtId) => this.changeVenueCourtId(venueCourtId)}
                     >
-                        {courtData.map((item) => {
-                            return (
-                                <Option key={'court' + item.id} value={item.id}>
-                                    {item.name}
-                                </Option>
-                            )
-                        })}
+                        {courtData.map((item) => (
+                            <Option key={'court' + item.id} value={item.id}>
+                                {item.name}
+                            </Option>
+                        ))}
                     </Select>
 
                     <div className="row">
@@ -251,8 +247,9 @@ class CompetitionException extends Component {
                             <TimePicker
                                 className="comp-venue-time-timepicker"
                                 style={{ width: "100%" }}
-                                format={"HH:mm"}
+                                format="HH:mm"
                                 onChange={(endTime) => this.onChangeTime(endTime)}
+                                onBlur={(e) => this.onChangeTime(e.target.value && moment(e.target.value, "HH:mm"))}
                                 value={moment(this.state.time, "HH:mm")}
                             />
                         </div>
@@ -310,7 +307,7 @@ class CompetitionException extends Component {
     }
 
     handleGenerateDrawModal =  (key) =>{
-        if (key == "ok") {
+        if (key === "ok") {
             if (this.state.generateRoundId != null) {
                 this.callGenerateDraw();
                 this.setState({ drawGenerateModalVisible: false });

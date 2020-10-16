@@ -54,7 +54,7 @@ export function* umpireRoasterListSaga(action) {
 
 export function* umpireActionPerofomSaga(action) {
     try {
-        const result = yield call(action.data.status == 'DELETE' ? LiveScoreAxiosApi.umpireRoasterDeleteAction : LiveScoreAxiosApi.umpireRoasterActionPerform,
+        const result = yield call(action.data.status === 'DELETE' ? LiveScoreAxiosApi.umpireRoasterDeleteAction : LiveScoreAxiosApi.umpireRoasterActionPerform,
             action.data);
 
         if (result.status === 1) {

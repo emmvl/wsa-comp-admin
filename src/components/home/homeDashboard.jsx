@@ -267,7 +267,7 @@ class HomeDashboard extends Component {
     async componentDidUpdate(nextProps) {
         const { yearList } = this.props.appState
         let userOrganisation = this.props.userState.getUserOrganisation
-        if (this.state.userCountLoading == true && this.props.appState.onLoad == false) {
+        if (this.state.userCountLoading && this.props.appState.onLoad == false) {
             if (yearList.length > 0) {
                 let yearRefId = yearList[0].id
 
@@ -278,7 +278,7 @@ class HomeDashboard extends Component {
                 this.setState({ userCountLoading: false })
             }
         }
-        if (this.state.loading == true && this.props.userState.onOrgLoad == false) {
+        if (this.state.loading && this.props.userState.onOrgLoad == false) {
             if (nextProps.userOrganisation !== userOrganisation) {
                 if (userOrganisation.length > 0) {
                     if (this.props.appState.yearList == 0) {
@@ -303,7 +303,7 @@ class HomeDashboard extends Component {
             }
         }
 
-        if (this.state.updateActionBoxLoad == true && this.props.homeDashboardState.onActionBoxLoad == false) {
+        if (this.state.updateActionBoxLoad && this.props.homeDashboardState.onActionBoxLoad == false) {
             this.setState({ updateActionBoxLoad: false });
             this.handleActionBoxList(1);
         }
@@ -311,7 +311,7 @@ class HomeDashboard extends Component {
 
     onYearChange = (yearRefId) => {
         this.props.setHomeDashboardYear(yearRefId)
-        // this.setState({ yearRefId: yearRefId, })
+        // this.setState({ yearRefId, })
         this.props.clearHomeDashboardData("yearChange")
         this.props.getUserCount(yearRefId)
     }
@@ -335,7 +335,7 @@ class HomeDashboard extends Component {
     }
 
     handleUpdateActionBoxOk = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             this.updateActionBox(this.state.actions);
         }
 

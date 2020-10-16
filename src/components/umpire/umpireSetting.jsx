@@ -41,7 +41,7 @@ class UmpireSetting extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
-            if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
+            if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
 
@@ -70,7 +70,7 @@ class UmpireSetting extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.umpireAllocationSettings}
                         </Breadcrumb.Item>

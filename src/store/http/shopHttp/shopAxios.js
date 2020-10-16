@@ -13,7 +13,7 @@ async function logout() {
 let token = getAuthToken();
 let AxiosApi = {
 
-    /////////////////product listing get API 
+    /////////////////product listing get API
     async getProductListing(sorterBy, order, offset, filter, limit) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
@@ -21,7 +21,7 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    /////////////////Add product 
+    /////////////////Add product
     addProduct(payload) {
         let body = payload
         var url = `/product`;
@@ -36,13 +36,13 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    ////delete product from the product listing API 
+    ////delete product from the product listing API
     deleteProduct(productId) {
         var url = `/product?id=${productId}`
         return Method.dataDelete(url, token);
     },
 
-    ////delete product from the product listing API 
+    ////delete product from the product listing API
     deleteProductVariant(optionId) {
         var url = `/product/variant?id=${optionId}`
         return Method.dataDelete(url, token);
@@ -60,7 +60,7 @@ let AxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    /////////////////product listing get API 
+    /////////////////product listing get API
     getProductDetailsById(productId) {
         var url = `/product?id=${productId}`;
         return Method.dataGet(url, token);
@@ -83,7 +83,6 @@ let AxiosApi = {
 
     ///////////shop order summary listing get API
     async getOrderSummaryListing(params) {
-        console.log("params", params)
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
         let { limit, offset, search, year, postcode, affiliate, paymentMethod, order, sorterBy } = params
@@ -100,7 +99,7 @@ let AxiosApi = {
         return Method.dataGetDownload(url, token, "orderSummary");
     },
 
-    /////// //order status status listing get API 
+    /////// //order status status listing get API
     async getOrderStatusListing(params) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
@@ -109,14 +108,14 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    ///////////update order status API 
+    ///////////update order status API
     updateOrderStatus(payload) {
         let body = payload
         var url = `/order`;
         return Method.dataPut(url, token, body);
     },
 
-    ///////////update order status API 
+    ///////////update order status API
     getOrderDetails(id) {
         var url = `/order?id=${id}`;
         return Method.dataGet(url, token);
