@@ -924,7 +924,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             </div>
                         ))
                         }
-                        )}
+
                         <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddTimeSlotBtn} className='input-heading-add-another' onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, null, "addTimeSlotManualperVenue", venueIndex)}> + {AppConstants.add_TimeSlot}</span>
                     </div>
                     {data.length > 1 &&
