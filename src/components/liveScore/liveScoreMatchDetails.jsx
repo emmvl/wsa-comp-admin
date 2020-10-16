@@ -19,7 +19,7 @@ import {
     liveScoreExportGameAttendanceAction, liveScoreGameAttendanceListAction
 } from "../../store/actions/LiveScoreAction/liveScoreGameAttendanceAction"
 import {
-    liveScorePlayerMinuteTrackingListAction, liveScorePlayerMinuteRecordAction
+    liveScorePlayerMinuteTrackingListAction, liveScorePlayerMinuteRecordAction, liveScoreUpdatePlayerMinuteRecordAction
 } from "../../store/actions/LiveScoreAction/liveScorePlayerMinuteTrackingAction";
 import { isArrayNotEmpty } from '../../util/helpers'
 import { getLiveScoreCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage';
@@ -201,6 +201,9 @@ class LiveScoreMatchDetails extends Component {
             borrowedTeam2Players: [],
             loadTrackingData: true,
             minutesTrackingData: [],
+            periodDuration: null,
+            positionDuration: null,
+            playedCheckBox: false
         };
         this.umpireScore_View = this.umpireScore_View.bind(this);
         this.team_View = this.team_View.bind(this);
@@ -211,6 +214,19 @@ class LiveScoreMatchDetails extends Component {
     componentDidMount() {
         let isLineUpEnable = null;
         this.props.getLiveScoreGamePositionsList();
+        const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
+
+        if (isArrayNotEmpty(match)) {
+
+            if (match.type == 'FOUR_QUARTERS') {
+                let periodDuration = (match.matchDuration * 60) / 4
+                this.setState({ periodDuration })
+            } else {
+                let periodDuration = (match.matchDuration * 60) / 2
+                this.setState({ periodDuration })
+            }
+        }
+
 
         if (this.state.matchId) {
             this.props.liveScoreGameAttendanceListAction(this.state.matchId);
@@ -306,16 +322,21 @@ class LiveScoreMatchDetails extends Component {
         return attendance;
     };
 
-    setAttendance = (team, playerId, period, field, value) => {
+    setAttendance = (team, playerId, period, field, value, row, positionDuration, periodDuration) => {
+        // console.log(row, 'playerdata')
+
+        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: value, playerdata: row, playerId: playerId, period: period, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId })
+
         const teamAttendance = team === 'team1' ? this.state.team1Attendance : this.state.team2Attendance;
+
         const attendanceIndex = teamAttendance
             .findIndex((att) => att.playerId === playerId && att.period === period);
         teamAttendance[attendanceIndex] = {
             ...teamAttendance[attendanceIndex],
             [field]: value,
         };
-
         if (team === 'team1') {
+
             this.setState({
                 team1Attendance: teamAttendance,
             })
@@ -330,10 +351,13 @@ class LiveScoreMatchDetails extends Component {
         const attendance = this.state.gameAttendanceList
             .find((att) => att.playerId === playerId && att.period === period);
         if (attendance && attendance[field]) {
+
             return attendance[field];
         }
         return null;
     };
+
+
 
     getAttendance = (players) => {
         let attendance = [];
@@ -393,12 +417,14 @@ class LiveScoreMatchDetails extends Component {
         if (filteredAttendance.length === 0) {
             return;
         }
-
+        // console.log(this.state.team1Attendance, 'this.state.team1Attendance', filteredAttendance)
         this.props.liveScoreExportGameAttendanceAction(
             this.state.matchId,
             teamId,
             filteredAttendance,
         );
+
+
     };
 
     playingView(record, value, index, key) {
@@ -474,7 +500,7 @@ class LiveScoreMatchDetails extends Component {
         const length = match ? match.length : 0;
         let isMatchStatus = length > 0 && match[0].matchStatus === "ENDED";
 
-        console.log(this.state.screenName, 'this.state.screenName')
+        // console.log(this.state.screenName, 'this.state.screenName')
 
         return (
             <div className="p-4">
@@ -695,987 +721,1135 @@ class LiveScoreMatchDetails extends Component {
         )
     };
 
+
     teamPlayersStatus = (data, team, teamId) => {
         const competition = JSON.parse(getLiveScoreCompetiton());
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
-
-        const columns = [
-            {
-                title: 'Name',
-                dataIndex: 'name',
-                key: 'name',
-                width: 120,
-            },
-            {
-                title: 'Period 1',
-                children: competition?.positionTracking ? [
-                    {
-                        title: 'Position',
-                        key: 'position1',
-                        width: 150,
-                        render: (p, row) => (
-                            <Select
-                                className="year-select reg-filter-select1 table-cell-select"
-                                size="small"
-                                style={{ width: '100%' }}
-                                defaultValue={this.getAttendanceValue(row.playerId, 1, 'positionId')}
-                                onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
-                            >
-                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                    <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
-                                ))}
-                            </Select>
-                        )
-                    },
-                    {
-                        title: 'Goals',
-                        key: 'goals1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec1',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    size="small"
-                                    type="number"
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                ] : [
-                    // {
-                    //     title: 'Position',
-                    //     key: 'position1',
-                    //     width: 150,
-                    //     render: (p, row) => (
-                    //         <Select
-                    //             className="year-select reg-filter-select1 table-cell-select"
-                    //             size="small"
-                    //             style={{ width: '100%' }}
-                    //             defaultValue={this.getAttendanceValue(row.playerId, 1, 'positionId')}
-                    //             onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
-                    //         >
-                    //             {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                    //                 <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
-                    //             ))}
-                    //         </Select>
-                    //     )
-                    // },
-                    {
-                        title: 'Goals',
-                        key: 'goals1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec1',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    size="small"
-                                    type="number"
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                ]
-            },
-            {
-                title: 'Period 2',
-                children: competition?.positionTracking ? [
-                    {
-                        title: 'Position',
-                        key: 'position2',
-                        width: 150,
-                        render: (p, row) => (
-                            <Select
-                                className="year-select reg-filter-select1 table-cell-select"
-                                size="small"
-                                style={{ width: '100%' }}
-                                defaultValue={this.getAttendanceValue(row.playerId, 2, 'positionId')}
-                                onChange={
-                                    (value) =>
-                                        this.setAttendance(team, row.playerId, 2, 'positionId', value)
-                                }
-                            >
-                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                    <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
-                                ))}
-                            </Select>
-                        )
-                    },
-                    {
-                        title: 'Goals',
-                        key: 'goals2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition ?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec2',
-                        width: 60,
-                        render: (p, row) =>
-                            competition ?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    size="small"
-                                    type="number"
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                ] : [
-                    {
-                        title: 'Goals',
-                        key: 'goals2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec2',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    min={0}
-                                    size="small"
-                                    type="number"
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                ],
-            },
-            {
-                title: 'Period 3',
-                children: competition?.positionTracking ? [
-                    {
-                        title: 'Position',
-                        key: 'position3',
-                        width: 150,
-                        render: (p, row) => (
-                            <Select
-                                className="year-select reg-filter-select1 table-cell-select"
-                                size="small"
-                                style={{ width: '100%' }}
-                                defaultValue={this.getAttendanceValue(row.playerId, 3, 'positionId')}
-                                onChange={
-                                    (value) =>
-                                        this.setAttendance(team, row.playerId, 3, 'positionId', value)
-                                }
-                            >
-                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                    <Option key={`position3_${position.id}`} value={position.id}>{position.name}</Option>
-                                ))}
-                            </Select>
-                        )
-                    },
-                    {
-                        title: 'Goals',
-                        key: 'goals3',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss3',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss3',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec3',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    size="small"
-                                    type="number"
-                                    min={0}
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 3)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 3, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 3, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                ] : [
-                    {
-                        title: 'Goals',
-                        key: 'goals3',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss3',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss3',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec3',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    size="small"
-                                    type="number"
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 3)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 3, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 3, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                ],
-            },
-            {
-                title: 'Period 4',
-                children: competition?.positionTracking ? [
-                    {
-                        title: 'Position',
-                        key: 'position4',
-                        width: 150,
-                        render: (p, row) => (
-                            <Select
-                                className="year-select reg-filter-select1 table-cell-select"
-                                size="small"
-                                style={{ width: '100%' }}
-                                defaultValue={this.getAttendanceValue(row.playerId, 4, 'positionId')}
-                                onChange={
-                                    (value) => this.setAttendance(team, row.playerId, 4, 'positionId', value)
-                                }
-                            >
-                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                    <Option key={`position4_${position.id}`} value={position.id}>{position.name}</Option>
-                                ))}
-                            </Select>
-                        )
-                    },
-                    {
-                        title: 'Goals',
-                        key: 'goals4',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss4',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss4',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec4',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    size="small"
-                                    type="number"
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 4)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 4, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 4, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec2',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <Input
-                                    size="small"
-                                    type="number"
-                                />
-                            ) : (
-                                <Checkbox
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                ] : [
-                    {
-                        title: 'Goals',
-                        key: 'goals4',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number"/>
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss4',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss4',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec4',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    size="small"
-                                    type="number"
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 4)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 4, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 4, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                    // {
-                    //     title: 'Miss',
-                    //     key: 'miss2',
-                    //     width: 60,
-                    //     render: () => (
-                    //         <Input size="small" type="number" />
-                    //     )
-                    // },
-                    // {
-                    //     title: 'P Miss',
-                    //     key: 'pmiss2',
-                    //     width: 60,
-                    //     render: () => (
-                    //         <Input size="small" type="number" />
-                    //     )
-                    // },
-                    // {
-                    //     title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                    //     key: 'sec2',
-                    //     width: 60,
-                    //     render: (p, row) =>
-                    //         competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                    //             <Input
-                    //                 size="small"
-                    //                 type="number"
-                    //             />
-                    //         ) : (
-                    //             <Checkbox
-                    //                 onChange={
-                    //                     (e) =>
-                    //                         this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                    //                 }
-                    //             />
-                    //         )
-                    // },
-                ],
-            },
-            // {
-            //     title: 'Period 3',
-            //     children: [
-            //         {
-            //             title: 'Position',
-            //             key: 'position3',
-            //             width: 150,
-            //             render: (p, row) => (
-            //                 <Select
-            //                     className="year-select reg-filter-select1 table-cell-select"
-            //                     size="small"
-            //                     style={{ width: '100%' }}
-            //                     defaultValue={row?.lineup?.positionId}
-            //                     onChange={
-            //                         (value) =>
-            //                             this.setAttendance(team, row.playerId, 3, 'positionId', value)
-            //                     }
-            //                 >
-            //                     {this.props.liveScoreGamePositionState.positionList.map((position) => (
-            //                         <Option key={`position3_${position.id}`} value={position.id}>{position.name}</Option>
-            //                     ))}
-            //                 </Select>
-            //             )
-            //         },
-            //         {
-            //             title: 'Goals',
-            //             key: 'goals3',
-            //             width: 60,
-            //             render: () => (
-            //                 <Input size="small" type="number" />
-            //             )
-            //         },
-            //         {
-            //             title: 'Miss',
-            //             key: 'miss3',
-            //             width: 60,
-            //             render: () => (
-            //                 <Input size="small" type="number" />
-            //             )
-            //         },
-            //         {
-            //             title: 'P Miss',
-            //             key: 'pmiss3',
-            //             width: 60,
-            //             render: () => (
-            //                 <Input size="small" type="number" />
-            //             )
-            //         },
-            //         {
-            //             title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-            //             key: 'sec3',
-            //             width: 60,
-            //             render: (p, row) =>
-            //                 competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-            //                     <Input size="small" type="number" />
-            //                 ) : (
-            //                     <Checkbox
-            //                         onChange={
-            //                             (e) =>
-            //                                 this.setAttendance(team, row.playerId, 3, 'isPlaying', e.target.checked)
-            //                         }
-            //                     />
-            //                 )
-            //         },
-            //     ],
-            // },
-            // {
-            //     title: 'Period 4',
-            //     children: [
-            //         {
-            //             title: 'Position',
-            //             key: 'position4',
-            //             width: 150,
-            //             render: (p, row) => (
-            //                 <Select
-            //                     className="year-select reg-filter-select1 table-cell-select"
-            //                     size="small"
-            //                     style={{ width: '100%' }}
-            //                     defaultValue={row?.lineup?.positionId}
-            //                     onChange={
-            //                         (value) =>
-            //                             this.setAttendance(team, row.playerId, 4, 'positionId', value)
-            //                     }
-            //                 >
-            //                     {this.props.liveScoreGamePositionState.positionList.map((position) => (
-            //                         <Option key={`position4_${position.id}`} value={position.id}>{position.name}</Option>
-            //                     ))}
-            //                 </Select>
-            //             )
-            //         },
-            //         {
-            //             title: 'Goals',
-            //             key: 'goals4',
-            //             width: 60,
-            //             render: () => (
-            //                 <Input size="small" type="number" />
-            //             )
-            //         },
-            //         {
-            //             title: 'Miss',
-            //             key: 'miss4',
-            //             width: 60,
-            //             render: () => (
-            //                 <Input size="small" type="number" />
-            //             )
-            //         },
-            //         {
-            //             title: 'P Miss',
-            //             key: 'pmiss4',
-            //             width: 60,
-            //             render: () => (
-            //                 <Input size="small" type="number" />
-            //             )
-            //         },
-            //         {
-            //             title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-            //             key: 'sec4',
-            //             width: 60,
-            //             render: (p, row) =>
-            //                 competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-            //                     <Input size="small" type="number" />
-            //                 ) : (
-            //                     <Checkbox
-            //                         onChange={
-            //                             (e) =>
-            //                                 this.setAttendance(team, row.playerId, 4, 'isPlaying', e.target.checked)
-            //                         }
-            //                     />
-            //                 )
-            //         },
-            //     ],
-            // },
-        ];
-        const columns2 = [
-            {
-                title: 'Name',
-                dataIndex: 'name',
-                key: 'name',
-                width: 120,
-            },
-            {
-                title: 'Period 1',
-                children: competition?.positionTracking ? [
-                    {
-                        title: 'Position',
-                        key: 'position1',
-                        width: 150,
-                        render: (p, row) => (
-                            <Select
-                                className="year-select reg-filter-select1 table-cell-select"
-                                size="small"
-                                style={{ width: '100%' }}
-                                defaultValue={this.getAttendanceValue(row.playerId, 1, 'positionId')}
-                                onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
-                            >
-                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                    <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
-                                ))}
-                            </Select>
-                        )
-                    },
-                    {
-                        title: 'Goals',
-                        key: 'goals1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec1',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    size="small"
-                                    type="number"
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                ] : [
-                    // {
-                    //     title: 'Position',
-                    //     key: 'position1',
-                    //     width: 150,
-                    //     render: (p, row) => (
-                    //         <Select
-                    //             className="year-select reg-filter-select1 table-cell-select"
-                    //             size="small"
-                    //             style={{ width: '100%' }}
-                    //             defaultValue={this.getAttendanceValue(row.playerId, 1, 'positionId')}
-                    //             onChange={(value) => this.setAttendance(team, row.playerId, 1, 'positionId', value)}
-                    //         >
-                    //             {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                    //                 <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
-                    //             ))}
-                    //         </Select>
-                    //     )
-                    // },
-                    {
-                        title: 'Goals',
-                        key: 'goals1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss1',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec1',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    size="small"
-                                    type="number"
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 1)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 1, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 1, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 1, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                ]
-            },
-            {
-                title: 'Period 2',
-                children: competition?.positionTracking ? [
-                    {
-                        title: 'Position',
-                        key: 'position2',
-                        width: 150,
-                        render: (p, row) => (
-                            <Select
-                                className="year-select reg-filter-select1 table-cell-select"
-                                size="small"
-                                style={{ width: '100%' }}
-                                defaultValue={this.getAttendanceValue(row.playerId, 2, 'positionId')}
-                                onChange={
-                                    (value) =>
-                                        this.setAttendance(team, row.playerId, 2, 'positionId', value)
-                                }
-                            >
-                                {this.props.liveScoreGamePositionState.positionList.map((position) => (
-                                    <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
-                                ))}
-                            </Select>
-                        )
-                    },
-                    {
-                        title: 'Goals',
-                        key: 'goals2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec2',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    size="small"
-                                    type="number"
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                ] : [
-                    {
-                        title: 'Goals',
-                        key: 'goals2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'Miss',
-                        key: 'miss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: 'P Miss',
-                        key: 'pmiss2',
-                        width: 60,
-                        render: () => (
-                            <Input size="small" type="number" />
-                        )
-                    },
-                    {
-                        title: competition?.attendanceRecordingPeriod === 'MINUTE' ? 'Secs' : 'Played',
-                        key: 'sec2',
-                        width: 60,
-                        render: (p, row) =>
-                            competition?.attendanceRecordingPeriod === 'MINUTE' ? (
-                                <InputNumber
-                                    min={0}
-                                    size="small"
-                                    type="number"
-                                    defaultValue={this.getMinuteTrackingData(teamId, row.playerId, 2)}
-                                    onChange={(value) => this.setMinuteTrackingData(teamId, row.playerId, 2, value)}
-                                />
-                            ) : (
-                                <Checkbox
-                                    defaultChecked={this.getAttendanceValue(row.playerId, 2, 'isPlaying')}
-                                    onChange={
-                                        (e) =>
-                                            this.setAttendance(team, row.playerId, 2, 'isPlaying', e.target.checked)
-                                    }
-                                />
-                            )
-                    },
-                ],
-            },
-        ];
-
+        const { trackingList } = this.props.liveScorePlayerMinuteTrackingState
         return (
             <Table
                 className="home-dashboard-table attendance-table"
-                columns={match?.type === 'TWO_HALVES' ? columns2 : columns}
+                columns={this.getTeamPlayerStatusColumn(data, team, teamId)}
                 dataSource={data}
                 size="small"
                 scroll={{ x: '100%' }}
                 pagination={false}
                 loading={this.props.liveScoreGamePositionState.onLoad}
-                // rowKey={(record) => record.id}
+            // rowKey={(record) => record.id}
             />
         )
+    }
+
+    setAttendanceValue = (playerId, period, field, key) => {
+        const competition = JSON.parse(getLiveScoreCompetiton());
+        let { trackResultData } = this.props.liveScorePlayerMinuteTrackingState
+        let gtt = (competition.gameTimeTracking || competition.gameTimeTracking == 1) ? true : false //// Game Time Tracking
+
+        let attendance = trackResultData
+            .find((att) => att.playerId === playerId && att.period === period);
+        // console.log("trackResultData", trackResultData)
+        // console.log("attendance", attendance)
+
+
+        if (key == 'flow1') {
+            if (field === "positionId") {
+                let positionId = attendance ? attendance.positionId : null
+                return positionId
+            }
+            if(field==="diabled"){
+                return attendance ? attendance.isPlaying:false
+            }
+            if (field === "isPlaying") {
+                let isPlaying = gtt ? attendance ? (attendance.playedEndPeriod) : attendance ? (attendance.playedFullPeriod) : false : false
+                return isPlaying
+            }
+        } else if (key == 'flow2') {
+            if (field == "isPlaying") {
+                let isPlaying = gtt ? attendance ? (attendance.playedEndPeriod) : attendance ? (attendance.playedFullPeriod) : false : false
+                return isPlaying
+            }
+        }
+        else if (key == 'flow3') {
+            if (field === "positionId") {
+                let positionId = attendance ? attendance.positionId : null
+                return positionId
+            }
+            if (field === "duration") {
+                let duration = attendance ? attendance.duration : 0
+                return duration
+            }
+        }else if (key === "flow4") {
+            if (field === "isPlaying") {
+                let isPlaying = attendance ? attendance.playedFullPeriod : false
+                return isPlaying
+            }
+            if (field === "seconds") {
+                let duration = attendance ? attendance.duration : 0
+                return duration
+            }
+        } else if (key === "flow5") {
+
+            if (field === "isPlaying") {
+                let isPlaying = attendance ? attendance.playedFullPeriod : false
+                return isPlaying
+            }
+        }
+    };
+
+    getTeamPlayerStatusColumn = (data, team, teamId) => {
+        const competition = JSON.parse(getLiveScoreCompetiton());
+        const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
+        const { noOfPosition } = this.props.liveScorePlayerMinuteTrackingState
+
+        let pt = (competition.positionTracking || competition.positionTracking == 1) ? true : false //// Position Tracking
+        let gtt = (competition.gameTimeTracking || competition.gameTimeTracking == 1) ? true : false //// Game Time Tracking
+        let art = competition.attendanceRecordingPeriod //// Attendance Recording Period
+
+        let periodDuration = null
+        let positionDuration = null
+        if (match.type == 'FOUR_QUARTERS') {
+            periodDuration = (match.matchDuration * 60) / 4
+            positionDuration = periodDuration / noOfPosition
+        } else {
+            periodDuration = (match.matchDuration * 60) / 2
+            positionDuration = periodDuration / noOfPosition
+        }
+        if (match.type == 'TWO_HALVES') {
+            if (pt && gtt && art != 'MINUTE') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position1',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 1, 'positionId', "flow1")}
+                                        onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 1, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Played',
+                                key: 'played1',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    let disable=this.setAttendanceValue(row.playerId, 1, 'diabled', "flow1")?false:true
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={disable? this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow1"):false}
+                                                disabled={disable}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position2',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 2, 'positionId', "flow1")}
+                                        onChange={
+                                            (value) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 2, key: 'positionId', selectedData: value, index: index, playerdata: row, playedCheckBox: this.state.playedCheckBox, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Played',
+                                key: 'played2',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    let disable=this.setAttendanceValue(row.playerId, 2, 'diabled', "flow1")?false:true
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={disable? this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow1"):false}
+                                                disabled={disable}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                        ]
+                    },
+                ];
+
+                return columns
+            } else if (!pt && gtt && art != 'MINUTE') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played1',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow2")}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played2',
+                                width: 60,
+                                render: (p, row, index) =>
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow2")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                            },
+                        ]
+                    },
+                ];
+
+                return columns
+            } else if (pt && !gtt && art === 'MINUTE') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position1',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 1, 'positionId', "flow3")}
+                                        onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 1, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec2',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        defaultValue={this.setAttendanceValue(row.playerId, 1, 'duration', "flow3")}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position2',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 2, 'positionId', "flow3")}
+                                        onChange={
+                                            (value) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 2, key: 'positionId', selectedData: value, index: index, playerdata: row, playedCheckBox: this.state.playedCheckBox, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec2',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        defaultValue={this.setAttendanceValue(row.playerId, 1, 'duration', "flow3")}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ]
+                    },
+                ];
+
+                return columns
+            } else if (!pt && !gtt && art === 'MINUTE') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Played Full Period',
+                                key: 'playedFullPeriod1',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow4")}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec2',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        value={this.setAttendanceValue( row.playerId, 1,'seconds','flow4')}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Played Full Period',
+                                key: 'playedFullPeriod2',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow4")}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec2',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        value={this.setAttendanceValue( row.playerId, 2,'seconds','flow4')}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ]
+                    },
+                ];
+
+                return columns
+            } else if (!pt && !gtt && art === 'MATCH') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played1',
+                                width: 60,
+                                render: (p, row, index) =>
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow5")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played2',
+                                width: 60,
+                                render: (p, row, index) =>
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow5")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                            },
+                        ]
+                    },
+                ];
+                return columns
+            }
+        } else {
+            if (pt && gtt && art != 'MINUTE') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position1',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 1, 'positionId', "flow1")}
+                                        onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 1, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Played',
+                                key: 'played1',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    let disable=this.setAttendanceValue(row.playerId, 1, 'diabled', "flow1")?false:true
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={disable? this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow1"):false}
+                                                disabled={disable}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position2',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 2, 'positionId', "flow1")}
+                                        onChange={
+                                            (value) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 2, key: 'positionId', selectedData: value, index: index, playerdata: row, playedCheckBox: this.state.playedCheckBox, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Played',
+                                key: 'played2',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    let disable=this.setAttendanceValue(row.playerId, 2, 'diabled', "flow1")?false:true
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={disable? this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow1"):false}
+                                                disabled={disable}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                        ]
+                    },
+                    {
+                        title: 'Period 3',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position3',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 3, 'positionId', "flow1")}
+                                        onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 3, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Played',
+                                key: 'played3',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    let disable=this.setAttendanceValue(row.playerId, 3, 'diabled', "flow1")?false:true
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={disable? this.setAttendanceValue(row.playerId, 3, 'isPlaying', "flow1"):false}
+                                                disabled={disable}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 4',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position4',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 4, 'positionId', "flow1")}
+                                        onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 4, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Played',
+                                key: 'played4',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    let disable=this.setAttendanceValue(row.playerId, 4, 'diabled', "flow1")?false:true
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={disable? this.setAttendanceValue(row.playerId, 4, 'isPlaying', "flow1"):false}
+                                                disabled={disable}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                        ],
+                    },
+                ];
+
+                return columns
+            } else if (!pt && gtt && art != 'MINUTE') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played1',
+                                width: 60,
+                                render: (p, row, index) =>
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow2")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played2',
+                                width: 60,
+                                render: (p, row, index) =>
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow2")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                            },
+                        ]
+                    }, {
+                        title: 'Period 3',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played3',
+                                width: 60,
+                                render: (p, row, index) =>
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 3, 'isPlaying', "flow2")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                            },
+                        ]
+                    }, {
+                        title: 'Period 4',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played4',
+                                width: 60,
+                                render: (p, row, index) =>
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 4, 'isPlaying', "flow2")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                            },
+                        ]
+                    },
+                ];
+
+                return columns
+            } else if (pt && !gtt && art === 'MINUTE') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position1',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 1, 'positionId', "flow3")}
+                                        onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 1, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec1',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        defaultValue={this.setAttendanceValue(row.playerId, 1, 'duration', "flow3")}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position2',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 2, 'positionId', "flow3")}
+                                        onChange={
+                                            (value) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 2, key: 'positionId', selectedData: value, index: index, playerdata: row, playedCheckBox: this.state.playedCheckBox, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec2',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        defaultValue={this.setAttendanceValue(row.playerId, 2, 'duration', "flow3")}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ]
+                    }, {
+                        title: 'Period 3',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position3',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 3, 'positionId', "flow3")}
+                                        onChange={
+                                            (value) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 3, key: 'positionId', selectedData: value, index: index, playerdata: row, playedCheckBox: this.state.playedCheckBox, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec3',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        defaultValue={this.setAttendanceValue(row.playerId, 3, 'duration', "flow3")}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ]
+                    },
+                    {
+                        title: 'Period 4',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position4',
+                                width: 150,
+                                render: (p, row, index) => (
+                                    <Select
+                                        className="year-select reg-filter-select1 table-cell-select"
+                                        size="small"
+                                        style={{ width: '100%' }}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 4, 'positionId', "flow3")}
+                                        onChange={
+                                            (value) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 4, key: 'positionId', selectedData: value, index: index, playerdata: row, playedCheckBox: this.state.playedCheckBox, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    >
+                                        {this.props.liveScoreGamePositionState.positionList.map((position) => (
+                                            <Option key={`position2_${position.id}`} value={position.id}>{position.name}</Option>
+                                        ))}
+                                    </Select>
+                                )
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec4',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        defaultValue={this.setAttendanceValue(row.playerId, 4, 'duration', "flow3")}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ]
+                    },
+                ];
+
+                return columns
+            } else if (!pt && !gtt && art === 'MINUTE') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Played Full Period',
+                                key: 'playedFullPeriod1',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow4")}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec1',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        value={this.setAttendanceValue(row.playerId, 1,'seconds','flow4')}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Played Full Period',
+                                key: 'playedFullPeriod2',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow4")}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec2',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        value={this.setAttendanceValue( row.playerId, 2,'seconds','flow4')}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ]
+                    }, {
+                        title: 'Period 3',
+                        children: [
+                            {
+                                title: 'Played Full Period',
+                                key: 'playedFullPeriod3',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={this.setAttendanceValue(row.playerId, 3, 'isPlaying', "flow4")}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec3',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        value={this.setAttendanceValue( row.playerId, 3,'seconds','flow4')}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ]
+                    }, {
+                        title: 'Period 4',
+                        children: [
+                            {
+                                title: 'Played Full Period',
+                                key: 'playedFullPeriod4',
+                                width: 60,
+                                render: (p, row, index) => {
+                                    return (
+                                        <>
+                                            <Checkbox
+                                                defaultChecked={this.setAttendanceValue(row.playerId, 4, 'isPlaying', "flow4")}
+                                                onChange={
+                                                    (e) =>
+                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                }
+                                            />
+                                        </>
+                                    )
+                                }
+                            },
+                            {
+                                title: 'Secs',
+                                key: 'sec4',
+                                width: 60,
+                                render: (p, row) =>
+                                    <InputNumber
+                                        size="small"
+                                        type="number"
+                                        value={this.setAttendanceValue(row.playerId, 4,'seconds','flow4')}
+                                        onChange={(value) =>
+                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                    />
+                            },
+                        ]
+                    },
+                ];
+
+                return columns
+            }  else if (!pt && !gtt && art === 'MATCH') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played1',
+                                width: 60,
+                                render: (p, row, index) =>
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow5")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played2',
+                                width: 60,
+                                render: (p, row, index) =>
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow5")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                            },
+                        ]
+                    }, {
+                        title: 'Period 3',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played3',
+                                width: 60,
+                                render: (p, row, index) =>
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 3, 'isPlaying', "flow5")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                            },
+                        ]
+                    }, {
+                        title: 'Period 4',
+                        children: [
+                            {
+                                title: 'Played',
+                                key: 'played4',
+                                width: 60,
+                                render: (p, row, index) =>
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 4, 'isPlaying', "flow5")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                            },
+                        ]
+                    },
+                ];
+                return columns
+            }
+        }
+
     }
 
     handleAttendanceView = (visible, team) => {
@@ -1688,10 +1862,14 @@ class LiveScoreMatchDetails extends Component {
     team_View = () => {
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match : [];
         const { team1Players, team2Players } = this.props.liveScoreMatchState;
+        const { trackingList } = this.props.liveScorePlayerMinuteTrackingState
         const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
         const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
+        // console.log(team1PlayersData, 'team1PlayersData', this.state.borrowedTeam1Players)
 
         const length = match ? match.length : 0;
+
+
 
         return (
             <div className="row mt-5 ml-0 mr-0 mb-5">
@@ -1723,7 +1901,7 @@ class LiveScoreMatchDetails extends Component {
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
-                                        onClick={() => this.exportAttendance('team1', match[0]?.team1?.id)}
+                                    // onClick={() => this.exportAttendance('team1', match[0] ?.team1 ?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
@@ -1756,6 +1934,7 @@ class LiveScoreMatchDetails extends Component {
                             )}
                         </div>
                     </div>
+                    {/* {this.footerView('team1', match[0]?.team1?.id)} */}
                 </div>
                 <div
                     className={this.state.teamAttendance ? 'col-12 mt-5' : 'col-6 col-md-6 col-sm-12'}
@@ -1785,7 +1964,7 @@ class LiveScoreMatchDetails extends Component {
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
-                                        onClick={() => this.exportAttendance('team2', match[0]?.team2?.id)}
+                                    // onClick={() => this.exportAttendance('team2', match[0] ?.team2 ?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
@@ -1817,7 +1996,9 @@ class LiveScoreMatchDetails extends Component {
                             )}
                         </div>
                     </div>
+                    {this.footerView('team2', match[0]?.team2?.id)}
                 </div>
+
             </div>
         )
     };
@@ -2014,6 +2195,51 @@ class LiveScoreMatchDetails extends Component {
 
     }
 
+    onSavePlayerTrack(trackResultData) {
+        let filteredData = []
+        for (let i in trackResultData) {
+            if (trackResultData[i].duration > 0 || trackResultData[i].positionId > 0) {
+                filteredData.push(trackResultData[i])
+            }
+        }
+
+        if (filteredData.length > 0) {
+            this.props.liveScorePlayerMinuteRecordAction(filteredData, this.state.matchId)
+        }
+
+
+    }
+
+    footerView = (team, teamId) => {
+        const { trackResultData } = this.props.liveScorePlayerMinuteTrackingState
+
+        return (
+            <div className="fluid-width paddingBottom56px mt-4" >
+                <div className="row" >
+                    <div className="col-sm-3" >
+                        <div className="reg-add-save-button ml-3">
+                            {this.state.teamAttendance && <Button className="cancelBtnWidth" type="cancel-button">
+                                {AppConstants.cancel}
+                            </Button>
+                            }
+                        </div>
+                    </div>
+                    <div className="col-sm">
+                        <div className="comp-buttons-view mr-3">
+                            {/* {this.state.teamAttendance && <Button onClick={() =>trackResultData.length > 0 && this.props.liveScorePlayerMinuteRecordAction(trackResultData, this.state.matchId) */}
+                            {this.state.teamAttendance && <Button onClick={() => trackResultData.length > 0 && this.onSavePlayerTrack(trackResultData)
+
+                            } className="publish-button save-draft-text mr-0" htmlType="submit" type="primary"
+                            >
+                                {AppConstants.save}</Button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div >
+        )
+    }
+
     render() {
         console.log(this.props.location.state, 'umpireKey')
         let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
@@ -2021,8 +2247,9 @@ class LiveScoreMatchDetails extends Component {
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <Loader
                     visible={
-                        this.props.liveScorePlayerMinuteTrackingState.onLoad
-                        || this.props.liveScorePlayerMinuteTrackingState.recordLoad
+                        // this.props.liveScorePlayerMinuteTrackingState.onLoad
+                        // || 
+                        this.props.liveScorePlayerMinuteTrackingState.recordLoad
                     }
                 />
                 {
@@ -2073,6 +2300,7 @@ function mapDispatchToProps(dispatch) {
         liveScoreGameAttendanceListAction,
         liveScorePlayerMinuteTrackingListAction,
         liveScorePlayerMinuteRecordAction,
+        liveScoreUpdatePlayerMinuteRecordAction
     }, dispatch)
 }
 

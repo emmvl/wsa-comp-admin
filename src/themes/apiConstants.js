@@ -1935,8 +1935,10 @@ const ApiConstants = {
 
   API_MEMBERSHIP_PAYMENT_OPTIONS_LOAD: "API_MEMBERSHIP_PAYMENT_OPTIONS_LOAD",
   API_MEMBERSHIP_PAYMENT_OPTIONS_SUCCESS: "API_MEMBERSHIP_PAYMENT_OPTIONS_SUCCESS",
+
+  API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD: "API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD",
   Search_Division_Timeslot_update:"Search_Division_Timeslot_update",
-  Clear_Division_Timeslot_update:"Clear_Division_Timeslot_update"
+  Clear_Division_Timeslot_update:"Clear_Division_Timeslot_update",
 
 };
 

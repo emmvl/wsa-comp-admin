@@ -1402,8 +1402,8 @@ let LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    liveScorePlayerMinuteRecord(data) {
-        const url = '/pmt/record';
+    liveScorePlayerMinuteRecord(data, matchId) {
+        const url = `/pmt/record?matchId=${matchId}`;
 
         return Method.dataPost(url, token, data);
     },
