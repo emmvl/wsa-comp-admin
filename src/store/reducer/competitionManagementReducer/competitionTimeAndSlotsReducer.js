@@ -33,6 +33,8 @@ const postTimeSlot = {
 }
 // initial state
 const initialState = {
+    mainDivisionList: [],
+    mainGradeList: [],
     onLoad: false,
     onGetTimeSlotLoad: false,
     error: null,
@@ -554,6 +556,7 @@ function CompetitionTimeSlots(state = initialState, action) {
         case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_LOAD:
             return { ...state, onLoad: true, onGetTimeSlotLoad: true, error: null };
         case ApiConstants.API_GET_COMPETITION_WITH_TIME_SLOTS_SUCCESS:
+
             let refData = action.refResult
             const timeSlotRotationWithHelpMsg = getTimeSlotRotationWithHelpMsg(refData.TimeslotRotation, state.timeSlotRotationHelpMessage)
             const timeSlotGenerationWithHelpMsg = getTimeSlotGenerationWithHelpMsg(refData.TimeslotGeneration, state.timeSlotGenerationHelpMessage)
@@ -580,6 +583,8 @@ function CompetitionTimeSlots(state = initialState, action) {
             state.timeSlotGeneration = selectedTimeGeneration
             state.allResult = timeSlotResult
             state.onGetTimeSlotLoad = false
+            state.mainDivisionList = resultData.divisions
+            state.mainGradeList = resultData.grades
             return {
                 ...state,
                 status: action.status,
@@ -890,6 +895,33 @@ function CompetitionTimeSlots(state = initialState, action) {
                 status: action.status
             };
 
+
+        case ApiConstants.Clear_Division_Timeslot_update:
+            if (action.key == "divisions") {
+                state.getcompetitionTimeSlotData.divisions = state.mainDivisionList
+            }
+            if (action.key == 'grades') {
+                state.getcompetitionTimeSlotData.grades = state.mainGradeList
+            }
+            return {
+                ...state,
+                onLoad: false,
+                error: null
+            }
+
+        case ApiConstants.Search_Division_Timeslot_update:
+            console.log(action)
+            if (action.key == "divisions") {
+                state.getcompetitionTimeSlotData.divisions = action.value
+            }
+            if (action.key == "grades") {
+                state.getcompetitionTimeSlotData.grades = action.value
+            }
+            return {
+                ...state,
+                onLoad: false,
+                error: null
+            }
         default:
             return state;
     }

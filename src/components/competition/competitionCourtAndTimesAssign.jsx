@@ -13,7 +13,7 @@ import {
 import {
     getCompetitionWithTimeSlots, addRemoveTimeSlot,
     UpdateTimeSlotsData, UpdateTimeSlotsDataManual,
-    addTimeSlotDataPost
+    addTimeSlotDataPost, searchDivisionList, ClearDivisionArr
 } from "../../store/actions/competitionModuleAction/competitionTimeAndSlotsAction"
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -95,7 +95,6 @@ class CompetitionCourtAndTimesAssign extends Component {
     // component did update
     componentDidUpdate(nextProps) {
         let competitionTimeSlots = this.props.competitionTimeSlots
-
         if (nextProps.competitionTimeSlots !== competitionTimeSlots) {
             if (competitionTimeSlots.onGetTimeSlotLoad == false && this.state.getDataLoading == true) {
                 this.setState({
@@ -463,8 +462,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                         value={item.startTime != null && moment(item.startTime, "HH:mm")}
                         format={"HH:mm"}
                         defaultValue={moment()}
-                        // disabledDate={d => !d || d.isAfter(closeDate)
-                        // minuteStep={15}
+                    // disabledDate={d => !d || d.isAfter(closeDate)
+                    // minuteStep={15}
                     />
                 </div>
                 <div className="col-sm">
@@ -478,8 +477,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                         value={item.endTime != null && moment(item.endTime, "HH:mm")}
                         format={"HH:mm"}
                         onChange={(time) => time != null && this.changeTime(time, "endTime", index)}
-                        // minuteStep={15}
-                        // disabledHours={() => this.getDisabledHours(item.startTime)}
+                    // minuteStep={15}
+                    // disabledHours={() => this.getDisabledHours(item.startTime)}
                     />
                 </div>
                 {data.length > 1 &&
@@ -581,7 +580,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         }, 300)
     }
 
-    getCourtRotationId=(data, key)=> {
+    getCourtRotationId = (data, key) => {
         switch (key) {
             case "timeSlotPref":
                 switch (data) {
@@ -682,7 +681,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             className="reg-competition-radio"
                             disabled={disabledStatus}
                             onChange={(e) => this.changeTimeSlotGeneration(e)}
-                            // setFieldsValue={timeSlotData.timeslotGenerationRefId}
+                        // setFieldsValue={timeSlotData.timeslotGenerationRefId}
                         >
                             {commonState.timeSlotGeneration.length > 0 && commonState.timeSlotGeneration.map((item, index) => (
                                 <div key={"slot" + index}>
@@ -788,7 +787,8 @@ class CompetitionCourtAndTimesAssign extends Component {
         let daysList = this.props.competitionTimeSlots
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
-
+        let mainGradeList = this.props.competitionTimeSlots.mainGradeList
+        let mainDivisionList = this.props.competitionTimeSlots.mainDivisionList
         return (
             <div>
                 <div className="row">
@@ -830,7 +830,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             onChange={(startTime) => startTime != null && this.props.UpdateTimeSlotsDataManual(startTime.format("HH:mm"), "startTime", "competitionTimeslotManualperVenueTime", timeIndex, null, index, venueIndex)}
                                             value={timeItem.startTime != null && moment(timeItem.startTime, "HH:mm")}
                                             format={"HH:mm"}
-                                            // minuteStep={15}
+                                        // minuteStep={15}
                                         />
                                         {item.startTime.length > 1 &&
                                             <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
@@ -863,8 +863,11 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                         id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_Divisions}
                                                         mode='multiple'
                                                         placeholder="Select"
+                                                        filterOption={false}
                                                         style={{ display: 'grid', alignContent: 'center' }}
-                                                        onChange={(divisions) => this.props.UpdateTimeSlotsDataManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManualAllvenue', timeIndex, id, index, venueIndex)}
+                                                        onBlur={() => this.props.ClearDivisionArr('divisions')}
+                                                        onChange={(divisions) => this.onSelectDivisionsMatchDurationManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManualAllvenue', timeIndex, id, index, venueIndex)}
+                                                        onSearch={(value) => this.handleSearch(value, mainDivisionList)}
                                                     >
                                                         {division.divisions && division.divisions.map((item) => (
                                                             <Option value={item.competitionMembershipProductDivision}> {item.divisionName}</Option>
@@ -884,8 +887,11 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                         disabled={disabledStatus}
                                                         mode='multiple'
                                                         placeholder="Select"
+                                                        filterOption={false}
                                                         style={{ display: 'grid', alignContent: 'center' }}
-                                                        onChange={(divisions) => this.props.UpdateTimeSlotsDataManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManualAllvenue', timeIndex, id, index, venueIndex)}
+                                                        onBlur={() => this.props.ClearDivisionArr('grades')}
+                                                        onChange={(divisions) => this.onSelectGradesMatchDurationManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManualAllvenue', timeIndex, id, index, venueIndex)}
+                                                        onSearch={(value) => this.handleSearchGrades(value, mainGradeList)}
                                                     >
                                                         {division.grades && division.grades.map((item) => (
                                                             <Option value={item.competitionDivisionGradeId}> {item.gradeName}</Option>
@@ -911,13 +917,55 @@ class CompetitionCourtAndTimesAssign extends Component {
                         </div>
                     }
                 </div>
-            </div>
+            </div >
         )
     }
+    onSelectDivision(divisions, key, mainKey, index, mainId, id) {
+        this.props.ClearDivisionArr("divisions")
+
+        this.props.UpdateTimeSlotsData(divisions, key, mainKey, index, mainId, id)
+    }
+
+    onSelectGrades(grades, key, mainKey, index, mainId, id) {
+        this.props.ClearDivisionArr("grades")
+        this.props.UpdateTimeSlotsData(grades, key, mainKey, index, mainId, id)
+    }
+
+    handleSearch = (value, data) => {
+        const filteredData = data.filter(memo => {
+            return memo.divisionName.toLowerCase().indexOf(value.toLowerCase()) > -1
+        })
+        this.props.searchDivisionList(filteredData, 'divisions')
+    };
+    handleSearchGrades = (value, data) => {
+        const filteredData = data.filter(memo => {
+            return memo.gradeName.toLowerCase().indexOf(value.toLowerCase()) > -1
+        })
+        this.props.searchDivisionList(filteredData, 'grades')
+    };
+    onSelectDivisionMatchDuration(divisions, key, mainKey, timeIndex, mainId, id, index) {
+        this.props.ClearDivisionArr("divisions")
+        this.props.UpdateTimeSlotsDataManual(divisions, key, mainKey, timeIndex, mainId, id, index)
+    }
+    onSelectGradesMatchDuration(divisions, key, mainKey, timeIndex, mainId, id, index) {
+        this.props.ClearDivisionArr("grades")
+        this.props.UpdateTimeSlotsDataManual(divisions, key, mainKey, timeIndex, mainId, id, index)
+    }
+
+    onSelectGradesMatchDurationManual(divisions, key, mainKey, timeIndex, id, index, venueIndex) {
+        this.props.ClearDivisionArr("grades")
+        this.props.UpdateTimeSlotsDataManual(divisions, key, mainKey, timeIndex, id, index, venueIndex)
+    }
+    onSelectDivisionsMatchDurationManual(divisions, key, mainKey, timeIndex, id, index, venueIndex) {
+        this.props.ClearDivisionArr("divisions")
+        this.props.UpdateTimeSlotsDataManual(divisions, key, mainKey, timeIndex, id, index, venueIndex)
+    }
+
 
     // add data on click of division
     addTimeSlotDivision(item, index, mainId, id, data) {
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
+        let mainDivisionList = this.props.competitionTimeSlots.mainDivisionList
         let timeSlotEntityKey = this.props.competitionTimeSlots
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
         return (
@@ -933,18 +981,20 @@ class CompetitionCourtAndTimesAssign extends Component {
                         mode='multiple'
                         disabled={disabledStatus}
                         id={AppUniqueId.timeRotation_matchDuration_AdddivisionTimeslotOrderTextField}
-                        // className="pt-3"
                         placeholder="Select"
-                        // value={item.timeSlotEntityManualkeyArr}
                         style={{ width: "100%", minWidth: 120, maxWidth: 180 }}
-                        onChange={(divisions) => this.props.UpdateTimeSlotsData(divisions, 'venuePreferenceEntityId', 'competitionTimeslotsEntity', index, mainId, id)}
+                        filterOption={false}
+                        onBlur={() => this.props.ClearDivisionArr('divisions')}
+                        onSearch={(value) => { this.handleSearch(value, mainDivisionList) }}
+                        onChange={(divisions) => this.onSelectDivision(divisions, 'venuePreferenceEntityId', 'competitionTimeslotsEntity', index, mainId, id)}
                     >
-                        {division.divisions && division.divisions.map((item) => (
-                            <Option value={item.competitionMembershipProductDivision}> {item.divisionName}</Option>
+                        {division.divisions && division.divisions.map((item, divisionIndex) => (
+                            <Option key={"divisionName" + divisionIndex} value={item.competitionMembershipProductDivision}> {item.divisionName}</Option>
                         ))}
                     </Select>
                 </Form.Item>
-                {data.length > 1 &&
+                {
+                    data.length > 1 &&
                     <div className="col-sm-2 delete-image-timeSlot-view pt-3" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                         <a className="transfer-image-view">
                             <span className="user-remove-btn">
@@ -954,7 +1004,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         </a>
                     </div>
                 }
-            </div>
+            </div >
         )
     }
 
@@ -979,7 +1029,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let grades = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         let timeSlotEntityKey = this.props.competitionTimeSlots
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
-
+        let mainGradeList = this.props.competitionTimeSlots.mainGradeList
         return (
             <div style={{ display: "flex", flexDirection: "row" }}>
                 <Form.Item
@@ -994,11 +1044,16 @@ class CompetitionCourtAndTimesAssign extends Component {
                         placeholder="Select"
                         disabled={disabledStatus}
                         style={{ width: "100%", minWidth: 120, maxWidth: 180 }}
-                        onChange={(grades) => this.props.UpdateTimeSlotsData(grades, 'venuePreferenceEntityId', 'competitionTimeslotsEntity', index, mainId, id)}
+                        filterOption={false}
+                        onBlur={() => this.props.ClearDivisionArr('grades')}
+                        onChange={(grades) => this.onSelectGrades(grades, 'venuePreferenceEntityId', 'competitionTimeslotsEntity', index, mainId, id)}
+                        onSearch={(value) => this.handleSearchGrades(value, mainGradeList)}
                     >
-                        {grades.grades && grades.grades.map((item, gradesIndex) => (
-                            <Option value={item.competitionDivisionGradeId}> {item.gradeName}</Option>
-                        ))}
+                        {grades.grades && grades.grades.map((item, gradesIndex) => {
+                            return (
+                                <Option key={"grades33" + gradesIndex} value={item.competitionDivisionGradeId}> {item.gradeName}</Option>
+                            )
+                        })}
                     </Select>
                 </Form.Item>
                 {data.length > 1 &&
@@ -1025,6 +1080,8 @@ class CompetitionCourtAndTimesAssign extends Component {
         let daysList = this.props.competitionTimeSlots
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let mainGradeList = this.props.competitionTimeSlots.mainGradeList
+        let mainDivisionList = this.props.competitionTimeSlots.mainDivisionList
 
         return (
             <div className="row" key={"addSlot" + index}>
@@ -1065,7 +1122,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     onChange={(startTime) => startTime != null && this.props.UpdateTimeSlotsDataManual(startTime.format("HH:mm"), "startTime", "competitionTimeslotManualTime", timeIndex, null, index)}
                                     value={timeItem.startTime != null && moment(timeItem.startTime, "HH:mm")}
                                     format={"HH:mm"}
-                                    // minuteStep={15}
+                                // minuteStep={15}
                                 />
                                 {item.startTime.length > 1 &&
                                     <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
@@ -1095,9 +1152,11 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 disabled={disabledStatus}
                                                 mode='multiple'
                                                 placeholder="Select"
-                                                // value={item.timeSlotEntityManualkey}
+                                                filterOption={false}
                                                 style={{ display: 'grid', alignContent: 'center', }}
-                                                onChange={(divisions) => this.props.UpdateTimeSlotsDataManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
+                                                onBlur={() => this.props.ClearDivisionArr('divisions')}
+                                                onChange={(divisions) => this.onSelectDivisionMatchDuration(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
+                                                onSearch={(value) => this.handleSearch(value, mainDivisionList)}
                                             >
                                                 {id == 4 && division.divisions && division.divisions.map((item) => (
                                                     <Option value={item.competitionMembershipProductDivision}> {item.divisionName}</Option>
@@ -1118,7 +1177,10 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 mode='multiple'
                                                 placeholder="Select"
                                                 style={{ display: 'grid', alignContent: 'center', }}
-                                                onChange={(divisions) => this.props.UpdateTimeSlotsDataManual(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
+                                                filterOption={false}
+                                                onBlur={() => this.props.ClearDivisionArr('grades')}
+                                                onChange={(divisions) => this.onSelectGradesMatchDuration(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
+                                                onSearch={(value) => this.handleSearchGrades(value, mainGradeList)}
                                             >
                                                 {division.grades && division.grades.map((item, index) => (
                                                     <Option key={"grades" + index} value={item.competitionDivisionGradeId}> {item.gradeName}</Option>
@@ -1208,7 +1270,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.saveAPIsActionCall}
-                        onFinishFailed={({errorFields}) => this.formRef.current.scrollToField(errorFields[0].name)}
+                        onFinishFailed={({ errorFields }) => this.formRef.current.scrollToField(errorFields[0].name)}
                         noValidate="noValidate"
                     >
                         {this.headerView()}
@@ -1239,7 +1301,9 @@ function mapDispatchToProps(dispatch) {
         UpdateTimeSlotsDataManual,
         getVenuesTypeAction,
         addTimeSlotDataPost,
-        clearYearCompetitionAction
+        clearYearCompetitionAction,
+        searchDivisionList,
+        ClearDivisionArr
     }, dispatch)
 }
 

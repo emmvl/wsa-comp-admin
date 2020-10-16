@@ -57,7 +57,22 @@ function addTimeSlotDataPost(payload) {
     }
     return action
 }
+ function searchDivisionList(value,key){
+     const action ={
+         type:ApiConstants.Search_Division_Timeslot_update,
+         value,
+         key
+     }
+     return action
+ }
 
+ function ClearDivisionArr(key){
+     const action ={
+         type:ApiConstants.Clear_Division_Timeslot_update,
+         key
+     }
+     return action
+ }
 
 export {
     getCompetitionWithTimeSlots,
@@ -65,4 +80,6 @@ export {
     UpdateTimeSlotsData,
     UpdateTimeSlotsDataManual,
     addTimeSlotDataPost,
+    searchDivisionList,
+    ClearDivisionArr
 }
