@@ -69,7 +69,8 @@ const initialState = {
     isInvitorsChanged: false,
     radioSelectionArr: [],
     invitedAnyAssocArr: [],
-    invitedAnyClubArr: []
+    invitedAnyClubArr: [],
+    disabled:false
 }
 
 
@@ -380,7 +381,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     record1,
                     record2,
                     attendanceRecordingType: payload.attendanceRecordingType,
-                    attendanceRecordingPeriod: payload.attendanceRecordingPeriod,
+                    attendanceRecordingPeriod:payload.gameTimeTracking?"PERIOD": payload.attendanceRecordingPeriod,
                     timerType: payload.timerType,
                     days: recordingTimeDays(payload.attendanceSelectionTime),
                     hours: recordingTimeHours(payload.attendanceSelectionTime),
@@ -398,6 +399,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 gamesBorrowedThreshold: payload.gamesBorrowedThreshold,
                 linkedCompetitionId: payload.linkedCompetitionId,
                 inputNumberValue: payload.gamesBorrowedThreshold,
+                disabled:payload.gameTimeTracking,
             }
         case ApiConstants.LiveScore_SETTING_VIEW_ERROR:
             return {
@@ -413,6 +415,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
         case ApiConstants.LiveScore_SETTING_CHANGE_FORM:
             const keys = payload.key
             const Data = payload.data
+
+            console.log(payload,'LiveScore_SETTING_CHANGE_FORM')
 
             if (keys === 'buzzerEnabled' || keys === 'warningBuzzerEnabled' || keys === "lineupSelection" || keys === 'premierCompLink') {
                 state[keys] = Data
@@ -526,6 +530,23 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                         break;
                     }
                 }
+
+                if(Data.length>0){
+                    for (let i in Data) {
+                        if (Data[i] === "gameTimeTracking") {
+                            state.disabled = true
+                            state.form.attendanceRecordingPeriod='PERIOD'
+                            break;
+                        }else{
+                            state.disabled = false
+                        }
+                    }
+                }else{
+                    state.disabled = false
+                }
+
+               
+
                 if (posTracking) {
                 } else {
                     state.lineupSelection = false

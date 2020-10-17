@@ -508,7 +508,7 @@ class LiveScoreSettingsView extends Component {
     ////////form content view
     contentView = () => {
         const { competitionName, competitionLogo, scoring, days, hours, minutes, lineupSelectionDays, lineupSelectionHours, lineupSelectionMins, record1, venue, Logo } = this.props.liveScoreSetting.form
-        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink, borrowedPlayer, gamesBorrowedThreshold, linkedCompetitionId } = this.props.liveScoreSetting
+        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink, borrowedPlayer, gamesBorrowedThreshold, linkedCompetitionId,disabled } = this.props.liveScoreSetting
         let grade = this.state.venueData
         // const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
         const applyTo1 = [
@@ -785,6 +785,7 @@ class LiveScoreSettingsView extends Component {
                                     data: reportSelection
                                 })}
                                 value={this.props.liveScoreSetting.form.attendanceRecordingPeriod}
+                                disabled={disabled}
                             >
                                 <Option value={"PERIOD"}>{'Period'}</Option>
                                 <Option value={"MINUTE"}>{'Minute'}</Option>
