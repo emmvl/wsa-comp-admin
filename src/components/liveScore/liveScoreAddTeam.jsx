@@ -289,10 +289,10 @@ class LiveScoreAddTeam extends Component {
                                     this.props.liveScoreAddTeamform({ key: 'divisionId', data: divisionSelection })
                                 }}
                                 // value={teamManagerData.divisionId}
-                                placeholder={"Select Division"}
+                                placeholder="Select Division"
                             >
                                 {divisionList.map((item) => (
-                                    <Option key={item.id} value={item.id}> {item.name}</Option>
+                                    <Option key={'division_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -308,13 +308,13 @@ class LiveScoreAddTeam extends Component {
                                 this.props.liveScoreAddTeamform({ key: 'organisationId', data: affiliateId })
                             }}
                             // value={teamManagerData.divisionId}
-                            placeholder={"Select Affiliate"}
+                            placeholder="Select Affiliate"
                         >
-                            {affilateList.map((item) => {
-                                return <Option key={item.id} value={item.id}>
+                            {affilateList.map((item) => (
+                                <Option key={'affiliate_' + item.id} value={item.id}>
                                     {item.name}
                                 </Option>
-                            })}
+                            ))}
                         </Select>
                     </Form.Item>
                 </div>
@@ -334,7 +334,7 @@ class LiveScoreAddTeam extends Component {
                     >
                         <div className="row ml-2" style={{ marginTop: 18 }}>
                             <div style={{ display: 'flex', alignItems: 'center' }}>
-                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>
+                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">
                                     {AppConstants.new}
                                 </Radio>
                                 <div style={{ marginLeft: -10, width: 50 }}>
@@ -345,7 +345,7 @@ class LiveScoreAddTeam extends Component {
                             </div>
 
                             <div style={{ display: 'flex', alignItems: 'center', marginLeft: -15 }}>
-                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>
+                                <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                     {AppConstants.existing}
                                 </Radio>
                                 <div style={{ marginLeft: -10 }}>
@@ -389,18 +389,18 @@ class LiveScoreAddTeam extends Component {
                             }}
                             onBlur={() => this.props.liveScoreManagerListAction(5, 1, this.state.localCompetitionID)}
                             optionFilterProp="children"
-                        // onSearch={(value) => {
-                        //     this.setState({ showOption: true })
-                        //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
-                        //         return data.firstName.indexOf(value) > -1
-                        //     })
-                        //     this.props.liveScoreManagerFilter(filteredData)
-                        // }}
-                        // value={selectedManager}
+                            // onSearch={(value) => {
+                            //     this.setState({ showOption: true })
+                            //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
+                            //         return data.firstName.indexOf(value) > -1
+                            //     })
+                            //     this.props.liveScoreManagerFilter(filteredData)
+                            // }}
+                            // value={selectedManager}
                         >
                             {/* {this.state.showOption ?  */}
                             {managerListResult.map((item) => (
-                                <Option key={item.id} value={JSON.stringify(item.id)}>
+                                <Option key={'manager_' + JSON.stringify(item.id)} value={JSON.stringify(item.id)}>
                                     {item.NameWithNumber}
                                 </Option>
                             ))}
@@ -727,7 +727,7 @@ class LiveScoreAddTeam extends Component {
                         <Footer>{this.footerView()}</Footer>
                     </Form>
                 </Layout>
-            </div >
+            </div>
         );
     }
 }

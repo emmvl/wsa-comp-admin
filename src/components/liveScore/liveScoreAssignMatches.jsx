@@ -219,9 +219,9 @@ class LiveScoreAssignMatch extends Component {
             if (this.state.lodding && this.props.liveScoreScorerState.onLoad == false) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 const body = {
-                    "paging": {
-                        "limit": 10,
-                        "offset": 0
+                    paging: {
+                        limit: 10,
+                        offset: 0
                     }
 
                 }
@@ -253,9 +253,9 @@ class LiveScoreAssignMatch extends Component {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ lodding: true })
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": offset
+            paging: {
+                limit: 10,
+                offset: offset
             },
             "searchText": ""
         }
@@ -268,9 +268,9 @@ class LiveScoreAssignMatch extends Component {
 
         this.setState({ teamID: filter.filter })
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
+            paging: {
+                limit: 10,
+                offset: 0
             },
             "searchText": ""
         }
@@ -304,21 +304,14 @@ class LiveScoreAssignMatch extends Component {
                                 style={{ display: "flex", alignItems: "flex-start" }}
                                 // onChange={(selectStatus) => this.setState({ selectStatus })}
                                 onChange={(filter) => this.onChangeTeam({ filter })}
-                                value={this.state.teamID}>
-                                {
-                                    teamData.map((item, index) => {
-                                        return (
-                                            <Option key={"teamname" + item.id} value={item.id}>
-                                                {item.name}
-                                            </Option>
-                                        )
-                                    })
-                                }
-
-
+                                value={this.state.teamID}
+                            >
+                                {teamData.map((item) => (
+                                    <Option key={'team_' + item.id} value={item.id}>
+                                        {item.name}
+                                    </Option>
+                                ))}
                             </Select>
-
-
                         </div>
                     </div>
                 </div>

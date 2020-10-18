@@ -24,21 +24,21 @@ const initialState = {
     status: 0,
     selectedVenues: [],
     timeSlot: [{
-        "dayRefId": 1,
-        "startTime": [{
-            "startTime": "00:00",
-            "sortOrder": 0,
+        dayRefId: 1,
+        startTime: [{
+            startTime: "00:00",
+            sortOrder: 0,
         }]
     }
     ],
     division: [{
-        "competitionDivisionId": 0,
-        "divisionName": "",
-        "grades": [
+        competitionDivisionId: 0,
+        divisionName: "",
+        grades: [
             {
-                "competitionDivisionGradeId": 0,
-                "gradeName": "",
-                "noOfTeams": ""
+                competitionDivisionGradeId: 0,
+                gradeName: "",
+                noOfTeams: ""
             }
         ]
     }],
@@ -369,9 +369,9 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, venueI
         venueCourtName: null,
         venueCourtId: venueCourtId,
         venueShortName: null,
-        matchDate: matchDate,
-        startTime: startTime,
-        endTime: endTime,
+        matchDate,
+        startTime,
+        endTime,
         gradeName: null,
         competitionDivisionGradeId: null,
         divisionName: null,
@@ -462,22 +462,22 @@ function createTimeslotData(dataArr) {
                 let timeSlotStatusData = checkTimeSlotStatus(matchUpdatedTimeSlot, updatedtimeSlotArr)
                 if (timeSlotStatusData.status) {
                     let timeslotUpdatedArrayValue = {
-                        "startTime": matchUpdatedTimeSlot.startTime,
-                        "sortOrder": matchUpdatedTimeSlot.sortOrder,
+                        startTime: matchUpdatedTimeSlot.startTime,
+                        sortOrder: matchUpdatedTimeSlot.sortOrder,
 
                     }
                     updatedtimeSlotArr[timeSlotStatusData.index].startTime.push(JSON.parse(JSON.stringify(timeslotUpdatedArrayValue)))
                 }
                 else {
                     let timeslotUpdatedArray = {
-                        "startTime": matchUpdatedTimeSlot.startTime,
-                        "sortOrder": matchUpdatedTimeSlot.sortOrder,
+                        startTime: matchUpdatedTimeSlot.startTime,
+                        sortOrder: matchUpdatedTimeSlot.sortOrder,
                     }
 
                     let mainobj = {
                         "competitionVenueTimeslotsDayTimeId": matchUpdatedTimeSlot.competitionVenueTimeslotsDayTimeId,
-                        "dayRefId": matchUpdatedTimeSlot.dayRefId,
-                        "startTime": [timeslotUpdatedArray]
+                        dayRefId: matchUpdatedTimeSlot.dayRefId,
+                        startTime: [timeslotUpdatedArray]
                     }
                     updatedtimeSlotArr.push(JSON.parse(JSON.stringify(mainobj)))
 
@@ -536,18 +536,18 @@ function QuickCompetitionState(state = initialState, action) {
             if (action.key === "add") {
                 let timeSlotobject = {
                     "competitionVenueTimeslotsDayTimeId": 0,
-                    "dayRefId": 1,
-                    "startTime": [{
-                        "startTime": "00:00",
-                        "sortOrder": 0,
+                    dayRefId: 1,
+                    startTime: [{
+                        startTime: "00:00",
+                        sortOrder: 0,
                     }]
                 }
                 state.timeSlot.push(timeSlotobject)
             }
             if (action.key === "addStartTime") {
                 let startTimeObject = {
-                    "startTime": "00:00",
-                    "sortOrder": 0,
+                    startTime: "00:00",
+                    sortOrder: 0,
                 }
                 state.timeSlot[action.index].startTime.push(startTimeObject)
             }
@@ -573,13 +573,13 @@ function QuickCompetitionState(state = initialState, action) {
         case ApiConstants.API_UPDATE_QUICKCOMPETITION_Division:
             if (action.key === "addDivision") {
                 let divisionObject = {
-                    "competitionDivisionId": 0,
-                    "divisionName": "",
-                    "grades": [
+                    competitionDivisionId: 0,
+                    divisionName: "",
+                    grades: [
                         {
-                            "competitionDivisionGradeId": 0,
-                            "gradeName": "",
-                            "noOfTeams": ""
+                            competitionDivisionGradeId: 0,
+                            gradeName: "",
+                            noOfTeams: ""
                         }
                     ]
                 }
@@ -587,9 +587,9 @@ function QuickCompetitionState(state = initialState, action) {
             }
             if (action.key === "addGrade") {
                 let gradeObject = {
-                    "competitionDivisionGradeId": 0,
-                    "gradeName": "",
-                    "noOfTeams": ""
+                    competitionDivisionGradeId: 0,
+                    gradeName: "",
+                    noOfTeams: ""
                 }
                 state.division[action.index].grades.push(gradeObject)
             }

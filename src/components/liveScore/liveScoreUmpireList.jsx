@@ -109,11 +109,11 @@ class LiveScoreUmpireList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": this.state.searchText
+                search: this.state.searchText
             }
             this.props.liveScoreUmpiresListAction(id, body)
         } else {
@@ -126,9 +126,9 @@ class LiveScoreUmpireList extends Component {
     handleUmpireTableList = (page, competitionId) => {
         let offset = page ? 10 * (page - 1) : 0
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": offset
+            paging: {
+                limit: 10,
+                offset: offset
             },
         };
         this.props.liveScoreUmpiresListAction(competitionId, body)
@@ -140,11 +140,11 @@ class LiveScoreUmpireList extends Component {
         this.setState({ searchText: e.target.value })
         if (e.target.value == null || e.target.value == "") {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": e.target.value
+                search: e.target.value
             };
             this.props.liveScoreUmpiresListAction(id, body)
         }
@@ -156,11 +156,11 @@ class LiveScoreUmpireList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": e.target.value
+                search: e.target.value
             }
             this.props.liveScoreUmpiresListAction(id, body)
         }
@@ -172,11 +172,11 @@ class LiveScoreUmpireList extends Component {
         if (this.state.searchText == null || this.state.searchText == "") {
         } else {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": this.state.searchText
+                search: this.state.searchText
             };
             this.props.liveScoreUmpiresListAction(id, body)
         }

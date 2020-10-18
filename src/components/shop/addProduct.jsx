@@ -172,15 +172,16 @@ class AddProduct extends Component {
         }
         let variants = productDetailData.variants
         if (productDetailData.variantsChecked === true) {
-            variants.length > 0 && variants.map((item, index) => {
-                let variantName = `variants${index}name`;
-                this.formRef.current.setFieldsValue({
-                    [variantName]: item.name
-                });
-            })
+            if (variants.length > 0) {
+                variants.forEach((item, index) => {
+                    let variantName = `variants${index}name`;
+                    this.formRef.current.setFieldsValue({
+                        [variantName]: item.name
+                    });
+                })
+            }
         }
     }
-
 
     setEditorFieldValue() {
         let { productDetailData } = this.props.shopProductState;
@@ -441,14 +442,14 @@ class AddProduct extends Component {
     addVariantOption = (index, subIndex, key, optionId) => {
         let { productDetailData } = this.props.shopProductState
         let varientOptionObject = {
-            "optionName": "",
-            "properties": {
-                "price": productDetailData.price,
-                "cost": 0,
-                "SKU": "",
-                "barcode": "",
-                "quantity": 0,
-                "id": 0
+            optionName: "",
+            properties: {
+                price: productDetailData.price,
+                cost: 0,
+                SKU: "",
+                barcode: "",
+                quantity: 0,
+                id: 0
             }
         }
         let varientOptions = productDetailData.variants[index].options
@@ -541,7 +542,7 @@ class AddProduct extends Component {
                 >
                     <InputWithHead
                         auto_complete="off"
-                        required={"required-field pb-0 pt-3"}
+                        required="required-field pb-0 pt-3"
                         heading={AppConstants.title}
                         placeholder={AppConstants.enterTitle}
                         onChange={(e) =>
@@ -571,28 +572,22 @@ class AddProduct extends Component {
                         )
                     }
                     placeholder="Select"
-                    value={productDetailData.type ?
-                        isNotNullOrEmptyString(productDetailData.type.typeName) ?
-                            productDetailData.type.id : [] : []}
+                    value={productDetailData.type && isNotNullOrEmptyString(productDetailData.type.typeName)
+                        ? productDetailData.type.id
+                        : []}
                     disabled={this.state.allDisabled}
                 >
-                    {isArrayNotEmpty(typesProductList) && typesProductList.map(
-                        (item, index) => {
-                            return (
-                                <Option
-                                    key={'type' + item.id + index}
-                                    value={item.id}
-                                >
-                                    {item.typeName}
-                                </Option>
-                            );
-                        }
-                    )}
+                    {isArrayNotEmpty(typesProductList) && typesProductList.map((item) => (
+                        <Option key={'type_' + item.id} value={item.id}>
+                            {item.typeName}
+                        </Option>
+                    ))}
                 </Select>
-                {
-                    this.state.orgLevel === "state" &&
-                    <span className="input-heading-add-another" onClick={this.addAnotherProductType}>+{AppConstants.addType}</span>
-                }
+                {this.state.orgLevel === "state" && (
+                    <span className="input-heading-add-another" onClick={this.addAnotherProductType}>
+                        +{AppConstants.addType}
+                    </span>
+                )}
                 <Modal
                     className="add-membership-type-modal"
                     title={AppConstants.addType}
@@ -661,7 +656,7 @@ class AddProduct extends Component {
                         </>
                     </div>
                     {urls.length > 0 ?
-                        < div className="d-flex justify-content-end" style={{ width: '100%' }}>
+                        <div className="d-flex justify-content-end" style={{ width: '100%' }}>
                             {this.getImage()}
                         </div> : ''
                     }
@@ -940,7 +935,7 @@ class AddProduct extends Component {
                                             prefix="$"
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "price", 0, subIndex)}
                                             value={subItem.properties.price}
-                                            type={"number"}
+                                            type="number"
                                             disabled={this.state.allDisabled}
                                         />
                                     </div>
@@ -952,7 +947,7 @@ class AddProduct extends Component {
                                             prefix="$"
                                             onChange={(e) => this.onVariantOptionOnChange(e.target.value, "cost", 0, subIndex)}
                                             value={subItem.properties.cost}
-                                            type={"number"}
+                                            type="number"
                                             disabled={this.state.allDisabled}
                                         />
                                     </div>
@@ -986,7 +981,7 @@ class AddProduct extends Component {
                                             min={0}
                                             onChange={(value) => this.onVariantOptionOnChange(value, "quantity", 0, subIndex)}
                                             value={subItem.properties.quantity}
-                                            type={"number"}
+                                            type="number"
                                             disabled={this.state.allDisabled}
                                         />
                                     </div>

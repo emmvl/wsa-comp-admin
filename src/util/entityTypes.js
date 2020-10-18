@@ -2,24 +2,24 @@
 function entityTypes(enitityName) {
     let enitityArray = [
         {
-            "id": 1,
-            "name": "COMPETITION"
+            id: 1,
+            name: "COMPETITION"
         },
         {
-            "id": 2,
-            "name": "ORGANISATION"
+            id: 2,
+            name: "ORGANISATION"
         },
         {
-            "id": 5,
-            "name": "PLAYER"
+            id: 5,
+            name: "PLAYER"
         },
         {
-            "id": 3,
-            "name": "TEAM"
+            id: 3,
+            name: "TEAM"
         },
         {
-            "id": 4,
-            "name": "USER"
+            id: 4,
+            name: "USER"
         }
     ]
     let enitityId = null

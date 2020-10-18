@@ -111,7 +111,7 @@ class LiveScoreSocialSheet extends Component {
             <div className="match-details-rl-padding row mt-5">
                 <div className="col-sm" style={{ flexDirection: "column", display: "flex" }}>
                     <div className="pl-5" style={{ display: "flex", flexDirection: "column" }}>
-                        <span className='year-select-heading'>Round 1</span>
+                        <span className="year-select-heading">Round 1</span>
                         <span className='year-select-heading mt-2'>Venue : John Fisher Court 1</span>
                         <span className='year-select-heading mt-2'>H: Team 1</span>
                     </div>
@@ -125,7 +125,7 @@ class LiveScoreSocialSheet extends Component {
                 </div>
                 <div className="col-sm" style={{ flexDirection: "column", display: "flex", alignContent: "center" }}>
                     <div className="pl-5" style={{ display: "flex", flexDirection: "column" }}>
-                        <span className='year-select-heading'>Date: 08/06/2020</span>
+                        <span className="year-select-heading">Date: 08/06/2020</span>
                         <span className='year-select-heading mt-2'>Time : 10:00am</span>
                         <span className='year-select-heading mt-2'>H: Team 2</span>
                     </div>

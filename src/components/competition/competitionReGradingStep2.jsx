@@ -136,31 +136,33 @@ class CompetitionReGradingStep2 extends Component {
                     <div className="row">
                         <div className="col-sm-2">
                             <div className="com-year-select-heading-view">
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 75 }}
                                     onChange={(year) => this.setState({ year })}
                                     value={this.state.year}
                                 >
-                                    <Option value={"2019"}>{AppConstants.year2019}</Option>
+                                    <Option value="2019">{AppConstants.year2019}</Option>
                                 </Select>
                             </div>
                         </div>
                         <div className="col-sm-8">
                             <div style={{
-                                width: "100%", display: "flex",
+                                width: "100%",
+                                display: "flex",
                                 flexDirection: "row",
-                                alignItems: "center", marginRight: 50
+                                alignItems: "center",
+                                marginRight: 50
                             }}>
-                                <span className='year-select-heading'>{AppConstants.competition_name}:</span>
+                                <span className="year-select-heading">{AppConstants.competition_name}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 140 }}
                                     onChange={(competition) => this.setState({ competition })}
                                     value={this.state.competition}
                                 >
-                                    <Option value={"2019winters"}>{AppConstants.winter2019}</Option>
+                                    <Option value="2019winters">{AppConstants.winter2019}</Option>
                                 </Select>
                             </div>
                         </div>

@@ -42,11 +42,11 @@ class RegistrationWizardModel extends React.Component {
                                 onChange={competitionChange}
                                 value={competitionId}
                             >
-                                {wizardCompetition.length > 0 && wizardCompetition.map((item, index) => {
-                                    return (
-                                        <Option key={"Comp" + index} value={item.competitionId}> {item.competitionName}</Option>
-                                    );
-                                })}
+                                {wizardCompetition.map((item) => (
+                                    <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                        {item.competitionName}
+                                    </Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
@@ -55,12 +55,12 @@ class RegistrationWizardModel extends React.Component {
                         <div className="row">
                             <div className="col-sm  pl-0 pb-2">
                                 <div className="col-sm-6" style={{ display: "flex", justifyContent: 'flex-start' }}>
-                                    <span className={`comment-heading`}>
+                                    <span className="comment-heading">
                                         {"Step"}
                                     </span>
                                 </div>
                                 <div className="col-sm-6" style={{ display: "flex", justifyContent: 'flex-end', paddingRight: 5 }}>
-                                    <span className={`comment-heading`}>
+                                    <span className="comment-heading">
                                         {"Status"}
                                     </span>
                                 </div>
@@ -71,16 +71,16 @@ class RegistrationWizardModel extends React.Component {
                             <div className="row" style={{ width: "100%" }}>
 
                                 <div className="col-sm-1 serialView pb-2">
-                                    <span className={`comment-heading`}>
+                                    <span className="comment-heading">
                                         {"1"}{" "}
                                     </span>
                                 </div>
                                 <div className="col-sm setupView pb-2">
-                                    <span className={`comment-heading`}>
+                                    <span className="comment-heading">
                                         {AppConstants.setup} {" "}
                                     </span>
                                     <a href={stripeConnectURL} className="stripe-connect">
-                                        <span className={`comment-heading`} style={{ textDecoration: "underline", cursor: 'pointer', color: "#FF8237" }}>
+                                        <span className="comment-heading" style={{ textDecoration: "underline", cursor: 'pointer', color: "#FF8237" }}>
                                             {AppConstants.setupStripe}
                                         </span>
                                     </a>
@@ -90,16 +90,16 @@ class RegistrationWizardModel extends React.Component {
                         }
                         <div className="row" style={{ width: "100%" }}>
                             <div className="col-sm-1 serialView pb-2 ">
-                                <span className={`comment-heading`}>
+                                <span className="comment-heading">
                                     {!stripeConnected ? "2" : "1"}{" "}
                                 </span>
                             </div>
                             <div className="col-sm-10 setupView pb-2 ">
-                                <span className={`comment-heading`}>
+                                <span className="comment-heading">
                                     {AppConstants.set} {" "}
                                 </span>
 
-                                <span className={`comment-heading`} onClick={competitionClick} style={{ textDecoration: "underline", cursor: 'pointer', color: "#FF8237" }}>
+                                <span className="comment-heading" onClick={competitionClick} style={{ textDecoration: "underline", cursor: 'pointer', color: "#FF8237" }}>
                                     {AppConstants.competitionFees}
                                 </span>
                             </div>
@@ -115,18 +115,18 @@ class RegistrationWizardModel extends React.Component {
                         </div>
                         <div className="row" style={{ width: "100%" }}>
                             <div className="col-sm-1 serialView pb-2">
-                                <span className={`comment-heading`}>
+                                <span className="comment-heading">
                                     {!stripeConnected ? "3" : "2"} {" "}
                                 </span>
                             </div>
                             <div className="col-sm-10 setupView pb-2 ">
 
-                                <span disabled={publishStatus == 2} className={`comment-heading`}>
+                                <span disabled={publishStatus == 2} className="comment-heading">
                                     {AppConstants.createPublish} {" "}
                                 </span>
 
 
-                                <span onClick={registrationClick} className={`comment-heading`} style={{ textDecoration: "underline", cursor: 'pointer', color: "#FF8237" }}>
+                                <span onClick={registrationClick} className="comment-heading" style={{ textDecoration: "underline", cursor: 'pointer', color: "#FF8237" }}>
                                     {AppConstants.registrationForm}
                                 </span>
 
@@ -138,19 +138,16 @@ class RegistrationWizardModel extends React.Component {
                                         alt=""
                                         className="export-image"
                                     />
-
-
                                 }
 
                                 {/* </div> */}
                             </div>
                         </div>
                     </div>
-                </Modal >
+                </Modal>
             </div>
         )
     }
 }
-
 
 export default RegistrationWizardModel;

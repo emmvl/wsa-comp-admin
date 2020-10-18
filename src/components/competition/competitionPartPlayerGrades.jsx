@@ -278,7 +278,7 @@ class CompetitionPartPlayerGrades extends Component {
         });
     };
 
-    // model cancel for dissapear a model
+    // model cancel for disappear a model
     handleCancel = e => {
         this.setState({
             visible: false,
@@ -416,7 +416,7 @@ class CompetitionPartPlayerGrades extends Component {
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="com-year-select-heading-view pb-3">
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     name="yearRefId"
                                     style={{ width: 90 }}
@@ -424,47 +424,45 @@ class CompetitionPartPlayerGrades extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {this.props.appState.participate_YearArr.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.participate_YearArr.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
                         <div className="col-sm pb-3">
                             <div style={{
-                                width: "fit-content", display: "flex",
+                                width: "fit-content",
+                                display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
                             }}>
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     name="competition"
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {this.props.appState.participate_CompetitionArr.map(item => {
-                                        return (
-                                            <Option key={item.statusRefId} value={item.competitionId}>
-                                                {item.competitionName}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.participate_CompetitionArr.map(item => (
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-sm pb-3">
                                 <div className="col-sm" style={{
-                                    width: "100%", display: "flex",
+                                    width: "100%",
+                                    display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center"
                                 }}>
-                                    <span className='year-select-heading'>{AppConstants.division}:</span>
+                                    <span className="year-select-heading">{AppConstants.division}:</span>
                                     <Select
                                         disabled={this.state.competitionStatus == 1}
                                         style={{ minWidth: 120 }}
@@ -472,14 +470,14 @@ class CompetitionPartPlayerGrades extends Component {
                                         onChange={(divisionId) => this.onDivisionChange(divisionId)}
                                         value={JSON.parse(JSON.stringify(this.state.divisionId))}
                                     >
-                                        {this.props.registrationState.allDivisionsData.map(item => {
-                                            return (
-                                                <Option key={"division" + item.competitionMembershipProductDivisionId}
-                                                    value={item.competitionMembershipProductDivisionId}>
-                                                    {item.divisionName}
-                                                </Option>
-                                            )
-                                        })}
+                                        {this.props.registrationState.allDivisionsData.map(item => (
+                                            <Option
+                                                key={'compMemProdDiv_' + item.competitionMembershipProductDivisionId}
+                                                value={item.competitionMembershipProductDivisionId}
+                                            >
+                                                {item.divisionName}
+                                            </Option>
+                                        ))}
                                     </Select>
                                 </div>
                             </div>
@@ -604,7 +602,7 @@ class CompetitionPartPlayerGrades extends Component {
                                                 <span className="player-grading-haeding-player-count-text ml-2">
                                                     {teamItem.players.length > 1 ? teamItem.players.length + " Players" : teamItem.players.length + " Player"} </span>
                                             </div>
-                                            <div className="col-sm d-flex justify-content-end ">
+                                            <div className="col-sm d-flex justify-content-end">
                                                 <img className="comp-player-table-img team-delete-link" src={AppImages.deleteImage}
                                                     alt="" height="20" width="20"
                                                     style={{ cursor: "pointer" }}
@@ -617,100 +615,96 @@ class CompetitionPartPlayerGrades extends Component {
                                         </div>
                                     </div>
                                     <div className="collapse" id={teamIndex}>
-                                        {teamItem.players.length > 0 && teamItem.players.map((playerItem, playerIndex) => {
-
-                                            return (
-                                                <Draggable
-                                                    isDragDisabled={disableStatus}
-                                                    key={JSON.stringify(playerItem.playerId)}
-                                                    draggableId={JSON.stringify(playerItem.playerId)}
-                                                    index={playerIndex}>
-                                                    {(provided, snapshot) => (
-                                                        <div
-                                                            ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                            className="player-grading-draggable-view"
-                                                        >
-                                                            <div className="row">
-                                                                <Checkbox
-                                                                    disabled={disableStatus}
-                                                                    checked={playerItem.isChecked}
-                                                                    className="single-checkbox mt-1 check-box-player"
-                                                                    onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")}>
-                                                                </Checkbox>
-                                                                <div className="col-sm d-flex align-items-center">
-                                                                    {disableStatus == false ?
-                                                                        <NavLink to={{
-                                                                            pathname: `/userPersonal`,
-                                                                            state: { userId: playerItem.userId, screenKey: 'competitionPartPlayerGrades', screen: "/competitionPartPlayerGrades" }
-                                                                        }}
-                                                                        >
-                                                                            <span style={{ cursor: "pointer" }}
-                                                                                className="player-grading-player-name-text">{playerItem.playerName}</span>
-                                                                        </NavLink>
-                                                                        : <span style={{ cursor: "pointer" }}
+                                        {teamItem.players.map((playerItem, playerIndex) => (
+                                            <Draggable
+                                                isDragDisabled={disableStatus}
+                                                key={JSON.stringify(playerItem.playerId)}
+                                                draggableId={JSON.stringify(playerItem.playerId)}
+                                                index={playerIndex}
+                                            >
+                                                {(provided, snapshot) => (
+                                                    <div
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        className="player-grading-draggable-view"
+                                                    >
+                                                        <div className="row">
+                                                            <Checkbox
+                                                                disabled={disableStatus}
+                                                                checked={playerItem.isChecked}
+                                                                className="single-checkbox mt-1 check-box-player"
+                                                                onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")}>
+                                                            </Checkbox>
+                                                            <div className="col-sm d-flex align-items-center">
+                                                                {disableStatus == false ?
+                                                                    <NavLink to={{
+                                                                        pathname: `/userPersonal`,
+                                                                        state: { userId: playerItem.userId, screenKey: 'competitionPartPlayerGrades', screen: "/competitionPartPlayerGrades" }
+                                                                    }}
+                                                                    >
+                                                                        <span style={{ cursor: "pointer" }}
                                                                             className="player-grading-player-name-text">{playerItem.playerName}</span>
-                                                                    }
-                                                                </div>
-                                                                <div
-                                                                    className="col-sm d-flex justify-content-end "
-                                                                    style={{ flexFlow: 'wrap' }}>
-                                                                    {/* <div className="col-sm">
-                                                                        {playerItem.playerHistory.map((item, index) => {
-
-                                                                            return (
-                                                                                <Tag className="comp-player-table-tag" key={item.teamId}>
-                                                                                    {item.teamText}
+                                                                    </NavLink>
+                                                                    : <span style={{ cursor: "pointer" }}
+                                                                        className="player-grading-player-name-text">{playerItem.playerName}</span>
+                                                                }
+                                                            </div>
+                                                            <div
+                                                                className="col-sm d-flex justify-content-end"
+                                                                style={{ flexFlow: 'wrap' }}
+                                                            >
+                                                                {/* <div className="col-sm">
+                                                                    {playerItem.playerHistory.map((item, index) => (
+                                                                        <Tag className="comp-player-table-tag" key={item.teamId}>
+                                                                            {item.teamText}
+                                                                        </Tag>
+                                                                    ))}
+                                                                </div> */}
+                                                                <div className="d-flex">
+                                                                    {playerItem.position1 && (
+                                                                        <Tag className="comp-player-table-tag" style={{ background: playerItem.position1Color, color: "#ffffff" }} key={playerItem.position1}>
+                                                                            {playerItem.position1}
+                                                                        </Tag>
+                                                                    )}
+                                                                    {playerItem.position2 && (
+                                                                        <Tag className="comp-player-table-tag" style={{ background: playerItem.position2Color, color: "#ffffff" }} key={playerItem.position2}>
+                                                                            {playerItem.position2}
+                                                                        </Tag>
+                                                                    )}
+                                                                    <div className="col-sm d-flex">
+                                                                        {playerItem.playerHistory.map((item, index) => (
+                                                                            item.divisionGrade != null && item.divisionGrade != "" && (
+                                                                                <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                                    {item.divisionGrade + '(' + item.ladderResult + ')'}
                                                                                 </Tag>
-
                                                                             )
-                                                                        })}
-                                                                    </div> */}
-                                                                    <div className="d-flex">
-                                                                        {playerItem.position1 &&
-                                                                            <Tag className="comp-player-table-tag" style={{ background: playerItem.position1Color, color: "#ffffff" }} key={playerItem.position1}>
-                                                                                {playerItem.position1}
-                                                                            </Tag>
-                                                                        }
-                                                                        {playerItem.position2 &&
-                                                                            <Tag className="comp-player-table-tag" style={{ background: playerItem.position2Color, color: "#ffffff" }} key={playerItem.position2}>
-                                                                                {playerItem.position2}
-                                                                            </Tag>
-                                                                        }
-                                                                        <div className="col-sm d-flex">
-                                                                            {playerItem.playerHistory.map((item, index) => {
-                                                                                return (
-                                                                                    item.divisionGrade != null && item.divisionGrade != "" ?
-                                                                                        <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                                            {item.divisionGrade + '(' + item.ladderResult + ')'}
-                                                                                        </Tag>
-                                                                                        : null
-                                                                                )
-                                                                            })}
-                                                                        </div>
-                                                                        <img className="comp-player-table-img" src={
-                                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
-                                                                                AppImages.commentEmpty} alt="" height="20" width="20"
-                                                                            style={{ cursor: "pointer" }}
-                                                                            onClick={() => disableStatus == false && this.onClickComment(playerItem, teamIndex)} />
-                                                                        {/* </div> */}
+                                                                        ))}
                                                                     </div>
+                                                                    <img
+                                                                        className="comp-player-table-img"
+                                                                        src={playerItem.isCommentsAvailable == 1
+                                                                            ? AppImages.commentFilled
+                                                                            : AppImages.commentEmpty
+                                                                        }
+                                                                        alt=""
+                                                                        height="20"
+                                                                        width="20"
+                                                                        style={{ cursor: "pointer" }}
+                                                                        onClick={() => disableStatus == false && this.onClickComment(playerItem, teamIndex)}
+                                                                    />
+                                                                    {/* </div> */}
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    )}
-
-                                                </Draggable>
-
-
-                                            )
-                                        })}
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        ))}
                                     </div>
                                     {provided.placeholder}
                                 </div>
-                            )
-                            }
+                            )}
                         </Droppable>
                     ))
                 }
@@ -771,8 +765,7 @@ class CompetitionPartPlayerGrades extends Component {
     ///modal ok for hitting Api and close modal
     handleModalOk = e => {
         this.props.clearReducerCompPartPlayerGradingAction("commentList")
-        {
-            this.state.comment.length > 0 &&
+        if (this.state.comment.length > 0) {
             this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
         }
         this.setState({
@@ -780,10 +773,10 @@ class CompetitionPartPlayerGrades extends Component {
             comment: "",
             playerId: null,
             teamID: null,
-
         });
     };
-    // model cancel for dissapear a model
+
+    // model cancel for disappear a model
     handleModalCancel = e => {
         this.props.clearReducerCompPartPlayerGradingAction("commentList")
         this.setState({
@@ -791,24 +784,19 @@ class CompetitionPartPlayerGrades extends Component {
             comment: "",
             playerId: null,
             teamID: null,
-
         });
     };
-
-
 
     ////////for the unassigned teams on the right side of the view port
     unassignedView = () => {
         let unassignedData = this.props.partPlayerGradingState.unassignedPartPlayerGradingListData;
-        let colorPosition1;
-        let colorPosition2;
         let divisionData = this.props.registrationState.allDivisionsData.filter(x => x.competitionMembershipProductDivisionId != null);
         let commentList = this.props.partPlayerGradingState.playerCommentList
         let commentLoad = this.props.partPlayerGradingState.commentLoad
         let disableStatus = this.state.competitionStatus == 1
         return (
             <div>
-                <Droppable isDropDisabled={disableStatus} droppableId={'0'}>
+                <Droppable isDropDisabled={disableStatus} droppableId="0">
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
@@ -828,13 +816,13 @@ class CompetitionPartPlayerGrades extends Component {
                                             {unassignedData.players.length > 1 ? unassignedData.players.length + " Players" : unassignedData.players.length + " Player"}
                                         </span>
                                     </div>
-                                    {this.state.divisionId != null &&
+                                    {this.state.divisionId != null && (
                                         <div className="col-sm d-flex justify-content-end">
                                             <Button disabled={disableStatus} className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
                                                 + {AppConstants.createTeam}
                                             </Button>
                                         </div>
-                                    }
+                                    )}
                                 </div>
                             </div>
                             {unassignedData.players && unassignedData.players.map((playerItem, playerIndex) => (
@@ -842,7 +830,8 @@ class CompetitionPartPlayerGrades extends Component {
                                     isDragDisabled={disableStatus}
                                     key={JSON.stringify(playerItem.playerId)}
                                     draggableId={JSON.stringify(playerItem.playerId)}
-                                    index={playerIndex}>
+                                    index={playerIndex}
+                                >
                                     {(provided, snapshot) => (
                                         <div
                                             ref={provided.innerRef}
@@ -873,43 +862,45 @@ class CompetitionPartPlayerGrades extends Component {
                                                     }
                                                 </div>
                                                 <div
-                                                    className="col-sm d-flex justify-content-end "
-                                                    style={{ flexFlow: 'wrap' }}>
+                                                    className="col-sm d-flex justify-content-end"
+                                                    style={{ flexFlow: 'wrap' }}
+                                                >
                                                     {/* <div className="col-sm">
-                                                        {playerItem.playerHistory.map((item, index) => {
-                                                            return (
-                                                                <Tag className="comp-player-table-tag" key={item.teamId}>
-                                                                    {item.teamText}
-                                                                </Tag>
-
-                                                            )
-                                                        })}
+                                                        {playerItem.playerHistory.map((item, index) => (
+                                                            <Tag className="comp-player-table-tag" key={item.teamId}>
+                                                                {item.teamText}
+                                                            </Tag>
+                                                        ))}
                                                     </div> */}
                                                     <div className="d-flex">
-                                                        {playerItem.position1 &&
+                                                        {playerItem.position1 && (
                                                             <Tag className="comp-player-table-tag" style={{ background: playerItem.position1Color, color: "#ffffff" }} key={playerItem.position1}>
                                                                 {playerItem.position1}
                                                             </Tag>
-                                                        }
-                                                        {playerItem.position2 &&
+                                                        )}
+                                                        {playerItem.position2 && (
                                                             <Tag className="comp-player-table-tag" style={{ background: playerItem.position2Color, color: "#ffffff" }} key={playerItem.position2}>
                                                                 {playerItem.position2}
                                                             </Tag>
-                                                        }
+                                                        )}
                                                         <div className="col-sm d-flex">
-                                                            {playerItem.playerHistory.map((item, index) => {
-                                                                return (
-                                                                    item.divisionGrade != null && item.divisionGrade != "" ?
-                                                                        <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                            {item.divisionGrade + '(' + item.ladderResult + ')'}
-                                                                        </Tag>
-                                                                        : null
+                                                            {playerItem.playerHistory.map((item, index) => (
+                                                                item.divisionGrade != null && item.divisionGrade != "" && (
+                                                                    <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                        {item.divisionGrade + '(' + item.ladderResult + ')'}
+                                                                    </Tag>
                                                                 )
-                                                            })}
+                                                            ))}
                                                         </div>
-                                                        <img className="comp-player-table-img" src={
-                                                            playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled :
-                                                                AppImages.commentEmpty} alt="" height="20" width="20"
+                                                        <img
+                                                            className="comp-player-table-img"
+                                                            src={playerItem.isCommentsAvailable == 1
+                                                                ? AppImages.commentFilled
+                                                                : AppImages.commentEmpty
+                                                            }
+                                                            alt=""
+                                                            height="20"
+                                                            width="20"
                                                             style={{ cursor: "pointer" }}
                                                             onClick={() => disableStatus == false && this.onClickComment(playerItem, null)}
                                                         />
@@ -942,7 +933,6 @@ class CompetitionPartPlayerGrades extends Component {
                         onChange={(e) => this.setState({ newTeam: e.target.value })}
                         value={this.state.newTeam}
                     />
-
                 </Modal>
                 <PlayerCommentModal
                     visible={this.state.modalVisible}
@@ -961,32 +951,30 @@ class CompetitionPartPlayerGrades extends Component {
                     title={AppConstants.changeDivision}
                     visible={this.state.changeDivisionModalVisible}
                     onOk={() => this.changePlayerDivision("ok")}
-                    onCancel={() => this.changePlayerDivision("cancel")}>
+                    onCancel={() => this.changePlayerDivision("cancel")}
+                >
                     <div className="change-division-modal">
-                        <div className='year-select-heading'>{AppConstants.division}</div>
+                        <div className="year-select-heading">{AppConstants.division}</div>
                         <Select
                             style={{ minWidth: 120 }}
                             className="year-select change-division-select"
                             onChange={(divisionId) => this.setState({ competitionDivisionId: divisionId })}
-                            value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
-                            {divisionData.map(item => {
-                                return (
-                                    <Option key={"division" + item.competitionMembershipProductDivisionId}
-                                        value={item.competitionMembershipProductDivisionId}>
-                                        {item.divisionName}
-                                    </Option>
-                                )
-                            })}
+                            value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}
+                        >
+                            {divisionData.map(item => (
+                                <Option
+                                    key={'compMemProdDiv_' + item.competitionMembershipProductDivisionId}
+                                    value={item.competitionMembershipProductDivisionId}
+                                >
+                                    {item.divisionName}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
-
                 </Modal>
-
             </div>
         )
     }
-
-
 
     ////////form content view
     contentView = () => {

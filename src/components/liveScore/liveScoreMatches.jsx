@@ -564,9 +564,9 @@ class LiveScoreMatchesList extends Component {
         for (let i in liveScoreMatchListData) {
             if (liveScoreMatchListData[i].team1Score !== liveScoreBulkScoreList[i].team1Score || liveScoreMatchListData[i].team2Score !== liveScoreBulkScoreList[i].team2Score) {
                 let requestObject = {
-                    "id": liveScoreMatchListData[i].id,
-                    "team1Score": JSON.parse(liveScoreMatchListData[i].team1Score),
-                    "team2Score": JSON.parse(liveScoreMatchListData[i].team2Score)
+                    id: liveScoreMatchListData[i].id,
+                    team1Score: JSON.parse(liveScoreMatchListData[i].team1Score),
+                    team2Score: JSON.parse(liveScoreMatchListData[i].team2Score)
                 }
                 array.push(requestObject)
             }
@@ -630,7 +630,7 @@ class LiveScoreMatchesList extends Component {
                             >
                                 <Option value="All">All</Option>
                                 {divisionListArr.map((item) => (
-                                    <Option key={"division" + item.id} value={item.id}>{item.name}</Option>
+                                    <Option key={'division_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </div>
@@ -646,7 +646,7 @@ class LiveScoreMatchesList extends Component {
                             >
                                 <Option value="All">All</Option>
                                 {roundListArr.map((item) => (
-                                    <Option key={"round" + item.id} value={item.name}>{item.name}</Option>
+                                    <Option key={'round_' + item.name} value={item.name}>{item.name}</Option>
                                 ))}
                             </Select>
                         </div>

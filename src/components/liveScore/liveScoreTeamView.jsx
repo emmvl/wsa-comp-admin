@@ -84,7 +84,7 @@ const columns = [
                     <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                 }
             >
-                <Menu.Item key={'1'}>
+                <Menu.Item key="1">
                     <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }}>
                         <span>Edit</span>
                     </NavLink>
@@ -248,7 +248,7 @@ class LiveScoreTeamView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.group} height="16" width="16" alt="" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.name}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.name}</span>
                         </div>
 
                         {managerDataList.map((item) => (
@@ -262,7 +262,7 @@ class LiveScoreTeamView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.group} height="16" width="16" alt="" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.email}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.email}</span>
                         </div>
                         {managerDataList.map((item) => (
                             <span className="desc-text-style side-bar-profile-data">{item.email}</span>
@@ -275,7 +275,7 @@ class LiveScoreTeamView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.callAnswer} alt="" height="16" width="16" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.contactNumber}</span>
                         </div>
                         {managerDataList.map((item) => (
                             <span className="desc-text-style side-bar-profile-data">{item.mobileNumber}</span>
@@ -292,7 +292,7 @@ class LiveScoreTeamView extends Component {
                                 <div className="live-score-icon-view">
                                     <img src={AppImages.group} height="16" width="16" alt="" />
                                 </div>
-                                <span className='year-select-heading ml-3'>{AppConstants.name}</span>
+                                <span className="year-select-heading ml-3">{AppConstants.name}</span>
                             </div>
 
                             {coachData.map((item) => (
@@ -306,7 +306,7 @@ class LiveScoreTeamView extends Component {
                                 <div className="live-score-icon-view">
                                     <img src={AppImages.group} height="16" width="16" alt="" />
                                 </div>
-                                <span className='year-select-heading ml-3'>{AppConstants.email}</span>
+                                <span className="year-select-heading ml-3">{AppConstants.email}</span>
                             </div>
                             {coachData.map((item) => (
                                 <span className="desc-text-style side-bar-profile-data">{item.email}</span>
@@ -319,7 +319,7 @@ class LiveScoreTeamView extends Component {
                                 <div className="live-score-icon-view">
                                     <img src={AppImages.callAnswer} alt="" height="16" width="16" />
                                 </div>
-                                <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
+                                <span className="year-select-heading ml-3">{AppConstants.contactNumber}</span>
                             </div>
                             {coachData.map((item) => (
                                 <span className="desc-text-style side-bar-profile-data">{item.mobileNumber}</span>
@@ -340,7 +340,7 @@ class LiveScoreTeamView extends Component {
         const { userRoleId } = this.state
         let roleId = (userRoleId == 11 || userRoleId == 13)
         return (
-            <div className="row ">
+            <div className="row">
                 <div className="col-sm">
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.players}</Breadcrumb.Item>

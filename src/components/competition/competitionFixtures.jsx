@@ -256,18 +256,16 @@ class CompetitionFixtures extends Component {
                     <div className="year-select-heading-view">
                         <span className="year-select-heading">{AppConstants.year}:</span>
                         <Select
-                            name={'yearRefId'}
+                            name="yearRefId"
                             className="year-select"
                             onChange={yearRefId => this.onYearChange(yearRefId)}
                             value={this.state.yearRefId}
                         >
-                            {this.props.appState.own_YearArr.length > 0 && this.props.appState.own_YearArr.map(item => {
-                                return (
-                                    <Option key={'yearRefId' + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                );
-                            })}
+                            {this.props.appState.own_YearArr.map(item => (
+                                <Option key={'year_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
                 </div>
@@ -283,26 +281,19 @@ class CompetitionFixtures extends Component {
                     >
                         <span className="year-select-heading">
                             {AppConstants.competition}:
-        </span>
+                        </span>
                         <Select
                             style={{ minWidth: 160 }}
-                            name={'competition'}
+                            name="competition"
                             className="year-select reg-filter-select1 innerSelect-value-draws"
-                            onChange={competitionId =>
-                                this.onCompetitionChange(competitionId)
-                            }
+                            onChange={competitionId => this.onCompetitionChange(competitionId)}
                             value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                         >
-                            {this.props.appState.own_CompetitionArr.map(item => {
-                                return (
-                                    <Option
-                                        key={'competition' + item.competitionId}
-                                        value={item.competitionId}
-                                    >
-                                        {item.competitionName}
-                                    </Option>
-                                );
-                            })}
+                            {this.props.appState.own_CompetitionArr.map(item => (
+                                <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                    {item.competitionName}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
                 </div>
@@ -320,11 +311,12 @@ class CompetitionFixtures extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <div style={{
-                                    width: "100%", display: "flex",
+                                    width: "100%",
+                                    display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
                                 }}>
-                                    <span className='year-select-heading'>{AppConstants.grade}:</span>
+                                    <span className="year-select-heading">{AppConstants.grade}:</span>
                                     <Select
                                         className="year-select"
                                         style={{ minWidth: 100, maxWidth: 130 }}
@@ -333,16 +325,14 @@ class CompetitionFixtures extends Component {
                                         }
                                         value={JSON.parse(JSON.stringify(this.state.competitionDivisionGradeId))}
                                     >
-                                        {this.props.drawsState.fixtureDivisionGradeNameList.length > 0 && this.props.drawsState.fixtureDivisionGradeNameList.map(item => {
-                                            return (
-                                                <Option
-                                                    key={'divisionGradeNameList' + item.competitionDivisionGradeId}
-                                                    value={item.competitionDivisionGradeId}
-                                                >
-                                                    {item.name}
-                                                </Option>
-                                            );
-                                        })}
+                                        {this.props.drawsState.fixtureDivisionGradeNameList.map(item => (
+                                            <Option
+                                                key={'compDivGrade_' + item.competitionDivisionGradeId}
+                                                value={item.competitionDivisionGradeId}
+                                            >
+                                                {item.name}
+                                            </Option>
+                                        ))}
                                     </Select>
                                 </div>
                             </div>
@@ -813,7 +803,7 @@ class CompetitionFixtures extends Component {
                     <div className="table-head-wrap">
                         {/* Times list */}
                         <div className="tablehead-row-fixture ">
-                            <div className="sr-no empty-bx"></div>
+                            <div className="sr-no empty-bx" />
                             {dateArray.map((date, index) => {
                                 if (index !== 0) {
                                     dayMargin += 75;
@@ -972,7 +962,7 @@ class CompetitionFixtures extends Component {
     //                                                     <span
     //                                                         className={'border'}
     //                                                         style={{ top: topMarginAwayTeam, left: leftMargin }}
-    //                                                     ></span>
+    //                                                     />
     //                                                     <div
     //                                                         className={
     //                                                             'box purple-box ' +

@@ -278,8 +278,8 @@ class UserAddAffiliates extends Component {
           }
           value={affiliate.organisationTypeRefId}
         >
-          {(affiliateToData.organisationTypes || []).map((org, index) => (
-            <Option key={org.id} value={org.id}>
+          {(affiliateToData.organisationTypes || []).map((org) => (
+            <Option key={'organisation_' + org.id} value={org.id}>
               {org.name}
             </Option>
           ))}
@@ -316,7 +316,7 @@ class UserAddAffiliates extends Component {
             />
 
             <Form.Item
-              name='affiliatedToOrgId'
+              name="affiliatedToOrgId"
               rules={[{
                 required: true,
                 message: ValidationConstants.affiliateToRequired,
@@ -332,11 +332,8 @@ class UserAddAffiliates extends Component {
                   .filter(
                     (x) => x.organisationtypeRefId == affiliate.organisationTypeRefId - 1
                   )
-                  .map((aff, index) => (
-                    <Option
-                      key={aff.organisationId}
-                      value={aff.organisationId}
-                    >
+                  .map((aff) => (
+                    <Option key={'organisation_' + aff.organisationId} value={aff.organisationId}>
                       {aff.name}
                     </Option>
                   ))}
@@ -400,8 +397,8 @@ class UserAddAffiliates extends Component {
             onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
             value={affiliate.stateRefId}
           >
-            {stateList.length > 0 && stateList.map((item) => (
-              <Option value={item.id}> {item.name}</Option>
+            {stateList.map((item) => (
+              <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
             ))}
           </Select>
         </Form.Item>
@@ -580,8 +577,8 @@ class UserAddAffiliates extends Component {
                 }
                 value={item.roleId}
               >
-                {(roles || []).map((role, index) => (
-                  <Option key={role.id} value={role.id}>
+                {(roles || []).map((role) => (
+                  <Option key={'role_' + role.id} value={role.id}>
                     {role.description}
                   </Option>
                 ))}

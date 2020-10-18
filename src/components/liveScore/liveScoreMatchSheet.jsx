@@ -396,8 +396,9 @@ class LiveScoreMatchSheet extends Component {
                                 value={this.state.division}
                                 placeholder={AppConstants.selectDivision}
                             >
-                                {division.length > 0 && division.map(
-                                    (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
+                                {division.map((item) => (
+                                    <Option value={item.id} key={'division_' + item.id}>{item.name}</Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
@@ -414,8 +415,9 @@ class LiveScoreMatchSheet extends Component {
                                 value={this.state.selectedTeam}
                                 placeholder={AppConstants.selectTeam}
                             >
-                                {teamList.length > 0 && teamList.map(
-                                    (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
+                                {teamList.map((item) => (
+                                    <Option value={item.id} key={'team_' + item.id}>{item.name}</Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
@@ -433,8 +435,9 @@ class LiveScoreMatchSheet extends Component {
                                 value={this.state.selectedTemplateId ?? AppConstants.selectTemplateType}
                                 placeholder={AppConstants.selectTemplateType}
                             >
-                                {templateList.length > 0 && templateList.map(
-                                    (item) => <Option value={item.id} key={item.id}>{item.description}</Option>)}
+                                {templateList.map((item) => (
+                                    <Option value={item.id} key={'template_' + item.id}>{item.description}</Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
@@ -452,8 +455,9 @@ class LiveScoreMatchSheet extends Component {
                                 value={this.state.selectedRound ?? AppConstants.selectRound}
                                 placeholder={AppConstants.selectTemplateType}
                             >
-                                {this.state.rounds.length > 0 && this.state.rounds.map(
-                                    (item) => <Option value={item.id} key={item.id}>{item.name}</Option>)}
+                                {this.state.rounds.map((item) => (
+                                    <Option value={item.id} key={'round_' + item.id}>{item.name}</Option>
+                                ))}
                             </Select>
                         </div>
                     </div>

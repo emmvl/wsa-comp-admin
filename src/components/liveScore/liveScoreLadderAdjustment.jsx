@@ -153,9 +153,9 @@ class LiveScoreLadderAdjustment extends Component {
                                     onChange={(divisionId) => this.changeDivision(divisionId)}
                                     value={this.state.divisionId}
                                 >
-                                    {divisionListArr.map((item, index) => {
-                                        return <Option key={"division" + item.id} value={item.id}>{item.name}</Option>
-                                    })}
+                                    {divisionListArr.map((item) => (
+                                        <Option key={'division_' + item.id} value={item.id}>{item.name}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -247,8 +247,8 @@ class LiveScoreLadderAdjustment extends Component {
                                         showSearch
                                         optionFilterProp="children"
                                     >
-                                        {teamList.map((item, index) => (
-                                            <Option key={'teamList' + index} value={item.id}> {item.name}</Option>
+                                        {teamList.map((item) => (
+                                            <Option key={'team_' + item.id} value={item.id}>{item.name}</Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
@@ -300,7 +300,7 @@ class LiveScoreLadderAdjustment extends Component {
                 <div>
                     <span
                         onClick={() => this.props.updateLadderSetting({ data: null, key: 'addLadderAdjustment' })}
-                        className='input-heading-add-another pointer'
+                        className="input-heading-add-another pointer"
                     >
                         + {AppConstants.addNewAdjustment}
                     </span>
@@ -367,8 +367,8 @@ class LiveScoreLadderAdjustment extends Component {
     onSaveClick = (values) => {
         const { ladderData } = this.props.liveScoreLadderState
         let body = {
-            "competitionUniqueKey": this.state.compUniqueKey,
-            "divisionId": this.state.divisionId,
+            competitionUniqueKey: this.state.compUniqueKey,
+            divisionId: this.state.divisionId,
             "adjustments": ladderData
         }
         this.props.ladderAdjustmentPostData({ body })

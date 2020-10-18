@@ -177,7 +177,7 @@ class AddUmpire extends Component {
                             </Breadcrumb>
                         </div>
                     </div>
-                </Header >
+                </Header>
             </div>
         )
     }
@@ -214,7 +214,7 @@ class AddUmpire extends Component {
                                 }}
                             >
                                 {umpireList.map((item) => (
-                                    <Option key={item.id} value={item.firstName + " " + item.lastName}>
+                                    <Option key={'umpire_' + item.id} value={item.firstName + " " + item.lastName}>
                                         {item.firstName + " " + item.lastName}
                                     </Option>
                                 ))}
@@ -233,7 +233,7 @@ class AddUmpire extends Component {
                             rules={[{ required: true, message: ValidationConstants.organisationField }]}
                         >
                             <InputWithHead
-                                required={"required-field pb-1"}
+                                required="required-field pb-1"
                                 heading={AppConstants.organisation}
                             />
                             <Select
@@ -246,7 +246,7 @@ class AddUmpire extends Component {
                                 optionFilterProp="children"
                             >
                                 {affilateData.map((item) => (
-                                    <Option value={item.id}>{item.name}</Option>
+                                    <Option key={'organisation_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -362,7 +362,7 @@ class AddUmpire extends Component {
                             rules={[{ required: true, message: ValidationConstants.organisationField }]}
                         >
                             <InputWithHead
-                                required={"required-field pb-1"}
+                                required="required-field pb-1"
                                 heading={AppConstants.organisation}
                             />
                             <Select
@@ -377,7 +377,7 @@ class AddUmpire extends Component {
                                 // notFoundContent={onAffiliateLoad ? <Spin size="small" /> : null}
                             >
                                 {affiliateListResult.map((item) => (
-                                    <Option value={item.id}>{item.name}</Option>
+                                    <Option key={'organisation_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -423,11 +423,10 @@ class AddUmpire extends Component {
                 >
                     {/* radio button without tooltip */}
                     <div className="row ml-2" style={{ marginTop: 18 }}>
-                        <Radio value={"new"}>{AppConstants.new}</Radio>
-                        <Radio value={"existing"}>{AppConstants.existing} </Radio>
+                        <Radio value="new">{AppConstants.new}</Radio>
+                        <Radio value="existing">{AppConstants.existing} </Radio>
                     </div>
                 </Radio.Group>
-
             </div>
         )
     }
@@ -485,19 +484,19 @@ class AddUmpire extends Component {
                 if (umpireRadioBtn === 'new') {
                     if (this.state.isEdit === true) {
                         body = {
-                            "id": umpireData.id,
-                            "firstName": umpireData.firstName,
-                            "lastName": umpireData.lastName,
-                            "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
-                            "email": umpireData.email,
+                            id: umpireData.id,
+                            firstName: umpireData.firstName,
+                            lastName: umpireData.lastName,
+                            mobileNumber: regexNumberExpression(umpireData.mobileNumber),
+                            email: umpireData.email,
                             "affiliates": umpireData.affiliates,
                         }
                     } else {
                         body = {
-                            "firstName": umpireData.firstName,
-                            "lastName": umpireData.lastName,
-                            "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
-                            "email": umpireData.email,
+                            firstName: umpireData.firstName,
+                            lastName: umpireData.lastName,
+                            mobileNumber: regexNumberExpression(umpireData.mobileNumber),
+                            email: umpireData.email,
                             "affiliates": umpireData.affiliates,
 
                         }
@@ -510,7 +509,7 @@ class AddUmpire extends Component {
                     }
                 } else if (umpireRadioBtn === 'existing') {
                     body = {
-                        "id": exsitingUmpireId,
+                        id: exsitingUmpireId,
                         "affiliates": umpireData.affiliates,
                     }
 
@@ -530,19 +529,19 @@ class AddUmpire extends Component {
             if (umpireRadioBtn === 'new') {
                 if (this.state.isEdit === true) {
                     body = {
-                        "id": umpireData.id,
-                        "firstName": umpireData.firstName,
-                        "lastName": umpireData.lastName,
-                        "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
-                        "email": umpireData.email,
+                        id: umpireData.id,
+                        firstName: umpireData.firstName,
+                        lastName: umpireData.lastName,
+                        mobileNumber: regexNumberExpression(umpireData.mobileNumber),
+                        email: umpireData.email,
                         "affiliates": umpireData.affiliates,
                     }
                 } else {
                     body = {
-                        "firstName": umpireData.firstName,
-                        "lastName": umpireData.lastName,
-                        "mobileNumber": regexNumberExpression(umpireData.mobileNumber),
-                        "email": umpireData.email,
+                        firstName: umpireData.firstName,
+                        lastName: umpireData.lastName,
+                        mobileNumber: regexNumberExpression(umpireData.mobileNumber),
+                        email: umpireData.email,
                         "affiliates": umpireData.affiliates,
                     }
                 }
@@ -554,7 +553,7 @@ class AddUmpire extends Component {
                 }
             } else if (umpireRadioBtn === 'existing') {
                 body = {
-                    "id": exsitingUmpireId,
+                    id: exsitingUmpireId,
                     "affiliates": umpireData.affiliates,
                 }
 

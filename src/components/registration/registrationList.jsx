@@ -130,20 +130,20 @@ class RegistrationList extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="com-year-select-heading-view">
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 75 }}
                                     onChange={(year) => this.setState({ year })}
                                     value={this.state.year}
                                 >
-                                    <Option value={"2019"}>{AppConstants.year2019}</Option>
+                                    <Option value="2019">{AppConstants.year2019}</Option>
                                 </Select>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="com-year-select-heading-view">
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 75 }}
@@ -156,27 +156,27 @@ class RegistrationList extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="com-year-select-heading-view">
-                                <span className='year-select-heading'>{AppConstants.product}:</span>
+                                <span className="year-select-heading">{AppConstants.product}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 75 }}
                                     onChange={(product) => this.setState({ product })}
                                     value={this.state.product}
                                 >
-                                    <Option value={"NETSETGO"}>{AppConstants.netSetGo}</Option>
+                                    <Option value="NETSETGO">{AppConstants.netSetGo}</Option>
                                 </Select>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div className="com-year-select-heading-view">
-                                <span className='year-select-heading'>{AppConstants.dOB}:</span>
+                                <span className="year-select-heading">{AppConstants.dOB}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 75 }}
                                     onChange={(dob) => this.setState({ dob })}
                                     value={this.state.dob}
                                 >
-                                    <Option value={"NETSETGO"}>{AppConstants.netSetGo}</Option>
+                                    <Option value="NETSETGO">{AppConstants.netSetGo}</Option>
                                 </Select>
                             </div>
                         </div>

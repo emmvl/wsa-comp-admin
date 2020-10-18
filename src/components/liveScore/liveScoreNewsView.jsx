@@ -176,8 +176,7 @@ class LiveScoreNewsView extends Component {
                 )}
 
                 {/* <span className="input-heading">{newsData.body}</span> */}
-                {/* <div className="input-heading" dangerouslySetInnerHTML={{ __html: newsData.body }}></div> */}
-
+                {/* <div className="input-heading" dangerouslySetInnerHTML={{ __html: newsData.body }} /> */}
 
                 <div style={{ marginTop: -10 }}>
                     <Editor

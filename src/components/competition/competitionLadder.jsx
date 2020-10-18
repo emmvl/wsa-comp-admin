@@ -383,30 +383,30 @@ class CompetitionLadder extends Component {
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="com-year-select-heading-view">
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     name="yearRefId"
                                     className="year-select"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {own_YearArr.length > 0 && own_YearArr.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {own_YearArr.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
                         <div className="col-sm-3">
                             <div style={{
-                                width: "100%", display: "flex",
+                                width: "100%",
+                                display: "flex",
                                 flexDirection: "row",
-                                alignItems: "center", marginRight: 50,
+                                alignItems: "center",
+                                marginRight: 50,
                             }}>
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     name="competition"
@@ -415,13 +415,11 @@ class CompetitionLadder extends Component {
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
-                                        return (
-                                            <Option key={"competition" + item.competitionId} value={item.competitionId}>
-                                                {item.competitionName}
-                                            </Option>
-                                        );
-                                    })}
+                                    {own_CompetitionArr.map(item => (
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -453,24 +451,30 @@ class CompetitionLadder extends Component {
                             </div>
                             {this.deleteConfirmModalView(ladderFormat)}
                         </div>
-                        {!ladder.isEditted ?
+                        {!ladder.isEditted ? (
                             <div>
                                 <Select
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                     onChange={(e) => this.onChangeSchemeName(e, "ladderFormat",index, ladderFormat, schemeData )}
-                                    value={ladder.schemeName}>
-                                    {(schemeData || []).map((item, schemeIndex) => (
-                                        <Option  key={item.schemeName} value={item.schemeName}>{item.schemeName}</Option>
+                                    value={ladder.schemeName}
+                                >
+                                    {(schemeData || []).map((item) => (
+                                        <Option key={'scheme_' + item.schemeName} value={item.schemeName}>
+                                            {item.schemeName}
+                                        </Option>
                                     ))}
                                 </Select>
-                            </div> :
-                            <InputWithHead placeholder={AppConstants.ladderFormatScheme}
-                                           value={ladder.schemeName}
-                                           onChange={(e)=> this.onUpdateSchemeName(e, ladderFormat, index)}></InputWithHead>
-                        }
+                            </div>
+                        ) : (
+                            <InputWithHead
+                                placeholder={AppConstants.ladderFormatScheme}
+                                value={ladder.schemeName}
+                                onChange={(e)=> this.onUpdateSchemeName(e, ladderFormat, index)}
+                            />
+                        )}
 
                         <Checkbox className="single-checkbox pt-2" defaultChecked={isAllDivisionChecked}  onChange={(e) => this.onChangeAllDivision(e, ladderFormat,index)}>{AppConstants.allDivisions}</Checkbox>
-                        {!isAllDivisionChecked ?
+                        {!isAllDivisionChecked && (
                             <div className="fluid-width">
                                 <div className="row">
                                     <div className="col-sm">
@@ -478,10 +482,14 @@ class CompetitionLadder extends Component {
                                             mode="multiple"
                                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                             onChange={(e) =>this.onChange(e, ladderFormat, ladder, index)}
-                                            value={ladder.selectedDivisions}>
-                                            {(ladder.divisions || []).map((division, divIndex)  => (
-                                                <Option key={division.competitionMembershipProductDivisionId}
-                                                        disabled={division.isDisabled}  value={division.competitionMembershipProductDivisionId}>
+                                            value={ladder.selectedDivisions}
+                                        >
+                                            {(ladder.divisions || []).map((division)  => (
+                                                <Option
+                                                    key={'compMemProdDiv_' + division.competitionMembershipProductDivisionId}
+                                                    disabled={division.isDisabled}
+                                                    value={division.competitionMembershipProductDivisionId}
+                                                >
                                                     {division.divisionsName}
                                                 </Option>
                                             ))}
@@ -489,11 +497,12 @@ class CompetitionLadder extends Component {
                                     </div>
                                 </div>
                                 {this.allDivisionModalView(ladderFormat)}
-                            </div> : null}
+                            </div>
+                        )}
                         <div className="inside-container-view">
                             <div className="table-responsive">
                                 <div style={{display: 'flex', paddingLeft: '10px'}}>
-                                    <div style={{width: '89%'}}><InputWithHead heading={"Result type/Byes"} /></div>
+                                    <div style={{width: '89%'}}><InputWithHead heading="Result type/Byes" /></div>
                                     <div><InputWithHead heading={"Points"} /></div>
                                 </div>
                                 {(ladder.resultTypes || []).map((res, resIndex) => (
@@ -522,7 +531,7 @@ class CompetitionLadder extends Component {
                 { !isAllDivisionChecked ?
                     <div className="row">
                         <div className="col-sm" onClick={(e) => this.onClickAddLadder(e, ladderFormat)}>
-                            <span className='input-heading-add-another pointer'>+ {AppConstants.addNewLadderScheme}</span>
+                            <span className="input-heading-add-another pointer">+ {AppConstants.addNewLadderScheme}</span>
                         </div>
                     </div> : null
                 }
@@ -555,10 +564,14 @@ class CompetitionLadder extends Component {
                     title="Ladder Format"
                     visible={this.state.schemeModalVisible}
                     onOk={() => this.handleSchemeModal(false, "ok", this.state.currentIndex, ladderFormat)}
-                    onCancel={() => this.handleSchemeModal(false, "cancel", this.state.currentIndex, ladderFormat)}>
-                    <InputWithHead heading={AppConstants.ladderFormatScheme} placeholder={AppConstants.ladderFormatScheme}
-                                   value={schemeName}
-                                   onChange={(e)=> this.onUpdateSchemeName(e, ladderFormat, this.state.currentIndex)}></InputWithHead>
+                    onCancel={() => this.handleSchemeModal(false, "cancel", this.state.currentIndex, ladderFormat)}
+                >
+                    <InputWithHead
+                        heading={AppConstants.ladderFormatScheme}
+                        placeholder={AppConstants.ladderFormatScheme}
+                        value={schemeName}
+                        onChange={(e)=> this.onUpdateSchemeName(e, ladderFormat, this.state.currentIndex)}
+                    />
                 </Modal>
             </div>
         );

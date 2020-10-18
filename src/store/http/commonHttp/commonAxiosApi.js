@@ -127,14 +127,14 @@ let AxiosApi = {
         let userId = await getUserId()
         let organisationId = await getOrganisationData().organisationUniqueKey;
         let body = {
-            "competitionUniqueKey": venuData.competitionUniqueKey,
-            "organisationId": organisationId,
-            "yearRefId": venuData.yearRefId,
-            "competitionMembershipProductDivisionId": venuData.competitionMembershipProductDivisionId,
+            competitionUniqueKey: venuData.competitionUniqueKey,
+            organisationId: organisationId,
+            yearRefId: venuData.yearRefId,
+            competitionMembershipProductDivisionId: venuData.competitionMembershipProductDivisionId,
             "venueId": venuData.venueId,
             "lng": venuData.lng,
             "lat": venuData.lat,
-            "name": venuData.name,
+            name: venuData.name,
             "shortName": venuData.shortName,
             "street1": venuData.street1,
             "street2": venuData.street2,

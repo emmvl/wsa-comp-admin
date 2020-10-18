@@ -62,34 +62,38 @@ class UserAffiliateApproveRejectForm extends Component {
         return (
             <div className="user-affiliate-dropdown-view">
                 <div style={{
-                    width: "100%", display: "flex",
+                    width: "100%",
+                    display: "flex",
                     flexDirection: "row",
-                    alignItems: "center", marginLeft: 7
+                    alignItems: "center",
+                    marginLeft: 7
                 }}>
-                    <span className='year-select-heading'>{AppConstants.organisationType}</span>
+                    <span className="year-select-heading">{AppConstants.organisationType}</span>
                     <Select
                         className="year-select"
                         // style={{ width: 75 }}
                         onChange={(organisationType) => this.setState({ organisationType })}
                         value={this.state.organisationType}
                     >
-                        <Option value={"club"}>{AppConstants.club}</Option>
+                        <Option value="club">{AppConstants.club}</Option>
                     </Select>
                 </div>
 
                 <div style={{
-                    width: "100%", display: "flex",
+                    width: "100%",
+                    display: "flex",
                     flexDirection: "row",
-                    alignItems: "center", marginLeft: 7
+                    alignItems: "center",
+                    marginLeft: 7
                 }}>
-                    <span className='year-select-heading'>{AppConstants.affiliatedTo}</span>
+                    <span className="year-select-heading">{AppConstants.affiliatedTo}</span>
                     <Select
                         className="year-select"
                         // style={{ width: 75 }}
                         onChange={(affiliatedTo) => this.setState({ affiliatedTo })}
                         value={this.state.affiliatedTo}
                     >
-                        <Option value={"peninsulaNetballAssociation"}>{AppConstants.peninsulaNetballAssociation}</Option>
+                        <Option value="peninsulaNetballAssociation">{AppConstants.peninsulaNetballAssociation}</Option>
                     </Select>
                 </div>
             </div>

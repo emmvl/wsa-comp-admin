@@ -49,8 +49,8 @@ function getTeamObj(teamSelectId, teamArr) {
         for (let j in teamSelectId) {
             if (teamSelectId[j] == teamArr[i].id) {
                 obj = {
-                    "name": teamArr[i].name,
-                    "id": teamArr[i].id
+                    name: teamArr[i].name,
+                    id: teamArr[i].id
                 }
                 teamObj.push(obj)
                 break;

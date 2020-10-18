@@ -2824,7 +2824,7 @@ class RegistrationCompetitionFee extends Component {
                                         disabled={this.state.permissionState.divisionsDisable}
                                     >
                                         {this.props.commonReducerState.genderDataEnum.map((item) => (
-                                            <Option key={item.id} value={item.id}>
+                                            <Option key={'gender_' + item.id} value={item.id}>
                                                 {item.description}
                                             </Option>
                                         ))}
@@ -3403,41 +3403,45 @@ class RegistrationCompetitionFee extends Component {
             ? data.competitionDiscounts[0].discounts
             : [];
 
-        discountData.length > 0 && discountData.map((item, index) => {
-            let competitionMembershipProductTypeId = `competitionMembershipProductTypeId${index}`;
-            let membershipProductUniqueKey = `membershipProductUniqueKey${index}`;
-            let competitionTypeDiscountTypeRefId = `competitionTypeDiscountTypeRefId${index}`;
-            this.formRef.current.setFieldsValue({
-                [competitionMembershipProductTypeId]: item.competitionMembershipProductTypeId,
-                [membershipProductUniqueKey]: item.membershipProductUniqueKey,
-                [competitionTypeDiscountTypeRefId]: item.competitionTypeDiscountTypeRefId,
-            });
-            let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0
-                ? item.childDiscounts
-                : [];
-            childDiscounts.map((childItem, childindex) => {
-                let childDiscountPercentageValue = `percentageValue${index}${childindex}`;
+        if (discountData.length > 0) {
+            discountData.forEach((item, index) => {
+                let competitionMembershipProductTypeId = `competitionMembershipProductTypeId${index}`;
+                let membershipProductUniqueKey = `membershipProductUniqueKey${index}`;
+                let competitionTypeDiscountTypeRefId = `competitionTypeDiscountTypeRefId${index}`;
                 this.formRef.current.setFieldsValue({
-                    [childDiscountPercentageValue]: childItem.percentageValue,
+                    [competitionMembershipProductTypeId]: item.competitionMembershipProductTypeId,
+                    [membershipProductUniqueKey]: item.membershipProductUniqueKey,
+                    [competitionTypeDiscountTypeRefId]: item.competitionTypeDiscountTypeRefId,
+                });
+                let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0
+                    ? item.childDiscounts
+                    : [];
+                childDiscounts.forEach((childItem, childindex) => {
+                    let childDiscountPercentageValue = `percentageValue${index}${childindex}`;
+                    this.formRef.current.setFieldsValue({
+                        [childDiscountPercentageValue]: childItem.percentageValue,
+                    });
                 });
             });
-        });
+        }
         let divisionData = this.props.competitionFeesState.competitionDivisionsData;
         let divisionArray = divisionData !== null ? divisionData : [];
-        divisionArray.length > 0 && divisionArray.map((item, index) => {
-            item.divisions.map((divItem, divIndex) => {
-                let divisionName = `divisionName${index}${divIndex}`;
-                let genderRefId = `genderRefId${index}${divIndex}`;
-                let fromDate = `fromDate${index}${divIndex}`;
-                let toDate = `toDate${index}${divIndex}`;
-                this.formRef.current.setFieldsValue({
-                    [divisionName]: divItem.divisionName,
-                    [genderRefId]: divItem.genderRefId ? divItem.genderRefId : [],
-                    [fromDate]: divItem.fromDate && moment(divItem.fromDate),
-                    [toDate]: divItem.toDate && moment(divItem.toDate),
+        if (divisionArray.length > 0) {
+            divisionArray.forEach((item, index) => {
+                item.divisions.forEach((divItem, divIndex) => {
+                    let divisionName = `divisionName${index}${divIndex}`;
+                    let genderRefId = `genderRefId${index}${divIndex}`;
+                    let fromDate = `fromDate${index}${divIndex}`;
+                    let toDate = `toDate${index}${divIndex}`;
+                    this.formRef.current.setFieldsValue({
+                        [divisionName]: divItem.divisionName,
+                        [genderRefId]: divItem.genderRefId ? divItem.genderRefId : [],
+                        [fromDate]: divItem.fromDate && moment(divItem.fromDate),
+                        [toDate]: divItem.toDate && moment(divItem.toDate),
+                    });
                 });
             });
-        });
+        }
     }
 
     saveCompFeesApiCall = (values) => {
@@ -3956,7 +3960,7 @@ class RegistrationCompetitionFee extends Component {
                     || fee_data[i].isTeamSeasonal
                     || fee_data[i].isTeamCasual == false)
             ) {
-                finalPostData.map((item, index) => {
+                finalPostData.forEach((item, index) => {
                     finalPostData[index]["isSeasonal"] = fee_data[i].isSeasonal;
                     finalPostData[index]["isCasual"] = fee_data[i].isCasual;
                     finalPostData[index]["isTeamSeasonal"] = fee_data[i].isTeamSeasonal;
@@ -4354,7 +4358,7 @@ class RegistrationCompetitionFee extends Component {
                                     style={{ maxWidth: 80 }}
                                 >
                                     {this.props.appState.yearList.map((item) => (
-                                        <Option key={'yearRefId' + item.id} value={item.id}>
+                                        <Option key={'year_' + item.id} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -4756,8 +4760,8 @@ class RegistrationCompetitionFee extends Component {
                             }}
                             disabled={compDetailDisable}
                         >
-                            {appState.venueList.length > 0 && appState.venueList.map((item) => (
-                                <Option key={item.id} value={item.id}>
+                            {appState.venueList.map((item) => (
+                                <Option key={'venue_' + item.id} value={item.id}>
                                     {item.name}
                                 </Option>
                             ))}
@@ -4801,8 +4805,8 @@ class RegistrationCompetitionFee extends Component {
                         value={detailsData.competitionTypeRefId}
                         disabled={compDetailDisable}
                     >
-                        {appState.typesOfCompetition.length > 0 && appState.typesOfCompetition.map((item) => (
-                            <Radio key={item.id} value={item.id}>
+                        {appState.typesOfCompetition.map((item) => (
+                            <Radio key={'competitionType_' + item.id} value={item.id}>
                                 {' '}
                                 {item.description}
                             </Radio>
@@ -4832,9 +4836,9 @@ class RegistrationCompetitionFee extends Component {
                         value={detailsData.competitionFormatRefId}
                         disabled={compDetailDisable}
                     >
-                        {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map((item) => (
+                        {appState.competitionFormatTypes.map((item) => (
                             <div className="contextualHelp-RowDirection">
-                                <Radio key={item.id} value={item.id}>
+                                <Radio key={'competitionFormat' + item.id} value={item.id}>
                                     {' '}
                                     {item.description}
                                 </Radio>
@@ -4927,7 +4931,7 @@ class RegistrationCompetitionFee extends Component {
                                 disabled={compDetailDisable}
                             >
                                 {roundsArray.map((item) => (
-                                    <Option key={item.noOfRounds} value={item.noOfRounds}>
+                                    <Option key={'round_' + item.noOfRounds} value={item.noOfRounds}>
                                         {item.noOfRounds}
                                     </Option>
                                 ))}
@@ -5250,7 +5254,7 @@ class RegistrationCompetitionFee extends Component {
                     >
                         {restrictionTypeMeta.map((item) => (
                             <div className="contextualHelp-RowDirection">
-                                <Radio key={item.id} value={item.id}>
+                                <Radio key={'registrationRestrictionType_' + item.id} value={item.id}>
                                     {' '}
                                     {item.description}
                                 </Radio>
@@ -5413,7 +5417,7 @@ class RegistrationCompetitionFee extends Component {
                                         style={{ display: 'flex', alignItems: 'center' }}
                                     >
                                         <div className="contextualHelp-RowDirection">
-                                            <Radio value={'perDivision'}>
+                                            <Radio value="perDivision">
                                                 {AppConstants.perDivision}
                                             </Radio>
                                             <div style={{ marginLeft: -20 }}>
@@ -5703,7 +5707,9 @@ class RegistrationCompetitionFee extends Component {
     //                     // loading={detailsData.searchLoad}
     //                 >
     //                     {associationAffilites.map((item) => (
-    //                         <Option key={item.organisationId} value={item.organisationId}>{item.name}</Option>
+    //                         <Option key={'organization_' + item.organisationId} value={item.organisationId}>
+    //                             {item.name}
+    //                         </Option>
     //                     ))}
     //                 </Select>
     //             </div>
@@ -5730,7 +5736,9 @@ class RegistrationCompetitionFee extends Component {
     //                     // loading={detailsData.searchLoad}
     //                 >
     //                     {clubAffilites.map((item) => (
-    //                         <Option key={item.organisationId} value={item.organisationId}>{item.name}</Option>
+    //                         <Option key={'organisation_' + item.organisationId} value={item.organisationId}>
+    //                             {item.name}
+    //                         </Option>
     //                     ))}
     //                 </Select>
     //             </div>
@@ -5755,7 +5763,7 @@ class RegistrationCompetitionFee extends Component {
     //                     value={seletedInvitee}
     //                 >
     //                     {(invitees || []).map((item, index) => (
-    //                         <div>
+    //                         <div key={item.id}>
     //                             {item.subReferences.length === 0 ? (
     //                                 <Radio value={item.id}>{item.description}</Radio>
     //                             ) : (
@@ -5763,8 +5771,8 @@ class RegistrationCompetitionFee extends Component {
     //                                     <div className="applicable-to-heading invitees-main">
     //                                         {orgLevelId == "4" && item.id == 1 ? "" : item.description}
     //                                     </div>
-    //                                     {(item.subReferences).map((subItem, subIndex) => (
-    //                                         <div style={{ marginLeft: '20px' }}>
+    //                                     {(item.subReferences).map((subItem) => (
+    //                                         <div key={subItem.id}  style={{ marginLeft: '20px' }}>
     //                                             {this.disableInvitee(subItem) && (
     //                                                 <Radio key={subItem.id} value={subItem.id}>{subItem.description}</Radio>
     //                                             )}
@@ -5821,7 +5829,7 @@ class RegistrationCompetitionFee extends Component {
                         loading={detailsData.searchLoad}
                     >
                         {associationAffilites.map((item) => (
-                            <Option key={item.organisationId} value={item.organisationId}>
+                            <Option key={'organisation_' + item.organisationId} value={item.organisationId}>
                                 {item.name}
                             </Option>
                         ))}
@@ -5862,7 +5870,7 @@ class RegistrationCompetitionFee extends Component {
                         loading={detailsData.searchLoad}
                     >
                         {clubAffilites.map((item) => (
-                            <Option key={item.organisationId} value={item.organisationId}>
+                            <Option key={'organisation_' + item.organisationId} value={item.organisationId}>
                                 {item.name}
                             </Option>
                         ))}
@@ -5903,7 +5911,7 @@ class RegistrationCompetitionFee extends Component {
                     >
                         {(invitees || []).map( (item, index) =>
                             index === 0 && (
-                                <div>
+                                <div key={item.id}>
                                     {item.subReferences.length === 0 ? (
                                         <Radio value={item.id}>{item.description}</Radio>
                                     ) : (
@@ -5977,7 +5985,7 @@ class RegistrationCompetitionFee extends Component {
                     >
                         {(invitees || []).map((item, index) =>
                             index === 1 && (
-                                <div>
+                                <div key={item.id}>
                                     {item.subReferences.length === 0 ? (
                                         <Radio value={item.id}>{item.description}</Radio>
                                     ) : (
@@ -6063,7 +6071,7 @@ class RegistrationCompetitionFee extends Component {
                     >
                         {(invitees || []).map((item, index) =>
                             index > 1 && (
-                                <div>
+                                <div key={item.id}>
                                     {item.subReferences.length === 0 ? (
                                         <div className="contextualHelp-RowDirection">
                                             <Radio value={item.id}>{item.description}</Radio>
@@ -6078,8 +6086,8 @@ class RegistrationCompetitionFee extends Component {
                                             <div className="applicable-to-heading invitees-main">
                                                 {item.description}
                                             </div>
-                                            {item.subReferences.map((subItem, subIndex) => (
-                                                <div style={{ marginLeft: '20px' }}>
+                                            {item.subReferences.map((subItem) => (
+                                                <div key={subItem.id} style={{ marginLeft: '20px' }}>
                                                     <Radio
                                                         disabled={regInviteesDisable}
                                                         onChange={(e) =>
@@ -6450,7 +6458,7 @@ class RegistrationCompetitionFee extends Component {
             <div className="advanced-setting-view pt-5">
                 <span className="form-heading">{AppConstants.governmentVouchers}</span>
                 <div className="inside-container-view">
-                    {govtVoucher.length > 0 && govtVoucher.map((item, index) => (
+                    {govtVoucher.map((item, index) => (
                         <div className="row">
                             <Checkbox
                                 className="single-checkbox mt-3"
@@ -6518,7 +6526,7 @@ class RegistrationCompetitionFee extends Component {
                             disabled={this.checkDiscountDisable(item.organisationId)}
                         >
                             {this.props.appState.commonDiscountTypes.map((item) => (
-                                <Option key={'discountType' + item.id} value={item.id}>
+                                <Option key={'discountType_' + item.id} value={item.id}>
                                     {item.description}
                                 </Option>
                             ))}
@@ -6594,7 +6602,7 @@ class RegistrationCompetitionFee extends Component {
                             disabled={this.checkDiscountDisable(item.organisationId)}
                         >
                             {this.props.appState.commonDiscountTypes.map((item) => (
-                                <Option key={'discountType' + item.id} value={item.id}>
+                                <Option key={'discountType_' + item.id} value={item.id}>
                                     {item.description}
                                 </Option>
                             ))}
@@ -6744,7 +6752,7 @@ class RegistrationCompetitionFee extends Component {
                             disabled={this.checkDiscountDisable(item.organisationId)}
                         >
                             {this.props.appState.commonDiscountTypes.map((item) => (
-                                <Option key={'discountType' + item.id} value={item.id}>
+                                <Option key={'discountType_' + item.id} value={item.id}>
                                     {item.description}
                                 </Option>
                             ))}
@@ -6833,8 +6841,8 @@ class RegistrationCompetitionFee extends Component {
                             value={JSON.stringify(JSON.parse(item.applyDiscount))}
                             disabled={this.checkDiscountDisable(item.organisationId)}
                         >
-                            <Radio value={'1'}>{AppConstants.yes}</Radio>
-                            <Radio value={'0'}>{AppConstants.no}</Radio>
+                            <Radio value="1">{AppConstants.yes}</Radio>
+                            <Radio value="0">{AppConstants.no}</Radio>
                         </Radio.Group>
                     </div>
                 );
@@ -6977,7 +6985,7 @@ class RegistrationCompetitionFee extends Component {
                         </CustomToolTip>
                     </div>
                 </div>
-                {discountData.length > 0 && discountData.map((item, index) => (
+                {discountData.map((item, index) => (
                     <div className="prod-reg-inside-container-view">
                         <div
                             className="transfer-image-view pt-2"
@@ -7022,7 +7030,7 @@ class RegistrationCompetitionFee extends Component {
                                     >
                                         {this.props.competitionFeesState.defaultDiscountType.map((discountTypeItem) => (
                                             <Option
-                                                key={'disType' + discountTypeItem.id}
+                                                key={'discountType_' + discountTypeItem.id}
                                                 value={discountTypeItem.id}
                                             >
                                                 {discountTypeItem.description}
@@ -7058,7 +7066,7 @@ class RegistrationCompetitionFee extends Component {
                                     >
                                         {membershipPrdArr && membershipPrdArr.membershipProducts && membershipPrdArr.membershipProducts.map((item) => (
                                             <Option
-                                                key={item.membershipProductUniqueKey}
+                                                key={'product_' + item.membershipProductUniqueKey}
                                                 value={item.membershipProductUniqueKey}
                                             >
                                                 {item.membershipProductName}
@@ -7091,9 +7099,9 @@ class RegistrationCompetitionFee extends Component {
                                     // value={item.competitionMembershipProductTypeId}
                                     disabled={this.checkDiscountDisable(item.organisationId)}
                                 >
-                                    {item.membershipProductTypes.length > 0 && item.membershipProductTypes.map((item) => (
+                                    {item.membershipProductTypes.map((item) => (
                                         <Option
-                                            key={item.competitionMembershipProductTypeId}
+                                            key={'productType_' + item.competitionMembershipProductTypeId}
                                             value={item.competitionMembershipProductTypeId}
                                         >
                                             {item.membershipProductTypeName}

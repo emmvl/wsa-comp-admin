@@ -99,8 +99,8 @@ const columns = [
                 // value={this_Obj.state.frequency}
                 defaultValue={frequency}
             >
-                <Option value={"once"}>Once</Option>
-                <Option value={"match"}>Match</Option>
+                <Option value="once">Once</Option>
+                <Option value="match">Match</Option>
             </Select>
         )
     },
@@ -217,13 +217,9 @@ class ProductAddRegistration extends Component {
                     onChange={registrationType => this.setState({ registrationType })}
                     value={this.state.registrationType}
                 >
-                    <Option value={"playingMember"}>{AppConstants.playingMember}</Option>
-                    <Option value={"nonPlayingMember"}>
-                        {AppConstants.nonPlayingMember}
-                    </Option>
-                    <Option value={"umpire/referee"}>
-                        {AppConstants.Umpire_Referee}
-                    </Option>
+                    <Option value="playingMember">{AppConstants.playingMember}</Option>
+                    <Option value="nonPlayingMember">{AppConstants.nonPlayingMember}</Option>
+                    <Option value="umpire/referee">{AppConstants.Umpire_Referee}</Option>
                 </Select>
 
                 <InputWithHead heading={AppConstants.category} />
@@ -232,7 +228,7 @@ class ProductAddRegistration extends Component {
                     onChange={category => this.setState({ category })}
                     value={this.state.category}
                 >
-                    <Option value={"NETSETGO"}>{AppConstants.netSetGo}</Option>
+                    <Option value="NETSETGO">{AppConstants.netSetGo}</Option>
                 </Select>
 
                 <span className="applicable-to-heading">
@@ -264,11 +260,9 @@ class ProductAddRegistration extends Component {
                     onChange={paymentFrequency => this.setState({ paymentFrequency })}
                     value={this.state.paymentFrequency}
                 >
-                    <Option value={"oncePerYear"}>{AppConstants.oncePerYear}</Option>
-                    <Option value={"eachMatch"}>{AppConstants.eachMatch}</Option>
-                    <Option value={"eachCompetition"}>
-                        {AppConstants.eachCompetition}
-                    </Option>
+                    <Option value="oncePerYear">{AppConstants.oncePerYear}</Option>
+                    <Option value="eachMatch">{AppConstants.eachMatch}</Option>
+                    <Option value="eachCompetition">{AppConstants.eachCompetition}</Option>
                 </Select>
 
                 <InputWithHead heading={AppConstants.description} />
@@ -363,14 +357,10 @@ class ProductAddRegistration extends Component {
                     onChange={applyTo => this.setState({ applyTo })}
                     value={this.state.applyTo}
                 >
-                    <Option value={"clubFees"} disabled>
-                        {AppConstants.clubFees}
-                    </Option>
-                    <Option value={"associationFees"} disabled>
-                        {AppConstants.associationFees}
-                    </Option>
-                    <Option value={"stateFees"}>{AppConstants.stateFees}</Option>
-                    <Option value={"allFees"}>{AppConstants.allFees}</Option>
+                    <Option value="clubFees" disabled>{AppConstants.clubFees}</Option>
+                    <Option value="associationFees" disabled>{AppConstants.associationFees}</Option>
+                    <Option value="stateFees">{AppConstants.stateFees}</Option>
+                    <Option value="allFees">{AppConstants.allFees}</Option>
                 </Select>
 
                 <div className="prod-reg-inside-container-view">

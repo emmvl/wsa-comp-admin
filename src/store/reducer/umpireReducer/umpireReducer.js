@@ -104,8 +104,8 @@ function getAffiliateData(selectedAffiliateId, affiliateArray) {
         for (let j in selectedAffiliateId) {
             if (selectedAffiliateId[j] === affiliateArray[i].id) {
                 obj = {
-                    "name": affiliateArray[i].name,
-                    "id": affiliateArray[i].id
+                    name: affiliateArray[i].name,
+                    id: affiliateArray[i].id
                 }
                 affiliateObj.push(obj)
                 break;

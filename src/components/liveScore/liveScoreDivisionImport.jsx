@@ -167,7 +167,7 @@ class LiveScoreDivisionImport extends Component {
                     </Content>
 
                     <Footer>
-                        {/* <div className="formView"></div> */}
+                        {/* <div className="formView" /> */}
                     </Footer>
                 </Layout>
             </div>

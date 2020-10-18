@@ -176,9 +176,9 @@ class CompetitionPartPlayerGradeCalculate extends Component {
     submitApiCall = () => {
         let playerGradingTableData = this.props.partPlayerGradingState.getCompPartPlayerGradingSummaryData
         let payload = {
-            "organisationId": 1,
-            "yearRefId": this.state.yearRefId,
-            "competitionUniqueKey": this.state.firstTimeCompId,
+            organisationId: 1,
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.firstTimeCompId,
             "playerSummary": playerGradingTableData
         }
         this.props.saveCompPartPlayerGradingSummaryAction(payload)
@@ -243,7 +243,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
     //         comments: null
     //     });
     // };
-    // // model cancel for dissapear a model
+    // // model cancel for disappear a model
     // handleCancel = e => {
     //     this.setState({
     //         visible: false,
@@ -265,7 +265,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="com-year-select-heading-view pb-3">
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     name="yearRefId"
                                     className="year-select reg-filter-select-year ml-2"
@@ -273,23 +273,23 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {this.props.appState.participate_YearArr.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.participate_YearArr.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
                         <div className="col-sm pb-3">
                             <div style={{
-                                width: "fit-content", display: "flex",
+                                width: "fit-content",
+                                display: "flex",
                                 flexDirection: "row",
-                                alignItems: "center", marginRight: 50
+                                alignItems: "center",
+                                marginRight: 50
                             }}>
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     name="competition"
                                     className="year-select reg-filter-select-competition ml-2"
@@ -297,13 +297,11 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                                     }
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {this.props.appState.participate_CompetitionArr.map(item => {
-                                        return (
-                                            <Option key={item.statusRefId} value={item.competitionId}>
-                                                {item.competitionName}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.participate_CompetitionArr.map(item => (
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>

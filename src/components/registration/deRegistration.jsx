@@ -155,17 +155,12 @@ class DeRegistration extends Component {
                         }
                         value={saveData.reasonTypeRefId}
                     >
-                        {(deRegistionOption || []).map(
-                            (item, index) => (
-                                <div key={"register" + index}>
-                                    <Radio value={item.id}>{item.value}</Radio>
-                                    {this.checkDeRegistrationOption(
-                                        item,
-                                        saveData.reasonTypeRefId
-                                    )}
-                                </div>
-                            )
-                        )}
+                        {(deRegistionOption || []).map((item) => (
+                            <div key={'reasonType_' + item.id}>
+                                <Radio value={item.id}>{item.value}</Radio>
+                                {this.checkDeRegistrationOption(item, saveData.reasonTypeRefId)}
+                            </div>
+                        ))}
                     </Radio.Group>
                 </div>
             )
@@ -216,14 +211,12 @@ class DeRegistration extends Component {
                         }
                         value={saveData.deRegistrationOptionId}
                     >
-                        {(DeRegistionMainOption || []).map(
-                            (item, index) => (
-                                <div key={"register" + index}>
-                                    <Radio value={item.id}>{item.value}</Radio>
-                                    {this.checkMainRegistrationOption(item, saveData.deRegistrationOptionId)}
-                                </div>
-                            )
-                        )}
+                        {(DeRegistionMainOption || []).map((item) => (
+                            <div key={'deRegistrationOption_' + item.id}>
+                                <Radio value={item.id}>{item.value}</Radio>
+                                {this.checkMainRegistrationOption(item, saveData.deRegistrationOptionId)}
+                            </div>
+                        ))}
                     </Radio.Group>
                 </div>
             )
@@ -245,8 +238,8 @@ class DeRegistration extends Component {
                             value={saveData.transfer.organisationId}
                             placeholder="Organisation Name"
                         >
-                            {(transferOrganisations || []).map((org, cIndex) => (
-                                <Option key={org.organisationId} value={org.organisationId}>
+                            {(transferOrganisations || []).map((org) => (
+                                <Option key={'organisation_' + org.organisationId} value={org.organisationId}>
                                     {org.organisationName}
                                 </Option>
                             ))}
@@ -268,8 +261,8 @@ class DeRegistration extends Component {
                             value={saveData.transfer.competitionId}
                             placeholder="Competition Name"
                         >
-                            {(transferCompetitions || []).map((comp, cIndex) => (
-                                <Option key={comp.competitionId} value={comp.competitionId}>
+                            {(transferCompetitions || []).map((comp) => (
+                                <Option key={'competition_' + comp.competitionId} value={comp.competitionId}>
                                     {comp.competitionName}
                                 </Option>
                             ))}
@@ -288,14 +281,12 @@ class DeRegistration extends Component {
                         }
                         value={saveData.transfer.reasonTypeRefId}
                     >
-                        {(transferOption || []).map(
-                            (item, index) => (
-                                <div key={"transferOption" + index}>
-                                    <Radio value={item.id}>{item.value}</Radio>
-                                    {this.checkTransferOption(item, saveData.transfer.reasonTypeRefId)}
-                                </div>
-                            )
-                        )}
+                        {(transferOption || []).map((item) => (
+                            <div key={'reasonType_' + item.id}>
+                                <Radio value={item.id}>{item.value}</Radio>
+                                {this.checkTransferOption(item, saveData.transfer.reasonTypeRefId)}
+                            </div>
+                        ))}
                     </Radio.Group>
                 </div>
             )
@@ -391,21 +382,19 @@ class DeRegistration extends Component {
                         }
                         value={saveData.regChangeTypeRefId}
                     >
-                        {(registrationSelection || []).map(
-                            (item, index) => (
-                                <div key={"register" + index}>
-                                    <div className="contextualHelp-RowDirection">
-                                        <Radio value={item.id}>{item.value}</Radio>
-                                        <div style={{ marginLeft: -20 }}>
-                                            <Tooltip placement='bottom' background="#ff8237">
-                                                <span>{item.helpMsg}</span>
-                                            </Tooltip>
-                                        </div>
+                        {(registrationSelection || []).map((item) => (
+                            <div key={'regChangeType_' + item.id}>
+                                <div className="contextualHelp-RowDirection">
+                                    <Radio value={item.id}>{item.value}</Radio>
+                                    <div style={{ marginLeft: -20 }}>
+                                        <Tooltip placement='bottom' background="#ff8237">
+                                            <span>{item.helpMsg}</span>
+                                        </Tooltip>
                                     </div>
-                                    {this.checkRegistrationOption(item, saveData.regChangeTypeRefId)}
                                 </div>
-                            )
-                        )}
+                                {this.checkRegistrationOption(item, saveData.regChangeTypeRefId)}
+                            </div>
+                        ))}
                     </Radio.Group>
                 </div>
             </div>

@@ -329,11 +329,11 @@ class PaymentDashboard extends Component {
                         onChange={(year) => this.setState({ year })}
                         value={this.state.year}
                     >
-                        <Option value={"2020"}>{AppConstants.year2020}</Option>
-                        <Option value={"2019"}>{AppConstants.year2019}</Option>
-                        <Option value={"2018"}>{AppConstants.year2018}</Option>
-                        <Option value={"2017"}>{AppConstants.year2017}</Option>
-                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                        <Option value="2020">{AppConstants.year2020}</Option>
+                        <Option value="2019">{AppConstants.year2019}</Option>
+                        <Option value="2018">{AppConstants.year2018}</Option>
+                        <Option value="2017">{AppConstants.year2017}</Option>
+                        <Option value="2016">{AppConstants.year2016}</Option>
                     </Select>
                 </div>
                 <div className="col-sm">
@@ -346,11 +346,11 @@ class PaymentDashboard extends Component {
                         value={this.state.competition}
                     >
                         <Option value="all">{AppConstants.all}</Option>
-                        <Option value={"2020"}>{AppConstants.year2020}</Option>
-                        <Option value={"2019"}>{AppConstants.year2019}</Option>
-                        <Option value={"2018"}>{AppConstants.year2018}</Option>
-                        <Option value={"2017"}>{AppConstants.year2017}</Option>
-                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                        <Option value="2020">{AppConstants.year2020}</Option>
+                        <Option value="2019">{AppConstants.year2019}</Option>
+                        <Option value="2018">{AppConstants.year2018}</Option>
+                        <Option value="2017">{AppConstants.year2017}</Option>
+                        <Option value="2016">{AppConstants.year2016}</Option>
                     </Select>
                 </div>
                 <div className="col-sm">
@@ -362,11 +362,11 @@ class PaymentDashboard extends Component {
                         value={this.state.paymentFor}
                     >
                         <Option value="all">{AppConstants.all}</Option>
-                        <Option value={"2020"}>{AppConstants.year2020}</Option>
-                        <Option value={"2019"}>{AppConstants.year2019}</Option>
-                        <Option value={"2018"}>{AppConstants.year2018}</Option>
-                        <Option value={"2017"}>{AppConstants.year2017}</Option>
-                        <Option value={"2016"}>{AppConstants.year2016}</Option>
+                        <Option value="2020">{AppConstants.year2020}</Option>
+                        <Option value="2019">{AppConstants.year2019}</Option>
+                        <Option value="2018">{AppConstants.year2018}</Option>
+                        <Option value="2017">{AppConstants.year2017}</Option>
+                        <Option value="2016">{AppConstants.year2016}</Option>
                     </Select>
                 </div>
                 <div className="col-sm">

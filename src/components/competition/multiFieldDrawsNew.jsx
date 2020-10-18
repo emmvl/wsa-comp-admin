@@ -818,13 +818,11 @@ class MultifieldDrawsNew extends Component {
                                 onChange={(yearRefId) => this.onYearChange(yearRefId)}
                                 value={this.state.yearRefId}
                             >
-                                {this.props.appState.own_YearArr.map((item) => {
-                                    return (
-                                        <Option key={'yearRefId' + item.id} value={item.id}>
-                                            {item.description}
-                                        </Option>
-                                    );
-                                })}
+                                {this.props.appState.own_YearArr.map((item) => (
+                                    <Option key={'year_' + item.id} value={item.id}>
+                                        {item.description}
+                                    </Option>
+                                ))}
                             </Select>
                         </div>
 
@@ -838,11 +836,11 @@ class MultifieldDrawsNew extends Component {
                                 value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                             >
                                 {this.props.appState.own_CompetitionArr.length > 0 && (
-                                    <Option key={"-1"} value={"-1"}>{AppConstants.all}</Option>
+                                    <Option key="-1" value="-1">{AppConstants.all}</Option>
                                 )}
                                 {this.props.appState.own_CompetitionArr.map((item) => (
                                     <Option
-                                        key={item.statusRefId}
+                                        key={'competition_' + item.competitionId}
                                         value={item.competitionId}
                                     >
                                         {item.competitionName}
@@ -859,14 +857,11 @@ class MultifieldDrawsNew extends Component {
                                 onChange={(roundId) => this.onRoundsChange(roundId)}
                                 value={this.state.roundId}
                             >
-                                {this.props.drawsState.getDrawsRoundsData.length > 0 &&
-                                    this.props.drawsState.getDrawsRoundsData.map((item) => {
-                                        return (
-                                            <Option key={item.roundId} value={item.roundId}>
-                                                {item.name}
-                                            </Option>
-                                        );
-                                    })}
+                                {this.props.drawsState.getDrawsRoundsData.map((item) => (
+                                    <Option key={'round_' + item.roundId} value={item.roundId}>
+                                        {item.name}
+                                    </Option>
+                                ))}
                             </Select>
                         </div>
                         <div className="col-sm mt-2">
@@ -923,7 +918,7 @@ class MultifieldDrawsNew extends Component {
                     <div className="col-sm d-flex justify-content-start">
                         <span className="user-contact-heading">{AppConstants.venue}</span>
                     </div>
-                    <div className="col-sm d-flex justify-content-end " style={{ marginTop: 5 }}>
+                    <div className="col-sm d-flex justify-content-end" style={{ marginTop: 5 }}>
                         <a
                             className="view-more-btn"
                             data-toggle="collapse"
@@ -1335,54 +1330,50 @@ class MultifieldDrawsNew extends Component {
                     {this.props.drawsState.updateLoad ? (
                         <div className="draggable-wrap draw-data-table">
                             <Loader visible={this.props.drawsState.updateLoad} />
-                            {this.props.drawsState.getRoundsDrawsdata.length > 0 &&
-                                this.props.drawsState.getRoundsDrawsdata.map(
-                                    (dateItem, dateIndex) => (
-                                        <div>
-                                            {this.state.firstTimeCompId != "-1" && (
-                                                <div className="draws-round-view">
-                                                    <span className="draws-round">
-                                                        {dateItem.roundName}
-                                                    </span>
-                                                </div>
-                                            )}
-                                            <div key={"drawData" + dateIndex}>
-                                                {this.draggableView(dateItem)}
-                                            </div>
+
+                            {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
+                                <div>
+                                    {this.state.firstTimeCompId != "-1" && (
+                                        <div className="draws-round-view">
+                                            <span className="draws-round">
+                                                {dateItem.roundName}
+                                            </span>
                                         </div>
-                                    )
-                                )}
+                                    )}
+                                    <div key={"drawData" + dateIndex}>
+                                        {this.draggableView(dateItem)}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     ) : (
                         <div className="draggable-wrap draw-data-table">
                             <Loader visible={this.props.drawsState.updateLoad} />
-                            {this.props.drawsState.getRoundsDrawsdata.length > 0 &&
-                                this.props.drawsState.getRoundsDrawsdata.map(
-                                    (dateItem, dateIndex) => (
-                                        <div className="pt-4" key={"drawData" + dateIndex}>
-                                            {this.state.firstTimeCompId != "-1" &&
-                                                <div className="draws-round-view">
-                                                    <span className="draws-round">
-                                                        {dateItem.roundName}
-                                                    </span>
-                                                </div>
-                                            }
-                                            {this.draggableView(dateItem)}
-                                        </div>
 
-                                        /* {dateItem.legendsArray.length > 0 ?
-                                             <div className="pt-4" key={"drawData" + dateIndex}>
-                                                 {this.draggableView(dateItem)}
-                                             </div>
-                                             :
-                                             <div>
-                                                 <div className="comp-warning-info" style={{ paddingBottom: "40px" }}>
-                                                    {AppConstants.noFixturesMessage}
-                                                 </div>
-                                             </div>
-                                         } */
-                                    )
-                                )}
+                            {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
+                                <div className="pt-4" key={"drawData" + dateIndex}>
+                                    {this.state.firstTimeCompId != "-1" && (
+                                        <div className="draws-round-view">
+                                            <span className="draws-round">
+                                                {dateItem.roundName}
+                                            </span>
+                                        </div>
+                                    )}
+                                    {this.draggableView(dateItem)}
+                                </div>
+
+                                /* {dateItem.legendsArray.length > 0 ?
+                                     <div className="pt-4" key={"drawData" + dateIndex}>
+                                         {this.draggableView(dateItem)}
+                                     </div>
+                                     :
+                                     <div>
+                                         <div className="comp-warning-info" style={{ paddingBottom: "40px" }}>
+                                            {AppConstants.noFixturesMessage}
+                                         </div>
+                                     </div>
+                                 } */
+                            ))}
                         </div>
                     )}
                 </div>
@@ -1406,46 +1397,43 @@ class MultifieldDrawsNew extends Component {
                         <div className="tablehead-row">
                             <div className="sr-no empty-bx" />
 
-                            {dateItem.dateNewArray.length > 0 &&
-                                dateItem.dateNewArray.map((item, index) => {
-                                    if (index !== 0) {
-                                        dateMargin += 110;
-                                    }
-                                    if (index == 0) {
-                                        dateMargin = 70;
-                                    }
-                                    return (
-                                        <span key={"day" + index} style={{ left: dateMargin }}>
-                                            {item.notInDraw == false ? getDayName(item.date) : ''}
-                                        </span>
-                                    );
-                                })}
+                            {dateItem.dateNewArray.map((item, index) => {
+                                if (index !== 0) {
+                                    dateMargin += 110;
+                                }
+                                if (index == 0) {
+                                    dateMargin = 70;
+                                }
+                                return (
+                                    <span key={"day" + index} style={{ left: dateMargin }}>
+                                        {item.notInDraw == false ? getDayName(item.date) : ''}
+                                    </span>
+                                );
+                            })}
                         </div>
                         {/* Times list */}
                         <div className="tablehead-row">
                             <div className="sr-no empty-bx" />
 
-                            {dateItem.dateNewArray.length > 0 &&
-                                dateItem.dateNewArray.map((item, index) => {
-                                    if (index !== 0) {
-                                        dayMargin += 110;
-                                    }
-                                    if (index == 0) {
-                                        dayMargin = 70;
-                                    }
-                                    return (
-                                        <span key={"time" + index}
-                                            style={{
-                                                left: dayMargin,
-                                                fontSize: item.notInDraw !== false && 11,
-                                            }}
-                                        >
-                                            {item.notInDraw == false
-                                                ? getTime(item.date)
-                                                : 'Not in draw'}
-                                        </span>
-                                    );
-                                })}
+                            {dateItem.dateNewArray.map((item, index) => {
+                                if (index !== 0) {
+                                    dayMargin += 110;
+                                }
+                                if (index == 0) {
+                                    dayMargin = 70;
+                                }
+                                return (
+                                    <span
+                                        key={"time" + index}
+                                        style={{
+                                            left: dayMargin,
+                                            fontSize: item.notInDraw !== false && 11,
+                                        }}
+                                    >
+                                        {item.notInDraw == false ? getTime(item.date) : 'Not in draw'}
+                                    </span>
+                                );
+                            })}
                         </div>
                     </div>
                 </div>
@@ -1662,7 +1650,7 @@ class MultifieldDrawsNew extends Component {
 
     contentView = () => {
         return (
-            <div className='row'>
+            <div className="row">
                 <div className={this.state.filterEnable ? 'col-sm-3' : "col-sm-1"}>{this.sideMenuView()}</div>
                 <div className={this.state.filterEnable ? 'col-sm-9' : "col-sm"}>{this.containerView()}</div>
             </div>
@@ -1735,7 +1723,7 @@ class MultifieldDrawsNew extends Component {
             <div className="fluid-width paddingBottom56px">
                 <div className="row">
                     <div className="col-sm-3">
-                        <div className="reg-add-save-button"></div>
+                        <div className="reg-add-save-button" />
                     </div>
                     <div className="col-sm">
                         <div className="comp-buttons-view">
@@ -1818,10 +1806,10 @@ class MultifieldDrawsNew extends Component {
                     <Select
                         className="year-select reg-filter-select-competition ml-2"
                         onChange={(e) => this.setState({ generateRoundId: e })}
-                        placeholder={'Round'}
+                        placeholder="Round"
                     >
-                        {(activeDrawsRoundsData || []).map((d, dIndex) => (
-                            <Option key={d.roundId} value={d.roundId} >{d.name}</Option>
+                        {(activeDrawsRoundsData || []).map((d) => (
+                            <Option key={'round_' + d.roundId} value={d.roundId}>{d.name}</Option>
                         ))}
                     </Select>
                 </Modal>
@@ -1921,7 +1909,7 @@ class MultifieldDrawsNew extends Component {
                     menuName={AppConstants.competitions}
                 />
 
-                <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey={'18'} />
 
                 <Layout className="comp-dash-table-view">
                     {this.headerView()}

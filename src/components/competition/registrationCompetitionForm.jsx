@@ -155,11 +155,11 @@ class RegistrationCompetitionForm extends Component {
                                     style={{ width: "100%", minWidth: 120, }}
                                     onChange={genderRefId => this.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
                                     value={genderRefId}
-                                    placeholder={"Select"}
+                                    placeholder="Select"
                                     disabled={this.state.permissionState.divisionsDisable}
                                 >
                                     {this.props.commonReducerState.genderDataEnum.map(item => (
-                                        <Option key={item.id} value={item.id}>
+                                        <Option key={'gender_' + item.id} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -614,7 +614,7 @@ class RegistrationCompetitionForm extends Component {
                                 >
                                     <Select className="year-select reg-filter-select-year ml-2">
                                         {this.props.appState.yearList.map(item => (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
+                                            <Option key={'year_' + item.id} value={item.id}>
                                                 {item.description}
                                             </Option>
                                         ))}
@@ -720,9 +720,9 @@ class RegistrationCompetitionForm extends Component {
     ///// Add Non Playing dates
     addNonPlayingDate() {
         let nonPlayingObject = {
-            "competitionNonPlayingDatesId": 0,
-            "name": "",
-            "nonPlayingDate": ""
+            competitionNonPlayingDatesId: 0,
+            name: "",
+            nonPlayingDate: ""
         }
         this.props.add_editcompetitionFeeDeatils(nonPlayingObject, "nonPlayingObjectAdd")
     }
@@ -913,8 +913,8 @@ class RegistrationCompetitionForm extends Component {
                             onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
                             disabled={compDetailDisable}
                         >
-                            {appState.venueList.length > 0 && appState.venueList.map((item) => (
-                                <Option key={item.id} value={item.id}>{item.name}</Option>
+                            {appState.venueList.map((item) => (
+                                <Option key={'venue_' + item.id} value={item.id}>{item.name}</Option>
                             ))}
                         </Select>
                     </Form.Item>
@@ -947,8 +947,14 @@ class RegistrationCompetitionForm extends Component {
                         value={detailsData.competitionTypeRefId}
                         disabled={compDetailDisable}
                     >
-                        {appState.typesOfCompetition.length > 0 && appState.typesOfCompetition.map(item => (
-                            <Radio id={this.getRadioBtnIds(item.id, 'competitionType')} key={item.id} value={item.id}> {item.description}</Radio>
+                        {appState.typesOfCompetition.map(item => (
+                            <Radio
+                                id={this.getRadioBtnIds(item.id, 'competitionType')}
+                                key={'competitionType_' + item.id}
+                                value={item.id}
+                            >
+                                {item.description}
+                            </Radio>
                         ))}
                     </Radio.Group>
                 </Form.Item>
@@ -961,8 +967,14 @@ class RegistrationCompetitionForm extends Component {
                         value={detailsData.competitionFormatRefId}
                         disabled={compDetailDisable}
                     >
-                        {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => (
-                            <Radio id={this.getRadioBtnIds(item.id, 'competitionFormat')} key={item.id} value={item.id}> {item.description}</Radio>
+                        {appState.competitionFormatTypes.map(item => (
+                            <Radio
+                                id={this.getRadioBtnIds(item.id, 'competitionFormat')}
+                                key={'competitionFormatType_' + item.id}
+                                value={item.id}
+                            >
+                                {item.description}
+                            </Radio>
                         ))}
                     </Radio.Group>
                 </Form.Item>
@@ -1012,7 +1024,9 @@ class RegistrationCompetitionForm extends Component {
                                 disabled={compDetailDisable}
                             >
                                 {roundsArray.map(item => (
-                                    <Option key={item.noOfRounds} value={item.noOfRounds}>{item.noOfRounds}</Option>
+                                    <Option key={'round_' + item.noOfRounds} value={item.noOfRounds}>
+                                        {item.noOfRounds}
+                                    </Option>
                                 ))}
                             </Select>
                         </Form.Item>

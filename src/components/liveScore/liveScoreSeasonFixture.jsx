@@ -282,35 +282,37 @@ class LiveScoreSeasonFixture extends Component {
                 <div className="row">
                     <div className="col-sm-4">
                         <div className="com-year-select-heading-view">
-                            <span className='year-select-heading'>{AppConstants.competition}:</span>
+                            <span className="year-select-heading">{AppConstants.competition}:</span>
                             <Select
                                 className="year-select"
                                 style={{ minWidth: 160 }}
                                 onChange={(comp) => this.onChangeComp({ comp })}
                                 value={this.state.selectedComp}
                             >
-                                {competition.map((item) => {
-                                    return <Option value={item.id}>{item.longName}</Option>
-                                })}
+                                {competition.map((item) => (
+                                    <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
                     <div className="col-sm-2">
                         <div style={{
-                            width: "100%", display: "flex",
+                            width: "100%",
+                            display: "flex",
                             flexDirection: "row",
-                            alignItems: "center", marginRight: 50
+                            alignItems: "center",
+                            marginRight: 50
                         }}>
-                            <span className='year-select-heading'>{AppConstants.division}:</span>
+                            <span className="year-select-heading">{AppConstants.division}:</span>
                             <Select
                                 className="year-select"
                                 style={{ minWidth: 100 }}
                                 onChange={(division) => this.changeDivision({ division })}
                                 value={this.state.division}
                             >
-                                {division.map((item) => {
-                                    return <Option value={item.id}>{item.name}</Option>
-                                })}
+                                {division.map((item) => (
+                                    <Option key={'division_' + item.id} value={item.id}>{item.name}</Option>
+                                ))}
                             </Select>
                         </div>
                     </div>

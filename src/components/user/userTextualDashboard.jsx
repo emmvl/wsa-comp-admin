@@ -488,7 +488,7 @@ class UserTextualDashboard extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {this.props.appState.yearList.map(item => (
-                                        <Option key={"yearRefId" + item.id} value={item.id}>
+                                        <Option key={'year_' + item.id} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -506,10 +506,10 @@ class UserTextualDashboard extends Component {
                                     onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionUniqueKey")}
                                     value={this.state.competitionUniqueKey}
                                 >
-                                    <Option key={-1} value="-1">{AppConstants.all}</Option>
-                                    {(competitionList || []).map((item, cIndex) => (
+                                    <Option key="-1" value="-1">{AppConstants.all}</Option>
+                                    {(competitionList || []).map((item) => (
                                         <Option
-                                            key={"competition" + item.competitionUniqueKey + cIndex}
+                                            key={'competition_' + item.competitionUniqueKey}
                                             value={item.competitionUniqueKey}
                                         >
                                             {item.name}
@@ -528,8 +528,8 @@ class UserTextualDashboard extends Component {
                                     value={this.state.roleId}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(roles || []).map((org) => (
-                                        <Option key={org.id} value={org.id}>{org.description}</Option>
+                                    {(roles || []).map((role) => (
+                                        <Option key={'role_' + role.id} value={role.id}>{role.description}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -544,8 +544,8 @@ class UserTextualDashboard extends Component {
                                     value={this.state.genderRefId}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(genderData || []).map((g, index) => (
-                                        <Option key={g.id} value={g.id}>{g.description}</Option>
+                                    {(genderData || []).map((g) => (
+                                        <Option key={'gender_' + g.id} value={g.id}>{g.description}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -565,9 +565,9 @@ class UserTextualDashboard extends Component {
                                     value={this.state.linkedEntityId}
                                 >
                                     <Option key="-1" value="-1">{AppConstants.all}</Option>
-                                    {(organisations || []).map((g, index) => (
+                                    {(organisations || []).map((g) => (
                                         <Option
-                                            key={g.organisationUniqueKey}
+                                            key={'organisation_' + g.organisationUniqueKey}
                                             value={g.organisationUniqueKey}
                                         >
                                             {g.name}

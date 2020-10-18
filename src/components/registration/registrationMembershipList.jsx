@@ -260,20 +260,18 @@ class RegistrationMembershipList extends Component {
                     <div className="row">
                         <div className="col-sm-2">
                             <div className="com-year-select-heading-view pb-3">
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     className="year-select reg-filter-select-year ml-2"
                                     style={{ width: 90 }}
                                     value={this.state.yearRefId}
                                     onChange={(e) => this.yearChange(e)}
                                 >
-                                    {this.props.appState.yearList.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.yearList.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>

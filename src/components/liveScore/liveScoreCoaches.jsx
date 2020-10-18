@@ -41,7 +41,7 @@ function tableSort(key) {
     } else if (_this.state.sortBy === key && _this.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    _this.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    _this.setState({ sortBy, sortOrder });
     _this.props.liveScoreCoachListAction(17, 1, _this.state.competitionId, _this.state.searchText, _this.state.offset, sortBy, sortOrder);
 }
 
@@ -98,9 +98,9 @@ const columns = [
         key: "Linked Entity Name",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (linkedEntity, record) => (
+        render: (linkedEntity) => (
             <div>
-                {linkedEntity.length > 0 && linkedEntity.map((item, i) => (
+                {linkedEntity.map((item, i) => (
                     teamListData(item.entityId) ? (
                         <div key={`name${i}` + linkedEntity.entityId}>
                             <NavLink

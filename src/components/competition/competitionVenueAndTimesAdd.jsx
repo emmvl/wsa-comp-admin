@@ -533,8 +533,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                         value={venuData.stateRefId}
                         disabled
                     >
-                        {stateList.length > 0 && stateList.map((item) => (
-                            <Option key={item.id} value={item.id}>{item.name}</Option>
+                        {stateList.map((item) => (
+                            <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
                         ))}
                     </Select>
                 </Form.Item>
@@ -582,8 +582,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                                     placeholder="Select"
                                     optionFilterProp="children"
                                 >
-                                    {affiliateList.length > 0 && affiliateList.map((item, index) => (
-                                        <Option key={item.id} value={item.id}>{item.name}</Option>
+                                    {affiliateList.map((item) => (
+                                        <Option key={'affiliate_' + item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -613,8 +613,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                         value={item.dayRefId}
                         placeholder="Select Week Day"
                     >
-                        {daysList.length > 0 && daysList.map((item) => (
-                            <Option key={item.id} value={item.id}> {item.description}</Option>
+                        {daysList.map((item) => (
+                            <Option key={'day_' + item.id} value={item.id}>{item.description}</Option>
                         ))}
                     </Select>
                 </div>
@@ -716,8 +716,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                         value={item.dayRefId}
                         placeholder="Select Week Day"
                     >
-                        {daysList.length > 0 && daysList.map((item) => (
-                            <Option key={item.id} value={item.id}> {item.description}</Option>
+                        {daysList.map((item) => (
+                            <Option key={'day_' + item.id} value={item.id}>{item.description}</Option>
                         ))}
                     </Select>
                 </div>

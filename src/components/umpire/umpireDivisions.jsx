@@ -115,11 +115,10 @@ class UmpireDivisions extends Component {
                                     style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
-
                                 >
-                                    {competition.map((item, index) => {
-                                        return <Option key={"comp" + index} value={item.id}>{item.longName}</Option>
-                                    })}
+                                    {competition.map((item) => (
+                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -144,11 +143,9 @@ class UmpireDivisions extends Component {
                     // value={detailsData.competitionTypeRefId}
                     // disabled={compDetailDisable}
                 >
-                    {allocatePools.map((item, index) => {
-                        return (
-                            <Radio key={"pools" + index} value={item.id}>{item.name}</Radio>
-                        )
-                    })}
+                    {allocatePools.map((item) => (
+                        <Radio key={'allocatePool_' + item.id} value={item.id}>{item.name}</Radio>
+                    ))}
                 </Radio.Group>
 
                 <span className='text-heading-large pt-3 mb-0' >{AppConstants.umpirePools}</span>

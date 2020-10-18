@@ -469,7 +469,7 @@ class RegistrationChangeReview extends Component {
                                     value={regChangeReviewData ? regChangeReviewData.reasonTypeRefId : null}
                                 >
                                     {isArrayNotEmpty(deRegistionOption) && deRegistionOption.map((item) => (
-                                        <Radio key={item.id} value={item.id}>{item.value}</Radio>
+                                        <Radio key={'deRegistionOption_' + item.id} value={item.id}>{item.value}</Radio>
                                     ))}
                                     {(regChangeReviewData.reasonTypeRefId == 5) && (
                                         <div>
@@ -511,7 +511,7 @@ class RegistrationChangeReview extends Component {
                                     value={regChangeReviewData ? regChangeReviewData.reasonTypeRefId : null}
                                 >
                                     {isArrayNotEmpty(transferOption) && transferOption.map((item) => (
-                                        <Radio key={item.id} value={item.id}>{item.value}</Radio>
+                                        <Radio key={'transferOption_' + item.id} value={item.id}>{item.value}</Radio>
                                     ))}
                                     {(regChangeReviewData.reasonTypeRefId == 3) && (
                                         <div>

@@ -408,19 +408,17 @@ class CompetitionDrawEditOld extends Component {
                         <div className="reg-filter-col-cont">
                             <span className="year-select-heading">{AppConstants.draws}:</span>
                             <Select
-                                name={'yearRefId'}
+                                name="yearRefId"
                                 className="year-select reg-filter-select1 ml-2"
                                 style={{ maxWidth: 160 }}
                                 onChange={yearRefId => this.onYearChange(yearRefId)}
                                 value={this.state.yearRefId}
                             >
-                                {this.props.appState.own_YearArr.length > 0 && this.props.appState.own_YearArr.map(item => {
-                                    return (
-                                        <Option key={'yearRefId' + item.id} value={item.id}>
-                                            {item.description}
-                                        </Option>
-                                    );
-                                })}
+                                {this.props.appState.own_YearArr.map(item => (
+                                    <Option key={'year_' + item.id} value={item.id}>
+                                        {item.description}
+                                    </Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
@@ -440,7 +438,7 @@ class CompetitionDrawEditOld extends Component {
                                 {AppConstants.competition}:
                             </span>
                             <Select
-                                name={'competition'}
+                                name="competition"
                                 className="year-select reg-filter-select1 ml-2"
                                 style={{ maxWidth: 250 }}
                                 onChange={competitionId =>
@@ -448,16 +446,11 @@ class CompetitionDrawEditOld extends Component {
                                 }
                                 value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                             >
-                                {this.props.appState.own_CompetitionArr.map(item => {
-                                    return (
-                                        <Option
-                                            key={'competition' + item.competitionId}
-                                            value={item.competitionId}
-                                        >
-                                            {item.competitionName}
-                                        </Option>
-                                    );
-                                })}
+                                {this.props.appState.own_CompetitionArr.map(item => (
+                                    <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                        {item.competitionName}
+                                    </Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
@@ -477,23 +470,21 @@ class CompetitionDrawEditOld extends Component {
                         </span>
                         <Select
                             style={{ minWidth: 160 }}
-                            name={'competition'}
+                            name="competition"
                             className="year-select"
                             onChange={competitionDivisionGradeId =>
                                 this.onDivisionGradeNameChange(competitionDivisionGradeId)
                             }
                             value={JSON.parse(JSON.stringify(this.state.competitionDivisionGradeId))}
                         >
-                            {this.props.drawsState.divisionGradeNameList.map(item => {
-                                return (
-                                    <Option
-                                        key={'divisionGradeNameList' + item.competitionDivisionGradeId}
-                                        value={item.competitionDivisionGradeId}
-                                    >
-                                        {item.name}
-                                    </Option>
-                                );
-                            })}
+                            {this.props.drawsState.divisionGradeNameList.map(item => (
+                                <Option
+                                    key={'compDivGrade_' + item.competitionDivisionGradeId}
+                                    value={item.competitionDivisionGradeId}
+                                >
+                                    {item.name}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
                 </div>
@@ -559,14 +550,11 @@ class CompetitionDrawEditOld extends Component {
                                         onChange={venueId => this.onVenueChange(venueId)}
                                         value={JSON.parse(JSON.stringify(this.state.venueId))}
                                     >
-                                        {this.props.drawsState.competitionVenues.length > 0 &&
-                                            this.props.drawsState.competitionVenues.map(item => {
-                                                return (
-                                                    <Option key={item.id} value={item.id}>
-                                                        {item.name}
-                                                    </Option>
-                                                );
-                                            })}
+                                        {this.props.drawsState.competitionVenues.map(item => (
+                                            <Option key={'competitionVenue_' + item.id} value={item.id}>
+                                                {item.name}
+                                            </Option>
+                                        ))}
                                     </Select>
                                 </div>
                             </div>
@@ -588,20 +576,17 @@ class CompetitionDrawEditOld extends Component {
                                         onChange={roundId => this.onRoundsChange(roundId)}
                                         value={this.state.roundId}
                                     >
-                                        {this.props.drawsState.getDrawsRoundsData.length > 0 &&
-                                            this.props.drawsState.getDrawsRoundsData.map(item => {
-                                                return (
-                                                    <Option key={item.roundId} value={item.roundId}>
-                                                        {item.name}
-                                                    </Option>
-                                                );
-                                            })}
+                                        {this.props.drawsState.getDrawsRoundsData.map(item => (
+                                            <Option key={'drawsRound_' + item.roundId} value={item.roundId}>
+                                                {item.name}
+                                            </Option>
+                                        ))}
                                     </Select>
-                                    {this.state.roundTime !== null &&
+                                    {this.state.roundTime !== null && (
                                         <span className="year-select-heading pb-1">
-                                            {"Starting"} {"  "}{moment(this.state.roundTime).format("ddd DD/MM")}
+                                            {`Starting ${moment(this.state.roundTime).format("ddd DD/MM")}`}
                                         </span>
-                                    }
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -639,7 +624,7 @@ class CompetitionDrawEditOld extends Component {
                     <div className="table-head-wrap">
                         {/* Day name list */}
                         <div className="tablehead-row">
-                            <div className="sr-no empty-bx"></div>
+                            <div className="sr-no empty-bx" />
                             {this.props.drawsState.dateArray.map((item, index) => {
                                 if (index !== 0) {
                                     dateMargin += 110;
@@ -656,7 +641,7 @@ class CompetitionDrawEditOld extends Component {
                         </div>
                         {/* Times list */}
                         <div className="tablehead-row">
-                            <div className="sr-no empty-bx"></div>
+                            <div className="sr-no empty-bx" />
                             {this.props.drawsState.dateArray.map((item, index) => {
                                 if (index !== 0) {
                                     dayMargin += 110;
@@ -846,7 +831,7 @@ class CompetitionDrawEditOld extends Component {
                     menuHeading={AppConstants.competitions}
                     menuName={AppConstants.competitions}
                 />
-                <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey={'18'} />
                 {/* <Layout className="container"> */}
                 <Layout className="comp-dash-table-view">
                     {/* <Form

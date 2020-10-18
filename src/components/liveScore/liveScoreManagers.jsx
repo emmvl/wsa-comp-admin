@@ -30,7 +30,7 @@ function tableSort(key) {
     } else if (_this.state.sortBy === key && _this.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    _this.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    _this.setState({ sortBy, sortOrder });
     _this.props.liveScoreManagerListAction(3, 1, _this.state.competitionId, _this.state.searchText, _this.state.offset, sortBy, sortOrder);
 }
 
@@ -98,9 +98,9 @@ const columns = [
         key: 'Linked Entity',
         sorter: true,
         onHeaderCell: () => listeners('linkedEntity.name'),
-        render: (linkedEntity, record) => (
+        render: (linkedEntity) => (
             <div>
-                {linkedEntity.length > 0 && linkedEntity.map((item, i) => (
+                {linkedEntity.map((item, i) => (
                     teamListData(item.entityId) ? (
                         <div key={`managerName${i}` + item.entityId}>
                             <NavLink
@@ -130,13 +130,13 @@ const columns = [
         key: 'Linked Entity Parent Name',
         sorter: true,
         onHeaderCell: () => listeners('linkedEntity.parentName'),
-        render: (linkedEntity, record) => (
+        render: (linkedEntity) => (
             <div>
-                {linkedEntity.length > 0 && linkedEntity.map((item, i) => (
+                {linkedEntity.map((item, i) => (
                     // teamListData(item.entityId) ?
                     //     <NavLink to={{
-                    //         // pathname: '/userPersonal',
-                    //         // state: { userId: record.id, screenKey: "livescore" }
+                    //         pathname: '/userPersonal',
+                    //         state: { userId: record.id, screenKey: "livescore" }
                     //     }}>
                     //         <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data">{item.parentName}</span>
                     //     </NavLink>
@@ -161,7 +161,7 @@ const columns = [
                         <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                     }
                 >
-                    <Menu.Item key={'1'}>
+                    <Menu.Item key="1">
                         <NavLink
                             to={{
                                 pathname: '/liveScoreAddManagers',

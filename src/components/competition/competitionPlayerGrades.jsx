@@ -274,10 +274,10 @@ class CompetitionPlayerGrades extends Component {
     addNewTeam = () => {
         this.setState({ visible: true })
     }
+
     // model ok button
     handleOk = e => {
-        {
-            this.state.newTeam.length > 0 &&
+        if (this.state.newTeam.length > 0) {
             this.props.addNewTeamAction(this.state.firstTimeCompId, this.state.divisionId, this.state.newTeam)
         }
         this.setState({
@@ -287,7 +287,7 @@ class CompetitionPlayerGrades extends Component {
         });
     };
 
-    // model cancel for dissapear a model
+    // model cancel for disappear a model
     handleCancel = e => {
         this.setState({
             visible: false,
@@ -424,7 +424,7 @@ class CompetitionPlayerGrades extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div className="com-year-select-heading-view pb-3" >
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     id={AppUniqueId.PlayerGradingYear_dpdn}
                                     name="yearRefId"
@@ -433,23 +433,22 @@ class CompetitionPlayerGrades extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {this.props.appState.own_YearArr.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.own_YearArr.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" >
+                        <div className="col-sm pb-3">
                             <div style={{
-                                width: "fit-content", display: "flex",
+                                width: "fit-content",
+                                display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
                             }}>
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     id={AppUniqueId.PlayerGradingCompetition_dpdn}
                                     name="competition"
@@ -457,24 +456,23 @@ class CompetitionPlayerGrades extends Component {
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {this.props.appState.own_CompetitionArr.map(item => {
-                                        return (
-                                            <Option key={item.statusRefId} value={item.competitionId}>
-                                                {item.competitionName}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.own_CompetitionArr.map(item => (
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
                         <div className="row">
                             <div className="col-sm pb-3" >
                                 <div className="col-sm" style={{
-                                    width: "100%", display: "flex",
+                                    width: "100%",
+                                    display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center"
                                 }}>
-                                    <span className='year-select-heading'>{AppConstants.division}:</span>
+                                    <span className="year-select-heading">{AppConstants.division}:</span>
                                     <Select
                                         id={AppUniqueId.PlayerGradingDivisionName_dpdn}
                                         disabled={this.state.competitionStatus == 1}
@@ -483,14 +481,14 @@ class CompetitionPlayerGrades extends Component {
                                         onChange={(divisionId) => this.onDivisionChange(divisionId)}
                                         value={JSON.parse(JSON.stringify(this.state.divisionId))}
                                     >
-                                        {this.props.registrationState.allDivisionsData.map(item => {
-                                            return (
-                                                <Option key={"division" + item.competitionMembershipProductDivisionId}
-                                                    value={item.competitionMembershipProductDivisionId}>
-                                                    {item.divisionName}
-                                                </Option>
-                                            )
-                                        })}
+                                        {this.props.registrationState.allDivisionsData.map(item => (
+                                            <Option
+                                                key={'compMemProdDiv_' + item.competitionMembershipProductDivisionId}
+                                                value={item.competitionMembershipProductDivisionId}
+                                            >
+                                                {item.divisionName}
+                                            </Option>
+                                        ))}
                                     </Select>
                                 </div>
                             </div>
@@ -621,7 +619,7 @@ class CompetitionPlayerGrades extends Component {
                                                 <span className="player-grading-haeding-player-count-text ml-2">
                                                     {teamItem.players.length > 1 ? teamItem.players.length + " Players" : teamItem.players.length + " Player"} </span>
                                             </div>
-                                            <div className="col-sm d-flex justify-content-end ">
+                                            <div className="col-sm d-flex justify-content-end">
                                                 {(teamItem.gradeRefId == null || teamItem.gradeRefId == 0) ?
                                                     <img
                                                         className="comp-player-table-img team-delete-link"
@@ -632,113 +630,100 @@ class CompetitionPlayerGrades extends Component {
                                                     />
                                                     : null}
                                                 <a className="view-more-btn collapsed" data-toggle="collapse" href={`#${teamIndex}`} role="button" aria-expanded="false" aria-controls={teamIndex}>
-                                                    <i className="fa fa-angle-down" style={{ color: "#ff8237", }} aria-hidden="true" ></i>
+                                                    <i className="fa fa-angle-down" style={{ color: "#ff8237", }} aria-hidden="true" />
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="collapse" id={teamIndex}>
-                                        {teamItem.players.length > 0 && teamItem.players.map((playerItem, playerIndex) => {
-
-                                            return (
-                                                <Draggable
-                                                    isDragDisabled={disableStatus}
-                                                    key={JSON.stringify(playerItem.playerId)}
-                                                    draggableId={JSON.stringify(playerItem.playerId)}
-                                                    index={playerIndex}>
-                                                    {(provided, snapshot) => (
-                                                        <div
-                                                            ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                            className="player-grading-draggable-view"
-                                                        >
-                                                            <div className="row">
-                                                                <Checkbox
-                                                                    disabled={disableStatus}
-                                                                    checked={playerItem.isChecked}
-                                                                    className="single-checkbox mt-1 check-box-player"
-                                                                    onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")}>
-                                                                </Checkbox>
-                                                                <div className="col-sm d-flex align-items-center">
-
-                                                                    {disableStatus == false ?
-                                                                        <NavLink to={{
-                                                                            pathname: `/userPersonal`,
-                                                                            state: { userId: playerItem.userId, screenKey: 'competitionPlayerGrades', screen: "/competitionPlayerGrades" }
-                                                                        }}
-                                                                        >
-                                                                            <span style={{ cursor: "pointer" }}
-                                                                                className="player-grading-player-name-text">{playerItem.playerName}</span>
-                                                                        </NavLink>
-                                                                        :
+                                        {teamItem.players.map((playerItem, playerIndex) => (
+                                            <Draggable
+                                                isDragDisabled={disableStatus}
+                                                key={JSON.stringify(playerItem.playerId)}
+                                                draggableId={JSON.stringify(playerItem.playerId)}
+                                                index={playerIndex}
+                                            >
+                                                {(provided, snapshot) => (
+                                                    <div
+                                                        ref={provided.innerRef}
+                                                        {...provided.draggableProps}
+                                                        {...provided.dragHandleProps}
+                                                        className="player-grading-draggable-view"
+                                                    >
+                                                        <div className="row">
+                                                            <Checkbox
+                                                                disabled={disableStatus}
+                                                                checked={playerItem.isChecked}
+                                                                className="single-checkbox mt-1 check-box-player"
+                                                                onChange={e => this.onChangeChildDivCheckbox(e.target.checked, teamIndex, playerIndex, "assigned")}>
+                                                            </Checkbox>
+                                                            <div className="col-sm d-flex align-items-center">
+                                                                {disableStatus == false ?
+                                                                    <NavLink to={{
+                                                                        pathname: `/userPersonal`,
+                                                                        state: { userId: playerItem.userId, screenKey: 'competitionPlayerGrades', screen: "/competitionPlayerGrades" }
+                                                                    }}
+                                                                    >
                                                                         <span style={{ cursor: "pointer" }}
                                                                             className="player-grading-player-name-text">{playerItem.playerName}</span>
-                                                                    }
-                                                                </div>
-                                                                <div
-                                                                    className="col-sm d-flex justify-content-end "
-                                                                    style={{ flexFlow: 'wrap' }}>
-                                                                    {/* <div className="col-sm">
-                                                                        {playerItem.playerHistory.map((item, index) => {
-
-                                                                            return (
+                                                                    </NavLink>
+                                                                    :
+                                                                    <span style={{ cursor: "pointer" }}
+                                                                        className="player-grading-player-name-text">{playerItem.playerName}</span>
+                                                                }
+                                                            </div>
+                                                            <div
+                                                                className="col-sm d-flex justify-content-end"
+                                                                style={{ flexFlow: 'wrap' }}>
+                                                                {/* <div className="col-sm">
+                                                                    {playerItem.playerHistory.map((item, index) => (
+                                                                        <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
+                                                                            {item.divisionGrade + '('+ item.ladderResult + ')'}
+                                                                        </Tag>
+                                                                    ))}
+                                                                </div> */}
+                                                                <div className="d-flex">
+                                                                    {playerItem.position1 && (
+                                                                        <Tag className="comp-player-table-tag" style={{ background: playerItem.position1Color, color: "#ffffff" }} key={playerItem.position1}>
+                                                                            {playerItem.position1}
+                                                                        </Tag>
+                                                                    )}
+                                                                    {playerItem.position2 && (
+                                                                        <Tag className="comp-player-table-tag" style={{ background: playerItem.position2Color, color: "#ffffff" }} key={playerItem.position2}>
+                                                                            {playerItem.position2}
+                                                                        </Tag>
+                                                                    )}
+                                                                    <div className="col-sm d-flex">
+                                                                        {playerItem.playerHistory.map((item, index) => (
+                                                                            item.divisionGrade != null && item.divisionGrade != "" && (
                                                                                 <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                                    {item.divisionGrade + '('+ item.ladderResult + ')'}
+                                                                                    {item.divisionGrade + '(' + item.ladderResult + ')'}
                                                                                 </Tag>
-
                                                                             )
-                                                                        })}
-                                                                    </div> */}
-                                                                    <div className="d-flex">
-                                                                        {playerItem.position1 &&
-                                                                            <Tag className="comp-player-table-tag" style={{ background: playerItem.position1Color, color: "#ffffff" }} key={playerItem.position1}>
-                                                                                {playerItem.position1}
-                                                                            </Tag>
-                                                                        }
-                                                                        {playerItem.position2 &&
-                                                                            <Tag className="comp-player-table-tag" style={{ background: playerItem.position2Color, color: "#ffffff" }} key={playerItem.position2}>
-                                                                                {playerItem.position2}
-                                                                            </Tag>
-                                                                        }
-                                                                        <div className="col-sm d-flex">
-                                                                            {playerItem.playerHistory.map((item, index) => {
-                                                                                return (
-                                                                                    item.divisionGrade != null && item.divisionGrade != "" ?
-                                                                                        <Tag className="comp-player-table-tag" key={item.divisionGrade + index}>
-                                                                                            {item.divisionGrade + '(' + item.ladderResult + ')'}
-                                                                                        </Tag>
-                                                                                        : null
-                                                                                )
-                                                                            })}
-                                                                        </div>
-                                                                        <img
-                                                                            aria-disabled={"true"}
-                                                                            className="comp-player-table-img"
-                                                                            src={playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty}
-                                                                            alt=""
-                                                                            height="20"
-                                                                            width="20"
-                                                                            style={{ cursor: "pointer" }}
-                                                                            onClick={() => disableStatus == false && this.onClickComment(playerItem, teamIndex)}
-                                                                        />
-                                                                        {/* </div> */}
+                                                                        ))}
                                                                     </div>
+                                                                    <img
+                                                                        aria-disabled="true"
+                                                                        className="comp-player-table-img"
+                                                                        src={playerItem.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty}
+                                                                        alt=""
+                                                                        height="20"
+                                                                        width="20"
+                                                                        style={{ cursor: "pointer" }}
+                                                                        onClick={() => disableStatus == false && this.onClickComment(playerItem, teamIndex)}
+                                                                    />
+                                                                    {/* </div> */}
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    )}
-
-                                                </Draggable>
-
-
-                                            )
-                                        })}
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        ))}
                                     </div>
                                     {provided.placeholder}
                                 </div>
-                            )
-                            }
+                            )}
                         </Droppable>
                     ))
                 }
@@ -779,10 +764,8 @@ class CompetitionPlayerGrades extends Component {
 
     ///modal ok for hitting Api and close modal
     handleModalOk = e => {
-
         this.props.clearReducerCompPartPlayerGradingAction("commentList")
-        {
-            this.state.comment.length > 0 &&
+        if (this.state.comment.length > 0) {
             this.props.playerGradingComment(this.state.firstTimeCompId, this.state.divisionId, this.state.comment, this.state.playerId, this.state.teamID)
         }
         this.setState({
@@ -792,7 +775,8 @@ class CompetitionPlayerGrades extends Component {
             teamID: null,
         });
     };
-    // model cancel for dissapear a model
+
+    // model cancel for disappear a model
     handleModalCancel = e => {
         this.props.clearReducerCompPartPlayerGradingAction("commentList")
         this.setState({
@@ -835,7 +819,7 @@ class CompetitionPlayerGrades extends Component {
         let disableStatus = this.state.competitionStatus == 1
         return (
             <div>
-                <Droppable isDropDisabled={disableStatus} droppableId={'0'}>
+                <Droppable isDropDisabled={disableStatus} droppableId="0">
                     {(provided, snapshot) => (
                         <div
                             ref={provided.innerRef}
@@ -869,7 +853,8 @@ class CompetitionPlayerGrades extends Component {
                                     isDragDisabled={disableStatus}
                                     key={JSON.stringify(playerItem.playerId)}
                                     draggableId={JSON.stringify(playerItem.playerId)}
-                                    index={playerIndex}>
+                                    index={playerIndex}
+                                >
                                     {(provided, snapshot) => (
                                         <div
                                             ref={provided.innerRef}
@@ -901,7 +886,7 @@ class CompetitionPlayerGrades extends Component {
                                                     }
                                                 </div>
                                                 <div
-                                                    className="col-sm d-flex justify-content-end "
+                                                    className="col-sm d-flex justify-content-end"
                                                     style={{ flexFlow: 'wrap' }}>
                                                     {/* <div className="col-sm">
                                                         {playerItem.playerHistory.map((item, index) => {
@@ -997,22 +982,24 @@ class CompetitionPlayerGrades extends Component {
                     title={AppConstants.changeDivision}
                     visible={this.state.changeDivisionModalVisible}
                     onOk={() => this.changePlayerDivision("ok")}
-                    onCancel={() => this.changePlayerDivision("cancel")}>
+                    onCancel={() => this.changePlayerDivision("cancel")}
+                >
                     <div className="change-division-modal">
-                        <div className='year-select-heading'>{AppConstants.division}</div>
+                        <div className="year-select-heading">{AppConstants.division}</div>
                         <Select
                             style={{ minWidth: 120 }}
                             className="year-select change-division-select"
                             onChange={(divisionId) => this.setState({ competitionDivisionId: divisionId })}
-                            value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
-                            {divisionData.map(item => {
-                                return (
-                                    <Option key={"division" + item.competitionMembershipProductDivisionId}
-                                        value={item.competitionMembershipProductDivisionId}>
-                                        {item.divisionName}
-                                    </Option>
-                                )
-                            })}
+                            value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}
+                        >
+                            {divisionData.map(item => (
+                                <Option
+                                    key={'compMemProdDiv_' + item.competitionMembershipProductDivisionId}
+                                    value={item.competitionMembershipProductDivisionId}
+                                >
+                                    {item.divisionName}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
 

@@ -356,16 +356,12 @@ class AffiliateDirectory extends Component {
                   }
                   value={this.state.yearRefId}
                 >
-                  <Option key={-1} value={-1}>
-                    {AppConstants.all}
-                  </Option>
-                  {this.props.appState.yearList.map((item) => {
-                    return (
-                      <Option key={"yearRefId" + item.id} value={item.id}>
-                        {item.description}
-                      </Option>
-                    );
-                  })}
+                  <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                  {this.props.appState.yearList.map((item) => (
+                    <Option key={'year_' + item.id} value={item.id}>
+                      {item.description}
+                    </Option>
+                  ))}
                 </Select>
               </div>
             </div>
@@ -375,7 +371,7 @@ class AffiliateDirectory extends Component {
                   {AppConstants.organisationType}
                 </div>
                 <Select
-                  name={"organisationTypeRefId"}
+                  name="organisationTypeRefId"
                   className="year-select user-filter-select"
                   onChange={(e) =>
                     this.onChangeDropDownValue(e, "organisationTypeRefId")
@@ -385,8 +381,8 @@ class AffiliateDirectory extends Component {
                   <Option key={-1} value={-1}>
                     {AppConstants.all}
                   </Option>
-                  {(organisationTypes || []).map((org, index) => (
-                    <Option key={org.id} value={org.id}>
+                  {(organisationTypes || []).map((org) => (
+                    <Option key={'organisationType_' + org.id} value={org.id}>
                       {org.name}
                     </Option>
                   ))}

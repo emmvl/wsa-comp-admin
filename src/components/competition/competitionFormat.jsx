@@ -123,7 +123,7 @@ class CompetitionFormat extends Component {
                     if (!competitionFormatState.error) {
                         if (this.state.buttonClicked === "save") {
                             message.success(AppConstants.successMessage);
-                        } else if (this.state.buttonClicked == "next") {
+                        } else if (this.state.buttonClicked === "next") {
                             if (this.state.isFinalAvailable) {
                                 history.push('/competitionFinals');
                             }
@@ -546,8 +546,8 @@ class CompetitionFormat extends Component {
         if (this.state.competitionStatus == 1) {
         } else {
             let nonPlayingObject = {
-                "competitionNonPlayingDatesId": 0,
-                "name": "",
+                competitionNonPlayingDatesId: 0,
+                name: "",
                 "nonPlayingDate": ""
             }
             // this.props.add_editcompetitionFeeDeatils(nonPlayingObject, "nonPlayingObjectAdd")
@@ -622,8 +622,8 @@ class CompetitionFormat extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {own_YearArr.length > 0 && own_YearArr.map(item => (
-                                        <Option key={"yearRefId" + item.id} value={item.id}>
+                                    {own_YearArr.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -646,8 +646,8 @@ class CompetitionFormat extends Component {
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => (
-                                        <Option key={item.statusRefId} value={item.competitionId}>
+                                    {own_CompetitionArr.map(item => (
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
                                             {item.competitionName}
                                         </Option>
                                     ))}
@@ -693,7 +693,9 @@ class CompetitionFormat extends Component {
                                 <div className="row">
                                     {(appState.competitionFormatTypes || []).map(item => (
                                         <div className="col-sm">
-                                            <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                                            <Radio key={'competitionFormatType_' + item.id} value={item.id}>
+                                                {item.description}
+                                            </Radio>
                                         </div>
                                     ))}
                                 </div>
@@ -710,9 +712,9 @@ class CompetitionFormat extends Component {
                     onChange={(fixTemplate) => this.onChangeSetValue(fixTemplate, 'fixtureTemplateId')}
                     value={data.fixtureTemplateId}
                 >
-                    <Option style={{height: '30px'}} value={null} key={null}>{}</Option>
-                    {(data.fixtureTemplates || []).map((fixture, fixIndex) => (
-                        <Option value={fixture.id} key={fixture.id}>{fixture.name}</Option>
+                    <Option style={{ height: 30 }} value={null} key={null}>{}</Option>
+                    {(data.fixtureTemplates || []).map((fixture) => (
+                        <Option key={'fixtureTemplate_' + fixture.id} value={fixture.id}>{fixture.name}</Option>
                     ))}
                 </Select> */}
 
@@ -728,12 +730,15 @@ class CompetitionFormat extends Component {
                         onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
                         value={data.matchTypeRefId}
                     >
-                        {(appState.matchTypes || []).map((item, index) => {
+                        {(appState.matchTypes || []).map((item) => {
                             if (item.name !== "SINGLE") {
                                 return (
-                                  <Option key={item.id} value={item.id}>{item.description}</Option>
+                                    <Option key={'matchType_' + item.id} value={item.id}>
+                                        {item.description}
+                                    </Option>
                                 );
                             }
+                            return <></>;
                         })}
                     </Select>
                 </Form.Item>
@@ -747,8 +752,10 @@ class CompetitionFormat extends Component {
                             value={data.noOfRounds}
                         >
                             <Option style={{ height: '30px' }} value={null} key={null}>{}</Option>
-                            {(data.fixtureTemplates || []).map((fixture, fixIndex) => (
-                                <Option value={fixture.noOfRounds} key={fixture.noOfRounds}>{fixture.noOfRounds}</Option>
+                            {(data.fixtureTemplates || []).map((fixture) => (
+                                <Option value={fixture.noOfRounds} key={'fixtureTemplate_' + fixture.noOfRounds}>
+                                    {fixture.noOfRounds}
+                                </Option>
                             ))}
                         </Select>
                         <InputWithHead heading={AppConstants.enhancedRoundRobinType} />
@@ -758,8 +765,8 @@ class CompetitionFormat extends Component {
                             onChange={(x) => this.onChangeSetValue(x, 'enhancedRoundRobinTypeRefId')}
                             value={data.enhancedRoundRobinTypeRefId}
                         >
-                            {(appState.enhancedRoundRobinTypes || []).map((round, roundIndex) => (
-                                <Option value={round.id} key={round.id}>{round.description}</Option>
+                            {(appState.enhancedRoundRobinTypes || []).map((round) => (
+                                <Option value={round.id} key={'round_' + round.id}>{round.description}</Option>
                             ))}
                         </Select>
                     </div>
@@ -775,16 +782,16 @@ class CompetitionFormat extends Component {
                 >
                     <div className="fluid-width">
                         <div className="row">
-                            {(appState.typesOfCompetition || []).map((item, index) => (
+                            {(appState.typesOfCompetition || []).map((item) => (
                                 <div className="col-sm">
-                                    <Radio key={item.id} value={item.id}>{item.description}</Radio>
+                                    <Radio key={'competitionType_' + item.id} value={item.id}>{item.description}</Radio>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </Radio.Group>
 
-                <InputWithHead heading={AppConstants.timeBetweenRounds}></InputWithHead>
+                <InputWithHead heading={AppConstants.timeBetweenRounds} />
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm" style={{ marginTop: 5 }}>
@@ -875,10 +882,11 @@ class CompetitionFormat extends Component {
                                                 mode="multiple"
                                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                                 onChange={(e) => this.onChange(e, data.competionFormatDivisions, index)}
-                                                value={item.selectedDivisions}>
-                                                {(item.divisions || []).map((division, divIndex) => (
+                                                value={item.selectedDivisions}
+                                            >
+                                                {(item.divisions || []).map((division) => (
                                                     <Option
-                                                        key={division.competitionMembershipProductDivisionId + divIndex}
+                                                        key={'compMemProdDiv_' + division.competitionMembershipProductDivisionId}
                                                         disabled={division.isDisabled}
                                                         value={division.competitionMembershipProductDivisionId}
                                                     >
@@ -1173,7 +1181,7 @@ class CompetitionFormat extends Component {
                         placeholder="Round"
                     >
                         {(activeDrawsRoundsData || []).map((d) => (
-                            <Option key={d.roundId} value={d.roundId}>{d.name}</Option>
+                            <Option key={'round_' + d.roundId} value={d.roundId}>{d.name}</Option>
                         ))}
                     </Select>
                 </Modal>

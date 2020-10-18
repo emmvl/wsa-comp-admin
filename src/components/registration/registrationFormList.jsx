@@ -215,7 +215,7 @@ class RegistrationFormList extends Component {
                     <div className="row">
                         <div className="col-sm-2">
                             <div className="com-year-select-heading-view">
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     name="yearRefId"
                                     className="year-select reg-filter-select-year ml-2"
@@ -223,13 +223,11 @@ class RegistrationFormList extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {this.props.appState.yearList.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.yearList.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>

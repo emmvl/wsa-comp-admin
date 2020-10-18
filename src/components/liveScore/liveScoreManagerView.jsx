@@ -96,7 +96,7 @@ class LiveScoreManagerView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.group} height="16" width="16" alt="" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.emailAddress}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.emailAddress}</span>
                         </div>
                         <span className="desc-text-style side-bar-profile-data">{data.email}</span>
                     </div>
@@ -106,7 +106,7 @@ class LiveScoreManagerView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.callAnswer} alt="" height="16" width="16" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.contactNumber}</span>
                         </div>
                         <span className="desc-text-style side-bar-profile-data">{data.mobileNumber}</span>
                     </div>
@@ -116,10 +116,10 @@ class LiveScoreManagerView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.group} height="16" width="16" alt="" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.team}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.team}</span>
                         </div>
 
-                        {data.linkedEntity.length > 0 && data.linkedEntity.map((item) => (
+                        {data.linkedEntity.map((item) => (
                             <span className="desc-text-style side-bar-profile-data">{item.name}</span>
                         ))}
                     </div>

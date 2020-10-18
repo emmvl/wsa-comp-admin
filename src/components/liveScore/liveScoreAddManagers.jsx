@@ -182,11 +182,11 @@ class LiveScoreAddManager extends Component {
                                         : this.props.liveScoreManagerListAction(5, 1, this.state.competition_id)
                                 }}
                             >
-                                {managerList.map((item) => {
-                                    return <Option key={item.id} value={item.firstName + " " + item.lastName}>
+                                {managerList.map((item) => (
+                                    <Option key={'manager_' + item.id} value={item.firstName + " " + item.lastName}>
                                         {item.NameWithNumber}
                                     </Option>
-                                })}
+                                ))}
                             </AutoComplete>
                         </Form.Item>
                     </div>
@@ -198,7 +198,7 @@ class LiveScoreAddManager extends Component {
                             rules={[{ required: true, message: ValidationConstants.teamName }]}
                             className="slct-in-add-manager-livescore"
                         >
-                            <InputWithHead required={"required-field pb-1"} heading={AppConstants.team} />
+                            <InputWithHead required="required-field pb-1" heading={AppConstants.team} />
                             <Select
                                 mode="multiple"
                                 showSearch
@@ -209,7 +209,7 @@ class LiveScoreAddManager extends Component {
                                 optionFilterProp="children"
                             >
                                 {teamData.map((item) => (
-                                    <Option key={item.id} value={item.id}>{item.name}</Option>
+                                    <Option key={'team_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -326,7 +326,7 @@ class LiveScoreAddManager extends Component {
                                 optionFilterProp="children"
                             >
                                 {teamData.map((item) => (
-                                    <Option value={item.id}> {item.name}</Option>
+                                    <Option key={'team_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -352,12 +352,12 @@ class LiveScoreAddManager extends Component {
                     value={managerRadioBtn}
                 >
                     {/* <div className="row ml-2" style={{ marginTop: 18 }}>
-                        <Radio value={"new"}>{AppConstants.new}</Radio>
-                        <Radio value={"existing"}>{AppConstants.existing}</Radio>
+                        <Radio value="new">{AppConstants.new}</Radio>
+                        <Radio value="existing">{AppConstants.existing}</Radio>
                     </div> */}
                     <div className="row ml-2" style={{ marginTop: 18 }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>{AppConstants.new}</Radio>
+                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
                             <div style={{ marginLeft: -10, width: 50 }}>
                                 <Tooltip background="#ff8237">
                                     <span>{AppConstants.newMsgForScorerManager}</span>
@@ -365,7 +365,7 @@ class LiveScoreAddManager extends Component {
                             </div>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', marginLeft: -10 }}>
-                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>
+                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                 {AppConstants.existing}
                             </Radio>
                             <div style={{ marginLeft: -10 }}>
@@ -437,27 +437,27 @@ class LiveScoreAddManager extends Component {
                 if (managerRadioBtn === 'new') {
                     if (this.state.isEdit === true) {
                         body = {
-                            "id": managerData.id,
-                            "firstName": managerData.firstName,
-                            "lastName": managerData.lastName,
-                            "mobileNumber": regexNumberExpression(managerData.mobileNumber),
-                            "email": managerData.email,
-                            "teams": managerData.teams
+                            id: managerData.id,
+                            firstName: managerData.firstName,
+                            lastName: managerData.lastName,
+                            mobileNumber: regexNumberExpression(managerData.mobileNumber),
+                            email: managerData.email,
+                            teams: managerData.teams
                         }
                     } else {
                         body = {
-                            "firstName": managerData.firstName,
-                            "lastName": managerData.lastName,
-                            "mobileNumber": regexNumberExpression(managerData.mobileNumber),
-                            "email": managerData.email,
-                            "teams": managerData.teams
+                            firstName: managerData.firstName,
+                            lastName: managerData.lastName,
+                            mobileNumber: regexNumberExpression(managerData.mobileNumber),
+                            email: managerData.email,
+                            teams: managerData.teams
                         }
                     }
                     this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
                 } else if (managerRadioBtn === 'existing') {
                     body = {
-                        "id": exsitingManagerId,
-                        "teams": managerData.teams
+                        id: exsitingManagerId,
+                        teams: managerData.teams
                     }
                     this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
                 }
@@ -467,27 +467,27 @@ class LiveScoreAddManager extends Component {
             if (managerRadioBtn === 'new') {
                 if (this.state.isEdit === true) {
                     body = {
-                        "id": managerData.id,
-                        "firstName": managerData.firstName,
-                        "lastName": managerData.lastName,
-                        "mobileNumber": regexNumberExpression(managerData.mobileNumber),
-                        "email": managerData.email,
-                        "teams": managerData.teams
+                        id: managerData.id,
+                        firstName: managerData.firstName,
+                        lastName: managerData.lastName,
+                        mobileNumber: regexNumberExpression(managerData.mobileNumber),
+                        email: managerData.email,
+                        teams: managerData.teams
                     }
                 } else {
                     body = {
-                        "firstName": managerData.firstName,
-                        "lastName": managerData.lastName,
-                        "mobileNumber": regexNumberExpression(managerData.mobileNumber),
-                        "email": managerData.email,
-                        "teams": managerData.teams
+                        firstName: managerData.firstName,
+                        lastName: managerData.lastName,
+                        mobileNumber: regexNumberExpression(managerData.mobileNumber),
+                        email: managerData.email,
+                        teams: managerData.teams
                     }
                 }
                 this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
             } else if (managerRadioBtn === 'existing') {
                 body = {
-                    "id": exsitingManagerId,
-                    "teams": managerData.teams
+                    id: exsitingManagerId,
+                    teams: managerData.teams
                 }
                 this.props.liveScoreAddEditManager(body, teamId, exsitingManagerId)
             }

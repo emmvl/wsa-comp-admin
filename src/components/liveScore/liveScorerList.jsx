@@ -27,11 +27,11 @@ let _this = null;
 /////function to sort table column
 function tableSort(key) {
     const body = {
-        "paging": {
-            "limit": 10,
-            "offset": _this.state.offset
+        paging: {
+            limit: 10,
+            offset: _this.state.offset
         },
-        "search": _this.state.searchText
+        search: _this.state.searchText
     };
 
     let sortBy = key;
@@ -110,7 +110,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (teams, record) => (
             <div>
-                {teams.length > 0 && teams.map((item, i) => (
+                {teams.map((item, i) => (
                     teamListData(item.id) ? (
                         <div key={`teams${i}` + item.id}>
                             <NavLink
@@ -152,7 +152,7 @@ const columns = [
                         <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                     }
                 >
-                    <Menu.Item key={'1'}>
+                    <Menu.Item key="1">
                         <NavLink
                             to={{
                                 pathname: '/liveScoreAddScorer',
@@ -199,11 +199,11 @@ class LiveScorerList extends Component {
     componentDidMount() {
         let { scorerActionObject } = this.props.liveScoreScorerState
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
+            paging: {
+                limit: 10,
+                offset: 0
             },
-            "search": ""
+            search: ""
         };
 
         if (getLiveScoreCompetiton()) {
@@ -232,13 +232,13 @@ class LiveScorerList extends Component {
         let offset = page ? 10 * (page - 1) : 0;
         let { searchText, sortBy, sortOrder } = this.state
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": offset
+            paging: {
+                limit: 10,
+                offset: offset
             },
-            "search": searchText,
-            "sortBy": sortBy,
-            "sortOrder": sortOrder
+            search: searchText,
+            sortBy,
+            sortOrder
         }
         this.props.liveScoreScorerListAction(id, 4, body, searchText, sortBy, sortOrder)
     }
@@ -351,13 +351,13 @@ class LiveScorerList extends Component {
         let { sortBy, sortOrder } = this.state
         if (e.target.value == null || e.target.value == "") {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": e.target.value,
-                "sortBy": sortBy,
-                "sortOrder": sortOrder
+                search: e.target.value,
+                sortBy,
+                sortOrder
             }
 
             this.props.liveScoreScorerListAction(id, 4, body, e.target.value, sortBy, sortOrder)
@@ -372,13 +372,13 @@ class LiveScorerList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": e.target.value,
-                "sortBy": sortBy,
-                "sortOrder": sortOrder
+                search: e.target.value,
+                sortBy,
+                sortOrder
             }
             this.props.liveScoreScorerListAction(id, 4, body, this.state.searchText, sortBy, sortOrder)
         }
@@ -392,13 +392,13 @@ class LiveScorerList extends Component {
         if (searchText == null || searchText == "") {
         } else {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": searchText,
-                "sortBy": sortBy,
-                "sortOrder": sortOrder
+                search: searchText,
+                sortBy,
+                sortOrder
             }
             this.props.liveScoreScorerListAction(id, 4, body, searchText, sortBy, sortOrder)
         }

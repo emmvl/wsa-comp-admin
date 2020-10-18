@@ -170,7 +170,7 @@ const columns = [
                         <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                     }
                 >
-                    <Menu.Item key={'1'}>
+                    <Menu.Item key="1">
                         <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }}>
                             <span>Edit</span>
                         </NavLink>

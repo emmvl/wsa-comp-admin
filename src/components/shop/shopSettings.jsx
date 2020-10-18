@@ -207,8 +207,8 @@ class ShopSettings extends Component {
                             'state'
                         )}
                     >
-                        {stateList.length > 0 && stateList.map((item) => (
-                            <Option key={"stateList" + item.id} value={item.name}> {item.name}</Option>
+                        {stateList.map((item) => (
+                            <Option key={'state_' + item.name} value={item.name}>{item.name}</Option>
                         ))}
                     </Select>
                 </Form.Item>

@@ -407,7 +407,7 @@ class TeamRegistrations extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {this.props.appState.yearList.map(item => (
-                                        <Option key={"yearRefId" + item.id} value={item.id}>
+                                        <Option key={'year_' + item.id} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -426,8 +426,10 @@ class TeamRegistrations extends Component {
                                 >
                                     <Option key={-1} value="-1">{AppConstants.all}</Option>
                                     {(competitions || []).map(item => (
-                                        <Option key={"competition" + item.competitionUniqueKey}
-                                                value={item.competitionUniqueKey}>
+                                        <Option
+                                            key={'competition_' + item.competitionUniqueKey}
+                                            value={item.competitionUniqueKey}
+                                        >
                                             {item.name}
                                         </Option>
                                     ))}
@@ -446,7 +448,9 @@ class TeamRegistrations extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(uniqueValues || []).map((org) => (
-                                        <Option key={org.organisationId} value={org.organisationId}>{org.name}</Option>
+                                        <Option key={'organisation_' + org.organisationId} value={org.organisationId}>
+                                            {org.name}
+                                        </Option>
                                     ))}
                                 </Select>
                             </div>
@@ -461,7 +465,7 @@ class TeamRegistrations extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(paymentStatus || []).map((g) => (
-                                        <Option key={g.id} value={g.id}>{g.description}</Option>
+                                        <Option key={'status_' + g.id} value={g.id}>{g.description}</Option>
                                     ))}
                                 </Select>
                             </div>

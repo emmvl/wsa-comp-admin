@@ -346,9 +346,9 @@ class LiveScoreAddMatch extends Component {
                         placeholder="Select Team"
                         optionFilterProp="children"
                     >
-                        <Option key={'team1'} value={'team1'}> {addEditMatch.team1.name}</Option>
-                        <Option key={'team2'} value={'team2'}> {addEditMatch.team2.name}</Option>
-                        <Option key={'both'} value={'both'}> {'Both'}</Option>
+                        <Option key="team1" value="team1">{addEditMatch.team1.name}</Option>
+                        <Option key="team2" value="team2">{addEditMatch.team2.name}</Option>
+                        <Option key="both" value="both">Both</Option>
                     </Select>
                 </div>
             </Modal>
@@ -480,7 +480,7 @@ class LiveScoreAddMatch extends Component {
                             formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             parser={value => value.replace(/\$\s?|(,*)/g, '')}
                             onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "matchDuration")}
-                            placeholder={'0'}
+                            placeholder="0"
                             disabled={allDisabled}
                         />
                     </Form.Item>
@@ -498,7 +498,7 @@ class LiveScoreAddMatch extends Component {
                             formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             parser={value => value.replace(/\$\s?|(,*)/g, '')}
                             onChange={(mainBreakDuration) => this.props.liveScoreUpdateMatchAction(mainBreakDuration, "mainBreakDuration")}
-                            placeholder={'0'}
+                            placeholder="0"
                             disabled={allDisabled}
                         />
                     </Form.Item>
@@ -517,7 +517,7 @@ class LiveScoreAddMatch extends Component {
                                 formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 parser={value => value.replace(/\$\s?|(,*)/g, '')}
                                 onChange={(qtrBreak) => this.props.liveScoreUpdateMatchAction(qtrBreak, "qtrBreak")}
-                                placeholder={'0'}
+                                placeholder="0"
                                 disabled={allDisabled}
                             />
                         </Form.Item>
@@ -607,12 +607,12 @@ class LiveScoreAddMatch extends Component {
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(divisionName) => this.selectDivision(divisionName)}
                                 // value={addEditMatch.divisionId}
-                                placeholder={'Select Division'}
+                                placeholder="Select Division"
                                 optionFilterProp="children"
                                 disabled={allDisabled}
                             >
                                 {isArrayNotEmpty(divisionList) && divisionList.map((item) => (
-                                    <Option key={item.id} value={item.id}> {item.name}</Option>
+                                    <Option key={'division_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -625,12 +625,12 @@ class LiveScoreAddMatch extends Component {
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(type) => this.props.liveScoreUpdateMatchAction(type, 'type')}
                                 // value={addEditMatch.type}
-                                placeholder={'Select Type'}
+                                placeholder="Select Type"
                                 disabled={allDisabled}
                             >
-                                {/* <Option value={'SINGLE'}> Single</Option> */}
-                                <Option value={"TWO_HALVES"}>Halves</Option>
-                                <Option value={"FOUR_QUARTERS"}>Quarters</Option>
+                                {/* <Option value="SINGLE">Single</Option> */}
+                                <Option value="TWO_HALVES">Halves</Option>
+                                <Option value="FOUR_QUARTERS">Quarters</Option>
                             </Select>
                         </Form.Item>
                     </div>
@@ -652,7 +652,7 @@ class LiveScoreAddMatch extends Component {
                             parser={value => value.replace(/\$\s?|(,*)/g, '')}
                             onChange={(mnbMatchId) => this.props.liveScoreUpdateMatchAction(mnbMatchId, "mnbMatchId")}
                             value={addEditMatch.mnbMatchId ? addEditMatch.mnbMatchId : ''}
-                            placeholder={'0'}
+                            placeholder="0"
                             disabled={allDisabled}
                         />
                     </div>
@@ -674,7 +674,7 @@ class LiveScoreAddMatch extends Component {
                                     disabled={allDisabled}
                                 >
                                     {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
-                                        <Option value={item.id}> {item.name}</Option>
+                                        <Option key={'homeTeam_' + item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             </Form.Item>
@@ -688,13 +688,13 @@ class LiveScoreAddMatch extends Component {
                                     disabled={allDisabled}
                                     optionFilterProp="children"
                                     className="reg-form-multiple-select"
-                                    placeholder={'Select Away Team'}
+                                    placeholder="Select Away Team"
                                     style={{ width: "100%", }}
                                     onChange={(awayTeam) => this.props.liveScoreUpdateMatchAction(awayTeam, "team2id")}
-                                // value={addEditMatch.team2Id ? addEditMatch.team2Id : ''}
+                                    // value={addEditMatch.team2Id ? addEditMatch.team2Id : ''}
                                 >
                                     {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
-                                        <Option value={item.id}> {item.name}</Option>
+                                        <Option key={'awayTeam_' + item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             </Form.Item>
@@ -718,7 +718,7 @@ class LiveScoreAddMatch extends Component {
                                 disabled={allDisabled}
                             >
                                 {venueData && venueData.map((item) => (
-                                    <Option key={'venue' + item.id} value={item.venueCourtId}>
+                                    <Option key={'venue_' + item.venueCourtId} value={item.venueCourtId}>
                                         {item.name}
                                     </Option>
                                 ))}
@@ -733,14 +733,14 @@ class LiveScoreAddMatch extends Component {
                                     // mode="multiple"
                                     showSearch
                                     onChange={(round) => this.props.liveScoreUpdateMatchAction(round, "roundId")}
-                                    placeholder={'Select Round'}
+                                    placeholder="Select Round"
                                     style={{ width: "100%", }}
                                     // value={addEditMatch.roundId ? addEditMatch.roundId : ''}
                                     optionFilterProp="children"
                                     disabled={allDisabled}
                                 >
                                     {isArrayNotEmpty(roundList) && roundList.map((item) => (
-                                        <Option value={item.id}> {item.name}</Option>
+                                        <Option key={'round_' + item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             </Form.Item>
@@ -865,10 +865,10 @@ class LiveScoreAddMatch extends Component {
                                                     this.props.liveScoreUpdateMatchAction(umpire1Orag, 'umpire1Orag')
                                                 }}
                                                 value={umpire1Orag ? umpire1Orag : undefined}
-                                                placeholder={'Select Umpire 1 Organisation'}
+                                                placeholder="Select Umpire 1 Organisation"
                                             >
                                                 {isArrayNotEmpty(clubListData) && clubListData.map((item) => (
-                                                    <Option key={item.id} value={item.id}> {item.name}</Option>
+                                                    <Option key={'umpire1Org_' + item.id} value={item.id}>{item.name}</Option>
                                                 ))}
                                             </Select>
                                         </div>
@@ -901,13 +901,13 @@ class LiveScoreAddMatch extends Component {
                         <Select
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={(scorer1) => this.onScorerChange(scorer1, 'scorer1')}
-                            placeholder={'Select Scorer'}
+                            placeholder="Select Scorer"
                             // value={addEditMatch.scorerStatus}
                             value={scorer1 ? scorer1 : undefined}
                             disabled={allDisabled}
                         >
                             {scorerListResult.map((item) => (
-                                <Option key={'venue' + item.id} value={item.id}>
+                                <Option key={'scorer_' + item.id} value={item.id}>
                                     {item.NameWithNumber}
                                 </Option>
                             ))}
@@ -920,12 +920,12 @@ class LiveScoreAddMatch extends Component {
                             <Select
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(scorer2) => this.onScorerChange(scorer2, 'scorer2')}
-                                placeholder={'Select Scorer'}
+                                placeholder="Select Scorer"
                                 value={scorer2 ? scorer2 : undefined}
                                 disabled={allDisabled}
                             >
                                 {scorerListResult.map((item) => (
-                                    <Option key={'venue' + item.id} value={item.id}>
+                                    <Option key={'scorer_' + item.id} value={item.id}>
                                         {item.NameWithNumber}
                                     </Option>
                                 ))}
@@ -966,13 +966,13 @@ class LiveScoreAddMatch extends Component {
                             <Select
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(value) => this.props.liveScoreUpdateMatchAction(value, "resultStatus")}
-                                placeholder={'Select Result Status'}
+                                placeholder="Select Result Status"
                                 value={addEditMatch.resultStatus == "0" ? null : addEditMatch.resultStatus}
                                 disabled={allDisabled}
                             >
-                                <Option key={'UNCONFIRMED'} value={'UNCONFIRMED'}>{'Unconfirmed'}</Option>
-                                <Option key={'DISPUTE'} value={'DISPUTE'}>{'Dispute'}</Option>
-                                <Option key={'FINAL'} value={'FINAL'}>{'Final'}</Option>
+                                <Option key="UNCONFIRMED" value="UNCONFIRMED">Unconfirmed</Option>
+                                <Option key="DISPUTE" value="DISPUTE">Dispute</Option>
+                                <Option key="FINAL" value="FINAL">Final</Option>
                             </Select>
                         </div>
                     </div>
@@ -1010,15 +1010,15 @@ class LiveScoreAddMatch extends Component {
                                 <Select
                                     showSearch
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    placeholder={'Select Type'}
+                                    placeholder="Select Type"
                                     optionFilterProp="children"
                                     onChange={(id) => this.props.liveScoreUpdateMatchAction(id, "extraTimeType")}
                                     value={addEditMatch.extraTimeType ? addEditMatch.extraTimeType : undefined}
                                     disabled={this.state.umpireKey === 'umpire'}
                                 >
-                                    <Option key={'SINGLE_PERIOD'} value={'SINGLE_PERIOD'}> {'Single Period'}</Option>
-                                    <Option key={'TWO_HALVES'} value={'TWO_HALVES'}> {'Halves'}</Option>
-                                    <Option key={'FOUR_QUARTERS'} value={'FOUR_QUARTERS'}> {'Quarters'}</Option>
+                                    <Option key="SINGLE_PERIOD" value="SINGLE_PERIOD">Single Period</Option>
+                                    <Option key="TWO_HALVES" value="TWO_HALVES">Halves</Option>
+                                    <Option key="FOUR_QUARTERS" value="FOUR_QUARTERS">Quarters</Option>
                                 </Select>
                             </div>
 
@@ -1028,7 +1028,7 @@ class LiveScoreAddMatch extends Component {
                                 <InputNumber
                                     formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                     parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                    placeholder={'0'}
+                                    placeholder="0"
                                     onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeDuration")}
                                     value={addEditMatch.extraTimeDuration}
                                     disabled={this.state.umpireKey === 'umpire'}
@@ -1040,7 +1040,7 @@ class LiveScoreAddMatch extends Component {
                                 <InputNumber
                                     formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                     parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                    placeholder={'0'}
+                                    placeholder="0"
                                     onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeMainBreak")}
                                     value={addEditMatch.extraTimeMainBreak}
                                     disabled={this.state.umpireKey === 'umpire'}
@@ -1053,7 +1053,7 @@ class LiveScoreAddMatch extends Component {
                                     <InputNumber
                                         formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                         parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                        placeholder={'0'}
+                                        placeholder="0"
                                         onChange={(matchDuration) => this.props.liveScoreUpdateMatchAction(matchDuration, "extraTimeqtrBreak")}
                                         value={addEditMatch.extraTimeqtrBreak}
                                     />
@@ -1071,8 +1071,8 @@ class LiveScoreAddMatch extends Component {
                             value={addEditMatch.extraTimeWinByGoals}
                             disabled={this.state.umpireKey === 'umpire'}
                         >
-                            <Radio key={1} value={1}>{'1st Goal Wins'}</Radio>
-                            <Radio key={2} value={2}>{'2nd Goal Wins'}</Radio>
+                            <Radio key={1} value={1}>1st Goal Wins</Radio>
+                            <Radio key={2} value={2}>2nd Goal Wins</Radio>
                             <Radio key={0} value={0}>None</Radio>
                         </Radio.Group>
                     </div>
@@ -1569,7 +1569,7 @@ class LiveScoreAddMatch extends Component {
                         </Footer>
                     </Form>
                 </Layout>
-            </div >
+            </div>
         );
     }
 }

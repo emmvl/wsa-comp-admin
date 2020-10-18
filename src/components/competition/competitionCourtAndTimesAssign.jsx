@@ -153,61 +153,76 @@ class CompetitionCourtAndTimesAssign extends Component {
             mainTimeRotationID: competitionTimeSlots.getcompetitionTimeSlotData.mainTimeRotationID
         })
         let timeSlotMatchDuration = competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime ? competitionTimeSlots.getcompetitionTimeSlotData.competitionVenueTimeslotsDayTime : []
-        timeSlotMatchDuration.length > 0 && timeSlotMatchDuration.map((item, index) => {
-            let dayRefId = `dayRefId${index}`
-            this.formRef.current.setFieldsValue({
-                [dayRefId]: item.dayRefId,
+        if (timeSlotMatchDuration.length > 0) {
+            timeSlotMatchDuration.forEach((item, index) => {
+                let dayRefId = `dayRefId${index}`
+                this.formRef.current.setFieldsValue({
+                    [dayRefId]: item.dayRefId,
+                })
             })
-        })
+        }
 
         let timeslotmatchEntityCheck = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotsEntity ? competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotsEntity : []
-        timeslotmatchEntityCheck.length > 0 && timeslotmatchEntityCheck.map((item, index) => {
-            let timeSlotEntityManualkeyArr = `timeSlotEntityManualkeyArr${index}`
-            let timeSlotEntityGradeKeyArr = `timeSlotEntityGradeKeyArr${index}`
+        if (timeslotmatchEntityCheck.length > 0) {
+            timeslotmatchEntityCheck.forEach((item, index) => {
+                let timeSlotEntityManualkeyArr = `timeSlotEntityManualkeyArr${index}`
+                let timeSlotEntityGradeKeyArr = `timeSlotEntityGradeKeyArr${index}`
 
-            this.formRef.current.setFieldsValue({
-                [timeSlotEntityManualkeyArr]: item.timeSlotEntityManualkeyArr,
-                [timeSlotEntityGradeKeyArr]: item.timeSlotEntityGradeKeyArr
+                this.formRef.current.setFieldsValue({
+                    [timeSlotEntityManualkeyArr]: item.timeSlotEntityManualkeyArr,
+                    [timeSlotEntityGradeKeyArr]: item.timeSlotEntityGradeKeyArr
+                })
             })
-        })
+        }
 
         let timeSlotManualPerVenue = competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual ? competitionTimeSlots.getcompetitionTimeSlotData.competitionTimeslotManual : []
-        timeSlotManualPerVenue.length > 0 && timeSlotManualPerVenue.map((PerVenueItem, perVenueIndex) => {
-            PerVenueItem.timeslots.length > 0 && PerVenueItem.timeslots.map((timeSlotItem, timeSlotIndex) => {
-                let dayRefIdManual = `dayRefIdManual${timeSlotIndex}`
-                this.formRef.current.setFieldsValue({
-                    [dayRefIdManual]: timeSlotItem.dayRefId,
+        if (timeSlotManualPerVenue.length > 0) {
+            timeSlotManualPerVenue.forEach((PerVenueItem) => {
+                if (PerVenueItem.timeslots.length > 0) {
+                    PerVenueItem.timeslots.forEach((timeSlotItem, timeSlotIndex) => {
+                        let dayRefIdManual = `dayRefIdManual${timeSlotIndex}`
+                        this.formRef.current.setFieldsValue({
+                            [dayRefIdManual]: timeSlotItem.dayRefId,
+                        })
 
-                })
-
-                timeSlotItem.startTime.length > 0 && timeSlotItem.startTime.map((startTimeItem, startTimeIndex) => {
-                    let timeSlotEntityManualkey = `timeSlotEntityManualkey${timeSlotIndex}${startTimeIndex}`
-                    let timeSlotEntityGradeKey = `timeSlotEntityGradeKey${timeSlotIndex}${startTimeIndex}`
-                    this.formRef.current.setFieldsValue({
-                        [timeSlotEntityManualkey]: startTimeItem.timeSlotEntityManualkey,
-                        [timeSlotEntityGradeKey]: startTimeItem.timeSlotEntityGradeKey
+                        if (timeSlotItem.startTime.length > 0) {
+                            timeSlotItem.startTime.forEach((startTimeItem, startTimeIndex) => {
+                                let timeSlotEntityManualkey = `timeSlotEntityManualkey${timeSlotIndex}${startTimeIndex}`
+                                let timeSlotEntityGradeKey = `timeSlotEntityGradeKey${timeSlotIndex}${startTimeIndex}`
+                                this.formRef.current.setFieldsValue({
+                                    [timeSlotEntityManualkey]: startTimeItem.timeSlotEntityManualkey,
+                                    [timeSlotEntityGradeKey]: startTimeItem.timeSlotEntityGradeKey
+                                })
+                            })
+                        }
                     })
-                })
+                }
             })
-        })
+        }
 
         let timeSlotManualAllVenue = competitionTimeSlots.timeSlotManualAllVenue ? competitionTimeSlots.timeSlotManualAllVenue : []
-        timeSlotManualAllVenue.length > 0 && timeSlotManualAllVenue.map((venueItemData, venue_Index) => {
-            venueItemData.timeslots.length > 0 && venueItemData.timeslots.map((timeSlotsItem, timeSlotsIndex) => {
-                let dayRefIdAllVenue = `dayRefIdAllVenue${venue_Index}${timeSlotsIndex}`
-                this.formRef.current.setFieldsValue({
-                    [dayRefIdAllVenue]: timeSlotsItem.dayRefId,
-                })
-                timeSlotsItem.startTime.length > 0 && timeSlotsItem.startTime.map((startItem, startIndex) => {
-                    let perDivisionkey = `perDivisionkey${venue_Index}${timeSlotsIndex}${startIndex}`
-                    let perGradeKey = `perGradeKey${venue_Index}${timeSlotsIndex}${startIndex}`
-                    this.formRef.current.setFieldsValue({
-                        [perDivisionkey]: startItem.timeSlotEntityManualkey,
-                        [perGradeKey]: startItem.timeSlotEntityGradeKey
+        if (timeSlotManualAllVenue.length > 0) {
+            timeSlotManualAllVenue.forEach((venueItemData, venue_Index) => {
+                if (venueItemData.timeslots.length > 0) {
+                    venueItemData.timeslots.forEach((timeSlotsItem, timeSlotsIndex) => {
+                        let dayRefIdAllVenue = `dayRefIdAllVenue${venue_Index}${timeSlotsIndex}`
+                        this.formRef.current.setFieldsValue({
+                            [dayRefIdAllVenue]: timeSlotsItem.dayRefId,
+                        })
+                        if (timeSlotsItem.startTime.length > 0) {
+                            timeSlotsItem.startTime.forEach((startItem, startIndex) => {
+                                let perDivisionkey = `perDivisionkey${venue_Index}${timeSlotsIndex}${startIndex}`
+                                let perGradeKey = `perGradeKey${venue_Index}${timeSlotsIndex}${startIndex}`
+                                this.formRef.current.setFieldsValue({
+                                    [perDivisionkey]: startItem.timeSlotEntityManualkey,
+                                    [perGradeKey]: startItem.timeSlotEntityGradeKey
+                                })
+                            })
+                        }
                     })
-                })
+                }
             })
-        })
+        }
     }
 
     // for post api
@@ -260,20 +275,20 @@ class CompetitionCourtAndTimesAssign extends Component {
                             for (let l in manualcompetitionTimeslotsEntityOBj) {
                                 manualcompetitionTimeslotsEntityOBj[l].competitionVenueTimeslotEntityId = 0
                                 manualperVenueObj = {
-                                    "competitionVenueTimeslotsDayTimeId": 0,
-                                    "dayRefId": getTimeSlot[j].dayRefId,
-                                    "startTime": getStartTime[k].startTime,
-                                    "sortOrder": JSON.parse(k),
-                                    "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID == 8 ? manualcompetitionTimeslotsEntityOBj : [],
+                                    competitionVenueTimeslotsDayTimeId: 0,
+                                    dayRefId: getTimeSlot[j].dayRefId,
+                                    startTime: getStartTime[k].startTime,
+                                    sortOrder: JSON.parse(k),
+                                    competitionTimeslotsEntity: timeSlotData.mainTimeRotationID == 8 ? manualcompetitionTimeslotsEntityOBj : [],
                                 }
                             }
                         } else {
                             manualperVenueObj = {
-                                "competitionVenueTimeslotsDayTimeId": 0,
-                                "dayRefId": getTimeSlot[j].dayRefId,
-                                "startTime": getStartTime[k].startTime,
-                                "sortOrder": JSON.parse(k),
-                                "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID == 8 ? manualcompetitionTimeslotsEntityOBj : [],
+                                competitionVenueTimeslotsDayTimeId: 0,
+                                dayRefId: getTimeSlot[j].dayRefId,
+                                startTime: getStartTime[k].startTime,
+                                sortOrder: JSON.parse(k),
+                                competitionTimeslotsEntity: timeSlotData.mainTimeRotationID == 8 ? manualcompetitionTimeslotsEntityOBj : [],
                             }
                         }
 
@@ -312,20 +327,20 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     competitionTimeslotsEntityObj[l].competitionVenueTimeslotEntityId = 0
 
                                     manualAllVenueObj = {
-                                        "competitionVenueTimeslotsDayTimeId": 0,
-                                        "dayRefId": timeSloltdataArr[j].dayRefId,
-                                        "startTime": manualStartTime[k].startTime,
-                                        "sortOrder": JSON.parse(k),
-                                        "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID !== 8 ? [] : competitionTimeslotsEntityObj,
+                                        competitionVenueTimeslotsDayTimeId: 0,
+                                        dayRefId: timeSloltdataArr[j].dayRefId,
+                                        startTime: manualStartTime[k].startTime,
+                                        sortOrder: JSON.parse(k),
+                                        competitionTimeslotsEntity: timeSlotData.mainTimeRotationID !== 8 ? [] : competitionTimeslotsEntityObj,
                                     }
                                 }
                             } else {
                                 manualAllVenueObj = {
-                                    "competitionVenueTimeslotsDayTimeId": 0,
-                                    "dayRefId": timeSloltdataArr[j].dayRefId,
-                                    "startTime": manualStartTime[k].startTime,
-                                    "sortOrder": JSON.parse(k),
-                                    "competitionTimeslotsEntity": timeSlotData.mainTimeRotationID !== 8 ? [] : competitionTimeslotsEntityObj,
+                                    competitionVenueTimeslotsDayTimeId: 0,
+                                    dayRefId: timeSloltdataArr[j].dayRefId,
+                                    startTime: manualStartTime[k].startTime,
+                                    sortOrder: JSON.parse(k),
+                                    competitionTimeslotsEntity: timeSlotData.mainTimeRotationID !== 8 ? [] : competitionTimeslotsEntityObj,
                                 }
                             }
                             timeSlotManualperVenueArray.push(manualAllVenueObj)
@@ -447,10 +462,10 @@ class CompetitionCourtAndTimesAssign extends Component {
                             style={{ width: "80%" }}
                             disabled={disabledStatus}
                             onChange={(dayOfTheWeek) => this.props.UpdateTimeSlotsData(dayOfTheWeek, 'dayRefId', 'competitionVenueTimeslotsDayTime', index, null, null)}
-                            placeholder={'Select Week Day'}
+                            placeholder="Select Week Day"
                         >
-                            {daysList.weekDays.length > 0 && daysList.weekDays.map((item) => (
-                                <Option value={item.id}> {item.description}</Option>
+                            {daysList.weekDays.map((item) => (
+                                <Option key={'weekDay_' + item.id} value={item.id}>{item.description}</Option>
                             ))}
                         </Select>
                     </Form.Item>
@@ -468,8 +483,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                         value={item.startTime != null && moment(item.startTime, "HH:mm")}
                         onChange={(time) => this.onTimeChange(time, index, 'startTime')}
                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'startTime')}
-                    // disabledDate={d => !d || d.isAfter(closeDate)
-                    // minuteStep={15}
+                        // disabledDate={d => !d || d.isAfter(closeDate)
+                        // minuteStep={15}
                     />
                 </div>
                 <div className="col-sm">
@@ -484,8 +499,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                         value={item.endTime != null && moment(item.endTime, "HH:mm")}
                         onChange={(time) => this.onTimeChange(time, index, 'endTime')}
                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'endTime')}
-                    // minuteStep={15}
-                    // disabledHours={() => this.getDisabledHours(item.startTime)}
+                        // minuteStep={15}
+                        // disabledHours={() => this.getDisabledHours(item.startTime)}
                     />
                 </div>
                 {data.length > 1 && (
@@ -540,23 +555,23 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {own_YearArr.length > 0 && own_YearArr.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {own_YearArr.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
                         <div className="col-sm-3 pb-3">
                             <div style={{
-                                width: "fit-content", display: "flex",
+                                width: "fit-content",
+                                display: "flex",
                                 flexDirection: "row",
-                                alignItems: "center", marginRight: 50,
+                                alignItems: "center",
+                                marginRight: 50,
                             }}>
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     id={AppUniqueId.competitionName_dpdnTimeslot}
                                     name="competition"
@@ -564,13 +579,11 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => {
-                                        return (
-                                            <Option key={item.statusRefId} value={item.competitionId}>
-                                                {item.competitionName}
-                                            </Option>
-                                        );
-                                    })}
+                                    {own_CompetitionArr.map(item => (
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -648,10 +661,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                         }}
                         value={timeSlotData.mainTimeRotationID}
                     >
-                        {commonState.timeSlotRotation.length > 0 && commonState.timeSlotRotation.map((item, index) => (
-                            <div key={"timeSlot" + index}>
+                        {commonState.timeSlotRotation.map((item) => (
+                            <div key={'mainTimeRotation_' + item.id}>
                                 <div className="contextualHelp-RowDirection">
-                                    <Radio id={this.getCourtRotationId(item.id, 'timeSlotPref')} key={item.id} value={item.id}> {item.description}</Radio>
+                                    <Radio id={this.getCourtRotationId(item.id, 'timeSlotPref')} value={item.id}>
+                                        {item.description}
+                                    </Radio>
                                     <div style={{ marginLeft: -22, marginTop: -5 }}>
                                         <CustomTooltip background="#ff8237">
                                             <span>{item.helpMsg}</span>
@@ -669,11 +684,15 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 }}
                                                 value={timeSlotData.timeslotRotationRefId}
                                             >
-                                                {timeSlotData.mainTimeRotationID == item.id && item.subReferences.map((subArr) => {
-                                                    return (
-                                                        <Radio id={this.getCourtRotationId(item.id, 'subPref')} key={"data" + subArr.id} value={subArr.id}> {subArr.description}</Radio>
-                                                    )
-                                                })}
+                                                {timeSlotData.mainTimeRotationID == item.id && item.subReferences.map((subArr) => (
+                                                    <Radio
+                                                        id={this.getCourtRotationId(item.id, 'subPref')}
+                                                        key={'timeslotRotation_' + subArr.id}
+                                                        value={subArr.id}
+                                                    >
+                                                        {subArr.description}
+                                                    </Radio>
+                                                ))}
                                             </Radio.Group>
                                         </Form.Item>
                                     </div>
@@ -688,12 +707,17 @@ class CompetitionCourtAndTimesAssign extends Component {
                             className="reg-competition-radio"
                             disabled={disabledStatus}
                             onChange={(e) => this.changeTimeSlotGeneration(e)}
-                        // value={timeSlotData.timeslotGenerationRefId}
+                            // value={timeSlotData.timeslotGenerationRefId}
                         >
-                            {commonState.timeSlotGeneration.length > 0 && commonState.timeSlotGeneration.map((item, index) => (
-                                <div key={"slot" + index}>
-                                    <div className='contextualHelp-RowDirection' >
-                                        <Radio id={this.getCourtRotationId(item.id, 'timeSlotGenration')} key={item.id} value={item.id}> {item.description}</Radio>
+                            {commonState.timeSlotGeneration.map((item, index) => (
+                                <div key={'timeslotGeneration_' + item.id}>
+                                    <div className="contextualHelp-RowDirection">
+                                        <Radio
+                                            id={this.getCourtRotationId(item.id, 'timeSlotGenration')}
+                                            value={item.id}
+                                        >
+                                            {item.description}
+                                        </Radio>
                                         <div style={{ marginLeft: -22, marginTop: -5 }}>
                                             <CustomTooltip background="#ff8237">
                                                 <span>{item.helpMsg}</span>
@@ -703,9 +727,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     {timeSlotData.timeslotGenerationRefId === index + 1 && item.id == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) &&
                                         <div>
                                             <div className="fluid-width">
-                                                {timeSlotData.competitionVenueTimeslotsDayTime.map((item, index) => {
-                                                    return this.addDataTimeSlot(item, index, timeSlotData.competitionVenueTimeslotsDayTime)
-                                                })}
+                                                {timeSlotData.competitionVenueTimeslotsDayTime.map((item, index) =>
+                                                    this.addDataTimeSlot(item, index, timeSlotData.competitionVenueTimeslotsDayTime)
+                                                )}
                                             </div>
                                             <span id={AppUniqueId.timeRotation_matchDuration_Add_anotherday_Btn} className="input-heading-add-another" onClick={() => disabledStatus == false && this.addAnotherTimeSlot(null, null, "competitionVenueTimeslotsDayTime")}> + {AppConstants.addAnotherDay}</span>
                                         </div>
@@ -718,17 +742,17 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                         {AppConstants.divisionsTimeSlot}
                                                     </span>
                                                 )}
-                                                {timeSlotData.timeslotRotationRefId == 4 && timeSlotData.competitionTimeslotsEntity.map((item, index) => {
-                                                    return this.addTimeSlotDivision(item, index, timeSlotData.mainTimeRotationID, timeSlotData.timeslotRotationRefId, timeSlotData.competitionTimeslotsEntity)
-                                                })}
+                                                {timeSlotData.timeslotRotationRefId == 4 && timeSlotData.competitionTimeslotsEntity.map((item, index) =>
+                                                    this.addTimeSlotDivision(item, index, timeSlotData.mainTimeRotationID, timeSlotData.timeslotRotationRefId, timeSlotData.competitionTimeslotsEntity)
+                                                )}
                                                 {timeSlotData.timeslotRotationRefId == 5 && (
                                                     <span className="applicable-to-heading">
                                                         {AppConstants.gradesTimeSlot}
                                                     </span>
                                                 )}
-                                                {timeSlotData.timeslotRotationRefId == 5 && timeSlotData.competitionTimeslotsEntity.map((item, index) => {
-                                                    return this.addTimeSlotGrades(item, index, timeSlotData.mainTimeRotationID, timeSlotData.timeslotRotationRefId, timeSlotData.competitionTimeslotsEntity)
-                                                })}
+                                                {timeSlotData.timeslotRotationRefId == 5 && timeSlotData.competitionTimeslotsEntity.map((item, index) =>
+                                                    this.addTimeSlotGrades(item, index, timeSlotData.mainTimeRotationID, timeSlotData.timeslotRotationRefId, timeSlotData.competitionTimeslotsEntity)
+                                                )}
                                             </div>
 
                                             <span id={AppUniqueId.timeRotation_matchDuration_AddAnotherTimeslot_Btn} className="input-heading-add-another" onClick={() => disabledStatus == false && this.addDivisionOrGrade(null, null, "competitionTimeslotsEntity")}>+ {AppConstants.addTimeSlot}</span>
@@ -745,8 +769,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             onChange={(e) => this.onChangeVenueRefId(e.target.value)}
                                             value={timeSlotData.applyToVenueRefId}
                                         >
-                                            {commonState.applyVenue.length > 0 && commonState.applyVenue.map(item => (
-                                                <Radio id={this.getCourtRotationId(item.id, 'manuallySubPref')} key={item.id} value={item.id}>
+                                            {commonState.applyVenue.map(item => (
+                                                <Radio
+                                                    id={this.getCourtRotationId(item.id, 'manuallySubPref')}
+                                                    key={'applyVenue_' + item.id}
+                                                    value={item.id}
+                                                >
                                                     {item.description}
                                                 </Radio>
                                             ))}
@@ -757,33 +785,33 @@ class CompetitionCourtAndTimesAssign extends Component {
                         </Radio.Group>
                     </Form.Item>
 
-                    {timeSlotData.timeslotGenerationRefId === 2 && timeSlotData.applyToVenueRefId == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) &&
+                    {timeSlotData.timeslotGenerationRefId === 2 && timeSlotData.applyToVenueRefId == 1 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) && (
                         <div>
                             <div className="fluid-width">
-                                {timeSlotManual.length > 0 && timeSlotManual[0].timeslots.map((item, index) => {
-                                    return (this.addDataTimeSlotManual(item, index, timeSlotData.timeslotRotationRefId, timeSlotData.mainTimeRotationID, timeSlotManual[0].timeslots))
-                                })}
+                                {timeSlotManual.length > 0 && timeSlotManual[0].timeslots.map((item, index) =>
+                                    (this.addDataTimeSlotManual(item, index, timeSlotData.timeslotRotationRefId, timeSlotData.mainTimeRotationID, timeSlotManual[0].timeslots))
+                                )}
                             </div>
                             <span className="input-heading-add-another" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(null, null, "competitionTimeslotManual")}> +{AppConstants.addAnotherDay}</span>
                         </div>
-                    }
-                    {timeSlotData.timeslotGenerationRefId === 2 && timeSlotData.applyToVenueRefId == 2 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) &&
+                    )}
+                    {timeSlotData.timeslotGenerationRefId === 2 && timeSlotData.applyToVenueRefId == 2 && (timeSlotData.mainTimeRotationID === 8 || timeSlotData.mainTimeRotationID === 9 || timeSlotData.mainTimeRotationID === 6 || timeSlotData.mainTimeRotationID === 7) && (
                         <div>
                             <div>
                                 <div className="fluid-width">
                                     {(commonState.timeSlotManualAllVenue || []).map((item, venueIndex) => (
-                                        <div>
+                                        <div key={item.venueName}>
                                             <span className="applicable-to-heading mt-3">{item.venueName}</span>
-                                            {item.timeslots.map((slotsItem, slotIndex) => {
-                                                return this.addDataTimeSlotManualPerVenues(slotsItem, venueIndex, slotIndex, timeSlotData.timeslotRotationRefId, timeSlotData.mainTimeRotationID, item.timeslots)
-                                            })}
-                                            <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddAnotherDayBtn} className='input-heading-add-another pointer' onClick={() => disabledStatus == false && this.addTimeManualAllVenue(venueIndex, item, "competitionTimeslotManualAllVenue")}> + {AppConstants.addAnotherDay}</span>
+                                            {item.timeslots.map((slotsItem, slotIndex) =>
+                                                this.addDataTimeSlotManualPerVenues(slotsItem, venueIndex, slotIndex, timeSlotData.timeslotRotationRefId, timeSlotData.mainTimeRotationID, item.timeslots)
+                                            )}
+                                            <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddAnotherDayBtn} className="input-heading-add-another pointer" onClick={() => disabledStatus == false && this.addTimeManualAllVenue(venueIndex, item, "competitionTimeslotManualAllVenue")}> + {AppConstants.addAnotherDay}</span>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         </div>
-                    }
+                    )}
                 </div>
             </div>
         )
@@ -806,9 +834,10 @@ class CompetitionCourtAndTimesAssign extends Component {
     addDataTimeSlotManualPerVenues(item, venueIndex, index, id, mainId, data) {
         let daysList = this.props.competitionTimeSlots
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         let mainGradeList = this.props.competitionTimeSlots.mainGradeList
         let mainDivisionList = this.props.competitionTimeSlots.mainDivisionList
+
         return (
             <div>
                 <div className="row">
@@ -829,15 +858,15 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 // value={item.dayRefId}
                                 placeholder="Select Week Day"
                             >
-                                {daysList.weekDays.length > 0 && daysList.weekDays.map((item) => (
-                                    <Option value={item.id}> {item.description}</Option>
+                                {daysList.weekDays.map((item) => (
+                                    <Option key={'weekDay_' + item.id} value={item.id}>{item.description}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
                     </div>
                     <div className="col-sm">
-                        {item.startTime.length > 0 && item.startTime.map((timeItem, timeIndex) => (
-                            <div className="row">
+                        {item.startTime.map((timeItem, timeIndex) => (
+                            <div key={timeIndex} className="row">
                                 <div className={mainId == 8 ? "col-sm" : "col-sm"}>
                                     <InputWithHead heading={index == 0 && timeIndex == 0 ? AppConstants.startTime : ' '} />
                                     <TimePicker
@@ -850,7 +879,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                         onBlur={(e) => this.onVenueTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, timeIndex, venueIndex, 'startTime')}
                                         value={timeItem.startTime != null && moment(timeItem.startTime, "HH:mm")}
                                         format="HH:mm"
-                                    // minuteStep={15}
+                                        // minuteStep={15}
                                     />
                                     {item.startTime.length > 1 && (
                                         <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
@@ -881,7 +910,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 <Select
                                                     disabled={disabledStatus}
                                                     id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_Divisions}
-                                                    mode='multiple'
+                                                    mode="multiple"
                                                     placeholder="Select"
                                                     filterOption={false}
                                                     style={{ display: 'grid', alignContent: 'center' }}
@@ -890,12 +919,17 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     onSearch={(value) => this.handleSearch(value, mainDivisionList)}
                                                 >
                                                     {division.divisions && division.divisions.map((item) => (
-                                                        <Option value={item.competitionMembershipProductDivision}> {item.divisionName}</Option>
+                                                        <Option
+                                                            key={'compMemProdDiv_' + item.competitionMembershipProductDivision}
+                                                            value={item.competitionMembershipProductDivision}
+                                                        >
+                                                            {item.divisionName}
+                                                        </Option>
                                                     ))}
                                                 </Select>
-                                            </Form.Item>)
-                                        }
-                                        {id == 5 &&
+                                            </Form.Item>
+                                        )}
+                                        {id == 5 && (
                                             <Form.Item
                                                 name={`perGradeKey${venueIndex}${index}${timeIndex}`}
                                                 rules={[{
@@ -905,7 +939,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             >
                                                 <Select
                                                     disabled={disabledStatus}
-                                                    mode='multiple'
+                                                    mode="multiple"
                                                     placeholder="Select"
                                                     filterOption={false}
                                                     style={{ display: 'grid', alignContent: 'center' }}
@@ -914,18 +948,21 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                     onSearch={(value) => this.handleSearchGrades(value, mainGradeList)}
                                                 >
                                                     {division.grades && division.grades.map((item) => (
-                                                        <Option value={item.competitionDivisionGradeId}> {item.gradeName}</Option>
+                                                        <Option
+                                                            key={'compDivGrade_' + item.competitionDivisionGradeId}
+                                                            value={item.competitionDivisionGradeId}
+                                                        >
+                                                            {item.gradeName}
+                                                        </Option>
                                                     ))}
                                                 </Select>
                                             </Form.Item>
-                                        }
-                                    </div>)
-                                }
+                                        )}
+                                    </div>
+                                )}
                             </div>
-                        ))
-                        }
-
-                        <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddTimeSlotBtn} className='input-heading-add-another' onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, null, "addTimeSlotManualperVenue", venueIndex)}> + {AppConstants.add_TimeSlot}</span>
+                        ))}
+                        <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddTimeSlotBtn} className="input-heading-add-another" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, null, "addTimeSlotManualperVenue", venueIndex)}> + {AppConstants.add_TimeSlot}</span>
                     </div>
                     {data.length > 1 &&
                         <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
@@ -941,6 +978,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             </div >
         )
     }
+
     onSelectDivision(divisions, key, mainKey, index, mainId, id) {
         this.props.ClearDivisionArr("divisions")
 
@@ -958,16 +996,19 @@ class CompetitionCourtAndTimesAssign extends Component {
         })
         this.props.searchDivisionList(filteredData, 'divisions')
     };
+
     handleSearchGrades = (value, data) => {
         const filteredData = data.filter(memo => {
             return memo.gradeName.toLowerCase().indexOf(value.toLowerCase()) > -1
         })
         this.props.searchDivisionList(filteredData, 'grades')
     };
+
     onSelectDivisionMatchDuration(divisions, key, mainKey, timeIndex, mainId, id, index) {
         this.props.ClearDivisionArr("divisions")
         this.props.UpdateTimeSlotsDataManual(divisions, key, mainKey, timeIndex, mainId, id, index)
     }
+
     onSelectGradesMatchDuration(divisions, key, mainKey, timeIndex, mainId, id, index) {
         this.props.ClearDivisionArr("grades")
         this.props.UpdateTimeSlotsDataManual(divisions, key, mainKey, timeIndex, mainId, id, index)
@@ -977,11 +1018,11 @@ class CompetitionCourtAndTimesAssign extends Component {
         this.props.ClearDivisionArr("grades")
         this.props.UpdateTimeSlotsDataManual(divisions, key, mainKey, timeIndex, id, index, venueIndex)
     }
+
     onSelectDivisionsMatchDurationManual(divisions, key, mainKey, timeIndex, id, index, venueIndex) {
         this.props.ClearDivisionArr("divisions")
         this.props.UpdateTimeSlotsDataManual(divisions, key, mainKey, timeIndex, id, index, venueIndex)
     }
-
 
     // add data on click of division
     addTimeSlotDivision(item, index, mainId, id, data) {
@@ -1009,8 +1050,13 @@ class CompetitionCourtAndTimesAssign extends Component {
                         onSearch={(value) => { this.handleSearch(value, mainDivisionList) }}
                         onChange={(divisions) => this.onSelectDivision(divisions, 'venuePreferenceEntityId', 'competitionTimeslotsEntity', index, mainId, id)}
                     >
-                        {division.divisions && division.divisions.map((item, divisionIndex) => (
-                            <Option key={"divisionName" + divisionIndex} value={item.competitionMembershipProductDivision}> {item.divisionName}</Option>
+                        {division.divisions && division.divisions.map((item) => (
+                            <Option
+                                key={'compMemProdDiv_' + item.competitionMembershipProductDivision}
+                                value={item.competitionMembershipProductDivision}
+                            >
+                                {item.divisionName}
+                            </Option>
                         ))}
                     </Select>
                 </Form.Item>
@@ -1049,8 +1095,9 @@ class CompetitionCourtAndTimesAssign extends Component {
     addTimeSlotGrades(item, index, mainId, id, data) {
         let grades = this.props.competitionTimeSlots.getcompetitionTimeSlotData
         let timeSlotEntityKey = this.props.competitionTimeSlots
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         let mainGradeList = this.props.competitionTimeSlots.mainGradeList
+
         return (
             <div style={{ display: "flex", flexDirection: "row" }}>
                 <Form.Item
@@ -1070,11 +1117,14 @@ class CompetitionCourtAndTimesAssign extends Component {
                         onChange={(grades) => this.onSelectGrades(grades, 'venuePreferenceEntityId', 'competitionTimeslotsEntity', index, mainId, id)}
                         onSearch={(value) => this.handleSearchGrades(value, mainGradeList)}
                     >
-                        {grades.grades && grades.grades.map((item, gradesIndex) => {
-                            return (
-                                <Option key={"grades33" + gradesIndex} value={item.competitionDivisionGradeId}> {item.gradeName}</Option>
-                            )
-                        })}
+                        {grades.grades && grades.grades.map((item) => (
+                            <Option
+                                key={'compDivGrade_' + item.competitionDivisionGradeId}
+                                value={item.competitionDivisionGradeId}
+                            >
+                                {item.gradeName}
+                            </Option>
+                        ))}
                     </Select>
                 </Form.Item>
                 {data.length > 1 && (
@@ -1106,7 +1156,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     addDataTimeSlotManual(item, index, id, mainId, data) {
         let daysList = this.props.competitionTimeSlots
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         let mainGradeList = this.props.competitionTimeSlots.mainGradeList
         let mainDivisionList = this.props.competitionTimeSlots.mainDivisionList
 
@@ -1128,14 +1178,16 @@ class CompetitionCourtAndTimesAssign extends Component {
                             placeholder="Select Week Day"
                             disabled={disabledStatus}
                         >
-                            {daysList.weekDays.length > 0 && daysList.weekDays.map((item, index) => (
-                                <Option key={"days" + index} value={item.id}> {item.description}</Option>
+                            {daysList.weekDays.map((item) => (
+                                <Option key={`weekDay_${item.id}`} value={item.id}>
+                                    {item.description}
+                                </Option>
                             ))}
                         </Select>
                     </Form.Item>
                 </div>
                 <div className="col-sm">
-                    {item.startTime.length > 0 && item.startTime.map((timeItem, timeIndex) => (
+                    {item.startTime.map((timeItem, timeIndex) => (
                         <div className="row" key={"timeSlotindex" + timeIndex}>
                             {/* <div className="col-sm"> */}
                             {/* <div className={"col-sm"}> */}
@@ -1150,7 +1202,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     onBlur={(e) => this.onCompVenueTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, timeIndex, 'startTime')}
                                     value={timeItem.startTime != null && moment(timeItem.startTime, "HH:mm")}
                                     format="HH:mm"
-                                // minuteStep={15}
+                                    // minuteStep={15}
                                 />
                                 {item.startTime.length > 1 && (
                                     <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
@@ -1187,7 +1239,12 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 onSearch={(value) => this.handleSearch(value, mainDivisionList)}
                                             >
                                                 {id == 4 && division.divisions && division.divisions.map((item) => (
-                                                    <Option value={item.competitionMembershipProductDivision}> {item.divisionName}</Option>
+                                                    <Option
+                                                        key={'compMemProdDiv_' + item.competitionMembershipProductDivision}
+                                                        value={item.competitionMembershipProductDivision}
+                                                    >
+                                                        {item.divisionName}
+                                                    </Option>
                                                 ))}
                                             </Select>
                                         </Form.Item>
@@ -1210,8 +1267,13 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 onChange={(divisions) => this.onSelectGradesMatchDuration(divisions, 'venuePreferenceTypeRefId', 'competitionTimeslotManual', timeIndex, mainId, id, index)}
                                                 onSearch={(value) => this.handleSearchGrades(value, mainGradeList)}
                                             >
-                                                {division.grades && division.grades.map((item, index) => (
-                                                    <Option key={"grades" + index} value={item.competitionDivisionGradeId}> {item.gradeName}</Option>
+                                                {division.grades && division.grades.map((item) => (
+                                                    <Option
+                                                        key={'compDivGrade_' + item.competitionDivisionGradeId}
+                                                        value={item.competitionDivisionGradeId}
+                                                    >
+                                                        {item.gradeName}
+                                                    </Option>
                                                 ))}
                                             </Select>
                                         </Form.Item>

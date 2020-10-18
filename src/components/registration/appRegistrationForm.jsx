@@ -817,9 +817,9 @@ class AppRegistrationForm extends Component {
                         onChange={(e) => this.onChangeSetParticipantValue(e, "competitionMembershipProductTypeId", index )}
                         value={item.competitionMembershipProductTypeId}
                     >
-                        {(item.membershipProducts || []).map((mem, index) => (
+                        {(item.membershipProducts || []).map((mem) => (
                             <Option
-                                key={mem.competitionMembershipProductTypeId}
+                                key={'compMemProdType_' + mem.competitionMembershipProductTypeId}
                                 value={mem.competitionMembershipProductTypeId}
                                 disabled={mem.isDisabled}
                             >
@@ -834,8 +834,8 @@ class AppRegistrationForm extends Component {
                     style={{ width: "100%", paddingRight: 1 }}
                     onChange={(e) => this.onChangeSetValue(e, "" )}
                 >
-                    {(divisions || []).map((division, index) => (
-                        <Option key={division.id} value={division.id}>{division.name}</Option>
+                    {(divisions || []).map((division) => (
+                        <Option key={'division_' + division.id} value={division.id}>{division.name}</Option>
                     ))}
                 </Select> */}
             </div>
@@ -996,8 +996,8 @@ class AppRegistrationForm extends Component {
                         onChange={(e) => this.onChangeSetParticipantValue(e, "stateRefId", index )}
                         value={item.stateRefId}
                     >
-                        {stateList.length > 0 && stateList.map((item) => (
-                            <Option key={item.id} value={item.id}> {item.name}</Option>
+                        {stateList.map((item) => (
+                            <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
                         ))}
                     </Select>
                 </Form.Item>
@@ -1166,8 +1166,8 @@ class AppRegistrationForm extends Component {
                                 onChange={(e) => this.onChangeSetParentValue(e, "stateRefId", index)}
                                 value={item.parentOrGuardian.stateRefId}
                             >
-                                {stateList.length > 0 && stateList.map((item) => (
-                                    <Option key={item.id} value={item.id}> {item.name}</Option>
+                                {stateList.map((item) => (
+                                    <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -1272,8 +1272,8 @@ class AppRegistrationForm extends Component {
                     onChange={(e) => this.onChangeSetValue(e, index, participantOrProduct, productIndex, "positions", subIndex, "position1")}
                     value={item.position1}
                 >
-                    {(playerPositionList || []).map((play1, index) => (
-                        <Option key={play1.id} value={play1.id}>{play1.name}</Option>
+                    {(playerPositionList || []).map((play1) => (
+                        <Option key={'playerPosition1_' + play1.id} value={play1.id}>{play1.name}</Option>
                     ))}
                 </Select>
 
@@ -1283,8 +1283,8 @@ class AppRegistrationForm extends Component {
                     onChange={(e) => this.onChangeSetValue(e, index, participantOrProduct, productIndex, "positions", subIndex, "position2")}
                     value={item.position2}
                 >
-                    {(playerPositionList || []).map((play2, index) => (
-                        <Option key={play2.id} value={play2.id}>{play2.name}</Option>
+                    {(playerPositionList || []).map((play2) => (
+                        <Option key={'playerPosition2_' + play2.id} value={play2.id}>{play2.name}</Option>
                     ))}
                 </Select>
             </div>
@@ -1449,8 +1449,8 @@ class AppRegistrationForm extends Component {
                         onChange={(e) => this.onChangeSetParticipantValue(e.target.value, "heardByRefId", index)}
                         value={item.heardByRefId}
                     >
-                        {(heardByList || []).map((heard, index) => (
-                            <Radio key={heard.id} value={heard.id}>{heard.description}</Radio>
+                        {(heardByList || []).map((heard) => (
+                            <Radio key={'heardBy_' + heard.id} value={heard.id}>{heard.description}</Radio>
                         ))}
                     </Radio.Group>
                 </Form.Item>
@@ -1465,15 +1465,17 @@ class AppRegistrationForm extends Component {
                 )}
 
                 <InputWithHead heading={AppConstants.favouriteTeam} required="required-field" />
-                <Form.Item name={`favouriteTeamRefId${index}`}
-                           rules={[{ required: true, message: ValidationConstants.favoriteTeamField[0] }]}>
+                <Form.Item
+                    name={`favouriteTeamRefId${index}`}
+                    rules={[{ required: true, message: ValidationConstants.favoriteTeamField[0] }]}
+                >
                     <Select
                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                         onChange={(e) => this.onChangeSetParticipantValue(e, "favouriteTeamRefId", index)}
                         value={item.favouriteTeamRefId}
                     >
-                        {(favouriteTeamsList || []).map((fav, index) => (
-                            <Option key={fav.id} value={fav.id}>{fav.description}</Option>
+                        {(favouriteTeamsList || []).map((fav) => (
+                            <Option key={'favouriteTeam_' + fav.id} value={fav.id}>{fav.description}</Option>
                         ))}
                     </Select>
                 </Form.Item>
@@ -1490,8 +1492,8 @@ class AppRegistrationForm extends Component {
                                 onChange={(e) => this.onChangeSetParticipantValue(e, "favouriteFireBird", index)}
                                 value={item.favouriteFireBird}
                             >
-                                {(firebirdPlayerList || []).map((fire, index) => (
-                                    <Option key={fire.id} value={fire.id}>{fire.description}</Option>
+                                {(firebirdPlayerList || []).map((fire) => (
+                                    <Option key={'firebirdPlayer_' + fire.id} value={fire.id}>{fire.description}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -1580,8 +1582,8 @@ class AppRegistrationForm extends Component {
                             onChange={(e) => this.onChangeSetRegistrationValue(e, "countryRefId")}
                             value={registrationDetail.countryRefId}
                         >
-                            {countryList.length > 0 && countryList.map((country) => (
-                                <Option key={country.id} value={country.id}>{country.description}</Option>
+                            {countryList.map((country) => (
+                                <Option key={'country_' + country.id} value={country.id}>{country.description}</Option>
                             ))}
                         </Select>
                     </div>
@@ -1596,8 +1598,8 @@ class AppRegistrationForm extends Component {
                             onChange={(e) => this.onChangeSetRegistrationValue(e, "nationalityRefId")}
                             value={registrationDetail.nationalityRefId}
                         >
-                            {nationalityList.length > 0 && nationalityList.map((nation) => (
-                                <Option key={nation.id} value={nation.id}>{nation.description}</Option>
+                            {nationalityList.map((nation) => (
+                                <Option key={'nationality_' + nation.id} value={nation.id}>{nation.description}</Option>
                             ))}
                         </Select>
                     </div>
@@ -1642,8 +1644,7 @@ class AppRegistrationForm extends Component {
                                     </div>
                                     <div className="transfer-image-view pointer" onClick={() =>
                                         this.deleteEnableOrDisablePopup("voucher", true, 0, 0, index, AppConstants.voucherDeleteConfirmMsg)}>
-                                        <span className="user-remove-btn"><i className="fa fa-trash-o"
-                                                                             aria-hidden="true" /></span>
+                                        <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                                         <span className="user-remove-text">
                                             {AppConstants.remove}
                                         </span>
@@ -1661,9 +1662,12 @@ class AppRegistrationForm extends Component {
                                     onChange={(e) => this.onChangeSetVoucherValue(e, "tempParticipantId", index)}
                                     value={voc.tempParticipantId}
                                 >
-                                    {(userRegistrations || []).map((item, partIndex) => (
-                                        <Option key={item.tempParticipantId} value={item.tempParticipantId}
-                                                disabled={item.isVoucherAdded}>
+                                    {(userRegistrations || []).map((item) => (
+                                        <Option
+                                            key={'tempParticipant_' + item.tempParticipantId}
+                                            value={item.tempParticipantId}
+                                            disabled={item.isVoucherAdded}
+                                        >
                                             {item.firstName}
                                         </Option>
                                     ))}
@@ -1695,9 +1699,9 @@ class AppRegistrationForm extends Component {
                     onChange={(e) => this.onChangeSetProdMemberTypeValue(e, index, prodIndex)}
                     value={prod.competitionMembershipProductTypeId}
                 >
-                    {(item.membershipProducts || []).map((mem, index) => (
+                    {(item.membershipProducts || []).map((mem) => (
                         <Option
-                            key={mem.competitionMembershipProductTypeId}
+                            key={'compMemProdType_' + mem.competitionMembershipProductTypeId}
                             value={mem.competitionMembershipProductTypeId}
                             disabled={mem.isDisabled}
                         >

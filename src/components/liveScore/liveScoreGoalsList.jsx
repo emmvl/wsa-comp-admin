@@ -299,7 +299,7 @@ class LiveScoreGoalList extends Component {
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
-                < div className="row">
+                <div className="row">
                     <div className="col-sm" style={{ alignSelf: 'center' }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.goalState}</Breadcrumb.Item>
@@ -318,7 +318,8 @@ class LiveScoreGoalList extends Component {
                                     className="year-select reg-filter-select1"
                                     style={{ display: "flex", justifyContent: "flex-end", minWidth: 100 }}
                                     onChange={(filter) => this.onChangeFilter(filter)}
-                                    value={this.state.filter}>
+                                    value={this.state.filter}
+                                >
                                     <Option value={AppConstants.ByMatch}>{AppConstants.ByMatch}</Option>
                                     <Option value={AppConstants.total}>{AppConstants.total}</Option>
                                 </Select>

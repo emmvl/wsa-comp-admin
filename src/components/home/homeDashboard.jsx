@@ -371,7 +371,7 @@ class HomeDashboard extends Component {
         return (
             <div>
                 {this.actionboxHeadingView()}
-                {/* <span className='input-heading'>{"This feature is not implemented yet"}</span> */}
+                {/* <span className="input-heading">{"This feature is not implemented yet"}</span> */}
                 <div className="home-table-view" style={{ boxShadow: 'none', background: 'none' }}>
                     <div id={AppConstants.home_table_view} className="table-responsive home-dash-table-view">
                         <Table className="home-dashboard-table"
@@ -414,12 +414,14 @@ class HomeDashboard extends Component {
                 </div>
                 <div className="col-sm text-right">
                     <div style={{
-                        width: "100%", display: "flex",
+                        width: "100%",
+                        display: "flex",
                         flexDirection: "row",
-                        alignItems: "center", marginLeft: 7,
+                        alignItems: "center",
+                        marginLeft: 7,
                         justifyContent: "flex-end"
                     }}>
-                        <span className='year-select-heading' style={{ marginRight: 10 }}>{AppConstants.year}:</span>
+                        <span className="year-select-heading" style={{ marginRight: 10 }}>{AppConstants.year}:</span>
                         <Select
                             name="yearRefId"
                             className="year-select reg-filter-select-year"
@@ -427,13 +429,11 @@ class HomeDashboard extends Component {
                             onChange={yearRefId => this.onYearChange(yearRefId)}
                             value={yearRefId}
                         >
-                            {this.props.appState.yearList.map(item => {
-                                return (
-                                    <Option key={"yearRefId" + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                );
-                            })}
+                            {this.props.appState.yearList.map(item => (
+                                <Option key={'year_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
                 </div>
@@ -497,7 +497,7 @@ class HomeDashboard extends Component {
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
                                     onClick={() => (userRoleId == 2) && history.push("/registration")}  >
 
-                                    <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true"></i></a>
+                                    <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true" /></a>
 
                                 </div>
                             </div>
@@ -525,7 +525,7 @@ class HomeDashboard extends Component {
                                 </div>
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
                                     onClick={() => userRoleId == 2 && history.push("/competitionDashboard")}  >
-                                    <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true"></i></a>
+                                    <a className="view-more-btn"><i className="fa fa-angle-right" aria-hidden="true" /></a>
                                 </div>
                             </div>
                         </div>
@@ -552,7 +552,7 @@ class HomeDashboard extends Component {
                                 <div className="col-sm-2" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}
                                     onClick={() => userRoleId == 2 && history.push("/liveScoreCompetitions")}  >
 
-                                    <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true"></i></a>
+                                    <a className="view-more-btn" ><i className="fa fa-angle-right" aria-hidden="true" /></a>
 
                                 </div>
                             </div>

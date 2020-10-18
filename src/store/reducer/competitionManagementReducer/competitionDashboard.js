@@ -7,7 +7,7 @@ const replicateObj = {
 		"oldYearRefId": null,
 		"oldCompetitionId": null,
 		"newYearRefId": null,
-		"competitionName": null,
+		competitionName: null,
 		"competitionDates": null,
 		"competitionStartDate": null,
 		"competitionEndDate": null,
@@ -19,11 +19,11 @@ const replicateObj = {
 			"nonPlayingDates": 1,
 			"registrationTypes": 1,
 			"registrationFees": 1,
-			"venues": 1,
+			venues: 1,
 			"fixtures": {
                 "divisions": 1,
-                "grades": 1,
-                "teams": 1,
+                grades: 1,
+                teams: 1,
                 "venuePreferneces": 1,
                 "timeslots": 1
             }
@@ -34,8 +34,8 @@ const replicateObj = {
 
 const fixtures = {
     "divisions": null,
-    "grades": null,
-    "teams": null,
+    grades: null,
+    teams: null,
     "venuePreferneces": null,
     "timeslots": null
 }

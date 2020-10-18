@@ -76,7 +76,7 @@ class LiveScoreIncidentView extends Component {
                         </NavLink>
                     </div>
                 </div>
-            </Header >
+            </Header>
         )
     }
 

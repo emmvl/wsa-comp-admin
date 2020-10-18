@@ -174,8 +174,8 @@ class LiveScoreAddDivision extends Component {
                                 onChange={(value) => this.props.liveScoreUpdateDivisionAction(value, "positionTracking")}
                                 placeholder={AppConstants.positionTracking}
                             >
-                                {this.state.positionTrackingArray.map((item, index) => (
-                                    <Option key={index + "goal"} value={item.id}>{item.value}</Option>
+                                {this.state.positionTrackingArray.map((item) => (
+                                    <Option key={'positionTracking_' + item.id} value={item.id}>{item.value}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -190,8 +190,8 @@ class LiveScoreAddDivision extends Component {
                                 onChange={(value) => this.props.liveScoreUpdateDivisionAction(value, "recordGoalAttempts")}
                                 placeholder={AppConstants.recordGoalAttempt}
                             >
-                                {this.state.recordGoalAttemptArray.map((item, index) => (
-                                    <Option key={index + "record"} value={item.id}>{item.value}</Option>
+                                {this.state.recordGoalAttemptArray.map((item) => (
+                                    <Option key={'recordGoalAttempt_' + item.id} value={item.id}>{item.value}</Option>
                                 ))}
                             </Select>
                         </Form.Item>

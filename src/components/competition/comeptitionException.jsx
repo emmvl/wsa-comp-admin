@@ -199,7 +199,7 @@ class CompetitionException extends Component {
                             value={this.state.venueId}
                         >
                             {venueData.map((item) => (
-                                <Option key={'venue' + item.id} value={item.venueId}>
+                                <Option key={'venue_' + item.venueId} value={item.venueId}>
                                     {item.venueName}
                                 </Option>
                             ))}
@@ -215,7 +215,7 @@ class CompetitionException extends Component {
                         onChange={(venueCourtId) => this.changeVenueCourtId(venueCourtId)}
                     >
                         {courtData.map((item) => (
-                            <Option key={'court' + item.id} value={item.id}>
+                            <Option key={'court_' + item.id} value={item.id}>
                                 {item.name}
                             </Option>
                         ))}
@@ -276,11 +276,11 @@ class CompetitionException extends Component {
             let matchDate = moment(this.state.matchDate).format('YYYY-MM-DD') + " " + this.state.time
             var date = moment(this.state.time, "hh:mm:ss A").add(this.state.matchDuration, "minute")
             let postObj = {
-                "drawsId": this.state.drawsId,
-                "venueCourtId": this.state.venueCourtId,
-                "matchDate": matchDate,
-                "startTime": this.state.time,
-                "endTime": moment(date).format("HH:mm")
+                drawsId: this.state.drawsId,
+                venueCourtId: this.state.venueCourtId,
+                matchDate,
+                startTime: this.state.time,
+                endTime: moment(date).format("HH:mm")
             }
             let apiData = {
                 yearRefId: this.state.yearRefId,
@@ -363,11 +363,11 @@ class CompetitionException extends Component {
                 >
                     <Select
                         className="year-select reg-filter-select-competition ml-2"
-                        onChange={(e) => this.setState({generateRoundId: e})}
-                        placeholder={'Round'}
+                        onChange={(generateRoundId) => this.setState({ generateRoundId })}
+                        placeholder="Round"
                     >
-                        {(activeDrawsRoundsData || []).map((d, dIndex) => (
-                            <Option key={d.roundId} value={d.roundId}>{d.name}</Option>
+                        {(activeDrawsRoundsData || []).map((d) => (
+                            <Option key={'activeDrawsRound_' + d.roundId} value={d.roundId}>{d.name}</Option>
                         ))}
                     </Select>
                 </Modal>
@@ -382,7 +382,7 @@ class CompetitionException extends Component {
                     menuHeading={AppConstants.competitions}
                     menuName={AppConstants.competitions}
                 />
-                <InnerHorizontalMenu menu={'competition'} compSelectedKey={'24'} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey={'24'} />
                 <Layout>
                     {this.headerView()}
                     <Form

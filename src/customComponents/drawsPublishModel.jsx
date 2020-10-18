@@ -44,10 +44,10 @@ class DrawsPublishModel extends React.Component {
               <Radio value={2}>
                 {AppConstants.part}
               </Radio>
-              {modalIsShowPart ?
+              {modalIsShowPart && (
                 <div style={{ display: 'grid' }}>
                   <Checkbox className="checkbox-model-popup" onChange={modelCheckDivision}>Divisions</Checkbox>
-                  {modalIsShowDivision ?
+                  {modalIsShowDivision && (
                     <div className="col-sm-3 division">
                       <Select
                         mode="multiple"
@@ -55,21 +55,19 @@ class DrawsPublishModel extends React.Component {
                         onChange={modalDivisions}
                         filterOption={false}
                       >
-                        {(filteredDivisions || []).map((item) => {
-                          return (
-                            <Option
-                              key={'divisionGradeNameList' + item.competitionDivisionGradeId}
-                              value={item.competitionDivisionGradeId}
-                            >
-                              {item.name}
-                            </Option>
-                          );
-                        })}
+                        {(filteredDivisions || []).map((item) => (
+                          <Option
+                            key={'divisionGrade_' + item.competitionDivisionGradeId}
+                            value={item.competitionDivisionGradeId}
+                          >
+                            {item.name}
+                          </Option>
+                        ))}
                       </Select>
                     </div>
-                    : null}
+                  )}
                   <Checkbox className="checkbox-model-popup" onChange={modelCheckRound}>Rounds</Checkbox>
-                  {modalIsShowRound ?
+                  {modalIsShowRound && (
                     <div className="col-sm-3 division">
                       <Select
                         mode="multiple"
@@ -78,18 +76,16 @@ class DrawsPublishModel extends React.Component {
                         filterOption={false}
                         //onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
                       >
-                        {(filteredRounds || []).map((item) => {
-                          return (
-                            <Option key={item.roundId} value={item.roundId}>
-                              {item.name}
-                            </Option>
-                          );
-                        })}
+                        {(filteredRounds || []).map((item) => (
+                          <Option key={'round_' + item.roundId} value={item.roundId}>
+                            {item.name}
+                          </Option>
+                        ))}
                       </Select>
                     </div>
-                    : null}
+                  )}
                 </div>
-                : null}
+              )}
             </Radio.Group>
           </div>
         </div>

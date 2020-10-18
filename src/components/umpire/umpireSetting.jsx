@@ -111,8 +111,8 @@ class UmpireSetting extends Component {
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
                                 >
-                                    {competition.map((item, index) => (
-                                        <Option key={`longName${index}` + item.id} value={item.id}>{item.longName}</Option>
+                                    {competition.map((item) => (
+                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -151,8 +151,8 @@ class UmpireSetting extends Component {
 
                     {allocateViaPool && (
                         <Radio.Group className="reg-competition-radio ml-5">
-                            {allocateViaPoolArr.length > 0 && allocateViaPoolArr.map((item, index) => (
-                                <Radio key={`name` + index} value={item.id}>{item.name}</Radio>
+                            {allocateViaPoolArr.map((item) => (
+                                <Radio key={'allocateViaPool_' + item.id} value={item.id}>{item.name}</Radio>
                             ))}
                         </Radio.Group>
                     )}
@@ -219,7 +219,13 @@ class UmpireSetting extends Component {
                                     value={compOrgDivisionSelected}
                                 >
                                     {compOrgDiv.map((item) => (
-                                        <Option key={"compOrgDiv" + item.id} disabled={item.disabled} value={item.id}>{item.name}</Option>
+                                        <Option
+                                            key={'compOrgDivision_' + item.id}
+                                            disabled={item.disabled}
+                                            value={item.id}
+                                        >
+                                            {item.name}
+                                        </Option>
                                     ))}
                                 </Select>
                             )}

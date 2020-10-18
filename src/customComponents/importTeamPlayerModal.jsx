@@ -205,7 +205,7 @@ class ImportTeamPlayerModal extends React.Component {
                             : null
                         }
                     </div>
-                </Modal >
+                </Modal>
             </div>
         )
     }

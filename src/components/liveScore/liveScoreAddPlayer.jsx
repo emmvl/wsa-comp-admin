@@ -89,7 +89,7 @@ class LiveScoreAddPlayer extends Component {
 
                     if (teamsId) {
                         this.props.form.setFieldsValue({
-                            "team": teamsId
+                            team: teamsId
                         })
                     }
                 }
@@ -128,7 +128,7 @@ class LiveScoreAddPlayer extends Component {
 
                     if (teamsId) {
                         this.props.form.setFieldsValue({
-                            "team": teamsId
+                            team: teamsId
                         })
                     }
                 }
@@ -145,7 +145,7 @@ class LiveScoreAddPlayer extends Component {
         this.formRef.current.setFieldsValue({
             'firstName': playerData.firstName,
             'lastName': playerData.lastName,
-            "team": playerData.teamId ? playerData.teamId : this.state.teamId
+            team: playerData.teamId ? playerData.teamId : this.state.teamId
         })
     }
 
@@ -204,7 +204,7 @@ class LiveScoreAddPlayer extends Component {
         return (
             <div className="content-view pt-0">
                 {/* First and Last name row */}
-                <div className='row'>
+                <div className="row">
                     <div className="col-sm">
                         <Form.Item name='firstName' rules={[{ required: true, message: ValidationConstants.nameField[0] }]}>
                             <InputWithHead
@@ -286,7 +286,7 @@ class LiveScoreAddPlayer extends Component {
                                 placeholder={AppConstants.selectTeam}
                             >
                                 {isArrayNotEmpty(teamData) && teamData.map((item) => (
-                                    <Option value={item.id}> {item.name}</Option>
+                                    <Option key={'team_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
