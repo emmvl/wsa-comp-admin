@@ -17,7 +17,7 @@ import {
     getGenderAction,
     registrationPaymentStatusAction,
 } from "store/actions/commonAction/commonAction";
-import { endUserRegDashboardListAction } from "store/actions/registrationAction/endUserRegistrationAction";
+import { endUserRegDashboardListAction, regTransactionUpdateAction } from "store/actions/registrationAction/endUserRegistrationAction";
 import { getAllCompetitionAction } from "store/actions/registrationAction/registrationDashboardAction";
 import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
 import { getOnlyYearListAction, } from "store/actions/appAction";
@@ -147,8 +147,8 @@ const columns = [
     },
     {
         title: "Paid Fee (incl. GST)",
-        dataIndex: "fee",
-        key: "fee",
+        dataIndex: "paidFee",
+        key: "paidFee",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (fee) => (
@@ -820,6 +820,7 @@ function mapDispatchToProps(dispatch) {
         getOnlyYearListAction,
         getAllCompetitionAction,
         registrationPaymentStatusAction,
+        regTransactionUpdateAction
     }, dispatch);
 }
 

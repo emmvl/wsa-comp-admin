@@ -566,4 +566,6 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_GET_PAYMENT_METHOD_REF_LOAD, getPaymentMethodsDefaultSaga);
   yield takeEvery(ApiConstants.API_OLD_MEMBERSHIP_PRODUCTS_BY_COMP_ID_LOAD, getOldMembershipProductsByCompId);
   yield takeEvery(ApiConstants.API_NEW_MEMBERSHIP_PRODUCTS_BY_YEAR_LOAD, getNewMembershipProductsByYear);
+
+  yield takeEvery(ApiConstants.API_REG_TRANSACTION_UPDATE_LOAD, endUserRegSaga.updateRegTransactionSaga)
 }

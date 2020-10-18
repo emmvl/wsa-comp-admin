@@ -537,7 +537,11 @@ let AxiosApi = {
         let organisationUniqueKey = payload.organisationUniqueKey;
         var url = `api/membershipproduct/all/${yearRefId}?organisationUniqueKey=${organisationUniqueKey}`
         return Method.dataGet(url, token);
-    }
+    },
+    updateRegTransaction(payload) {
+        var url = `/api/registration/transaction/update`;
+        return Method.dataPost(url, token, payload);
+    },
 };
 
 const Method = {

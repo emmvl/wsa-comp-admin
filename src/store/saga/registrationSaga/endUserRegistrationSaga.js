@@ -103,3 +103,20 @@ export function* endUserRegDashboardListSaga(action) {
     yield call(errorSaga, error, ApiConstants.API_USER_REG_DASHBOARD_LIST_ERROR)
   }
 }
+
+export function* updateRegTransactionSaga(action) {
+  try {
+    const result = yield call(AxiosApi.updateRegTransaction, action.payload);
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_REG_TRANSACTION_UPDATE_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result, ApiConstants.API_USER_REG_DASHBOARD_LIST_FAIL)
+    }
+  } catch (error) {
+    yield call(errorSaga, error, ApiConstants.API_USER_REG_DASHBOARD_LIST_ERROR)
+  }
+}

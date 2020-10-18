@@ -48,10 +48,22 @@ function endUserRegDashboardListAction(payload, sortBy, sortOrder) {
     return action;
 }
 
+function regTransactionUpdateAction(payload) {
+    const action = {
+        type: ApiConstants.API_REG_TRANSACTION_UPDATE_LOAD,
+        payload: payload
+    };
+
+    return action;
+}
+
+
+
 export {
     saveEndUserRegistrationAction,
     updateEndUserRegisrationAction,
     orgRegistrationRegSettingsEndUserRegAction,
     membershipProductEndUserRegistrationAction,
-    endUserRegDashboardListAction
+    endUserRegDashboardListAction,
+    regTransactionUpdateAction
 }

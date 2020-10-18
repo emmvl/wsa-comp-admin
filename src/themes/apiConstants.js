@@ -1940,6 +1940,9 @@ const ApiConstants = {
   Search_Division_Timeslot_update:"Search_Division_Timeslot_update",
   Clear_Division_Timeslot_update:"Clear_Division_Timeslot_update",
 
+  API_REG_TRANSACTION_UPDATE_LOAD: "API_REG_TRANSACTION_UPDATE_LOAD",
+  API_REG_TRANSACTION_UPDATE_SUCCESS: "API_REG_TRANSACTION_UPDATE_SUCCESS",
+
 };
 
 export default ApiConstants;
