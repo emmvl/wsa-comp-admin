@@ -3550,20 +3550,22 @@ class RegistrationCompetitionFee extends Component {
                     }
                     if (fee_data[i].isTeamSeasonal) {
                         feeSeasonalTeamData = fee_data[i].seasonalTeam.perType;
+                        // console.log("feeSeasonalTeamData", feeSeasonalTeamData);
+                        // console.log("feeSeasonalData", feeSeasonalData);
                         for (let j in feeSeasonalData) {
                             for (let k in feeSeasonalTeamData) {
                                 if (
                                     feeSeasonalData[j].competitionMembershipProductTypeId ==
                                     feeSeasonalTeamData[k].competitionMembershipProductTypeId
                                 ) {
-                                    feeSeasonalData[j]['teamSeasonalFees'] = feeSeasonalTeamData[j].fee;
-                                    feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
-                                    feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
-                                    feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
-                                    feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
-                                    feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
+                                    feeSeasonalData[j]['teamSeasonalFees'] = feeSeasonalTeamData[j]?.fee;
+                                    feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j]?.gst;
+                                    feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j]?.affiliateFee;
+                                    feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j]?.affiliateGst;
+                                    feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.nominationFees;
+                                    feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.nominationGST;
+                                    feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.affNominationFees;
+                                    feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.affNominationGST;
                                     break;
                                 }
                             }
@@ -3578,10 +3580,10 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j].competitionMembershipProductTypeId ==
                                     feeSeasonalTeamData[k].competitionMembershipProductTypeId
                                 ) {
-                                    feeSeasonalData[j]['teamCasualFees'] = feeCasualTeamData[j].fee;
-                                    feeSeasonalData[j]['teamCasualGST'] = feeCasualTeamData[j].gst;
-                                    feeSeasonalData[j]['affiliateTeamCasualFees'] = feeCasualTeamData[j].affiliateFee;
-                                    feeSeasonalData[j]['affiliateTeamCasualGST'] = feeCasualTeamData[j].affiliateGst;
+                                    feeSeasonalData[j]['teamCasualFees'] = feeCasualTeamData[j]?.fee;
+                                    feeSeasonalData[j]['teamCasualGST'] = feeCasualTeamData[j]?.gst;
+                                    feeSeasonalData[j]['affiliateTeamCasualFees'] = feeCasualTeamData[j]?.affiliateFee;
+                                    feeSeasonalData[j]['affiliateTeamCasualGST'] = feeCasualTeamData[j]?.affiliateGst;
 
                                     break;
                                 }
