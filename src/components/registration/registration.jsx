@@ -146,7 +146,7 @@ const columns = [
         },
     },
     {
-        title: "Fee (incl. GST)",
+        title: "Paid Fee (incl. GST)",
         dataIndex: "fee",
         key: "fee",
         sorter: true,
@@ -154,6 +154,18 @@ const columns = [
         render: (fee) => (
             <div>
                 {fee != null ? currencyFormat(fee) : ""}
+            </div>
+        ),
+    },
+    {
+        title: "Pending Fee (incl. GST)",
+        dataIndex: "pendingFee",
+        key: "pendingFee",
+        sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (pendingFee) => (
+            <div>
+                {pendingFee != null ? currencyFormat(pendingFee) : ""}
             </div>
         ),
     },
