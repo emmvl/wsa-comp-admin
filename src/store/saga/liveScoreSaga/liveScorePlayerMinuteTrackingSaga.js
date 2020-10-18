@@ -1,8 +1,9 @@
-import {put, call, takeEvery} from "redux-saga/effects"
+import { put, call, takeEvery } from "redux-saga/effects"
 import ApiConstants from '../../../themes/apiConstants'
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
 import { message } from "antd";
 import AppConstants from "../../../themes/appConstants";
+import history from "../../../util/history";
 
 function* failSaga(result) {
 
@@ -39,12 +40,13 @@ function* errorSaga(error) {
 // Record player minute
 export function* liveScorePlayerMinuteRecordSaga(action) {
   try {
-    const result = yield call(LiveScoreAxiosApi.liveScorePlayerMinuteRecord, action.data);
+    const result = yield call(LiveScoreAxiosApi.liveScorePlayerMinuteRecord, action.data, action.matchId);
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_RECORD_SUCCESS,
         status: result.status,
       });
+      history.push('/liveScoreMatches')
     } else {
       yield call(failSaga, result);
     }

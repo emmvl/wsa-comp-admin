@@ -69,11 +69,11 @@ function competitionFormatReducer(state = initialState, action) {
             };
 
         case ApiConstants.UPDATE_COMPETITION_FORMAT:
-            
+
             let oldData = state.competitionFormatList;
             let updatedValue = action.updatedData;
             let getKey = action.key;
-            if(getKey == "addCompetitionFormatDivisions")
+            if(getKey === "addCompetitionFormatDivisions")
             {
                 addCompetitionFormatDivision(updatedValue);
                 getCompetitionFormatDivisions(updatedValue);
@@ -89,15 +89,15 @@ function competitionFormatReducer(state = initialState, action) {
             else if(getKey == "nonPlayingDataRemove"){
                 oldData.nonPlayingDates.splice(updatedValue,1);
             }
-            else if(getKey == "nonPlayingUpdateDates"){              
+            else if(getKey == "nonPlayingUpdateDates"){
                 let index = updatedValue.index;
                 let key = updatedValue.key;
-                oldData.nonPlayingDates[index][key] = updatedValue.data;              
-            } 		 
+                oldData.nonPlayingDates[index][key] = updatedValue.data;
+            }
             else{
                 oldData[getKey] = updatedValue;
             }
-           
+
             return { ...state, error: null };
 
         case ApiConstants.API_COMPETITION_FORMAT_FAIL:
@@ -143,7 +143,7 @@ function addCompetitionFormatDivision(data, key){
             isChecked: false,
             isDisabled: false,
             divisionsName:divisions[item].divisionName
-        } 
+        }
         compFormatDivisionObj.divisions.push(divisionsObj);
     }
     data.competionFormatDivisions.push(compFormatDivisionObj);
@@ -160,7 +160,7 @@ function getCompetitionFormatDivisions(data)
         {
             let divisionsArray = [];
             let divisions = data.divisions;
-            
+
             for(let div in divisions){
                 let divisionsObj = {
                     competitionFormatDivisionId: 0,
@@ -172,7 +172,7 @@ function getCompetitionFormatDivisions(data)
                 let itemDivisions = compFormatDivisions[item].divisions;
                 for(let compDivision in itemDivisions)
                 {
-                    if(itemDivisions[compDivision].competitionMembershipProductDivisionId === 
+                    if(itemDivisions[compDivision].competitionMembershipProductDivisionId ===
                         divisions[div].competitionMembershipProductDivision){
                             divisionsObj.competitionFormatDivisionId = itemDivisions[compDivision].competitionFormatDivisionId;
                             divisionsObj.competitionMembershipProductDivisionId = itemDivisions[compDivision].competitionMembershipProductDivisionId;

@@ -96,7 +96,7 @@ class CompetitionFormat extends Component {
             let competitionFormatState = this.props.competitionFormatState;
             let competitionModuleState = this.props.competitionModuleState;
             if (nextProps.competitionFormatState != competitionFormatState) {
-                if (competitionFormatState.onLoad == false && this.state.getDataLoading == true) {
+                if (competitionFormatState.onLoad == false && this.state.getDataLoading) {
                     this.setState({
                         getDataLoading: false,
                     })
@@ -121,14 +121,14 @@ class CompetitionFormat extends Component {
                 if (competitionFormatState.onLoad == false && this.state.loading === true) {
                     this.setState({ loading: false });
                     if (!competitionFormatState.error) {
-                        if (this.state.buttonClicked == "save") {
+                        if (this.state.buttonClicked === "save") {
                             message.success(AppConstants.successMessage);
                         } else if (this.state.buttonClicked == "next") {
                             if (this.state.isFinalAvailable) {
                                 history.push('/competitionFinals');
                             }
-                        } else if (this.state.buttonClicked == "createDraw") {
-                            if (this.state.buttonPressed == "save") {
+                        } else if (this.state.buttonClicked === "createDraw") {
+                            if (this.state.buttonPressed === "save") {
                                 if (this.state.isFinalAvailable) {
                                     history.push('/competitionFinals');
                                 } else {
@@ -179,7 +179,7 @@ class CompetitionFormat extends Component {
                 }
             }
 
-            if (this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false) {
+            if (this.state.roundLoad && this.props.drawsState.onActRndLoad == false) {
                 this.setState({ roundLoad: false });
                 if (this.props.drawsState.activeDrawsRoundsData != null && this.props.drawsState.activeDrawsRoundsData.length > 0) {
                     this.setState({ drawGenerateModalVisible: true })
@@ -202,7 +202,7 @@ class CompetitionFormat extends Component {
 
     apiCalls = (competitionId, yearRefId) => {
         let payload = {
-            yearRefId: yearRefId,
+            yearRefId,
             competitionUniqueKey: competitionId,
             organisationId: this.state.organisationId
         }
@@ -311,7 +311,7 @@ class CompetitionFormat extends Component {
         this.setState({
             deleteModalVisible: flag
         });
-        if (key == "ok") {
+        if (key === "ok") {
             this.deleteCompetitionFormatDivision(competionFormatDivisions, index);
         }
     }
@@ -346,7 +346,7 @@ class CompetitionFormat extends Component {
             //     }
             // });
             // this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
-        } else if (fieldName == "competitionFormatRefId") {
+        } else if (fieldName === "competitionFormatRefId") {
             if (id != 4) {
                 this.props.updateCompetitionFormatAction(null, "noOfRounds");
                 // this.props.updateCompetitionFormatAction(fixtureTemplateId, "fixtureTemplateId");
@@ -377,7 +377,7 @@ class CompetitionFormat extends Component {
         this.setState({
             allDivisionVisible: flag
         });
-        if (key == "ok") {
+        if (key === "ok") {
             this.performAllDivisionOperation(true, competionFormatDivisions, index);
         }
     }
@@ -422,7 +422,7 @@ class CompetitionFormat extends Component {
     }
 
     handleGenerateDrawModal = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             if (this.state.generateRoundId != null) {
                 this.callGenerateDraw();
                 this.setState({ drawGenerateModalVisible: false });
@@ -502,7 +502,7 @@ class CompetitionFormat extends Component {
         let compDetailDisable = false;
         // this.state.permissionState.compDetailDisable
 
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         return (
             <div className="fluid-width mt-3">
                 <div className="row">
@@ -512,7 +512,7 @@ class CompetitionFormat extends Component {
                             placeholder={AppConstants.name}
                             value={item.name}
                             onChange={(e) => this.updateNonPlayingNames(e.target.value, index, "name")}
-                            disabled={(disabledStatus || compDetailDisable) ? true : false}
+                            disabled={disabledStatus || compDetailDisable}
                         />
                     </div>
                     <div className="col-sm">
@@ -525,7 +525,7 @@ class CompetitionFormat extends Component {
                             format="DD-MM-YYYY"
                             showTime={false}
                             value={item.nonPlayingDate && moment(item.nonPlayingDate, "YYYY-MM-DD")}
-                            disabled={(disabledStatus || compDetailDisable) ? true : false}
+                            disabled={disabledStatus || compDetailDisable}
                         />
                     </div>
                     <div className="col-sm-2 transfer-image-view" onClick={() => !disabledStatus ? this.removeNonPlaying(index) : null}>
@@ -568,15 +568,15 @@ class CompetitionFormat extends Component {
         if (key == "date") {
             let obj = {
                 data: moment(data).format("YYYY-MM-DD"),
-                index: index,
+                index,
                 key: "nonPlayingDate"
             }
             this.props.updateCompetitionFormatAction(obj, "nonPlayingUpdateDates");
         } else {
             let obj = {
-                data: data,
-                index: index,
-                key: key
+                data,
+                index,
+                key
             }
             this.props.updateCompetitionFormatAction(obj, "nonPlayingUpdateDates")
         }
@@ -665,7 +665,7 @@ class CompetitionFormat extends Component {
         let data = this.props.competitionFormatState.competitionFormatList;
         let appState = this.props.appState;
         let isAllDivisionChecked = this.props.competitionFormatState.isAllDivisionChecked;
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         let nonPlayingDates = data.nonPlayingDates != undefined ? data.nonPlayingDates : [];
         return (
             <div className="content-view pt-4">
@@ -686,7 +686,7 @@ class CompetitionFormat extends Component {
                         <Radio.Group
                             className="reg-competition-radio"
                             onChange={(e) => this.onChangeSetValue(e.target.value, 'competitionFormatRefId')}
-                            setFieldsValue={data.competitionFormatRefId}
+                            value={data.competitionFormatRefId}
                             disabled={disabledStatus}
                         >
                             <div className="fluid-width">
@@ -911,7 +911,7 @@ class CompetitionFormat extends Component {
                                             disabled={disabledStatus}
                                             required="required-field"
                                             placeholder={AppConstants.mins}
-                                            setFieldsValue={item.matchDuration}
+                                            value={item.matchDuration}
                                             onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'matchDuration', data.competionFormatDivisions, index)}
                                         />
                                     </Form.Item>
@@ -921,7 +921,7 @@ class CompetitionFormat extends Component {
                                         <Form.Item
                                             name={`mainBreak${index}`}
                                             rules={[{
-                                                required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? true : false),
+                                                required: ((data.matchTypeRefId == 2 || data.matchTypeRefId == 3)),
                                                 message: ValidationConstants.mainBreak
                                             }]}
                                         >
@@ -931,7 +931,7 @@ class CompetitionFormat extends Component {
                                                 heading={AppConstants.mainBreak}
                                                 required={(data.matchTypeRefId == 2 || data.matchTypeRefId == 3) ? "required-field" : null}
                                                 placeholder={AppConstants.mins}
-                                                setFieldsValue={item.mainBreak}
+                                                value={item.mainBreak}
                                                 onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'mainBreak', data.competionFormatDivisions, index)}
                                             />
                                         </Form.Item>
@@ -941,7 +941,7 @@ class CompetitionFormat extends Component {
                                     <div className="col-sm-3">
                                         <Form.Item
                                             name={`qtrBreak${index}`}
-                                            rules={[{ required: (data.matchTypeRefId == 3 ? true : false), message: ValidationConstants.qtrBreak }]}
+                                            rules={[{ required: (data.matchTypeRefId == 3), message: ValidationConstants.qtrBreak }]}
                                         >
                                             <InputWithHead
                                                 auto_complete="off"
@@ -949,7 +949,7 @@ class CompetitionFormat extends Component {
                                                 heading={AppConstants.qtrBreak}
                                                 placeholder={AppConstants.mins}
                                                 required={(data.matchTypeRefId == 3) ? "required-field" : null}
-                                                setFieldsValue={item.qtrBreak}
+                                                value={item.qtrBreak}
                                                 onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'qtrBreak', data.competionFormatDivisions, index)}
                                             />
                                         </Form.Item>
@@ -968,7 +968,7 @@ class CompetitionFormat extends Component {
                                                 heading={AppConstants.timeBetweenMatches}
                                                 placeholder={AppConstants.mins}
                                                 required="required-field"
-                                                setFieldsValue={item.timeBetweenGames}
+                                                value={item.timeBetweenGames}
                                                 onChange={(e) => this.onChangeSetCompFormatDivisionValue(e.target.value, 'timeBetweenGames', data.competionFormatDivisions, index)}
                                             />
                                         </Form.Item>
@@ -1048,7 +1048,7 @@ class CompetitionFormat extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = (isSubmitting) => {
         let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
-        let isPublished = this.state.competitionStatus == 1 ? true : false
+        let isPublished = this.state.competitionStatus == 1
         let finalAvailable = this.checkFinalAvailable()
         return (
             <div className="fluid-width">
@@ -1064,13 +1064,13 @@ class CompetitionFormat extends Component {
                             </div>
                         </div>
                         <div className="col-sm">
-                            {finalAvailable == true ? (
+                            {finalAvailable ? (
                                 <div className="comp-buttons-view">
                                     <Tooltip
                                         style={{ height: '100%' }}
                                         onMouseEnter={() =>
                                             this.setState({
-                                                tooltipVisibleSave: isPublished ? true : false,
+                                                tooltipVisibleSave: isPublished,
                                             })
                                         }
                                         onMouseLeave={() =>
@@ -1109,7 +1109,7 @@ class CompetitionFormat extends Component {
                                         style={{ height: '100%' }}
                                         onMouseEnter={() =>
                                             this.setState({
-                                                tooltipVisibleSave: isPublished ? true : false,
+                                                tooltipVisibleSave: isPublished,
                                             })
                                         }
                                         onMouseLeave={() =>
@@ -1134,7 +1134,7 @@ class CompetitionFormat extends Component {
                                         style={{ height: '100%' }}
                                         onMouseEnter={() =>
                                             this.setState({
-                                                tooltipVisibleDelete: isPublished ? true : false,
+                                                tooltipVisibleDelete: isPublished,
                                             })
                                         }
                                         onMouseLeave={() =>
@@ -1209,7 +1209,7 @@ class CompetitionFormat extends Component {
                     {this.headerView()}
                     <Form
                         ref={this.formRef}
-                        autocomplete="off"
+                        autoComplete="off"
                         onFinish={this.saveCompetitionFormats}
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name)

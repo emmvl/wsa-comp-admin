@@ -326,7 +326,7 @@ const columnsInvite = [
                         <NavLink
                             to={{
                                 pathname: "./addUmpire",
-                                state: { record: record, screenName: "umpireDashboard" }
+                                state: { record, screenName: "umpireDashboard" }
                             }}
                         >
                             <span>Invite</span>

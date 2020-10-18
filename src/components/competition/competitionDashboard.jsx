@@ -463,7 +463,7 @@ class CompetitionDashboard extends Component {
             cancelText: 'No',
             onOk() {
                 // [
-                // <NavLink 
+                // <NavLink
                 //     // onClick={() => this.props.clearCompReducerDataAction("all")}
                 //     to={{ pathname: `/registrationCompetitionForm`, state: { id: null } }}
                 // />
@@ -519,7 +519,7 @@ class CompetitionDashboard extends Component {
     compScreenDeciderCheck = (record, key) => {
         let storedYearID = localStorage.getItem("yearId");
         let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
-        if (key == "own") {
+        if (key === "own") {
             history.push("/competitionOpenRegForm", { id: record.competitionId, screenKey: "compDashboard" });
             setOwn_competition(record.competitionId)
             setOwnCompetitionYear(selectedYearId)

@@ -136,7 +136,7 @@ class ShopSettings extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.settings}
                         </Breadcrumb.Item>
@@ -161,7 +161,7 @@ class ShopSettings extends Component {
                 ]}>
                     <InputWithHead
                         auto_complete='new-address'
-                        required={"required-field pb-0"}
+                        required="required-field pb-0"
                         heading={AppConstants.address}
                         placeholder={AppConstants.address}
                         onChange={(e) => this.props.onChangeSettingsData(
@@ -179,7 +179,7 @@ class ShopSettings extends Component {
                 ]}>
                     <InputWithHead
                         auto_complete='new-suburb'
-                        required={"required-field pb-0"}
+                        required="required-field pb-0"
                         heading={AppConstants.suburb}
                         placeholder={AppConstants.suburb}
                         onChange={(e) => this.props.onChangeSettingsData(
@@ -221,7 +221,7 @@ class ShopSettings extends Component {
                 ]}>
                     <InputWithHead
                         auto_complete='new-postCode'
-                        required={"required-field pb-0"}
+                        required="required-field pb-0"
                         heading={AppConstants.postCode}
                         placeholder={AppConstants.postcode}
                         onChange={(e) => this.props.onChangeSettingsData(
@@ -256,7 +256,7 @@ class ShopSettings extends Component {
                             />
                         </div>
                         <div className="col-sm-2 d-flex justify-content-center align-items-center">
-                            <span className='user-remove-btn pl-2' style={{ cursor: 'pointer' }}>
+                            <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                 <img
                                     className="dot-image"
                                     src={AppImages.redCross}

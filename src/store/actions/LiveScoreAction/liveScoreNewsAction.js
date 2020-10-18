@@ -4,7 +4,7 @@ function liveScoreNewsListAction(competitionId) {
 
     const action = {
         type: ApiConstants.API_LIVE_SCORE_NEWS_LIST_LOAD,
-        competitionId: competitionId
+        competitionId
     }
     return action;
 }
@@ -23,8 +23,8 @@ function liveScoreUpdateNewsAction(data, key, contentType) {
 
     const action = {
         type: ApiConstants.API_LIVE_SCORE_UPDATE_NEWS,
-        data: data,
-        key: key,
+        data,
+        key,
         contentType: contentType
     }
     return action;
@@ -50,8 +50,8 @@ function liveScoreRefreshNewsAction() {
 function newsNotificationAction(data, value, screenKey) {
     const action = {
         type: ApiConstants.API_LIVESCORE_NEWS_NOTIFICATION_LOAD,
-        data: data,
-        value: value,
+        data,
+        value,
         screenKey: screenKey
     }
     return action
@@ -81,4 +81,4 @@ export {
     newsNotificationAction,
     liveScoreDeleteNewsAction,
     setDefaultImageVideoNewAction
-}; 
+};

@@ -151,10 +151,10 @@ class CompetitionVenueAndCourts extends Component {
                         <Table className="fees-table" columns={columns} dataSource={data} pagination={false} Divider=" false" />
                     </div>
 
-                    <span className='input-heading-add-another'>+ {AppConstants.addAnotherCourt}</span>
+                    <span className="input-heading-add-another">+ {AppConstants.addAnotherCourt}</span>
                 </div>
 
-                <span className='input-heading-add-another'>+ {AppConstants.addAnotherVenue}</span>
+                <span className="input-heading-add-another">+ {AppConstants.addAnotherVenue}</span>
             </div>
         )
     }

@@ -111,14 +111,14 @@ class UserOurOrganization extends Component {
                     loading: false,
                 })
             }
-            if (userState.status == 1 && this.state.buttonPressed == "save") {
+            if (userState.status == 1 && this.state.buttonPressed === "save") {
                 if (this.state.isSameUserEmailChanged) {
                     this.logout();
                 } else {
                     history.push('/userAffiliatesList');
                 }
             }
-            if (userState.status == 1 && this.state.buttonPressed == "savePhotos") {
+            if (userState.status == 1 && this.state.buttonPressed === "savePhotos") {
                 this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null });
 
                 this.props.getOrganisationPhotoAction(obj);
@@ -128,7 +128,7 @@ class UserOurOrganization extends Component {
                 this.props.getOrganisationPhotoAction(obj);
             }
         }
-        if (this.state.buttonPressed == "cancel") {
+        if (this.state.buttonPressed === "cancel") {
             if (this.state.sourcePage == "DIR") {
                 history.push('/affiliateDirectory');
             } else {
@@ -148,7 +148,7 @@ class UserOurOrganization extends Component {
         }
 
         if (nextProps.userState !== userState) {
-            if (userState.affiliateOurOrgOnLoad === false && this.state.getDataLoading == true) {
+            if (userState.affiliateOurOrgOnLoad === false && this.state.getDataLoading) {
                 this.setState({
                     getDataLoading: false
                 });
@@ -239,7 +239,7 @@ class UserOurOrganization extends Component {
     }
 
     removeModalHandle = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             this.removeContact(this.state.currentIndex);
             this.setState({ deleteModalVisible: false });
         } else {
@@ -270,7 +270,7 @@ class UserOurOrganization extends Component {
                 [`lastName${index}`]: item.lastName,
                 [`email${index}`]: item.email,
             });
-            item['isSameUser'] = getUserId() == item.userId ? true : false;
+            item['isSameUser'] = getUserId() == item.userId;
             if (item.userId == getUserId()) {
                 this.setState({ isSameUserEmailId: item.email });
             }
@@ -410,7 +410,7 @@ class UserOurOrganization extends Component {
     }
 
     deleteOrgPhotoModalHandle = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             let payload = {
                 id: this.state.tableRecord.id
             }
@@ -474,7 +474,7 @@ class UserOurOrganization extends Component {
                     formData.append("postalCode", affiliate.postalCode);
                     formData.append("stateRefId", affiliate.stateRefId);
                     formData.append("whatIsTheLowestOrgThatCanAddChild", affiliate.whatIsTheLowestOrgThatCanAddChild);
-                    formData.append("logoIsDefault", affiliate.logoIsDefault == true ? 1 : 0);
+                    formData.append("logoIsDefault", affiliate.logoIsDefault ? 1 : 0);
                     formData.append("contacts", contacts);
                     // formData.append("termsAndConditionsRefId", affiliate.termsAndConditionsRefId);
                     // formData.append("termsAndConditions", termsAndConditionsValue);
@@ -521,7 +521,7 @@ class UserOurOrganization extends Component {
 
     updateCharity = () => {
         let affiliate = this.props.userState.affiliateOurOrg;
-        let charityRoundUpArr = affiliate.charityRoundUp.filter(x => x.isSelected == true);
+        let charityRoundUpArr = affiliate.charityRoundUp.filter(x => x.isSelected);
 
         let payload = {
             organisationId: getOrganisationData().organisationUniqueKey,
@@ -533,29 +533,32 @@ class UserOurOrganization extends Component {
     }
 
     ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <div className="header-view">
-                <Header className="form-header-view" style={{
+    headerView = () => (
+        <div className="header-view">
+            <Header
+                className="form-header-view"
+                style={{
                     backgroundColor: "transparent",
                     display: "flex",
                     alignItems: "center",
-                }}>
-                    {this.state.sourcePage == "AFF" ?
-                        <Breadcrumb separator=" > ">
-                            <NavLink to="/userAffiliatesList">
-                                <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.affiliates}</Breadcrumb.Item>
-                            </NavLink>
-                            {/* <Breadcrumb.Item className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item> */}
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.ourOrganisation}</Breadcrumb.Item>
-                        </Breadcrumb> :
-                        <NavLink to="/affiliatedirectory">
-                            <span className="breadcrumb-product">{AppConstants.affiliates}</span>
-                        </NavLink>}
-                </Header>
-            </div>
-        )
-    }
+                }}
+            >
+                {this.state.sourcePage == "AFF" ? (
+                    <Breadcrumb separator=" > ">
+                        <NavLink to="/userAffiliatesList">
+                            <Breadcrumb.Item separator=" > " className="breadcrumb-product">{AppConstants.affiliates}</Breadcrumb.Item>
+                        </NavLink>
+                        {/* <Breadcrumb.Item className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item> */}
+                        <Breadcrumb.Item className="breadcrumb-add">{AppConstants.ourOrganisation}</Breadcrumb.Item>
+                    </Breadcrumb>
+                ) : (
+                    <NavLink to="/affiliatedirectory">
+                        <span className="breadcrumb-product">{AppConstants.affiliates}</span>
+                    </NavLink>
+                )}
+            </Header>
+        </div>
+    );
 
     ////////form content view
     contentView = () => {
@@ -571,14 +574,13 @@ class UserOurOrganization extends Component {
             <div className="content-view pt-4">
                 <Form.Item name='name' rules={[{ required: true, message: ValidationConstants.nameField[2] }]}>
                     <InputWithHead
-                        auto_complete='off'
-                        required="required-field pt-0 pb-0"
+                        auto_complete="off"
+                        required="required-field pt-0"
                         heading={AppConstants.organisationName}
                         placeholder={AppConstants.organisationName}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "name")}
-                        // value={affiliate.name}
                         disabled={!this.state.isEditable}
-                        setFieldsValue={affiliate.name}
+                        value={affiliate.name}
                     />
                 </Form.Item>
                 <InputWithHead required="required-field pb-0" heading={AppConstants.organisationLogo} />
@@ -625,7 +627,7 @@ class UserOurOrganization extends Component {
                                 {AppConstants.saveAsDefault}
                             </Checkbox>
 
-                            {/* {this.state.isSetDefault == true && <Checkbox
+                            {/* {this.state.isSetDefault && <Checkbox
                                 className="single-checkbox ml-0"
                                 checked={this.state.logoSetDefault}
                                 onChange={e =>
@@ -664,7 +666,7 @@ class UserOurOrganization extends Component {
                         onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
                         // value={affiliate.street1}
                         disabled={!this.state.isEditable}
-                        setFieldsValue={affiliate.street1}
+                        value={affiliate.street1}
                     />
                 </Form.Item>
 
@@ -685,7 +687,7 @@ class UserOurOrganization extends Component {
                         placeholder={AppConstants.suburb}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
                         // value={affiliate.suburb}
-                        setFieldsValue={affiliate.suburb}
+                        value={affiliate.suburb}
                         disabled={!this.state.isEditable}
                     />
                 </Form.Item>
@@ -701,7 +703,7 @@ class UserOurOrganization extends Component {
                         placeholder={AppConstants.select}
                         onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                         // value={affiliate.stateRefId}
-                        setFieldsValue={affiliate.stateRefId}
+                        value={affiliate.stateRefId}
                         disabled={!this.state.isEditable}
 
                     >
@@ -719,7 +721,7 @@ class UserOurOrganization extends Component {
                         placeholder={AppConstants.postcode}
                         onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
                         // value={affiliate.postalCode}
-                        setFieldsValue={affiliate.postalCode}
+                        value={affiliate.postalCode}
                         maxLength={4}
                         disabled={!this.state.isEditable}
                     />
@@ -796,7 +798,7 @@ class UserOurOrganization extends Component {
                                 placeholder={AppConstants.firstName}
                                 onChange={(e) => this.onChangeContactSetValue(e.target.value, "firstName", index)}
                                 // value={item.firstName}
-                                setFieldsValue={item.firstName}
+                                value={item.firstName}
                                 disabled={!this.state.isEditable}
                             />
                         </Form.Item>
@@ -815,7 +817,7 @@ class UserOurOrganization extends Component {
                                 required="required-field pt-0 pb-0"
                                 heading={AppConstants.lastName} placeholder={AppConstants.lastName}
                                 onChange={(e) => this.onChangeContactSetValue(e.target.value, "lastName", index)}
-                                setFieldsValue={item.lastName}
+                                value={item.lastName}
                                 disabled={!this.state.isEditable}
                                 auto_complete='new-lastName'
                             />
@@ -840,7 +842,7 @@ class UserOurOrganization extends Component {
                                 disabled={!item.isSameUser}
                                 onChange={(e) => this.onChangeContactSetValue(e.target.value, "email", index)}
                                 // value={item.email}
-                                setFieldsValue={item.email}
+                                value={item.email}
                                 disabled={!this.state.isEditable}
                             />
                         </Form.Item>
@@ -871,7 +873,7 @@ class UserOurOrganization extends Component {
                                     <Select
                                         style={{ width: "100%", paddingRight: 1 }}
                                         onChange={(e) => this.onChangeContactSetValue(e, "roles", index)}
-                                        setFieldsValue={item.roleId}
+                                        value={item.roleId}
                                     >
                                         {(roles || []).map((role, index) => (
                                             <Option key={role.id} value={role.id}>{role.description}</Option>
@@ -1010,7 +1012,7 @@ class UserOurOrganization extends Component {
             <div className="content-view">
                 <Table
                     className="home-dashboard-table"
-                    // loading={this.props.userState.onLoad == true && true}
+                    // loading={this.props.userState.onLoad && true}
                     columns={columns}
                     dataSource={orgPhotosList}
                     showHeader={false}
@@ -1110,7 +1112,7 @@ class UserOurOrganization extends Component {
                                 <Select
                                     style={{ width: "100%", paddingRight: 1 }}
                                     onChange={(e) => this.setOrgPhotoValue(e)}
-                                    setFieldsValue={this.state.tableRecord.photoTypeRefId}
+                                    value={this.state.tableRecord.photoTypeRefId}
                                 >
                                     {(photoTypeData || []).map((photo, index) => (
                                         <Option key={photo.id} value={photo.id}>{photo.description}</Option>
@@ -1243,19 +1245,17 @@ class UserOurOrganization extends Component {
                 ))}
                 <div className="inside-container-view">
                     <span className="form-heading">{AppConstants.roundUp}</span>
-                    {charityRoundUp.map((item, index) => {
-                        return (
-                            <div className="row" key={index} style={{ marginLeft: '0px' }}>
-                                <Checkbox
-                                    className="single-checkbox mt-3"
-                                    checked={item.isSelected}
-                                    onChange={(e) => this.onChangesetCharity(e.target.checked, index, 'charityRoundUp')}
-                                >
-                                    {item.description}
-                                </Checkbox>
-                            </div>
-                        );
-                    })}
+                    {charityRoundUp.map((item, index) => (
+                        <div className="row" key={index} style={{ marginLeft: '0px' }}>
+                            <Checkbox
+                                className="single-checkbox mt-3"
+                                checked={item.isSelected}
+                                onChange={(e) => this.onChangesetCharity(e.target.checked, index, 'charityRoundUp')}
+                            >
+                                {item.description}
+                            </Checkbox>
+                        </div>
+                    ))}
                 </div>
             </div>
         );
@@ -1335,7 +1335,7 @@ class UserOurOrganization extends Component {
                     {this.headerView()}
                     <Form
                         ref={this.formRef}
-                        autocomplete="off"
+                        autoComplete="off"
                         onFinish={this.saveAffiliate}
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name);
@@ -1357,21 +1357,22 @@ class UserOurOrganization extends Component {
                                     <TabPane tab={AppConstants.photos} key="2">
                                         <div>{AppConstants.orgPhotosText}</div>
                                         <div className="tab-formView mt-5">
-                                            {!this.state.isEditView ?
+                                            {!this.state.isEditView ? (
                                                 <div>
                                                     {this.photosHeaderView()}
                                                     {this.photosListView()}
-                                                </div> :
+                                                </div>
+                                            ) : (
                                                 <div>
                                                     {this.photosEditHeaderView()}
                                                     {(photoUrl || this.state.orgPhotosImg) && this.photosEditViewRemoveBtnView()}
                                                     {this.photosAddEditView()}
                                                 </div>
-                                            }
+                                            )}
                                         </div>
-                                        {this.state.isEditView ?
-                                            <div>{this.photosEditViewFooterView()}</div> : null
-                                        }
+                                        {this.state.isEditView && (
+                                            <div>{this.photosEditViewFooterView()}</div>
+                                        )}
                                         {this.orgPhotoDeleteConfirmModalView()}
                                     </TabPane>
                                     <TabPane tab={AppConstants.termsAndCond} key="3">
@@ -1416,7 +1417,8 @@ function mapDispatchToProps(dispatch) {
         deleteOrganisationPhotoAction,
         deleteOrgContact,
         updateCharityValue,
-        updateCharityAction, updateTermsAndCondtionAction
+        updateCharityAction,
+        updateTermsAndCondtionAction,
     }, dispatch);
 }
 

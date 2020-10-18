@@ -263,7 +263,7 @@ class LiveScoreGameTimeList extends Component {
 
     handleGameTimeTableList = (page, competitionId, aggregate) => {
         let offset = page ? 10 * (page - 1) : 0
-        this.setState({ offset: offset })
+        this.setState({ offset })
 
         this.props.gameTimeStatisticsListAction(competitionId, aggregate === 'All' ? "" : aggregate, offset, this.state.searchText, this.state.sortBy, this.state.sortOrder)
     }

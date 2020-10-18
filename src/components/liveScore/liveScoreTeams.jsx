@@ -175,7 +175,7 @@ class LiveScoreTeam extends Component {
     /// Handle Page change
     handlePageChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
-        this.setState({ offset: offset })
+        this.setState({ offset })
         this.props.getTeamsWithPagination(this.state.competitionId, offset, 10, this.state.searchText, this.state.sortBy, this.state.sortOrder)
     }
 
@@ -329,7 +329,7 @@ class LiveScoreTeam extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreTeamState.onLoad == true && true}
+                        loading={this.props.liveScoreTeamState.onLoad && true}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={teamData}

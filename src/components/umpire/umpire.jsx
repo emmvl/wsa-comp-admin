@@ -34,7 +34,7 @@ function checkUserRoll(rolesArr, index) {
     if (isArrayNotEmpty(rolesArr)) {
         for (let i in rolesArr) {
             let roles = rolesArr[i].role
-            if (roles.name == "umpire_coach") {
+            if (roles.name === "umpire_coach") {
                 isClub = "YES"
             }
         }
@@ -203,7 +203,7 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: "./assignUmpire",
-                                state: { record: record },
+                                state: { record },
                             }}
                         >
                             <span>Assign to match</span>

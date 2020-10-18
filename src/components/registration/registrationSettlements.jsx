@@ -240,7 +240,7 @@ class RegistrationSettlements extends Component {
                         columns={columns}
                         dataSource={stripePayoutList}
                         pagination={false}
-                        loading={this.props.stripeState.onLoad == true && true}
+                        loading={this.props.stripeState.onLoad && true}
                     />
                 </div>
                 <div className="reg-payment-pages-div mb-5">

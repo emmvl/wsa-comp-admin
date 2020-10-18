@@ -42,7 +42,7 @@ let AxiosApi = {
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
             paging: {
-                offset: offset,
+                offset,
                 limit: 10
             }
         };
@@ -61,7 +61,7 @@ let AxiosApi = {
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
             paging: {
-                offset: offset,
+                offset,
                 limit: 10
             }
         };
@@ -275,7 +275,7 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    ///////////save the competition fees deatils 
+    ///////////save the competition fees deatils
     async saveCompetitionFeesDetails(payload, sourceModule, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -335,7 +335,7 @@ let AxiosApi = {
         var url = `/api/competitionfee/fees?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}&affiliateOrgId=${affiliateOrgId} `
         return Method.dataPost(url, token, payload)
     },
-    //post competition fee discount 
+    //post competition fee discount
     async postCompetitonFeeDiscount(payload, competitionId, affiliateOrgId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -364,13 +364,13 @@ let AxiosApi = {
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let payload = {
             organisationUniqueKey: organisationUniqueKey,
-            sourceModule: sourceModule
+            sourceModule
         }
         var url = `/api/competitionfee/divisionsByCompetition?competitionUniqueKey=${competitionId}&yearRefId=${yearRefId}`;
         return Method.dataPost(url, token, payload);
     },
 
-    ///// Get Competition Venue 
+    ///// Get Competition Venue
     async getCompetitionVenue(competitionId, startDate, endDate) {
         console.log(competitionId, startDate, endDate)
         let orgItem = await getOrganisationData()
@@ -403,13 +403,13 @@ let AxiosApi = {
     },
 
 
-    //registration dash list 
+    //registration dash list
     async registrationDashboardList(offset, yearRefId, sortBy, sortOrder) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
             paging: {
-                offset: offset,
+                offset,
                 limit: 10
             }
         };
@@ -426,7 +426,7 @@ let AxiosApi = {
         let organisationUniqueKey = orgItem.organisationUniqueKey
         let body = {
             organisationUniqueKey: organisationUniqueKey,
-            yearRefId: yearRefId,
+            yearRefId,
             userId: userId
         }
         var url = `api/homedashboard/usercount`;
@@ -460,7 +460,7 @@ let AxiosApi = {
         return Method.dataPost(url, token, payload);
     },
 
-    ///registration wizard 
+    ///registration wizard
     async getAllCompetitionList(yearId) {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey

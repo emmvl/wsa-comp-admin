@@ -56,7 +56,7 @@ function setPostData(selectedData, matcheResults, compId) {
     let object = null
     for (let i in matcheResults) {
         let postResultObject = matchPostArray(matcheResults[i].id, selectedData)
-        if (postResultObject.status == true) {
+        if (postResultObject.status) {
             object = {
                 competitionId: postResultObject.result.competitionId,
                 resultTypeId: postResultObject.result.resultTypeId,
@@ -165,7 +165,7 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
 
         //// Update Ladder Setting
         case ApiConstants.UPDATE_LADDER_SETTING:
-            if (action.key == "addLadder") {
+            if (action.key === "addLadder") {
                 let ladder = deepCopyFunction(state.defaultLadders.find(x => x));
 
                 let formatId = state.ladders[state.ladders.length-1].ladderFormatId;
@@ -174,9 +174,9 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
                 state.ladders.push(ladder);
                 disableAddedDivisions(state.ladders, state.divisions);
             }
-            else if (action.key == "isAllDivision") {
+            else if (action.key === "isAllDivision") {
                 let ladder = state.ladders[action.index];
-                if (action.data == true) {
+                if (action.data) {
                     let arr = [];
                     state.divisions.map((item) => {
                         arr.push(item.divisionId);
@@ -189,16 +189,16 @@ function liveScoreLadderSettingReducer(state = initialState, action) {
                 ladder[action.key] = action.data;
                 disableAddedDivisions(state.ladders, state.divisions);
             }
-            else if (action.key == "deleteLadder") {
+            else if (action.key === "deleteLadder") {
                 state.ladders.splice(action.index, 1);
                 disableAddedDivisions(state.ladders, state.divisions);
             }
-            else if (action.key == "selectedDivisions") {
+            else if (action.key === "selectedDivisions") {
                 state.ladders[action.index][action.key] = action.data;
                 state.ladders[action.index]["isAllDivision"] = false;
                 disableAddedDivisions(state.ladders, state.divisions);
             }
-            else if (action.key == "resultTypes") {
+            else if (action.key === "resultTypes") {
                 state.ladders[action.index]["settings"][action.subIndex]["points"] = action.data;
             }
             else {

@@ -1,340 +1,295 @@
 import ApiConstants from "../../../themes/apiConstants";
-import { func } from "prop-types";
 
 // get the competition fees list in registration
 function regCompetitionListAction(offset, yearRefId, searchText, sortBy, sortOrder) {
-    const action = {
+    return {
         type: ApiConstants.API_REG_COMPETITION_LIST_LOAD,
-        offset: offset,
-        yearRefId: yearRefId,
-        searchText: searchText,
-        sortBy, sortOrder
+        offset,
+        yearRefId,
+        searchText,
+        sortBy,
+        sortOrder
     };
-    return action;
 }
 
 //////delete the competition list product
 function regCompetitionListDeleteAction(competitionId) {
-    const action = {
+    return {
         type: ApiConstants.API_REG_COMPETITION_LIST_DELETE_LOAD,
-        competitionId: competitionId
+        competitionId
     };
-    return action;
 }
 
 /////get the competition fees all the data in one API
 function getAllCompetitionFeesDeatilsAction(competitionId, hasRegistration, sourceModule, affiliateOrgId) {
-    const action = {
+    return {
         type: ApiConstants.API_GET_COMPETITION_FEES_DETAILS_LOAD,
-        competitionId: competitionId,
+        competitionId,
         hasRegistration,
-        sourceModule: sourceModule,
-        affiliateOrgId: affiliateOrgId
+        sourceModule,
+        affiliateOrgId
     };
-    return action;
 }
 
-
-
-/////save the competition fees deatils 
+/////save the competition fees details
 function saveCompetitionFeesDetailsAction(payload, logoOrgId, sourceModule, affiliateOrgId) {
-    const action = {
+    return {
         type: ApiConstants.API_SAVE_COMPETITION_FEES_DETAILS_LOAD,
-        payload: payload,
+        payload,
         logoOrgId,
-        sourceModule: sourceModule,
-        affiliateOrgId: affiliateOrgId
+        sourceModule,
+        affiliateOrgId
     };
-    return action;
 }
 
 ////save the competition membership tab details
 function saveCompetitionFeesMembershipTabAction(payload, competitionId, affiliateOrgId) {
-    const action = {
+    return {
         type: ApiConstants.API_SAVE_COMPETITION_FEES_MEMBERHSIP_TAB_LOAD,
-        payload: payload,
-        competitionId: competitionId,
-        affiliateOrgId: affiliateOrgId
+        payload,
+        competitionId,
+        affiliateOrgId
     };
-    return action;
 }
 
 ////get default competition membershipproduct tab details
 function getDefaultCompFeesMembershipProductTabAction(hasRegistration) {
-    const action = {
+    return {
         type: ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERHSIP_PRODUCT_LOAD,
         hasRegistration
     };
-    return action;
 }
 
 ////membership product selected action tochange membership typearray data
 function membershipProductSelectedAction(checked, index, membershipProductUniqueKey) {
-    const action = {
+    return {
         type: ApiConstants.COMPETITION_FEES_MEMBERSHIP_PRODUCT_SELECTED_ONCHANGE,
-        checked: checked,
-        index: index,
-        membershipProductUniqueKey: membershipProductUniqueKey,
+        checked,
+        index,
+        membershipProductUniqueKey,
     };
-    return action;
 }
 
 ///membership product selected action tochange membership typearray data
 function membershipTypeSelectedAction(checked, membershipIndex, typeIndex) {
-    const action = {
+    return {
         type: ApiConstants.COMPETITION_FEES_MEMBERSHIP_TYPES_SELECTED_ONCHANGE,
-        checked: checked,
-        membershipIndex: membershipIndex,
-        typeIndex: typeIndex,
+        checked,
+        membershipIndex,
+        typeIndex,
     };
-    return action;
 }
 
 /////save the division table data  in the competition fees section
 function saveCompetitionFeesDivisionAction(payload, competitionId, affiliateOrgId) {
-    const action = {
+    return {
         type: ApiConstants.API_SAVE_COMPETITION_FEES_DIVISION_TAB_LOAD,
-        payload: payload,
-        competitionId: competitionId,
-        affiliateOrgId: affiliateOrgId
+        payload,
+        competitionId,
+        affiliateOrgId
     };
-    return action;
 }
 
 /////onchange the division table data on change
 function divisionTableDataOnchangeAction(checked, record, index, keyword) {
-    const action = {
+    return {
         type: ApiConstants.COMPETITION_FEES_DIVISION_TABLE_DATA_ONCHANGE,
-        checked: checked,
-        record: record,
-        index: index,
-        keyword: keyword,
+        checked,
+        record,
+        index,
+        keyword,
     };
-    return action;
 }
 
-//////add or remove another division inthe divsision tab
+//////add or remove another division in the division tab
 function addRemoveDivisionAction(index, item, keyword) {
-    const action = {
+    return {
         type: ApiConstants.COMPETITION_FEES_DIVISION_ADD_REMOVE,
-        index: index,
-        item: item,
-        keyword: keyword,
+        index,
+        item,
+        keyword,
     };
-    return action;
 }
 
 //update payments competition fee
 function updatePaymentOption(value, index, key) {
-    const action = {
+    return {
         type: ApiConstants.UPDATE_PAYMENTS_COMPETITION_FEES,
-        value: value,
-        index: index,
-        key: key
-    }
-    return action;
+        value,
+        index,
+        key
+    };
 }
 
-
-// update casual seasonal fee 
+// update casual seasonal fee
 function updatePaymentFeeOption(value, key, index, subKey) {
-    const action = {
+    return {
         type: ApiConstants.UPDATE_PAYMENTS_OPTIONS_COMPETITION_FEES,
-        value: value,
-        key: key,
-        index: index,
-        subKey: subKey
-    }
-    return action;
-
+        value,
+        key,
+        index,
+        subKey,
+    };
 }
 
 function paymentFeeDeafault() {
-    const action = {
+    return {
         type: ApiConstants.GET_CASUAL_FEE_DETAIL_API_LOAD,
-    }
-    return action
+    };
 }
 
 function instalmentDateAction(value, key, subKey) {
-    const action = {
+    return {
         type: ApiConstants.UPDATE_INSTALMENT_DATE,
-        value: value,
-        key: key,
-        subKey: subKey
-    }
-    return action
+        value,
+        key,
+        subKey
+    };
 }
-function paymentSeasonalFee() {
-    const action = {
-        type: ApiConstants.GET_SEASONAL_FEE_DETAIL_API_LOAD,
 
-    }
-    return action
+function paymentSeasonalFee() {
+    return {
+        type: ApiConstants.GET_SEASONAL_FEE_DETAIL_API_LOAD,
+    };
 }
 
 function competitionPaymentApi(value, competitionId,affiliateOrgId) {
-    const action = {
+    return {
         type: ApiConstants.API_POST_COMPETITION_FEE_PAYMENT_LOAD,
-        value: value,
-        competitionId: competitionId,
-        affiliateOrgId: affiliateOrgId
-    }
-    return action
+        value,
+        competitionId,
+        affiliateOrgId
+    };
 }
 
-
 function addRemoveCompFeeDiscountAction(keyAction, index) {
-    const action = {
+    return {
         type: ApiConstants.ADD_ANOTHER_DISCOUNT_COMPETITION_FEE,
-        keyAction: keyAction,
-        index: index
-    }
-    return action
+        keyAction,
+        index
+    };
 }
 
 //// add/edit competition FeeDeatils Action
 function add_editcompetitionFeeDeatils(data, key) {
-    const action = {
+    return {
         type: ApiConstants.API_ADD_EDIT_COMPETITION_FEES_DETAILS,
-        data: data,
-        key: key
-    }
-    return action
+        data,
+        key
+    };
 }
-
 
 ///updated discount in membership fees section
 function updatedDiscountDataAction(discountData) {
-    const action = {
+    return {
         type: ApiConstants.UPDATE_DISCOUNT_DATA_COMPETITION_FEES,
-        discountData: discountData,
+        discountData,
     };
-    return action;
 }
 
 // for update membership fee product
 function updatedDiscountMemberPrd(value, discountData, index) {
-    const action = {
+    return {
         type: ApiConstants.UPDATE_DISCOUNT_MEMBERSHIP_PRODUCT,
-        value: value,
-        discountData: discountData,
-        index: index
+        value,
+        discountData,
+        index
     }
-    return action;
 }
 
 ////save competition fees discount
 function regSaveCompetitionFeeDiscountAction(payload, competitionId, affiliateOrgId) {
-    const action = {
+    return {
         type: ApiConstants.API_POST_COMPETITION_FEE_DISCOUNT_LOAD,
-        payload: payload,
-        competitionId: competitionId,
-        affiliateOrgId: affiliateOrgId
+        payload,
+        competitionId,
+        affiliateOrgId
     }
-    return action
 }
 
 //////get default discount type for competition feess
 function competitionDiscountTypesAction() {
-    const action = {
+    return {
         type: ApiConstants.API_COMPETITION_DISCOUNT_TYPE_LOAD
     };
-    return action;
 }
-
 
 //// check box and Radio btn handler - competition fees section
 function checkUncheckcompetitionFeeSction(data, parentIndex, key) {
-    const action = {
+    return {
         type: ApiConstants.CHECK_UNCHECK_COMPETITION_FEES_SECTION,
-        data: data,
-        parentIndex: parentIndex,
-        key: key
+        data,
+        parentIndex,
+        key
     }
-    return action
 }
 
-
-/// save competition fee section 
+/// save competition fee section
 function saveCompetitionFeeSection(data, competitionId, affiliateOrgId) {
-    const action = {
+    return {
         type: ApiConstants.API_SAVE_COMPETITION_FEES_SECTION_LOAD,
-        data: data,
-        competitionId: competitionId,
-        affiliateOrgId: affiliateOrgId
+        data,
+        competitionId,
+        affiliateOrgId
     }
-    return action
 }
-
-
 
 ///// Add/Edit competition fee section details
-function add_editFee_deatialsScetion(data, tableIndex, item, key, arrayKey) {
-    const action = {
+function add_editFee_deatialsScetion(data, tableIndex, record, key, arrayKey) {
+    return {
         type: ApiConstants.API_ADD_EDIT_COMPETITION_FEES_SECTION,
-        data: data,
-        key: key,
-        record: item,
-        tableIndex: tableIndex,
-        arrayKey: arrayKey
+        data,
+        key,
+        record,
+        tableIndex,
+        arrayKey
     }
-
-    return action
 }
 
 //////clear the reducer data action
 function clearCompReducerDataAction(dataName) {
-    const action = {
+    return {
         type: ApiConstants.REG_COMPETITION_FEES_CLEARING_REDUCER_DATA,
-        dataName: dataName
+        dataName
     };
-    return action;
 }
 
-/////get default charity and government voucherss
+/////get default charity and government vouchers
 function getDefaultCharity() {
-    const action = {
+    return {
         type: ApiConstants.API_COMPETITION_FEE_DEFAULT_CHARITY_LOAD
     };
-    return action;
 }
 
 //////get the default competition logo api
 function getDefaultCompFeesLogoAction() {
-    const action = {
+    return {
         type: ApiConstants.API_COMPETITION_FEE_DEFAULT_LOGO_LOAD
     };
-    return action;
 }
 
-
-///// On invitees serach action 
+///// On invitees search action
 function onInviteesSearchAction(value, inviteesType) {
-    const action = {
+    return {
         type: ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD,
-        value: value,
-        inviteesType: inviteesType
+        value,
+        inviteesType
     }
-    return action
 }
 
 //Delete Competition Division from Comp Details
 function removeCompetitionDivisionAction(payload) {
-    const action = {
+    return {
         type: ApiConstants.API_COMPETITION_DIVISION_DELETE_LOAD,
-        payload: payload
+        payload
     };
-    return action;
 }
 
 function paymentMethodsDefaultAction() {
-    const action = {
+    return {
         type: ApiConstants.API_GET_PAYMENT_METHOD_REF_LOAD,
     }
-    return action
 }
-
 
 export {
     regCompetitionListAction,

@@ -70,7 +70,7 @@ export function* addEditUmpireSaga(action) {
                 status: result.status,
             });
             message.success(action.extraData.isEdit ? 'Edit Umpire - Successfully Edited' : 'Add Umpire - Successfully Added')
-            history.push(action.extraData.screenName == 'umpireDashboard' ? '/umpireDashboard' : '/umpire')
+            history.push(action.extraData.screenName === 'umpireDashboard' ? '/umpireDashboard' : '/umpire')
 
         } else {
             yield call(failSaga, result)

@@ -66,7 +66,7 @@ class CompetitionDrawEdit extends Component {
                 }
             }
         }
-        if (this.state.venueLoad == true && this.props.drawsState.divisionLoad == false) {
+        if (this.state.venueLoad && this.props.drawsState.divisionLoad == false) {
             if (nextProps.drawsState !== this.props.drawsState) {
                 // if (nextProps.drawsState.fixtureDivisionGradeNameList !== fixtureDivisionGradeNameList) {
                 if (fixtureDivisionGradeNameList.length > 0) {
@@ -82,12 +82,12 @@ class CompetitionDrawEdit extends Component {
             }
         }
 
-        // if (this.state.updateLoad == true && this.props.drawsState.updateFixtureLoad == false) {
+        // if (this.state.updateLoad && this.props.drawsState.updateFixtureLoad == false) {
         //     this.setState({updateLoad: false, reGenerateLoad: true})
         //     this.reGenerateDraw();
         // }
 
-        if (this.state.reGenerateLoad == true && this.props.competitionModuleState.drawGenerateLoad == false) {
+        if (this.state.reGenerateLoad && this.props.competitionModuleState.drawGenerateLoad == false) {
             this.setState({ reGenerateLoad: false })
             if (!this.props.competitionModuleState.error && this.props.competitionModuleState.status == 1) {
                 localStorage.removeItem("draws_round");
@@ -96,7 +96,7 @@ class CompetitionDrawEdit extends Component {
         }
 
         if (
-            this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false
+            this.state.roundLoad && this.props.drawsState.onActRndLoad == false
           ) {
             this.setState({roundLoad: false});
             if(this.props.drawsState.activeDrawsRoundsData!= null &&
@@ -161,7 +161,7 @@ class CompetitionDrawEdit extends Component {
     }
 
     handleGenerateDrawModal =  (key) =>{
-        if(key == "ok"){
+        if(key === "ok"){
           if(this.state.generateRoundId!= null){
             this.callGenerateDraw();
             this.setState({drawGenerateModalVisible: false});
@@ -400,7 +400,7 @@ class CompetitionDrawEdit extends Component {
 
     ////////form content view
     contentView = () => {
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         return (
             <div className="comp-draw-content-view mt-5">
                 <div className="row comp-draw-list-top-head">
@@ -452,7 +452,7 @@ class CompetitionDrawEdit extends Component {
 
     //////the gragable content view inside the container
     dragableView = () => {
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         let topMargin = 50;
         let topMarginHomeTeam = 50;
         let topMarginAwayTeam = 103;
@@ -521,7 +521,7 @@ class CompetitionDrawEdit extends Component {
                                                                     ':0:' + courtData.roundId + ":" + slotObject.competitionFormatRefId
                                                                 }
                                                                 content={1}
-                                                                swappable={disabledStatus == false ? true : false}
+                                                                swappable={disabledStatus == false}
                                                                 onSwap={(source, target) =>
                                                                     this.onSwap(source, target, courtData.roundId, courtData.draws)
                                                                 }
@@ -552,7 +552,7 @@ class CompetitionDrawEdit extends Component {
                                                                     ':1:' + courtData.roundId + ":" + slotObject.competitionFormatRefId
                                                                 }
                                                                 content={1}
-                                                                swappable={disabledStatus == false ? true : false}
+                                                                swappable={disabledStatus == false}
                                                                 onSwap={(source, target) =>
                                                                     this.onSwap(source, target, courtData.roundId, courtData.draws)
                                                                 }
@@ -577,7 +577,7 @@ class CompetitionDrawEdit extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
-        let isPublish = this.state.competitionStatus == 1 ? true : false
+        let isPublish = this.state.competitionStatus == 1
         return (
             <div className="fluid-width">
                 {/* <div className="footer-view"> */}
@@ -588,7 +588,7 @@ class CompetitionDrawEdit extends Component {
                                 style={{ height: '100%' }}
                                 onMouseEnter={() =>
                                     this.setState({
-                                        tooltipVisibleDelete: isPublish ? true : false,
+                                        tooltipVisibleDelete: isPublish,
                                     })
                                 }
                                 onMouseLeave={() =>

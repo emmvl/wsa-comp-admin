@@ -116,14 +116,14 @@ class RegistrationPayoutTransaction extends Component {
         let stripeTransactionPayoutList = this.props.stripeState.stripeTransactionPayoutList
         let starting_after = null
         let ending_before = null
-        if (key == "next") {
+        if (key === "next") {
             ///move forward
             page = parseInt(page) + 1
             let id = (stripeTransactionPayoutList[stripeTransactionPayoutList.length - 1]['id']);
             starting_after = id
             ending_before = null
         }
-        if (key == "Previous") {
+        if (key === "Previous") {
             //////move backward
             page = parseInt(page) - 1
             let id = (stripeTransactionPayoutList[0]['id']);
@@ -160,7 +160,7 @@ class RegistrationPayoutTransaction extends Component {
                         columns={columns}
                         dataSource={stripeTransactionPayoutList}
                         pagination={false}
-                        loading={this.props.stripeState.onLoad == true && true}
+                        loading={this.props.stripeState.onLoad && true}
                     />
                 </div>
                 <div className="reg-payment-pages-div mb-5">

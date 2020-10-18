@@ -41,7 +41,7 @@ class UmpireDivisions extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
-            if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
+            if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
                 if (getUmpireCompId()) {
@@ -72,7 +72,7 @@ class UmpireDivisions extends Component {
 
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.umpirePoolsDivision}
                         </Breadcrumb.Item>
@@ -141,7 +141,7 @@ class UmpireDivisions extends Component {
                     className="reg-competition-radio"
                     // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
                     // onChange={e => this.setPools(e.target.value)}
-                    // setFieldsValue={detailsData.competitionTypeRefId}
+                    // value={detailsData.competitionTypeRefId}
                     // disabled={compDetailDisable}
                 >
                     {allocatePools.map((item, index) => {

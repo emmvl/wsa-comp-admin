@@ -45,7 +45,7 @@ class DeRegistration extends Component {
     componentDidUpdate(nextProps) {
         let deRegisterState = this.props.deRegistrationState;
 
-        if (this.state.saveLoad == true && deRegisterState.onSaveLoad == false) {
+        if (this.state.saveLoad && deRegisterState.onSaveLoad == false) {
             history.push({ pathname: '/userPersonal', state: { tabKey: "5", userId: this.state.userId } });
         }
     }
@@ -55,7 +55,7 @@ class DeRegistration extends Component {
     }
 
     updateDeregistrationData = (value, key, subKey) => {
-        if (key == "regChangeTypeRefId") {
+        if (key === "regChangeTypeRefId") {
             if (value == 2) {
                 this.getTransferOrgData();
             }
@@ -242,7 +242,7 @@ class DeRegistration extends Component {
                             required="required-field pt-0 pb-0"
                             className="input-inside-table-venue-court team-mem_prod_type"
                             onChange={(e) => this.updateDeregistrationData(e, "organisationId", "transfer")}
-                            setFieldsValue={saveData.transfer.organisationId}
+                            value={saveData.transfer.organisationId}
                             placeholder="Organisation Name"
                         >
                             {(transferOrganisations || []).map((org, cIndex) => (
@@ -265,7 +265,7 @@ class DeRegistration extends Component {
                             required="required-field pt-0 pb-0"
                             className="input-inside-table-venue-court team-mem_prod_type"
                             onChange={(e) => this.updateDeregistrationData(e, "competitionId", "transfer")}
-                            setFieldsValue={saveData.transfer.competitionId}
+                            value={saveData.transfer.competitionId}
                             placeholder="Competition Name"
                         >
                             {(transferCompetitions || []).map((comp, cIndex) => (

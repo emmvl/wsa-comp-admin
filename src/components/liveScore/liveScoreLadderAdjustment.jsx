@@ -77,7 +77,7 @@ class LiveScoreLadderAdjustment extends Component {
             this.setState({ getLoad: false })
         }
 
-        if (this.state.resetLoad == true && this.props.liveScoreLadderState.onResetLoad == false) {
+        if (this.state.resetLoad && this.props.liveScoreLadderState.onResetLoad == false) {
             this.setState({ resetLoad: false });
             history.push("/liveScoreLadderList")
         }
@@ -110,7 +110,7 @@ class LiveScoreLadderAdjustment extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.ladderAdjustment}
                         </Breadcrumb.Item>
@@ -123,7 +123,7 @@ class LiveScoreLadderAdjustment extends Component {
     changeDivision(divisionId) {
         this.props.updateLadderSetting({ data: divisionId, key: 'divisionId' })
         this.props.getliveScoreTeams(this.state.competitionId, divisionId)
-        this.props.ladderAdjustmentGetData({ uniqueKey: this.state.compUniqueKey, divisionId: divisionId })
+        this.props.ladderAdjustmentGetData({ uniqueKey: this.state.compUniqueKey, divisionId })
         this.setState({ divisionId, getLoad: true })
     }
 
@@ -166,15 +166,15 @@ class LiveScoreLadderAdjustment extends Component {
     };
 
     deleteItem(index) {
-        this.props.updateLadderSetting({ index: index, key: 'removeItem' })
+        this.props.updateLadderSetting({ index, key: 'removeItem' })
     }
 
     confirmationModal(key, compUniqueKey, resetOptionId) {
-        if (key == "show") {
+        if (key === "show") {
             this.setState({
                 modalVisible: true,
             })
-        } else if (key == "ok") {
+        } else if (key === "ok") {
             let divisionId = null;
             if (this.state.resetOptionId == 1) {
                 divisionId = this.state.divisionId
@@ -183,7 +183,7 @@ class LiveScoreLadderAdjustment extends Component {
             let obj = {
                 competitionUniqueKey: compUniqueKey,
                 resetOptionId: resetOptionId,
-                divisionId: divisionId
+                divisionId
             }
             this.props.resetLadderAction(obj)
             this.setState({
@@ -191,7 +191,7 @@ class LiveScoreLadderAdjustment extends Component {
                 compUniqueKey: compUniqueKey,
                 resetLoad: true
             })
-        } else if (key == "cancel") {
+        } else if (key === "cancel") {
             this.setState({
                 modalVisible: false,
                 resetOptionId: 1
@@ -229,7 +229,7 @@ class LiveScoreLadderAdjustment extends Component {
                         <div className="row pt-3">
                             <div className='col-sm-3 division-table-field-view'>
                                 <InputWithHead
-                                    required={"required-field pb-0"}
+                                    required="required-field pb-0"
                                     heading={AppConstants.teamName}
                                 />
                             </div>
@@ -240,7 +240,7 @@ class LiveScoreLadderAdjustment extends Component {
                                         style={{ width: "100%" }}
                                         onChange={(teamId) => this.props.updateLadderSetting({
                                             data: teamId,
-                                            index: index,
+                                            index,
                                             key: 'teamId'
                                         })}
                                         // value={ladderData[index] ? ladderData[index].teamId : undefined}
@@ -257,16 +257,16 @@ class LiveScoreLadderAdjustment extends Component {
 
                         <div className="row pt-3">
                             <div className='col-sm-3 division-table-field-view'>
-                                <InputWithHead required={"required-field pb-0"} heading={AppConstants.points} />
+                                <InputWithHead required="required-field pb-0" heading={AppConstants.points} />
                             </div>
                             <div className="col-sm">
                                 <Form.Item name={`points${index}`} rules={[{ required: true, message: ValidationConstants.point }]}>
                                     <InputWithHead
-                                        auto_complete='off'
+                                        auto_complete="off"
                                         placeholder={AppConstants.points}
                                         onChange={(e) => this.props.updateLadderSetting({
                                             data: e.target.value,
-                                            index: index,
+                                            index,
                                             key: 'points'
                                         })}
                                         // value={ladderData[index] && ladderData[index].points}
@@ -277,16 +277,16 @@ class LiveScoreLadderAdjustment extends Component {
 
                         <div className="row pt-3">
                             <div className='col-sm-3 division-table-field-view'>
-                                <InputWithHead required={"required-field pb-0"} heading={AppConstants.reasonForChange} />
+                                <InputWithHead required="required-field pb-0" heading={AppConstants.reasonForChange} />
                             </div>
                             <div className="col-sm">
                                 <Form.Item name={`adjustmentReason${index}`} rules={[{ required: true, message: ValidationConstants.reasonChange }]}>
                                     <InputWithHead
-                                        auto_complete='off'
+                                        auto_complete="off"
                                         placeholder={AppConstants.reasonForChange}
                                         onChange={(e) => this.props.updateLadderSetting({
                                             data: e.target.value,
-                                            index: index,
+                                            index,
                                             key: 'adjustmentReason'
                                         })}
                                         // value={ladderData[index] && ladderData[index].reasonforChange}
@@ -371,7 +371,7 @@ class LiveScoreLadderAdjustment extends Component {
             "divisionId": this.state.divisionId,
             "adjustments": ladderData
         }
-        this.props.ladderAdjustmentPostData({ body: body })
+        this.props.ladderAdjustmentPostData({ body })
     }
 
     render = () => {

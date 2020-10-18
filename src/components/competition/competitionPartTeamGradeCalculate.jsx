@@ -114,13 +114,13 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 }
             }
         }
-        if (this.props.ownTeamGradingState.onLoad == false && this.state.getDataLoading == true) {
+        if (this.props.ownTeamGradingState.onLoad == false && this.state.getDataLoading) {
             this.setState({ getDataLoading: false })
             let arr = this.props.ownTeamGradingState.finalsortOrderArray
             this.addNewGrade(arr)
         }
 
-        if (this.props.ownTeamGradingState.updateGradeOnLoad == false && this.state.updateGradeOnLoad == true) {
+        if (this.props.ownTeamGradingState.updateGradeOnLoad == false && this.state.updateGradeOnLoad) {
             this.props.onchangeTeamGradingSummaryData(this.state.updateGradeName, this.state.competitionDivisionGradeId, "ownTeamGradingSummaryGetData")
             this.setState({
                 updateGradeOnLoad: false,
@@ -182,7 +182,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
     //////addd new column in the table for grades
     addNewGrade = (arr) => {
         const columns1 = this.state.columns
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         for (let i in arr) {
             let newColumn = {
                 title: null,
@@ -243,7 +243,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
     ///////view for breadcrumb
     headerView = () => {
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
@@ -430,7 +430,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         // dataSource={this.state.data}
                         dataSource={ownTeamGradingSummaryGetData}
                         pagination={false}
-                        loading={this.props.ownTeamGradingState.onLoad == true && true}
+                        loading={this.props.ownTeamGradingState.onLoad && true}
                     />
                 </div>
 
@@ -442,7 +442,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     onCancel={this.handleCancel}
                 >
                     <InputWithHead
-                        required={"pt-0 mt-0"}
+                        required="pt-0 mt-0"
                         heading={AppConstants.gradeName}
                         placeholder={AppConstants.pleaseEnterGradeName}
                         onChange={(e) => this.setState({ updateGradeName: e.target.value })}
@@ -479,7 +479,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        let isPublished = this.state.competitionStatus == 1 ? true : false
+        let isPublished = this.state.competitionStatus == 1
         return (
             <div className="fluid-width paddingBottom56px">
                 <div className="row">
@@ -496,7 +496,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 style={{ height: '100%' }}
                                 onMouseEnter={() =>
                                     this.setState({
-                                        tooltipVisibleDelete: isPublished ? true : false,
+                                        tooltipVisibleDelete: isPublished,
                                     })
                                 }
                                 onMouseLeave={() =>

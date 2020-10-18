@@ -60,7 +60,7 @@ const columns = [
         render: (minimumPlayers, record, index) => <Input
             className="input-inside-player-grades-table-for-grade"
             value={minimumPlayers}
-            disabled={this_Obj.state.competitionStatus == 1 ? true : false}
+            disabled={this_Obj.state.competitionStatus == 1}
             onChange={(e) => this_Obj.props.onchangeCompPartPlayerGradingSummaryData(e.target.value, index, "minimumPlayers")} />,
         width: '20%',
         sorter: (a, b) => tableSort(a, b, "minimumPlayers")
@@ -332,7 +332,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                         columns={columns}
                         dataSource={playerGradingTableData}
                         pagination={false}
-                        loading={this.props.partPlayerGradingState.onLoad == true && true}
+                        loading={this.props.partPlayerGradingState.onLoad && true}
                     />
                 </div>
                 {/* <PlayerCommentModal
@@ -355,7 +355,7 @@ class CompetitionPlayerGradeCalculate extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        let isPublished = this.state.competitionStatus == 1 ? true : false
+        let isPublished = this.state.competitionStatus == 1
         return (
             <div className="fluid-width">
                 <div className="comp-player-grades-footer-view">
@@ -368,7 +368,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                                     style={{ height: '100%' }}
                                     onMouseEnter={() =>
                                         this.setState({
-                                            tooltipVisibleDelete: isPublished ? true : false,
+                                            tooltipVisibleDelete: isPublished,
                                         })
                                     }
                                     onMouseLeave={() =>
@@ -378,7 +378,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                                     title={AppConstants.statusPublishHover}
                                 >
                                     <Button
-                                        disabled={this.state.competitionStatus == 1 ? true : false}
+                                        disabled={this.state.competitionStatus == 1}
                                         className="publish-button"
                                         style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }}
                                         type="primary"

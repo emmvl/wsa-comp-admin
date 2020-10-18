@@ -199,7 +199,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             }
 
 
-        /////competition part player grading get API 
+        /////competition part player grading get API
         case ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADING_LIST_LOAD:
             return { ...state, onLoad: true, error: null }
 
@@ -220,7 +220,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
 
         //////competition part player grading clear reducer
         case ApiConstants.CLEARING_COMPETITION_PART_PLAYER_GRADING_REDUCER_DATA:
-            if (action.key == "partPlayerGradingListData") {
+            if (action.key === "partPlayerGradingListData") {
                 state.partPlayerGradingListData = []
                 state.AllPartPlayerGradingListData = []
                 state.unassignedPartPlayerGradingListData = {
@@ -232,7 +232,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                 }
                 state.assignedPartPlayerGradingListData = []
             }
-            if (action.key == "commentList") {
+            if (action.key === "commentList") {
                 state.playerCommentList = []
             }
             return {
@@ -262,7 +262,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
                 // newTeam: action.result,
                 error: null
             }
-        // 
+        //
         case ApiConstants.API_DRAG_NEW_TEAM_LOAD:
             let assignData = JSON.parse(JSON.stringify(state.AllPartPlayerGradingListData))
             let sourceData = updatedAssignData(assignData, action.source, action.destination)
@@ -357,7 +357,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             }
 
         case ApiConstants.API_COMPETITION_IMPORT_DATA_CLEANUP:
-            if (action.key == "player") {
+            if (action.key === "player") {
                 state.playerImportData = [];
             }
             else if (action.key == "team") {
@@ -387,7 +387,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             }
 
         case ApiConstants.UPDATE_PLAYER_GRADING_DATA:
-            if (action.key == "assigned") {
+            if (action.key === "assigned") {
                 state.assignedPartPlayerGradingListData = action.data;
             }
             else if (action.key == "unAssigned") {

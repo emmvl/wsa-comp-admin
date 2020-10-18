@@ -9,14 +9,23 @@ function liveScorePlayerMinuteTrackingListAction(matchId, teamId, playerId) {
   };
 }
 
-function liveScorePlayerMinuteRecordAction(data) {
+function liveScorePlayerMinuteRecordAction(data, matchId) {
   return {
     type: ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_RECORD_LOAD,
-    data
+    data,
+    matchId
+  };
+}
+
+function liveScoreUpdatePlayerMinuteRecordAction(data) {
+  return {
+    type: ApiConstants.API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD,
+    data,
   };
 }
 
 export {
   liveScorePlayerMinuteRecordAction,
   liveScorePlayerMinuteTrackingListAction,
+  liveScoreUpdatePlayerMinuteRecordAction
 };

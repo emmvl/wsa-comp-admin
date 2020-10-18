@@ -6,8 +6,8 @@ import ApiConstants from "../../../themes/apiConstants"
 function getCompPartPlayerGradingSummaryAction(yearRefId, competitionId) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_LOAD,
-        yearRefId: yearRefId,
-        competitionId: competitionId,
+        yearRefId,
+        competitionId,
     }
     return action;
 }
@@ -16,9 +16,9 @@ function getCompPartPlayerGradingSummaryAction(yearRefId, competitionId) {
 function onchangeCompPartPlayerGradingSummaryData(value, index, key) {
     const action = {
         type: ApiConstants.ONCHANGE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_DATA,
-        value: value,
-        index: index,
-        key: key
+        value,
+        index,
+        key
     }
     return action;
 }
@@ -32,7 +32,7 @@ function saveCompPartPlayerGradingSummaryAction(payload) {
     return action;
 }
 
-//competition part player grading get API 
+//competition part player grading get API
 function getCompPartPlayerGradingAction(yearRefId, competitionId, divisionId) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADING_LIST_LOAD,
@@ -150,8 +150,8 @@ function changeDivisionPlayerAction(payload) {
 function addOrRemovePlayerForChangeDivisionAction(data, key) {
     const action = {
         type: ApiConstants.UPDATE_PLAYER_GRADING_DATA,
-        data: data,
-        key: key
+        data,
+        key
     }
     return action;
 }

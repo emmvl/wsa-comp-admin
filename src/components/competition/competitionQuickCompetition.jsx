@@ -102,13 +102,13 @@ class CompetitionQuickCompetition extends Component {
                 })
             }
             if (this.state.compModalLoad === true && this.props.quickCompetitionState.onQuickCompLoad === false) {
-                if (this.state.modalButtonPressed == "next") {
+                if (this.state.modalButtonPressed === "next") {
                     this.setState({
                         compModalLoad: false,
                         visibleCompModal: false,
                         venueModalVisible: true
                     })
-                } else if (this.state.modalButtonPressed == "save") {
+                } else if (this.state.modalButtonPressed === "save") {
                     this.setState({
                         compModalLoad: false,
                         visibleCompModal: false
@@ -123,7 +123,7 @@ class CompetitionQuickCompetition extends Component {
                     timeslotModalLoad: false,
                     timeSlotVisible: false, visibleDivisionModal: true
                 })
-            } else if (this.state.timeSlotButtonClicked == "save") {
+            } else if (this.state.timeSlotButtonClicked === "save") {
                 this.setState({
                     timeslotModalLoad: false,
                     timeSlotVisible: false,
@@ -136,7 +136,7 @@ class CompetitionQuickCompetition extends Component {
                     venueComptitionLoad: false,
                     timeSlotVisible: true, venueModalVisible: false
                 })
-            } else if (this.state.venueButtonClicked == "save") {
+            } else if (this.state.venueButtonClicked === "save") {
                 this.setState({
                     venueComptitionLoad: false,
                     venueModalVisible: false
@@ -264,7 +264,7 @@ class CompetitionQuickCompetition extends Component {
             timeslotRotationRefId: 7,
         }
 
-        if (key == "save") {
+        if (key === "save") {
             this.props.quickCompetitionTimeSlotData(body, this.state.yearRefId, this.state.firstTimeCompId, this.props.quickCompetitionState.quickComptitionDetails.competitionName)
             this.setState({
                 timeslotModalLoad: true, timeSlotButtonClicked: "save"
@@ -371,7 +371,7 @@ class CompetitionQuickCompetition extends Component {
             "competitionUniqueKey": this.state.firstTimeCompId,
             "competitionVenues": this.props.quickCompetitionState.quickComptitionDetails.competitionVenues
         }
-        if (key == "save") {
+        if (key === "save") {
             this.props.quickCompetitionAddVenue(payload)
             this.setState({
                 venueButtonClicked: "save",

@@ -263,7 +263,7 @@ class LiveScoreAddNews extends Component {
             //     return;
             // }
 
-            if (this.state.isEdit == true) {
+            if (this.state.isEdit) {
                 editData.newsImage = ''
             }
 
@@ -306,7 +306,7 @@ class LiveScoreAddNews extends Component {
                 }, 2000);
             }
 
-            if (this.state.isEdit == true) {
+            if (this.state.isEdit) {
                 editData.newsVideo = ''
             }
             // this.setState({ video: data.files[0], videoSelection: URL.createObjectURL(data.files[0]) })
@@ -367,9 +367,9 @@ class LiveScoreAddNews extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
-                            {isEdit == true ? AppConstants.editNews : AppConstants.addNews}
+                            {isEdit ? AppConstants.editNews : AppConstants.addNews}
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </Header>
@@ -390,7 +390,6 @@ class LiveScoreAddNews extends Component {
                         mode="tags"
                         placeholder={AppConstants.searchScorer}
                         style={{ width: "100%", }}
-                        placeholder="Select Scorer"
                         // onChange={(scorerId) => this.props.liveScoreUpdateNewsAction(scorerId, "title")}
                         // value={editData.title}
                     >
@@ -513,8 +512,8 @@ class LiveScoreAddNews extends Component {
                         <Option value={"Individual Scorer"}>{'Individual Scorer'}</Option>
                     </Select>
                 </div>
-                {this.state.recipientSelection == "Individual Manager" && this.managerView()}
-                {this.state.recipientSelection == "Individual Scorer" && this.scorerView()}
+                {this.state.recipientSelection === "Individual Manager" && this.managerView()}
+                {this.state.recipientSelection === "Individual Scorer" && this.scorerView()}
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.newsImage} />
@@ -543,7 +542,7 @@ class LiveScoreAddNews extends Component {
 
                             <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
                                 {(this.state.crossImageIcon || newsImage) &&
-                                    <span className='user-remove-btn pl-2' style={{ cursor: 'pointer' }}>
+                                    <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                         <img
                                             className="dot-image"
                                             src={AppImages.redCross}
@@ -612,7 +611,7 @@ class LiveScoreAddNews extends Component {
                             value={expiryDate ? moment(expiryDate) : ''}
                             showTime={false}
                             placeholder="dd-mm-yyyy"
-                            name={'registrationOepn'}
+                            name="registrationOepn"
                         />
                     </div>
                     <div className="col-sm">
@@ -620,9 +619,10 @@ class LiveScoreAddNews extends Component {
                         <TimePicker
                             className="comp-venue-time-timepicker"
                             style={{ width: "100%" }}
-                            format={"HH:mm"}
+                            format="HH:mm"
                             value={expiryTime_formate !== null && moment(expiryTime_formate, "HH:mm")}
                             onChange={(time) => this.props.liveScoreUpdateNewsAction(time, "expire_time")}
+                            onBlur={(e) => this.props.liveScoreUpdateNewsAction(e.target.value && moment(e.target.value, "HH:mm"), 'expire_time')}
                             placeholder='Select Time'
                         />
                     </div>
@@ -800,10 +800,10 @@ class LiveScoreAddNews extends Component {
                     <div className="row">
                         <div className="col-sm pl-3">
                             <div className="reg-add-save-button">
-                                {/* <Button onClick={() => history.push(this.state.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreNewsList')} type="cancel-button">{AppConstants.cancel}</Button> */}
+                                {/* <Button onClick={() => history.push(this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/liveScoreNewsList')} type="cancel-button">{AppConstants.cancel}</Button> */}
                                 <NavLink
                                     to={{
-                                        pathname: this.state.key == 'dashboard' ? 'liveScoreDashboard' : '/liveScoreNewsList',
+                                        pathname: this.state.key === 'dashboard' ? 'liveScoreDashboard' : '/liveScoreNewsList',
                                         state: { screenKey: this.state.screenKey }
                                     }}
                                 >
@@ -841,7 +841,7 @@ class LiveScoreAddNews extends Component {
                 {stateWideMsg ? (
                     <InnerHorizontalMenu menu="liveScoreNews" liveScoreNewsSelectedKey="21" />
                 ) : (
-                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.key == 'dashboard' ? '1' : "21"} />
+                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.key === 'dashboard' ? '1' : "21"} />
                 )}
 
                 <Layout>

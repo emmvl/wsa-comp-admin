@@ -128,7 +128,7 @@ class CompetitionDraws extends Component {
     let changeStatus = this.props.drawsState.changeStatus
 
     if (
-      this.state.venueLoad == true &&
+      this.state.venueLoad &&
       this.props.drawsState.updateLoad == false
     ) {
       if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
@@ -266,7 +266,7 @@ class CompetitionDraws extends Component {
     }
 
     if (nextProps.drawsState.changeStatus != changeStatus) {
-      if (this.props.drawsState.changeStatus == false && this.state.changeStatus == true) {
+      if (this.props.drawsState.changeStatus == false && this.state.changeStatus) {
         let statusRefId = this.props.drawsState.publishStatus
         setOwn_competitionStatus(statusRefId)
         message.success("Draws published to live scores successfully");
@@ -278,7 +278,7 @@ class CompetitionDraws extends Component {
       }
     }
     if (
-      this.state.roundLoad == true && this.props.drawsState.onActRndLoad == false
+      this.state.roundLoad && this.props.drawsState.onActRndLoad == false
     ) {
       this.setState({ roundLoad: false });
       if (this.props.drawsState.activeDrawsRoundsData != null &&
@@ -597,7 +597,7 @@ class CompetitionDraws extends Component {
             }}
           >
             <Button
-              disabled={this.state.competitionStatus == 1 ? true : false}
+              disabled={this.state.competitionStatus == 1}
               id={AppUniqueId.matchList_Btn}
               onClick={() => this.onMatchesList()}
               className="primary-add-comp-form"
@@ -693,7 +693,7 @@ class CompetitionDraws extends Component {
 
   ///dropdown view containing all the dropdown of header
   dropdownView = () => {
-    let disabledStatus = this.state.competitionStatus == 1 ? true : false
+    let disabledStatus = this.state.competitionStatus == 1
     return (
       <div style={{
         alignItems: "center",
@@ -929,7 +929,7 @@ class CompetitionDraws extends Component {
   };
 
   handleGenerateDrawModal = (key) => {
-    if (key == "ok") {
+    if (key === "ok") {
       if (this.state.generateRoundId != null) {
         this.callGenerateDraw();
         this.setState({ drawGenerateModalVisible: false });
@@ -955,7 +955,7 @@ class CompetitionDraws extends Component {
   }
 
   handlePublishModal = (key) => {
-    if (key == "ok") {
+    if (key === "ok") {
       let competitiondata = this.props.drawsState.liveScoreCompetiton
       localStorage.setItem("LiveScoreCompetition", JSON.stringify(competitiondata))
       localStorage.removeItem('stateWideMessage')
@@ -1039,7 +1039,7 @@ class CompetitionDraws extends Component {
       divisions: [],
       rounds: []
     }
-    if (this.state.publishPartModel.isShowPart == true) {
+    if (this.state.publishPartModel.isShowPart) {
       payload.divisions = this.state.selectedDivisions;
       payload.rounds = this.state.selectedRounds
     }
@@ -1089,7 +1089,7 @@ class CompetitionDraws extends Component {
 
   ////////form content view
   contentView = () => {
-    let disabledStatus = this.state.competitionStatus == 1 ? true : false
+    let disabledStatus = this.state.competitionStatus == 1
 
     let roundTime = '';
     if (this.state.roundTime) {
@@ -1149,7 +1149,7 @@ class CompetitionDraws extends Component {
                     alignItems: 'center',
                   }}
                 >
-                  {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck == true ?
+                  {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
                     <div
                       style={{
                         width: '100%',
@@ -1194,10 +1194,10 @@ class CompetitionDraws extends Component {
                             size="large"
                             style={{ width: "75%", minWidth: 180, paddingLeft: 5 }}
                             format="DD-MM-YYYY"
-                            //  defaultValue={new}
+                            // defaultValue={new}
                             onChange={(startDate) => this.onChangeStartDate(moment(startDate).format("YYYY-MM-DD"))}
                             value={moment(this.state.startDate)}
-                          // disabledDate={d => !d || d.isAfter(this.state.endDate)}
+                            // disabledDate={d => !d || d.isAfter(this.state.endDate)}
                           />
                         </div>
                       </div> */}
@@ -1388,7 +1388,7 @@ class CompetitionDraws extends Component {
   }
 
   checkSwap(slot) {
-    let disabledStatus = this.state.competitionStatus == 1 ? true : false
+    let disabledStatus = this.state.competitionStatus == 1
     if (slot.competitionDivisionGradeId == this.state.competitionDivisionGradeId || this.state.competitionDivisionGradeId == 0) {
       if (this.state.organisation_Id == slot.awayTeamOrganisationId || this.state.organisation_Id == slot.homeTeamOrganisationId || this.state.organisation_Id == "-1") {
         if (!disabledStatus) {
@@ -1409,7 +1409,7 @@ class CompetitionDraws extends Component {
 
   //////the gragable content view inside the container
   draggableView = (dateItem) => {
-    let disabledStatus = this.state.competitionStatus == 1 ? true : false
+    let disabledStatus = this.state.competitionStatus == 1
     var dateMargin = 25;
     var dayMargin = 25;
     let topMargin = 0;
@@ -1689,7 +1689,7 @@ class CompetitionDraws extends Component {
     let publishStatus = this.props.drawsState.publishStatus;
     let isTeamNotInDraws = this.props.drawsState.isTeamInDraw;
     let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;
-    let isPublish = this.state.competitionStatus == 1 ? true : false;
+    let isPublish = this.state.competitionStatus == 1;
     let teamNames = this.props.drawsState.teamNames;
     return (
       <div className="fluid-width paddingBottom56px">
@@ -1723,7 +1723,7 @@ class CompetitionDraws extends Component {
                 style={{ height: '100%' }}
                 onMouseEnter={() =>
                   this.setState({
-                    tooltipVisibleDelete: isPublish ? true : false,
+                    tooltipVisibleDelete: isPublish,
                   })
                 }
                 onMouseLeave={() =>
@@ -1743,7 +1743,7 @@ class CompetitionDraws extends Component {
                       ? this.openModel(this.props)
                       : this.check()
                   }
-                  disabled={this.state.competitionStatus == 1 || publishStatus == 1 ? true : false}
+                  disabled={this.state.competitionStatus == 1 || publishStatus == 1}
                 >
                   {AppConstants.publish}
                 </Button>

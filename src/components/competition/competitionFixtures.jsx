@@ -56,7 +56,7 @@ class CompetitionFixtures extends Component {
                 }
             }
         }
-        if (this.state.venueLoad == true && this.props.drawsState.divisionLoad == false) {
+        if (this.state.venueLoad && this.props.drawsState.divisionLoad == false) {
             if (nextProps.drawsState !== this.props.drawsState) {
                 // if (nextProps.drawsState.fixtureDivisionGradeNameList !== fixtureDivisionGradeNameList) {
                 if (fixtureDivisionGradeNameList.length > 0) {

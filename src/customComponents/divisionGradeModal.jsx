@@ -99,7 +99,7 @@ class DivisionGradeModal extends React.Component {
                                                     return (
                                                         <div className="row " key={"gradeValue" + gradeIndex}>
                                                             <div className="col-sm pl-4 pb-2 division" style={{ display: "flex" }}>
-                                                                <Form.Item name={`grade${index}${gradeIndex}`} rules={[{ required: gradeIndex >= 1 ? true : false, message: ValidationConstants.gradeField }]}>
+                                                                <Form.Item name={`grade${index}${gradeIndex}`} rules={[{ required: gradeIndex >= 1, message: ValidationConstants.gradeField }]}>
                                                                     <InputWithHead
                                                                         heading={index == 0 && gradeIndex == 0 ? AppConstants.grade : " "}
                                                                         placeholder={"Enter grade"}
@@ -108,7 +108,7 @@ class DivisionGradeModal extends React.Component {
                                                                     />
                                                                 </Form.Item>
                                                                 {item.grades.length > 1 &&
-                                                                    <span className='user-remove-btn pl-2'
+                                                                    <span className="user-remove-btn pl-2"
                                                                         onClick={() => { removegrade(index, gradeIndex); this.valueupdate() }}
                                                                         style={{ cursor: 'pointer', display: 'flex', position: 'relative', justifyContent: "center", alignItems: 'center', paddingTop: 30 }}>
                                                                         <img

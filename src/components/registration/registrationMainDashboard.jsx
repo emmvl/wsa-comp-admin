@@ -213,7 +213,7 @@ class RegistrationMainDashboard extends Component {
 
     componentDidUpdate(nextProps) {
         const { yearList } = this.props.appState
-        if (this.state.loading == true && this.props.appState.onLoad == false) {
+        if (this.state.loading && this.props.appState.onLoad == false) {
             if (yearList.length > 0) {
                 let storedYearID = localStorage.getItem("yearId");
                 let yearRefId = null
@@ -241,7 +241,7 @@ class RegistrationMainDashboard extends Component {
                     let compName = competitionTypeList[0].competitionName
                     let regStatus = competitionTypeList[0].orgRegistrationStatusId
                     this.setState({
-                        competitionId: competitionId,
+                        competitionId,
                         publishStatus: publishStatus,
                         orgRegistratinId: orgRegistratinId,
                         wizardYear: wizardYear, registrationCloseDate: registrationCloseDate,
@@ -418,7 +418,7 @@ class RegistrationMainDashboard extends Component {
     }
     //wizard  registration click
     onClickRegistration() {
-        if (this.state.isDirect == true && this.state.competitionCreatorOrganisation == 1) {
+        if (this.state.isDirect && this.state.competitionCreatorOrganisation == 1) {
             history.push("/registrationForm", {
                 id: this.state.competitionId,
                 year: this.state.wizardYear,
@@ -510,7 +510,7 @@ class RegistrationMainDashboard extends Component {
             <div className="comp-dash-table-view">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.registrationDashboardState.onLoad == true && true}
+                        loading={this.props.registrationDashboardState.onLoad && true}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={this.props.registrationDashboardState.participatingInRegistrations}

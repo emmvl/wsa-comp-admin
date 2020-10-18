@@ -5,7 +5,7 @@ import ApiConstants from "../../../themes/apiConstants";
 function saveEndUserRegistrationAction(payload) {
     const action = {
         type: ApiConstants.API_SAVE_END_USER_REGISTRATION_LOAD,
-        payload: payload
+        payload
     };
     return action;
 }
@@ -15,7 +15,7 @@ function updateEndUserRegisrationAction(data, key) {
     const action = {
         type: ApiConstants.UPDATE_END_USER_REGISTRATION,
         updatedData: data,
-        key: key
+        key
     };
     return action;
 }
@@ -24,7 +24,7 @@ function updateEndUserRegisrationAction(data, key) {
 function orgRegistrationRegSettingsEndUserRegAction(payload) {
     const action = {
         type: ApiConstants.API_ORG_REGISTRATION_REG_SETTINGS_LOAD,
-        payload: payload
+        payload
     };
     return action;
 }
@@ -33,7 +33,7 @@ function orgRegistrationRegSettingsEndUserRegAction(payload) {
 function membershipProductEndUserRegistrationAction(payload) {
     const action = {
         type: ApiConstants.API_MEMBERSHIP_PRODUCT_END_USER_REG_LOAD,
-        payload: payload
+        payload
     };
     return action;
 }
@@ -42,7 +42,7 @@ function membershipProductEndUserRegistrationAction(payload) {
 function endUserRegDashboardListAction(payload, sortBy, sortOrder) {
     const action = {
         type: ApiConstants.API_USER_REG_DASHBOARD_LIST_LOAD,
-        payload: payload,
+        payload,
         sortBy, sortOrder
     };
     return action;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Select, Checkbox, Radio } from 'antd';
 import AppConstants from "../themes/appConstants"
-import CustumToolTip from 'react-png-tooltip'
+import CustomToolTip from 'react-png-tooltip'
 import AppUniqueId from "../themes/appUniqueId"
 
 const { Option } = Select;

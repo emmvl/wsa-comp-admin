@@ -419,7 +419,6 @@ class DashboardLayout extends React.Component {
                           )}
 
                           <ul className="dropdown-menu">
-
                             <li className={menuName === AppConstants.home ? "active" : ""}>
                               <div className="home-menu menu-wrap">
                                 <NavLink to="/homeDashboard">
@@ -493,10 +492,8 @@ class DashboardLayout extends React.Component {
                             <li className={menuName === AppConstants.finance ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'finance') ? 'visible' : 'none' }}>
                               <div className="finance-menu menu-wrap">
                                 <NavLink to="/paymentDashboard">
-                                  <a href="#">
-                                    <span className="icon" />
-                                    {AppConstants.finance}
-                                  </a>
+                                  <span className="icon" />
+                                  {AppConstants.finance}
                                 </NavLink>
                               </div>
                             </li>
@@ -535,7 +532,7 @@ class DashboardLayout extends React.Component {
             >
               {(this.props.userState.affiliateList || []).map((affiliate) => (
                 <Option
-                  key={affiliate.affiliateOrgId}
+                  key={affiliate.id}
                   value={affiliate.affiliateOrgId}
                 >
                   {affiliate.affiliateName}

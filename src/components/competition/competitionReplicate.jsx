@@ -42,7 +42,7 @@ class CompetitionReplicate extends Component {
 
     async componentDidUpdate(nextProps) {
         try {
-            if (!this.props.competitionDashboardState.replicateSaveOnLoad && this.state.buttonSave == "save") {
+            if (!this.props.competitionDashboardState.replicateSaveOnLoad && this.state.buttonSave === "save") {
                 if (this.props.competitionDashboardState.status == 4) {
                     message.error(this.props.competitionDashboardState.replicateSaveErrorMessage);
                 } else {
@@ -100,10 +100,10 @@ class CompetitionReplicate extends Component {
 
     onChangeReplicateValue = (data, key, subKey, index) => {
         this.props.updateReplicateSaveObjAction(data, key, subKey, index);
-        if (subKey == "oldCompetitionId") {
+        if (subKey === "oldCompetitionId") {
             this.setHasRegistration(data);
         }
-        if (subKey == "newYearRefId") {
+        if (subKey === "newYearRefId") {
             this.getNewMembershipProducts(data)
         }
     }
@@ -135,7 +135,7 @@ class CompetitionReplicate extends Component {
         try {
             if (this.state.hasRegistration == 1) {
                 let payload = {
-                    yearRefId: yearRefId,
+                    yearRefId,
                     organisationUniqueKey: getOrganisationData().organisationUniqueKey
                 }
                 this.props.getNewMembershipProductByYearAction(payload)
@@ -196,7 +196,7 @@ class CompetitionReplicate extends Component {
                                         <Select
                                             style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                                             onChange={(year) => this.onChangeReplicateValue(year, "details", "oldYearRefId")}
-                                            setFieldsValue={replicateSave.details.oldYearRefId}
+                                            value={replicateSave.details.oldYearRefId}
                                         >
                                             {own_YearArr.length > 0 && own_YearArr.map(item => (
                                                 <Option key={"yearRefId" + item.id} value={item.id}>
@@ -222,7 +222,7 @@ class CompetitionReplicate extends Component {
                                         <Select
                                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                             onChange={(compName) => this.onChangeReplicateValue(compName, "details", "oldCompetitionId")}
-                                            setFieldsValue={replicateSave.details.oldCompetitionId}
+                                            value={replicateSave.details.oldCompetitionId}
                                         >
                                             {all_own_CompetitionArr.length > 0 && all_own_CompetitionArr.map(item => (
                                                 <Option key={item.statusRefId} value={item.competitionId}>
@@ -256,7 +256,7 @@ class CompetitionReplicate extends Component {
                                     <Select
                                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                         onChange={(year) => this.onChangeReplicateValue(year, "details", "newYearRefId")}
-                                        setFieldsValue={replicateSave.details.newYearRefId}
+                                        value={replicateSave.details.newYearRefId}
                                     >
                                         {own_YearArr.length > 0 && own_YearArr.map(item => (
                                             <Option key={"yearRefId" + item.id} value={item.id}>
@@ -287,7 +287,7 @@ class CompetitionReplicate extends Component {
                                     <InputWithHead
                                         auto_complete="off"
                                         placeholder={AppConstants.competition_name}
-                                        setFieldsValue={replicateSave.details.competitionName}
+                                        value={replicateSave.details.competitionName}
                                         onChange={(e) => this.onChangeReplicateValue(e.target.value, "details", "competitionName")}
                                     />
                                 </Form.Item>
@@ -318,7 +318,7 @@ class CompetitionReplicate extends Component {
                                         <Select
                                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                             onChange={(membershipProductUniqueKey) => this.onChangeReplicateValue(membershipProductUniqueKey, "membershipProducts", null, oldProductIndex)}
-                                            setFieldsValue={replicateSave.details.newYearRefId}
+                                            value={replicateSave.details.newYearRefId}
                                         >
                                             {(newMembershipProducs || []).map(item => (
                                                 <Option
@@ -576,7 +576,7 @@ class CompetitionReplicate extends Component {
                     {this.headerView()}
                     <Form
                         ref={this.formRef}
-                        autocomplete="off"
+                        autoComplete="off"
                         scrollToFirstError
                         onFinish={this.saveRelicate}
                         noValidate="noValidate"

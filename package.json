@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
+    "@craco/craco": "^5.7.0",
     "@react-pdf/renderer": "^2.0.0-beta.6",
     "@stripe/react-stripe-js": "^1.1.2",
     "@stripe/stripe-js": "^1.5.0",
@@ -12,6 +13,8 @@
     "base-64": "^0.1.0",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.9.3",
+    "craco-antd": "^1.18.1",
+    "craco-less": "^1.17.0",
     "currency-formatter": "^1.5.5",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
@@ -49,9 +52,9 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

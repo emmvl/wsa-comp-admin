@@ -139,7 +139,7 @@ class RegistrationChangeReview extends Component {
 
     componentDidUpdate(nextProps) {
         let regChangeState = this.props.registrationChangeState;
-        if (this.state.loading == true && regChangeState.onSaveLoad == false) {
+        if (this.state.loading && regChangeState.onSaveLoad == false) {
             this.goBack();
         }
     }
@@ -154,9 +154,9 @@ class RegistrationChangeReview extends Component {
     }
 
     acceptModal = (key) => {
-        if (key == "show") {
+        if (key === "show") {
             this.setState({ acceptVisible: true });
-        } else if (key == "ok") {
+        } else if (key === "ok") {
             const { reviewSaveData } = this.props.registrationChangeState;
             let err = false;
             let msg = "";
@@ -189,9 +189,9 @@ class RegistrationChangeReview extends Component {
     };
 
     declineModal = (key) => {
-        if (key == "show") {
+        if (key === "show") {
             this.setState({ declineVisible: true });
-        } else if (key == "ok") {
+        } else if (key === "ok") {
             const { regChangeReviewData, reviewSaveData } = this.props.registrationChangeState;
             if (reviewSaveData.declineReasonRefId != 0 && reviewSaveData.declineReasonRefId != null) {
                 this.setState({ declineVisible: false });

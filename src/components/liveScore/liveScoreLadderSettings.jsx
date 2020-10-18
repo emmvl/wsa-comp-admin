@@ -50,7 +50,7 @@ class LiveScoreLadderSettings extends Component {
     componentDidUpdate(nextProps) {
         let ladderSettingState = this.props.ladderSettingState;
         if (nextProps.ladderSettingState != ladderSettingState) {
-            if (ladderSettingState.loader == false && this.state.saveLoad == true) {
+            if (ladderSettingState.loader == false && this.state.saveLoad) {
                 this.setState({ saveLoad: false })
                 this.props.ladderSettingGetDATA();
             }
@@ -58,7 +58,7 @@ class LiveScoreLadderSettings extends Component {
     }
 
     onChangeLadderSetting = (value, index, key, subIndex, subKey) => {
-        if (key == "isAllDivision" && value == true) {
+        if (key === "isAllDivision" && value) {
             // let ladders = this.props.ladderSettingState.ladders;
             // if (ladders.length > 1) {
             this.setState({ allDivisionVisible: true, ladderIndex: index });
@@ -75,14 +75,14 @@ class LiveScoreLadderSettings extends Component {
     }
 
     handleDeleteModal = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             this.props.updateLadderSetting(null, this.state.ladderIndex, "deleteLadder");
         }
         this.setState({ deleteModalVisible: false, ladderIndex: null });
     }
 
     handleAllDivisionModal = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             this.props.updateLadderSetting(true, this.state.ladderIndex, "isAllDivision");
         }
         this.setState({ allDivisionVisible: false, ladderIndex: null });
@@ -94,7 +94,7 @@ class LiveScoreLadderSettings extends Component {
             if (item.ladderFormatId < 0) {
                 item.ladderFormatId = 0;
             }
-            item.isAllDivision = item.isAllDivision == true ? 1 : 0;
+            item.isAllDivision = item.isAllDivision ? 1 : 0;
             delete item.divisions;
         });
         this.props.ladderSettingPostDATA(ladders)
@@ -104,8 +104,8 @@ class LiveScoreLadderSettings extends Component {
     contentView = () => {
         const { ladders, divisions } = this.props.ladderSettingState
         let ladderData = isArrayNotEmpty(ladders) ? ladders : [];
-        let isAllDivision = ladderData.find(x => x.isAllDivision == true);
-        let isAllDivisionChecked = isAllDivision != null ? true : false;
+        let isAllDivision = ladderData.find(x => x.isAllDivision);
+        let isAllDivisionChecked = isAllDivision != null;
         let allDivision = divisions.find(x => x.isDisabled == false);
         let allDivAdded = allDivision != null ? false : true;
 
@@ -233,7 +233,7 @@ class LiveScoreLadderSettings extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.ladderSettings}
                         </Breadcrumb.Item>

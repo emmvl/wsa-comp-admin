@@ -83,7 +83,7 @@ const columns = [
             <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
                 <Select className="select-inside-team-grades-table"
                     value={sortOrder}
-                    disabled={this_obj.state.competitionStatus == 1 ? true : false}
+                    disabled={this_obj.state.competitionStatus == 1}
                     onChange={(e) => this_obj.props.onchangeCompOwnFinalTeamGradingData(e, index, "sortOrder")}
                 >
                     {this_obj.props.ownTeamGradingState.teamRanks.map((item) => {
@@ -116,7 +116,7 @@ const columns = [
 
             <span className={(!record.isActive && record.delIndicationMsg == undefined) ? "disabled-row" : null}>
                 <Input className="input-inside-team-grades-table" style={{ width: '230px' }}
-                    disabled={this_obj.state.competitionStatus == 1 ? true : false}
+                    disabled={this_obj.state.competitionStatus == 1}
                     onChange={e => this_obj.props.onchangeCompOwnFinalTeamGradingData(e.target.value, index, "teamName")}
                     placeholder={"Team Name"}
                     value={teamName}
@@ -189,7 +189,7 @@ const columns = [
                     record.delIndicationMsg == undefined) ?
                     <Select className="select-inside-team-grades-table"
                         value={finalGradeId}
-                        disabled={this_obj.state.competitionStatus == 1 ? true : false}
+                        disabled={this_obj.state.competitionStatus == 1}
                         onChange={(finalGradeId) => this_obj.props.onchangeCompOwnFinalTeamGradingData(finalGradeId, index, "finalGradeId")}
                     >
                         {this_obj.props.ownTeamGradingState.compFinalTeamGradingFinalGradesData.map((item) => {
@@ -229,7 +229,7 @@ const columns = [
             >
                 <SubMenu
                     key="sub1"
-                    disabled={this_obj.state.competitionStatus == 1 ? true : false}
+                    disabled={this_obj.state.competitionStatus == 1}
                     title={
                         <img
                             className="dot-image"
@@ -317,7 +317,7 @@ class CompetitionProposedTeamGrading extends Component {
     }
 
     handleChangeDivision = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             let payload = {
                 competitionDivisionId: this.state.competitionDivisionId,
                 teamId: this.state.teamId,
@@ -397,7 +397,7 @@ class CompetitionProposedTeamGrading extends Component {
     componentDidMount() {
         let divisionId = this.props.location.state ? this.props.location.state.id : null;
         let gradeRefId = this.props.location.state ? this.props.location.state.gradeRefId : null;
-        this.setState({ divisionId: divisionId, gradeRefId: gradeRefId })
+        this.setState({ divisionId, gradeRefId: gradeRefId })
         // this.props.gradesReferenceListAction()
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
@@ -493,7 +493,7 @@ class CompetitionProposedTeamGrading extends Component {
         let finalGrades = this.props.ownTeamGradingState.compFinalTeamGradingFinalGradesData;
         let isError = false;
 
-        if (buttonClicked == "submit") {
+        if (buttonClicked === "submit") {
             finalTeamGradingData.map((item) => {
                 if ((item.finalGradeId == 0 || item.finalGradeId == null || item.finalGradeId == "" ||
                     item.finalGradeId == undefined) && item.actionType != "IsActive") {
@@ -585,7 +585,7 @@ class CompetitionProposedTeamGrading extends Component {
 
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
-        let disableStatus = this.state.competitionStatus == 1 ? true : false
+        let disableStatus = this.state.competitionStatus == 1
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
@@ -709,7 +709,7 @@ class CompetitionProposedTeamGrading extends Component {
                         columns={columns}
                         dataSource={proposedTeamGradingData}
                         pagination={false}
-                        loading={this.props.ownTeamGradingState.onLoad == true && true}
+                        loading={this.props.ownTeamGradingState.onLoad && true}
                         rowClassName={record => !record.isActive && record.delIndicationMsg != undefined && "disabled-row"}
                     />
                 </div>
@@ -771,7 +771,7 @@ class CompetitionProposedTeamGrading extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        let isPublished = this.state.competitionStatus == 1 ? true : false
+        let isPublished = this.state.competitionStatus == 1
         return (
             <div className="fluid-width paddingBottom56px">
                 <div className="row">
@@ -799,7 +799,7 @@ class CompetitionProposedTeamGrading extends Component {
                                     style={{ height: '100%' }}
                                     onMouseEnter={() =>
                                         this.setState({
-                                            tooltipVisibleDelete: isPublished ? true : false,
+                                            tooltipVisibleDelete: isPublished,
                                         })
                                     }
                                     onMouseLeave={() =>

@@ -208,7 +208,7 @@ class LiveScoreLadderList extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreLadderState.liveScoreLadderDivisionData !== this.props.liveScoreLadderState.liveScoreLadderDivisionData) {
-            if (this.state.loadding == true && this.props.liveScoreLadderState.onLoad == false) {
+            if (this.state.loadding && this.props.liveScoreLadderState.onLoad == false) {
                 const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
                 let divisionArray = this.props.liveScoreLadderState.liveScoreLadderDivisionData
                 let divisionId = isArrayNotEmpty(divisionArray) ? divisionArray[0].id : null
@@ -264,7 +264,7 @@ class LiveScoreLadderList extends Component {
                     >
                         <span className="year-select-heading">
                             {AppConstants.filterByDivision}:
-                </span>
+                        </span>
                         {grade.length > 0 && <Select
                             className="year-select reg-filter-select1 ml-2"
                             style={{ minWidth: 140 }}
@@ -296,7 +296,7 @@ class LiveScoreLadderList extends Component {
             <div className="comp-dash-table-view" style={{ paddingBottom: 100 }}>
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreLadderState.onLoad == true ? true : false}
+                        loading={this.props.liveScoreLadderState.onLoad}
                         className="home-dashboard-table"
                         columns={columns} dataSource={DATA}
                         pagination={false}

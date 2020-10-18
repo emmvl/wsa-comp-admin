@@ -6,9 +6,10 @@ import ApiConstants from "../../../themes/apiConstants";
 function regDashboardListAction(offset, yearRefId, sortBy, sortOrder) {
     const action = {
         type: ApiConstants.API_REG_DASHBOARD_LIST_LOAD,
-        offset: offset,
-        yearRefId: yearRefId,
-        sortBy, sortOrder
+        offset,
+        yearRefId,
+        sortBy,
+        sortOrder
     };
     return action;
 }

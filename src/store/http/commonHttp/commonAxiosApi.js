@@ -57,7 +57,7 @@ let AxiosApi = {
 
     async getVenue(action) {
         let organisationId = await getOrganisationData().organisationUniqueKey;
-        // if (action.key == "all") {
+        // if (action.key === "all") {
         //     organisationId = '';
         // }
         var url = `/api/venue/all?organisationUniqueKey=${organisationId}`;
@@ -182,7 +182,7 @@ let AxiosApi = {
         return Method.dataGet(url, token);
     },
     // <common server baseurl>/api/venue/competitionmgmnt?search=asma&competitionId=1
-    /////////get the grades reference data 
+    /////////get the grades reference data
     gradesReferenceList() {
         let url = `common/reference/grade`;
         return Method.dataGet(url, token);
@@ -192,7 +192,7 @@ let AxiosApi = {
         return Method.dataGet(url, token)
     },
 
-    /// All Venues Listing 
+    /// All Venues Listing
     async getVenuesList(payload, sortBy, sortOrder) {
         let userId = await getUserId()
         let url
@@ -204,7 +204,7 @@ let AxiosApi = {
 
         return Method.dataPost(url, token, payload);
     },
-    /// Get Venue by Id 
+    /// Get Venue by Id
     async getVenueById(payload) {
         let userId = await getUserId()
         let url = `/api/venue/edit?userId=${userId}`;

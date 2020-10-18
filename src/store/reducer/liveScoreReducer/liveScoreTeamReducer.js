@@ -136,7 +136,7 @@ function LiveScoreTeamState(state = initialState, action) {
                 state[key] = data;
             } else if (key === "checkBox") {
                 state.isCheked = data;
-                if (data == true) {
+                if (data) {
                     state.teamManagerData["logoUrl"] = null;
                     state.teamLogo = null;
                 }

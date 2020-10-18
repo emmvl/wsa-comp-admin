@@ -28,7 +28,7 @@ function updateCompetitionStatus(payload, yearId) {
 function deleteCompetitionAction(competitionId,targetValue) {
     const action = {
         type: ApiConstants.API_COMPETITION_DASHBOARD_DELETE_LOAD,
-        competitionId: competitionId,
+        competitionId,
         targetValue:targetValue
     };
     return action;
@@ -37,10 +37,10 @@ function deleteCompetitionAction(competitionId,targetValue) {
 function updateReplicateSaveObjAction(data,key,subKey,index){
     const action = {
         type: ApiConstants.UPDATE_REPLICATE_SAVE_OBJ,
-        data: data,
-        key: key,
-        subKey: subKey,
-        index: index
+        data,
+        key,
+        subKey,
+        index
     }
     return action;
 }
@@ -56,7 +56,7 @@ function replicateSaveAction(replicateSave){
 function getOldMembershipProductsByCompIdAction(payload){
     const action = {
         type: ApiConstants.API_OLD_MEMBERSHIP_PRODUCTS_BY_COMP_ID_LOAD,
-        payload: payload
+        payload
     }
     return action;
 }
@@ -64,7 +64,7 @@ function getOldMembershipProductsByCompIdAction(payload){
 function getNewMembershipProductByYearAction(payload){
     const action = {
         type: ApiConstants.API_NEW_MEMBERSHIP_PRODUCTS_BY_YEAR_LOAD,
-        payload: payload
+        payload
     }
     return action;
 }

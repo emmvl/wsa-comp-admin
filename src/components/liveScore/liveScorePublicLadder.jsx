@@ -175,7 +175,7 @@ class LiveScorePublicLadder extends Component {
 
     // componentDidUpdate(nextProps) {
     //     if (nextProps.liveScoreLadderState.liveScoreLadderDivisionData !== this.props.liveScoreLadderState.liveScoreLadderDivisionData) {
-    //         if (this.state.loadding == true && this.props.liveScoreLadderState.onLoad == false) {
+    //         if (this.state.loadding && this.props.liveScoreLadderState.onLoad == false) {
     //             let divisionArray = this.props.liveScoreLadderState.liveScoreLadderDivisionData
     //             let divisionId = isArrayNotEmpty(divisionArray) ? divisionArray[0].id : null
     //             this.props.liveScoreLaddersListAction(this.state.competitionId, divisionId, this.state.competitionUniqueKey)
@@ -186,7 +186,7 @@ class LiveScorePublicLadder extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreFixturCompState !== this.props.liveScoreFixturCompState) {
-            if (this.state.onCompLoad == true && this.props.liveScoreFixturCompState.onLoad == false) {
+            if (this.state.onCompLoad && this.props.liveScoreFixturCompState.onLoad == false) {
                 let firstComp = this.props.liveScoreFixturCompState.comptitionList && this.props.liveScoreFixturCompState.comptitionList[0].id
                 let compKey  = this.props.liveScoreFixturCompState.comptitionList && this.props.liveScoreFixturCompState.comptitionList[0].competitionUniqueKey
                 this.props.getLiveScoreDivisionList(firstComp)
@@ -195,7 +195,7 @@ class LiveScorePublicLadder extends Component {
         }
 
         if (this.props.liveScoreLadderState !== nextProps.liveScoreLadderState) {
-            if (this.props.liveScoreLadderState.onLoad == false && this.state.onDivisionLoad == true) {
+            if (this.props.liveScoreLadderState.onLoad == false && this.state.onDivisionLoad) {
 
                 if (this.props.liveScoreLadderState.liveScoreLadderDivisionData.length > 0) {
                     let division = this.props.liveScoreLadderState.liveScoreLadderDivisionData[0].id
@@ -281,7 +281,7 @@ class LiveScorePublicLadder extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table loading={this.props.liveScoreLadderState.onLoad == true ? true : false} className="home-dashboard-table" columns={columns} dataSource={DATA} pagination={false}
+                    <Table loading={this.props.liveScoreLadderState.onLoad} className="home-dashboard-table" columns={columns} dataSource={DATA} pagination={false}
                     />
                 </div>
             </div>

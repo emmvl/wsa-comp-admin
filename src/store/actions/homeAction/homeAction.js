@@ -28,7 +28,7 @@ function setHomeDashboardYear(year) {
 function getActionBoxAction(payload){
     const action = {
         type: ApiConstants.API_GET_ACTION_BOX_LOAD,
-        payload: payload
+        payload
     }
 
     return action;
@@ -37,7 +37,7 @@ function getActionBoxAction(payload){
 function updateActionBoxAction(payload){
     const action = {
         type: ApiConstants.API_UPDATE_ACTION_BOX_LOAD,
-        payload: payload
+        payload
     }
     return action;
 }

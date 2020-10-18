@@ -3,11 +3,10 @@
   display: flex;
   align-content: flex-start;
   text-align: center;
-  font-size: 15px;
   color: var(--app-color);
-  padding-bottom: 7.5px;
+  padding-bottom: 8px;
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
 }
 
 .text-right {
@@ -16,7 +15,7 @@
 }
 
 .home-dash-left-text {
-  font-family: inter;
+  font-family: inter, sans-serif;
   font-size: 22px;
   font-weight: normal;
   font-stretch: normal;
@@ -63,7 +62,7 @@
 .home-inbox-table .ant-table-thead > tr > th {
   /* border-bottom: 0px; */
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
   font-size: 13px;
   /* padding: 7px 7px; */
   overflow-wrap: break-word;
@@ -77,8 +76,7 @@
   /* padding: 20px 15px; */
   overflow-wrap: break-word;
   color: var(--app-4c4c6d);
-  font-size: 15px;
-  font-family: inter;
+  font-family: inter, sans-serif;
   /* background-color: red; */
   padding: 30px 24px;
   height: 64px;
@@ -102,29 +100,22 @@
 
 .event-time-end-text {
   color: var(--app-77778f);
-  font-size: 15px;
   padding-top: 5px;
 }
 
 .event-desc-head {
   color: var(--app-1b1b34);
-  font-family: "inter-medium";
+  font-family: inter-medium, sans-serif;
 }
 
 .inbox-name-text {
-  font-size: 15px;
   font-weight: 500;
   text-align: left;
-  font-family: "inter-medium";
+  font-family: inter-medium, sans-serif;
   color: var(--app-4c4c6d);
 }
 
 .inbox-time-text {
-  font-size: 15px;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  letter-spacing: normal;
   text-align: right;
   color: var(--app-9b9bad);
 }
@@ -150,7 +141,7 @@
 
 .home-dash-name-table-title {
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
   font-size: 13px;
   color: var(--app-color);
 }
@@ -176,9 +167,9 @@ img.bg {
   padding-bottom: 0px !important;
 }
 
-@media screen and (max-width: 1024px) { 
+@media screen and (max-width: 1024px) {
   img.bg {
     left: 50%;
-    margin-left: -512px;  
+    margin-left: -512px;
   }
 }

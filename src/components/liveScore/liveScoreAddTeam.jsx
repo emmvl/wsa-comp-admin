@@ -79,7 +79,7 @@ class LiveScoreAddTeam extends Component {
 
         if (this.state.screenKey == 'umpire') {
             if (getUmpireCompetitonData()) {
-                if (this.state.isEdit == true) {
+                if (this.state.isEdit) {
 
                     this.props.liveScoreGetTeamDataAction(this.state.teamId)
                     this.setState({ load: true })
@@ -97,7 +97,7 @@ class LiveScoreAddTeam extends Component {
             }
         } else {
             if (getLiveScoreCompetiton()) {
-                if (this.state.isEdit == true) {
+                if (this.state.isEdit) {
 
                     this.props.liveScoreGetTeamDataAction(this.state.teamId)
                     this.setState({ load: true })
@@ -119,9 +119,9 @@ class LiveScoreAddTeam extends Component {
     componentDidUpdate(nextProps) {
         let { teamManagerData } = this.props.liveScoreTeamState
 
-        if (this.state.isEdit == true) {
+        if (this.state.isEdit) {
             if (nextProps.liveScoreTeamState !== this.props.liveScoreTeamState) {
-                if (this.props.liveScoreTeamState.teamLoad == false && this.state.load == true) {
+                if (this.props.liveScoreTeamState.teamLoad == false && this.state.load) {
                     this.setInitialFieldValue(teamManagerData)
                     this.setState({ load: false })
                 }
@@ -177,9 +177,9 @@ class LiveScoreAddTeam extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
-                            {isEdit == true ? AppConstants.editTeam : AppConstants.addTeam}
+                            {isEdit ? AppConstants.editTeam : AppConstants.addTeam}
                         </Breadcrumb.Item>
                     </Breadcrumb>
                 </Header>
@@ -221,7 +221,7 @@ class LiveScoreAddTeam extends Component {
                     />
                 </Form.Item>
                 <InputWithHead
-                    auto_complete='off'
+                    auto_complete="off"
                     heading={"Team Alias"}
                     placeholder={"Team Alias"}
                     conceptulHelp
@@ -369,7 +369,7 @@ class LiveScoreAddTeam extends Component {
         const { managerListResult } = this.props.liveScoreMangerState
         return (
             <div>
-                <InputWithHead heading={AppConstants.managerSearch} required={"required-field pb-0"} />
+                <InputWithHead heading={AppConstants.managerSearch} required="required-field pb-0" />
                 <div>
                     <Form.Item name='managerId' rules={[{ required: true, message: ValidationConstants.searchManager }]}>
                         <Select
@@ -434,7 +434,7 @@ class LiveScoreAddTeam extends Component {
 
     managerNewRadioBtnView() {
         const { teamManagerData } = this.props.liveScoreTeamState
-        let hasError = this.state.hasError == true ? true : false
+        let hasError = this.state.hasError
         return (
             <div>
                 <div className="row">
@@ -462,7 +462,7 @@ class LiveScoreAddTeam extends Component {
                     <div className="col-sm">
                         <Form.Item name='lastName' rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
                             <InputWithHead
-                                auto_complete='off'
+                                auto_complete="off"
                                 required="required-field pt-0 pb-0"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.enterLastName}
