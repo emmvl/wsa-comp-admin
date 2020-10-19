@@ -1644,7 +1644,9 @@ const AppConstants = {
   membershipPaymentOptions: "MembershipPaymentOption",
   membershipFeesPaymentOptions: "Membership Fee Payment Options",
   whenPaymentsRequired: "When Payments are Required",
-  Communication: "Communication"
+  Communication: "Communication",
+  fullCashAmount: "Full cash amount", 
+  partialCashAmount: "Partial cash amount"
 };
 
 export default AppConstants;
