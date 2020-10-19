@@ -34,7 +34,6 @@ import './competition.css';
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
-let this_Obj = null;
 
 const columns = [
     {
@@ -99,7 +98,6 @@ class CompetitionPartTeamGradeCalculate extends Component {
         };
         // this.props.clearYearCompetitionAction()
         this.props.clearTeamGradingReducerDataAction('ownTeamGradingSummaryGetData')
-        this_Obj = this
     }
 
     componentDidUpdate(nextProps) {
@@ -182,7 +180,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
     addNewGrade = (arr) => {
         let columns1 = [...this.state.columns];
         let disabledStatus = this.state.competitionStatus == 1;
-        
+
         for (let i in arr) {
             let newColumn = {
                 title: null,
@@ -453,7 +451,6 @@ class CompetitionPartTeamGradeCalculate extends Component {
     contentView = () => {
         const { columns, data, addGradeVisible, updateGradeName,getDataLoading } = this.state;
         const { ownTeamGradingSummaryGetData, onLoad } = this.props.ownTeamGradingState;
-  
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
