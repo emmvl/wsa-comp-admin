@@ -1,4 +1,5 @@
 import ApiConstants from '../../../themes/apiConstants'
+import { getLiveScoreCompetiton } from '../../../util/sessionStorage';
 
 const initialState = {
   onLoad: false,
@@ -10,7 +11,8 @@ const initialState = {
   trackResultData: null,
   playedCheckBox: false,
   noOfPosition: null,
-  finalPostData: null
+  finalPostData: null,
+  positionList: []
 };
 
 function getFilterTrackData(trackData) {
@@ -50,6 +52,48 @@ function getcountIsPlayingValue(data) {
   return arr
 }
 
+function getFilterPositionData(positionData) {
+  const competition = JSON.parse(getLiveScoreCompetiton());
+
+  let positionArray = []
+  if (competition.gameTimeTracking === false) {
+    for (let i in positionData) {
+      if (positionData[i].isPlaying === true && positionData[i].isVisible === true) {
+        positionArray.push(positionData[i])
+      }
+    }
+  } else {
+    for (let i in positionData) {
+      if (positionData[i].isVisible === true) {
+        positionArray.push(positionData[i])
+      }
+    }
+  }
+  return positionArray
+}
+
+function getPositionArry(mainArr, positionArray) {
+  let position = positionArray
+  for (let i in mainArr) {
+    for (let j in positionArray) {
+      if (mainArr[i].positionId != positionArray[j].id) {
+        let obj = {
+          "id": null,
+          "isPlaying": false,
+          "isVisible": false,
+          "name": null,
+        }
+        position.push(obj)
+        break;
+      }
+    }
+    break;
+  }
+  return position
+}
+
+
+
 function liveScorePlayerMinuteTrackingState(state = initialState, action) {
   switch (action.type) {
     case ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_RECORD_LOAD:
@@ -78,6 +122,8 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
     case ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_TRACKING_LIST_SUCCESS:
       let trackResult = getFilterTrackData(action.result.data)
       state.trackResultData = trackResult
+      let postionArr = getPositionArry(action.result.data, state.positionList)
+      state.positionList = postionArr
       return {
         ...state,
         onLoad: false,
@@ -349,11 +395,11 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
 
       let countIsPlayingValue = getcountIsPlayingValue(action.result)
       state.noOfPosition = countIsPlayingValue.length
-      // console.log(countIsPlayingValue, 'getcountIsPlayingValue')
       return {
         ...state,
         onLoad: false,
-        recordLoad: false
+        recordLoad: false,
+        positionList: action.result
       };
 
 
