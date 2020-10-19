@@ -279,7 +279,7 @@ class LiveScoreMatchSheet extends Component {
         }
         if (this.state.selectedRound !== null) {
             const selectedRound = this.state.rounds.find((round) => round.id === this.state.selectedRound);
-            filteredMatches = filteredMatches.filter((match) => match.round.name === selectedRound.name);
+            filteredMatches = filteredMatches.filter((match) => match?.round?.name === selectedRound.name);
         }
 
         return (

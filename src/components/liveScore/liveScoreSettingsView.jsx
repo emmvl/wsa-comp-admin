@@ -645,7 +645,7 @@ class LiveScoreSettingsView extends Component {
                                 }}
                                 value={venue}
                             >
-                                {this.props.venueList.venueData && this.props.liveScoreSetting.venueData.map((item) => (
+                                {this.props.liveScoreSetting.venueData && this.props.liveScoreSetting.venueData.map((item) => (
                                     <Option key={'venue_' + item.venueId} value={item.venueId}>
                                         {item.venueName}
                                     </Option>

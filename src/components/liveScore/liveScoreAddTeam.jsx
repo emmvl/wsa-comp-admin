@@ -389,18 +389,18 @@ class LiveScoreAddTeam extends Component {
                             }}
                             onBlur={() => this.props.liveScoreManagerListAction(5, 1, this.state.localCompetitionID)}
                             optionFilterProp="children"
-                            // onSearch={(value) => {
-                            //     this.setState({ showOption: true })
-                            //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
-                            //         return data.firstName.indexOf(value) > -1
-                            //     })
-                            //     this.props.liveScoreManagerFilter(filteredData)
-                            // }}
-                            // value={selectedManager}
+                        // onSearch={(value) => {
+                        //     this.setState({ showOption: true })
+                        //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
+                        //         return data.firstName.indexOf(value) > -1
+                        //     })
+                        //     this.props.liveScoreManagerFilter(filteredData)
+                        // }}
+                        // value={selectedManager}
                         >
                             {/* {this.state.showOption ?  */}
                             {managerListResult.map((item) => (
-                                <Option key={'manager_' + JSON.stringify(item.id)} value={JSON.stringify(item.id)}>
+                                <Option key={'manager_' + item.id} value={item.id}>
                                     {item.NameWithNumber}
                                 </Option>
                             ))}
