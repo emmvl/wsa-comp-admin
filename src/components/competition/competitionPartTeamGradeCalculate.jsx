@@ -183,7 +183,6 @@ class CompetitionPartTeamGradeCalculate extends Component {
         let columns1 = [...this.state.columns];
         let disabledStatus = this.state.competitionStatus == 1;
         
-        console.log("arr", arr);
         for (let i in arr) {
             let newColumn = {
                 title: null,
@@ -240,8 +239,6 @@ class CompetitionPartTeamGradeCalculate extends Component {
         this.setState({
             columns: columns1
         })
-
-        console.log("columns1", columns1)
     };
 
     exportTeams = () => {
@@ -456,8 +453,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
     contentView = () => {
         const { columns, data, addGradeVisible, updateGradeName,getDataLoading } = this.state;
         const { ownTeamGradingSummaryGetData, onLoad } = this.props.ownTeamGradingState;
-        console.log("Columns#######", columns);
-        console.log("ownTeamGradingSummaryGetData", ownTeamGradingSummaryGetData)
+  
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
