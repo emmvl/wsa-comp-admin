@@ -105,7 +105,7 @@ class CompetitionPlayerImport extends Component {
                             </Breadcrumb>
                         </div>
                     </div>
-                </Header >
+                </Header>
             </div>
         )
     }

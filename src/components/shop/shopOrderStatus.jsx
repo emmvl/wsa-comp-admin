@@ -380,7 +380,7 @@ class ShopOrderStatus extends Component {
                     <div className="row reg-filter-row">
                         <div className="reg-col col-md-6 col-sm-6">
                             <div className="reg-filter-col-cont">
-                                <div style={{ width: 180 }} className='year-select-heading'>{AppConstants.year} :</div>
+                                <div style={{ width: 180 }} className="year-select-heading">{AppConstants.year} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
@@ -388,20 +388,18 @@ class ShopOrderStatus extends Component {
                                     className="year-select reg-filter-select mr-3"
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {this.props.appState.yearList.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.yearList.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
 
                         <div className="reg-col col-md-6 col-sm-6">
                             <div className="reg-filter-col-cont">
-                                <div style={{ width: 180 }} className='year-select-heading'>{AppConstants.product} :</div>
+                                <div style={{ width: 180 }} className="year-select-heading">{AppConstants.product} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     onChange={(product) => this.onChangeDropDownValue(product, "product")}
@@ -409,14 +407,16 @@ class ShopOrderStatus extends Component {
                                     className="year-select reg-filter-select mr-3"
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    <Option key={AppConstants.direct} value={AppConstants.direct}>{AppConstants.direct}</Option>
+                                    <Option key={AppConstants.direct} value={AppConstants.direct}>
+                                        {AppConstants.direct}
+                                    </Option>
                                 </Select>
                             </div>
                         </div>
 
                         <div className="reg-col col-md-6 col-sm-6">
                             <div className="reg-filter-col-cont">
-                                <div style={{ width: 180 }} className='year-select-heading'>{AppConstants.paymentStatus} :</div>
+                                <div style={{ width: 180 }} className="year-select-heading">{AppConstants.paymentStatus} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     onChange={(paymentStatus) => this.onChangeDropDownValue(paymentStatus, "paymentStatus")}
@@ -424,20 +424,18 @@ class ShopOrderStatus extends Component {
                                     className="year-select reg-filter-select mr-3"
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {paymentStatusData.map(item => {
-                                        return (
-                                            <Option key={"paymentStatus" + item.name} value={item.value}>
-                                                {item.name}
-                                            </Option>
-                                        );
-                                    })}
+                                    {paymentStatusData.map(item => (
+                                        <Option key={'paymentStatus_' + item.value} value={item.value}>
+                                            {item.name}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
 
                         <div className="reg-col col-md-6 col-sm-6">
                             <div className="reg-filter-col-cont">
-                                <div style={{ width: 180 }} className='year-select-heading'>{AppConstants.fulfilmentStatus} :</div>
+                                <div style={{ width: 180 }} className="year-select-heading">{AppConstants.fulfilmentStatus} :</div>
                                 <Select
                                     //  mode="multiple"
                                     className="year-select reg-filter-select mr-3"
@@ -446,13 +444,11 @@ class ShopOrderStatus extends Component {
                                     value={this.state.fulfilmentStatus}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {fulfilmentStatusData.map(item => {
-                                        return (
-                                            <Option key={"fulfilmentStatus" + item.name} value={item.value}>
-                                                {item.name}
-                                            </Option>
-                                        );
-                                    })}
+                                    {fulfilmentStatusData.map(item => (
+                                        <Option key={'fulfilmentStatus_' + item.value} value={item.value}>
+                                            {item.name}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>

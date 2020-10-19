@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
-    Layout, Button, Table, Modal, InputNumber, Checkbox, Tooltip, Select, Input, Spin, AutoComplete, Switch, message,
+    Layout, Button, Table, Modal, InputNumber, Checkbox, Tooltip, Select, Spin, AutoComplete, Switch,
 } from 'antd';
 
 import {
@@ -36,8 +36,6 @@ import ValidationConstants from '../../themes/validationConstant';
 import InputWithHead from "../../customComponents/InputWithHead";
 
 import './liveScore.css';
-import liveScorePlayerMinuteTrackingState
-    from "../../store/reducer/liveScoreReducer/liveScorePlayerMinuteTrackingReducer";
 
 const { Content } = Layout;
 const { confirm } = Modal;
@@ -82,15 +80,19 @@ const columns = [
         dataIndex: 'attendance',
         key: 'attendance',
         sorter: (a, b) => tableSort(a, b, "attendance"),
-        render: attendance =>
+        render: attendance => (
             <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
-                <img className="dot-image"
+                <img
+                    className="dot-image"
                     src={attendance && attendance.isPlaying === true ? AppImages.greenDot : AppImages.greyDot}
-                    alt="" width="12" height="12" />
-            </span>,
+                    alt=""
+                    width="12"
+                    height="12"
+                />
+            </span>
+        ),
     },
 ];
-
 
 const columnsTeam1 = [
     {
@@ -121,18 +123,15 @@ const columnsTeam1 = [
         dataIndex: 'attended',
         key: 'attended',
         sorter: (a, b) => tableSort(a, b, "attended"),
-        render: (team, record, index) => {
-            return (
-                <Checkbox
-                    className={record.lineup && record.lineup.playing ? 'checkbox-green-color-outline mt-1' : 'single-checkbox mt-1'}
-                    checked={record.attendance && record.attendance.isPlaying}
-                    onChange={(e) => this_.playingView(record, e.target.checked, index, 'team1Players')}
-                />
-            )
-        },
+        render: (team, record, index) => (
+            <Checkbox
+                className={record.lineup && record.lineup.playing ? 'checkbox-green-color-outline mt-1' : 'single-checkbox mt-1'}
+                checked={record.attendance && record.attendance.isPlaying}
+                onChange={(e) => this_.playingView(record, e.target.checked, index, 'team1Players')}
+            />
+        ),
     },
 ];
-
 
 const columnsTeam2 = [
     {
@@ -163,15 +162,13 @@ const columnsTeam2 = [
         dataIndex: 'attended',
         key: 'attended',
         sorter: (a, b) => tableSort(a, b, "attended"),
-        render: (attended, record, index) => {
-            return (
-                <Checkbox
-                    className={record.lineup && record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1'}
-                    checked={record.attendance && record.attendance.isPlaying}
-                    onChange={(e) => this_.playingView(record, e.target.checked, index, 'team2Players')}
-                />
-            )
-        },
+        render: (attended, record, index) => (
+            <Checkbox
+                className={record.lineup && record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1'}
+                checked={record.attendance && record.attendance.isPlaying}
+                onChange={(e) => this_.playingView(record, e.target.checked, index, 'team2Players')}
+            />
+        ),
     },
 ];
 
@@ -208,7 +205,6 @@ class LiveScoreMatchDetails extends Component {
         this.umpireScore_View = this.umpireScore_View.bind(this);
         this.team_View = this.team_View.bind(this);
         this_ = this;
-
     }
 
     componentDidMount() {
@@ -217,8 +213,7 @@ class LiveScoreMatchDetails extends Component {
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
 
         if (isArrayNotEmpty(match)) {
-
-            if (match.type == 'FOUR_QUARTERS') {
+            if (match.type === 'FOUR_QUARTERS') {
                 let periodDuration = (match.matchDuration * 60) / 4
                 this.setState({ periodDuration })
             } else {
@@ -227,11 +222,9 @@ class LiveScoreMatchDetails extends Component {
             }
         }
 
-
         if (this.state.matchId) {
             this.props.liveScoreGameAttendanceListAction(this.state.matchId);
             this.props.liveScorePlayerMinuteTrackingListAction(this.state.matchId);
-
         }
 
         if (this.state.umpireKey === 'umpire') {
@@ -249,7 +242,6 @@ class LiveScoreMatchDetails extends Component {
             } else {
                 history.push('/liveScoreCompetitions')
             }
-
         }
 
         if (this.props.location.state) {
@@ -292,9 +284,7 @@ class LiveScoreMatchDetails extends Component {
             }
         }
 
-
-        if (this.props.liveScorePlayerMinuteTrackingState.recordLoad
-            !== nextProps.liveScorePlayerMinuteTrackingState.recordLoad) {
+        if (this.props.liveScorePlayerMinuteTrackingState.recordLoad !== nextProps.liveScorePlayerMinuteTrackingState.recordLoad) {
             if (!this.props.liveScorePlayerMinuteTrackingState.recordLoad) {
                 this.setState({ loadTrackingData: true });
                 this.props.liveScorePlayerMinuteTrackingListAction(this.state.matchId);
@@ -323,20 +313,15 @@ class LiveScoreMatchDetails extends Component {
     };
 
     setAttendance = (team, playerId, period, field, value, row, positionDuration, periodDuration) => {
-        // console.log(row, 'playerdata')
-
         this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: value, playerdata: row, playerId: playerId, period: period, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId })
 
         const teamAttendance = team === 'team1' ? this.state.team1Attendance : this.state.team2Attendance;
-
-        const attendanceIndex = teamAttendance
-            .findIndex((att) => att.playerId === playerId && att.period === period);
+        const attendanceIndex = teamAttendance.findIndex((att) => att.playerId === playerId && att.period === period);
         teamAttendance[attendanceIndex] = {
             ...teamAttendance[attendanceIndex],
             [field]: value,
         };
         if (team === 'team1') {
-
             this.setState({
                 team1Attendance: teamAttendance,
             })
@@ -348,16 +333,12 @@ class LiveScoreMatchDetails extends Component {
     };
 
     getAttendanceValue = (playerId, period, field) => {
-        const attendance = this.state.gameAttendanceList
-            .find((att) => att.playerId === playerId && att.period === period);
+        const attendance = this.state.gameAttendanceList.find((att) => att.playerId === playerId && att.period === period);
         if (attendance && attendance[field]) {
-
             return attendance[field];
         }
         return null;
     };
-
-
 
     getAttendance = (players) => {
         let attendance = [];
@@ -417,14 +398,12 @@ class LiveScoreMatchDetails extends Component {
         if (filteredAttendance.length === 0) {
             return;
         }
-        // console.log(this.state.team1Attendance, 'this.state.team1Attendance', filteredAttendance)
+
         this.props.liveScoreExportGameAttendanceAction(
             this.state.matchId,
             teamId,
             filteredAttendance,
         );
-
-
     };
 
     playingView(record, value, index, key) {
@@ -467,7 +446,7 @@ class LiveScoreMatchDetails extends Component {
     };
 
     // method to show modal view after click
-    showModal = (livestreamURL, ) => {
+    showModal = (livestreamURL) => {
         this.setState({
             visible: true,
             liveStreamLink: livestreamURL
@@ -488,7 +467,6 @@ class LiveScoreMatchDetails extends Component {
         });
     };
 
-
     // view for breadcrumb
     headerView = () => {
         const match = this.props.liveScoreMatchState.matchDetails
@@ -499,8 +477,6 @@ class LiveScoreMatchDetails extends Component {
 
         const length = match ? match.length : 0;
         let isMatchStatus = length > 0 && match[0].matchStatus === "ENDED";
-
-        // console.log(this.state.screenName, 'this.state.screenName')
 
         return (
             <div className="p-4">
@@ -543,7 +519,12 @@ class LiveScoreMatchDetails extends Component {
                                 >
                                     <NavLink to={{
                                         pathname: '/liveScoreAddIncident',
-                                        state: { matchId: this.state.matchId, matchDetails: matchDetails, umpireKey: this.state.umpireKey, screenName: this.state.screenName }
+                                        state: {
+                                            matchId: this.state.matchId,
+                                            matchDetails: matchDetails,
+                                            umpireKey: this.state.umpireKey,
+                                            screenName: this.state.screenName
+                                        }
                                     }}>
                                         <Button className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addIncident}
@@ -562,8 +543,11 @@ class LiveScoreMatchDetails extends Component {
                                         justifyContent: "flex-end"
                                     }}
                                 >
-                                    <Button onClick={() => this.showModal(match[0].livestreamURL)}
-                                        className="primary-add-comp-form" type="primary">
+                                    <Button
+                                        onClick={() => this.showModal(match[0].livestreamURL)}
+                                        className="primary-add-comp-form"
+                                        type="primary"
+                                    >
                                         + {AppConstants.addliveStream}
                                     </Button>
                                 </div>
@@ -677,12 +661,11 @@ class LiveScoreMatchDetails extends Component {
                     <div style={{ display: "flex", alignContent: "center", flexDirection: 'column' }}>
                         {UmpireData.map((item, index) => (
                             <div key={`umpire_club_data_${index}`}>
-                                {isArrayNotEmpty(item.competitionOrganisations)
-                                    && item.competitionOrganisations.map((item, index) => (
-                                        <span key={`umpire_club_${index}`} className="inbox-name-text pt-2">
-                                            {item.name}
-                                        </span>
-                                    ))}
+                                {isArrayNotEmpty(item.competitionOrganisations) && item.competitionOrganisations.map((item, index) => (
+                                    <span key={`umpire_club_${index}`} className="inbox-name-text pt-2">
+                                        {item.name}
+                                    </span>
+                                ))}
                             </div>
                         ))}
                     </div>
@@ -703,11 +686,13 @@ class LiveScoreMatchDetails extends Component {
                             S1: {length >= 1 && match && match[0].scorer1 ? match[0].scorer1.firstName + ' ' + match[0].scorer1.lastName : ''}
                         </span>
                     </div>
-                    {scoreType !== 'SINGLE' && <div style={{ display: "flex", alignContent: "center" }}>
-                        <span className="inbox-name-text pt-2">
-                            S2: {length >= 1 && match && match[0].scorer2 ? match[0].scorer2.firstName + ' ' + match[0].scorer2.lastName : ''}
-                        </span>
-                    </div>}
+                    {scoreType !== 'SINGLE' && (
+                        <div style={{ display: "flex", alignContent: "center" }}>
+                            <span className="inbox-name-text pt-2">
+                                S2: {length >= 1 && match && match[0].scorer2 ? match[0].scorer2.firstName + ' ' + match[0].scorer2.lastName : ''}
+                            </span>
+                        </div>
+                    )}
                 </div>
                 <div className="col-sm-12 col-md-6 col-lg-3 mt-3">
                     <div className="match-score-detail">
@@ -720,7 +705,6 @@ class LiveScoreMatchDetails extends Component {
             </div>
         )
     };
-
 
     teamPlayersStatus = (data, team, teamId) => {
         const competition = JSON.parse(getLiveScoreCompetiton());
@@ -744,69 +728,51 @@ class LiveScoreMatchDetails extends Component {
         const competition = JSON.parse(getLiveScoreCompetiton());
         let { trackResultData } = this.props.liveScorePlayerMinuteTrackingState
         let gtt = (competition.gameTimeTracking || competition.gameTimeTracking == 1) ? true : false //// Game Time Tracking
+        let attendance = trackResultData.find((att) => att.playerId === playerId && att.period === period);
 
-        let attendance = trackResultData
-            .find((att) => att.playerId === playerId && att.period === period);
-        // console.log("trackResultData", trackResultData)
-        // console.log("attendance", attendance)
-
-
-        if (key == 'flow1') {
+        if (key === 'flow1') {
             if (field === "positionId") {
-                let positionId = attendance ? attendance.positionId : null
-                return positionId
+                return attendance ? attendance.positionId : null
             }
             if (field === "diabled") {
                 return attendance ? attendance.isPlaying : false
             }
             if (field === "isPlaying") {
-                let isPlaying = gtt ? attendance ? (attendance.playedEndPeriod) : attendance ? (attendance.playedFullPeriod) : false : false
-                return isPlaying
+                return gtt ? attendance ? (attendance.playedEndPeriod) : attendance ? (attendance.playedFullPeriod) : false : false
             }
-        } else if (key == 'flow2') {
-            if (field == "isPlaying") {
-                let isPlaying = gtt ? attendance ? (attendance.playedEndPeriod) : attendance ? (attendance.playedFullPeriod) : false : false
-                return isPlaying
+        } else if (key === 'flow2') {
+            if (field === "isPlaying") {
+                return gtt ? attendance ? (attendance.playedEndPeriod) : attendance ? (attendance.playedFullPeriod) : false : false
             }
-        }
-        else if (key == 'flow3') {
+        } else if (key === 'flow3') {
             if (field === "positionId") {
-                let positionId = attendance ? attendance.positionId : null
-                return positionId
+                return attendance ? attendance.positionId : null
             }
             if (field === "duration") {
-                let duration = attendance ? attendance.duration : 0
-                return duration
+                return attendance ? attendance.duration : 0
             }
         } else if (key === "flow4") {
             if (field === "isPlaying") {
-                let isPlaying = attendance ? attendance.playedFullPeriod : false
-                return isPlaying
+                return attendance ? attendance.playedFullPeriod : false
             }
             if (field === "seconds") {
-                let duration = attendance ? attendance.duration : 0
-                return duration
+                return attendance ? attendance.duration : 0
             }
         } else if (key === "flow5") {
-
             if (field === "isPlaying") {
-                let isPlaying = attendance ? attendance.playedFullPeriod : false
-                return isPlaying
+                return attendance ? attendance.playedFullPeriod : false
             }
         }
     };
 
     getPositionArray(playerId, period) {
         let { trackResultData } = this.props.liveScorePlayerMinuteTrackingState
-        let positionArray = trackResultData.filter(x => x.playerId === playerId && x.period === period).map(x => x.positionId);
-        return positionArray
-
+        return trackResultData.filter(x => x.playerId === playerId && x.period === period).map(x => x.positionId);
     }
 
     getPositionIndex(playerId, period) {
         let { trackResultData } = this.props.liveScorePlayerMinuteTrackingState
-        let positionArray = trackResultData.filter(x => x.playerId === playerId && x.period === period).map(x => ({ "positionId": x.positionId, "id": x.id }));
-        return positionArray
+        return trackResultData.filter(x => x.playerId === playerId && x.period === period).map(x => ({ "positionId": x.positionId, "id": x.id }));
     }
 
     getTeamPlayerStatusColumn = (data, team, teamId) => {
@@ -818,18 +784,17 @@ class LiveScoreMatchDetails extends Component {
         let gtt = (competition.gameTimeTracking || competition.gameTimeTracking == 1) ? true : false //// Game Time Tracking
         let art = competition.attendanceRecordingPeriod //// Attendance Recording Period
 
-
         let periodDuration = null
         let positionDuration = null
-        if (match.type == 'FOUR_QUARTERS') {
+        if (match.type === 'FOUR_QUARTERS') {
             periodDuration = (match.matchDuration * 60) / 4
             positionDuration = periodDuration / noOfPosition
         } else {
             periodDuration = (match.matchDuration * 60) / 2
             positionDuration = periodDuration / noOfPosition
         }
-        if (match.type == 'TWO_HALVES') {
-            if (pt && gtt && art != 'MINUTE') {
+        if (match.type === 'TWO_HALVES') {
+            if (pt && gtt && art !== 'MINUTE') {
                 const columns = [
                     {
                         title: 'Name',
@@ -850,7 +815,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -867,7 +831,6 @@ class LiveScoreMatchDetails extends Component {
                                                             ))}
                                                         </Select>
                                                     )
-
                                                 })
 
                                                 :
@@ -884,8 +847,6 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
                             },
@@ -893,19 +854,17 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played1',
                                 width: 60,
-                                render: (p, row, index) => {
+                                render: (p, row) => {
                                     let disable = this.setAttendanceValue(row.playerId, 1, 'diabled', "flow1") ? false : true
                                     return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={disable ? this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow1") : false}
-                                                disabled={disable}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
+                                        <Checkbox
+                                            defaultChecked={disable ? this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow1") : false}
+                                            disabled={disable}
+                                            onChange={
+                                                (e) =>
+                                                    this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                            }
+                                        />
                                     )
                                 }
                             },
@@ -924,7 +883,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -941,7 +899,6 @@ class LiveScoreMatchDetails extends Component {
                                                             ))}
                                                         </Select>
                                                     )
-
                                                 })
 
                                                 :
@@ -958,8 +915,6 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
                             },
@@ -967,19 +922,17 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played2',
                                 width: 60,
-                                render: (p, row, index) => {
+                                render: (p, row) => {
                                     let disable = this.setAttendanceValue(row.playerId, 2, 'diabled', "flow1") ? false : true
                                     return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={disable ? this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow1") : false}
-                                                disabled={disable}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
+                                        <Checkbox
+                                            defaultChecked={disable ? this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow1") : false}
+                                            disabled={disable}
+                                            onChange={
+                                                (e) =>
+                                                    this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                            }
+                                        />
                                     )
                                 }
                             },
@@ -1003,19 +956,15 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played1',
                                 width: 60,
-                                render: (p, row, index) => {
-                                    return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow2")}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
-                                    )
-                                }
+                                render: (p, row) => (
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow2")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                                )
                             },
                         ],
                     },
@@ -1026,7 +975,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played2',
                                 width: 60,
-                                render: (p, row, index) =>
+                                render: (p, row) =>
                                     <Checkbox
                                         defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow2")}
                                         onChange={
@@ -1061,7 +1010,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -1078,7 +1026,6 @@ class LiveScoreMatchDetails extends Component {
                                                             ))}
                                                         </Select>
                                                     )
-
                                                 })
 
                                                 :
@@ -1095,8 +1042,6 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
                             },
@@ -1128,7 +1073,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -1145,7 +1089,6 @@ class LiveScoreMatchDetails extends Component {
                                                             ))}
                                                         </Select>
                                                     )
-
                                                 })
 
                                                 :
@@ -1162,8 +1105,6 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
                             },
@@ -1175,7 +1116,7 @@ class LiveScoreMatchDetails extends Component {
                                     <InputNumber
                                         size="small"
                                         type="number"
-                                        defaultValue={this.setAttendanceValue(row.playerId, 1, 'duration', "flow3")}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 2, 'duration', "flow3")}
                                         onChange={(value) =>
                                             this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                     />
@@ -1200,19 +1141,15 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played Full Period',
                                 key: 'playedFullPeriod1',
                                 width: 60,
-                                render: (p, row, index) => {
-                                    return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow4")}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
-                                    )
-                                }
+                                render: (p, row) => (
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow4")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                                )
                             },
                             {
                                 title: 'Secs',
@@ -1236,17 +1173,15 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played Full Period',
                                 key: 'playedFullPeriod2',
                                 width: 60,
-                                render: (p, row, index) => {
+                                render: (p, row) => {
                                     return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow4")}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
+                                        <Checkbox
+                                            defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow4")}
+                                            onChange={
+                                                (e) =>
+                                                    this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                            }
+                                        />
                                     )
                                 }
                             },
@@ -1283,7 +1218,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played1',
                                 width: 60,
-                                render: (p, row, index) =>
+                                render: (p, row) =>
                                     <Checkbox
                                         defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow5")}
                                         onChange={
@@ -1301,7 +1236,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played2',
                                 width: 60,
-                                render: (p, row, index) =>
+                                render: (p, row) =>
                                     <Checkbox
                                         defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow5")}
                                         onChange={
@@ -1316,7 +1251,7 @@ class LiveScoreMatchDetails extends Component {
                 return columns
             }
         } else {
-            if (pt && gtt && art != 'MINUTE') {
+            if (pt && gtt && art !== 'MINUTE') {
                 const columns = [
                     {
                         title: 'Name',
@@ -1337,7 +1272,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -1354,7 +1288,6 @@ class LiveScoreMatchDetails extends Component {
                                                             ))}
                                                         </Select>
                                                     )
-
                                                 })
 
                                                 :
@@ -1371,8 +1304,6 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
                             },
@@ -1380,19 +1311,17 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played1',
                                 width: 60,
-                                render: (p, row, index) => {
+                                render: (p, row) => {
                                     let disable = this.setAttendanceValue(row.playerId, 1, 'diabled', "flow1") ? false : true
                                     return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={disable ? this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow1") : false}
-                                                disabled={disable}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
+                                        <Checkbox
+                                            defaultChecked={disable ? this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow1") : false}
+                                            disabled={disable}
+                                            onChange={
+                                                (e) =>
+                                                    this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                            }
+                                        />
                                     )
                                 }
                             },
@@ -1411,7 +1340,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -1428,7 +1356,6 @@ class LiveScoreMatchDetails extends Component {
                                                             ))}
                                                         </Select>
                                                     )
-
                                                 })
 
                                                 :
@@ -1445,8 +1372,6 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
                             },
@@ -1454,7 +1379,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played2',
                                 width: 60,
-                                render: (p, row, index) => {
+                                render: (p, row) => {
                                     let disable = this.setAttendanceValue(row.playerId, 2, 'diabled', "flow1") ? false : true
                                     return (
                                         <>
@@ -1485,7 +1410,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -1519,8 +1443,6 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
                             },
@@ -1528,19 +1450,17 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played3',
                                 width: 60,
-                                render: (p, row, index) => {
+                                render: (p, row) => {
                                     let disable = this.setAttendanceValue(row.playerId, 3, 'diabled', "flow1") ? false : true
                                     return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={disable ? this.setAttendanceValue(row.playerId, 3, 'isPlaying', "flow1") : false}
-                                                disabled={disable}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
+                                        <Checkbox
+                                            defaultChecked={disable ? this.setAttendanceValue(row.playerId, 3, 'isPlaying', "flow1") : false}
+                                            disabled={disable}
+                                            onChange={
+                                                (e) =>
+                                                    this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                            }
+                                        />
                                     )
                                 }
                             },
@@ -1559,7 +1479,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -1593,8 +1512,6 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
                             },
@@ -1602,19 +1519,17 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played4',
                                 width: 60,
-                                render: (p, row, index) => {
+                                render: (p, row) => {
                                     let disable = this.setAttendanceValue(row.playerId, 4, 'diabled', "flow1") ? false : true
                                     return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={disable ? this.setAttendanceValue(row.playerId, 4, 'isPlaying', "flow1") : false}
-                                                disabled={disable}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
+                                        <Checkbox
+                                            defaultChecked={disable ? this.setAttendanceValue(row.playerId, 4, 'isPlaying', "flow1") : false}
+                                            disabled={disable}
+                                            onChange={
+                                                (e) =>
+                                                    this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'checkBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                            }
+                                        />
                                     )
                                 }
                             },
@@ -1623,7 +1538,7 @@ class LiveScoreMatchDetails extends Component {
                 ];
 
                 return columns
-            } else if (!pt && gtt && art != 'MINUTE') {
+            } else if (!pt && gtt && art !== 'MINUTE') {
                 const columns = [
                     {
                         title: 'Name',
@@ -1638,7 +1553,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played1',
                                 width: 60,
-                                render: (p, row, index) =>
+                                render: (p, row) =>
                                     <Checkbox
                                         defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow2")}
                                         onChange={
@@ -1656,7 +1571,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played2',
                                 width: 60,
-                                render: (p, row, index) =>
+                                render: (p, row) =>
                                     <Checkbox
                                         defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow2")}
                                         onChange={
@@ -1673,7 +1588,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played3',
                                 width: 60,
-                                render: (p, row, index) =>
+                                render: (p, row) =>
                                     <Checkbox
                                         defaultChecked={this.setAttendanceValue(row.playerId, 3, 'isPlaying', "flow2")}
                                         onChange={
@@ -1690,7 +1605,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played4',
                                 width: 60,
-                                render: (p, row, index) =>
+                                render: (p, row) =>
                                     <Checkbox
                                         defaultChecked={this.setAttendanceValue(row.playerId, 4, 'isPlaying', "flow2")}
                                         onChange={
@@ -1725,7 +1640,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -1759,8 +1673,6 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
                             },
@@ -1792,7 +1704,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -1826,11 +1737,8 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
-
                             },
                             {
                                 title: 'Secs',
@@ -1859,7 +1767,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -1893,8 +1800,6 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
                             },
@@ -1926,7 +1831,6 @@ class LiveScoreMatchDetails extends Component {
 
                                     return (
                                         <>
-
                                             {positionArray.length > 0 ?
                                                 positionArray.map((position) => {
                                                     let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
@@ -1960,24 +1864,21 @@ class LiveScoreMatchDetails extends Component {
                                                 </Select>
                                             }
                                         </>
-
-
                                     )
                                 }
-
                             },
                             {
                                 title: 'Secs',
                                 key: 'sec4',
                                 width: 60,
-                                render: (p, row) =>
+                                render: (p, row) => (
                                     <InputNumber
                                         size="small"
                                         type="number"
                                         defaultValue={this.setAttendanceValue(row.playerId, 4, 'duration', "flow3")}
-                                        onChange={(value) =>
-                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                        onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                     />
+                                )
                             },
                         ]
                     },
@@ -1999,32 +1900,28 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played Full Period',
                                 key: 'playedFullPeriod1',
                                 width: 60,
-                                render: (p, row, index) => {
-                                    return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow4")}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
-                                    )
-                                }
+                                render: (p, row) => (
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow4")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                                )
                             },
                             {
                                 title: 'Secs',
                                 key: 'sec1',
                                 width: 60,
-                                render: (p, row) =>
+                                render: (p, row) => (
                                     <InputNumber
                                         size="small"
                                         type="number"
                                         value={this.setAttendanceValue(row.playerId, 1, 'seconds', 'flow4')}
-                                        onChange={(value) =>
-                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                        onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                     />
+                                )
                             },
                         ],
                     },
@@ -2035,32 +1932,28 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played Full Period',
                                 key: 'playedFullPeriod2',
                                 width: 60,
-                                render: (p, row, index) => {
-                                    return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow4")}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
-                                    )
-                                }
+                                render: (p, row) => (
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow4")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                                )
                             },
                             {
                                 title: 'Secs',
                                 key: 'sec2',
                                 width: 60,
-                                render: (p, row) =>
+                                render: (p, row) => (
                                     <InputNumber
                                         size="small"
                                         type="number"
                                         value={this.setAttendanceValue(row.playerId, 2, 'seconds', 'flow4')}
-                                        onChange={(value) =>
-                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                        onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                     />
+                                )
                             },
                         ]
                     }, {
@@ -2070,32 +1963,28 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played Full Period',
                                 key: 'playedFullPeriod3',
                                 width: 60,
-                                render: (p, row, index) => {
-                                    return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={this.setAttendanceValue(row.playerId, 3, 'isPlaying', "flow4")}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
-                                    )
-                                }
+                                render: (p, row) => (
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 3, 'isPlaying', "flow4")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                                )
                             },
                             {
                                 title: 'Secs',
                                 key: 'sec3',
                                 width: 60,
-                                render: (p, row) =>
+                                render: (p, row) => (
                                     <InputNumber
                                         size="small"
                                         type="number"
                                         value={this.setAttendanceValue(row.playerId, 3, 'seconds', 'flow4')}
-                                        onChange={(value) =>
-                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                        onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                     />
+                                )
                             },
                         ]
                     }, {
@@ -2105,32 +1994,28 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played Full Period',
                                 key: 'playedFullPeriod4',
                                 width: 60,
-                                render: (p, row, index) => {
-                                    return (
-                                        <>
-                                            <Checkbox
-                                                defaultChecked={this.setAttendanceValue(row.playerId, 4, 'isPlaying', "flow4")}
-                                                onChange={
-                                                    (e) =>
-                                                        this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
-                                                }
-                                            />
-                                        </>
-                                    )
-                                }
+                                render: (p, row) => (
+                                    <Checkbox
+                                        defaultChecked={this.setAttendanceValue(row.playerId, 4, 'isPlaying', "flow4")}
+                                        onChange={
+                                            (e) =>
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                        }
+                                    />
+                                )
                             },
                             {
                                 title: 'Secs',
                                 key: 'sec4',
                                 width: 60,
-                                render: (p, row) =>
+                                render: (p, row) => (
                                     <InputNumber
                                         size="small"
                                         type="number"
                                         value={this.setAttendanceValue(row.playerId, 4, 'seconds', 'flow4')}
-                                        onChange={(value) =>
-                                            this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                        onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                     />
+                                )
                             },
                         ]
                     },
@@ -2152,7 +2037,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played1',
                                 width: 60,
-                                render: (p, row, index) =>
+                                render: (p, row) => (
                                     <Checkbox
                                         defaultChecked={this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow5")}
                                         onChange={
@@ -2160,6 +2045,7 @@ class LiveScoreMatchDetails extends Component {
                                                 this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
                                         }
                                     />
+                                )
                             },
                         ],
                     },
@@ -2170,7 +2056,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played2',
                                 width: 60,
-                                render: (p, row, index) =>
+                                render: (p, row) => (
                                     <Checkbox
                                         defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow5")}
                                         onChange={
@@ -2178,6 +2064,7 @@ class LiveScoreMatchDetails extends Component {
                                                 this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
                                         }
                                     />
+                                )
                             },
                         ]
                     }, {
@@ -2187,7 +2074,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played3',
                                 width: 60,
-                                render: (p, row, index) =>
+                                render: (p, row) => (
                                     <Checkbox
                                         defaultChecked={this.setAttendanceValue(row.playerId, 3, 'isPlaying', "flow5")}
                                         onChange={
@@ -2195,6 +2082,7 @@ class LiveScoreMatchDetails extends Component {
                                                 this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 3, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
                                         }
                                     />
+                                )
                             },
                         ]
                     }, {
@@ -2204,7 +2092,7 @@ class LiveScoreMatchDetails extends Component {
                                 title: 'Played',
                                 key: 'played4',
                                 width: 60,
-                                render: (p, row, index) =>
+                                render: (p, row) => (
                                     <Checkbox
                                         defaultChecked={this.setAttendanceValue(row.playerId, 4, 'isPlaying', "flow5")}
                                         onChange={
@@ -2212,6 +2100,7 @@ class LiveScoreMatchDetails extends Component {
                                                 this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 4, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
                                         }
                                     />
+                                )
                             },
                         ]
                     },
@@ -2219,7 +2108,6 @@ class LiveScoreMatchDetails extends Component {
                 return columns
             }
         }
-
     }
 
     handleAttendanceView = (visible, team) => {
@@ -2235,11 +2123,7 @@ class LiveScoreMatchDetails extends Component {
         const { trackingList } = this.props.liveScorePlayerMinuteTrackingState
         const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
         const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
-        // console.log(team1PlayersData, 'team1PlayersData', this.state.borrowedTeam1Players)
-
         const length = match ? match.length : 0;
-
-
 
         return (
             <div className="row mt-5 ml-0 mr-0 mb-5">
@@ -2267,7 +2151,7 @@ class LiveScoreMatchDetails extends Component {
                                 <span className='home-dash-left-text'>{AppConstants.players}</span>
                             </div>
                             <div className="col-sm text-right align-items-center">
-                                {this.state.teamAttendance &&
+                                {this.state.teamAttendance && (
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
@@ -2275,7 +2159,7 @@ class LiveScoreMatchDetails extends Component {
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
-                                }
+                                )}
                                 <Button
                                     className="primary-add-comp-form"
                                     type="primary"
@@ -2330,7 +2214,7 @@ class LiveScoreMatchDetails extends Component {
                                 <span className='home-dash-left-text'>{AppConstants.players}</span>
                             </div>
                             <div className="col-sm text-right align-items-center">
-                                {this.state.teamAttendance &&
+                                {this.state.teamAttendance && (
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
@@ -2338,7 +2222,7 @@ class LiveScoreMatchDetails extends Component {
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
-                                }
+                                )}
                                 <Button
                                     className="primary-add-comp-form"
                                     type="primary"
@@ -2368,7 +2252,6 @@ class LiveScoreMatchDetails extends Component {
                     </div>
                     {this.footerView('team2', match[0]?.team2?.id)}
                 </div>
-
             </div>
         )
     };
@@ -2386,7 +2269,6 @@ class LiveScoreMatchDetails extends Component {
             return match[0].team1Score + ' : ' + match[0].team2Score;
         }
     }
-
 
     onClickFunc() {
         if (this.state.liveStreamLink) {
@@ -2562,28 +2444,23 @@ class LiveScoreMatchDetails extends Component {
         } else {
             history.push("/liveScoreCompetitions")
         }
-
     }
-
 
     getDurationArray(playerId, period) {
         let { trackResultData } = this.props.liveScorePlayerMinuteTrackingState
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
         let periodDuration = null
-        if (match.type == 'FOUR_QUARTERS') {
+        if (match.type === 'FOUR_QUARTERS') {
             periodDuration = (match.matchDuration * 60) / 4
         } else {
             periodDuration = (match.matchDuration * 60) / 2
         }
         let duration = trackResultData.filter(x => x.playerId === playerId && x.period === period).map(x => x.duration);
-        let sum = duration.reduce(function (a, b) { return a + b; }, 0);
-        if (sum === periodDuration) {
-            return true
-        } else {
-            return false
-        }
+        let sum = duration.reduce(function (a, b) {
+            return a + b;
+        }, 0);
+        return (sum === periodDuration);
     }
-
 
     onSavePlayerTrack(trackResultData) {
         let filteredData = []
@@ -2600,80 +2477,84 @@ class LiveScoreMatchDetails extends Component {
             });
             this.props.liveScorePlayerMinuteRecordAction(filteredData, this.state.matchId)
         }
-
-
     }
 
     footerView = (team, teamId) => {
         const { trackResultData } = this.props.liveScorePlayerMinuteTrackingState
 
         return (
-            <div className="fluid-width paddingBottom56px mt-4" >
-                <div className="row" >
-                    <div className="col-sm-3" >
+            <div className="fluid-width paddingBottom56px mt-4">
+                <div className="row">
+                    <div className="col-sm-3">
                         <div className="reg-add-save-button ml-3">
-                            {this.state.teamAttendance && <Button className="cancelBtnWidth" type="cancel-button">
-                                {AppConstants.cancel}
-                            </Button>
-                            }
+                            {this.state.teamAttendance && (
+                                <Button className="cancelBtnWidth" type="cancel-button">
+                                    {AppConstants.cancel}
+                                </Button>
+                            )}
                         </div>
                     </div>
                     <div className="col-sm">
                         <div className="comp-buttons-view mr-3">
-                            {/* {this.state.teamAttendance && <Button onClick={() =>trackResultData.length > 0 && this.props.liveScorePlayerMinuteRecordAction(trackResultData, this.state.matchId) */}
-                            {this.state.teamAttendance && <Button onClick={() => trackResultData.length > 0 && this.onSavePlayerTrack(trackResultData)
-
-                            } className="publish-button save-draft-text mr-0" htmlType="submit" type="primary"
-                            >
-                                {AppConstants.save}</Button>
-                            }
+                            {this.state.teamAttendance && (
+                                <Button
+                                    onClick={() => trackResultData.length > 0 && this.onSavePlayerTrack(trackResultData)}
+                                    // onClick={() => trackResultData.length > 0 && this.onSavePlayerTrack(trackResultData, this.state.matchId)}
+                                    className="publish-button save-draft-text mr-0"
+                                    htmlType="submit"
+                                    type="primary"
+                                >
+                                    {AppConstants.save}
+                                </Button>
+                            )}
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
     render() {
-        let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
+        const { umpireKey } = this.state;
+        let screen = (this.props.location.state && this.props.location.state.screenName) ? this.props.location.state.screenName : null;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <Loader
                     visible={
-                        // this.props.liveScorePlayerMinuteTrackingState.onLoad
-                        // || 
+                        // this.props.liveScorePlayerMinuteTrackingState.onLoad ||
                         this.props.liveScorePlayerMinuteTrackingState.recordLoad
                     }
                 />
-                {
-                    this.state.umpireKey ?
-                        <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                        :
+
+                {umpireKey ? (
+                    <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
+                ) : (
                         <DashboardLayout
                             menuHeading={AppConstants.liveScores}
                             menuName={AppConstants.liveScores}
                             onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                         />
-                }
+                    )}
 
-                {
-                    this.state.umpireKey ?
-                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
-                        :
+                {umpireKey ? (
+                    <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
+                ) : (
                         <InnerHorizontalMenu
                             menu="liveScore"
                             liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
                         />
-                }
+                    )}
+
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
+
                 <Layout>
                     {this.headerView()}
 
                     <Content>
-                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && this.state.umpireKey === 'umpire')) && this.umpireScore_View()}
-                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && this.state.umpireKey === 'umpire')) && this.team_View()}
-                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && this.state.umpireKey === 'umpire')) && this.ModalView()}
-                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && this.state.umpireKey === 'umpire')) && this.AddPlayerModalView()}
+                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && umpireKey === 'umpire')) && this.umpireScore_View()}
+                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && umpireKey === 'umpire')) && this.team_View()}
+                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && umpireKey === 'umpire')) && this.ModalView()}
+                        {(getLiveScoreCompetiton() || (getUmpireCompetitonData() && umpireKey === 'umpire')) && this.AddPlayerModalView()}
                     </Content>
                 </Layout>
             </div>
@@ -2706,4 +2587,5 @@ function mapStateToProps(state) {
         liveScorePlayerMinuteTrackingState: state.liveScorePlayerMinuteTrackingState,
     }
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreMatchDetails);

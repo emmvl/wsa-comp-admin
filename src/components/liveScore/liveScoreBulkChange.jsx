@@ -175,7 +175,7 @@ class LiveScoreBulkChange extends Component {
                             // value={selected_Option.venueId}
                         >
                             {venueData && venueData.map((item) => (
-                                <Option key={'venue' + item.id} value={item.venueId}>
+                                <Option key={'venue_' + item.venueId} value={item.venueId}>
                                     {item.venueName}
                                 </Option>
                             ))}
@@ -441,7 +441,7 @@ class LiveScoreBulkChange extends Component {
                         onSearch={(e) => this.onSearchVenue(e)}
                     >
                         {venueData && venueData.map((item) => (
-                            <Option key={'venue' + item.venueId} value={item.venueId}>
+                            <Option key={'venue_' + item.venueId} value={item.venueId}>
                                 {item.venueName}
                             </Option>
                         ))}
@@ -466,7 +466,7 @@ class LiveScoreBulkChange extends Component {
                         filterOption={false}
                     >
                         {pushCourtData && pushCourtData.map((item) => (
-                            <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
+                            <Option key={'court_' + item.venueCourtId} value={item.venueCourtId}>
                                 {item.name}
                             </Option>
                         ))}
@@ -584,7 +584,7 @@ class LiveScoreBulkChange extends Component {
                         onSearch={(e) => this.onSearchVenue(e)}
                     >
                         {venueData && venueData.map((item) => (
-                            <Option key={'venue' + item.venueId} value={item.venueId}>
+                            <Option key={'venue_' + item.venueId} value={item.venueId}>
                                 {item.venueName}
                             </Option>
                         ))}
@@ -609,7 +609,7 @@ class LiveScoreBulkChange extends Component {
                         filterOption={false}
                     >
                         {bringCourtData && bringCourtData.map((item) => (
-                            <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
+                            <Option key={'court_' + item.venueCourtId} value={item.venueCourtId}>
                                 {item.name}
                             </Option>
                         ))}
@@ -724,7 +724,7 @@ class LiveScoreBulkChange extends Component {
                         onSearch={(e) => this.onSearchVenue(e)}
                     >
                         {venueData && venueData.map((item) => (
-                            <Option key={'venue' + item.venueId} value={item.venueId}>
+                            <Option key={'venue_' + item.venueId} value={item.venueId}>
                                 {item.venueName}
                             </Option>
                         ))}
@@ -749,7 +749,7 @@ class LiveScoreBulkChange extends Component {
                         filterOption={false}
                     >
                         {endCourtData && endCourtData.map((item) => (
-                            <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
+                            <Option key={'court_' + item.venueCourtId} value={item.venueCourtId}>
                                 {item.name}
                             </Option>
                         ))}
@@ -769,7 +769,7 @@ class LiveScoreBulkChange extends Component {
                             optionFilterProp="children"
                         >
                             {roundResult.map((item) => (
-                                <Option key={'round' + item.id} value={item.id}>
+                                <Option key={'round_' + item.id} value={item.id}>
                                     {item.name}
                                 </Option>
                             ))}
@@ -801,7 +801,7 @@ class LiveScoreBulkChange extends Component {
                             placeholder={AppConstants.selectRoundOne}
                         >
                             {roundResult.map((item) => (
-                                <Option key={'round' + item.name} value={item.name}>
+                                <Option key={'round_' + item.name} value={item.name}>
                                     {item.name}
                                 </Option>
                             ))}
@@ -822,7 +822,7 @@ class LiveScoreBulkChange extends Component {
                             optionFilterProp="children"
                         >
                             {roundResult.map((item) => (
-                                <Option key={'round' + item.name} value={item.name}>
+                                <Option key={'round_' + item.name} value={item.name}>
                                     {item.name}
                                 </Option>
                             ))}
@@ -930,7 +930,7 @@ class LiveScoreBulkChange extends Component {
                             onSearch={(e) => this.onSearchVenue(e)}
                         >
                             {venueData && venueData.map((item) => (
-                                <Option key={'venue' + item.venueId} value={item.venueId}>
+                                <Option key={'venue_' + item.venueId} value={item.venueId}>
                                     {item.venueName}
                                 </Option>
                             ))}
@@ -955,7 +955,7 @@ class LiveScoreBulkChange extends Component {
                             filterOption={false}
                         >
                             {abandonCourtData && abandonCourtData.map((item) => (
-                                <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
+                                <Option key={'court_' + item.venueCourtId} value={item.venueCourtId}>
                                     {item.name}
                                 </Option>
                             ))}
@@ -978,7 +978,7 @@ class LiveScoreBulkChange extends Component {
                                 optionFilterProp="children"
                             >
                                 {roundResult.map((item) => (
-                                    <Option key={'round' + item.id} value={item.id}>
+                                    <Option key={'round_' + item.id} value={item.id}>
                                         {item.name}
                                     </Option>
                                 ))}
@@ -990,7 +990,7 @@ class LiveScoreBulkChange extends Component {
                 <span className="text-heading-large mt-5 mb-0">{AppConstants.abandon}</span>
                 <InputWithHead heading={AppConstants.selectReason} required="required-field" />
                 <div>
-                    <Form.Item name='reason' rules={[{ required: true, message: ValidationConstants.selectReason }]}>
+                    <Form.Item name="reason" rules={[{ required: true, message: ValidationConstants.selectReason }]}>
                         <Select
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={selectReason => this.setState({ selectReason })}
@@ -998,13 +998,13 @@ class LiveScoreBulkChange extends Component {
                             onChange={(resultType) => this.props.liveScoreUpdateBulkAction(resultType, "resultType")}
                             // value={abandonData.resultType ? abandonData.resultType : []}
                         >
-                            {/* {isArrayNotEmpty(matchResult) && matchResult.map((item, index) => (
-                                <Option key={item.id} value={item.id}>
+                            {/* {isArrayNotEmpty(matchResult) && matchResult.map((item) => (
+                                <Option key={'reason_' + item.id} value={item.id}>
                                     {item.code}
                                 </Option>
                             ))} */}
-                            <Option value={'8'}>{'Incomplete'}</Option>
-                            <Option value={'9'}>{'Not Played'}</Option>
+                            <Option value="8">Incomplete</Option>
+                            <Option value="9">Not Played</Option>
                         </Select>
                     </Form.Item>
                 </div>
@@ -1167,7 +1167,7 @@ class LiveScoreBulkChange extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"12"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="12" />
                 <Layout>
                     {this.headerView()}
                     <Form

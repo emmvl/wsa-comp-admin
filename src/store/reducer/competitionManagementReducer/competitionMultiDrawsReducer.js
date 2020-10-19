@@ -60,10 +60,10 @@ function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
           newArray.unshift({ competitionName: competitionName, legendArray: [] })
           // let index = currentLegends.findIndex((x) => x.colorCode === color)
           let object = {
-            "colorCode": color,
-            "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
-            "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A",
-            "competitionDivisionGradeId": drawsArray[i].slotsArray[j].competitionDivisionGradeId ? drawsArray[i].slotsArray[j].competitionDivisionGradeId : "N/A",
+            colorCode: color,
+            gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+            divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A",
+            competitionDivisionGradeId: drawsArray[i].slotsArray[j].competitionDivisionGradeId ? drawsArray[i].slotsArray[j].competitionDivisionGradeId : "N/A",
             "checked": true
           }
 
@@ -76,10 +76,10 @@ function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
         let color = drawsArray[i].slotsArray[j].colorCode
         let getIndex = newArray[compIndex].legendArray.findIndex((x) => x.colorCode === color)
         let object = {
-          "colorCode": color,
-          "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
-          "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A",
-          "competitionDivisionGradeId": drawsArray[i].slotsArray[j].competitionDivisionGradeId ? drawsArray[i].slotsArray[j].competitionDivisionGradeId : "N/A",
+          colorCode: color,
+          gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+          divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A",
+          competitionDivisionGradeId: drawsArray[i].slotsArray[j].competitionDivisionGradeId ? drawsArray[i].slotsArray[j].competitionDivisionGradeId : "N/A",
           "checked": true
         }
         if (getIndex === -1) {
@@ -100,9 +100,9 @@ function createLegendsArray(drawsArray, currentLegends, dateArray) {
       let color = drawsArray[i].slotsArray[j].colorCode
       let index = currentLegends.findIndex((x) => x.colorCode === color)
       let object = {
-        "colorCode": color,
-        "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
-        "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
+        colorCode: color,
+        gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+        divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
       }
       if (index === -1) {
         if (color !== "#999999") {
@@ -282,9 +282,9 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, key) {
     venueCourtName: null,
     venueCourtId: venueCourtId,
     venueShortName: null,
-    matchDate: matchDate,
-    startTime: startTime,
-    endTime: endTime,
+    matchDate,
+    startTime,
+    endTime,
     homeTeamId: null,
     awayTeamId: null,
     homeTeamName: null,

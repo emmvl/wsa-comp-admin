@@ -66,7 +66,7 @@ class CompetitionModal extends React.Component {
                         noValidate="noValidate"
                     >
                         {/* <div style={{ display: 'flex' }}>
-                            < span style={{ fontSize: 16 }} className={`comment-heading`}>{'"Enter competition Name"'} {" "} {'or'}{" "}   {'Select an existing competition'}   </span>
+                            <span style={{ fontSize: 16 }} className="comment-heading">{'"Enter competition Name"'} {" "} {'or'}{" "}   {'Select an existing competition'}   </span>
                         </div> */}
                         <div className="inside-container-view mt-3">
                             <div className="col-sm pl-0 pb-2">

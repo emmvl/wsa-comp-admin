@@ -198,8 +198,8 @@ class CompetitionReplicate extends Component {
                                             onChange={(year) => this.onChangeReplicateValue(year, "details", "oldYearRefId")}
                                             value={replicateSave.details.oldYearRefId}
                                         >
-                                            {own_YearArr.length > 0 && own_YearArr.map(item => (
-                                                <Option key={"yearRefId" + item.id} value={item.id}>
+                                            {own_YearArr.map(item => (
+                                                <Option key={'year_' + item.id} value={item.id}>
                                                     {item.description}
                                                 </Option>
                                             ))}
@@ -224,8 +224,11 @@ class CompetitionReplicate extends Component {
                                             onChange={(compName) => this.onChangeReplicateValue(compName, "details", "oldCompetitionId")}
                                             value={replicateSave.details.oldCompetitionId}
                                         >
-                                            {all_own_CompetitionArr.length > 0 && all_own_CompetitionArr.map(item => (
-                                                <Option key={item.statusRefId} value={item.competitionId}>
+                                            {all_own_CompetitionArr.map(item => (
+                                                <Option
+                                                    key={'competition_' + item.competitionId}
+                                                    value={item.competitionId}
+                                                >
                                                     {item.competitionName}
                                                 </Option>
                                             ))}
@@ -258,8 +261,8 @@ class CompetitionReplicate extends Component {
                                         onChange={(year) => this.onChangeReplicateValue(year, "details", "newYearRefId")}
                                         value={replicateSave.details.newYearRefId}
                                     >
-                                        {own_YearArr.length > 0 && own_YearArr.map(item => (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
+                                        {own_YearArr.map(item => (
+                                            <Option key={'year_' + item.id} value={item.id}>
                                                 {item.description}
                                             </Option>
                                         ))}
@@ -322,7 +325,7 @@ class CompetitionReplicate extends Component {
                                         >
                                             {(newMembershipProducs || []).map(item => (
                                                 <Option
-                                                    key={item.membershipProductUniqueKey}
+                                                    key={'membershipProduct_' + item.membershipProductUniqueKey}
                                                     value={item.membershipProductUniqueKey}
                                                 >
                                                     {item.membershipProductName}

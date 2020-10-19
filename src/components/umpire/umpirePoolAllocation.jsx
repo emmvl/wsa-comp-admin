@@ -145,22 +145,22 @@ class UmpirePoolAllocation extends Component {
                     </div>
                     {/* <div className="mt-5" style={{ display: "flex", width: 'fit-content' }}>
                         <div style={{
-                            width: "100%", display: "flex",
+                            width: "100%",
+                            display: "flex",
                             flexDirection: "row",
-                            alignItems: "center", marginRight: 50,
+                            alignItems: "center",
+                            marginRight: 50,
                         }}>
-                            <span className='year-select-heading'>{AppConstants.competition}:</span>
+                            <span className="year-select-heading">{AppConstants.competition}:</span>
                             <Select
                                 className="year-select"
                                 style={{ minWidth: 160 }}
                                 onChange={(comp) => this.onChangeComp({ comp })}
                                 value={this.state.selectedComp}
                             >
-                                {
-                                    competition.map((item) => {
-                                        return <Option value={item.id}>{item.longName}</Option>
-                                    })
-                                }
+                                {competition.map((item) => (
+                                    <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
+                                ))}
                             </Select>
                         </div>
                     </div> */}
@@ -185,22 +185,21 @@ class UmpirePoolAllocation extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div style={{
-                                width: "100%", display: "flex",
+                                width: "100%",
+                                display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
                             }}>
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 200, maxWidth: 250 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
                                 >
-                                    {
-                                        competition.map((item, index) => {
-                                            return <Option key={"longName" + index} value={item.id}>{item.longName}</Option>
-                                        })
-                                    }
+                                    {competition.map((item) => (
+                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -317,7 +316,7 @@ class UmpirePoolAllocation extends Component {
                                     </div>
                                 </div>
                                 <div className="collapse" id={teamIndex}>
-                                    {teamItem.players.length > 0 && teamItem.players.map((playerItem, playerIndex) => (
+                                    {teamItem.players.map((playerItem, playerIndex) => (
                                         <Draggable
                                             key={JSON.stringify(playerItem.playerId)}
                                             draggableId={JSON.stringify(playerItem.playerId)}
@@ -400,7 +399,7 @@ class UmpirePoolAllocation extends Component {
         let unassignedData = this.state.unassignedData
         return (
             <div>
-                <Droppable droppableId={'1'}>
+                <Droppable droppableId="1">
                     {(provided, snapshot) => (
                         <div ref={provided.innerRef} className="player-grading-droppable-view">
                             <div className="player-grading-droppable-heading-view">

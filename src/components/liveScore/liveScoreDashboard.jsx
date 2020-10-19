@@ -580,13 +580,13 @@ const columnsPlayersToPay = [
 
 const playerTopay = [
     {
-        "firstName": "Sam",
-        "lastName": "Ham",
-        "linked": "Cromer Netball Club",
-        "division": "11B",
-        "team": "WSA 1",
-        "grade": "A",
-        "payReq": "Voucher redemption"
+        firstName: "Sam",
+        lastName: "Ham",
+        linked: "Cromer Netball Club",
+        division: "11B",
+        team: "WSA 1",
+        grade: "A",
+        payReq: "Voucher redemption"
     }
 ]
 
@@ -890,7 +890,7 @@ class LiveScoreDashboard extends Component {
 
 
             <div className="col-sm pt-4">
-                <div className="row " >
+                <div className="row" >
                     <div className=" live-score-edit-match-buttons">
                         <Button className='primary-add-comp-form' type='primary'>{AppConstants.publish}</Button>
                     </div>

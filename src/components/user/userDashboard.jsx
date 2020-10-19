@@ -222,7 +222,7 @@ class UserDashboard extends Component {
                         </Breadcrumb>
                     </div>
                 </div>
-            </Header >
+            </Header>
         )
     }
 
@@ -234,24 +234,25 @@ class UserDashboard extends Component {
                     <div className="row">
                         <div className="col-sm-3">
                             <div className="com-year-select-heading-view">
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 75 }}
                                     onChange={(year) => this.setState({ year })}
                                     value={this.state.year}
                                 >
-                                    <Option value={"2019winter"}>{AppConstants.winter2019}</Option>
+                                    <Option value="2019winter">{AppConstants.winter2019}</Option>
                                 </Select>
                             </div>
                         </div>
                         <div className="col-sm">
                             <div style={{
-                                width: "100%", display: "flex",
+                                width: "100%",
+                                display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
                             }}>
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 140 }}

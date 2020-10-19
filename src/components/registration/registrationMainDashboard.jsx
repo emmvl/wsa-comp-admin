@@ -57,19 +57,17 @@ const columns = [
         render: divisions => {
             let divisionList = isArrayNotEmpty(divisions) ? divisions : []
             return (
-                < span key={"part1"}>
-                    {
-                        divisionList.map(item => (
-                            <Tag
-                                className="comp-dashboard-table-tag"
-                                color={item.color}
-                                key={"part" + item.id}
-                            >
-                                {item.divisionName}
-                            </Tag>
-                        ))
-                    }
-                </span >
+                <span key="part1">
+                    {divisionList.map(item => (
+                        <Tag
+                            className="comp-dashboard-table-tag"
+                            color={item.color}
+                            key={"part" + item.id}
+                        >
+                            {item.divisionName}
+                        </Tag>
+                    ))}
+                </span>
             )
         },
         sorter: true,
@@ -83,9 +81,9 @@ const columns = [
             let inviteesRegType = isArrayNotEmpty(invitees) ? invitees : []
             let registrationInviteesRefId = isArrayNotEmpty(inviteesRegType) ? inviteesRegType[0].registrationInviteesRefId : 0
             return (
-                < span >
+                <span>
                     {checkRegistrationType(registrationInviteesRefId)}
-                </span >
+                </span>
             )
         },
         sorter: true,
@@ -115,19 +113,17 @@ const columnsOwned = [
         render: divisions => {
             let divisionList = isArrayNotEmpty(divisions) ? divisions : []
             return (
-                < span key={"owned1"}>
-                    {
-                        divisionList.map(item => (
-                            <Tag
-                                className="comp-dashboard-table-tag"
-                                color={item.color}
-                                key={"owned" + item.id}
-                            >
-                                {item.divisionName}
-                            </Tag>
-                        ))
-                    }
-                </span >
+                <span key="owned1">
+                    {divisionList.map(item => (
+                        <Tag
+                            className="comp-dashboard-table-tag"
+                            color={item.color}
+                            key={"owned" + item.id}
+                        >
+                            {item.divisionName}
+                        </Tag>
+                    ))}
+                </span>
             )
         },
         sorter: true,
@@ -141,9 +137,9 @@ const columnsOwned = [
             let inviteesRegType = isArrayNotEmpty(invitees) ? invitees : []
             let registrationInviteesRefId = isArrayNotEmpty(inviteesRegType) ? inviteesRegType[0].registrationInviteesRefId : 0
             return (
-                < span >
+                <span>
                     {checkRegistrationType(registrationInviteesRefId)}
-                </span >
+                </span>
             )
         },
         sorter: true,
@@ -332,10 +328,9 @@ class RegistrationMainDashboard extends Component {
                                     onChange={yearId => this.onYearClick(yearId)}
                                     value={this.state.year}
                                 >
-                                    {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                        <Option key={"yearlist" + yearIndex} value={item.id}> {item.name}</Option>
-                                    ))
-                                    }
+                                    {yearList.map((item) => (
+                                        <Option key={'year_' + item.id} value={item.id}>{item.name}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>

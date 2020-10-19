@@ -705,10 +705,9 @@ class UserOurOrganization extends Component {
                         // value={affiliate.stateRefId}
                         value={affiliate.stateRefId}
                         disabled={!this.state.isEditable}
-
                     >
-                        {stateList.length > 0 && stateList.map((item) => (
-                            <Option value={item.id}> {item.name}</Option>
+                        {stateList.map((item) => (
+                            <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
                         ))}
                     </Select>
                 </Form.Item>
@@ -875,8 +874,8 @@ class UserOurOrganization extends Component {
                                         onChange={(e) => this.onChangeContactSetValue(e, "roles", index)}
                                         value={item.roleId}
                                     >
-                                        {(roles || []).map((role, index) => (
-                                            <Option key={role.id} value={role.id}>{role.description}</Option>
+                                        {(roles || []).map((role) => (
+                                            <Option key={'role_' + role.id} value={role.id}>{role.description}</Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
@@ -987,7 +986,7 @@ class UserOurOrganization extends Component {
                         </div>
                     )}
                 </div>
-            </Header >
+            </Header>
         )
     }
 
@@ -1114,8 +1113,10 @@ class UserOurOrganization extends Component {
                                     onChange={(e) => this.setOrgPhotoValue(e)}
                                     value={this.state.tableRecord.photoTypeRefId}
                                 >
-                                    {(photoTypeData || []).map((photo, index) => (
-                                        <Option key={photo.id} value={photo.id}>{photo.description}</Option>
+                                    {(photoTypeData || []).map((photo) => (
+                                        <Option key={'photoType_' + photo.id} value={photo.id}>
+                                            {photo.description}
+                                        </Option>
                                     ))}
                                 </Select>
                             </Form.Item>

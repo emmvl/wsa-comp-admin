@@ -362,7 +362,7 @@ class OrderSummary extends Component {
                     <div className="row reg-filter-row">
                         <div className="reg-col col-md-3 col-sm-6">
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.year} :</div>
+                                <div className="year-select-heading">{AppConstants.year} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
@@ -370,29 +370,10 @@ class OrderSummary extends Component {
                                     className="year-select reg-filter-select"
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {this.props.appState.yearList.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div className="reg-col col-md-3 col-sm-6">
-                            <div className="reg-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.affiliate} :</div>
-                                <Select
-                                    style={{ minWidth: 160 }}
-                                    className="year-select reg-filter-select"
-                                    onChange={affiliateOrgId => this.onChangeDropDownValue(affiliateOrgId, "affiliateOrgId")}
-                                    value={this.state.affiliateOrgId}
-                                >
-                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(uniqueValues || []).map((org, index) => (
-                                        <Option key={org.organisationId} value={org.organisationId}>{org.name}</Option>
+                                    {this.props.appState.yearList.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
                                     ))}
                                 </Select>
                             </div>
@@ -400,7 +381,26 @@ class OrderSummary extends Component {
 
                         <div className="reg-col col-md-3 col-sm-6">
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading' style={{ width: 95 }}>{AppConstants.postCode} :</div>
+                                <div className="year-select-heading">{AppConstants.affiliate} :</div>
+                                <Select
+                                    style={{ minWidth: 160 }}
+                                    className="year-select reg-filter-select"
+                                    onChange={affiliateOrgId => this.onChangeDropDownValue(affiliateOrgId, "affiliateOrgId")}
+                                    value={this.state.affiliateOrgId}
+                                >
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {(uniqueValues || []).map((org) => (
+                                        <Option key={'organisation_' + org.organisationId} value={org.organisationId}>
+                                            {org.name}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="reg-col col-md-3 col-sm-6">
+                            <div className="reg-filter-col-cont">
+                                <div className="year-select-heading" style={{ width: 95 }}>{AppConstants.postCode} :</div>
                                 <div style={{ width: '76%' }}>
                                     <InputWithHead
                                         placeholder={AppConstants.postCode}
@@ -414,7 +414,7 @@ class OrderSummary extends Component {
 
                         <div className="reg-col col-md-3 col-sm-6 no-padding-right">
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.payment} :</div>
+                                <div className="year-select-heading">{AppConstants.payment} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     onChange={paymentMethod => this.onChangeDropDownValue(paymentMethod, "paymentMethod")}
@@ -422,8 +422,8 @@ class OrderSummary extends Component {
                                     className="year-select reg-filter-select"
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {paymentData.map((item, index) => (
-                                        <Option key={item.value} value={item.value}>{item.name}</Option>
+                                    {paymentData.map((item) => (
+                                        <Option key={'payment_' + item.value} value={item.value}>{item.name}</Option>
                                     ))}
                                 </Select>
                             </div>

@@ -43,9 +43,9 @@ function tableSort(key) {
     this_obj.setState({ sortBy, sortOrder });
 
     const body = {
-        "paging": {
-            "limit": 10,
-            "offset": this_obj.state.offset
+        paging: {
+            limit: 10,
+            offset: this_obj.state.offset
         }
     }
 
@@ -556,9 +556,9 @@ class LiveScorePositionTrackReport extends Component {
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 }
             }
             this.props.liveScorePositionTrackingAction({
@@ -631,9 +631,9 @@ class LiveScorePositionTrackReport extends Component {
         let offset = page ? 10 * (page - 1) : 0;
         let { sortBy, sortOrder } = this.state
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": offset
+            paging: {
+                limit: 10,
+                offset: offset
             }
         }
         this.setState({ offset })
@@ -679,9 +679,9 @@ class LiveScorePositionTrackReport extends Component {
     onChangePeriod(reportId) {
         let { sortBy, sortOrder } = this.state
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
+            paging: {
+                limit: 10,
+                offset: 0
             }
         }
         this.props.liveScorePositionTrackingAction({
@@ -699,9 +699,9 @@ class LiveScorePositionTrackReport extends Component {
     onChangeGame(aggregateId) {
         let { sortBy, sortOrder } = this.state
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
+            paging: {
+                limit: 10,
+                offset: 0
             }
         }
         this.props.liveScorePositionTrackingAction({
@@ -722,9 +722,9 @@ class LiveScorePositionTrackReport extends Component {
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value == null || e.target.value == "") {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 }
             }
             this.props.liveScorePositionTrackingAction({
@@ -746,9 +746,9 @@ class LiveScorePositionTrackReport extends Component {
         var code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 }
             }
             this.props.liveScorePositionTrackingAction({
@@ -770,9 +770,9 @@ class LiveScorePositionTrackReport extends Component {
         if (this.state.searchText == null || this.state.searchText == "") {
         } else {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 }
             }
             this.props.liveScorePositionTrackingAction({
@@ -794,30 +794,30 @@ class LiveScorePositionTrackReport extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <div className="reg-filter-col-cont pb-3">
-                            <span className='year-select-heading'>{AppConstants.periodFilter}:</span>
+                            <span className="year-select-heading">{AppConstants.periodFilter}:</span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"
                                 style={{ minWidth: 160 }}
                                 onChange={(reportId) => this.onChangePeriod(reportId)}
                                 value={this.state.reporting}
                             >
-                                <Option value={'PERIOD'}>{'Period'}</Option>
-                                <Option value={'PERCENT'}>{'%'}</Option>
-                                <Option value={'MINUTE'}>{'Minutes'}</Option>
+                                <Option value="PERIOD">Period</Option>
+                                <Option value="PERCENT">%</Option>
+                                <Option value="MINUTE">Minutes</Option>
                             </Select>
                         </div>
                     </div>
                     <div className="col-sm">
                         <div className="reg-filter-col-cont pb-3">
-                            <span className='year-select-heading'>{AppConstants.byGame}:</span>
+                            <span className="year-select-heading">{AppConstants.byGame}:</span>
                             <Select
                                 className="year-select reg-filter-select1 ml-2"
                                 style={{ minWidth: 160 }}
                                 onChange={(aggregateId) => this.onChangeGame(aggregateId)}
                                 value={this.state.aggregate}
                             >
-                                <Option value={'MATCH'}>{'By Game'}</Option>
-                                <Option value={'ALL'}>{'All Games'}</Option>
+                                <Option value="MATCH">By Game</Option>
+                                <Option value="ALL">All Games</Option>
                             </Select>
                         </div>
                     </div>

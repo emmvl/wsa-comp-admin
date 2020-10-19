@@ -360,7 +360,7 @@ class UserProfileEdit extends Component {
                         )}
                     </div>
                 </div>
-                <div className='row'>
+                <div className="row">
                     <div className="col-sm" style={{ paddingTop: "11px" }}>
                         <InputWithHead
                             auto_complete="new-addressOne"
@@ -403,11 +403,11 @@ class UserProfileEdit extends Component {
                             style={{ width: "100%", paddingRight: 1, minWidth: 182,}}
                             placeholder={AppConstants.select}
                             value={userData.stateRefId}
-                            name={'stateRefId'}
+                            name="stateRefId"
                             onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                         >
-                            {stateList.length > 0 && stateList.map((item) => (
-                                <Option value={item.id}>{item.name}</Option>
+                            {stateList.map((item) => (
+                                <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
                             ))}
                         </Select>
                     </div>
@@ -433,7 +433,7 @@ class UserProfileEdit extends Component {
         const { stateList } = this.props.commonReducerState;
         return (
             <div className="content-view pt-0">
-                <div className='row'>
+                <div className="row">
                     <div className="col-sm">
                         <Form.Item name='firstName' rules={[{ required: true, message: ValidationConstants.firstName }]}>
                             <InputWithHead
@@ -461,7 +461,7 @@ class UserProfileEdit extends Component {
                         </Form.Item>
                     </div>
                 </div>
-                <div className='row'>
+                <div className="row">
                     <div className="col-sm" style={{paddingTop: "11px"}}>
                         <InputWithHead
                             style={{marginTop: "9px"}}
@@ -504,11 +504,11 @@ class UserProfileEdit extends Component {
                             placeholder={AppConstants.select_state}
                             // onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                             value={userData.stateRefId}
-                            name={'stateRefId'}
+                            name="stateRefId"
                             onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                         >
-                            {stateList.length > 0 && stateList.map((item) => (
-                                <Option value={item.id}> {item.name}</Option>
+                            {stateList.map((item) => (
+                                <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
                             ))}
                         </Select>
                     </div>
@@ -565,7 +565,7 @@ class UserProfileEdit extends Component {
         return (
             <div className="content-view pt-0">
                 {/* First and Last name row */}
-                <div className='row'>
+                <div className="row">
                     <div className="col-sm">
                         <Form.Item name='emergencyContactName' rules={[{ required: true, message: ValidationConstants.emergencyContactName[0] }]}>
                             <InputWithHead
@@ -612,9 +612,12 @@ class UserProfileEdit extends Component {
                                 <Radio.Group
                                     className="reg-competition-radio"
                                     onChange={(e) => this.onChangeSetValue(e.target.value, "genderRefId")}
-                                    value={userData.genderRefId}>
+                                    value={userData.genderRefId}
+                                >
                                     {(genderData || []).map((gender) => (
-                                        <Radio key={gender.id} value={gender.id}>{gender.description}</Radio>
+                                        <Radio key={'gender_' + gender.id} value={gender.id}>
+                                            {gender.description}
+                                        </Radio>
                                     ))}
                                 </Radio.Group>
                             </Form.Item>
@@ -623,7 +626,7 @@ class UserProfileEdit extends Component {
                 </div>
                 {userData.userRegistrationId != null && (
                     <div>
-                        <div className='row'>
+                        <div className="row">
                             <div className="col-sm">
                                 <div style={{ paddingTop: "11px", paddingBottom: "10px" }}>
                                     <InputWithHead heading={AppConstants.childCountry} />
@@ -633,10 +636,12 @@ class UserProfileEdit extends Component {
                                     placeholder={AppConstants.childCountry}
                                     onChange={(e) => this.onChangeSetValue(e, "countryRefId")}
                                     value={userData.countryRefId}
-                                    name={'countryRefId'}
+                                    name="countryRefId"
                                 >
-                                    {countryList.length > 0 && countryList.map((country) => (
-                                        <Option key={country.id} value={country.id}> {country.description}</Option>
+                                    {countryList.map((country) => (
+                                        <Option key={'country_' + country.id} value={country.id}>
+                                            {country.description}
+                                        </Option>
                                     ))}
                                 </Select>
                             </div>
@@ -652,10 +657,12 @@ class UserProfileEdit extends Component {
                                     placeholder={AppConstants.nationalityReference}
                                     onChange={(e) => {this.onChangeSetValue(e, "nationalityRefId")}}
                                     value={userData.nationalityRefId}
-                                    name={"nationalityRefId"}
+                                    name="nationalityRefId"
                                 >
-                                    {nationalityList.length > 0 && nationalityList.map((nation) => (
-                                        <Option key={nation.id} value={nation.id}>{nation.description}</Option>
+                                    {nationalityList.map((nation) => (
+                                        <Option key={'nationality_' + nation.id} value={nation.id}>
+                                            {nation.description}
+                                        </Option>
                                     ))}
                                 </Select>
                             </div>
@@ -694,7 +701,7 @@ class UserProfileEdit extends Component {
                             onChange={e => this.onChangeSetValue(e, "childrenCheckExpiryDate")}
                             format="DD-MM-YYYY"
                             showTime={false}
-                            value ={userData.childrenCheckExpiryDate !== null && moment(userData.childrenCheckExpiryDate)}
+                            value={userData.childrenCheckExpiryDate !== null && moment(userData.childrenCheckExpiryDate)}
                             placeholder="dd-mm-yyyy"
                             name={'childrenCheckExpiryDate'}
                         />
@@ -739,16 +746,19 @@ class UserProfileEdit extends Component {
                             <div style={{ marginLeft: '25px' }}>
                                 <InputWithHead
                                     auto_complete='new-disabilityCareNumber'
-                                    heading={AppConstants.disabilityCareNumber} placeholder={AppConstants.disabilityCareNumber}
+                                    heading={AppConstants.disabilityCareNumber}
+                                    placeholder={AppConstants.disabilityCareNumber}
                                     onChange={(e) => this.onChangeSetValue(e.target.value, "disabilityCareNumber")}
-                                    value={userData.disabilityCareNumber} />
+                                    value={userData.disabilityCareNumber}
+                                />
                                 <InputWithHead heading={AppConstants.typeOfDisability} />
                                 <Radio.Group
                                     className="reg-competition-radio"
                                     onChange={(e) => this.onChangeSetValue(e.target.value, "disabilityTypeRefId")}
-                                    value={userData.disabilityTypeRefId}>
-                                    {(disabilityList || []).map((dis, disIndex) => (
-                                        <Radio key={dis.id} value={dis.id}>{dis.description}</Radio>
+                                    value={userData.disabilityTypeRefId}
+                                >
+                                    {(disabilityList || []).map((dis) => (
+                                        <Radio key={'disabilityType_' + dis.id} value={dis.id}>{dis.description}</Radio>
                                     ))}
                                 </Radio.Group>
                             </div>
@@ -774,7 +784,6 @@ class UserProfileEdit extends Component {
     };
 
     onSaveClick = (e) => {
-        let userState = this.props.userState;
         let data = this.state.userData;
         data["section"] = this.state.section;
         data["organisationId"] = this.state.organisationId;
@@ -850,7 +859,6 @@ function mapStateToProps(state) {
     return {
         commonReducerState: state.CommonReducerState,
         userState: state.UserState,
-
     }
 }
 

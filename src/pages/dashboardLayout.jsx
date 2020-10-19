@@ -531,10 +531,7 @@ class DashboardLayout extends React.Component {
               loading={this.props.userState.onLoad}
             >
               {(this.props.userState.affiliateList || []).map((affiliate) => (
-                <Option
-                  key={affiliate.id}
-                  value={affiliate.affiliateOrgId}
-                >
+                <Option key={'organization_' + affiliate.affiliateOrgId} value={affiliate.affiliateOrgId}>
                   {affiliate.affiliateName}
                 </Option>
               ))}

@@ -412,13 +412,11 @@ class RegistrationForm extends Component {
     //                                 value={this.state.yearRefId}
     //                                 // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
     //                             >
-    //                                 {this.props.appState.yearList.map(item => {
-    //                                     return (
-    //                                         <Option key={"yearRefId" + item.id} value={item.id}>
-    //                                             {item.description}
-    //                                         </Option>
-    //                                     );
-    //                                 })}
+    //                                 {this.props.appState.yearList.map(item => (
+    //                                     <Option key={'year_' + item.id} value={item.id}>
+    //                                         {item.description}
+    //                                     </Option>
+    //                                 ))}
     //                             </Select>
     //                         </div>
     //                     </div>
@@ -443,13 +441,11 @@ class RegistrationForm extends Component {
     //                                 value={this.state.firstTimeCompId}
     //                                 // value={formDataValue ? formDataValue.competitionUniqueKeyId ? formDataValue.competitionUniqueKeyId : "" : ""}
     //                             >
-    //                                 {this.props.appState.competitionList.map(item => {
-    //                                     return (
-    //                                         <Option key={"competition" + item.competitionId} value={item.competitionId}>
-    //                                             {item.competitionName}
-    //                                         </Option>
-    //                                     );
-    //                                 })}
+    //                                 {this.props.appState.competitionList.map(item => (
+    //                                     <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+    //                                         {item.competitionName}
+    //                                     </Option>
+    //                                 ))}
     //                             </Select>
     //                         </div>
     //                     </div>
@@ -525,7 +521,7 @@ class RegistrationForm extends Component {
         let isPublished = this.state.isPublished
         return (
             <div className="content-view pt-4">
-                <div className="row " style={{ paddingLeft: 10, paddingBottom: 15 }}>
+                <div className="row" style={{ paddingLeft: 10, paddingBottom: 15 }}>
                     <span className="form-heading pt-2 pl-2">{this.state.compName}</span>
                 </div>
                 <span className="user-reg-link">{`Competition Registrations close on ${compCLoseDate}`}</span>
@@ -606,19 +602,14 @@ class RegistrationForm extends Component {
                     placeholder="Select"
                     disabled={isPublished}
                 >
-                    {productList.map((item, index) => {
-                        return (
-                            <Option
-                                key={item.membershipProductId}
-                                value={item.membershipProductId}
-                            >
-                                {item.membershipProductName}
-                            </Option>
-                        );
-                    })}
+                    {productList.map((item) => (
+                        <Option key={'product_' + item.membershipProductId} value={item.membershipProductId}>
+                            {item.membershipProductName}
+                        </Option>
+                    ))}
                 </Select>
-                {this.props.registrationState.selectedMemberShipType.length > 0 &&
-                this.props.registrationState.selectedMemberShipType.map((item, index) => (
+
+                {this.props.registrationState.selectedMemberShipType.map((item) => (
                     <div className="inside-container-view">
                         <span className="form-heading pt-2 pl-2">
                             {item.membershipProductName}
@@ -691,23 +682,17 @@ class RegistrationForm extends Component {
                                 {defaultChecked.venueVisible && (
                                     <div className="col-sm">
                                         <Select
-                                            name={"trainingVenueId"}
+                                            name="trainingVenueId"
                                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            onChange={(trainingVenueId) => this.props.updateRegistrationForm(trainingVenueId, "trainingVenueId")
-                                            }
+                                            onChange={(trainingVenueId) => this.props.updateRegistrationForm(trainingVenueId, "trainingVenueId")}
                                             value={formDataValue ? formDataValue.trainingVenueId : null}
                                             placeholder="Select"
                                         >
-                                            {venueList.map(item => {
-                                                return (
-                                                    <Option
-                                                        key={"trainingVenue" + item.id}
-                                                        value={item.id}
-                                                    >
-                                                        {item.name}
-                                                    </Option>
-                                                );
-                                            })}
+                                            {venueList.map(item => (
+                                                <Option key={'venue_' + item.id} value={item.id}>
+                                                    {item.name}
+                                                </Option>
+                                            ))}
                                         </Select>
                                     </div>
                                 )}
@@ -989,14 +974,12 @@ class RegistrationForm extends Component {
                     </div>
                 </div>
                 <div className="checkbox-row-wise">
-                    {registrationMethod.length > 0 && registrationMethod.map((item, index) => (
+                    {registrationMethod.map((item, index) => (
                         <Checkbox
                             className="single-checkbox"
                             name='registerMethods'
                             checked={this.onChangeRegistrationMethod(item, index)}
-                            onChange={(e) => this.methodSelection(e, item, formDataValue)
-
-                            }
+                            onChange={(e) => this.methodSelection(e, item, formDataValue)}
                             key={"methods" + index}
                             disabled={isPublished}
                         >
@@ -1334,7 +1317,7 @@ class RegistrationForm extends Component {
                                             // value={formDataValue ? formDataValue.yearRefId ? formDataValue.yearRefId : 1 : 1}
                                         >
                                             {this.props.appState.allYearList.map(item => (
-                                                <Option key={"yearRefId" + item.id} value={item.id}>
+                                                <Option key={'year_' + item.id} value={item.id}>
                                                     {item.description}
                                                 </Option>
                                             ))}
@@ -1363,8 +1346,10 @@ class RegistrationForm extends Component {
                                             value={registrationFormData.inviteCompetitionId != null ? registrationFormData.inviteCompetitionId.toString() : '0'}
                                         >
                                             {this.props.appState.allCompetitionTypeList.map(item => (
-                                                <Option key={"competition" + item.competitionId}
-                                                        value={item.competitionId}>
+                                                <Option
+                                                    key={'competition_' + item.competitionId}
+                                                    value={item.competitionId}
+                                                >
                                                     {item.competitionName}
                                                 </Option>
                                             ))}
@@ -1380,7 +1365,7 @@ class RegistrationForm extends Component {
                             value={registrationFormData.inviteTypeRefId}
                         >
                             {(inviteTypeData || []).map((fix) => (
-                                <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
+                                <Radio key={'inviteType_' + fix.id} value={fix.id}>{fix.description}</Radio>
                             ))}
                         </Radio.Group>
                         <InputWithHead heading={AppConstants.gender} />

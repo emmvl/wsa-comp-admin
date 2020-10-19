@@ -48,7 +48,7 @@ class RegistrationInvoice extends Component {
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                     </div>
                 </div>
-            </Header >
+            </Header>
         )
     }
 
@@ -291,9 +291,9 @@ class RegistrationInvoice extends Component {
                     <Divider className="mt-0 mb-0" />
                 </div>
 
-                {/* {data.membership && data.membership.length > 0 && data.membership.map((membershipItem, membershipIndex) => {
+                {/* {data.membership && data.membership.map((membershipItem, membershipIndex) => {
                     return ( */}
-                {data && data.length > 0 && data.map((participantItem, participantIndex) => {
+                {data && data.map((participantItem, participantIndex) => {
                     let competitionDetails = participantItem && participantItem.competitionDetail
                     let userDetail = participantItem.userDetail && participantItem.userDetail
                     let membershipDetail = participantItem && participantItem.membershipDetail
@@ -301,58 +301,56 @@ class RegistrationInvoice extends Component {
                     let totalAmount = participantItem && participantItem.totalAmount
                     return (
                         <div>
-                            < div className="invoice-row-view">
+                            <div className="invoice-row-view">
                                 <div className="invoice-col-View pb-0 pl-0">
                                     <div className="invoice-col-View pb-0 pl-0 pr-0">
-                                        {userDetail && userDetail.firstName &&
+                                        {userDetail && userDetail.firstName && (
                                             <InputWithHead
-                                                heading=
-                                                {competitionDetails.competitionDivisionName ?
-                                                    "Registration - " + membershipDetail.mTypeName + " " + userDetail.firstName + " " + userDetail.lastName
-                                                    + ", " + competitionDetails.competitionName + ", " + competitionDetails.competitionDivisionName
-                                                    :
-                                                    "Registration - " + membershipDetail.mTypeName + " " + userDetail.firstName + " " + userDetail.lastName
-                                                    + ", " + competitionDetails.competitionName
+                                                heading={competitionDetails.competitionDivisionName
+                                                    ? "Registration - " + membershipDetail.mTypeName + " " + userDetail.firstName + " " + userDetail.lastName
+                                                        + ", " + competitionDetails.competitionName + ", " + competitionDetails.competitionDivisionName
+                                                    : "Registration - " + membershipDetail.mTypeName + " " + userDetail.firstName + " " + userDetail.lastName
+                                                        + ", " + competitionDetails.competitionName
                                                 }
                                             />
-                                        }
+                                        )}
                                     </div>
 
-                                    {/* {userDetail && userDetail.suburb &&
+                                    {/* {userDetail && userDetail.suburb && (
                                         <Descriptions>
                                             <Descriptions.Item className="pb-0 pt-0">
                                                 {userDetail.suburb}
                                             </Descriptions.Item>
                                         </Descriptions>
-                                    }
+                                    )}
 
-                                    {userDetail && userDetail.street1 &&
+                                    {userDetail && userDetail.street1 && (
                                         <Descriptions>
                                             <Descriptions.Item className="pb-0">
                                                 {userDetail.street1} {" "}{userDetail.street2}
                                             </Descriptions.Item>
                                         </Descriptions>
-                                    }
-                                    {userDetail && userDetail.PhoneNo &&
+                                    )}
+
+                                    {userDetail && userDetail.PhoneNo && (
                                         <Descriptions>
                                             <Descriptions.Item className="pb-0">
                                                 {userDetail.PhoneNo}
                                             </Descriptions.Item>
                                         </Descriptions>
-                                    }
-                                    {userDetail && userDetail.postalCode &&
+                                    )}
+
+                                    {userDetail && userDetail.postalCode && (
                                         <Descriptions>
                                             <Descriptions.Item>
                                                 {userDetail.postalCode}
                                             </Descriptions.Item>
                                         </Descriptions>
-                                    } */}
+                                    )} */}
                                 </div>
                                 < Divider className="mt-0 mb-0" />
                             </ div>
-                            {affiliateDetail &&
-                                this.competitionAffiliateView(affiliateDetail)
-                            }
+                            {affiliateDetail && this.competitionAffiliateView(affiliateDetail)}
                             {this.competitionOrganiserView(competitionDetails)}
                             {this.membershipProductView(membershipDetail)}
 
@@ -381,48 +379,44 @@ class RegistrationInvoice extends Component {
         let charityRoundUpData = this.props.stripeState.charityRoundUpFilter
         return (
             <div className="d-flex justify-content-start mb-5">
-
-                <div  >
+                <div>
                     <Radio.Group
                         className="reg-competition-radio"
                         // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
                         // value={index == 0 && item.competitionId}
                         defaultValue={0}
                     >
-                        {charityRoundUpData.length > 0 && charityRoundUpData.map((item, index) => {
-                            return (
-                                <div>
-                                    <Radio key={item.competitionId} value={item.competitionId}>{item.competitionId == 0 ? (item.charityTitle) : ("Support " + item.charityTitle)}</Radio>
-                                    <div className="d-flex justify-content-start pl-5">
-                                        <span className="roundUpDescription-text">{item.roundUpDescription}</span>
-                                    </div>
-                                    <div className="ml-5">
-                                        <Radio.Group
-                                            className="reg-competition-radio"
+                        {charityRoundUpData.map((item) => (
+                            <div key={item.competitionId}>
+                                <Radio key={'competition_' + item.competitionId} value={item.competitionId}>
+                                    {item.competitionId == 0 ? (item.charityTitle) : ("Support " + item.charityTitle)}
+                                </Radio>
+                                <div className="d-flex justify-content-start pl-5">
+                                    <span className="roundUpDescription-text">{item.roundUpDescription}</span>
+                                </div>
+                                <div className="ml-5">
+                                    <Radio.Group
+                                        className="reg-competition-radio"
                                         // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
                                         // value={charityRoundUpIndex == 0 && charityRoundUpItem.charitySelectedId}
-                                        >
-                                            {item.charityDetail.length > 0 && item.charityDetail.map((charityRoundUpItem, charityRoundUpIndex) => {
-                                                return (
-                                                    <Radio key={charityRoundUpItem.charitySelectedId} value={charityRoundUpItem.charitySelectedId}>{charityRoundUpItem.charitySelectedDescription}</Radio>
-                                                )
-                                            })}
-                                        </Radio.Group>
-                                    </div>
+                                    >
+                                        {item.charityDetail.map((charityRoundUpItem) => (
+                                            <Radio
+                                                key={'charity_' + charityRoundUpItem.charitySelectedId}
+                                                value={charityRoundUpItem.charitySelectedId}
+                                            >
+                                                {charityRoundUpItem.charitySelectedDescription}
+                                            </Radio>
+                                        ))}
+                                    </Radio.Group>
                                 </div>
-                            )
-                        })}
+                            </div>
+                        ))}
                     </Radio.Group>
-
                 </div>
-
             </div>
         )
     }
-
-
-
-
 
     totalInvoiceView = (result) => {
         let subTotalFees = this.props.stripeState.subTotalFees

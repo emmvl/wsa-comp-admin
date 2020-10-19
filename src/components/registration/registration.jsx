@@ -522,7 +522,7 @@ class Registration extends Component {
                             >
                                 <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                 {(paymentStatus || []).map((g) => (
-                                    <Option key={g.id} value={g.id}>{g.description}</Option>
+                                    <Option key={'paymentStatus_' + g.id} value={g.id}>{g.description}</Option>
                                 ))}
                             </Select>
                         </div>
@@ -585,7 +585,7 @@ class Registration extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {this.props.appState.yearList.map(item => (
-                                        <Option key={"yearRefId" + item.id} value={item.id}>
+                                        <Option key={'year_' + item.id} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -603,10 +603,10 @@ class Registration extends Component {
                                     onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionUniqueKey")}
                                     value={this.state.competitionUniqueKey}
                                 >
-                                    <Option key={-1} value={"-1"}>{AppConstants.all}</Option>
+                                    <Option key={-1} value="-1">{AppConstants.all}</Option>
                                     {(competitions || []).map(item => (
                                         <Option
-                                            key={"competition" + item.competitionUniqueKey}
+                                            key={'competition_' + item.competitionUniqueKey}
                                             value={item.competitionUniqueKey}
                                         >
                                             {item.competitionName}
@@ -661,9 +661,9 @@ class Registration extends Component {
                                     value={this.state.membershipProductId}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(membershipProducts || []).map((g, index) => (
+                                    {(membershipProducts || []).map((g) => (
                                         <Option
-                                            key={g.membershipProductUniqueKey}
+                                            key={'membershipProduct_' + g.membershipProductUniqueKey}
                                             value={g.membershipProductUniqueKey}
                                         >
                                             {g.productName}
@@ -682,8 +682,8 @@ class Registration extends Component {
                                     value={this.state.genderRefId}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(genderData || []).map((g, index) => (
-                                        <Option key={g.id} value={g.id}>{g.description}</Option>
+                                    {(genderData || []).map((g) => (
+                                        <Option key={'gender_' + g.id} value={g.id}>{g.description}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -700,8 +700,10 @@ class Registration extends Component {
                                     value={this.state.affiliate}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(uniqueValues || []).map((org, index) => (
-                                        <Option key={org.organisationId} value={org.organisationId}>{org.name}</Option>
+                                    {(uniqueValues || []).map((org) => (
+                                        <Option key={'organisation_' + org.organisationId} value={org.organisationId}>
+                                            {org.name}
+                                        </Option>
                                     ))}
                                 </Select>
                             </div>
@@ -718,7 +720,7 @@ class Registration extends Component {
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(payments || []).map((payment) => (
                                         <Option
-                                            key={payment.paymentTypeId}
+                                            key={'paymentType_' + payment.paymentTypeId}
                                             value={payment.paymentTypeId}
                                         >
                                             {payment.paymentType}
@@ -742,9 +744,9 @@ class Registration extends Component {
                                     value={this.state.membershipProductTypeId}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(membershipProductTypes || []).map((g, index) => (
+                                    {(membershipProductTypes || []).map((g) => (
                                         <Option
-                                            key={g.membershipProductTypeId}
+                                            key={'membershipProductType_' + g.membershipProductTypeId}
                                             value={g.membershipProductTypeId}
                                         >
                                             {g.membershipProductTypeName}

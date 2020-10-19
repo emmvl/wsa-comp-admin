@@ -88,7 +88,7 @@ class CompetitionVenueAndCourts extends Component {
 
                 </div>
 
-            </Header >
+            </Header>
 
 
         )
@@ -102,7 +102,7 @@ class CompetitionVenueAndCourts extends Component {
                     <div className="row">
                         <div className="col-sm-2">
                             <div className="com-year-select-heading-view">
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 75 }}
@@ -115,11 +115,13 @@ class CompetitionVenueAndCourts extends Component {
                         </div>
                         <div className="col-sm-2">
                             <div style={{
-                                width: "100%", display: "flex",
+                                width: "100%",
+                                display: "flex",
                                 flexDirection: "row",
-                                alignItems: "center", marginRight: 50
+                                alignItems: "center",
+                                marginRight: 50
                             }}>
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 140 }}

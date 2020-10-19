@@ -264,7 +264,7 @@ const columns = [
                                 }
                             >
                                 <Menu.Item
-                                    key={'1'}
+                                    key="1"
                                     onClick={() => history.push("/registrationChangeReview", {deRegisterId: record.id,deRegData: record})}
                                 >
                                    <span>Review</span>
@@ -378,7 +378,7 @@ class RegistrationChange extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {this.props.appState.yearList.map(item => (
-                                        <Option key={"yearRefId" + item.id} value={item.id}>
+                                        <Option key={'year_' + item.id} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -396,9 +396,9 @@ class RegistrationChange extends Component {
                                     onChange={(e) => this.onChangeDropDownValue(e, "competitionId")}
                                 >
                                    <Option key={-1} value="-1">{AppConstants.all}</Option>
-                                    {(competitionList || []).map((item, cIndex) => (
+                                    {(competitionList || []).map((item) => (
                                         <Option
-                                            key={"competition" + item.competitionId + cIndex}
+                                            key={'competition_' + item.competitionId}
                                             value={item.competitionId}
                                         >
                                             {item.competitionName}
@@ -419,7 +419,7 @@ class RegistrationChange extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(regChangeTypes || []).map((g) => (
-                                        <Option key={g.id} value={g.id}>{g.description}</Option>
+                                        <Option key={'regChangeType_' + g.id} value={g.id}>{g.description}</Option>
                                     ))}
                                 </Select>
                             </div>

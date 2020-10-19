@@ -334,15 +334,14 @@ class CompetitionDashboard extends Component {
                     <div className="col-sm-8">
                         <div className="year-select-heading-view pb-3">
                             <span className="year-select-heading">{AppConstants.year}:</span>
-
                             <Select
                                 className="year-select reg-filter-select-year ml-2"
                                 style={{ width: 90 }}
                                 onChange={this.onYearClick}
                                 value={selectedYearId}
                             >
-                                {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                    <Option key={"yearlist" + yearIndex} value={item.id}>
+                                {yearList.map((item) => (
+                                    <Option key={'year_' + item.id} value={item.id}>
                                         {item.name}
                                     </Option>
                                 ))}
@@ -580,21 +579,22 @@ class CompetitionDashboard extends Component {
                 {this.state.statusRefId === 0 ? (
                     <p>{AppConstants.compDeleteConfirm.replace("(COMP_NAME)", this.state.competitionName)}</p>
                 ) : (
-                        <div>
-                            <p>
-                                {AppConstants.deletePublishToLsMsg.replace("(COMP_NAME)", this.state.competitionName)
-                                    .replace("(COMP_NAME)", this.state.competitionName)}
-                            </p>
-                            <Radio.Group
-                                className="reg-competition-radio customize-radio-text"
-                                onChange={(e) => this.onChangeSetValue(e.target.value)}
-                                value={this.state.onDeleteTargetValue}
-                            >
-                                <Radio value={1}>{AppConstants.both}</Radio>
-                                <Radio value={2}>{AppConstants.onlyCompMngmt}</Radio>
-                            </Radio.Group>
-                        </div>
-                    )}
+                    <div>
+                        <p>
+                            {AppConstants.deletePublishToLsMsg
+                                .replace("(COMP_NAME)", this.state.competitionName)
+                                .replace("(COMP_NAME)", this.state.competitionName)}
+                        </p>
+                        <Radio.Group
+                            className="reg-competition-radio customize-radio-text"
+                            onChange={(e) => this.onChangeSetValue(e.target.value)}
+                            value={this.state.onDeleteTargetValue}
+                        >
+                            <Radio value={1}>{AppConstants.both}</Radio>
+                            <Radio value={2}>{AppConstants.onlyCompMngmt}</Radio>
+                        </Radio.Group>
+                    </div>
+                )}
             </Modal>
         </div>
     );

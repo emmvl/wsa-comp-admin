@@ -68,20 +68,20 @@ const columns = [
 
 const data = [
     {
-        "firstName": "Umpire",
-        "lastName": "One",
-        "umpireId": "1342",
-        "matchId": "2006",
-        "verifiedBy": "",
-        "makePayment": "Paid",
+        firstName: "Umpire",
+        lastName: "One",
+        umpireId: "1342",
+        matchId: "2006",
+        verifiedBy: "",
+        makePayment: "Paid",
     },
     {
-        "firstName": "Umpire",
-        "lastName": "Two",
-        "umpireId": "1553",
-        "matchId": "2020",
-        "verifiedBy": "",
-        "makePayment": "Unpaid",
+        firstName: "Umpire",
+        lastName: "Two",
+        umpireId: "1553",
+        matchId: "2020",
+        verifiedBy: "",
+        makePayment: "Unpaid",
     }
 ];
 
@@ -233,7 +233,7 @@ class UmpirePayments extends Component {
                                     value={this.state.selectedComp}
                                 >
                                     {competition.map((item) => (
-                                        <Option key={"competition" + item.id} value={item.id}>{item.longName}</Option>
+                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
                                     ))}
                                 </Select>
                             </div>

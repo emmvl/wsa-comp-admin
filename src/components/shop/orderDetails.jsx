@@ -168,21 +168,14 @@ class OrderDetails extends Component {
                 <span className="form-heading">{AppConstants.orderFulfilment}</span>
                 <Select
                     className="shop-type-select mt-2"
-                    onChange={(value) =>
-                        console.log("value", value)
-                    }
+                    onChange={(value) => console.log("value", value)}
                     placeholder="Select"
                 >
-                    {orderFulfilmentData.map(
-                        (item, index) => (
-                            <Option
-                                key={'orderFulfilmentData' + item.value + index}
-                                value={item.value}
-                            >
-                                {item.name}
-                            </Option>
-                        )
-                    )}
+                    {orderFulfilmentData.map((item) => (
+                        <Option key={'orderFulfilment_' + item.value} value={item.value}>
+                            {item.name}
+                        </Option>
+                    ))}
                 </Select>
             </div>
         );

@@ -248,7 +248,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
 
         case ApiConstants.API_ADD_NEW_TEAM_SUCCESS:
             let newobj = {
-                "teamId": action.result.teamId,
+                teamId: action.result.teamId,
                 "teamName": action.result.teamName,
                 "playerCount": action.result.playerCount,
                 "players": action.result.players,

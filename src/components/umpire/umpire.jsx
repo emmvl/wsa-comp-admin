@@ -143,7 +143,7 @@ const columns = [
         onHeaderCell: () => listeners("linkedEntityName"),
         render: (linkedEntity) => (
             <div>
-                {linkedEntity.length > 0 && linkedEntity.map((item, index) => (
+                {linkedEntity.map((item, index) => (
                     <span key={`entityName ${index}`} className="multi-column-text-aligned">{item.name}</span>
                 ))}
             </div>
@@ -155,7 +155,7 @@ const columns = [
         key: "umpire",
         sorter: true,
         onHeaderCell: () => listeners("umpire"),
-        render: (umpireCoach, record, index) => <span>{checkUmpireUserRoll(record.userRoleEntities, 15)}</span>,
+        render: (umpireCoach, record) => <span>{checkUmpireUserRoll(record.userRoleEntities, 15)}</span>,
     },
     {
         title: "Umpire Coach",
@@ -596,8 +596,8 @@ class Umpire extends Component {
                                 onChange={(comp) => this.onChangeComp({ comp })}
                                 value={this.state.selectedComp}
                             >
-                                {competition.map((item, index) => (
-                                    <Option key={`competition` + index} value={item.id}>{item.longName}</Option>
+                                {competition.map((item) => (
+                                    <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
                                 ))}
                             </Select>
                         </div>

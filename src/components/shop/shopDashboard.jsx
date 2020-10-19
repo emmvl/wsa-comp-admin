@@ -71,13 +71,13 @@ class ShopDashboard extends Component {
                             <div className="row reg-filter-row">
                                 <div className="reg-col">
                                     <div className="reg-filter-col-cont">
-                                        <div className='year-select-heading pl-5 '>{AppConstants.year}</div>
+                                        <div className="year-select-heading pl-5">{AppConstants.year}</div>
                                         <Select
                                             style={{ minWidth: 160 }}
-                                            value={"2020"}
-                                            className="year-select shop-filter-select">
-                                            <Option key={"year"} value="year">{"2020"}</Option>
-
+                                            value="2020"
+                                            className="year-select shop-filter-select"
+                                        >
+                                            <Option key="year" value="year">2020</Option>
                                         </Select>
                                     </div>
                                 </div>
@@ -123,7 +123,7 @@ class ShopDashboard extends Component {
                     <div className="row reg-filter-row" style={{ marginLeft:'0px'}}>
                         <div className="reg-col">
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.year} :</div>
+                                <div className="year-select-heading">{AppConstants.year} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     value="2020"
@@ -136,7 +136,7 @@ class ShopDashboard extends Component {
 
                         <div className="reg-col mr-5">
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading' style={{width: 200}}>{AppConstants.productType} :</div>
+                                <div className="year-select-heading" style={{width: 200}}>{AppConstants.productType} :</div>
                                 <Select
                                     style={{ minWidth: 115 }}
                                     value="All"
@@ -149,7 +149,7 @@ class ShopDashboard extends Component {
 
                         <div className="reg-col">
                             <div className="reg-filter-col-cont">
-                                <div className='year-select-heading'>{AppConstants.affiliate} :</div>
+                                <div className="year-select-heading">{AppConstants.affiliate} :</div>
                                 <Select
                                     style={{ minWidth: 160 }}
                                     value="All"

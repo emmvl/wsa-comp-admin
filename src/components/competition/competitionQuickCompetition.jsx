@@ -118,7 +118,7 @@ class CompetitionQuickCompetition extends Component {
 
         }
         if (this.state.timeslotModalLoad === true && this.props.quickCompetitionState.onQuickCompLoad === false) {
-            if (this.state.timeSlotButtonClicked == "next") {
+            if (this.state.timeSlotButtonClicked === "next") {
                 this.setState({
                     timeslotModalLoad: false,
                     timeSlotVisible: false, visibleDivisionModal: true
@@ -131,7 +131,7 @@ class CompetitionQuickCompetition extends Component {
             }
         }
         if (this.state.venueComptitionLoad === true && this.props.quickCompetitionState.onQuickCompLoad === false) {
-            if (this.state.venueButtonClicked == "next") {
+            if (this.state.venueButtonClicked === "next") {
                 this.setState({
                     venueComptitionLoad: false,
                     timeSlotVisible: true, venueModalVisible: false
@@ -154,10 +154,10 @@ class CompetitionQuickCompetition extends Component {
             if (postDivisionData.length > 0 && postTimeslotData.length > 0) {
                 if (quickCompetitionData.competitionVenues.length > 0) {
                     let payload = {
-                        "competitionId": this.state.firstTimeCompId,
-                        "competitionName": quickCompetitionData.competitionName,
-                        "competitionVenues": quickCompetitionData.competitionVenues,
-                        "draws": postDraws
+                        competitionId: this.state.firstTimeCompId,
+                        competitionName: quickCompetitionData.competitionName,
+                        competitionVenues: quickCompetitionData.competitionVenues,
+                        draws: postDraws
                     }
                     this.props.updateQuickCompetitionAction(payload, this.state.yearRefId, this.state.buttonPressed)
                 } else {
@@ -239,9 +239,9 @@ class CompetitionQuickCompetition extends Component {
             for (let k in manualStartTime) {
                 let manualAllVenueObj = {
                     "competitionVenueTimeslotsDayTimeId": 0,
-                    "dayRefId": timeslot[j].dayRefId,
-                    "startTime": manualStartTime[k].startTime,
-                    "sortOrder": JSON.parse(k),
+                    dayRefId: timeslot[j].dayRefId,
+                    startTime: manualStartTime[k].startTime,
+                    sortOrder: JSON.parse(k),
                     "competitionTimeslotsEntity": [],
                 }
                 timeSlotManualperVenueArray.push(manualAllVenueObj)
@@ -368,8 +368,8 @@ class CompetitionQuickCompetition extends Component {
     // venue save button handle
     handleVenueSave = (e, key) => {
         let payload = {
-            "competitionUniqueKey": this.state.firstTimeCompId,
-            "competitionVenues": this.props.quickCompetitionState.quickComptitionDetails.competitionVenues
+            competitionUniqueKey: this.state.firstTimeCompId,
+            competitionVenues: this.props.quickCompetitionState.quickComptitionDetails.competitionVenues
         }
         if (key === "save") {
             this.props.quickCompetitionAddVenue(payload)
@@ -377,7 +377,7 @@ class CompetitionQuickCompetition extends Component {
                 venueButtonClicked: "save",
                 venueComptitionLoad: true
             })
-        } else if (key == "next") {
+        } else if (key === "next") {
             this.props.quickCompetitionAddVenue(payload)
             this.setState({
                 venueButtonClicked: "next",
@@ -492,8 +492,8 @@ class CompetitionQuickCompetition extends Component {
                                 onChange={(yearRefId) => this.onYearChange(yearRefId)}
                                 value={this.state.yearRefId}
                             >
-                                {quickCompetitionState.quick_CompetitionYearArr.length > 0 && quickCompetitionState.quick_CompetitionYearArr.map((item) => (
-                                    <Option key={'yearRefId' + item.id} value={item.id}>
+                                {quickCompetitionState.quick_CompetitionYearArr.map((item) => (
+                                    <Option key={'year_' + item.id} value={item.id}>
                                         {item.description}
                                     </Option>
                                 ))}
@@ -515,14 +515,12 @@ class CompetitionQuickCompetition extends Component {
                                 name="competition"
                                 // style={{ minWidth: 200 }}
                                 className="year-select reg-filter-select-competition ml-2"
-                                onChange={competitionId =>
-                                    this.onCompetitionChange(competitionId)
-                                }
+                                onChange={competitionId => this.onCompetitionChange(competitionId)}
                                 value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                             >
-                                {quickCompetitionState.quick_CompetitionArr.length > 0 && quickCompetitionState.quick_CompetitionArr.map(item => (
+                                {quickCompetitionState.quick_CompetitionArr.map(item => (
                                     <Option
-                                        key={'competition' + item.competitionId}
+                                        key={'competition_' + item.competitionId}
                                         value={item.competitionId}
                                     >
                                         {item.competitionName}
@@ -644,8 +642,8 @@ class CompetitionQuickCompetition extends Component {
                                 // onBlur={() => console.log("called")}
                                 onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
                             >
-                                {appState.venueList.length > 0 && appState.venueList.map((item) => (
-                                    <Option key={item.id} value={item.id}>{item.name}</Option>
+                                {appState.venueList.map((item) => (
+                                    <Option key={'venue_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -686,7 +684,7 @@ class CompetitionQuickCompetition extends Component {
                         </div>
                         <div className="tablehead-row-fixture">
                             <div className="sr-no empty-bx" />
-                            {dateArray.length > 0 && dateArray.map((item, index) => {
+                            {dateArray.map((item, index) => {
                                 if (index !== 0) {
                                     dayMargin += 75;
                                 }

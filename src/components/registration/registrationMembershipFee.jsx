@@ -242,7 +242,7 @@ class RegistrationMembershipFee extends Component {
             })
             let productBody = {
                 "membershipProductId": productId,
-                "yearRefId": yearRefId,
+                yearRefId: yearRefId,
                 "statusRefId": this.state.statusRefId,
                 "validityRefId": validityRefId,
                 "membershipProductName": membershipProductName,
@@ -338,23 +338,25 @@ class RegistrationMembershipFee extends Component {
         });
         let typesData = membershipProductData.membershipProductTypes ? membershipProductData.membershipProductTypes : []
 
-        typesData.length > 0 && typesData.map((item, index) => {
-            let dobFrom = `dobFrom${index}`
-            let dobTo = `dobTo${index}`
-            let allowTeamRegistrationTypeRefId = `allowTeamRegistrationTypeRefId${index}`
-            if (isNotNullOrEmptyString(item.dobFrom)) {
+        if (typesData.length > 0) {
+            typesData.forEach((item, index) => {
+                let dobFrom = `dobFrom${index}`
+                let dobTo = `dobTo${index}`
+                let allowTeamRegistrationTypeRefId = `allowTeamRegistrationTypeRefId${index}`
+                if (isNotNullOrEmptyString(item.dobFrom)) {
+                    this.formRef.current.setFieldsValue({
+                        [dobFrom]: moment(item.dobFrom),
+                        [dobTo]: moment(item.dobTo),
+                    })
+                }
                 this.formRef.current.setFieldsValue({
-                    [dobFrom]: moment(item.dobFrom),
-                    [dobTo]: moment(item.dobTo),
+                    [allowTeamRegistrationTypeRefId]: item.allowTeamRegistrationTypeRefId
                 })
-            }
-            this.formRef.current.setFieldsValue({
-                [allowTeamRegistrationTypeRefId]: item.allowTeamRegistrationTypeRefId
             })
-        })
+        }
         let data = this.props.registrationState.membershipProductDiscountData
         let discountData = data && data.membershipProductDiscounts !== null ? data.membershipProductDiscounts[0].discounts : []
-        discountData.map((item, index) => {
+        discountData.forEach((item, index) => {
             let membershipProductTypeMappingId = `membershipProductTypeMappingId${index}`
             let membershipPrdTypeDiscountTypeRefId = `membershipPrdTypeDiscountTypeRefId${index}`
             this.formRef.current.setFieldsValue({
@@ -362,7 +364,7 @@ class RegistrationMembershipFee extends Component {
                 [membershipPrdTypeDiscountTypeRefId]: item.membershipPrdTypeDiscountTypeRefId,
             })
             let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
-            childDiscounts.map((childItem, childindex) => {
+            childDiscounts.forEach((childItem, childindex) => {
                 let childDiscountPercentageValue = `percentageValue${index} + ${childindex}`
                 this.formRef.current.setFieldsValue({
                     [childDiscountPercentageValue]: childItem.percentageValue
@@ -424,13 +426,11 @@ class RegistrationMembershipFee extends Component {
                                         className="year-select reg-filter-select1 ml-2"
                                         style={{ maxWidth: 80 }}
                                     >
-                                        {this.props.appState.yearList.map(item => {
-                                            return (
-                                                <Option key={"yearRefId" + item.id} value={item.id}>
-                                                    {item.description}
-                                                </Option>
-                                            );
-                                        })}
+                                        {this.props.appState.yearList.map(item => (
+                                            <Option key={'year_' + item.id} value={item.id}>
+                                                {item.description}
+                                            </Option>
+                                        ))}
                                     </Select>
                                 </Form.Item>
                             </div>
@@ -505,7 +505,7 @@ class RegistrationMembershipFee extends Component {
                     {AppConstants.membershipTypes}
                 </span>
 
-                {defaultTypes.length > 0 && defaultTypes.map((item, index) => (
+                {defaultTypes.map((item, index) => (
                     <div key={index} className="prod-reg-inside-container-view">
                         <div className="row">
                             <div className="col-sm">
@@ -519,15 +519,17 @@ class RegistrationMembershipFee extends Component {
                                     {item.membershipProductTypeRefName}
                                 </Checkbox>
                             </div>
-                            {(item.membershipProductTypeRefId > 4 || item.membershipProductTypeRefId == 0) &&
-                                <div className="col-sm transfer-image-view pt-4"
-                                     onClick={() => !this.state.membershipIsUsed ? this.props.removeCustomMembershipTypeAction(index) : null}>
+                            {(item.membershipProductTypeRefId > 4 || item.membershipProductTypeRefId == 0) && (
+                                <div
+                                    className="col-sm transfer-image-view pt-4"
+                                    onClick={() => !this.state.membershipIsUsed ? this.props.removeCustomMembershipTypeAction(index) : null}
+                                >
                                         <span className="user-remove-btn">
                                             <i className="fa fa-trash-o" aria-hidden="true" />
                                         </span>
                                     <span className="user-remove-text mr-0">{AppConstants.remove}</span>
                                 </div>
-                            }
+                            )}
                         </div>
                         {item.isMemebershipType && (
                             <div className="reg-membership-fee-mandate-check-view">
@@ -649,7 +651,12 @@ class RegistrationMembershipFee extends Component {
                                                         disabled={this.state.membershipIsUsed}
                                                     >
                                                         {(allowTeamRegistration || []).map((fix) => (
-                                                            <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
+                                                            <Radio
+                                                                key={'allowTeamRegistrationType_' + fix.id}
+                                                                value={fix.id}
+                                                            >
+                                                                {fix.description}
+                                                            </Radio>
                                                         ))}
                                                     </Radio.Group>
                                                 </Form.Item>
@@ -711,7 +718,7 @@ class RegistrationMembershipFee extends Component {
                     />
                 </Form.Item>
 
-                <div className='contextualHelp-RowDirection'>
+                <div className="contextualHelp-RowDirection">
                     <span className="applicable-to-heading  required-field">
                         {AppConstants.validity}
                     </span>
@@ -726,15 +733,13 @@ class RegistrationMembershipFee extends Component {
                         className="reg-competition-radio"
                         disabled={this.state.membershipIsUsed}
                     >
-                        {appState.productValidityList.map(item => {
-                            return (
-                                <div key={"productValidityList" + item.id}>
-                                    {item.id == "2" && (
-                                        <Radio key={"validityRefId" + item.id} value={item.id}> {item.description}</Radio>
-                                    )}
-                                </div>
-                            );
-                        })}
+                        {appState.productValidityList.map(item => (
+                            <div key={'productValidity_' + item.id}>
+                                {item.id == "2" && (
+                                    <Radio key={'validity_' + item.id} value={item.id}>{item.description}</Radio>
+                                )}
+                            </div>
+                        ))}
                     </Radio.Group>
                 </Form.Item>
                 {this.membershipTypesView()}
@@ -755,7 +760,7 @@ class RegistrationMembershipFee extends Component {
             <div>
                 <div className="tab-formView fees-view pt-5">
                     <span className="form-heading">{AppConstants.membershipFees}</span>
-                    {feesData.length > 0 && feesData.map((item, index) => (
+                    {feesData.map((item, index) => (
                         <div className="inside-container-view" key={"feesData" + index}>
                             <div className="table-responsive">
                                 <Table
@@ -775,9 +780,9 @@ class RegistrationMembershipFee extends Component {
                                 defaultValue={item.membershipProductFeesTypeRefId}
                                 disabled={this.state.membershipIsUsed}
                             >
-                                {this.props.appState.membershipProductFeesTypes.map((item, typeindex) => (
-                                    <div className='row' key={"membershipProductFeesTypes" + typeindex}>
-                                        <Radio key={"validityRefId" + typeindex} value={item.id}> {item.description}</Radio>
+                                {this.props.appState.membershipProductFeesTypes.map((item) => (
+                                    <div className="row" key={'membershipProductFeesType_' + item.id}>
+                                        <Radio key={'membershipFee_' + item.id} value={item.id}> {item.description}</Radio>
 
                                         <div style={{ marginLeft: -18, }}>
                                             <Tooltip background="#ff8237">
@@ -808,9 +813,9 @@ class RegistrationMembershipFee extends Component {
                         defaultValue={data?.paymentOptionRefId}
                         disabled={this.state.membershipIsUsed}
                     >
-                        {this.props.commonReducerState.membershipPaymentOptions.map((item, typeindex) => (
-                            <div className='row pl-2' key={"paymentOptionRefId" + typeindex}>
-                                <Radio key={"paymentOptionRefId" + typeindex} value={item.id}>{item.description}</Radio>
+                        {this.props.commonReducerState.membershipPaymentOptions.map((item) => (
+                            <div className="row pl-2" key={'membershipPaymentOption_' + item.id}>
+                                <Radio key={'paymentOption_' + item.id} value={item.id}>{item.description}</Radio>
                             </div>
                         ))}
                     </Radio.Group>
@@ -833,13 +838,11 @@ class RegistrationMembershipFee extends Component {
                             value={item.discountTypeRefId}
                             disabled={this.state.membershipIsUsed}
                         >
-                            {this.props.appState.commonDiscountTypes.map(item => {
-                                return (
-                                    <Option key={"discountType" + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                );
-                            })}
+                            {this.props.appState.commonDiscountTypes.map(item => (
+                                <Option key={'discountType_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
                         </Select>
                         <div className="row">
                             <div className="col-sm">
@@ -911,13 +914,11 @@ class RegistrationMembershipFee extends Component {
                             value={item.discountTypeRefId}
                             disabled={this.state.membershipIsUsed}
                         >
-                            {this.props.appState.commonDiscountTypes.map(item => {
-                                return (
-                                    <Option key={"discountType" + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                );
-                            })}
+                            {this.props.appState.commonDiscountTypes.map(item => (
+                                <Option key={'discountType_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
                         </Select>
                         <InputWithHead
                             auto_complete="new-code"
@@ -1035,13 +1036,11 @@ class RegistrationMembershipFee extends Component {
                             value={item.discountTypeRefId}
                             disabled={this.state.membershipIsUsed}
                         >
-                            {this.props.appState.commonDiscountTypes.map(item => {
-                                return (
-                                    <Option key={"discountType" + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                );
-                            })}
+                            {this.props.appState.commonDiscountTypes.map(item => (
+                                <Option key={'discountType_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
                         </Select>
                         <div className="row">
                             <div className="col-sm">
@@ -1264,7 +1263,7 @@ class RegistrationMembershipFee extends Component {
         let discountData = data && data.membershipProductDiscounts !== null ? data.membershipProductDiscounts[0].discounts : []
         return (
             <div className="discount-view pt-5">
-                <div className='row'>
+                <div className="row">
                     <span className="form-heading">{AppConstants.discounts}</span>
                     <div style={{ marginTop: 5 }}>
                         <Tooltip background="#ff8237">
@@ -1298,9 +1297,9 @@ class RegistrationMembershipFee extends Component {
                                         // value={item.membershipPrdTypeDiscountTypeRefId !== 0 && item.membershipPrdTypeDiscountTypeRefId}
                                         disabled={this.state.membershipIsUsed}
                                     >
-                                        {this.props.registrationState.membershipProductDiscountType.map((discountTypeItem) => (
-                                            <Option key={"disType" + discountTypeItem.id} value={discountTypeItem.id}>
-                                                {discountTypeItem.description}
+                                        {this.props.registrationState.membershipProductDiscountType.map((item) => (
+                                            <Option key={'discountType_' + item.id} value={item.id}>
+                                                {item.description}
                                             </Option>
                                         ))}
                                     </Select>
@@ -1326,7 +1325,10 @@ class RegistrationMembershipFee extends Component {
                                         disabled={this.state.membershipIsUsed}
                                     >
                                         {this.state.discountMembershipTypeData.map(item => (
-                                            <Option key={"product" + item} value={item.membershipProductTypeMappingId}>
+                                            <Option
+                                                key={'discountMembershipType_' + item.membershipProductTypeMappingId}
+                                                value={item.membershipProductTypeMappingId}
+                                            >
                                                 {item.membershipProductTypeRefName}
                                             </Option>
                                         ))}

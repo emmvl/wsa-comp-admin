@@ -332,22 +332,22 @@ class LiveScoreAddIncident extends Component {
                                     optionFilterProp="children"
                                 >
                                     {/* {isArrayNotEmpty(teamResult) && teamResult.map((item) => (
-                                        <Option value={item.id}> {item.name}</Option>
+                                        <Option key={'team_' + item.id} value={item.id}>{item.name}</Option>
                                     ))} */}
-                                    <Option value={team1Id}> {team1_Name}</Option>
-                                    <Option value={team2Id}> {team2_Name}</Option>
+                                    <Option key={team1Id} value={team1Id}>{team1_Name}</Option>
+                                    <Option key={team2Id} value={team2Id}>{team2_Name}</Option>
                                 </Select>
                             ) : (
                                 <Select
                                     className="reg-form-multiple-select"
-                                    placeholder='Select Home Team'
+                                    placeholder="Select Home Team"
                                     style={{ width: "100%" }}
                                     onChange={(teamId) => this.setTeamId(teamId)}
                                     // value={incidentData.teamId ? incidentData.teamId : ''}
                                     optionFilterProp="children"
                                 >
-                                    <Option value={team1_Id}> {team_1}</Option>
-                                    <Option value={team2_Id}> {team_2}</Option>
+                                    <Option key={team1_Id} value={team1_Id}>{team_1}</Option>
+                                    <Option key={team2_Id} value={team2_Id}>{team_2}</Option>
                                 </Select>
                             )}
                         </Form.Item>
@@ -373,7 +373,9 @@ class LiveScoreAddIncident extends Component {
                             value={playerIds}
                         >
                             {isArrayNotEmpty(playerResult) && playerResult.map((item) => (
-                                <Option value={item.playerId}>{item.firstName + " " + item.lastName}</Option>
+                                <Option key={'player_' + item.playerId} value={item.playerId}>
+                                    {item.firstName + " " + item.lastName}
+                                </Option>
                             ))}
                         </Select>
                         {/* </Form.Item> */}
@@ -396,7 +398,7 @@ class LiveScoreAddIncident extends Component {
                                 // value={incidentData.injury ? incidentData.injury : undefined}
                             >
                                 {isArrayNotEmpty(incidentTypeResult) && incidentTypeResult.map((item) => (
-                                    <Option value={item.id}>{item.name}</Option>
+                                    <Option key={'incidentType_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -459,7 +461,7 @@ class LiveScoreAddIncident extends Component {
                         />
 
                         <div style={{ position: 'absolute', bottom: 71, left: 150 }}>
-                            {(this.state.crossImageIcon || incidentData.addImages) &&
+                            {(this.state.crossImageIcon || incidentData.addImages) && (
                                 <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                     <img
                                         className="dot-image"
@@ -470,7 +472,7 @@ class LiveScoreAddIncident extends Component {
                                         onClick={() => this.deleteImage()}
                                     />
                                 </span>
-                            }
+                            )}
                         </div>
                     </div>
                     <div className="col-sm">
@@ -566,7 +568,6 @@ class LiveScoreAddIncident extends Component {
                 const { id } = JSON.parse(getUmpireCompetitonData());
                 compId = id
             }
-
         } else {
             const { id } = JSON.parse(getLiveScoreCompetiton());
             compId = id
@@ -624,7 +625,6 @@ class LiveScoreAddIncident extends Component {
                 key: 'media',
                 incidentMediaIds,
                 umpireKey: this.state.umpireKey
-
             });
         } else {
             this.props.liveScoreAddEditIncident({
@@ -635,7 +635,6 @@ class LiveScoreAddIncident extends Component {
                 key: 'media',
                 incidentMediaIds,
                 umpireKey: this.state.umpireKey
-
             });
         }
     };
@@ -645,23 +644,17 @@ class LiveScoreAddIncident extends Component {
         let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+                {umpireKey ? (
+                    <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
+                ) : (
+                    <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                )}
 
-                {
-                    umpireKey ?
-                        <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                        :
-                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                }
-
-
-
-                {
-                    umpireKey ?
-                        <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
-                        :
-                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
-                }
-
+                {umpireKey ? (
+                    <InnerHorizontalMenu menu="umpire" umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
+                ) : (
+                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="17" />
+                )}
 
                 <Loader visible={this.props.liveScoreIncidentState.loading} />
 

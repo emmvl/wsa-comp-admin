@@ -170,11 +170,11 @@ class LiveScoreAddScorer extends Component {
                                     // this.props.liveScoreManagerListAction(3, 1, this.state.competition_id)
                                 }}
                             >
-                                {scorer_list.map((item) => {
-                                    return <Option key={item.id} value={item.firstName + " " + item.lastName}>
+                                {scorer_list.map((item) => (
+                                    <Option key={'scorer_' + item.id} value={item.firstName + " " + item.lastName}>
                                         {item.NameWithNumber}
                                     </Option>
-                                })}
+                                ))}
                             </AutoComplete>
                         </Form.Item>
                     </div>
@@ -195,8 +195,8 @@ class LiveScoreAddScorer extends Component {
                                     onChange={(teamId) => this.props.liveScoreScorerUpdate(teamId, "teamId")}
                                     // value={teamId}
                                 >
-                                    {isArrayNotEmpty(teamData) > 0 && teamData.map((item) => (
-                                        <Option value={item.id}> {item.name}</Option>
+                                    {isArrayNotEmpty(teamData) && teamData.map((item) => (
+                                        <Option key={'team_' + item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             )}
@@ -312,7 +312,7 @@ class LiveScoreAddScorer extends Component {
 
                 {/* <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.team} required={"required-field pb-0 pt-3"} />
+                        <InputWithHead heading={AppConstants.team} required="required-field pb-0 pt-3" />
                         <Form.Item className="slct-in-add-manager-livescore">
                             <Select
                                 loading={this.props.liveScoreTeamState.onLoad && true}
@@ -323,7 +323,7 @@ class LiveScoreAddScorer extends Component {
                                 value={teamId}
                             >
                                 {teamData.map((item) => (
-                                    <Option value={item.id}> {item.name}</Option>
+                                    <Option key={'team_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -349,11 +349,11 @@ class LiveScoreAddScorer extends Component {
                     value={scorerRadioBtn}
                 >
                     <div className="row ml-4" style={{ marginTop: 18 }}>
-                        {/* <Radio value={"new"}>{AppConstants.new}</Radio>
-                        <Radio value={"existing"}>{AppConstants.existing}</Radio> */}
+                        {/* <Radio value="new">{AppConstants.new}</Radio>
+                        <Radio value="existing">{AppConstants.existing}</Radio> */}
 
                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"new"}>{AppConstants.new}</Radio>
+                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
                             <div style={{ marginLeft: -10, width: 50 }}>
                                 <Tooltip background="#ff8237">
                                     <span>{AppConstants.newMsgForScorerManager}</span>
@@ -362,7 +362,7 @@ class LiveScoreAddScorer extends Component {
                         </div>
 
                         <div style={{ display: 'flex', alignItems: 'center', marginLeft: -10 }}>
-                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value={"existing"}>
+                            <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                 {AppConstants.existing}
                             </Radio>
                             <div style={{ marginLeft: -10 }}>
@@ -383,7 +383,6 @@ class LiveScoreAddScorer extends Component {
     //     const { scorerRadioBtn } = this.props.liveScoreScorerState
     //     return (
     //         <div>
-    //             {/* <div></div> */}
     //             {/* {this.radioBtnContainer()}
     //             {scorerRadioBtn == 'new' ? */}
     //             {this.scorerNewRadioBtnView(getFieldDecorator)}

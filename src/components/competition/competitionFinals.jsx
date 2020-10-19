@@ -305,16 +305,16 @@ class CompetitionFinals extends Component {
             let finalFixtureTemplateList = [];
             let poolsArray = [
                 {
-                    "id": 1,
-                    "description": "Top1"
+                    id: 1,
+                    description: "Top1"
                 },
                 {
-                    "id": 2,
-                    "description": "Top2"
+                    id: 2,
+                    description: "Top2"
                 },
                 {
-                    "id": 3,
-                    "description": "Top4"
+                    id: 3,
+                    description: "Top4"
                 }
             ];
             finalFixtureTemplateList = (hasTop4 == 1)
@@ -400,11 +400,11 @@ class CompetitionFinals extends Component {
         let finalsList = this.getSaveFinalList(competitionFinalsList);
         let venueList = competitionVenuesList;
         let payload = {
-            "yearRefId": this.state.yearRefId,
-            "competitionUniqueKey": this.state.firstTimeCompId,
-            "organisationId": this.state.organisationId,
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.firstTimeCompId,
+            organisationId: this.state.organisationId,
             "finals": finalsList,
-            "venues": venueList
+            venues: venueList
         }
 
         this.props.saveCompetitionFinalsAction(payload);
@@ -439,7 +439,9 @@ class CompetitionFinals extends Component {
                     <div className="row">
                         <div className="col-sm-3 pb-3">
                             <div style={{
-                                width: "fit-content", display: "flex", flexDirection: "row",
+                                width: "fit-content",
+                                display: "flex",
+                                flexDirection: "row",
                                 alignItems: "center"
                             }}>
                                 <span className="year-select-heading">{AppConstants.year}:</span>
@@ -450,8 +452,8 @@ class CompetitionFinals extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {own_YearArr.length > 0 && own_YearArr.map(item => (
-                                        <Option key={"yearRefId" + item.id} value={item.id}>
+                                    {own_YearArr.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -474,8 +476,8 @@ class CompetitionFinals extends Component {
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map(item => (
-                                        <Option key={item.statusRefId} value={item.competitionId}>
+                                    {own_CompetitionArr.map(item => (
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
                                             {item.competitionName}
                                         </Option>
                                     ))}
@@ -526,8 +528,8 @@ class CompetitionFinals extends Component {
                                 onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
                                 // disabled={compDetailDisable}
                             >
-                                {appState.venueList.length > 0 && appState.venueList.map((item) => (
-                                    <Option key={item.id} value={item.id}>{item.name}</Option>
+                                {appState.venueList.map((item) => (
+                                    <Option key={'venue_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -584,8 +586,10 @@ class CompetitionFinals extends Component {
                                                 value={data.finalsFixtureTemplateRefId}
                                                 onChange={(e) => this.onChangeSetValue(e, 'finalsFixtureTemplateRefId', index)}
                                             >
-                                                {(finalFixtureTemplateData || []).map((fix, fixIndex) => (
-                                                    <Option key={fix.id} value={fix.id}>{fix.description}</Option>
+                                                {(finalFixtureTemplateData || []).map((fix) => (
+                                                    <Option key={'finalsFixtureTemplate_' + fix.id} value={fix.id}>
+                                                        {fix.description}
+                                                    </Option>
                                                 ))}
                                             </Select>
                                         </Form.Item>
@@ -599,8 +603,10 @@ class CompetitionFinals extends Component {
                                                 value={data.poolTopRefId}
                                                 onChange={(e) => this.onChangeSetValue(e, 'poolTopRefId', index)}
                                             >
-                                                {(this.getFinalFixtureTemplateData(data.hasTop4) || []).map((fix, fixIndex) => (
-                                                    <Option key={fix.id} value={fix.id}>{fix.description}</Option>
+                                                {(this.getFinalFixtureTemplateData(data.hasTop4) || []).map((fix) => (
+                                                    <Option key={'poolTop_' + fix.id} value={fix.id}>
+                                                        {fix.description}
+                                                    </Option>
                                                 ))}
                                             </Select>
                                         </Form.Item>
@@ -629,12 +635,15 @@ class CompetitionFinals extends Component {
                                             onChange={(matchType) => this.onChangeSetValue(matchType, 'finalsMatchTypeRefId', index)}
                                             value={data.finalsMatchTypeRefId}
                                         >
-                                            {(appState.matchTypes || []).map((item, index) => {
+                                            {(appState.matchTypes || []).map((item) => {
                                                 if (item.name !== "SINGLE") {
                                                     return (
-                                                        <Option key={item.id} value={item.id}>{item.description}</Option>
-                                                    )
+                                                        <Option key={'finalsMatchType_' + item.id} value={item.id}>
+                                                            {item.description}
+                                                        </Option>
+                                                    );
                                                 }
+                                                return <></>;
                                             })}
                                         </Select>
                                     </Form.Item>
@@ -760,8 +769,10 @@ class CompetitionFinals extends Component {
                                                                     value={whoPlaysWhoItem.wpwPool1}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool1', index, whoPlaysWhoIndex)}
                                                                 >
-                                                                    {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
-                                                                        <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
+                                                                        <Option key={'wpwPool1_' + pool.poolId} value={pool.poolId}>
+                                                                            {pool.poolName}
+                                                                        </Option>
                                                                     ))}
                                                                 </Select>
                                                             </Form.Item>
@@ -778,8 +789,10 @@ class CompetitionFinals extends Component {
                                                                     value={whoPlaysWhoItem.wpwPool2}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool2', index, whoPlaysWhoIndex)}
                                                                 >
-                                                                    {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
-                                                                        <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
+                                                                        <Option key={'wpwPool2_' + pool.poolId} value={pool.poolId}>
+                                                                            {pool.poolName}
+                                                                        </Option>
                                                                     ))}
                                                                 </Select>
                                                             </Form.Item>
@@ -795,8 +808,10 @@ class CompetitionFinals extends Component {
                                                                     value={whoPlaysWhoItem.wpwPool3}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool3', index, whoPlaysWhoIndex)}
                                                                 >
-                                                                {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
-                                                                        <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
+                                                                        <Option key={'wpwPool3_' + pool.poolId} value={pool.poolId}>
+                                                                            {pool.poolName}
+                                                                        </Option>
                                                                     ))}
                                                                 </Select>
                                                             </Form.Item>
@@ -812,8 +827,10 @@ class CompetitionFinals extends Component {
                                                                     value={whoPlaysWhoItem.wpwPool4}
                                                                     onChange={(e) => this.onChangeSetValue(e, 'wpwPool4', index, whoPlaysWhoIndex)}
                                                                 >
-                                                                    {(whoPlaysWhoItem.pools || []).map((pool, poolIndex) => (
-                                                                        <Option key={pool.poolId} value={pool.poolId}>{pool.poolName}</Option>
+                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
+                                                                        <Option key={'wpwPool4_' + pool.poolId} value={pool.poolId}>
+                                                                            {pool.poolName}
+                                                                        </Option>
                                                                     ))}
                                                                 </Select>
                                                             </Form.Item>
@@ -864,7 +881,7 @@ class CompetitionFinals extends Component {
                                 value={data.applyToRefId}
                             >
                                 {(applyToData || []).map((app) => (
-                                    <Radio key={app.id} value={app.id}>{app.description}</Radio>
+                                    <Radio key={'applyTo_' + app.id} value={app.id}>{app.description}</Radio>
                                 ))}
                             </Radio.Group>
                         </Form.Item>
@@ -882,7 +899,9 @@ class CompetitionFinals extends Component {
                                 value={data.extraTimeMatchTypeRefId}
                             >
                                 {(appState.matchTypes || []).map((item) => (
-                                    <Option key={item.id} value={item.id}>{item.description}</Option>
+                                    <Option key={'extraTimeMatchType_' + item.id} value={item.id}>
+                                        {item.description}
+                                    </Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -981,8 +1000,8 @@ class CompetitionFinals extends Component {
                                     onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
                                     value={data.extraTimeDrawRefId}
                                 >
-                                    {(extraTimeDrawData || []).map((ex, exIndex) => (
-                                        <Radio key={ex.id} value={ex.id}>{ex.description}</Radio>
+                                    {(extraTimeDrawData || []).map((ex) => (
+                                        <Radio key={'extraTimeDraw_' + ex.id} value={ex.id}>{ex.description}</Radio>
                                     ))}
                                 </Radio.Group>
                             </Form.Item>
@@ -1059,10 +1078,10 @@ class CompetitionFinals extends Component {
                     <Select
                         className="year-select reg-filter-select-competition ml-2"
                         onChange={(e) => this.setState({ generateRoundId: e })}
-                        placeholder={'Round'}
+                        placeholder="Round"
                     >
                         {(activeDrawsRoundsData || []).map((d) => (
-                            <Option key={d.roundId} value={d.roundId}>{d.name}</Option>
+                            <Option key={'round_' + d.roundId} value={d.roundId}>{d.name}</Option>
                         ))}
                     </Select>
                 </Modal>

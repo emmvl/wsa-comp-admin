@@ -78,8 +78,8 @@ class CompetitionVenueModal extends React.Component {
                                         // onBlur={() => console.log("called")}
                                         onSearch={(value) => handleSearch(value)}
                                     >
-                                        {appState.venueList.length > 0 && appState.venueList.map((item) => (
-                                            <Option key={item.id} value={item.id}>{item.name}</Option>
+                                        {appState.venueList.map((item) => (
+                                            <Option key={'venue_' + item.id} value={item.id}>{item.name}</Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
@@ -103,7 +103,7 @@ class CompetitionVenueModal extends React.Component {
                             </div>
                         </div>
                     </Form>
-                </Modal >
+                </Modal>
             </div>
         )
     }

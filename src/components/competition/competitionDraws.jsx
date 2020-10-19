@@ -713,19 +713,17 @@ class CompetitionDraws extends Component {
           >
             <span className="year-select-heading">{AppConstants.year}:</span>
             <Select
-              name={'yearRefId'}
+              name="yearRefId"
               className="year-select reg-filter-select-year ml-2"
               style={{ width: 90 }}
               onChange={(yearRefId) => this.onYearChange(yearRefId)}
               value={this.state.yearRefId}
             >
-              {this.props.appState.own_YearArr.map((item) => {
-                return (
-                  <Option key={'yearRefId' + item.id} value={item.id}>
-                    {item.description}
-                  </Option>
-                );
-              })}
+              {this.props.appState.own_YearArr.map((item) => (
+                <Option key={'year_' + item.id} value={item.id}>
+                  {item.description}
+                </Option>
+              ))}
             </Select>
           </div>
         </div>
@@ -746,25 +744,21 @@ class CompetitionDraws extends Component {
               <Select
                 id={AppUniqueId.draw_comp_dpdn}
                 // style={{ minWidth: 200 }}
-                name={'competition'}
+                name="competition"
                 className="reg-filter-select-competition ml-2"
                 onChange={(competitionId, e) =>
                   this.onCompetitionChange(competitionId, e.key)
                 }
                 value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
               >
-                {this.props.appState.own_CompetitionArr.length > 0 && <Option key={"-1"} value={"-1"}>{AppConstants.all}</Option>
-                }
-                {this.props.appState.own_CompetitionArr.map((item) => {
-                  return (
-                    <Option
-                      key={item.statusRefId}
-                      value={item.competitionId}
-                    >
-                      {item.competitionName}
-                    </Option>
-                  );
-                })}
+                {this.props.appState.own_CompetitionArr.length > 0 && (
+                    <Option key="-1" value="-1">{AppConstants.all}</Option>
+                )}
+                {this.props.appState.own_CompetitionArr.map((item) => (
+                  <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                    {item.competitionName}
+                  </Option>
+                ))}
               </Select>
             </div>
 
@@ -805,7 +799,7 @@ class CompetitionDraws extends Component {
             <Select
               id={AppUniqueId.division_dpdn}
               style={{ minWidth: 160 }}
-              name={'competition'}
+              name="competition"
               disabled={disabledStatus}
               className="year-select reg-filter-select1 ml-2"
               onChange={(competitionDivisionGradeId) =>
@@ -815,18 +809,14 @@ class CompetitionDraws extends Component {
                 JSON.stringify(this.state.competitionDivisionGradeId)
               )}
             >
-              {this.props.drawsState.divisionGradeNameList.map((item) => {
-                return (
-                  <Option
-                    key={
-                      'divisionGradeNameList' + item.competitionDivisionGradeId
-                    }
-                    value={item.competitionDivisionGradeId}
-                  >
-                    {item.name}
-                  </Option>
-                );
-              })}
+              {this.props.drawsState.divisionGradeNameList.map((item) => (
+                <Option
+                  key={'compDivGrade_' + item.competitionDivisionGradeId}
+                  value={item.competitionDivisionGradeId}
+                >
+                  {item.name}
+                </Option>
+              ))}
             </Select>
           </div>
 
@@ -848,35 +838,22 @@ class CompetitionDraws extends Component {
               disabled={disabledStatus}
               id={AppUniqueId.organisation_dpdn}
               style={{ minWidth: 160 }}
-              name={'competition'}
+              name="competition"
               className="year-select reg-filter-select1 ml-2"
               onChange={(oragnisationId) =>
                 this.onchangeOrganisation(oragnisationId)
               }
               value={this.state.organisation_Id}
             >
-              <Option
-                key={
-                  "-1"
-                }
-                value={"-1"}
-              >
-                {AppConstants.all}
-              </Option>
-              {
-                this.props.drawsState.drawOrganisations.map((item) => {
-                  return (
-                    <Option
-                      key={
-                        'orgId' + item.organisationUniqueKey
-                      }
-                      value={item.organisationUniqueKey}
-                    >
-                      {item.organisationName}
-                    </Option>
-                  );
-                })
-              }
+              <Option key="-1" value="-1">{AppConstants.all}</Option>
+              {this.props.drawsState.drawOrganisations.map((item) => (
+                <Option
+                  key={'organisation_' + item.organisationUniqueKey}
+                  value={item.organisationUniqueKey}
+                >
+                  {item.organisationName}
+                </Option>
+              ))}
             </Select>
           </div>
         </div>
@@ -1129,14 +1106,11 @@ class CompetitionDraws extends Component {
                     onChange={(venueId) => this.onVenueChange(venueId)}
                     value={JSON.parse(JSON.stringify(this.state.venueId))}
                   >
-                    {this.props.drawsState.competitionVenues.length > 0 &&
-                      this.props.drawsState.competitionVenues.map((item) => {
-                        return (
-                          <Option key={item.id} value={item.id}>
-                            {item.name}
-                          </Option>
-                        );
-                      })}
+                    {this.props.drawsState.competitionVenues.map((item) => (
+                      <Option key={'competitionVenue_' + item.id} value={item.id}>
+                        {item.name}
+                      </Option>
+                    ))}
                   </Select>
                 </div>
               </div>
@@ -1252,14 +1226,11 @@ class CompetitionDraws extends Component {
                         onChange={(roundId) => this.onRoundsChange(roundId)}
                         value={this.state.roundId}
                       >
-                        {this.props.drawsState.getDrawsRoundsData.length > 0 &&
-                          this.props.drawsState.getDrawsRoundsData.map((item) => {
-                            return (
-                              <Option key={item.roundId} value={item.roundId}>
-                                {item.name}
-                              </Option>
-                            );
-                          })}
+                        {this.props.drawsState.getDrawsRoundsData.map((item) => (
+                          <Option key={'drawsRound_' + item.roundId} value={item.roundId}>
+                            {item.name}
+                          </Option>
+                        ))}
                       </Select>
                       {roundTime !== '' && (
                         <span className="year-select-heading pb-1">
@@ -1295,79 +1266,74 @@ class CompetitionDraws extends Component {
           {this.props.drawsState.updateLoad ? (
             <div className="draggable-wrap draw-data-table">
               <Loader visible={this.props.drawsState.updateLoad} />
-              {this.props.drawsState.getRoundsDrawsdata.length > 0 &&
-                this.props.drawsState.getRoundsDrawsdata.map(
-                  (dateItem, dateIndex) => {
-                    return (
-                      <div key={"drawData" + dateIndex}>
-                        <div className="draws-round-view">
-                          <span className="draws-round">
-                            {dateItem.roundName}
-                          </span>
-                        </div>
-                        {this.draggableView(dateItem)}
-                        {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
-                          <div>
-                            <AllLegendComponent
-                              allLegendArray={dateItem.legendsArray}
-                            />
-                          </div>
-                          :
-                          <div style={{ display: 'table', marginTop: 35 }}>
-                            <LegendComponent
-                              disabled={disabledStatus}
-                              legendArray={dateItem.legendsArray}
-                            />
-                          </div>
-                        }
-                      </div>
-                    );
-                  }
-                )}
+
+              {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
+                <div key={"drawData" + dateIndex}>
+                  <div className="draws-round-view">
+                    <span className="draws-round">
+                      {dateItem.roundName}
+                    </span>
+                  </div>
+
+                  {this.draggableView(dateItem)}
+
+                  {(this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck) ? (
+                    <div>
+                      <AllLegendComponent
+                        allLegendArray={dateItem.legendsArray}
+                      />
+                    </div>
+                  ) : (
+                    <div style={{ display: 'table', marginTop: 35 }}>
+                      <LegendComponent
+                        disabled={disabledStatus}
+                        legendArray={dateItem.legendsArray}
+                      />
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
           ) : (
-              <div className="draggable-wrap draw-data-table">
-                {this.props.drawsState.getRoundsDrawsdata.length > 0 &&
-                  this.props.drawsState.getRoundsDrawsdata.map(
-                    (dateItem, dateIndex) => {
-                      return (
+            <div className="draggable-wrap draw-data-table">
+              {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
+                <div>
+                  {dateItem.legendsArray.length > 0 ? (
+                    <div key={"drawData" + dateIndex}>
+                      <div className="draws-round-view">
+                        <span className="draws-round">
+                          {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? "" : dateItem.roundName}
+                        </span>
+                      </div>
+
+                      {this.draggableView(dateItem)}
+
+                      {(this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck) ? (
                         <div>
-                          {dateItem.legendsArray.length > 0 ?
-                            <div key={"drawData" + dateIndex}>
-                              <div className="draws-round-view">
-                                <span className="draws-round">
-                                  {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ? "" : dateItem.roundName}
-                                </span>
-                              </div>
-                              {this.draggableView(dateItem)}
-                              {this.state.firstTimeCompId == "-1" || this.state.dateRangeCheck ?
-                                <div>
-                                  <AllLegendComponent
-                                    allLegendArray={dateItem.legendsArray}
-                                  />
-                                </div>
-                                :
-                                <div style={{ display: 'table', marginTop: 35 }}>
-                                  <LegendComponent
-                                    disabled={disabledStatus}
-                                    legendArray={dateItem.legendsArray}
-                                  />
-                                </div>
-                              }
-                            </div>
-                        :
-                            <div>
-                              {this.state.firstTimeCompId == -1 &&
-                                <div className="comp-warning-info" style={{ paddingBottom: "40px" }}>{AppConstants.noFixturesMessage}</div>
-                              }
-                            </div>
-                          }
+                          <AllLegendComponent
+                            allLegendArray={dateItem.legendsArray}
+                          />
                         </div>
-                      );
-                    }
+                      ) : (
+                        <div style={{ display: 'table', marginTop: 35 }}>
+                          <LegendComponent
+                            disabled={disabledStatus}
+                            legendArray={dateItem.legendsArray}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div>
+                      {this.state.firstTimeCompId == -1 && (
+                        <div className="comp-warning-info" style={{ paddingBottom: "40px" }}>{AppConstants.noFixturesMessage}</div>
+                      )}
+                    </div>
                   )}
-              </div>
-            )}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -1424,47 +1390,43 @@ class CompetitionDraws extends Component {
             <div className="tablehead-row">
               <div className="sr-no empty-bx" />
 
-              {dateItem.dateNewArray.length > 0 &&
-                dateItem.dateNewArray.map((item, index) => {
-                  if (index !== 0) {
-                    dateMargin += 110;
-                  }
-                  if (index == 0) {
-                    dateMargin = 70;
-                  }
-                  return (
-                    <span key={"day" + index} style={{ left: dateMargin }}>
-                      {item.notInDraw == false ? getDayName(item.date) : ''}
-                    </span>
-                  );
-                })}
+              {dateItem.dateNewArray.map((item, index) => {
+                if (index !== 0) {
+                  dateMargin += 110;
+                }
+                if (index == 0) {
+                  dateMargin = 70;
+                }
+                return (
+                  <span key={"day" + index} style={{ left: dateMargin }}>
+                    {item.notInDraw == false ? getDayName(item.date) : ''}
+                  </span>
+                );
+              })}
             </div>
             {/* Times list */}
             <div className="tablehead-row">
               <div className="sr-no empty-bx" />
 
-              {dateItem.dateNewArray.length > 0 &&
-                dateItem.dateNewArray.map((item, index) => {
-                  if (index !== 0) {
-                    dayMargin += 110;
-                  }
-                  if (index == 0) {
-                    dayMargin = 70;
-                  }
-                  return (
-                    <span
-                      key={"time" + index}
-                      style={{
-                        left: dayMargin,
-                        fontSize: item.notInDraw !== false && 11,
-                      }}
-                    >
-                      {item.notInDraw == false
-                        ? getTime(item.date)
-                        : 'Not in draw'}
-                    </span>
-                  );
-                })}
+              {dateItem.dateNewArray.map((item, index) => {
+                if (index !== 0) {
+                  dayMargin += 110;
+                }
+                if (index == 0) {
+                  dayMargin = 70;
+                }
+                return (
+                  <span
+                    key={"time" + index}
+                    style={{
+                      left: dayMargin,
+                      fontSize: item.notInDraw !== false && 11,
+                    }}
+                  >
+                    {item.notInDraw == false ? getTime(item.date) : 'Not in draw'}
+                  </span>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -1779,10 +1741,10 @@ class CompetitionDraws extends Component {
           <Select
             className="year-select reg-filter-select-competition ml-2"
             onChange={(e) => this.setState({ generateRoundId: e })}
-            placeholder={'Round'}
+            placeholder="Round"
           >
-            {(activeDrawsRoundsData || []).map((d, dIndex) => (
-              <Option key={d.roundId} value={d.roundId}>{d.name}</Option>
+            {(activeDrawsRoundsData || []).map((d) => (
+              <Option key={'activeDrawsRound_' + d.roundId} value={d.roundId}>{d.name}</Option>
             ))}
           </Select>
         </Modal>
@@ -1810,7 +1772,7 @@ class CompetitionDraws extends Component {
           menuHeading={AppConstants.competitions}
           menuName={AppConstants.competitions}
         />
-        {/* <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} /> */}
+        {/* <InnerHorizontalMenu menu="competition" compSelectedKey={'18'} /> */}
         <Layout className="comp-dash-table-view">
           {this.headerView()}
           {this.dropdownView()}

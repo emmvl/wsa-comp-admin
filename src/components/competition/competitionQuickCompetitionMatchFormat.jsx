@@ -443,8 +443,8 @@ class QuickCompetitionMatchFormat extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {quickCompetitionState.quick_CompetitionYearArr.length > 0 && quickCompetitionState.quick_CompetitionYearArr.map(item => (
-                                        <Option key={"yearRefId" + item.id} value={item.id}>
+                                    {quickCompetitionState.quick_CompetitionYearArr.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -467,8 +467,8 @@ class QuickCompetitionMatchFormat extends Component {
                                     onChange={competitionId => this.onCompetitionChange(competitionId)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {quickCompetitionState.quick_CompetitionArr.length > 0 && quickCompetitionState.quick_CompetitionArr.map(item => (
-                                        <Option key={"competition" + item.competitionId} value={item.competitionId}>
+                                    {quickCompetitionState.quick_CompetitionArr.map(item => (
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
                                             {item.competitionName}
                                         </Option>
                                     ))}
@@ -511,7 +511,9 @@ class QuickCompetitionMatchFormat extends Component {
                                 <div className="row">
                                     {(appState.competitionFormatTypes || []).map(item => (
                                         <div className="col-sm">
-                                            <Radio key={item.id} value={item.id}>{item.description}</Radio>
+                                            <Radio key={'competitionFormatType_' + item.id} value={item.id}>
+                                                {item.description}
+                                            </Radio>
                                         </div>
                                     ))}
                                 </div>
@@ -532,9 +534,9 @@ class QuickCompetitionMatchFormat extends Component {
                     onChange={(fixTemplate) => this.onChangeSetValue(fixTemplate, 'fixtureTemplateId')}
                     value={data.fixtureTemplateId}
                 >
-                    <Option style={{height: '30px'}} value={null} key={null}>{}</Option>
-                    {(data.fixtureTemplates || []).map((fixture, fixIndex) => (
-                        <Option value={fixture.id} key={fixture.id}>{fixture.name}</Option>
+                    <Option style={{ height: 30 }} value={null} key={null}>{}</Option>
+                    {(data.fixtureTemplates || []).map((fixture) => (
+                        <Option key={'fixtureTemplate_' + fixture.id} value={fixture.id}>{fixture.name}</Option>
                     ))}
                 </Select> */}
 
@@ -548,12 +550,13 @@ class QuickCompetitionMatchFormat extends Component {
                         onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
                         value={data.matchTypeRefId}
                     >
-                        {(appState.matchTypes || []).map((item, index) => {
+                        {(appState.matchTypes || []).map((item) => {
                             if (item.name !== "SINGLE") {
                                 return (
-                                  <Option key={item.id} value={item.id}>{item.description}</Option>
+                                  <Option key={'matchType_' + item.id} value={item.id}>{item.description}</Option>
                                 );
                             }
+                            return <></>;
                         })}
                     </Select>
                 </Form.Item>
@@ -566,8 +569,10 @@ class QuickCompetitionMatchFormat extends Component {
                             value={data.noOfRounds}
                         >
                             <Option style={{ height: '30px' }} value={null} key={null}>{}</Option>
-                            {(data.fixtureTemplates || []).map((fixture, fixIndex) => (
-                                <Option value={fixture.noOfRounds} key={fixture.noOfRounds}>{fixture.noOfRounds}</Option>
+                            {(data.fixtureTemplates || []).map((fixture) => (
+                                <Option value={'fixtureTemplate_' + fixture.noOfRounds} key={fixture.noOfRounds}>
+                                    {fixture.noOfRounds}
+                                </Option>
                             ))}
                         </Select>
                         <InputWithHead heading={AppConstants.enhancedRoundRobinType} />
@@ -576,8 +581,10 @@ class QuickCompetitionMatchFormat extends Component {
                             onChange={(x) => this.onChangeSetValue(x, 'enhancedRoundRobinTypeRefId')}
                             value={data.enhancedRoundRobinTypeRefId}
                         >
-                            {(appState.enhancedRoundRobinTypes || []).map((round, roundIndex) => (
-                                <Option value={round.id} key={round.id}>{round.description}</Option>
+                            {(appState.enhancedRoundRobinTypes || []).map((round) => (
+                                <Option key={'enhancedRoundRobinType_' + round.id} value={round.id}>
+                                    {round.description}
+                                </Option>
                             ))}
                         </Select>
                     </div>
@@ -591,9 +598,9 @@ class QuickCompetitionMatchFormat extends Component {
                 >
                     <div className="fluid-width">
                         <div className="row">
-                            {(appState.typesOfCompetition || []).map((item, index) => (
+                            {(appState.typesOfCompetition || []).map((item) => (
                                 <div className="col-sm">
-                                    <Radio key={item.id} value={item.id}>{item.description}</Radio>
+                                    <Radio key={'competitionType_' + item.id} value={item.id}>{item.description}</Radio>
                                 </div>
                             ))}
                         </div>
@@ -664,10 +671,14 @@ class QuickCompetitionMatchFormat extends Component {
                                             mode="multiple"
                                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                             onChange={(e) => this.onChange(e, data.competionFormatDivisions, index)}
-                                            value={item.selectedDivisions}>
-                                            {(item.divisions || []).map((division, divIndex) => (
-                                                <Option key={division.competitionMembershipProductDivisionId + divIndex}
-                                                    disabled={division.isDisabled} value={division.competitionMembershipProductDivisionId}>
+                                            value={item.selectedDivisions}
+                                        >
+                                            {(item.divisions || []).map((division) => (
+                                                <Option
+                                                    key={'compMemProdDiv_' + division.competitionMembershipProductDivisionId}
+                                                    disabled={division.isDisabled}
+                                                    value={division.competitionMembershipProductDivisionId}
+                                                >
                                                     {division.divisionsName}
                                                 </Option>
                                             ))}

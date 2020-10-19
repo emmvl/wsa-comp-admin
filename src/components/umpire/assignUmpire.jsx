@@ -188,9 +188,9 @@ class AssignUmpire extends Component {
                     firstComp = compId
                 }
                 const body = {
-                    "paging": {
-                        "limit": 10,
-                        "offset": 0
+                    paging: {
+                        limit: 10,
+                        offset: 0
                     }
                 }
                 this.props.getAssignUmpireListAction(firstComp, body)
@@ -203,10 +203,10 @@ class AssignUmpire extends Component {
     onChangeStatus(index, record, umpireKey, statusText, userData) {
         let umpireUserId = this_obj.props.location.state ? this_obj.props.location.state.record.id : 0
         let assignBody = {
-            "matchId": record.id,
-            "roleId": 15,
-            "userId": umpireUserId,
-            "rosterId": userData ? userData.rosterId : null
+            matchId: record.id,
+            roleId: 15,
+            userId: umpireUserId,
+            rosterId: userData ? userData.rosterId : null
         }
         if (statusText === "Assign") {
             this.props.assignUmpireAction(assignBody, index, umpireKey)
@@ -218,9 +218,9 @@ class AssignUmpire extends Component {
     }
     onChangeComp(compID) {
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
+            paging: {
+                limit: 10,
+                offset: 0
             }
         }
         this.setState({ selectedComp: compID })
@@ -243,24 +243,22 @@ class AssignUmpire extends Component {
                     <div style={{ display: "flex", justifyContent: 'space-between', }}>
                         {/* <div className="mt-5"> */}
                         {/* <div style={{
-                            width: "100%", display: "flex",
+                            width: "100%",
+                            display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
                         }}> */}
-                        {/* <span className='year-select-heading'>{AppConstants.competition}:</span>
-                            <Select
-                                className="year-select"
-                                style={{ minWidth: 160 }}
-                                onChange={(comp) => this.onChangeComp(comp)}
-                                value={this.state.selectedComp}
-                            >
-                                {
-                                    competition.map((item) => {
-                                        return <Option value={item.id}>{item.longName}</Option>
-                                    })
-                                }
-
-                            </Select> */}
+                        {/* <span className="year-select-heading">{AppConstants.competition}:</span>
+                        <Select
+                            className="year-select"
+                            style={{ minWidth: 160 }}
+                            onChange={(comp) => this.onChangeComp(comp)}
+                            value={this.state.selectedComp}
+                        >
+                            {competition.map((item) => (
+                                <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
+                            ))}
+                        </Select> */}
 
                         {/* <div className="col-sm"> */}
                         <div className="reg-add-save-button">
@@ -283,9 +281,9 @@ class AssignUmpire extends Component {
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": offset
+            paging: {
+                limit: 10,
+                offset: offset
             }
         }
         this.props.getAssignUmpireListAction(this.state.selectedComp, body)

@@ -24,9 +24,7 @@ function tableSort(a, b, key) {
     let stringB = JSON.stringify(b[key])
     return stringA.localeCompare(stringB)
     //}
-
 }
-
 
 ////Table columns
 const columns = [
@@ -47,21 +45,17 @@ const columns = [
                 : <span>{data}</span>
         )
     },
-
     {
         title: 'P',
         dataIndex: 'P',
         key: 'P',
         sorter: (a, b) => tableSort(a, b, "P"),
-
     },
     {
         title: 'W',
         dataIndex: 'W',
         key: 'W',
         sorter: (a, b) => tableSort(a, b, "W"),
-
-
     },
     {
         title: 'L',
@@ -74,30 +68,24 @@ const columns = [
         dataIndex: 'D',
         key: 'D',
         sorter: (a, b) => tableSort(a, b, "D"),
-
-
     },
     {
         title: 'B',
         dataIndex: 'B',
         key: 'B',
         sorter: (a, b) => tableSort(a, b, "B"),
-
-
     },
     {
         title: 'FW',
         dataIndex: 'FW',
         key: 'FW',
         sorter: (a, b) => tableSort(a, b, "FW"),
-
     },
     {
         title: 'FL',
         dataIndex: 'FL',
         key: 'FL',
         sorter: (a, b) => tableSort(a, b, "FL"),
-
     },
     {
         title: 'F',
@@ -110,8 +98,6 @@ const columns = [
         dataIndex: 'A',
         key: 'A',
         sorter: (a, b) => tableSort(a, b, "A"),
-
-
     },
     {
         title: 'PTS',
@@ -127,7 +113,6 @@ const columns = [
         render: (SMR) => <span>{(JSON.parse(SMR) * 100).toFixed(2) + "%"}</span>
     },
 ];
-
 
 class LiveScoreLadderList extends Component {
     constructor(props) {
@@ -145,44 +130,48 @@ class LiveScoreLadderList extends Component {
         let { liveScoreCompIsParent } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
-                < div className="row">
+                <div className="row">
                     <div className="col-sm">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.competitionladders}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
 
-                    {liveScoreCompIsParent && <div className="col-sm" style={{
-
-                        display: "flex",
-                        flexDirection: 'row',
-                        alignItems: "center",
-                        justifyContent: "flex-end",
-                    }}>
-                        <div className="row">
-                            <div className="col-sm">
-                                <div
-                                    className="comp-dashboard-botton-view-mobile"
-                                    style={{
-                                        width: "100%",
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        justifyContent: "flex-end"
-                                    }}>
-                                    <NavLink to={{
-                                        pathname: '/liveScoreLadderAdjustment',
-                                        state: { divisionId: this.state.divisionId }
-                                    }}>
-                                        <Button className="primary-add-comp-form" type="primary">
-                                            {AppConstants.edit}
-                                        </Button>
-                                    </NavLink>
+                    {liveScoreCompIsParent && (
+                        <div
+                            className="col-sm"
+                            style={{
+                                display: "flex",
+                                flexDirection: 'row',
+                                alignItems: "center",
+                                justifyContent: "flex-end",
+                            }}
+                        >
+                            <div className="row">
+                                <div className="col-sm">
+                                    <div
+                                        className="comp-dashboard-botton-view-mobile"
+                                        style={{
+                                            width: "100%",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "flex-end"
+                                        }}
+                                    >
+                                        <NavLink to={{
+                                            pathname: '/liveScoreLadderAdjustment',
+                                            state: { divisionId: this.state.divisionId }
+                                        }}>
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                {AppConstants.edit}
+                                            </Button>
+                                        </NavLink>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>}
-
+                    )}
                 </div>
             </div>
         )
@@ -219,16 +208,14 @@ class LiveScoreLadderList extends Component {
         }
     }
 
-
-
     divisionChange = (value) => {
-
         // let competitionID = getCompetitonId()
         const { id, uniqueKey } = JSON.parse(getLiveScoreCompetiton())
         this.props.updateLadderSetting({ data: value.division, key: 'divisionId' })
         this.props.liveScoreLaddersListAction(id, value.division, uniqueKey)
         this.setState({ divisionId: value.division })
     }
+
     ///dropdown view containing dropdown
     dropdownView = () => {
         const { liveScoreLadderState } = this.props;
@@ -238,21 +225,22 @@ class LiveScoreLadderList extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="reg-filter-col-cont">
-                    {/* <span className='year-select-heading'>{AppConstants.filterByDivision}:</span> */}
-                    {/* {grade.length > 0 && <Select
-                        className="year-select reg-filter-select1 ml-2"
-                        style={{ minWidth: 200 }}
-                        onChange={(division) => this.divisionChange({ division })}
-                        nowrap
-                        defaultValue={grade[0].name}
-                    >
-                        {grade.map((item) => (
-                            <Option key={'selectDivision' + item.id} value={item.id}>
-                                {item.name}
-                            </Option>
-                        ))}
-
-                    </Select>} */}
+                    {/* <span className="year-select-heading">{AppConstants.filterByDivision}:</span> */}
+                    {/* {grade.length > 0 && (
+                        <Select
+                            className="year-select reg-filter-select1 ml-2"
+                            style={{ minWidth: 200 }}
+                            onChange={(division) => this.divisionChange({ division })}
+                            nowrap
+                            defaultValue={grade[0].name}
+                        >
+                            {grade.map((item) => (
+                                <Option key={'division_' + item.id} value={item.id}>
+                                    {item.name}
+                                </Option>
+                            ))}
+                        </Select>
+                    )} */}
 
                     <div
                         style={{
@@ -265,22 +253,22 @@ class LiveScoreLadderList extends Component {
                         <span className="year-select-heading">
                             {AppConstants.filterByDivision}:
                         </span>
-                        {grade.length > 0 && <Select
-                            className="year-select reg-filter-select1 ml-2"
-                            style={{ minWidth: 140 }}
-                            onChange={(division) => this.divisionChange({ division })}
-                            nowrap
-                            defaultValue={grade[0].name}
-                        >
-                            {grade.map((item) => (
-                                <Option key={'selectDivision' + item.id} value={item.id}>
-                                    {item.name}
-                                </Option>
-                            ))}
-
-                        </Select>}
+                        {grade.length > 0 && (
+                            <Select
+                                className="year-select reg-filter-select1 ml-2"
+                                style={{ minWidth: 140 }}
+                                onChange={(division) => this.divisionChange({ division })}
+                                nowrap
+                                defaultValue={grade[0].name}
+                            >
+                                {grade.map((item) => (
+                                    <Option key={'division_' + item.id} value={item.id}>
+                                        {item.name}
+                                    </Option>
+                                ))}
+                            </Select>
+                        )}
                     </div>
-
                 </div>
             </div>
         )
@@ -313,18 +301,16 @@ class LiveScoreLadderList extends Component {
                 </div> */}
                 <div className="comp-dash-table-view mt-4 ml-1">
                     <div className="ladder-list-adjustment">
-                        {
-                            (adjData || []).map((x, index) => {
-                                let key = x.points >= "0" ? " added " : ' deducted '
-                                let value = x.points >= 0 ? x.points : JSON.stringify(x.points)
-                                let newValue = value >= 0 ? value : value.replace("-", '')
-                                return (
-                                    <div key={index} style={{ marginBottom: '10px' }}>
-                                        <li className="required-field">{x.teamName + key + newValue + ' points for ' + x.adjustmentReason}</li>
-                                    </div>
-                                )
-                            })
-                        }
+                        {(adjData || []).map((x, index) => {
+                            let key = x.points >= "0" ? " added " : ' deducted '
+                            let value = x.points >= 0 ? x.points : JSON.stringify(x.points)
+                            let newValue = value >= 0 ? value : value.replace("-", '')
+                            return (
+                                <div key={index} style={{ marginBottom: '10px' }}>
+                                    <li className="required-field">{x.teamName + key + newValue + ' points for ' + x.adjustmentReason}</li>
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
             </div>
@@ -334,7 +320,11 @@ class LiveScoreLadderList extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                <DashboardLayout
+                    menuHeading={AppConstants.liveScores}
+                    menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="11" />
                 <Layout>
                     {this.headerView()}
@@ -344,11 +334,11 @@ class LiveScoreLadderList extends Component {
                     </Content>
                 </Layout>
             </div>
-
         );
     }
 }
-function mapDispatchtoprops(dispatch) {
+
+function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getliveScoreDivisions,
         liveScoreLaddersListAction,
@@ -358,9 +348,10 @@ function mapDispatchtoprops(dispatch) {
 
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         liveScoreLadderState: state.LiveScoreLadderState
     }
 }
-export default connect(mapStatetoProps, mapDispatchtoprops)((LiveScoreLadderList));
+
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreLadderList);

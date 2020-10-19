@@ -61,17 +61,15 @@ function umpireActivityTableSort(key) {
   } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
     sortBy = sortOrder = null;
   }
-  const payload =
-  {
-    "paging": {
-      "limit": 10,
-      "offset": this_Obj.state.umpireActivityOffset
+  const payload = {
+    paging: {
+      limit: 10,
+      offset: this_Obj.state.umpireActivityOffset
     }
   }
   this_Obj.setState({ UmpireActivityListSortBy: sortBy, UmpireActivityListSortOrder: sortOrder });
 
   this_Obj.props.getUmpireActivityListAction(payload, JSON.stringify([15]), this_Obj.state.userId, sortBy, sortOrder);
-
 }
 
 const { Header, Footer, Content } = Layout;
@@ -929,13 +927,11 @@ const umpireActivityColumn = [
       let organisationArray = record.user.userRoleEntities.length > 0 && this_Obj.getOrganisationArray(record.user.userRoleEntities, record.roleId)
       return (
         <div>
-          {organisationArray.length > 0 && organisationArray.map((item, index) => {
-            return (
-              <span key={`organisationName` + index} className='multi-column-text-aligned'>
-                {item.competitionOrganisation && item.competitionOrganisation.name}
-              </span>
-            )
-          })}
+          {organisationArray.map((item, index) => (
+            <span key={`organisationName` + index} className='multi-column-text-aligned'>
+              {item.competitionOrganisation && item.competitionOrganisation.name}
+            </span>
+          ))}
         </div>
       )
     },
@@ -1140,14 +1136,13 @@ class UserModulePersonalDetail extends Component {
     }
 
     if (
-      (this.state.competition.competitionUniqueKey == null ||
-        this.state.competition.competitionUniqueKey == "-1") &&
+      (this.state.competition.competitionUniqueKey == null || this.state.competition.competitionUniqueKey == "-1") &&
       personal.competitions != undefined &&
       personal.competitions.length > 0 &&
       this.props.userState.personalData != nextProps.userState.personalData
     ) {
-      //let years = [];
-      //let competitions = [];
+      // let years = [];
+      // let competitions = [];
       // (personal.competitions || []).map((item, index) => {
       //     let obj = {
       //         id: item.yearRefId
@@ -1361,9 +1356,9 @@ class UserModulePersonalDetail extends Component {
       this.handleIncidentableList(1, userId, competition, yearRefId);
     } else if (tabKey === "8") {
       let payload = {
-        "paging": {
-          "limit": 10,
-          "offset": 0
+        paging: {
+          limit: 10,
+          offset: 0
         }
       }
       this.props.getUmpireActivityListAction(payload, JSON.stringify([15]), userId, this.state.UmpireActivityListSortBy, this.state.UmpireActivityListSortOrder);
@@ -1430,9 +1425,9 @@ class UserModulePersonalDetail extends Component {
     let offset = page ? 10 * (page - 1) : 0
     this.setState({ umpireActivityOffset: offset })
     let payload = {
-      "paging": {
-        "limit": 10,
-        "offset": offset,
+      paging: {
+        limit: 10,
+        offset: offset,
       }
     }
     this.props.getUmpireActivityListAction(payload, JSON.stringify([15]), userId, this.state.UmpireActivityListSortBy, this.state.UmpireActivityListSortOrder);
@@ -1544,16 +1539,12 @@ class UserModulePersonalDetail extends Component {
               onChange={(yearRefId) => this.onChangeYear(yearRefId)}
               value={this.state.yearRefId}
             >
-              <Option key={-1} value={-1}>
-                {AppConstants.all}
-              </Option>
-              {this.props.appState.yearList.map((item) => {
-                return (
-                  <Option key={"yearRefId" + item.id} value={item.id}>
-                    {item.description}
-                  </Option>
-                );
-              })}
+              <Option key={-1} value={-1}>{AppConstants.all}</Option>
+              {this.props.appState.yearList.map((item) => (
+                <Option key={'year_' + item.id} value={item.id}>
+                  {item.description}
+                </Option>
+              ))}
             </Select>
             <Select
               className="user-prof-filter-select"
@@ -1561,12 +1552,10 @@ class UserModulePersonalDetail extends Component {
               onChange={(e) => this.onChangeSetValue(e)}
               value={compititionId}
             >
-              <Option key={-1} value={"-1"}>
-                {AppConstants.all}
-              </Option>
-              {(this.state.competitions || []).map((comp, index) => (
+              <Option key="-1" value="-1">{AppConstants.all}</Option>
+              {(this.state.competitions || []).map((comp) => (
                 <Option
-                  key={comp.competitionUniqueKey}
+                  key={'competition_' + comp.competitionUniqueKey}
                   value={comp.competitionUniqueKey}
                 >
                   {comp.competitionName}
@@ -1884,7 +1873,7 @@ class UserModulePersonalDetail extends Component {
             loading={userState.onPersonLoad && true}
           />
         </div>
-        <div className="row ">
+        <div className="row">
           <div
             className="col-sm user-module-row-heading"
             style={{ marginTop: "30px" }}
@@ -2574,25 +2563,14 @@ class UserModulePersonalDetail extends Component {
                       onChange={(e) => this.onChangeTab(e)}
                     >
                       <TabPane tab={AppConstants.activity} key="1">
-                        {activityPlayerList != null &&
-                          activityPlayerList.length > 0 &&
-                          this.playerActivityView()}
-                        {activityManagerList != null &&
-                          activityManagerList.length > 0 &&
-                          this.managerActivityView()}
+                        {activityPlayerList != null && activityPlayerList.length > 0 && this.playerActivityView()}
+                        {activityManagerList != null && activityManagerList.length > 0 && this.managerActivityView()}
 
-                        {coachActivityRoster != null &&
-                          coachActivityRoster.length > 0 &&
-                          this.coachActivityView()}
+                        {coachActivityRoster != null && coachActivityRoster.length > 0 && this.coachActivityView()}
 
-                        {umpireActivityRoster != null &&
-                          umpireActivityRoster.length > 0 &&
-                          this.umpireActivityTable()}
+                        {umpireActivityRoster != null && umpireActivityRoster.length > 0 && this.umpireActivityTable()}
 
-
-                        {scorerActivityRoster != null &&
-                          scorerActivityRoster.length > 0 &&
-                          this.scorerActivityView()}
+                        {scorerActivityRoster != null && scorerActivityRoster.length > 0 && this.scorerActivityView()}
                         {/* {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()} */}
                         {activityPlayerList.length === 0 &&
                           activityManagerList.length === 0 &&
@@ -2613,9 +2591,7 @@ class UserModulePersonalDetail extends Component {
                         </TabPane>
                       )}
                       <TabPane tab={AppConstants.registration} key="5">
-                        {!this.state.isRegistrationForm
-                          ? this.registrationView()
-                          : this.registrationFormView()}
+                        {!this.state.isRegistrationForm ? this.registrationView() : this.registrationFormView()}
                       </TabPane>
                       <TabPane tab={AppConstants.history} key="6">
                         {this.historyView()}
@@ -2623,12 +2599,11 @@ class UserModulePersonalDetail extends Component {
                       <TabPane tab={AppConstants.incident} key="7">
                         {this.incidentView()}
                       </TabPane>
-                      {
-                        userRole &&
+                      {userRole && (
                         <TabPane tab={AppConstants.umpireActivity} key="8">
                           {this.umpireActivityView()}
                         </TabPane>
-                      }
+                      )}
                     </Tabs>
                   </div>
                 </div>
@@ -2667,7 +2642,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
   return {
     userState: state.UserState,
     appState: state.AppState,
@@ -2676,6 +2651,6 @@ function mapStatetoProps(state) {
 }
 
 export default connect(
-  mapStatetoProps,
+  mapStateToProps,
   mapDispatchToProps
 )(UserModulePersonalDetail);

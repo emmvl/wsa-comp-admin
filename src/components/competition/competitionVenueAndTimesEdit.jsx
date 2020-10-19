@@ -565,8 +565,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                         value={venuData.stateRefId}
                         disabled={this.state.isUsed || !this.state.isCreator}
                     >
-                        {stateList.length > 0 && stateList.map((item) => (
-                            <Option key={item.id} value={item.id}> {item.name}</Option>
+                        {stateList.map((item) => (
+                            <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
                         ))}
                     </Select>
                 </Form.Item>
@@ -615,8 +615,14 @@ class CompetitionVenueAndTimesEdit extends Component {
                                     onChange={(affiliateData) => this.props.updateVenuAndTimeDataAction(affiliateData, 'editOrganisations', "editOrganisations")}
                                     placeholder="Select"
                                 >
-                                    {this.state.venueOrganisation.length > 0 && this.state.venueOrganisation.map((item, index) => (
-                                        <Option key={item.id} value={item.id} disabled={item.isDisabled}>{item.name}</Option>
+                                    {this.state.venueOrganisation.map((item) => (
+                                        <Option
+                                            key={'venueOrganisation_' + item.id}
+                                            value={item.id}
+                                            disabled={item.isDisabled}
+                                        >
+                                            {item.name}
+                                        </Option>
                                     ))}
                                 </Select>
                             </div>
@@ -645,10 +651,10 @@ class CompetitionVenueAndTimesEdit extends Component {
                         style={{ width: "100%" }}
                         onChange={(dayOfTheWeek) => this.props.updateVenuAndTimeDataAction(dayOfTheWeek, index, 'dayRefId', 'gameTimeslot')}
                         value={item.dayRefId}
-                        placeholder={'Select Week Day'}
+                        placeholder="Select Week Day"
                     >
-                        {daysList.length > 0 && daysList.map((item) => (
-                            <Option key={item.id} value={item.id}> {item.description}</Option>
+                        {daysList.map((item) => (
+                            <Option key={'day_' + item.id} value={item.id}>{item.description}</Option>
                         ))}
                     </Select>
                 </div>
@@ -743,8 +749,8 @@ class CompetitionVenueAndTimesEdit extends Component {
                         value={item.dayRefId}
                         placeholder="Select Week Day"
                     >
-                        {daysList.length > 0 && daysList.map((item) => (
-                            <Option key={item.id} value={item.id}> {item.description}</Option>
+                        {daysList.map((item) => (
+                            <Option key={'day_' + item.id} value={item.id}>{item.description}</Option>
                         ))}
                     </Select>
                 </div>

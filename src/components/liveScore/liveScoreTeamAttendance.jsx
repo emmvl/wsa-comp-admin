@@ -41,13 +41,13 @@ function tableSort(key) {
     this_Obj.setState({ sortBy, sortOrder });
     let { limit, offset, competitionId, searchText, selectStatus } = this_Obj.state
     const body = {
-        "paging": {
-            "limit": limit,
-            "offset": offset
+        paging: {
+            limit: limit,
+            offset: offset
         },
-        "search": searchText,
-        "sortBy": sortBy,
-        "sortOrder": sortOrder
+        search: searchText,
+        sortBy,
+        sortOrder,
     }
     this_Obj.props.liveScoreTeamAttendanceListAction(competitionId, body, selectStatus, this_Obj.state.selectedDivision === "All" ? '' : this_Obj.state.selectedDivision, this_Obj.state.selectedRound === "All" ? "" : this_Obj.state.selectedRound)
 }
@@ -317,13 +317,13 @@ class LiveScoreTeamAttendance extends Component {
         this.setState({ offset })
         let { searchText, sortBy, sortOrder } = this.state
         const paginationBody = {
-            "paging": {
-                "limit": 10,
-                "offset": offset
+            paging: {
+                limit: 10,
+                offset: offset
             },
-            "search": searchText,
-            "sortBy": sortBy,
-            "sortOrder": sortOrder
+            search: searchText,
+            sortBy,
+            sortOrder,
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (id !== null) {
@@ -341,13 +341,13 @@ class LiveScoreTeamAttendance extends Component {
         let { searchText, sortBy, sortOrder } = this.state
         this.setState({ selectStatus: status })
         const paginationBody = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
+            paging: {
+                limit: 10,
+                offset: 0
             },
-            "search": searchText,
-            "sortBy": sortBy,
-            "sortOrder": sortOrder
+            search: searchText,
+            sortBy,
+            sortOrder,
         }
         let { id } = JSON.parse(getLiveScoreCompetiton())
         if (status === 'All') {
@@ -375,13 +375,13 @@ class LiveScoreTeamAttendance extends Component {
         this.setState({ searchText: e.target.value, offset: 0 })
         if (e.target.value === null || e.target.value === "") {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": e.target.value,
-                "sortBy": sortBy,
-                "sortOrder": sortOrder
+                search: e.target.value,
+                sortBy,
+                sortOrder
             }
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound)
         }
@@ -395,13 +395,13 @@ class LiveScoreTeamAttendance extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": e.target.value,
-                "sortBy": sortBy,
-                "sortOrder": sortOrder
+                search: e.target.value,
+                sortBy,
+                sortOrder
             }
 
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound)
@@ -442,13 +442,13 @@ class LiveScoreTeamAttendance extends Component {
         if (searchText === null || searchText === "") {
         } else {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": searchText,
-                "sortBy": sortBy,
-                "sortOrder": sortOrder
+                search: searchText,
+                sortBy,
+                sortOrder
             };
             this.props.liveScoreTeamAttendanceListAction(id, body, this.state.selectStatus, this.state.selectedDivision === "All" ? '' : this.state.selectedDivision, this.state.selectedRound === "All" ? '' : this.state.selectedRound)
         }
@@ -565,8 +565,8 @@ class LiveScoreTeamAttendance extends Component {
                                 value={this.state.selectedDivision}
                             >
                                 <Option value="All">All</Option>
-                                {divisionListArr.map((item, index) => (
-                                    <Option key={"division" + item.id} value={item.id}>{item.name}</Option>
+                                {divisionListArr.map((item) => (
+                                    <Option key={'division_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </div>
@@ -582,7 +582,7 @@ class LiveScoreTeamAttendance extends Component {
                             >
                                 <Option value="All">All</Option>
                                 {roundListArr.map((item) => (
-                                    <Option key={"round" + item.id} value={item.id}>{item.name}</Option>
+                                    <Option key={'round_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </div>

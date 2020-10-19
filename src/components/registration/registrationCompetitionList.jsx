@@ -374,7 +374,7 @@ class RegistrationCompetitionList extends Component {
                                 onChange={this.yearChange}
                             >
                                 {this.props.appState.yearList.map(item => (
-                                    <Option key={"yearRefId" + item.id} value={item.id}>
+                                    <Option key={'year_' + item.id} value={item.id}>
                                         {item.description}
                                     </Option>
                                 ))}

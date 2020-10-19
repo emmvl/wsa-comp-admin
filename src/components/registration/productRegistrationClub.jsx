@@ -163,20 +163,19 @@ class ProductRegistrationClub extends Component {
         return (
             <div className="product-reg-club-header-view">
                 <div className="year-select-view">
-                    <span className='year-select-heading'>{AppConstants.year}:</span>
+                    <span className="year-select-heading">{AppConstants.year}:</span>
                     <Select
                         className="year-select"
                         style={{ width: 75 }}
                         onChange={(year) => this.setState({ year })}
                         value={this.state.year}
                     >
-                        <Option value={"2019"}>{AppConstants.year2019}</Option>
+                        <Option value="2019">{AppConstants.year2019}</Option>
                     </Select>
                 </div>
             </div>
         )
     }
-
 
     ////////form content view
     contentView = () => {
@@ -184,9 +183,9 @@ class ProductRegistrationClub extends Component {
         return (
             <div className="fees-view pt-0">
                 <div>
-                    <Radio.Group onChange={this.onChange} value={this.state.value} defaultValue={"playingMember"}>
-                        <Radio value={"playingMember"}>{AppConstants.playingMember}</Radio>
-                        <Radio value={"nonPlayingMember"}>{AppConstants.nonPlayingMember}</Radio>
+                    <Radio.Group onChange={this.onChange} value={this.state.value} defaultValue="playingMember">
+                        <Radio value="playingMember">{AppConstants.playingMember}</Radio>
+                        <Radio value="nonPlayingMember">{AppConstants.nonPlayingMember}</Radio>
                     </Radio.Group>
                 </div>
                 <div className="table-responsive home-dash-table-view mt-5">
@@ -196,8 +195,6 @@ class ProductRegistrationClub extends Component {
             </div>
         )
     }
-
-
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {

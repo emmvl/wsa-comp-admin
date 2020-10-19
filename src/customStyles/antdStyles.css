@@ -28,6 +28,7 @@
 }
 
 .ant-select {
+  min-width: 100px;
   color: var(--app-1b1b34);
   font-family: inter, sans-serif;
   /* overflow: hidden; */

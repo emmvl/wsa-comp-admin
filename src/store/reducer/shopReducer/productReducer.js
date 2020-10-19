@@ -6,7 +6,7 @@ const defaultAddProductObject = {
     productName: "",
     description: "",
     affiliates: {
-        "direct": 1,
+        direct: 1,
         "firstLevel": 0,
         "secondLevel": 0
     },
@@ -101,7 +101,7 @@ function getImageUrls(images) {
         for (let i in images) {
             let object = {
                 "image": images[i].url,
-                "id": images[i].id
+                id: images[i].id
             }
             displayImagesUrls.push(object)
         }
@@ -233,7 +233,7 @@ function shopProductState(state = initialState, action) {
                     productName: "",
                     description: "",
                     affiliates: {
-                        "direct": 1,
+                        direct: 1,
                         "firstLevel": 0,
                         "secondLevel": 0
                     },

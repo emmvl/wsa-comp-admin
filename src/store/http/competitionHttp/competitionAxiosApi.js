@@ -242,8 +242,8 @@ let CompetitionAxiosApi = {
         let userId = await getUserId()
         let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
         let body = {
-            "yearRefId": yearId,
-            "organisationId": organisationUniqueKey
+            yearRefId: yearId,
+            organisationId: organisationUniqueKey
         }
         var url = `/api/competitionmanagement/dashboard?userId=${userId}`
         return Method.dataPost(url, token, body);
@@ -261,8 +261,8 @@ let CompetitionAxiosApi = {
     async saveDrawsApi(yearId, competitionId, drawsId) {
         let userId = await getUserId()
         let body = {
-            "competitionUniqueKey": competitionId,
-            "yearRefId": 1,
+            competitionUniqueKey: competitionId,
+            yearRefId: 1,
             "drawsMasterId": 0,
         }
         var url = `/api/draws/save?userId=${userId}`
@@ -524,7 +524,7 @@ let CompetitionAxiosApi = {
     async getCommentList(competitionId, entityId, commentType) {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         let body = {
-            "competitionUniqueKey": competitionId,
+            competitionUniqueKey: competitionId,
             "organisationUniqueKey": organisationId,
             "entityId": entityId,
             "commentType": commentType
@@ -547,7 +547,7 @@ let CompetitionAxiosApi = {
     async saveQuickCompDivision(competitionUniqueKey, divisions) {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         let body = {
-            "competitionUniqueKey": competitionUniqueKey,
+            competitionUniqueKey: competitionUniqueKey,
             "organisationUniqueKey": organisationId,
             "divisions": divisions
         }
@@ -557,9 +557,9 @@ let CompetitionAxiosApi = {
     async createQuickComptition(year, comptitionName, competitionDate) {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         let body = {
-            "competitionName": comptitionName,
-            "organisationId": organisationId,
-            "yearRefId": year,
+            competitionName: comptitionName,
+            organisationId: organisationId,
+            yearRefId: year,
             "startDate": competitionDate
         }
         var url = `/api/quickcompetition/create`
@@ -569,8 +569,8 @@ let CompetitionAxiosApi = {
     async getQuickCompetiitonDetails(competitionUniqueKey) {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         let body = {
-            "competitionId": competitionUniqueKey,
-            "organisationId": organisationId
+            competitionId: competitionUniqueKey,
+            organisationId: organisationId
         }
         var url = `/api/quickcompetition/details`
         return Method.dataPost(url, token, body);
@@ -587,9 +587,9 @@ let CompetitionAxiosApi = {
         let organisationId = await getOrganisationData().organisationUniqueKey;
         let userId = await getUserId()
         let body = {
-            "yearRefId": yearRefId,
-            "competitionUniqueKey": competitionUniqueKey,
-            "organisationId": organisationId
+            yearRefId: yearRefId,
+            competitionUniqueKey: competitionUniqueKey,
+            organisationId: organisationId
         }
         var url = `/api/generatedraw?userId=${userId}`;
         return Method.dataPost(url, token, body);

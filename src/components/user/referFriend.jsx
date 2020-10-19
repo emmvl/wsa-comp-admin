@@ -203,21 +203,20 @@ class ReferFriend extends Component {
                     <div className="row">
                         <div className="col-sm-2">
                             <div className="com-year-select-heading-view">
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     name="yearRefId"
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ maxWidth: 80 }}
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
-                                    value={this.state.yearRefId}>
+                                    value={this.state.yearRefId}
+                                >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {this.props.appState.yearList.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.yearList.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>

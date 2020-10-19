@@ -143,7 +143,7 @@ const divisionTableColumns = [
                         disabled={(this_Obj.state.competitionStatus == 1 || this_Obj.state.permissionState.divisionsDisable)}
                     >
                         {this_Obj.props.commonReducerState.genderDataEnum.map(item => (
-                            <Option key={item.id} value={item.id}>
+                            <Option key={'gender_' + item.id} value={item.id}>
                                 {item.description}
                             </Option>
                         ))}
@@ -278,7 +278,6 @@ class CompetitionOpenRegForm extends Component {
             competitionStatus: 0,
             divisionState: false,
             nextButtonClicked: false
-
         };
         this_Obj = this;
         this.props.clearCompReducerDataAction("all")
@@ -750,8 +749,8 @@ class CompetitionOpenRegForm extends Component {
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {own_YearArr.length > 0 && own_YearArr.map(item => (
-                                        <Option key={"yearRefId" + item.id} value={item.id}>
+                                    {own_YearArr.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
                                             {item.description}
                                         </Option>
                                     ))}
@@ -779,7 +778,7 @@ class CompetitionOpenRegForm extends Component {
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
                                     {all_own_CompetitionArr.map(item => (
-                                        <Option key={item.id} value={item.competitionId}>
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
                                             {item.competitionName}
                                         </Option>
                                     ))}
@@ -897,9 +896,9 @@ class CompetitionOpenRegForm extends Component {
 
         } else {
             let nonPlayingObject = {
-                "competitionNonPlayingDatesId": 0,
-                "name": "",
-                "nonPlayingDate": ""
+                competitionNonPlayingDatesId: 0,
+                name: "",
+                nonPlayingDate: ""
             }
             this.props.add_editcompetitionFeeDeatils(nonPlayingObject, "nonPlayingObjectAdd")
         }
@@ -1041,8 +1040,8 @@ class CompetitionOpenRegForm extends Component {
                             onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
                             disabled={disabledStatus || compDetailDisable}
                         >
-                            {appState.venueList.length > 0 && appState.venueList.map((item) => (
-                                <Option key={item.id} value={item.id}>{item.name}</Option>
+                            {appState.venueList.map((item) => (
+                                <Option key={'venue_' + item.id} value={item.id}>{item.name}</Option>
                             ))}
                         </Select>
                     </Form.Item>
@@ -1067,8 +1066,8 @@ class CompetitionOpenRegForm extends Component {
                         value={detailsData.competitionTypeRefId}
                         disabled={disabledStatus || compDetailDisable}
                     >
-                        {appState.typesOfCompetition.length > 0 && appState.typesOfCompetition.map(item => (
-                            <Radio key={item.id} value={item.id}> {item.description}</Radio>
+                        {appState.typesOfCompetition.map(item => (
+                            <Radio key={'competitionType_' + item.id} value={item.id}>{item.description}</Radio>
                         ))}
                     </Radio.Group>
                 </Form.Item>
@@ -1084,7 +1083,7 @@ class CompetitionOpenRegForm extends Component {
                         value={detailsData.competitionFormatRefId}
                         disabled={disabledStatus || compDetailDisable}
                     >
-                        {appState.competitionFormatTypes.length > 0 && appState.competitionFormatTypes.map(item => (
+                        {appState.competitionFormatTypes.map(item => (
                             <div className="contextualHelp-RowDirection" key={item.id}>
                                 <Radio key={item.id} value={item.id}>{item.description}</Radio>
                                 <div style={{ marginLeft: -25, marginTop: 0 }}>
@@ -1160,7 +1159,9 @@ class CompetitionOpenRegForm extends Component {
                                 disabled={disabledStatus || compDetailDisable}
                             >
                                 {roundsArray.map(item => (
-                                    <Option key={item.noOfRounds} value={item.noOfRounds}>{item.noOfRounds}</Option>
+                                    <Option key={'round_' + item.noOfRounds} value={item.noOfRounds}>
+                                        {item.noOfRounds}
+                                    </Option>
                                 ))}
                             </Select>
                         </Form.Item>

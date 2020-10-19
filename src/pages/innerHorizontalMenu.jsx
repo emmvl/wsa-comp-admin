@@ -565,8 +565,8 @@ class InnerHorizontalMenu extends React.Component {
                                     onChange={(yearId) => this.setYearId(yearId)}
                                     value={JSON.parse(this.state.yearId)}
                                 >
-                                    {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                        <Option key={"yearlist" + yearIndex} value={item.id}>{item.name}</Option>
+                                    {yearList.map((item) => (
+                                        <Option key={'year_' + item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -578,8 +578,8 @@ class InnerHorizontalMenu extends React.Component {
                                     onChange={this.setCompetitionID}
                                     value={this.state.selectedComp}
                                 >
-                                    {compList.map((item, index) => (
-                                        <Option key={'longName' + index} value={item.id}>{item.longName}</Option>
+                                    {compList.map((item) => (
+                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
                                     ))}
                                 </Select>
                             </div>

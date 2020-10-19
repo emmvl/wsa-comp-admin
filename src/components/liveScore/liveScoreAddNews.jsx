@@ -394,7 +394,7 @@ class LiveScoreAddNews extends Component {
                         // value={editData.title}
                     >
                         {scorerList.map((item) => (
-                            <Option key={'scorer' + item.firstName} value={item.firstName}>
+                            <Option key={'scorer_' + item.firstName} value={item.firstName}>
                                 {item.NameWithNumber}
                             </Option>
                         ))}
@@ -420,11 +420,11 @@ class LiveScoreAddNews extends Component {
                         // onChange={e => this.venueChange(e)}
                         // value={this.state.venue === [] ? AppConstants.selectVenue : this.state.venue}
                     >
-                        {managerList.map((item) => {
-                            return <Option value={item.firstName}>
+                        {managerList.map((item) => (
+                            <Option key={'manager_' + item.firstName} value={item.firstName}>
                                 {item.firstName + " " + item.lastName}
                             </Option>
-                        })}
+                        ))}
                     </Select>
                 </div>
             </div>
@@ -504,12 +504,12 @@ class LiveScoreAddNews extends Component {
                         onChange={recipientSelection => this.setRecipientData(recipientSelection, 'recipients')}
                         value={editData.recipients}
                     >
-                        <Option value={"All Managers"}>{'All Managers'}</Option>
-                        <Option value={"All Scorers"}>{'All Scorers'}</Option>
-                        <Option value={"All Managers and Scorers"}>{'All Managers and Scorers'}</Option>
-                        <Option value={"All Users"}>{'All Users'}</Option>
-                        <Option value={"Individual Manager"}>{'Individual Manager'}</Option>
-                        <Option value={"Individual Scorer"}>{'Individual Scorer'}</Option>
+                        <Option value="All Managers">All Managers</Option>
+                        <Option value="All Scorers">All Scorers</Option>
+                        <Option value="All Managers and Scorers">All Managers and Scorers</Option>
+                        <Option value="All Users">All Users</Option>
+                        <Option value="Individual Manager">Individual Manager</Option>
+                        <Option value="Individual Scorer">Individual Scorer</Option>
                     </Select>
                 </div>
                 {this.state.recipientSelection === "Individual Manager" && this.managerView()}
@@ -541,7 +541,7 @@ class LiveScoreAddNews extends Component {
                             />
 
                             <div style={{ position: 'absolute', bottom: 65, left: 150 }}>
-                                {(this.state.crossImageIcon || newsImage) &&
+                                {(this.state.crossImageIcon || newsImage) && (
                                     <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
                                         <img
                                             className="dot-image"
@@ -552,7 +552,7 @@ class LiveScoreAddNews extends Component {
                                             onClick={() => this.deleteImage()}
                                         />
                                     </span>
-                                }
+                                )}
                             </div>
                         </div>
                     </div>

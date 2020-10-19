@@ -643,10 +643,9 @@ class LiveScoreCompetitions extends Component {
                                 onChange={yearId => this.onYearClick(yearId)}
                                 value={this.state.year}
                             >
-                                {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                    <Option key={"yearlist" + yearIndex} value={item.id}> {item.name}</Option>
-                                ))
-                                }
+                                {yearList.map((item) => (
+                                    <Option key={'year_' + item.id} value={item.id}>{item.name}</Option>
+                                ))}
                             </Select>
                         </div>
                     </div>

@@ -41,7 +41,7 @@ class LiveScoreIncidentImport extends Component {
                             </Breadcrumb>
                         </div>
                     </div>
-                </Header >
+                </Header>
             </div>
         )
     }

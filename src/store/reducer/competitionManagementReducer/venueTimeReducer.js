@@ -7,10 +7,10 @@ import AppConstants from "../../../themes/appConstants";
 ////Venue Constraints List Object /////////////End
 
 let objData = {
-    // "competitionUniqueKey": "",
-    // "yearRefId": "",
-    "organisationId": 1,
-    "venues": [],
+    // competitionUniqueKey: "",
+    // yearRefId: "",
+    organisationId: 1,
+    venues: [],
     "nonPlayingDates": [],
     "venueConstraintId": 0,
     "courtRotationRefId": 8,
@@ -223,13 +223,13 @@ function checkSelectedVenuesList(selectedVenue, venueList) {
             venueObject = {
                 "competitionVenueId": matchedWithSelectedVenue.result.competitionVenueId,
                 "venueId": venueList[i].id,
-                // "name": venueList[i].name,
+                // name: venueList[i].name,
             }
         } else {
             venueObject = {
                 "competitionVenueId": 0,
                 "venueId": venueList[i].id,
-                // "name": venueList[i].name,
+                // name: venueList[i].name,
             }
         }
 
@@ -253,10 +253,10 @@ function getVenueObj(venueObj) {
 
 
     let objData = {
-        "competitionUniqueKey": "",
-        "yearRefId": "",
-        "organisationId": 1,
-        "venues": [],
+        competitionUniqueKey: "",
+        yearRefId: "",
+        organisationId: 1,
+        venues: [],
         "nonPlayingDates": [],
         "venueConstraintId": 0,
         "courtRotationRefId": 8,
@@ -341,8 +341,8 @@ function craeteSelectedCourtPrefArray(selectedCourts, allCourtsList, courtRotati
         if (selectedCourtListId.status) {
             venuCourtObj = {
                 "venueConstraintCourtPreferenceId": selectedCourts[i].venueConstraintCourtPreferenceId,
-                "venueCourtId": selectedCourtListId.result.venueId,
-                "name": selectedCourtListId.result.name,
+                venueCourtId: selectedCourtListId.result.venueId,
+                name: selectedCourtListId.result.name,
                 "entitiesDivision": selectedCourts[i].entities,
                 "entitiesDivisionId": courtRotationId == 6 ? divisionId : [],
                 "entitiesGrade": selectedCourts[i].entities,
@@ -350,14 +350,14 @@ function craeteSelectedCourtPrefArray(selectedCourts, allCourtsList, courtRotati
             }
             venuCourtObjPost = {
                 "venueConstraintCourtPreferenceId": selectedCourts[i].venueConstraintCourtPreferenceId,
-                "venueCourtId": selectedCourtListId.result.venueId,
+                venueCourtId: selectedCourtListId.result.venueId,
                 "entities": selectedCourts[i].entities,
             }
         } else {
             venuCourtObj = {
                 "venueConstraintCourtPreferenceId": 0,
-                "venueCourtId": selectedCourtListId.result.venueId,
-                "name": selectedCourtListId.result.name,
+                venueCourtId: selectedCourtListId.result.venueId,
+                name: selectedCourtListId.result.name,
                 "entitiesDivision": [],
                 "entitiesDivisionId": [],
                 "entitiesGrade": [],
@@ -366,7 +366,7 @@ function craeteSelectedCourtPrefArray(selectedCourts, allCourtsList, courtRotati
 
             venuCourtObjPost = {
                 "venueConstraintCourtPreferenceId": selectedCourts[i].venueConstraintCourtPreferenceId,
-                "venueCourtId": selectedCourtListId.result.venueId,
+                venueCourtId: selectedCourtListId.result.venueId,
                 "entities": selectedCourts[i].entities,
             }
 
@@ -1061,8 +1061,8 @@ function VenueTimeState(state = initialState, action) {
                 if (action.contentType === 'addCourtPreferences') {
                     let venuCourtObj = {
                         "venueConstraintCourtPreferenceId": 0,
-                        "venueCourtId": null,
-                        "name": "",
+                        venueCourtId: null,
+                        name: "",
                         "entitiesDivision": [],
                         "entitiesDivisionId": [],
                         "entitiesGrade": [],

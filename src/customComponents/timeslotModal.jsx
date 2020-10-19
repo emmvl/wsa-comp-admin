@@ -49,8 +49,8 @@ class TimeSlotModal extends React.Component {
                 >
                     <div className="inside-container-view">
                         <Loader visible={onTimeslotLoad} />
-                        {timeslots.length > 0 && timeslots.map((item, index) => (
-                            <div className="row" key={"timevalue" + index}>
+                        {timeslots.map((item, index) => (
+                            <div className="row" key={'timeslot_' + index}>
                                 <div className="col-sm">
                                     <InputWithHead heading={index == 0 ? AppConstants.dayOfTheWeek : " "} />
                                     <Select
@@ -59,14 +59,15 @@ class TimeSlotModal extends React.Component {
                                         value={item.dayRefId}
                                         placeholder="Select Week Day"
                                     >
-                                        {weekDays.length > 0 && weekDays.map((item, index) => (
-                                            <Option key={"weekdays" + index} value={item.id}> {item.description}</Option>
-                                        ))
-                                        }
+                                        {weekDays.map((item) => (
+                                            <Option key={'weekDay_' + item.id} value={item.id}>
+                                                {item.description}
+                                            </Option>
+                                        ))}
                                     </Select>
                                 </div>
                                 <div className="col-sm">
-                                    {item.startTime.length > 0 && item.startTime.map((timeItem, timeIndex) => (
+                                    {item.startTime.map((timeItem, timeIndex) => (
                                         <div className="row" key={"timevalue" + timeIndex}>
                                             <div className={"col-sm"}>
                                                 <InputWithHead heading={index == 0 && timeIndex == 0 ? AppConstants.startTime : ' '} />
@@ -113,7 +114,7 @@ class TimeSlotModal extends React.Component {
                                 )}
                             </div>
                         ))}
-                        <span className='input-heading-add-another pointer' onClick={addTimeSlot}> + {AppConstants.addAnotherDay}</span>
+                        <span className="input-heading-add-another pointer" onClick={addTimeSlot}> + {AppConstants.addAnotherDay}</span>
                     </div>
                     <div className="row">
                         <div className="col-sm" style={{ display: "flex", width: "100%", paddingTop: 10 }}>
@@ -142,6 +143,5 @@ class TimeSlotModal extends React.Component {
         )
     }
 }
-
 
 export default TimeSlotModal;

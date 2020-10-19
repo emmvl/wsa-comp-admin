@@ -142,8 +142,12 @@ class LiveScoreLadderSettings extends Component {
                                         onChange={(e) => this.onChangeLadderSetting(e, index, "selectedDivisions")}
                                         value={ladder.selectedDivisions}
                                     >
-                                        {(ladder.divisions || []).map((division, divIndex) => (
-                                            <Option key={division.divisionId} value={division.divisionId} disabled={division.isDisabled}>
+                                        {(ladder.divisions || []).map((division) => (
+                                            <Option
+                                                key={'division_' + division.divisionId}
+                                                value={division.divisionId}
+                                                disabled={division.isDisabled}
+                                            >
                                                 {division.divisionName}
                                             </Option>
                                         ))}
@@ -179,7 +183,7 @@ class LiveScoreLadderSettings extends Component {
                 {(isAllDivisionChecked == false && allDivAdded == false) && (
                     <div className="row">
                         <div className="col-sm" onClick={(e) => this.onChangeLadderSetting(null, null, "addLadder")}>
-                            <span className='input-heading-add-another pointer'>+ {AppConstants.addNewLadderScheme}</span>
+                            <span className="input-heading-add-another pointer">+ {AppConstants.addNewLadderScheme}</span>
                         </div>
                     </div>
                 )}

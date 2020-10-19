@@ -122,7 +122,7 @@ class LiveScorePlayerProfile extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.calendar} alt="" height="16" width="16" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.dateOfBirth}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.dateOfBirth}</span>
                         </div>
                         <span className="live-score-desc-text side-bar-profile-data">{AppConstants.Date03032000}</span>
                     </div>
@@ -131,7 +131,7 @@ class LiveScorePlayerProfile extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.callAnswer} alt="" height="16" width="16" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.contactNumber}</span>
                         </div>
                         <span className="live-score-desc-text side-bar-profile-data">{AppConstants.no0456765765}</span>
                     </div>
@@ -140,7 +140,7 @@ class LiveScorePlayerProfile extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.group} height="16" width="16" alt="" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.team}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.team}</span>
                         </div>
                         <span className="live-score-desc-text side-bar-profile-data">{AppConstants.belrose08}</span>
                     </div>
@@ -149,7 +149,7 @@ class LiveScorePlayerProfile extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.circleOutline} alt="" height="16" width="16" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.division}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.division}</span>
                         </div>
                         <span className="live-score-desc-text side-bar-profile-data">12a</span>
                     </div>
@@ -158,7 +158,7 @@ class LiveScorePlayerProfile extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.circleOutline} alt="" height="16" width="16" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.competition}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.competition}</span>
                         </div>
                         <span className="live-score-desc-text side-bar-profile-data">{AppConstants.winter2019}</span>
                     </div>
@@ -200,18 +200,21 @@ class LiveScorePlayerProfile extends Component {
                             <div className="row">
                                 <div className="col-sm-2" >
                                     <div style={{
-                                        width: "100%", display: "flex",
+                                        width: "100%",
+                                        display: "flex",
                                         flexDirection: "row",
-                                        alignItems: "center", marginLeft: 7, paddingBottom: 10
+                                        alignItems: "center",
+                                        marginLeft: 7,
+                                        paddingBottom: 10
                                     }}>
-                                        <span className='year-select-heading'>{AppConstants.year}:</span>
+                                        <span className="year-select-heading">{AppConstants.year}:</span>
                                         <Select
                                             className="year-select"
                                             // style={{ width: 75 }}
                                             onChange={(year) => this.setState({ year })}
                                             value={this.state.year}
                                         >
-                                            <Option value={"2019"}>{AppConstants.year2019}</Option>
+                                            <Option value="2019">{AppConstants.year2019}</Option>
                                         </Select>
                                     </div>
                                 </div>

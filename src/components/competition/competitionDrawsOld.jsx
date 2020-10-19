@@ -53,36 +53,38 @@ class CompetitionDraws extends Component {
             <div className="row">
                 <div className="col-sm-3">
                     <div className="year-select-heading-view">
-                        <span className='year-select-heading'>{AppConstants.draws}:</span>
+                        <span className="year-select-heading">{AppConstants.draws}:</span>
                         <Select
                             className="year-select"
                             // style={{ width: 75 }}
                             onChange={(year) => this.setState({ year })}
                             value={this.state.year}
                         >
-                            <Option value={"2019"}>2019</Option>
-                            <Option value={"2018"}>2018</Option>
-                            <Option value={"2017"}>2017</Option>
-                            <Option value={"2016"}>2016</Option>
+                            <Option value="2019">2019</Option>
+                            <Option value="2018">2018</Option>
+                            <Option value="2017">2017</Option>
+                            <Option value="2016">2016</Option>
                         </Select>
                     </div>
                 </div>
                 <div className="col-sm-3">
                     <div style={{
-                        width: "100%", display: "flex",
+                        width: "100%",
+                        display: "flex",
                         flexDirection: "row",
-                        alignItems: "center", marginRight: 50,
+                        alignItems: "center",
+                        marginRight: 50,
                     }}>
-                        <span className='year-select-heading'>{AppConstants.competition}:</span>
+                        <span className="year-select-heading">{AppConstants.competition}:</span>
                         <Select
                             className="year-select"
                             // style={{ width: 140 }}
                             onChange={(competition) => this.setState({ competition })}
                             value={this.state.competition}
                         >
-                            <Option value={"2019winter"}>{AppConstants.winter2019}</Option>
-                            <Option value={"sapphire"}>Sapphire Series</Option>
-                            <Option value={"junior"}>Junior Premier</Option>
+                            <Option value="2019winter">{AppConstants.winter2019}</Option>
+                            <Option value="sapphire">Sapphire Series</Option>
+                            <Option value="junior">Junior Premier</Option>
                         </Select>
                     </div>
                 </div>
@@ -105,32 +107,33 @@ class CompetitionDraws extends Component {
                                     flexDirection: "row",
                                     alignItems: "center",
                                 }}>
-                                    <span className='year-select-heading'>{AppConstants.venue}:</span>
+                                    <span className="year-select-heading">{AppConstants.venue}:</span>
                                     <Select
                                         className="year-select"
                                         // style={{ width: 75 }}
                                         onChange={(venue) => this.setState({ venue })}
                                         value={this.state.venue}
                                     >
-                                        <Option value={"abbott"}>{AppConstants.AbbottAddress}</Option>
+                                        <Option value="abbott">{AppConstants.AbbottAddress}</Option>
                                     </Select>
                                 </div>
                             </div>
                             <div className="col-sm-7 pl-0">
                                 <div className="col-sm-4">
                                     <div style={{
-                                        width: "100%", display: "flex",
+                                        width: "100%",
+                                        display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
                                     }}>
-                                        <span className='year-select-heading'>{AppConstants.round}:</span>
+                                        <span className="year-select-heading">{AppConstants.round}:</span>
                                         <Select
                                             className="year-select"
                                             // style={{ width: 140 }}
                                             onChange={(round) => this.setState({ round })}
                                             value={this.state.round}
                                         >
-                                            <Option value={"01"}>01</Option>
+                                            <Option value="01">01</Option>
                                         </Select>
                                     </div>
 
@@ -166,7 +169,7 @@ class CompetitionDraws extends Component {
                 <div className="scroll-bar pb-4">
                     <div className="table-head-wrap">
                         <div className="tablehead-row">
-                            <div className="sr-no empty-bx"></div>
+                            <div className="sr-no empty-bx" />
                             <span className="left-25">Sat</span>
                             <span className="left-135">Sat</span>
                             <span className="left-245">Sat</span>
@@ -178,7 +181,7 @@ class CompetitionDraws extends Component {
                             <span className="left-905">Sat</span>
                         </div>
                         <div className="tablehead-row">
-                            <div className="sr-no empty-bx"></div>
+                            <div className="sr-no empty-bx" />
                             <span className="left-25">7:45</span>
                             <span className="left-135">8:45</span>
                             <span className="left-245">9:45</span>
@@ -193,11 +196,9 @@ class CompetitionDraws extends Component {
 
                     <div className="main-canvas Draws">
                         <div className="sr-no">1</div>
-                        <span className="border left-25"></span>
+                        <span className="border left-25" />
                         <div className="box left-25 grey--bg">
-                            <span>
-                                Na
-                                 </span>
+                            <span>Na</span>
                         </div>
                         <span className="border left-135" />
                         <div className="box left-135 purple-bg">
@@ -207,49 +208,49 @@ class CompetitionDraws extends Component {
                             </span>
                         </div>
 
-                        <span className="border left-245"></span>
+                        <span className="border left-245" />
                         <div className="box left-245 green-bg">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border left-355"></span>
+                        <span className="border left-355" />
                         <div className="box left-355 yellow-bg black-text">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border left-465"></span>
+                        <span className="border left-465" />
                         <div className="box left-465 blue-bg">
                             <span>
                                 Newport 10 <br />
                                 Collaroy 9
                                  </span>
                         </div>
-                        <span className="border left-575"></span>
+                        <span className="border left-575" />
                         <div className="box left-575 red-bg">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border left-685"></span>
+                        <span className="border left-685" />
                         <div className="box left-685 red-bg">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border left-795"></span>
+                        <span className="border left-795" />
                         <div className="box left-795 blue-bg">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border left-905"></span>
+                        <span className="border left-905" />
                         <div className="box left-905 blue-bg">
                             <span>
                                 Newport 8 <br />
@@ -259,62 +260,62 @@ class CompetitionDraws extends Component {
 
 
                         <div className="sr-no">2</div>
-                        <span className="border top-55 left-25"></span>
+                        <span className="border top-55 left-25" />
                         <div className="box left-25 grey--bg top-55">
                             <span>
                                 na
                                  </span>
                         </div>
-                        <span className="border top-55 left-135"></span>
+                        <span className="border top-55 left-135" />
                         <div className="box left-135 purple-bg top-55">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-55 left-245"></span>
+                        <span className="border top-55 left-245" />
                         <div className="box left-245 green-bg top-55">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-55 left-355"></span>
+                        <span className="border top-55 left-355" />
                         <div className="box left-355 yellow-bg black-text top-55">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-55 left-465"></span>
+                        <span className="border top-55 left-465" />
                         <div className="box left-465 blue-bg top-55">
                             <span>
                                 Newport 10 <br />
                                 Collaroy 9
                                  </span>
                         </div>
-                        <span className="border top-55 left-575"></span>
+                        <span className="border top-55 left-575" />
                         <div className="box left-575 red-bg top-55">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-55 left-685"></span>
+                        <span className="border top-55 left-685" />
                         <div className="box left-685 red-bg top-55">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-55 left-795"></span>
+                        <span className="border top-55 left-795" />
                         <div className="box left-795 blue-bg top-55">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-55 left-905"></span>
+                        <span className="border top-55 left-905" />
                         <div className="box left-905 blue-bg top-55">
                             <span>
                                 Newport 8 <br />
@@ -323,63 +324,63 @@ class CompetitionDraws extends Component {
                         </div>
 
                         <div className="sr-no">3</div>
-                        <span className="border top-110 left-25"></span>
+                        <span className="border top-110 left-25" />
                         <div className="box left-25 green-bg top-110">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-110 left-135"></span>
+                        <span className="border top-110 left-135" />
                         <div className="box left-135 yellow-bg black-text top-110">
                             <span>
                                 Queenscliff 10 <br />
                                 Mona Vale 9
                                  </span>
                         </div>
-                        <span className="border top-110 left-245"></span>
+                        <span className="border top-110 left-245" />
                         <div className="box left-245 red-bg top-110">
                             <span>
                                 Newport 10 <br />
                                 Collaroy 9
                                  </span>
                         </div>
-                        <span className="border top-110 left-355"></span>
+                        <span className="border top-110 left-355" />
                         <div className="box left-355 yellow-bg black-text top-110">
                             <span>
                                 Mona Vale 8 <br />
                                 Collaroy 8
                                  </span>
                         </div>
-                        <span className="border top-110 left-465"></span>
+                        <span className="border top-110 left-465" />
                         <div className="box left-465 orange-bg top-110">
                             <span>
                                 Newport 10 <br />
                                 Collaroy 9
                                  </span>
                         </div>
-                        <span className="border top-110 left-575"></span>
+                        <span className="border top-110 left-575" />
                         <div className="box left-575 red-bg top-110">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-110 left-685"></span>
+                        <span className="border top-110 left-685" />
                         <div className="box left-685 red-bg top-110">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-110 left-795"></span>
+                        <span className="border top-110 left-795" />
                         <div className="box left-795 blue-bg top-110">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-110 left-905"></span>
+                        <span className="border top-110 left-905" />
                         <div className="box left-905 blue-bg top-110">
                             <span>
                                 Newport 8 <br />
@@ -388,63 +389,63 @@ class CompetitionDraws extends Component {
                         </div>
 
                         <div className="sr-no">4</div>
-                        <span className="border top-165 left-25"></span>
+                        <span className="border top-165 left-25" />
                         <div className="box left-25 green-bg top-165">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-165 left-135"></span>
+                        <span className="border top-165 left-135" />
                         <div className="box left-135 red-bg top-165">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-165 left-245"></span>
+                        <span className="border top-165 left-245" />
                         <div className="box left-245 green-bg top-165">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-165 left-355"></span>
+                        <span className="border top-165 left-355" />
                         <div className="box left-355 yellow-bg black-text top-165">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-165 left-465"></span>
+                        <span className="border top-165 left-465" />
                         <div className="box left-465 blue-bg top-165">
                             <span>
                                 Newport 10 <br />
                                 Collaroy 9
                                  </span>
                         </div>
-                        <span className="border top-165 left-575"></span>
+                        <span className="border top-165 left-575" />
                         <div className="box left-575 red-bg top-165">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-165 left-685"></span>
+                        <span className="border top-165 left-685" />
                         <div className="box left-685 red-bg top-165">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-165 left-795"></span>
+                        <span className="border top-165 left-795" />
                         <div className="box left-795 blue-bg top-165">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-165 left-905"></span>
+                        <span className="border top-165 left-905" />
                         <div className="box left-905 blue-bg top-165">
                             <span>
                                 Newport 8 <br />
@@ -454,63 +455,63 @@ class CompetitionDraws extends Component {
 
 
                         <div className="sr-no">5</div>
-                        <span className="border top-220 left-25"></span>
+                        <span className="border top-220 left-25" />
                         <div className="box left-25 green-bg top-220">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-220 left-135"></span>
+                        <span className="border top-220 left-135" />
                         <div className="box left-135 purple-bg top-220">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-220 left-245"></span>
+                        <span className="border top-220 left-245" />
                         <div className="box left-245 green-bg top-220">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-220 left-355"></span>
+                        <span className="border top-220 left-355" />
                         <div className="box left-355 yellow-bg black-text top-220">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-220 left-465"></span>
+                        <span className="border top-220 left-465" />
                         <div className="box left-465 blue-bg top-220">
                             <span>
                                 Newport 10 <br />
                                 Collaroy 9
                                  </span>
                         </div>
-                        <span className="border top-220 left-575"></span>
+                        <span className="border top-220 left-575" />
                         <div className="box left-575 red-bg top-220">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-220 left-685"></span>
+                        <span className="border top-220 left-685" />
                         <div className="box left-685 red-bg top-220">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-220 left-795"></span>
+                        <span className="border top-220 left-795" />
                         <div className="box left-795 blue-bg top-220">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-220 left-905"></span>
+                        <span className="border top-220 left-905" />
                         <div className="box left-905 blue-bg top-220">
                             <span>
                                 Newport 8 <br />
@@ -520,63 +521,63 @@ class CompetitionDraws extends Component {
 
 
                         <div className="sr-no">6</div>
-                        <span className="border top-275 left-25"></span>
+                        <span className="border top-275 left-25" />
                         <div className="box left-25 green-bg top-275">
                             <span>
                                 Queenscliff 10 <br />
                                 Mona Vale 9
                                  </span>
                         </div>
-                        <span className="border top-275 left-135"></span>
+                        <span className="border top-275 left-135" />
                         <div className="box left-135 purple-bg top-275">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-275 left-245"></span>
+                        <span className="border top-275 left-245" />
                         <div className="box left-245 green-bg top-275">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-275 left-355"></span>
+                        <span className="border top-275 left-355" />
                         <div className="box left-355 yellow-bg black-text top-275">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-275 left-465"></span>
+                        <span className="border top-275 left-465" />
                         <div className="box left-465 blue-bg top-275">
                             <span>
                                 Newport 10 <br />
                                 Collaroy 9
                                  </span>
                         </div>
-                        <span className="border top-275 left-575"></span>
+                        <span className="border top-275 left-575" />
                         <div className="box left-575 red-bg top-275">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-275 left-685"></span>
+                        <span className="border top-275 left-685" />
                         <div className="box left-685 red-bg top-275">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-275 left-795"></span>
+                        <span className="border top-275 left-795" />
                         <div className="box left-795 blue-bg top-275">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-275 left-905"></span>
+                        <span className="border top-275 left-905" />
                         <div className="box left-905 blue-bg top-275">
                             <span>
                                 Newport 8 <br />
@@ -588,63 +589,63 @@ class CompetitionDraws extends Component {
 
 
                         <div className="sr-no">7</div>
-                        <span className="border top-330 left-25"></span>
+                        <span className="border top-330 left-25" />
                         <div className="box left-25 green-bg top-330">
                             <span>
                                 Queenscliff 10 <br />
                                 Mona Vale 9
                                  </span>
                         </div>
-                        <span className="border top-330 left-135"></span>
+                        <span className="border top-330 left-135" />
                         <div className="box left-135 purple-bg top-330">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-330 left-245"></span>
+                        <span className="border top-330 left-245" />
                         <div className="box left-245 green-bg top-330">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-330 left-355"></span>
+                        <span className="border top-330 left-355" />
                         <div className="box left-355 yellow-bg black-text top-330">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-330 left-465"></span>
+                        <span className="border top-330 left-465" />
                         <div className="box left-465 blue-bg top-330">
                             <span>
                                 Newport 10 <br />
                                 Collaroy 9
                                  </span>
                         </div>
-                        <span className="border top-330 left-575"></span>
+                        <span className="border top-330 left-575" />
                         <div className="box left-575 red-bg top-330">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-330 left-685"></span>
+                        <span className="border top-330 left-685" />
                         <div className="box left-685 red-bg top-330">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-330 left-795"></span>
+                        <span className="border top-330 left-795" />
                         <div className="box left-795 blue-bg top-330">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-330 left-905"></span>
+                        <span className="border top-330 left-905" />
                         <div className="box left-905 blue-bg top-330">
                             <span>
                                 Newport 8 <br />
@@ -656,74 +657,70 @@ class CompetitionDraws extends Component {
 
 
                         <div className="sr-no">8</div>
-                        <span className="border top-385 left-25"></span>
+                        <span className="border top-385 left-25" />
                         <div className="box left-25 green-bg top-385">
                             <span>
                                 Queenscliff 10 <br />
                                 Mona Vale 9
                                  </span>
                         </div>
-                        <span className="border top-385 left-135"></span>
+                        <span className="border top-385 left-135" />
                         <div className="box left-135 purple-bg top-385">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-385 left-245"></span>
+                        <span className="border top-385 left-245" />
                         <div className="box left-245 green-bg top-385">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-385 left-355"></span>
+                        <span className="border top-385 left-355" />
                         <div className="box left-355 yellow-bg black-text top-385">
                             <span>
                                 Beacon Hill 10 <br />
                                 Mona Vale 10
                                  </span>
                         </div>
-                        <span className="border top-385 left-465"></span>
+                        <span className="border top-385 left-465" />
                         <div className="box left-465 blue-bg top-385">
                             <span>
                                 Newport 10 <br />
                                 Collaroy 9
                                  </span>
                         </div>
-                        <span className="border top-385 left-575"></span>
+                        <span className="border top-385 left-575" />
                         <div className="box left-575 red-bg top-385">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
                                  </span>
                         </div>
-                        <span className="border top-385 left-685"></span>
+                        <span className="border top-385 left-685" />
                         <div className="box left-685 red-bg top-385">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
-                                 </span>
+                            </span>
                         </div>
-                        <span className="border top-385 left-795"></span>
+                        <span className="border top-385 left-795" />
                         <div className="box left-795 blue-bg top-385">
                             <span>
                                 Peninsula 15 <br />
                                 Cromer 5
                                  </span>
                         </div>
-                        <span className="border top-385 left-905"></span>
+                        <span className="border top-385 left-905" />
                         <div className="box left-905 blue-bg top-385">
                             <span>
                                 Newport 8 <br />
                                 Curl Curl 8
-                                 </span>
+                            </span>
                         </div>
-
                     </div>
-
-
-
                 </div>
             </div>
         )
@@ -756,7 +753,7 @@ class CompetitionDraws extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu="competition" compSelectedKey={"18"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="18" />
                 <Layout className="container">
                     <div className="comp-draw-head-content-view">
                         {this.headerView()}

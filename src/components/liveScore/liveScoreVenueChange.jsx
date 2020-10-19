@@ -240,7 +240,7 @@ class LiveScoreVenueChange extends Component {
                             onSearch={(e) => this.onSearchVenue(e)}
                         >
                             {venueList.map((item) => (
-                                <Option key={'venue' + item.id} value={item.venueId}>
+                                <Option key={'venue_' + item.venueId} value={item.venueId}>
                                     {item.venueName}
                                 </Option>
                             ))}
@@ -265,13 +265,11 @@ class LiveScoreVenueChange extends Component {
                         }}
                         filterOption={false}
                     >
-                        {courtList.map((item) => {
-                            return (
-                                <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
-                                    {item.name}
-                                </Option>
-                            )
-                        })}
+                        {courtList.map((item) => (
+                            <Option key={'court_' + item.venueCourtId} value={item.venueCourtId}>
+                                {item.name}
+                            </Option>
+                        ))}
                     </Select>
                 </Form.Item>
             </div>
@@ -299,13 +297,11 @@ class LiveScoreVenueChange extends Component {
                             optionFilterProp="children"
                             onSearch={(e) => this.onSearchVenue(e)}
                         >
-                            {venueList.map((item) => {
-                                return (
-                                    <Option key={'venue' + item.id} value={item.venueId}>
-                                        {item.venueName}
-                                    </Option>
-                                )
-                            })}
+                            {venueList.map((item) => (
+                                <Option key={'venue_' + item.venueId} value={item.venueId}>
+                                    {item.venueName}
+                                </Option>
+                            ))}
                         </Select>
                     </Form.Item>
                 </div>
@@ -328,13 +324,11 @@ class LiveScoreVenueChange extends Component {
                             }}
                             filterOption={false}
                         >
-                            {courtList.map((item) => {
-                                return (
-                                    <Option key={'court' + item.venueCourtId} value={item.venueCourtId}>
-                                        {item.name}
-                                    </Option>
-                                )
-                            })}
+                            {courtList.map((item) => (
+                                <Option key={'court_' + item.venueCourtId} value={item.venueCourtId}>
+                                    {item.name}
+                                </Option>
+                            ))}
                         </Select>
                     </Form.Item>
                 </div>

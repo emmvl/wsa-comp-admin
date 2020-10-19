@@ -338,7 +338,12 @@ class VenuesList extends Component {
             <div className="fluid-width">
                 <div className="row">
                     <div>
-                        <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                        <div style={{
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center"
+                        }}>
                             <button className="dashboard-lay-search-button" onClick={this.onClickSearchIcon}>
                                 <img src={AppImages.searchIcon} height="15" width="15" alt="" />
                             </button>

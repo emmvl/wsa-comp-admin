@@ -273,7 +273,7 @@ class LiveScoreAddEditCoach extends Component {
 
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.team} required={"required-field pb-0 pt-3"} />
+                        <InputWithHead heading={AppConstants.team} required="required-field pb-0 pt-3" />
                         <Form.Item
                             name={AppConstants.selectTeam}
                             rules={[{ required: true, message: ValidationConstants.teamName }]}
@@ -290,7 +290,7 @@ class LiveScoreAddEditCoach extends Component {
                                 optionFilterProp="children"
                             >
                                 {teamData.map((item) => (
-                                    <Option value={item.id}>{item.name}</Option>
+                                    <Option key={'team_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -332,7 +332,7 @@ class LiveScoreAddEditCoach extends Component {
                                 }}
                             >
                                 {coachList.map((item) => (
-                                    <Option key={item.id} value={item.firstName + " " + item.lastName}>
+                                    <Option key={'coach_' + item.id} value={item.firstName + " " + item.lastName}>
                                         {item.firstName + " " + item.lastName}
                                     </Option>
                                 ))}
@@ -362,7 +362,7 @@ class LiveScoreAddEditCoach extends Component {
                                 optionFilterProp="children"
                             >
                                 {teamData.map((item) => (
-                                    <Option value={item.id}>{item.name}</Option>
+                                    <Option key={'team_' + item.id} value={item.id}>{item.name}</Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -417,27 +417,27 @@ class LiveScoreAddEditCoach extends Component {
                 if (coachRadioBtn == 'new') {
                     if (this.state.isEdit) {
                         body = {
-                            "id": coachdata.id,
-                            "firstName": coachdata.firstName,
-                            "lastName": coachdata.lastName,
-                            "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
-                            "email": coachdata.email,
-                            "teams": coachdata.teams
+                            id: coachdata.id,
+                            firstName: coachdata.firstName,
+                            lastName: coachdata.lastName,
+                            mobileNumber: regexNumberExpression(coachdata.mobileNumber),
+                            email: coachdata.email,
+                            teams: coachdata.teams
                         }
                     } else {
                         body = {
-                            "firstName": coachdata.firstName,
-                            "lastName": coachdata.lastName,
-                            "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
-                            "email": coachdata.email,
-                            "teams": coachdata.teams
+                            firstName: coachdata.firstName,
+                            lastName: coachdata.lastName,
+                            mobileNumber: regexNumberExpression(coachdata.mobileNumber),
+                            email: coachdata.email,
+                            teams: coachdata.teams
                         }
                     }
                     this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
                 } else if (coachRadioBtn == 'existing') {
                     body = {
-                        "id": exsitingManagerId,
-                        "teams": coachdata.teams
+                        id: exsitingManagerId,
+                        teams: coachdata.teams
                     }
                     this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
                 }
@@ -447,27 +447,27 @@ class LiveScoreAddEditCoach extends Component {
             if (coachRadioBtn == 'new') {
                 if (this.state.isEdit) {
                     body = {
-                        "id": coachdata.id,
-                        "firstName": coachdata.firstName,
-                        "lastName": coachdata.lastName,
-                        "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
-                        "email": coachdata.email,
-                        "teams": coachdata.teams
+                        id: coachdata.id,
+                        firstName: coachdata.firstName,
+                        lastName: coachdata.lastName,
+                        mobileNumber: regexNumberExpression(coachdata.mobileNumber),
+                        email: coachdata.email,
+                        teams: coachdata.teams
                     }
                 } else {
                     body = {
-                        "firstName": coachdata.firstName,
-                        "lastName": coachdata.lastName,
-                        "mobileNumber": regexNumberExpression(coachdata.mobileNumber),
-                        "email": coachdata.email,
-                        "teams": coachdata.teams
+                        firstName: coachdata.firstName,
+                        lastName: coachdata.lastName,
+                        mobileNumber: regexNumberExpression(coachdata.mobileNumber),
+                        email: coachdata.email,
+                        teams: coachdata.teams
                     }
                 }
                 this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
             } else if (coachRadioBtn == 'existing') {
                 body = {
-                    "id": exsitingManagerId,
-                    "teams": coachdata.teams
+                    id: exsitingManagerId,
+                    teams: coachdata.teams
                 }
                 this.props.liveScoreAddEditCoach(body, teamId, exsitingManagerId)
             }

@@ -211,26 +211,30 @@ class CompetitionVenueTimesPrioritisation extends Component {
         let allData = this.props.venueTimeState.venueConstrainstData
 
         ////Non playing dates value
-        // allData.nonPlayingDates.length > 0 && allData.nonPlayingDates.map((item, index) => {
-        //     let name = `name${index}`;
-        //     let date = `date${index}`;
-        //     this.formRef.current.setFieldsValue({
-        //         [name]: item.name,
-        //         [date]: moment(item.nonPlayingDate)
+        // if (allData.nonPlayingDates.length > 0) {
+        //     allData.nonPlayingDates.forEach((item, index) => {
+        //         let name = `name${index}`;
+        //         let date = `date${index}`;
+        //         this.formRef.current.setFieldsValue({
+        //             [name]: item.name,
+        //             [date]: moment(item.nonPlayingDate)
+        //         });
         //     });
-        // });
+        // }
 
         ////Court preferences value
-        allData.courtPreferences.length > 0 && allData.courtPreferences.map((item, index) => {
-            let courtIDS = `courtIDS${index}`;
-            let entitiesDivisionId = `entitiesDivisionId${index}`;
-            let entitiesGradeId = `entitiesGradeId${index}`;
-            this.formRef.current.setFieldsValue({
-                [courtIDS]: item.venueCourtId,
-                [entitiesDivisionId]: item.entitiesDivisionId,
-                [entitiesGradeId]: item.entitiesGradeId
-            });
-        })
+        if (allData.courtPreferences.length > 0) {
+            allData.courtPreferences.forEach((item, index) => {
+                let courtIDS = `courtIDS${index}`;
+                let entitiesDivisionId = `entitiesDivisionId${index}`;
+                let entitiesGradeId = `entitiesGradeId${index}`;
+                this.formRef.current.setFieldsValue({
+                    [courtIDS]: item.venueCourtId,
+                    [entitiesDivisionId]: item.entitiesDivisionId,
+                    [entitiesGradeId]: item.entitiesGradeId
+                });
+            })
+        }
 
         // this.setFormFieldsMatchPreference();
         // this.setFormFieldsLockedDraws();
@@ -333,8 +337,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     onChange={year => this.onYearClick(year)}
                                     value={this.state.yearRefId}
                                 >
-                                    {own_YearArr.length > 0 && own_YearArr.map((item, index) => (
-                                        <Option key={"year" + index} value={item.id}> {item.name}</Option>
+                                    {own_YearArr.map((item) => (
+                                        <Option key={'year_' + item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -358,8 +362,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     onChange={(competitionId, e) => this.onCompetitionClick(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {own_CompetitionArr.length > 0 && own_CompetitionArr.map((item) => (
-                                        <Option key={item.statusRefId} value={item.competitionId}>{item.competitionName}</Option>
+                                    {own_CompetitionArr.map((item) => (
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                            {item.competitionName}
+                                        </Option>
                                     ))}
                                 </Select>
                             </div>
@@ -471,8 +477,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "venueCourtId", "courtPreferences")}
                                 // value={item.venueCourtId}
                             >
-                                {courtList.length > 0 && courtList.map((item) => (
-                                    <Option value={item.venueId}>{courtList.length > 0 && item.name}</Option>
+                                {courtList.map((item) => (
+                                    <Option key={'venue_' + item.venueId} value={item.venueId}>
+                                        {item.name}
+                                    </Option>
                                 ))}
                             </Select>
                         </Form.Item>
@@ -496,7 +504,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     // value={item.entitiesDivisionId}
                                 >
                                     {divisionsList.map((item) => (
-                                        <Option value={item.competitionMembershipProductDivision}>{item.divisionName}</Option>
+                                        <Option
+                                            key={'compMemProdDiv_' + item.competitionMembershipProductDivision}
+                                            value={item.competitionMembershipProductDivision}
+                                        >
+                                            {item.divisionName}
+                                        </Option>
                                     ))}
                                 </Select>
                             </Form.Item>
@@ -517,7 +530,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesGrade", "courtPreferences")}
                                 >
                                     {gradesList.map((item) => (
-                                        <Option value={item.competitionDivisionGradeId}>{item.gradeName}</Option>
+                                        <Option
+                                            key={'compDivGrade_' + item.competitionDivisionGradeId}
+                                            value={item.competitionDivisionGradeId}
+                                        >
+                                            {item.gradeName}
+                                        </Option>
                                     ))}
                                 </Select>
                             </Form.Item>
@@ -550,8 +568,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         style={{ width: "100%", minWidth: 182 }}
                         placeholder="Select Court"
                     >
-                        {courtArray.length > 0 && courtArray.map((item) => (
-                            <Option value={item.venueCourtId}>{item.name}</Option>
+                        {courtArray.map((item) => (
+                            <Option key={'court_' + item.venueCourtId} value={item.venueCourtId}>{item.name}</Option>
                         ))}
                     </Select>
                 </div>
@@ -563,7 +581,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         placeholder="Select Grade"
                     >
                         {gradesList.map((item) => (
-                            <Option value={item.competitionDivisionGradeId.toString()}>{item.gradeName}</Option>
+                            <Option
+                                key={'compDivGrade_' + item.competitionDivisionGradeId.toString()}
+                                value={item.competitionDivisionGradeId.toString()}
+                            >
+                                {item.gradeName}
+                            </Option>
                         ))}
                     </Select>
                 </div>
@@ -614,8 +637,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     // value={homeRotation}
                     // defaultValue={homeRotation}
                 >
-                    {homeTeamRotationList.length > 0 && homeTeamRotationList.map((item, index) => (
-                        <div className="contextualHelp-RowDirection">
+                    {homeTeamRotationList.map((item) => (
+                        <div key={item.id} className="contextualHelp-RowDirection">
                             <Radio id={this.getCourtRotationId(item.id, 'homeTeamRotation')} value={item.id}>
                                 {item.description}
                             </Radio>
@@ -708,10 +731,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     onChange={(e) => { this.setState({ evenRotationFlag: false }); this.props.updateVenueConstraintsData(e.target.value, null, "courtPreferences", "courtParentSelection") }}
                     value={selectedRadioBtn}
                 >
-                    {courtRotationList.length > 0 && courtRotationList.map((item, index) => (
-                        <div>
+                    {courtRotationList.map((item, index) => (
+                        <div key={item.id}>
                             <div className="contextualHelp-RowDirection">
-                                <Radio id={this.getCourtRotationId(item.id, 'courtRotation')} key={"main" + index} value={item.id}>
+                                <Radio id={this.getCourtRotationId(item.id, 'courtRotation')} value={item.id}>
                                     {item.description}
                                 </Radio>
                                 {item.helpMsg && (
@@ -731,8 +754,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         onChange={(e) => this.props.updateVenueConstraintsData(e.target.value, null, "", "evenRotationValue", index)}
                                         value={evenRotation}
                                     >
-                                        {evenRotaionList.length > 0 && evenRotaionList.map((item, index) => (
-                                            <Radio id={this.getCourtRotationId(item.id, 'subPref1')} key={"sec" + index} value={item.id}>
+                                        {evenRotaionList.map((item) => (
+                                            <Radio
+                                                id={this.getCourtRotationId(item.id, 'subPref1')}
+                                                key={'evenRotation_' + item.id}
+                                                value={item.id}
+                                            >
                                                 {item.description}
                                             </Radio>
                                         ))}
@@ -748,8 +775,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         onChange={(e) => this.props.updateVenueConstraintsData(e.target.value, null, "evenRotation", "radioButtonValue")}
                                         value={evenRotation}
                                     >
-                                        {allocateSameCourtList.length > 0 && allocateSameCourtList.map((item) => (
-                                            <Radio id={this.getCourtRotationId(item.id, 'subPref2')} value={item.id}>
+                                        {allocateSameCourtList.map((item) => (
+                                            <Radio
+                                                id={this.getCourtRotationId(item.id, 'subPref2')}
+                                                key={'evenRotation_' + item.id}
+                                                value={item.id}
+                                            >
                                                 {item.description}
                                             </Radio>
                                         ))}
@@ -807,8 +838,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             filterOption={false}
                             onSearch={(value) => { this.handleSearch(value, mainVenueList) }}
                         >
-                            {venueList.length > 0 && venueList.map((item) => (
-                                <Option value={item.id} key={item.name}>{item.name}</Option>
+                            {venueList.map((item) => (
+                                <Option value={item.id} key={'venue_' + item.id}>{item.name}</Option>
                             ))}
                         </Select>
                         <div onClick={() => disabledStatus == false && this.props.clearVenueDataAction("venue")}>
@@ -935,8 +966,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         onChange={(div) => this.onChangeSetMPValue(div, 'competitionMembershipProductDivisionId', index)}
                                         value={item.competitionMembershipProductDivisionId}
                                     >
-                                        {(venueConstrainstData.divisionGrades || []).map((div, divIndex) => (
-                                            <Option key={div.competitionMembershipProductDivisionId} value={div.competitionMembershipProductDivisionId}>{div.divisionName}</Option>
+                                        {(venueConstrainstData.divisionGrades || []).map((div) => (
+                                            <Option
+                                                key={'compMemProdDiv_' + div.competitionMembershipProductDivisionId}
+                                                value={div.competitionMembershipProductDivisionId}
+                                            >
+                                                {div.divisionName}
+                                            </Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
@@ -952,8 +988,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         onChange={(div) => this.onChangeSetMPValue(div, 'competitionDivisionGradeId', index)}
                                         value={item.competitionDivisionGradeId}
                                     >
-                                        {(item.grades || []).map((g, gIndex) => (
-                                            <Option key={g.gradeId} value={g.gradeId}>{g.gradeName}</Option>
+                                        {(item.grades || []).map((g) => (
+                                            <Option key={'compDivGrade' + g.gradeId} value={g.gradeId}>
+                                                {g.gradeName}
+                                            </Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
@@ -969,8 +1007,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         onChange={(div) => this.onChangeSetMPValue(div, 'team1Id', index)}
                                         value={item.team1Id}
                                     >
-                                        {(item.teams || []).map((t, index) => (
-                                            <Option key={t.teamId} value={t.teamId}>{t.teamName}</Option>
+                                        {(item.teams || []).map((t) => (
+                                            <Option key={'team1_' + t.teamId} value={t.teamId}>{t.teamName}</Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
@@ -986,8 +1024,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         onChange={(div) => this.onChangeSetMPValue(div, 'team2Id', index)}
                                         value={item.team2Id}
                                     >
-                                        {(item.teams || []).map((t1, tIndex) => (
-                                            <Option key={t1.teamId} value={t1.teamId}>{t1.teamName}</Option>
+                                        {(item.teams || []).map((t1) => (
+                                            <Option key={'team2_' + t1.teamId} value={t1.teamId}>{t1.teamName}</Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
@@ -1005,8 +1043,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         onChange={(div) => this.onChangeSetMPValue(div, 'venueId', index)}
                                         value={item.venueId}
                                     >
-                                        {(venuePost || []).map((v, vIndex) => (
-                                            <Option key={v.venueId} value={v.venueId}>{v.venueName}</Option>
+                                        {(venuePost || []).map((v) => (
+                                            <Option key={'venue_' + v.venueId} value={v.venueId}>{v.venueName}</Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
@@ -1022,8 +1060,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         onChange={(div) => this.onChangeSetMPValue(div, 'courtId', index)}
                                         value={item.courtId}
                                     >
-                                        {(item.courts || []).map((c, cIndex) => (
-                                            <Option key={c.venueCourtId} value={c.venueCourtId}>{c.courtNumber}</Option>
+                                        {(item.courts || []).map((c) => (
+                                            <Option key={'court_' + c.venueCourtId} value={c.venueCourtId}>
+                                                {c.courtNumber}
+                                            </Option>
                                         ))}
                                     </Select>
                                 </Form.Item>
@@ -1116,8 +1156,13 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'competitionMembershipProductDivisionId', index)}
                                                 value={item.competitionMembershipProductDivisionId}
                                             >
-                                                {(venueConstrainstData.divisionGrades || []).map((div, divIndex) => (
-                                                    <Option key={div.competitionMembershipProductDivisionId} value={div.competitionMembershipProductDivisionId}>{div.divisionName}</Option>
+                                                {(venueConstrainstData.divisionGrades || []).map((div) => (
+                                                    <Option
+                                                        key={'compMemProdDiv_' + div.competitionMembershipProductDivisionId}
+                                                        value={div.competitionMembershipProductDivisionId}
+                                                    >
+                                                        {div.divisionName}
+                                                    </Option>
                                                 ))}
                                             </Select>
                                         </Form.Item>
@@ -1133,8 +1178,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'competitionDivisionGradeId', index)}
                                                 value={item.competitionDivisionGradeId}
                                             >
-                                                {(item.grades || []).map((g, gIndex) => (
-                                                    <Option key={g.gradeId} value={g.gradeId}>{g.gradeName}</Option>
+                                                {(item.grades || []).map((g) => (
+                                                    <Option key={'compDivisionGrade_' + g.gradeId} value={g.gradeId}>
+                                                        {g.gradeName}
+                                                    </Option>
                                                 ))}
                                             </Select>
                                         </Form.Item>
@@ -1150,8 +1197,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'team1Id', index)}
                                                 value={item.team1Id}
                                             >
-                                                {(item.teams || []).map((t, index) => (
-                                                    <Option key={t.teamId} value={t.teamId}>{t.teamName}</Option>
+                                                {(item.teams || []).map((t) => (
+                                                    <Option key={'team1_' + t.teamId} value={t.teamId}>
+                                                        {t.teamName}
+                                                    </Option>
                                                 ))}
                                             </Select>
                                         </Form.Item>
@@ -1167,8 +1216,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'team2Id', index)}
                                                 value={item.team2Id}
                                             >
-                                                {(item.teams || []).map((t1, tIndex) => (
-                                                    <Option key={t1.teamId} value={t1.teamId}>{t1.teamName}</Option>
+                                                {(item.teams || []).map((t1) => (
+                                                    <Option key={'team2_' + t1.teamId} value={t1.teamId}>
+                                                        {t1.teamName}
+                                                    </Option>
                                                 ))}
                                             </Select>
                                         </Form.Item>
@@ -1186,8 +1237,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'venueId', index)}
                                                 value={item.venueId}
                                             >
-                                                {(venuePost || []).map((v, vIndex) => (
-                                                    <Option key={v.venueId} value={v.venueId}>{v.venueName}</Option>
+                                                {(venuePost || []).map((v) => (
+                                                    <Option key={'venue_' + v.venueId} value={v.venueId}>
+                                                        {v.venueName}
+                                                    </Option>
                                                 ))}
                                             </Select>
                                         </Form.Item>
@@ -1203,8 +1256,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'courtId', index)}
                                                 value={item.courtId}
                                             >
-                                                {(item.courts || []).map((c, cIndex) => (
-                                                    <Option key={c.venueCourtId} value={c.venueCourtId}>
+                                                {(item.courts || []).map((c) => (
+                                                    <Option key={'court_' + c.venueCourtId} value={c.venueCourtId}>
                                                         {c.courtNumber}
                                                     </Option>
                                                 ))}
@@ -1368,10 +1421,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
         if (venueConstrainstData.courtRotationRefId != 0 && venueConstrainstData.homeTeamRotationRefId != 0) {
             let postObject = {
-                "competitionUniqueKey": competitionUniqueKey,
-                "yearRefId": this.state.yearRefId,
-                "organisationId": 1,
-                "venues": venueConstarintsDetails.venuePost,
+                competitionUniqueKey: competitionUniqueKey,
+                yearRefId: this.state.yearRefId,
+                organisationId: 1,
+                venues: venueConstarintsDetails.venuePost,
                 "nonPlayingDates": venueConstrainstData.nonPlayingDates,
                 "venueConstraintId": venueConstrainstData.venueConstraintId,
                 "courtRotationRefId": venueConstrainstData.courtRotationRefId,

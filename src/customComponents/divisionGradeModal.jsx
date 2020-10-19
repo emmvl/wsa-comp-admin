@@ -28,21 +28,25 @@ class DivisionGradeModal extends React.Component {
     setFieldValues = () => {
         if (this.formRef.current) {
             let division = this.props.division
-            division.length > 0 && division.map((item, index) => {
-                let division = `division${index}`
-                this.formRef.current.setFieldsValue({
-                    [division]: item.divisionName,
-                })
-                let grade = item.grades
-                grade.length > 0 && grade.map((gradeItem, gradeIndex) => {
-                    let grade = `grade${index}${gradeIndex}`
-                    let team = `team${index}${gradeIndex}`
+            if (division.length > 0) {
+                division.forEach((item, index) => {
+                    let division = `division${index}`
                     this.formRef.current.setFieldsValue({
-                        [grade]: gradeItem.gradeName,
-                        [team]: gradeItem.noOfTeams
+                        [division]: item.divisionName,
                     })
+                    let grade = item.grades
+                    if (grade.length > 0) {
+                        grade.forEach((gradeItem, gradeIndex) => {
+                            let grade = `grade${index}${gradeIndex}`
+                            let team = `team${index}${gradeIndex}`
+                            this.formRef.current.setFieldsValue({
+                                [grade]: gradeItem.gradeName,
+                                [team]: gradeItem.noOfTeams
+                            })
+                        })
+                    }
                 })
-            })
+            }
         }
     }
 
@@ -81,82 +85,79 @@ class DivisionGradeModal extends React.Component {
                     >
                         <div>
                             <div className="inside-container-view mt-0">
-                                {division.length > 0 && division.map((item, index) => {
-                                    return (
-                                        <div className="row " key={"divisionValue" + index}>
-                                            <div className="col-sm-4 pl-4 pb-2 division">
-                                                <Form.Item name={`division${index}`} rules={[{ required: true, message: ValidationConstants.divisionField }]}>
-                                                    <InputWithHead
-                                                        heading={index == 0 ? AppConstants.division : " "}
-                                                        placeholder={"Enter division"}
-                                                        // value={item.division}
-                                                        onChange={(e) => changeDivision(index, e)}
-                                                    />
-                                                </Form.Item>
-                                            </div>
-                                            <div className="col-sm-7">
-                                                {item.grades.length > 0 && item.grades.map((gradeItem, gradeIndex) => {
-                                                    return (
-                                                        <div className="row " key={"gradeValue" + gradeIndex}>
-                                                            <div className="col-sm pl-4 pb-2 division" style={{ display: "flex" }}>
-                                                                <Form.Item name={`grade${index}${gradeIndex}`} rules={[{ required: gradeIndex >= 1, message: ValidationConstants.gradeField }]}>
-                                                                    <InputWithHead
-                                                                        heading={index == 0 && gradeIndex == 0 ? AppConstants.grade : " "}
-                                                                        placeholder={"Enter grade"}
-                                                                        // value={gradeItem.grade}
-                                                                        onChange={(e) => changegrade(index, gradeIndex, e)}
-                                                                    />
-                                                                </Form.Item>
-                                                                {item.grades.length > 1 &&
-                                                                    <span className="user-remove-btn pl-2"
-                                                                        onClick={() => { removegrade(index, gradeIndex); this.valueupdate() }}
-                                                                        style={{ cursor: 'pointer', display: 'flex', position: 'relative', justifyContent: "center", alignItems: 'center', paddingTop: 30 }}>
-                                                                        <img
-                                                                            className="dot-image"
-                                                                            src={AppImages.redCross}
-                                                                            alt=""
-                                                                            width="16"
-                                                                            height="16"
-                                                                        />
-                                                                    </span>
-                                                                }
-                                                            </div>
-                                                            <div className="col-sm pl-4 pb-2 pr-0">
-                                                                <InputWithHead
-                                                                    heading={index == 0 && gradeIndex == 0 ? AppConstants.numbersOfTeams : " "}
-                                                                />
-                                                                <Form.Item name={`team${index}${gradeIndex}`} rules={[{ required: true, message: ValidationConstants.SelectNumberTeam }]}>
-                                                                    <InputNumber
-                                                                        type={"number"}
-                                                                        style={{ width: 100 }}
-                                                                        // value={gradeItem.team}
-                                                                        formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                                                        parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                                                        onChange={(e) => changeTeam(index, gradeIndex, e)}
-                                                                        placeholder={'0'}
-                                                                        min={0}
-                                                                    />
-                                                                </Form.Item>
-                                                            </div>
-                                                        </div>
-                                                    )
-                                                })}
-                                                <span className='input-heading-add-another pointer' onClick={() => { item.grades[0].gradeName.length > 0 && addGrade(index); this.valueupdate() }}> + {AppConstants.addgrade}</span>
-                                            </div>
-                                            {division.length > 1 && (
-                                                <div className="col-sm-1 delete-image-timeSlot-view" onClick={() => { removeDivision(index); this.valueupdate() }}>
-                                                    <a className="transfer-image-view">
-                                                        <span className="user-remove-btn">
-                                                            <i className="fa fa-trash-o" aria-hidden="true" />
-                                                        </span>
-                                                    </a>
-                                                </div>
-                                            )}
+                                {division.map((item, index) => (
+                                    <div className="row" key={"divisionValue" + index}>
+                                        <div className="col-sm-4 pl-4 pb-2 division">
+                                            <Form.Item name={`division${index}`} rules={[{ required: true, message: ValidationConstants.divisionField }]}>
+                                                <InputWithHead
+                                                    heading={index == 0 ? AppConstants.division : " "}
+                                                    placeholder="Enter division"
+                                                    // value={item.division}
+                                                    onChange={(e) => changeDivision(index, e)}
+                                                />
+                                            </Form.Item>
                                         </div>
-                                    )
-                                    }
-                                )}
-                                <span className='input-heading-add-another pointer' onClick={addDivision}> + {AppConstants.addDivisions}</span>
+                                        <div className="col-sm-7">
+                                            {item.grades.map((gradeItem, gradeIndex) => (
+                                                <div className="row" key={"gradeValue" + gradeIndex}>
+                                                    <div className="col-sm pl-4 pb-2 division" style={{ display: "flex" }}>
+                                                        <Form.Item name={`grade${index}${gradeIndex}`} rules={[{ required: gradeIndex >= 1, message: ValidationConstants.gradeField }]}>
+                                                            <InputWithHead
+                                                                heading={index == 0 && gradeIndex == 0 ? AppConstants.grade : " "}
+                                                                placeholder={"Enter grade"}
+                                                                // value={gradeItem.grade}
+                                                                onChange={(e) => changegrade(index, gradeIndex, e)}
+                                                            />
+                                                        </Form.Item>
+                                                        {item.grades.length > 1 && (
+                                                            <span
+                                                                className="user-remove-btn pl-2"
+                                                                onClick={() => { removegrade(index, gradeIndex); this.valueupdate() }}
+                                                                style={{ cursor: 'pointer', display: 'flex', position: 'relative', justifyContent: "center", alignItems: 'center', paddingTop: 30 }}
+                                                            >
+                                                                <img
+                                                                    className="dot-image"
+                                                                    src={AppImages.redCross}
+                                                                    alt=""
+                                                                    width="16"
+                                                                    height="16"
+                                                                />
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div className="col-sm pl-4 pb-2 pr-0">
+                                                        <InputWithHead
+                                                            heading={index == 0 && gradeIndex == 0 ? AppConstants.numbersOfTeams : " "}
+                                                        />
+                                                        <Form.Item name={`team${index}${gradeIndex}`} rules={[{ required: true, message: ValidationConstants.SelectNumberTeam }]}>
+                                                            <InputNumber
+                                                                type="number"
+                                                                style={{ width: 100 }}
+                                                                // value={gradeItem.team}
+                                                                formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                                parser={value => value.replace(/\$\s?|(,*)/g, '')}
+                                                                onChange={(e) => changeTeam(index, gradeIndex, e)}
+                                                                placeholder="0"
+                                                                min={0}
+                                                            />
+                                                        </Form.Item>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            <span className="input-heading-add-another pointer" onClick={() => { item.grades[0].gradeName.length > 0 && addGrade(index); this.valueupdate() }}> + {AppConstants.addgrade}</span>
+                                        </div>
+                                        {division.length > 1 && (
+                                            <div className="col-sm-1 delete-image-timeSlot-view" onClick={() => { removeDivision(index); this.valueupdate() }}>
+                                                <a className="transfer-image-view">
+                                                    <span className="user-remove-btn">
+                                                        <i className="fa fa-trash-o" aria-hidden="true" />
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                                <span className="input-heading-add-another pointer" onClick={addDivision}> + {AppConstants.addDivisions}</span>
                             </div>
 
                             <div className="row">
