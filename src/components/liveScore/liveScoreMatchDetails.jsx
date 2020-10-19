@@ -719,7 +719,7 @@ class LiveScoreMatchDetails extends Component {
                 scroll={{ x: '100%' }}
                 pagination={false}
                 loading={this.props.liveScoreGamePositionState.onLoad}
-                // rowKey={(record) => record.id}
+            // rowKey={(record) => record.id}
             />
         )
     }
@@ -1116,7 +1116,7 @@ class LiveScoreMatchDetails extends Component {
                                     <InputNumber
                                         size="small"
                                         type="number"
-                                        defaultValue={this.setAttendanceValue(row.playerId, 1, 'duration', "flow3")}
+                                        defaultValue={this.setAttendanceValue(row.playerId, 2, 'duration', "flow3")}
                                         onChange={(value) =>
                                             this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'duration', selectedData: value, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'seconds', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                     />
@@ -1179,7 +1179,7 @@ class LiveScoreMatchDetails extends Component {
                                             defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow4")}
                                             onChange={
                                                 (e) =>
-                                                    this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                    this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
                                             }
                                         />
                                     )
@@ -1937,7 +1937,7 @@ class LiveScoreMatchDetails extends Component {
                                         defaultChecked={this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow4")}
                                         onChange={
                                             (e) =>
-                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 1, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
+                                                this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'playedFullPeriod', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
                                         }
                                     />
                                 )
@@ -2155,7 +2155,7 @@ class LiveScoreMatchDetails extends Component {
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
-                                        // onClick={() => this.exportAttendance('team1', match[0] ?.team1 ?.id)}
+                                    // onClick={() => this.exportAttendance('team1', match[0] ?.team1 ?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
@@ -2218,7 +2218,7 @@ class LiveScoreMatchDetails extends Component {
                                     <Button
                                         className="primary-add-comp-form mr-4"
                                         type="primary"
-                                        // onClick={() => this.exportAttendance('team2', match[0] ?.team2 ?.id)}
+                                    // onClick={() => this.exportAttendance('team2', match[0] ?.team2 ?.id)}
                                     >
                                         + {AppConstants.exportAttendance}
                                     </Button>
@@ -2238,16 +2238,16 @@ class LiveScoreMatchDetails extends Component {
                                     {this.teamPlayersStatus(team2PlayersData, 'team2', match[0]?.team2?.id)}
                                 </div>
                             ) : (
-                                <div className="col-12">
-                                    <Table
-                                        className="home-dashboard-table pt-2"
-                                        columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
-                                        dataSource={team2PlayersData}
-                                        pagination={false}
-                                        scroll={{ x: '100%' }}
-                                    />
-                                </div>
-                            )}
+                                    <div className="col-12">
+                                        <Table
+                                            className="home-dashboard-table pt-2"
+                                            columns={this.state.isLineUp === 1 ? columnsTeam2 : columns}
+                                            dataSource={team2PlayersData}
+                                            pagination={false}
+                                            scroll={{ x: '100%' }}
+                                        />
+                                    </div>
+                                )}
                         </div>
                     </div>
                     {this.footerView('team2', match[0]?.team2?.id)}
@@ -2529,21 +2529,21 @@ class LiveScoreMatchDetails extends Component {
                 {umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                    <DashboardLayout
-                        menuHeading={AppConstants.liveScores}
-                        menuName={AppConstants.liveScores}
-                        onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                    />
-                )}
+                        <DashboardLayout
+                            menuHeading={AppConstants.liveScores}
+                            menuName={AppConstants.liveScores}
+                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                        />
+                    )}
 
                 {umpireKey ? (
                     <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={screen === 'umpireList' ? "2" : "1"} />
                 ) : (
-                    <InnerHorizontalMenu
-                        menu="liveScore"
-                        liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
-                    />
-                )}
+                        <InnerHorizontalMenu
+                            menu="liveScore"
+                            liveScoreSelectedKey={this.state.screenName === 'incident' ? '17' : "2"}
+                        />
+                    )}
 
                 <Loader visible={this.props.liveScoreMatchState.onLoad} />
 
