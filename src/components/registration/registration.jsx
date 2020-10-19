@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Breadcrumb, Table, Select, Menu, Pagination, DatePicker, Input, Button } from "antd";
+import { Layout, Breadcrumb, Table, Select, Menu, Pagination, DatePicker, Input, Button, Radio, message, Modal } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { isEmptyArray } from "formik";
 import moment from "moment";
-
+import Loader from '../../customComponents/loader';
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import { currencyFormat } from "util/currencyFormat";
@@ -173,7 +173,7 @@ const columns = [
         title: "Action",
         dataIndex: "isUsed",
         key: "isUsed",
-        render: () => (
+        render: (isUsed, record, index) => (
             <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
@@ -197,9 +197,20 @@ const columns = [
                             <span>View</span>
                         </NavLink>
                     </Menu.Item>
-                    <Menu.Item key="2">
-                        <span>Refund</span>
-                    </Menu.Item>
+                    {
+                        record.actionView == 1 && 
+                        <Menu.Item key="2" onClick = {() => this_Obj.setCashPayment(record)}>
+                            <span>Receive Cash Payment</span>
+                        </Menu.Item> 
+
+                    }
+                    {
+                        record.actionView == 2 && 
+                        <Menu.Item key="2">
+                            <span>Refund</span>
+                        </Menu.Item> 
+                    }
+                    
                 </SubMenu>
             </Menu>
         ),
@@ -229,6 +240,10 @@ class Registration extends Component {
             searchText: "",
             regFrom: "-1",
             regTo: "-1",
+            cashTranferType: 1,
+            amount: null,
+            selectedRow: null,
+            loading: false
         }
 
         this_Obj = this;
@@ -293,6 +308,14 @@ class Registration extends Component {
             history.push("/");
         }
     }
+
+    componentDidUpdate() {
+        let userRegistrationState = this.props.userRegistrationState;
+        if(this.state.loading == true && userRegistrationState.onTranSaveLoad == false){
+            this.setState({loading: false});
+            this.handleRegTableList(1);
+        }
+    }   
 
     handleRegTableList = (page) => {
         const {
@@ -405,6 +428,54 @@ class Registration extends Component {
     onClickSearchIcon = async () => {
         this.handleRegTableList(1);
     };
+
+    updateTransaction = () =>{
+        let selectedRow = this.state.selectedRow;
+        let amount = 0;
+        if(this.state.cashTranferType == 1){
+            amount = selectedRow.amountToTransfer;
+        }
+        else{
+            amount = this.state.amount;
+        }
+        let payload = {
+            amount: amount,
+            feeType: selectedRow.feeType,
+            transactionId: selectedRow.transactionId,
+            pendingFee: selectedRow.pendingFee
+        }
+
+        console.log("payload::" + JSON.stringify(payload));
+        this.props.regTransactionUpdateAction(payload)
+        this.setState({loading: true});
+    }
+
+    setCashPayment = (record) => {
+        console.log(record);
+        this.setState({selectedRow: record, visible: true, amount: 0, cashTranferType: 1 });
+    }
+
+    receiveCashPayment = (key) =>{
+        if(key == "cancel"){
+            this.setState({visible: false});
+        }
+        else if(key == "ok"){
+            let selectedRow = this.state.selectedRow;
+            let pendingFee = selectedRow.pendingFee;
+            let amountToTransfer = selectedRow.amountToTransfer;
+            let amount = this.state.amount;
+            let totalAmt = Number(amountToTransfer) - Number(amount);
+            if(totalAmt >= 0){
+                this.setState({visible: false});
+                this.updateTransaction();
+            }
+            else{
+                message.config({ duration: 0.9, maxCount: 1 })
+                message.error("Amount exceeded");
+            }
+            
+        }
+    }
 
     headerView = () => (
         <div className="comp-player-grades-header-view-design" style={{ marginBottom: -10 }}>
@@ -789,6 +860,40 @@ class Registration extends Component {
         );
     };
 
+    transferModalView() {
+        let selectedRow = this.state.selectedRow;
+ 
+        return (
+            <Modal
+                title="Cash"
+                visible={this.state.visible}
+                onCancel={() => this.receiveCashPayment("cancel")}
+                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
+                okText="Save"
+                onOk={() => this.receiveCashPayment("ok")}
+                centered
+            >
+                <div> {AppConstants.amount} : {selectedRow ? selectedRow.amountToTransfer : 0}</div>
+                <Radio.Group
+                    className="reg-competition-radio"
+                    value={this.state.cashTranferType}
+                    onChange={(e) => {this.setState({cashTranferType: e.target.value})}}
+                >
+                    <Radio value={1}>{AppConstants.fullCashAmount}</Radio>
+                    <Radio value={2}>{AppConstants.partialCashAmount}</Radio>
+                    
+                    {this.state.cashTranferType == 2 && (
+                        <InputWithHead
+                            placeholder={AppConstants.amount}
+                            value={this.state.amount}
+                            onChange={(e) => this.setState({amount: e.target.value})}
+                        />
+                    )} 
+                </Radio.Group>
+            </Modal>
+        )
+    }
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
@@ -801,9 +906,11 @@ class Registration extends Component {
                     {this.statusView()}
 
                     <Content>
+                        <Loader visible={this.props.userRegistrationState.onTranSaveLoad} />
                         {this.dropdownView()}
                         {this.countView()}
                         {this.contentView()}
+                        {this.transferModalView()}
                     </Content>
                 </Layout>
             </div>
