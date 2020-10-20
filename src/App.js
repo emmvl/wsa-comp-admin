@@ -18,6 +18,7 @@ import lazyLoad from "./components/lazyLoad";
 import "./customStyles/customStyles.css";
 import "./customStyles/antdStyles.css";
 import TagManager from 'react-gtm-module'
+import ErrorBoundary from "./components/emptyComponent/errorBoundry";
 // const ORG_ID = 'Netball';
 const tagManagerArgs = {
   gtmId: process.env.REACT_APP_GTM_ID
@@ -34,6 +35,7 @@ function App() {
   }, [])
   return (
     <div className="App">
+      <ErrorBoundary>
       {/* <FullStory org={ORG_ID} /> */}
       {/* <MemoryRouter> */}
       <Router history={history} >
@@ -57,6 +59,7 @@ function App() {
         </Switch>
       </Router>
       {/* </MemoryRouter> */}
+      </ErrorBoundary>
     </div>
   );
 }

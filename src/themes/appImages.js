@@ -52,7 +52,8 @@ const AppImages = {
   email: require("../images/email.png"),
   downloadIcon: require("../images/down-arrow.png"),
   filterIcon: require("../images/filter-results-button.png"),
-  chatIcon: require("../images/chat.svg")
+  chatIcon: require("../images/chat.svg"),
+  wentWrong: require("../images/went_wrong.jpg"),
 };
 
 export default AppImages;

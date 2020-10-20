@@ -411,7 +411,7 @@ class PaymentDashboard extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={paymentState.paymentListData}
+                        dataSource={paymentState}
                         pagination={false}
                         loading={this.props.paymentState.onLoad && true}
                     />
