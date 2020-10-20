@@ -26,7 +26,8 @@ const initialState = {
     paymentListData: [],
     paymentListPage: 1,
     paymentListTotalCount: 1,
-    paymentDashboardListAction: null
+    paymentDashboardListAction: null,
+    paymentCompetitionList: [],
 }
 
 
@@ -224,8 +225,8 @@ function stripe(state = initialState, action) {
             let invoicedata = isArrayNotEmpty(action.result) ? action.result : []
             let charityRoundUpData = getCharityRoundUpArray(invoicedata)
             let calculateSubTotalData = calculateSubTotal(invoicedata)
-            state.subTotalFees=calculateSubTotalData.invoiceSubtotal
-            state.subTotalGst=calculateSubTotalData.invoiceGstTotal
+            state.subTotalFees = calculateSubTotalData.invoiceSubtotal
+            state.subTotalGst = calculateSubTotalData.invoiceGstTotal
             state.charityRoundUpFilter = charityRoundUpData
             state.getInvoicedata = action.result
             return {
@@ -242,6 +243,7 @@ function stripe(state = initialState, action) {
             return {
                 ...state, onLoad: false,
                 paymentListData: paymentData.transactions,
+                paymentCompetitionList: paymentData.competitionList,
                 paymentListTotalCount: paymentData.page.totalCount,
                 paymentListPage: paymentData.page
                     ? paymentData.page.currentPage
