@@ -34,7 +34,6 @@ import './competition.css';
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
-let this_Obj = null;
 
 const columns = [
     {
@@ -99,7 +98,6 @@ class CompetitionPartTeamGradeCalculate extends Component {
         };
         // this.props.clearYearCompetitionAction()
         this.props.clearTeamGradingReducerDataAction('ownTeamGradingSummaryGetData')
-        this_Obj = this
     }
 
     componentDidUpdate(nextProps) {
@@ -121,9 +119,9 @@ class CompetitionPartTeamGradeCalculate extends Component {
             }
         }
         if (this.props.ownTeamGradingState.onLoad == false && this.state.getDataLoading) {
-            this.setState({ getDataLoading: false })
             let arr = this.props.ownTeamGradingState.finalsortOrderArray
             this.addNewGrade(arr)
+            this.setState({ getDataLoading: false });
         }
 
         if (this.props.ownTeamGradingState.updateGradeOnLoad == false && this.state.updateGradeOnLoad) {
@@ -180,12 +178,14 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
     //////add new column in the table for grades
     addNewGrade = (arr) => {
-        const columns1 = this.state.columns;
+        let columns1 = [...this.state.columns];
         let disabledStatus = this.state.competitionStatus == 1;
+
         for (let i in arr) {
             let newColumn = {
                 title: null,
                 dataIndex: `grades${i}`,
+                key: `grades${i}`,
                 render: (grades, record) => (
                     <div
                         style={{
@@ -449,7 +449,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
     ////////form content view
     contentView = () => {
-        const { columns, data, addGradeVisible, updateGradeName } = this.state;
+        const { columns, data, addGradeVisible, updateGradeName,getDataLoading } = this.state;
         const { ownTeamGradingSummaryGetData, onLoad } = this.props.ownTeamGradingState;
         return (
             <div className="comp-dash-table-view mt-2">
@@ -460,8 +460,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         // dataSource={data}
                         dataSource={ownTeamGradingSummaryGetData}
                         pagination={false}
-                        loading={onLoad && true}
-                        rowKey="competitionMembershipProductDivisionId"
+                        loading={getDataLoading && true}
                     />
                 </div>
 

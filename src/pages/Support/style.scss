@@ -6,15 +6,17 @@
   height: calc(100% - 77px);
   display: flex;
   overflow: hidden;
+  font-family: inter, sans-serif;
+  font-size: 15px;
 }
 
 .support-side-bar {
   min-width: 241px;
   height: 100%;
   display: flex;
+  flex: 1.5;
   flex-direction: column;
   overflow: auto;
-  flex: 1.5;
   border-right: 1px solid rgba(27, 27, 52, 0.07);
 
   .separator {
@@ -24,20 +26,20 @@
 
 .search-box {
   margin: 15px;
-  font-size: 11px;
+  font-size: 15px;
 }
 
 .side-bar-item {
   width: 100%;
   font-family: inter, sans-serif;
-  font-size: 20px;
+  font-size: 15px;
 
   ul {
-    white-space: nowrap;
-    padding: 10px 15px;
-    font-size: 12px;
-    line-height: 1;
     margin: 0;
+    padding: 10px 15px;
+    font-size: 15px;
+    line-height: 1;
+    white-space: nowrap;
     cursor: pointer;
 
     &:hover {
@@ -49,8 +51,8 @@
     }
 
     > i {
-      text-align: center;
       width: 20px;
+      text-align: center;
       transition-duration: 0.3s;
     }
 
@@ -72,9 +74,10 @@ iframe {
 }
 
 .support-content-panel {
-  padding: 20px 0 0 30px;
+  padding: 20px 30px;
+  overflow: auto;
   flex: 5;
-  font-size: 12px;
+  font-size: 15px;
 
   * {
     line-height: 2;
@@ -130,9 +133,9 @@ iframe {
 @media (max-width: 767px) {
   .support-side-bar {
     display: flex;
+    flex: 5;
     flex-direction: column;
     overflow-y: scroll;
     background-color: var(--app-fbf1ea);
-    flex: 5;
   }
 }
