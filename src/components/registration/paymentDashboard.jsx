@@ -12,6 +12,10 @@ import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { currencyFormat } from "../../util/currencyFormat";
 import { getPaymentList, exportPaymentApi } from "../../store/actions/stripeAction/stripeAction"
 import InputWithHead from "../../customComponents/InputWithHead"
+import { getOrganisationData } from "util/sessionStorage";
+import { getAffiliateToOrganisationAction } from "store/actions/userAction/userAction";
+import { isEmptyArray } from "formik";
+import moment from "moment";
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -185,24 +189,27 @@ class PaymentDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            organisationUniqueKey: getOrganisationData().organisationUniqueKey,
             deleteLoading: false,
-            year: "2020",
-            competition: "all",
-            paymentFor: "all",
+            yearRefId: -1,
+            competitionUniqueKey: "-1",
+            filterOrganisation: -1,
             loadingSave: false,
             offset: 0,
             userInfo: null,
             userId: -1,
             registrationId: null,
             sortBy: null,
-            sortOrder: null
+            sortOrder: null,
+            dateFrom: null,
+            dateTo: null,
         };
         this_Obj = this;
 
     }
     async componentDidMount() {
         const { paymentDashboardListAction } = this.props.paymentState
-
+        this.referenceCalls(this.state.organisationUniqueKey);
         let page = 1
         let sortBy = this.state.sortBy
         let sortOrder = this.state.sortOrder
@@ -230,6 +237,11 @@ class PaymentDashboard extends Component {
 
 
     }
+
+    referenceCalls = (organisationId) => {
+        this.props.getAffiliateToOrganisationAction(organisationId);
+        this.props.getOnlyYearListAction();
+    };
 
     onExport() {
         this.props.exportPaymentApi("paymentDashboard")
@@ -309,16 +321,57 @@ class PaymentDashboard extends Component {
     }
 
     handlePaymentTableList = (page, userId, regId) => {
-        let { sortBy, sortOrder } = this.state
+        let { sortBy, sortOrder, yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
             offset,
             userId: userId,
             registrationId: regId
         })
-        this.props.getPaymentList(offset, sortBy, sortOrder, userId, regId);
+        this.props.getPaymentList(offset, sortBy, sortOrder, userId, regId, yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo);
     };
+
+    onChangeDropDownValue = async (value, key) => {
+        if (key === "yearRefId") {
+            await this.setState({ yearRefId: value });
+            this.handlePaymentTableList(1);
+        } else if (key === "competitionId") {
+            await this.setState({ competitionUniqueKey: value });
+            this.handlePaymentTableList(1);
+        } else if (key === "filterOrganisation") {
+            await this.setState({ filterOrganisation: value });
+            this.handlePaymentTableList(1, -1, "-1");
+        } else if (key === "dateFrom") {
+            await this.setState({ dateFrom: value });
+            this.handlePaymentTableList(1, -1, "-1");
+        } else if (key === "dateTo") {
+            await this.setState({ dateTo: value });
+            this.handlePaymentTableList(1, -1, "-1");
+        }
+    };
+
+
     dropdownView = () => {
+        let affiliateToData = this.props.userState.affiliateTo;
+        let uniqueValues = [];
+        let paymentStatus = [
+            { id: 1, description: "Pending Membership" },
+            { id: 2, description: "Pending Registration Fee" },
+            { id: 3, description: "Registered" },
+        ];
+
+        if (affiliateToData.affiliatedTo !== undefined) {
+            let obj = {
+                organisationId: getOrganisationData().organisationUniqueKey,
+                name: getOrganisationData().name,
+            };
+            uniqueValues.push(obj);
+            let arr = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
+            if (isEmptyArray) {
+                uniqueValues = [...uniqueValues, ...arr];
+            }
+        }
+        const { paymentCompetitionList } = this.props.paymentState;
         return (
             <div className="row pb-5">
                 <div className="col-sm">
@@ -326,71 +379,79 @@ class PaymentDashboard extends Component {
                     <Select
                         className="reg-payment-select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
-                        onChange={(year) => this.setState({ year })}
-                        value={this.state.year}
+                        onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
+                        value={this.state.yearRefId}
                     >
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
+                        <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                        {this.props.appState.yearList.map(item => (
+                            <Option key={'year_' + item.id} value={item.id}>
+                                {item.description}
+                            </Option>
+                        ))}
                     </Select>
                 </div>
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.competition} />
-
                     <Select
+                        showSearch
+                        optionFilterProp="children"
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
-                        onChange={(competition) => this.setState({ competition })}
-                        value={this.state.competition}
+                        onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
+                        value={this.state.competitionUniqueKey}
                     >
-                        <Option value="all">{AppConstants.all}</Option>
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
+                        <Option key={-1} value="-1">{AppConstants.all}</Option>
+                        {(paymentCompetitionList || []).map(item => (
+                            <Option
+                                key={'competition_' + item.competitionUniquekey}
+                                value={item.competitionUniqueKey}
+                            >
+                                {item.competitionName}
+                            </Option>
+                        ))}
                     </Select>
                 </div>
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
                     <Select
+                        showSearch
+                        optionFilterProp="children"
                         className="reg-payment-select"
                         style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
-                        onChange={(paymentFor) => this.setState({ paymentFor })}
-                        value={this.state.paymentFor}
+                        onChange={(e) => this.onChangeDropDownValue(e, "filterOrganisation")}
+                        value={this.state.filterOrganisation}
                     >
-                        <Option value="all">{AppConstants.all}</Option>
-                        <Option value="2020">{AppConstants.year2020}</Option>
-                        <Option value="2019">{AppConstants.year2019}</Option>
-                        <Option value="2018">{AppConstants.year2018}</Option>
-                        <Option value="2017">{AppConstants.year2017}</Option>
-                        <Option value="2016">{AppConstants.year2016}</Option>
+                        <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                        {(uniqueValues || []).map((org) => (
+                            <Option key={'organisation_' + org.organisationId} value={org.organisationId}>
+                                {org.name}
+                            </Option>
+                        ))}
                     </Select>
                 </div>
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
                     <DatePicker
                         className="reg-payment-datepicker"
-                        size="large"
+                        size="default"
                         style={{ width: "100%", minWidth: 160 }}
-                        onChange={date => this.dateOnChangeFrom(date)}
                         format="DD-MM-YYYY"
                         showTime={false}
                         placeholder="dd-mm-yyyy"
+                        onChange={e => this.onChangeDropDownValue(e, "dateFrom")}
+                        value={this.state.dateFrom !== null && moment(this.state.dateFrom, "YYYY-MM-DD")}
                     />
                 </div>
                 <div className="col-sm">
                     <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
                     <DatePicker
                         className="reg-payment-datepicker"
-                        size="large"
+                        size="default"
                         style={{ width: "100%", minWidth: 160 }}
-                        onChange={date => this.dateOnChangeTo(date)}
                         format="DD-MM-YYYY"
                         showTime={false}
                         placeholder="dd-mm-yyyy"
+                        onChange={e => this.onChangeDropDownValue(e, "dateTo")}
+                        value={this.state.dateTo !== null && moment(this.state.dateTo, "YYYY-MM-DD")}
                     />
                 </div>
             </div>
@@ -411,7 +472,7 @@ class PaymentDashboard extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={paymentState}
+                        dataSource={paymentState.paymentListData}
                         pagination={false}
                         loading={this.props.paymentState.onLoad && true}
                     />
@@ -450,7 +511,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
         getPaymentList,
-        exportPaymentApi
+        exportPaymentApi,
+        getAffiliateToOrganisationAction,
     }, dispatch)
 }
 
@@ -458,6 +520,8 @@ function mapStatetoProps(state) {
     return {
         paymentState: state.StripeState,
         appState: state.AppState,
+        userState: state.UserState,
+        userRegistrationState: state.EndUserRegistrationState,
     }
 }
 export default connect(mapStatetoProps, mapDispatchToProps)((PaymentDashboard));
