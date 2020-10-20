@@ -144,7 +144,9 @@ const initialState = {
   affiliateDirListAction: null,
   userAffiliateListAction: null,
   userFriendListAction: null,
-  userReferFriendListAction: null
+  userReferFriendListAction: null,
+  onSaveOrgPhotoLoad: false,
+  onDeleteOrgPhotoLoad: false
 };
 
 function userReducer(state = initialState, action) {
@@ -533,23 +535,25 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.API_SAVE_ORG_PHOTO_LOAD:
-      return { ...state, onLoad: true };
+      return { ...state, onSaveOrgPhotoLoad: true };
 
     case ApiConstants.API_SAVE_ORG_PHOTO_SUCCESS:
+      console.log("$$$$$$$$$$$$$$")
       return {
         ...state,
-        onLoad: false,
+        onSaveOrgPhotoLoad: false,
         status: action.status,
         error: null
       };
 
     case ApiConstants.API_DELETE_ORG_PHOTO_LOAD:
-      return { ...state, onLoad: true };
+      return { ...state, onDeleteOrgPhotoLoad: true };
 
     case ApiConstants.API_DELETE_ORG_PHOTO_SUCCESS:
+      console.log("&&&&&&&&&&&&&")
       return {
         ...state,
-        onLoad: false,
+        onDeleteOrgPhotoLoad: false,
         status: action.status,
         error: null
       };
