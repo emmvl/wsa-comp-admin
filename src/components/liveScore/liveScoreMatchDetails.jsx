@@ -766,6 +766,10 @@ class LiveScoreMatchDetails extends Component {
             if (field === "isPlaying") {
                 return attendance ? attendance.playedFullPeriod : false
             }
+        } else if (key === "flow6") {
+            if (field === "positionId") {
+                return attendance ? attendance.positionId : null
+            }
         }
     };
 
@@ -1209,7 +1213,7 @@ class LiveScoreMatchDetails extends Component {
                 ];
 
                 return columns
-            } else if (!pt && !gtt && art === 'MATCH') {
+            } else if (!pt && !gtt && art != "MINUTE") {
                 const columns = [
                     {
                         title: 'Name',
@@ -1250,6 +1254,114 @@ class LiveScoreMatchDetails extends Component {
                                                 this.props.liveScoreUpdatePlayerMinuteRecordAction({ key: 'playedCheckBox', selectedData: e.target.checked, playerdata: row, playerId: row.playerId, period: 2, team: team, extraKey: 'onlySibgleCheckBox', positionDuration: positionDuration, periodDuration: periodDuration, matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })
                                         }
                                     />
+                            },
+                        ]
+                    },
+                ];
+                return columns
+            } else if (pt && !gtt && art !== 'MINUTE') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position1',
+                                width: 150,
+                                render: (p, row, index) => {
+                                    let positionArray = this.getPositionIndex(row.playerId, 1)
+
+                                    return (
+                                        <>
+                                            {positionArray.length > 0 ?
+                                                positionArray.map((position) => {
+                                                    let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
+                                                    return (
+                                                        <Select
+                                                            className="year-select reg-filter-select1 table-cell-select"
+                                                            size="small"
+                                                            style={{ width: '100%', marginTop: positionArray.length > 1 ? 10 : 0 }}
+                                                            defaultValue={position.positionId > 0 && position.positionId}
+                                                            onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 1, key: 'positionId', selectedData: value ? value : 0, index: arrayIndex, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art, id: position.id })}
+                                                        >
+                                                            {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                                <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                            ))}
+                                                        </Select>
+                                                    )
+                                                })
+
+                                                :
+                                                <Select
+                                                    className="year-select reg-filter-select1 table-cell-select"
+                                                    size="small"
+                                                    style={{ width: '100%' }}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 1, 'positionId', "flow6")}
+                                                    onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 1, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                                >
+                                                    {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                        <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                    ))}
+                                                </Select>
+                                            }
+                                        </>
+                                    )
+                                }
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position2',
+                                width: 150,
+                                render: (p, row, index) => {
+                                    let positionArray = this.getPositionIndex(row.playerId, 2)
+
+                                    return (
+                                        <>
+                                            {positionArray.length > 0 ?
+                                                positionArray.map((position) => {
+                                                    let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
+                                                    return (
+                                                        <Select
+                                                            className="year-select reg-filter-select1 table-cell-select"
+                                                            size="small"
+                                                            style={{ width: '100%', marginTop: positionArray.length > 1 ? 10 : 0 }}
+                                                            defaultValue={position.positionId > 0 && position.positionId}
+                                                            onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 2, key: 'positionId', selectedData: value ? value : 0, index: arrayIndex, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art, id: position.id })}
+                                                        >
+                                                            {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                                <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                            ))}
+                                                        </Select>
+                                                    )
+                                                })
+
+                                                :
+                                                <Select
+                                                    className="year-select reg-filter-select1 table-cell-select"
+                                                    size="small"
+                                                    style={{ width: '100%' }}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 2, 'positionId', "flow6")}
+                                                    onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 2, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                                >
+                                                    {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                        <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                    ))}
+                                                </Select>
+                                            }
+                                        </>
+                                    )
+                                }
                             },
                         ]
                     },
@@ -2030,7 +2142,7 @@ class LiveScoreMatchDetails extends Component {
                 ];
 
                 return columns
-            } else if (!pt && !gtt && art === 'MATCH') {
+            } else if (!pt && !gtt && art != "MINUTE") {
                 const columns = [
                     {
                         title: 'Name',
@@ -2113,6 +2225,217 @@ class LiveScoreMatchDetails extends Component {
                         ]
                     },
                 ];
+                return columns
+            } if (pt && !gtt && art !== 'MINUTE') {
+                const columns = [
+                    {
+                        title: 'Name',
+                        dataIndex: 'name',
+                        key: 'name',
+                        width: 120,
+                    },
+                    {
+                        title: 'Period 1',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position1',
+                                width: 150,
+                                render: (p, row, index) => {
+                                    let positionArray = this.getPositionIndex(row.playerId, 1)
+
+                                    return (
+                                        <>
+                                            {positionArray.length > 0 ?
+                                                positionArray.map((position) => {
+                                                    let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
+                                                    return (
+                                                        <Select
+                                                            className="year-select reg-filter-select1 table-cell-select"
+                                                            size="small"
+                                                            style={{ width: '100%', marginTop: positionArray.length > 1 ? 10 : 0 }}
+                                                            defaultValue={position.positionId > 0 && position.positionId}
+                                                            onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 1, key: 'positionId', selectedData: value ? value : 0, index: arrayIndex, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art, id: position.id })}
+                                                        >
+                                                            {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                                <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                            ))}
+                                                        </Select>
+                                                    )
+                                                })
+
+                                                :
+                                                <Select
+                                                    className="year-select reg-filter-select1 table-cell-select"
+                                                    size="small"
+                                                    style={{ width: '100%' }}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 1, 'positionId', "flow6")}
+                                                    onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 1, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                                >
+                                                    {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                        <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                    ))}
+                                                </Select>
+                                            }
+                                        </>
+                                    )
+                                }
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 2',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position2',
+                                width: 150,
+                                render: (p, row, index) => {
+                                    let positionArray = this.getPositionIndex(row.playerId, 2)
+
+                                    return (
+                                        <>
+                                            {positionArray.length > 0 ?
+                                                positionArray.map((position) => {
+                                                    let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
+                                                    return (
+                                                        <Select
+                                                            className="year-select reg-filter-select1 table-cell-select"
+                                                            size="small"
+                                                            style={{ width: '100%', marginTop: positionArray.length > 1 ? 10 : 0 }}
+                                                            defaultValue={position.positionId > 0 && position.positionId}
+                                                            onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 2, key: 'positionId', selectedData: value ? value : 0, index: arrayIndex, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art, id: position.id })}
+                                                        >
+                                                            {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                                <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                            ))}
+                                                        </Select>
+                                                    )
+                                                })
+
+                                                :
+                                                <Select
+                                                    className="year-select reg-filter-select1 table-cell-select"
+                                                    size="small"
+                                                    style={{ width: '100%' }}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 2, 'positionId', "flow6")}
+                                                    onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 2, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                                >
+                                                    {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                        <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                    ))}
+                                                </Select>
+                                            }
+                                        </>
+                                    )
+                                }
+                            },
+                        ]
+                    },
+                    {
+                        title: 'Period 3',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position3',
+                                width: 150,
+                                render: (p, row, index) => {
+                                    // let positionArray = this.getPositionArray(row.playerId, 1)
+                                    let positionArray = this.getPositionIndex(row.playerId, 3)
+
+                                    return (
+                                        <>
+                                            {positionArray.length > 0 ?
+                                                positionArray.map((position) => {
+                                                    let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
+                                                    return (
+                                                        <Select
+                                                            className="year-select reg-filter-select1 table-cell-select"
+                                                            size="small"
+                                                            style={{ width: '100%', marginTop: positionArray.length > 1 ? 10 : 0 }}
+                                                            defaultValue={position.positionId > 0 && position.positionId}
+                                                            onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 3, key: 'positionId', selectedData: value ? value : 0, index: arrayIndex, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art, id: position.id })}
+                                                        >
+                                                            {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                                <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                            ))}
+                                                        </Select>
+                                                    )
+
+                                                })
+
+                                                :
+                                                <Select
+                                                    className="year-select reg-filter-select1 table-cell-select"
+                                                    size="small"
+                                                    style={{ width: '100%' }}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 3, 'positionId', "flow6")}
+                                                    onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 3, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                                >
+                                                    {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                        <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                    ))}
+                                                </Select>
+                                            }
+                                        </>
+                                    )
+                                }
+                            },
+                        ],
+                    },
+                    {
+                        title: 'Period 4',
+                        children: [
+                            {
+                                title: 'Position',
+                                key: 'position4',
+                                width: 150,
+                                render: (p, row, index) => {
+                                    // let positionArray = this.getPositionArray(row.playerId, 1)
+                                    let positionArray = this.getPositionIndex(row.playerId, 4)
+
+                                    return (
+                                        <>
+                                            {positionArray.length > 0 ?
+                                                positionArray.map((position) => {
+                                                    let arrayIndex = trackResultData.findIndex(x => x.id === position.id)
+                                                    return (
+                                                        <Select
+                                                            className="year-select reg-filter-select1 table-cell-select"
+                                                            size="small"
+                                                            style={{ width: '100%', marginTop: positionArray.length > 1 ? 10 : 0 }}
+                                                            defaultValue={position.positionId > 0 && position.positionId}
+                                                            onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 4, key: 'positionId', selectedData: value ? value : 0, index: arrayIndex, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art, id: position.id })}
+                                                        >
+                                                            {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                                <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                            ))}
+                                                        </Select>
+                                                    )
+
+                                                })
+
+                                                :
+                                                <Select
+                                                    className="year-select reg-filter-select1 table-cell-select"
+                                                    size="small"
+                                                    style={{ width: '100%' }}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 4, 'positionId', "flow6")}
+                                                    onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 4, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
+                                                >
+                                                    {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
+                                                        <Option key={`position1_${position.id}`} value={position.id}>{position.name}</Option>
+                                                    ))}
+                                                </Select>
+                                            }
+                                        </>
+                                    )
+                                }
+                            },
+                        ],
+                    },
+                ];
+
                 return columns
             }
         }

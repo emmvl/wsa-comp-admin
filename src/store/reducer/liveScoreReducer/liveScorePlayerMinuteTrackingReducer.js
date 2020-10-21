@@ -356,7 +356,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
 
           }
         }
-      } else if (!positionTrack && !gameTimeTrack && attndceRecrd == "MATCH") {
+      } else if (!positionTrack && !gameTimeTrack && attndceRecrd != "MINUTE") {
 
         if (findData === -1) {
           let trackObj = {
@@ -383,6 +383,35 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
           state.trackResultData[findData]['duration'] = selectedData ? periodDuration : 0
           state.trackResultData[findData]['updatedBy'] = userId
           state.trackResultData[findData]['createdBy'] = null
+        }
+      } else if (positionTrack && !gameTimeTrack && attndceRecrd != "MINUTE") {
+
+        if (extraKey == 'positionId') {
+          if (findData === -1) {
+            let trackObj = {
+              "id": null,
+              "matchId": matchId,
+              "teamId": playerdata.teamId,
+              "playerId": playerdata.playerId,
+              "period": period,
+              "positionId": selectedData,
+              "duration": positionDuration,
+              "playedInPeriod": false,
+              "playedEndPeriod": state.playedCheckBox,
+              "playedFullPeriod": positionDuration === periodDuration ? true : false,
+              "periodDuration": periodDuration,
+              "source": "Web",
+              "createdBy": userId,
+              "updatedBy": null
+            }
+            trackDataRes.push(trackObj)
+          } else {
+            state.trackResultData[findData][key] = selectedData
+            state.trackResultData[findData]["playedInPeriod"] = false
+            state.trackResultData[findData]["playedFullPeriod"] = positionDuration === periodDuration ? true : false
+            state.trackResultData[findData]['updatedBy'] = userId
+            state.trackResultData[findData]['createdBy'] = null
+          }
         }
       }
 
