@@ -41,7 +41,7 @@ function tableSort(key) {
     }
 
     this_Obj.setState({ sortBy, sortOrder });
-    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder, this_Obj.state.userId);
+    this_Obj.props.getPaymentList(this_Obj.state.offset, sortBy, sortOrder, -1, "-1", this_Obj.state.yearRefId, this_Obj.state.competitionUniqueKey, this_Obj.state.filterOrganisation, this_Obj.state.dateFrom, this_Obj.state.dateTo);
 }
 
 
@@ -198,7 +198,7 @@ class PaymentDashboard extends Component {
             offset: 0,
             userInfo: null,
             userId: -1,
-            registrationId: null,
+            registrationId: "-1",
             sortBy: null,
             sortOrder: null,
             dateFrom: null,
@@ -219,8 +219,13 @@ class PaymentDashboard extends Component {
             sortOrder = paymentDashboardListAction.sortOrder
             let registrationId = paymentDashboardListAction.registrationId == null ? '-1' : paymentDashboardListAction.registrationId
             let userId = paymentDashboardListAction.userId == null ? -1 : paymentDashboardListAction.userId
+            let yearRefId = paymentDashboardListAction.yearId
+            let competitionUniqueKey = paymentDashboardListAction.competitionKey
+            let dateFrom = paymentDashboardListAction.dateFrom
+            let dateTo = paymentDashboardListAction.dateTo
+            let filterOrganisation = paymentDashboardListAction.paymentFor
 
-            await this.setState({ offset, sortBy, sortOrder, registrationId, userId })
+            await this.setState({ offset, sortBy, sortOrder, registrationId, userId, yearRefId, competitionUniqueKey, dateFrom, dateTo, filterOrganisation })
             page = Math.floor(offset / 10) + 1;
 
             this.handlePaymentTableList(page, userId, registrationId)
@@ -328,7 +333,7 @@ class PaymentDashboard extends Component {
             userId: userId,
             registrationId: regId
         })
-        this.props.getPaymentList(offset, sortBy, sortOrder, userId, regId, yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo);
+        this.props.getPaymentList(offset, sortBy, sortOrder, -1, "-1", yearRefId, competitionUniqueKey, filterOrganisation, dateFrom, dateTo);
     };
 
     onChangeDropDownValue = async (value, key) => {
@@ -396,13 +401,15 @@ class PaymentDashboard extends Component {
                         showSearch
                         optionFilterProp="children"
                         className="reg-payment-select"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
                         onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
                         value={this.state.competitionUniqueKey}
                     >
-                        <Option key={-1} value="-1">{AppConstants.all}</Option>
+                        <Option key={-1} value={"-1"}>{AppConstants.all}</Option>
                         {(paymentCompetitionList || []).map(item => (
                             <Option
-                                key={'competition_' + item.competitionUniquekey}
+                                // key={'competition_' + item.competitionUniquekey}
+                                key={item.competitionUniquekey}
                                 value={item.competitionUniqueKey}
                             >
                                 {item.competitionName}

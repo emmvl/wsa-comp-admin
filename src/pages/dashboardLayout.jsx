@@ -490,7 +490,7 @@ class DashboardLayout extends React.Component {
                             </li>
 
                             <li className={menuName === AppConstants.finance ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'finance') ? 'visible' : 'none' }}>
-                              <div className="finance-menu menu-wrap">
+                              <div className="finance-menu menu-wrap" onClick={() => this.props.clearDataOnCompChangeAction()}>
                                 <NavLink to="/paymentDashboard">
                                   <span className="icon" />
                                   {AppConstants.finance}

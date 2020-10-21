@@ -189,7 +189,7 @@ class LiveScoreAddDivision extends Component {
 
                         {
                             ((competition.lineupSelectionEnabled == 1 || competition.lineupSelectionEnabled == true) && positionTracking === false) &&
-                            < span className="text-with-red-color pt-0">
+                            < span className="text-with-red-color pt-2">
                                 {AppConstants.sqadSelectionEabled}
                             </span>
                         }
