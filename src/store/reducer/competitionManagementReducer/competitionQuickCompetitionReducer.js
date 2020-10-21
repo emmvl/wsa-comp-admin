@@ -67,7 +67,8 @@ const initialState = {
     mergeValidate: false,
     validateMessage: "",
     newSelectedCompetition: "",
-    mergeCompetitionTypeSelection:null
+    mergeCompetitionTypeSelection: null,
+    updateStatus: false
 };
 var gradeColorArray = [];
 const lightGray = '#999999';
@@ -388,6 +389,7 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, venueI
 
 ///sort competition data
 function sortCompArray(compListData) {
+    console.log(compListData)
     let isSortedArray = []
     const sortAlphaNum = (a, b) => a.competitionName.localeCompare(b.competitionName, 'en', { numeric: true })
     isSortedArray = compListData.sort(sortAlphaNum)
@@ -622,6 +624,7 @@ function QuickCompetitionState(state = initialState, action) {
                 ...state,
                 onLoad: true,
                 onQuickCompLoad: true,
+                updateStatus: false
             }
         ///////create quick competition  success
         case ApiConstants.API_CREATE_QUICK_COMPETITION_SUCCESS:
@@ -737,7 +740,7 @@ function QuickCompetitionState(state = initialState, action) {
             return { ...state, onLoad: true, onQuickCompLoad: true }
         ////update quick competition Success
         case ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS:
-            console.log(action)
+            state.updateStatus = action.updateStatus
             let AllCompListArr = JSON.parse(JSON.stringify(state.quick_CompetitionArr))
             let changeCompIndex = AllCompListArr.findIndex((x) => x.competitionId == action.competitionId)
             AllCompListArr[changeCompIndex].competitionName = action.competitionName
@@ -889,7 +892,7 @@ function QuickCompetitionState(state = initialState, action) {
                 ...state,
                 onInvitationLoad: false,
                 error: null,
-				mergeCompetitionTypeSelection:action.result,
+                mergeCompetitionTypeSelection: action.result,
                 mergeValidate: action.validateSuccess,
                 validateMessage: action.result.message
             }
@@ -923,6 +926,38 @@ function QuickCompetitionState(state = initialState, action) {
 
             }
 
+        case ApiConstants.API_UPDATE_STATUS_TIMESLOT_LOAD:
+            return { ...state, onQuickCompLoad: true, error: null }
+
+        case ApiConstants.API_UPDATE_STATUS_TIMESLOT_SUCCESS:
+            console.log(action)
+            return {
+                ...state,
+                onQuickCompLoad: false,
+                error: null
+            }
+
+        case ApiConstants.API_UPDATE_STATUS_DIVISION_LOAD:
+            return {
+                ...state,
+                onQuickCompLoad: true,
+                error: null,
+            }
+        case ApiConstants.API_UPDATE_STATUS_DIVISION_SUCCESS:
+            return {
+                ...state, onQuickCompLoad: false, error: null
+            }
+        case ApiConstants.API_UPDATE_STATUS_VENUE_LOAD:
+            return {
+                ...state,
+                onQuickCompLoad: true,
+                error: null,
+            }
+        case ApiConstants.API_UPDATE_STATUS_VENUE_SUCCESS:
+            return {
+                ...state,
+                onQuickCompLoad: false, error: null
+            }
         default:
             return state;
     }

@@ -152,6 +152,33 @@ function mergeCompetitionProceed(payload) {
     }
 }
 
+function updateQuickCompetitionTimeSlotData(body, yearRefId,competitionUniqueKey, competitionName, payload){
+    return{
+        type:ApiConstants.API_UPDATE_STATUS_TIMESLOT_LOAD,
+        body,
+        yearRefId,
+        competitionUniqueKey,
+        competitionName,
+        payload
+    }
+}
+
+function updateGridAndDivisionAction(competitionUniqueKey, divisions, year, competitionName,  payload){
+    return {
+        type:ApiConstants.API_UPDATE_STATUS_DIVISION_LOAD,
+        competitionUniqueKey, divisions, year, competitionName,payload
+    }
+}
+
+function updateGridAndVenue(body,payload,competitionUniqueKey,year,competitionName)
+{
+    return{
+        type:ApiConstants.API_UPDATE_STATUS_VENUE_LOAD,
+        body,payload,
+        competitionUniqueKey,year,competitionName
+    }
+}
+
 export {
     updateQuickCompetitionData,
     updateTimeSlot,
@@ -170,5 +197,8 @@ export {
     quickCompetitionAddVenue,
     getMergeCompetitionAction,
     validateMergeCompetitionaction,
-    mergeCompetitionProceed
+    mergeCompetitionProceed,
+    updateQuickCompetitionTimeSlotData,
+    updateGridAndDivisionAction,
+    updateGridAndVenue
 }
