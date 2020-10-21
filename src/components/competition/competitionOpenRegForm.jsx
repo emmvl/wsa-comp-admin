@@ -304,7 +304,7 @@ class CompetitionOpenRegForm extends Component {
                 let isPublished = competitionFeesState.competitionDetailData.statusRefId == 2
 
                 let registrationCloseDate = competitionFeesState.competitionDetailData.registrationCloseDate
-                  && moment(competitionFeesState.competitionDetailData.registrationCloseDate)
+                    && moment(competitionFeesState.competitionDetailData.registrationCloseDate)
                 let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
 
                 let creatorId = competitionFeesState.competitionCreator
@@ -535,6 +535,7 @@ class CompetitionOpenRegForm extends Component {
             selectedVenues: compFeesState.selectedVenues,
             startDate: compFeesState.competitionDetailData.startDate && moment(compFeesState.competitionDetailData.startDate),
             endDate: compFeesState.competitionDetailData.endDate && moment(compFeesState.competitionDetailData.endDate),
+            finalTypeRefId: compFeesState.competitionDetailData.finalTypeRefId,
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
@@ -712,9 +713,10 @@ class CompetitionOpenRegForm extends Component {
         this.setDetailsFieldValue()
     }
 
-    onCompetitionChange(competitionId, statusRefId, competitionArray) {
+    onCompetitionChange(competitionId, competitionArray) {
         let competititionIndex = competitionArray.findIndex((x) => x.competitionId == competitionId)
         let competitionStatus = competitionArray[competititionIndex].competitionStatus
+        let statusRefId = competitionArray[competititionIndex].statusRefId
         if (competitionStatus == 2) {
             setOwn_competition(competitionId)
             setOwn_competitionStatus(statusRefId)
@@ -774,7 +776,7 @@ class CompetitionOpenRegForm extends Component {
                                 <Select
                                     name="competition"
                                     className="year-select reg-filter-select-competition ml-2"
-                                    onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key, all_own_CompetitionArr)}
+                                    onChange={(competitionId) => this.onCompetitionChange(competitionId, all_own_CompetitionArr)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
                                     {all_own_CompetitionArr.map(item => (
@@ -1049,12 +1051,12 @@ class CompetitionOpenRegForm extends Component {
                 {this.state.competitionStatus == 1 ? (
                     <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
                 ) : (
-                    <NavLink
-                        to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionDetails } }}
-                    >
-                        <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
-                    </NavLink>
-                )}
+                        <NavLink
+                            to={{ pathname: `/competitionVenueAndTimesAdd`, state: { key: AppConstants.competitionDetails } }}
+                        >
+                            <span className="input-heading-add-another">+{AppConstants.addVenue}</span>
+                        </NavLink>
+                    )}
                 <span className="applicable-to-heading required-field">{AppConstants.typeOfCompetition}</span>
                 <Form.Item
                     name="competitionTypeRefId"
@@ -1315,10 +1317,10 @@ class CompetitionOpenRegForm extends Component {
                                     </a>
                                 </div>
                             ) : (
-                                <span className="applicable-to-heading pt-0 pl-2">
-                                    {AppConstants.nonPlayerDivisionMessage}
-                                </span>
-                            )}
+                                    <span className="applicable-to-heading pt-0 pl-2">
+                                        {AppConstants.nonPlayerDivisionMessage}
+                                    </span>
+                                )}
                         </div>
                     </div>
                 ))}
@@ -1414,41 +1416,41 @@ class CompetitionOpenRegForm extends Component {
                                     )}
                                 </div>
                             ) : (
-                                <div className="comp-buttons-view">
-                                    <Tooltip
-                                        style={{ height: "100%" }}
-                                        onMouseEnter={() => this.setState({ tooltipVisiblePublish: allDisable })}
-                                        onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
-                                        visible={this.state.tooltipVisiblePublish}
-                                        title={ValidationConstants.compIsPublished}
-                                    >
-                                        <Button
-                                            id={AppUniqueId.compdiv_save_button}
-                                            className="publish-button save-draft-text"
-                                            type="primary"
-                                            disabled={tabKey === "1" || tabKey === "2" ? this.state.competitionStatus == 1 ? true : allDisable : isPublished}
-                                            htmlType="submit"
-                                            onClick={() => this.setState({
-                                                statusRefId: tabKey == "2" ? 2 : 1,
-                                                buttonPressed: tabKey == "2" ? "publish" : "next"
-                                            })}
-                                            style={{ width: 92.5 }}
+                                    <div className="comp-buttons-view">
+                                        <Tooltip
+                                            style={{ height: "100%" }}
+                                            onMouseEnter={() => this.setState({ tooltipVisiblePublish: allDisable })}
+                                            onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
+                                            visible={this.state.tooltipVisiblePublish}
+                                            title={ValidationConstants.compIsPublished}
                                         >
-                                            {tabKey === "2" ? AppConstants.save : AppConstants.next}
-                                        </Button>
-                                    </Tooltip>
-                                    {tabKey == "2" && (
-                                        <Button
-                                            onClick={() => this.setState({ nextButtonClicked: true })}
-                                            htmlType="submit"
-                                            className="publish-button"
-                                            type="primary"
-                                        >
-                                            {AppConstants.next}
-                                        </Button>
-                                    )}
-                                </div>
-                            )}
+                                            <Button
+                                                id={AppUniqueId.compdiv_save_button}
+                                                className="publish-button save-draft-text"
+                                                type="primary"
+                                                disabled={tabKey === "1" || tabKey === "2" ? this.state.competitionStatus == 1 ? true : allDisable : isPublished}
+                                                htmlType="submit"
+                                                onClick={() => this.setState({
+                                                    statusRefId: tabKey == "2" ? 2 : 1,
+                                                    buttonPressed: tabKey == "2" ? "publish" : "next"
+                                                })}
+                                                style={{ width: 92.5 }}
+                                            >
+                                                {tabKey === "2" ? AppConstants.save : AppConstants.next}
+                                            </Button>
+                                        </Tooltip>
+                                        {tabKey == "2" && (
+                                            <Button
+                                                onClick={() => this.setState({ nextButtonClicked: true })}
+                                                htmlType="submit"
+                                                className="publish-button"
+                                                type="primary"
+                                            >
+                                                {AppConstants.next}
+                                            </Button>
+                                        )}
+                                    </div>
+                                )}
                         </div>
                     </div>
                 </div>
