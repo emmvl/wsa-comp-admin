@@ -1645,8 +1645,9 @@ const AppConstants = {
   membershipFeesPaymentOptions: "Membership Fee Payment Options",
   whenPaymentsRequired: "When Payments are Required",
   Communication: "Communication",
-  fullCashAmount: "Full cash amount", 
-  partialCashAmount: "Partial cash amount"
+  fullCashAmount: "Full cash amount",
+  partialCashAmount: "Partial cash amount",
+  sqadSelectionEabled: "Squad selection will be disabled for this division if position tracking is disabled"
 };
 
 export default AppConstants;
