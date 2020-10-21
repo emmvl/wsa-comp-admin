@@ -56,6 +56,8 @@ class UserOurOrganization extends Component {
             organisationId: getOrganisationData().organisationUniqueKey,
             loggedInuserOrgTypeRefId: 0,
             loading: false,
+            photoLoading: false,
+            photoDeleteLoading:false,
             buttonPressed: "",
             getDataLoading: false,
             deleteModalVisible: false,
@@ -118,16 +120,21 @@ class UserOurOrganization extends Component {
                     history.push('/userAffiliatesList');
                 }
             }
-            if (userState.status == 1 && this.state.buttonPressed === "savePhotos") {
-                this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null });
+        }
 
+        if(nextProps.userState!= userState){
+            if (userState.onSaveOrgPhotoLoad == false && this.state.photoLoading == true) {
+                this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null, buttonPressed: "",
+                photoLoading: false });
+    
                 this.props.getOrganisationPhotoAction(obj);
             }
-            if (userState.status == 1 && this.state.buttonPressed == "deletePhotos") {
-                this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null });
+            if (userState.onDeleteOrgPhotoLoad == false && this.state.photoDeleteLoading == true) {
+                this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null, buttonPressed: "", photoDeleteLoading: false });
                 this.props.getOrganisationPhotoAction(obj);
             }
         }
+        
         if (this.state.buttonPressed === "cancel") {
             if (this.state.sourcePage == "DIR") {
                 history.push('/affiliateDirectory');
@@ -414,7 +421,7 @@ class UserOurOrganization extends Component {
             let payload = {
                 id: this.state.tableRecord.id
             }
-            this.setState({ loading: true, buttonPressed: "deletePhotos" });
+            this.setState({ photoDeleteLoading: true, buttonPressed: "deletePhotos" });
             this.props.deleteOrganisationPhotoAction(payload);
         }
 
@@ -480,7 +487,7 @@ class UserOurOrganization extends Component {
                     // formData.append("termsAndConditions", termsAndConditionsValue);
                     // formData.append("organisationLogo", this.state.termsAndCondititionFile);
                     // formData.append("termsAndConditionId", this.state.termsAndCondititionFile == null ? 1 : 0);
-
+                    console.log("formData", formData);
                     this.setState({ loading: true });
                     this.props.saveAffiliateAction(formData);
                 }
@@ -494,7 +501,7 @@ class UserOurOrganization extends Component {
             formData.append("photoUrl", tableRowData.photoUrl);
             formData.append("organisationId", getOrganisationData().organisationUniqueKey);
 
-            this.setState({ loading: true });
+            this.setState({ photoLoading: true });
             this.props.saveOrganisationPhotoAction(formData);
         }
     }
