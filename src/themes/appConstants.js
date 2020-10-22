@@ -1647,7 +1647,8 @@ const AppConstants = {
   Communication: "Communication",
   fullCashAmount: "Full cash amount",
   partialCashAmount: "Partial cash amount",
-  sqadSelectionEabled: "Squad selection will be disabled for this division if position tracking is disabled"
+  sqadSelectionEabled: "Squad selection will be disabled for this division if position tracking is disabled",
+  backToHome: "Back to home",
 };
 
 export default AppConstants;

@@ -18,7 +18,7 @@ import lazyLoad from "./components/lazyLoad";
 import "./customStyles/customStyles.css";
 import "./customStyles/antdStyles.css";
 import TagManager from 'react-gtm-module'
-import ErrorBoundary from "./components/emptyComponent/errorBoundry";
+import ErrorBoundary from "./components/emptyComponent/errorBoundary";
 // const ORG_ID = 'Netball';
 const tagManagerArgs = {
   gtmId: process.env.REACT_APP_GTM_ID

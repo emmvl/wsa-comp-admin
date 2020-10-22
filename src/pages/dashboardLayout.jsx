@@ -503,9 +503,9 @@ class DashboardLayout extends React.Component {
                     </li>
 
                     <li>
-                      <div className="user-profile-box">
+                      {this.props.isManuNotVisible !== true && <div className="user-profile-box">
                         {this.userProfileDropdown()}
-                      </div>
+                      </div>}
                     </li>
                   </ul>
                 </div>

@@ -167,9 +167,27 @@ img.bg {
   padding-bottom: 0px !important;
 }
 
+.error-boundry-main-div{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.went-wrong-img{
+  height: 385px;
+  width: auto;
+  object-fit: contain;
+}
+
 @media screen and (max-width: 1024px) {
   img.bg {
     left: 50%;
     margin-left: -512px;
+  }
+  .went-wrong-img{
+    height: 285px;
+    width: auto;
+    object-fit: cover;
   }
 }
