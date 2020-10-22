@@ -195,7 +195,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             statusRefId: -1,
             paging: { limit: -1, offset: 0 },
             stateOrganisations: true,
-          });
+        });
 
         this.formRef = React.createRef();
     }
@@ -459,12 +459,9 @@ class CompetitionVenueAndTimesEdit extends Component {
             ? stateList.find((state) => state.id === venuData.stateRefId).name
             : null;
 
-        let defaultVenueAddress = `${
-                venuData.street1 ? `${venuData.street1},` : ''
-            } ${
-                venuData.suburb ? `${venuData.suburb},` : ''
-            } ${
-                state ? `${state},` : ''
+        let defaultVenueAddress = `${venuData.street1 ? `${venuData.street1},` : ''
+            } ${venuData.suburb ? `${venuData.suburb},` : ''
+            } ${state ? `${state},` : ''
             } Australia`;
 
         return (
@@ -635,7 +632,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
     onTimeChange = (time, index, field) => {
         if (time !== null && time !== undefined) {
-            this.updateVenuAndTimeDataAction(time.format("HH:mm"), index, field, 'gameTimeslot');
+            this.props.updateVenuAndTimeDataAction(time.format("HH:mm"), index, field, 'gameTimeslot');
         }
     };
 
@@ -760,7 +757,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         disabled={item.isDisabled}
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
-                        onChange={(time) => this.onAddTimeChange(time, index, tableIndex,'startTime')}
+                        onChange={(time) => this.onAddTimeChange(time, index, tableIndex, 'startTime')}
                         onBlur={(e) => this.onAddTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, tableIndex, 'startTime')}
                         value={moment(item.startTime, "HH:mm")}
                         format="HH:mm"
@@ -776,7 +773,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         disabledHours={() => this.getDisabledHours(item.startTime)}
                         disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
                         style={{ width: "100%" }}
-                        onChange={(time) => this.onAddTimeChange(time, index, tableIndex,'endTime')}
+                        onChange={(time) => this.onAddTimeChange(time, index, tableIndex, 'endTime')}
                         onBlur={(e) => this.onAddTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, tableIndex, 'endTime')}
                         value={moment(item.endTime, "HH:mm")}
                         format="HH:mm"

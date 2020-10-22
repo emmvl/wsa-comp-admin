@@ -257,7 +257,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
               "period": period,
               // "positionId": playerdata.attendance ? playerdata.attendance.positionId ? playerdata.attendance.positionId : 0 : 0,
               "positionId": selectedData,
-              "duration": positionDuration,
+              "duration": 0,
               "playedInPeriod": false,
               "playedEndPeriod": null,
               "playedFullPeriod": false,
@@ -285,7 +285,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
               "duration": selectedData,
               "playedInPeriod": selectedData > 0 ? true : false,
               "playedEndPeriod": null,
-              "playedFullPeriod": selectedData == periodDuration ? true : false,
+              "playedFullPeriod": false,
               "periodDuration": periodDuration,
               "source": "Web",
               "createdBy": userId,
@@ -312,7 +312,8 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
               "playerId": playerdata.playerId,
               "period": period,
               "positionId": playerdata.attendance ? playerdata.attendance.positionId ? playerdata.attendance.positionId : 0 : 0,
-              "duration": selectedData ? periodDuration : 0,
+              // "duration": selectedData ? periodDuration : 0,
+              "duration": periodDuration,
               "playedInPeriod": false,
               "playedEndPeriod": null,
               "playedFullPeriod": false,
@@ -324,7 +325,8 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
             trackDataRes.push(trackObj)
           } else {
             state.trackResultData[findData][key] = selectedData
-            state.trackResultData[findData]['duration'] = selectedData ? periodDuration : 0
+            // state.trackResultData[findData]['duration'] = selectedData ? periodDuration : 0
+            state.trackResultData[findData]['duration'] = periodDuration
             state.trackResultData[findData]['updatedBy'] = userId
             state.trackResultData[findData]['createdBy'] = null
           }
@@ -340,7 +342,8 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
               "duration": selectedData,
               "playedInPeriod": selectedData > 0 ? true : false,
               "playedEndPeriod": null,
-              "playedFullPeriod": selectedData == periodDuration ? true : false,
+              // "playedFullPeriod": selectedData == periodDuration ? true : false,
+              "playedFullPeriod": false,
               "periodDuration": periodDuration,
               "source": "Web",
               "createdBy": userId,
@@ -349,7 +352,8 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
             trackDataRes.push(trackObj)
           } else {
             state.trackResultData[findData]['playedInPeriod'] = selectedData > 0 ? true : false
-            state.trackResultData[findData]['playedFullPeriod'] = selectedData == periodDuration ? true : false
+            // state.trackResultData[findData]['playedFullPeriod'] = selectedData == periodDuration ? true : false
+            state.trackResultData[findData]['playedFullPeriod'] = false
             state.trackResultData[findData]['duration'] = selectedData
             state.trackResultData[findData]['updatedBy'] = userId
             state.trackResultData[findData]['createdBy'] = null
@@ -397,7 +401,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
               "positionId": selectedData,
               "duration": positionDuration,
               "playedInPeriod": false,
-              "playedEndPeriod": state.playedCheckBox,
+              "playedEndPeriod": null,
               "playedFullPeriod": positionDuration === periodDuration ? true : false,
               "periodDuration": periodDuration,
               "source": "Web",
