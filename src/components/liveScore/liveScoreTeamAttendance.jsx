@@ -98,18 +98,14 @@ const columns = [
         sorter: true,
         onHeaderCell: () => listeners("firstName"),
         render: (firstName, record) => (
-            <>
-                {record.status == 'Borrowed' ? (
-                    <span>{firstName}</span>
-                ) : (
-                    <span
-                        className="input-heading-add-another pt-0"
-                        onClick={() => this_Obj.checkUserId(record)}
-                    >
-                        {firstName}
-                    </span>
-                )}
-            </>
+
+            <span
+                className="input-heading-add-another pt-0"
+                onClick={() => this_Obj.checkUserId(record)}
+            >
+                {firstName}
+            </span>
+
         ),
     },
     {
@@ -119,18 +115,12 @@ const columns = [
         sorter: true,
         onHeaderCell: () => listeners("lastName"),
         render: (lastName, record) => (
-            <>
-                {record.status == 'Borrowed' ? (
-                    <span>{lastName}</span>
-                ) : (
-                    <span
-                        className="input-heading-add-another pt-0"
-                        onClick={() => this_Obj.checkUserId(record)}
-                    >
-                        {lastName}
-                    </span>
-                )}
-            </>
+            <span
+                className="input-heading-add-another pt-0"
+                onClick={() => this_Obj.checkUserId(record)}
+            >
+                {lastName}
+            </span>
         ),
     },
     {
@@ -211,7 +201,13 @@ const borrowedColumns = [
         key: 'firstName',
         sorter: true,
         onHeaderCell: () => listeners("firstName"),
-        render: (firstName) => <span>{firstName}</span>
+        render: (firstName, record) =>
+            <span
+                className="input-heading-add-another pt-0"
+                onClick={() => this_Obj.checkUserId(record)}
+            >
+                {firstName}
+            </span>
     },
     {
         title: 'Last Name',
@@ -219,7 +215,10 @@ const borrowedColumns = [
         key: 'lastName',
         sorter: true,
         onHeaderCell: () => listeners("lastName"),
-        render: (lastName) => <span>{lastName}</span>
+        render: (lastName, record) => <span
+            className="input-heading-add-another pt-0"
+            onClick={() => this_Obj.checkUserId(record)}>
+            {lastName}</span>
     },
     {
         title: 'Division',
@@ -310,7 +309,7 @@ class LiveScoreTeamAttendance extends Component {
     }
 
 
-    handleTablePagination = (page, roundName)  => {
+    handleTablePagination = (page, roundName) => {
         let { teamAttendanceListActionObject } = this.props.liveScoreTeamAttendanceState
         let roundSelect = roundName ? roundName : this.state.selectedRound
         let offset = page ? 10 * (page - 1) : 0;
