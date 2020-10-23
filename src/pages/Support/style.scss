@@ -6,8 +6,13 @@
   height: calc(100% - 77px);
   display: flex;
   overflow: hidden;
+  background: #fff;
   font-family: inter, sans-serif;
   font-size: 15px;
+
+  img {
+    max-width: 100%;
+  }
 }
 
 .support-side-bar {

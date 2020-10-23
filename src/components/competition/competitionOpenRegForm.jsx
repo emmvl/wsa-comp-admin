@@ -300,6 +300,7 @@ class CompetitionOpenRegForm extends Component {
             }
         }
         if (nextProps.competitionFeesState !== competitionFeesState) {
+        
             if (competitionFeesState.getCompAllDataOnLoad === false && this.state.getDataLoading) {
                 let isPublished = competitionFeesState.competitionDetailData.statusRefId == 2
 
@@ -339,6 +340,7 @@ class CompetitionOpenRegForm extends Component {
                     let competitionId = null
                     let statusRefId = null
                     let competitionStatus = null
+            
                     if (screenKey === "compDashboard" || fromReplicate == 1) {
                         competitionId = getOwn_competition()
                         let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
@@ -475,6 +477,7 @@ class CompetitionOpenRegForm extends Component {
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.all_own_CompetitionArr.length > 0 ? this.props.appState.all_own_CompetitionArr : undefined;
         let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
+
         if (fromReplicate != 1) {
             if (storedCompetitionId && yearId && propsData && compData) {
                 this.props.getAllCompetitionFeesDeatilsAction(storedCompetitionId, null, this.state.sourceModule)

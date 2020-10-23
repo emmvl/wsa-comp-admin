@@ -33,7 +33,8 @@ class CompetitionReplicate extends Component {
         this.state = {
             yearRefId: 1,
             buttonSave: null,
-            hasRegistration: 0
+            hasRegistration: 0,
+            saveLoad: false
         }
 
         this.getRefernce();
@@ -42,12 +43,15 @@ class CompetitionReplicate extends Component {
 
     async componentDidUpdate(nextProps) {
         try {
-            if (!this.props.competitionDashboardState.replicateSaveOnLoad && this.state.buttonSave === "save") {
+            if (!this.props.competitionDashboardState.replicateSaveOnLoad && this.state.saveLoad) {
+                this.setState({saveLoad: false})
                 if (this.props.competitionDashboardState.status == 4) {
                     message.error(this.props.competitionDashboardState.replicateSaveErrorMessage);
                 } else {
+                    
                     await setOwn_competition(this.props.competitionDashboardState.competitionId);
-                    await setOwnCompetitionYear(this.props.competitionDashboardState.yearRefId)
+                    await setOwnCompetitionYear(this.props.competitionDashboardState.yearRefId);
+
                     if (this.state.hasRegistration != 1) {
                         history.push({ pathname: "/competitionOpenRegForm", state: { fromReplicate: 1 } })
                     } else {
@@ -169,8 +173,9 @@ class CompetitionReplicate extends Component {
                     return;
                 }
             }
-            this.setState({ buttonSave: "save" });
+           
             this.props.replicateSaveAction(replicateSave);
+            this.setState({ saveLoad: true});
         } catch (ex) {
             console.log("Error in saveReplicate::" + ex)
         }
