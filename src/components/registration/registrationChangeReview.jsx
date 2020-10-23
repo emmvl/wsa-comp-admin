@@ -289,8 +289,8 @@ class RegistrationChangeReview extends Component {
 
         console.log("****" + JSON.stringify(reviewSaveData));
 
-        // this.props.saveRegistrationChangeReview(reviewSaveData);
-        // this.setState({ loading: true });
+        this.props.saveRegistrationChangeReview(reviewSaveData);
+        this.setState({ loading: true });
     }
 
     ////modal view

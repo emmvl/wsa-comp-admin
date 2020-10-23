@@ -1381,7 +1381,7 @@ function createProductFeeArr(data) {
                 }
 
                 if (statusTeamCasual.status) {
-                    let mFeesCasual = Number(memberShipProductType[j].mSeasonalFee) + Number(memberShipProductType[j].mSeasonalGst)
+                    let mFeesCasual = Number(memberShipProductType[j].mCasualFee) + Number(memberShipProductType[j].mCasualGst)
 
                     type_object_team_casual = {
                         "competitionMembershipProductFeeId": statusTeamCasual.result.competitionMembershipProductFeeId,
@@ -1600,6 +1600,7 @@ function createProductFeeArr(data) {
                         }
                     }
 
+                    console.log("*****", statusTeamCasual);
                     if (statusTeamCasual.status) {
                         let mFeesCasualPer = Number(memberShipProductType[k].mCasualFee) + Number(memberShipProductType[k].mCasualGst)
                         type_object_team_casual = {
@@ -1648,6 +1649,8 @@ function createProductFeeArr(data) {
                             "checkBoxOption": statusRefId == 1 ? 1 : 0
                         }
                     }
+
+                    console.log("perTypeTeamArrayCasual", perTypeTeamArrayCasual);
 
                     if (memberShipProductType[k].isPlaying == 1) {
                         perTypeTeamArraySeasonal.push(type_object_team_seasonal)
@@ -1717,6 +1720,8 @@ function createProductFeeArr(data) {
             "isTeamReg": (isSeasonalTeamFeeTypeAvailable || isCasualTeamFeeTypeAvailable),
             "teamRegChargeTypeRefId": teamRegChargeTypeRefId
         }
+
+        console.log("object",object);
 
         productArray.push(object)
     }
