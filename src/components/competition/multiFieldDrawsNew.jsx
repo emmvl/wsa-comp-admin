@@ -887,7 +887,7 @@ class MultifieldDrawsNew extends Component {
                             </div>
                         </div>
 
-                        <div className='col-sm-2 mt-2' style={{ minWidth: 180 }}>
+                        <div className='col-sm-2 mt-2' style={{ minWidth: 160 }}>
                             <Checkbox
                                 className="single-checkbox-radio-style"
                                 style={{ paddingTop: 8 }}
@@ -946,7 +946,7 @@ class MultifieldDrawsNew extends Component {
                     </Checkbox>
                     {isArrayNotEmpty(competitionVenues) && competitionVenues.map((item, index) => {
                         return (
-                            index < this.checkDisplayCountList(competitionVenues, showAllVenue) && <div className="column pl-5">
+                            index < this.checkDisplayCountList(competitionVenues, showAllVenue) && <div key={"competitionVenue_" + item.id} className="column pl-5">
                                 <Checkbox
                                     className="single-checkbox-radio-style"
                                     style={{ paddingTop: 8 }}
@@ -1116,7 +1116,7 @@ class MultifieldDrawsNew extends Component {
                             </Checkbox>
                             {isArrayNotEmpty(divisionGradeNameList) && divisionGradeNameList.map((item, index) => {
                                 return (
-                                    index < this.checkDisplayCountList(divisionGradeNameList, showAllDivision) && <div className="column pl-5">
+                                    index < this.checkDisplayCountList(divisionGradeNameList, showAllDivision) && <div key={"divisionGrade_" + item.competitionDivisionGradeId} className="column pl-5">
                                         <Checkbox
                                             className={`single-checkbox-radio-style ${getColor(item.colorCode)}`}
                                             style={{ paddingTop: 8 }}
@@ -1306,7 +1306,7 @@ class MultifieldDrawsNew extends Component {
                             <Loader visible={this.props.drawsState.updateLoad} />
 
                             {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
-                                <div>
+                                <div className="pt-4 pb-4" key={"drawData" + dateIndex}>
                                     {this.state.firstTimeCompId != "-1" && (
                                         <div className="draws-round-view">
                                             <span className="draws-round">
@@ -1325,7 +1325,7 @@ class MultifieldDrawsNew extends Component {
                                 <Loader visible={this.props.drawsState.updateLoad} />
 
                                 {this.props.drawsState.getRoundsDrawsdata.map((dateItem, dateIndex) => (
-                                    <div className="pt-4" key={"drawData" + dateIndex}>
+                                    <div className="pt-4 pb-4" key={"drawData" + dateIndex}>
                                         {this.state.firstTimeCompId != "-1" && (
                                             <div className="draws-round-view">
                                                 <span className="draws-round">
@@ -1354,6 +1354,18 @@ class MultifieldDrawsNew extends Component {
             </div>
         );
     }
+    checkDate(date, index, dateArray) {
+        if (index == 0) {
+            return moment(date).format('DD MMM, ddd')
+        } else {
+            if (moment(dateArray[index].date).format('DD-MM-YYYY') == moment(dateArray[(index - 1)].date).format('DD-MM-YYYY')) {
+                return moment(date).format('ddd')
+            }
+            else {
+                return moment(date).format('DD MMM, ddd')
+            }
+        }
+    }
 
     draggableView = (dateItem) => {
         let disabledStatus = this.state.competitionStatus == 1
@@ -1364,8 +1376,8 @@ class MultifieldDrawsNew extends Component {
             ? this.props.drawsState.legendsArray
             : [];
         return (
-            <div>
-                <div className="scroll-bar pb-4">
+            <>
+                <div className="scroll-bar pb-4" style={{ width: dateItem.dateNewArray.length > 0 && dateItem.dateNewArray.length * 140, minWidth: 1080 }}>
                     <div className="table-head-wrap">
                         {/* Day name list */}
                         <div className="tablehead-row">
@@ -1379,7 +1391,7 @@ class MultifieldDrawsNew extends Component {
                                 }
                                 return (
                                     <span key={"day" + index} style={{ left: dateMargin }}>
-                                        {item.notInDraw == false ? moment(item.date).format('DD MMM, ddd') : ''}
+                                        {item.notInDraw == false ? this.checkDate(item.date, index, dateItem.dateNewArray) : ''}
                                     </span>
                                 );
                             })}
@@ -1617,7 +1629,7 @@ class MultifieldDrawsNew extends Component {
                         );
                     })}
                 </div>
-            </div>
+            </>
         );
     };
 
