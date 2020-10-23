@@ -287,8 +287,10 @@ class RegistrationChangeReview extends Component {
         reviewSaveData["isFromOrg"] = isFromOrg;
         reviewSaveData["orgRefTypeId"] = regChangeReviewData.orgRefTypeId;
 
-        this.props.saveRegistrationChangeReview(reviewSaveData);
-        this.setState({ loading: true });
+        console.log("****" + JSON.stringify(reviewSaveData));
+
+        // this.props.saveRegistrationChangeReview(reviewSaveData);
+        // this.setState({ loading: true });
     }
 
     ////modal view
