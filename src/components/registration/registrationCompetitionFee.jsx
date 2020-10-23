@@ -611,7 +611,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Association Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
@@ -805,7 +805,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Association Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
@@ -828,7 +828,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Association GST',
+        title: 'Affiliate GST',
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
         render: (affiliateGst, record, index) => (
@@ -1076,7 +1076,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Club Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
@@ -1271,7 +1271,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Club fees (excl. GST)',
+        title: 'Affiliate fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
@@ -1552,7 +1552,7 @@ const playerSeasonalTableTeamAssociation = [
             ),
     },
     {
-        title: 'Association Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) =>
@@ -1845,7 +1845,7 @@ const playerSeasonalTableTeamClub = [
             ),
     },
     {
-        title: 'Club Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) =>
@@ -2242,7 +2242,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Association Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
@@ -2451,7 +2451,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Club fees (excl. GST)',
+        title: 'Affiliate fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
