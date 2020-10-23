@@ -495,7 +495,7 @@ class PaymentDashboard extends Component {
                             optionFilterProp="children"
                             className="reg-payment-select"
                             style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
-                            // onChange={(e) => this.onChangeDropDownValue(e, "filterOrganisation")}
+                            onChange={(type) => this.setState({ type })}
                             value={this.state.type}
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
@@ -513,7 +513,7 @@ class PaymentDashboard extends Component {
                             optionFilterProp="children"
                             className="reg-payment-select"
                             style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
-                            // onChange={(e) => this.onChangeDropDownValue(e, "filterOrganisation")}
+                            onChange={(status) => this.setState({ status })}
                             value={this.state.status}
                         >
                             <Option key={-1} value={-1}>{AppConstants.all}</Option>
