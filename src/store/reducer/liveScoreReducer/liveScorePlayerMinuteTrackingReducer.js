@@ -227,6 +227,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
             "playerId": playerdata.playerId,
             "period": period,
             "positionId": playerdata.attendance ? playerdata.attendance.positionId ? playerdata.attendance.positionId : 0 : 0,
+            // "positionId": 0,
             "duration": selectedData ? periodDuration : 0,
             "playedInPeriod": selectedData,
             "playedEndPeriod": selectedData,
@@ -241,6 +242,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
           state.trackResultData[findData]['playedInPeriod'] = selectedData
           state.trackResultData[findData]['playedEndPeriod'] = selectedData
           state.trackResultData[findData]['playedFullPeriod'] = selectedData
+          // state.trackResultData[findData]['positionId'] = 0
           state.trackResultData[findData]['duration'] = selectedData ? periodDuration : 0
           state.trackResultData[findData]['updatedBy'] = userId
           state.trackResultData[findData]['createdBy'] = null
@@ -419,7 +421,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
         }
       }
 
-      // console.log(action, 'API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD', state.trackResultData)
+      console.log(action, 'API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD', state.trackResultData)
       return {
         ...state,
       };

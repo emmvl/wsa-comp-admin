@@ -297,10 +297,10 @@ class LiveScoreMatchDetails extends Component {
 
         if (player) {
             attendance = Array(4).fill(null).map((_, index) => ({
-                teamId: player?.teamId,
+                teamId: player ?.teamId,
                 matchId: this.state.matchId,
-                playerId: player?.playerId,
-                positionId: player?.lineup?.positionId,
+                playerId: player ?.playerId,
+                positionId: player ?.lineup ?.positionId,
                 isBorrowed: borrowed,
                 isPlaying: true,
                 verifiedBy: null,
@@ -384,12 +384,12 @@ class LiveScoreMatchDetails extends Component {
             ? trackingList.find((data) => data.playerId === playerId && data.period === period)
             : null;
 
-        return trackingData?.duration || 0;
+        return trackingData ?.duration || 0;
     };
 
     exportAttendance = (team, teamId) => {
         const teamAttendance = team === 'team1' ? this.state.team1Attendance : this.state.team2Attendance;
-        const filteredAttendance = teamAttendance.filter((att) => !!att?.positionId);
+        const filteredAttendance = teamAttendance.filter((att) => !!att ?.positionId);
 
         if (this.state.minutesTrackingData.length > 0) {
             this.props.liveScorePlayerMinuteRecordAction(this.state.minutesTrackingData);
@@ -845,7 +845,7 @@ class LiveScoreMatchDetails extends Component {
                                                     className="year-select reg-filter-select1 table-cell-select"
                                                     size="small"
                                                     style={{ width: '100%' }}
-                                                    defaultValue={this.setAttendanceValue(row.playerId, 1, 'positionId', "flow3")}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 1, 'positionId', "flow1")}
                                                     onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 1, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                                 >
                                                     {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
@@ -913,7 +913,7 @@ class LiveScoreMatchDetails extends Component {
                                                     className="year-select reg-filter-select1 table-cell-select"
                                                     size="small"
                                                     style={{ width: '100%' }}
-                                                    defaultValue={this.setAttendanceValue(row.playerId, 2, 'positionId', "flow3")}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 2, 'positionId', "flow1")}
                                                     onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 2, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                                 >
                                                     {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
@@ -1057,7 +1057,7 @@ class LiveScoreMatchDetails extends Component {
                             },
                             {
                                 title: 'Secs',
-                                key: 'sec2',
+                                key: 'sec1',
                                 width: 60,
                                 render: (p, row) =>
                                     <InputNumber
@@ -1163,7 +1163,7 @@ class LiveScoreMatchDetails extends Component {
                             },
                             {
                                 title: 'Secs',
-                                key: 'sec2',
+                                key: 'sec1',
                                 width: 60,
                                 render: (p, row) =>
                                     <InputNumber
@@ -1412,7 +1412,7 @@ class LiveScoreMatchDetails extends Component {
                                                     className="year-select reg-filter-select1 table-cell-select"
                                                     size="small"
                                                     style={{ width: '100%' }}
-                                                    defaultValue={this.setAttendanceValue(row.playerId, 1, 'positionId', "flow3")}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 1, 'positionId', "flow1")}
                                                     onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 1, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                                 >
                                                     {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
@@ -1480,7 +1480,7 @@ class LiveScoreMatchDetails extends Component {
                                                     className="year-select reg-filter-select1 table-cell-select"
                                                     size="small"
                                                     style={{ width: '100%' }}
-                                                    defaultValue={this.setAttendanceValue(row.playerId, 2, 'positionId', "flow3")}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 2, 'positionId', "flow1")}
                                                     onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 2, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                                 >
                                                     {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
@@ -1497,12 +1497,12 @@ class LiveScoreMatchDetails extends Component {
                                 key: 'played2',
                                 width: 60,
                                 render: (p, row) => {
-                                    let disable = this.setAttendanceValue(row.playerId, 1, 'disabled', "flow1")
+                                    let disable = this.setAttendanceValue(row.playerId, 2, 'disabled', "flow1")
                                     let value = disable ? true : false
                                     return (
                                         <>
                                             <Checkbox
-                                                defaultChecked={value ? false : this.setAttendanceValue(row.playerId, 1, 'isPlaying', "flow1")}
+                                                defaultChecked={value ? false : this.setAttendanceValue(row.playerId, 2, 'isPlaying', "flow1")}
                                                 disabled={value}
                                                 onChange={
                                                     (e) =>
@@ -1552,7 +1552,7 @@ class LiveScoreMatchDetails extends Component {
                                                     className="year-select reg-filter-select1 table-cell-select"
                                                     size="small"
                                                     style={{ width: '100%' }}
-                                                    defaultValue={this.setAttendanceValue(row.playerId, 3, 'positionId', "flow3")}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 3, 'positionId', "flow1")}
                                                     onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 3, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                                 >
                                                     {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
@@ -1622,7 +1622,7 @@ class LiveScoreMatchDetails extends Component {
                                                     className="year-select reg-filter-select1 table-cell-select"
                                                     size="small"
                                                     style={{ width: '100%' }}
-                                                    defaultValue={this.setAttendanceValue(row.playerId, 4, 'positionId', "flow3")}
+                                                    defaultValue={this.setAttendanceValue(row.playerId, 4, 'positionId', "flow1")}
                                                     onChange={(value) => this.props.liveScoreUpdatePlayerMinuteRecordAction({ team: team, playerId: row.playerId, period: 4, key: 'positionId', selectedData: value, index: index, playerdata: row, positionDuration: positionDuration, periodDuration: periodDuration, extraKey: 'positionId', matchId: this.state.matchId, positionTrack: pt, gameTimeTrack: gtt, attndceRecrd: art })}
                                                 >
                                                     {this.props.liveScorePlayerMinuteTrackingState.positionList.map((position) => (
@@ -2503,7 +2503,7 @@ class LiveScoreMatchDetails extends Component {
                         <div>
                             {this.state.teamAttendance && (
                                 <div className="col-12">
-                                    {this.teamPlayersStatus(team1PlayersData, 'team1', match[0]?.team1?.id)}
+                                    {this.teamPlayersStatus(team1PlayersData, 'team1', match[0] ?.team1 ?.id)}
                                 </div>
                             )}
                             {!this.state.teamAttendance && (
@@ -2566,7 +2566,7 @@ class LiveScoreMatchDetails extends Component {
                         <div>
                             {this.state.teamAttendance ? (
                                 <div className="col-12">
-                                    {this.teamPlayersStatus(team2PlayersData, 'team2', match[0]?.team2?.id)}
+                                    {this.teamPlayersStatus(team2PlayersData, 'team2', match[0] ?.team2 ?.id)}
                                 </div>
                             ) : (
                                     <div className="col-12">
@@ -2581,7 +2581,7 @@ class LiveScoreMatchDetails extends Component {
                                 )}
                         </div>
                     </div>
-                    {this.footerView('team2', match[0]?.team2?.id)}
+                    {this.footerView('team2', match[0] ?.team2 ?.id)}
                 </div>
             </div>
         )
@@ -2672,11 +2672,11 @@ class LiveScoreMatchDetails extends Component {
                 attendance: null,
                 attended: false,
                 lineup: null,
-                name: `${borrowedPlayer?.firstName || ''} ${borrowedPlayer?.lastName || ''}`,
-                photoUrl: borrowedPlayer?.profilePicture,
-                playerId: borrowedPlayer?.playerId,
-                team: borrowedPlayer?.team?.name,
-                teamId: borrowedPlayer?.team?.id,
+                name: `${borrowedPlayer ?.firstName || ''} ${borrowedPlayer ?.lastName || ''}`,
+                photoUrl: borrowedPlayer ?.profilePicture,
+                playerId: borrowedPlayer ?.playerId,
+                team: borrowedPlayer ?.team ?.name,
+                teamId: borrowedPlayer ?.team ?.id,
             };
 
             if (this.state.addPlayerModal === 'team1') {
