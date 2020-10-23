@@ -3974,6 +3974,7 @@ class RegistrationCompetitionFee extends Component {
         }
 
         if (finalpostarray.length > 0) {
+            console.log("finalpostarray", finalpostarray);
             this.props.saveCompetitionFeeSection(finalpostarray, competitionId, this.state.affiliateOrgId);
             this.setState({ loading: true });
         } else {
