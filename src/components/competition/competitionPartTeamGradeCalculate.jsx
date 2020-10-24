@@ -405,7 +405,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         </div>
                         {/* <div className="col-sm-5" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button className="primary-add-comp-form" type="primary" onClick={this.addNewGrade}>
-                                + {AppConstants.addgrade}
+                                + {AppConstants.addGrade}
                             </Button>
                         </div> */}
                     </div>

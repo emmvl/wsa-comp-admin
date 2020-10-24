@@ -42,7 +42,7 @@ function* errorSaga(error) {
 
 export function* liveScoreBannerSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.liveScoreBannerList, action.competitionID);
+        const result = yield call(LiveScoreAxiosApi.liveScoreBannerList, action.competitionID, action.organisationID);
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_BANNERS_SUCCESS,
@@ -62,6 +62,7 @@ export function* liveScoreAddBannerSaga(action) {
     try {
         const result = yield call(
             LiveScoreAxiosApi.liveScoreAddBanner,
+            action.organisationID,
             action.competitionID,
             action.bannerImage,
             action.showOnHome,

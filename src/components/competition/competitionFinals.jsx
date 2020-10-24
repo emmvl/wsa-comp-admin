@@ -619,7 +619,7 @@ class CompetitionFinals extends Component {
                                             checked={data.playOff3rdposition == 1}
                                             onChange={e => this.onChangeSetValue(e.target.checked ? 1 : 0, "playOff3rdposition",index)}
                                         >
-                                            {AppConstants.playOff3rdposition}
+                                            {AppConstants.playOff3rdPosition}
                                         </Checkbox>
                                     )}
 
@@ -972,7 +972,7 @@ class CompetitionFinals extends Component {
                                             <InputWithHead
                                                 auto_complete="new-beforeExtraTime"
                                                 disabled={disabledStatus}
-                                                heading={AppConstants.beaforeExtraTime}
+                                                heading={AppConstants.beforeExtraTime}
                                                 placeholder={AppConstants.mins}
                                                 value={data.beforeExtraTime}
                                                 required="required-field"

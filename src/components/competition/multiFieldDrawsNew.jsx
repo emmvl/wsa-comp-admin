@@ -7,8 +7,6 @@ import history from "../../util/history";
 import { NavLink } from 'react-router-dom';
 import DrawsPublishModel from '../../customComponents/drawsPublishModel'
 import _ from "lodash";
-import '../../../node_modules/react-grid-layout/css/styles.css'
-import '../../../node_modules/react-resizable/css/styles.css'
 import loadjs from 'loadjs';
 import moment from 'moment';
 import AppImages from "../../themes/appImages";

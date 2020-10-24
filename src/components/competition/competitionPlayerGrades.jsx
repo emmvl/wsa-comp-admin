@@ -958,7 +958,7 @@ class CompetitionPlayerGrades extends Component {
                             id={AppUniqueId.PlayerGrading_addTeamName}
                             required="pt-0 mt-0"
                             heading={AppConstants.addTeam}
-                            placeholder={AppConstants.pleaseEnterteamName}
+                            placeholder={AppConstants.pleaseEnterTeamName}
                             onChange={(e) => this.setState({ newTeam: e.target.value })}
                             value={this.state.newTeam}
                         />

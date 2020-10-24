@@ -135,9 +135,9 @@ class LiveScoreBanners extends Component {
                 <div className="row">
                     <div className="col-sm pt-1">
                         <InputWithHead
-                            heading={AppConstants.bannerlink}
-                            placeholder={AppConstants.bannerlink}
-                            name={'bannerlink'}
+                            heading={AppConstants.bannerLink}
+                            placeholder={AppConstants.bannerLink}
+                            name={'bannerLink'}
                             disabled
                             value={record.bannerLink ? record.bannerLink : `http://`}
                         />

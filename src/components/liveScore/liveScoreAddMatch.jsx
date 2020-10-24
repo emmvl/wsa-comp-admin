@@ -1481,7 +1481,7 @@ class LiveScoreAddMatch extends Component {
                                             onClick={() => this.setState({ forfeitVisible: true })}
                                             type="cancel-button"
                                         >
-                                            {AppConstants.forfiet}
+                                            {AppConstants.forfeit}
                                         </Button>
                                     )}
                                     {this.state.isEdit && (

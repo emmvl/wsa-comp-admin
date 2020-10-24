@@ -95,7 +95,7 @@ function* getUreSaga(action) {
 function* getAffiliatesListingSaga(action) {
   try {
     const result = yield call(UserAxiosApi.affiliatesListing, action.payload, action.sortBy, action.sortOrder);
-    console.log(result)
+
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_AFFILIATES_LISTING_SUCCESS,
@@ -129,7 +129,7 @@ function* saveAffiliateSaga(action) {
   }
 }
 
-// Get the Affiliate by Organisation Id 
+// Get the Affiliate by Organisation Id
 function* getAffiliateByOrganisationIdSaga(action) {
   try {
     const result = yield call(UserAxiosApi.affiliateByOrganisationId, action.payload);
@@ -148,7 +148,7 @@ function* getAffiliateByOrganisationIdSaga(action) {
   }
 }
 
-// Get the Affiliate Our Organisation Id 
+// Get the Affiliate Our Organisation Id
 function* getAffiliateOurOrganisationIdSaga(action) {
   try {
     const resultcharity = yield call(CommonAxiosApi.getCharityRoundUp, action);
@@ -211,7 +211,25 @@ function* getOrganisationForVenueSaga(action) {
   }
 }
 
-// Delete Affiliate 
+function* getBannerCount(action) {
+  try {
+    const result = yield call(UserAxiosApi.getBannerCount, action.organisationId);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_BANNER_COUNT_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
+// Delete Affiliate
 function* deleteAffiliateSaga(action) {
   try {
     const result = yield call(UserAxiosApi.affiliateDelete, action.payload);
@@ -249,7 +267,7 @@ function* getUserOrganisationSaga(action) {
   }
 }
 
-// Get the User Dashboard Textual Listing 
+// Get the User Dashboard Textual Listing
 function* getUserDashboardTextualListingSaga(action) {
   try {
     const result = yield call(UserAxiosApi.getUserDashboardTextualListing, action.payload, action.sortBy, action.sortOrder);
@@ -438,7 +456,7 @@ function* getUserFriendListSaga(action) {
   }
 }
 
-// Get the User Refer Friend List 
+// Get the User Refer Friend List
 function* getUserReferFriendListSaga(action) {
   try {
     const result = yield call(UserAxiosApi.getUserReferFriendList, action.payload, action.sortBy,
@@ -458,7 +476,7 @@ function* getUserReferFriendListSaga(action) {
   }
 }
 
-// Get the Org Photos List 
+// Get the Org Photos List
 function* getOrgPhotosListSaga(action) {
   try {
     const result = yield call(UserAxiosApi.getOrgPhotosList, action.payload);
@@ -477,7 +495,7 @@ function* getOrgPhotosListSaga(action) {
   }
 }
 
-// Save the Org Photos  
+// Save the Org Photos
 function* saveOrgPhotosSaga(action) {
   try {
     const result = yield call(UserAxiosApi.saveOrgPhoto, action.payload);
@@ -496,7 +514,7 @@ function* saveOrgPhotosSaga(action) {
   }
 }
 
-// Delete the Org Photos  
+// Delete the Org Photos
 function* deleteOrgPhotosSaga(action) {
   try {
     const result = yield call(UserAxiosApi.deleteOrgPhoto, action.payload);
@@ -515,7 +533,7 @@ function* deleteOrgPhotosSaga(action) {
   }
 }
 
-// Delete Org Contact  
+// Delete Org Contact
 function* deleteOrgContactSaga(action) {
   try {
     const result = yield call(UserAxiosApi.deleteOrgContact, action.payload);
@@ -557,7 +575,7 @@ function* exportOrgRegQuestionsSaga(action) {
   }
 }
 
-// Get the Affiliate Directory 
+// Get the Affiliate Directory
 function* getAffiliateDirectorySaga(action) {
   try {
     const result = yield call(UserAxiosApi.affiliateDirectory, action.payload, action.sortBy, action.sortOrder);
@@ -819,7 +837,7 @@ function* getUserModuleIncidentDataSaga(action) {
   }
 }
 
-// Get the User Role 
+// Get the User Role
 function* getUserRole(action) {
   try {
     const result = yield call(UserAxiosApi.getUserRoleData, action.userId);
@@ -914,6 +932,26 @@ function* getUmpireActivityListSaga(action) {
   }
 }
 
+function* updateBannerCount(action) {
+  try {
+    const result = yield call(UserAxiosApi.updateBannerCount, action.payload);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_UPDATE_BANNER_COUNT_SUCCESS,
+        result: result.result.data,
+        status: result.status,
+      });
+
+      message.success('Banner count updated successfully');
+    } else {
+      yield call(failSaga, result);
+    }
+  } catch (error) {
+    yield call(errorSaga, error);
+  }
+}
+
 
 export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_ROLE_LOAD, getRoleSaga);
@@ -960,4 +998,6 @@ export default function* rootUserSaga() {
   yield takeEvery(ApiConstants.API_GET_UMPIRE_DATA_LOAD, getUmpireSaga);
   yield takeEvery(ApiConstants.API_GET_COACH_DATA_LOAD, getCoachSaga);
   yield takeEvery(ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_LOAD, getUmpireActivityListSaga);
+  yield takeEvery(ApiConstants.API_BANNER_COUNT_LOAD, getBannerCount);
+  yield takeEvery(ApiConstants.API_UPDATE_BANNER_COUNT_LOAD, updateBannerCount);
 }

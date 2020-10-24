@@ -726,9 +726,9 @@ class UserProfileEdit extends Component {
                     allowClear
                 />
 
-                <InputWithHead heading={AppConstants.redularMedicalConditions} />
+                <InputWithHead heading={AppConstants.regularMedicalConditions} />
                 <TextArea
-                    placeholder={AppConstants.redularMedicalConditions}
+                    placeholder={AppConstants.regularMedicalConditions}
                     onChange={(e) => this.onChangeSetValue(e.target.value, "regularMedication")}
                     value={userData.regularMedication}
                     allowClear

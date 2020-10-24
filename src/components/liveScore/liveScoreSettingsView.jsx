@@ -492,7 +492,7 @@ class LiveScoreSettingsView extends Component {
                         style={{ width: '100%', paddingRight: 1, minWidth: 182, maxWidth: 300 }}
                         onChange={trackFullPeriod => this.setState({ trackFullPeriod })}
                         value={this.state.trackFullPeriod}
-                        placeholder={AppConstants.selectComptition}
+                        placeholder={AppConstants.selectCompetition}
                     >
                         {trackFullPeriod.map((item) => (
                             <Option key={'trackFullPeriod_' + item.value} value={item.value}>
@@ -745,8 +745,8 @@ class LiveScoreSettingsView extends Component {
                 </div>
 
                 {/* dropdown view */}
-                {/* <InputWithHead heading={AppConstants.attendence_reord_report} /> */}
-                <span className="text-heading-large pt-5">{AppConstants.attendence_reord_report}</span>
+                {/* <InputWithHead heading={AppConstants.attendance_record_report} /> */}
+                <span className="text-heading-large pt-5">{AppConstants.attendance_record_report}</span>
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
