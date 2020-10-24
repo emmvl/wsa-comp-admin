@@ -40,32 +40,6 @@ class LiveScoreAddDivision extends Component {
         this.formRef = createRef();
     }
 
-    headerView = () => {
-        let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
-        return (
-            <div className="header-view">
-                <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center",
-                    }}
-                >
-                    <div className="row">
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
-                            <Breadcrumb separator=" > ">
-                                <Breadcrumb.Item className="breadcrumb-add">
-                                    {isEdit ? AppConstants.editDivision : AppConstants.addDivision}
-                                </Breadcrumb.Item>
-                            </Breadcrumb>
-                        </div>
-                    </div>
-                </Header>
-            </div>
-        )
-    }
-
     componentDidMount() {
         if (this.state.isEdit) {
             this.props.liveScoreUpdateDivisionAction(this.state.tableData, 'isEditDivision')
@@ -104,9 +78,42 @@ class LiveScoreAddDivision extends Component {
         })
     }
 
+    headerView = () => {
+        let isEdit = this.props.location.state ? this.props.location.state.isEdit : null
+
+        return (
+            <div className="header-view">
+                <Header
+                    className="form-header-view"
+                    style={{
+                        backgroundColor: "transparent",
+                        display: "flex",
+                        alignItems: "center",
+                    }}
+                >
+                    <div className='row'>
+                        <div className="col-sm mt-5" style={{ display: "flex", alignContent: "center" }}>
+                            <Breadcrumb separator=" > ">
+                                <Breadcrumb.Item className="breadcrumb-add">
+                                    {isEdit ? AppConstants.editDivision : AppConstants.addDivision}
+                                </Breadcrumb.Item>
+                            </Breadcrumb>
+
+
+                        </div>
+                    </div>
+
+                </Header>
+
+            </div >
+        )
+    }
+
     ////form view
     contentView = () => {
         const { name, divisionName, gradeName } = this.props.liveScoreDivisionState
+        const { positionTracking } = this.props.liveScoreDivisionState
+        const competition = JSON.parse(getLiveScoreCompetiton());
         return (
             <div className="content-view pt-4">
                 <div className="row">
@@ -179,7 +186,15 @@ class LiveScoreAddDivision extends Component {
                                 ))}
                             </Select>
                         </Form.Item>
+
+                        {
+                            ((competition.lineupSelectionEnabled == 1 || competition.lineupSelectionEnabled == true) && positionTracking === false) &&
+                            < span className="text-with-red-color pt-2">
+                                {AppConstants.sqadSelectionEabled}
+                            </span>
+                        }
                     </div>
+
                 </div>
                 <div className="row">
                     <div className="col-sm">

@@ -496,6 +496,15 @@
   color: #f5222d;
   margin-top: 2px;
 }
+.text-with-red-color {
+  display: inline-flex;
+  align-content: flex-start;
+  padding-top: 22px;
+  color: red;
+  /* font-weight: 500; */
+  /* font-family: inter-medium, sans-serif; */
+  white-space: nowrap;
+}
 
 @media (min-width: 768px) and (max-width: 1024px) {
   .live-score-edit-match-buttons {

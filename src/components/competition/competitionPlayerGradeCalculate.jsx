@@ -215,7 +215,10 @@ class CompetitionPlayerGradeCalculate extends Component {
     }
 
     // on Competition change
-    onCompetitionChange(competitionId, statusRefId) {
+    onCompetitionChange(competitionId) {
+        let own_CompetitionArr = this.props.appState.own_CompetitionArr
+        let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
+        let statusRefId = own_CompetitionArr[statusIndex].statusRefId
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
         this.props.getCompPartPlayerGradingSummaryAction(this.state.yearRefId, competitionId)

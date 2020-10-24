@@ -40,6 +40,7 @@ import { umpireCompetitionListAction } from "../../store/actions/umpireAction/um
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { getOrganisationData } from '../../util/sessionStorage';
 import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
+import ApiConstants from "themes/apiConstants";
 
 const { Header, Footer } = Layout;
 const { Option } = Select;
@@ -508,7 +509,7 @@ class LiveScoreSettingsView extends Component {
     ////////form content view
     contentView = () => {
         const { competitionName, competitionLogo, scoring, days, hours, minutes, lineupSelectionDays, lineupSelectionHours, lineupSelectionMins, record1, venue, Logo } = this.props.liveScoreSetting.form
-        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink, borrowedPlayer, gamesBorrowedThreshold, linkedCompetitionId,disabled } = this.props.liveScoreSetting
+        const { loader, buzzerEnabled, warningBuzzerEnabled, recordUmpire, lineupSelection, gameborrowed, minutesBorrowed, premierCompLink, borrowedPlayer, gamesBorrowedThreshold, linkedCompetitionId, disabled } = this.props.liveScoreSetting
         let grade = this.state.venueData
         // const applyTo1 = [{ label: 'Record Umpire', value: "recordUmpire" }, { label: ' Game Time Tracking', value: "gameTimeTracking" }, { label: 'Position Tracking', value: "positionTracking" }];
         const applyTo1 = [
@@ -615,7 +616,7 @@ class LiveScoreSettingsView extends Component {
                             <Checkbox
                                 className="single-checkbox"
                                 defaultChecked
-                                // onChange={e => this.onChange(e)}
+                            // onChange={e => this.onChange(e)}
                             >
                                 {AppConstants.useDefault}
                             </Checkbox>
@@ -734,7 +735,7 @@ class LiveScoreSettingsView extends Component {
                                     key: "recordUmpire",
                                     data: recordUmpire
                                 })}
-                                // value={recordUmpire}
+                            // value={recordUmpire}
                             >
                                 <Option value="NONE">None</Option>
                                 <Option value="USERS">Integrated</Option>
@@ -764,8 +765,8 @@ class LiveScoreSettingsView extends Component {
                                     key: "attendanceRecordingType",
                                     data: recordSelection
                                 })}
-                                // defaultValue={}
-                                // value={this.props.liveScoreSetting.form.attendanceRecordingType}
+                            // defaultValue={}
+                            // value={this.props.liveScoreSetting.form.attendanceRecordingType}
                             >
                                 <Option value="OWN">Own</Option>
                                 <Option value="BOTH">Both</Option>
@@ -999,7 +1000,7 @@ class LiveScoreSettingsView extends Component {
                         <Radio.Group
                             className="reg-competition-radio"
                             onChange={e => this.competition_format(e)}
-                            // value={this.props.liveScoreSetting.form.scoring}
+                        // value={this.props.liveScoreSetting.form.scoring}
                         >
                             <div className="row ml-2" style={{ marginTop: 0 }}>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -1045,9 +1046,9 @@ class LiveScoreSettingsView extends Component {
                             placeholder={'Select Time'}
                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                             onChange={timer => this.props.onChangeSettingForm({ key: "timerType", data: timer })}
-                            // value="CENTRAL"
-                            // value={this.props.liveScoreSetting.form.timerType}
-                            // defaultValue={this.props.liveScoreSetting.form.timerType}
+                        // value="CENTRAL"
+                        // value={this.props.liveScoreSetting.form.timerType}
+                        // defaultValue={this.props.liveScoreSetting.form.timerType}
                         >
                             <Option value="CENTRAL">Central</Option>
                             <Option value="PER_MATCH">Per Match</Option>
@@ -1171,8 +1172,7 @@ class LiveScoreSettingsView extends Component {
     openModel = (props) => {
         let this_ = this;
         confirm({
-            title: 'Editing the organisations may impact your team and role associations. Would you like to proceed?',
-            // content: 'Some descriptions',
+            title: AppConstants.editOrganisationMessage,
             okText: 'Yes',
             okType: 'danger',
             cancelText: 'No',
@@ -1284,63 +1284,63 @@ class LiveScoreSettingsView extends Component {
                                     {item.subReferences.length === 0 ? (
                                         <Radio value={item.id}>{item.description}</Radio>
                                     ) : (
-                                        <div>
-                                            <div className="applicable-to-heading invitees-main">{item.description}</div>
+                                            <div>
+                                                <div className="applicable-to-heading invitees-main">{item.description}</div>
 
-                                            <div style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                paddingLeft: 13
-                                            }}>
-                                                <Checkbox
-                                                    disabled={disabledComponent}
-                                                    className="single-checkbox-radio-style"
-                                                    style={{ paddingLeft: 7, paddingTop: 8 }}
-                                                    checked={associationChecked}
-                                                    onChange={e => this.props.onChangeSettingForm({
-                                                        key: 'associationChecked',
-                                                        data: e.target.checked,
-                                                        checkBoxId: item.subReferences[0].id
-                                                    })}
-                                                >
-                                                    {item.subReferences[0].description}
-                                                </Checkbox>
+                                                <div style={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    paddingLeft: 13
+                                                }}>
+                                                    <Checkbox
+                                                        disabled={disabledComponent}
+                                                        className="single-checkbox-radio-style"
+                                                        style={{ paddingLeft: 7, paddingTop: 8 }}
+                                                        checked={associationChecked}
+                                                        onChange={e => this.props.onChangeSettingForm({
+                                                            key: 'associationChecked',
+                                                            data: e.target.checked,
+                                                            checkBoxId: item.subReferences[0].id
+                                                        })}
+                                                    >
+                                                        {item.subReferences[0].description}
+                                                    </Checkbox>
 
-                                                {associationChecked && this.associationSearchInvitee()}
+                                                    {associationChecked && this.associationSearchInvitee()}
 
-                                                <Checkbox
-                                                    disabled={disabledComponent}
-                                                    className="single-checkbox-radio-style"
-                                                    style={{ paddingTop: 15, paddingLeft: associationChecked ? 5 : 0 }}
-                                                    checked={clubChecked}
-                                                    onChange={e => this.props.onChangeSettingForm({
-                                                        key: 'clubChecked',
-                                                        data: e.target.checked,
-                                                        checkBoxId: item.subReferences[1].id
-                                                    })}
-                                                >
-                                                    {item.subReferences[1].description}
-                                                </Checkbox>
+                                                    <Checkbox
+                                                        disabled={disabledComponent}
+                                                        className="single-checkbox-radio-style"
+                                                        style={{ paddingTop: 15, paddingLeft: associationChecked ? 5 : 0 }}
+                                                        checked={clubChecked}
+                                                        onChange={e => this.props.onChangeSettingForm({
+                                                            key: 'clubChecked',
+                                                            data: e.target.checked,
+                                                            checkBoxId: item.subReferences[1].id
+                                                        })}
+                                                    >
+                                                        {item.subReferences[1].description}
+                                                    </Checkbox>
 
-                                                {clubChecked && this.clubSearchInvitee()}
-                                            </div>
+                                                    {clubChecked && this.clubSearchInvitee()}
+                                                </div>
 
-                                            <div style={{ marginLeft: 20 }}>
-                                                <Radio.Group
-                                                    onChange={(e) => this.props.onChangeSettingForm({
-                                                        key: "anyOrgNonSelected",
-                                                        data: e.target.value
-                                                    })}
-                                                    value={anyOrgNonSelected}
-                                                    disabled={disabledComponent}
-                                                >
-                                                    <Radio disabled={disabledComponent} key="none2" value="none2">
-                                                        None
+                                                <div style={{ marginLeft: 20 }}>
+                                                    <Radio.Group
+                                                        onChange={(e) => this.props.onChangeSettingForm({
+                                                            key: "anyOrgNonSelected",
+                                                            data: e.target.value
+                                                        })}
+                                                        value={anyOrgNonSelected}
+                                                        disabled={disabledComponent}
+                                                    >
+                                                        <Radio disabled={disabledComponent} key="none2" value="none2">
+                                                            None
                                                     </Radio>
-                                                </Radio.Group>
+                                                    </Radio.Group>
+                                                </div>
                                             </div>
-                                        </div>
-                                    )}
+                                        )}
                                 </div>
                             )))
                         }
@@ -1374,8 +1374,8 @@ class LiveScoreSettingsView extends Component {
                                             ))}
                                         </div>
                                     ) : (
-                                        item.id == 5 && <Radio value={item.id}>{item.description}</Radio>
-                                    )}
+                                            item.id == 5 && <Radio value={item.id}>{item.description}</Radio>
+                                        )}
                                 </div>
                             )))
                         }
@@ -1471,8 +1471,8 @@ class LiveScoreSettingsView extends Component {
                 {this.state.isEdit === 'edit' ? (
                     <Loader visible={this.props.liveScoreSetting.editLoader} />
                 ) : (
-                    <Loader visible={this.props.liveScoreSetting.loader} />
-                )}
+                        <Loader visible={this.props.liveScoreSetting.loader} />
+                    )}
                 <Layout>
                     {this.headerView()}
                     {this.dropDownView()}

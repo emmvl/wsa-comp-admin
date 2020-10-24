@@ -158,6 +158,7 @@ class RegistrationChangeReview extends Component {
             this.setState({ acceptVisible: true });
         } else if (key === "ok") {
             const { reviewSaveData } = this.props.registrationChangeState;
+            console.log("reviewSaveData", reviewSaveData);
             let err = false;
             let msg = "";
             if (reviewSaveData.refundTypeRefId == 2) {
@@ -286,6 +287,8 @@ class RegistrationChangeReview extends Component {
         }
         reviewSaveData["isFromOrg"] = isFromOrg;
         reviewSaveData["orgRefTypeId"] = regChangeReviewData.orgRefTypeId;
+
+        console.log("****" + JSON.stringify(reviewSaveData));
 
         this.props.saveRegistrationChangeReview(reviewSaveData);
         this.setState({ loading: true });

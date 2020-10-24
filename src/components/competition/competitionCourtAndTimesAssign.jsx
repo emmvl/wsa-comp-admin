@@ -418,7 +418,10 @@ class CompetitionCourtAndTimesAssign extends Component {
     }
 
     // on Competition change
-    onCompetitionChange(competitionId, statusRefId) {
+    onCompetitionChange(competitionId) {
+        let own_CompetitionArr = this.props.appState.own_CompetitionArr
+        let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
+        let statusRefId = own_CompetitionArr[statusIndex].statusRefId
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
         let quickComp = this.props.appState.own_CompetitionArr.find(
@@ -483,8 +486,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                         value={item.startTime != null && moment(item.startTime, "HH:mm")}
                         onChange={(time) => this.onTimeChange(time, index, 'startTime')}
                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'startTime')}
-                        // disabledDate={d => !d || d.isAfter(closeDate)
-                        // minuteStep={15}
+                    // disabledDate={d => !d || d.isAfter(closeDate)
+                    // minuteStep={15}
                     />
                 </div>
                 <div className="col-sm">
@@ -499,8 +502,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                         value={item.endTime != null && moment(item.endTime, "HH:mm")}
                         onChange={(time) => this.onTimeChange(time, index, 'endTime')}
                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'endTime')}
-                        // minuteStep={15}
-                        // disabledHours={() => this.getDisabledHours(item.startTime)}
+                    // minuteStep={15}
+                    // disabledHours={() => this.getDisabledHours(item.startTime)}
                     />
                 </div>
                 {data.length > 1 && (
@@ -675,26 +678,26 @@ class CompetitionCourtAndTimesAssign extends Component {
                                 </div>
                                 {isArrayNotEmpty(item.subReferences) && (
                                     <div>
-                                        <Form.Item name='timeslotRotationRefId' rules={[{ required: false, message: "Please select time slot preference" }]}  >
-                                            <Radio.Group
-                                                disabled={disabledStatus}
-                                                className="reg-competition-radio pl-5"
-                                                onChange={e => {
-                                                    this.updatetimeRotation(e)
-                                                }}
-                                                value={timeSlotData.timeslotRotationRefId}
-                                            >
-                                                {timeSlotData.mainTimeRotationID == item.id && item.subReferences.map((subArr) => (
-                                                    <Radio
-                                                        id={this.getCourtRotationId(item.id, 'subPref')}
-                                                        key={'timeslotRotation_' + subArr.id}
-                                                        value={subArr.id}
-                                                    >
-                                                        {subArr.description}
-                                                    </Radio>
-                                                ))}
-                                            </Radio.Group>
-                                        </Form.Item>
+                                        {/* <Form.Item name='timeslotRotationRefId' rules={[{ required: false, message: "Please select time slot preference" }]}  > */}
+                                        <Radio.Group
+                                            disabled={disabledStatus}
+                                            className="reg-competition-radio pl-5"
+                                            onChange={e => {
+                                                this.updatetimeRotation(e)
+                                            }}
+                                            value={timeSlotData.timeslotRotationRefId}
+                                        >
+                                            {timeSlotData.mainTimeRotationID == item.id && item.subReferences.map((subArr) => (
+                                                <Radio
+                                                    id={this.getCourtRotationId(item.id, 'subPref')}
+                                                    key={'timeslotRotation_' + subArr.id}
+                                                    value={subArr.id}
+                                                >
+                                                    {subArr.description}
+                                                </Radio>
+                                            ))}
+                                        </Radio.Group>
+                                        {/* </Form.Item> */}
                                     </div>
                                 )}
                             </div>
@@ -707,7 +710,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             className="reg-competition-radio"
                             disabled={disabledStatus}
                             onChange={(e) => this.changeTimeSlotGeneration(e)}
-                            // value={timeSlotData.timeslotGenerationRefId}
+                        // value={timeSlotData.timeslotGenerationRefId}
                         >
                             {commonState.timeSlotGeneration.map((item, index) => (
                                 <div key={'timeslotGeneration_' + item.id}>
@@ -879,7 +882,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                         onBlur={(e) => this.onVenueTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, timeIndex, venueIndex, 'startTime')}
                                         value={timeItem.startTime != null && moment(timeItem.startTime, "HH:mm")}
                                         format="HH:mm"
-                                        // minuteStep={15}
+                                    // minuteStep={15}
                                     />
                                     {item.startTime.length > 1 && (
                                         <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>
@@ -1202,7 +1205,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     onBlur={(e) => this.onCompVenueTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, timeIndex, 'startTime')}
                                     value={timeItem.startTime != null && moment(timeItem.startTime, "HH:mm")}
                                     format="HH:mm"
-                                    // minuteStep={15}
+                                // minuteStep={15}
                                 />
                                 {item.startTime.length > 1 && (
                                     <span className="user-remove-btn pl-2" style={{ cursor: 'pointer' }}>

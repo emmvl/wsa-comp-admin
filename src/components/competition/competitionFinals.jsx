@@ -105,7 +105,7 @@ class CompetitionFinals extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     this.apiCalls(competitionId, this.state.yearRefId);
-                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId})
+                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
             }
         }
@@ -251,7 +251,10 @@ class CompetitionFinals extends Component {
     }
 
     // on Competition change
-    onCompetitionChange(competitionId, statusRefId) {
+    onCompetitionChange(competitionId) {
+        let own_CompetitionArr = this.props.appState.own_CompetitionArr
+        let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
+        let statusRefId = own_CompetitionArr[statusIndex].statusRefId
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
         let payload = {
@@ -506,7 +509,7 @@ class CompetitionFinals extends Component {
     contentView = () => {
         let finalsList = this.props.competitionFinalsState.competitionFinalsList;
         let venueList = this.props.competitionFinalsState.competitionVenuesList;
-        const {finalTypeRefId } = this.props.competitionFinalsState;
+        const { finalTypeRefId } = this.props.competitionFinalsState;
         let appState = this.props.appState;
         let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
         let disabledStatus = this.state.competitionStatus == 1
@@ -558,15 +561,15 @@ class CompetitionFinals extends Component {
                                             <InputWithHead heading={AppConstants.finalsStartDate} required="required-field" />
                                             <Form.Item name={`finalsStartDate${index}`} rules={[{ required: true, message: ValidationConstants.finalsStartDateRequired }]}>
                                                 <DatePicker
-                                                  id={AppUniqueId.final_StartDate}
-                                                  disabled={disabledStatus}
-                                                  size="large"
-                                                  placeholder="dd-mm-yyyy"
-                                                  style={{ width: "100%" }}
-                                                  onChange={(e) => this.onChangeSetValue(e, 'finalsStartDate', index)}
-                                                  name="finalsStartDate"
-                                                  format="DD-MM-YYYY"
-                                                  showTime={false}
+                                                    id={AppUniqueId.final_StartDate}
+                                                    disabled={disabledStatus}
+                                                    size="large"
+                                                    placeholder="dd-mm-yyyy"
+                                                    style={{ width: "100%" }}
+                                                    onChange={(e) => this.onChangeSetValue(e, 'finalsStartDate', index)}
+                                                    name="finalsStartDate"
+                                                    format="DD-MM-YYYY"
+                                                    showTime={false}
                                                 />
                                             </Form.Item>
                                         </div>
@@ -617,7 +620,7 @@ class CompetitionFinals extends Component {
                                             disabled={disabledStatus}
                                             className="single-checkbox"
                                             checked={data.playOff3rdposition == 1}
-                                            onChange={e => this.onChangeSetValue(e.target.checked ? 1 : 0, "playOff3rdposition",index)}
+                                            onChange={e => this.onChangeSetValue(e.target.checked ? 1 : 0, "playOff3rdposition", index)}
                                         >
                                             {AppConstants.playOff3rdPosition}
                                         </Checkbox>
@@ -749,7 +752,7 @@ class CompetitionFinals extends Component {
                                         {AppConstants.poolSettingsWhoPlaysWho}
                                     </span>
 
-                                    {(data.whoPlaysWho || []).map((whoPlaysWhoItem,whoPlaysWhoIndex) => (
+                                    {(data.whoPlaysWho || []).map((whoPlaysWhoItem, whoPlaysWhoIndex) => (
                                         <div key={whoPlaysWhoItem.competitiondivisionId}>
                                             {whoPlaysWhoItem.noOfPools == 4 && (
                                                 <div>
@@ -757,83 +760,86 @@ class CompetitionFinals extends Component {
                                                         heading={AppConstants.division + " : " + whoPlaysWhoItem.divisionName}
                                                         required="pt-0"
                                                     />
-                                                    <div className="row">
-                                                        <div className="col-md-6">
-                                                            <Form.Item
-                                                                name={`wpwPool1${whoPlaysWhoIndex}`}
-                                                                rules={[{ required: true, message: ValidationConstants.wpwPool1Required }]}
-                                                            >
-                                                                <Select
-                                                                    disabled={disabledStatus}
-                                                                    style={{ marginBottom: "20px" }}
-                                                                    value={whoPlaysWhoItem.wpwPool1}
-                                                                    onChange={(e) => this.onChangeSetValue(e, 'wpwPool1', index, whoPlaysWhoIndex)}
+                                                    <div className="col-md inside-container-view" style={{ padding: 20, marginTop: 7 }}>
+                                                        <div className="row">
+                                                            <div className="col-md-6">
+                                                                <Form.Item
+                                                                    name={`wpwPool1${whoPlaysWhoIndex}`}
+                                                                    rules={[{ required: true, message: ValidationConstants.wpwPool1Required }]}
                                                                 >
-                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
-                                                                        <Option key={'wpwPool1_' + pool.poolId} value={pool.poolId}>
-                                                                            {pool.poolName}
-                                                                        </Option>
-                                                                    ))}
-                                                                </Select>
-                                                            </Form.Item>
-                                                        </div>
+                                                                    <Select
+                                                                        disabled={disabledStatus}
+                                                                        value={whoPlaysWhoItem.wpwPool1}
+                                                                        onChange={(e) => this.onChangeSetValue(e, 'wpwPool1', index, whoPlaysWhoIndex)}
+                                                                    >
+                                                                        {(whoPlaysWhoItem.pools || []).map((pool) => (
+                                                                            <Option key={'wpwPool1_' + pool.poolId} value={pool.poolId}>
+                                                                                {pool.poolName}
+                                                                            </Option>
+                                                                        ))}
+                                                                    </Select>
+                                                                </Form.Item>
+                                                            </div>
 
-                                                        <div className="col-md-6">
-                                                            <Form.Item
-                                                                name={`wpwPool2${whoPlaysWhoIndex}`}
-                                                                rules={[{ required: true, message: ValidationConstants.wpwPool2Required }]}
-                                                            >
-                                                                <Select
-                                                                    disabled={disabledStatus}
-                                                                    style={{ marginBottom: "20px" }}
-                                                                    value={whoPlaysWhoItem.wpwPool2}
-                                                                    onChange={(e) => this.onChangeSetValue(e, 'wpwPool2', index, whoPlaysWhoIndex)}
+                                                            <div className="col-md-6">
+                                                                <Form.Item
+                                                                    name={`wpwPool2${whoPlaysWhoIndex}`}
+                                                                    rules={[{ required: true, message: ValidationConstants.wpwPool2Required }]}
                                                                 >
-                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
-                                                                        <Option key={'wpwPool2_' + pool.poolId} value={pool.poolId}>
-                                                                            {pool.poolName}
-                                                                        </Option>
-                                                                    ))}
-                                                                </Select>
-                                                            </Form.Item>
+                                                                    <Select
+                                                                        disabled={disabledStatus}
+                                                                        value={whoPlaysWhoItem.wpwPool2}
+                                                                        onChange={(e) => this.onChangeSetValue(e, 'wpwPool2', index, whoPlaysWhoIndex)}
+                                                                    >
+                                                                        {(whoPlaysWhoItem.pools || []).map((pool) => (
+                                                                            <Option key={'wpwPool2_' + pool.poolId} value={pool.poolId}>
+                                                                                {pool.poolName}
+                                                                            </Option>
+                                                                        ))}
+                                                                    </Select>
+                                                                </Form.Item>
+                                                            </div>
                                                         </div>
-
-                                                        <div className="col-md-6">
-                                                            <Form.Item
-                                                                name={`wpwPool3${whoPlaysWhoIndex}`}
-                                                                rules={[{ required: true, message: ValidationConstants.wpwPool3Required }]}
-                                                            >
-                                                                <Select
-                                                                    disabled={disabledStatus}
-                                                                    value={whoPlaysWhoItem.wpwPool3}
-                                                                    onChange={(e) => this.onChangeSetValue(e, 'wpwPool3', index, whoPlaysWhoIndex)}
+                                                    </div>
+                                                    <div className="col-md inside-container-view" style={{ padding: 20 }}>
+                                                        <div className="row">
+                                                            <div className="col-md-6">
+                                                                <Form.Item
+                                                                    name={`wpwPool3${whoPlaysWhoIndex}`}
+                                                                    rules={[{ required: true, message: ValidationConstants.wpwPool3Required }]}
                                                                 >
-                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
-                                                                        <Option key={'wpwPool3_' + pool.poolId} value={pool.poolId}>
-                                                                            {pool.poolName}
-                                                                        </Option>
-                                                                    ))}
-                                                                </Select>
-                                                            </Form.Item>
-                                                        </div>
+                                                                    <Select
+                                                                        disabled={disabledStatus}
+                                                                        value={whoPlaysWhoItem.wpwPool3}
+                                                                        onChange={(e) => this.onChangeSetValue(e, 'wpwPool3', index, whoPlaysWhoIndex)}
+                                                                    >
+                                                                        {(whoPlaysWhoItem.pools || []).map((pool) => (
+                                                                            <Option key={'wpwPool3_' + pool.poolId} value={pool.poolId}>
+                                                                                {pool.poolName}
+                                                                            </Option>
+                                                                        ))}
+                                                                    </Select>
+                                                                </Form.Item>
+                                                            </div>
 
-                                                        <div className="col-md-6">
-                                                            <Form.Item
-                                                                name={`wpwPool4${whoPlaysWhoIndex}`}
-                                                                rules={[{ required: true, message: ValidationConstants.wpwPool4Required }]}
-                                                            >
-                                                                <Select
-                                                                    disabled={disabledStatus}
-                                                                    value={whoPlaysWhoItem.wpwPool4}
-                                                                    onChange={(e) => this.onChangeSetValue(e, 'wpwPool4', index, whoPlaysWhoIndex)}
+                                                            <div className="col-md-6">
+                                                                <Form.Item
+                                                                    name={`wpwPool4${whoPlaysWhoIndex}`}
+                                                                    rules={[{ required: true, message: ValidationConstants.wpwPool4Required }]}
                                                                 >
-                                                                    {(whoPlaysWhoItem.pools || []).map((pool) => (
-                                                                        <Option key={'wpwPool4_' + pool.poolId} value={pool.poolId}>
-                                                                            {pool.poolName}
-                                                                        </Option>
-                                                                    ))}
-                                                                </Select>
-                                                            </Form.Item>
+                                                                    <Select
+                                                                        disabled={disabledStatus}
+                                                                        value={whoPlaysWhoItem.wpwPool4}
+                                                                        onChange={(e) => this.onChangeSetValue(e, 'wpwPool4', index, whoPlaysWhoIndex)}
+                                                                    >
+                                                                        {(whoPlaysWhoItem.pools || []).map((pool) => (
+                                                                            <Option key={'wpwPool4_' + pool.poolId} value={pool.poolId}>
+                                                                                {pool.poolName}
+                                                                            </Option>
+                                                                        ))}
+                                                                    </Select>
+                                                                </Form.Item>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -865,148 +871,148 @@ class CompetitionFinals extends Component {
         return (
             <div>
                 {/* {(finalsList || []).map((data, index) => ( */}
-                    <div>
-                        <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }}>
-                            {AppConstants.finalExtraTime}
-                        </span>
-                        <Form.Item
-                            name={`applyToRefId${index}`}
-                            rules={[{ required: true, message: ValidationConstants.applyToRequired }]}
+                <div>
+                    <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }}>
+                        {AppConstants.finalExtraTime}
+                    </span>
+                    <Form.Item
+                        name={`applyToRefId${index}`}
+                        rules={[{ required: true, message: ValidationConstants.applyToRequired }]}
+                    >
+                        <Radio.Group
+                            disabled={disabledStatus}
+                            id={AppUniqueId.applyToRefId_radiobtn}
+                            className="reg-competition-radio"
+                            onChange={(e) => this.onChangeSetValue(e.target.value, 'applyToRefId', index)}
+                            value={data.applyToRefId}
                         >
-                            <Radio.Group
-                                disabled={disabledStatus}
-                                id={AppUniqueId.applyToRefId_radiobtn}
-                                className="reg-competition-radio"
-                                onChange={(e) => this.onChangeSetValue(e.target.value, 'applyToRefId', index)}
-                                value={data.applyToRefId}
-                            >
-                                {(applyToData || []).map((app) => (
-                                    <Radio key={'applyTo_' + app.id} value={app.id}>{app.description}</Radio>
-                                ))}
-                            </Radio.Group>
-                        </Form.Item>
+                            {(applyToData || []).map((app) => (
+                                <Radio key={'applyTo_' + app.id} value={app.id}>{app.description}</Radio>
+                            ))}
+                        </Radio.Group>
+                    </Form.Item>
 
-                        <InputWithHead heading={AppConstants.extraTimeMatchType} required="required-field" />
-                        <Form.Item
-                            name={`extraTimeMatchTypeRefId${index}`}
-                            rules={[{ required: true, message: ValidationConstants.extraTimeMatchTypeRequired }]}
+                    <InputWithHead heading={AppConstants.extraTimeMatchType} required="required-field" />
+                    <Form.Item
+                        name={`extraTimeMatchTypeRefId${index}`}
+                        rules={[{ required: true, message: ValidationConstants.extraTimeMatchTypeRequired }]}
+                    >
+                        <Select
+                            disabled={disabledStatus}
+                            id={AppUniqueId.finals_extratimetype_dpdn}
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            onChange={(matchType) => this.onChangeSetValue(matchType, 'extraTimeMatchTypeRefId', index)}
+                            value={data.extraTimeMatchTypeRefId}
                         >
-                            <Select
-                                disabled={disabledStatus}
-                                id={AppUniqueId.finals_extratimetype_dpdn}
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                onChange={(matchType) => this.onChangeSetValue(matchType, 'extraTimeMatchTypeRefId', index)}
-                                value={data.extraTimeMatchTypeRefId}
-                            >
-                                {(appState.matchTypes || []).map((item) => (
-                                    <Option key={'extraTimeMatchType_' + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </Form.Item>
+                            {(appState.matchTypes || []).map((item) => (
+                                <Option key={'extraTimeMatchType_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
+                        </Select>
+                    </Form.Item>
 
-                        <div className="fluid-width">
-                            <div className="row">
-                                <div id={AppUniqueId.finals_extratime_duration} className="col-sm-3">
+                    <div className="fluid-width">
+                        <div className="row">
+                            <div id={AppUniqueId.finals_extratime_duration} className="col-sm-3">
+                                <Form.Item
+                                    name={`extraTimeDuration${index}`}
+                                    rules={[{
+                                        required: true, pattern: new RegExp("^[1-9][0-9]*$"),
+                                        message: ValidationConstants.extraTimeDurationRequired
+                                    }]}
+                                >
+                                    <InputWithHead
+                                        auto_complete='new-extraTimeDuration'
+                                        disabled={disabledStatus}
+                                        heading={AppConstants.extraTimeDuration}
+                                        required="required-field"
+                                        placeholder={AppConstants.mins}
+                                        value={data.extraTimeDuration}
+                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDuration', index)}
+                                    />
+                                </Form.Item>
+                            </div>
+                            {(data.extraTimeMatchTypeRefId == 2 || data.extraTimeMatchTypeRefId == 3) && (
+                                <div id={AppUniqueId.finals_extratime_mainbreak} className="col-sm-3">
                                     <Form.Item
-                                        name={`extraTimeDuration${index}`}
-                                        rules={[{
-                                            required: true, pattern: new RegExp("^[1-9][0-9]*$"),
-                                            message: ValidationConstants.extraTimeDurationRequired
-                                        }]}
+                                        name={`extraTimeMainBreak${index}`}
+                                        rules={[{ required: true, message: ValidationConstants.extraTimeMainBreakRequired }]}
                                     >
                                         <InputWithHead
-                                            auto_complete='new-extraTimeDuration'
+                                            auto_complete="new-extraTimeMainBreak"
                                             disabled={disabledStatus}
-                                            heading={AppConstants.extraTimeDuration}
+                                            heading={AppConstants.extraTimeMainBreak}
                                             required="required-field"
                                             placeholder={AppConstants.mins}
-                                            value={data.extraTimeDuration}
-                                            onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDuration', index)}
+                                            value={data.extraTimeMainBreak}
+                                            onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeMainBreak', index)}
                                         />
                                     </Form.Item>
                                 </div>
-                                {(data.extraTimeMatchTypeRefId == 2 || data.extraTimeMatchTypeRefId == 3) && (
-                                    <div id={AppUniqueId.finals_extratime_mainbreak} className="col-sm-3">
-                                        <Form.Item
-                                            name={`extraTimeMainBreak${index}`}
-                                            rules={[{ required: true, message: ValidationConstants.extraTimeMainBreakRequired }]}
-                                        >
-                                            <InputWithHead
-                                                auto_complete="new-extraTimeMainBreak"
-                                                disabled={disabledStatus}
-                                                heading={AppConstants.extraTimeMainBreak}
-                                                required="required-field"
-                                                placeholder={AppConstants.mins}
-                                                value={data.extraTimeMainBreak}
-                                                onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeMainBreak', index)}
-                                            />
-                                        </Form.Item>
-                                    </div>
-                                )}
-                                {data.extraTimeMatchTypeRefId == 3 && (
-                                    <div id={AppUniqueId.finals_extratime_break} className="col-sm-3">
-                                        <Form.Item
-                                            name={`extraTimeBreak${index}`}
-                                            rules={[{ required: true, message: ValidationConstants.extraTimeBreakRequired }]}
-                                        >
-                                            <InputWithHead
-                                                auto_complete="new-extraTimeBreak"
-                                                disabled={disabledStatus}
-                                                heading={AppConstants.extraTimeBreak}
-                                                placeholder={AppConstants.mins}
-                                                value={data.extraTimeBreak}
-                                                required="required-field"
-                                                onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeBreak', index)}
-                                            />
-                                        </Form.Item>
-                                    </div>
-                                )}
-                                {data.timeslotGenerationRefId != 2 && (
-                                    <div className="col-sm-3">
-                                        <Form.Item
-                                            name={`beforeExtraTime${index}`}
-                                            rules={[{ required: true, message: ValidationConstants.beforeExtraTimeRequired }]}
-                                        >
-                                            <InputWithHead
-                                                auto_complete="new-beforeExtraTime"
-                                                disabled={disabledStatus}
-                                                heading={AppConstants.beforeExtraTime}
-                                                placeholder={AppConstants.mins}
-                                                value={data.beforeExtraTime}
-                                                required="required-field"
-                                                onChange={(e) => this.onChangeSetValue(e.target.value, 'beforeExtraTime', index)}
-                                            />
-                                        </Form.Item>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="mt-4">
-                            <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }}>
-                                {AppConstants.extraTime}
-                            </span>
-                            <InputWithHead heading={AppConstants.extraTimeIfDraw2} required="required-field pt-0" />
-                            <Form.Item
-                                name={`extraTimeDrawRefId${index}`}
-                                rules={[{ required: true, message: ValidationConstants.extraTimeDrawRequired }]}
-                            >
-                                <Radio.Group
-                                    disabled={disabledStatus}
-                                    id={AppUniqueId.extratime_ifDraw_radiobtn}
-                                    className="reg-competition-radio"
-                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
-                                    value={data.extraTimeDrawRefId}
-                                >
-                                    {(extraTimeDrawData || []).map((ex) => (
-                                        <Radio key={'extraTimeDraw_' + ex.id} value={ex.id}>{ex.description}</Radio>
-                                    ))}
-                                </Radio.Group>
-                            </Form.Item>
+                            )}
+                            {data.extraTimeMatchTypeRefId == 3 && (
+                                <div id={AppUniqueId.finals_extratime_break} className="col-sm-3">
+                                    <Form.Item
+                                        name={`extraTimeBreak${index}`}
+                                        rules={[{ required: true, message: ValidationConstants.extraTimeBreakRequired }]}
+                                    >
+                                        <InputWithHead
+                                            auto_complete="new-extraTimeBreak"
+                                            disabled={disabledStatus}
+                                            heading={AppConstants.extraTimeBreak}
+                                            placeholder={AppConstants.mins}
+                                            value={data.extraTimeBreak}
+                                            required="required-field"
+                                            onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeBreak', index)}
+                                        />
+                                    </Form.Item>
+                                </div>
+                            )}
+                            {data.timeslotGenerationRefId != 2 && (
+                                <div className="col-sm-3">
+                                    <Form.Item
+                                        name={`beforeExtraTime${index}`}
+                                        rules={[{ required: true, message: ValidationConstants.beforeExtraTimeRequired }]}
+                                    >
+                                        <InputWithHead
+                                            auto_complete="new-beforeExtraTime"
+                                            disabled={disabledStatus}
+                                            heading={AppConstants.beforeExtraTime}
+                                            placeholder={AppConstants.mins}
+                                            value={data.beforeExtraTime}
+                                            required="required-field"
+                                            onChange={(e) => this.onChangeSetValue(e.target.value, 'beforeExtraTime', index)}
+                                        />
+                                    </Form.Item>
+                                </div>
+                            )}
                         </div>
                     </div>
+
+                    <div className="mt-4">
+                        <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }}>
+                            {AppConstants.extraTime}
+                        </span>
+                        <InputWithHead heading={AppConstants.extraTimeIfDraw2} required="required-field pt-0" />
+                        <Form.Item
+                            name={`extraTimeDrawRefId${index}`}
+                            rules={[{ required: true, message: ValidationConstants.extraTimeDrawRequired }]}
+                        >
+                            <Radio.Group
+                                disabled={disabledStatus}
+                                id={AppUniqueId.extratime_ifDraw_radiobtn}
+                                className="reg-competition-radio"
+                                onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
+                                value={data.extraTimeDrawRefId}
+                            >
+                                {(extraTimeDrawData || []).map((ex) => (
+                                    <Radio key={'extraTimeDraw_' + ex.id} value={ex.id}>{ex.description}</Radio>
+                                ))}
+                            </Radio.Group>
+                        </Form.Item>
+                    </div>
+                </div>
                 {/* ))} */}
             </div>
         )

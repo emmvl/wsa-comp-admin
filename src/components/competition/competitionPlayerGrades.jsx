@@ -254,7 +254,10 @@ class CompetitionPlayerGrades extends Component {
     }
 
     // on Competition change
-    onCompetitionChange = (competitionId, statusRefId) => {
+    onCompetitionChange = (competitionId) => {
+        let own_CompetitionArr = this.props.appState.own_CompetitionArr
+        let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
+        let statusRefId = own_CompetitionArr[statusIndex].statusRefId
         setOwn_competitionStatus(statusRefId)
         setOwn_competition(competitionId)
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")

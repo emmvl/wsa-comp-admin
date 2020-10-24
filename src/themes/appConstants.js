@@ -1007,75 +1007,56 @@ const AppConstants = {
     deleteDivision: 'Delete Competition Division',
     changeDivision: 'Change Division',
     action: 'Action',
-    competitionDivisionValidation:
-    'If there are any players graded to this division, they will be unassigned.',
+    competitionDivisionValidation: 'If there are any players graded to this division, they will be unassigned.',
     exception: 'Exception',
-    exceptionHeading:
-    'This allows you to schedule a match at a venue or time outside the automatic scheduling',
+    exceptionHeading: 'This allows you to schedule a match at a venue or time outside the automatic scheduling',
 
     // Add Venue ToolTip Messages
 
     LatitudeMsg: `1. Go to google maps https://www.google.com/maps\n\n'
-  2. Click on satellite view.\n\n
-  3. Search for your venue.\n\n
-  4. Click and drop a pin on the centre of the court then copy and paste both the Longitude and Latitude.`,
+      2. Click on satellite view.\n\n
+      3. Search for your venue.\n\n
+      4. Click and drop a pin on the centre of the court then copy and paste both the Longitude and Latitude.`,
 
-    overRideSlotMsg:
-    'Only click if the Court has different availability to the Venue ie. Court 1 is only available for matches from 9am but the other courts are free from 8am',
-    gameDayMsg:
-    'Add the days of the week, matches can be played at this venue. Click + Add Day.',
-    courtsMsg:
-    'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.',
+    overRideSlotMsg: 'Only click if the Court has different availability to the Venue ie. Court 1 is only available for matches from 9am but the other courts are free from 8am',
+    gameDayMsg: 'Add the days of the week, matches can be played at this venue. Click + Add Day.',
+    courtsMsg: 'Add the Courts at this venue. For effective use of the Live Scoring App please add Longitude and Latitude of the Court.',
 
-    activeNewsMsg:
-    'A list of all of the news that currently appears in the Game Day App',
-    todayMatchMsg:
-    'A list of all the matches being played on this day. This list shows whether scorers have been set , attendance has been taken and if umpires have been recorded(optional). Please refresh your screen to get the latest updates.',
-    playersToPayMsg:
-    'A list of Players who have registered and are required to pay either with cash or a voucher.',
-    todayIncidentMsg:
-    'If enabled, a list of all of the incidents that have occured on this day including injuries and disciplinary.',
-    matchDurationMsg:
-    'Game time only (in minutes). This time should exclude time for breaks.',
+    activeNewsMsg: 'A list of all of the news that currently appears in the Game Day App',
+    todayMatchMsg: 'A list of all the matches being played on this day. This list shows whether scorers have been set , attendance has been taken and if umpires have been recorded(optional). Please refresh your screen to get the latest updates.',
+    playersToPayMsg: 'A list of Players who have registered and are required to pay either with cash or a voucher.',
+    todayIncidentMsg: 'If enabled, a list of all of the incidents that have occured on this day including injuries and disciplinary.',
+    matchDurationMsg: 'Game time only (in minutes). This time should exclude time for breaks.',
     mainBreakMsg: 'Half time break (in minutes).',
     qtrBreatMsg: 'Break after 1st and 3rd quaters (in minutes).',
     teamAliasMsg: 'The name that is used for the Team on the draw and media.',
-    managerNewMsg:
-    'Add a user who has not registered in the App or Web platform as a ',
-    managerExsitingMsg:
-    'Add a user who has already registered in the App or Web platform as a ',
+    managerNewMsg: 'Add a user who has not registered in the App or Web platform as a ',
+    managerExsitingMsg: 'Add a user who has already registered in the App or Web platform as a ',
     bulkMatchMsg: `Push Back - Push back one, a number or all games to a day or time that suits.\n\n
-  Bring Forward - Bring forward one, a number or all games to a day or time that suits.\n\n
-  Abandon Matches - Abandon one, a number or all matches that are incomplete or not played.\n\n
-  End Matches - End one, a number or all matches.\n\n
-  Double Header - Create a double header where two rounds are played in the one round allocation ie. Round 2 is rained out and the association decides to play Round 2 and Round 3 together as two half matches.`,
+      Bring Forward - Bring forward one, a number or all games to a day or time that suits.\n\n
+      Abandon Matches - Abandon one, a number or all matches that are incomplete or not played.\n\n
+      End Matches - End one, a number or all matches.\n\n
+      Double Header - Create a double header where two rounds are played in the one round allocation ie. Round 2 is rained out and the association decides to play Round 2 and Round 3 together as two half matches.`,
 
-    courtChangeMsg:
-    'Move the matches on one, many or all Venues, Courts to another Venue, Court.',
-    shortNameMsg:
-    'The short name is used in the APP to make it easier for users to search.',
-    recordUmpireMsg:
-    'The Scorer or Manager of a match will document the Umpire names and the Clubs they belong to.',
-    gameTimeTrackMsg:
-    'If selected it portrays the Game Time played by the team and players of that team in the Game Day App.',
+    courtChangeMsg: 'Move the matches on one, many or all Venues, Courts to another Venue, Court.',
+    shortNameMsg: 'The short name is used in the APP to make it easier for users to search.',
+    recordUmpireMsg: 'The Scorer or Manager of a match will document the Umpire names and the Clubs they belong to.',
+    gameTimeTrackMsg: 'If selected it portrays the Game Time played by the team and players of that team in the Game Day App.',
     positionTrackMsg: 'If Selected allows tracking of team positions by player.',
-    recordGoalAttemptMsg:
-    'If selected allows for the recording of Goal Attempts, Misses and Penalty Misses by player.',
+    recordGoalAttemptMsg: 'If selected allows for the recording of Goal Attempts, Misses and Penalty Misses by player.',
     centerPassEnableMsg: 'Enable Centre Pass display. ',
-    incidentEnableMsg:
-    'Enable the trackng of incidents including disciplinary, injury- first aid and injury - ambulance.',
+    incidentEnableMsg: 'Enable the trackng of incidents including disciplinary, injury- first aid and injury - ambulance.',
     recordMsg: 'Choose between allowing scorers to record their own team, both teams or the oppositions team attendance.',
-    reportMsg:
-    'Determine which game time report you would like managers and coaches to see - choose between minute, period or games.',
+    reportMsg: 'Determine which game time report you would like managers and coaches to see - choose between minute, period or games.',
     singleScoringMsg: 'Team A is the only team scoring the match.',
     fiftyScoringMsg: 'Team A scores first half and Team B scores second half',
 
     timerMsg: `Central  - games start, break and end at the same time. The Scorer has no ability to pause.\n\n
-  Central with per match override - games all start at the designated time but can be paused and resumed by the Scorer anytime throughout the game.\n\n
-  Per Match - games are started and paused by the Scorer.`,
+      Central with per match override - games all start at the designated time but can be paused and resumed by the Scorer anytime throughout the game.\n\n
+      Per Match - games are started and paused by the Scorer.`,
 
     buzzerMsg: `Click on Turn off the Buzzer so it doesnt signal the start, breaks or end of the game.\n\n
-  Click on 30 second warning so it doesnt sound with a 30 second warning for players to take the court.`,
+      Click on 30 second warning so it doesnt sound with a 30 second warning for players to take the court.`,
     newsPublishMsg: 'Publish the news/ message to the App only.',
     newsPublishNotifyMsg: 'Publish the news/ message to the App and notify App users.',
     participateCompMsg: 'A list of all Competitions your Organisation is competing in.',
@@ -1118,75 +1099,57 @@ const AppConstants = {
     qtrBreakCompFormatMsg: 'Break Duration at end of 1st and 3rd quarters.',
 
     /// /Registration Competition Fees
-    regInviteesAffiliatesMsg:
-    'Organisations that are affiliated below your organisation. They will invite Users (Players, Coaches, Umpires etc) to register to their organisation and they will then submit them to your competition.',
-    regInviteesAnyOrgMsg:
-    'Add Organisation(s) not linked below your organisation in your State.They will invite Users (Players, Coaches, Umpires etc) to register to their organisation and they will then submit them to your competition.',
-    regInviteesDirectMsg:
-    'Users (Players, Coaches, Umpire etc) will register direct to your organisation and you will place them into teams (if they are not directly registering teams to your organisation).',
+    regInviteesAffiliatesMsg: 'Organisations that are affiliated below your organisation. They will invite Users (Players, Coaches, Umpires etc) to register to their organisation and they will then submit them to your competition.',
+    regInviteesAnyOrgMsg: 'Add Organisation(s) not linked below your organisation in your State.They will invite Users (Players, Coaches, Umpires etc) to register to their organisation and they will then submit them to your competition.',
+    regInviteesDirectMsg: 'Users (Players, Coaches, Umpire etc) will register direct to your organisation and you will place them into teams (if they are not directly registering teams to your organisation).',
 
     /// /Registration Form List
-    regFormDashBoardMsg:
-    'After you have added your Competition Fees, locate the Competition in the Registration Form table and click on edit (three dots in Action) to add Registration details and open registrations.',
-    regFormOpenMsg:
-    'List the date you want Registrations to open and be made available to users.',
-    regFormCloseMsg:
-    'List the date you want Registrations to close. Please note registrations can still be taken after this date if required.',
-    regLockMsg:
-    'Registration Lock immediately closes registration for those divisions it is applied to.',
+    regFormDashBoardMsg: 'After you have added your Competition Fees, locate the Competition in the Registration Form table and click on edit (three dots in Action) to add Registration details and open registrations.',
+    regFormOpenMsg: 'List the date you want Registrations to open and be made available to users.',
+    regFormCloseMsg: 'List the date you want Registrations to close. Please note registrations can still be taken after this date if required.',
+    regLockMsg: 'Registration Lock immediately closes registration for those divisions it is applied to.',
     regFormTrainingMsg: 'Show users training details like Date, Time and Venue.',
-    regFormSpecialNoteMsg:
-    'Detail any special notes you would like to include on the Registration Form.',
-    regFormPhotoMsg:
-    'These are stored in "Our Organisation" Photos. You can display as many photos as you would like to Users to show them your uniform, courts, logo etc.',
-    replyContactDetailMsg:
-    'Let Users know who to contact if they have any questions. You can choose to list their Name, Role, Email and or Phone number.',
+    regFormSpecialNoteMsg: 'Detail any special notes you would like to include on the Registration Form.',
+    regFormPhotoMsg: 'These are stored in "Our Organisation" Photos. You can display as many photos as you would like to Users to show them your uniform, courts, logo etc.',
+    replyContactDetailMsg: 'Let Users know who to contact if they have any questions. You can choose to list their Name, Role, Email and or Phone number.',
     howUserRegisterMsg: 'Define how Users can Register for your Competition.',
     additionQuesMsg: 'Click on the Questions you would like to ask Users who are Registering to your Competition.',
     allDivisionsMsg: 'All Divisions are changed the same Fees.',
     perDivisionMsg: 'Each Division can be charged a different Fee. ',
-    paymentSeasonalFeeMsg:
-    'Choose the payment options you would like to offer users to pay their Registration Fees with.You can choose multiple.',
-    paymentCausalFeeMsg:
-    'Choose the payment options you would like to offer users to pay their Registration Fees with.You can choose multiple.',
-    charityRoundUpMsg:
-    'Add the ability for users Registering to round up their registration to the nearest $1, $5 or $10 to support the pre-defined charity.',
-    discountMsg:
-    'Choose the discount you would like to apply to your Competition Fee. Please note, this discount only applies to your organisations Competition Fee. You can choose which membership Product and Type this fee is applied to.',
-    discountTypeMsg:
-    'Currently the only choices are - Discount Code or Family. You can offer both discounts for the one competition but Family will be applied first. ',
+    paymentSeasonalFeeMsg: 'Choose the payment options you would like to offer users to pay their Registration Fees with.You can choose multiple.',
+    paymentCausalFeeMsg: 'Choose the payment options you would like to offer users to pay their Registration Fees with.You can choose multiple.',
+    charityRoundUpMsg: 'Add the ability for users Registering to round up their registration to the nearest $1, $5 or $10 to support the pre-defined charity.',
+    discountMsg: 'Choose the discount you would like to apply to your Competition Fee. Please note, this discount only applies to your organisations Competition Fee. You can choose which membership Product and Type this fee is applied to.',
+    discountTypeMsg: 'Currently the only choices are - Discount Code or Family. You can offer both discounts for the one competition but Family will be applied first. ',
 
     /// /Registration Membership Fee
 
-    membershipProductNameMsg:
-    'Add a name that your affiliated organisations can resonate with e.g. Annual Membership Fee',
+    membershipProductNameMsg: 'Add a name that your affiliated organisations can resonate with e.g. Annual Membership Fee',
     validityMsg: `Add how long you want the membership product to be available:\n\n
-  * Calendar Year - 1st Jan to 31st Dec in that year\n\n
-  * 12 months from date of Registration`,
+      * Calendar Year - 1st Jan to 31st Dec in that year\n\n
+      * 12 months from date of Registration`,
 
     membershipCasualFeeMsg: 'Fee charged to participate in a single game.',
     membershipSeasonalFeeMsg: 'Fee charged to join a Netball competition.',
-    firstComRegOnlyMsg:
-    'Fee charged to the User for the first competition they join in the defined period (whether it be calendar year or 12 months from date of registration). It will not be charged if they join another competition in that defined period.',
-    allCompRegMsg:
-    'Fee charged to the User every time they join a competition in the defined period (whether it be calendar year or 12 months from date of registration).',
+    firstComRegOnlyMsg: 'Fee charged to the User for the first competition they join in the defined period (whether it be calendar year or 12 months from date of registration). It will not be charged if they join another competition in that defined period.',
+    allCompRegMsg: 'Fee charged to the User every time they join a competition in the defined period (whether it be calendar year or 12 months from date of registration).',
     membershipDiscountMsg: 'Discounts applied here apply to Player Membership Fees only.',
 
     /// /For Users Module
     orgTypeMsg: 'Detail the type of organisation being added. State Organisations can add Associations/ Leagues and Clubs/ Schools, Associations can only add Clubs/ Schools.',
     addAffiliatePermissionLevelMsg: `Choose the permission level for each contact.\n\n
-  Admin - can access all areas in the platform.\n\n
-  Communications Admin - can access the advertising platform and the Home Screen for News and Notifications.\n\n
-  Umpires Admin - can access the Umpires platform.\n\n
-  Results Admin - can access the Live Scores Platform to upload match results and player information.\n\n
-  Finance Admin - can access Payments and the Registration platform.`,
+      Admin - can access all areas in the platform.\n\n
+      Communications Admin - can access the advertising platform and the Home Screen for News and Notifications.\n\n
+      Umpires Admin - can access the Umpires platform.\n\n
+      Results Admin - can access the Live Scores Platform to upload match results and player information.\n\n
+      Finance Admin - can access Payments and the Registration platform.`,
 
     ourOrgPermissionLevelMsg: `Choose the permission level for each contact.\n\n
-  Admin - can access all areas in the platform.\n\n
-  Communications Admin - can access the advertising platform and the Home Screen for News and Notifications.\n\n
-  Umpires Admin - can access the Umpires platform.\n\n
-  Results Admin - can access the Live Scores Platform to upload match results and player information.\n\n
-  Finance Admin - can access Payments and the Registration platform.`,
+      Admin - can access all areas in the platform.\n\n
+      Communications Admin - can access the advertising platform and the Home Screen for News and Notifications.\n\n
+      Umpires Admin - can access the Umpires platform.\n\n
+      Results Admin - can access the Live Scores Platform to upload match results and player information.\n\n
+      Finance Admin - can access Payments and the Registration platform.`,
 
     selectedTeams: 'Selected Teams Array',
     importCoach: 'Import Coaches',
@@ -1515,8 +1478,8 @@ const AppConstants = {
     enterCode: 'Registration Code',
     finalExtraTime: 'Final Extra Time',
     statusContextMsg: `“Pending Membership” (when the membership fee hasn’t been paid by the individual)\n\n
-  “Pending Registration Fee” (when the individual fee is pending)\n\n
-  “Registered” (when all fees have been paid)`,
+      “Pending Registration Fee” (when the individual fee is pending)\n\n
+      “Registered” (when all fees have been paid)`,
     totalFeeMsg: 'A fee charged to a player each time they take the court (where the seasonal fee is not being charged).',
     telExp: '^[0-9]{10}$',
     update: 'Update',
@@ -1608,7 +1571,12 @@ const AppConstants = {
     Communication: 'Communication',
     fullCashAmount: 'Full cash amount',
     partialCashAmount: 'Partial cash amount',
-
+    sqadSelectionEabled: 'Squad selection will be disabled for this division if position tracking is disabled',
+    editOrganisationMessage: 'If you edit the organisations, please ensure all teams are linked to the correct organisation so that managers, scorers, umpires and coaches remain correctly linked to this competition. Would you like to proceed?',
+    backToHome: 'Back to home',
+    wantYouRegenerateDraw: 'Do you want to Regenerate the draw and:',
+    retainException: 'Retain Exception',
+    removeException: 'Remove Exception',
 };
 
 export default AppConstants;

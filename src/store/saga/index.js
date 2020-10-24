@@ -568,4 +568,7 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_NEW_MEMBERSHIP_PRODUCTS_BY_YEAR_LOAD, getNewMembershipProductsByYear);
 
   yield takeEvery(ApiConstants.API_REG_TRANSACTION_UPDATE_LOAD, endUserRegSaga.updateRegTransactionSaga)
+  yield takeEvery(ApiConstants.API_UPDATE_STATUS_TIMESLOT_LOAD,competitionQuickSaga.UpdateGrid_TimeSlotSaga)
+  yield takeEvery(ApiConstants.API_UPDATE_STATUS_DIVISION_LOAD,competitionQuickSaga.updateGrid_DivisionSaga)
+  yield takeEvery(ApiConstants.API_UPDATE_STATUS_VENUE_LOAD,competitionQuickSaga.updateGrid_VenueSaga)
 }

@@ -611,7 +611,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Association Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
@@ -805,7 +805,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Association Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
@@ -828,7 +828,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Association GST',
+        title: 'Affiliate GST',
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
         render: (affiliateGst, record, index) => (
@@ -1076,7 +1076,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Club Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
@@ -1271,7 +1271,7 @@ const playerCasualTableClub = [
         ),
     },
     {
-        title: 'Club fees (excl. GST)',
+        title: 'Affiliate fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
@@ -1552,7 +1552,7 @@ const playerSeasonalTableTeamAssociation = [
             ),
     },
     {
-        title: 'Association Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) =>
@@ -1845,7 +1845,7 @@ const playerSeasonalTableTeamClub = [
             ),
     },
     {
-        title: 'Club Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) =>
@@ -2242,7 +2242,7 @@ const playerCasualTableTeamAssociation = [
         ),
     },
     {
-        title: 'Association Fees (excl. GST)',
+        title: 'Affiliate Fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
@@ -2451,7 +2451,7 @@ const playerCasualTableTeamClub = [
         ),
     },
     {
-        title: 'Club fees (excl. GST)',
+        title: 'Affiliate fees (excl. GST)',
         dataIndex: 'affiliateFee',
         key: 'affiliateFee',
         render: (affiliateFee, record, index) => (
@@ -3512,7 +3512,7 @@ class RegistrationCompetitionFee extends Component {
                             for (let k in feeCasualTeamData) {
                                 if (
                                     feeSeasonalData[j].competitionMembershipProductTypeId ==
-                                    feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                                    feeCasualTeamData[k].competitionMembershipProductTypeId
                                 ) {
                                     feeSeasonalData[j]['teamCasualFees'] = feeCasualTeamData[k].fee;
                                     feeSeasonalData[j]['teamCasualGST'] = feeCasualTeamData[k].gst;
@@ -3582,7 +3582,7 @@ class RegistrationCompetitionFee extends Component {
                             for (let k in feeCasualTeamData) {
                                 if (
                                     feeSeasonalData[j].competitionMembershipProductTypeId ==
-                                    feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                                    feeCasualTeamData[k].competitionMembershipProductTypeId
                                 ) {
                                     feeSeasonalData[j]['teamCasualFees'] = feeCasualTeamData[j]?.fee;
                                     feeSeasonalData[j]['teamCasualGST'] = feeCasualTeamData[j]?.gst;
@@ -3597,11 +3597,11 @@ class RegistrationCompetitionFee extends Component {
 
                     finalPostData = [...feeSeasonalData];
                 }
-            } else if (fee_data[i].isSeasonal && fee_data[i].isCasual == false) {
+            } else if (fee_data[i].isSeasonal == true && fee_data[i].isCasual == false) {
                 if (fee_data[i].isAllType === 'allDivisions') {
                     feeSeasonalData = fee_data[i].seasonal.allType;
 
-                    if (fee_data[i].isTeamSeasonal) {
+                    if (fee_data[i].isTeamSeasonal == true) {
                         feeSeasonalTeamData = fee_data[i].seasonalTeam.allType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeSeasonalTeamData) {
@@ -3632,13 +3632,13 @@ class RegistrationCompetitionFee extends Component {
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual) {
+                    if (fee_data[i].isTeamCasual == true) {
                         feeCasualTeamData = fee_data[i].casualTeam.allType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeCasualTeamData) {
                                 if (
                                     feeSeasonalData[j].competitionMembershipProductTypeId ==
-                                    feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                                    feeCasualTeamData[k].competitionMembershipProductTypeId
                                 ) {
                                     feeSeasonalData[j]['teamCasualFees'] = feeCasualTeamData[k].fee;
                                     feeSeasonalData[j]['teamCasualGST'] = feeCasualTeamData[k].gst;
@@ -3705,7 +3705,7 @@ class RegistrationCompetitionFee extends Component {
                             for (let k in feeCasualTeamData) {
                                 if (
                                     feeSeasonalData[j].competitionMembershipProductTypeId ==
-                                    feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                                    feeCasualTeamData[k].competitionMembershipProductTypeId
                                 ) {
                                     feeSeasonalData[j]['teamCasualFees'] = feeCasualTeamData[j].fee;
                                     feeSeasonalData[j]['teamCasualGST'] = feeCasualTeamData[j].gst;
@@ -3770,7 +3770,7 @@ class RegistrationCompetitionFee extends Component {
                             for (let k in feeCasualTeamData) {
                                 if (
                                     feeCasualData[j].competitionMembershipProductTypeId ==
-                                    feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                                    feeCasualTeamData[k].competitionMembershipProductTypeId
                                 ) {
                                     feeCasualData[j]['teamCasualFees'] = feeCasualTeamData[k].fee;
                                     feeCasualData[j]['teamCasualGST'] = feeCasualTeamData[k].gst;
@@ -3828,7 +3828,7 @@ class RegistrationCompetitionFee extends Component {
                             for (let k in feeCasualTeamData) {
                                 if (
                                     feeCasualData[j].competitionMembershipProductTypeId ==
-                                    feeSeasonalTeamData[k].competitionMembershipProductTypeId
+                                    feeCasualTeamData[k].competitionMembershipProductTypeId
                                 ) {
                                     feeCasualData[j]['teamCasualFees'] = feeCasualTeamData[j].fee;
                                     feeCasualData[j]['teamCasualGST'] = feeCasualTeamData[j].gst;
@@ -3958,7 +3958,7 @@ class RegistrationCompetitionFee extends Component {
                 (fee_data[i].isSeasonal
                     || fee_data[i].isCasual
                     || fee_data[i].isTeamSeasonal
-                    || fee_data[i].isTeamCasual == false)
+                    || fee_data[i].isTeamCasual)
             ) {
                 finalPostData.forEach((item, index) => {
                     finalPostData[index]["isSeasonal"] = fee_data[i].isSeasonal;
@@ -3974,6 +3974,7 @@ class RegistrationCompetitionFee extends Component {
         }
 
         if (finalpostarray.length > 0) {
+            console.log("finalpostarray", finalpostarray);
             this.props.saveCompetitionFeeSection(finalpostarray, competitionId, this.state.affiliateOrgId);
             this.setState({ loading: true });
         } else {

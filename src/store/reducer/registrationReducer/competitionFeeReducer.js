@@ -1381,7 +1381,7 @@ function createProductFeeArr(data) {
                 }
 
                 if (statusTeamCasual.status) {
-                    let mFeesCasual = Number(memberShipProductType[j].mSeasonalFee) + Number(memberShipProductType[j].mSeasonalGst)
+                    let mFeesCasual = Number(memberShipProductType[j].mCasualFee) + Number(memberShipProductType[j].mCasualGst)
 
                     type_object_team_casual = {
                         "competitionMembershipProductFeeId": statusTeamCasual.result.competitionMembershipProductFeeId,
@@ -1600,6 +1600,7 @@ function createProductFeeArr(data) {
                         }
                     }
 
+                    console.log("*****", statusTeamCasual);
                     if (statusTeamCasual.status) {
                         let mFeesCasualPer = Number(memberShipProductType[k].mCasualFee) + Number(memberShipProductType[k].mCasualGst)
                         type_object_team_casual = {
@@ -1649,6 +1650,8 @@ function createProductFeeArr(data) {
                         }
                     }
 
+                    console.log("perTypeTeamArrayCasual", perTypeTeamArrayCasual);
+
                     if (memberShipProductType[k].isPlaying == 1) {
                         perTypeTeamArraySeasonal.push(type_object_team_seasonal)
                         perTypeTeamArrayCasual.push(type_object_team_casual)
@@ -1677,7 +1680,7 @@ function createProductFeeArr(data) {
         for (let x in productArrayToCheckAllType) {
             if (product[i].membershipProductUniqueKey == productArrayToCheckAllType[x].membershipProductUniqueKey) {
                 divisionIdToCheckAllType = checkIsDivisionAllType(productArrayToCheckAllType[x].fees)
-                product[i]["isProductTypeALL"] = divisionIdToCheckAllType
+                product[i]["isProductTypeALL"] = divisionIdToCheckAllType ? true: false
                 break;
             }
         }
@@ -1713,10 +1716,12 @@ function createProductFeeArr(data) {
             "isCasual": isCasualFeeTypeAvailable,
             "isTeamSeasonal": (isSeasonalTeamFeeTypeAvailable == undefined ? false : isSeasonalTeamFeeTypeAvailable),
             "isTeamCasual": (isCasualTeamFeeTypeAvailable == undefined ? false : isCasualTeamFeeTypeAvailable),
-            "isIndividualReg": (isSeasonalFeeTypeAvailable || isCasualFeeTypeAvailable),
-            "isTeamReg": (isSeasonalTeamFeeTypeAvailable || isCasualTeamFeeTypeAvailable),
+            "isIndividualReg": (isSeasonalFeeTypeAvailable == true || isCasualFeeTypeAvailable == true) ? true : false,
+            "isTeamReg": (isSeasonalTeamFeeTypeAvailable == true || isCasualTeamFeeTypeAvailable == true) ? true : false,
             "teamRegChargeTypeRefId": teamRegChargeTypeRefId
         }
+
+        console.log("object",object);
 
         productArray.push(object)
     }

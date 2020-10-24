@@ -302,7 +302,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition")
     }
 
-    onCompetitionClick(competitionId, statusRefId) {
+    onCompetitionClick(competitionId) {
+        let own_CompetitionArr = this.props.appState.own_CompetitionArr
+        let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
+        let statusRefId = own_CompetitionArr[statusIndex].statusRefId
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
         let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId == competitionId && x.isQuickCompetition == 1);
