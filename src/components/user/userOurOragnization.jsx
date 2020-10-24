@@ -468,7 +468,7 @@ class UserOurOrganization extends Component {
                     //     termsAndConditionsValue = affiliate.termsAndConditionsFile;
                     // }
 
-                    formData.append("email", affiliate.email);
+                    formData.append("email", affiliate.email ? affiliate.email : '');
                     formData.append("organisationLogo", this.state.image);
                     formData.append("organisationLogoId", affiliate.organisationLogoId);
                     formData.append("affiliateId", affiliate.affiliateId);
