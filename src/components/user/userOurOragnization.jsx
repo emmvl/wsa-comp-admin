@@ -389,12 +389,16 @@ class UserOurOrganization extends Component {
     }
 
     addPhoto = () => {
-        let obj = {
-            id: 0,
-            photoTypeRefId: null,
-            photoUrl: null
+        try{
+            let obj = {
+                id: 0,
+                photoTypeRefId: null,
+                photoUrl: null
+            }
+            this.setState({ isEditView: true, tableRecord: obj, orgPhotosImg: null, orgPhotosImgSend: null });
+        }catch(ex){
+            console.log("Error in addPhoto::"+ex);
         }
-        this.setState({ isEditView: true, tableRecord: obj, orgPhotosImg: null, orgPhotosImgSend: null });
     }
 
     cancelEditView = () => {
@@ -1078,60 +1082,64 @@ class UserOurOrganization extends Component {
     };
 
     photosAddEditView = () => {
-        const photoUrl = this.state.tableRecord != null ? this.state.tableRecord.photoUrl : null;
-        const { photoTypeData } = this.props.commonReducerState;
-        return (
-            <div className="content-view pt-2">
-                <ImageLoader
-                    className="banner-image"
-                    height
-                    width
-                    borderRadius
-                    timeout={this.state.timeout}
-                    src={photoUrl ? photoUrl : this.state.orgPhotosImg}
-                />
-                <div>
-                    <div className="row">
-                        <div className="col-sm">
-                            <span className="user-contact-heading required-field">{AppConstants.uploadImage}</span>
-                            <div onClick={this.onSelectPhotos}>
+        try{
+            const photoUrl = this.state.tableRecord != null ? this.state.tableRecord.photoUrl : null;
+            const { photoTypeData } = this.props.commonReducerState;
+            return (
+                <div className="content-view pt-2">
+                    <ImageLoader
+                        className="banner-image"
+                        height
+                        width
+                        borderRadius
+                        timeout={this.state.timeout}
+                        src={photoUrl ? photoUrl : this.state.orgPhotosImg}
+                    />
+                    <div>
+                        <div className="row">
+                            <div className="col-sm">
+                                <span className="user-contact-heading required-field">{AppConstants.uploadImage}</span>
+                                <div onClick={this.onSelectPhotos}>
+                                </div>
+                                {/* <Form.Item name='photosImage' rules={[{ required: photoUrl ? false : true, message: ValidationConstants.organisationPhotoRequired }]}> */}
+                                    <input
+                                        required="pb-0"
+                                        type="file"
+                                        id="photos-pic"
+                                        onChange={(evt) => {
+                                            this.setPhotosImage(evt.target)
+                                            this.setState({ timeout: 1000 })
+                                            setTimeout(() => {
+                                                this.setState({ timeout: null })
+                                            }, 1000);
+                                        }}
+                                    />
+                                {/* </Form.Item> */}
+                                <span className="form-err">{this.state.imageError}</span>
                             </div>
-                            <Form.Item name='photosImage' rules={[{ required: photoUrl ? false : true, message: ValidationConstants.organisationPhotoRequired }]}>
-                                <input
-                                    required="pb-0"
-                                    type="file"
-                                    id="photos-pic"
-                                    onChange={(evt) => {
-                                        this.setPhotosImage(evt.target)
-                                        this.setState({ timeout: 1000 })
-                                        setTimeout(() => {
-                                            this.setState({ timeout: null })
-                                        }, 1000);
-                                    }}
-                                />
-                            </Form.Item>
-                            <span className="form-err">{this.state.imageError}</span>
-                        </div>
-                        <div className="col-sm pt-1">
-                            <InputWithHead heading={AppConstants.category} required="required-field" />
-                            <Form.Item name='photoTypeRefId' rules={[{ required: true, message: ValidationConstants.photoTypeRequired }]}>
-                                <Select
-                                    style={{ width: "100%", paddingRight: 1 }}
-                                    onChange={(e) => this.setOrgPhotoValue(e)}
-                                    value={this.state.tableRecord.photoTypeRefId}
-                                >
-                                    {(photoTypeData || []).map((photo) => (
-                                        <Option key={'photoType_' + photo.id} value={photo.id}>
-                                            {photo.description}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
+                            <div className="col-sm pt-1">
+                                <InputWithHead heading={AppConstants.category} required="required-field" />
+                                <Form.Item name='photoTypeRefId' rules={[{ required: true, message: ValidationConstants.photoTypeRequired }]}>
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1 }}
+                                        onChange={(e) => this.setOrgPhotoValue(e)}
+                                        value={this.state.tableRecord.photoTypeRefId}
+                                    >
+                                        {(photoTypeData || []).map((photo) => (
+                                            <Option key={'photoType_' + photo.id} value={photo.id}>
+                                                {photo.description}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        }catch(ex){
+            console.log("Error in photosAddEditView::"+ex);
+        }
     }
 
     photosEditViewRemoveBtnView = () => {
