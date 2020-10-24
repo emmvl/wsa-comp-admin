@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Tooltip, Popover, Menu, Select, DatePicker, Checkbox, Form, message, Spin, Modal } from "antd";
+import { Layout, Button, Tooltip, Popover, Menu, Select, DatePicker, Checkbox, Form, message, Spin, Modal,Radio } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -140,7 +140,9 @@ class MultifieldDrawsNew extends Component {
             showAllOrg: false,
             allOrgChecked: true,
             singleCompDivisionCheked: true,
-            filterDates: false
+            filterDates: false,
+            regenerateDrawExceptionModalVisible: false,
+            regenerateExceptionRefId: null
         };
         this.props.clearMultiDraws();
     }
@@ -1642,13 +1644,29 @@ class MultifieldDrawsNew extends Component {
         )
     }
 
-    callGenerateDraw = () => {
+    handleRegenerateDrawException = (key) => {
+        try{
+          if(key === "ok") {
+            this.callGenerateDraw(this.state.regenerateExceptionRefId);
+            this.setState({ regenerateDrawExceptionModalVisible: false,regenerateExceptionRefId: null });
+          }else {
+            this.setState({ regenerateDrawExceptionModalVisible: false });
+          }
+        }catch(ex){
+          console.log("Error in handleRegenerateDrawException::"+ex);
+        }
+      }
+
+    callGenerateDraw = (regenerateExceptionRefId) => {
         let payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: this.state.firstTimeCompId,
             organisationId: getOrganisationData().organisationUniqueKey,
             roundId: this.state.generateRoundId
         };
+        if(regenerateExceptionRefId){
+            payload["exceptionTypeRefId"] = regenerateExceptionRefId;
+          }
         this.props.generateDrawAction(payload);
         this.setState({ venueLoad: true });
     }
@@ -1659,7 +1677,8 @@ class MultifieldDrawsNew extends Component {
             this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
             this.setState({ roundLoad: true });
         } else {
-            this.callGenerateDraw();
+            this.setState({regenerateDrawExceptionModalVisible: true});
+            //this.callGenerateDraw();
         }
     };
 
@@ -1696,6 +1715,31 @@ class MultifieldDrawsNew extends Component {
             },
         });
     };
+
+    regenerateDrawExceptionModal = () => {
+        try{
+          return(
+            <Modal
+              className="add-membership-type-modal"
+              title="Draws Regeneration"
+              visible={this.state.regenerateDrawExceptionModalVisible}
+              onOk={() => this.handleRegenerateDrawException("ok")}
+              onCancel={() => this.handleRegenerateDrawException("cancel")}
+            >
+              <div style={{fontWeight: "600"}}>{AppConstants.wantYouRegenerateDraw}</div>  
+              <Radio.Group
+                  className="reg-competition-radio"
+                  onChange={(e) => this.setState({regenerateExceptionRefId: e.target.value})}
+              >
+                  <Radio style={{fontSize: '14px'}} value={1}>{AppConstants.retainException}</Radio>
+                  <Radio style={{fontSize: '14px'}} value={2}>{AppConstants.removeException}</Radio>
+              </Radio.Group>
+            </Modal>
+          )
+        }catch(ex){
+          console.log("Error in regenerateDrayExceptionModal::"+ex);
+        }
+      }
 
     //////footer view containing all the buttons like publish and regenerate draws
     footerView = () => {
@@ -1901,6 +1945,7 @@ class MultifieldDrawsNew extends Component {
                     <Content>{this.contentView()}</Content>
                     <Footer>{this.footerView()}</Footer>
                     <Loader visible={this.props.drawsState.updateLoad || this.props.competitionModuleState.drawGenerateLoad} />
+                    {this.regenerateDrawExceptionModal()}
                 </Layout>
             </div>
         );
