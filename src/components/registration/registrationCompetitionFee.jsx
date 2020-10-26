@@ -511,7 +511,7 @@ const playerSeasonalTableAssociation = [
         ),
     },
     {
-        title: 'Association Nomination Fees (excl. GST)',
+        title: 'Affiliate Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         render: (fee, record, index) => (
@@ -976,7 +976,7 @@ const playerSeasonalTableClub = [
         ),
     },
     {
-        title: 'Club Nomination Fees (excl. GST)',
+        title: 'Affiliate Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         render: (fee, record, index) => (
@@ -1442,7 +1442,7 @@ const playerSeasonalTableTeamAssociation = [
         ),
     },
     {
-        title: 'Association Nomination Fees (excl. GST)',
+        title: 'Affiliate Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         render: (fee, record, index) => (
@@ -1735,7 +1735,7 @@ const playerSeasonalTableTeamClub = [
         ),
     },
     {
-        title: 'Club Nomination Fees (excl. GST)',
+        title: 'Affiliate Nomination Fees (excl. GST)',
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         render: (fee, record, index) => (
