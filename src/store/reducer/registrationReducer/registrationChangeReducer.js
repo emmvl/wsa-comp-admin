@@ -63,7 +63,8 @@ const initialState = {
         startDate: null,
         userName: null,
         userRegisteredTo: null,
-        isShowButton: null
+        isShowButton: null,
+        deRegistrationOptionId: null,
     },
     reviewSaveData: {
         refundTypeRefId:null,

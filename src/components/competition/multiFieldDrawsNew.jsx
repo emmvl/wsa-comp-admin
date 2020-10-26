@@ -1748,6 +1748,21 @@ class MultifieldDrawsNew extends Component {
         }
       }
 
+      handleGenerateDrawModal = (key) => {
+        if (key === "ok") {
+          if (this.state.generateRoundId != null) {
+            this.callGenerateDraw();
+            this.setState({ drawGenerateModalVisible: false });
+          }
+          else {
+            message.error("Please select round");
+          }
+        }
+        else {
+          this.setState({ drawGenerateModalVisible: false });
+        }
+      }
+
     //////footer view containing all the buttons like publish and regenerate draws
     footerView = () => {
         let publishStatus = this.props.drawsState.publishStatus;

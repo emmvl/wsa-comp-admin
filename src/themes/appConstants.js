@@ -1592,7 +1592,7 @@ const AppConstants = {
   whoAssignsUmpires: 'Who Assigns Umpires',
   competitionOrganiser: 'Competition Organiser',
   affiliateOrganisations: 'Affiliate Organisations',
-  takenCourtforTraining: "Have you taken the court for training, grading or a compitition game",
+  takenCourtforTraining: "Have you taken the court for training, grading or a competition game",
   exportAttendance: 'Export Attendance',
   exportAttendanceMessage: 'Attendance exported successfully',
   hardshipCode: "Hardship Code",
@@ -1655,7 +1655,8 @@ const AppConstants = {
   pool:"Pool",
   wantYouRegenerateDraw: "Do you want to Regenerate the draw and:",
   retainException: "Retain Exception",
-  removeException: "Remove Exception"
+  removeException: "Remove Exception",
+  reasonRegisterTitle: "Why would you like to de-register?",
 };
 
 export default AppConstants;

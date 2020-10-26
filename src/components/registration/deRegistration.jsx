@@ -137,10 +137,10 @@ class DeRegistration extends Component {
     ////checkMainRegistrationOption
     checkMainRegistrationOption = (subItem, selectedOption) => {
         const { saveData, deRegistionOption } = this.props.deRegistrationState
-        if (subItem.id == 1 && selectedOption == 1) {
-        } else if (subItem.id == 2 && selectedOption == 2) {
+  
+        if ((subItem.id == 1 && selectedOption == 1) || (subItem.id == 2 && selectedOption == 2)) {
             return (
-                <div className="ml-5">
+                <div className="ml-5 pt-3">
                     <InputWithHead
                         required="pt-0"
                         heading={AppConstants.reasonRegisterTitle}
@@ -177,7 +177,7 @@ class DeRegistration extends Component {
                     <InputWithHead
                         required="pt-0"
                         placeholder={AppConstants.other}
-                        value={saveData.transafer.transferOther}
+                        value={saveData.transfer.transferOther}
                         onChange={(e) => this.updateDeregistrationData(e.target.value, "transferOther", 'transfer')}
                     />
                 </div>
