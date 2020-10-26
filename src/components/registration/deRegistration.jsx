@@ -87,6 +87,7 @@ class DeRegistration extends Component {
         } else {
             let regData = this.state.regData;
             let personal = this.state.personal;
+            saveData["isTeam"] = 0;
             saveData["userId"] = personal.userId;
             saveData["organisationId"] = regData.organisationId;
             saveData["competitionId"] = regData.competitionId;

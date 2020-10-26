@@ -161,6 +161,12 @@ function regChangeReducer(state = initialState, action) {
 
         case ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_SUCCESS:
             let regChangeReviewData = action.result;
+            state.reviewSaveData = {
+                refundTypeRefId:null,
+                declineReasonRefId:null,
+                otherInfo:null,
+                invoices: null
+            }
             return {
                 ...state,
                 onChangeReviewLoad: false,
