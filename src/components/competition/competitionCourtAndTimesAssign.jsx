@@ -29,6 +29,7 @@ import {
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
 } from "../../util/sessionStorage"
 import AppImages from "../../themes/appImages";
 import Loader from '../../customComponents/loader'
@@ -50,7 +51,8 @@ class CompetitionCourtAndTimesAssign extends Component {
             tooltipVisibleDelete: false,
             isQuickCompetition: false,
             onNextLoad: false,
-            nextButtonClicked: false
+            nextButtonClicked: false,
+            finalTypeRefId: null
         }
         // this.props.timeSlotInit()
         this.props.clearYearCompetitionAction()
@@ -63,6 +65,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
+        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -75,7 +78,8 @@ class CompetitionCourtAndTimesAssign extends Component {
                 firstTimeCompId: storedCompetitionId,
                 competitionStatus: storedCompetitionStatus,
                 getDataLoading: true,
-                isQuickCompetition: quickComp != undefined
+                isQuickCompetition: quickComp != undefined,
+                finalTypeRefId: storedfinalTypeRefId
             })
             // if (this.props.competitionTimeSlots.allrefernceData.length > 0) {
             this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
@@ -109,13 +113,16 @@ class CompetitionCourtAndTimesAssign extends Component {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
                     let statusRefId = competitionList[0].statusRefId
+                    let finalTypeRefId = competitionList[0].finalTypeRefId
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
+                    setOwn_CompetitionFinalRefId(finalTypeRefId)
                     let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId ==
                         competitionId && x.isQuickCompetition == 1);
                     this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
                     this.setState({
                         getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
+                        finalTypeRefId: finalTypeRefId,
                         isQuickCompetition: quickComp != undefined
                     })
                 }
@@ -222,6 +229,16 @@ class CompetitionCourtAndTimesAssign extends Component {
                     })
                 }
             })
+        }
+    }
+
+    // get the title 
+    getTitle(pool, grade) {
+        if (this.state.finalTypeRefId == 2) {
+            return pool
+        }
+        else {
+            return grade
         }
     }
 
@@ -412,8 +429,9 @@ class CompetitionCourtAndTimesAssign extends Component {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
+        setOwn_CompetitionFinalRefId(undefined)
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
-        this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0, isQuickCompetition: false })
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0, isQuickCompetition: false, finalTypeRefId: null, })
         this.setDetailsFieldValue()
     }
 
@@ -422,14 +440,16 @@ class CompetitionCourtAndTimesAssign extends Component {
         let own_CompetitionArr = this.props.appState.own_CompetitionArr
         let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
         let statusRefId = own_CompetitionArr[statusIndex].statusRefId
+        let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
+        setOwn_CompetitionFinalRefId(finalTypeRefId)
         let quickComp = this.props.appState.own_CompetitionArr.find(
             x => x.competitionId == competitionId && x.isQuickCompetition == 1
         );
         this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
         this.setState({
-            getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
+            getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId,
             isQuickCompetition: quickComp != undefined
         })
     }
@@ -639,7 +659,6 @@ class CompetitionCourtAndTimesAssign extends Component {
                     default: break;
                 }
                 break;
-
             default: break
         }
     }
@@ -688,12 +707,13 @@ class CompetitionCourtAndTimesAssign extends Component {
                                             value={timeSlotData.timeslotRotationRefId}
                                         >
                                             {timeSlotData.mainTimeRotationID == item.id && item.subReferences.map((subArr) => (
+
                                                 <Radio
                                                     id={this.getCourtRotationId(item.id, 'subPref')}
                                                     key={'timeslotRotation_' + subArr.id}
                                                     value={subArr.id}
                                                 >
-                                                    {subArr.description}
+                                                    {this.getReferenceTitle(subArr)}
                                                 </Radio>
                                             ))}
                                         </Radio.Group>
@@ -750,7 +770,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                                 )}
                                                 {timeSlotData.timeslotRotationRefId == 5 && (
                                                     <span className="applicable-to-heading">
-                                                        {AppConstants.gradesTimeSlot}
+                                                        {this.getTitle(AppConstants.poolsTimeSlot, AppConstants.gradesTimeSlot)}
                                                     </span>
                                                 )}
                                                 {timeSlotData.timeslotRotationRefId == 5 && timeSlotData.competitionTimeslotsEntity.map((item, index) =>
@@ -834,6 +854,19 @@ class CompetitionCourtAndTimesAssign extends Component {
         }
     };
 
+    getReferenceTitle = (ItemArr) => {
+        if (ItemArr.name == "EVEN_GRADES" && this.state.finalTypeRefId == 2) {
+            return AppConstants.pools
+        }
+        else if (ItemArr.name == "ALLOCATE_GRADES" && this.state.finalTypeRefId == 2) {
+            return AppConstants.pools
+        }
+        else {
+            return ItemArr.description
+        }
+
+    }
+
     addDataTimeSlotManualPerVenues(item, venueIndex, index, id, mainId, data) {
         let daysList = this.props.competitionTimeSlots
         let division = this.props.competitionTimeSlots.getcompetitionTimeSlotData
@@ -900,7 +933,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
                                 {mainId == 8 && (
                                     <div className="col-sm">
-                                        <InputWithHead heading={index == 0 && timeIndex == 0 ? id == 4 ? AppConstants.divisions : AppConstants.grades : ' '} />
+                                        <InputWithHead heading={index == 0 && timeIndex == 0 ? id == 4 ? AppConstants.divisions : this.getTitle(AppConstants.pools, AppConstants.grades) : ' '} />
 
                                         {id == 4 && (
                                             <Form.Item
@@ -1222,7 +1255,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             </div>
                             {mainId == 8 && (
                                 <div className="col-sm">
-                                    <InputWithHead heading={timeIndex == 0 ? id == 4 ? AppConstants.divisions : AppConstants.grades : ' '} />
+                                    <InputWithHead heading={timeIndex == 0 ? id == 4 ? AppConstants.divisions : this.getTitle(AppConstants.pools, AppConstants.grades) : ' '} />
                                     {id == 4 && (
                                         <Form.Item
                                             name={`timeSlotEntityManualkey${index}${timeIndex}`}

@@ -18,7 +18,7 @@ import {
     clearTeamGradingReducerDataAction,
     getCompFinalGradesListAction,
     teamGradingCommentAction,
-    changeHistoryHover, deleteTeamActionAction, changeDivisionTeamAction
+    changeHistoryHover, deleteTeamActionAction, changeDivisionTeamAction,
 } from "../../store/actions/competitionModuleAction/competitionTeamGradingAction";
 import { gradesReferenceListAction } from "../../store/actions/commonAction/commonAction";
 import {
@@ -26,7 +26,8 @@ import {
     getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
-    getOwn_competitionStatus, setOwn_competitionStatus
+    getOwn_competitionStatus, setOwn_competitionStatus,
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
 } from "../../util/sessionStorage"
 import ValidationConstants from "../../themes/validationConstant";
 import moment from "moment"
@@ -172,7 +173,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "playerHistory")
     },
     {
-        title: 'Proposed Grade',
+        title: () => this_obj.getTitle('Proposed Pool', 'Proposed Grade'),
         dataIndex: 'proposedGradeRefId',
         key: 'proposedGradeRefId',
         render: (proposedGradeRefId, record) => (
@@ -185,7 +186,7 @@ const columns = [
         sorter: (a, b) => tableSort(a, b, "proposedGradeRefId")
     },
     {
-        title: 'Final Grade',
+        title: () => this_obj.getTitle('Final Pool', 'Final Grade'),
         dataIndex: 'finalGradeId',
         key: 'finalGradeId',
         render: (finalGradeId, record, index) => (
@@ -204,8 +205,8 @@ const columns = [
                         ))}
                     </Select>
                 ) : (
-                    <span>{record.delIndicationMsg}</span>
-                )}
+                        <span>{record.delIndicationMsg}</span>
+                    )}
             </span>
         ),
         sorter: (a, b) => tableSort(a, b, "finalGradeId")
@@ -298,7 +299,8 @@ class CompetitionProposedTeamGrading extends Component {
             divisionLoad: false,
             competitionDivisionId: null,
             competitionStatus: 0,
-            tooltipVisibleDelete: false
+            tooltipVisibleDelete: false,
+            finalTypeRefId: null
         }
         this_obj = this
         this.props.clearTeamGradingReducerDataAction("finalTeamGrading")
@@ -344,6 +346,14 @@ class CompetitionProposedTeamGrading extends Component {
     changeHover(record, index, historyIndex, key) {
         this.props.changeHistoryHover(record, index, historyIndex, key)
 
+    }
+    getTitle(pool, grade) {
+        if (this.state.finalTypeRefId == 2) {
+            return pool
+        }
+        else {
+            return grade
+        }
     }
 
     handleOk = e => {
@@ -409,6 +419,7 @@ class CompetitionProposedTeamGrading extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
+        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -416,6 +427,7 @@ class CompetitionProposedTeamGrading extends Component {
                 yearRefId: JSON.parse(yearId),
                 firstTimeCompId: storedCompetitionId,
                 competitionStatus: storedCompetitionStatus,
+                finalTypeRefId: storedfinalTypeRefId,
                 getDataLoading: true
             })
             this.props.getDivisionsListAction(yearId, storedCompetitionId, this.state.sourceModule)
@@ -444,11 +456,13 @@ class CompetitionProposedTeamGrading extends Component {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
                     let statusRefId = competitionList[0].statusRefId
+                    let finalTypeRefId = competitionList[0].finalTypeRefId
                     // let competitionId = this.state.firstTimeCompId !== null ? this.state.firstTimeCompId : competitionList[0].competitionId
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
+                    setOwn_CompetitionFinalRefId(finalTypeRefId)
                     this.props.getDivisionsListAction(this.state.yearRefId, competitionId, this.state.sourceModule)
-                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId })
+                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId })
                 }
             }
         }
@@ -558,10 +572,11 @@ class CompetitionProposedTeamGrading extends Component {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
+        setOwn_CompetitionFinalRefId(undefined)
         this.props.clearTeamGradingReducerDataAction("finalTeamGrading")
         this.props.clearReducerDataAction("allDivisionsData")
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
-        this.setState({ firstTimeCompId: null, yearRefId: yearId, divisionId: null, gradeRefId: null, competitionStatus: 0 })
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, divisionId: null, gradeRefId: null, competitionStatus: 0, finalTypeRefId: null })
 
     }
 
@@ -570,11 +585,13 @@ class CompetitionProposedTeamGrading extends Component {
         let own_CompetitionArr = this.props.appState.own_CompetitionArr
         let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
         let statusRefId = own_CompetitionArr[statusIndex].statusRefId
+        let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
+        setOwn_CompetitionFinalRefId(finalTypeRefId)
         this.props.clearTeamGradingReducerDataAction("finalTeamGrading")
         this.props.clearReducerDataAction("allDivisionsData")
-        this.setState({ firstTimeCompId: competitionId, divisionId: null, gradeRefId: null, competitionStatus: statusRefId })
+        this.setState({ firstTimeCompId: competitionId, divisionId: null, gradeRefId: null, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId })
         this.props.getDivisionsListAction(this.state.yearRefId, competitionId, this.state.sourceModule)
     }
 
@@ -672,7 +689,7 @@ class CompetitionProposedTeamGrading extends Component {
                                 flexDirection: "row",
                                 alignItems: "center"
                             }}>
-                                <span className="year-select-heading">{AppConstants.grade}:</span>
+                                <span className="year-select-heading">{this.getTitle(AppConstants.pool, AppConstants.grade)}:</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ width: 160 }}
@@ -733,14 +750,14 @@ class CompetitionProposedTeamGrading extends Component {
                     value={this.state.comment}
                     commentLoad={commentLoad}
                     commentList={commentList}
-                    // owner={this.state.commentsCreatedBy}
-                    // OwnCreatedComment={this.state.commentsCreatedOn}
-                    // ownnerComment={this.state.comments}
-                    // affilate={this.state.responseCommentsCreatedBy}
-                    // affilateCreatedComment={this.state.responseCommentsCreatedOn}
-                    // affilateComment={this.state.responseComments}
-                    // finalGradeId={this.state.finalGradeId}
-                    // proposedGradeID={this.state.proposedGradeID}
+                // owner={this.state.commentsCreatedBy}
+                // OwnCreatedComment={this.state.commentsCreatedOn}
+                // ownnerComment={this.state.comments}
+                // affilate={this.state.responseCommentsCreatedBy}
+                // affilateCreatedComment={this.state.responseCommentsCreatedOn}
+                // affilateComment={this.state.responseComments}
+                // finalGradeId={this.state.finalGradeId}
+                // proposedGradeID={this.state.proposedGradeID}
                 />
 
                 <Modal

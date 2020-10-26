@@ -57,6 +57,7 @@ import {
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
 } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import { venueListAction } from '../../store/actions/commonAction/commonAction'
@@ -300,7 +301,7 @@ class CompetitionOpenRegForm extends Component {
             }
         }
         if (nextProps.competitionFeesState !== competitionFeesState) {
-        
+
             if (competitionFeesState.getCompAllDataOnLoad === false && this.state.getDataLoading) {
                 let isPublished = competitionFeesState.competitionDetailData.statusRefId == 2
 
@@ -340,7 +341,8 @@ class CompetitionOpenRegForm extends Component {
                     let competitionId = null
                     let statusRefId = null
                     let competitionStatus = null
-            
+                    let finalTypeRefId = null
+
                     if (screenKey === "compDashboard" || fromReplicate == 1) {
                         competitionId = getOwn_competition()
                         let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
@@ -349,15 +351,18 @@ class CompetitionOpenRegForm extends Component {
                         competitionStatus = competitionTypeList[compIndex].competitionStatus
                         setOwn_competitionStatus('')
                         setOwn_competition('')
+                        setOwn_CompetitionFinalRefId('')
                     } else {
                         competitionId = competitionTypeList[0].competitionId
                         statusRefId = competitionTypeList[0].statusRefId
                         competitionStatus = competitionTypeList[0].competitionStatus
+                        finalTypeRefId = competitionTypeList[0].finalTypeRefId
                     }
                     this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
                     if (competitionStatus == 2) {
                         setOwn_competitionStatus(statusRefId)
                         setOwn_competition(competitionId)
+                        setOwn_CompetitionFinalRefId(finalTypeRefId)
                     }
                     this.setState({
                         getDataLoading: true,
@@ -474,6 +479,7 @@ class CompetitionOpenRegForm extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
+        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.all_own_CompetitionArr.length > 0 ? this.props.appState.all_own_CompetitionArr : undefined;
         let fromReplicate = this.props.location.state ? this.props.location.state.fromReplicate : null;
@@ -550,6 +556,7 @@ class CompetitionOpenRegForm extends Component {
                 [membershipProductUniqueKey]: item.membershipProductUniqueKey,
             })
         })
+
         this.setDivisionFormFields();
     }
 
@@ -639,6 +646,7 @@ class CompetitionOpenRegForm extends Component {
                 }
 
                 this.props.saveCompetitionFeesDetailsAction(formData, compFeesState.defaultCompFeesOrgLogoData.id, this.state.sourceModule)
+                setOwn_CompetitionFinalRefId(postData.finalTypeRefId)
                 this.setState({ loading: true, divisionState: true });
             } else {
                 message.error(ValidationConstants.competitionLogoIsRequired)
@@ -709,6 +717,7 @@ class CompetitionOpenRegForm extends Component {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
+        setOwn_CompetitionFinalRefId(undefined)
         this.props.clearCompReducerDataAction("all")
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
         // this.props.getCompetitionTypeListAction(yearRefId);
@@ -720,9 +729,11 @@ class CompetitionOpenRegForm extends Component {
         let competititionIndex = competitionArray.findIndex((x) => x.competitionId == competitionId)
         let competitionStatus = competitionArray[competititionIndex].competitionStatus
         let statusRefId = competitionArray[competititionIndex].statusRefId
+        let finalTypeRefId = competitionArray[competititionIndex].finalTypeRefId
         if (competitionStatus == 2) {
             setOwn_competition(competitionId)
             setOwn_competitionStatus(statusRefId)
+            setOwn_CompetitionFinalRefId(finalTypeRefId)
         }
         this.props.clearCompReducerDataAction("all")
         this.props.getAllCompetitionFeesDeatilsAction(competitionId, null, this.state.sourceModule)
@@ -928,6 +939,9 @@ class CompetitionOpenRegForm extends Component {
         })
         this.props.searchVenueList(filteredData)
     };
+    setGradesAndPools = (value) => {
+        this.props.add_editcompetitionFeeDeatils(value, "finalTypeRefId")
+    }
 
     ///////form content view - fee details
     contentView = () => {
@@ -1109,7 +1123,7 @@ class CompetitionOpenRegForm extends Component {
                 >
                     <Radio.Group
                         className="reg-competition-radio"
-                        onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "finalTypeRefId")}
+                        onChange={e => this.setGradesAndPools(e.target.value)}
                         value={detailsData.competitionDetailData.finalTypeRefId}
                     >
                         <Radio value={1}>{AppConstants.grades}</Radio>

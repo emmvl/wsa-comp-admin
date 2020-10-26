@@ -20,7 +20,8 @@ import {
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
-    setOwn_competitionStatus
+    setOwn_competitionStatus,
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
 } from "../../util/sessionStorage"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import AppImages from "../../themes/appImages";
@@ -39,7 +40,7 @@ const { Option } = Select;
 let this_obj = null;
 
 var colors = JSON.parse(JSON.stringify(ColorsArray))
-let reverseColors = colors.reverse()
+
 
 
 const menu = (
@@ -88,8 +89,10 @@ class CompetitionPlayerGrades extends Component {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
                     let statusRefId = competitionList[0].statusRefId
+                    let finalTypeRefId = competitionList[0].finalTypeRefId
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
+                    setOwn_CompetitionFinalRefId(finalTypeRefId)
                     this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
                     this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
@@ -125,6 +128,7 @@ class CompetitionPlayerGrades extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
+        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -246,6 +250,7 @@ class CompetitionPlayerGrades extends Component {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
+        setOwn_CompetitionFinalRefId(undefined)
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
         this.props.clearReducerDataAction("allDivisionsData")
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
@@ -258,8 +263,10 @@ class CompetitionPlayerGrades extends Component {
         let own_CompetitionArr = this.props.appState.own_CompetitionArr
         let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
         let statusRefId = own_CompetitionArr[statusIndex].statusRefId
+        let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
         setOwn_competitionStatus(statusRefId)
         setOwn_competition(competitionId)
+        setOwn_CompetitionFinalRefId(finalTypeRefId)
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
         this.props.clearReducerDataAction("allDivisionsData")
         this.setState({ firstTimeCompId: competitionId, divisionId: null, competitionStatus: statusRefId })
