@@ -142,7 +142,7 @@ class MultifieldDrawsNew extends Component {
             singleCompDivisionCheked: true,
             filterDates: false,
             regenerateDrawExceptionModalVisible: false,
-            regenerateExceptionRefId: null
+            regenerateExceptionRefId: 1
         };
         this.props.clearMultiDraws();
     }
@@ -1648,7 +1648,7 @@ class MultifieldDrawsNew extends Component {
         try{
           if(key === "ok") {
             this.callGenerateDraw(this.state.regenerateExceptionRefId);
-            this.setState({ regenerateDrawExceptionModalVisible: false,regenerateExceptionRefId: null });
+            this.setState({ regenerateDrawExceptionModalVisible: false,regenerateExceptionRefId: 1 });
           }else {
             this.setState({ regenerateDrawExceptionModalVisible: false });
           }

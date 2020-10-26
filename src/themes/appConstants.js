@@ -1651,7 +1651,7 @@ const AppConstants = {
   affiliateAddressAddressSelect: "Please input affiliate address",
   editOrganisationMessage:'If you edit the organisations, please ensure all teams are linked to the correct organisation so that managers, scorers, umpires and coaches remain correctly linked to this competition. Would you like to proceed?',
   backToHome: "Back to home",
-  wantYouRegenerateDraw: "Do you want to Regenerate the draw and:",
+  wantYouRegenerateDraw: "Do you want to Regenerate the draw and",
   retainException: "Retain Exception",
   removeException: "Remove Exception",
   reasonRegisterTitle: "Why would you like to de-register?",
