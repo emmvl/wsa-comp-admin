@@ -1648,6 +1648,7 @@ const AppConstants = {
   fullCashAmount: "Full cash amount",
   partialCashAmount: "Partial cash amount",
   sqadSelectionEabled: "Squad selection will be disabled for this division if position tracking is disabled",
+  affiliateAddressAddressSelect: "Please input affiliate address",
   editOrganisationMessage:'If you edit the organisations, please ensure all teams are linked to the correct organisation so that managers, scorers, umpires and coaches remain correctly linked to this competition. Would you like to proceed?',
   backToHome: "Back to home",
   wantYouRegenerateDraw: "Do you want to Regenerate the draw and:",

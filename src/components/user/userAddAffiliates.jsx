@@ -21,6 +21,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import { getCommonRefData } from "../../store/actions/commonAction/commonAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 import Loader from "../../customComponents/loader";
+import PlacesAutocomplete from "../competition/elements/PlaceAutoComplete";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -46,6 +47,8 @@ class UserAddAffiliates extends Component {
       currentIndex: 0,
       organisationName: "",
       whatIsTheLowestOrgThatCanAddChild: 0,
+      affiliateAddress: null,
+      affiliateAddressError: '',
     };
     this.props.getCommonRefData();
     //this.props.getUreAction();
@@ -180,9 +183,16 @@ class UserAddAffiliates extends Component {
 
   saveAffiliate = (values) => {
     let affiliate = this.props.userState.affiliate.affiliate;
+
+    if (this.state.affiliateAddress === null) {
+      message.error(ValidationConstants.affiliateAddressRequiredError);
+
+      return;
+    }
+
     if (
-      affiliate.contacts == null ||
-      affiliate.contacts == undefined ||
+      affiliate.contacts === null ||
+      affiliate.contacts === undefined ||
       affiliate.contacts.length === 0
     ) {
       message.error(ValidationConstants.affiliateContactRequired[0]);
@@ -250,6 +260,55 @@ class UserAddAffiliates extends Component {
         </Header>
       </div>
     );
+  };
+
+  // Handle address autocomplete
+  handlePlacesAutocomplete = (data) => {
+    const { stateList } = this.props.commonReducerState;
+    const address = data;
+
+    this.setState({
+      affiliateAddress: null,
+    });
+
+    if (!address.addressOne && !address.suburb) {
+      this.setState({
+        affiliateAddressError: ValidationConstants.affiliateAddressRequiredError,
+        affiliateAddress: null,
+      })
+    } else {
+      this.setState({
+        affiliateAddressError: ''
+      })
+    }
+
+    this.setState({
+      affiliateAddress: address,
+    });
+
+    const stateRefId = stateList.length > 0 && address.state
+      ? stateList.find((state) => state.name === address.state).id
+      : null;
+
+    const newAddress = {
+      stateRefId,
+      addressOne: address.addressOne || null,
+      suburb: address.suburb || null,
+      postcode: address.postcode || null,
+    };
+
+    this.formRef.current.setFieldsValue(newAddress);
+
+    if (address.addressOne && address.suburb) {
+      this.setState({
+        affiliateAddress: newAddress,
+      });
+
+      this.onChangeSetValue(newAddress.stateRefId, "stateRefId");
+      this.onChangeSetValue(newAddress.addressOne, "street1");
+      this.onChangeSetValue(newAddress.suburb, "suburb");
+      this.onChangeSetValue(newAddress.postcode, "postalCode");
+    }
   };
 
   ////////form content view
@@ -352,68 +411,17 @@ class UserAddAffiliates extends Component {
             value={affiliate.name}
           />
         </Form.Item>
-
-        <Form.Item name='addressOne' rules={[{ required: true, message: ValidationConstants.addressField[2] }]}>
-          <InputWithHead
-            required="required-field pb-1"
-            auto_complete="new-address"
-            heading={AppConstants.addressOne}
-            placeholder={AppConstants.addressOne}
-            name={AppConstants.addressOne}
-            onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-            value={affiliate.street1}
-          />
-        </Form.Item>
-
-        <InputWithHead
-          auto_complete="new-addressTwo"
-          required="pb-1"
-          heading={AppConstants.addressTwo}
-          placeholder={AppConstants.addressTwo}
-          onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
-          value={affiliate.street2}
-        />
-
-        <Form.Item name='suburb' rules={[{ required: true, message: ValidationConstants.suburbField[0] }]}>
-          <InputWithHead
-            auto_complete="new-suburb"
-            required="required-field pb-1"
-            heading={AppConstants.suburb}
-            placeholder={AppConstants.suburb}
-            onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
-            value={affiliate.suburb}
-          />
-        </Form.Item>
-
-        <InputWithHead
-          required="required-field pb-1"
-          heading={AppConstants.stateHeading}
-        />
-
-        <Form.Item name='stateRefId' rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
-          <Select
-            style={{ width: "100%" }}
-            placeholder={AppConstants.select}
-            onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-            value={affiliate.stateRefId}
-          >
-            {stateList.map((item) => (
-              <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
-            ))}
-          </Select>
-        </Form.Item>
-
-        <Form.Item name='postcode' rules={[{ required: true, message: ValidationConstants.postCodeField[0] }]}>
-          <InputWithHead
-            auto_complete="new-postCode"
-            required="required-field pb-1"
-            heading={AppConstants.postcode}
-            placeholder={AppConstants.postcode}
-            onChange={(e) =>
-              this.onChangeSetValue(e.target.value, "postalCode")
-            }
-            value={affiliate.postalCode}
-            maxLength={4}
+        <Form.Item name="affiliateAddress">
+          <PlacesAutocomplete
+            heading={AppConstants.address}
+            required
+            error={this.state.affiliateAddressError}
+            onBlur={() => {
+              this.setState({
+                affiliateAddressError: ''
+              })
+            }}
+            onSetData={this.handlePlacesAutocomplete}
           />
         </Form.Item>
 
@@ -643,7 +651,9 @@ class UserAddAffiliates extends Component {
                   type="primary"
                   htmlType="submit"
                   disabled={isSubmitting}
-                  onClick={() => this.setState({ buttonPressed: "save" })}
+                  onClick={() => {
+                    this.setState({ buttonPressed: "save" })
+                  }}
                 >
                   {AppConstants.addAffiliates}
                 </Button>
