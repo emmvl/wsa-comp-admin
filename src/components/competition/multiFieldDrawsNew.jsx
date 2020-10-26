@@ -53,7 +53,8 @@ import {
     getDraws_division_grade,
     getOrganisationData,
     getOwn_competitionStatus,
-    setOwn_competitionStatus
+    setOwn_competitionStatus,
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
 } from '../../util/sessionStorage';
 import ValidationConstants from '../../themes/validationConstant';
 import './draws.scss';
@@ -268,9 +269,11 @@ class MultifieldDrawsNew extends Component {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId;
                     let statusRefId = competitionList[0].statusRefId
+                    let finalTypeRefId = competitionList[0].finalTypeRefId
                     setOwn_competitionStatus(statusRefId)
                     this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
                     setOwn_competition(competitionId);
+                    setOwn_CompetitionFinalRefId(finalTypeRefId)
                     this.setState({ firstTimeCompId: competitionId, venueLoad: true, competitionStatus: statusRefId });
                 }
             }
@@ -341,6 +344,7 @@ class MultifieldDrawsNew extends Component {
         let yearId = getOwnCompetitionYear();
         let storedCompetitionId = getOwn_competition();
         let storedCompetitionStatus = getOwn_competitionStatus()
+        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0
             ? this.props.appState.own_YearArr
             : undefined;
@@ -444,6 +448,7 @@ class MultifieldDrawsNew extends Component {
         setOwnCompetitionYear(yearId);
         setOwn_competition(undefined);
         setOwn_competitionStatus(undefined)
+        setOwn_CompetitionFinalRefId(undefined)
         this.setState({
             firstTimeCompId: null,
             yearRefId: yearId,
@@ -645,8 +650,10 @@ class MultifieldDrawsNew extends Component {
         } else {
             let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
             let statusRefId = own_CompetitionArr[statusIndex].statusRefId
+            let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
             setOwn_competition(competitionId);
             setOwn_competitionStatus(statusRefId)
+            setOwn_CompetitionFinalRefId(finalTypeRefId)
             this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
         }
 

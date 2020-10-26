@@ -21,7 +21,8 @@ import {
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
-    setOwn_competitionStatus
+    setOwn_competitionStatus,
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
 } from "../../util/sessionStorage"
 // import PlayerCommentModal from "../../customComponents/playerCommentModal";
 // import moment from "moment"
@@ -127,8 +128,10 @@ class CompetitionPlayerGradeCalculate extends Component {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
                     let statusRefId = competitionList[0].statusRefId
+                    let finalTypeRefId = competitionList[0].finalTypeRefId
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
+                    setOwn_CompetitionFinalRefId(finalTypeRefId)
                     this.props.getCompPartPlayerGradingSummaryAction(this.state.yearRefId, competitionId)
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
@@ -149,6 +152,7 @@ class CompetitionPlayerGradeCalculate extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
+        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -209,6 +213,7 @@ class CompetitionPlayerGradeCalculate extends Component {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
+        setOwn_CompetitionFinalRefId(undefined)
         this.props.getYearAndCompetitionOwnAction(this.props.appState.yearList, yearId, "own_competition")
         this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0 })
         // this.setDetailsFieldValue()
@@ -219,8 +224,11 @@ class CompetitionPlayerGradeCalculate extends Component {
         let own_CompetitionArr = this.props.appState.own_CompetitionArr
         let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
         let statusRefId = own_CompetitionArr[statusIndex].statusRefId
+        let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
+
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
+        setOwn_CompetitionFinalRefId(finalTypeRefId)
         this.props.getCompPartPlayerGradingSummaryAction(this.state.yearRefId, competitionId)
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
     }
