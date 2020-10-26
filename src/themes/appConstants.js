@@ -1591,7 +1591,7 @@ const AppConstants = {
   whoAssignsUmpires: 'Who Assigns Umpires',
   competitionOrganiser: 'Competition Organiser',
   affiliateOrganisations: 'Affiliate Organisations',
-  takenCourtforTraining: "Have you taken the court for training, grading or a compitition game",
+  takenCourtforTraining: "Have you taken the court for training, grading or a competition game",
   exportAttendance: 'Export Attendance',
   exportAttendanceMessage: 'Attendance exported successfully',
   hardshipCode: "Hardship Code",
