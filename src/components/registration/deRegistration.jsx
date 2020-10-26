@@ -137,8 +137,8 @@ class DeRegistration extends Component {
     ////checkMainRegistrationOption
     checkMainRegistrationOption = (subItem, selectedOption) => {
         const { saveData, deRegistionOption } = this.props.deRegistrationState
-        if (subItem.id == 1 && selectedOption == 1) {
-        } else if (subItem.id == 2 && selectedOption == 2) {
+  
+        if ((subItem.id == 1 && selectedOption == 1) || (subItem.id == 2 && selectedOption == 2)) {
             return (
                 <div className="ml-5">
                     <InputWithHead

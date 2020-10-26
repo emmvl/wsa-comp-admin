@@ -1653,7 +1653,8 @@ const AppConstants = {
   backToHome: "Back to home",
   wantYouRegenerateDraw: "Do you want to Regenerate the draw and:",
   retainException: "Retain Exception",
-  removeException: "Remove Exception"
+  removeException: "Remove Exception",
+  reasonRegisterTitle: "Why would you like to de-register?",
 };
 
 export default AppConstants;
