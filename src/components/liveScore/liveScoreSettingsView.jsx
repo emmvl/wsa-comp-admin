@@ -416,6 +416,7 @@ class LiveScoreSettingsView extends Component {
 
         let regInvitees = localStorage.getItem("regInvitees")
         if (regInvitees === "true") {
+            localStorage.setItem("regInvitees", "false")
             this.props.initializeCompData();
             this.props.settingDataPostInitiate({
                 body: formData,
@@ -1397,7 +1398,7 @@ class LiveScoreSettingsView extends Component {
                             <div className="comp-buttons-view">
                                 <Button
                                     disabled={this.props.liveScoreSetting.loader}
-                                    onClick={this.handleSubmit}
+                                    // onClick={this.handleSubmit}
                                     htmlType="submit"
                                     className="publish-button"
                                     type="primary"
@@ -1483,6 +1484,7 @@ class LiveScoreSettingsView extends Component {
                         onFinish={this.handleSubmit}
                         onFinishFailed={(err) => this.formRef.current.scrollToField(err.errorFields[0].name)}
                         className="login-form"
+                        noValidate="noValidate"
                     >
                         {/* <Form onSubmit={this.checkSubmit} noValidate="novalidate" className="login-form"> */}
                         <div className="formView">{this.contentView()}</div>
