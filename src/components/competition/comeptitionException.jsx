@@ -408,7 +408,8 @@ function mapDispatchToProps(dispatch) {
         venueListAction,
         courtListAction,
         updateCourtTimingsDrawsAction,
-        generateDrawAction
+        generateDrawAction,
+        getActiveRoundsAction
     }, dispatch)
 }
 
