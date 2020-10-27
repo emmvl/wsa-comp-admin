@@ -1657,6 +1657,8 @@ const AppConstants = {
   retainException: "Retain Exception",
   removeException: "Remove Exception",
   reasonRegisterTitle: "Why would you like to de-register?",
+
+  purchase:"Purchases"
 };
 
 export default AppConstants;

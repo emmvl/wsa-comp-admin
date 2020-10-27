@@ -597,7 +597,7 @@ class LiveScoreMatchesList extends Component {
         const { competitionId, searchText, selectedRound, sortBy, sortOrder } = this.state;
 
         setTimeout(() => {
-            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, selectedRound === 'All' ? null : selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
+            this.props.liveScoreMatchListAction(competitionId, start, offset, searchText, division === 'All' ? null : division, null, undefined, this.state.sortBy, this.state.sortOrder)
         }, 200);
         this.props.liveScoreRoundListAction(competitionId, division === 'All' ? '' : division)
 
