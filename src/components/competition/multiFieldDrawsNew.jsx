@@ -1736,6 +1736,7 @@ class MultifieldDrawsNew extends Component {
               <div style={{fontWeight: "600"}}>{AppConstants.wantYouRegenerateDraw}</div>  
               <Radio.Group
                   className="reg-competition-radio"
+                  value={this.state.regenerateExceptionRefId}
                   onChange={(e) => this.setState({regenerateExceptionRefId: e.target.value})}
               >
                   <Radio style={{fontSize: '14px'}} value={1}>{AppConstants.retainException}</Radio>
