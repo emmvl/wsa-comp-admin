@@ -81,6 +81,7 @@ class QuickCompetitionMatchFormat extends Component {
                     })
                     this.setFormFieldValue();
                 }
+                this.setFormFieldValue()
             }
             if (nextProps.quickCompetitionState !== this.props.quickCompetitionState) {
                 let competitionList = this.props.quickCompetitionState.quick_CompetitionArr;
@@ -553,7 +554,7 @@ class QuickCompetitionMatchFormat extends Component {
                         {(appState.matchTypes || []).map((item) => {
                             if (item.name !== "SINGLE") {
                                 return (
-                                  <Option key={'matchType_' + item.id} value={item.id}>{item.description}</Option>
+                                    <Option key={'matchType_' + item.id} value={item.id}>{item.description}</Option>
                                 );
                             }
                             return <></>;

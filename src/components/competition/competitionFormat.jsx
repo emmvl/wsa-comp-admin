@@ -104,6 +104,7 @@ class CompetitionFormat extends Component {
                     })
                     this.setFormFieldValue();
                 }
+                this.setFormFieldValue()
             }
             if (nextProps.appState !== this.props.appState) {
                 let competitionList = this.props.appState.own_CompetitionArr;
