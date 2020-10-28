@@ -26,7 +26,7 @@ import {
 import { getYearAndQuickCompetitionAction } from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction"
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import Loader from '../../customComponents/loader';
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -81,6 +81,7 @@ class QuickCompetitionMatchFormat extends Component {
                     })
                     this.setFormFieldValue();
                 }
+                this.setFormFieldValue()
             }
             if (nextProps.quickCompetitionState !== this.props.quickCompetitionState) {
                 let competitionList = this.props.quickCompetitionState.quick_CompetitionArr;
@@ -404,6 +405,8 @@ class QuickCompetitionMatchFormat extends Component {
 
         this.props.saveCompetitionFormatAction(formatList);
         this.setState({ loading: true });
+        setOwnCompetitionYear(this.state.yearRefId);
+        setOwn_competition(this.state.firstTimeCompId);
     }
 
     ///////view for breadcrumb
@@ -553,7 +556,7 @@ class QuickCompetitionMatchFormat extends Component {
                         {(appState.matchTypes || []).map((item) => {
                             if (item.name !== "SINGLE") {
                                 return (
-                                  <Option key={'matchType_' + item.id} value={item.id}>{item.description}</Option>
+                                    <Option key={'matchType_' + item.id} value={item.id}>{item.description}</Option>
                                 );
                             }
                             return <></>;

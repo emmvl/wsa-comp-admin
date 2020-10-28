@@ -28,7 +28,7 @@ import {
 import moment from 'moment'
 import Loader from '../../customComponents/loader'
 import history from "../../util/history"
-
+import { getCurrentYear } from 'util/permissions'
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -36,7 +36,7 @@ class CompetitionDrawEdit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: '',
             venueId: '',
             roundId: '',
@@ -65,6 +65,13 @@ class CompetitionDrawEdit extends Component {
                     this.props.getDivisionAction(competitionId);
                     setOwn_competition(competitionId)
                     this.setState({ firstTimeCompId: competitionId, venueLoad: true, competitionStatus: statusRefId })
+                }
+            }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
                 }
             }
         }
@@ -137,7 +144,7 @@ class CompetitionDrawEdit extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
+            // setOwnCompetitionYear(1)
         }
     }
 
@@ -427,8 +434,8 @@ class CompetitionDrawEdit extends Component {
                         {this.dragableView()}
                     </div>
                 ) : (
-                    this.dragableView()
-                )}
+                        this.dragableView()
+                    )}
             </div>
         )
     }
@@ -482,49 +489,49 @@ class CompetitionDrawEdit extends Component {
                                                 <span>Free</span>
                                             </div>
                                         ) : (
-                                            <div>
-                                                <div
-                                                    className="box purple-box purple-bg"
-                                                    style={{
-                                                        top: topMarginHomeTeam,
-                                                        backgroundColor: slotObject.team1Color,
-                                                        left: leftMargin,
-                                                        cursor: disabledStatus && "no-drop"
-                                                    }}
-                                                >
-                                                    <FixtureSwappable
-                                                        id={index.toString() + ':' + slotIndex.toString() + ':0:' + courtData.roundId + ":" + slotObject.competitionFormatRefId}
-                                                        content={1}
-                                                        swappable={disabledStatus == false}
-                                                        onSwap={(source, target) => this.onSwap(source, target, courtData.roundId, courtData.draws)}
+                                                <div>
+                                                    <div
+                                                        className="box purple-box purple-bg"
+                                                        style={{
+                                                            top: topMarginHomeTeam,
+                                                            backgroundColor: slotObject.team1Color,
+                                                            left: leftMargin,
+                                                            cursor: disabledStatus && "no-drop"
+                                                        }}
                                                     >
-                                                        <span>{slotObject.team1Name}</span>
-                                                    </FixtureSwappable>
-                                                </div>
-                                                <span
-                                                    className="border"
-                                                    style={{ top: topMarginAwayTeam, left: leftMargin }}
-                                                />
-                                                <div
-                                                    className="box purple-box purple-bg"
-                                                    style={{
-                                                        top: topMarginAwayTeam,
-                                                        backgroundColor: slotObject.team2Color,
-                                                        left: leftMargin,
-                                                        cursor: disabledStatus && "no-drop"
-                                                    }}
-                                                >
-                                                    <FixtureSwappable
-                                                        id={index.toString() + ':' + slotIndex.toString() + ':1:' + courtData.roundId + ":" + slotObject.competitionFormatRefId}
-                                                        content={1}
-                                                        swappable={disabledStatus == false}
-                                                        onSwap={(source, target) => this.onSwap(source, target, courtData.roundId, courtData.draws)}
+                                                        <FixtureSwappable
+                                                            id={index.toString() + ':' + slotIndex.toString() + ':0:' + courtData.roundId + ":" + slotObject.competitionFormatRefId}
+                                                            content={1}
+                                                            swappable={disabledStatus == false}
+                                                            onSwap={(source, target) => this.onSwap(source, target, courtData.roundId, courtData.draws)}
+                                                        >
+                                                            <span>{slotObject.team1Name}</span>
+                                                        </FixtureSwappable>
+                                                    </div>
+                                                    <span
+                                                        className="border"
+                                                        style={{ top: topMarginAwayTeam, left: leftMargin }}
+                                                    />
+                                                    <div
+                                                        className="box purple-box purple-bg"
+                                                        style={{
+                                                            top: topMarginAwayTeam,
+                                                            backgroundColor: slotObject.team2Color,
+                                                            left: leftMargin,
+                                                            cursor: disabledStatus && "no-drop"
+                                                        }}
                                                     >
-                                                        <span>{slotObject.team2Name}</span>
-                                                    </FixtureSwappable>
+                                                        <FixtureSwappable
+                                                            id={index.toString() + ':' + slotIndex.toString() + ':1:' + courtData.roundId + ":" + slotObject.competitionFormatRefId}
+                                                            content={1}
+                                                            swappable={disabledStatus == false}
+                                                            onSwap={(source, target) => this.onSwap(source, target, courtData.roundId, courtData.draws)}
+                                                        >
+                                                            <span>{slotObject.team2Name}</span>
+                                                        </FixtureSwappable>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        );
+                                            );
                                     })}
                                 </div>
                             );

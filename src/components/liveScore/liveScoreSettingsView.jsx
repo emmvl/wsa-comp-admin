@@ -41,6 +41,7 @@ import { getOnlyYearListAction } from "store/actions/appAction";
 import { getOrganisationData } from '../../util/sessionStorage';
 import { initializeCompData } from '../../store/actions/LiveScoreAction/liveScoreInnerHorizontalAction'
 import ApiConstants from "themes/apiConstants";
+import { getCurrentYear } from "util/permissions";
 
 const { Header, Footer } = Layout;
 const { Option } = Select;
@@ -144,7 +145,7 @@ class LiveScoreSettingsView extends Component {
 
         if (nextProps.appState !== this.props.appState) {
             if (this.props.appState.onLoad === false && this.state.yearLoading === true) {
-                let yearId = this.props.appState.yearList.length > 0 ? this.props.appState.yearList[0].id : null
+                let yearId = this.props.appState.yearList.length > 0 ? getCurrentYear(this.props.appState.yearList) : null
                 if (this.props.appState.yearList.length > 0) {
                     this.props.onChangeSettingForm({ key: "yearRefId", data: yearId })
                     this.setState({ yearLoading: false });
@@ -1415,7 +1416,6 @@ class LiveScoreSettingsView extends Component {
 
     onYearClick(yearRefId) {
         this.setState({ yearRefId })
-
         this.props.onChangeSettingForm({ key: "yearRefId", data: yearRefId })
     }
 

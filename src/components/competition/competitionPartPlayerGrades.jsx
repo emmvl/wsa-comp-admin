@@ -30,6 +30,7 @@ import ColorsArray from "../../util/colorsArray";
 import PlayerCommentModal from "../../customComponents/playerCommentModal";
 import moment from "moment"
 import Tooltip from 'react-png-tooltip'
+import { getCurrentYear } from 'util/permissions'
 
 
 const { Header, Footer, Content } = Layout;
@@ -51,7 +52,7 @@ class CompetitionPartPlayerGrades extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             divisionId: null,
             firstTimeCompId: "",
             getDataLoading: false,
@@ -86,10 +87,19 @@ class CompetitionPartPlayerGrades extends Component {
                     let statusRefId = competitionList[0].statusRefId
                     setParticipating_competition(competitionId)
                     setParticipating_competitionStatus(statusRefId)
-                    this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getParticipatingYear()
+                    this.props.getDivisionsListAction(yearId, competitionId)
                     this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
             }
+            if (nextProps.appState.participate_YearArr !== this.props.appState.participate_YearArr) {
+                if (this.props.appState.participate_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.participate_YearArr)
+                    setParticipatingYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
+                }
+            }
+
         }
         if (nextProps.registrationState.allDivisionsData !== allDivisionsData) {
             if (allDivisionsData.length > 0) {

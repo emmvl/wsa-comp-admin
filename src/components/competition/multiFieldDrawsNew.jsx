@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Tooltip, Popover, Menu, Select, DatePicker, Checkbox, Form, message, Spin, Modal,Radio } from "antd";
+import { Layout, Button, Tooltip, Popover, Menu, Select, DatePicker, Checkbox, Form, message, Spin, Modal, Radio } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -267,7 +267,8 @@ class MultifieldDrawsNew extends Component {
             let competitionList = this.props.appState.own_CompetitionArr;
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
-                    let competitionId = competitionList[0].competitionId;
+                    let storedCompetitionId = getOwn_competition();
+                    let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined")? storedCompetitionId : competitionList[0].competitionId;
                     let statusRefId = competitionList[0].statusRefId
                     let finalTypeRefId = competitionList[0].finalTypeRefId
                     setOwn_competitionStatus(statusRefId)
@@ -403,7 +404,7 @@ class MultifieldDrawsNew extends Component {
                 null,
                 'own_competition'
             );
-            setOwnCompetitionYear(1);
+            // setOwnCompetitionYear(1);
         }
     }
 
@@ -1652,17 +1653,17 @@ class MultifieldDrawsNew extends Component {
     }
 
     handleRegenerateDrawException = (key) => {
-        try{
-          if(key === "ok") {
-            this.callGenerateDraw(this.state.regenerateExceptionRefId);
-            this.setState({ regenerateDrawExceptionModalVisible: false,regenerateExceptionRefId: 1 });
-          }else {
-            this.setState({ regenerateDrawExceptionModalVisible: false });
-          }
-        }catch(ex){
-          console.log("Error in handleRegenerateDrawException::"+ex);
+        try {
+            if (key === "ok") {
+                this.callGenerateDraw(this.state.regenerateExceptionRefId);
+                this.setState({ regenerateDrawExceptionModalVisible: false, regenerateExceptionRefId: 1 });
+            } else {
+                this.setState({ regenerateDrawExceptionModalVisible: false });
+            }
+        } catch (ex) {
+            console.log("Error in handleRegenerateDrawException::" + ex);
         }
-      }
+    }
 
     callGenerateDraw = (regenerateExceptionRefId) => {
         let payload = {
@@ -1671,9 +1672,9 @@ class MultifieldDrawsNew extends Component {
             organisationId: getOrganisationData().organisationUniqueKey,
             roundId: this.state.generateRoundId
         };
-        if(regenerateExceptionRefId){
+        if (regenerateExceptionRefId) {
             payload["exceptionTypeRefId"] = regenerateExceptionRefId;
-          }
+        }
         this.props.generateDrawAction(payload);
         this.setState({ venueLoad: true });
     }
@@ -1684,7 +1685,7 @@ class MultifieldDrawsNew extends Component {
         //     this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
         //     this.setState({ roundLoad: true });
         // } else {
-            this.setState({regenerateDrawExceptionModalVisible: true});
+            this.setState({ regenerateDrawExceptionModalVisible: true });
             //this.callGenerateDraw();
         //}
     };
@@ -1724,46 +1725,46 @@ class MultifieldDrawsNew extends Component {
     };
 
     regenerateDrawExceptionModal = () => {
-        try{
-          return(
-            <Modal
-              className="add-membership-type-modal"
-              title="Draws Regeneration"
-              visible={this.state.regenerateDrawExceptionModalVisible}
-              onOk={() => this.handleRegenerateDrawException("ok")}
-              onCancel={() => this.handleRegenerateDrawException("cancel")}
-            >
-              <div style={{fontWeight: "600"}}>{AppConstants.wantYouRegenerateDraw}</div>  
-              <Radio.Group
-                  className="reg-competition-radio"
-                  value={this.state.regenerateExceptionRefId}
-                  onChange={(e) => this.setState({regenerateExceptionRefId: e.target.value})}
-              >
-                  <Radio style={{fontSize: '14px'}} value={1}>{AppConstants.retainException}</Radio>
-                  <Radio style={{fontSize: '14px'}} value={2}>{AppConstants.removeException}</Radio>
-                  <Radio style={{fontSize: '14px'}} value={3}>{AppConstants.useRound1Template}</Radio>
-              </Radio.Group>
-            </Modal>
-          )
-        }catch(ex){
-          console.log("Error in regenerateDrayExceptionModal::"+ex);
+        try {
+            return (
+                <Modal
+                    className="add-membership-type-modal"
+                    title="Draws Regeneration"
+                    visible={this.state.regenerateDrawExceptionModalVisible}
+                    onOk={() => this.handleRegenerateDrawException("ok")}
+                    onCancel={() => this.handleRegenerateDrawException("cancel")}
+                >
+                    <div style={{ fontWeight: "600" }}>{AppConstants.wantYouRegenerateDraw}</div>
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        value={this.state.regenerateExceptionRefId}
+                        onChange={(e) => this.setState({ regenerateExceptionRefId: e.target.value })}
+                    >
+                        <Radio style={{ fontSize: '14px' }} value={1}>{AppConstants.retainException}</Radio>
+                        <Radio style={{ fontSize: '14px' }} value={2}>{AppConstants.removeException}</Radio>
+						<Radio style={{fontSize: '14px'}} value={3}>{AppConstants.useRound1Template}</Radio>
+                    </Radio.Group>
+                </Modal>
+            )
+        } catch (ex) {
+            console.log("Error in regenerateDrayExceptionModal::" + ex);
         }
-      }
+    }
 
-      handleGenerateDrawModal = (key) => {
+    handleGenerateDrawModal = (key) => {
         if (key === "ok") {
-          if (this.state.generateRoundId != null) {
-            this.callGenerateDraw();
-            this.setState({ drawGenerateModalVisible: false });
-          }
-          else {
-            message.error("Please select round");
-          }
+            if (this.state.generateRoundId != null) {
+                this.callGenerateDraw();
+                this.setState({ drawGenerateModalVisible: false });
+            }
+            else {
+                message.error("Please select round");
+            }
         }
         else {
-          this.setState({ drawGenerateModalVisible: false });
+            this.setState({ drawGenerateModalVisible: false });
         }
-      }
+    }
 
     //////footer view containing all the buttons like publish and regenerate draws
     footerView = () => {

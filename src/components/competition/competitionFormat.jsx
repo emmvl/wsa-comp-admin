@@ -33,6 +33,7 @@ import {
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
 import moment from "moment";
+import { getCurrentYear } from 'util/permissions'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -46,7 +47,7 @@ class CompetitionFormat extends Component {
             currentIndex: 0,
             competitionId: '',
             organisationId: getOrganisationData().organisationUniqueKey,
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: '',
             getDataLoading: false,
             buttonPressed: "",
@@ -89,7 +90,7 @@ class CompetitionFormat extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
+            // setOwnCompetitionYear(1)
         }
     }
 
@@ -104,6 +105,7 @@ class CompetitionFormat extends Component {
                     })
                     this.setFormFieldValue();
                 }
+                this.setFormFieldValue()
             }
             if (nextProps.appState !== this.props.appState) {
                 let competitionList = this.props.appState.own_CompetitionArr;
@@ -115,8 +117,16 @@ class CompetitionFormat extends Component {
                         setOwn_competition(competitionId);
                         setOwn_competitionStatus(statusRefId)
                         setOwn_CompetitionFinalRefId(finalTypeRefId)
-                        this.apiCalls(competitionId, this.state.yearRefId);
+                        let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                        this.apiCalls(competitionId, yearId);
                         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
+                    }
+                }
+                if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                    if (this.props.appState.own_YearArr.length > 0) {
+                        let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                        setOwnCompetitionYear(yearRefId)
+                        this.setState({ yearRefId: yearRefId })
                     }
                 }
             }

@@ -4,6 +4,7 @@ import { isArrayNotEmpty, isNotNullOrEmptyString } from '../../../util/helpers';
 import { isDateSame, sortArrayByDate } from './../../../themes/dateformate';
 import ColorsArray from '../../../util/colorsArray';
 import AppConstants from "../../../themes/appConstants";
+import {reverseArray} from 'util/permissions'
 
 //dummy object
 const newQuickComp = {
@@ -68,7 +69,8 @@ const initialState = {
     validateMessage: "",
     newSelectedCompetition: "",
     mergeCompetitionTypeSelection: null,
-    updateStatus: false
+    updateStatus: false,
+    yearId:null
 };
 var gradeColorArray = [];
 const lightGray = '#999999';
@@ -396,6 +398,8 @@ function sortCompArray(compListData) {
     return isSortedArray
 }
 
+
+
 //set comeptitionvenue object
 function createCompetitionVenuesData(value) {
     let VenueObject = {
@@ -683,12 +687,14 @@ function QuickCompetitionState(state = initialState, action) {
             return { ...state, onLoad: true }
         ////get year and  quick competition list success
         case ApiConstants.API_YEAR_AND_QUICK_COMPETITION_SUCCESS:
+            let yearListSorted = action.yearList?reverseArray(action.yearList):[]
             return {
                 ...state,
                 quick_CompetitionArr: action.competetionListResult,
-                quick_CompetitionYearArr: action.yearList,
+                quick_CompetitionYearArr: yearListSorted,
                 onLoad: false,
-                error: null
+                error: null,
+                yearId:action.yearId
             }
         ////get quick competition Load
         case ApiConstants.API_GET_QUICK_COMPETITION_LOAD:

@@ -45,7 +45,7 @@ class CompetitionQuickCompetition extends Component {
             timeSlotVisible: false,
             visibleCompModal: false,
             visibleDivisionModal: false,
-            yearRefId: 1,
+            yearRefId: null,
             quickCompetitionLoad: false,
             onloadData: false,
             buttonPressed: "",
@@ -82,7 +82,8 @@ class CompetitionQuickCompetition extends Component {
             if (nextProps.quickCompetitionState.quick_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId;
-                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true });
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : this.props.quickCompetitionState.yearId
+                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true, yearRefId: yearId });
                     this.props.getQuickCompetitionAction(competitionId)
                 }
             }

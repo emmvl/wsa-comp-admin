@@ -8,7 +8,7 @@ import Tooltip from "react-png-tooltip";
 
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
-import { checkUserRole } from "util/permissions";
+import { checkUserRole, getCurrentYear } from "util/permissions";
 import { currencyFormat } from "util/currencyFormat";
 import { stringTONumber } from "util/helpers";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "store/actions/appAction";
@@ -68,10 +68,10 @@ function totalSeasonalFees(seasonalFees1, record) {
                 {record.feeOrgId == null ? "N/A" : (record.seasonalFees == null && record.seasonalGST == null) ? "N/A" : "Affiliate fee not set!"}
             </span>
         ) : (
-            <span>
-                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
-            </span>
-        )
+                <span>
+                    {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+                </span>
+            )
     );
 }
 
@@ -99,10 +99,10 @@ function totalCasualFees(casualFees1, record) {
                 {record.feeOrgId == null ? "N/A" : (record.casualFees == null && record.casualGST == null) ? "N/A" : "Affiliate fee not set!"}
             </span>
         ) : (
-            <span>
-                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
-            </span>
-        )
+                <span>
+                    {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+                </span>
+            )
     );
 }
 
@@ -246,52 +246,63 @@ class RegistrationCompetitionList extends Component {
         super(props);
 
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             deleteLoading: false,
             userRole: "",
             searchText: '',
             offset: 0,
             sortBy: null,
             sortOrder: null,
+            allyearload: false
         };
 
         this_Obj = this;
-
         this.props.CLEAR_OWN_COMPETITION_DATA();
-        this.props.getOnlyYearListAction(this.props.appState.yearList);
+
     }
 
     async componentDidMount() {
-        const { competitionListAction } = this.props.competitionFeesState
-
+        this.props.getOnlyYearListAction(this.props.appState.yearList);
+        this.setState({
+            allyearload: true
+        })
         checkUserRole().then((value) => (
-          this.setState({ userRole: value })
+            this.setState({ userRole: value })
         ))
-        let page = 1
-        let sortBy = this.state.sortBy
-        let sortOrder = this.state.sortOrder
-        if (competitionListAction) {
-            let offset = competitionListAction.offset
-            sortBy = competitionListAction.sortBy
-            sortOrder = competitionListAction.sortOrder
-            let yearRefId = competitionListAction.yearRefId
-            let searchText = competitionListAction.searchText
-
-            await this.setState({ offset, sortBy, sortOrder, yearRefId, searchText })
-            page = Math.floor(offset / 10) + 1;
-
-            this.handleCompetitionTableList(page, yearRefId, searchText)
-        } else {
-            this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText)
-        }
     }
 
     componentDidUpdate(nextProps) {
+        const { competitionListAction } = this.props.competitionFeesState
         if (this.props.competitionFeesState.onLoad === false && this.state.deleteLoading === true) {
             this.setState({
                 deleteLoading: false,
             });
             this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText);
+        }
+        if (this.state.allyearload === true && this.props.appState.onLoad == false) {
+            if (this.props.appState.yearList.length > 0) {
+                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                let page = 1
+                let sortBy = this.state.sortBy
+                let sortOrder = this.state.sortOrder
+                if (competitionListAction) {
+                    let offset = competitionListAction.offset
+                    sortBy = competitionListAction.sortBy
+                    sortOrder = competitionListAction.sortOrder
+                    let yearRefId = competitionListAction.yearRefId
+                    let searchText = competitionListAction.searchText
+
+                    this.setState({ offset, sortBy, sortOrder, yearRefId, searchText })
+                    page = Math.floor(offset / 10) + 1;
+
+                    this.handleCompetitionTableList(page, yearRefId, searchText)
+                    this.setState({ yearRefId: yearRefId, allyearload: false })
+                } else {
+                    this.handleCompetitionTableList(1, mainYearRefId, this.state.searchText)
+                    this.setState({ yearRefId: mainYearRefId, allyearload: false })
+                }
+
+            }
         }
     }
 
@@ -427,6 +438,7 @@ class RegistrationCompetitionList extends Component {
     );
 
     handleCompetitionTableList = (page, yearRefId, searchText) => {
+        console.log("called")
         const { sortBy, sortOrder } = this.state;
         const offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset });

@@ -36,6 +36,7 @@ import Loader from '../../customComponents/loader'
 import CustomTooltip from 'react-png-tooltip'
 import AppUniqueId from "../../themes/appUniqueId";
 import history from "../../util/history"
+import { getCurrentYear } from 'util/permissions'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -44,7 +45,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: "",
             getDataLoading: false,
             competitionStatus: 0,
@@ -81,9 +82,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 isQuickCompetition: quickComp != undefined,
                 finalTypeRefId: storedfinalTypeRefId
             })
-            // if (this.props.competitionTimeSlots.allrefernceData.length > 0) {
             this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
-            // }
         } else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
@@ -91,7 +90,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
+
         }
     }
 
@@ -117,14 +116,22 @@ class CompetitionCourtAndTimesAssign extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
                     let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId ==
                         competitionId && x.isQuickCompetition == 1);
-                    this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
+                    this.props.getCompetitionWithTimeSlots(yearId, competitionId);
                     this.setState({
                         getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
                         finalTypeRefId: finalTypeRefId,
                         isQuickCompetition: quickComp != undefined
                     })
+                }
+            }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
                 }
             }
         }
@@ -527,9 +534,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                     />
                 </div>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-view pb-4" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionVenueTimeslotsDayTimedelete")}>
+                    <div className="col-sm-2 delete-image-view pb-4" >
                         <a className="transfer-image-view">
-                            <span className="user-remove-btn">
+                            <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionVenueTimeslotsDayTimedelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span id={AppUniqueId.timeslotGenerationRemove_btn} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
@@ -1001,9 +1008,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                         <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddTimeSlotBtn} className="input-heading-add-another" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, null, "addTimeSlotManualperVenue", venueIndex)}> + {AppConstants.add_TimeSlot}</span>
                     </div>
                     {data.length > 1 &&
-                        <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
+                        <div className="col-sm-2 delete-image-timeSlot-view" >
                             <a className="transfer-image-view">
-                                <span className="user-remove-btn">
+                                <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
                                     <i className="fa fa-trash-o" aria-hidden="true" />
                                 </span>
                                 <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
@@ -1097,9 +1104,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </Select>
                 </Form.Item>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-timeSlot-view pt-3" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
+                    <div className="col-sm-2 delete-image-timeSlot-view pt-3" >
                         <a className="transfer-image-view">
-                            <span className="user-remove-btn">
+                            <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
@@ -1164,9 +1171,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </Select>
                 </Form.Item>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-timeSlot-view pt-2" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
+                    <div className="col-sm-2 delete-image-timeSlot-view pt-2" >
                         <a className="transfer-image-view">
-                            <span className="user-remove-btn">
+                            <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
@@ -1321,9 +1328,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                     <span className="input-heading-add-another" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, null, "addTimeSlotManual")}> + {AppConstants.add_TimeSlot}</span>
                 </div>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotManualdelete")}>
+                    <div className="col-sm-2 delete-image-timeSlot-view" >
                         <a className="transfer-image-view">
-                            <span className="user-remove-btn">
+                            <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotManualdelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>

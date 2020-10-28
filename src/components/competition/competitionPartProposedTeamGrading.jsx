@@ -37,7 +37,7 @@ import {
     commentListingAction,
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import AppUniqueId from "../../themes/appUniqueId";
-
+import { getCurrentYear } from 'util/permissions'
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 let this_obj = null;
@@ -99,10 +99,10 @@ const columns = [
                                     </Tag>
                                 </NavLink>
                             ) : (
-                                <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
+                                    <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
                                         {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
-                                </Tag>
-                            )}
+                                    </Tag>
+                                )}
                         </Tooltip>
                     )
                 ))}
@@ -173,7 +173,7 @@ class CompetitionPartProposedTeamGrading extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             divisionId: null,
             firstTimeCompId: "",
             saveLoad: false,
@@ -209,10 +209,19 @@ class CompetitionPartProposedTeamGrading extends Component {
                     let statusRefId = competitionList[0].statusRefId
                     setParticipating_competition(competitionId)
                     setParticipating_competitionStatus(statusRefId)
-                    this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getParticipatingYear()
+                    this.props.getDivisionsListAction(yearId, competitionId)
                     this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
             }
+            if (nextProps.appState.participate_YearArr !== this.props.appState.participate_YearArr) {
+                if (this.props.appState.participate_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.participate_YearArr)
+                    setParticipatingYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
+                }
+            }
+
         }
         if (nextProps.registrationState.allDivisionsData !== allDivisionsData) {
             if (allDivisionsData.length > 0) {
@@ -570,14 +579,14 @@ class CompetitionPartProposedTeamGrading extends Component {
                     value={this.state.comment}
                     commentLoad={commentLoad}
                     commentList={commentList}
-                    // owner={this.state.commentsCreatedBy}
-                    // OwnCreatedComment={this.state.commentsCreatedOn}
-                    // ownnerComment={this.state.comments}
-                    // affilate={this.state.responseCommentsCreatedBy}
-                    // affilateCreatedComment={this.state.responseCommentsCreatedOn}
-                    // affilateComment={this.state.responseComments}
-                    // finalGradeId={this.state.finalGradeId}
-                    // proposedGradeID={this.state.proposedGradeID}
+                // owner={this.state.commentsCreatedBy}
+                // OwnCreatedComment={this.state.commentsCreatedOn}
+                // ownnerComment={this.state.comments}
+                // affilate={this.state.responseCommentsCreatedBy}
+                // affilateCreatedComment={this.state.responseCommentsCreatedOn}
+                // affilateComment={this.state.responseComments}
+                // finalGradeId={this.state.finalGradeId}
+                // proposedGradeID={this.state.proposedGradeID}
                 />
 
                 <Modal

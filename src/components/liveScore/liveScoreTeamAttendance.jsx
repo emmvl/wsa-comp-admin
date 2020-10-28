@@ -302,7 +302,7 @@ class LiveScoreTeamAttendance extends Component {
         }
         if (nextProps.roundList !== roundList) {
             if (this.props.liveScoreTeamAttendanceState.roundLoad === false && this.state.roundLoad === true) {
-                this.handleTablePagination(page)
+                this.handleTablePagination(1)
                 this.setState({ roundLoad: false })
             }
         }
@@ -632,7 +632,13 @@ class LiveScoreTeamAttendance extends Component {
                         className="antd-pagination"
                         current={teamAttendancePage}
                         total={total}
-                        onChange={this.handleTablePagination}
+                        // onChange={this.handleTablePagination(page, this.state.selectedRound)}
+                        onChange={(page) =>
+                            this.handleTablePagination(
+                                page,
+                                this.state.selectedRound
+                            )
+                        }
                     />
                 </div>
             </div>
