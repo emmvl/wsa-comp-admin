@@ -33,7 +33,7 @@ import moment from "moment"
 import Tooltip from 'react-png-tooltip'
 import AppUniqueId from "../../themes/appUniqueId";
 
-
+import { getCurrentYear } from 'util/permissions'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -55,7 +55,7 @@ class CompetitionPlayerGrades extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             divisionId: null,
             firstTimeCompId: "",
             getDataLoading: false,
@@ -73,7 +73,8 @@ class CompetitionPlayerGrades extends Component {
             changeDivisionModalVisible: false,
             competitionDivisionId: null,
             divisionLoad: false,
-            competitionStatus: 0
+            competitionStatus: 0,
+            compLoad: false
         }
         this_obj = this;
         this.onDragEnd = this.onDragEnd.bind(this);
@@ -90,11 +91,20 @@ class CompetitionPlayerGrades extends Component {
                     let competitionId = competitionList[0].competitionId
                     let statusRefId = competitionList[0].statusRefId
                     let finalTypeRefId = competitionList[0].finalTypeRefId
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
-                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId })
+
+                    this.props.getDivisionsListAction(yearId, competitionId)
+                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, compLoad: false })
+                }
+            }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
                 }
             }
         }
@@ -144,7 +154,8 @@ class CompetitionPlayerGrades extends Component {
             if (yearId) {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
                 this.setState({
-                    yearRefId: JSON.parse(yearId)
+                    yearRefId: JSON.parse(yearId),
+                    compLoad: true
                 })
             }
             else {
@@ -254,7 +265,7 @@ class CompetitionPlayerGrades extends Component {
         this.props.clearReducerCompPartPlayerGradingAction("partPlayerGradingListData")
         this.props.clearReducerDataAction("allDivisionsData")
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
-        this.setState({ firstTimeCompId: null, yearRefId: yearId, divisionId: null, competitionStatus: 0 })
+        this.setState({ firstTimeCompId: null, yearRefId: yearId, divisionId: null, competitionStatus: 0, compLoad: true })
 
     }
 

@@ -36,7 +36,7 @@ import {
     commentListingAction,
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import AppUniqueId from "../../themes/appUniqueId";
-
+import { getCurrentYear } from "util/permissions"
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 let this_obj = null;
@@ -275,7 +275,7 @@ class CompetitionProposedTeamGrading extends Component {
         super(props);
         this.state = {
             sourceModule: "FTG",
-            yearRefId: 1,
+            yearRefId: null,
             divisionId: null,
             gradeRefId: null,
             firstTimeCompId: null,
@@ -428,7 +428,8 @@ class CompetitionProposedTeamGrading extends Component {
                 firstTimeCompId: storedCompetitionId,
                 competitionStatus: storedCompetitionStatus,
                 finalTypeRefId: storedfinalTypeRefId,
-                getDataLoading: true
+                getDataLoading: true,
+                compLoad: false
             })
             this.props.getDivisionsListAction(yearId, storedCompetitionId, this.state.sourceModule)
             // this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId, 1, 6)
@@ -437,7 +438,8 @@ class CompetitionProposedTeamGrading extends Component {
             if (yearId) {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
                 this.setState({
-                    yearRefId: JSON.parse(yearId)
+                    yearRefId: JSON.parse(yearId),
+                    compLoad: true
                 })
             }
             else {
@@ -461,8 +463,16 @@ class CompetitionProposedTeamGrading extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    this.props.getDivisionsListAction(this.state.yearRefId, competitionId, this.state.sourceModule)
-                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId })
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    this.props.getDivisionsListAction(yearId, competitionId, this.state.sourceModule)
+                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId, compLoad: false })
+                }
+            }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId, })
                 }
             }
         }

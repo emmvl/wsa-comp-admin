@@ -35,7 +35,7 @@ import {
 import AppUniqueId from "../../themes/appUniqueId";
 import { NavLink } from 'react-router-dom';
 import { isArrayNotEmpty } from "util/helpers";
-
+import { getCurrentYear } from 'util/permissions'
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -44,7 +44,7 @@ class CompetitionFinals extends Component {
         super(props);
         this.state = {
             firstTimeCompId: '',
-            yearRefId: 1,
+            yearRefId: null,
             organisationId: getOrganisationData().organisationUniqueKey,
             getDataLoading: false,
             buttonPressed: "",
@@ -109,8 +109,16 @@ class CompetitionFinals extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    this.apiCalls(competitionId, this.state.yearRefId);
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    this.apiCalls(competitionId, yearId);
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
+                }
+            }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
                 }
             }
         }

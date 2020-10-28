@@ -69,7 +69,8 @@ const initialState = {
     validateMessage: "",
     newSelectedCompetition: "",
     mergeCompetitionTypeSelection: null,
-    updateStatus: false
+    updateStatus: false,
+    yearId:null
 };
 var gradeColorArray = [];
 const lightGray = '#999999';
@@ -692,7 +693,8 @@ function QuickCompetitionState(state = initialState, action) {
                 quick_CompetitionArr: action.competetionListResult,
                 quick_CompetitionYearArr: yearListSorted,
                 onLoad: false,
-                error: null
+                error: null,
+                yearId:action.yearId
             }
         ////get quick competition Load
         case ApiConstants.API_GET_QUICK_COMPETITION_LOAD:

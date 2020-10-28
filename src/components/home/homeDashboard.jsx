@@ -285,7 +285,7 @@ class HomeDashboard extends Component {
                         this.props.getOnlyYearListAction(this.props.appState.yearList)
                         this.setState({ userCountLoading: true, loading: false })
                     } else {
-                        let yearRefId = yearList[0].id
+                        let yearRefId = getCurrentYear(yearList)
                         if (this.props.homeDashboardState.userCount == null) {
                             this.props.getUserCount(yearRefId)
                             this.setState({ loading: false })

@@ -28,7 +28,7 @@ import {
 import moment from 'moment'
 import Loader from '../../customComponents/loader'
 import history from "../../util/history"
-
+import { getCurrentYear } from 'util/permissions'
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 
@@ -36,7 +36,7 @@ class CompetitionDrawEdit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: '',
             venueId: '',
             roundId: '',
@@ -65,6 +65,13 @@ class CompetitionDrawEdit extends Component {
                     this.props.getDivisionAction(competitionId);
                     setOwn_competition(competitionId)
                     this.setState({ firstTimeCompId: competitionId, venueLoad: true, competitionStatus: statusRefId })
+                }
+            }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
                 }
             }
         }

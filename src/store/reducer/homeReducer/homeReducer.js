@@ -12,7 +12,7 @@ const initialState = {
     registrationCount: null,
     liveScoreCompetitionCount: null,
     registrationCompetitionCount: null,
-    yearRefId: 1,
+    yearRefId: null,
     actionBoxList: null,
     actionBoxPage: 1,
     actionBoxTotalCount: 1

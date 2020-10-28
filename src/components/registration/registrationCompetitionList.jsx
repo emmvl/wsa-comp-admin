@@ -68,10 +68,10 @@ function totalSeasonalFees(seasonalFees1, record) {
                 {record.feeOrgId == null ? "N/A" : (record.seasonalFees == null && record.seasonalGST == null) ? "N/A" : "Affiliate fee not set!"}
             </span>
         ) : (
-            <span>
-                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
-            </span>
-        )
+                <span>
+                    {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+                </span>
+            )
     );
 }
 
@@ -99,10 +99,10 @@ function totalCasualFees(casualFees1, record) {
                 {record.feeOrgId == null ? "N/A" : (record.casualFees == null && record.casualGST == null) ? "N/A" : "Affiliate fee not set!"}
             </span>
         ) : (
-            <span>
-                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
-            </span>
-        )
+                <span>
+                    {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+                </span>
+            )
     );
 }
 
@@ -246,7 +246,7 @@ class RegistrationCompetitionList extends Component {
         super(props);
 
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             deleteLoading: false,
             userRole: "",
             searchText: '',
@@ -280,15 +280,12 @@ class RegistrationCompetitionList extends Component {
             this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText);
         }
         if (this.state.allyearload === true && this.props.appState.onLoad == false) {
-            console.log("called4")
             if (this.props.appState.yearList.length > 0) {
-                console.log("called3")
                 let mainYearRefId = getCurrentYear(this.props.appState.yearList)
                 let page = 1
                 let sortBy = this.state.sortBy
                 let sortOrder = this.state.sortOrder
                 if (competitionListAction) {
-                    console.log("called1")
                     let offset = competitionListAction.offset
                     sortBy = competitionListAction.sortBy
                     sortOrder = competitionListAction.sortOrder
@@ -299,11 +296,12 @@ class RegistrationCompetitionList extends Component {
                     page = Math.floor(offset / 10) + 1;
 
                     this.handleCompetitionTableList(page, yearRefId, searchText)
+                    this.setState({ yearRefId: yearRefId, allyearload: false })
                 } else {
-                    console.log("called2")
                     this.handleCompetitionTableList(1, mainYearRefId, this.state.searchText)
+                    this.setState({ yearRefId: mainYearRefId, allyearload: false })
                 }
-                this.setState({ yearRefId: mainYearRefId, allyearload: false })
+
             }
         }
     }

@@ -65,7 +65,7 @@ import { getOrganisationData } from "../../util/sessionStorage"
 import CustomToolTip from 'react-png-tooltip'
 import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import AppUniqueId from "../../themes/appUniqueId";
-
+import { getCurrentYear } from 'util/permissions'
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TextArea } = Input;
@@ -247,7 +247,7 @@ class CompetitionOpenRegForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             value: "NETSETGO",
             division: "Division",
             sourceModule: "COMP",
@@ -371,6 +371,14 @@ class CompetitionOpenRegForm extends Component {
                     })
                 }
             }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
+                }
+            }
+
         }
         if (competitionFeesState.onLoad === false && this.state.divisionState === true) {
             setTimeout(() => {

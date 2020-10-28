@@ -36,6 +36,7 @@ import Loader from '../../customComponents/loader'
 import CustomTooltip from 'react-png-tooltip'
 import AppUniqueId from "../../themes/appUniqueId";
 import history from "../../util/history"
+import { getCurrentYear } from 'util/permissions'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -44,7 +45,7 @@ class CompetitionCourtAndTimesAssign extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: "",
             getDataLoading: false,
             competitionStatus: 0,
@@ -115,14 +116,22 @@ class CompetitionCourtAndTimesAssign extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
                     let quickComp = this.props.appState.own_CompetitionArr.find(x => x.competitionId ==
                         competitionId && x.isQuickCompetition == 1);
-                    this.props.getCompetitionWithTimeSlots(this.state.yearRefId, competitionId);
+                    this.props.getCompetitionWithTimeSlots(yearId, competitionId);
                     this.setState({
                         getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
                         finalTypeRefId: finalTypeRefId,
                         isQuickCompetition: quickComp != undefined
                     })
+                }
+            }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
                 }
             }
         }

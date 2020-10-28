@@ -125,6 +125,7 @@ export function* getquickYearAndCompetitionListSaga(action) {
                     yearList: result.result.data,
                     competetionListResult: resultCompetition.result.data,
                     status: result.status,
+                    yearId:yearId
                 });
 
             }

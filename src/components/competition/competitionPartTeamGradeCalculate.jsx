@@ -30,7 +30,7 @@ import {
 import InputWithHead from 'customComponents/InputWithHead';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
-
+import { getCurrentYear } from 'util/permissions'
 import './competition.css';
 
 const { Footer, Content } = Layout;
@@ -68,7 +68,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
         super(props);
 
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             count: 1,
             firstTimeCompId: "",
             getDataLoading: false,
@@ -112,12 +112,20 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    this.props.getTeamGradingSummaryAction(this.state.yearRefId, competitionId)
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    this.props.getTeamGradingSummaryAction(yearId, competitionId)
                     this.setState({
                         getDataLoading: true,
                         firstTimeCompId: competitionId,
                         competitionStatus: statusRefId
                     })
+                }
+            }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
                 }
             }
         }

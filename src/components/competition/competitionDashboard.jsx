@@ -220,7 +220,7 @@ class CompetitionDashboard extends Component {
         super(props);
 
         this.state = {
-            year: "2019",
+            year: null,
             loading: false,
             modalVisible: false,
             competitionId: "",
@@ -249,9 +249,9 @@ class CompetitionDashboard extends Component {
         const { yearList } = this.props.appState;
         if (this.state.loading === true && this.props.appState.onLoad === false) {
             if (yearList.length > 0) {
-                let yearRefId = this.getYearRefId();
+                let yearRefId = this.getYearRefId(yearList);
                 this.props.competitionDashboardAction(yearRefId);
-                this.setState({ loading: false });
+                this.setState({ loading: false, year: yearRefId });
             }
         }
 
@@ -266,12 +266,12 @@ class CompetitionDashboard extends Component {
         }
     }
 
-    getYearRefId = () => {
-        const { yearList } = this.props.appState;
+    getYearRefId = (yearList) => {
         let storedYearID = localStorage.getItem("yearId");
         let yearRefId;
         if (storedYearID == null || storedYearID == "null") {
             yearRefId = getCurrentYear(yearList)
+            localStorage.setItem("yearId", yearRefId)
         } else {
             yearRefId = storedYearID;
         }
@@ -318,6 +318,7 @@ class CompetitionDashboard extends Component {
 
     onYearClick = (yearId) => {
         localStorage.setItem("yearId", yearId);
+        this.setState({ year: yearId })
         this.props.competitionDashboardAction(yearId);
     };
 
@@ -338,7 +339,7 @@ class CompetitionDashboard extends Component {
                                 className="year-select reg-filter-select-year ml-2"
                                 style={{ width: 90 }}
                                 onChange={this.onYearClick}
-                                value={selectedYearId}
+                                value={JSON.parse(this.state.year)}
                             >
                                 {yearList.map((item) => (
                                     <Option key={'year_' + item.id} value={item.id}>

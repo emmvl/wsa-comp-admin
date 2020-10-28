@@ -160,14 +160,14 @@ class RegistrationMainDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: 1,
+            year: null,
             loading: false,
             visible: false,
             competitionId: "",
             publishStatus: 0,
             orgRegistratinId: 0,
             registrationCloseDate: '',
-            wizardYear: 1,
+            wizardYear: null,
             isDirect: false,
             inviteeStatus: 0,
             competitionCreatorOrganisation: 0,
@@ -193,18 +193,10 @@ class RegistrationMainDashboard extends Component {
             sortBy = regDashboardListAction.sortBy
             sortOrder = regDashboardListAction.sortOrder
             let year = regDashboardListAction.yearRefId
-
             await this.setState({ sortBy, sortOrder, year })
-
             this.props.registrationMainDashboardListAction(year, sortBy, sortOrder)
             this.props.getAllCompetitionAction(year)
-        } else {
-            this.props.registrationMainDashboardListAction(this.state.year, this.state.sortBy, this.state.sortOrder)
-            this.props.getAllCompetitionAction(this.state.year)
         }
-
-
-
     }
 
     componentDidUpdate(nextProps) {
@@ -218,7 +210,9 @@ class RegistrationMainDashboard extends Component {
                 } else {
                     yearRefId = storedYearID
                 }
-                this.setState({ loading: false })
+                this.props.registrationMainDashboardListAction(yearRefId, this.state.sortBy, this.state.sortOrder)
+                this.props.getAllCompetitionAction(yearRefId)
+                this.setState({ loading: false, year: yearRefId })
             }
         }
         let competitionTypeList = this.props.registrationDashboardState.competitionTypeList
@@ -305,8 +299,6 @@ class RegistrationMainDashboard extends Component {
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { yearList, selectedYear } = this.props.appState
-        let storedYearID = localStorage.getItem("yearId");
-        let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID)
         let stripeConnected = this.stripeConnected()
         let userEmail = this.userEmail()
         let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
@@ -326,7 +318,7 @@ class RegistrationMainDashboard extends Component {
                                     className="year-select reg-filter-select-year ml-2"
                                     style={{ width: 90 }}
                                     onChange={yearId => this.onYearClick(yearId)}
-                                    value={this.state.year}
+                                    value={JSON.parse(this.state.year)}
                                 >
                                     {yearList.map((item) => (
                                         <Option key={'year_' + item.id} value={item.id}>{item.name}</Option>

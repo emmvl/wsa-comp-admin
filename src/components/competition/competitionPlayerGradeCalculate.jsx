@@ -26,7 +26,7 @@ import {
 } from "../../util/sessionStorage"
 // import PlayerCommentModal from "../../customComponents/playerCommentModal";
 // import moment from "moment"
-
+import { getCurrentYear } from 'util/permissions'
 
 
 const { Footer, Content } = Layout;
@@ -99,7 +99,7 @@ class CompetitionPlayerGradeCalculate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             value: "playingMember",
             competition: "2019winters",
             division: "12years",
@@ -132,8 +132,16 @@ class CompetitionPlayerGradeCalculate extends Component {
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    this.props.getCompPartPlayerGradingSummaryAction(this.state.yearRefId, competitionId)
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    this.props.getCompPartPlayerGradingSummaryAction(yearId, competitionId)
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
+                }
+            }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
                 }
             }
         }
