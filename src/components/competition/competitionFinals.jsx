@@ -102,7 +102,8 @@ class CompetitionFinals extends Component {
             let competitionList = this.props.appState.own_CompetitionArr;
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
-                    let competitionId = competitionList[0].competitionId;
+                    let storedCompetitionId = getOwn_competition();
+                    let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined")? storedCompetitionId : competitionList[0].competitionId;
                     let statusRefId = competitionList[0].statusRefId;
                     let finalTypeRefId = competitionList[0].finalTypeRefId
                     setOwn_competition(competitionId)

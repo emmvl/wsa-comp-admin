@@ -26,7 +26,7 @@ import {
 import { getYearAndQuickCompetitionAction } from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction"
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import Loader from '../../customComponents/loader';
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -405,6 +405,8 @@ class QuickCompetitionMatchFormat extends Component {
 
         this.props.saveCompetitionFormatAction(formatList);
         this.setState({ loading: true });
+        setOwnCompetitionYear(this.state.yearRefId);
+        setOwn_competition(this.state.firstTimeCompId);
     }
 
     ///////view for breadcrumb
