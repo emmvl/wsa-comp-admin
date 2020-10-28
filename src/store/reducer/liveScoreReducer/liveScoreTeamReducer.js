@@ -176,7 +176,7 @@ function LiveScoreTeamState(state = initialState, action) {
         case ApiConstants.GET_DIVISION_TEAM:
             return { ...state, onLoad: true };
 
-        case ApiConstants.GET_AFFILATE_TEAM:
+        case ApiConstants.GET_AFFILIATE_TEAM:
             return { ...state };
 
         case ApiConstants.GET_DIVISION_SUCCESS:
@@ -208,7 +208,7 @@ function LiveScoreTeamState(state = initialState, action) {
         case ApiConstants.API_LIVE_SCORE_DELETE_TEAM_PLAYER_SUCCESS:
             return { ...state, onLoad: false };
 
-        case ApiConstants.GET_AFFILATE_SUCCESS:
+        case ApiConstants.GET_AFFILIATE_SUCCESS:
             return {
                 ...state,
                 onLoad: false,
@@ -219,7 +219,7 @@ function LiveScoreTeamState(state = initialState, action) {
                 affilateList: action.payload,
             };
 
-        case ApiConstants.GET_AFFILATE_ERROR:
+        case ApiConstants.GET_AFFILIATE_ERROR:
             return {
                 ...state,
                 onLoad: false,
@@ -268,10 +268,10 @@ function LiveScoreTeamState(state = initialState, action) {
             state.managerType = action.result.managers.length > 0 ? "existing" : null;
             return { ...state, onLoad: false, teamLoad: false };
 
-        case ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD:
+        case ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGING_LOAD:
             return { ...state, onLoad: true, livescoreTeamActionObject: action };
 
-        case ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_SUCCESS:
+        case ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGING_SUCCESS:
             const result = action.result.teams;
             state.totalTeams = action.result.page.page.totalCount;
             state.teamCurrentPage = action.result.page.page.currentPage

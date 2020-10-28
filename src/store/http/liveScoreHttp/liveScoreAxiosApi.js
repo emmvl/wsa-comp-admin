@@ -1,4 +1,4 @@
-/* eslint-disable no-use-before-define */
+/* eslint-disable no-use-before-define, max-len, no-unused-vars */
 import { message } from 'antd';
 
 import ValidationConstants from 'themes/validationConstant';
@@ -549,6 +549,11 @@ const LiveScoreAxiosApi = {
         return Method.dataDelete(url, token);
     },
 
+    liveScoreRemoveBannerImage(bannerId, type) {
+        const url = `/banners/id/${bannerId}?ratioType=${parseInt(type, 10) === 0 ? 'horizontal' : 'square'}`;
+        return Method.dataPost(url, token);
+    },
+
     liveScoreNewsList(competitionId) {
         const url = `/news/admin?entityId=${competitionId}&entityTypeId=1`;
         return Method.dataGet(url, token);
@@ -669,7 +674,7 @@ const LiveScoreAxiosApi = {
     },
 
     liveScoreEndMatches(data, startTime, endTime) {
-        const competitionID = localStorage.getItem('competitionId');
+        // const competitionID = localStorage.getItem('competitionId');
         const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
 
         const extendParam = checkVenueCourtId(data);
@@ -684,7 +689,7 @@ const LiveScoreAxiosApi = {
     },
 
     liveScoreDoubleHeader(data) {
-        const competitionID = localStorage.getItem('competitionId');
+        // const competitionID = localStorage.getItem('competitionId');
         const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
         const url = `/matches/bulk/doubleheader?competitionId=${id}&round1=${data.round_1}&round2=${data.round_2}`;
         return Method.dataPost(url, token);
@@ -883,16 +888,16 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreAttendanceList(competitionId, payload, select_status, divisionId, roundId) {
+    liveScoreAttendanceList(competitionId, payload, selectStatus, divisionId, roundId) {
         let url;
         const body = {
             paging: payload.paging,
             search: payload.search,
         };
-        if (select_status === 'All') {
+        if (selectStatus === 'All') {
             url = `/players/activity?competitionId=${competitionId}&status=${''}`;
         } else {
-            url = `/players/activity?competitionId=${competitionId}&status=${select_status}`;
+            url = `/players/activity?competitionId=${competitionId}&status=${selectStatus}`;
         }
         if (payload.sortBy && payload.sortOrder) {
             url += `&sortBy=${payload.sortBy}&sortOrder=${payload.sortOrder}`;
@@ -964,16 +969,16 @@ const LiveScoreAxiosApi = {
     },
 
     // change assign status
-    changeAssignStatus(roleId, records, teamID, teamKey, scorer_Id) {
+    changeAssignStatus(roleId, records, teamID, teamKey, scorerId) {
         const body = JSON.stringify({
             matchId: records.id,
             roleId,
             teamId: records[teamKey].id,
-            userId: scorer_Id,
+            userId: scorerId,
         });
 
         const url = '/roster/admin/assign';
-        //  const url = `https://livescores-api-dev.worldsportaction.com/roster`;
+        // const url = `https://livescores-api-dev.worldsportaction.com/roster`;
         return Method.dataPost(url, token, body);
     },
 
@@ -1009,7 +1014,7 @@ const LiveScoreAxiosApi = {
     },
 
     // Get Teams with pagination
-    getTeamWithPagging(competitionID, offset, limit, search, sortBy, sortOrder) {
+    getTeamWithPaging(competitionID, offset, limit, search, sortBy, sortOrder) {
         let url = null;
         if (search && search.length > 0) {
             url = `/teams/list?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
@@ -1025,7 +1030,7 @@ const LiveScoreAxiosApi = {
     },
 
     /// Get Player list with paging
-    getPlayerWithPaggination(competitionID, offset, limit, search, sortBy, sortOrder) {
+    getPlayerWithPagination(competitionID, offset, limit, search, sortBy, sortOrder) {
         let url = null;
         if (search && search.length > 0) {
             url = `/players/admin?competitionId=${competitionID}&offset=${offset}&limit=${limit}&search=${search}`;
@@ -1059,14 +1064,14 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, localStorage.token);
     },
 
-    liveScoreAddCoach(data, teamId, exsitingManagerId) {
+    liveScoreAddCoach(data, teamId, existingManagerId) {
         const body = data;
         const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
         const url = `/users/coach?competitionId=${id}`;
         return Method.dataPost(url, token, body);
     },
 
-    addEditUmpire(data, teamId, exsitingManagerId, isUmpire, isUmpireCoach) {
+    addEditUmpire(data, teamId, existingManagerId, isUmpire, isUmpireCoach) {
         const body = data;
         const id = JSON.parse(localStorage.getItem('umpireCompetitionId'));
         const url = `/users/umpire?competitionId=${id}&isUmpire=${isUmpire}&isUmpireCoach=${isUmpireCoach}`;
@@ -1083,8 +1088,7 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    umpireRoasterList(competitionID, status, refRoleId, paginationBody, sortBy,
-        sortOrder) {
+    umpireRoasterList(competitionID, status, refRoleId, paginationBody, sortBy, sortOrder) {
         let url = null;
         const body = paginationBody;
 
@@ -1321,6 +1325,7 @@ const LiveScoreAxiosApi = {
 
         return Method.dataPost(url, token, body);
     },
+
     liveScoreGetMainDivisionList(compId, offset, sortBy, sortOrder) {
         let url;
 
@@ -1332,6 +1337,7 @@ const LiveScoreAxiosApi = {
 
         return Method.dataGet(url, null);
     },
+
     /// //livescore own part competition listing
     liveScoreOwnPartCompetitionList(data, orgKey, sortBy, sortOrder, yearRefId) {
         let url = null;
@@ -1354,6 +1360,7 @@ const LiveScoreAxiosApi = {
         const url = '/matches/livestreamURL';
         return Method.dataPost(url, token, body);
     },
+
     resetLadderPoints(payload) {
         const url = '/teams/ladder/reset';
         return Method.dataPost(url, token, payload);

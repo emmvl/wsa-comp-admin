@@ -24,20 +24,20 @@ export const liveScoreCompetionActionError = (data) => {
 
 export const liveScoreCompetitionDeleteInitiate = (data, key) => {
     return {
-        type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_INITIATE,
+        type: ApiConstants.API_LIVESCORE_COMPETITION_DELETE_INITIATE,
         payload: data,
         key
     }
 }
 export const liveScoreCompetitionDeleteSuccess = (data) => {
     return {
-        type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_SUCCESS,
+        type: ApiConstants.API_LIVESCORE_COMPETITION_DELETE_SUCCESS,
         payload: data
     }
 }
 export const liveScoreCompetitionDeleteError = (data) => {
     return {
-        type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_ERROR,
+        type: ApiConstants.API_LIVESCORE_COMPETITION_DELETE_ERROR,
         payload: data
     }
 }

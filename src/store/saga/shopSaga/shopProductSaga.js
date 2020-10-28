@@ -84,7 +84,7 @@ function* getTypesOfProductSaga(/* action */) {
 
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.API_GET_TYPES_LIST_IN_ADD_PROUCT_SUCCESS,
+        type: ApiConstants.API_GET_TYPES_LIST_IN_ADD_PRODUCT_SUCCESS,
         result: result.result.data,
         status: result.status
       });
@@ -183,7 +183,7 @@ function* getProductDetailsByIdSaga(action) {
 export default function* rootShopProductSaga() {
   yield takeEvery(ApiConstants.API_GET_SHOP_PRODUCT_LISTING_LOAD, getProductListingSaga);
   yield takeEvery(ApiConstants.API_ADD_SHOP_PRODUCT_LOAD, addProductSaga);
-  yield takeEvery(ApiConstants.API_GET_TYPES_LIST_IN_ADD_PROUCT_LOAD, getTypesOfProductSaga);
+  yield takeEvery(ApiConstants.API_GET_TYPES_LIST_IN_ADD_PRODUCT_LOAD, getTypesOfProductSaga);
   yield takeEvery(ApiConstants.API_DELETE_SHOP_PRODUCT_LOAD, deleteProductSaga);
   yield takeEvery(ApiConstants.API_DELETE_SHOP_PRODUCT_VARIANT_LOAD, deleteProductVariantSaga);
   yield takeEvery(ApiConstants.API_SHOP_ADD_TYPE_IN_TYPELIST_LOAD, addNewTypeSaga);

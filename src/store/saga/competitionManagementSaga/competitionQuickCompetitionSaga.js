@@ -300,7 +300,7 @@ export function* quickCompetitionAddVenueSaga(action) {
         const result = yield call(AxiosApi.addVenueQuickCompetition, action.payload);
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_QUICK_COMPETITION_ADDVENUE_SUCCESS,
+                type: ApiConstants.API_QUICK_COMPETITION_ADD_VENUE_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
@@ -493,7 +493,7 @@ export function* updateGrid_VenueSaga(action) {
                 }
                 else {
                     yield put({
-                        type: ApiConstants.API_QUICK_COMPETITION_ADDVENUE_SUCCESS,
+                        type: ApiConstants.API_QUICK_COMPETITION_ADD_VENUE_SUCCESS,
                         result: result.result.data,
                         status: result.status,
                     });

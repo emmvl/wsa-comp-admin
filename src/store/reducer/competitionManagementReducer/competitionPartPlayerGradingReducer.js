@@ -147,11 +147,11 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             };
 
         //competition part player grade calculate player grading summary get API
-        case ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_LOAD:
+        case ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMARY_LIST_LOAD:
             return { ...state, onLoad: true, error: null }
 
 
-        case ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_SUCCESS:
+        case ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMARY_LIST_SUCCESS:
             let partPlayerSummaryListData = isArrayNotEmpty(action.result) ? action.result : []
             let finalPartPlayerSummaryListData = []
             partPlayerSummaryListData.map((item) => {
@@ -172,7 +172,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             }
 
         //////competition part player grade calculate player grading summary data on Change table input
-        case ApiConstants.ONCHANGE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_DATA:
+        case ApiConstants.ONCHANGE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMARY_DATA:
             let onChangePartPlayerData = JSON.parse(JSON.stringify(state.getCompPartPlayerGradingSummaryData))
             if (action.key == "minimumPlayers") {
                 onChangePartPlayerData[action.index]["minimumPlayers"] = action.value
@@ -187,11 +187,11 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             }
 
         //////save the competition part player grade calculate player grading summary or say proposed player grading toggle
-        case ApiConstants.API_SAVE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_LOAD:
+        case ApiConstants.API_SAVE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMARY_LIST_LOAD:
             return { ...state, onLoad: true, error: null }
 
 
-        case ApiConstants.API_SAVE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_SUCCESS:
+        case ApiConstants.API_SAVE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMARY_LIST_SUCCESS:
             return {
                 ...state,
                 onLoad: false,

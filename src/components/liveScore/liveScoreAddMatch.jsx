@@ -336,7 +336,7 @@ class LiveScoreAddMatch extends Component {
                 centered
             >
                 <div className="col-sm">
-                    <InputWithHead required="required-field" heading={AppConstants.whichTeamForfieted} />
+                    <InputWithHead required="required-field" heading={AppConstants.whichTeamForfeited} />
 
                     <Select
                         showSearch

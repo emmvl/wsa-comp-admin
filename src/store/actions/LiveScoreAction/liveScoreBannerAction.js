@@ -1,7 +1,7 @@
 import ApiConstants from 'themes/apiConstants';
 
 // Banners action
-function getliveScoreBanners(competitionID, organisationID = null) {
+function getLiveScoreBanners(competitionID, organisationID = null) {
     return {
         type: ApiConstants.API_LIVE_SCORE_BANNERS_LOAD,
         competitionID,
@@ -10,7 +10,19 @@ function getliveScoreBanners(competitionID, organisationID = null) {
 }
 
 // Banners Add
-function liveScoreAddBanner(organisationID, competitionID, bannerImage, showOnHome, showOnDraws, showOnLadder, showOnNews, showOnChat, format, bannerLink, bannerId) {
+function liveScoreAddBanner(
+    organisationID,
+    competitionID,
+    bannerImage,
+    showOnHome,
+    showOnDraws,
+    showOnLadder,
+    showOnNews,
+    showOnChat,
+    format,
+    bannerLink,
+    bannerId,
+) {
     return {
         type: ApiConstants.API_LIVE_SCORE_ADD_BANNER_LOAD,
         organisationID,
@@ -24,6 +36,14 @@ function liveScoreAddBanner(organisationID, competitionID, bannerImage, showOnHo
         format,
         bannerLink,
         bannerId,
+    };
+}
+
+function liveScoreRemoveBannerImage(bannerId, ratioType) {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_REMOVE_BANNER_IMAGE_LOAD,
+        bannerId,
+        ratioType,
     };
 }
 
@@ -50,9 +70,10 @@ function clearEditBannerAction() {
 }
 
 export {
-    getliveScoreBanners,
+    getLiveScoreBanners,
     liveScoreAddBanner,
     liveScoreRemoveBanner,
     liveScoreAddBannerUpdate,
     clearEditBannerAction,
+    liveScoreRemoveBannerImage,
 };

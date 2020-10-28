@@ -9,7 +9,6 @@ import {
     InputNumber,
     Layout,
     message,
-    Radio,
     Table,
     Tabs,
 } from 'antd';
@@ -18,12 +17,14 @@ import AppConstants from 'themes/appConstants';
 import ValidationConstants from 'themes/validationConstant';
 import { getOrganisationData } from 'util/sessionStorage';
 import { getBannerCnt, updateBannerAction } from 'store/actions/userAction/userAction';
-import { getliveScoreBanners, liveScoreRemoveBanner } from 'store/actions/LiveScoreAction/liveScoreBannerAction';
+import { getLiveScoreBanners, liveScoreRemoveBanner, liveScoreRemoveBannerImage } from 'store/actions/LiveScoreAction/liveScoreBannerAction';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
 import Loader from 'customComponents/loader';
 import InputWithHead from 'customComponents/InputWithHead';
 import ImageLoader from 'customComponents/ImageLoader';
+
+import './style.scss';
 
 const { Content } = Layout;
 const { TabPane } = Tabs;
@@ -45,9 +46,20 @@ class CommunicationBanner extends Component {
                 key: 'bannerUrl',
                 render: (bannerUrl, record) => (
                     <div>
-                        {this.removeBtn(record)}
-                        {this.imageView(bannerUrl)}
-                        {this.footerBannerView(record)}
+                        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
+                            <div className="mb-3" style={{ width: '400px' }}>
+                                <InputWithHead
+                                    heading={AppConstants.sponsorName}
+                                    placeholder={AppConstants.sponsorName}
+                                    name={AppConstants.sponsorName}
+                                    disabled
+                                    value={AppConstants.sponsorName ? record.sponsorName : 'http://'}
+                                />
+                            </div>
+                            {this.removeBtn(record)}
+                        </div>
+                        {this.imageView(bannerUrl, record, 0)}
+                        {this.imageView(bannerUrl, record, 1)}
                     </div>
                 ),
             },
@@ -59,7 +71,7 @@ class CommunicationBanner extends Component {
             const { organisationId } = getOrganisationData();
             if (organisationId) {
                 this.props.getBannerCnt(organisationId);
-                this.props.getliveScoreBanners(null, organisationId);
+                this.props.getLiveScoreBanners(null, organisationId);
             }
         }
     }
@@ -72,13 +84,13 @@ class CommunicationBanner extends Component {
                 if (
                     bannerCount
                     && (prevBannerCount.numStateBanner !== bannerCount.numStateBanner
-                        || prevBannerCount.numCompBanner !== bannerCount.numCompBanner
-                        || this.state.numCompBanner + this.state.numCompBanner < 0)
+                    || prevBannerCount.numCompBanner !== bannerCount.numCompBanner
+                    || this.state.numStateBanner + this.state.numCompBanner < 0)
                 ) {
-                    this.setState({ ...bannerCount });
+                    // this.setState({ ...bannerCount });
                 }
             } else if (!prevBannerCount && bannerCount) {
-                this.setState({ ...bannerCount });
+                // this.setState({ ...bannerCount });
             }
         }
     }
@@ -95,9 +107,13 @@ class CommunicationBanner extends Component {
         });
     };
 
+    removeImage = (bannerId, type) => {
+        this.props.liveScoreRemoveBannerImage(bannerId, type);
+    };
+
     bannerAddEdit = () => {
         localStorage.setItem('communication', 'true');
-    }
+    };
 
     headerView = () => (
         <div className="row">
@@ -120,7 +136,7 @@ class CommunicationBanner extends Component {
 
     removeBanner = (record) => {
         this.props.liveScoreRemoveBanner(record.id);
-    }
+    };
 
     removeBtn = (record) => (
         <div className="mb-3">
@@ -159,9 +175,11 @@ class CommunicationBanner extends Component {
         </div>
     );
 
-    imageView = (bannerUrl) => (
-        <div>
+    imageView = (bannerUrl, record, type) => (
+        <div className="flex-row" style={{ display: 'flex' }}>
             <ImageLoader
+                closeable
+                removeImage={() => this.removeImage(record.id, type)}
                 className="banner-image"
                 src={bannerUrl}
                 width
@@ -169,6 +187,7 @@ class CommunicationBanner extends Component {
                 borderRadius
                 timeout={this.state.timeout}
             />
+            {this.footerBannerView(record, type)}
         </div>
     );
 
@@ -191,31 +210,21 @@ class CommunicationBanner extends Component {
         </div>
     );
 
-    footerBannerView = (record) => (
+    footerBannerView = (record, type) => (
         <div>
             <div className="row">
                 <div className="col-sm pt-1">
                     <InputWithHead
-                        heading={AppConstants.bannerLink}
-                        placeholder={AppConstants.bannerLink}
-                        name="bannerLink"
+                        heading={AppConstants[type === 0 ? 'horizBannerLink' : 'squareBannerLink']}
+                        placeholder={AppConstants[type === 0 ? 'horizBannerLink' : 'squareBannerLink']}
+                        name={`${type === 0 ? 'horizontal-' : 'square-'}bannerLink`}
                         disabled
-                        value={record.bannerLink ? record.bannerLink : 'http://'}
+                        value={
+                            record[type === 0 ? 'horizontalBannerLink' : 'squareBannerLink']
+                                ? record[type === 0 ? 'horizontalBannerLink' : 'squareBannerLink']
+                                : 'http://'
+                        }
                     />
-
-                    <div className="mt-3">
-                        <div>
-                            <span>{AppConstants.bannerFormat}</span>
-                        </div>
-                        <Radio.Group
-                            name="format"
-                            disabled
-                            value={record.format}
-                        >
-                            <Radio value="Horizontal">Horizontal</Radio>
-                            <Radio value="Square">Square</Radio>
-                        </Radio.Group>
-                    </div>
                 </div>
             </div>
         </div>
@@ -321,16 +330,18 @@ class CommunicationBanner extends Component {
 CommunicationBanner.propTypes = {
     liveScoreBannerState: PropTypes.object.isRequired,
     userState: PropTypes.object.isRequired,
-    getliveScoreBanners: PropTypes.func.isRequired,
+    getLiveScoreBanners: PropTypes.func.isRequired,
     liveScoreRemoveBanner: PropTypes.func.isRequired,
+    liveScoreRemoveBannerImage: PropTypes.func.isRequired,
     getBannerCnt: PropTypes.func.isRequired,
     updateBannerAction: PropTypes.func.isRequired,
 };
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getliveScoreBanners,
+        getLiveScoreBanners,
         liveScoreRemoveBanner,
+        liveScoreRemoveBannerImage,
         getBannerCnt,
         updateBannerAction,
     }, dispatch);

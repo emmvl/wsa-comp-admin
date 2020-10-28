@@ -70,7 +70,7 @@ function clearVenueTimesDataAction(competitionId) {
 }
 function removePrefencesObjectAction(index, data, key) {
     const action = {
-        type: ApiConstants.DELETE_PREFENCE_OBJECT,
+        type: ApiConstants.DELETE_PREFERENCE_OBJECT,
         index,
         data,
         key
@@ -80,7 +80,7 @@ function removePrefencesObjectAction(index, data, key) {
 
 function removeObjectAction(index, data, key) {
     const action = {
-        type: ApiConstants.DELETE_PREFENCE_OBJECT_ADD_VENUE,
+        type: ApiConstants.DELETE_PREFERENCE_OBJECT_ADD_VENUE,
         index,
         data,
         key

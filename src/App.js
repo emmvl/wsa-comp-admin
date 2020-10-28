@@ -15,7 +15,7 @@ import PrivateRoute from './util/protectedRoute';
 import Login from './components/login';
 import ForgotPassword from './components/ForgotPassword';
 import lazyLoad from './components/lazyLoad';
-import ErrorBoundary from './components/emptyComponent/errorBoundry';
+import ErrorBoundary from './components/emptyComponent/errorBoundary';
 
 import './customStyles/customStyles.css';
 import './customStyles/antdStyles.css';

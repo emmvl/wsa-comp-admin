@@ -859,7 +859,7 @@ class LiveScoreSettingsView extends Component {
                     // onChange={(e) => this.props.onChangeSettingForm({ key: "lineupSelection", data: e.target.checked })}
                     checked={lineupSelection}
                 >
-                    {AppConstants.sqadSelection}
+                    {AppConstants.squadSelection}
                 </Checkbox>
 
                 {lineupSelection && (

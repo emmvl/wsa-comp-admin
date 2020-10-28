@@ -1,58 +1,71 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'antd';
-import AppImages from "../../themes/appImages";
-import history from "../../util/history";
-import DashboardLayout from "../../pages/dashboardLayout";
-import AppConstants from "../../themes/appConstants";
+
+import AppImages from 'themes/appImages';
+import AppConstants from 'themes/appConstants';
+import history from 'util/history';
+import DashboardLayout from 'pages/dashboardLayout';
+
 class ErrorBoundary extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { error: null, errorInfo: null };
-  }
+    constructor(props) {
+        super(props);
 
-
-  componentDidCatch(error, errorInfo) {
-    console.log("error, errorInfo", error, errorInfo)
-    if (process.env.REACT_APP_FRIENDLY_ERROR === "true") {
-      this.setState({
-        error: error,
-        errorInfo: errorInfo
-      });
+        this.state = { error: null, errorInfo: null };
     }
-  }
 
-  navigateToHome = () => {
-    history.push("/")
-    window.location.reload()
-  }
-
-  render() {
-    if (this.state.errorInfo) {
-      return (
-        <div>
-          <DashboardLayout isManuNotVisible={true} />
-          <div className="error-boundry-main-div">
-            <img
-              src={AppImages.wentWrong}
-              alt=""
-              className="went-wrong-img"
-            />
-            <Button className="open-reg-button mt-5" type="primary" onClick={() => this.navigateToHome()}>
-              {AppConstants.backToHome}
-            </Button>
-          </div>
-          {/* <details style={{ whiteSpace: 'pre-wrap' }}>
-                 {this.state.error && this.state.error.toString()}
-                 <br />
-                 {this.state.errorInfo.componentStack}
-               </details> */}
-        </div>
-      );
+    componentDidCatch(error, errorInfo) {
+        if (process.env.REACT_APP_FRIENDLY_ERROR === 'true') {
+            this.setState({
+                error,
+                errorInfo,
+            });
+        }
     }
-    return this.props.children;
-  }
+
+    navigateToHome = () => {
+        history.push('/');
+        window.location.reload();
+    }
+
+    render() {
+        if (this.state.errorInfo) {
+            return (
+                <div>
+                    <DashboardLayout isManuNotVisible />
+
+                    <div className="error-boundry-main-div">
+                        <img
+                            src={AppImages.wentWrong}
+                            alt=""
+                            className="went-wrong-img"
+                        />
+                        <Button className="open-reg-button mt-5" type="primary" onClick={this.navigateToHome}>
+                            {AppConstants.backToHome}
+                        </Button>
+                    </div>
+
+                    {/*
+                    <details style={{ whiteSpace: 'pre-wrap' }}>
+                        {this.state.error && this.state.error.toString()}
+                        <br />
+                        {this.state.errorInfo.componentStack}
+                    </details>
+                    */}
+                </div>
+            );
+        }
+
+        return this.props.children;
+    }
 }
 
+ErrorBoundary.propTypes = {
+    children: PropTypes.node,
+};
 
+ErrorBoundary.defaultProps = {
+    children: null,
+};
 
 export default ErrorBoundary;

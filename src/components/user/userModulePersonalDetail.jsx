@@ -2483,7 +2483,7 @@ class UserModulePersonalDetail extends Component {
             >
               <a href={stripeConnectURL} className="stripe-connect">
                 <span>
-                  {AppConstants.uploadBankAccnt}
+                  {AppConstants.uploadBankAccount}
                 </span>
               </a>
 

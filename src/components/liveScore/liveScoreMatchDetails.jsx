@@ -548,7 +548,7 @@ class LiveScoreMatchDetails extends Component {
                                         className="primary-add-comp-form"
                                         type="primary"
                                     >
-                                        + {AppConstants.addliveStream}
+                                        + {AppConstants.addLiveStream}
                                     </Button>
                                 </div>
                             </div>

@@ -93,7 +93,7 @@ function liveScoreMatchResetImportResultAction() {
 
 function liveScoreGetMatchDetailInitiate(data, isLineup) {
     return {
-        type: ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_INITAITE,
+        type: ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_INITIATE,
         payload: data,
         isLineup: isLineup,
     };
@@ -145,7 +145,7 @@ function onCancelBulkScoreUpdate() {
 
 function liveScoreAddLiveStreamAction(data) {
     return {
-        type: ApiConstants.API_ADD_LIVE_STREM_LOAD,
+        type: ApiConstants.API_ADD_LIVE_STREAM_LOAD,
         data,
     };
 }

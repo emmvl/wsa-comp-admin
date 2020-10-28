@@ -848,7 +848,7 @@ function QuickCompetitionState(state = initialState, action) {
                 error: null,
             }
 
-        case ApiConstants.API_QUICK_COMPETITION_ADDVENUE_LOAD:
+        case ApiConstants.API_QUICK_COMPETITION_ADD_VENUE_LOAD:
             return {
                 ...state,
                 onLoad: true,
@@ -857,7 +857,7 @@ function QuickCompetitionState(state = initialState, action) {
                 status: null,
             }
 
-        case ApiConstants.API_QUICK_COMPETITION_ADDVENUE_SUCCESS:
+        case ApiConstants.API_QUICK_COMPETITION_ADD_VENUE_SUCCESS:
             state.postSelectedVenues = JSON.parse(JSON.stringify(state.selectedVenues))
             return {
                 ...state,

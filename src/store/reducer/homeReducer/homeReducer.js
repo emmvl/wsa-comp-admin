@@ -22,9 +22,9 @@ const initialState = {
 function homeReducer(state = initialState, action) {
     switch (action.type) {
         //////get the Dashboard list in registration
-        case ApiConstants.API_USERCOUNT_LOAD:
+        case ApiConstants.API_USER_COUNT_LOAD:
             return { ...state, onLoad: true, error: null }
-        case ApiConstants.API_USERCOUNT_SUCCESS:
+        case ApiConstants.API_USER_COUNT_SUCCESS:
             console.log(action)
             return {
                 ...state,
@@ -56,14 +56,14 @@ function homeReducer(state = initialState, action) {
 
 
         ///******fail and error handling */
-        case ApiConstants.API_USERCOUNT_FAIL:
+        case ApiConstants.API_USER_COUNT_FAIL:
             return {
                 ...state,
                 onLoad: false,
                 error: action.error,
                 status: action.status
             };
-        case ApiConstants.API_USERCOUNT_ERROR:
+        case ApiConstants.API_USER_COUNT_ERROR:
             return {
                 ...state,
                 onLoad: false,

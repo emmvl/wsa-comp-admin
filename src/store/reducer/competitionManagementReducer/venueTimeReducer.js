@@ -1153,14 +1153,14 @@ function VenueTimeState(state = initialState, action) {
                 ...state,
             };
 
-        case ApiConstants.DELETE_PREFENCE_OBJECT:
+        case ApiConstants.DELETE_PREFERENCE_OBJECT:
             state.venueConstrainstData[action.key].splice(action.index, 1)
             state.courtPreferencesPost.splice(action.index, 1)
             return {
                 ...state,
             };
 
-        case ApiConstants.DELETE_PREFENCE_OBJECT_ADD_VENUE:
+        case ApiConstants.DELETE_PREFERENCE_OBJECT_ADD_VENUE:
             state.venuData['gameDays'].splice(action.index, 1)
             return { ...state }
 

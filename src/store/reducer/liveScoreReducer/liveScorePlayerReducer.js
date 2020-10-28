@@ -134,10 +134,10 @@ function LiveScorePlayerState(state = initialState, action) {
                 status: action.status,
             };
 
-        case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD:
+        case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGINATION_LOAD:
             return { ...state, onLoad: true, playerListActionObject: action };
 
-        case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_SUCCESS:
+        case ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGINATION_SUCCESS:
             const playerListResult = liveScoreModal.getPlayerListData(action.result.players);
             state.totalCount = action.result.page.totalCount;
             state.currentPage = action.result.page.currentPage;
