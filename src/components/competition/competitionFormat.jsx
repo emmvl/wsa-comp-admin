@@ -89,7 +89,7 @@ class CompetitionFormat extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
+            // setOwnCompetitionYear(1)
         }
     }
 

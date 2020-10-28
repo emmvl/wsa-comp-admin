@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { isArrayNotEmpty } from "../../util/helpers";
 import { registrationMainDashboardListAction } from "../../store/actions/registrationAction/registrationDashboardAction";
-import { checkRegistrationType } from "../../util/permissions";
+import { checkRegistrationType, getCurrentYear } from "../../util/permissions";
 import { clearCompReducerDataAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import history from "../../util/history";
 import WizardModel from "../../customComponents/registrationWizardModel"
@@ -214,7 +214,7 @@ class RegistrationMainDashboard extends Component {
                 let storedYearID = localStorage.getItem("yearId");
                 let yearRefId = null
                 if (storedYearID == null || storedYearID == "null") {
-                    yearRefId = yearList[0].id
+                    yearRefId = getCurrentYear(yearList)
                 } else {
                     yearRefId = storedYearID
                 }

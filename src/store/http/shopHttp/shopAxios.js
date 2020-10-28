@@ -86,7 +86,7 @@ let AxiosApi = {
         let orgItem = await getOrganisationData()
         let organisationUniqueKey = orgItem.organisationUniqueKey
         let { limit, offset, search, year, postcode, affiliate, paymentMethod, order, sorterBy } = params
-        var url = `/order/summary?organisationUniqueKey=${affiliate}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
+        var url = `/order/summary?currentOrganisation=${organisationUniqueKey}&organisationUniqueKey=${affiliate}&limit=${limit}&offset=${offset}&search=${search}&year=${year}&postcode=${postcode}&paymentMethod=${paymentMethod}&order=${order}&sorterBy=${sorterBy}`;
         return Method.dataGet(url, token);
     },
 

@@ -1,6 +1,7 @@
 import { getOrganisationData, getLiveScoreCompetiton } from "./sessionStorage";
 import AppConstants from "../themes/appConstants";
 import history from "../util/history";
+import moment from 'moment'
 
 const organisationTypeRefIdObject = {
     [AppConstants.national]: 1,
@@ -180,4 +181,39 @@ function getUserRoleId() {
     return userRoleId
 }
 
-export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel, checkRegistrationType, checkLivScoreCompIsParent, checkUserAccess, showRoleLevelPermision, getUserRoleId }
+function getCurrentYear(yearArr){
+    let currentYear = moment().year()
+    let currentYearIndex = yearArr.findIndex((x)=>x.name == currentYear)
+    if(currentYearIndex === -1){
+        let getfirstIndexId =  yearArr[0].id
+        return getfirstIndexId
+    }else{
+    let getCurrentYearId = yearArr[currentYearIndex].id
+    return getCurrentYearId
+    }
+  }
+
+  function compare(a, b) {
+    const bandA = a.sortOrder;
+    const bandB = b.sortOrder;
+    let comparison = 0;
+    if (bandA < bandB) {
+        comparison = 1;
+    } else if (bandA > bandB) {
+        comparison = -1;
+    }
+    return comparison;
+}
+
+function reverseArray(array){
+    let isSortedArray = []
+    isSortedArray = array.sort(compare)
+       return isSortedArray 
+     }
+
+       
+  
+  export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel,
+       checkRegistrationType, checkLivScoreCompIsParent, checkUserAccess, 
+       showRoleLevelPermision, getUserRoleId,getCurrentYear,reverseArray }
+  

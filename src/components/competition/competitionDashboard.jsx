@@ -10,7 +10,7 @@ import AppImages from "themes/appImages";
 import AppUniqueId from "themes/appUniqueId";
 import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
-import { checkRegistrationType } from "util/permissions";
+import { checkRegistrationType, getCurrentYear } from "util/permissions";
 import { getPrevUrl } from "util/sessionStorage";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "store/actions/appAction";
 import {
@@ -271,7 +271,7 @@ class CompetitionDashboard extends Component {
         let storedYearID = localStorage.getItem("yearId");
         let yearRefId;
         if (storedYearID == null || storedYearID == "null") {
-            yearRefId = yearList[0].id;
+            yearRefId = getCurrentYear(yearList)
         } else {
             yearRefId = storedYearID;
         }
@@ -579,22 +579,22 @@ class CompetitionDashboard extends Component {
                 {this.state.statusRefId === 0 ? (
                     <p>{AppConstants.compDeleteConfirm.replace("(COMP_NAME)", this.state.competitionName)}</p>
                 ) : (
-                    <div>
-                        <p>
-                            {AppConstants.deletePublishToLsMsg
-                                .replace("(COMP_NAME)", this.state.competitionName)
-                                .replace("(COMP_NAME)", this.state.competitionName)}
-                        </p>
-                        <Radio.Group
-                            className="reg-competition-radio customize-radio-text"
-                            onChange={(e) => this.onChangeSetValue(e.target.value)}
-                            value={this.state.onDeleteTargetValue}
-                        >
-                            <Radio value={1}>{AppConstants.both}</Radio>
-                            <Radio value={2}>{AppConstants.onlyCompMngmt}</Radio>
-                        </Radio.Group>
-                    </div>
-                )}
+                        <div>
+                            <p>
+                                {AppConstants.deletePublishToLsMsg
+                                    .replace("(COMP_NAME)", this.state.competitionName)
+                                    .replace("(COMP_NAME)", this.state.competitionName)}
+                            </p>
+                            <Radio.Group
+                                className="reg-competition-radio customize-radio-text"
+                                onChange={(e) => this.onChangeSetValue(e.target.value)}
+                                value={this.state.onDeleteTargetValue}
+                            >
+                                <Radio value={1}>{AppConstants.both}</Radio>
+                                <Radio value={2}>{AppConstants.onlyCompMngmt}</Radio>
+                            </Radio.Group>
+                        </div>
+                    )}
             </Modal>
         </div>
     );

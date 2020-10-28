@@ -149,7 +149,7 @@ class CompetitionPlayerGrades extends Component {
             }
             else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
-                setOwnCompetitionYear(1)
+                // setOwnCompetitionYear(1)
             }
         }
 

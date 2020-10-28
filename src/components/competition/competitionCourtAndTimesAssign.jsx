@@ -81,9 +81,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                 isQuickCompetition: quickComp != undefined,
                 finalTypeRefId: storedfinalTypeRefId
             })
-            // if (this.props.competitionTimeSlots.allrefernceData.length > 0) {
             this.props.getCompetitionWithTimeSlots(yearId, storedCompetitionId);
-            // }
         } else if (yearId) {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
             this.setState({
@@ -91,7 +89,7 @@ class CompetitionCourtAndTimesAssign extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
+
         }
     }
 
@@ -527,9 +525,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                     />
                 </div>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-view pb-4" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionVenueTimeslotsDayTimedelete")}>
+                    <div className="col-sm-2 delete-image-view pb-4" >
                         <a className="transfer-image-view">
-                            <span className="user-remove-btn">
+                            <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionVenueTimeslotsDayTimedelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span id={AppUniqueId.timeslotGenerationRemove_btn} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
@@ -1001,9 +999,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                         <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddTimeSlotBtn} className="input-heading-add-another" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, null, "addTimeSlotManualperVenue", venueIndex)}> + {AppConstants.add_TimeSlot}</span>
                     </div>
                     {data.length > 1 &&
-                        <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
+                        <div className="col-sm-2 delete-image-timeSlot-view" >
                             <a className="transfer-image-view">
-                                <span className="user-remove-btn">
+                                <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
                                     <i className="fa fa-trash-o" aria-hidden="true" />
                                 </span>
                                 <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
@@ -1097,9 +1095,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </Select>
                 </Form.Item>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-timeSlot-view pt-3" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
+                    <div className="col-sm-2 delete-image-timeSlot-view pt-3" >
                         <a className="transfer-image-view">
-                            <span className="user-remove-btn">
+                            <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
@@ -1164,9 +1162,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </Select>
                 </Form.Item>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-timeSlot-view pt-2" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
+                    <div className="col-sm-2 delete-image-timeSlot-view pt-2" >
                         <a className="transfer-image-view">
-                            <span className="user-remove-btn">
+                            <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
@@ -1321,9 +1319,9 @@ class CompetitionCourtAndTimesAssign extends Component {
                     <span className="input-heading-add-another" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, null, "addTimeSlotManual")}> + {AppConstants.add_TimeSlot}</span>
                 </div>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-timeSlot-view" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotManualdelete")}>
+                    <div className="col-sm-2 delete-image-timeSlot-view" >
                         <a className="transfer-image-view">
-                            <span className="user-remove-btn">
+                            <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotManualdelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>

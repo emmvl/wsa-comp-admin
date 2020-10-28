@@ -71,7 +71,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
             tooltipVisibleDelete: false,
             isQuickCompetition: false,
             onNextClicked: false,
-            addOrRemoveVenues: false
+            addOrRemoveVenues: false,
+            finalTypeRefId: null
         };
 
         this.formRef = React.createRef();
@@ -94,6 +95,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 competitionStatus: storedCompetitionStatus,
                 getDataLoading: true,
                 isQuickCompetition: quickComp != undefined,
+                finalTypeRefId: storedfinalTypeRefId
             })
             this.props.venueConstraintListAction(yearId, storedCompetitionId, 1)
         } else {
@@ -104,7 +106,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 })
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, "own_competition")
-                setOwnCompetitionYear(1)
+                // setOwnCompetitionYear(1)
             }
         }
         // this.setState({ loading: false })
@@ -142,6 +144,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         firstTimeCompId: competitionId,
                         competitionStatus: statusRefId,
                         isQuickCompetition: quickComp != undefined,
+                        finalTypeRefId: finalTypeRefId
                     });
                 }
             }
@@ -302,8 +305,8 @@ class CompetitionVenueTimesPrioritisation extends Component {
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
         setOwn_CompetitionFinalRefId(undefined)
-        this.setState({ yearRefId: yearId, firstTimeCompId: null, competitionStatus: 0 })
-        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition")
+        this.setState({ yearRefId: yearId, firstTimeCompId: null, competitionStatus: 0, finalTypeRefId: null, })
+        this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, "own_competition",)
     }
 
     onCompetitionClick(competitionId) {
@@ -319,6 +322,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
             firstTimeCompId: competitionId,
             competitionStatus: statusRefId,
             isQuickCompetition: quickComp != undefined,
+            finalTypeRefId: finalTypeRefId,
         })
         this.props.clearVenueTimesDataAction(competitionId)
 
@@ -423,12 +427,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     </div>
                     <div
                         className="col-sm-2 delete-image-view pb-4"
-                        onClick={() => this.props.removePrefencesObjectAction(index, item, 'nonPlayingDates')}
+
                     >
-                        <span className="user-remove-btn">
+                        <span className="user-remove-btn" onClick={() => this.props.removePrefencesObjectAction(index, item, 'nonPlayingDates')}>
                             <i className="fa fa-trash-o" aria-hidden="true" />
                         </span>
-                        <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">
+                        <span className="user-remove-text mr-0 mb-1">
                             {AppConstants.remove}
                         </span>
                     </div>
@@ -553,12 +557,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
 
                     <div
                         className="col-sm-2 delete-image-view pb-4"
-                        onClick={() => disabledStatus == false && this.removePreferencesObjectAction(index, item)}
+
                     >
-                        <span className="user-remove-btn">
+                        <span className="user-remove-btn" onClick={() => disabledStatus == false && this.removePreferencesObjectAction(index, item)}>
                             <i className="fa fa-trash-o" aria-hidden="true" />
                         </span>
-                        <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                        <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
                     </div>
                 </div>
             </div>
@@ -626,6 +630,21 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 </div>
             </div>
         )
+    }
+
+
+    getReferenceTitle = (ItemArr) => {
+        console.log(ItemArr)
+        if (ItemArr.name == "EVEN_GRADES" && this.state.finalTypeRefId == 2) {
+            return AppConstants.pools
+        }
+        else if (ItemArr.name == "ALLOCATE_GRADES" && this.state.finalTypeRefId == 2) {
+            return AppConstants.pools
+        }
+        else {
+            return ItemArr.description
+        }
+
     }
 
     homeTeamRotationView() {
@@ -769,7 +788,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                                 key={'evenRotation_' + item.id}
                                                 value={item.id}
                                             >
-                                                {item.description}
+                                                {this.getReferenceTitle(item)}
                                             </Radio>
                                         ))}
                                     </Radio.Group>
@@ -790,7 +809,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                                 key={'evenRotation_' + item.id}
                                                 value={item.id}
                                             >
-                                                {item.description}
+                                                {this.getReferenceTitle(item)}
                                             </Radio>
                                         ))}
                                     </Radio.Group>
@@ -954,12 +973,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     <div className="fluid-width comp-venue-time-inside-container-view" style={{ marginBottom: '20px' }}>
                         <div
                             className="col-sm delete-image-view pb-4"
-                            onClick={() => this.removeDetail(index, "matchPreference")}
+
                         >
-                            <span className="user-remove-btn">
+                            <span className="user-remove-btn" onClick={() => this.removeDetail(index, "matchPreference")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
-                            <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">
+                            <span className="user-remove-text mr-0 mb-1">
                                 {AppConstants.remove}
                             </span>
                         </div>
@@ -1143,12 +1162,12 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             >
                                 <div
                                     className="col-sm delete-image-view pb-4"
-                                    onClick={() => this.removeDetail(index, "lockedDraws")}
+
                                 >
-                                    <span className="user-remove-btn">
+                                    <span className="user-remove-btn" onClick={() => this.removeDetail(index, "lockedDraws")}>
                                         <i className="fa fa-trash-o" aria-hidden="true" />
                                     </span>
-                                    <span style={{ cursor: 'pointer' }} className="user-remove-text mr-0 mb-1">
+                                    <span className="user-remove-text mr-0 mb-1">
                                         {AppConstants.remove}
                                     </span>
                                 </div>

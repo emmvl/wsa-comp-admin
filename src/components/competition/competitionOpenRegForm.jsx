@@ -500,7 +500,7 @@ class CompetitionOpenRegForm extends Component {
                 });
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-                setOwnCompetitionYear(1)
+                // setOwnCompetitionYear(1)
             }
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')

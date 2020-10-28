@@ -21,7 +21,7 @@ import Loader from '../../customComponents/loader';
 import history from "../../util/history";
 import { getOrganisationData } from "../../util/sessionStorage";
 import moment from "moment"
-import { getUserRoleId } from '../../util/permissions'
+import { getUserRoleId, getCurrentYear } from '../../util/permissions'
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -269,7 +269,7 @@ class HomeDashboard extends Component {
         let userOrganisation = this.props.userState.getUserOrganisation
         if (this.state.userCountLoading && this.props.appState.onLoad == false) {
             if (yearList.length > 0) {
-                let yearRefId = yearList[0].id
+                let yearRefId = getCurrentYear(yearList)
 
                 if (this.props.homeDashboardState.userCount == null) {
                     this.props.getUserCount(yearRefId)

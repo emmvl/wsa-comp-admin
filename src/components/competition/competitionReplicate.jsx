@@ -44,11 +44,11 @@ class CompetitionReplicate extends Component {
     async componentDidUpdate(nextProps) {
         try {
             if (!this.props.competitionDashboardState.replicateSaveOnLoad && this.state.saveLoad) {
-                this.setState({saveLoad: false})
+                this.setState({ saveLoad: false })
                 if (this.props.competitionDashboardState.status == 4) {
                     message.error(this.props.competitionDashboardState.replicateSaveErrorMessage);
                 } else {
-                    
+
                     await setOwn_competition(this.props.competitionDashboardState.competitionId);
                     await setOwnCompetitionYear(this.props.competitionDashboardState.yearRefId);
 
@@ -68,7 +68,7 @@ class CompetitionReplicate extends Component {
     getRefernce = () => {
         try {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
+            // setOwnCompetitionYear(1)
         } catch (ex) {
             console.log("Error in referenceApiCalls::" + ex);
         }
@@ -173,9 +173,9 @@ class CompetitionReplicate extends Component {
                     return;
                 }
             }
-           
+
             this.props.replicateSaveAction(replicateSave);
-            this.setState({ saveLoad: true});
+            this.setState({ saveLoad: true });
         } catch (ex) {
             console.log("Error in saveReplicate::" + ex)
         }
