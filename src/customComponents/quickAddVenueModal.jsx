@@ -20,7 +20,7 @@ class CompetitionVenueModal extends React.Component {
     componentDidUpdate() {
         if (this.props.venueVisible === true && this.state.competitionState === true) {
             this.setState({ competitionState: false })
-            this.setFieldValues()
+            this.valueupdate()
         }
         if (this.props.venueVisible === false && this.state.competitionState === false) {
             this.setState({ competitionState: true })
@@ -43,6 +43,12 @@ class CompetitionVenueModal extends React.Component {
         }
     }
 
+    valueupdate = () => {
+        setTimeout(() => {
+            this.setFieldValues()
+        }, 500);
+    }
+
     render() {
         const { modalTitle, handleVenueOK, onVenueCancel, onVenueBack, appState, onSelectValues, handleSearch, handleVenueNext } = this.props
         return (
@@ -62,7 +68,7 @@ class CompetitionVenueModal extends React.Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.onOKsubmit}
-                        onFinishFailed={({errorFields}) => this.formRef.current.scrollToField(errorFields[0].name)}
+                        onFinishFailed={({ errorFields }) => this.formRef.current.scrollToField(errorFields[0].name)}
                         noValidate="noValidate"
                     >
                         <div className="inside-container-view mt-3">

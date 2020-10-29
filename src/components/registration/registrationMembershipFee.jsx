@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { getCurrentYear } from 'util/permissions'
 import {
     Layout,
     Input,
@@ -154,7 +155,8 @@ class RegistrationMembershipFee extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
+            onYearLoad: false,
             value: 1,
             discountType: 0,
             membershipTabKey: "1",
@@ -206,10 +208,20 @@ class RegistrationMembershipFee extends Component {
                 history.push('/registrationMembershipList');
             }
         }
+        if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
+            if (this.props.appState.yearList.length > 0) {
+                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                this.setState({
+                    onYearLoad: false
+                })
+                this.setFieldDecoratorValues()
+            }
+        }
     }
 
     apiCalls = (productId) => {
         this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.setState({ onYearLoad: true })
         this.props.getProductValidityListAction()
         if (productId == null) {
             this.props.regGetDefaultMembershipProductTypesAction()
@@ -257,10 +269,10 @@ class RegistrationMembershipFee extends Component {
         } else if (this.state.membershipTabKey == "2") {
             let finalMembershipFeesData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductFeesTableData));
             finalMembershipFeesData.membershipFees.map((item) => {
-                    delete item['membershipProductName']
-                    delete item['membershipProductTypeRefName']
-                    return item
-                }
+                delete item['membershipProductName']
+                delete item['membershipProductTypeRefName']
+                return item
+            }
             )
             this.props.regSaveMembershipProductFeesAction(finalMembershipFeesData)
             this.setState({ loading: true })
@@ -332,7 +344,7 @@ class RegistrationMembershipFee extends Component {
         let membershipProductData = allData !== null ? allData.membershipproduct : []
         // this.formRef.current.validateFields((err, values) => console.log("values266", Object.keys(values)))
         this.formRef.current.setFieldsValue({
-            yearRefId: membershipProductData.yearRefId ? membershipProductData.yearRefId : 1,
+            yearRefId: membershipProductData.yearRefId ? membershipProductData.yearRefId : this.props.appState.yearList.length > 0 ? getCurrentYear(this.props.appState.yearList) : null,
             membershipProductName: membershipProductData.membershipProductName,
             validityRefId: membershipProductData.ValidityRefId ? membershipProductData.ValidityRefId : 2,
         });
@@ -524,9 +536,9 @@ class RegistrationMembershipFee extends Component {
                                     className="col-sm transfer-image-view pt-4"
                                     onClick={() => !this.state.membershipIsUsed ? this.props.removeCustomMembershipTypeAction(index) : null}
                                 >
-                                        <span className="user-remove-btn">
-                                            <i className="fa fa-trash-o" aria-hidden="true" />
-                                        </span>
+                                    <span className="user-remove-btn">
+                                        <i className="fa fa-trash-o" aria-hidden="true" />
+                                    </span>
                                     <span className="user-remove-text mr-0">{AppConstants.remove}</span>
                                 </div>
                             )}
@@ -639,7 +651,7 @@ class RegistrationMembershipFee extends Component {
                                 {item.isAllow && item.isPlaying == 1 && (
                                     <div className="fluid-width" style={{ marginTop: "10px" }}>
                                         <div className="row">
-                                            <div className="col-sm" style={{ marginLeft: 25}}>
+                                            <div className="col-sm" style={{ marginLeft: 25 }}>
                                                 <Form.Item
                                                     name={`allowTeamRegistrationTypeRefId${index}`}
                                                     rules={[{ required: true, message: ValidationConstants.playerTypeRequired }]}
@@ -1340,7 +1352,7 @@ class RegistrationMembershipFee extends Component {
                     </div>
                 ))}
                 <span className="input-heading-add-another"
-                       onClick={() => !this.state.membershipIsUsed ? this.addRemoveDiscount("add", -1) : null}>
+                    onClick={() => !this.state.membershipIsUsed ? this.addRemoveDiscount("add", -1) : null}>
                     + {AppConstants.addDiscount}
                 </span>
             </div>
@@ -1455,7 +1467,7 @@ function mapDispatchToProps(dispatch) {
         membershipFeesTableInputChangeAction, getCommonDiscountTypeTypeAction, membershipProductDiscountTypesAction,
         addNewMembershipTypeAction, addRemoveDiscountAction, updatedDiscountDataAction,
         membershipFeesApplyRadioAction, onChangeAgeCheckBoxAction, updatedMembershipTypeDataAction,
-        removeCustomMembershipTypeAction, regMembershipListDeleteAction, getAllowTeamRegistrationTypeAction,membershipPaymentOptionAction
+        removeCustomMembershipTypeAction, regMembershipListDeleteAction, getAllowTeamRegistrationTypeAction, membershipPaymentOptionAction
     }, dispatch)
 }
 

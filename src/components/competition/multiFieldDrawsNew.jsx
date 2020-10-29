@@ -1680,14 +1680,14 @@ class MultifieldDrawsNew extends Component {
     }
 
     reGenerateDraw = () => {
-        let competitionStatus = getOwn_competitionStatus();
-        if (competitionStatus == 2) {
-            this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
-            this.setState({ roundLoad: true });
-        } else {
+        // let competitionStatus = getOwn_competitionStatus();
+        // if (competitionStatus == 2) {
+        //     this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+        //     this.setState({ roundLoad: true });
+        // } else {
             this.setState({ regenerateDrawExceptionModalVisible: true });
             //this.callGenerateDraw();
-        }
+        //}
     };
 
     check = () => {
@@ -1742,6 +1742,7 @@ class MultifieldDrawsNew extends Component {
                     >
                         <Radio style={{ fontSize: '14px' }} value={1}>{AppConstants.retainException}</Radio>
                         <Radio style={{ fontSize: '14px' }} value={2}>{AppConstants.removeException}</Radio>
+						<Radio style={{fontSize: '14px'}} value={3}>{AppConstants.useRound1Template}</Radio>
                     </Radio.Group>
                 </Modal>
             )

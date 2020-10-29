@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Button, Table, Select, Input, Modal, Checkbox } from "antd";
+import { Layout, Button, Table, Select, Input, Modal, Checkbox, Pagination } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 import AppConstants from "themes/appConstants";
@@ -10,6 +10,7 @@ import { isArrayNotEmpty } from "util/helpers";
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
+import { getUmpirePaymentData, updateUmpirePaymentData } from '../../store/actions/umpireAction/umpirePaymentAction'
 
 import "./umpire.css";
 
@@ -29,15 +30,15 @@ const columns = [
         title: "First Name",
         dataIndex: "firstName",
         key: "First Name",
-        sorter: (a, b) => tableSort(a, b, "firstName"),
-        render: (firstName) => <span className="input-heading-add-another pt-0">{firstName}</span>
+        sorter: true,
+        render: (firstName, recod) => <span className="input-heading-add-another pt-0">{recod.user && recod.user.firstName}</span>
     },
     {
         title: "Last Name",
         dataIndex: "lastName",
         key: "Last Name",
-        sorter: (a, b) => tableSort(a, b, "lastName"),
-        render: (lastName) => <span className="input-heading-add-another pt-0">{lastName}</span>
+        sorter: true,
+        render: (lastName, recod) => <span className="input-heading-add-another pt-0">{recod.user && recod.user.lastName}</span>
     },
     {
         title: "Match ID",
@@ -54,36 +55,25 @@ const columns = [
     },
     {
         title: "Make Payment",
-        dataIndex: "makePayment",
-        key: "makePayment",
-        sorter: (a, b) => tableSort(a, b, "makePayment"),
+        dataIndex: "status",
+        key: "status",
+        sorter: (a, b) => tableSort(a, b, "status"),
+        render: (status) => <span>{status ? status : 'Unpaid'}</span>
     },
     {
         title: "Pay",
-        dataIndex: "pay",
-        key: "pay",
-        render: () => <Checkbox className="single-checkbox" defaultChecked={false} />
+        dataIndex: "paymentStatus",
+        key: "paymentStatus",
+        render: (paymentStatus, record, index) => <Checkbox
+            className="single-checkbox"
+            checked={paymentStatus ? paymentStatus : false}
+        // onChange={(e) => this_obj.props.updateUmpirePaymentData({ data: e.target.checked, key: "paymentStatus", index: index })}
+        >
+        </Checkbox>
     }
-];
+]
 
-const data = [
-    {
-        firstName: "Umpire",
-        lastName: "One",
-        umpireId: "1342",
-        matchId: "2006",
-        verifiedBy: "",
-        makePayment: "Paid",
-    },
-    {
-        firstName: "Umpire",
-        lastName: "Two",
-        umpireId: "1553",
-        matchId: "2020",
-        verifiedBy: "",
-        makePayment: "Unpaid",
-    }
-];
+const data = []
 
 class UmpirePayments extends Component {
     constructor(props) {
@@ -113,29 +103,91 @@ class UmpirePayments extends Component {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
                 let compData = compList.length > 0 && compList[0]
+
+                const body =
+                {
+                    paging: {
+                        offset: 0,
+                        limit: 10,
+                    },
+                }
+
+                // this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body })
                 this.setState({ selectedComp: firstComp, loading: false })
             }
         }
     }
 
-    contentView = () => (
-        <div className="comp-dash-table-view mt-4">
-            <div className="table-responsive home-dash-table-view">
-                <Table
-                    // loading={this.props.umpireRoasterdState.onLoad}
-                    className="home-dashboard-table"
-                    columns={columns}
-                    dataSource={data}
-                    pagination={false}
-                    rowKey={(record, index) => "umpirePayments" + record.matchId + index}
-                />
+    handlePageChange = (page) => {
+        let { sortBy, sortOrder } = this.state
+        let offsetData = page ? 10 * (page - 1) : 0;
+        this.setState({ offsetData });
+
+        const body = {
+            paging: {
+                offset: offsetData,
+                limit: 10,
+            },
+        };
+        // this.props.getUmpirePaymentData({ compId: this.state.selectedComp, pagingBody: body })
+    }
+
+
+
+    contentView = () => {
+        const { umpirePaymentList, onLoad, totalCount, currentPage } = this.props.umpirePaymentState
+        return (
+            <div className="comp-dash-table-view mt-4">
+                <div className="table-responsive home-dash-table-view">
+                    <Table
+                        loading={onLoad}
+                        className="home-dashboard-table"
+                        columns={columns}
+                        dataSource={umpirePaymentList}
+                        pagination={false}
+                        rowKey={(record, index) => "umpirePayments" + record.matchId + index}
+                    />
+                </div>
+
+                <div className="comp-dashboard-botton-view-mobile">
+                    <div
+                        className="comp-dashboard-botton-view-mobile"
+                        style={{
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "flex-end",
+                        }}>
+                    </div>
+
+                    <div className="d-flex justify-content-end">
+                        <Pagination
+                            className="antd-pagination"
+                            total={totalCount}
+                            defaultPageSize={10}
+                            onChange={this.handlePageChange}
+                            current={currentPage}
+                        />
+                    </div>
+                </div>
             </div>
-        </div>
-    );
+        )
+    }
 
     onChangeComp = (compID) => {
         let selectedComp = compID.comp;
+        const body =
+        {
+            paging: {
+                offset: 0,
+                limit: 10,
+            },
+        }
+
+        // this.props.getUmpirePaymentData({ compId: selectedComp, pagingBody: body })
         this.setState({ selectedComp });
+
     };
 
     showConfirm = () => {
@@ -186,8 +238,8 @@ class UmpirePayments extends Component {
                                         prefix={
                                             <SearchOutlined
                                                 style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                                // onClick={this.onClickSearchIcon}
-                                           />
+                                            // onClick={this.onClickSearchIcon}
+                                            />
                                         }
                                         allowClear
                                     />
@@ -201,27 +253,13 @@ class UmpirePayments extends Component {
     );
 
     dropdownView = () => {
+        const { paymentStatus } = this.props.umpirePaymentState
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
 
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width">
                     <div className="row">
-                        {/* year List */}
-                        {/* <div className="reg-col">
-                            <div className="reg-filter-col-cont">
-                                <span className="year-select-heading">{AppConstants.year}:</span>
-                                <Select
-                                    className="year-select reg-filter-select1"
-                                    // style={{ minWidth: 200 }}
-                                    value={this.state.year}
-                                >
-                                    <Option value="2019">2019</Option>
-                                    <Option value="2020">2020</Option>
-                                </Select>
-                            </div>
-                        </div> */}
-
                         {/* competition List */}
                         <div className="col-sm-3">
                             <div className="reg-filter-col-cont">
@@ -251,15 +289,13 @@ class UmpirePayments extends Component {
                                     alignContent: "center"
                                 }}
                             >
-                                {/* <Button type="primary" className="primary-add-comp-form umpire-btn-width">
-                                    {AppConstants.bulkPayment}
-                                </Button> */}
-
-                                {/* <div className="single-checkbox-width"> */}
-                                <Checkbox className="single-checkbox" defaultChecked={false}>
-                                    All
+                                <Checkbox
+                                    className="single-checkbox"
+                                    checked={paymentStatus}
+                                // onChange={(e) => this.props.updateUmpirePaymentData({ data: e.target.checked, key: "allCheckBox" })}
+                                >
+                                    {"All"}
                                 </Checkbox>
-                                {/* </div> */}
                             </div>
                         </div>
                     </div>
@@ -320,13 +356,16 @@ class UmpirePayments extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        umpireCompetitionListAction
+        umpireCompetitionListAction,
+        getUmpirePaymentData,
+        updateUmpirePaymentData
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        umpireCompetitionState: state.UmpireCompetitionState
+        umpireCompetitionState: state.UmpireCompetitionState,
+        umpirePaymentState: state.UmpirePaymentState
     };
 }
 

@@ -80,6 +80,8 @@ import UmpirePaymentSettingState from "./umpireReducer/umpirePaymentSettingReduc
 import CompetitionMultiDrawsState from "./competitionManagementReducer/competitionMultiDrawsReducer";
 import liveScorePlayerMinuteTrackingState from "./liveScoreReducer/liveScorePlayerMinuteTrackingReducer";
 
+import UmpirePaymentState from './umpireReducer/umpirePaymentReducer'
+
 const rootReducer = combineReducers({
   LoginState,
   MenuNavigationState,
@@ -150,6 +152,7 @@ const rootReducer = combineReducers({
   liveScoreGameAttendanceState,
   CompetitionMultiDrawsState,
   liveScorePlayerMinuteTrackingState,
+  UmpirePaymentState
 });
 
 export default rootReducer;
