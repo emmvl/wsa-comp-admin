@@ -1404,6 +1404,14 @@ let LiveScoreAxiosApi = {
         return Method.dataPost(url, token, payload);
     },
 
+    umpirePaymentList(data) {
+        const { compId, pagingBody } = data;
+
+        let url = `/matchUmpire/payments?competitionId=${compId}`;
+
+        return Method.dataPost(url, token, pagingBody);
+    },
+
 };
 
 const Method = {

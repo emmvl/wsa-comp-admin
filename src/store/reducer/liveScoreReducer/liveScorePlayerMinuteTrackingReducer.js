@@ -421,7 +421,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
         }
       }
 
-      console.log(action, 'API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD', state.trackResultData)
+      // console.log(action, 'API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD', state.trackResultData)
       return {
         ...state,
       };
