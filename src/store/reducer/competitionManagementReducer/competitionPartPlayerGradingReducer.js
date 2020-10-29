@@ -406,7 +406,7 @@ function CompetitionPartPlayerGrading(state = initialState, action) {
             return {
                 ...state,
                 onLoad: false,
-                playerCommentList: action.result,
+                playerCommentList: action.result?action.result:[],
                 commentLoad: false
             }
 

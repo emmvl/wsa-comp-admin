@@ -18,37 +18,36 @@ class DivisionGradeModal extends React.Component {
     componentDidUpdate() {
         if (this.props.visible === true && this.state.divisionState === true) {
             this.setState({ divisionState: false })
-            this.setFieldValues()
+            this.valueupdate()
         }
         if (this.props.visible === false && this.state.divisionState === false) {
             this.setState({ divisionState: true })
-            this.setFieldValues()
         }
     }
 
     setFieldValues = () => {
-        // if (this.formRef.current) {
-        let division = this.props.division
-        if (division.length > 0) {
-            division.forEach((item, index) => {
-                let division = `division${index}`
-                this.formRef.current.setFieldsValue({
-                    [division]: item.divisionName,
-                })
-                let grade = item.grades
-                if (grade.length > 0) {
-                    grade.forEach((gradeItem, gradeIndex) => {
-                        let grade = `grade${index}${gradeIndex}`
-                        let team = `team${index}${gradeIndex}`
-                        this.formRef.current.setFieldsValue({
-                            [grade]: gradeItem.gradeName,
-                            [team]: gradeItem.noOfTeams
-                        })
+        if (this.formRef.current) {
+            let division = this.props.division
+            if (division.length > 0) {
+                division.forEach((item, index) => {
+                    let division = `division${index}`
+                    this.formRef.current.setFieldsValue({
+                        [division]: item.divisionName,
                     })
-                }
-            })
+                    let grade = item.grades
+                    if (grade.length > 0) {
+                        grade.forEach((gradeItem, gradeIndex) => {
+                            let grade = `grade${index}${gradeIndex}`
+                            let team = `team${index}${gradeIndex}`
+                            this.formRef.current.setFieldsValue({
+                                [grade]: gradeItem.gradeName,
+                                [team]: gradeItem.noOfTeams
+                            })
+                        })
+                    }
+                })
+            }
         }
-        // }
     }
 
     valueupdate = () => {

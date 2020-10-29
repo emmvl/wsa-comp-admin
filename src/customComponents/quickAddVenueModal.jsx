@@ -20,7 +20,7 @@ class CompetitionVenueModal extends React.Component {
     componentDidUpdate() {
         if (this.props.venueVisible === true && this.state.competitionState === true) {
             this.setState({ competitionState: false })
-            this.setFieldValues()
+            this.valueupdate()
         }
         if (this.props.venueVisible === false && this.state.competitionState === false) {
             this.setState({ competitionState: true })
@@ -28,11 +28,11 @@ class CompetitionVenueModal extends React.Component {
     }
 
     setFieldValues = () => {
-        // if (this.formRef.current) {
-        this.formRef.current.setFieldsValue({
-            'selectedVenues': this.props.quickCompetitionState.postSelectedVenues,
-        });
-        // }
+        if (this.formRef.current) {
+            this.formRef.current.setFieldsValue({
+                'selectedVenues': this.props.quickCompetitionState.postSelectedVenues,
+            });
+        }
     }
 
     onOKsubmit = (e) => {
@@ -41,6 +41,12 @@ class CompetitionVenueModal extends React.Component {
         } else if (this.state.buttonClicked === "next") {
             this.props.handleVenueNext()
         }
+    }
+
+    valueupdate = () => {
+        setTimeout(() => {
+            this.setFieldValues()
+        }, 500);
     }
 
     render() {
