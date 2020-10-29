@@ -17,10 +17,10 @@ class CompetitionVenueModal extends React.Component {
         this.formRef = React.createRef();
     }
 
-    async componentDidUpdate() {
-        if (this.props.venueVisible === true && this.state.competitionState === true) {
+    componentDidUpdate() {
+        if (this.props.venueVisible === true && this.state.competitionState === true && this.formRef.current) {
             this.setState({ competitionState: false })
-            await this.setFieldValues()
+            this.setFieldValues()
         }
         if (this.props.venueVisible === false && this.state.competitionState === false) {
             this.setState({ competitionState: true })
@@ -28,11 +28,11 @@ class CompetitionVenueModal extends React.Component {
     }
 
     setFieldValues = () => {
-        if (this.formRef.current) {
-            this.formRef.current.setFieldsValue({
-                'selectedVenues': this.props.quickCompetitionState.postSelectedVenues,
-            });
-        }
+        // if (this.formRef.current) {
+        this.formRef.current.setFieldsValue({
+            'selectedVenues': this.props.quickCompetitionState.postSelectedVenues,
+        });
+        // }
     }
 
     onOKsubmit = (e) => {
@@ -62,7 +62,7 @@ class CompetitionVenueModal extends React.Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.onOKsubmit}
-                        onFinishFailed={({errorFields}) => this.formRef.current.scrollToField(errorFields[0].name)}
+                        onFinishFailed={({ errorFields }) => this.formRef.current.scrollToField(errorFields[0].name)}
                         noValidate="noValidate"
                     >
                         <div className="inside-container-view mt-3">

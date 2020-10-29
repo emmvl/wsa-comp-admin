@@ -15,10 +15,10 @@ class DivisionGradeModal extends React.Component {
         this.formRef = React.createRef();
     }
 
-    async componentDidUpdate() {
-        if (this.props.visible === true && this.state.divisionState === true) {
+    componentDidUpdate() {
+        if (this.props.visible === true && this.state.divisionState === true && this.formRef.current) {
             this.setState({ divisionState: false })
-            await this.setFieldValues()
+            this.setFieldValues()
         }
         if (this.props.visible === false && this.state.divisionState === false) {
             this.setState({ divisionState: true })
@@ -27,29 +27,29 @@ class DivisionGradeModal extends React.Component {
     }
 
     setFieldValues = () => {
-        if (this.formRef.current) {
-            let division = this.props.division
-            console.log(division)
-            if (division.length > 0) {
-                division.forEach((item, index) => {
-                    let division = `division${index}`
-                    this.formRef.current.setFieldsValue({
-                        [division]: item.divisionName,
-                    })
-                    let grade = item.grades
-                    if (grade.length > 0) {
-                        grade.forEach((gradeItem, gradeIndex) => {
-                            let grade = `grade${index}${gradeIndex}`
-                            let team = `team${index}${gradeIndex}`
-                            this.formRef.current.setFieldsValue({
-                                [grade]: gradeItem.gradeName,
-                                [team]: gradeItem.noOfTeams
-                            })
-                        })
-                    }
+        // if (this.formRef.current) {
+        let division = this.props.division
+        console.log(division)
+        if (division.length > 0) {
+            division.forEach((item, index) => {
+                let division = `division${index}`
+                this.formRef.current.setFieldsValue({
+                    [division]: item.divisionName,
                 })
-            }
+                let grade = item.grades
+                if (grade.length > 0) {
+                    grade.forEach((gradeItem, gradeIndex) => {
+                        let grade = `grade${index}${gradeIndex}`
+                        let team = `team${index}${gradeIndex}`
+                        this.formRef.current.setFieldsValue({
+                            [grade]: gradeItem.gradeName,
+                            [team]: gradeItem.noOfTeams
+                        })
+                    })
+                }
+            })
         }
+        // }
     }
 
     valueupdate = () => {
