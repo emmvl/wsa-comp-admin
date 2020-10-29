@@ -244,9 +244,9 @@ class RegistrationChangeReview extends Component {
     getOrgRefName = (orgRefTypeId) => {
         let orgTypeRefName;
         if (orgRefTypeId == 1) {
-            orgTypeRefName = "Competition";
-        } else if (orgRefTypeId == 2) {
             orgTypeRefName = "Affiliate";
+        } else if (orgRefTypeId == 2) {
+            orgTypeRefName = "Competition";
         } else if (orgRefTypeId == 3) {
             orgTypeRefName = "Membership";
         }
@@ -282,6 +282,7 @@ class RegistrationChangeReview extends Component {
         let isFromOrg = 1;
         if (regChangeReviewData.regChangeTypeRefId == 2) {
             if (regChangeReviewData.isShowButton == 2) {
+                reviewSaveData["refundTypeRefId"] = 1;
                 isFromOrg = 2;
             }
         }
