@@ -18,7 +18,7 @@ class CompetitionVenueModal extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.props.venueVisible === true && this.state.competitionState === true && this.formRef.current) {
+        if (this.props.venueVisible === true && this.state.competitionState === true) {
             this.setState({ competitionState: false })
             this.setFieldValues()
         }

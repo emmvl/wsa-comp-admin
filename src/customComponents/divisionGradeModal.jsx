@@ -16,7 +16,7 @@ class DivisionGradeModal extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.props.visible === true && this.state.divisionState === true && this.formRef.current) {
+        if (this.props.visible === true && this.state.divisionState === true) {
             this.setState({ divisionState: false })
             this.setFieldValues()
         }
@@ -29,7 +29,6 @@ class DivisionGradeModal extends React.Component {
     setFieldValues = () => {
         // if (this.formRef.current) {
         let division = this.props.division
-        console.log(division)
         if (division.length > 0) {
             division.forEach((item, index) => {
                 let division = `division${index}`

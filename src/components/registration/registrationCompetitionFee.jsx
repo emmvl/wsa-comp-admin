@@ -3060,7 +3060,6 @@ class RegistrationCompetitionFee extends Component {
         if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
                 let mainYearRefId = getCurrentYear(this.props.appState.yearList)
-                console.log('called')
                 this.props.add_editcompetitionFeeDeatils(mainYearRefId, "yearRefId")
                 this.setState({
                     onYearLoad: false
