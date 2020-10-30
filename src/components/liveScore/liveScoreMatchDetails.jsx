@@ -812,6 +812,8 @@ class LiveScoreMatchDetails extends Component {
             periodDuration = (match.matchDuration * 60) / 2
             positionDuration = periodDuration / noOfPosition
         }
+
+        console.log(match, 'noOfPosition', periodDuration)
         if (match.type === 'TWO_HALVES') {
             if (pt && gtt && art !== 'MINUTE') {
                 const columns = [
@@ -2833,6 +2835,21 @@ class LiveScoreMatchDetails extends Component {
                     }
                 }
                 this.props.liveScorePlayerMinuteRecordAction(finalArray, this.state.matchId)
+            }
+
+        } else if (pt && gtt && art != 'MINUTE') {
+
+            if (filteredData.length > 0) {
+
+                for (let i in filteredData) {
+                    if (filteredData[i].playedEndPeriod === true || filteredData[i].playedFullPeriod === true) {
+
+                        // finalArray.push(filteredData[i])
+                    } else {
+                        filteredData[i]['duration'] = Math.round(filteredData[i]['duration'] / 2)
+                    }
+                }
+                this.props.liveScorePlayerMinuteRecordAction(filteredData, this.state.matchId)
             }
 
         } else {
