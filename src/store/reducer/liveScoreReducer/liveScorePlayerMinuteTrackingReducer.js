@@ -15,7 +15,8 @@ const initialState = {
   positionList: [],
   positionData: [],
   positionDuration: null,
-  updateDurationData: []
+  updateDurationData: [],
+  tickBox: false
 };
 
 function getFilterTrackData(trackData) {
@@ -72,6 +73,14 @@ function getFilterPositionData(positionData) {
       }
     }
   }
+
+  let obj = {
+    "id": null,
+    "isPlaying": false,
+    "isVisible": false,
+    "name": null,
+  }
+  positionArray.push(obj)
   return positionArray
 }
 
@@ -143,14 +152,14 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
         ...state,
         onLoad: true,
         status: action.status,
-        recordLoad: false
+        recordLoad: false,
       };
 
     case ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_TRACKING_LIST_SUCCESS:
       let trackResult = getFilterTrackData(action.result.data)
       state.trackResultData = trackResult
-      let postionArr = getPositionArry(action.result.data, state.positionList)
-      state.positionList = postionArr
+      // let postionArr = getPositionArry(action.result.data, state.positionList)
+      // state.positionList = postionArr
       return {
         ...state,
         onLoad: false,
@@ -217,8 +226,10 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
             positionDuration = noOfSelectedPosition.length > 0 ? periodDuration / noOfSelectedPosition.length : 0
 
             for (let i in trackDataRes) {
-              if (trackDataRes[i].playerId == playerId) {
+              if (trackDataRes[i].playerId == playerId && trackDataRes[i].playedFullPeriod == true) {
                 trackDataRes[i]['duration'] = Math.round(positionDuration)
+              } else if (trackDataRes[i].playerId == playerId && trackDataRes[i].playedFullPeriod == false) {
+                trackDataRes[i]['duration'] = Math.round(positionDuration) / 2
               }
             }
 
@@ -227,8 +238,10 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
             noOfSelectedPosition = getSelectedPosition(playerId, state.trackResultData, state.positionData)
             positionDuration = noOfSelectedPosition.length > 0 ? periodDuration / noOfSelectedPosition.length : 0
             for (let i in state.trackResultData) {
-              if (state.trackResultData[i].playerId == playerId) {
+              if (state.trackResultData[i].playerId == playerId && state.trackResultData[i].playedFullPeriod == true) {
                 state.trackResultData[i]['duration'] = Math.round(positionDuration)
+              } else if (state.trackResultData[i].playerId == playerId && state.trackResultData[i].playedFullPeriod == false) {
+                state.trackResultData[i]['duration'] = Math.round(positionDuration) / 2
               }
             }
             state.trackResultData[findData]['updatedBy'] = userId
@@ -236,6 +249,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
           }
         } else if (extraKey === 'checkBox') {
           state.playedCheckBox = selectedData
+          state.tickBox = selectedData
           if (findData === -1) {
             let trackObj = {
               "id": null,
@@ -260,7 +274,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
 
             for (let i in trackDataRes) {
               if (trackDataRes[i].playerId == playerId) {
-                trackDataRes[i]['duration'] = Math.round(positionDuration)
+                trackDataRes[i]['duration'] = selectedData ? Math.round(positionDuration) : Math.round(positionDuration) / 2
               }
             }
 
@@ -270,7 +284,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
 
             for (let i in state.trackResultData) {
               if (state.trackResultData[i].playerId == playerId) {
-                state.trackResultData[i]['duration'] = Math.round(positionDuration)
+                state.trackResultData[i]['duration'] = selectedData ? Math.round(positionDuration) : Math.round(positionDuration) / 2
               }
             }
 

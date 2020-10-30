@@ -222,13 +222,13 @@ class LiveScoreMatchDetails extends Component {
         let isLineUpEnable = null;
         this.props.getLiveScoreGamePositionsList();
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
-
+        let periodDuration = null
         if (isArrayNotEmpty(match)) {
             if (match.type === 'FOUR_QUARTERS') {
-                let periodDuration = (match.matchDuration * 60) / 4
+                periodDuration = (match.matchDuration * 60) / 4
                 this.setState({ periodDuration })
             } else {
-                let periodDuration = (match.matchDuration * 60) / 2
+                periodDuration = (match.matchDuration * 60) / 2
                 this.setState({ periodDuration })
             }
         }
@@ -832,7 +832,6 @@ class LiveScoreMatchDetails extends Component {
                                 width: 150,
                                 render: (p, row, index) => {
                                     let positionArray = this.getPositionIndex(row.playerId, 1)
-
                                     return (
                                         <>
                                             {positionArray.length > 0 ?
@@ -1399,7 +1398,6 @@ class LiveScoreMatchDetails extends Component {
                                 width: 150,
                                 render: (p, row, index) => {
                                     let positionArray = this.getPositionIndex(row.playerId, 1)
-
                                     return (
                                         <>
                                             {positionArray.length > 0 ?
@@ -2835,21 +2833,6 @@ class LiveScoreMatchDetails extends Component {
                     }
                 }
                 this.props.liveScorePlayerMinuteRecordAction(finalArray, this.state.matchId)
-            }
-
-        } else if (pt && gtt && art != 'MINUTE') {
-
-            if (filteredData.length > 0) {
-
-                for (let i in filteredData) {
-                    if (filteredData[i].playedEndPeriod === true || filteredData[i].playedFullPeriod === true) {
-
-                        // finalArray.push(filteredData[i])
-                    } else {
-                        filteredData[i]['duration'] = Math.round(filteredData[i]['duration'] / 2)
-                    }
-                }
-                this.props.liveScorePlayerMinuteRecordAction(filteredData, this.state.matchId)
             }
 
         } else {
