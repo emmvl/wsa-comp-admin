@@ -473,70 +473,71 @@ class CompetitionQuickCompetition extends Component {
                         </div>
                     </div>
                 </Header>
-
-                <div className="row">
-                    <div className="col-sm-2 pb-3">
-                        <span className="input-heading-add-another pt-0" onClick={() => this.visibleCompetitionModal()}>
-                            +{AppConstants.addNew}
-                        </span>
-                    </div>
-                </div>
-
                 <div className="row pb-3">
-                    <div className="col-sm-3 pb-3">
-                        <div
-                            style={{
-                                width: "fit-content",
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginRight: 50,
-                            }}
-                        >
-                            <span className="year-select-heading">{AppConstants.year}:</span>
-                            <Select
-                                name="yearRefId"
-                                className="year-select reg-filter-select-year ml-2"
-                                // style={{ width: 90 }}
-                                onChange={(yearRefId) => this.onYearChange(yearRefId)}
-                                value={this.state.yearRefId}
-                            >
-                                {quickCompetitionState.quick_CompetitionYearArr.map((item) => (
-                                    <Option key={'year_' + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                ))}
-                            </Select>
-                        </div>
-                    </div>
-                    <div className="col-sm-3 pb-3">
-                        <div
-                            style={{
-                                width: "fit-content",
-                                display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                marginRight: 50
-                            }}
-                        >
-                            <span className="year-select-heading">{AppConstants.competition}:</span>
-                            <Select
-                                name="competition"
-                                className="year-select reg-filter-select-competition ml-2"
-                                onChange={competitionId => this.onCompetitionChange(competitionId)}
-                                value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
-                            >
-                                {quickCompetitionState.quick_CompetitionArr.map(item => (
-                                    <Option
-                                        key={'competition_' + item.competitionId}
-                                        value={item.competitionId}
+                    <div className='col-sm-8'>
+                        <div className="row pb-3">
+                            <div className="col-sm-3 pb-3">
+                                <div
+                                    style={{
+                                        width: "fit-content",
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        marginRight: 50,
+                                    }}
+                                >
+                                    <span className="year-select-heading">{AppConstants.year}:</span>
+                                    <Select
+                                        name="yearRefId"
+                                        className="year-select reg-filter-select-year ml-2"
+                                        // style={{ width: 90 }}
+                                        onChange={(yearRefId) => this.onYearChange(yearRefId)}
+                                        value={this.state.yearRefId}
                                     >
-                                        {item.competitionName}
-                                    </Option>
-                                ))}
-                            </Select>
+                                        {quickCompetitionState.quick_CompetitionYearArr.map((item) => (
+                                            <Option key={'year_' + item.id} value={item.id}>
+                                                {item.description}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </div>
+                            </div>
+                            <div className="col-sm pb-3">
+                                <div
+                                    style={{
+                                        width: "fit-content",
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        alignItems: 'center',
+                                        marginRight: 50
+                                    }}
+                                >
+                                    <span className="year-select-heading">{AppConstants.competition}:</span>
+                                    <Select
+                                        name="competition"
+                                        className="year-select reg-filter-select-competition ml-2"
+                                        onChange={competitionId => this.onCompetitionChange(competitionId)}
+                                        value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
+                                    >
+                                        {quickCompetitionState.quick_CompetitionArr.map(item => (
+                                            <Option
+                                                key={'competition_' + item.competitionId}
+                                                value={item.competitionId}
+                                            >
+                                                {item.competitionName}
+                                            </Option>
+                                        ))}
+                                    </Select>
+                                </div>
+                            </div>
+                            <div className="col-sm ml-3 pb-3 d-flex justify-content-start">
+
+                                <Button className="open-reg-button save-draft-text" onClick={() => this.visibleCompetitionModal()} type="primary">+ {AppConstants.newCompetition}</Button>
+
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
                 <TimeSlotModal
@@ -605,24 +606,28 @@ class CompetitionQuickCompetition extends Component {
     contentView = () => {
         let appState = this.props.appState
         let quickCompetitionState = this.props.quickCompetitionState
+        let quickCompetitionData = this.props.quickCompetitionState.quickComptitionDetails
+        console.log(quickCompetitionData)
         return (
             <div className="comp-draw-content-view mt-0">
                 <div className="row comp-draw-list-top-head">
                     <div className="col-sm-3">
-                        <Form.Item
-                            name="competition_name"
-                            rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}
-                        >
-                            <InputWithHead
-                                auto_complete="off"
-                                required="required-field pb-0 pt-0"
-                                placeholder={AppConstants.competition_name}
-                                onChange={(e) => this.props.updateQuickCompetitionData(captializedString(e.target.value), "competitionName")}
-                                onBlur={(i) => this.formRef.current.setFieldsValue({
-                                    'competition_name': captializedString(i.target.value)
-                                })}
-                            />
-                        </Form.Item>
+                        {quickCompetitionData.competitionName &&
+                            <Form.Item
+                                name="competition_name"
+                                rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}
+                            >
+                                <InputWithHead
+                                    auto_complete="off"
+                                    required="required-field pb-0 pt-0"
+                                    placeholder={AppConstants.competition_name}
+                                    onChange={(e) => this.props.updateQuickCompetitionData(captializedString(e.target.value), "competitionName")}
+                                    onBlur={(i) => this.formRef.current.setFieldsValue({
+                                        'competition_name': captializedString(i.target.value)
+                                    })}
+                                />
+                            </Form.Item>
+                        }
                     </div>
                     <div className="col-sm mt-2 quick-comp-btn-view button-space">
                         <Button className="open-reg-button save-draft-text" onClick={() => this.setState({ venueModalVisible: true })} type="primary">+ {AppConstants.addVenue}</Button>

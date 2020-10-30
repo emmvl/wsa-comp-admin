@@ -98,7 +98,7 @@ class MultifieldDrawsNew extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: '',
             venueId: '',
             roundId: '',
@@ -268,16 +268,18 @@ class MultifieldDrawsNew extends Component {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let storedCompetitionId = getOwn_competition();
-                    let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined")? storedCompetitionId : competitionList[0].competitionId;
+                    let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
                     let statusRefId = competitionList[0].statusRefId
                     let finalTypeRefId = competitionList[0].finalTypeRefId
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
                     setOwn_competitionStatus(statusRefId)
-                    this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
+                    this.props.getDrawsRoundsAction(yearId, competitionId);
                     setOwn_competition(competitionId);
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
-                    this.setState({ firstTimeCompId: competitionId, venueLoad: true, competitionStatus: statusRefId });
+                    this.setState({ firstTimeCompId: competitionId, venueLoad: true, competitionStatus: statusRefId, yearRefId: yearId });
                 }
             }
+
         }
 
         if (nextProps.competitionModuleState != competitionModuleState) {
@@ -829,7 +831,7 @@ class MultifieldDrawsNew extends Component {
                                 className="year-select reg-filter-select1"
                                 style={{ maxWidth: 100, minWidth: 100 }}
                                 onChange={(yearRefId) => this.onYearChange(yearRefId)}
-                                value={this.state.yearRefId}
+                                value={JSON.parse(this.state.yearRefId)}
                             >
                                 {this.props.appState.own_YearArr.map((item) => (
                                     <Option key={'year_' + item.id} value={item.id}>
@@ -1542,13 +1544,14 @@ class MultifieldDrawsNew extends Component {
                                                         top: topMargin + 50,
                                                         overflow: 'hidden',
                                                         whiteSpace: 'nowrap',
+                                                        marginLeft: slotObject.isLocked == 1 && -10
                                                     }}
                                                 >
                                                     <Menu
                                                         className="action-triple-dot-draws"
                                                         theme="light"
                                                         mode="horizontal"
-                                                        style={{ lineHeight: '16px', borderBottom: 0, cursor: disabledStatus && "no-drop" }}
+                                                        style={{ lineHeight: '16px', borderBottom: 0, cursor: disabledStatus && "no-drop", display: slotObject.isLocked !== 1 && "flex", justifyContent: slotObject.isLocked !== 1 && "center" }}
                                                     >
                                                         <SubMenu
                                                             disabled={disabledStatus}
@@ -1685,8 +1688,8 @@ class MultifieldDrawsNew extends Component {
         //     this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
         //     this.setState({ roundLoad: true });
         // } else {
-            this.setState({ regenerateDrawExceptionModalVisible: true });
-            //this.callGenerateDraw();
+        this.setState({ regenerateDrawExceptionModalVisible: true });
+        //this.callGenerateDraw();
         //}
     };
 
@@ -1742,7 +1745,7 @@ class MultifieldDrawsNew extends Component {
                     >
                         <Radio style={{ fontSize: '14px' }} value={1}>{AppConstants.retainException}</Radio>
                         <Radio style={{ fontSize: '14px' }} value={2}>{AppConstants.removeException}</Radio>
-						<Radio style={{fontSize: '14px'}} value={3}>{AppConstants.useRound1Template}</Radio>
+                        <Radio style={{ fontSize: '14px' }} value={3}>{AppConstants.useRound1Template}</Radio>
                     </Radio.Group>
                 </Modal>
             )

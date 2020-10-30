@@ -40,7 +40,7 @@ class QuickCompetitionMatchFormat extends Component {
             currentIndex: 0,
             competitionId: '',
             organisationId: getOrganisationData().organisationUniqueKey,
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: '',
             getDataLoading: false,
             buttonPressed: "",
@@ -88,8 +88,9 @@ class QuickCompetitionMatchFormat extends Component {
                 if (nextProps.quickCompetitionState.quick_CompetitionArr !== competitionList) {
                     if (competitionList.length > 0) {
                         let competitionId = competitionList[0].competitionId;
-                        this.setState({ firstTimeCompId: competitionId, getDataLoading: true });
-                        this.apiCalls(competitionId, this.state.yearRefId);
+                        let yearId = this.state.yearRefId ? this.state.yearRefId : this.props.quickCompetitionState.yearId
+                        this.setState({ firstTimeCompId: competitionId, getDataLoading: true, yearRefId: yearId });
+                        this.apiCalls(competitionId, yearId);
                     }
                 }
             }
