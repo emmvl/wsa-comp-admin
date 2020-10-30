@@ -500,7 +500,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
         }
       }
 
-      console.log(action, 'API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD', state.trackResultData)
+      // console.log(action, 'API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD', state.trackResultData)
       return {
         ...state,
       };
@@ -509,11 +509,13 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
       state.positionData = action.result
       let countIsPlayingValue = getcountIsPlayingValue(action.result)
       state.noOfPosition = countIsPlayingValue.length
+      let filteredData = getFilterPositionData(action.result)
+
       return {
         ...state,
         onLoad: false,
         recordLoad: false,
-        positionList: action.result
+        positionList: filteredData
       };
 
 

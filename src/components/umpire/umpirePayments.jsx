@@ -190,7 +190,7 @@ class UmpirePayments extends Component {
 
                     <div className="d-flex justify-content-end">
                         <Pagination
-                            className="antd-pagination"
+                            className="antd-pagination pb-2"
                             total={totalCount}
                             defaultPageSize={10}
                             onChange={this.handlePageChange}
