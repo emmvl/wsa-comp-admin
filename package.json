@@ -54,8 +54,8 @@
   "scripts": {
     "start": "rm -rf node_modules && craco start",
     "build": "rm -rf node_modules && craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject"
+    "test": "rm -rf node_modules && craco test",
+    "eject": "rm -rf node_modules && react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
