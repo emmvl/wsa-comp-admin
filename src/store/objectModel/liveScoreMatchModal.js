@@ -35,7 +35,8 @@ function getMatchViewObject(data) {
         teamId: data.team.id,
         attended: data.played === 0 || data.played === null ? false : true,
         lineup: data.lineup ? data.lineup : null,
-        attendance:data.attendance
+        attendance: data.attendance,
+        played: data.played
     }
 }
 module.exports = { getData, getMatchDivisionObject, getMatchViewData, getMatchViewObject }

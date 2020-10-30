@@ -57,9 +57,9 @@ function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
           newArray.unshift({ competitionName: competitionName, legendArray: [] })
           // let index = currentLegends.findIndex((x) => x.colorCode === color)
           let object = {
-            "colorCode": color,
-            "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
-            "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
+            colorCode: color,
+            gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+            divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
           }
 
           // if (index === -1) {
@@ -71,9 +71,9 @@ function createCompLegendsArray(drawsArray, currentLegends, dateArray) {
         let color = drawsArray[i].slotsArray[j].colorCode
         let getIndex = newArray[compIndex].legendArray.findIndex((x) => x.colorCode === color)
         let object = {
-          "colorCode": color,
-          "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
-          "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
+          colorCode: color,
+          gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+          divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
         }
         if (getIndex === -1) {
           if (color !== "#999999") {
@@ -93,9 +93,9 @@ function createLegendsArray(drawsArray, currentLegends, dateArray) {
       let color = drawsArray[i].slotsArray[j].colorCode
       let index = currentLegends.findIndex((x) => x.colorCode === color)
       let object = {
-        "colorCode": color,
-        "gradeName": color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
-        "divisionName": drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
+        colorCode: color,
+        gradeName: color == "#999999" ? "N/A" : drawsArray[i].slotsArray[j].gradeName,
+        divisionName: drawsArray[i].slotsArray[j].divisionName ? drawsArray[i].slotsArray[j].divisionName : "N/A"
       }
       if (index === -1) {
         if (color !== "#999999") {
@@ -193,7 +193,7 @@ function structureDrawsData(data, key) {
       );
     }
   }
-  legendsArray = key == "all" ? createCompLegendsArray(mainCourtNumberArray, legendArray, sortedDateArray) : createLegendsArray(mainCourtNumberArray, legendArray, sortedDateArray)
+  legendsArray = key === "all" ? createCompLegendsArray(mainCourtNumberArray, legendArray, sortedDateArray) : createLegendsArray(mainCourtNumberArray, legendArray, sortedDateArray)
   return { mainCourtNumberArray, sortedDateArray, legendsArray };
 }
 
@@ -234,7 +234,7 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, key) {
       //   drawsArray[i].competitionDivisionGradeId
       // );
 
-      let gradeColour = key == "all" ? getCompGradeColor(drawsArray[i].competitionDivisionGradeId, drawsArray[i].competitionUniqueKey) : getGradeColor(drawsArray[i].competitionDivisionGradeId);
+      let gradeColour = key === "all" ? getCompGradeColor(drawsArray[i].competitionDivisionGradeId, drawsArray[i].competitionUniqueKey) : getGradeColor(drawsArray[i].competitionDivisionGradeId);
 
       // if (gradeIndex === -1) {
       drawsArray[i].colorCode = gradeColour;
@@ -275,9 +275,9 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, key) {
     venueCourtName: null,
     venueCourtId: venueCourtId,
     venueShortName: null,
-    matchDate: matchDate,
-    startTime: startTime,
-    endTime: endTime,
+    matchDate,
+    startTime,
+    endTime,
     homeTeamId: null,
     awayTeamId: null,
     homeTeamName: null,
@@ -451,7 +451,7 @@ function setupDateObjectArray(dateArray, drawObject) {
   var tempDateArray = JSON.parse(JSON.stringify(dateArray))
   let defaultDateObject = {
     date: drawObject.matchDate,
-    notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1 ? true : false
+    notInDraw: drawObject.outOfCompetitionDate == 1 || drawObject.outOfRoundDate == 1
   }
   for (let i in dateArray) {
     if (isDateSame(dateArray[i].date, drawObject.matchDate)) {
@@ -876,7 +876,7 @@ function CompetitionDraws(state = initialState, action) {
         let drawDataIndex = state.getRoundsDrawsdata.findIndex((x) => x.roundId === action.drawData)
         let drawDataCase = state.getRoundsDrawsdata[drawDataIndex].draws;
         let swapedDrawsArray = state.getRoundsDrawsdata[drawDataIndex].draws;
-        if (action.actionType == 'add') {
+        if (action.actionType === 'add') {
           swapedDrawsArray = swapedDrawsArrayFunc(
             drawDataCase,
             sourceXIndex,
@@ -915,7 +915,7 @@ function CompetitionDraws(state = initialState, action) {
         updateLoad: false,
       };
 
-    //case 
+    //case
     case ApiConstants.API_UPDATE_COMPETITION_SAVE_DRAWS_LOAD:
       return {
         ...state,
@@ -953,7 +953,7 @@ function CompetitionDraws(state = initialState, action) {
       };
 
     case ApiConstants.API_UPDATE_COMPETITION_DRAWS_COURT_TIMINGS_SUCCESS:
-      // if (action.actionType == 'add') {
+      // if (action.actionType === 'add') {
       //   let sourceXNullCaseIndex = action.sourceArray[0];
       //   let sourceYNullCaseIndex = action.sourceArray[1];
       //   let targetXNullCaseIndex = action.targetArray[0];
@@ -1031,7 +1031,7 @@ function CompetitionDraws(state = initialState, action) {
       legendsArray = [];
       state.getRoundsDrawsdata = []
       state.drawOrganisations = []
-      if (action.key == 'rounds') {
+      if (action.key === 'rounds') {
         state.allcompetitionDateRange = []
         state.competitionVenues = [];
         state.getDrawsRoundsData = [];
@@ -1113,7 +1113,7 @@ function CompetitionDraws(state = initialState, action) {
 
     case ApiConstants.clearFixtureData:
       state.fixtureArray = []
-      if (action.key == 'grades') {
+      if (action.key === 'grades') {
         state.fixtureDivisionGradeNameList = []
       }
       return { ...state };
@@ -1148,7 +1148,7 @@ function CompetitionDraws(state = initialState, action) {
 
     case ApiConstants.API_UPDATE_DRAWS_LOCK_SUCCESS:
       let getDrawsArray = state.getRoundsDrawsdata
-      if (action.key == "all") {
+      if (action.key === "all") {
         let updatetLockValueIndex = getDrawsArray[0].draws.findIndex((x) => x.venueCourtId == action.venueCourtId)
         let updateslotsIndex = getDrawsArray[0].draws[updatetLockValueIndex].slotsArray.findIndex((x) => x.drawsId == action.drawsId)
         getDrawsArray[0].draws[updatetLockValueIndex].slotsArray[updateslotsIndex].isLocked = 0

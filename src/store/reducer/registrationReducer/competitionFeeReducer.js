@@ -1,10 +1,8 @@
 import ApiConstants from "../../../themes/apiConstants";
 import AppConstants from "../../../themes/appConstants";
-import history from "../../../util/history";
 import { getRegistrationSetting } from "../../objectModel/getRegSettingObject";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
-import { getUserId, getOrganisationData } from "../../../util/sessionStorage"
-import { stat } from "fs";
+import { getUserId, getOrganisationData } from "../../../util/sessionStorage";
 
 // dummy object of competition detail
 const competitionDetailObject = {
@@ -27,12 +25,10 @@ const competitionDetailObject = {
     invitees: [],
     selectedVenuesIds: [],
     logoIsDefault: false,
-    yearRefId: 1,
+    yearRefId: null,
     statusRefId: 1,
     hasRegistration: 0
 }
-
-
 
 const paymentOptionObject = {
     paymentOptions: [],
@@ -78,12 +74,11 @@ const initialState = {
     seasonalTeamExpendedKey: null,
     charityRoundUp: [],
     govtVoucher: [],
-    competionDiscountValue:
-    {
-        "competitionId": "",
-        "competitionDiscounts": [
+    competionDiscountValue: {
+        competitionId: "",
+        competitionDiscounts: [
             {
-                "discounts": []
+                discounts: []
             }
         ]
     },
@@ -153,9 +148,9 @@ const initialState = {
     associationChecked: false,
     clubChecked: false,
     anyOrgAssociationArr: [],
-    anyOrgClubArr: [],	
+    anyOrgClubArr: [],
     selectedPaymentMethods: [],
-    paymentMethodsDefault: [],   
+    paymentMethodsDefault: [],
     competitionListAction: null
 };
 
@@ -168,10 +163,9 @@ function getDefaultCompMemberhsipProduct(data, apiSelectedData) {
         for (let i in getmembershipProducts) {
             let statusData = checkMembershipProductData(getmembershipProducts[i], apiSelectedData.membershipProducts)
 
-            if (statusData.status == false) {
+            if (!statusData.status) {
                 getmembershipProducts[i]["isProductSelected"] = false;
-            }
-            else {
+            } else {
                 getmembershipProducts[i]["isProductSelected"] = true;
                 getmembershipProducts[i]["competitionMembershipProductId"] = statusData.competitionMembershipProductId;
             }
@@ -181,8 +175,7 @@ function getDefaultCompMemberhsipProduct(data, apiSelectedData) {
                     if (!checkMembershipProductTypes(getmembershipProducts[i].membershipProductTypes[j], statusData.types)) {
                         getmembershipProducts[i].membershipProductTypes[j]["isTypeSelected"] = false;
                         getmembershipProducts[i].membershipProductTypes[j]["competitionMembershipProductTypeId"] = 0;
-                    }
-                    else {
+                    } else {
                         getmembershipProducts[i].membershipProductTypes[j]["isTypeSelected"] = true;
                         getmembershipProducts[i].membershipProductTypes[j]["competitionMembershipProductId"] = statusData.competitionMembershipProductId;
                         for (let k in statusData.types) {
@@ -195,14 +188,13 @@ function getDefaultCompMemberhsipProduct(data, apiSelectedData) {
                     }
                 }
             }
-
         }
         compMembershipProductTempArray = getmembershipProducts
     }
     return compMembershipProductTempArray
 }
 
-////////function for pushing data selected by the user 
+////////function for pushing data selected by the user
 function checkMembershipProductTypes(productType, typesArray) {
     let status = false
     for (let i in typesArray) {
@@ -214,8 +206,7 @@ function checkMembershipProductTypes(productType, typesArray) {
     return status
 }
 
-
-//////function for pushing data selected by the user 
+//////function for pushing data selected by the user
 function checkMembershipProductData(product, apiSelectedData) {
     let status = false
     let types = []
@@ -236,7 +227,6 @@ function checkMembershipProductData(product, apiSelectedData) {
 function checkDivision(divisionArray, membershipProductUniqueKey, parentIndex) {
     let divisions = []
     for (let i in divisionArray) {
-
         if (membershipProductUniqueKey === divisionArray[i].membershipProductUniqueKey) {
             if (!isArrayNotEmpty(divisionArray[i].divisions)) {
                 divisions = []
@@ -247,14 +237,12 @@ function checkDivision(divisionArray, membershipProductUniqueKey, parentIndex) {
                     tempDivisionArray[j]["parentIndex"] = parentIndex
                     if (isNotNullOrEmptyString(tempDivisionArray[j].fromDate) && isNotNullOrEmptyString(tempDivisionArray[j].toDate)) {
                         tempDivisionArray[j]["ageRestriction"] = true;
-                    }
-                    else {
+                    } else {
                         tempDivisionArray[j]["ageRestriction"] = false;
                     }
                     if (tempDivisionArray[j].genderRefId !== null) {
                         tempDivisionArray[j]['genderRestriction'] = true
-                    }
-                    else {
+                    } else {
                         tempDivisionArray[j]['genderRestriction'] = false
                     }
                 }
@@ -263,7 +251,6 @@ function checkDivision(divisionArray, membershipProductUniqueKey, parentIndex) {
                 break
             }
         }
-
     }
 
     return divisions
@@ -288,7 +275,6 @@ function getDivisionTableData(data) {
     if (selectedMebershipProductArray) {
         for (let i in selectedMebershipProductArray) {
             let checkIsPlaying = isPlayingStatus(selectedMebershipProductArray[i].membershipProductTypes)
-            // if(selectedMebershipProductArray[i].membershipProductTypes)
             let defaultNonPlayingArray = [{
                 ageRestriction: false,
                 competitionDivisionId: 0,
@@ -346,9 +332,7 @@ function getCharityResult(data) {
         newCharityResult = data
     }
     return newCharityResult
-
 }
-
 
 function checkSelectedVoucher(selected, data) {
     for (let i in data) {
@@ -356,7 +340,6 @@ function checkSelectedVoucher(selected, data) {
             for (let j in selected) {
                 if (data[i].id == selected[j].governmentVoucherRefId) {
                     data[i]["isSelected"] = true;
-
                     break;
                 } else {
                     data[i]["isSelected"] = false;
@@ -377,8 +360,7 @@ function getSelectedDiscountProduct(data, productData) {
         if (productDataArr[i].membershipProductUniqueKey == data) {
             if (isArrayNotEmpty(productDataArr[i].membershipProductTypes)) {
                 selectedDiscountProduct = productDataArr[i].membershipProductTypes
-            }
-            else {
+            } else {
                 selectedDiscountProduct = []
             }
         }
@@ -417,42 +399,40 @@ function discountDataObject(data) {
 //     }
 //     return getUpdatedSeasonalFeeArr
 // }
+
 // get selected casual fee payment option key
 function checkSelectedCasualFee(paymentData, casualFee, selectedCasualFee, selectedCasualFeeKey) {
     selectedCasualFeeKey = []
     //if (paymentData) {
-        for(let item of casualFee){
-            let paymentOptObj = {
-                "feesTypeRefId": 1,
-                "isChecked": false,
-                "paymentOptionId": 0,
-                "paymentOptionRefId": item.id,
-                "description": item.description
-            }
-            let obj = paymentData ? (paymentData.find(x=>x.paymentOptionRefId == item.id && 
-                x.feesTypeRefId == 1)) : null;
-            if(obj){
-                paymentOptObj.isChecked = true;
-                paymentOptObj.paymentOptionId = obj.paymentOptionId;
-                selectedCasualFee.push(paymentOptObj);
-            }
-            else{
-                selectedCasualFee.push(paymentOptObj);
-            }
+    for (let item of casualFee) {
+        let paymentOptObj = {
+            feesTypeRefId: 1,
+            isChecked: false,
+            paymentOptionId: 0,
+            paymentOptionRefId: item.id,
+            description: item.description
         }
+        let obj = paymentData ? paymentData.find(x => x.paymentOptionRefId == item.id && x.feesTypeRefId == 1) : null;
+        if (obj) {
+            paymentOptObj.isChecked = true;
+            paymentOptObj.paymentOptionId = obj.paymentOptionId;
+            selectedCasualFee.push(paymentOptObj);
+        } else {
+            selectedCasualFee.push(paymentOptObj);
+        }
+    }
 
-        // for (let i in paymentData) {
-        //     if (paymentData[i].feesTypeRefId == 1) {
-        //         selectedCasualFeeKey.push(paymentData[i].paymentOptionRefId)
-        //         selectedCasualFee.push(paymentData[i])
-        //     }
-        // }
-        return {
-            selectedCasualFeeKey,
-            selectedCasualFee
-        }
-    //} 
-    // else {
+    // for (let i in paymentData) {
+    //     if (paymentData[i].feesTypeRefId == 1) {
+    //         selectedCasualFeeKey.push(paymentData[i].paymentOptionRefId)
+    //         selectedCasualFee.push(paymentData[i])
+    //     }
+    // }
+    return {
+        selectedCasualFeeKey,
+        selectedCasualFee
+    }
+    // } else {
     //     return {
     //         selectedCasualFeeKey,
     //         selectedCasualFee
@@ -460,54 +440,51 @@ function checkSelectedCasualFee(paymentData, casualFee, selectedCasualFee, selec
     // }
 }
 
-
 // get selected Seasonal fee payment option key
-function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasonalFee, selectedSeasonalFeeKey,instalmentDates,selectedSeasonalInstalmentDates) {
+function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasonalFee, selectedSeasonalFeeKey, instalmentDates, selectedSeasonalInstalmentDates) {
     selectedSeasonalFeeKey = [];
     selectedSeasonalInstalmentDates = [];
     //if (paymentDataArray) {
-        for(let item of seasonalFee){
-            let paymentOptObj = {
-                "feesTypeRefId": 2,
-                "isChecked": false,
-                "paymentOptionId": 0,
-                "paymentOptionRefId": item.id,
-                "description": item.description
-            }
-            let obj = paymentDataArray ? 
-            (paymentDataArray.find(x=>x.paymentOptionRefId == item.id && 
-                x.feesTypeRefId == 2)) : null;
-            if(obj){
-                paymentOptObj.isChecked = true;
-                paymentOptObj.paymentOptionId = obj.paymentOptionId;
-                selectedSeasonalFee.push(paymentOptObj);
-            }
-            else{
-                selectedSeasonalFee.push(paymentOptObj);
-            }
+    for (let item of seasonalFee) {
+        let paymentOptObj = {
+            feesTypeRefId: 2,
+            isChecked: false,
+            paymentOptionId: 0,
+            paymentOptionRefId: item.id,
+            description: item.description
         }
-        // for (let i in paymentDataArray) {
-        //     if (paymentDataArray[i].feesTypeRefId == 2) {
-        //         selectedSeasonalFeeKey.push(paymentDataArray[i].paymentOptionRefId)
-        //         paymentDataArray[i]["isChecked"] = true;
-        //         selectedSeasonalFee.push( paymentDataArray[i])
-        //     }
-        // }
+        let obj = paymentDataArray
+            ? paymentDataArray.find(x => x.paymentOptionRefId == item.id && x.feesTypeRefId == 2)
+            : null;
+        if (obj) {
+            paymentOptObj.isChecked = true;
+            paymentOptObj.paymentOptionId = obj.paymentOptionId;
+            selectedSeasonalFee.push(paymentOptObj);
+        } else {
+            selectedSeasonalFee.push(paymentOptObj);
+        }
+    }
+    // for (let i in paymentDataArray) {
+    //     if (paymentDataArray[i].feesTypeRefId == 2) {
+    //         selectedSeasonalFeeKey.push(paymentDataArray[i].paymentOptionRefId)
+    //         paymentDataArray[i]["isChecked"] = true;
+    //         selectedSeasonalFee.push( paymentDataArray[i])
+    //     }
+    // }
 
-        if(instalmentDates!= null && instalmentDates.length > 0){
-            for(let i in instalmentDates){
-                if (instalmentDates[i].feesTypeRefId == 2) {
-                    selectedSeasonalInstalmentDates.push(instalmentDates[i]);
-                }
+    if (instalmentDates != null && instalmentDates.length > 0) {
+        for (let i in instalmentDates) {
+            if (instalmentDates[i].feesTypeRefId == 2) {
+                selectedSeasonalInstalmentDates.push(instalmentDates[i]);
             }
         }
-        return {
-            selectedSeasonalFeeKey,
-            selectedSeasonalFee,
-            selectedSeasonalInstalmentDates
-        }
-     //}
-     //else {
+    }
+    return {
+        selectedSeasonalFeeKey,
+        selectedSeasonalFee,
+        selectedSeasonalInstalmentDates
+    }
+    // } else {
     //     return {
     //         selectedSeasonalFeeKey,
     //         selectedSeasonalFee,
@@ -518,50 +495,49 @@ function checkSelectedSeasonalFee(paymentDataArray, seasonalFee, selectedSeasona
 
 
 // get selected Seasonal Team fee payment option key
-function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSeasonalTeamFee, selectedSeasonalTeamFeeKey,instalmentdates,selectedTeamSeasonalInstalmentDates) {
+function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSeasonalTeamFee, selectedSeasonalTeamFeeKey, instalmentdates, selectedTeamSeasonalInstalmentDates) {
     selectedSeasonalTeamFeeKey = [];
     selectedTeamSeasonalInstalmentDates = [];
     //if (paymentDataArray) {
 
-        for(let item of seasonalFee){
-            let paymentOptObj = {
-                "feesTypeRefId": 3,
-                "isChecked": false,
-                "paymentOptionId": 0,
-                "paymentOptionRefId": item.id,
-                "description": item.description
-            }
-            let obj = paymentDataArray ? 
-            (paymentDataArray.find(x=>x.paymentOptionRefId == item.id && 
-                x.feesTypeRefId == 3)) : null;
-            if(obj){
-                paymentOptObj.isChecked = true;
-                paymentOptObj.paymentOptionId = obj.paymentOptionId;
-                selectedSeasonalTeamFee.push(paymentOptObj);
-            }
-            else{
-                selectedSeasonalTeamFee.push(paymentOptObj);
-            }
+    for (let item of seasonalFee) {
+        let paymentOptObj = {
+            "feesTypeRefId": 3,
+            "isChecked": false,
+            "paymentOptionId": 0,
+            "paymentOptionRefId": item.id,
+            "description": item.description
         }
+        let obj = paymentDataArray
+            ? (paymentDataArray.find(x => x.paymentOptionRefId == item.id && x.feesTypeRefId == 3))
+            : null;
+        if (obj) {
+            paymentOptObj.isChecked = true;
+            paymentOptObj.paymentOptionId = obj.paymentOptionId;
+            selectedSeasonalTeamFee.push(paymentOptObj);
+        } else {
+            selectedSeasonalTeamFee.push(paymentOptObj);
+        }
+    }
 
-        // for (let i in paymentDataArray) {
-        //     if (paymentDataArray[i].feesTypeRefId == 3) {
-        //         selectedSeasonalTeamFeeKey.push(paymentDataArray[i].paymentOptionRefId)
-        //         selectedSeasonalTeamFee.push(paymentDataArray[i])
-        //     }
-        // }
-        if(instalmentdates!= null && instalmentdates.length > 0){
-            for (let i in instalmentdates) {
-                if (instalmentdates[i].feesTypeRefId == 3) {
-                    selectedTeamSeasonalInstalmentDates.push(instalmentdates[i])
-                }
+    // for (let i in paymentDataArray) {
+    //     if (paymentDataArray[i].feesTypeRefId == 3) {
+    //         selectedSeasonalTeamFeeKey.push(paymentDataArray[i].paymentOptionRefId)
+    //         selectedSeasonalTeamFee.push(paymentDataArray[i])
+    //     }
+    // }
+    if (instalmentdates != null && instalmentdates.length > 0) {
+        for (let i in instalmentdates) {
+            if (instalmentdates[i].feesTypeRefId == 3) {
+                selectedTeamSeasonalInstalmentDates.push(instalmentdates[i])
             }
         }
-        return {
-            selectedSeasonalTeamFeeKey,
-            selectedSeasonalTeamFee,
-            selectedTeamSeasonalInstalmentDates
-        }
+    }
+    return {
+        selectedSeasonalTeamFeeKey,
+        selectedSeasonalTeamFee,
+        selectedTeamSeasonalInstalmentDates
+    }
 
     // }
     // else {
@@ -574,7 +550,7 @@ function checkSelectedSeasonalTeamFee(paymentDataArray, seasonalFee, selectedSea
 }
 
 function checkSelectedCasualTeamFee(paymentDataArray, casualFee, selectedCasualTeamFee) {
-    for(let item of casualFee){
+    for (let item of casualFee) {
         let paymentOptObj = {
             "feesTypeRefId": 4,
             "isChecked": false,
@@ -582,15 +558,14 @@ function checkSelectedCasualTeamFee(paymentDataArray, casualFee, selectedCasualT
             "paymentOptionRefId": item.id,
             "description": item.description
         }
-        let obj = paymentDataArray ? 
-        (paymentDataArray.find(x=>x.paymentOptionRefId == item.id && 
-            x.feesTypeRefId == 4)) : null;
-        if(obj){
+        let obj = paymentDataArray
+            ? (paymentDataArray.find(x => x.paymentOptionRefId == item.id && x.feesTypeRefId == 4))
+            : null;
+        if (obj) {
             paymentOptObj.isChecked = true;
             paymentOptObj.paymentOptionId = obj.paymentOptionId;
             selectedCasualTeamFee.push(paymentOptObj);
-        }
-        else{
+        } else {
             selectedCasualTeamFee.push(paymentOptObj);
         }
     }
@@ -600,26 +575,23 @@ function checkSelectedCasualTeamFee(paymentDataArray, casualFee, selectedCasualT
     }
 }
 
-function checkSelectedPaymentMethods(paymentMethodArray, paymentMethodDefault, selectedPaymentMethods){
-    for(let item of paymentMethodDefault){
+function checkSelectedPaymentMethods(paymentMethodArray, paymentMethodDefault, selectedPaymentMethods) {
+    for (let item of paymentMethodDefault) {
         let paymentMthObj = {
             "isChecked": false,
             "paymentMethodId": 0,
             "paymentMethodRefId": item.id,
             "description": item.description
         }
-        let obj = paymentMethodArray ? 
-        (paymentMethodArray.find(x=>x.paymentMethodRefId == item.id )) : null;
-        if(obj){
+        let obj = paymentMethodArray ? (paymentMethodArray.find(x => x.paymentMethodRefId == item.id)) : null;
+        if (obj) {
             paymentMthObj.isChecked = true;
             paymentMthObj.paymentMethodId = obj.paymentMethodId;
             selectedPaymentMethods.push(paymentMthObj);
-        }
-        else{
+        } else {
             selectedPaymentMethods.push(paymentMthObj);
         }
     }
-
 
     return {
         selectedPaymentMethods
@@ -628,15 +600,15 @@ function checkSelectedPaymentMethods(paymentMethodArray, paymentMethodDefault, s
 
 
 // for  updated selected Casual fee array
-function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key,instalmentDates) {   
-    if(value.length == 0){
-        instalmentDates = [];            
+function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key, instalmentDates) {
+    if (value.length == 0) {
+        instalmentDates = [];
     }
     for (let i in value) {
         if (allDataCasualFee.length > 0) {
             for (let j in allDataCasualFee) {
                 if (value[i] == allDataCasualFee[j].paymentOptionRefId) {
-                    if(allDataCasualFee[j].feesTypeRefId == key){
+                    if (allDataCasualFee[j].feesTypeRefId == key) {
                         let object = {
                             "subOptions": [],
                             "feesTypeRefId": allDataCasualFee[j].feesTypeRefId,
@@ -644,12 +616,10 @@ function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, 
                             "paymentOptionId": allDataCasualFee[j].paymentOptionId
                         }
                         getUpdatedCasualFeeArr.push(object)
-                        break                        
-                    }
-                    else {
+                        break
+                    } else {
                         if (value[i] == 5 || value[i] == 1) {
-                        }
-                        else {
+                        } else {
                             let object = {
                                 "subOptions": [],
                                 "feesTypeRefId": key,
@@ -659,12 +629,10 @@ function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, 
                             getUpdatedCasualFeeArr.push(object)
                             break
                         }
-                    }                 
-                    
+                    }
                 } else {
                     if (value[i] == 5 || value[i] == 1) {
-                    }
-                    else {
+                    } else {
                         let object = {
                             "subOptions": [],
                             "feesTypeRefId": key,
@@ -676,8 +644,7 @@ function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, 
                     }
                 }
             }
-        }
-        else {
+        } else {
             if (value[i] == 5 || value[i] == 1) {
             } else {
                 let object = {
@@ -691,11 +658,10 @@ function getUpdatedSeasonalFee(value, getUpdatedCasualFeeArr, allDataCasualFee, 
             }
         }
     }
-    return {getUpdatedCasualFeeArr,instalmentDates}
+    return { getUpdatedCasualFeeArr, instalmentDates }
 }
 
 function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, key) {
-  //  console.log("allDataCasualFee.length" + allDataCasualFee.length);
     for (let i in value) {
         if (allDataCasualFee.length > 0) {
             for (let j in allDataCasualFee) {
@@ -710,8 +676,7 @@ function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, ke
                     break
                 } else {
                     if (value[i] == 1 || value[i] == 4 || value[i] == 8 || value[i] == 12) {
-                    }
-                    else {
+                    } else {
                         let object = {
                             "subOptions": [],
                             "feesTypeRefId": key,
@@ -723,8 +688,7 @@ function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, ke
                     }
                 }
             }
-        }
-        else {
+        } else {
             if (value[i] == 1 || value[i] == 4 || value[i] == 8 || value[i] == 12) {
             } else {
                 let object = {
@@ -743,7 +707,6 @@ function getUpdatedCasualFee(value, getUpdatedCasualFeeArr, allDataCasualFee, ke
 
 //// selected venues id for display
 function checkSelectedVenue(details, venues) {
-
     let filteredVeneu = []
     for (let i in venues) {
         for (let j in details) {
@@ -755,7 +718,6 @@ function checkSelectedVenue(details, venues) {
         }
     }
     return filteredVeneu
-
 }
 
 //// check existing Venues
@@ -781,8 +743,6 @@ function checkExistingVenues(venuesArr, venueID) {
     return object
 }
 
-
-
 /// Create velue list object and ids
 function createVenuesList(venueList, selectedList, currentArray) {
     let postArr = []
@@ -802,19 +762,12 @@ function createVenuesList(venueList, selectedList, currentArray) {
             }
         }
 
-
         postArr.push(venuesObject)
-
-
     }
     return postArr;
-
 }
 
-
-
 function checkSlectedInvitees(array) {
-
     let selected = []
     if (array) {
         for (let i in array) {
@@ -859,7 +812,6 @@ function checkCharity(charityID, defaultCharityArr) {
             charity = {
                 status: true,
                 result: defaultCharityArr[i]
-
             }
         }
     }
@@ -876,9 +828,7 @@ function checkVoucher(voucherId, defaultVoucher) {
             vocuher = {
                 status: true,
                 result: defaultVoucher[i]
-
             }
-
         }
     }
     return vocuher
@@ -889,22 +839,21 @@ function checkCharityArray(selectedArr, defaultCharityArr) {
     let postCharityArr = []
     let charityObj = null
     for (let i in selectedArr) {
-        if (selectedArr[i].isSelected == true) {
+        if (selectedArr[i].isSelected) {
             slectedArray.push(selectedArr[i])
         }
     }
 
     for (let i in slectedArray) {
         let charityObjectArray = checkCharity(slectedArray[i].id, defaultCharityArr)
-        if (charityObjectArray.status == true) {
+        if (charityObjectArray.status) {
             charityObj = {
                 charityRoundUpId: charityObjectArray.result.charityRoundUpId,
                 charityRoundUpRefId: slectedArray[i].id,
                 charityRoundUpDescription: "",
                 charityRoundUpName: ""
             }
-        }
-        else {
+        } else {
             charityObj = {
                 charityRoundUpId: 0,
                 charityRoundUpRefId: slectedArray[i].id,
@@ -922,28 +871,23 @@ function checkVoucherArray(voucherArr, defaultGovtVoucher) {
     let postVoucherArr = []
     let charityObj = null
     for (let i in voucherArr) {
-        if (voucherArr[i].isSelected == true) {
+        if (voucherArr[i].isSelected) {
             selectedArray.push(voucherArr[i])
         }
     }
 
-
-
     for (let i in selectedArray) {
         let voucherObjectArray = checkVoucher(selectedArray[i].id, defaultGovtVoucher)
-        if (voucherObjectArray.status == true) {
+        if (voucherObjectArray.status) {
             charityObj = {
                 competitionGovernmentVoucherId: voucherObjectArray.result.competitionGovernmentVoucherId,
                 governmentVoucherRefId: selectedArray[i].id
             }
-        }
-        else {
+        } else {
             charityObj = {
                 competitionGovernmentVoucherId: 0,
                 governmentVoucherRefId: selectedArray[i].id,
             }
-
-
         }
         postVoucherArr.push(charityObj)
     }
@@ -951,21 +895,17 @@ function checkVoucherArray(voucherArr, defaultGovtVoucher) {
     return postVoucherArr
 }
 
-
 // function createInviteesPostArray(selectedInvitees, getInvitees) {
-//     console.log("selectedInvitees, getInvitees", selectedInvitees, getInvitees)
 //     let invitessObjectArr = []
 //     for (let i in selectedInvitees) {
 //         // let selectedInviteesArray = checkExistingInvitees(getInvitees, selectedInvitees[i])
 //         let inviteesObject = null
-//         // console.log("selectedInviteesArray", selectedInviteesArray)
-//         // if (selectedInviteesArray.status == true) {
+//         // if (selectedInviteesArray.status) {
 //         inviteesObject = {
 //             "inviteesId": isArrayNotEmpty(getInvitees) ? getInvitees[i].inviteesId : 0,
 //             "registrationInviteesRefId": selectedInvitees[i],
 //             "inviteesOrg": isArrayNotEmpty(getInvitees) ? getInvitees[i].inviteesOrg : []
 //         }
-
 //         // } else {
 //         //     inviteesObject = {
 //         //         "inviteesId": 0,
@@ -978,10 +918,9 @@ function checkVoucherArray(voucherArr, defaultGovtVoucher) {
 //     return invitessObjectArr
 // }
 
-function removeDirect(affiliateArray){
-
-    if(affiliateArray!= null && affiliateArray.length > 0){
-        return affiliateArray.filter(x=>x.registrationInviteesRefId!= 5);
+function removeDirect(affiliateArray) {
+    if (affiliateArray != null && affiliateArray.length > 0) {
+        return affiliateArray.filter(x => x.registrationInviteesRefId != 5);
     }
 }
 
@@ -991,13 +930,12 @@ function createInviteesPostArray(selectedInvitees, getInvitees) {
         for (let i in getInvitees) {
             let selectedInviteesArray = checkExistingInvitees(getInvitees, selectedInvitees)
             let inviteesObject = null
-            if (selectedInviteesArray.status == true) {
+            if (selectedInviteesArray.status) {
                 inviteesObject = {
                     "inviteesId": selectedInviteesArray.result.inviteesId,
                     "registrationInviteesRefId": selectedInvitees,
                     "inviteesOrg": isArrayNotEmpty(selectedInviteesArray.result.inviteesOrg) ? selectedInviteesArray.result.inviteesOrg : []
                 }
-
             } else {
                 inviteesObject = {
                     "inviteesId": 0,
@@ -1009,8 +947,7 @@ function createInviteesPostArray(selectedInvitees, getInvitees) {
             invitessObjectArr.push(inviteesObject)
             break;
         }
-    }
-    else {
+    } else {
         let invitees_Object = {
             "inviteesId": 0,
             "registrationInviteesRefId": selectedInvitees,
@@ -1020,13 +957,13 @@ function createInviteesPostArray(selectedInvitees, getInvitees) {
     }
     return invitessObjectArr
 }
+
 function checkOrgKeysSelection(key, orgArray) {
     let object = {
         status: false,
         result: null
     }
     for (let i in orgArray) {
-
         if (orgArray[i].organisationUniqueKey == key) {
             object = {
                 status: true,
@@ -1034,13 +971,10 @@ function checkOrgKeysSelection(key, orgArray) {
             }
             break;
         }
-
     }
 
     return object
-
 }
-
 
 function createInviteesOrgArray(selectedInvitees, orgKeys) {
     let invitessObjectArr = []
@@ -1051,7 +985,7 @@ function createInviteesOrgArray(selectedInvitees, orgKeys) {
     let orgArray = isArrayNotEmpty(selectedInvitees) ? selectedInvitees : []
     for (let i in orgKeys) {
         let details = checkOrgKeysSelection(orgKeys[i], orgArray)
-        if (details.status == true) {
+        if (details.status) {
             requiredObject = {
                 "competitionInviteesOrgId": details.result.competitionInviteesOrgId,
                 "organisationUniqueKey": details.result.organisationUniqueKey
@@ -1066,9 +1000,7 @@ function createInviteesOrgArray(selectedInvitees, orgKeys) {
     }
 
     return invitessObjectArr
-
 }
-
 
 // function getAffiliateOrgSelectedArr(invitees) {
 //     let orgInvitees = isArrayNotEmpty(invitees) ? invitees[0].inviteesOrg : []
@@ -1084,7 +1016,6 @@ function getAffiliateOrgSelectedArr(invitees, id) {
     let selecetdOrgArray = []
     for (let j in invitees) {
         if (invitees[j].registrationInviteesRefId == id) {
-
             let orgInvitees = isArrayNotEmpty(invitees[j].inviteesOrg) ? invitees[j].inviteesOrg : []
 
             for (let i in orgInvitees) {
@@ -1095,7 +1026,6 @@ function getAffiliateOrgSelectedArr(invitees, id) {
                 }
                 selecetdOrgArray.push(object)
             }
-
 
             break
         }
@@ -1113,7 +1043,6 @@ function getMemberShipProductTypes(key, productsArr) {
     return productTypes
 }
 
-
 function checkFeeDivisionType(data, uniqueKey) {
     let array = []
     for (let i in data) {
@@ -1123,7 +1052,6 @@ function checkFeeDivisionType(data, uniqueKey) {
     }
     return array
 }
-
 
 function checkStatus(getCompetitionFeeArray, item, divisionId, feeTypeRefId) {
     let object = {
@@ -1142,9 +1070,7 @@ function checkStatus(getCompetitionFeeArray, item, divisionId, feeTypeRefId) {
         }
     }
 
-
     return object
-
 }
 
 function removeDuplicacyInFeeArray(feeArray) {
@@ -1162,7 +1088,6 @@ function removeDuplicacyInFeeArray(feeArray) {
             if (!x) {
                 return acc.concat([current]);
             } else {
-
                 return acc;
             }
         }, []);
@@ -1171,8 +1096,6 @@ function removeDuplicacyInFeeArray(feeArray) {
     }
     return feesProductArray
 }
-
-
 
 function childFeesMapping(getFeeData) {
     let mainFeeArray = getFeeData
@@ -1198,7 +1121,7 @@ function childFeesMapping(getFeeData) {
     return mainFeeArray
 }
 
-/////get the all total fees 
+/////get the all total fees
 function getTotalFees(feesOwner, data, mFees) {
     let totalFees = 0
     let dataFees = data.Fees ? Number(data.Fees) : 0
@@ -1211,32 +1134,28 @@ function getTotalFees(feesOwner, data, mFees) {
     let nomAffiliateGst = data.affNominationGST == null ? 0 : Number(data.affNominationGST)
 
     if (!feesOwner) {
-        totalFees = (dataFees + dataGst + dataAffiliateFees + dataAffiliateGst + mFees + 
+        totalFees = (dataFees + dataGst + dataAffiliateFees + dataAffiliateGst + mFees +
             nomFees + nomGst + nomAffiliateFees + nomAffiliateGst)
         return totalFees.toFixed(2)
     } else {
         totalFees = (dataFees + dataGst + mFees + nomFees + nomGst)
         return totalFees.toFixed(2)
     }
-
-    
 }
 
-
-
-///// check Fee Type ---- 
+///// check Fee Type ----
 
 function checkFeeType(feeArray) {
     for (let i in feeArray) {
         // if (feeArray[i].mFees !== 0 && feeArray[i].mFees !== null) {
         //     return true
         // }
-        if(feeArray[i].checkBoxOption == null || feeArray[i].checkBoxOption == 1){
+        if (feeArray[i].checkBoxOption == null || feeArray[i].checkBoxOption == 1) {
             return true;
         }
         // if (feeArray[i].fee !== null && feeArray[i].gst !== null) {
         //     return true
-        // } 
+        // }
         else {
             return false
         }
@@ -1245,17 +1164,15 @@ function checkFeeType(feeArray) {
 
 function checkTeamChargeType(feeArray) {
     for (let i in feeArray) {
-        if(feeArray[i].teamRegChargeTypeRefId == null || feeArray[i].teamRegChargeTypeRefId == 1){
+        if (feeArray[i].teamRegChargeTypeRefId == null || feeArray[i].teamRegChargeTypeRefId == 1) {
             return 1;
-        }
-        else {
+        } else {
             return 2;
         }
     }
 }
 
-
-///// check Fee Type ---- 
+///// check Fee Type ----
 
 function checkIsDivisionAllType(productArray) {
     for (let i in productArray) {
@@ -1267,9 +1184,7 @@ function checkIsDivisionAllType(productArray) {
     }
 }
 
-
-
-/// create product array 
+/// create product array
 
 function createProductFeeArr(data) {
     var getFeeData = isArrayNotEmpty(data.competitionfees) ? data.competitionfees : []
@@ -1288,20 +1203,15 @@ function createProductFeeArr(data) {
     let product = data.competitionmembershipproduct.membershipProducts
     let divisions = data.competitiondivisions.competitionFeeDivision
 
-   // console.log("getFeeData::",getFeeData);
-
     let removeDuplicacyFeeArray = removeDuplicacyInFeeArray(getFeeData)
     getFeeData = removeDuplicacyFeeArray
 
-   // console.log("getFeeData111::"+JSON.stringify(getFeeData));
     let productArray = []
     for (let i in divisions) {
         let tempDivisionArray = checkFeeDivisionType(getFeeData, divisions[i].membershipProductUniqueKey)
         let getDivisionsArray = isArrayNotEmpty(tempDivisionArray) ? tempDivisionArray : []
 
-
         let memberShipProductType = getMemberShipProductTypes(divisions[i].membershipProductUniqueKey, product)
-       // console.log("&&&&&", memberShipProductType);
         let alltypeArraySeasonal = []
         let perTypeArraySeasonal = []
         let alltypeArrayCasual = []
@@ -1316,13 +1226,12 @@ function createProductFeeArr(data) {
             let statusCasual = checkStatus(getDivisionsArray, memberShipProductType[j], null, 1)
             let statusteamSeasonal = checkStatus(getDivisionsArray, memberShipProductType[j], null, 3)
             let statusTeamCasual = checkStatus(getDivisionsArray, memberShipProductType[j], null, 4)
-          //  console.log("statusSeasonal, statusCasual, statusteamSeasonal", statusSeasonal, statusCasual, statusteamSeasonal)
             let type_Object_casual = null
             let type_Object_seasonal = null
             let type_object_team_seasonal = null;
             let type_object_team_casual = null;
             ////// CASUAL OBJECT
-            if (statusCasual.status == true) {
+            if (statusCasual.status) {
                 let mFeesCasual = Number(memberShipProductType[j].mCasualFee) + Number(memberShipProductType[j].mCasualGst)
                 type_Object_casual = {
                     "competitionMembershipProductFeeId": statusCasual.result.competitionMembershipProductFeeId,
@@ -1370,7 +1279,7 @@ function createProductFeeArr(data) {
             }
 
             //// SEASONAL OBJECT
-            if (statusSeasonal.status == true) {
+            if (statusSeasonal.status) {
                 let mFeesSeasonal = Number(memberShipProductType[j].mSeasonalFee) + Number(memberShipProductType[j].mSeasonalGst)
 
                 type_Object_seasonal = {
@@ -1403,10 +1312,10 @@ function createProductFeeArr(data) {
                     "gst": 0,
                     "affiliateFee": 0,
                     "affiliateGst": 0,
-                    "nominationFees":  memberShipProductType[j].isPlaying == 1 ? 0 : null,
-                    "nominationGST":  memberShipProductType[j].isPlaying == 1 ? 0 : null,
-                    "affNominationFees":  memberShipProductType[j].isPlaying == 1 ? 0: null,
-                    "affNominationGST":  memberShipProductType[j].isPlaying == 1 ? 0: null,
+                    "nominationFees": memberShipProductType[j].isPlaying == 1 ? 0 : null,
+                    "nominationGST": memberShipProductType[j].isPlaying == 1 ? 0 : null,
+                    "affNominationFees": memberShipProductType[j].isPlaying == 1 ? 0 : null,
+                    "affNominationGST": memberShipProductType[j].isPlaying == 1 ? 0 : null,
                     "feeTypeRefId": 2,
                     "membershipProductTypeName": memberShipProductType[j].membershipProductTypeName,
                     "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
@@ -1419,9 +1328,9 @@ function createProductFeeArr(data) {
             }
 
             //// SEASONAL and Casual OBJECT Team
-            if (memberShipProductType[j].allowTeamRegistrationTypeRefId == 1 || 
+            if (memberShipProductType[j].allowTeamRegistrationTypeRefId == 1 ||
                 memberShipProductType[j].allowTeamRegistrationTypeRefId == 2) {
-                if (statusteamSeasonal.status == true) {
+                if (statusteamSeasonal.status) {
                     let mFeesSeasonal = Number(memberShipProductType[j].mSeasonalFee) + Number(memberShipProductType[j].mSeasonalGst)
 
                     type_object_team_seasonal = {
@@ -1432,10 +1341,10 @@ function createProductFeeArr(data) {
                         "gst": memberShipProductType[j].isPlaying == 1 ? statusteamSeasonal.result.GST : null,
                         "affiliateFee": memberShipProductType[j].isPlaying == 1 ? (statusteamSeasonal.result.affiliateFee ? statusteamSeasonal.result.affiliateFee : 0) : null,
                         "affiliateGst": memberShipProductType[j].isPlaying == 1 ? (statusteamSeasonal.result.affiliateGst ? statusteamSeasonal.result.affiliateGst : 0) : null,
-                        "nominationFees":  memberShipProductType[j].isPlaying == 1 ? statusteamSeasonal.result.nominationFees : null,
-                        "nominationGST":  memberShipProductType[j].isPlaying == 1 ? statusteamSeasonal.result.nominationGST : null,
-                        "affNominationFees":  memberShipProductType[j].isPlaying == 1 ? (statusteamSeasonal.result.affNominationFees ? statusteamSeasonal.result.affNominationFees : 0) : null,
-                        "affNominationGST":  memberShipProductType[j].isPlaying == 1 ? (statusteamSeasonal.result.affNominationGST ? statusteamSeasonal.result.affNominationGST : 0) : null,
+                        "nominationFees": memberShipProductType[j].isPlaying == 1 ? statusteamSeasonal.result.nominationFees : null,
+                        "nominationGST": memberShipProductType[j].isPlaying == 1 ? statusteamSeasonal.result.nominationGST : null,
+                        "affNominationFees": memberShipProductType[j].isPlaying == 1 ? (statusteamSeasonal.result.affNominationFees ? statusteamSeasonal.result.affNominationFees : 0) : null,
+                        "affNominationGST": memberShipProductType[j].isPlaying == 1 ? (statusteamSeasonal.result.affNominationGST ? statusteamSeasonal.result.affNominationGST : 0) : null,
                         "feeTypeRefId": statusteamSeasonal.result.feeTypeRefId,
                         "membershipProductTypeName": memberShipProductType[j].membershipProductTypeName,
                         "membershipProductUniqueKey": divisions[i].membershipProductUniqueKey,
@@ -1471,8 +1380,8 @@ function createProductFeeArr(data) {
                     }
                 }
 
-                if (statusTeamCasual.status == true) {
-                    let mFeesCasual = Number(memberShipProductType[j].mSeasonalFee) + Number(memberShipProductType[j].mSeasonalGst)
+                if (statusTeamCasual.status) {
+                    let mFeesCasual = Number(memberShipProductType[j].mCasualFee) + Number(memberShipProductType[j].mCasualGst)
 
                     type_object_team_casual = {
                         "competitionMembershipProductFeeId": statusTeamCasual.result.competitionMembershipProductFeeId,
@@ -1527,23 +1436,20 @@ function createProductFeeArr(data) {
             alltypeArrayCasual.push(type_Object_casual)
         }
 
-
         let divisionProductType = divisions[i].divisions
-       // console.log("divisionProductType", JSON.stringify(divisionProductType));
         for (let j in divisionProductType) {
             for (let k in memberShipProductType) {
                 let statusSeasonal = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 2)
                 let statusCasual = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 1)
                 let statusTeamSeasonal = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 3)
                 let statusTeamCasual = checkStatus(getDivisionsArray, memberShipProductType[k], divisionProductType[j].competitionMembershipProductDivisionId, 4)
-              //  console.log("statusSeasonal, statusCasual, statusteamSeasonal", statusSeasonal, statusCasual, statusTeamSeasonal)
                 let type_Object_casual = null
                 let type_Object_seasonal = null
                 let type_object_team_seasonal = null;
                 let type_object_team_casual = null;
 
                 ///// CASUAL TYPE -  DIVIVSION
-                if (statusCasual.status == true) {
+                if (statusCasual.status) {
                     let mFeesCasualPer = Number(memberShipProductType[k].mCasualFee) + Number(memberShipProductType[k].mCasualGst)
                     type_Object_casual = {
                         "competitionMembershipProductFeeId": statusCasual.result.competitionMembershipProductFeeId,
@@ -1578,7 +1484,7 @@ function createProductFeeArr(data) {
                         "affiliateGst": 0,
                         "nominationFees": null,
                         "nominationGST": null,
-                        "affNominationFees":null,
+                        "affNominationFees": null,
                         "affNominationGST": null,
                         "feeTypeRefId": 1,
                         "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
@@ -1592,7 +1498,7 @@ function createProductFeeArr(data) {
                     }
                 }
 
-                if (statusSeasonal.status == true) {
+                if (statusSeasonal.status) {
                     let mFeesCasualPer = Number(memberShipProductType[k].mSeasonalFee) + Number(memberShipProductType[k].mSeasonalGst)
                     type_Object_seasonal = {
                         "competitionMembershipProductFeeId": statusSeasonal.result.competitionMembershipProductFeeId,
@@ -1643,7 +1549,7 @@ function createProductFeeArr(data) {
 
                 if (memberShipProductType[k].allowTeamRegistrationTypeRefId == 1 ||
                     memberShipProductType[k].allowTeamRegistrationTypeRefId == 2) {
-                    if (statusTeamSeasonal.status == true) {
+                    if (statusTeamSeasonal.status) {
                         let mFeesCasualPer = Number(memberShipProductType[k].mSeasonalFee) + Number(memberShipProductType[k].mSeasonalGst)
                         type_object_team_seasonal = {
                             "competitionMembershipProductFeeId": statusTeamSeasonal.result.competitionMembershipProductFeeId,
@@ -1651,12 +1557,12 @@ function createProductFeeArr(data) {
                             "competitionMembershipProductDivisionId": divisionProductType[j].competitionMembershipProductDivisionId,
                             "fee": memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.Fees : null,
                             "gst": memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.GST : null,
-                            "affiliateFee": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateFee  ? statusTeamSeasonal.result.affiliateFee : 0) : null,
+                            "affiliateFee": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateFee ? statusTeamSeasonal.result.affiliateFee : 0) : null,
                             "affiliateGst": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affiliateGst ? statusTeamSeasonal.result.affiliateGst : 0) : null,
-                            "nominationFees":  memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.nominationFees : null,
-                            "nominationGST":  memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.nominationGST : null,
-                            "affNominationFees":  memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affNominationFees ? statusTeamSeasonal.result.affNominationFees : 0) : null,
-                            "affNominationGST":  memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affNominationGST ? statusTeamSeasonal.result.affNominationGST : 0) : null,
+                            "nominationFees": memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.nominationFees : null,
+                            "nominationGST": memberShipProductType[k].isPlaying == 1 ? statusTeamSeasonal.result.nominationGST : null,
+                            "affNominationFees": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affNominationFees ? statusTeamSeasonal.result.affNominationFees : 0) : null,
+                            "affNominationGST": memberShipProductType[k].isPlaying == 1 ? (statusTeamSeasonal.result.affNominationGST ? statusTeamSeasonal.result.affNominationGST : 0) : null,
                             "feeTypeRefId": 3,
                             "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
                             "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
@@ -1677,10 +1583,10 @@ function createProductFeeArr(data) {
                             "gst": memberShipProductType[k].isPlaying == 1 ? 0 : null,
                             "affiliateFee": memberShipProductType[k].isPlaying == 1 ? 0 : null,
                             "affiliateGst": memberShipProductType[k].isPlaying == 1 ? 0 : null,
-                            "nominationFees":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
-                            "nominationGST":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
-                            "affNominationFees":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
-                            "affNominationGST":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "nominationFees": memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "nominationGST": memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "affNominationFees": memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "affNominationGST": memberShipProductType[k].isPlaying == 1 ? 0 : null,
                             "feeTypeRefId": 3,
                             "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
                             "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
@@ -1694,7 +1600,8 @@ function createProductFeeArr(data) {
                         }
                     }
 
-                    if (statusTeamCasual.status == true) {
+                    console.log("*****", statusTeamCasual);
+                    if (statusTeamCasual.status) {
                         let mFeesCasualPer = Number(memberShipProductType[k].mCasualFee) + Number(memberShipProductType[k].mCasualGst)
                         type_object_team_casual = {
                             "competitionMembershipProductFeeId": statusTeamCasual.result.competitionMembershipProductFeeId,
@@ -1702,12 +1609,12 @@ function createProductFeeArr(data) {
                             "competitionMembershipProductDivisionId": divisionProductType[j].competitionMembershipProductDivisionId,
                             "fee": memberShipProductType[k].isPlaying == 1 ? statusTeamCasual.result.Fees : null,
                             "gst": memberShipProductType[k].isPlaying == 1 ? statusTeamCasual.result.GST : null,
-                            "affiliateFee": memberShipProductType[k].isPlaying == 1 ? (statusTeamCasual.result.affiliateFee  ? statusTeamCasual.result.affiliateFee : 0) : null,
+                            "affiliateFee": memberShipProductType[k].isPlaying == 1 ? (statusTeamCasual.result.affiliateFee ? statusTeamCasual.result.affiliateFee : 0) : null,
                             "affiliateGst": memberShipProductType[k].isPlaying == 1 ? (statusTeamCasual.result.affiliateGst ? statusTeamCasual.result.affiliateGst : 0) : null,
-                            "nominationFees":  memberShipProductType[k].isPlaying == 1 ? statusTeamCasual.result.nominationFees : null,
-                            "nominationGST":  memberShipProductType[k].isPlaying == 1 ? statusTeamCasual.result.nominationGST : null,
-                            "affNominationFees":  memberShipProductType[k].isPlaying == 1 ? (statusTeamCasual.result.affNominationFees ? statusTeamCasual.result.affNominationFees : 0) : null,
-                            "affNominationGST":  memberShipProductType[k].isPlaying == 1 ? (statusTeamCasual.result.affNominationGST ? statusTeamCasual.result.affNominationGST : 0) : null,
+                            "nominationFees": memberShipProductType[k].isPlaying == 1 ? statusTeamCasual.result.nominationFees : null,
+                            "nominationGST": memberShipProductType[k].isPlaying == 1 ? statusTeamCasual.result.nominationGST : null,
+                            "affNominationFees": memberShipProductType[k].isPlaying == 1 ? (statusTeamCasual.result.affNominationFees ? statusTeamCasual.result.affNominationFees : 0) : null,
+                            "affNominationGST": memberShipProductType[k].isPlaying == 1 ? (statusTeamCasual.result.affNominationGST ? statusTeamCasual.result.affNominationGST : 0) : null,
                             "feeTypeRefId": 4,
                             "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
                             "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
@@ -1727,10 +1634,10 @@ function createProductFeeArr(data) {
                             "gst": memberShipProductType[k].isPlaying == 1 ? 0 : null,
                             "affiliateFee": memberShipProductType[k].isPlaying == 1 ? 0 : null,
                             "affiliateGst": memberShipProductType[k].isPlaying == 1 ? 0 : null,
-                            "nominationFees":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
-                            "nominationGST":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
-                            "affNominationFees":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
-                            "affNominationGST":  memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "nominationFees": memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "nominationGST": memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "affNominationFees": memberShipProductType[k].isPlaying == 1 ? 0 : null,
+                            "affNominationGST": memberShipProductType[k].isPlaying == 1 ? 0 : null,
                             "feeTypeRefId": 4,
                             "membershipProductTypeName": memberShipProductType[k].membershipProductTypeName,
                             "divisionName": memberShipProductType[k].isPlaying == 1 ? divisionProductType[j].divisionName : "N/A",
@@ -1743,7 +1650,7 @@ function createProductFeeArr(data) {
                         }
                     }
 
-                   // console.log("After statusTeamSeasonal.result.affiliateFee" + type_object_team_seasonal.affiliateFee)
+                    console.log("perTypeTeamArrayCasual", perTypeTeamArrayCasual);
 
                     if (memberShipProductType[k].isPlaying == 1) {
                         perTypeTeamArraySeasonal.push(type_object_team_seasonal)
@@ -1754,8 +1661,6 @@ function createProductFeeArr(data) {
                             perTypeTeamArrayCasual.push(type_object_team_casual)
                         }
                     }
-                //    console.log("type_object_team_seasonal", type_object_team_seasonal); 
-                //    console.log("perTypeTeamArraySeasonal", perTypeTeamArraySeasonal); 
                 }
 
                 if (memberShipProductType[k].isPlaying == 1) {
@@ -1768,7 +1673,6 @@ function createProductFeeArr(data) {
                     }
                 }
             }
-
         }
 
         let productArrayToCheckAllType = isArrayNotEmpty(getFeeData) ? getFeeData : []
@@ -1776,10 +1680,9 @@ function createProductFeeArr(data) {
         for (let x in productArrayToCheckAllType) {
             if (product[i].membershipProductUniqueKey == productArrayToCheckAllType[x].membershipProductUniqueKey) {
                 divisionIdToCheckAllType = checkIsDivisionAllType(productArrayToCheckAllType[x].fees)
-                product[i]["isProductTypeALL"] = divisionIdToCheckAllType ? true : false
+                product[i]["isProductTypeALL"] = divisionIdToCheckAllType ? true: false
                 break;
             }
-
         }
         let isSeasonalFeeTypeAvailable = null
         let isCasualFeeTypeAvailable = null
@@ -1818,9 +1721,9 @@ function createProductFeeArr(data) {
             "teamRegChargeTypeRefId": teamRegChargeTypeRefId
         }
 
-        productArray.push(object)
+        console.log("object",object);
 
-        console.log("productArray",productArray);
+        productArray.push(object)
     }
     return productArray
 }
@@ -1842,7 +1745,6 @@ function checkDiscountProduct(discountStateData, selectedDiscount) {
         result: []
     }
     for (let i in selectedDiscount) {
-
         if (selectedDiscount[i].competitionTypeDiscountId === discountStateData.competitionTypeDiscountId) {
             object = {
                 status: true,
@@ -1854,75 +1756,74 @@ function checkDiscountProduct(discountStateData, selectedDiscount) {
     return object
 }
 
-// function getSeasonalExpandedKey(existingValue, newValue){
-//     for(let i in existingValue){
-//         if(newValue.indexOf(existingValue[i]) == -1){
-//             if()
+// function getSeasonalExpandedKey(existingValue, newValue) {
+//     for (let i in existingValue) {
+//         if (newValue.indexOf(existingValue[i]) == -1) {
 //         }
 //     }
 // }
 
-// adding object to seasonal payemnt 
+// adding object to seasonal payemnt
 
-function getSeasonaltreeData (datalist)
-{
-    let seasonalPaymentDefaultTemp = datalist.filter(x => x.id != 8);  
-    let instalmentDates = [];       
-    seasonalPaymentDefaultTemp.map((item) => {         
+function getSeasonaltreeData(datalist) {
+    let seasonalPaymentDefaultTemp = datalist.filter(x => x.id != 8);
+    let instalmentDates = [];
+    seasonalPaymentDefaultTemp.map((item) => {
         let subReferences = item.subReferences
-        if(subReferences.length > 0){
-            for(let i = 0;i<subReferences.length;i++){
+        if (subReferences.length > 0) {
+            for (let i = 0; i < subReferences.length; i++) {
                 subReferences[i]["instalmentDates"] = instalmentDates
             }
-        }       
-    })  
+        }
+    })
     return seasonalPaymentDefaultTemp;
 }
 
-function addInstalmentDate(selectedSeasonalInstalmentDatesArray){
+function addInstalmentDate(selectedSeasonalInstalmentDatesArray) {
     let newInstalmentDateObj = {
-        paymentOptionRefId:5,
-        paymentInstalmentId:0,
-        instalmentDate:"",
-        feesTypeRefId:2,
+        paymentOptionRefId: 5,
+        paymentInstalmentId: 0,
+        instalmentDate: "",
+        feesTypeRefId: 2,
     }
     selectedSeasonalInstalmentDatesArray.push(newInstalmentDateObj);
 }
 
-function removeInstalmentDate(removeObj){  
-    let selectedSeasonalInstalmentDatesArray = removeObj.selectedSeasonalInstalmentDatesArray;      
-    let index = removeObj.index; 
-    selectedSeasonalInstalmentDatesArray.splice(index,1);      
+function removeInstalmentDate(removeObj) {
+    let selectedSeasonalInstalmentDatesArray = removeObj.selectedSeasonalInstalmentDatesArray;
+    let index = removeObj.index;
+    selectedSeasonalInstalmentDatesArray.splice(index, 1);
 }
 
-function updateInstalmentDate(value){   
-    let instalmentDate = value.instalmentDate;      
-    let selectedSeasonalInstalmentDatesArrayItem = value.selectedSeasonalInstalmentDatesArrayItem; 
-    selectedSeasonalInstalmentDatesArrayItem.instalmentDate = instalmentDate;    
+function updateInstalmentDate(value) {
+    let instalmentDate = value.instalmentDate;
+    let selectedSeasonalInstalmentDatesArrayItem = value.selectedSeasonalInstalmentDatesArrayItem;
+    selectedSeasonalInstalmentDatesArrayItem.instalmentDate = instalmentDate;
 }
 
-function addSeasonalTeamInstalmentDate(selectedSeasonalTeamInstalmentDatesArray){
+function addSeasonalTeamInstalmentDate(selectedSeasonalTeamInstalmentDatesArray) {
     let newInstalmentDateObj = {
-            paymentOptionRefId:5,
-            paymentInstalmentId:0,
-            instalmentDate:"",
-            feesTypeRefId:3,
-        }
+        paymentOptionRefId: 5,
+        paymentInstalmentId: 0,
+        instalmentDate: "",
+        feesTypeRefId: 3,
+    }
     selectedSeasonalTeamInstalmentDatesArray.push(newInstalmentDateObj);
 }
- 
-function removeSeasonalTeamInstalmentDate(removeObj){  
+
+function removeSeasonalTeamInstalmentDate(removeObj) {
     let selectedSeasonalTeamInstalmentDatesArray = removeObj.selectedSeasonalTeamInstalmentDatesArray;
-    let selectedSeasonalTeamInstalmentDatesArrayItem = removeObj.selectedSeasonalTeamInstalmentDatesArrayItem;    
+    let selectedSeasonalTeamInstalmentDatesArrayItem = removeObj.selectedSeasonalTeamInstalmentDatesArrayItem;
     let index = selectedSeasonalTeamInstalmentDatesArray.indexOf(selectedSeasonalTeamInstalmentDatesArrayItem);
-    selectedSeasonalTeamInstalmentDatesArray.splice(index,1);             
+    selectedSeasonalTeamInstalmentDatesArray.splice(index, 1);
 }
- 
-function updateSeasonalTeamInstalmentDate(value){   
-    let seasonalTeamInstalmentDate = value.seasonalTeamInstalmentDate;      
-    let selectedSeasonalTeamInstalmentDatesArrayItem = value.selectedSeasonalTeamInstalmentDatesArrayItem; 
-    selectedSeasonalTeamInstalmentDatesArrayItem.instalmentDate = seasonalTeamInstalmentDate;        
+
+function updateSeasonalTeamInstalmentDate(value) {
+    let seasonalTeamInstalmentDate = value.seasonalTeamInstalmentDate;
+    let selectedSeasonalTeamInstalmentDatesArrayItem = value.selectedSeasonalTeamInstalmentDatesArrayItem;
+    selectedSeasonalTeamInstalmentDatesArrayItem.instalmentDate = seasonalTeamInstalmentDate;
 }
+
 function competitionFees(state = initialState, action) {
     switch (action.type) {
         case ApiConstants.API_COMPETITION_FEES_FAIL:
@@ -1947,7 +1848,6 @@ function competitionFees(state = initialState, action) {
             return { ...state, onLoad: true, error: null, competitionListAction: action };
 
         case ApiConstants.API_REG_COMPETITION_LIST_SUCCESS:
-            console.log("API_REG_COMPETITION_LIST_SUCCESS", state.selectedVenuesAdd, state.selectedVenues)
             let competitionListData = action.result;
             state.selectedVenuesAdd = null
             state.selectedVenues = []
@@ -2009,7 +1909,7 @@ function competitionFees(state = initialState, action) {
 
         case ApiConstants.GET_SEASONAL_FEE_DETAIL_API_SUCCESS:
             const seasonalPayment = getRegistrationSetting(action.seasonalPaymentOptionResult)
-			const seasonalPaymentData = getSeasonaltreeData(seasonalPayment)																
+            const seasonalPaymentData = getSeasonaltreeData(seasonalPayment)
             return {
                 ...state,
                 onLoad: false,
@@ -2035,7 +1935,6 @@ function competitionFees(state = initialState, action) {
 
         /////get the competition fees all the data in one API
         case ApiConstants.API_GET_COMPETITION_FEES_DETAILS_LOAD:
-
             return { ...state, onLoad: true, error: null, getCompAllDataOnLoad: true };
 
         case ApiConstants.API_GET_COMPETITION_FEES_DETAILS_SUCCESS:
@@ -2069,8 +1968,7 @@ function competitionFees(state = initialState, action) {
                         //state.anyOrgNonSelected = null
                         state.associationChecked = true
                         state.anyOrgAssociationArr = [affiliateObject]
-                    }
-                    else {
+                    } else {
                         // club
                         let affiliate_Org_SelectedArr = getAffiliateOrgSelectedArr(allData.competitiondetail.invitees, selectedInvitees[o])
                         state.clubSchool = affiliate_Org_SelectedArr.slectedAffilitesArray
@@ -2098,13 +1996,13 @@ function competitionFees(state = initialState, action) {
             }
             state.selectedInvitees = selectedInvitees
             let selectedCasualFee = checkSelectedCasualFee(allData.competitionpayments.paymentOptions, state.casualPaymentDefault, state.selectedCasualFee, state.selectedCasualFeeKey)
-            let selectedSeasonalFee = checkSelectedSeasonalFee(allData.competitionpayments.paymentOptions, state.seasonalPaymentDefault, state.SelectedSeasonalFee, state.SelectedSeasonalFeeKey,allData.competitionpayments.instalmentDates,state.selectedSeasonalInstalmentDates)
-            let selectedSeasonalTeamFee = checkSelectedSeasonalTeamFee(allData.competitionpayments.paymentOptions, state.seasonalTeamPaymentDefault, state.selectedSeasonalTeamFee, state.selectedSeasonalTeamFeeKey,allData.competitionpayments.instalmentDates,state.selectedTeamSeasonalInstalmentDates)
+            let selectedSeasonalFee = checkSelectedSeasonalFee(allData.competitionpayments.paymentOptions, state.seasonalPaymentDefault, state.SelectedSeasonalFee, state.SelectedSeasonalFeeKey, allData.competitionpayments.instalmentDates, state.selectedSeasonalInstalmentDates)
+            let selectedSeasonalTeamFee = checkSelectedSeasonalTeamFee(allData.competitionpayments.paymentOptions, state.seasonalTeamPaymentDefault, state.selectedSeasonalTeamFee, state.selectedSeasonalTeamFeeKey, allData.competitionpayments.instalmentDates, state.selectedTeamSeasonalInstalmentDates)
             let selectedCasualTeamFee = checkSelectedCasualTeamFee(allData.competitionpayments.paymentOptions, state.casualPaymentDefault, state.selectedCasualTeamFee)
             let selectedPaymentMethods = checkSelectedPaymentMethods(allData.competitionpayments.paymentMethods, state.paymentMethodsDefault, state.selectedPaymentMethods)
             let finalDiscountData = discountDataObject(allData.competitiondiscounts)
             state.competionDiscountValue.competitionDiscounts[0].discounts = finalDiscountData
-            console.log("####, $$$$$", state.charityRoundUp, allData.competitionpayments.charityRoundUp)
+
             let selectedCharity = checkSelectedCharity(allData.competitionpayments.charityRoundUp, state.charityRoundUp)
             let selectedGovtVoucher = checkSelectedVoucher(allData.competitiondiscounts.govermentVouchers, state.govtVoucher)
             state.charityRoundUp = selectedCharity
@@ -2123,7 +2021,7 @@ function competitionFees(state = initialState, action) {
                 let memberShipDiscountProduct = []
                 for (let i in discountslist) {
                     let selectedProductDiscount = checkDiscountProduct(discountslist[i], selectDiscountArray)
-                    if (selectedProductDiscount.status == true) {
+                    if (selectedProductDiscount.status) {
                         memberShipDiscountProduct = getSelectedDiscountProduct(selectedProductDiscount.result.membershipProductUniqueKey, allData.competitionmembershipproduct)
                         discountslist[i].competitionMembershipProductTypeId = selectedProductDiscount.result.competitionMembershipProductTypeId
                     }
@@ -2131,7 +2029,7 @@ function competitionFees(state = initialState, action) {
                 }
             }
             state.postInvitees = allData.competitiondetail.invitees
-            if(state.selectedVenuesAdd == null)
+            if (state.selectedVenuesAdd == null)
                 state.postVenues = allData.competitiondetail.venues
 
             if (state.createVenue) {
@@ -2141,7 +2039,7 @@ function competitionFees(state = initialState, action) {
                 }
                 state.postVenues.push(defaultPostVenueObject)
             }
-            
+
             state.charityTitle = isArrayNotEmpty(allData.competitionpayments.charityRoundUp) ? allData.competitionpayments.charityRoundUp[0].charityRoundUpName : ""
             state.charityDescription = isArrayNotEmpty(allData.competitionpayments.charityRoundUp) ? allData.competitionpayments.charityRoundUp[0].charityRoundUpDescription : ""
             state.onLoad = false
@@ -2168,7 +2066,7 @@ function competitionFees(state = initialState, action) {
                 defaultChairtyOption: allData.competitionpayments.charityRoundUp,
                 defaultGovtVoucher: allData.competitiondiscounts.govermentVouchers,
                 selectedSeasonalInstalmentDates: selectedSeasonalFee.selectedSeasonalInstalmentDates,
-                selectedTeamSeasonalInstalmentDates:selectedSeasonalTeamFee.selectedTeamSeasonalInstalmentDates,
+                selectedTeamSeasonalInstalmentDates: selectedSeasonalTeamFee.selectedTeamSeasonalInstalmentDates,
                 error: null
             };
 
@@ -2181,8 +2079,6 @@ function competitionFees(state = initialState, action) {
                 ...state,
                 error: null
             }
-
-
 
         ////save the competition membership tab details
         case ApiConstants.API_SAVE_COMPETITION_FEES_MEMBERHSIP_TAB_LOAD:
@@ -2207,19 +2103,17 @@ function competitionFees(state = initialState, action) {
                 error: null
             };
 
-
-
         ////membership product selected action tochange membership typearray data
         case ApiConstants.COMPETITION_FEES_MEMBERSHIP_PRODUCT_SELECTED_ONCHANGE:
-             state.defaultCompFeesMembershipProduct[action.index].isProductSelected = action.checked;
-				
-				let membershipProductobj = state.defaultCompFeesMembershipProduct[action.index];      												
-                membershipProductobj.competitionMembershipProductId = null;
-                let membershipProductTypesList = membershipProductobj.membershipProductTypes;
-                membershipProductTypesList.map((item)=>{         
-                    item.competitionMembershipProductId = null;
-                    item.competitionMembershipProductTypeId = 0;         
-                }); 
+            state.defaultCompFeesMembershipProduct[action.index].isProductSelected = action.checked;
+
+            let membershipProductobj = state.defaultCompFeesMembershipProduct[action.index];
+            membershipProductobj.competitionMembershipProductId = null;
+            let membershipProductTypesList = membershipProductobj.membershipProductTypes;
+            membershipProductTypesList.map((item) => {
+                item.competitionMembershipProductId = null;
+                item.competitionMembershipProductTypeId = 0;
+            });
 
             return {
                 ...state,
@@ -2227,7 +2121,6 @@ function competitionFees(state = initialState, action) {
                 status: action.status,
                 error: null
             };
-
 
         //////membership types in competition fees onchhange function
         case ApiConstants.COMPETITION_FEES_MEMBERSHIP_TYPES_SELECTED_ONCHANGE:
@@ -2259,7 +2152,6 @@ function competitionFees(state = initialState, action) {
                 error: null
             };
 
-
         /////onchange the division table data on change
         case ApiConstants.COMPETITION_FEES_DIVISION_TABLE_DATA_ONCHANGE:
             let onChangeDivisionIndex = state.competitionDivisionsData.findIndex(
@@ -2267,13 +2159,13 @@ function competitionFees(state = initialState, action) {
             );
             state.competitionDivisionsData[onChangeDivisionIndex].divisions[action.index][action.keyword] = action.checked
             // state.competitionDivisionsData[onChangeDivisionIndex].divisions[action.index]["parentIndex"] = onChangeDivisionIndex
-            if (action.keyword == "ageRestriction") {
+            if (action.keyword === "ageRestriction") {
                 if (action.checked == false) {
                     state.competitionDivisionsData[onChangeDivisionIndex].divisions[action.index]["fromDate"] = null
                     state.competitionDivisionsData[onChangeDivisionIndex].divisions[action.index]["toDate"] = null
                 }
             }
-            if (action.keyword == "genderRestriction") {
+            if (action.keyword === "genderRestriction") {
                 if (action.checked == false) {
                     state.competitionDivisionsData[onChangeDivisionIndex].divisions[action.index]["genderRefId"] = null
                 }
@@ -2285,44 +2177,43 @@ function competitionFees(state = initialState, action) {
                 error: null
             };
 
-        //////add or remove another division inthe divsision tab
+        //////add or remove another division in the division tab
         case ApiConstants.COMPETITION_FEES_DIVISION_ADD_REMOVE:
             // let key = competitionMembershipProduct_Id(state.defaultCompFeesMembershipProduct, action.item.membershipProductUniqueKey)
-            if (action.keyword == "add") {
+            if (action.keyword === "add") {
                 let defaultDivisionObject = {
                     toDate: null,
                     fromDate: null,
-                    divisionName: "",
+                    "divisionName": "",
                     genderRefId: null,
                     membershipProductUniqueKey: action.item.membershipProductUniqueKey,
                     competitionMembershipProductId: action.item.competitionMembershipProductId,
-                    competitionMembershipProductDivisionId: 0,
+                    "competitionMembershipProductDivisionId": 0,
                     competitionDivisionId: 0,
                     ageRestriction: false,
                     genderRestriction: false,
                     parentIndex: action.index,
                     isPlaying: 0,
                 }
-                state.competitionDivisionsData[action.index].divisions.push(defaultDivisionObject)
-
+                state.competitionDivisionsData[action.index].divisions = [
+                    ...state.competitionDivisionsData[action.index].divisions,
+                    defaultDivisionObject,
+                ];
             }
-            if (action.keyword == "remove") {
+            if (action.keyword === "remove") {
                 let removeDivisionIndex = state.competitionDivisionsData.findIndex(x => x.membershipProductUniqueKey == action.item.membershipProductUniqueKey)
                 if (removeDivisionIndex >= 0) {
                     state.competitionDivisionsData[removeDivisionIndex].divisions.splice(action.index, 1)
                 }
+            } else if (action.keyword === "removeDivision") {
+                state.competitionDivisionsData[0].divisions.splice(action.index, 1);
             }
-			else if (action.keyword == "removeDivision") {
-                state.competitionDivisionsData[0].divisions.splice(action.index,1);
-            }		 
-
             return {
                 ...state,
                 onLoad: false,
                 status: action.status,
                 error: null
             };
-
 
         ////save the competition fees details
         case ApiConstants.API_SAVE_COMPETITION_FEES_DETAILS_LOAD:
@@ -2340,10 +2231,10 @@ function competitionFees(state = initialState, action) {
             state.competitionDivisionsData = divisionGetSucces_Data
             state.onLoad = false
 
-            if(state.selectedPaymentMethods.length == 0){
+            if (state.selectedPaymentMethods.length == 0) {
                 let selectedCasualFee = checkSelectedCasualFee(null, state.casualPaymentDefault, state.selectedCasualFee, null)
-                let selectedSeasonalFee = checkSelectedSeasonalFee(null, state.seasonalPaymentDefault, state.SelectedSeasonalFee, null, null,state.selectedSeasonalInstalmentDates)
-                let selectedSeasonalTeamFee = checkSelectedSeasonalTeamFee(null, state.seasonalTeamPaymentDefault, state.selectedSeasonalTeamFee, null,null,null)
+                let selectedSeasonalFee = checkSelectedSeasonalFee(null, state.seasonalPaymentDefault, state.SelectedSeasonalFee, null, null, state.selectedSeasonalInstalmentDates)
+                let selectedSeasonalTeamFee = checkSelectedSeasonalTeamFee(null, state.seasonalTeamPaymentDefault, state.selectedSeasonalTeamFee, null, null, null)
                 let selectedCasualTeamFee = checkSelectedCasualTeamFee(null, state.casualPaymentDefault, state.selectedCasualTeamFee)
                 let selectedPaymentMethods = checkSelectedPaymentMethods(null, state.paymentMethodsDefault, state.selectedPaymentMethods)
 
@@ -2352,11 +2243,8 @@ function competitionFees(state = initialState, action) {
                 state.selectedSeasonalTeamFee = selectedSeasonalTeamFee.selectedSeasonalTeamFee;
                 state.selectedCasualTeamFee = selectedCasualTeamFee.selectedCasualTeamFee;
                 state.selectedPaymentMethods = selectedPaymentMethods.selectedPaymentMethods;
-
-
             }
-            
-            
+
             return {
                 ...state,
                 status: action.status,
@@ -2367,50 +2255,40 @@ function competitionFees(state = initialState, action) {
 
         ////Add-Edit competition fees details
         case ApiConstants.API_ADD_EDIT_COMPETITION_FEES_DETAILS:
-            if (action.key == "venues") { /// add-edit venues
+            if (action.key === "venues") { /// add-edit venues
                 state.selectedVenues = action.data
                 let venuesForPost = createVenuesList(state.venueList, action.data, state.competitionDetailData.venues)
                 state.postVenues = venuesForPost
-            } else if (action.key == "nonPlayingObjectAdd") { /// add non playing dates
+            } else if (action.key === "nonPlayingObjectAdd") { /// add non playing dates
                 state.competitionDetailData.nonPlayingDates.push(action.data)
-            }
-            // else if (action.key == "invitees") { /// add-edit inviteess
-            //     console.log("Selected Invitees" + JSON.stringify(action.data));
+            // } else if (action.key === "invitees") { /// add-edit inviteess
             //     state.selectedInvitees = action.data
             //     state.postInvitees = createInviteesPostArray(action.data, state.competitionDetailData.invitees)
             //     state.affiliateOrgSelected = []
             //     state.postInvitees[0]["inviteesOrg"] = []
-            // }
-            // else if (action.key == "affiliateOrgKey") { /// add-edit inviteess
+            // } else if (action.key === "affiliateOrgKey") { /// add-edit inviteess
             //     state.affiliateOrgSelected = action.data
-            //     console.log("affiliateOrgKey", state.postInvitees)
             //     // state.selectedInvitees = action.data
             //     let orgInviteesArray = createInviteesOrgArray(state.postInvitees, action.data)
             //     state.postInvitees[0]["inviteesOrg"] = orgInviteesArray
-            //     console.log(orgInviteesArray)
-            //     console.log(state.postInvitees)
-
-            // }
-            else if (action.key == "logoIsDefault") {
+            }
+            else if (action.key === "logoIsDefault") {
                 state.competitionDetailData[action.key] = action.data
-                if (action.data == true) {
+                if (action.data) {
                     state.competitionDetailData.competitionLogoUrl = state.defaultCompFeesOrgLogo
                 }
-
-            }
-            else if (action.key == "nonPlayingDataRemove") {
+            } else if (action.key === "nonPlayingDataRemove") {
                 let nonPlayingIndex = action.data
                 state.competitionDetailData.nonPlayingDates.splice(nonPlayingIndex, 1)
-            }
-            else if (action.key == 'affiliateSelected' || action.key == 'anyOrgSelected' || action.key == 'otherSelected' || action.key == 'affiliateNonSelected' || action.key == 'anyOrgNonSelected') {
-                if (action.key == 'affiliateSelected') {
+            } else if (action.key === 'affiliateSelected' || action.key === 'anyOrgSelected' || action.key === 'otherSelected' || action.key === 'affiliateNonSelected' || action.key === 'anyOrgNonSelected') {
+                if (action.key === 'affiliateSelected') {
                     state.affiliateSelected = action.data
                     state.affiliateArray = createInviteesPostArray(action.data, state.competitionDetailData.invitees)
                     state.otherSelected = null
                     state.affiliateNonSelected = null
                     state.invitedTo.splice(0, 1, action.data)
                 }
-                if (action.key == 'anyOrgSelected') {
+                if (action.key === 'anyOrgSelected') {
                     state.anyOrgSelected = action.data
                     state.anyOrgAffiliateArr = createInviteesPostArray(action.data, state.competitionDetailData.invitees)
                     state.otherSelected = null
@@ -2418,7 +2296,7 @@ function competitionFees(state = initialState, action) {
                     state.affiliateArray = removeDirect(state.affiliateArray)
                 }
 
-                if (action.key == 'otherSelected') {
+                if (action.key === 'otherSelected') {
                     state.otherSelected = action.data
                     state.affiliateSelected = null
                     state.anyOrgSelected = null
@@ -2434,14 +2312,14 @@ function competitionFees(state = initialState, action) {
                     state.anyOrgAssociationArr = []
                     state.anyOrgClubArr = []
                 }
-                if (action.key == 'affiliateNonSelected') {
+                if (action.key === 'affiliateNonSelected') {
                     state.invitedTo = []
                     state.affiliateSelected = []
                     state.otherSelected = null
                     state.affiliateNonSelected = action.data
                     state.affiliateArray = []
                 }
-                if (action.key == 'anyOrgNonSelected') {
+                if (action.key === 'anyOrgNonSelected') {
                     state.invitedTo = []
                     state.anyOrgSelected = []
                     state.otherSelected = null
@@ -2453,35 +2331,32 @@ function competitionFees(state = initialState, action) {
                     state.anyOrgAssociationArr = []
                     state.anyOrgClubArr = []
                 }
-            } else if (action.key == "associationChecked") {
+            } else if (action.key === "associationChecked") {
                 state.associationChecked = action.data
                 state.anyOrgNonSelected = null
                 state.anyOrgSelected = 7
                 state.anyOrgAssociationArr = createInviteesPostArray(7, state.competitionDetailData.invitees)
                 state.otherSelected = null
                 state.affiliateArray = removeDirect(state.affiliateArray)
-            }
-            else if (action.key == "clubChecked") {
+            } else if (action.key === "clubChecked") {
                 state.clubChecked = action.data
                 state.anyOrgNonSelected = null
-                state.anyOrgClubArr =  createInviteesPostArray(8, state.competitionDetailData.invitees)
+                state.anyOrgClubArr = createInviteesPostArray(8, state.competitionDetailData.invitees)
                 state.otherSelected = null
                 state.affiliateArray = removeDirect(state.affiliateArray)
-            }
-            else if (action.key == 'associationAffilite' || action.key == 'clubAffilite') {
-                if (action.key == 'associationAffilite') {
+            } else if (action.key === 'associationAffilite' || action.key === 'clubAffilite') {
+                if (action.key === 'associationAffilite') {
                     state.associationLeague = action.data
                     let orgInviteesArray = createInviteesOrgArray(state.any_club_Org_AffiliateArr, action.data)
                     state.anyOrgAssociationArr[0]["inviteesOrg"] = orgInviteesArray
                 }
 
-                if (action.key == 'clubAffilite') {
+                if (action.key === 'clubAffilite') {
                     state.clubSchool = action.data
                     let orgInviteesArray = createInviteesOrgArray(state.any_club_Org_AffiliateArr, action.data)
                     state.anyOrgClubArr[0]["inviteesOrg"] = orgInviteesArray
                 }
-            }
-            else {
+            } else {
                 state.competitionDetailData[action.key] = action.data
             }
             return {
@@ -2491,19 +2366,17 @@ function competitionFees(state = initialState, action) {
 
         //update charity round and update dicount govt voucher
         case ApiConstants.UPDATE_PAYMENTS_COMPETITION_FEES:
-            if (action.key == 'charityRoundUp') {
+            if (action.key === 'charityRoundUp') {
                 state.charityRoundUp[action.index].isSelected = action.value
-
             }
-
-            if (action.key == "govermentVouchers") {
+            if (action.key === "govermentVouchers") {
                 state.govtVoucher[action.index].isSelected = action.value
                 // state.selectedCharityArray.push(charityRoundUp[action.index])
             }
-            if (action.key == "title") {
+            if (action.key === "title") {
                 state.charityTitle = action.value
             }
-            if (action.key == "description") {
+            if (action.key === "description") {
                 state.charityDescription = action.value
             }
             let postCharityArray = checkCharityArray(state.charityRoundUp, state.defaultChairtyOption)
@@ -2518,72 +2391,61 @@ function competitionFees(state = initialState, action) {
 
         /// update payment option in competiton fee
         case ApiConstants.UPDATE_PAYMENTS_OPTIONS_COMPETITION_FEES:
-            //console.log("action", action);
-            if (action.key == "casualfee") {
+            if (action.key === "casualfee") {
                 state.selectedCasualFee[action.index][action.subKey] = action.value;
                 // state.selectedCasualFeeKey = action.value;
                 // state.casusalExpendedKey = action.value[0];
                 // let updatedCasual = getUpdatedCasualFee(action.value, getUpdatedCasualFeeArr, state.defaultSelectedCasualFee, 1)
                 // state.selectedCasualFee = updatedCasual
-            }
-            else if(action.key == "seasonalfee"){
-                if(action.subKey == "isChecked"){
+            } else if (action.key === "seasonalfee") {
+                if (action.subKey === "isChecked") {
                     state.SelectedSeasonalFee[action.index][action.subKey] = action.value;
 
                     let paymentOptionRefId = state.SelectedSeasonalFee[action.index]["paymentOptionRefId"];
-                   // console.log("paymentOptionRefId", paymentOptionRefId);
-                    if(paymentOptionRefId == 5){
+                    if (paymentOptionRefId == 5) {
                         state.competitionDetailData.isSeasonalUponReg = true;
                     }
                 }
 
                 // state.SelectedSeasonalFeeKey = action.value;
                 // state.seasonalExpendedKey = action.value[0];
-				// if( action.value.includes("6") || action.value.includes(6) || action.value.includes("7") || action.value.includes(7)){
+                // if (action.value.includes("6") || action.value.includes(6) || action.value.includes("7") || action.value.includes(7)) {
                 //     state.competitionDetailData.isSeasonalUponReg = true;
-                // }
-                // else{
+                // } else {
                 //     state.competitionDetailData.isSeasonalUponReg = false;
-                // }     	
-                // let updatedSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalFeeArr, state.defaultSelectedSeasonalFee, 2,state.selectedSeasonalInstalmentDates)
+                // }
+                // let updatedSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalFeeArr, state.defaultSelectedSeasonalFee, 2, state.selectedSeasonalInstalmentDates)
                 // state.SelectedSeasonalFee = updatedSeasonal.getUpdatedCasualFeeArr
                 // state.selectedSeasonalInstalmentDates = updatedSeasonal.instalmentDates;
-            }
-            else if(action.key == "seasonalteamfee"){
-
-                if(action.subKey == "isChecked"){
+            } else if (action.key === "seasonalteamfee") {
+                if (action.subKey === "isChecked") {
                     state.selectedSeasonalTeamFee[action.index][action.subKey] = action.value;
 
                     let id = state.selectedSeasonalTeamFee[action.index]["paymentOptionRefId"];
-                    if(id == 5){
+                    if (id == 5) {
                         state.competitionDetailData.isTeamSeasonalUponReg = true;
                     }
                 }
 
                 // state.selectedSeasonalTeamFeeKey = action.value;
-                // state.seasonalTeamExpendedKey = action.value[0]; 
-                // if( action.value.includes("6") || action.value.includes(6) || action.value.includes("7") || action.value.includes(7)){
+                // state.seasonalTeamExpendedKey = action.value[0];
+                // if (action.value.includes("6") || action.value.includes(6) || action.value.includes("7") || action.value.includes(7)) {
                 //     state.competitionDetailData.isTeamSeasonalUponReg = true;
-                // }
-                // else{
+                // } else {
                 //     state.competitionDetailData.isTeamSeasonalUponReg = false;
-                // }			   
-                // let updatedTeamSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalTeamFeeArr, state.defaultSelectedSeasonalTeamFee, 3,state.selectedTeamSeasonalInstalmentDates)
+                // }
+                // let updatedTeamSeasonal = getUpdatedSeasonalFee(action.value, getUpdatedSeasonalTeamFeeArr, state.defaultSelectedSeasonalTeamFee, 3, state.selectedTeamSeasonalInstalmentDates)
                 // state.selectedSeasonalTeamFee = updatedTeamSeasonal.getUpdatedCasualFeeArr;
                 // state.selectedTeamSeasonalInstalmentDates = updatedTeamSeasonal.instalmentDates;
-				// if(!state.selectedSeasonalTeamFeeKey.includes("8")|| !state.selectedSeasonalTeamFeeKey.includes(8)){
+                // if (!state.selectedSeasonalTeamFeeKey.includes("8") || !state.selectedSeasonalTeamFeeKey.includes(8)) {
                 //     state.competitionDetailData.teamSeasonalSchoolRegCode = ""
                 // }
-            }
-            else if (action.key == "casualteamfee") {
+            } else if (action.key === "casualteamfee") {
                 state.selectedCasualTeamFee[action.index][action.subKey] = action.value;
-            }
-            else if(action.key == "paymentmethods"){
+            } else if (action.key === "paymentmethods") {
                 state.selectedPaymentMethods[action.index][action.subKey] = action.value;
             }
             return { ...state }
-
-
 
         // for post api of competition fee
         case ApiConstants.API_POST_COMPETITION_FEE_PAYMENT_LOAD:
@@ -2602,12 +2464,11 @@ function competitionFees(state = initialState, action) {
                 error: null
             }
 
-
         // for add and remove another discount competion fee
         case ApiConstants.ADD_ANOTHER_DISCOUNT_COMPETITION_FEE:
             let orgData = getOrganisationData()
             let currentOrganisationId = orgData ? orgData.organisationId : 0
-            if (action.keyAction == "add") {
+            if (action.keyAction === "add") {
                 const newObj = {
                     "competitionMembershipProductTypeId": [],
                     "competitionTypeDiscountId": 0,
@@ -2626,8 +2487,7 @@ function competitionFees(state = initialState, action) {
                     "organisationId": currentOrganisationId,
                 }
                 state.competionDiscountValue.competitionDiscounts[0].discounts.push(newObj)
-            }
-            else if (action.keyAction == "remove") {
+            } else if (action.keyAction === "remove") {
                 state.competionDiscountValue.competitionDiscounts[0].discounts.splice(action.index, 1)
             }
             return {
@@ -2652,10 +2512,8 @@ function competitionFees(state = initialState, action) {
             state.competionDiscountValue.competitionDiscounts[0].discounts[action.index].competitionMembershipProductTypeId = null
             return { ...state }
 
-
         // get default charity and govt voucher
         case ApiConstants.API_REG_COMPETITION_FEE_DEFAULT_CHARITY_SUCCESS:
-           // console.log(")))))))))))))))))))))))");
             let charityData = getCharityResult(action.charityResult)
             let govtVocuherData = getCharityResult(action.govtVoucherResult)
             state.charityRoundUp = charityData
@@ -2674,7 +2532,6 @@ function competitionFees(state = initialState, action) {
                 error: null
             }
 
-
         case ApiConstants.API_COMPETITION_DISCOUNT_TYPE_LOAD:
             return { ...state, onLoad: true }
         case ApiConstants.API_COMPETITION_DISCOUNT_TYPE_SUCCESS:
@@ -2686,47 +2543,43 @@ function competitionFees(state = initialState, action) {
             }
 
         case ApiConstants.CHECK_UNCHECK_COMPETITION_FEES_SECTION:
-
-            if (action.key == "isIndividualReg") {
+            if (action.key === "isIndividualReg") {
                 state.competitionFeesData[action.parentIndex]["isSeasonal"] = action.data
                 state.competitionFeesData[action.parentIndex]["isCasual"] = action.data
             }
-            if (action.key == "isTeamReg") {
+            if (action.key === "isTeamReg") {
                 state.competitionFeesData[action.parentIndex]["isTeamSeasonal"] = action.data
                 state.competitionFeesData[action.parentIndex]["isTeamCasual"] = action.data
-                if(action.data == false){
+                if (action.data == false) {
                     state.competitionFeesData[action.parentIndex]["teamRegChargeTypeRefId"] = null;
-                }
-                else{
+                } else {
                     state.competitionFeesData[action.parentIndex]["teamRegChargeTypeRefId"] = 1;
                 }
             }
 
             state.competitionFeesData[action.parentIndex][action.key] = action.data
 
-            if (action.key == "isSeasonal" || action.key == "isCasual") {
+            if (action.key === "isSeasonal" || action.key === "isCasual") {
                 let isCasual = state.competitionFeesData[action.parentIndex]["isCasual"];
                 let isSeasonal = state.competitionFeesData[action.parentIndex]["isSeasonal"];
-                if (isSeasonal == true && isCasual == true)
+                if (isSeasonal && isCasual)
                     state.competitionFeesData[action.parentIndex]["isIndividualReg"] = true
                 else if (isSeasonal == false && isCasual == false)
                     state.competitionFeesData[action.parentIndex]["isIndividualReg"] = false
             }
-            if (action.key == "isTeamSeasonal" || action.key == "isTeamCasual") {
+            if (action.key === "isTeamSeasonal" || action.key === "isTeamCasual") {
                 let isCasual = state.competitionFeesData[action.parentIndex]["isTeamCasual"];
                 let isSeasonal = state.competitionFeesData[action.parentIndex]["isTeamSeasonal"];
-                if (isSeasonal == true && isCasual == true)
+                if (isSeasonal && isCasual)
                     state.competitionFeesData[action.parentIndex]["isTeamReg"] = true
                 else if (isSeasonal == false && isCasual == false)
                     state.competitionFeesData[action.parentIndex]["isTeamReg"] = false
 
-                if(isSeasonal == false){
+                if (isSeasonal == false) {
                     state.competitionFeesData[action.parentIndex]["teamRegChargeTypeRefId"] = null;
-                }
-                else if(isSeasonal == true){
+                } else if (isSeasonal) {
                     state.competitionFeesData[action.parentIndex]["teamRegChargeTypeRefId"] = 1;
                 }
-              
             }
 
             return {
@@ -2734,34 +2587,30 @@ function competitionFees(state = initialState, action) {
                 error: null
             }
 
-
-
         case ApiConstants.API_ADD_EDIT_COMPETITION_FEES_SECTION:
             let array = JSON.parse(JSON.stringify(state.competitionFeesData))
             let index = array.findIndex(x => x.membershipProductUniqueKey == action.record.membershipProductUniqueKey)
 
             if (index > -1) {
-                if (array[index].isAllType == "allDivisions") {
-                    if (action.key == "fee") {
+                if (array[index].isAllType === "allDivisions") {
+                    if (action.key === "fee") {
                         array[index][action.arrayKey].allType[action.tableIndex].fee = (action.data)
                         let gstAll = (Number(action.data) / 10).toFixed(2)
                         let nominationFees = array[index][action.arrayKey].allType[action.tableIndex].nominationFees
                         let nominationGST = array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
                         array[index][action.arrayKey].allType[action.tableIndex].gst = gstAll
                         array[index][action.arrayKey].allType[action.tableIndex].total = ((Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees)) +
-                        Number(nominationFees) + Number(nominationGST) )).toFixed(2)
-                    }
-                    else if (action.key == "gst") {
+                            Number(nominationFees) + Number(nominationGST))).toFixed(2)
+                    } else if (action.key === "gst") {
                         let fee = array[index][action.arrayKey].allType[action.tableIndex].fee
                         let nominationFees = array[index][action.arrayKey].allType[action.tableIndex].nominationFees
                         let nominationGST = array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
                         array[index][action.arrayKey].allType[action.tableIndex].gst = (action.data)
                         array[index][action.arrayKey].allType[action.tableIndex].total = ((Number(fee) + (Number(action.data)) + (Number(action.record.mFees)) +
-                        Number(nominationFees) + Number(nominationGST))).toFixed(2)
-                    }
-                    else if (action.key == "affiliateFee") {
+                            Number(nominationFees) + Number(nominationGST))).toFixed(2)
+                    } else if (action.key === "affiliateFee") {
                         let feesOwner = array[index][action.arrayKey].allType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst +
-                        array[index][action.arrayKey].allType[action.tableIndex].nominationFees + array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
+                            array[index][action.arrayKey].allType[action.tableIndex].nominationFees + array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
 
                         let affNominationFees = array[index][action.arrayKey].allType[action.tableIndex].affNominationFees;
                         let affNominationGST = array[index][action.arrayKey].allType[action.tableIndex].affNominationGST;
@@ -2769,38 +2618,34 @@ function competitionFees(state = initialState, action) {
                         let affiliateGstAll = (Number(action.data) / 10).toFixed(2)
                         array[index][action.arrayKey].allType[action.tableIndex].affiliateGst = affiliateGstAll
                         array[index][action.arrayKey].allType[action.tableIndex].total = ((Number(feesOwner) + Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees)) +
-                        Number(affNominationFees) + Number(affNominationGST))).toFixed(2)
-                    }
-                    else if (action.key == "affiliateGst") {
+                            Number(affNominationFees) + Number(affNominationGST))).toFixed(2)
+                    } else if (action.key === "affiliateGst") {
                         let feesOwner = array[index][action.arrayKey].allType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst +
-                        array[index][action.arrayKey].allType[action.tableIndex].nominationFees + array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
+                            array[index][action.arrayKey].allType[action.tableIndex].nominationFees + array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
                         let affNominationFees = array[index][action.arrayKey].allType[action.tableIndex].affNominationFees;
                         let affNominationGST = array[index][action.arrayKey].allType[action.tableIndex].affNominationGST;
                         let feeAffiliate = array[index][action.arrayKey].allType[action.tableIndex].affiliateFee
                         array[index][action.arrayKey].allType[action.tableIndex].affiliateGst = (action.data)
                         array[index][action.arrayKey].allType[action.tableIndex].total = ((Number(feesOwner) + Number(feeAffiliate) + (Number(action.data)) + (Number(action.record.mFees)) +
-                        Number(affNominationFees) + Number(affNominationGST))).toFixed(2)
-                    }
-                    else if (action.key == "nominationFees") {
+                            Number(affNominationFees) + Number(affNominationGST))).toFixed(2)
+                    } else if (action.key === "nominationFees") {
                         array[index][action.arrayKey].allType[action.tableIndex].nominationFees = (action.data)
                         let gstAll = (Number(action.data) / 10).toFixed(2)
                         let fee = array[index][action.arrayKey].allType[action.tableIndex].fee
                         let gst = array[index][action.arrayKey].allType[action.tableIndex].gst;
                         array[index][action.arrayKey].allType[action.tableIndex].nominationGST = gstAll
-                        array[index][action.arrayKey].allType[action.tableIndex].total = ((Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees) + 
-                                    Number(fee) + Number(gst)))).toFixed(2)
-                    }
-                    else if (action.key == "nominationGST") {
+                        array[index][action.arrayKey].allType[action.tableIndex].total = ((Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees) +
+                            Number(fee) + Number(gst)))).toFixed(2)
+                    } else if (action.key === "nominationGST") {
                         let nominationFees = array[index][action.arrayKey].allType[action.tableIndex].nominationFees;
                         let fee = array[index][action.arrayKey].allType[action.tableIndex].fee
                         let gst = array[index][action.arrayKey].allType[action.tableIndex].gst;
                         array[index][action.arrayKey].allType[action.tableIndex].gst = (action.data)
                         array[index][action.arrayKey].allType[action.tableIndex].total = ((Number(nominationFees) + (Number(action.data)) + (Number(action.record.mFees) +
-                                        Number(fee) + Number(gst)))).toFixed(2)
-                    }
-                    else if (action.key == "affNominationFees") {
-                        let feesOwner = array[index][action.arrayKey].allType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst + 
-                                        array[index][action.arrayKey].allType[action.tableIndex].nominationFees + array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
+                            Number(fee) + Number(gst)))).toFixed(2)
+                    } else if (action.key === "affNominationFees") {
+                        let feesOwner = array[index][action.arrayKey].allType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst +
+                            array[index][action.arrayKey].allType[action.tableIndex].nominationFees + array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
 
                         let affililateFee = array[index][action.arrayKey].allType[action.tableIndex].affiliateFee;
                         let affiliateGst = array[index][action.arrayKey].allType[action.tableIndex].affiliateGst;
@@ -2809,9 +2654,8 @@ function competitionFees(state = initialState, action) {
                         let affNominationGstAll = (Number(action.data) / 10).toFixed(2)
                         array[index][action.arrayKey].allType[action.tableIndex].affNominationGST = affNominationGstAll
                         array[index][action.arrayKey].allType[action.tableIndex].total = ((Number(feesOwner) + Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees)) +
-                                    Number(affililateFee) + Number(affiliateGst))).toFixed(2)
-                    }
-                    else if (action.key == "affNominationGST") {
+                            Number(affililateFee) + Number(affiliateGst))).toFixed(2)
+                    } else if (action.key === "affNominationGST") {
                         let feesOwner = array[index][action.arrayKey].allType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst
                         let affililateFee = array[index][action.arrayKey].allType[action.tableIndex].affiliateFee;
                         let affiliateGst = array[index][action.arrayKey].allType[action.tableIndex].affiliateGst;
@@ -2819,90 +2663,81 @@ function competitionFees(state = initialState, action) {
                         let affNominationFees = array[index][action.arrayKey].allType[action.tableIndex].affNominationFees;
                         array[index][action.arrayKey].allType[action.tableIndex].affiliateGst = (action.data)
                         array[index][action.arrayKey].allType[action.tableIndex].total = ((Number(feesOwner) + Number(affNominationFees) + (Number(action.data)) + (Number(action.record.mFees))
-                         + Number(affililateFee) + Number(affiliateGst))).toFixed(2)
+                            + Number(affililateFee) + Number(affiliateGst))).toFixed(2)
                     }
-
                 } else {
-
-                    if (action.key == "fee") {
+                    if (action.key === "fee") {
                         array[index][action.arrayKey].perType[action.tableIndex].fee = (action.data)
                         let gstPer = (Number(action.data) / 10).toFixed(2)
                         let nominationFees = array[index][action.arrayKey].perType[action.tableIndex].nominationFees
                         let nominationGST = array[index][action.arrayKey].perType[action.tableIndex].nominationGST;
                         array[index][action.arrayKey].perType[action.tableIndex].gst = gstPer
                         array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees)) +
-                        Number(nominationFees) + Number(nominationGST)).toFixed(2))
-                    }
-                    else if (action.key == "gst") {
+                            Number(nominationFees) + Number(nominationGST)).toFixed(2))
+                    } else if (action.key === "gst") {
                         let fee = array[index][action.arrayKey].perType[action.tableIndex].fee
                         let nominationFees = array[index][action.arrayKey].perType[action.tableIndex].nominationFees
                         let nominationGST = array[index][action.arrayKey].perType[action.tableIndex].nominationGST;
                         array[index][action.arrayKey].perType[action.tableIndex].gst = (action.data)
-                        array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(fee) + (Number(action.data)) + (Number(action.record.mFees)) + 
-                        Number(nominationFees) + Number(nominationGST)).toFixed(2))
-                    }
-                    else if (action.key == "affiliateFee") {
+                        array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(fee) + (Number(action.data)) + (Number(action.record.mFees)) +
+                            Number(nominationFees) + Number(nominationGST)).toFixed(2))
+                    } else if (action.key === "affiliateFee") {
                         let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].perType[action.tableIndex].gst +
-                        array[index][action.arrayKey].perType[action.tableIndex].nominationFees + array[index][action.arrayKey].perType[action.tableIndex].nominationGST;
-                        
+                            array[index][action.arrayKey].perType[action.tableIndex].nominationFees + array[index][action.arrayKey].perType[action.tableIndex].nominationGST;
+
                         let affNominationFees = array[index][action.arrayKey].perType[action.tableIndex].affNominationFees;
                         let affNominationGST = array[index][action.arrayKey].perType[action.tableIndex].affNominationGST;
-                        
+
                         array[index][action.arrayKey].perType[action.tableIndex].affiliateFee = (action.data)
                         let affiliateGstPer = (Number(action.data) / 10).toFixed(2)
                         array[index][action.arrayKey].perType[action.tableIndex].affiliateGst = affiliateGstPer
                         array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(feesOwner) + Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees)) +
-                        Number(affNominationFees) + Number(affNominationGST))).toFixed(2)
-                    }
-                    else if (action.key == "affiliateGst") {
+                            Number(affNominationFees) + Number(affNominationGST))).toFixed(2)
+                    } else if (action.key === "affiliateGst") {
                         let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].perType[action.tableIndex].gst
                         let feeAffiliate = array[index][action.arrayKey].perType[action.tableIndex].affiliateFee
                         let affNominationFees = array[index][action.arrayKey].perType[action.tableIndex].affNominationFees;
                         let affNominationGST = array[index][action.arrayKey].perType[action.tableIndex].affNominationGST;
-                        
+
                         array[index][action.arrayKey].perType[action.tableIndex].affiliateGst = (action.data)
                         array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(feesOwner) + Number(feeAffiliate) + (Number(action.data)) + (Number(action.record.mFees)) +
-                        Number(affNominationFees) + Number(affNominationGST))).toFixed(2)
-                    }
-                    else if (action.key == "nominationFees") {
+                            Number(affNominationFees) + Number(affNominationGST))).toFixed(2)
+                    } else if (action.key === "nominationFees") {
                         array[index][action.arrayKey].perType[action.tableIndex].nominationFees = (action.data)
                         let gstAll = (Number(action.data) / 10).toFixed(2)
                         let fee = array[index][action.arrayKey].perType[action.tableIndex].fee
                         let gst = array[index][action.arrayKey].perType[action.tableIndex].gst;
                         array[index][action.arrayKey].perType[action.tableIndex].nominationGST = gstAll
-                        array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees) + 
-                                    Number(fee) + Number(gst)))).toFixed(2)
-                    }
-                    else if (action.key == "nominationGST") {
+                        array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees) +
+                            Number(fee) + Number(gst)))).toFixed(2)
+                    } else if (action.key === "nominationGST") {
                         let nominationFees = array[index][action.arrayKey].perType[action.tableIndex].nominationFees;
                         let fee = array[index][action.arrayKey].perType[action.tableIndex].fee
                         let gst = array[index][action.arrayKey].perType[action.tableIndex].gst;
                         array[index][action.arrayKey].perType[action.tableIndex].gst = (action.data)
                         array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(nominationFees) + (Number(action.data)) + (Number(action.record.mFees) +
-                                        Number(fee) + Number(gst)))).toFixed(2)
-                    }
-                    else if (action.key == "affNominationFees") {
-                        let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst + 
-                                        array[index][action.arrayKey].perType[action.tableIndex].nominationFees + array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
-                
+                            Number(fee) + Number(gst)))).toFixed(2)
+                    } else if (action.key === "affNominationFees") {
+                        let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst +
+                            array[index][action.arrayKey].perType[action.tableIndex].nominationFees + array[index][action.arrayKey].allType[action.tableIndex].nominationGST;
+
                         let affililateFee = array[index][action.arrayKey].perType[action.tableIndex].affiliateFee;
                         let affiliateGst = array[index][action.arrayKey].perType[action.tableIndex].affiliateGst;
-                
+
                         array[index][action.arrayKey].perType[action.tableIndex].affNominationFees = (action.data)
                         let affNominationGstAll = (Number(action.data) / 10).toFixed(2)
                         array[index][action.arrayKey].perType[action.tableIndex].affNominationGST = affNominationGstAll
                         array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(feesOwner) + Number(action.data) + (Number(action.data / 10)) + (Number(action.record.mFees)) +
-                                    Number(affililateFee) + Number(affiliateGst))).toFixed(2)
-                    }
-                    else if (action.key == "affNominationGST") {
+                            Number(affililateFee) + Number(affiliateGst))).toFixed(2)
+                    } else if (action.key === "affNominationGST") {
                         let feesOwner = array[index][action.arrayKey].perType[action.tableIndex].fee + array[index][action.arrayKey].allType[action.tableIndex].gst
                         let affililateFee = array[index][action.arrayKey].perType[action.tableIndex].affiliateFee;
                         let affiliateGst = array[index][action.arrayKey].perType[action.tableIndex].affiliateGst;
-                
+
                         let affNominationFees = array[index][action.arrayKey].perType[action.tableIndex].affNominationFees;
                         array[index][action.arrayKey].perType[action.tableIndex].affiliateGst = (action.data)
                         array[index][action.arrayKey].perType[action.tableIndex].total = ((Number(feesOwner) + Number(affNominationFees) + (Number(action.data)) + (Number(action.record.mFees))
-                         + Number(affililateFee) + Number(affiliateGst))).toFixed(2)
+                            + Number(affililateFee) + Number(affiliateGst))).toFixed(2)
                     }
                 }
                 state.competitionFeesData = array
@@ -2929,7 +2764,6 @@ function competitionFees(state = initialState, action) {
                 error: null
             }
 
-
         case ApiConstants.API_SAVE_COMPETITION_FEES_SECTION_LOAD:
             return { ...state, onLoad: true };
 
@@ -2941,11 +2775,9 @@ function competitionFees(state = initialState, action) {
                 error: null
             };
 
-
         ///clearing particular reducer data
         case ApiConstants.REG_COMPETITION_FEES_CLEARING_REDUCER_DATA:
-            if (action.dataName == "all") {
-                console.log("REG_COMPETITION_FEES_CLEARING_REDUCER_DATA", state.selectedVenuesAdd, state.selectedVenues)
+            if (action.dataName === "all") {
                 const defaultDetailObj = {
                     competitionUniqueKey: "",
                     competitionName: "",
@@ -3017,21 +2849,19 @@ function competitionFees(state = initialState, action) {
                 state.anyOrgAffiliateArr = []
                 state.any_club_Org_AffiliateArr = []
                 state.selectedTeamSeasonalInstalmentDates = []
-                state.selectedSeasonalInstalmentDates = []	
+                state.selectedSeasonalInstalmentDates = []
                 state.associationChecked = false
                 state.clubChecked = false
                 state.anyOrgAssociationArr = []
-                state.anyOrgClubArr = []							  
+                state.anyOrgClubArr = []
             }
             return {
                 ...state, error: null
             };
 
-
         //////get the default competition logo api
         case ApiConstants.API_COMPETITION_FEE_DEFAULT_LOGO_LOAD:
             return { ...state, onLoad: true, error: null }
-
 
         case ApiConstants.API_COMPETITION_FEE_DEFAULT_LOGO_SUCCESS:
             if (state.competitionId.length == 0 || state.competitionId == null) {
@@ -3049,8 +2879,8 @@ function competitionFees(state = initialState, action) {
         case ApiConstants.API_ADD_VENUE_SUCCESS:
             let venueSuccess = action.result
             if (venueSuccess != null && (venueSuccess.screenNavigationKey == AppConstants.competitionFees ||
-                venueSuccess.screenNavigationKey == AppConstants.competitionDetails || 
-                venueSuccess.screenNavigationKey ==  AppConstants.dashboard)) {
+                venueSuccess.screenNavigationKey == AppConstants.competitionDetails ||
+                venueSuccess.screenNavigationKey == AppConstants.dashboard)) {
                 let updatedVenue = JSON.parse(JSON.stringify(state.newVenueObj))
                 updatedVenue["id"] = venueSuccess.venueId
                 updatedVenue['name'] = venueSuccess.name
@@ -3063,13 +2893,10 @@ function competitionFees(state = initialState, action) {
                 updatedVenue['contactNumber'] = venueSuccess.contactNumber
                 state.venueList.push(updatedVenue)
                 state.selectedVenuesAdd = "Add"
-               // console.log("state.selectedVenues", state.selectedVenues);
                 state.selectedVenues.push(venueSuccess.venueId)
                 state.createVenue = action.result
-               
             }
             return { ...state }
-
 
         case ApiConstants.API_AFFILIATE_TO_ORGANISATION_SUCCESS:
             let affiliateToAllData = action.result;
@@ -3088,11 +2915,8 @@ function competitionFees(state = initialState, action) {
                 error: null,
             };
 
-
-        ///// Inviteee Search Reducer 
-
+        ///// Invitee Search Reducer
         case ApiConstants.API_COMPETITION_FEE_INVITEES_SEARCH_LOAD:
-
             return {
                 ...state,
                 searchLoad: true
@@ -3122,27 +2946,25 @@ function competitionFees(state = initialState, action) {
             };
 
         case ApiConstants.UPDATE_INSTALMENT_DATE:
-         
-            if(action.key == "instalmentAddDate" && action.subKey == "seasonalfee"){
+            if (action.key === "instalmentAddDate" && action.subKey === "seasonalfee") {
                 addInstalmentDate(action.value)
             }
-            if (action.key == "instalmentRemoveDate") {
+            if (action.key === "instalmentRemoveDate") {
                 removeInstalmentDate(action.value)
             }
-            if (action.key == "instalmentDateupdate") {
+            if (action.key === "instalmentDateupdate") {
                 updateInstalmentDate(action.value)
             }
-            if(action.key == "instalmentAddDate" && action.subKey == "seasonalteamfee"){
+            if (action.key === "instalmentAddDate" && action.subKey === "seasonalteamfee") {
                 addSeasonalTeamInstalmentDate(action.value)
             }
-           
-            if (action.key == "isSeasonalUponReg" || action.key == "isTeamSeasonalUponReg") {
+            if (action.key === "isSeasonalUponReg" || action.key === "isTeamSeasonalUponReg") {
                 state.competitionDetailData[action.key] = action.value;
             }
-            if (action.key == "teamSeasonalSchoolRegCode") {
+            if (action.key === "teamSeasonalSchoolRegCode") {
                 state.competitionDetailData[action.key] = action.value;
             }
-            return { ...state, };
+            return { ...state };
 
         case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
             state.competitionListAction = null

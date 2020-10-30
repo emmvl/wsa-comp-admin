@@ -15,6 +15,7 @@ import { getLiveScoreCompetiton, getLiveScoreUmpireCompitionData } from '../util
 import history from "../util/history";
 import { getOnlyYearListAction } from "../store/actions/appAction";
 import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
+import { getUserRoleId } from '../util/permissions'
 
 const { SubMenu } = Menu;
 const { Option } = Select;
@@ -32,11 +33,13 @@ class InnerHorizontalMenu extends React.Component {
             liveScoreCompIsParent: false,
             yearId: null,
             yearLoading: false,
-            defaultYear: null
+            defaultYear: null,
+            userAccessPermission: "",
+            userRoleId: getUserRoleId()
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
 
         if (getLiveScoreCompetiton()) {
             const { id } = JSON.parse(getLiveScoreCompetiton())
@@ -70,7 +73,7 @@ class InnerHorizontalMenu extends React.Component {
 
     async componentDidUpdate(nextProps) {
 
-        if (this.props.userState.onLoad == false && this.state.orgState == true) {
+        if (this.props.userState.onLoad == false && this.state.orgState) {
             if (JSON.parse(localStorage.getItem('setOrganisationData'))) {
                 let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
                 if (this.props.menu === "liveScore") {
@@ -95,7 +98,7 @@ class InnerHorizontalMenu extends React.Component {
 
         if (nextProps.innerHorizontalState !== this.props.innerHorizontalState) {
 
-            if (this.state.loading == true && this.props.innerHorizontalState.onLoad == false) {
+            if (this.state.loading && this.props.innerHorizontalState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.innerHorizontalState.competitionList) ? this.props.innerHorizontalState.competitionList : []
                 let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
                 if (!isArrayNotEmpty(compList)) {
@@ -169,6 +172,8 @@ class InnerHorizontalMenu extends React.Component {
         let compList = isArrayNotEmpty(competitionList) ? competitionList : [];
         let { liveScoreCompIsParent } = this.state;
         const { yearList } = this.props.appState;
+        const { userRoleId } = this.state
+
         return (
             <div>
                 {menu === "competition" && (
@@ -190,7 +195,7 @@ class InnerHorizontalMenu extends React.Component {
                         <SubMenu
                             key="sub1"
                             title={
-                                <span id={AppUniqueId.own_comp_tab} >Own Competitions</span>
+                                <span id={AppUniqueId.own_comp_tab}>Own Competitions</span>
                             }
                         >
                             <Menu.Item key="2">
@@ -358,29 +363,7 @@ class InnerHorizontalMenu extends React.Component {
                                 </NavLink>
                             </Menu.Item>
                         </SubMenu>
-                        <SubMenu
-                            key="sub2"
-                            title={
-                                <span>Payments</span>
-                            }
-                        >
-                            <Menu.Item key="8">
-                                <NavLink to="/paymentDashboard">
-                                    <span>Payment Dashboard</span>
-                                </NavLink>
-                            </Menu.Item>
-                            <Menu.Item key="4">
-                                <NavLink to="/registrationPayments">
-                                    <span>Payment Gateway</span>
-                                </NavLink>
-                                {/* <a href="https://comp-management-test.firebaseapp.com/payment-dashboard.html">Payments</a> */}
-                            </Menu.Item>
-                            <Menu.Item key="5">
-                                <NavLink to="/registrationSettlements">
-                                    <span>Payouts</span>
-                                </NavLink>
-                            </Menu.Item>
-                        </SubMenu>
+
                         {/* <Menu.Item key="9">De-registration forms</Menu.Item> */}
                     </Menu>
                 )}
@@ -582,8 +565,8 @@ class InnerHorizontalMenu extends React.Component {
                                     onChange={(yearId) => this.setYearId(yearId)}
                                     value={JSON.parse(this.state.yearId)}
                                 >
-                                    {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                        <Option key={"yearlist" + yearIndex} value={item.id}>{item.name}</Option>
+                                    {yearList.map((item) => (
+                                        <Option key={'year_' + item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -595,8 +578,8 @@ class InnerHorizontalMenu extends React.Component {
                                     onChange={this.setCompetitionID}
                                     value={this.state.selectedComp}
                                 >
-                                    {compList.map((item, index) => (
-                                        <Option key={'longName' + index} value={item.id}>{item.longName}</Option>
+                                    {compList.map((item) => (
+                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -767,7 +750,7 @@ class InnerHorizontalMenu extends React.Component {
                     </Menu>
                 )}
 
-                {menu === "home" && (
+                {(menu === "home" && userRoleId == 2) && (
                     <Menu
                         theme="light"
                         mode="horizontal"
@@ -803,21 +786,12 @@ class InnerHorizontalMenu extends React.Component {
                         selectedKeys={[this.props.shopSelectedKey]}
                         onClick={() => this.props.clearDataOnCompChangeAction()}
                     >
-                        <Menu.Item key="1">
+                        {/* <Menu.Item key="1">
                             <NavLink to="/shopDashboard">
                                 <span>{AppConstants.dashboard}</span>
                             </NavLink>
-                        </Menu.Item>
-                        <SubMenu
-                            key="sub1"
-                            title={<span>{AppConstants.products}</span>}
-                        >
-                            <Menu.Item key="2">
-                                <NavLink to="/listProducts">
-                                    <span>{AppConstants.products}</span>
-                                </NavLink>
-                            </Menu.Item>
-                        </SubMenu>
+                        </Menu.Item> */}
+
                         <SubMenu
                             key="sub2"
                             title={<span>{AppConstants.orders}</span>}
@@ -833,11 +807,59 @@ class InnerHorizontalMenu extends React.Component {
                                 </NavLink>
                             </Menu.Item>
                         </SubMenu>
+                        <SubMenu
+                            key="sub1"
+                            title={<span>{AppConstants.products}</span>}
+                        >
+                            <Menu.Item key="2">
+                                <NavLink to="/listProducts">
+                                    <span>{AppConstants.products}</span>
+                                </NavLink>
+                            </Menu.Item>
+                        </SubMenu>
                         <Menu.Item key="4">
                             <NavLink to="/shopSettings">
                                 <span>{AppConstants.settings}</span>
                             </NavLink>
                         </Menu.Item>
+                    </Menu>
+                )}
+
+                {menu === "finance" && (
+                    <Menu
+                        theme="light"
+                        mode="horizontal"
+                        defaultSelectedKeys={['1']}
+                        style={{ lineHeight: '64px' }}
+                        selectedKeys={[this.props.finSelectedKey]}
+                        onClick={() => this.props.clearDataOnCompChangeAction()}
+                    >
+                        <Menu.Item key="1">
+                            <NavLink to="/paymentDashboard">
+                                <span>Dashboard</span>
+                            </NavLink>
+                        </Menu.Item>
+                        <Menu.Item key="2">
+                            <NavLink to="/registrationPayments">
+                                <span>Payment Gateway</span>
+                            </NavLink>
+                            {/* <a href="https://comp-management-test.firebaseapp.com/payment-dashboard.html">Payments</a> */}
+                        </Menu.Item>
+                        <Menu.Item key="3">
+                            <NavLink to="/registrationSettlements">
+                                <span>Payouts</span>
+                            </NavLink>
+                        </Menu.Item>
+                        {/* <SubMenu
+                            key="sub2"
+                            title={
+                                <span>Payments</span>
+                            }
+                        >
+
+
+
+                        </SubMenu> */}
                     </Menu>
                 )}
 

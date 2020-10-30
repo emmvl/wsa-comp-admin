@@ -26,8 +26,8 @@ const columns = [
             <NavLink to={{
                 pathname: '/liveScoreMatchDetails',
                 state: { matchId: record.match }
-            }} >
-                <span class="input-heading-add-another pt-0">{text}</span>
+            }}>
+                <span className="input-heading-add-another pt-0">{text}</span>
             </NavLink>
 
     },
@@ -106,7 +106,7 @@ class LiveScorerView extends Component {
                                 <div className="live-score-icon-view">
                                     <img src={AppImages.group} height="16" width="16" alt="" />
                                 </div>
-                                <span className='year-select-heading ml-3'>{AppConstants.emailAddress}</span>
+                                <span className="year-select-heading ml-3">{AppConstants.emailAddress}</span>
                             </div>
                             <span className="desc-text-style side-bar-profile-data">{data.email}</span>
                         </div>
@@ -116,7 +116,7 @@ class LiveScorerView extends Component {
                                 <div className="live-score-icon-view">
                                     <img src={AppImages.callAnswer} alt="" height="16" width="16" />
                                 </div>
-                                <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
+                                <span className="year-select-heading ml-3">{AppConstants.contactNumber}</span>
                             </div>
                             <span className="desc-text-style side-bar-profile-data">{data.mobileNumber}</span>
                         </div>
@@ -126,7 +126,7 @@ class LiveScorerView extends Component {
                                 <div className="live-score-icon-view">
                                     <img src={AppImages.group} height="16" width="16" alt="" />
                                 </div>
-                                <span className='year-select-heading ml-3'>{AppConstants.team}</span>
+                                <span className="year-select-heading ml-3">{AppConstants.team}</span>
                             </div>
                             <span className="desc-text-style side-bar-profile-data">{data.team}</span>
                         </div>
@@ -145,7 +145,7 @@ class LiveScorerView extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.activity}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -235,14 +235,14 @@ class LiveScorerView extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="5" />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
-                        <div className="fluid-width" >
-                            <div className="row" >
-                                <div className="col-sm-3" style={{ marginBottom: "6%" }} >
+                        <div className="fluid-width">
+                            <div className="row">
+                                <div className="col-sm-3" style={{ marginBottom: "6%" }}>
                                     {this.profileImageView()}
                                 </div>
                                 <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
@@ -253,7 +253,7 @@ class LiveScorerView extends Component {
                         </div>
                     </Content>
                 </Layout>
-            </div >
+            </div>
         );
     }
 }

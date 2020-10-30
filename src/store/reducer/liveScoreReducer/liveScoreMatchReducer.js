@@ -742,9 +742,9 @@ function liveScoreMatchReducer(state = initialState, action) {
 
         case ApiConstants.API_CHNAGE_LINEUP_STATUS_SUCCESS:
             if (action.key === "team1Players") {
-                state[action.key][action.index]["lineup"] = action.result[0];
+                state[action.key][action.index]["lineup"][0] = action.result[action.index];
             } else if (action.key === "team2Players") {
-                state[action.key][action.index]["lineup"] = action.result[0];
+                state[action.key][action.index]["lineup"][0] = action.result[action.index];
             }
             return {
                 ...state,

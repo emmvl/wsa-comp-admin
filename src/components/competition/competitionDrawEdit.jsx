@@ -53,7 +53,7 @@ class CompetitionDrawEditOld extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: '',
             venueId: '',
             roundId: '',
@@ -75,13 +75,21 @@ class CompetitionDrawEditOld extends Component {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId;
-                    this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    this.props.getDrawsRoundsAction(yearId, competitionId);
                     setOwn_competition(competitionId)
                     this.setState({ firstTimeCompId: competitionId, venueLoad: true })
                 }
             }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
+                }
+            }
         }
-        if (this.state.venueLoad == true && this.props.drawsState.updateLoad == false) {
+        if (this.state.venueLoad && this.props.drawsState.updateLoad == false) {
             if (nextProps.drawsState !== this.props.drawsState) {
                 if (nextProps.drawsState.getDrawsRoundsData !== drawsRoundData) {
                     if (venueData.length > 0) {
@@ -117,8 +125,7 @@ class CompetitionDrawEditOld extends Component {
             }
         }
 
-        if (this.state.updateLoad == true && this.props.drawsState.updateLoad == false) {
-            console.log("*********************************");
+        if (this.state.updateLoad && this.props.drawsState.updateLoad == false) {
             this.setState({ updateLoad: false })
             this.reGenerateDraw();
         }
@@ -175,7 +182,7 @@ class CompetitionDrawEditOld extends Component {
         }
         else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
+            // setOwnCompetitionYear(1)
         }
     }
 
@@ -189,7 +196,6 @@ class CompetitionDrawEditOld extends Component {
         this.setState({ venueLoad: true });
     }
 
-
     onChange = e => {
         this.setState({
             value: e.target.value
@@ -197,7 +203,6 @@ class CompetitionDrawEditOld extends Component {
     };
 
     onSwap(source, target) {
-
         let sourceIndexArray = source.split(':');
         let targetIndexArray = target.split(':');
 
@@ -206,12 +211,10 @@ class CompetitionDrawEditOld extends Component {
         let sourceZIndex = sourceIndexArray[2];
         let sourceID = sourceIndexArray[3];
 
-
         let targetXIndex = targetIndexArray[0];
         let targetYIndex = targetIndexArray[1];
         let targetZIndex = targetIndexArray[2];
         let targetID = targetIndexArray[3];
-
 
         let drawData = this.props.drawsState.getStaticDrawsData;
 
@@ -220,14 +223,8 @@ class CompetitionDrawEditOld extends Component {
 
         var customSourceObject = null
         var customTargetObject = null
-        console.log("Source===", source)
-        console.log("Target===", target)
-        // console.log("Source",sourceObejct)
-        // console.log("Target",targetObject)
 
         // if (targetObject.drawsId !== sourceObejct.drawsId) {
-        //     console.log('called207')
-
         //     if (sourceZIndex == 0) {
         //         if (targetZIndex == 0) {
         //             customSourceObject = {
@@ -246,7 +243,6 @@ class CompetitionDrawEditOld extends Component {
         //                 isLocked: 1
         //             };
         //         }
-
         //     } else {
         //         if (targetZIndex == 0) {
         //             customSourceObject = {
@@ -265,7 +261,6 @@ class CompetitionDrawEditOld extends Component {
         //                 isLocked: 1
         //             };
         //         }
-
         //     }
         //     if (targetZIndex == 0) {
         //         if (sourceZIndex == 0) {
@@ -306,7 +301,6 @@ class CompetitionDrawEditOld extends Component {
         //     }
         // } else {
         if (targetObject.drawsId == sourceObejct.drawsId) {
-            console.log('called207')
             customSourceObject = {
                 drawsId: sourceObejct.drawsId,
                 // roundId: this.state.roundId,
@@ -328,8 +322,6 @@ class CompetitionDrawEditOld extends Component {
                 draws: [customSourceObject, customTargetObject]
             };
 
-
-
             this.props.updateCompetitionDraws(
                 postObject,
                 sourceIndexArray,
@@ -342,7 +334,6 @@ class CompetitionDrawEditOld extends Component {
     }
 
     saveAPIsActionCall() {
-        console.log('called')
         if (this.state.firstTimeCompId == null || this.state.firstTimeCompId == "") {
             message.config({ duration: 0.9, maxCount: 1 })
             message.error(ValidationConstants.pleaseSelectCompetition)
@@ -422,22 +413,20 @@ class CompetitionDrawEditOld extends Component {
             <div className="row">
                 <div className="col-sm-3">
                     <div className="year-select-heading-view">
-                        <div className="reg-filter-col-cont"  >
+                        <div className="reg-filter-col-cont">
                             <span className="year-select-heading">{AppConstants.draws}:</span>
                             <Select
-                                name={'yearRefId'}
+                                name="yearRefId"
                                 className="year-select reg-filter-select1 ml-2"
                                 style={{ maxWidth: 160 }}
                                 onChange={yearRefId => this.onYearChange(yearRefId)}
                                 value={this.state.yearRefId}
                             >
-                                {this.props.appState.own_YearArr.length > 0 && this.props.appState.own_YearArr.map(item => {
-                                    return (
-                                        <Option key={'yearRefId' + item.id} value={item.id}>
-                                            {item.description}
-                                        </Option>
-                                    );
-                                })}
+                                {this.props.appState.own_YearArr.map(item => (
+                                    <Option key={'year_' + item.id} value={item.id}>
+                                        {item.description}
+                                    </Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
@@ -452,12 +441,12 @@ class CompetitionDrawEditOld extends Component {
                             marginRight: 50
                         }}
                     >
-                        <div className="reg-filter-col-cont"  >
+                        <div className="reg-filter-col-cont">
                             <span className="year-select-heading">
                                 {AppConstants.competition}:
-            </span>
+                            </span>
                             <Select
-                                name={'competition'}
+                                name="competition"
                                 className="year-select reg-filter-select1 ml-2"
                                 style={{ maxWidth: 250 }}
                                 onChange={competitionId =>
@@ -465,16 +454,11 @@ class CompetitionDrawEditOld extends Component {
                                 }
                                 value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                             >
-                                {this.props.appState.own_CompetitionArr.map(item => {
-                                    return (
-                                        <Option
-                                            key={'competition' + item.competitionId}
-                                            value={item.competitionId}
-                                        >
-                                            {item.competitionName}
-                                        </Option>
-                                    );
-                                })}
+                                {this.props.appState.own_CompetitionArr.map(item => (
+                                    <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                        {item.competitionName}
+                                    </Option>
+                                ))}
                             </Select>
                         </div>
                     </div>
@@ -491,26 +475,24 @@ class CompetitionDrawEditOld extends Component {
                     >
                         <span className="year-select-heading">
                             {AppConstants.division}:
-            </span>
+                        </span>
                         <Select
                             style={{ minWidth: 160 }}
-                            name={'competition'}
+                            name="competition"
                             className="year-select"
                             onChange={competitionDivisionGradeId =>
                                 this.onDivisionGradeNameChange(competitionDivisionGradeId)
                             }
                             value={JSON.parse(JSON.stringify(this.state.competitionDivisionGradeId))}
                         >
-                            {this.props.drawsState.divisionGradeNameList.map(item => {
-                                return (
-                                    <Option
-                                        key={'divisionGradeNameList' + item.competitionDivisionGradeId}
-                                        value={item.competitionDivisionGradeId}
-                                    >
-                                        {item.name}
-                                    </Option>
-                                );
-                            })}
+                            {this.props.drawsState.divisionGradeNameList.map(item => (
+                                <Option
+                                    key={'compDivGrade_' + item.competitionDivisionGradeId}
+                                    value={item.competitionDivisionGradeId}
+                                >
+                                    {item.name}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
                 </div>
@@ -551,7 +533,6 @@ class CompetitionDrawEditOld extends Component {
 
     ////////form content view
     contentView = () => {
-
         return (
             <div className="comp-draw-content-view">
                 <div className="row comp-draw-list-top-head">
@@ -569,7 +550,7 @@ class CompetitionDrawEditOld extends Component {
                                 >
                                     <span className="year-select-heading">
                                         {AppConstants.venue}:
-                  </span>
+                                    </span>
                                     <Select
                                         className="year-select"
                                         placeholder="Select"
@@ -577,14 +558,11 @@ class CompetitionDrawEditOld extends Component {
                                         onChange={venueId => this.onVenueChange(venueId)}
                                         value={JSON.parse(JSON.stringify(this.state.venueId))}
                                     >
-                                        {this.props.drawsState.competitionVenues.length > 0 &&
-                                            this.props.drawsState.competitionVenues.map(item => {
-                                                return (
-                                                    <Option key={item.id} value={item.id}>
-                                                        {item.name}
-                                                    </Option>
-                                                );
-                                            })}
+                                        {this.props.drawsState.competitionVenues.map(item => (
+                                            <Option key={'competitionVenue_' + item.id} value={item.id}>
+                                                {item.name}
+                                            </Option>
+                                        ))}
                                     </Select>
                                 </div>
                             </div>
@@ -599,27 +577,24 @@ class CompetitionDrawEditOld extends Component {
                                 >
                                     <span className="year-select-heading">
                                         {AppConstants.round}:
-                  </span>
+                                    </span>
                                     <Select
                                         className="year-select"
                                         style={{ minWidth: 100 }}
                                         onChange={roundId => this.onRoundsChange(roundId)}
                                         value={this.state.roundId}
                                     >
-                                        {this.props.drawsState.getDrawsRoundsData.length > 0 &&
-                                            this.props.drawsState.getDrawsRoundsData.map(item => {
-                                                return (
-                                                    <Option key={item.roundId} value={item.roundId}>
-                                                        {item.name}
-                                                    </Option>
-                                                );
-                                            })}
+                                        {this.props.drawsState.getDrawsRoundsData.map(item => (
+                                            <Option key={'drawsRound_' + item.roundId} value={item.roundId}>
+                                                {item.name}
+                                            </Option>
+                                        ))}
                                     </Select>
-                                    {this.state.roundTime !== null &&
+                                    {this.state.roundTime !== null && (
                                         <span className="year-select-heading pb-1">
-                                            {"Starting"} {"  "}{moment(this.state.roundTime).format("ddd DD/MM")}
+                                            {`Starting ${moment(this.state.roundTime).format("ddd DD/MM")}`}
                                         </span>
-                                    }
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -651,14 +626,13 @@ class CompetitionDrawEditOld extends Component {
         let topMarginHomeTeam = 36;
         let topMarginAwayTeam = 84;
         let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray) ? this.props.drawsState.legendsArray : []
-        console.log(this.props.drawsState.getStaticDrawsData)
         return (
             <div className="draggable-wrap draw-data-table">
                 <div className="scroll-bar">
                     <div className="table-head-wrap">
                         {/* Day name list */}
                         <div className="tablehead-row">
-                            <div className="sr-no empty-bx"></div>
+                            <div className="sr-no empty-bx" />
                             {this.props.drawsState.dateArray.map((item, index) => {
                                 if (index !== 0) {
                                     dateMargin += 110;
@@ -667,7 +641,7 @@ class CompetitionDrawEditOld extends Component {
                                     dateMargin = 70;
                                 }
                                 return (
-                                    <span style={{ left: dateMargin }} >
+                                    <span style={{ left: dateMargin }}>
                                         {item.notInDraw == false ? getDayName(item.date) : ""}
                                     </span>
                                 );
@@ -675,7 +649,7 @@ class CompetitionDrawEditOld extends Component {
                         </div>
                         {/* Times list */}
                         <div className="tablehead-row">
-                            <div className="sr-no empty-bx"></div>
+                            <div className="sr-no empty-bx" />
                             {this.props.drawsState.dateArray.map((item, index) => {
                                 if (index !== 0) {
                                     dayMargin += 110;
@@ -728,7 +702,7 @@ class CompetitionDrawEditOld extends Component {
                                                     <span
                                                         className={'border huge-border'}
                                                         style={{ top: topMargin, left: leftMargin }}
-                                                    ></span>
+                                                    />
                                                     <div
                                                         className={
                                                             'small-undraggable-box'
@@ -749,7 +723,7 @@ class CompetitionDrawEditOld extends Component {
                                                             top: topMarginHomeTeam,
                                                             left: leftMargin
                                                         }}
-                                                    ></span>
+                                                    />
                                                     <div
                                                         className={
                                                             'box purple-box' + ' purple-bg'
@@ -768,7 +742,7 @@ class CompetitionDrawEditOld extends Component {
                                                                 ':0:' + slotObject.competitionDivisionGradeId
                                                             }
                                                             content={1}
-                                                            swappable={true}
+                                                            swappable
                                                             onSwap={(source, target) =>
                                                                 this.onSwap(source, target)
                                                             }
@@ -779,7 +753,7 @@ class CompetitionDrawEditOld extends Component {
                                                     <span
                                                         className={'border'}
                                                         style={{ top: topMarginAwayTeam, left: leftMargin }}
-                                                    ></span>
+                                                    />
                                                     <div
                                                         className={
                                                             'box purple-box ' +
@@ -799,7 +773,7 @@ class CompetitionDrawEditOld extends Component {
                                                                 ':1:' + slotObject.competitionDivisionGradeId
                                                             }
                                                             content={1}
-                                                            swappable={true}
+                                                            swappable
                                                             onSwap={(source, target) =>
                                                                 this.onSwap(source, target)
                                                             }
@@ -838,7 +812,7 @@ class CompetitionDrawEditOld extends Component {
                     </div>
                     {/* <div className="col-sm-9">
                         <div className="comp-buttons-view">
-                            <Button className="open-reg-button" type="primary" onClick={() => this.saveAPIsActionCall()} disabled={publishStatus == 0 ? false : true} >
+                            <Button className="open-reg-button" type="primary" onClick={() => this.saveAPIsActionCall()} disabled={publishStatus == 0 ? false : true}>
                                 {AppConstants.save_publish}
                             </Button>
                         </div>
@@ -857,6 +831,7 @@ class CompetitionDrawEditOld extends Component {
             </div>
         );
     };
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
@@ -864,7 +839,7 @@ class CompetitionDrawEditOld extends Component {
                     menuHeading={AppConstants.competitions}
                     menuName={AppConstants.competitions}
                 />
-                <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey={'18'} />
                 {/* <Layout className="container"> */}
                 <Layout className="comp-dash-table-view">
                     {/* <Form
@@ -884,6 +859,7 @@ class CompetitionDrawEditOld extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
@@ -902,14 +878,15 @@ function mapDispatchToProps(dispatch) {
     );
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         drawsState: state.CompetitionDrawsState,
         competitionModuleState: state.CompetitionModuleState
     };
 }
+
 export default connect(
-    mapStatetoProps,
+    mapStateToProps,
     mapDispatchToProps
-)(Form.create()(CompetitionDrawEditOld));
+)(CompetitionDrawEditOld);

@@ -52,11 +52,12 @@ function liveScoreDivisionState(state = initialState, action) {
 
             } else if (action.key === "isAddDivision") {
                 state.divisionData = divisionObj;
+                state.positionTracking = null
             }
-            else if (action.key == "positionTracking") {
+            else if (action.key === "positionTracking") {
                 state.positionTracking = action.data
             }
-            else if (action.key == "recordGoalAttempts") {
+            else if (action.key === "recordGoalAttempts") {
                 state.recordGoalAttempts = action.data
             }
             return {

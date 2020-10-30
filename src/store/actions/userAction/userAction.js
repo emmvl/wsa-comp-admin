@@ -26,7 +26,7 @@ function impersonationAction(payload) {
 function getAffiliatesListingAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_AFFILIATES_LISTING_LOAD,
-    payload: payload,
+    payload,
     sortBy,
     sortOrder
   }
@@ -36,7 +36,7 @@ function getAffiliatesListingAction(payload, sortBy, sortOrder) {
 function saveAffiliateAction(payload) {
   return {
     type: ApiConstants.API_SAVE_AFFILIATE_LOAD,
-    payload: payload
+    payload
   };
 }
 
@@ -69,7 +69,7 @@ function updateAffiliateAction(data, key) {
   return {
     type: ApiConstants.UPDATE_AFFILIATE,
     updatedData: data,
-    key: key
+    key
   };
 }
 
@@ -78,7 +78,7 @@ function updateNewAffiliateAction(data, key) {
   return {
     type: ApiConstants.UPDATE_NEW_AFFILIATE,
     updatedData: data,
-    key: key
+    key
   };
 }
 
@@ -87,7 +87,7 @@ function updateOrgAffiliateAction(data, key) {
   return {
     type: ApiConstants.UPDATE_ORG_AFFILIATE,
     updatedData: data,
-    key: key
+    key
   };
 }
 
@@ -126,7 +126,7 @@ function onOrganisationChangeAction(organisationData, key) {
 function getUserDashboardTextualAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_USER_DASHBOARD_TEXTUAL_LOAD,
-    payload: payload,
+    payload,
     sortBy,
     sortOrder
   };
@@ -142,14 +142,14 @@ function getUserModulePersonalDetailsAction(userId) {
 function getUserModulePersonalByCompetitionAction(payload) {
   return {
     type: ApiConstants.API_USER_MODULE_PERSONAL_BY_COMPETITION_LOAD,
-    payload: payload
+    payload
   };
 }
 
 function getUserModuleRegistrationAction(payload) {
   return {
     type: ApiConstants.API_USER_MODULE_REGISTRATION_LOAD,
-    payload: payload
+    payload
   };
 }
 
@@ -191,7 +191,7 @@ function getUserModuleActivityManagerAction(userId) {
 function getUserFriendAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_USER_FRIEND_LOAD,
-    payload: payload,
+    payload,
     sortBy,
     sortOrder
   };
@@ -200,7 +200,7 @@ function getUserFriendAction(payload, sortBy, sortOrder) {
 function getUserReferFriendAction(payload, sortBy, sortOrder) {
   return {
     type: ApiConstants.API_USER_REFER_FRIEND_LOAD,
-    payload: payload,
+    payload,
     sortBy,
     sortOrder
   };
@@ -209,28 +209,28 @@ function getUserReferFriendAction(payload, sortBy, sortOrder) {
 function getOrganisationPhotoAction(payload) {
   return {
     type: ApiConstants.API_GET_ORG_PHOTO_LOAD,
-    payload: payload
+    payload
   };
 }
 
 function saveOrganisationPhotoAction(payload) {
   return {
     type: ApiConstants.API_SAVE_ORG_PHOTO_LOAD,
-    payload: payload
+    payload
   };
 }
 
 function deleteOrganisationPhotoAction(payload) {
   return {
     type: ApiConstants.API_DELETE_ORG_PHOTO_LOAD,
-    payload: payload
+    payload
   };
 }
 
 function deleteOrgContact(payload) {
   return {
     type: ApiConstants.API_DELETE_ORG_CONTACT_LOAD,
-    payload: payload
+    payload
   };
 }
 
@@ -238,7 +238,7 @@ function deleteOrgContact(payload) {
 function exportOrgRegQuestionAction(payload) {
   return {
     type: ApiConstants.API_EXPORT_ORG_REG_QUESTIONS_LOAD,
-    payload: payload
+    payload
   };
 }
 
@@ -247,7 +247,7 @@ function getAffiliateDirectoryAction(payload, sortBy, sortOrder) {
 
   return {
     type: ApiConstants.API_AFFILIATE_DIRECTORY_LOAD,
-    payload: payload,
+    payload,
     sortBy,
     sortOrder
   };
@@ -257,7 +257,7 @@ function getAffiliateDirectoryAction(payload, sortBy, sortOrder) {
 function exportAffiliateDirectoryAction(payload) {
   return {
     type: ApiConstants.API_EXPORT_AFFILIATE_DIRECTORY_LOAD,
-    payload: payload
+    payload
   };
 }
 
@@ -308,9 +308,9 @@ function getUserProfileAction() {
 function updateCharityValue(value, index, key) {
   const action = {
     type: ApiConstants.UPDATE_ORGANISATION_CHARITY_ROUND_UP,
-    value: value,
-    index: index,
-    key: key
+    value,
+    index,
+    key
   }
   return action;
 }
@@ -318,7 +318,7 @@ function updateCharityValue(value, index, key) {
 function updateCharityAction(payload) {
   const action = {
     type: ApiConstants.API_UPDATE_CHARITY_ROUND_UP_LOAD,
-    payload: payload
+    payload
   }
 
   return action;
@@ -327,7 +327,7 @@ function updateCharityAction(payload) {
 function updateTermsAndCondtionAction(payload) {
   const action = {
     type: ApiConstants.API_UPDATE_TERMS_AND_CONDITION_LOAD,
-    payload: payload
+    payload
   }
 
   return action;
@@ -336,7 +336,7 @@ function updateTermsAndCondtionAction(payload) {
 function userDeleteAction(payload) {
   const action = {
     type: ApiConstants.API_USER_DELETE_LOAD,
-    payload: payload
+    payload
   };
   return action
 }
@@ -344,7 +344,7 @@ function userDeleteAction(payload) {
 function getUserModuleIncidentListAction(payload) {
   const action = {
     type: ApiConstants.API_GET_USER_MODULE_INCIDENT_LIST_LOAD,
-    payload: payload
+    payload
   };
   return action
 }
@@ -387,10 +387,10 @@ function getCoachData(payload, roleId, matchStatus) {
   return action
 }
 
-function getUmpireActivityListAction(payload, roleId, userId) {
+function getUmpireActivityListAction(payload, roleId, userId, sortBy, sortOrder) {
   const action = {
     type: ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_LOAD,
-    payload, roleId, userId
+    payload, roleId, userId, sortBy, sortOrder
   };
   return action
 }

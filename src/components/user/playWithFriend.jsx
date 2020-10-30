@@ -173,7 +173,7 @@ class PlayWithFriend extends Component {
     }
 
     onChangeDropDownValue = async (value, key) => {
-        if(key == "yearRefId")
+        if(key === "yearRefId")
           await this.setState({yearRefId: value});
 
         this.handleFriendTableList(1);
@@ -183,15 +183,15 @@ class PlayWithFriend extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playWithAFriend}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -199,25 +199,24 @@ class PlayWithFriend extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view" >
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm-2">
+                            <div className="com-year-select-heading-view">
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
-                                    name={"yearRefId"}
+                                    name="yearRefId"
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ maxWidth: 80 }}
                                     onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
-                                    value={this.state.yearRefId}>
+                                    value={this.state.yearRefId}
+                                >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {this.props.appState.yearList.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.yearList.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -256,9 +255,9 @@ class PlayWithFriend extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu  menu={"user"} userSelectedKey={"5"} />
+                <InnerHorizontalMenu  menu="user" userSelectedKey="5" />
                 <Layout>
                     {this.headerView()}
                     <Content>

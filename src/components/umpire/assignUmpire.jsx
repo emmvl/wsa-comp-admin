@@ -5,7 +5,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
-import { getUmpireCompId, setUmpireCompId,getUmpireCompetiton } from '../../util/sessionStorage'
+import { getUmpireCompId, setUmpireCompId, getUmpireCompetiton } from '../../util/sessionStorage'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { connect } from 'react-redux';
@@ -52,10 +52,10 @@ function checkUmpireAssignStatus(data) {
 ////check for roster status so that bass the color of the umpire name
 function checkUmpireRosterStatus(data) {
     let rosterStatus = data ? data.rosterStatus : "N/A"
-    if (rosterStatus == "Yes") {
+    if (rosterStatus === "Yes") {
         return AppColor.umpireTextGreen;
     }
-    if (rosterStatus == "No") {
+    if (rosterStatus === "No") {
         return AppColor.umpireTextRed;
     }
     else {
@@ -73,9 +73,9 @@ const column = [
         sorter: (a, b) => tableSort(a, b, "id"),
         render: (id) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
-            state: { matchId: id, umpireKey: 'umpire' }
+            state: { matchId: id, umpireKey: 'umpire', screenName: 'umpireList' }
         }} >
-            <span class="input-heading-add-another pt-0" >{id}</span>
+            <span className="input-heading-add-another pt-0" >{id}</span>
         </NavLink>
     },
     {
@@ -119,14 +119,14 @@ const column = [
             return (
                 <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                        <span class="pt-0 "
+                        <span className="pt-0 "
                             style={{ color: checkUmpireRosterStatus(user1) }}
                         >{user1 && (user1.firstName + " " + user1.lastName)}</span>
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <span style={{ textDecoration: "underline" }}
                             onClick={() => this_obj.onChangeStatus(index, record, "user1", statusText, user1)}
-                            class="input-heading-add-another pt-0" >{statusText}</span>
+                            className="input-heading-add-another pt-0">{statusText}</span>
                     </div>
                 </div>
             )
@@ -143,12 +143,12 @@ const column = [
                 <div className="row" style={{ display: 'flex', justifyContent: 'center' }}>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
                         <span style={{ color: checkUmpireRosterStatus(user2) }}
-                            class="pt-0 " >{user2 && (user2.firstName + " " + user2.lastName)}</span>
+                            className="pt-0">{user2 && (user2.firstName + " " + user2.lastName)}</span>
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <span style={{ textDecoration: "underline" }}
                             onClick={() => this_obj.onChangeStatus(index, record, "user2", statusText, user2)}
-                            class="input-heading-add-another pt-0" >{statusText}</span>
+                            className="input-heading-add-another pt-0">{statusText}</span>
                     </div>
                 </div>
             )
@@ -180,7 +180,7 @@ class AssignUmpire extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
-            if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
+            if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
                 if (getUmpireCompetiton()) {
@@ -188,9 +188,9 @@ class AssignUmpire extends Component {
                     firstComp = compId
                 }
                 const body = {
-                    "paging": {
-                        "limit": 10,
-                        "offset": 0
+                    paging: {
+                        limit: 10,
+                        offset: 0
                     }
                 }
                 this.props.getAssignUmpireListAction(firstComp, body)
@@ -203,24 +203,24 @@ class AssignUmpire extends Component {
     onChangeStatus(index, record, umpireKey, statusText, userData) {
         let umpireUserId = this_obj.props.location.state ? this_obj.props.location.state.record.id : 0
         let assignBody = {
-            "matchId": record.id,
-            "roleId": 15,
-            "userId": umpireUserId,
-            "rosterId": userData ? userData.rosterId : null
+            matchId: record.id,
+            roleId: 15,
+            userId: umpireUserId,
+            rosterId: userData ? userData.rosterId : null
         }
-        if (statusText == "Assign") {
+        if (statusText === "Assign") {
             this.props.assignUmpireAction(assignBody, index, umpireKey)
         }
-        if (statusText == "Unassign") {
+        if (statusText === "Unassign") {
             this.props.unassignUmpireAction(userData.rosterId, index, umpireKey)
         }
 
     }
     onChangeComp(compID) {
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
+            paging: {
+                limit: 10,
+                offset: 0
             }
         }
         this.setState({ selectedComp: compID })
@@ -240,27 +240,25 @@ class AssignUmpire extends Component {
                             </span>
                         </div>
                     </div>
-                    <div style={{ display: "flex", justifyContent: 'space-between', }} >
-                        {/* <div className="mt-5" > */}
+                    <div style={{ display: "flex", justifyContent: 'space-between', }}>
+                        {/* <div className="mt-5"> */}
                         {/* <div style={{
-                            width: "100%", display: "flex",
+                            width: "100%",
+                            display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
-                        }} > */}
-                        {/* <span className='year-select-heading'>{AppConstants.competition}:</span>
-                            <Select
-                                className="year-select"
-                                style={{ minWidth: 160 }}
-                                onChange={(comp) => this.onChangeComp(comp)}
-                                value={this.state.selectedComp}
-                            >
-                                {
-                                    competition.map((item) => {
-                                        return <Option value={item.id}>{item.longName}</Option>
-                                    })
-                                }
-
-                            </Select> */}
+                        }}> */}
+                        {/* <span className="year-select-heading">{AppConstants.competition}:</span>
+                        <Select
+                            className="year-select"
+                            style={{ minWidth: 160 }}
+                            onChange={(comp) => this.onChangeComp(comp)}
+                            value={this.state.selectedComp}
+                        >
+                            {competition.map((item) => (
+                                <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
+                            ))}
+                        </Select> */}
 
                         {/* <div className="col-sm"> */}
                         <div className="reg-add-save-button">
@@ -275,7 +273,7 @@ class AssignUmpire extends Component {
                         {/* </div> */}
                     </div>
                 </div>
-            </div >
+            </div>
         );
     };
 
@@ -283,9 +281,9 @@ class AssignUmpire extends Component {
     handlePageChnage(page) {
         let offset = page ? 10 * (page - 1) : 0;
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": offset
+            paging: {
+                limit: 10,
+                offset: offset
             }
         }
         this.props.getAssignUmpireListAction(this.state.selectedComp, body)
@@ -298,7 +296,7 @@ class AssignUmpire extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={onLoad == true && true}
+                        loading={onLoad && true}
                         className="home-dashboard-table"
                         columns={this.state.columns}
                         dataSource={assignUmpireList}
@@ -313,7 +311,7 @@ class AssignUmpire extends Component {
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "flex-end"
-                        }} >
+                        }}>
                         {/* <div className="col-sm">
                             <div className="reg-add-save-button">
                                 <span style={{ cursor: "pointer" }}
@@ -343,7 +341,7 @@ class AssignUmpire extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"2"} />
+                <InnerHorizontalMenu menu="umpire" umpireSelectedKey="2" />
                 <Layout>
                     {this.headerView()}
                     <Content>

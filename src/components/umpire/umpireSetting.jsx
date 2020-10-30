@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import {
     Layout,
     Breadcrumb,
@@ -6,20 +8,13 @@ import {
     Button,
     Radio,
     Form,
-    TimePicker,
     Checkbox
 } from "antd";
-import InputWithHead from "../../customComponents/InputWithHead";
+
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import moment from "moment";
 import { isArrayNotEmpty } from "../../util/helpers";
-import ValidationConstants from "../../themes/validationConstant";
-import { NavLink } from "react-router-dom";
-import Loader from '../../customComponents/loader';
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { updateUmpireDataAction } from '../../store/actions/umpireAction/umpireSettingAction'
@@ -27,7 +22,6 @@ import history from "util/history";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
-
 
 class UmpireSetting extends Component {
     constructor(props) {
@@ -47,10 +41,9 @@ class UmpireSetting extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.umpireCompetitionState !== this.props.umpireCompetitionState) {
-            if (this.state.loading == true && this.props.umpireCompetitionState.onLoad == false) {
+            if (this.state.loading && this.props.umpireCompetitionState.onLoad == false) {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
-
 
                 if (getUmpireCompId()) {
                     let compId = JSON.parse(getUmpireCompId())
@@ -65,7 +58,6 @@ class UmpireSetting extends Component {
         }
     }
 
-
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -78,7 +70,7 @@ class UmpireSetting extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.umpireAllocationSettings}
                         </Breadcrumb.Item>
@@ -88,13 +80,11 @@ class UmpireSetting extends Component {
         );
     };
 
-    onChangeComp(compID) {
+    onChangeComp = (compID) => {
         let selectedComp = compID.comp
         setUmpireCompId(selectedComp)
         let compKey = compID.competitionUniqueKey
-
         this.setState({ selectedComp, competitionUniqueKey: compKey })
-
     }
 
     dropdownView = () => {
@@ -114,19 +104,16 @@ class UmpireSetting extends Component {
                             >
                                 <span className="year-select-heading">
                                     {AppConstants.competition}:
-                </span>
+                                </span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 200 }}
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
                                 >
-                                    {
-                                        competition.map((item, index) => {
-                                            return <Option key={`longName${index}` + item.id} value={item.id}>{item.longName}</Option>
-                                        })
-                                    }
-
+                                    {competition.map((item) => (
+                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -136,8 +123,7 @@ class UmpireSetting extends Component {
         );
     };
 
-    umpireAllocationRadioView() {
-
+    umpireAllocationRadioView = () => {
         const { allocateViaPool, manuallyAllocate } = this.props.umpireSettingState
 
         const allocateViaPoolArr = [
@@ -149,61 +135,49 @@ class UmpireSetting extends Component {
             <div>
                 <span className='text-heading-large pt-4 pb-2' >{AppConstants.howUmpiresAllocated}</span>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-
                     <Radio
                         onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "manuallyAllocate" })}
-                        checked={manuallyAllocate}>
-                        {'Manually Allocate'}
+                        checked={manuallyAllocate}
+                    >
+                        Manually Allocate
                     </Radio>
 
                     <Radio
                         onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "allocateViaPool" })}
-                        checked={allocateViaPool}>
-                        {'Allocate via pools'}
+                        checked={allocateViaPool}
+                    >
+                        Allocate via pools
                     </Radio>
 
-
-
-                    {allocateViaPool &&
-                        <Radio.Group
-                            className="reg-competition-radio ml-5"
-                        >
-                            {allocateViaPoolArr.length > 0 && allocateViaPoolArr.map((item, index) => {
-                                return (
-                                    <Radio key={`name` + index} value={item.id}>{item.name}</Radio>
-                                )
-                            }
-                            )}
-
+                    {allocateViaPool && (
+                        <Radio.Group className="reg-competition-radio ml-5">
+                            {allocateViaPoolArr.map((item) => (
+                                <Radio key={'allocateViaPool_' + item.id} value={item.id}>{item.name}</Radio>
+                            ))}
                         </Radio.Group>
-                    }
+                    )}
                 </div>
             </div>
         )
     }
-
 
     ////////form content view
     contentView = () => {
         const { compOrganiser, defaultChecked } = this.props.umpireSettingState
         return (
             <div className="pt-0 mt-4">
-
                 {this.umpireAllocationRadioView()}
 
-                <span className='text-heading-large pt-5' >{AppConstants.umpireReservePref}</span>
-
+                <span className='text-heading-large pt-5'>{AppConstants.umpireReservePref}</span>
                 <Checkbox
                     className="single-checkbox pt-2"
                     checked={defaultChecked.reserveChecked}
                     onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "reserveChecked" })}
-
                 >
                     {AppConstants.activeUmpireReserves}
                 </Checkbox>
 
-
-                <span className='text-heading-large pt-5' >{AppConstants.umpireCoach}</span>
+                <span className='text-heading-large pt-5'>{AppConstants.umpireCoach}</span>
                 <Checkbox
                     className="single-checkbox pt-2"
                     checked={defaultChecked.coachChecked}
@@ -211,58 +185,62 @@ class UmpireSetting extends Component {
                 >
                     {AppConstants.activeUmpireCoach}
                 </Checkbox>
-
-            </div >
+            </div>
         );
     };
-
 
     ////////top or say first view
     topView = () => {
         const { compOrganiser, affiliateOrg, compOrgDivisionSelected, selectAllDiv, compOrgDiv } = this.props.umpireSettingState
         return (
             <div className="content-view pt-4 mt-5">
-                <span className='text-heading-large pt-2 pb-2' >{AppConstants.whoAssignsUmpires}</span>
+                <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoAssignsUmpires}</span>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <Radio
                         onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "compOrganiser" })}
-                        checked={compOrganiser}>
+                        checked={compOrganiser}
+                    >
                         {AppConstants.competitionOrganiser}
                     </Radio>
-                    {compOrganiser && <div className="inside-container-view mb-4 mt-4" >
-                        <Checkbox
-                            onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: 'selectAllDiv' })}
-                            checked={selectAllDiv}
-
-                        >
-                            {AppConstants.allDivisions}
-                        </Checkbox>
-                        {
-                            selectAllDiv === false &&
-                            <Select
-                                mode='multiple'
-                                placeholder={'Select'}
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
-                                onChange={(divisionId) => this.props.updateUmpireDataAction({ data: divisionId, key: 'compOrgDivisionSelected' })}
-                                value={compOrgDivisionSelected}
+                    {compOrganiser && (
+                        <div className="inside-container-view mb-4 mt-4">
+                            <Checkbox
+                                onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: 'selectAllDiv' })}
+                                checked={selectAllDiv}
                             >
-
-                                {compOrgDiv.map((item) => (
-                                    <Option key={"compOrgDiv" + item.id} disabled={item.disabled} value={item.id}>{item.name}</Option>
-                                ))}
-
-                            </Select>
-                        }
-                        {this.contentView()}
-                    </div>}
+                                {AppConstants.allDivisions}
+                            </Checkbox>
+                            {selectAllDiv === false && (
+                                <Select
+                                    mode='multiple'
+                                    placeholder="Select"
+                                    style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                                    onChange={(divisionId) => this.props.updateUmpireDataAction({ data: divisionId, key: 'compOrgDivisionSelected' })}
+                                    value={compOrgDivisionSelected}
+                                >
+                                    {compOrgDiv.map((item) => (
+                                        <Option
+                                            key={'compOrgDivision_' + item.id}
+                                            disabled={item.disabled}
+                                            value={item.id}
+                                        >
+                                            {item.name}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            )}
+                            {this.contentView()}
+                        </div>
+                    )}
                     <Radio
-                        className={"pt-1"}
+                        className="pt-1"
                         onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "affiliateOrg" })}
-                        checked={affiliateOrg}>
+                        checked={affiliateOrg}
+                    >
                         {AppConstants.affiliateOrganisations}
                     </Radio>
                 </div>
-            </div >
+            </div>
         );
     };
 
@@ -270,14 +248,13 @@ class UmpireSetting extends Component {
         const { allocateViaPool, manuallyAllocate, affiliateOrg } = this.props.umpireSettingState
         if (affiliateOrg === true && key === "next") {
             history.push("/umpirePayment");
-        }
-        else if (allocateViaPool === true && key === "next") {
+        } else if (allocateViaPool === true && key === "next") {
             history.push("/umpirePoolAllocation");
-        }
-        else if (manuallyAllocate === true) {
+        } else if (manuallyAllocate === true) {
             history.push("/umpireDashboard");
         }
     }
+
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
@@ -291,12 +268,20 @@ class UmpireSetting extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit"
-                                    onClick={() => this.checkScreenNavigation("save")} >
+                                <Button
+                                    className="publish-button save-draft-text"
+                                    type="primary"
+                                    htmlType="submit"
+                                    onClick={() => this.checkScreenNavigation("save")}
+                                >
                                     {AppConstants.save}
                                 </Button>
-                                <Button className="publish-button save-draft-text" type="primary" htmlType="submit"
-                                    onClick={() => this.checkScreenNavigation("next")}>
+                                <Button
+                                    className="publish-button save-draft-text"
+                                    type="primary"
+                                    htmlType="submit"
+                                    onClick={() => this.checkScreenNavigation("next")}
+                                >
                                     {AppConstants.next}
                                 </Button>
 
@@ -309,14 +294,13 @@ class UmpireSetting extends Component {
     };
 
     render() {
-        const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
-                <InnerHorizontalMenu menu={"umpire"} umpireSelectedKey={"6"} />
+                <InnerHorizontalMenu menu="umpire" umpireSelectedKey="6" />
                 <Layout>
                     <Form
-                        onSubmit={this.saveAPIsActionCall}
+                        onFinish={this.saveAPIsActionCall}
                         noValidate="noValidate"
                     >
                         {this.headerView()}
@@ -331,6 +315,7 @@ class UmpireSetting extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
@@ -338,10 +323,11 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         umpireCompetitionState: state.UmpireCompetitionState,
         umpireSettingState: state.UmpireSettingState
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(UmpireSetting));
+
+export default connect(mapStateToProps, mapDispatchToProps)(UmpireSetting);

@@ -6,7 +6,6 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import CompetitionSwappable from '../../customComponents/quickCompetitionComponent';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import {
     setOwnCompetitionYear,
@@ -20,8 +19,9 @@ import {
     getYearAndCompetitionOwnAction,
 } from '../../store/actions/appAction';
 import { getDivisionAction, getCompetitionFixtureAction, clearFixtureData, updateCompetitionFixtures } from "../../store/actions/competitionModuleAction/competitionDrawsAction"
-import moment from 'moment'
+// import moment from 'moment';
 import Loader from '../../customComponents/loader'
+import { getCurrentYear } from 'util/permissions'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -30,7 +30,7 @@ class CompetitionFixtures extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: '',
             venueId: '',
             roundId: '',
@@ -39,7 +39,6 @@ class CompetitionFixtures extends Component {
             competitionDivisionGradeId: "",
         }
     }
-
 
     componentDidMount() {
         loadjs('assets/js/custom.js');
@@ -57,8 +56,15 @@ class CompetitionFixtures extends Component {
                     this.setState({ firstTimeCompId: competitionId, venueLoad: true })
                 }
             }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
+                }
+            }
         }
-        if (this.state.venueLoad == true && this.props.drawsState.divisionLoad == false) {
+        if (this.state.venueLoad && this.props.drawsState.divisionLoad == false) {
             if (nextProps.drawsState !== this.props.drawsState) {
                 // if (nextProps.drawsState.fixtureDivisionGradeNameList !== fixtureDivisionGradeNameList) {
                 if (fixtureDivisionGradeNameList.length > 0) {
@@ -116,7 +122,7 @@ class CompetitionFixtures extends Component {
         }
         else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
+            // setOwnCompetitionYear(1)
         }
     }
 
@@ -203,7 +209,6 @@ class CompetitionFixtures extends Component {
             if (targetObject.drawsId !== sourceObejct.drawsId) {
                 if (sourceZIndex == 0) {
                     if (targetZIndex == 0) {
-                        console.log('called')
                         customSourceObject = {
                             competitionUniqueKey: this.state.firstTimeCompId,
                             team1: targetObject.team1,
@@ -211,7 +216,6 @@ class CompetitionFixtures extends Component {
 
                         };
                     } else {
-                        console.log('called')
                         customSourceObject = {
                             competitionUniqueKey: this.state.firstTimeCompId,
                             team1: targetObject.team2,
@@ -222,24 +226,19 @@ class CompetitionFixtures extends Component {
 
                 } else {
                     if (targetZIndex == 0) {
-                        console.log('called')
                         customSourceObject = {
                             competitionUniqueKey: this.state.firstTimeCompId,
                             team1: sourceObejct.team2,
                             team2: targetObject.team1,
-
                         };
                     } else {
-                        console.log('called')
                         customSourceObject = {
                             competitionUniqueKey: this.state.firstTimeCompId,
                             team1: sourceObejct.team2,
                             team2: targetObject.team2,
                         };
                     }
-
                 }
-
             } else {
                 customSourceObject = {
                     competitionUniqueKey: this.state.firstTimeCompId,
@@ -265,18 +264,16 @@ class CompetitionFixtures extends Component {
                     <div className="year-select-heading-view">
                         <span className="year-select-heading">{AppConstants.year}:</span>
                         <Select
-                            name={'yearRefId'}
+                            name="yearRefId"
                             className="year-select"
                             onChange={yearRefId => this.onYearChange(yearRefId)}
                             value={this.state.yearRefId}
                         >
-                            {this.props.appState.own_YearArr.length > 0 && this.props.appState.own_YearArr.map(item => {
-                                return (
-                                    <Option key={'yearRefId' + item.id} value={item.id}>
-                                        {item.description}
-                                    </Option>
-                                );
-                            })}
+                            {this.props.appState.own_YearArr.map(item => (
+                                <Option key={'year_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
                 </div>
@@ -292,26 +289,19 @@ class CompetitionFixtures extends Component {
                     >
                         <span className="year-select-heading">
                             {AppConstants.competition}:
-        </span>
+                        </span>
                         <Select
                             style={{ minWidth: 160 }}
-                            name={'competition'}
+                            name="competition"
                             className="year-select reg-filter-select1 innerSelect-value-draws"
-                            onChange={competitionId =>
-                                this.onCompetitionChange(competitionId)
-                            }
+                            onChange={competitionId => this.onCompetitionChange(competitionId)}
                             value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                         >
-                            {this.props.appState.own_CompetitionArr.map(item => {
-                                return (
-                                    <Option
-                                        key={'competition' + item.competitionId}
-                                        value={item.competitionId}
-                                    >
-                                        {item.competitionName}
-                                    </Option>
-                                );
-                            })}
+                            {this.props.appState.own_CompetitionArr.map(item => (
+                                <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                    {item.competitionName}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
                 </div>
@@ -325,15 +315,16 @@ class CompetitionFixtures extends Component {
             <div className="comp-draw-content-view mt-0">
                 <div className="row comp-draw-list-top-head">
                     <div className="col-sm-4">
-                        <span className='form-heading'>{AppConstants.fixtures}</span>
-                        <div className="row"  >
-                            <div className="col-sm" >
+                        <span className="form-heading">{AppConstants.fixtures}</span>
+                        <div className="row">
+                            <div className="col-sm">
                                 <div style={{
-                                    width: "100%", display: "flex",
+                                    width: "100%",
+                                    display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
-                                }} >
-                                    <span className='year-select-heading'>{AppConstants.grade}:</span>
+                                }}>
+                                    <span className="year-select-heading">{AppConstants.grade}:</span>
                                     <Select
                                         className="year-select"
                                         style={{ minWidth: 100, maxWidth: 130 }}
@@ -342,16 +333,14 @@ class CompetitionFixtures extends Component {
                                         }
                                         value={JSON.parse(JSON.stringify(this.state.competitionDivisionGradeId))}
                                     >
-                                        {this.props.drawsState.fixtureDivisionGradeNameList.length > 0 && this.props.drawsState.fixtureDivisionGradeNameList.map(item => {
-                                            return (
-                                                <Option
-                                                    key={'divisionGradeNameList' + item.competitionDivisionGradeId}
-                                                    value={item.competitionDivisionGradeId}
-                                                >
-                                                    {item.name}
-                                                </Option>
-                                            );
-                                        })}
+                                        {this.props.drawsState.fixtureDivisionGradeNameList.map(item => (
+                                            <Option
+                                                key={'compDivGrade_' + item.competitionDivisionGradeId}
+                                                value={item.competitionDivisionGradeId}
+                                            >
+                                                {item.name}
+                                            </Option>
+                                        ))}
                                     </Select>
                                 </div>
                             </div>
@@ -822,7 +811,7 @@ class CompetitionFixtures extends Component {
                     <div className="table-head-wrap">
                         {/* Times list */}
                         <div className="tablehead-row-fixture ">
-                            <div className="sr-no empty-bx"></div>
+                            <div className="sr-no empty-bx" />
                             {dateArray.map((date, index) => {
                                 if (index !== 0) {
                                     dayMargin += 75;
@@ -854,7 +843,6 @@ class CompetitionFixtures extends Component {
                                     // if (slotIndex == 0) {
                                     //     leftMargin = 40;
                                     // }
-                                    console.log(slotObject)
                                     return (
                                         <div>
                                             <span
@@ -862,7 +850,7 @@ class CompetitionFixtures extends Component {
                                                 className={
                                                     'fixtureBorder'
                                                 }
-                                            ></span>
+                                            />
                                             <div
                                                 className={
                                                     'fixtureBox'
@@ -876,7 +864,7 @@ class CompetitionFixtures extends Component {
                                                 <CompetitionSwappable
                                                     id={index.toString() + ':' + slotIndex.toString()}
                                                     content={1}
-                                                    swappable={true}
+                                                    swappable
                                                     onSwap={(source, target) =>
                                                         console.log(source, target)
                                                     }
@@ -898,7 +886,7 @@ class CompetitionFixtures extends Component {
                     })}
                 </div>
 
-            </div >
+            </div>
         );
     };
     //////the gragable content view inside the container
@@ -911,9 +899,8 @@ class CompetitionFixtures extends Component {
     //     return (
     //         <div className="draggable-wrap draw-data-table">
     //             <div className="scroll-bar">
-
     //                 {/* Slots View */}
-    //                 < div className="fixture-main-canvas Draws" >
+    //                 <div className="fixture-main-canvas Draws">
     //                     {
     //                         getStaticDrawsData.map((courtData, index) => {
     //                             let leftMargin = 25;
@@ -924,8 +911,8 @@ class CompetitionFixtures extends Component {
     //                             }
     //                             return (
     //                                 <div>
-    //                                     <div className="fixture-round-view" >
-    //                                         <div >
+    //                                     <div className="fixture-round-view">
+    //                                         <div>
     //                                             <span className="fixture-round">{courtData.roundName}</span>
     //                                         </div>
     //                                         <div>
@@ -933,8 +920,6 @@ class CompetitionFixtures extends Component {
     //                                         </div>
     //                                     </div>
     //                                     <div className="sr-no fixture-huge-sr">
-
-
     //                                     </div>
 
     //                                     {courtData.draws.map((slotObject, slotIndex) => {
@@ -974,7 +959,7 @@ class CompetitionFixtures extends Component {
     //                                                                 ':0:' + courtData.roundId
     //                                                             }
     //                                                             content={1}
-    //                                                             swappable={true}
+    //                                                             swappable
     //                                                             onSwap={(source, target) =>
     //                                                                 this.onSwap(source, target, courtData.roundId, courtData.draws)
     //                                                             }
@@ -985,7 +970,7 @@ class CompetitionFixtures extends Component {
     //                                                     <span
     //                                                         className={'border'}
     //                                                         style={{ top: topMarginAwayTeam, left: leftMargin }}
-    //                                                     ></span>
+    //                                                     />
     //                                                     <div
     //                                                         className={
     //                                                             'box purple-box ' +
@@ -1005,7 +990,7 @@ class CompetitionFixtures extends Component {
     //                                                                 ':1:' + courtData.roundId
     //                                                             }
     //                                                             content={1}
-    //                                                             swappable={true}
+    //                                                             swappable
     //                                                             onSwap={(source, target) =>
     //                                                                 this.onSwap(source, target, courtData.roundId, courtData.draws)
     //                                                             }
@@ -1030,15 +1015,15 @@ class CompetitionFixtures extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width"  >
+            <div className="fluid-width">
                 {/* <div className="footer-view"> */}
-                <div className="row" >
+                <div className="row">
                     <div className="col-sm-3">
                         <div className="reg-add-save-button">
                             <Button type="cancel-button">{AppConstants.back}</Button>
                         </div>
                     </div>
-                    <div className="col-sm" >
+                    <div className="col-sm">
                         <div className="comp-buttons-view">
                             <Button className="open-reg-button" type="primary">{AppConstants.next}</Button>
                         </div>
@@ -1051,9 +1036,9 @@ class CompetitionFixtures extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"11"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="11" />
                 <Layout className="comp-dash-table-view">
                     {/* <div className="comp-draw-head-content-view"> */}
                     {this.headerView()}

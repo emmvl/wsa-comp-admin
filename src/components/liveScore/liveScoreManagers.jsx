@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Button, Table, Pagination, Input, Icon, Menu } from "antd";
+import { Layout, Button, Table, Pagination, Input, Menu } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import "./liveScore.css";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -11,13 +12,12 @@ import AppConstants from "../../themes/appConstants";
 import scorerData from "../../mocks/managersList";
 import AppImages from "../../themes/appImages";
 import { liveScoreManagerListAction } from "../../store/actions/LiveScoreAction/liveScoreManagerAction";
-import { getLiveScoreCompetiton, getUserId } from "../../util/sessionStorage";
+import { getLiveScoreCompetiton } from "../../util/sessionStorage";
 import history from "../../util/history";
 import { userExportFilesAction } from "../../store/actions/appAction";
 import { teamListData } from "../../util/helpers";
 
 const { Content } = Layout;
-let userId = getUserId();
 let _this = null;
 
 function tableSort(key) {
@@ -30,7 +30,7 @@ function tableSort(key) {
     } else if (_this.state.sortBy === key && _this.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
-    _this.setState({ sortBy: sortBy, sortOrder: sortOrder });
+    _this.setState({ sortBy, sortOrder });
     _this.props.liveScoreManagerListAction(3, 1, _this.state.competitionId, _this.state.searchText, _this.state.offset, sortBy, sortOrder);
 }
 
@@ -98,9 +98,9 @@ const columns = [
         key: 'Linked Entity',
         sorter: true,
         onHeaderCell: () => listeners('linkedEntity.name'),
-        render: (linkedEntity, record) => (
+        render: (linkedEntity) => (
             <div>
-                {linkedEntity.length > 0 && linkedEntity.map((item, i) => (
+                {linkedEntity.map((item, i) => (
                     teamListData(item.entityId) ? (
                         <div key={`managerName${i}` + item.entityId}>
                             <NavLink
@@ -118,8 +118,8 @@ const columns = [
                             </NavLink>
                         </div>
                     ) : (
-                            <span key={`managerName${i}` + item.entityId}>{item.name}</span>
-                        )
+                        <span key={`managerName${i}` + item.entityId}>{item.name}</span>
+                    )
                 ))}
             </div>
         ),
@@ -130,13 +130,13 @@ const columns = [
         key: 'Linked Entity Parent Name',
         sorter: true,
         onHeaderCell: () => listeners('linkedEntity.parentName'),
-        render: (linkedEntity, record) => (
+        render: (linkedEntity) => (
             <div>
-                {linkedEntity.length > 0 && linkedEntity.map((item, i) => (
+                {linkedEntity.map((item, i) => (
                     // teamListData(item.entityId) ?
                     //     <NavLink to={{
-                    //         // pathname: '/userPersonal',
-                    //         // state: { userId: record.id, screenKey: "livescore" }
+                    //         pathname: '/userPersonal',
+                    //         state: { userId: record.id, screenKey: "livescore" }
                     //     }}>
                     //         <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data">{item.parentName}</span>
                     //     </NavLink>
@@ -161,7 +161,7 @@ const columns = [
                         <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                     }
                 >
-                    <Menu.Item key={'1'}>
+                    <Menu.Item key="1">
                         <NavLink
                             to={{
                                 pathname: '/liveScoreAddManagers',
@@ -175,7 +175,7 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: "./liveScoreAssignMatch",
-                                state: { record: record }
+                                state: { record }
                             }}
                         >
                             <span>Assign to match</span>
@@ -225,7 +225,7 @@ class LiveScoreManagerList extends Component {
     }
 
     /// Handle Page change
-    handlePageChnage(page) {
+    handlePageChange = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
             offset
@@ -264,7 +264,7 @@ class LiveScoreManagerList extends Component {
                             current={currentPage}
                             total={totalCount}
                             defaultPageSize={10}
-                            onChange={(page) => this.handlePageChnage(page)}
+                            onChange={this.handlePageChange}
                         />
                     </div>
                 </div>
@@ -383,15 +383,14 @@ class LiveScoreManagerList extends Component {
                         <div className="comp-product-search-inp-width">
                             <Input
                                 className="product-reg-search-input"
-                                onChange={(e) => this.onChangeSearchText(e)}
+                                onChange={this.onChangeSearchText}
                                 placeholder="Search..."
-                                onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                onKeyPress={this.onKeyEnterSearchText}
                                 value={this.state.searchText}
                                 prefix={
-                                    <Icon
-                                        type="search"
+                                    <SearchOutlined
                                         style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                        onClick={() => this.onClickSearchIcon()}
+                                        onClick={this.onClickSearchIcon}
                                     />
                                 }
                                 allowClear
@@ -414,7 +413,7 @@ class LiveScoreManagerList extends Component {
         }
     }
 
-    // search key 
+    // search key
     onKeyEnterSearchText = (e) => {
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
@@ -444,7 +443,7 @@ class LiveScoreManagerList extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"4"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout>
                     {this.headerView()}
                     <Content>

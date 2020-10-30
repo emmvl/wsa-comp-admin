@@ -49,8 +49,8 @@ const columns1 = [
         render: (id) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
             state: { matchId: id }
-        }} >
-            <span class="input-heading-add-another pt-0" >{id}</span>
+        }}>
+            <span className="input-heading-add-another pt-0">{id}</span>
         </NavLink>
     },
     {
@@ -76,10 +76,10 @@ const columns1 = [
                             alt="" width="12" height="12" />
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                        <span style={{ overflowX: "auto", whiteSpace: "nowrap" }} class="input-heading-add-another pt-0 " >{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
+                        <span style={{ overflowX: "auto", whiteSpace: "nowrap" }} className="input-heading-add-another pt-0">{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
                     </div>
                     <div className="col-sm mr-5" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} class="input-heading-add-another pt-0" >{records.scorer1 ? "Unassign" : "Assign"}</span>
+                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} className="input-heading-add-another pt-0">{records.scorer1 ? "Unassign" : "Assign"}</span>
                     </div>
                 </div>
             )
@@ -98,8 +98,8 @@ const columns2 = [
         render: (id) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
             state: { matchId: id }
-        }} >
-            <span class="input-heading-add-another pt-0" >{id}</span>
+        }}>
+            <span className="input-heading-add-another pt-0">{id}</span>
         </NavLink>
     },
     {
@@ -125,16 +125,15 @@ const columns2 = [
                             alt="" width="12" height="12" />
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
-                        <span class="pt-0 " >{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
+                        <span className="pt-0">{records.team1.name} ({records.scorer1 ? records.scorer1.firstName + " " + records.scorer1.lastName : "Unassigned"})</span>
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} class="input-heading-add-another pt-0" >{checkScorerMatch(records.scorer1)}</span>
+                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer1", "team1", records.scorer1)} className="input-heading-add-another pt-0">{checkScorerMatch(records.scorer1)}</span>
                     </div>
                 </div>
             )
         }
     },
-
     {
         title: 'Team 2',
         dataIndex: 'team2',
@@ -151,14 +150,13 @@ const columns2 = [
                     </div>
                     <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-start', }}>
                         {this_obj.state.scoring_Type !== "SINGLE" ?
-                            <span class="pt-0" >{records.team2.name} ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassigned"})</span>
+                            <span className="pt-0">{records.team2.name} ({records.scorer2 ? records.scorer2.firstName + " " + records.scorer2.lastName : "Unassigned"})</span>
                             :
-                            <span class="pt-0" >{records.team2.name}</span>
-
+                            <span className="pt-0">{records.team2.name}</span>
                         }
                     </div>
-                    {this_obj.state.scoring_Type !== "SINGLE" ? <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }} >
-                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2", records.scorer2)} class="input-heading-add-another pt-0" >{checkScorerMatch(records.scorer2)}</span>
+                    {this_obj.state.scoring_Type !== "SINGLE" ? <div className="col-sm" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <span style={{ textDecoration: "underline" }} onClick={() => this_obj.onChangeStatus(index, records, "scorer2", "team2", records.scorer2)} className="input-heading-add-another pt-0">{checkScorerMatch(records.scorer2)}</span>
                     </div> : null}
                 </div>
             )
@@ -169,7 +167,7 @@ const columns2 = [
     //     dataIndex: 'scorer',
     //     key: 'scorer',
     //     render: (team1, records, index) => {
-    //         return <span onClick={() => this.onChangeStatus(index, records)} class="input-heading-add-another pt-0" >{records.scorer2 ? "Assign" : "Unassign"}</span>
+    //         return <span onClick={() => this.onChangeStatus(index, records)} className="input-heading-add-another pt-0">{records.scorer2 ? "Assign" : "Unassign"}</span>
     //     }
     // }
 ]
@@ -185,7 +183,7 @@ class LiveScoreAssignMatch extends Component {
                 filter: '',
                 competitionId: 0,
                 teamID: null,
-                // columns: scoringType == "SINGLE" ? columns1 : columns2,
+                // columns: scoringType === "SINGLE" ? columns1 : columns2,
                 columns: columns2,
                 lodding: false,
                 scoring_Type: scoringType
@@ -218,12 +216,12 @@ class LiveScoreAssignMatch extends Component {
 
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreScorerState.teamResult !== this.props.liveScoreScorerState.teamResult) {
-            if (this.state.lodding == true && this.props.liveScoreScorerState.onLoad == false) {
+            if (this.state.lodding && this.props.liveScoreScorerState.onLoad == false) {
                 const { id } = JSON.parse(getLiveScoreCompetiton())
                 const body = {
-                    "paging": {
-                        "limit": 10,
-                        "offset": 0
+                    paging: {
+                        limit: 10,
+                        offset: 0
                     }
 
                 }
@@ -234,7 +232,7 @@ class LiveScoreAssignMatch extends Component {
         }
     }
 
-    /// on status change 
+    /// on status change
     onChangeStatus(index, data, scorerKey, teamKey, isScorer) {
         let scorerID = this.props.location.state ? this.props.location.state.record.id : null
         if (!isScorer) {
@@ -250,14 +248,14 @@ class LiveScoreAssignMatch extends Component {
 
     }
 
-    /// On change values  
+    /// On change values
     handlePaggination = (page) => {
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({ lodding: true })
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": offset
+            paging: {
+                limit: 10,
+                offset: offset
             },
             "searchText": ""
         }
@@ -270,9 +268,9 @@ class LiveScoreAssignMatch extends Component {
 
         this.setState({ teamID: filter.filter })
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
+            paging: {
+                limit: 10,
+                offset: 0
             },
             "searchText": ""
         }
@@ -287,8 +285,8 @@ class LiveScoreAssignMatch extends Component {
 
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
-                < div className="row" >
-                    <div className="col-sm" style={{ alignSelf: 'center' }} >
+                <div className="row">
+                    <div className="col-sm" style={{ alignSelf: 'center' }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.assignMatches}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -306,25 +304,18 @@ class LiveScoreAssignMatch extends Component {
                                 style={{ display: "flex", alignItems: "flex-start" }}
                                 // onChange={(selectStatus) => this.setState({ selectStatus })}
                                 onChange={(filter) => this.onChangeTeam({ filter })}
-                                value={this.state.teamID} >
-                                {
-                                    teamData.map((item, index) => {
-                                        return (
-                                            <Option key={"teamname" + item.id} value={item.id}>
-                                                {item.name}
-                                            </Option>
-                                        )
-                                    })
-                                }
-
-
+                                value={this.state.teamID}
+                            >
+                                {teamData.map((item) => (
+                                    <Option key={'team_' + item.id} value={item.id}>
+                                        {item.name}
+                                    </Option>
+                                ))}
                             </Select>
-
-
                         </div>
                     </div>
-                </div >
-            </div >
+                </div>
+            </div>
         )
     }
 
@@ -335,7 +326,7 @@ class LiveScoreAssignMatch extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={matcheList.onLoad == true && true}
+                        loading={matcheList.onLoad && true}
                         className="home-dashboard-table"
                         columns={this.state.columns}
                         dataSource={matcheList.assignMatches}
@@ -352,7 +343,7 @@ class LiveScoreAssignMatch extends Component {
                             flexDirection: "row",
                             // alignItems: "center",
                             justifyContent: "center"
-                        }} >
+                        }}>
                         <div className="col-sm">
                             <div className="reg-add-save-button">
                                 <span style={{ cursor: "pointer" }} onClick={() => history.push('/liveScorerList')} className="input-heading-add-another">{AppConstants.backToScorer}</span>
@@ -381,7 +372,7 @@ class LiveScoreAssignMatch extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="5" />
                 <Layout>
                     {getLiveScoreCompetiton() && this.headerView()}
                     <Content>

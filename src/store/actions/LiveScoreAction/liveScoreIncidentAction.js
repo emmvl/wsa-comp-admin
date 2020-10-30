@@ -3,7 +3,7 @@ import ApiConstatnts from '../../../themes/apiConstants'
 function liveScoreIncidentList(competitionId, search, limit, offset, sortBy, sortOrder) {
     const action = {
         type: ApiConstatnts.API_LIVE_SCORE_INCIDENT_LIST_LOAD,
-        competitionId: competitionId,
+        competitionId,
         search: search,
         limit, offset, sortBy, sortOrder
     };
@@ -14,8 +14,8 @@ function liveScoreIncidentList(competitionId, search, limit, offset, sortBy, sor
 function liveScoreUpdateIncident(data, key) {
     const action = {
         type: ApiConstatnts.API_LIVE_SCORE_UPDATE_INCIDENT,
-        key: key,
-        data: data
+        key,
+        data
     };
     return action;
 }
@@ -37,8 +37,8 @@ export const liveScoreClearIncident = () => {
 function liveScoreUpdateIncidentData(data, key) {
     const action = {
         type: ApiConstatnts.API_LIVE_SCORE_UPDATE_INCIDENT_DATA,
-        key: key,
-        data: data
+        key,
+        data
     };
 
     return action;

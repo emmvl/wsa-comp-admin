@@ -51,8 +51,8 @@ function getTeamObj(teamSelectId, teamArr) {
         for (let j in teamSelectId) {
             if (teamSelectId[j] == teamArr[i].id) {
                 obj = {
-                    "name": teamArr[i].name,
-                    "id": teamArr[i].id
+                    name: teamArr[i].name,
+                    id: teamArr[i].id
                 }
                 teamObj.push(obj)
             }
@@ -123,18 +123,18 @@ function liveScoreScorerState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_SCORER:
 
-            if (action.key == 'teamId') {
+            if (action.key === 'teamId') {
                 let selectedTeams = getTeamObj(action.data, state.teamResult)
 
                 state.scorerData['teams'] = selectedTeams
                 state.teamId = action.data
-            } else if (action.key == 'scorerRadioBtn') {
+            } else if (action.key === 'scorerRadioBtn') {
                 state[action.key] = action.data
                 state.existingScorerId = null
-            } else if (action.key == 'isEditScorer') {
+            } else if (action.key === 'isEditScorer') {
 
                 state.scorerData = action.data
-            } else if (action.key == 'isAddScorer') {
+            } else if (action.key === 'isAddScorer') {
                 scorerObj = {
                     firstName: "",
                     lastName: "",
@@ -145,7 +145,7 @@ function liveScoreScorerState(state = initialState, action) {
                 state.scorerData = scorerObj
                 state.teamId = null
                 state.scorerRadioBtn = "new"
-            } else if (action.key == 'scorerSearch') {
+            } else if (action.key === 'scorerSearch') {
                 state.existingScorerId = action.data
             } else {
                 state.scorerData[action.key] = action.data

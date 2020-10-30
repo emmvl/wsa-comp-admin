@@ -137,43 +137,43 @@ class Login extends Component {
                   isSubmitting,
                   setFieldValue
                 }) => (
-                    <Form onSubmit={handleSubmit}>
-                      <div className="auth-form" style={{ zIndex: 15 }}>
-                        {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
-                      </div>
-                    </Form>
-                  )}
+                  <Form onFinish={handleSubmit}>
+                    <div className="auth-form" style={{ zIndex: 15 }}>
+                      {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
+                    </div>
+                  </Form>
+                )}
               </Formik>
             ) : (
-                <div className="auth-form" style={{ fontSize: 14, textAlign: 'center', zIndex: 15 }}>
-                  {!loginState.result.tfaEnabled && loginState.result.qrCode && (
-                    <>
-                      <img src={loginState.result.qrCode} alt="" />
+              <div className="auth-form" style={{ fontSize: 14, textAlign: 'center', zIndex: 15 }}>
+                {!loginState.result.tfaEnabled && loginState.result.qrCode && (
+                  <>
+                    <img src={loginState.result.qrCode} alt="" />
 
-                      <p>Scan QR code with your authenticator.</p>
-                    </>
-                  )}
+                    <p>Scan QR code with your authenticator.</p>
+                  </>
+                )}
 
-                  <div className="qr-code-form">
-                    <InputWithHead
-                      type="number"
-                      heading={AppConstants.qrCodeHeader}
-                      placeholder={AppConstants.qrCodeHeader}
-                      onChange={this.onChangeCode}
-                      value={code}
-                    />
+                <div className="qr-code-form">
+                  <InputWithHead
+                    type="number"
+                    heading={AppConstants.qrCodeHeader}
+                    placeholder={AppConstants.qrCodeHeader}
+                    onChange={this.onChangeCode}
+                    value={code}
+                  />
 
-                    <Button
-                      className="open-reg-button"
-                      type="primary"
-                      disabled={code.length !== 6 || loginState.onLoad}
-                      onClick={this.submitCode}
-                    >
-                      {AppConstants.submit}
-                    </Button>
-                  </div>
+                  <Button
+                    className="open-reg-button"
+                    type="primary"
+                    disabled={code.length !== 6 || loginState.onLoad}
+                    onClick={this.submitCode}
+                  >
+                    {AppConstants.submit}
+                  </Button>
                 </div>
-              )}
+              </div>
+            )}
 
             <Loader visible={loginState.onLoad} />
           </Content>

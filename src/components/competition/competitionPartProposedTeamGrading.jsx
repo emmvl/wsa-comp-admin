@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Button, Table, Select, Tag, Form, Tooltip, message, Menu, Modal } from 'antd';
+import { Layout, Breadcrumb, Input, Button, Table, Select, Tag, Tooltip, message, Menu, Modal } from 'antd';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -37,7 +37,7 @@ import {
     commentListingAction,
 } from "../../store/actions/competitionModuleAction/competitionPartPlayerGradingAction";
 import AppUniqueId from "../../themes/appUniqueId";
-
+import { getCurrentYear } from 'util/permissions'
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 let this_obj = null;
@@ -56,22 +56,19 @@ const columns = [
         dataIndex: 'sortOrder',
         key: 'sortOrder',
         sorter: (a, b) => tableSort(a, b, "sortOrder")
-
     },
     {
         title: 'Team Name',
         dataIndex: 'teamName',
         key: 'teamName',
         render: (teamName, record, index) => <Input className="input-inside-team-grades-table"
-            disabled={this_obj.state.competitionStatus == 1 ? true : false}
+            disabled={this_obj.state.competitionStatus == 1}
             onChange={e => this_obj.props.onchangeCompPartProposedTeamGradingData(e.target.value, index, "teamName")}
-            placeholder={"Team Name"}
+            placeholder="Team Name"
             value={teamName}
         />,
         sorter: (a, b) => tableSort(a, b, "teamName")
-
     },
-
     {
         title: 'History',
         dataIndex: 'playerHistory',
@@ -79,57 +76,59 @@ const columns = [
         render: (playerHistory, record, key) => (
             <span>
                 {playerHistory.map((item, index) => (
-                    (item.divisionGrade != null && item.divisionGrade != "") ? 
-                    <Tooltip
-                        className="comp-player-table-tag2"
-                        style={{ height: "100%" }}
-                        onMouseEnter={() => this_obj.changeHover(item, key, index, true)}
-                        onMouseLeave={() => this_obj.changeHover(item, key, index, false)}
-                        visible={item.hoverVisible}
-                        title={item.playerName}>
-                        {this_obj.state.competitionStatus != 1 ?
-                            <NavLink to={{
-                                pathname: `/userPersonal`,
-                                state: { userId: item.userId, screenKey: 'competitionPartProposedTeamGrading', screen: "/competitionPartProposedTeamGrading" }
-                            }}
-                            >
-                                <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
-                                    {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
-                                </Tag>
-                            </NavLink>
-                            :
-                            <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
-                                    {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
-                            </Tag>
-                        }
-                    </Tooltip> : null
+                    (item.divisionGrade != null && item.divisionGrade != "") && (
+                        <Tooltip
+                            className="comp-player-table-tag2"
+                            style={{ height: "100%" }}
+                            onMouseEnter={() => this_obj.changeHover(item, key, index, true)}
+                            onMouseLeave={() => this_obj.changeHover(item, key, index, false)}
+                            visible={item.hoverVisible}
+                            title={item.playerName}
+                        >
+                            {this_obj.state.competitionStatus != 1 ? (
+                                <NavLink to={{
+                                    pathname: `/userPersonal`,
+                                    state: {
+                                        userId: item.userId,
+                                        screenKey: 'competitionPartProposedTeamGrading',
+                                        screen: "/competitionPartProposedTeamGrading"
+                                    }
+                                }}>
+                                    <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
+                                        {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
+                                    </Tag>
+                                </NavLink>
+                            ) : (
+                                    <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
+                                        {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
+                                    </Tag>
+                                )}
+                        </Tooltip>
+                    )
                 ))}
             </span>
         ),
         sorter: (a, b) => tableSort(a, b, "playerHistory")
-
     },
     {
         title: 'Proposed Grade',
         dataIndex: 'proposedGradeRefId',
         key: 'proposedGradeRefId',
-        render: (proposedGradeRefId, record, index) =>
-            <Select className="select-inside-team-grades-table"
-                disabled={this_obj.state.competitionStatus == 1 ? true : false}
+        render: (proposedGradeRefId, record, index) => (
+            <Select
+                className="select-inside-team-grades-table"
+                disabled={this_obj.state.competitionStatus == 1}
                 onChange={proposedGradeRefId => this_obj.props.onchangeCompPartProposedTeamGradingData(proposedGradeRefId, index, "proposedGradeRefId")}
                 value={proposedGradeRefId}
             >
-                {this_obj.props.commonReducerState.gradesReferenceData.map(item => {
-                    return (
-                        <Option key={"proposedGradeRefId" + item.id} value={item.id}>
-                            {item.description}
-                        </Option>
-                    );
-                })}
-            </Select>,
+                {this_obj.props.commonReducerState.gradesReferenceData.map(item => (
+                    <Option key={'proposedGrade_' + item.id} value={item.id}>
+                        {item.description}
+                    </Option>
+                ))}
+            </Select>
+        ),
         sorter: (a, b) => tableSort(a, b, "proposedGradeRefId")
-
-
     },
     {
         title: 'Finalised Grade',
@@ -142,24 +141,25 @@ const columns = [
         dataIndex: 'comments',
         key: 'comments',
         width: 110,
-        render: (comments, record) =>
+        render: (comments, record) => (
             <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_obj.state.competitionStatus !== 0 && this_obj.onClickComment(record)}>
                 <img src={record.isCommentsAvailable == 1 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
-            </div>,
+            </div>
+        ),
     },
     {
         title: "Action",
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, e, index) => (
-            <Menu className="action-triple-dot-submenu" theme="light" mode="horizontal"
-                style={{ lineHeight: "25px" }}>
-                <SubMenu key="sub1"
-                    disabled={this_obj.state.competitionStatus == 1 ? true : false}
-                    title={<img className="dot-image" src={AppImages.moreTripleDot}
-                        alt="" width="16" height="16"
-                    />
-                    }>
+            <Menu className="action-triple-dot-submenu" theme="light" mode="horizontal" style={{ lineHeight: "25px" }}>
+                <SubMenu
+                    key="sub1"
+                    disabled={this_obj.state.competitionStatus == 1}
+                    title={
+                        <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                    }
+                >
                     <Menu.Item key="1" onClick={() => this_obj.onClickChangeDivision(e)}>
                         <span>Change Division</span>
                     </Menu.Item>
@@ -167,16 +167,13 @@ const columns = [
             </Menu>
         )
     }
-
-
 ];
-
 
 class CompetitionPartProposedTeamGrading extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             divisionId: null,
             firstTimeCompId: "",
             saveLoad: false,
@@ -212,10 +209,19 @@ class CompetitionPartProposedTeamGrading extends Component {
                     let statusRefId = competitionList[0].statusRefId
                     setParticipating_competition(competitionId)
                     setParticipating_competitionStatus(statusRefId)
-                    this.props.getDivisionsListAction(this.state.yearRefId, competitionId)
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getParticipatingYear()
+                    this.props.getDivisionsListAction(yearId, competitionId)
                     this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId })
                 }
             }
+            if (nextProps.appState.participate_YearArr !== this.props.appState.participate_YearArr) {
+                if (this.props.appState.participate_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.participate_YearArr)
+                    setParticipatingYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
+                }
+            }
+
         }
         if (nextProps.registrationState.allDivisionsData !== allDivisionsData) {
             if (allDivisionsData.length > 0) {
@@ -245,7 +251,7 @@ class CompetitionPartProposedTeamGrading extends Component {
     }
 
     handleChangeDivision = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             let payload = {
                 competitionDivisionId: this.state.competitionDivisionId,
                 teamId: this.state.teamId,
@@ -310,9 +316,8 @@ class CompetitionPartProposedTeamGrading extends Component {
     }
 
     handleOk = e => {
-        {
-            this.state.comment.length > 0 &&
-                this.props.partProposedSummaryComment(this.state.firstTimeCompId, this.state.divisionId, this.state.teamId, this.state.comment)
+        if (this.state.comment.length > 0) {
+            this.props.partProposedSummaryComment(this.state.firstTimeCompId, this.state.divisionId, this.state.teamId, this.state.comment)
         }
         this.props.clearReducerCompPartPlayerGradingAction("commentList")
         this.setState({
@@ -322,7 +327,8 @@ class CompetitionPartProposedTeamGrading extends Component {
             finalGradeId: null,
         });
     };
-    // model cancel for dissapear a model
+
+    // model cancel for disappear a model
     handleCancel = e => {
         this.props.clearReducerCompPartPlayerGradingAction("commentList")
         this.setState({
@@ -338,7 +344,7 @@ class CompetitionPartProposedTeamGrading extends Component {
     submitApiCall = (buttonClicked) => {
         let proposedTeamGradingData = this.props.ownTeamGradingState.getPartProposedTeamGradingData
         let isError = false;
-        if (buttonClicked == "submit") {
+        if (buttonClicked === "submit") {
             proposedTeamGradingData.map((item) => {
                 if ((item.proposedGradeRefId == 0 || item.proposedGradeRefId == null || item.proposedGradeRefId == "" ||
                     item.proposedGradeRefId == undefined)) {
@@ -349,10 +355,10 @@ class CompetitionPartProposedTeamGrading extends Component {
 
         if (!isError) {
             let payload = {
-                "competitionUniqueKey": this.state.firstTimeCompId,
-                "competitionMembershipProductDivisionId": this.state.divisionId,
-                "gradeRefId": this.state.gradeRefId,
-                "teams": proposedTeamGradingData
+                competitionUniqueKey: this.state.firstTimeCompId,
+                competitionMembershipProductDivisionId: this.state.divisionId,
+                gradeRefId: this.state.gradeRefId,
+                teams: proposedTeamGradingData
             }
             this.props.savePartProposedTeamGradingDataAction(payload)
             this.setState({ saveLoad: true })
@@ -383,13 +389,13 @@ class CompetitionPartProposedTeamGrading extends Component {
 
     ///////view for breadcrumb
     headerView = () => {
-        let disabledStatus = this.state.competitionStatus == 1 ? true : false
+        let disabledStatus = this.state.competitionStatus == 1
         return (
             <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add"> {AppConstants.proposedTeamGrading}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add"> {AppConstants.proposedTeamGrading}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                     <div className="col-sm" style={{
@@ -432,7 +438,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -470,87 +476,82 @@ class CompetitionPartProposedTeamGrading extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width" >
-                    <div className="row" >
+                <div className="fluid-width">
+                    <div className="row">
                         <div className="col-sm-3" >
                             <div className="com-year-select-heading-view pb-3" >
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
-                                    name={"yearRefId"}
+                                    name="yearRefId"
                                     style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {this.props.appState.participate_YearArr.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.participate_YearArr.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
                         <div className="col-sm pb-3" >
                             <div style={{
-                                width: "fit-content", display: "flex",
+                                width: "fit-content",
+                                display: "flex",
                                 flexDirection: "row",
-                                alignItems: "center", marginRight: 50
-                            }} >
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                alignItems: "center",
+                                marginRight: 50
+                            }}>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
-                                    name={"competition"}
+                                    name="competition"
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {this.props.appState.participate_CompetitionArr.map(item => {
-                                        return (
-                                            <Option key={item.statusRefId} value={item.competitionId}>
-                                                {item.competitionName}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.participate_CompetitionArr.map(item => (
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" >
-                            <div className="row" >
-                                <div className="col-sm" >
-                                    <div className="com-year-select-heading-view" >
-                                        <span className='year-select-heading'>{AppConstants.division}:</span>
+                        <div className="col-sm pb-3">
+                            <div className="row">
+                                <div className="col-sm">
+                                    <div className="com-year-select-heading-view">
+                                        <span className="year-select-heading">{AppConstants.division}:</span>
                                         <Select
-                                            disabled={this.state.competitionStatus == 1 ? true : false}
+                                            disabled={this.state.competitionStatus == 1}
                                             style={{ minWidth: 120 }}
                                             className="year-select reg-filter-select1 ml-2"
                                             onChange={(divisionId) => this.onDivisionChange(divisionId)}
                                             value={JSON.parse(JSON.stringify(this.state.divisionId))}
                                         >
-                                            {this.props.registrationState.allDivisionsData.map(item => {
-                                                return (
-                                                    <Option key={"division" + item.competitionMembershipProductDivisionId}
-                                                        value={item.competitionMembershipProductDivisionId}>
-                                                        {item.divisionName}
-                                                    </Option>
-                                                )
-                                            })}
+                                            {this.props.registrationState.allDivisionsData.map(item => (
+                                                <Option
+                                                    key={'compMemProdDiv_' + item.competitionMembershipProductDivisionId}
+                                                    value={item.competitionMembershipProductDivisionId}
+                                                >
+                                                    {item.divisionName}
+                                                </Option>
+                                            ))}
                                         </Select>
                                     </div>
                                 </div>
-                                <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }} >
-                                    <span className='comp-grading-final-text ml-1' >{AppConstants.open}</span>
+                                <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
+                                    <span className="comp-grading-final-text ml-1">{AppConstants.open}</span>
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>
         )
     }
-
 
     ////////form content view
     contentView = () => {
@@ -565,7 +566,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                         columns={columns}
                         dataSource={getPartProposedTeamGradingData}
                         pagination={false}
-                        loading={this.props.ownTeamGradingState.onLoad == true && true}
+                        loading={this.props.ownTeamGradingState.onLoad && true}
                     />
                 </div>
                 <CommentModal
@@ -593,25 +594,26 @@ class CompetitionPartProposedTeamGrading extends Component {
                     title={AppConstants.changeDivision}
                     visible={this.state.changeDivisionModalVisible}
                     onOk={() => this.handleChangeDivision("ok")}
-                    onCancel={() => this.handleChangeDivision("cancel")}>
+                    onCancel={() => this.handleChangeDivision("cancel")}
+                >
                     <div className="change-division-modal">
-                        <div className='year-select-heading'>{AppConstants.division}</div>
+                        <div className="year-select-heading">{AppConstants.division}</div>
                         <Select
                             style={{ minWidth: 120 }}
                             className="year-select change-division-select"
                             onChange={(divisionId) => this.setState({ competitionDivisionId: divisionId })}
-                            value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}>
-                            {this.props.registrationState.allDivisionsData.map(item => {
-                                return (
-                                    <Option key={"division" + item.competitionMembershipProductDivisionId}
-                                        value={item.competitionMembershipProductDivisionId}>
-                                        {item.divisionName}
-                                    </Option>
-                                )
-                            })}
+                            value={JSON.parse(JSON.stringify(this.state.competitionDivisionId))}
+                        >
+                            {this.props.registrationState.allDivisionsData.map(item => (
+                                <Option
+                                    key={'compMemProdDiv_' + item.competitionMembershipProductDivisionId}
+                                    value={item.competitionMembershipProductDivisionId}
+                                >
+                                    {item.divisionName}
+                                </Option>
+                            ))}
                         </Select>
                     </div>
-
                 </Modal>
             </div>
         )
@@ -621,11 +623,11 @@ class CompetitionPartProposedTeamGrading extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        let isPublished = this.state.competitionStatus == 1 ? true : false
+        let isPublished = this.state.competitionStatus == 1
         return (
             <div className="fluid-width paddingBottom56px" >
                 {/* <div className="comp-player-grades-footer-view"> */}
-                <div className="row" >
+                <div className="row">
                     <div className="col-sm-3 mt-3" >
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionPartPlayerGrades">
@@ -640,7 +642,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                     style={{ height: '100%' }}
                                     onMouseEnter={() =>
                                         this.setState({
-                                            tooltipVisibleSave: isPublished ? true : false,
+                                            tooltipVisibleSave: isPublished,
                                         })
                                     }
                                     onMouseLeave={() =>
@@ -660,7 +662,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                     style={{ height: '100%' }}
                                     onMouseEnter={() =>
                                         this.setState({
-                                            tooltipVisibleDelete: isPublished ? true : false,
+                                            tooltipVisibleDelete: isPublished,
                                         })
                                     }
                                     onMouseLeave={() =>
@@ -682,16 +684,16 @@ class CompetitionPartProposedTeamGrading extends Component {
                     </div>
                 </div>
             </div>
-            // </div >
+            // </div>
         )
     }
 
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"15"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey={"15"} />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -704,10 +706,10 @@ class CompetitionPartProposedTeamGrading extends Component {
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getYearAndCompetitionParticipateAction,
@@ -728,7 +730,7 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         ownTeamGradingState: state.CompetitionOwnTeamGradingState,
@@ -737,4 +739,5 @@ function mapStatetoProps(state) {
         partPlayerGradingState: state.CompetitionPartPlayerGradingState,
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionPartProposedTeamGrading));
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionPartProposedTeamGrading);

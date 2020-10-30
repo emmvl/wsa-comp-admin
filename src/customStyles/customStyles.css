@@ -1,4 +1,4 @@
-/* Styling for fees table inside the forms*/
+/* Styling for fees table inside the forms */
 
 .fees-table .ant-table-tbody > tr > td {
   border-bottom: 0;
@@ -9,18 +9,18 @@
 .fees-table .ant-table-thead > tr > th {
   border-bottom: 0;
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
   font-size: 13px;
   padding: 7px 7px;
   overflow-wrap: break-word;
   background-color: transparent;
 }
 
-/* Styling for data list table inside the home dashboard ,list products etc*/
+/* Styling for data list table inside the home dashboard, list products etc */
 
 .home-dashboard-table .ant-table-thead > tr > th {
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
   font-size: 13px;
   overflow-wrap: break-word;
   color: var(--app-9b9bad);
@@ -32,35 +32,35 @@
 .home-dashboard-table .ant-table-tbody > tr > td {
   overflow-wrap: break-word;
   color: var(--app-4c4c6d);
-  font-size: 15px;
-  font-family: inter;
+  font-family: inter, sans-serif;
   height: 64px;
   background-color: var(--app-white);
   padding-left: 21px;
 }
 
-.home-dashboard-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .home-dashboard-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .home-dashboard-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .home-dashboard-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+.home-dashboard-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.home-dashboard-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.home-dashboard-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.home-dashboard-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
   background: var(--app-f1c2a2) !important;
 }
 
-/*on Hover remove on link click */
+/* on Hover remove on link click */
 
 .text-decoration-none {
   text-decoration: none;
 }
 
-/*Input with heading component styling */
+/* Input with heading component styling */
 
 .input {
-  height: 56px;
   color: var(--app-1b1b34);
 }
 
 .textAreaInput textarea.ant-input {
   min-height: 90px !important;
   color: var(--app-1b1b34);
-  font-family: inter;
-  font-size: 15px;
+  font-family: inter, sans-serif;
 }
 
 .input-heading {
@@ -71,7 +71,7 @@
   font-size: 13px;
   color: var(--app-4c4c6d);
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
 }
 
 .comment-heading {
@@ -82,7 +82,7 @@
   font-size: 13px;
   color: var(--app-4c4c6d);
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
 }
 
 .form-err {
@@ -101,7 +101,7 @@
   font-size: 13px;
   color: var(--app-4c4c6d);
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
 }
 
 .head-decription-text {
@@ -112,10 +112,10 @@
   font-size: 13px;
   color: var(--app-1b1b34);
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
 }
 
-/*time slot table in venue and times table*/
+/* time slot table in venue and times table */
 
 .time-slot-table .ant-table-tbody > tr > td {
   border-bottom: 0;
@@ -126,33 +126,36 @@
 .time-slot-table .ant-table-thead > tr > th {
   border-bottom: 0;
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
   font-size: 13px;
   padding: 7px 7px;
   overflow-wrap: break-word;
   background-color: transparent;
 }
 
-.time-slot-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .time-slot-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .time-slot-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .time-slot-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+.time-slot-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.time-slot-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.time-slot-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.time-slot-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
   background: transparent;
 }
 
-/* time picker antd on venue and times add screen*/
+/* time picker antd on venue and times add screen */
 
 .comp-venue-time-timepicker .ant-time-picker-input {
   height: 56px;
 }
 
-/* time picker antd on venue and times prioritisation screen*/
+/* time picker antd on venue and times prioritisation screen */
 
 .comp-venue-time-datepicker .ant-input-lg {
   height: 44px;
   color: var(--app-1b1b34);
   font-size: 13px;
-  font-family: inter;
+  font-family: inter, sans-serif;
 }
 
-/*header view and content view for drag and drag screens*/
+/* header view and content view for drag and drag screens */
 
 .comp-draws-header-view.ant-layout-header {
   background-color: transparent;
@@ -173,7 +176,7 @@
   margin-top: 5%;
 }
 
-/*antd year select overide styles for small select*/
+/* antd year select override styles for small select */
 
 .year-select-view {
   padding-left: 40px;
@@ -187,7 +190,7 @@
   font-size: 13px;
   color: var(--app-9b9bad);
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
 }
 
 .year-select .ant-select-selection {
@@ -200,21 +203,24 @@
 
 .year-select .ant-select-arrow svg {
   display: inline-block;
-  height: 7px;
+  height: 9px;
   width: 10px;
+  margin-top: 2px;
 }
 
 .year-select .ant-select-arrow {
   right: 10px;
 }
 
-.year-select .ant-select-focused .ant-select-selection, .year-select .ant-select-selection:focus, .year-select .ant-select-selection:active {
+.year-select .ant-select-focused .ant-select-selection,
+.year-select .ant-select-selection:focus,
+.year-select .ant-select-selection:active {
   border-color: transparent;
   -webkit-box-shadow: 0 0 0 1px transparent;
   box-shadow: 0 0 0 1px transparent;
 }
 
-/*header overide for mobile*/
+/* header override for mobile */
 
 .form-header-view.ant-layout-header {
   padding: 0 4.5%;
@@ -253,7 +259,7 @@
 
 .refund-table .ant-table-thead > tr > th {
   font-weight: 500;
-  font-family: inter-medium;
+  font-family: inter-medium, sans-serif;
   font-size: 10px;
   overflow-wrap: break-word;
   color: var(--app-9b9bad);
@@ -266,12 +272,15 @@
   overflow-wrap: break-word;
   color: var(--app-4c4c6d);
   font-size: 10px;
-  font-family: inter;
+  font-family: inter, sans-serif;
   background-color: var(--app-white);
   padding: 8px;
   text-align: center;
 }
 
-.refund-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .refund-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .refund-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td, .home-dashboard-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+.refund-table .ant-table-thead > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.refund-table .ant-table-tbody > tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.refund-table .ant-table-thead > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td,
+.home-dashboard-table .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
   background: var(--app-f1c2a2) !important;
 }

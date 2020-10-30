@@ -33,15 +33,15 @@ class LiveScoreIncidentImport extends Component {
                     backgroundColor: "transparent",
                     display: "flex",
                     alignItems: "center",
-                }} >
-                    <div className="row" >
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                }}>
+                    <div className="row">
+                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                             <Breadcrumb separator=" > ">
                                 <Breadcrumb.Item className="breadcrumb-add">{AppConstants.importIncident}</Breadcrumb.Item>
                             </Breadcrumb>
                         </div>
                     </div>
-                </Header >
+                </Header>
             </div>
         )
     }
@@ -86,7 +86,7 @@ class LiveScoreIncidentImport extends Component {
                             </Button>
                         </div>
 
-                        <div className="reg-add-save-button ml-3"  >
+                        <div className="reg-add-save-button ml-3">
                             <NavLink to="/templates/wsa-livescore-import-incident.csv" target="_blank" download>
                                 <Button className="primary-add-comp-form" type="primary">
                                     {AppConstants.downloadTemplate}
@@ -110,12 +110,12 @@ class LiveScoreIncidentImport extends Component {
         }
     }
 
-    /////// render function 
+    /////// render function
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"17"} />
                 <Loader visible={this.props.liveScoreMatchListState.onLoad} />
                 <Layout>
                     {this.headerView()}

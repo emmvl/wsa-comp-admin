@@ -51,12 +51,13 @@ function liveScoreGetAffiliate(payload) {
     };
 }
 
-function liveAddNewTeam(data, teamId, key) {
+function liveAddNewTeam(data, teamId, key, screenKey) {
     return {
         type: ApiConstants.API_LIVE_SCORE_ADD_TEAM_LOAD,
         payload: data,
         teamId,
         key,
+        screenKey
     };
 }
 

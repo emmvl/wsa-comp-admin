@@ -88,7 +88,7 @@ const initialState = {
 
 };
 
-// Remove duplicate rounds names 
+// Remove duplicate rounds names
 
 function removeDuplicateValues(array) {
     return array.filter((obj, index, self) =>
@@ -209,7 +209,7 @@ function LiveScoreBulkMatchState(state = initialState, action) {
             }
         case ApiConstants.API_LIVE_SCORE_UPDATE_BULK:
 
-            if (action.key == 'selectedOption') {
+            if (action.key === 'selectedOption') {
                 state.bulkRadioBtn = 'fixedDuration'
 
                 state.pushBackData['courtId'] = []
@@ -249,24 +249,24 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                 new_object[action.key] = action.data
                 state.selected_Option = new_object
 
-            } else if (action.key == 'bulkRadioBtn') {
+            } else if (action.key === 'bulkRadioBtn') {
                 state.bulkRadioBtn = action.data
-            } else if (state.selectedOption == 'pushBack') {
+            } else if (state.selectedOption === 'pushBack') {
 
                 let new_object = state.pushBackData
-                if (action.key == "venueCourtId") {
+                if (action.key === "venueCourtId") {
                     new_object['courtId'] = action.data
                     state.selected_Option = new_object
                 }
-                if (action.key == "optionalDate") {
+                if (action.key === "optionalDate") {
                     new_object['optionalDate'] = action.data
                     state.selected_Option = new_object
                 }
-                if (action.key == "optionalTime") {
+                if (action.key === "optionalTime") {
                     new_object['optionalTime'] = action.data
                     state.selected_Option = new_object
                 }
-                if (action.key == "venueId") {
+                if (action.key === "venueId") {
                     new_object[action.key] = action.data
                     let index = state.venueData.findIndex(x => x.venueId == action.data)
                     if (index > -1) {
@@ -279,10 +279,10 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                     new_object[action.key] = action.data
                 }
                 state.pushBackData = new_object
-            } else if (state.selectedOption == 'bringForward') {
+            } else if (state.selectedOption === 'bringForward') {
                 let new_object = state.bringForwardData
 
-                if (action.key == "venueId") {
+                if (action.key === "venueId") {
                     new_object[action.key] = action.data
                     let index = state.venueData.findIndex(x => x.venueId == action.data)
                     if (index > -1) {
@@ -296,11 +296,11 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                 state.bringForwardData = new_object
 
 
-            } else if (state.selectedOption == 'endMatch') {
+            } else if (state.selectedOption === 'endMatch') {
 
                 state.endMatchData = endMatchObject
                 let new_object = state.endMatchData
-                if (action.key == "venueId") {
+                if (action.key === "venueId") {
                     new_object[action.key] = action.data
                     let index = state.venueData.findIndex(x => x.venueId == action.data)
                     if (index > -1) {
@@ -312,11 +312,11 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                     new_object[action.key] = action.data
                 }
                 state.endMatchData = new_object
-            } else if (state.selectedOption == 'abandonMatch') {
+            } else if (state.selectedOption === 'abandonMatch') {
                 // state.abandonData = abandonObject
                 let new_object = state.abandonData
                 new_object[action.key] = action.data
-                if (action.key == "venueId") {
+                if (action.key === "venueId") {
                     let index = state.venueData.findIndex(x => x.venueId == action.data)
                     if (index > -1) {
                         let courts = state.venueData[index].venueCourts
@@ -325,12 +325,12 @@ function LiveScoreBulkMatchState(state = initialState, action) {
                     }
                 }
                 state.abandonData = new_object
-            } else if (state.selectedOption == 'doubleHeader') {
+            } else if (state.selectedOption === 'doubleHeader') {
                 let new_object = state.doubleHeaderResult
                 new_object[action.key] = action.data
                 state.doubleHeaderResult = new_object
 
-            } else if (action.key == 'refreshPage') {
+            } else if (action.key === 'refreshPage') {
                 state.selectedOption = action.data
             } else {
                 action.key = action.data

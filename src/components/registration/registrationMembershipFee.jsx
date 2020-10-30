@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { getCurrentYear } from 'util/permissions'
 import {
     Layout,
     Input,
@@ -10,16 +13,18 @@ import {
     Radio,
     Tabs,
     Form,
-    Modal
+    Modal,
+    message
 } from "antd";
+import Tooltip from 'react-png-tooltip'
+import moment from "moment";
+
 import "./product.scss";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { getAllowTeamRegistrationTypeAction,membershipPaymentOptionAction } from '../../store/actions/commonAction/commonAction';
+import { getAllowTeamRegistrationTypeAction, membershipPaymentOptionAction } from '../../store/actions/commonAction/commonAction';
 import {
     regGetMembershipProductDetailsAction,
     regSaveMembershipProductDetailsAction,
@@ -43,14 +48,11 @@ import {
     getMembershipProductFeesTypeAction,
     getCommonDiscountTypeTypeAction
 } from "../../store/actions/appAction";
-import moment from "moment";
 import history from "../../util/history";
 import ValidationConstants from "../../themes/validationConstant";
-import { message } from "antd";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
 import Loader from '../../customComponents/loader';
 import { routePermissionForOrgLevel } from "../../util/permissions";
-import Tooltip from 'react-png-tooltip'
 import { captializedString } from "../../util/helpers"
 
 const { Footer, Content } = Layout;
@@ -58,8 +60,8 @@ const { Option } = Select;
 const { TabPane } = Tabs;
 const { confirm } = Modal;
 
-
 let this_Obj = null;
+
 const columns = [
     {
         title: AppConstants.type,
@@ -70,9 +72,7 @@ const columns = [
         title: AppConstants.membershipProduct,
         dataIndex: "membershipProductName",
         key: "membershipProductName",
-
     },
-
     {
         title: AppConstants.casualFeeExclGst,
         dataIndex: "casualFee",
@@ -80,18 +80,20 @@ const columns = [
         filterDropdown: true,
         filterIcon: () => {
             return (
-
-                <Tooltip placement="top" background='#ff8237'>
+                <Tooltip placement="top" background="#ff8237">
                     <span>{AppConstants.membershipCasualFeeMsg}</span>
                 </Tooltip>
-
-
             );
         },
         render: (casualFee, record) => (
-            <Input type="number" prefix="$" className="input-inside-table-fees" value={casualFee}
+            <Input
+                type="number"
+                prefix="$"
+                className="input-inside-table-fees"
+                value={casualFee}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "casualFee")}
-                disabled={this_Obj.state.membershipIsUsed} />
+                disabled={this_Obj.state.membershipIsUsed}
+            />
         )
     },
     {
@@ -99,9 +101,14 @@ const columns = [
         dataIndex: "casualGst",
         key: "casualGst",
         render: (casualFeeGst, record) => (
-            <Input type="number" prefix="$" className="input-inside-table-fees" value={casualFeeGst}
+            <Input
+                type="number"
+                prefix="$"
+                className="input-inside-table-fees"
+                value={casualFeeGst}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "casualGst")}
-                disabled={this_Obj.state.membershipIsUsed} />
+                disabled={this_Obj.state.membershipIsUsed}
+            />
         )
     },
     {
@@ -111,18 +118,20 @@ const columns = [
         filterDropdown: true,
         filterIcon: () => {
             return (
-
-                <Tooltip placement="top" background='#ff8237'>
+                <Tooltip placement="top" background="#ff8237">
                     <span>{AppConstants.membershipSeasonalFeeMsg}</span>
                 </Tooltip>
-
-
             );
         },
         render: (seasonalFee, record) => (
-            <Input type="number" prefix="$" className="input-inside-table-fees" value={seasonalFee}
+            <Input
+                type="number"
+                prefix="$"
+                className="input-inside-table-fees"
+                value={seasonalFee}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "seasonalFee")}
-                disabled={this_Obj.state.membershipIsUsed} />
+                disabled={this_Obj.state.membershipIsUsed}
+            />
         )
     },
     {
@@ -130,21 +139,24 @@ const columns = [
         dataIndex: "seasonalGst",
         key: "seasonalGst",
         render: (seasonalFeeGst, record) => (
-            <Input type="number" prefix="$" className="input-inside-table-fees" value={seasonalFeeGst}
+            <Input
+                type="number"
+                prefix="$"
+                className="input-inside-table-fees"
+                value={seasonalFeeGst}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "seasonalGst")}
-                disabled={this_Obj.state.membershipIsUsed} />
+                disabled={this_Obj.state.membershipIsUsed}
+            />
         )
     }
 ];
-
-
-
 
 class RegistrationMembershipFee extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
+            onYearLoad: false,
             value: 1,
             discountType: 0,
             membershipTabKey: "1",
@@ -160,8 +172,8 @@ class RegistrationMembershipFee extends Component {
             membershipIsUsed: false,
         };
         this_Obj = this;
+        this.formRef = React.createRef();
     }
-
 
     componentDidMount() {
         routePermissionForOrgLevel(AppConstants.national, AppConstants.state)
@@ -189,20 +201,27 @@ class RegistrationMembershipFee extends Component {
             if (!registrationState.error) {
                 this.setState({
                     // loading: false,
-                    membershipTabKey: this.state.buttonPressed == "next" && JSON.stringify(JSON.parse(this.state.membershipTabKey) + 1)
+                    membershipTabKey: this.state.buttonPressed === "next" && JSON.stringify(JSON.parse(this.state.membershipTabKey) + 1)
                 })
             }
-            if (this.state.buttonPressed == "save" || this.state.buttonPressed == "publish" || this.state.buttonPressed == "delete") {
+            if (this.state.buttonPressed === "save" || this.state.buttonPressed === "publish" || this.state.buttonPressed === "delete") {
                 history.push('/registrationMembershipList');
+            }
+        }
+        if (this.state.onYearLoad == true && this.props.appState.onLoad == false) {
+            if (this.props.appState.yearList.length > 0) {
+                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                this.setState({
+                    onYearLoad: false
+                })
+                this.setFieldDecoratorValues()
             }
         }
     }
 
-
-
-
     apiCalls = (productId) => {
         this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.setState({ onYearLoad: true })
         this.props.getProductValidityListAction()
         if (productId == null) {
             this.props.regGetDefaultMembershipProductTypesAction()
@@ -217,168 +236,149 @@ class RegistrationMembershipFee extends Component {
         this.props.membershipPaymentOptionAction()
     }
 
-
-    saveMembershipProductDetails = (e) => {
-        e.preventDefault();
+    saveMembershipProductDetails = (values) => {
         let productId = this.props.registrationState.membershipProductId
-        this.props.form.validateFields((err, values) => {
-            if (!err) {
-                if (this.state.membershipTabKey == "1") {
-                    const { yearRefId, membershipProductName, validityRefId } = values;
-                    let membershipTypesData = JSON.parse(JSON.stringify(this.props.registrationState.getDefaultMembershipProductTypes));
-                    let finalMembershipTypes = []
-                    membershipTypesData.map((item) => {
-                        if (item.isMemebershipType == true) {
-                            if (item.membershipProductTypeRefId > 0) {
-                                delete item['membershipProductTypeRefName']
-                            }
-                            finalMembershipTypes.push(item)
-                        }
-                        return item
-                    })
-                    let productBody =
-                    {
-                        "membershipProductId": productId,
-                        "yearRefId": yearRefId,
-                        "statusRefId": this.state.statusRefId,
-                        "validityRefId": validityRefId,
-                        "membershipProductName": membershipProductName,
-                        "membershipProductTypes": finalMembershipTypes
-                    }
-                    if (productBody.membershipProductTypes.length > 0) {
-                        this.props.regSaveMembershipProductDetailsAction(productBody)
-                        this.setState({ loading: true })
-                    }
-                    else {
-                        message.error(ValidationConstants.pleaseSelectMembershipTypes)
-                    }
-                }
-                else if (this.state.membershipTabKey == "2") {
-                    let finalMembershipFeesData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductFeesTableData));
-                    finalMembershipFeesData.membershipFees.map((item) => {
-                        delete item['membershipProductName']
+
+        if (this.state.membershipTabKey == "1") {
+            const { yearRefId, membershipProductName, validityRefId } = values;
+            let membershipTypesData = JSON.parse(JSON.stringify(this.props.registrationState.getDefaultMembershipProductTypes));
+            let finalMembershipTypes = []
+            membershipTypesData.map((item) => {
+                if (item.isMemebershipType) {
+                    if (item.membershipProductTypeRefId > 0) {
                         delete item['membershipProductTypeRefName']
-                        return item
                     }
-                    )
-                    this.props.regSaveMembershipProductFeesAction(finalMembershipFeesData)
-                    this.setState({ loading: true })
+                    finalMembershipTypes.push(item)
                 }
-                else if (this.state.membershipTabKey == "3") {
-                    let errMsg = null;
-                    let discountData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductDiscountData.membershipProductDiscounts[0].discounts))
-
-
-                    let disMap = new Map();
-                    let discountDuplicateError = false;
-                    for (let item of discountData) {
-                        let key = null;
-                        if (item.membershipPrdTypeDiscountTypeRefId == 2) {
-                            key = item.membershipProductTypeMappingId + "#" + item.membershipPrdTypeDiscountTypeRefId + "#" + item.discountCode;
-                            console.log("key value" + JSON.stringify(key));
-                        }
-                        else if (item.membershipPrdTypeDiscountTypeRefId == 3) {
-                            key = item.membershipProductTypeMappingId + "#" + item.membershipPrdTypeDiscountTypeRefId + "#" + item.discountCode;
-                        }
-                        if (disMap.get(key) == undefined) {
-                            disMap.set(key, 1);
-                        }
-                        else {
-                            if (item.membershipPrdTypeDiscountTypeRefId == 3) {
-                                errMsg = ValidationConstants.membershipDuplicateFamilyDiscountError;
-                            }
-                            else {
-                                errMsg = ValidationConstants.duplicateDiscountError;
-                            }
-                            discountDuplicateError = true;
-                            break;
-                        }
-                        if (item.childDiscounts) {
-                            if (item.childDiscounts.length == 0) {
-                                item.childDiscounts = null
-                            }
-                            if (item.membershipPrdTypeDiscountTypeRefId !== 3) {
-                                item.childDiscounts = null
-                            }
-                        }
-                        item.applyDiscount = parseInt(item.applyDiscount)
-                        if (item.amount !== null) {
-                            if (item.amount.length > 0) {
-                                item.amount = parseInt(item.amount)
-                            }
-                            else {
-                                item['amount'] = null
-                            }
-                        }
-                        else {
-                            item['amount'] = null
-                        }
-                        // return item
-                    }
-                    let discountBody =
-                    {
-                        "membershipProductId": productId,
-                        "statusRefId": this.state.statusRefId,
-                        "membershipProductDiscounts": [
-                            {
-                                "discounts": discountData
-                            }
-                        ]
-                    }
-                    if (discountDuplicateError) {
-                        message.config({ duration: 0.9, maxCount: 1 })
-                        message.error(errMsg);
-                    }
-                    else {
-                        this.props.regSaveMembershipProductDiscountAction(discountBody)
-                        this.setState({ loading: true })
-                    }
-
-                }
+                return item
+            })
+            let productBody = {
+                "membershipProductId": productId,
+                yearRefId: yearRefId,
+                "statusRefId": this.state.statusRefId,
+                "validityRefId": validityRefId,
+                "membershipProductName": membershipProductName,
+                "membershipProductTypes": finalMembershipTypes
             }
-        });
+            if (productBody.membershipProductTypes.length > 0) {
+                this.props.regSaveMembershipProductDetailsAction(productBody)
+                this.setState({ loading: true })
+            } else {
+                message.error(ValidationConstants.pleaseSelectMembershipTypes)
+            }
+        } else if (this.state.membershipTabKey == "2") {
+            let finalMembershipFeesData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductFeesTableData));
+            finalMembershipFeesData.membershipFees.map((item) => {
+                delete item['membershipProductName']
+                delete item['membershipProductTypeRefName']
+                return item
+            }
+            )
+            this.props.regSaveMembershipProductFeesAction(finalMembershipFeesData)
+            this.setState({ loading: true })
+        } else if (this.state.membershipTabKey == "3") {
+            let errMsg = null;
+            let discountData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductDiscountData.membershipProductDiscounts[0].discounts))
 
+            let disMap = new Map();
+            let discountDuplicateError = false;
+            for (let item of discountData) {
+                let key = null;
+                if (item.membershipPrdTypeDiscountTypeRefId == 2) {
+                    key = item.membershipProductTypeMappingId + "#" + item.membershipPrdTypeDiscountTypeRefId + "#" + item.discountCode;
+                } else if (item.membershipPrdTypeDiscountTypeRefId == 3) {
+                    key = item.membershipProductTypeMappingId + "#" + item.membershipPrdTypeDiscountTypeRefId + "#" + item.discountCode;
+                }
+                if (disMap.get(key) == undefined) {
+                    disMap.set(key, 1);
+                } else {
+                    if (item.membershipPrdTypeDiscountTypeRefId == 3) {
+                        errMsg = ValidationConstants.membershipDuplicateFamilyDiscountError;
+                    } else {
+                        errMsg = ValidationConstants.duplicateDiscountError;
+                    }
+                    discountDuplicateError = true;
+                    break;
+                }
+                if (item.childDiscounts) {
+                    if (item.childDiscounts.length === 0) {
+                        item.childDiscounts = null
+                    }
+                    if (item.membershipPrdTypeDiscountTypeRefId !== 3) {
+                        item.childDiscounts = null
+                    }
+                }
+                item.applyDiscount = parseInt(item.applyDiscount)
+                if (item.amount !== null) {
+                    if (item.amount.length > 0) {
+                        item.amount = parseInt(item.amount)
+                    } else {
+                        item['amount'] = null
+                    }
+                } else {
+                    item['amount'] = null
+                }
+                // return item
+            }
+            let discountBody = {
+                "membershipProductId": productId,
+                "statusRefId": this.state.statusRefId,
+                "membershipProductDiscounts": [
+                    {
+                        "discounts": discountData
+                    }
+                ]
+            }
+            if (discountDuplicateError) {
+                message.config({ duration: 0.9, maxCount: 1 })
+                message.error(errMsg);
+            } else {
+                this.props.regSaveMembershipProductDiscountAction(discountBody)
+                this.setState({ loading: true })
+            }
+        }
     }
-
 
     setFieldDecoratorValues = () => {
         let allData = this.props.registrationState.getMembershipProductDetails
         let membershipProductData = allData !== null ? allData.membershipproduct : []
-        // this.props.form.validateFields((err, values) => console.log("values266", Object.keys(values)))
-        this.props.form.setFieldsValue({
-            yearRefId: membershipProductData.yearRefId ? membershipProductData.yearRefId : 1,
+        // this.formRef.current.validateFields((err, values) => console.log("values266", Object.keys(values)))
+        this.formRef.current.setFieldsValue({
+            yearRefId: membershipProductData.yearRefId ? membershipProductData.yearRefId : this.props.appState.yearList.length > 0 ? getCurrentYear(this.props.appState.yearList) : null,
             membershipProductName: membershipProductData.membershipProductName,
             validityRefId: membershipProductData.ValidityRefId ? membershipProductData.ValidityRefId : 2,
         });
         let typesData = membershipProductData.membershipProductTypes ? membershipProductData.membershipProductTypes : []
 
-        typesData.length > 0 && typesData.map((item, index) => {
-            let dobFrom = `dobFrom${index}`
-            let dobTo = `dobTo${index}`
-            let allowTeamRegistrationTypeRefId = `allowTeamRegistrationTypeRefId${index}`
-            if (isNotNullOrEmptyString(item.dobFrom)) {
-                this.props.form.setFieldsValue({
-                    [dobFrom]: moment(item.dobFrom),
-                    [dobTo]: moment(item.dobTo),
+        if (typesData.length > 0) {
+            typesData.forEach((item, index) => {
+                let dobFrom = `dobFrom${index}`
+                let dobTo = `dobTo${index}`
+                let allowTeamRegistrationTypeRefId = `allowTeamRegistrationTypeRefId${index}`
+                if (isNotNullOrEmptyString(item.dobFrom)) {
+                    this.formRef.current.setFieldsValue({
+                        [dobFrom]: moment(item.dobFrom),
+                        [dobTo]: moment(item.dobTo),
+                    })
+                }
+                this.formRef.current.setFieldsValue({
+                    [allowTeamRegistrationTypeRefId]: item.allowTeamRegistrationTypeRefId
                 })
-            }
-            this.props.form.setFieldsValue({
-                [allowTeamRegistrationTypeRefId]: item.allowTeamRegistrationTypeRefId
             })
-        })
+        }
         let data = this.props.registrationState.membershipProductDiscountData
         let discountData = data && data.membershipProductDiscounts !== null ? data.membershipProductDiscounts[0].discounts : []
-        discountData.map((item, index) => {
+        discountData.forEach((item, index) => {
             let membershipProductTypeMappingId = `membershipProductTypeMappingId${index}`
             let membershipPrdTypeDiscountTypeRefId = `membershipPrdTypeDiscountTypeRefId${index}`
-            this.props.form.setFieldsValue({
+            this.formRef.current.setFieldsValue({
                 [membershipProductTypeMappingId]: item.membershipProductTypeMappingId,
                 [membershipPrdTypeDiscountTypeRefId]: item.membershipPrdTypeDiscountTypeRefId,
             })
             let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
-            childDiscounts.map((childItem, childindex) => {
+            childDiscounts.forEach((childItem, childindex) => {
                 let childDiscountPercentageValue = `percentageValue${index} + ${childindex}`
-                this.props.form.setFieldsValue({
+                this.formRef.current.setFieldsValue({
                     [childDiscountPercentageValue]: childItem.percentageValue
                 })
             })
@@ -401,7 +401,7 @@ class RegistrationMembershipFee extends Component {
                 }
             },
             onCancel() {
-                console.log('Cancel');
+                // console.log('Cancel');
             },
         });
     }
@@ -416,7 +416,7 @@ class RegistrationMembershipFee extends Component {
         this.props.onChangeAgeCheckBoxAction(index, checkedValue, keyword)
     }
 
-    dropdownView = (getFieldDecorator) => {
+    dropdownView = () => {
         return (
             <div className="comp-venue-courts-dropdown-view mt-5">
                 <div className="fluid-width">
@@ -432,23 +432,18 @@ class RegistrationMembershipFee extends Component {
                             >
                                 <span className="year-select-heading required-field">
                                     {AppConstants.year}:
-                </span>
-                                <Form.Item  >
-                                    {getFieldDecorator('yearRefId', { initialValue: 1 },
-                                        { rules: [{ required: true, message: ValidationConstants.pleaseSelectYear }] })(
-                                            <Select
-                                                className="year-select reg-filter-select1 ml-2"
-                                                style={{ maxWidth: 80 }}
-                                            >
-                                                {this.props.appState.yearList.map(item => {
-                                                    return (
-                                                        <Option key={"yearRefId" + item.id} value={item.id}>
-                                                            {item.description}
-                                                        </Option>
-                                                    );
-                                                })}
-                                            </Select>
-                                        )}
+                                </span>
+                                <Form.Item name='yearRefId' rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}>
+                                    <Select
+                                        className="year-select reg-filter-select1 ml-2"
+                                        style={{ maxWidth: 80 }}
+                                    >
+                                        {this.props.appState.yearList.map(item => (
+                                            <Option key={'year_' + item.id} value={item.id}>
+                                                {item.description}
+                                            </Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
                             </div>
                         </div>
@@ -457,9 +452,6 @@ class RegistrationMembershipFee extends Component {
             </div>
         );
     };
-
-
-
 
     handleOk = e => {
         let newObj = {
@@ -479,7 +471,6 @@ class RegistrationMembershipFee extends Component {
         });
     };
 
-
     handleCancel = e => {
         this.setState({
             visible: false,
@@ -490,8 +481,6 @@ class RegistrationMembershipFee extends Component {
     addAnothermembershipType = () => {
         this.setState({ visible: true })
     }
-
-
 
     ///setting the mandate age restriction from date
     dateOnChangeFrom = (date, index) => {
@@ -515,10 +504,9 @@ class RegistrationMembershipFee extends Component {
         membershipTypeData[index][keyword] = allowTeamRegistration;
         this.props.updatedMembershipTypeDataAction(membershipTypeData)
     };
+
     //////dynamic membership type view
-    membershipTypesView = (
-        getFieldDecorator
-    ) => {
+    membershipTypesView = () => {
         let registrationState = this.props.registrationState
         const defaultTypes = registrationState.getDefaultMembershipProductTypes !== null ? registrationState.getDefaultMembershipProductTypes : []
         let allData = this.props.registrationState.getMembershipProductDetails
@@ -529,7 +517,7 @@ class RegistrationMembershipFee extends Component {
                     {AppConstants.membershipTypes}
                 </span>
 
-                {defaultTypes.length > 0 && defaultTypes.map((item, index) => (
+                {defaultTypes.map((item, index) => (
                     <div key={index} className="prod-reg-inside-container-view">
                         <div className="row">
                             <div className="col-sm">
@@ -543,169 +531,155 @@ class RegistrationMembershipFee extends Component {
                                     {item.membershipProductTypeRefName}
                                 </Checkbox>
                             </div>
-                            {item.membershipProductTypeRefId > 4 || item.membershipProductTypeRefId == 0 &&
-                                <div className="col-sm transfer-image-view pt-4"
-                                    onClick={() => !this.state.membershipIsUsed ? this.props.removeCustomMembershipTypeAction(index) : null}>
+                            {(item.membershipProductTypeRefId > 4 || item.membershipProductTypeRefId == 0) && (
+                                <div
+                                    className="col-sm transfer-image-view pt-4"
+                                    onClick={() => !this.state.membershipIsUsed ? this.props.removeCustomMembershipTypeAction(index) : null}
+                                >
                                     <span className="user-remove-btn">
-                                        <i className="fa fa-trash-o" aria-hidden="true"></i>
+                                        <i className="fa fa-trash-o" aria-hidden="true" />
                                     </span>
                                     <span className="user-remove-text mr-0">{AppConstants.remove}</span>
                                 </div>
-                            }
+                            )}
                         </div>
-                        {
-                            item.isMemebershipType && (
+                        {item.isMemebershipType && (
+                            <div className="reg-membership-fee-mandate-check-view">
+                                <div className="colsm-">
+                                    {item.isDefault == 0 && (
+                                        <Checkbox
+                                            className="single-checkbox"
+                                            checked={item.isPlaying}
+                                            onChange={e =>
+                                                this.membershipTypesAndAgeSelected(e.target.checked, index, "isPlaying")
+                                            }
+                                            disabled={this.state.membershipIsUsed}
+                                        >
+                                            {AppConstants.playerConst}
+                                        </Checkbox>
+                                    )}
+                                </div>
+                                <Checkbox
+                                    className="single-checkbox"
+                                    style={{ width: '100%' }}
+                                    checked={item.isMandate}
+                                    onChange={e =>
+                                        this.membershipTypesAndAgeSelected(e.target.checked, index, "isMandate")
+                                    }
+                                    disabled={this.state.membershipIsUsed}
+                                >
+                                    {`Mandate ${item.membershipProductTypeRefName} Age Restrictions`}
+                                </Checkbox>
 
-                                <div className="reg-membership-fee-mandate-check-view">
-                                    <div className="colsm-">
-                                        {item.isDefault == 0 && (
-                                            <Checkbox
-                                                className="single-checkbox"
-                                                checked={item.isPlaying}
-                                                onChange={e =>
-                                                    this.membershipTypesAndAgeSelected(e.target.checked, index, "isPlaying")
-                                                }
-                                                disabled={this.state.membershipIsUsed}
-                                            >
-                                                {AppConstants.playerConst}
-                                            </Checkbox>
-                                        )}
+                                {item.isMandate && (
+                                    <div className="fluid-width">
+                                        <div className="row">
+                                            <div className="col-sm">
+                                                <InputWithHead heading={AppConstants.dobFrom} />
+                                                <Form.Item
+                                                    name={`dobFrom${index}`}
+                                                    rules={[{
+                                                        required: true,
+                                                        message: ValidationConstants.pleaseSelectDOBFrom
+                                                    }]}
+                                                >
+                                                    <DatePicker
+                                                        size="large"
+                                                        style={{ width: "100%" }}
+                                                        onChange={date => this.dateOnChangeFrom(date, index)}
+                                                        format="DD-MM-YYYY"
+                                                        placeholder="dd-mm-yyyy"
+                                                        showTime={false}
+                                                        // defaultValue={item.dobFrom !== null ? moment(item.dobFrom) : null}
+                                                        disabled={this.state.membershipIsUsed}
+                                                        disabledDate={d => d.isSameOrAfter(item.dobTo)}
+                                                    />
+                                                </Form.Item>
+                                            </div>
+                                            <div className="col-sm">
+                                                <InputWithHead heading={AppConstants.dobTo} />
+                                                <Form.Item
+                                                    name={`dobTo${index}`}
+                                                    rules={[{
+                                                        required: true,
+                                                        message: ValidationConstants.PleaseSelectDOBTo
+                                                    }]}
+                                                >
+                                                    <DatePicker
+                                                        size="large"
+                                                        style={{ width: "100%" }}
+                                                        onChange={date => this.dateOnChangeTo(date, index)}
+                                                        format="DD-MM-YYYY"
+                                                        placeholder="dd-mm-yyyy"
+                                                        showTime={false}
+                                                        // defaultValue={item.dobTo !== null ? moment(item.dobTo) : null}
+                                                        disabled={this.state.membershipIsUsed}
+                                                        // disabledDate={d => d.isSameOrBefore(item.dobFrom)}
+                                                        disabledDate={d => moment(item.dobFrom).isSameOrAfter(d, 'day')}
+                                                    />
+                                                </Form.Item>
+                                            </div>
+                                        </div>
                                     </div>
+                                )}
+                                <div className="fluid-width">
                                     <Checkbox
                                         className="single-checkbox"
-                                        style={{ width: '100%' }}
-                                        checked={item.isMandate}
+                                        style={{ marginLeft: "0px" }}
+                                        checked={item.isAllow}
                                         onChange={e =>
-                                            this.membershipTypesAndAgeSelected(e.target.checked, index, "isMandate")
+                                            this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
                                         }
                                         disabled={this.state.membershipIsUsed}
                                     >
-                                        {`Mandate ${item.membershipProductTypeRefName} Age Restrictions`}
+                                        {AppConstants.allowTeamRegistration}
                                     </Checkbox>
-
-                                    {item.isMandate && (
-                                        <div className="fluid-width">
-                                            <div className="row">
-                                                <div className="col-sm">
-                                                    <InputWithHead heading={AppConstants.dobFrom} />
-                                                    <Form.Item>
-                                                        {getFieldDecorator(
-                                                            `dobFrom${index}`,
-                                                            {
-                                                                rules: [
-                                                                    {
-                                                                        required: true,
-                                                                        message: ValidationConstants.pleaseSelectDOBFrom
-                                                                    }
-                                                                ]
-                                                            },
-                                                        )(
-                                                            <DatePicker
-                                                                size="large"
-                                                                style={{ width: "100%" }}
-                                                                onChange={date => this.dateOnChangeFrom(date, index)}
-                                                                format={"DD-MM-YYYY"}
-                                                                placeholder={"dd-mm-yyyy"}
-                                                                showTime={false}
-                                                                // defaultValue={item.dobFrom !== null ? moment(item.dobFrom) : null}
-                                                                disabled={this.state.membershipIsUsed}
-                                                                disabledDate={d => d.isSameOrAfter(item.dobTo)
-                                                                }
-                                                            />
-                                                        )}
-                                                    </Form.Item>
-                                                </div>
-                                                <div className="col-sm">
-                                                    <InputWithHead heading={AppConstants.dobTo} />
-                                                    <Form.Item>
-                                                        {getFieldDecorator(
-                                                            `dobTo${index}`,
-                                                            {
-                                                                rules: [
-                                                                    {
-                                                                        required: true,
-                                                                        message: ValidationConstants.PleaseSelectDOBTo
-                                                                    }
-                                                                ]
-                                                            },
-                                                        )(
-                                                            <DatePicker
-                                                                size="large"
-                                                                style={{ width: "100%" }}
-                                                                onChange={date => this.dateOnChangeTo(date, index)}
-                                                                format={"DD-MM-YYYY"}
-                                                                placeholder={"dd-mm-yyyy"}
-                                                                showTime={false}
-                                                                // defaultValue={item.dobTo !== null ? moment(item.dobTo) : null}
-                                                                disabled={this.state.membershipIsUsed}
-                                                                // disabledDate={d => d.isSameOrBefore(item.dobFrom)
-                                                                // }
-                                                                disabledDate={d => moment(item.dobFrom).isSameOrAfter(d, 'day')
-                                                                }
-                                                            />
-                                                        )}
-                                                    </Form.Item>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                    <div className="fluid-width">
-                                        <Checkbox
-                                            className="single-checkbox"
-                                            style={{ marginLeft: "0px" }}
-                                            checked={item.isAllow}
-                                            onChange={e =>
-                                                this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
-                                            }
-                                            disabled={this.state.membershipIsUsed}
-                                        >
-                                            {AppConstants.allowTeamRegistration}
-                                        </Checkbox>
-                                    </div>
-                                    {item.isPlaying != 1 && (
-                                        <Checkbox
-                                            className="single-checkbox"
-                                            style={{ marginLeft: "0px" }}
-                                            checked={item.isChildrenCheckNumber}
-                                            onChange={e =>
-                                                this.membershipTypesAndAgeSelected(e.target.checked, index, "isChildrenCheckNumber")
-                                            }
-                                            disabled={this.state.membershipIsUsed}
-                                        >
-                                            {AppConstants.childrenCheckNumber}
-                                        </Checkbox>
-                                    )}
-                                    {item.isAllow && item.isPlaying == 1 && (
-                                        <div className="fluid-width" style={{ marginTop: "10px" }}>
-                                            <div className="row">
-                                                <div className="col-sm" style={{ marginLeft: 25 }}>
-
-                                                    <Form.Item  >
-                                                        {getFieldDecorator(`allowTeamRegistrationTypeRefId${index}`, {
-                                                            rules: [{ required: true, message: ValidationConstants.playerTypeRequired }]
-                                                        })(
-                                                            <Radio.Group className="reg-competition-radio"
-                                                                onChange={(e) => this.allowTeamRegistrationPlayer(e.target.value, index, 'allowTeamRegistrationTypeRefId')}
-                                                                setFieldsValue={item.allowTeamRegistrationTypeRefId}
-                                                                disabled={this.state.membershipIsUsed}
-                                                            >
-                                                                {(allowTeamRegistration || []).map((fix, fixIndex) => (
-                                                                    <Radio key={fix.id} value={fix.id}>{fix.description}</Radio>
-                                                                ))}
-                                                            </Radio.Group>
-                                                        )}
-                                                    </Form.Item>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-
                                 </div>
-                            )
-                        }
+                                {item.isPlaying != 1 && (
+                                    <Checkbox
+                                        className="single-checkbox"
+                                        style={{ marginLeft: "0px" }}
+                                        checked={item.isChildrenCheckNumber}
+                                        onChange={e =>
+                                            this.membershipTypesAndAgeSelected(e.target.checked, index, "isChildrenCheckNumber")
+                                        }
+                                        disabled={this.state.membershipIsUsed}
+                                    >
+                                        {AppConstants.childrenCheckNumber}
+                                    </Checkbox>
+                                )}
+                                {item.isAllow && item.isPlaying == 1 && (
+                                    <div className="fluid-width" style={{ marginTop: "10px" }}>
+                                        <div className="row">
+                                            <div className="col-sm" style={{ marginLeft: 25 }}>
+                                                <Form.Item
+                                                    name={`allowTeamRegistrationTypeRefId${index}`}
+                                                    rules={[{ required: true, message: ValidationConstants.playerTypeRequired }]}
+                                                >
+                                                    <Radio.Group
+                                                        className="reg-competition-radio"
+                                                        onChange={(e) => this.allowTeamRegistrationPlayer(e.target.value, index, 'allowTeamRegistrationTypeRefId')}
+                                                        value={item.allowTeamRegistrationTypeRefId}
+                                                        disabled={this.state.membershipIsUsed}
+                                                    >
+                                                        {(allowTeamRegistration || []).map((fix) => (
+                                                            <Radio
+                                                                key={'allowTeamRegistrationType_' + fix.id}
+                                                                value={fix.id}
+                                                            >
+                                                                {fix.description}
+                                                            </Radio>
+                                                        ))}
+                                                    </Radio.Group>
+                                                </Form.Item>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
-                ))
-                }
+                ))}
                 <span className="input-heading-add-another" onClick={!this.state.membershipIsUsed ? this.addAnothermembershipType : null}>
                     + {AppConstants.addMembershipType}
                 </span>
@@ -718,81 +692,70 @@ class RegistrationMembershipFee extends Component {
                 >
                     <InputWithHead
                         auto_complete="new-membershipTypeName"
-                        required={"pt-0 mt-0"}
+                        required="pt-0 mt-0"
                         heading={AppConstants.membershipTypeName}
                         placeholder={AppConstants.pleaseEnterMembershipTypeName}
                         onChange={(e) => this.setState({ newNameMembershipType: e.target.value })}
                         value={this.state.newNameMembershipType}
                     />
-
                 </Modal>
-            </div >
+            </div>
         )
     }
 
-
-
     ////////form content view
-    contentView = (
-        getFieldDecorator
-    ) => {
+    contentView = () => {
         let appState = this.props.appState
         let allData = this.props.registrationState.getMembershipProductDetails
         let membershipProductData = allData !== null ? allData.membershipproduct : []
         return (
             <div className="content-view pt-5">
-                <span className="form-heading ">{AppConstants.membershipProduct}</span>
-                <Form.Item >
-                    {getFieldDecorator('membershipProductName',
-                        { rules: [{ required: true, message: ValidationConstants.membershipProductIsRequired }] })(
-                            <InputWithHead
-                                auto_complete="new-membershipProductName"
-                                required={"required-field pb-0 "}
-                                heading={AppConstants.membershipProductName}
-                                placeholder={AppConstants.membershipProductName}
-                                disabled={this.state.membershipIsUsed}
-                                conceptulHelp
-                                conceptulHelpMsg={AppConstants.membershipProductNameMsg}
-                                tooltiprequired={"mt-3"}
-                                onBlur={(i) => this.props.form.setFieldsValue({
-                                    'membershipProductName': captializedString(i.target.value)
-                                })}
-                            />
-                        )}
+                <span className="form-heading">{AppConstants.membershipProduct}</span>
+                <Form.Item
+                    name='membershipProductName'
+                    rules={[{ required: true, message: ValidationConstants.membershipProductIsRequired }]}
+                >
+                    <InputWithHead
+                        auto_complete="new-membershipProductName"
+                        required="required-field pb-0"
+                        heading={AppConstants.membershipProductName}
+                        placeholder={AppConstants.membershipProductName}
+                        disabled={this.state.membershipIsUsed}
+                        conceptulHelp
+                        conceptulHelpMsg={AppConstants.membershipProductNameMsg}
+                        tooltiprequired={"mt-3"}
+                        onBlur={(i) => this.formRef.current.setFieldsValue({
+                            'membershipProductName': captializedString(i.target.value)
+                        })}
+                    />
                 </Form.Item>
 
-
-                <div className='contextualHelp-RowDirection'>
+                <div className="contextualHelp-RowDirection">
                     <span className="applicable-to-heading  required-field">
                         {AppConstants.validity}
                     </span>
                     <div style={{ marginTop: 20 }}>
-                        <Tooltip placement="top" background='#ff8237'>
+                        <Tooltip placement="top" background="#ff8237">
                             <span>{AppConstants.validityMsg}</span>
                         </Tooltip>
                     </div>
                 </div>
-                <Form.Item  >
-                    {getFieldDecorator('validityRefId', { initialValue: 2 }, { rules: [{ required: true, message: ValidationConstants.pleaseSelectValidity }] })(
-                        <Radio.Group
-                            className="reg-competition-radio"
-                            disabled={this.state.membershipIsUsed}
-                        >
-                            {appState.productValidityList.map(item => {
-                                return (
-                                    <div key={"productValidityList" + item.id}>
-                                        {item.id == "2" &&
-                                            <Radio key={"validityRefId" + item.id} value={item.id}> {item.description}</Radio>
-                                        }
-                                    </div>
-                                );
-                            })}
-
-                        </Radio.Group>
-                    )}
+                <Form.Item name='validityRefId' rules={[{ required: true, message: ValidationConstants.pleaseSelectValidity }]}>
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        disabled={this.state.membershipIsUsed}
+                    >
+                        {appState.productValidityList.map(item => (
+                            <div key={'productValidity_' + item.id}>
+                                {item.id == "2" && (
+                                    <Radio key={'validity_' + item.id} value={item.id}>{item.description}</Radio>
+                                )}
+                            </div>
+                        ))}
+                    </Radio.Group>
                 </Form.Item>
-                {this.membershipTypesView(getFieldDecorator)}
-            </div >
+                {this.membershipTypesView()}
+            </div>
         );
     };
 
@@ -802,14 +765,14 @@ class RegistrationMembershipFee extends Component {
     }
 
     ////fees view inside the content
-    feesView = (getFieldDecorator) => {
-        let data = this.props.registrationState.membershipProductFeesTableData;
+    feesView = () => {
+        let data = this.props.registrationState.membershipProductFeesTableData
         let feesData = data ? data.membershipFees.length > 0 ? data.membershipFees : [] : []
         return (
             <div>
                 <div className="tab-formView fees-view pt-5">
                     <span className="form-heading">{AppConstants.membershipFees}</span>
-                    {feesData.length > 0 && feesData.map((item, index) => (
+                    {feesData.map((item, index) => (
                         <div className="inside-container-view" key={"feesData" + index}>
                             <div className="table-responsive">
                                 <Table
@@ -829,364 +792,363 @@ class RegistrationMembershipFee extends Component {
                                 defaultValue={item.membershipProductFeesTypeRefId}
                                 disabled={this.state.membershipIsUsed}
                             >
-                                {this.props.appState.membershipProductFeesTypes.map((item, typeindex) => {
-                                    return (
+                                {this.props.appState.membershipProductFeesTypes.map((item) => (
+                                    <div className="row" key={'membershipProductFeesType_' + item.id}>
+                                        <Radio key={'membershipFee_' + item.id} value={item.id}> {item.description}</Radio>
 
-                                        <div className='row' key={"membershipProductFeesTypes" + typeindex} >
-                                            <Radio key={"validityRefId" + typeindex} value={item.id}> {item.description}</Radio>
-
-                                            <div style={{ marginLeft: -18, }}>
-                                                <Tooltip background='#ff8237'>
-                                                    <span>{item.helpMsg}</span>
-                                                </Tooltip>
-                                            </div>
+                                        <div style={{ marginLeft: -18, }}>
+                                            <Tooltip background="#ff8237">
+                                                <span>{item.helpMsg}</span>
+                                            </Tooltip>
                                         </div>
-                                    );
-                                })}
+                                    </div>
+                                ))}
                             </Radio.Group>
                         </div>
                     ))}
                 </div>
+
                 <div className="tab-formView fees-view pt-5">
                     <span className="form-heading">{AppConstants.membershipFeesPaymentOptions}</span>
-                    <span style={{
-                        fontSize: "13px",
-                        fontWeight: "500",
-                        fontFamily: "inter-medium, sans-serif"
-                    }}>{AppConstants.whenPaymentsRequired}</span>
+                    <span
+                        style={{
+                            fontSize: "13px",
+                            fontWeight: "500",
+                            fontFamily: "inter-medium, sans-serif"
+                        }}
+                    >
+                        {AppConstants.whenPaymentsRequired}
+                    </span>
                     <Radio.Group
                         className="reg-competition-radio"
                         //onChange={e => this.membershipFeeApplyRadio(e.target.value)}
                         defaultValue={data?.paymentOptionRefId}
                         disabled={this.state.membershipIsUsed}
                     >
-                        {this.props.commonReducerState.membershipPaymentOptions.map((item, typeindex) => {
-                            return (
-                                <div className='row pl-2' key={"paymentOptionRefId" + typeindex} >
-                                    <Radio key={"paymentOptionRefId" + typeindex} value={item.id}> {item.description}</Radio>
-                                </div>
-                            );
-                        })}
+                        {this.props.commonReducerState.membershipPaymentOptions.map((item) => (
+                            <div className="row pl-2" key={'membershipPaymentOption_' + item.id}>
+                                <Radio key={'paymentOption_' + item.id} value={item.id}>{item.description}</Radio>
+                            </div>
+                        ))}
                     </Radio.Group>
                 </div>
             </div>
         );
     };
 
-
-
-    discountViewChange = (item, index, getFieldDecorator) => {
+    discountViewChange = (item, index) => {
         let childDiscounts = item.childDiscounts !== null && item.childDiscounts.length > 0 ? item.childDiscounts : []
         switch (item.membershipPrdTypeDiscountTypeRefId) {
             case 1:
-                return <div>
-                    <InputWithHead heading={"Discount Type"} />
-                    <Select
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
-                        placeholder="Select"
-                        value={item.discountTypeRefId}
-                        disabled={this.state.membershipIsUsed}
-                    >
-                        {this.props.appState.commonDiscountTypes.map(item => {
-                            return (
-                                <Option key={"discountType" + item.id} value={item.id}>
+                return (
+                    <div>
+                        <InputWithHead heading="Discount Type" />
+                        <Select
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
+                            placeholder="Select"
+                            value={item.discountTypeRefId}
+                            disabled={this.state.membershipIsUsed}
+                        >
+                            {this.props.appState.commonDiscountTypes.map(item => (
+                                <Option key={'discountType_' + item.id} value={item.id}>
                                     {item.description}
                                 </Option>
-                            );
-                        })}
-                    </Select>
-                    <div className="row">
-                        <div className="col-sm">
-                            <InputWithHead
-                                auto_complete="new-number"
-                                heading={AppConstants.percentageOff_FixedAmount}
-                                placeholder={AppConstants.percentageOff_FixedAmount}
-                                onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
-                                value={item.amount}
-                                suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
-                                type="number"
-                                disabled={this.state.membershipIsUsed}
-                            />
-                        </div>
-                        <div className="col-sm">
-                            <InputWithHead
-                                auto_complete="new-gernalDiscount"
-                                heading={AppConstants.description}
-                                placeholder={AppConstants.gernalDiscount}
-                                onChange={(e) => this.onChangeDescription(e.target.value, index)}
-                                value={item.description}
-                                disabled={this.state.membershipIsUsed}
-                            />
-                        </div>
-                    </div>
-                    <div className="fluid-width">
+                            ))}
+                        </Select>
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableFrom} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    placeholder={"dd-mm-yyyy"}
-                                    showTime={false}
-                                    value={item.availableFrom !== null && moment(item.availableFrom)}
+                                <InputWithHead
+                                    auto_complete="new-number"
+                                    heading={AppConstants.percentageOff_FixedAmount}
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
+                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
+                                    value={item.amount}
+                                    suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
+                                    type="number"
                                     disabled={this.state.membershipIsUsed}
                                 />
                             </div>
                             <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableTo} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    disabledDate={this.disabledDate}
-                                    disabledTime={this.disabledTime}
-                                    onChange={date => this.onChangeDiscountAvailableTo(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    placeholder={"dd-mm-yyyy"}
-                                    showTime={false}
-                                    value={item.availableTo !== null && moment(item.availableTo)}
+                                <InputWithHead
+                                    auto_complete="new-gernalDiscount"
+                                    heading={AppConstants.description}
+                                    placeholder={AppConstants.generalDiscount}
+                                    onChange={(e) => this.onChangeDescription(e.target.value, index)}
+                                    value={item.description}
                                     disabled={this.state.membershipIsUsed}
                                 />
                             </div>
                         </div>
+                        <div className="fluid-width">
+                            <div className="row">
+                                <div className="col-sm">
+                                    <InputWithHead heading={AppConstants.availableFrom} />
+                                    <DatePicker
+                                        size="large"
+                                        style={{ width: "100%" }}
+                                        onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
+                                        format="DD-MM-YYYY"
+                                        placeholder="dd-mm-yyyy"
+                                        showTime={false}
+                                        value={item.availableFrom !== null && moment(item.availableFrom)}
+                                        disabled={this.state.membershipIsUsed}
+                                    />
+                                </div>
+                                <div className="col-sm">
+                                    <InputWithHead heading={AppConstants.availableTo} />
+                                    <DatePicker
+                                        size="large"
+                                        style={{ width: "100%" }}
+                                        disabledDate={this.disabledDate}
+                                        disabledTime={this.disabledTime}
+                                        onChange={date => this.onChangeDiscountAvailableTo(date, index)}
+                                        format="DD-MM-YYYY"
+                                        placeholder="dd-mm-yyyy"
+                                        showTime={false}
+                                        value={item.availableTo !== null && moment(item.availableTo)}
+                                        disabled={this.state.membershipIsUsed}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
+                );
 
             case 2:
-                return <div>
-                    <InputWithHead heading={"Discount Type"} />
-                    <Select
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
-                        placeholder="Select"
-                        value={item.discountTypeRefId}
-                        disabled={this.state.membershipIsUsed}
-                    >
-                        {this.props.appState.commonDiscountTypes.map(item => {
-                            return (
-                                <Option key={"discountType" + item.id} value={item.id}>
+                return (
+                    <div>
+                        <InputWithHead heading="Discount Type" />
+                        <Select
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
+                            placeholder="Select"
+                            value={item.discountTypeRefId}
+                            disabled={this.state.membershipIsUsed}
+                        >
+                            {this.props.appState.commonDiscountTypes.map(item => (
+                                <Option key={'discountType_' + item.id} value={item.id}>
                                     {item.description}
                                 </Option>
-                            );
-                        })}
-                    </Select>
-                    <InputWithHead
-                        auto_complete="new-code"
-                        heading={AppConstants.code}
-                        placeholder={AppConstants.code}
-                        onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
-                        value={item.discountCode}
-                        disabled={this.state.membershipIsUsed}
-                    />
-                    <div className="row">
-                        <div className="col-sm">
-                            <InputWithHead
-                                auto_complete="new-number"
-                                heading={AppConstants.percentageOff_FixedAmount}
-                                placeholder={AppConstants.percentageOff_FixedAmount}
-                                onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
-                                value={item.amount}
-                                suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
-                                type="number"
-                                disabled={this.state.membershipIsUsed}
-                            />
-                        </div>
-                        <div className="col-sm">
-                            <InputWithHead
-                                auto_complete="new-gernalDiscount"
-                                heading={AppConstants.description}
-                                placeholder={AppConstants.gernalDiscount}
-                                onChange={(e) => this.onChangeDescription(e.target.value, index)}
-                                value={item.description}
-                                disabled={this.state.membershipIsUsed}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="fluid-width">
+                            ))}
+                        </Select>
+                        <InputWithHead
+                            auto_complete="new-code"
+                            heading={AppConstants.code}
+                            placeholder={AppConstants.code}
+                            onChange={(e) => this.onChangeDiscountCode(e.target.value, index)}
+                            value={item.discountCode}
+                            disabled={this.state.membershipIsUsed}
+                        />
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableFrom} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    placeholder={"dd-mm-yyyy"}
-                                    showTime={false}
-                                    value={item.availableFrom !== null && moment(item.availableFrom)}
+                                <InputWithHead
+                                    auto_complete="new-number"
+                                    heading={AppConstants.percentageOff_FixedAmount}
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
+                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
+                                    value={item.amount}
+                                    suffix={JSON.stringify(item.discountTypeRefId) == "2" ? "%" : null}
+                                    type="number"
                                     disabled={this.state.membershipIsUsed}
                                 />
                             </div>
                             <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableTo} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    disabledDate={this.disabledDate}
-                                    disabledTime={this.disabledTime}
-                                    onChange={date => this.onChangeDiscountAvailableTo(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    placeholder={"dd-mm-yyyy"}
-                                    showTime={false}
-                                    value={item.availableTo !== null && moment(item.availableTo)}
+                                <InputWithHead
+                                    auto_complete="new-gernalDiscount"
+                                    heading={AppConstants.description}
+                                    placeholder={AppConstants.generalDiscount}
+                                    onChange={(e) => this.onChangeDescription(e.target.value, index)}
+                                    value={item.description}
                                     disabled={this.state.membershipIsUsed}
                                 />
                             </div>
                         </div>
+                        <div className="fluid-width">
+                            <div className="row">
+                                <div className="col-sm">
+                                    <InputWithHead heading={AppConstants.availableFrom} />
+                                    <DatePicker
+                                        size="large"
+                                        style={{ width: "100%" }}
+                                        onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
+                                        format="DD-MM-YYYY"
+                                        placeholder="dd-mm-yyyy"
+                                        showTime={false}
+                                        value={item.availableFrom !== null && moment(item.availableFrom)}
+                                        disabled={this.state.membershipIsUsed}
+                                    />
+                                </div>
+                                <div className="col-sm">
+                                    <InputWithHead heading={AppConstants.availableTo} />
+                                    <DatePicker
+                                        size="large"
+                                        style={{ width: "100%" }}
+                                        disabledDate={this.disabledDate}
+                                        disabledTime={this.disabledTime}
+                                        onChange={date => this.onChangeDiscountAvailableTo(date, index)}
+                                        format="DD-MM-YYYY"
+                                        placeholder="dd-mm-yyyy"
+                                        showTime={false}
+                                        value={item.availableTo !== null && moment(item.availableTo)}
+                                        disabled={this.state.membershipIsUsed}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
+                );
 
             case 3:
-                return <div>
-                    {childDiscounts.map((childItem, childindex) => (
-                        <div className="row">
-                            <div className="col-sm-10">
-                                <Form.Item  >
-                                    {getFieldDecorator(`percentageValue${index} + ${childindex}`,
-                                        { rules: [{ required: true, message: ValidationConstants.pleaseEnterChildDiscountPercentage }] })(
-                                            <InputWithHead
-                                                heading={`Family Participant ${childindex + 1}%`}
-                                                placeholder={`Family Participant ${childindex + 1}%`}
-                                                onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
-                                                // value={childItem.percentageValue}
-                                                disabled={this.state.membershipIsUsed}
-                                            />
-                                        )}
-                                </Form.Item>
-                            </div>
-                            {childindex > 0 &&
-                                <div className="col-sm-2 delete-image-view pb-4"
-                                    onClick={() => !this.state.membershipIsUsed ? this.addRemoveChildDiscount(index, "delete", childindex) : null}>
-                                    <span className="user-remove-btn">
-                                        <i className="fa fa-trash-o" aria-hidden="true"></i>
-                                    </span>
-                                    <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                return (
+                    <div>
+                        {childDiscounts.map((childItem, childindex) => (
+                            <div className="row">
+                                <div className="col-sm-10">
+                                    <Form.Item name={`percentageValue${index} + ${childindex}`} rules={[{ required: true, message: ValidationConstants.pleaseEnterChildDiscountPercentage }]}  >
+                                        <InputWithHead
+                                            heading={`Family Participant ${childindex + 1}%`}
+                                            placeholder={`Family Participant ${childindex + 1}%`}
+                                            onChange={(e) => this.onChangeChildPercent(e.target.value, index, childindex, childItem)}
+                                            // value={childItem.percentageValue}
+                                            disabled={this.state.membershipIsUsed}
+                                        />
+                                    </Form.Item>
                                 </div>
-                            }
-                        </div>
-                    ))}
-                    <span className="input-heading-add-another"
-                        onClick={() => !this.state.membershipIsUsed ? this.addRemoveChildDiscount(index, "add", -1) : null}>
-                        + {AppConstants.addChild}
-                    </span>
-                </div>
+                                {childindex > 0 && (
+                                    <div
+                                        className="col-sm-2 delete-image-view pb-4"
+                                        onClick={() => !this.state.membershipIsUsed ? this.addRemoveChildDiscount(index, "delete", childindex) : null}
+                                    >
+                                        <span className="user-remove-btn">
+                                            <i className="fa fa-trash-o" aria-hidden="true" />
+                                        </span>
+                                        <span className="user-remove-text mr-0 mb-1">{AppConstants.remove}</span>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                        <span
+                            className="input-heading-add-another"
+                            onClick={() => !this.state.membershipIsUsed ? this.addRemoveChildDiscount(index, "add", -1) : null}
+                        >
+                            + {AppConstants.addChild}
+                        </span>
+                    </div>
+                );
 
             case 4:
-                return <div>
-                    <InputWithHead heading={"Discount Type"} />
-                    <Select
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
-                        placeholder="Select"
-                        value={item.discountTypeRefId}
-                        disabled={this.state.membershipIsUsed}
-                    >
-                        {this.props.appState.commonDiscountTypes.map(item => {
-                            return (
-                                <Option key={"discountType" + item.id} value={item.id}>
+                return (
+                    <div>
+                        <InputWithHead heading="Discount Type" />
+                        <Select
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
+                            placeholder="Select"
+                            value={item.discountTypeRefId}
+                            disabled={this.state.membershipIsUsed}
+                        >
+                            {this.props.appState.commonDiscountTypes.map(item => (
+                                <Option key={'discountType_' + item.id} value={item.id}>
                                     {item.description}
                                 </Option>
-                            );
-                        })}
-                    </Select>
-                    <div className="row">
-                        <div className="col-sm">
-                            <InputWithHead
-                                auto_complete="new-number"
-                                heading={AppConstants.percentageOff_FixedAmount}
-                                placeholder={AppConstants.percentageOff_FixedAmount}
-                                onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
-                                value={item.amount}
-                                type="number"
-                                disabled={this.state.membershipIsUsed}
-                            />
-                        </div>
-                        <div className="col-sm">
-                            <InputWithHead
-                                auto_complete="new-gernalDiscount"
-                                heading={AppConstants.description}
-                                placeholder={AppConstants.gernalDiscount}
-                                onChange={(e) => this.onChangeDescription(e.target.value, index)}
-                                value={item.description}
-                                disabled={this.state.membershipIsUsed}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="fluid-width">
+                            ))}
+                        </Select>
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableFrom} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    placeholder={"dd-mm-yyyy"}
-                                    showTime={false}
-                                    value={item.availableFrom !== null && moment(item.availableFrom)}
+                                <InputWithHead
+                                    auto_complete="new-number"
+                                    heading={AppConstants.percentageOff_FixedAmount}
+                                    placeholder={AppConstants.percentageOff_FixedAmount}
+                                    onChange={(e) => this.onChangePercentageOff(e.target.value, index)}
+                                    value={item.amount}
+                                    type="number"
                                     disabled={this.state.membershipIsUsed}
                                 />
                             </div>
                             <div className="col-sm">
-                                <InputWithHead heading={AppConstants.availableTo} />
-                                <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
-                                    placeholder={"dd-mm-yyyy"}
-                                    disabledDate={this.disabledDate}
-                                    disabledTime={this.disabledTime}
-                                    onChange={date => this.onChangeDiscountAvailableTo(date, index)}
-                                    format={"DD-MM-YYYY"}
-                                    showTime={false}
-                                    value={item.availableTo !== null && moment(item.availableTo)}
+                                <InputWithHead
+                                    auto_complete="new-gernalDiscount"
+                                    heading={AppConstants.description}
+                                    placeholder={AppConstants.generalDiscount}
+                                    onChange={(e) => this.onChangeDescription(e.target.value, index)}
+                                    value={item.description}
                                     disabled={this.state.membershipIsUsed}
                                 />
                             </div>
                         </div>
-                    </div>
-                </div>
 
+                        <div className="fluid-width">
+                            <div className="row">
+                                <div className="col-sm">
+                                    <InputWithHead heading={AppConstants.availableFrom} />
+                                    <DatePicker
+                                        size="large"
+                                        style={{ width: "100%" }}
+                                        onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
+                                        format="DD-MM-YYYY"
+                                        placeholder="dd-mm-yyyy"
+                                        showTime={false}
+                                        value={item.availableFrom !== null && moment(item.availableFrom)}
+                                        disabled={this.state.membershipIsUsed}
+                                    />
+                                </div>
+                                <div className="col-sm">
+                                    <InputWithHead heading={AppConstants.availableTo} />
+                                    <DatePicker
+                                        size="large"
+                                        style={{ width: "100%" }}
+                                        placeholder="dd-mm-yyyy"
+                                        disabledDate={this.disabledDate}
+                                        disabledTime={this.disabledTime}
+                                        onChange={date => this.onChangeDiscountAvailableTo(date, index)}
+                                        format="DD-MM-YYYY"
+                                        showTime={false}
+                                        value={item.availableTo !== null && moment(item.availableTo)}
+                                        disabled={this.state.membershipIsUsed}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
 
             case 5:
-                return <div>
-                    <InputWithHead
-                        auto_complete="new-description"
-                        heading={AppConstants.description}
-                        placeholder={AppConstants.description}
-                        onChange={(e) => this.onChangeDescription(e.target.value, index)}
-                        value={item.description}
-                        disabled={this.state.membershipIsUsed}
-                    />
-                    <InputWithHead
-                        auto_complete="new-question"
-                        heading={AppConstants.question}
-                        placeholder={AppConstants.question}
-                        onChange={(e) => this.onChangeQuestion(e.target.value, index)}
-                        value={item.question}
-                        disabled={this.state.membershipIsUsed}
-                    />
-                    <InputWithHead heading={"Apply Discount if Answer is Yes"} />
-                    <Radio.Group
-                        className="reg-competition-radio"
-                        onChange={e => this.applyDiscountQuestionCheck(e.target.value, index)}
-                        value={JSON.stringify(JSON.parse(item.applyDiscount))}
-                        disabled={this.state.membershipIsUsed}
-                    >
-                        <Radio value={"1"}>{AppConstants.yes}</Radio>
-                        <Radio value={"0"}>{AppConstants.no}</Radio>
-                    </Radio.Group>
-                </div>;
+                return (
+                    <div>
+                        <InputWithHead
+                            auto_complete="new-description"
+                            heading={AppConstants.description}
+                            placeholder={AppConstants.description}
+                            onChange={(e) => this.onChangeDescription(e.target.value, index)}
+                            value={item.description}
+                            disabled={this.state.membershipIsUsed}
+                        />
+                        <InputWithHead
+                            auto_complete="new-question"
+                            heading={AppConstants.question}
+                            placeholder={AppConstants.question}
+                            onChange={(e) => this.onChangeQuestion(e.target.value, index)}
+                            value={item.question}
+                            disabled={this.state.membershipIsUsed}
+                        />
+                        <InputWithHead heading={"Apply Discount if Answer is Yes"} />
+                        <Radio.Group
+                            className="reg-competition-radio"
+                            onChange={e => this.applyDiscountQuestionCheck(e.target.value, index)}
+                            value={JSON.stringify(JSON.parse(item.applyDiscount))}
+                            disabled={this.state.membershipIsUsed}
+                        >
+                            <Radio value="1">{AppConstants.yes}</Radio>
+                            <Radio value="0">{AppConstants.no}</Radio>
+                        </Radio.Group>
+                    </div>
+                );
+
             default:
-                return <div></div>;
+                return <div />;
         }
     }
-
 
     addRemoveChildDiscount = (index, keyWord, childindex) => {
         let discountData = this.props.registrationState.membershipProductDiscountData.membershipProductDiscounts[0].discounts
@@ -1194,26 +1156,23 @@ class RegistrationMembershipFee extends Component {
             "membershipFeesChildDiscountId": 0,
             "percentageValue": ""
         }
-        if (keyWord == "add") {
+        if (keyWord === "add") {
             if (isArrayNotEmpty(discountData[index].childDiscounts)) {
                 discountData[index].childDiscounts.push(childDisObject)
-            }
-            else {
+            } else {
                 discountData[index].childDiscounts = []
                 discountData[index].childDiscounts.push(childDisObject)
             }
-        }
-        else if (keyWord == "delete") {
+        } else if (keyWord === "delete") {
             if (isArrayNotEmpty(discountData[index].childDiscounts)) {
                 discountData[index].childDiscounts.splice(childindex, 1)
             }
         }
         this.props.updatedDiscountDataAction(discountData)
-        if (keyWord == "delete") {
+        if (keyWord === "delete") {
             this.setFieldDecoratorValues()
         }
     }
-
 
     ////////onchange apply discount question radio button
     applyDiscountQuestionCheck = (applyDiscount, index) => {
@@ -1222,7 +1181,6 @@ class RegistrationMembershipFee extends Component {
         this.props.updatedDiscountDataAction(discountData)
     }
 
-
     ///////child  onchange in discount section
     onChangeChildPercent = (childPercent, index, childindex, childItem) => {
         let discountData = this.props.registrationState.membershipProductDiscountData.membershipProductDiscounts[0].discounts
@@ -1230,7 +1188,6 @@ class RegistrationMembershipFee extends Component {
         discountData[index].childDiscounts[childindex].membershipFeesChildDiscountId = childItem.membershipFeesChildDiscountId
         this.props.updatedDiscountDataAction(discountData)
     }
-
 
     ///onchange question in case of custom discount
     onChangeQuestion = (question, index) => {
@@ -1267,6 +1224,7 @@ class RegistrationMembershipFee extends Component {
         discountData[index].membershipProductTypeMappingId = discountMembershipType
         this.props.updatedDiscountDataAction(discountData)
     }
+
     /////onChange discount refId
     onChangeDiscountRefId = (discountType, index) => {
         let discountData = this.props.registrationState.membershipProductDiscountData.membershipProductDiscounts[0].discounts
@@ -1311,17 +1269,16 @@ class RegistrationMembershipFee extends Component {
         this.props.updatedDiscountDataAction(discountData)
     }
 
-
     ////discount view inside the content
-    discountView = (getFieldDecorator) => {
+    discountView = () => {
         let data = this.props.registrationState.membershipProductDiscountData
         let discountData = data && data.membershipProductDiscounts !== null ? data.membershipProductDiscounts[0].discounts : []
         return (
             <div className="discount-view pt-5">
-                <div className='row'>
+                <div className="row">
                     <span className="form-heading">{AppConstants.discounts}</span>
                     <div style={{ marginTop: 5 }}>
-                        <Tooltip background='#ff8237'>
+                        <Tooltip background="#ff8237">
                             <span>{AppConstants.membershipDiscountMsg}</span>
                         </Tooltip>
                     </div>
@@ -1329,35 +1286,35 @@ class RegistrationMembershipFee extends Component {
 
                 {discountData.map((item, index) => (
                     <div className="prod-reg-inside-container-view">
-                        <div className="transfer-image-view pt-2"
-                            onClick={() => !this.state.membershipIsUsed ? this.addRemoveDiscount("remove", index) : null}>
+                        <div
+                            className="transfer-image-view pt-2"
+                            onClick={() => !this.state.membershipIsUsed ? this.addRemoveDiscount("remove", index) : null}
+                        >
                             <span className="user-remove-btn">
-                                <i className="fa fa-trash-o" aria-hidden="true"></i>
+                                <i className="fa fa-trash-o" aria-hidden="true" />
                             </span>
                             <span className="user-remove-text mr-0">{AppConstants.remove}</span>
                         </div>
                         <div className="row">
                             <div className="col-sm">
-                                <InputWithHead required="pt-0" heading={"Discount Type"} />
-                                <Form.Item  >
-                                    {getFieldDecorator(`membershipPrdTypeDiscountTypeRefId${index}`,
-                                        { rules: [{ required: true, message: ValidationConstants.pleaseSelectDiscountType }] })(
-                                            <Select
-                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                                onChange={discountType => this.onChangeMembershipProductDisType(discountType, index)}
-                                                placeholder="Select"
-                                                // value={item.membershipPrdTypeDiscountTypeRefId !== 0 && item.membershipPrdTypeDiscountTypeRefId}
-                                                disabled={this.state.membershipIsUsed}
-                                            >
-                                                {this.props.registrationState.membershipProductDiscountType.map((discountTypeItem, discountTypeIndex) => {
-                                                    return (
-                                                        <Option key={"disType" + discountTypeItem.id} value={discountTypeItem.id}>
-                                                            {discountTypeItem.description}
-                                                        </Option>
-                                                    );
-                                                })}
-                                            </Select>
-                                        )}
+                                <InputWithHead required="pt-0" heading="Discount Type" />
+                                <Form.Item
+                                    name={`membershipPrdTypeDiscountTypeRefId${index}`}
+                                    rules={[{ required: true, message: ValidationConstants.pleaseSelectDiscountType }]}
+                                >
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={discountType => this.onChangeMembershipProductDisType(discountType, index)}
+                                        placeholder="Select"
+                                        // value={item.membershipPrdTypeDiscountTypeRefId !== 0 && item.membershipPrdTypeDiscountTypeRefId}
+                                        disabled={this.state.membershipIsUsed}
+                                    >
+                                        {this.props.registrationState.membershipProductDiscountType.map((item) => (
+                                            <Option key={'discountType_' + item.id} value={item.id}>
+                                                {item.description}
+                                            </Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
                             </div>
                             <div className="col-sm">
@@ -1365,43 +1322,42 @@ class RegistrationMembershipFee extends Component {
                                     required="pt-0"
                                     heading={AppConstants.membershipTypes}
                                 />
-                                <Form.Item  >
-                                    {getFieldDecorator(`membershipProductTypeMappingId${index}`,
-                                        { rules: [{ required: true, message: ValidationConstants.pleaseSelectMembershipTypes }] })(
-                                            <Select
-                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                                onChange={discountMembershipType =>
-                                                    this.onChangeMembershipTypeDiscount(discountMembershipType, index)
-                                                }
-                                                // defaultValue={item.membershipProductTypeMappingId}
-                                                placeholder="Select"
-                                                // value={item.membershipProductTypeMappingId}
-                                                disabled={this.state.membershipIsUsed}
+                                <Form.Item
+                                    name={`membershipProductTypeMappingId${index}`}
+                                    rules={[{ required: true, message: ValidationConstants.pleaseSelectMembershipTypes }]}
+                                >
+                                    <Select
+                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        onChange={discountMembershipType =>
+                                            this.onChangeMembershipTypeDiscount(discountMembershipType, index)
+                                        }
+                                        // defaultValue={item.membershipProductTypeMappingId}
+                                        placeholder="Select"
+                                        // value={item.membershipProductTypeMappingId}
+                                        disabled={this.state.membershipIsUsed}
+                                    >
+                                        {this.state.discountMembershipTypeData.map(item => (
+                                            <Option
+                                                key={'discountMembershipType_' + item.membershipProductTypeMappingId}
+                                                value={item.membershipProductTypeMappingId}
                                             >
-                                                {this.state.discountMembershipTypeData.map(item => {
-                                                    return (
-                                                        <Option key={"product" + item} value={item.membershipProductTypeMappingId}>
-                                                            {item.membershipProductTypeRefName}
-                                                        </Option>
-                                                    );
-                                                })}
-                                            </Select>
-                                        )}
+                                                {item.membershipProductTypeRefName}
+                                            </Option>
+                                        ))}
+                                    </Select>
                                 </Form.Item>
                             </div>
                         </div>
-                        {this.discountViewChange(item, index, getFieldDecorator)}
+                        {this.discountViewChange(item, index)}
                     </div>
                 ))}
-                < span className="input-heading-add-another"
+                <span className="input-heading-add-another"
                     onClick={() => !this.state.membershipIsUsed ? this.addRemoveDiscount("add", -1) : null}>
                     + {AppConstants.addDiscount}
                 </span>
-            </div >
+            </div>
         );
     };
-
-
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
@@ -1409,37 +1365,44 @@ class RegistrationMembershipFee extends Component {
         let membershipProductId = this.props.registrationState.membershipProductId
         return (
             <div className="fluid-width">
-                {!this.state.membershipIsUsed &&
+                {!this.state.membershipIsUsed && (
                     <div className="footer-view">
                         <div className="row">
                             <div className="col-sm">
                                 <div className="reg-add-save-button">
-                                    {membershipProductId.length > 0 &&
-                                        <Button type="cancel-button" onClick={() => this.showDeleteConfirm()}>{AppConstants.delete}</Button>
-                                    }
+                                    {membershipProductId.length > 0 && (
+                                        <Button type="cancel-button" onClick={() => this.showDeleteConfirm()}>
+                                            {AppConstants.delete}
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                             <div className="col-sm">
                                 <div className="comp-buttons-view">
-                                    <Button className="save-draft-text" type="save-draft-text"
-                                        htmlType="submit" onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}>
+                                    <Button
+                                        className="save-draft-text"
+                                        type="save-draft-text"
+                                        htmlType="submit"
+                                        onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}
+                                    >
                                         {AppConstants.saveAsDraft}
                                     </Button>
-                                    <Button className="publish-button" type="primary"
-                                        htmlType="submit" onClick={() => this.setState({
-                                            statusRefId: tabKey == "3" ? 2 : 1,
-                                            buttonPressed: tabKey == "3" ? "publish" : "next"
+                                    <Button
+                                        className="publish-button"
+                                        type="primary"
+                                        htmlType="submit"
+                                        onClick={() => this.setState({
+                                            statusRefId: tabKey === "3" ? 2 : 1,
+                                            buttonPressed: tabKey === "3" ? "publish" : "next"
                                         })}
                                     >
-                                        {tabKey === "3"
-                                            ? AppConstants.publish
-                                            : AppConstants.next}
+                                        {tabKey === "3" ? AppConstants.publish : AppConstants.next}
                                     </Button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                }
+                )}
             </div>
         );
     };
@@ -1452,23 +1415,23 @@ class RegistrationMembershipFee extends Component {
         this.setFieldDecoratorValues()
     };
 
-
     render() {
-        const { getFieldDecorator } = this.props.form;
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}
                 />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"6"} />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="6" />
                 <Layout>
                     <Form
+                        ref={this.formRef}
                         autoComplete='off'
-                        onSubmit={this.saveMembershipProductDetails}
+                        onFinish={this.saveMembershipProductDetails}
                         noValidate="noValidate"
+                        initialValues={{ yearRefId: 1, validityRefId: 1 }}
                     >
-                        {this.dropdownView(getFieldDecorator)}
+                        {this.dropdownView()}
                         <Content>
                             <div className="tab-view">
                                 <Tabs
@@ -1476,13 +1439,13 @@ class RegistrationMembershipFee extends Component {
                                     onChange={this.tabCallBack}
                                 >
                                     <TabPane tab={AppConstants.membershipProduct} key="1">
-                                        <div className="tab-formView mt-5">{this.contentView(getFieldDecorator)}</div>
+                                        <div className="tab-formView mt-5">{this.contentView()}</div>
                                     </TabPane>
                                     <TabPane tab={AppConstants.fees} key="2">
-                                        <div >{this.feesView(getFieldDecorator)}</div>
+                                        <div>{this.feesView()}</div>
                                     </TabPane>
                                     <TabPane tab={AppConstants.discount} key="3">
-                                        <div className="tab-formView">{this.discountView(getFieldDecorator)}</div>
+                                        <div className="tab-formView">{this.discountView()}</div>
                                     </TabPane>
                                 </Tabs>
                             </div>
@@ -1494,8 +1457,8 @@ class RegistrationMembershipFee extends Component {
             </div>
         );
     }
-
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         regGetMembershipProductDetailsAction, regSaveMembershipProductDetailsAction,
@@ -1504,15 +1467,16 @@ function mapDispatchToProps(dispatch) {
         membershipFeesTableInputChangeAction, getCommonDiscountTypeTypeAction, membershipProductDiscountTypesAction,
         addNewMembershipTypeAction, addRemoveDiscountAction, updatedDiscountDataAction,
         membershipFeesApplyRadioAction, onChangeAgeCheckBoxAction, updatedMembershipTypeDataAction,
-        removeCustomMembershipTypeAction, regMembershipListDeleteAction, getAllowTeamRegistrationTypeAction,membershipPaymentOptionAction
+        removeCustomMembershipTypeAction, regMembershipListDeleteAction, getAllowTeamRegistrationTypeAction, membershipPaymentOptionAction
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         registrationState: state.RegistrationState,
         appState: state.AppState,
         commonReducerState: state.CommonReducerState
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(RegistrationMembershipFee));
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationMembershipFee);

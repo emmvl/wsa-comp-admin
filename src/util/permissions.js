@@ -1,6 +1,7 @@
 import { getOrganisationData, getLiveScoreCompetiton } from "./sessionStorage";
 import AppConstants from "../themes/appConstants";
 import history from "../util/history";
+import moment from 'moment'
 
 const organisationTypeRefIdObject = {
     [AppConstants.national]: 1,
@@ -50,8 +51,6 @@ async function routePermissionForOrgLevel(orgLevel1, orgLevel2) {
         history.push('./')
     }
 }
-
-
 const registrationsInviteesObject = {
     [AppConstants.firstlevelAffiliate]: 2,
     [AppConstants.secondlevelAffiliate]: 3,
@@ -80,4 +79,141 @@ async function checkLivScoreCompIsParent() {
     }
 }
 
-export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel, checkRegistrationType, checkLivScoreCompIsParent }
+async function checkUserAccess() {
+    let orgItem = await getOrganisationData()
+    let userRoleId = orgItem ? orgItem.userRoleId : 2
+    if (userRoleId == 2) {
+        return "admin"
+    }
+    else if (userRoleId == 11) {
+        return "umpire"
+    }
+    else if (userRoleId == 13) {
+        return "finance"
+    }
+    else {
+        return "admin"
+    }
+
+}
+
+function showRoleLevelPermision(userRoleId, menuName) {
+
+    if (menuName === 'user') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            case 11: return true
+                break;
+            case 13: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName === 'registration') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName === 'competitions') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName === 'liveScores') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName === 'events') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName === 'shop') {
+
+        switch (userRoleId) {
+            case 2: return true
+            default: return false
+
+        }
+    } else if (menuName == 'umpires') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            case 11: return true
+                break;
+            default: return false
+
+        }
+    } else if (menuName == 'finance') {
+
+        switch (userRoleId) {
+            case 2: return true
+                break;
+            case 13: return true
+                break;
+            default: return false
+
+        }
+    }
+
+}
+
+function getUserRoleId() {
+    let orgItem = getOrganisationData()
+    let userRoleId = orgItem ? orgItem.userRoleId : 2
+
+    return userRoleId
+}
+
+function getCurrentYear(yearArr){
+    let currentYear = moment().year()
+    let currentYearIndex = yearArr.findIndex((x)=>x.name == currentYear)
+    if(currentYearIndex === -1){
+        let getfirstIndexId =  yearArr[0].id
+        return getfirstIndexId
+    }else{
+    let getCurrentYearId = yearArr[currentYearIndex].id
+    return getCurrentYearId
+    }
+  }
+
+  function compare(a, b) {
+    const bandA = a.sortOrder;
+    const bandB = b.sortOrder;
+    let comparison = 0;
+    if (bandA < bandB) {
+        comparison = 1;
+    } else if (bandA > bandB) {
+        comparison = -1;
+    }
+    return comparison;
+}
+
+function reverseArray(array){
+    let isSortedArray = []
+    isSortedArray = array.sort(compare)
+       return isSortedArray 
+     }
+
+       
+  
+  export { checkOrganisationLevel, checkUserRole, routePermissionForOrgLevel,
+       checkRegistrationType, checkLivScoreCompIsParent, checkUserAccess, 
+       showRoleLevelPermision, getUserRoleId,getCurrentYear,reverseArray }
+  

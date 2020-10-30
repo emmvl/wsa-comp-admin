@@ -76,11 +76,11 @@ function getQuickCompetitionAction(competitionUniqueKey) {
 
 }
 
-// post time slot Data 
+// post time slot Data
 function quickCompetitionTimeSlotData(payload, year, competitionUniqueKey, competitionName) {
     const action = {
         type: ApiConstants.API_QUICK_COMPETITION_TIMESLOT_POST_LOAD,
-        payload: payload, year: year, competitionUniqueKey: competitionUniqueKey, competitionName: competitionName
+        payload, year: year, competitionUniqueKey: competitionUniqueKey, competitionName: competitionName
     }
     return action
 }
@@ -141,14 +141,41 @@ function getMergeCompetitionAction() {
 function validateMergeCompetitionaction(payload) {
     return {
         type: ApiConstants.API_VALIDATE_MERGE_COMPETITION_LOAD,
-        payload: payload
+        payload
     }
 }
 
 function mergeCompetitionProceed(payload) {
     return {
         type: ApiConstants.API_MERGE_COMPETITION_PROCESS_LOAD,
-        payload: payload
+        payload
+    }
+}
+
+function updateQuickCompetitionTimeSlotData(body, yearRefId,competitionUniqueKey, competitionName, payload){
+    return{
+        type:ApiConstants.API_UPDATE_STATUS_TIMESLOT_LOAD,
+        body,
+        yearRefId,
+        competitionUniqueKey,
+        competitionName,
+        payload
+    }
+}
+
+function updateGridAndDivisionAction(competitionUniqueKey, divisions, year, competitionName,  payload){
+    return {
+        type:ApiConstants.API_UPDATE_STATUS_DIVISION_LOAD,
+        competitionUniqueKey, divisions, year, competitionName,payload
+    }
+}
+
+function updateGridAndVenue(body,payload,competitionUniqueKey,year,competitionName)
+{
+    return{
+        type:ApiConstants.API_UPDATE_STATUS_VENUE_LOAD,
+        body,payload,
+        competitionUniqueKey,year,competitionName
     }
 }
 
@@ -170,5 +197,8 @@ export {
     quickCompetitionAddVenue,
     getMergeCompetitionAction,
     validateMergeCompetitionaction,
-    mergeCompetitionProceed
+    mergeCompetitionProceed,
+    updateQuickCompetitionTimeSlotData,
+    updateGridAndDivisionAction,
+    updateGridAndVenue
 }

@@ -136,7 +136,7 @@ const columnsInvite = [
             <NavLink
                 to={{
                     pathname: "/liveScoreMatchDetails",
-                    state: { matchId: id, umpireKey: "umpire" },
+                    state: { matchId: id, umpireKey: "umpire", screenName: "umpireDashboard" },
                 }}
             >
                 <span className="input-heading-add-another pt-0">{id}</span>
@@ -326,7 +326,7 @@ const columnsInvite = [
                         <NavLink
                             to={{
                                 pathname: "./addUmpire",
-                                state: { record: record, screenName: "umpireDashboard" }
+                                state: { record, screenName: "umpireDashboard" }
                             }}
                         >
                             <span>Invite</span>
@@ -376,7 +376,7 @@ const columns = [
             <NavLink
                 to={{
                     pathname: "/liveScoreMatchDetails",
-                    state: { matchId: id, umpireKey: "umpire" }
+                    state: { matchId: id, umpireKey: "umpire", screenName: "umpireDashboard" }
                 }}
             >
                 <span className="input-heading-add-another pt-0">{id}</span>
@@ -1082,8 +1082,8 @@ class UmpireDashboard extends Component {
                                     onChange={(comp) => this.onChangeComp({ comp })}
                                     value={this.state.selectedComp}
                                 >
-                                    {competition.map((item, index) => (
-                                        <Option key={'longName' + index} value={item.id}>{item.longName}</Option>
+                                    {competition.map((item) => (
+                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -1098,8 +1098,10 @@ class UmpireDashboard extends Component {
                                     value={this.state.venue}
                                 >
                                     <Option value="All">All</Option>
-                                    {venueList.map((item, index) => (
-                                        <Option key={'venueName' + index} value={item.venueId}>{item.venueName}</Option>
+                                    {venueList.map((item) => (
+                                        <Option key={'venue_' + item.venueId} value={item.venueId}>
+                                            {item.venueName}
+                                        </Option>
                                     ))}
                                 </Select>
                             </div>
@@ -1116,8 +1118,8 @@ class UmpireDashboard extends Component {
                                     value={this.state.division}
                                 >
                                     <Option value="All">All</Option>
-                                    {divisionList.map((item, index) => (
-                                        <Option key={'division' + index} value={item.id}>{item.name}</Option>
+                                    {divisionList.map((item) => (
+                                        <Option key={'division_' + item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -1132,8 +1134,8 @@ class UmpireDashboard extends Component {
                                     value={this.state.round}
                                 >
                                     <Option value="All">All</Option>
-                                    {roundList.map((item, index) => (
-                                        <Option key={'division' + index} value={item.id}>{item.name}</Option>
+                                    {roundList.map((item) => (
+                                        <Option key={'round_' + item.id} value={item.id}>{item.name}</Option>
                                     ))}
                                 </Select>
                             </div>

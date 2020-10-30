@@ -9,8 +9,8 @@ import {
   Pagination,
   Modal,
   Input,
-  Icon,
 } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 import "./user.css";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import { NavLink } from "react-router-dom";
@@ -151,7 +151,7 @@ const columns = [
                 state: {
                   affiliateOrgId: e.affiliateOrgId,
                   orgTypeRefId: e.organisationTypeRefId,
-                  isEditable: e.isEditable == 1 ? true : false,
+                  isEditable: e.isEditable == 1,
                   sourcePage: "DIR",
                   organisationTypeRefId: e.organisationTypeRefId,
                 },
@@ -205,7 +205,6 @@ class AffiliateDirectory extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    console.log("Component componentDidUpdate");
     let userState = this.props.userState;
     if (userState.onLoad === false && this.state.loading === true) {
       if (!userState.error) {
@@ -216,7 +215,7 @@ class AffiliateDirectory extends Component {
     }
   }
 
-  referenceCalls = (organisationId) => {
+  referenceCalls = () => {
     this.props.getOnlyYearListAction();
   };
 
@@ -237,7 +236,7 @@ class AffiliateDirectory extends Component {
     this.props.getAffiliateDirectoryAction(filter, this.state.sortBy, this.state.sortOrder);
   };
 
-  naviageToAffiliate = (e) => {
+  navigateToAffiliate = (e) => {
     this.props.history.push("/userEditAffiliates", {
       affiliateOrgId: e.affiliateOrgId,
       orgTypeRefId: e.organisationTypeRefId,
@@ -245,13 +244,13 @@ class AffiliateDirectory extends Component {
   };
 
   onChangeDropDownValue = async (value, key) => {
-    if (key == "yearRefId") {
+    if (key === "yearRefId") {
       await this.setState({ yearRefId: value });
       this.handleAffiliateTableList(1);
-    } else if (key == "organisationTypeRefId") {
+    } else if (key === "organisationTypeRefId") {
       await this.setState({ organisationTypeRefId: value });
       this.handleAffiliateTableList(1);
-    } else if (key == "searchText") {
+    } else if (key === "searchText") {
       await this.setState({ searchText: value });
       if (value == null || value == "") {
         this.handleAffiliateTableList(1);
@@ -295,7 +294,6 @@ class AffiliateDirectory extends Component {
               <Breadcrumb.Item className="breadcrumb-add">
                 {AppConstants.affiliateDirectory}
               </Breadcrumb.Item>
-
             </Breadcrumb>
           </div>
           <div
@@ -351,23 +349,19 @@ class AffiliateDirectory extends Component {
                   {AppConstants.year}
                 </div>
                 <Select
-                  name={"yearRefId"}
+                  name="yearRefId"
                   className="year-select user-filter-select"
                   onChange={(yearRefId) =>
                     this.onChangeDropDownValue(yearRefId, "yearRefId")
                   }
                   value={this.state.yearRefId}
                 >
-                  <Option key={-1} value={-1}>
-                    {AppConstants.all}
-                  </Option>
-                  {this.props.appState.yearList.map((item) => {
-                    return (
-                      <Option key={"yearRefId" + item.id} value={item.id}>
-                        {item.description}
-                      </Option>
-                    );
-                  })}
+                  <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                  {this.props.appState.yearList.map((item) => (
+                    <Option key={'year_' + item.id} value={item.id}>
+                      {item.description}
+                    </Option>
+                  ))}
                 </Select>
               </div>
             </div>
@@ -377,7 +371,7 @@ class AffiliateDirectory extends Component {
                   {AppConstants.organisationType}
                 </div>
                 <Select
-                  name={"organisationTypeRefId"}
+                  name="organisationTypeRefId"
                   className="year-select user-filter-select"
                   onChange={(e) =>
                     this.onChangeDropDownValue(e, "organisationTypeRefId")
@@ -387,8 +381,8 @@ class AffiliateDirectory extends Component {
                   <Option key={-1} value={-1}>
                     {AppConstants.all}
                   </Option>
-                  {(organisationTypes || []).map((org, index) => (
-                    <Option key={org.id} value={org.id}>
+                  {(organisationTypes || []).map((org) => (
+                    <Option key={'organisationType_' + org.id} value={org.id}>
                       {org.name}
                     </Option>
                   ))}
@@ -418,8 +412,7 @@ class AffiliateDirectory extends Component {
                     onKeyPress={(e) => this.onKeyEnterSearchText(e)}
                     value={this.state.searchText}
                     prefix={
-                      <Icon
-                        type="search"
+                      <SearchOutlined
                         style={{
                           color: "rgba(0,0,0,.25)",
                           height: 16,
@@ -473,7 +466,7 @@ class AffiliateDirectory extends Component {
           menuHeading={AppConstants.user}
           menuName={AppConstants.user}
         />
-        <InnerHorizontalMenu menu={"user"} userSelectedKey={"4"} />
+        <InnerHorizontalMenu menu="user" userSelectedKey="4" />
         <Layout>
           {this.headerView()}
           <Content>
@@ -498,11 +491,11 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
   return {
     userState: state.UserState,
     appState: state.AppState,
   };
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)(AffiliateDirectory);
+export default connect(mapStateToProps, mapDispatchToProps)(AffiliateDirectory);

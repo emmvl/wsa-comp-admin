@@ -196,7 +196,7 @@ const AppConstants = {
   fees: 'Fees',
   discount: 'Discount',
   discounts: 'Discounts',
-  gernalDiscount: 'General Discount',
+  generalDiscount: 'General Discount',
   fixedAmount: 'Fixed $ amount',
   percentageOff: 'Percentage off',
   amount: 'Amount',
@@ -936,6 +936,7 @@ const AppConstants = {
 
   divisionsTimeSlot: 'Add Divisions (in timeslot order - first to last)',
   gradesTimeSlot: 'Add Grades (in timeslot order - first to last)',
+  poolsTimeSlot: 'Add Pools (in timeslot order - first to last)',
 
   seasonFixture: 'Season Fixture',
   season: 'Season',
@@ -1591,7 +1592,7 @@ const AppConstants = {
   whoAssignsUmpires: 'Who Assigns Umpires',
   competitionOrganiser: 'Competition Organiser',
   affiliateOrganisations: 'Affiliate Organisations',
-  takenCourtforTraining: "Have you taken the court for training, grading or a compitition game",
+  takenCourtforTraining: "Have you taken the court for training, grading or a competition game",
   exportAttendance: 'Export Attendance',
   exportAttendanceMessage: 'Attendance exported successfully',
   hardshipCode: "Hardship Code",
@@ -1625,7 +1626,6 @@ const AppConstants = {
   filterDates: "Filter Dates",
   uploadBankAccnt: "Upload Bank Account",
   editBankAccount: "Edit Bank Account",
-  registrationCloseDate: "Registration close date",
   theyAlreadyTakenCourt: "They have already taken the court for training, grading or a competition game",
   theyOweMonies: "They owe monies",
   noTeamAvailable: "No team available",
@@ -1644,7 +1644,22 @@ const AppConstants = {
   chargedPerMatch: "Charged per Match",
   membershipPaymentOptions: "MembershipPaymentOption",
   membershipFeesPaymentOptions: "Membership Fee Payment Options",
-  whenPaymentsRequired: "When Payments are Required"
+  whenPaymentsRequired: "When Payments are Required",
+  Communication: "Communication",
+  fullCashAmount: "Full cash amount",
+  partialCashAmount: "Partial cash amount",
+  sqadSelectionEabled: "Squad selection will be disabled for this division if position tracking is disabled",
+  affiliateAddressAddressSelect: "Please input affiliate address",
+  editOrganisationMessage:'If you edit the organisations, please ensure all teams are linked to the correct organisation so that managers, scorers, umpires and coaches remain correctly linked to this competition. Would you like to proceed?',
+  backToHome: "Back to home",
+  pool:"Pool",
+  wantYouRegenerateDraw: "Do you want to Regenerate the draw and",
+  retainException: "Retain Exception",
+  removeException: "Remove Exception",
+  reasonRegisterTitle: "Why would you like to de-register?",
+  useRound1Template: "Use Round 1 template",
+
+  purchase:"Purchases"
 };
 
 export default AppConstants;

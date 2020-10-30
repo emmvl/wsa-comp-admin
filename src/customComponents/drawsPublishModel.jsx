@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Select, Checkbox, Radio } from 'antd';
 import AppConstants from "../themes/appConstants"
-import CustumToolTip from 'react-png-tooltip'
+import CustomToolTip from 'react-png-tooltip'
 import AppUniqueId from "../themes/appUniqueId"
 
 const { Option } = Select;
@@ -14,7 +14,6 @@ class DrawsPublishModel extends React.Component {
   }
 
   render() {
-    //console.log("Porps"+JSON.stringify(this.props));
     const { modalPublish, modalDivisions, modalRounds, publishVisible,
       modelCheckDivision, modelCheckRound, modelCancel, modelRadio,
       modalRadioValue, modalIsShowPart, modalIsShowDivision,
@@ -42,13 +41,13 @@ class DrawsPublishModel extends React.Component {
               <Radio value={1}>
                 {AppConstants.all}
               </Radio>
-              <Radio value={2} >
+              <Radio value={2}>
                 {AppConstants.part}
               </Radio>
-              {modalIsShowPart ?
+              {modalIsShowPart && (
                 <div style={{ display: 'grid' }}>
                   <Checkbox className="checkbox-model-popup" onChange={modelCheckDivision}>Divisions</Checkbox>
-                  {modalIsShowDivision ?
+                  {modalIsShowDivision && (
                     <div className="col-sm-3 division">
                       <Select
                         mode="multiple"
@@ -56,41 +55,37 @@ class DrawsPublishModel extends React.Component {
                         onChange={modalDivisions}
                         filterOption={false}
                       >
-                        {(filteredDivisions || []).map((item) => {
-                          return (
-                            <Option
-                              key={'divisionGradeNameList' + item.competitionDivisionGradeId}
-                              value={item.competitionDivisionGradeId}
-                            >
-                              {item.name}
-                            </Option>
-                          );
-                        })}
+                        {(filteredDivisions || []).map((item) => (
+                          <Option
+                            key={'divisionGrade_' + item.competitionDivisionGradeId}
+                            value={item.competitionDivisionGradeId}
+                          >
+                            {item.name}
+                          </Option>
+                        ))}
                       </Select>
                     </div>
-                    : null}
+                  )}
                   <Checkbox className="checkbox-model-popup" onChange={modelCheckRound}>Rounds</Checkbox>
-                  {modalIsShowRound ?
-                    <div className="col-sm-3 division" >
+                  {modalIsShowRound && (
+                    <div className="col-sm-3 division">
                       <Select
                         mode="multiple"
                         style={{ width: "100%", minWidth: 370, marginLeft: 25 }}
                         onChange={modalRounds}
                         filterOption={false}
-                      //onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
+                        //onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
                       >
-                        {(filteredRounds || []).map((item) => {
-                          return (
-                            <Option key={item.roundId} value={item.roundId}>
-                              {item.name}
-                            </Option>
-                          );
-                        })}
+                        {(filteredRounds || []).map((item) => (
+                          <Option key={'round_' + item.roundId} value={item.roundId}>
+                            {item.name}
+                          </Option>
+                        ))}
                       </Select>
                     </div>
-                    : null}
+                  )}
                 </div>
-                : null}
+              )}
             </Radio.Group>
           </div>
         </div>

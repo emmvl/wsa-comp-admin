@@ -119,7 +119,7 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/userEditAffiliates`, state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId } }} >
+                        <NavLink to={{ pathname: `/userEditAffiliates`, state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId } }}>
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
@@ -172,7 +172,6 @@ class UserAffiliatesList extends Component {
     }
 
     componentDidUpdate(nextProps) {
-        console.log("Component componentDidUpdate");
         let userState = this.props.userState;
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
@@ -252,23 +251,22 @@ class UserAffiliatesList extends Component {
     }
 
     deleteAffiliate = (affiliateId) => {
-        console.log("affiliateId::" + affiliateId);
         this.props.affiliateDeleteAction(affiliateId)
         this.setState({ deleteLoading: true })
     }
 
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             {/* <Breadcrumb.Item className="breadcrumb-product">User</Breadcrumb.Item> */}
                             <Breadcrumb.Item className="breadcrumb-add">Affiliates</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -282,50 +280,62 @@ class UserAffiliatesList extends Component {
 
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-lg-3 col-md-6" >
-                            <div style={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading' style={{ width: 120 }}>{AppConstants.affiliatedTo}</span>
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-lg-3 col-md-6">
+                            <div style={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center"
+                            }}>
+                                <span className="year-select-heading" style={{ width: 120 }}>{AppConstants.affiliatedTo}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}
                                     onChange={(e) => this.onChangeAffiliateTo(e)}
-                                    value={this.state.affiliatedToOrgId}>
+                                    value={this.state.affiliatedToOrgId}
+                                >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(uniqueValues || []).map((org, index) => (
-                                        <Option key={org.affiliatedToOrgId} value={org.affiliatedToOrgId}>{org.affiliatedToOrgName}</Option>
+                                    {(uniqueValues || []).map((org) => (
+                                        <Option
+                                            key={'organization_' + org.affiliatedToOrgId}
+                                            value={org.affiliatedToOrgId}
+                                        >
+                                            {org.affiliatedToOrgName}
+                                        </Option>
                                     ))}
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-lg-4 col-md-6" >
-                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading' style={{ width: 240 }}>{AppConstants.organisationType}</span>
+                        <div className="col-lg-4 col-md-6">
+                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                                <span className="year-select-heading" style={{ width: 240 }}>{AppConstants.organisationType}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}
                                     onChange={(e) => this.onChangeOrganisationTypes(e)}
-                                    value={this.state.organisationTypeRefId}>
+                                    value={this.state.organisationTypeRefId}
+                                >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(affiliateToData.organisationTypes || []).map((org, index) => (
-                                        <Option key={org.id} value={org.id}>{org.name}</Option>
+                                    {(affiliateToData.organisationTypes || []).map((org) => (
+                                        <Option key={'organizationTyp_' + org.id} value={org.id}>{org.name}</Option>
                                     ))}
-
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-lg-3 col-md-6" >
-                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }} >
-                                <span className='year-select-heading' style={{ width: 120 }}>{AppConstants.status}</span>
+                        <div className="col-lg-3 col-md-6">
+                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                                <span className="year-select-heading" style={{ width: 120 }}>{AppConstants.status}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
                                     style={{ minWidth: 160 }}
                                     onChange={(e) => this.onChangeStatusRefId(e)}
-                                    value={this.state.statusRefId}>
+                                    value={this.state.statusRefId}
+                                >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {(affiliateToData.status || []).map((st, index) => (
-                                        <Option key={st.id} value={st.id}>{st.description}</Option>
+                                    {(affiliateToData.status || []).map((st) => (
+                                        <Option key={'status_' + st.id} value={st.id}>{st.description}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -396,11 +406,10 @@ class UserAffiliatesList extends Component {
     }
 
     render() {
-        console.log(this.props.userState.userAffiliateListAction, 'userAffiliateListAction')
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                <InnerHorizontalMenu menu={"user"} userSelectedKey={"2"} />
+                <InnerHorizontalMenu menu="user" userSelectedKey="2" />
                 <Layout>
                     {this.headerView()}
                     <Content>

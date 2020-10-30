@@ -44,9 +44,9 @@ const CARD_ELEMENT_OPTIONS = {
 ///////view for breadcrumb
 const headerView = () => {
     return (
-        <Header className="login-header-view" >
-            <div className="row" >
-                <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+        <Header className="login-header-view">
+            <div className="row">
+                <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                     <Breadcrumb style={{
                         display: 'flex', lignItems: 'center', alignSelf: 'center'
                     }} separator=" > ">
@@ -54,17 +54,17 @@ const headerView = () => {
                     </Breadcrumb>
                 </div>
             </div>
-        </Header >
+        </Header>
     )
 }
 
 //////footer view containing all the buttons
 const footerView = () => {
     return (
-        <div className="container" >
+        <div className="container">
             <div className="login-footer-view">
-                <div className="row" >
-                    <div className="col-sm" >
+                <div className="row">
+                    <div className="col-sm">
                         <div className="comp-finals-button-view">
                             <Button
                                 className="open-reg-button"
@@ -78,7 +78,7 @@ const footerView = () => {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }
 
@@ -114,7 +114,7 @@ const CheckoutForm = (props) => {
 
     return (
         <div className="content-view">
-            <form id='my-form' className="form" onSubmit={handleSubmit} >
+            <form id='my-form' className="form" onSubmit={handleSubmit}>
                 <label className='home-dash-left-text' for="card-element">
                     Credit or debit card
                  </label>
@@ -137,10 +137,9 @@ const stripePromise = loadStripe(StripeKeys.publicKey);
 
 const Stripe = (props) => {
     screenProps = props
-    console.log("props", props)
     const [loading, setLoading] = useState(false);
     return (
-        <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+        <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
             <DashboardLayout
                 menuHeading={""}
                 menuName={""}

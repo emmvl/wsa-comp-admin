@@ -141,26 +141,20 @@ class LiveScorePlayerView extends Component {
     profileImageView = () => {
         let data = this.state.data
 
-        console.log(data, 'datadata')
-
         return (
-            <div className="fluid-width mt-2" >
-
-                <div className='profile-image-view mr-5' >
+            <div className="fluid-width mt-2">
+                <div className='profile-image-view mr-5'>
                     <span className="user-contact-heading">{AppConstants.playerProfile}</span>
                     {/* <img className="user-image" src={'https://www.si.com/specials/fittest50-2017/img/men/ngolo_kante.jpg'} alt="" height="80" width="80" /> */}
 
-                    {
-                        data.profilePicture ?
-                            <img className="user-image" src={data.profilePicture} alt="" height="80" width="80" />
-                            :
-                            <span className="user-contact-heading">{AppConstants.noImage}</span>
-
+                    {data.profilePicture ?
+                        <img className="user-image" src={data.profilePicture} alt="" height="80" width="80" />
+                        :
+                        <span className="user-contact-heading">{AppConstants.noImage}</span>
                     }
                     <span className="user-contact-heading">{data.firstName + " " + data.lastName}</span>
                     <span className="year-select-heading pt-0">{'#' + data.playerId}</span>
                 </div>
-
 
                 <div className="profile-img-view-style">
                     <div className="live-score-side-desc-view">
@@ -168,7 +162,7 @@ class LiveScorePlayerView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.calendar} alt="" height="16" width="16" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.dateOfBirth}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.dateOfBirth}</span>
                         </div>
                         <span className="desc-text-style side-bar-profile-data">{liveScore_formateDate(data.dob) == "Invalid date" ? "" : liveScore_formateDate(data.dob)}</span>
                     </div>
@@ -177,7 +171,7 @@ class LiveScorePlayerView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.callAnswer} alt="" height="16" width="16" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.contactNumber}</span>
                         </div>
                         <span className="desc-text-style side-bar-profile-data">{data.phoneNumber}</span>
                     </div>
@@ -186,7 +180,7 @@ class LiveScorePlayerView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.group} height="16" width="16" alt="" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.team}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.team}</span>
                         </div>
                         <span className="desc-text-style side-bar-profile-data">{data.team ? data.team.name : data.teamName}</span>
                     </div>
@@ -195,7 +189,7 @@ class LiveScorePlayerView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.circleOutline} alt="" height="16" width="16" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.division}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.division}</span>
                         </div>
                         <span className="desc-text-style side-bar-profile-data">{data.division ? data.division.name : ""}</span>
                     </div>
@@ -204,7 +198,7 @@ class LiveScorePlayerView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.circleOutline} alt="" height="16" width="16" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.competition}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.competition}</span>
                         </div>
                         <span className="desc-text-style side-bar-profile-data">{'TWSA'}</span>
                     </div>
@@ -213,30 +207,14 @@ class LiveScorePlayerView extends Component {
         )
     }
 
-
     tabCallBack = key => {
         this.setState({ playerTabKey: key });
     };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     btnView = () => {
-        console.log(this.state.data)
         return (
             <div className="col-sm mt-5" style={{ display: "flex", justifyContent: "flex-end", }}>
-                <div className="comp-dashboard-botton-view-mobile" >
+                <div className="comp-dashboard-botton-view-mobile">
                     <NavLink to={{
                         pathname: '/liveScoreAddPlayer',
                         state: { isEdit: true, playerData: this.state.data }
@@ -256,18 +234,14 @@ class LiveScorePlayerView extends Component {
     }
 
 
-    //////// tableView 
+    //////// tableView
     activityView = () => {
         return (
-
             <div>
-                <div className="comp-dash-table-view p-0 " >
-
+                <div className="comp-dash-table-view p-0">
                     <div className="table-responsive home-dash-table-view">
-                        <Table className="home-dashboard-table" columns={activity_Columns} dataSource={activity_data} pagination={false}
-                        />
+                        <Table className="home-dashboard-table" columns={activity_Columns} dataSource={activity_data} pagination={false} />
                     </div>
-
                 </div>
                 <div className="d-flex justify-content-end">
                     <Pagination
@@ -276,18 +250,17 @@ class LiveScorePlayerView extends Component {
                         total={8}
                     />
                 </div>
-            </div >
+            </div>
         )
     }
 
-    //////// tableView 
+    //////// tableView
     shootingStateView = () => {
         return (
-            <div >
-                <div className="comp-dash-table-view p-0 " >
+            <div>
+                <div className="comp-dash-table-view p-0">
                     <div className="table-responsive home-dash-table-view ">
-                        <Table className="home-dashboard-table" columns={shhoting_Columns} dataSource={shhoting_data} pagination={false}
-                        />
+                        <Table className="home-dashboard-table" columns={shhoting_Columns} dataSource={shhoting_data} pagination={false} />
                     </div>
                 </div>
                 <div className="d-flex justify-content-end">
@@ -297,25 +270,25 @@ class LiveScorePlayerView extends Component {
                         total={8}
                     />
                 </div>
-            </div >
+            </div>
         )
     }
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={this.state.screenName == 'dashboard' ? "1" : this.state.screenName == 'incident' ? '17' : "7"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={this.state.screenName === 'dashboard' ? "1" : this.state.screenName === 'incident' ? '17' : "7"} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
-                        <div className="fluid-width" >
-                            <div className="row" >
-                                <div className="col-sm-3 " style={{ marginBottom: "7%" }} >
+                        <div className="fluid-width">
+                            <div className="row">
+                                <div className="col-sm-3 " style={{ marginBottom: "7%" }}>
                                     {this.profileImageView()}
                                 </div>
-                                <div className="col-sm-9 " style={{ backgroundColor: "#f7fafc", }}>
+                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
                                     {this.btnView()}
-                                    <div className="inside-table-view mt-4" >
+                                    <div className="inside-table-view mt-4">
                                         <Tabs defaultActiveKey="1" onChange={this.tabCallBack}>
                                             <TabPane tab={AppConstants.activity} key="1">
                                                 {this.activityView()}
@@ -330,7 +303,7 @@ class LiveScorePlayerView extends Component {
                         </div>
                     </Content>
                 </Layout>
-            </div >
+            </div>
         );
     }
 }

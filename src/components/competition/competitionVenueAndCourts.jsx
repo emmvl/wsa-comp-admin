@@ -67,9 +67,7 @@ class CompetitionVenueAndCourts extends Component {
         }
     }
 
-
     onChange = e => {
-        console.log('radio checked', e.target.value);
         this.setState({
             value: e.target.value,
         });
@@ -80,17 +78,17 @@ class CompetitionVenueAndCourts extends Component {
     headerView = () => {
         return (
 
-            <Header className="comp-venue-courts-header-view" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <Header className="comp-venue-courts-header-view">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add">{AppConstants.Step_3}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.Step_3}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
 
                 </div>
 
-            </Header >
+            </Header>
 
 
         )
@@ -99,36 +97,38 @@ class CompetitionVenueAndCourts extends Component {
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         return (
-            <div className="comp-venue-courts-dropdown-view mt-0" >
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view" >
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+            <div className="comp-venue-courts-dropdown-view mt-0">
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm-2">
+                            <div className="com-year-select-heading-view">
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 75 }}
                                     onChange={(year) => this.setState({ year })}
                                     value={this.state.year}
                                 >
-                                    <Option value={"2019"}>{AppConstants.year2019}</Option>
+                                    <Option value="2019">{AppConstants.year2019}</Option>
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-2" >
+                        <div className="col-sm-2">
                             <div style={{
-                                width: "100%", display: "flex",
+                                width: "100%",
+                                display: "flex",
                                 flexDirection: "row",
-                                alignItems: "center", marginRight: 50
-                            }} >
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                alignItems: "center",
+                                marginRight: 50
+                            }}>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     className="year-select"
                                     // style={{ width: 140 }}
                                     onChange={(competition) => this.setState({ competition })}
                                     value={this.state.competition}
                                 >
-                                    <Option value={"2019winter"}>{AppConstants.winter2019}</Option>
+                                    <Option value="2019winter">{AppConstants.winter2019}</Option>
                                 </Select>
                             </div>
                         </div>
@@ -143,23 +143,21 @@ class CompetitionVenueAndCourts extends Component {
     contentView = () => {
         return (
             <div className="content-view pt-5">
-                <span className='form-heading'>Venue 1</span>
+                <span className="form-heading">Venue 1</span>
                 <InputWithHead heading={AppConstants.name} placeholder={AppConstants.name} />
                 <InputWithHead heading={AppConstants.address} placeholder={AppConstants.address} />
                 <InputWithHead heading={AppConstants.contactNumber} placeholder={AppConstants.contactNumber} />
 
-                <div className="inside-container-view" >
+                <div className="inside-container-view">
                     <div className="table-responsive">
                         <Table className="fees-table" columns={columns} dataSource={data} pagination={false} Divider=" false" />
                     </div>
 
-                    <span className='input-heading-add-another'>+ {AppConstants.addAnotherCourt}</span>
+                    <span className="input-heading-add-another">+ {AppConstants.addAnotherCourt}</span>
                 </div>
 
-                <span className='input-heading-add-another'>+ {AppConstants.addAnotherVenue}</span>
-
+                <span className="input-heading-add-another">+ {AppConstants.addAnotherVenue}</span>
             </div>
-
         )
     }
 
@@ -168,10 +166,10 @@ class CompetitionVenueAndCourts extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
+                    <div className="row">
+                        <div className="col-sm">
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button>
                                 <Button className="open-reg-button" type="primary">{AppConstants.next}</Button>
@@ -186,9 +184,9 @@ class CompetitionVenueAndCourts extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"7"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="7" />
                 <Layout>
                     {this.headerView()}
                     <Content>

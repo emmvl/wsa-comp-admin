@@ -43,8 +43,8 @@ class MultifieldDraws extends Component {
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
-                <div className="row ">
-                    <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }} >
+                <div className="row">
+                    <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.draws}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -121,12 +121,8 @@ class MultifieldDraws extends Component {
           key={l.i}
           data-grid={l}
         >
-          
-            
-          
-          {l.whiteArea.map(() => {
-            return (
-              <Popover content={content} trigger={"click"}>
+          {l.whiteArea.map(() => (
+            <Popover content={content} trigger={"click"}>
               <div
                 key={1}
                 style={{
@@ -135,11 +131,9 @@ class MultifieldDraws extends Component {
                   backgroundColor: '#fff',
                   margin: 2.5,
                 }}
-              ></div>
-              </Popover>
-            );
-          })}
-          
+              />
+            </Popover>
+          ))}
         </div>
       );
     });
@@ -191,7 +185,7 @@ class MultifieldDraws extends Component {
             paddingBottom: 10,
           }}
         >
-          <div style={{ paddingLeft: 100 }}></div>
+          <div style={{ paddingLeft: 100 }} />
           <div
             style={{
               display: 'flex',
@@ -263,7 +257,7 @@ class MultifieldDraws extends Component {
               margin={[10, 10]}
               onLayoutChange={this.onLayoutChange}
               {...this.props}
-              preventCollision={true}
+              preventCollision
               compactType={null}
               rowHeight={30}
             >
@@ -272,20 +266,20 @@ class MultifieldDraws extends Component {
           </div>
         </div>
         <div className="mt-5" style={{ display: "flex", flexDirection: 'row', paddingLeft: 50 }}>
-                    {lagendsArray.map((subItem) => {
-                        return (
-                            <div className="legend-color-text-div" >
-                                <div>
-                                    <div className="legend-color-div" style={{ backgroundColor: subItem.colorCode }} >
-                                    </div>
-                                </div>
-                                <div className="legend-text-div">
-                                    <span className="legend-text">{subItem.divisionName}-{subItem.gradeName}</span>
-                                </div>
+            {lagendsArray.map((subItem) => {
+                return (
+                    <div className="legend-color-text-div">
+                        <div>
+                            <div className="legend-color-div" style={{ backgroundColor: subItem.colorCode }}>
                             </div>
-                        )
-                    })}
-                </div>
+                        </div>
+                        <div className="legend-text-div">
+                            <span className="legend-text">{subItem.divisionName}-{subItem.gradeName}</span>
+                        </div>
+                    </div>
+                )
+            })}
+        </div>
       </div>
     );
   }
@@ -297,21 +291,20 @@ class MultifieldDraws extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <div className="reg-add-save-button">
-                            <Button
-                                type="cancel-button"
-                                onClick={() => console.log("cancel")}>{AppConstants.cancel}</Button>
+                            <Button type="cancel-button" onClick={() => console.log("cancel")}>
+                                {AppConstants.cancel}
+                            </Button>
                         </div>
                     </div>
                     <div className="col-sm">
                         <div className="comp-buttons-view">
-                            <Button className="publish-button" type="primary"
-                                htmlType="submit">
+                            <Button className="publish-button" type="primary" htmlType="submit">
                                 {AppConstants.save}
                             </Button>
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         );
     };
 
@@ -320,7 +313,7 @@ class MultifieldDraws extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.draws} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={'competition'} compSelectedKey={'18'} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey={'18'} />
                 <Layout>
                     {this.headerView()}
                     {this.containerView()}

@@ -18,53 +18,45 @@ class CommentModal extends React.Component {
                 >
 
                     <div style={{ overflow: "auto", minHeight: 50, maxHeight: 200, padding: 10, }}>
-                        <Loader
-                            visible={
-                                commentLoad
-                            } />
-                        {commentList.length > 0 && commentList.map((commentItem, commentIndex) => {
-                            return (
-                                <div className="col-sm pl-0 pb-2" >
-                                    < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{commentItem.createdByName}{" "}{"("}{commentItem.organisationName}{")"}{" "}</span>
-                                    < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{"("}{moment(commentItem.createdOn).format("DD-MM-YYYY HH:mm")}{")"}{" "}{":"}{"   "}</span>
-                                    < span className={`comment-heading`}>{commentItem.comment}</span>
-                                </div>
-                            )
-                        })}
+                        <Loader visible={commentLoad} />
+                        {commentList.map((commentItem) => (
+                            <div className="col-sm pl-0 pb-2">
+                                <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{commentItem.createdByName}{" "}{"("}{commentItem.organisationName}{")"}{" "}</span>
+                                <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{"("}{moment(commentItem.createdOn).format("DD-MM-YYYY HH:mm")}{")"}{" "}{":"}{"   "}</span>
+                                <span className="comment-heading">{commentItem.comment}</span>
+                            </div>
+                        ))}
                     </div>
-                    {/* {finalGradeId !== null &&
-                        owner &&
+                    {/* {finalGradeId !== null && owner && (
                         <div>
                             <div className="col-sm pl-0 pb-2">
-                                {owner !== null &&
-                                    < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{owner}{" "}</span>
-                                }
-                                {OwnCreatedComment !== null &&
-                                    < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{"("}{OwnCreatedComment}{")"}{" "}{":"}{"   "}</span>
-                                }
-                                {ownnerComment !== null &&
-                                    < span className={`comment-heading`}>{ownnerComment}</span>
-                                }
-
+                                {owner !== null && (
+                                    <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{owner}{" "}</span>
+                                )}
+                                {OwnCreatedComment !== null && (
+                                    <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{"("}{OwnCreatedComment}{")"}{" "}{":"}{"   "}</span>
+                                )}
+                                {ownnerComment !== null && (
+                                    <span className="comment-heading">{ownnerComment}</span>
+                                )}
                             </div>
                             <div>
                             </div>
                         </div>
-                    }
-                    {proposedGradeID !== null &&
-                        affilate &&
+                    )}
+                    {proposedGradeID !== null && affilate && (
                         <div className="col-sm pl-0 pb-2">
-                            {affilate !== null &&
-                                < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{affilate}{" "}</span>
-                            }
-                            {affilateCreatedComment !== null &&
-                                < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{"("}{affilateCreatedComment}{')'}{" "}{":"}{"   "}</span>
-                            }
-                            {affilateComment !== null &&
-                                < span className={`comment-heading`}>{affilateComment}</span>
-                            }
+                            {affilate !== null && (
+                                <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{affilate}{" "}</span>
+                            )}
+                            {affilateCreatedComment !== null && (
+                                <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{"("}{affilateCreatedComment}{')'}{" "}{":"}{"   "}</span>
+                            )}
+                            {affilateComment !== null && (
+                                <span className="comment-heading">{affilateComment}</span>
+                            )}
                         </div>
-                    } */}
+                    )} */}
                     <div className="pt-2">
                         <TextArea
                             className="textAreaInput"
@@ -80,11 +72,10 @@ class CommentModal extends React.Component {
                             {...this.props}
                         />
                     </div>
-                </Modal >
-            </div >
+                </Modal>
+            </div>
         )
     }
 }
-
 
 export default CommentModal;

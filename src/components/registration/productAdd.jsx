@@ -86,7 +86,6 @@ class ProductAdd extends Component {
         }
     }
 
-
     onChange(checkedValues) {
         console.log('checked = ', checkedValues);
     }
@@ -110,7 +109,7 @@ class ProductAdd extends Component {
                     backgroundColor: 'transparent', display: 'flex',
                     alignItems: 'center'
                 }}>
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-product">Products</Breadcrumb.Item>
                         <Breadcrumb.Item className="breadcrumb-add">Add</Breadcrumb.Item>
                     </Breadcrumb>
@@ -153,30 +152,30 @@ class ProductAdd extends Component {
         return (
 
             <div className="content-view pt-5">
-                <span className='form-heading'>Product Details</span>
+                <span className="form-heading">Product Details</span>
                 {/* <span className="required-field">*</span> */}
-                <span className='input-heading'>Name</span>
+                <span className="input-heading">Name</span>
                 <Input className="input" placeholder="Name" />
 
-                <span className='input-heading'>Type</span>
+                <span className="input-heading">Type</span>
                 <Select
                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                     onChange={(productType) => this.setState({ productType })}
                     value={this.state.productType}
                 >
-                    <Option value={"recurring"}>Recurring</Option>
+                    <Option value="recurring">Recurring</Option>
                 </Select>
 
-                <span className='input-heading'>Description</span>
+                <span className="input-heading">Description</span>
                 <Input className="input" placeholder="Description" />
 
                 <span className='applicable-to-heading'>Allow Registration Via</span>
                 <Checkbox.Group style={{ display: "-ms-flexbox", flexDirection: 'column', justifyContent: 'center' }} options={registrationVia} defaultValue={['Application', 'Website']} onChange={(e) => this.onChange(e)} />
 
-                <span className='input-heading'>Contact Name</span>
+                <span className="input-heading">Contact Name</span>
                 <Input className="input" placeholder="Contact Name" />
 
-                <span className='input-heading'>Contact Email</span>
+                <span className="input-heading">Contact Email</span>
                 <Input className="input" placeholder="Contact Email" />
 
                 <div className="inside-container-view">
@@ -270,17 +269,17 @@ class ProductAdd extends Component {
         const paymentTypes = ['Credit/Debit Card', 'Direct Debit', 'Cash', 'Zip Pay'];
         return (
             <div className="payment-view pt-5">
-                <span className='form-heading'>Payment Settings</span>
+                <span className="form-heading">Payment Settings</span>
                 <Checkbox.Group style={{ display: "-ms-flexbox", flexDirection: 'column', justifyContent: 'center' }} options={paymentTypes}
                     defaultValue={['Credit/Debit Card', 'Direct Debit', 'Cash']} onChange={(e) => this.onChange(e)} />
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm" >
-                            <span className='input-heading'>Tax Description</span>
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm">
+                            <span className="input-heading">Tax Description</span>
                             <Input className="input" placeholder="Tax Description" />
                         </div>
                         <div className="col-sm">
-                            <span className='input-heading'>Tax %</span>
+                            <span className="input-heading">Tax %</span>
                             <Input className="input" placeholder="Tax %" />
                         </div>
                     </div>
@@ -289,91 +288,91 @@ class ProductAdd extends Component {
         )
     }
 
-
     ////fees view inside the content
     feesView = () => {
         return (
             <div className="fees-view pt-5">
-                <span className='form-heading'>Fees</span>
-                <span className='input-heading'>Type</span>
+                <span className="form-heading">Fees</span>
+                <span className="input-heading">Type</span>
                 <Select
                     style={{ minWidth: 182, width: "100%", paddingRight: 1 }}
                     onChange={(feesType) => this.setState({ feesType })}
                     value={this.state.feesType}
                 >
-                    <Option value={"differentiateBy1&2Registration"}>Differentiate by 1st registration and 2nd+ registration</Option>
+                    <Option value="differentiateBy1&2Registration">
+                        Differentiate by 1st registration and 2nd+ registration
+                    </Option>
                 </Select>
-                <div className="inside-container-view" >
+                <div className="inside-container-view">
                     <div className="table-responsive">
                         <Table className="fees-table" columns={columns} dataSource={data} pagination={false} Divider="false" />
                     </div>
-                    <span className='input-heading-add-another'>+ Add Another Division</span>
-                    <Checkbox className="gst-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>Prices include GST (10%)</Checkbox>
+                    <span className="input-heading-add-another">+ Add Another Division</span>
+                    <Checkbox className="gst-single-checkbox" defaultChecked onChange={(e) => this.onChange(e)}>Prices include GST (10%)</Checkbox>
                 </div>
 
-                <div className="inside-container-view" >
+                <div className="inside-container-view">
                     <div className="table-responsive">
                         <Table className="fees-table" columns={columns} dataSource={data} pagination={false} />
                     </div>
-                    <span className='input-heading-add-another'>+ Add Another Division</span>
-                    <Checkbox className="gst-single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>Prices include GST (10%)</Checkbox>
+                    <span className="input-heading-add-another">+ Add Another Division</span>
+                    <Checkbox className="gst-single-checkbox" defaultChecked onChange={(e) => this.onChange(e)}>Prices include GST (10%)</Checkbox>
                 </div>
             </div>
         )
     }
 
-
     ////discount view inside the content
     discountView = () => {
         return (
             <div className="discount-view pt-5">
-                <span className='form-heading'>Discounts</span>
-                <span className='input-heading'>Type</span>
+                <span className="form-heading">Discounts</span>
+                <span className="input-heading">Type</span>
                 <Select
                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                     onChange={(discountType) => this.setState({ discountType })}
                     value={this.state.discountType}
                 >
-                    <Option value={"applyToClubFeesOnly"}>Apply to Club fees only</Option>
+                    <Option value="applyToClubFeesOnly">Apply to Club fees only</Option>
                 </Select>
 
 
                 <div className="inside-container-view">
-                    <Checkbox className="single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>General Discount</Checkbox>
+                    <Checkbox className="single-checkbox" defaultChecked onChange={(e) => this.onChange(e)}>General Discount</Checkbox>
                     <div className="row">
                         <div className="col-3" style={{ minWidth: 150 }}>
-                            <span className='input-heading'>Percentage Off</span>
+                            <span className="input-heading">Percentage Off</span>
                             <Input className="input" placeholder="Percentage Off" />
                         </div>
                         <div className="col-9" style={{ minWidth: 150 }}>
-                            <span className='input-heading'>Description</span>
+                            <span className="input-heading">Description</span>
                             <Input className="input" placeholder="General Discount" />
                         </div>
                     </div>
 
-                    <div className="fluid-width" >
-                        <div className="row" >
-                            <div className="col-sm" >
-                                <span className='input-heading'>Available From</span>
+                    <div className="fluid-width">
+                        <div className="row">
+                            <div className="col-sm">
+                                <span className="input-heading">Available From</span>
                                 <DatePicker
                                     size="large"
                                     style={{ width: "100%" }}
                                     onChange={date => this.dateOnChangeFrom(date)}
-                                    format={'DD-MM-YYYY'}
-                                    placeholder={"dd-mm-yyyy"}
+                                    format="DD-MM-YYYY"
+                                    placeholder="dd-mm-yyyy"
                                     showTime={false}
                                 />
                             </div>
                             <div className="col-sm">
-                                <span className='input-heading'>Available To</span>
+                                <span className="input-heading">Available To</span>
                                 <DatePicker
                                     size="large"
                                     style={{ width: "100%" }}
-                                    placeholder={"dd-mm-yyyy"}
+                                    placeholder="dd-mm-yyyy"
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.dateOnChangeTo(date)}
-                                    format={'DD-MM-YYYY'}
+                                    format="DD-MM-YYYY"
                                     showTime={false}
                                 />
                             </div>
@@ -382,41 +381,41 @@ class ProductAdd extends Component {
                 </div>
 
                 <div className="inside-container-view">
-                    <Checkbox className="single-checkbox" defaultChecked={true} onChange={(e) => this.onChange(e)}>Early Discount</Checkbox>
+                    <Checkbox className="single-checkbox" defaultChecked onChange={(e) => this.onChange(e)}>Early Discount</Checkbox>
                     <div className="row">
                         <div className="col-3" style={{ minWidth: 150 }}>
-                            <span className='input-heading'>Percentage Off</span>
+                            <span className="input-heading">Percentage Off</span>
                             <Input className="input" placeholder="Percentage Off" />
                         </div>
                         <div className="col-9" style={{ minWidth: 150 }}>
-                            <span className='input-heading'>Description</span>
+                            <span className="input-heading">Description</span>
                             <Input className="input" placeholder="Early Discount" />
                         </div>
                     </div>
 
-                    <div className="fluid-width" >
-                        <div className="row" >
-                            <div className="col-sm" >
-                                <span className='input-heading'>Available From</span>
+                    <div className="fluid-width">
+                        <div className="row">
+                            <div className="col-sm">
+                                <span className="input-heading">Available From</span>
                                 <DatePicker
                                     size="large"
                                     style={{ width: "100%" }}
                                     onChange={date => this.dateOnChangeFrom(date)}
-                                    format={'DD-MM-YYYY'}
-                                    placeholder={"dd-mm-yyyy"}
+                                    format="DD-MM-YYYY"
+                                    placeholder="dd-mm-yyyy"
                                     showTime={false}
                                 />
                             </div>
                             <div className="col-sm">
-                                <span className='input-heading'>Available To</span>
+                                <span className="input-heading">Available To</span>
                                 <DatePicker
                                     size="large"
-                                    placeholder={"dd-mm-yyyy"}
+                                    placeholder="dd-mm-yyyy"
                                     style={{ width: "100%" }}
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.dateOnChangeTo(date)}
-                                    format={'DD-MM-YYYY'}
+                                    format="DD-MM-YYYY"
                                     showTime={false}
                                 />
                             </div>
@@ -448,13 +447,13 @@ class ProductAdd extends Component {
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="footer-view">
-                    <div className="row" >
+                    <div className="row">
                         <div className="col-sm" style={{ display: 'flex', alignItems: "flex-start" }}>
                             <Button type="cancel-button">Cancel</Button>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm">
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 <Button className="save-draft-text" type="save-draft-text">Save as Draft</Button>
                                 <Button className="publish-button" type="primary">Publish</Button>
@@ -465,8 +464,6 @@ class ProductAdd extends Component {
             </div>
         )
     }
-
-
 
     ///advance setting view inside the content view
     advancedSettingView = () => {
@@ -484,7 +481,7 @@ class ProductAdd extends Component {
         ];
         return (
             <div className="advanced-setting-view pt-5">
-                <span className='form-heading'>Advanced Settings</span>
+                <span className="form-heading">Advanced Settings</span>
 
                 <div className="inside-container-view">
                     <Tree className="tree-government-rebate pt-0" checkable
@@ -498,10 +495,10 @@ class ProductAdd extends Component {
                     defaultValue={['Allow Team Preference', 'Manually approve all new registrations', 'Allow people to invite friends']} onChange={(e) => this.onChange(e)} />
 
                 <div className="inside-container-view">
-                    <Checkbox className="single-checkbox mt-1" defaultChecked={true} onChange={(e) => this.onChange(e)}>Disclaimers</Checkbox>
-                    <span className='input-heading'>Disclaimer Link</span>
+                    <Checkbox className="single-checkbox mt-1" defaultChecked onChange={(e) => this.onChange(e)}>Disclaimers</Checkbox>
+                    <span className="input-heading">Disclaimer Link</span>
                     <Input className="input" placeholder="Disclaimer Link" />
-                    <span className='input-heading-add-another'>+ Add Another Disclaimer Link</span>
+                    <span className="input-heading-add-another">+ Add Another Disclaimer Link</span>
                 </div>
             </div>
         )
@@ -554,7 +551,7 @@ class ProductAdd extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
                 <Layout>
                     {this.headerView()}

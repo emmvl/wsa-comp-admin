@@ -9,7 +9,7 @@ import { bindActionCreators } from 'redux';
 import { getOnlyYearListAction } from '../../store/actions/appAction'
 import { isArrayNotEmpty } from "../../util/helpers";
 import { registrationMainDashboardListAction } from "../../store/actions/registrationAction/registrationDashboardAction";
-import { checkRegistrationType } from "../../util/permissions";
+import { checkRegistrationType, getCurrentYear } from "../../util/permissions";
 import { clearCompReducerDataAction } from "../../store/actions/registrationAction/competitionFeeAction";
 import history from "../../util/history";
 import WizardModel from "../../customComponents/registrationWizardModel"
@@ -57,19 +57,17 @@ const columns = [
         render: divisions => {
             let divisionList = isArrayNotEmpty(divisions) ? divisions : []
             return (
-                < span key={"part1"}>
-                    {
-                        divisionList.map(item => (
-                            <Tag
-                                className="comp-dashboard-table-tag"
-                                color={item.color}
-                                key={"part" + item.id}
-                            >
-                                {item.divisionName}
-                            </Tag>
-                        ))
-                    }
-                </span >
+                <span key="part1">
+                    {divisionList.map(item => (
+                        <Tag
+                            className="comp-dashboard-table-tag"
+                            color={item.color}
+                            key={"part" + item.id}
+                        >
+                            {item.divisionName}
+                        </Tag>
+                    ))}
+                </span>
             )
         },
         sorter: true,
@@ -83,9 +81,9 @@ const columns = [
             let inviteesRegType = isArrayNotEmpty(invitees) ? invitees : []
             let registrationInviteesRefId = isArrayNotEmpty(inviteesRegType) ? inviteesRegType[0].registrationInviteesRefId : 0
             return (
-                < span >
+                <span>
                     {checkRegistrationType(registrationInviteesRefId)}
-                </span >
+                </span>
             )
         },
         sorter: true,
@@ -115,19 +113,17 @@ const columnsOwned = [
         render: divisions => {
             let divisionList = isArrayNotEmpty(divisions) ? divisions : []
             return (
-                < span key={"owned1"} >
-                    {
-                        divisionList.map(item => (
-                            <Tag
-                                className="comp-dashboard-table-tag"
-                                color={item.color}
-                                key={"owned" + item.id}
-                            >
-                                {item.divisionName}
-                            </Tag>
-                        ))
-                    }
-                </span >
+                <span key="owned1">
+                    {divisionList.map(item => (
+                        <Tag
+                            className="comp-dashboard-table-tag"
+                            color={item.color}
+                            key={"owned" + item.id}
+                        >
+                            {item.divisionName}
+                        </Tag>
+                    ))}
+                </span>
             )
         },
         sorter: true,
@@ -141,9 +137,9 @@ const columnsOwned = [
             let inviteesRegType = isArrayNotEmpty(invitees) ? invitees : []
             let registrationInviteesRefId = isArrayNotEmpty(inviteesRegType) ? inviteesRegType[0].registrationInviteesRefId : 0
             return (
-                < span >
+                <span>
                     {checkRegistrationType(registrationInviteesRefId)}
-                </span >
+                </span>
             )
         },
         sorter: true,
@@ -164,14 +160,14 @@ class RegistrationMainDashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            year: 1,
+            year: null,
             loading: false,
             visible: false,
             competitionId: "",
             publishStatus: 0,
             orgRegistratinId: 0,
             registrationCloseDate: '',
-            wizardYear: 1,
+            wizardYear: null,
             isDirect: false,
             inviteeStatus: 0,
             competitionCreatorOrganisation: 0,
@@ -197,32 +193,26 @@ class RegistrationMainDashboard extends Component {
             sortBy = regDashboardListAction.sortBy
             sortOrder = regDashboardListAction.sortOrder
             let year = regDashboardListAction.yearRefId
-
             await this.setState({ sortBy, sortOrder, year })
-
             this.props.registrationMainDashboardListAction(year, sortBy, sortOrder)
             this.props.getAllCompetitionAction(year)
-        } else {
-            this.props.registrationMainDashboardListAction(this.state.year, this.state.sortBy, this.state.sortOrder)
-            this.props.getAllCompetitionAction(this.state.year)
         }
-
-
-
     }
 
     componentDidUpdate(nextProps) {
         const { yearList } = this.props.appState
-        if (this.state.loading == true && this.props.appState.onLoad == false) {
+        if (this.state.loading && this.props.appState.onLoad == false) {
             if (yearList.length > 0) {
                 let storedYearID = localStorage.getItem("yearId");
                 let yearRefId = null
                 if (storedYearID == null || storedYearID == "null") {
-                    yearRefId = yearList[0].id
+                    yearRefId = getCurrentYear(yearList)
                 } else {
                     yearRefId = storedYearID
                 }
-                this.setState({ loading: false })
+                this.props.registrationMainDashboardListAction(yearRefId, this.state.sortBy, this.state.sortOrder)
+                this.props.getAllCompetitionAction(yearRefId)
+                this.setState({ loading: false, year: yearRefId })
             }
         }
         let competitionTypeList = this.props.registrationDashboardState.competitionTypeList
@@ -241,7 +231,7 @@ class RegistrationMainDashboard extends Component {
                     let compName = competitionTypeList[0].competitionName
                     let regStatus = competitionTypeList[0].orgRegistrationStatusId
                     this.setState({
-                        competitionId: competitionId,
+                        competitionId,
                         publishStatus: publishStatus,
                         orgRegistratinId: orgRegistratinId,
                         wizardYear: wizardYear, registrationCloseDate: registrationCloseDate,
@@ -309,8 +299,6 @@ class RegistrationMainDashboard extends Component {
     ///dropdown view containing all the dropdown of header
     dropdownView = () => {
         const { yearList, selectedYear } = this.props.appState
-        let storedYearID = localStorage.getItem("yearId");
-        let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID)
         let stripeConnected = this.stripeConnected()
         let userEmail = this.userEmail()
         let stripeConnectURL = `https://connect.stripe.com/express/oauth/authorize?redirect_uri=https://connect.stripe.com/connect/default/oauth/test&client_id=${StripeKeys.clientId}&state={STATE_VALUE}&stripe_user[email]=${userEmail}&redirect_uri=${StripeKeys.url}/registrationPayments`
@@ -323,24 +311,23 @@ class RegistrationMainDashboard extends Component {
                 <div className="row">
                     <div className="col-sm-2">
                         <div className="year-select-heading-view pb-3">
-                            <div className="reg-filter-col-cont"  >
+                            <div className="reg-filter-col-cont">
                                 <span className="year-select-heading">
                                     {AppConstants.year}:</span>
                                 <Select
                                     className="year-select reg-filter-select-year ml-2"
                                     style={{ width: 90 }}
                                     onChange={yearId => this.onYearClick(yearId)}
-                                    value={this.state.year}
+                                    value={JSON.parse(this.state.year)}
                                 >
-                                    {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                        < Option key={"yearlist" + yearIndex} value={item.id} > {item.name}</Option>
-                                    ))
-                                    }
+                                    {yearList.map((item) => (
+                                        <Option key={'year_' + item.id} value={item.id}>{item.name}</Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
                     </div>
-                    <div className="col-sm pb-3" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }} >
+                    <div className="col-sm pb-3" style={{ display: "flex", alignContent: "center", justifyContent: 'flex-end' }}>
                         <Button
                             className="open-reg-button"
                             type="primary"
@@ -418,7 +405,7 @@ class RegistrationMainDashboard extends Component {
     }
     //wizard  registration click
     onClickRegistration() {
-        if (this.state.isDirect == true && this.state.competitionCreatorOrganisation == 1) {
+        if (this.state.isDirect && this.state.competitionCreatorOrganisation == 1) {
             history.push("/registrationForm", {
                 id: this.state.competitionId,
                 year: this.state.wizardYear,
@@ -492,7 +479,7 @@ class RegistrationMainDashboard extends Component {
 
                             </span>
                             {/* <div style={{ marginTop: -10 }}>
-                                <Tooltip placement="top" background='#ff8237'>
+                                <Tooltip placement="top" background="#ff8237">
                                     <span>{AppConstants.ownedCompetitionMsg}</span>
                                 </Tooltip>
                             </div> */}
@@ -510,7 +497,7 @@ class RegistrationMainDashboard extends Component {
             <div className="comp-dash-table-view">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.registrationDashboardState.onLoad == true && true}
+                        loading={this.props.registrationDashboardState.onLoad && true}
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={this.props.registrationDashboardState.participatingInRegistrations}
@@ -528,7 +515,6 @@ class RegistrationMainDashboard extends Component {
 
     ////////ownedView view for competition
     ownedView = () => {
-        console.log(this.props.registrationDashboardState)
         return (
             <div className="comp-dash-table-view" style={{ paddingBottom: 100 }}>
                 <div className="table-responsive home-dash-table-view">
@@ -549,11 +535,10 @@ class RegistrationMainDashboard extends Component {
     };
 
     render() {
-        console.log(this.props.registrationDashboardState.regDashboardListAction, 'regDashboardListAction')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"1"} />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="1" />
                 <Layout>
                     <Content>
                         {this.dropdownView()}

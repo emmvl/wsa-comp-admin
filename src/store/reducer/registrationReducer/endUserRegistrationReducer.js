@@ -43,7 +43,8 @@ const initialState = {
     membershipProducts: [],
     postalCodes: [],
     feesPaid: 0,
-    registrationListAction: null
+    registrationListAction: null,
+    onTranSaveLoad: false
 }
 
 
@@ -127,6 +128,16 @@ function endUserRegistrationReducer(state = initialState, action) {
                 status: action.status,
                 error: null
             };
+
+            case ApiConstants.API_REG_TRANSACTION_UPDATE_LOAD:
+                return { ...state, onTranSaveLoad: true };
+
+            case ApiConstants.API_REG_TRANSACTION_UPDATE_SUCCESS:
+                return {
+                    ...state,
+                    onTranSaveLoad: false,
+                    status: action.status
+                };
 
             case ApiConstants.API_USER_REG_DASHBOARD_LIST_FAIL:
             return {

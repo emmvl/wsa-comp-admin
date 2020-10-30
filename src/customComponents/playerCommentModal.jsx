@@ -18,19 +18,14 @@ class PlayerCommentModal extends React.Component {
                 // cancelButtonProps={{ style: { display: finalGradeId !== null && 'none' } }}
                 >
                     <div style={{ overflow: "auto", minHeight: 50, maxHeight: 200, padding: 10, }}>
-                        <Loader
-                            visible={
-                                commentLoad
-                            } />
-                        {commentList.length > 0 && commentList.map((commentItem, commentIndex) => {
-                            return (
-                                <div className="col-sm pl-0 pb-2" >
-                                    < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{commentItem.createdByName}{" "}{"("}{commentItem.organisationName}{")"}{" "}</span>
-                                    < span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className={`comment-heading`}>{"("}{moment(commentItem.createdOn).format("DD-MM-YYYY HH:mm")}{")"}{" "}{":"}{"   "}</span>
-                                    < span className={`comment-heading`}>{commentItem.comment}</span>
-                                </div>
-                            )
-                        })}
+                        <Loader visible={commentLoad} />
+                        {commentList.map((commentItem) => (
+                            <div className="col-sm pl-0 pb-2">
+                                <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{commentItem.createdByName}{" "}{"("}{commentItem.organisationName}{")"}{" "}</span>
+                                <span style={{ fontFamily: "bold", fontSize: 18, paddingRight: 2 }} className="comment-heading">{"("}{moment(commentItem.createdOn).format("DD-MM-YYYY HH:mm")}{")"}{" "}{":"}{"   "}</span>
+                                <span className="comment-heading">{commentItem.comment}</span>
+                            </div>
+                        ))}
                     </div>
                     <div className="pt-2">
                         <TextArea
@@ -48,8 +43,8 @@ class PlayerCommentModal extends React.Component {
                         />
                     </div>
 
-                </Modal >
-            </div >
+                </Modal>
+            </div>
         )
     }
 }

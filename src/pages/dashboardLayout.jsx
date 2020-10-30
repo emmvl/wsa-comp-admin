@@ -27,6 +27,7 @@ import {
 import Loader from "customComponents/loader";
 import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
 import "./layout.css";
+import { showRoleLevelPermision, getUserRoleId } from 'util/permissions';
 
 const { Option } = Select;
 
@@ -42,7 +43,9 @@ class DashboardLayout extends React.Component {
       impersonationAffiliateOrgId: null,
       impersonationOrgData: null,
       logout: false,
+      userRoleId: getUserRoleId()
     };
+
   }
 
   async componentDidUpdate(nextProps) {
@@ -206,8 +209,8 @@ class DashboardLayout extends React.Component {
       case AppConstants.liveScores:
         return AppImages.liveScoreIcon;
 
-      case AppConstants.events:
-        return AppImages.eventsIcon;
+      case AppConstants.Communication:
+        return AppImages.chatIcon;
 
       case AppConstants.shop:
         return AppImages.shopIcon;
@@ -369,7 +372,7 @@ class DashboardLayout extends React.Component {
 
   render() {
     let menuName = this.props.menuName;
-
+    const { userRoleId } = this.state
     return (
       <>
         {this.state.impersonationOrgData && (
@@ -424,7 +427,8 @@ class DashboardLayout extends React.Component {
                                 </NavLink>
                               </div>
                             </li>
-                            <li className={menuName === AppConstants.user ? "active" : ""}>
+
+                            <li className={menuName === AppConstants.user ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'user') ? 'visible' : 'none' }}>
                               <div className="user-menu menu-wrap">
                                 <NavLink to="/userTextualDashboard">
                                   <span className="icon" />
@@ -432,15 +436,16 @@ class DashboardLayout extends React.Component {
                                 </NavLink>
                               </div>
                             </li>
-                            <li className={menuName === AppConstants.registration ? "active" : ""}>
+                            <li className={menuName === AppConstants.registration ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'registration') ? 'visible' : 'none' }}>
                               <div id={AppConstants.registration_icon} className="registration-menu menu-wrap">
-                                <NavLink to="/registrationDashboard">
+                                <NavLink to={"/registrationDashboard"}>
                                   <span id={AppConstants.registrations_label} className="icon" />
                                   {AppConstants.registration}
                                 </NavLink>
                               </div>
                             </li>
-                            <li className={menuName === AppConstants.competitions ? "active" : ""}>
+
+                            <li className={menuName === AppConstants.competitions ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'competitions') ? 'visible' : 'none' }}>
                               <div id={AppConstants.competition_icon} className="competitions-menu menu-wrap">
                                 <NavLink to="/competitionDashboard">
                                   <span id={AppConstants.competitions_label} className="icon" />
@@ -448,7 +453,8 @@ class DashboardLayout extends React.Component {
                                 </NavLink>
                               </div>
                             </li>
-                            <li className={menuName === AppConstants.liveScores ? "active" : ""}>
+
+                            <li className={menuName === AppConstants.liveScores ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'liveScores') ? 'visible' : 'none' }}>
                               <div className="lives-cores menu-wrap" onClick={() => this.props.clearDataOnCompChangeAction()}>
                                 <NavLink to="/liveScoreCompetitions">
                                   <span className="icon" />
@@ -456,23 +462,25 @@ class DashboardLayout extends React.Component {
                                 </NavLink>
                               </div>
                             </li>
-                            <li className={menuName === AppConstants.events ? "active" : ""}>
+                            <li className={menuName === AppConstants.Communication ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'events') ? 'visible' : 'none' }}>
                               <div className="events-menu menu-wrap">
                                 <a href="#">
                                   <span className="icon" />
-                                  {AppConstants.events}
+                                  {AppConstants.Communication}
                                 </a>
                               </div>
                             </li>
-                            <li className={menuName === AppConstants.shop ? "active" : ""}>
+
+                            <li className={menuName === AppConstants.shop ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'shop') ? 'visible' : 'none' }}>
                               <div className="shop-menu menu-wrap">
-                                <NavLink to="/shopDashboard">
+                                <NavLink to="/orderSummary">
                                   <span className="icon" />
                                   {AppConstants.shop}
                                 </NavLink>
                               </div>
                             </li>
-                            <li className={menuName === AppConstants.umpires ? "active" : ""}>
+
+                            <li className={menuName === AppConstants.umpires ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'umpires') ? 'visible' : 'none' }}>
                               <div className="umpires-menu menu-wrap">
                                 <NavLink to="/umpireDashboard">
                                   <span className="icon" />
@@ -480,12 +488,13 @@ class DashboardLayout extends React.Component {
                                 </NavLink>
                               </div>
                             </li>
-                            <li className={menuName === AppConstants.finance ? "active" : ""}>
-                              <div className="finance-menu menu-wrap">
-                                <a href="#">
+
+                            <li className={menuName === AppConstants.finance ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'finance') ? 'visible' : 'none' }}>
+                              <div className="finance-menu menu-wrap" onClick={() => this.props.clearDataOnCompChangeAction()}>
+                                <NavLink to="/paymentDashboard">
                                   <span className="icon" />
                                   {AppConstants.finance}
-                                </a>
+                                </NavLink>
                               </div>
                             </li>
                           </ul>
@@ -494,9 +503,9 @@ class DashboardLayout extends React.Component {
                     </li>
 
                     <li>
-                      <div className="user-profile-box">
+                      {this.props.isManuNotVisible !== true && <div className="user-profile-box">
                         {this.userProfileDropdown()}
-                      </div>
+                      </div>}
                     </li>
                   </ul>
                 </div>
@@ -516,16 +525,13 @@ class DashboardLayout extends React.Component {
               onChange={this.handleImpersonationOrg}
               placeholder="Organisation"
               showSearch
-              filterOption={(input, option) =>
-                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              filterOption={(input, data) =>
+                data.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               loading={this.props.userState.onLoad}
             >
               {(this.props.userState.affiliateList || []).map((affiliate) => (
-                <Option
-                  key={affiliate.affiliateOrgId}
-                  value={affiliate.affiliateOrgId}
-                >
+                <Option key={'organization_' + affiliate.affiliateOrgId} value={affiliate.affiliateOrgId}>
                   {affiliate.affiliateName}
                 </Option>
               ))}

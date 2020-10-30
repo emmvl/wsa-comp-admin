@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
-import { Layout, Breadcrumb, Button, Table, Pagination, Menu, Input, Icon } from "antd";
+import { Layout, Breadcrumb, Button, Table, Pagination, Menu, Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
@@ -26,11 +27,11 @@ let _this = null;
 /////function to sort table column
 function tableSort(key) {
     const body = {
-        "paging": {
-            "limit": 10,
-            "offset": _this.state.offset
+        paging: {
+            limit: 10,
+            offset: _this.state.offset
         },
-        "search": _this.state.searchText
+        search: _this.state.searchText
     };
 
     let sortBy = key;
@@ -109,7 +110,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (teams, record) => (
             <div>
-                {teams.length > 0 && teams.map((item, i) => (
+                {teams.map((item, i) => (
                     teamListData(item.id) ? (
                         <div key={`teams${i}` + item.id}>
                             <NavLink
@@ -130,8 +131,8 @@ const columns = [
                             </NavLink>
                         </div>
                     ) : (
-                            <span>{item.name}</span>
-                        )
+                        <span>{item.name}</span>
+                    )
                 ))}
             </div>
         )
@@ -151,7 +152,7 @@ const columns = [
                         <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                     }
                 >
-                    <Menu.Item key={'1'}>
+                    <Menu.Item key="1">
                         <NavLink
                             to={{
                                 pathname: '/liveScoreAddScorer',
@@ -165,7 +166,7 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: "./liveScoreAssignMatch",
-                                state: { record: record }
+                                state: { record }
                             }}
                         >
                             <span>Assign to match</span>
@@ -198,11 +199,11 @@ class LiveScorerList extends Component {
     componentDidMount() {
         let { scorerActionObject } = this.props.liveScoreScorerState
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": 0
+            paging: {
+                limit: 10,
+                offset: 0
             },
-            "search": ""
+            search: ""
         };
 
         if (getLiveScoreCompetiton()) {
@@ -231,13 +232,13 @@ class LiveScorerList extends Component {
         let offset = page ? 10 * (page - 1) : 0;
         let { searchText, sortBy, sortOrder } = this.state
         const body = {
-            "paging": {
-                "limit": 10,
-                "offset": offset
+            paging: {
+                limit: 10,
+                offset: offset
             },
-            "search": searchText,
-            "sortBy": sortBy,
-            "sortOrder": sortOrder
+            search: searchText,
+            sortBy,
+            sortOrder
         }
         this.props.liveScoreScorerListAction(id, 4, body, searchText, sortBy, sortOrder)
     }
@@ -325,15 +326,14 @@ class LiveScorerList extends Component {
                     <div className="comp-product-search-inp-width">
                         <Input
                             className="product-reg-search-input"
-                            onChange={(e) => this.onChangeSearchText(e)}
+                            onChange={this.onChangeSearchText}
                             placeholder="Search..."
-                            onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                            onKeyPress={this.onKeyEnterSearchText}
                             value={this.state.searchText}
                             prefix={
-                                <Icon
-                                    type="search"
+                                <SearchOutlined
                                     style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                    onClick={() => this.onClickSearchIcon()}
+                                    onClick={this.onClickSearchIcon}
                                 />
                             }
                             allowClear
@@ -351,20 +351,20 @@ class LiveScorerList extends Component {
         let { sortBy, sortOrder } = this.state
         if (e.target.value == null || e.target.value == "") {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": e.target.value,
-                "sortBy": sortBy,
-                "sortOrder": sortOrder
+                search: e.target.value,
+                sortBy,
+                sortOrder
             }
 
             this.props.liveScoreScorerListAction(id, 4, body, e.target.value, sortBy, sortOrder)
         }
     }
 
-    // search key 
+    // search key
     onKeyEnterSearchText = (e) => {
         this.setState({ offset: 0 })
         let { sortBy, sortOrder } = this.state
@@ -372,13 +372,13 @@ class LiveScorerList extends Component {
         const { id } = JSON.parse(getLiveScoreCompetiton())
         if (code === 13) { //13 is the enter keycode
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": e.target.value,
-                "sortBy": sortBy,
-                "sortOrder": sortOrder
+                search: e.target.value,
+                sortBy,
+                sortOrder
             }
             this.props.liveScoreScorerListAction(id, 4, body, this.state.searchText, sortBy, sortOrder)
         }
@@ -392,13 +392,13 @@ class LiveScorerList extends Component {
         if (searchText == null || searchText == "") {
         } else {
             const body = {
-                "paging": {
-                    "limit": 10,
-                    "offset": 0
+                paging: {
+                    limit: 10,
+                    offset: 0
                 },
-                "search": searchText,
-                "sortBy": sortBy,
-                "sortOrder": sortOrder
+                search: searchText,
+                sortBy,
+                sortOrder
             }
             this.props.liveScoreScorerListAction(id, 4, body, searchText, sortBy, sortOrder)
         }
@@ -417,7 +417,7 @@ class LiveScorerList extends Component {
                         columns={columns}
                         dataSource={dataSource}
                         pagination={false}
-                        loading={this.props.liveScoreScorerState.onLoad == true ? true : false}
+                        loading={this.props.liveScoreScorerState.onLoad}
                         rowKey={(record) => "scorerData" + record.id}
                     />
                 </div>
@@ -427,14 +427,14 @@ class LiveScorerList extends Component {
                         current={scorerListCurrentPage}
                         total={scorerListTotalCount}
                         onChange={(page) => this.handlePagination(page)}
-                    // defaultPageSize={10}
+                        // defaultPageSize={10}
                     />
                 </div>
             </div>
         )
     }
 
-    /////// render function 
+    /////// render function
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
@@ -443,7 +443,7 @@ class LiveScorerList extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"5"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="5" />
                 <Layout>
                     {this.headerView()}
                     <Content>

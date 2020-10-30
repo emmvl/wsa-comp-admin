@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Button, Table, Select, Form, Tooltip } from 'antd';
+import { Layout, Breadcrumb, Input, Button, Table, Select, Tooltip } from 'antd';
 import { NavLink } from 'react-router-dom';
 import './competition.css';
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -21,11 +21,12 @@ import {
     setOwn_competition,
     getOwn_competition,
     getOwn_competitionStatus,
-    setOwn_competitionStatus
+    setOwn_competitionStatus,
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
 } from "../../util/sessionStorage"
 // import PlayerCommentModal from "../../customComponents/playerCommentModal";
 // import moment from "moment"
-
+import { getCurrentYear } from 'util/permissions'
 
 
 const { Footer, Content } = Layout;
@@ -50,7 +51,7 @@ const columns = [
         title: 'Players',
         dataIndex: 'playerCount',
         key: 'playerCount',
-        render: playerCount => <Input disabled={true} className="input-inside-player-grades-table-for-grade" value={playerCount} />,
+        render: playerCount => <Input disabled className="input-inside-player-grades-table-for-grade" value={playerCount} />,
         sorter: (a, b) => tableSort(a, b, "playerCount")
     },
     {
@@ -60,7 +61,7 @@ const columns = [
         render: (minimumPlayers, record, index) => <Input
             className="input-inside-player-grades-table-for-grade"
             value={minimumPlayers}
-            disabled={this_Obj.state.competitionStatus == 1 ? true : false}
+            disabled={this_Obj.state.competitionStatus == 1}
             onChange={(e) => this_Obj.props.onchangeCompPartPlayerGradingSummaryData(e.target.value, index, "minimumPlayers")} />,
         width: '20%',
         sorter: (a, b) => tableSort(a, b, "minimumPlayers")
@@ -69,14 +70,14 @@ const columns = [
         title: '# Teams',
         dataIndex: 'noOfTeams',
         key: 'noOfTeams',
-        render: noOfTeams => <Input disabled={true} className="input-inside-player-grades-table-for-grade" value={noOfTeams} />,
+        render: noOfTeams => <Input disabled className="input-inside-player-grades-table-for-grade" value={noOfTeams} />,
         sorter: (a, b) => tableSort(a, b, "noOfTeams")
     },
     {
         title: 'Extra Players',
         dataIndex: 'extraPlayers',
         key: 'extraPlayers',
-        render: extraPlayers => <Input disabled={true} className="input-inside-player-grades-table-for-grade" value={extraPlayers} />,
+        render: extraPlayers => <Input disabled className="input-inside-player-grades-table-for-grade" value={extraPlayers} />,
         sorter: (a, b) => tableSort(a, b, "extraPlayers")
     },
     // {
@@ -98,7 +99,7 @@ class CompetitionPlayerGradeCalculate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             value: "playingMember",
             competition: "2019winters",
             division: "12years",
@@ -127,10 +128,20 @@ class CompetitionPlayerGradeCalculate extends Component {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
                     let statusRefId = competitionList[0].statusRefId
+                    let finalTypeRefId = competitionList[0].finalTypeRefId
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
-                    this.props.getCompPartPlayerGradingSummaryAction(this.state.yearRefId, competitionId)
+                    setOwn_CompetitionFinalRefId(finalTypeRefId)
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    this.props.getCompPartPlayerGradingSummaryAction(yearId, competitionId)
                     this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
+                }
+            }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
                 }
             }
         }
@@ -149,6 +160,7 @@ class CompetitionPlayerGradeCalculate extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
+        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -179,9 +191,9 @@ class CompetitionPlayerGradeCalculate extends Component {
     submitApiCall = () => {
         let playerGradingTableData = this.props.partPlayerGradingState.getCompPartPlayerGradingSummaryData
         let payload = {
-            "organisationId": 1,
-            "yearRefId": this.state.yearRefId,
-            "competitionUniqueKey": this.state.firstTimeCompId,
+            organisationId: 1,
+            yearRefId: this.state.yearRefId,
+            competitionUniqueKey: this.state.firstTimeCompId,
             "playerSummary": playerGradingTableData
         }
         this.props.saveCompPartPlayerGradingSummaryAction(payload)
@@ -192,15 +204,15 @@ class CompetitionPlayerGradeCalculate extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
-                            < Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGradingToggle}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGradingToggle}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -209,15 +221,22 @@ class CompetitionPlayerGradeCalculate extends Component {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
+        setOwn_CompetitionFinalRefId(undefined)
         this.props.getYearAndCompetitionOwnAction(this.props.appState.yearList, yearId, "own_competition")
         this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0 })
         // this.setDetailsFieldValue()
     }
 
     // on Competition change
-    onCompetitionChange(competitionId, statusRefId) {
+    onCompetitionChange(competitionId) {
+        let own_CompetitionArr = this.props.appState.own_CompetitionArr
+        let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
+        let statusRefId = own_CompetitionArr[statusIndex].statusRefId
+        let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
+
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
+        setOwn_CompetitionFinalRefId(finalTypeRefId)
         this.props.getCompPartPlayerGradingSummaryAction(this.state.yearRefId, competitionId)
         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
     }
@@ -226,54 +245,52 @@ class CompetitionPlayerGradeCalculate extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width" >
-                    <div className="row" >
-                        <div className="col-sm-3" >
-                            <div className="com-year-select-heading-view pb-3" >
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                <div className="fluid-width">
+                    <div className="row">
+                        <div className="col-sm-3">
+                            <div className="com-year-select-heading-view pb-3">
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
-                                    name={"yearRefId"}
+                                    name="yearRefId"
                                     style={{ width: 90 }}
                                     className="year-select reg-filter-select-year ml-2"
                                     onChange={yearRefId => this.onYearChange(yearRefId)}
                                     value={this.state.yearRefId}
                                 >
-                                    {this.props.appState.own_YearArr.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.own_YearArr.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm-6 pb-3" >
+                        <div className="col-sm-6 pb-3">
                             <div style={{
-                                width: "fit-content", display: "flex",
+                                width: "fit-content",
+                                display: "flex",
                                 flexDirection: "row",
-                                alignItems: "center", marginRight: 50
-                            }} >
-                                <span className='year-select-heading'>{AppConstants.competition}:</span>
+                                alignItems: "center",
+                                marginRight: 50
+                            }}>
+                                <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     // style={{ minWidth: 200 }}
-                                    name={"competition"}
+                                    name="competition"
                                     className="year-select reg-filter-select-competition ml-2"
                                     onChange={(competitionId, e) => this.onCompetitionChange(competitionId, e.key)}
                                     value={JSON.parse(JSON.stringify(this.state.firstTimeCompId))}
                                 >
-                                    {this.props.appState.own_CompetitionArr.map(item => {
-                                        return (
-                                            <Option key={item.statusRefId} value={item.competitionId}>
-                                                {item.competitionName}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.own_CompetitionArr.map(item => (
+                                        <Option key={'competition_' + item.competitionId} value={item.competitionId}>
+                                            {item.competitionName}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignItems: 'center' }} >
-                            <NavLink to="/competitionPlayerGrades" >
+                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignItems: 'center' }}>
+                            <NavLink to="/competitionPlayerGrades">
                                 <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
                             </NavLink>
                         </div>
@@ -307,7 +324,7 @@ class CompetitionPlayerGradeCalculate extends Component {
     //         comments: null
     //     });
     // };
-    // // model cancel for dissapear a model
+    // // model cancel for disappear a model
     // handleCancel = e => {
     //     this.setState({
     //         visible: false,
@@ -327,11 +344,12 @@ class CompetitionPlayerGradeCalculate extends Component {
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table"
+                    <Table
+                        className="home-dashboard-table"
                         columns={columns}
                         dataSource={playerGradingTableData}
                         pagination={false}
-                        loading={this.props.partPlayerGradingState.onLoad == true && true}
+                        loading={this.props.partPlayerGradingState.onLoad && true}
                     />
                 </div>
                 {/* <PlayerCommentModal
@@ -354,12 +372,12 @@ class CompetitionPlayerGradeCalculate extends Component {
 
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
-        let isPublished = this.state.competitionStatus == 1 ? true : false
+        let isPublished = this.state.competitionStatus == 1
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="comp-player-grades-footer-view">
-                    <div className="row" >
-                        <div className="col-sm" >
+                    <div className="row">
+                        <div className="col-sm">
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
 
@@ -367,7 +385,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                                     style={{ height: '100%' }}
                                     onMouseEnter={() =>
                                         this.setState({
-                                            tooltipVisibleDelete: isPublished ? true : false,
+                                            tooltipVisibleDelete: isPublished,
                                         })
                                     }
                                     onMouseLeave={() =>
@@ -377,7 +395,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                                     title={AppConstants.statusPublishHover}
                                 >
                                     <Button
-                                        disabled={this.state.competitionStatus == 1 ? true : false}
+                                        disabled={this.state.competitionStatus == 1}
                                         className="publish-button"
                                         style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }}
                                         type="primary"
@@ -396,9 +414,9 @@ class CompetitionPlayerGradeCalculate extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu={"competition"} compSelectedKey={"4"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="4" />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -410,10 +428,10 @@ class CompetitionPlayerGradeCalculate extends Component {
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getYearAndCompetitionOwnAction,
@@ -424,10 +442,11 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         partPlayerGradingState: state.CompetitionPartPlayerGradingState
     }
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(Form.create()(CompetitionPlayerGradeCalculate));
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionPlayerGradeCalculate);

@@ -7,6 +7,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
+import { getCurrentYear } from 'util/permissions'
 import { bindActionCreators } from 'redux';
 import {
     regMembershipListAction, regMembershipListDeleteAction,
@@ -115,7 +116,7 @@ const columns = [
                             }
                         >
                             <Menu.Item key="1">
-                                <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: record.membershipProductId } }} >
+                                <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: record.membershipProductId } }}>
                                     <span >Edit</span>
                                 </NavLink>
                             </Menu.Item>
@@ -137,7 +138,7 @@ const columns = [
                             }
                         >
                             <Menu.Item key="1">
-                                <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: record.membershipProductId } }} >
+                                <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: record.membershipProductId } }}>
                                     <span >View</span>
                                 </NavLink>
                             </Menu.Item>
@@ -154,47 +155,80 @@ class RegistrationMembershipList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             deleteLoading: false,
             offset: 0,
             sortBy: null,
-            sortOrder: null
-
+            sortOrder: null,
+            allyearload: false
         }
         this_Obj = this;
         this.props.getOnlyYearListAction(this.props.appState.yearList)
     }
 
     async componentDidMount() {
+        this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.setState({
+            allyearload: true
+        })
+        // const { regMembershipListAction } = this.props.registrationState
+        // routePermissionForOrgLevel(AppConstants.national, AppConstants.state)
+        // let page = 1
+        // let sortBy = this.state.sortBy
+        // let sortOrder = this.state.sortOrder
+        // if (regMembershipListAction) {
+        //     let offset = regMembershipListAction.offset
+        //     sortBy = regMembershipListAction.sortBy
+        //     sortOrder = regMembershipListAction.sortOrder
+        //     let yearRefId = regMembershipListAction.yearRefId
 
-        const { regMembershipListAction } = this.props.registrationState
-        routePermissionForOrgLevel(AppConstants.national, AppConstants.state)
-        let page = 1
-        let sortBy = this.state.sortBy
-        let sortOrder = this.state.sortOrder
-        if (regMembershipListAction) {
-            let offset = regMembershipListAction.offset
-            sortBy = regMembershipListAction.sortBy
-            sortOrder = regMembershipListAction.sortOrder
-            let yearRefId = regMembershipListAction.yearRefId
+        //     await this.setState({ offset, sortBy, sortOrder, yearRefId })
+        //     page = Math.floor(offset / 10) + 1;
 
-            await this.setState({ offset, sortBy, sortOrder, yearRefId })
-            page = Math.floor(offset / 10) + 1;
-
-            this.handleMembershipTableList(page, yearRefId)
-        } else {
-            this.handleMembershipTableList(1, this.state.yearRefId)
-        }
+        //     this.handleMembershipTableList(page, yearRefId)
+        // } else {
+        //     this.handleMembershipTableList(1, this.state.yearRefId)
+        // }
 
 
     }
 
-    componentDidUpdate(nextProps) {
-        if (this.props.registrationState.onLoad === false && this.state.deleteLoading == true) {
+    async componentDidUpdate(nextProps) {
+        if (this.props.registrationState.onLoad === false && this.state.deleteLoading) {
             this.setState({
                 deleteLoading: false,
             })
             this.handleMembershipTableList(1, this.state.yearRefId)
+        }
+        if (this.state.allyearload === true && this.props.appState.onLoad == false) {
+            if (this.props.appState.yearList.length > 0) {
+                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                const { regMembershipListAction } = this.props.registrationState
+                routePermissionForOrgLevel(AppConstants.national, AppConstants.state)
+                let page = 1
+                let sortBy = this.state.sortBy
+                let sortOrder = this.state.sortOrder
+                if (regMembershipListAction) {
+                    let offset = regMembershipListAction.offset
+                    sortBy = regMembershipListAction.sortBy
+                    sortOrder = regMembershipListAction.sortOrder
+                    let yearRefId = regMembershipListAction.yearRefId
+
+                    await this.setState({ offset, sortBy, sortOrder, yearRefId })
+                    page = Math.floor(offset / 10) + 1;
+
+                    this.handleMembershipTableList(page, yearRefId)
+                    this.setState({
+                        yearRefId: yearRefId, allyearload: false
+                    })
+                } else {
+                    this.handleMembershipTableList(1, mainYearRefId)
+                    this.setState({
+                        yearRefId: mainYearRefId, allyearload: false
+                    })
+                }
+
+            }
         }
     }
 
@@ -234,15 +268,15 @@ class RegistrationMembershipList extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.membershipFees}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -256,24 +290,22 @@ class RegistrationMembershipList extends Component {
     dropdownView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width" >
+                <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-2" >
-                            <div className="com-year-select-heading-view pb-3" >
-                                <span className='year-select-heading'>{AppConstants.year}:</span>
+                        <div className="col-sm-2">
+                            <div className="com-year-select-heading-view pb-3">
+                                <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     className="year-select reg-filter-select-year ml-2"
                                     style={{ width: 90 }}
                                     value={this.state.yearRefId}
                                     onChange={(e) => this.yearChange(e)}
                                 >
-                                    {this.props.appState.yearList.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
+                                    {this.props.appState.yearList.map(item => (
+                                        <Option key={'year_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
                                 </Select>
                             </div>
                         </div>
@@ -286,7 +318,7 @@ class RegistrationMembershipList extends Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -302,7 +334,7 @@ class RegistrationMembershipList extends Component {
                         columns={columns}
                         dataSource={registrationState.regMembershipFeeListData}
                         pagination={false}
-                        loading={this.props.registrationState.onLoad == true && true}
+                        loading={this.props.registrationState.onLoad && true}
                         rowKey={(record, index) => record.membershipProductId + index}
                     />
                 </div>
@@ -320,9 +352,9 @@ class RegistrationMembershipList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"6"} />
+                <InnerHorizontalMenu menu="registration" regSelectedKey="6" />
                 <Layout>
                     {this.headerView()}
                     <Content>

@@ -1,113 +1,84 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Button, Form, message } from "antd";
 
-import AppConstants from "../../themes/appConstants";
-import InputWithHead from "../../customComponents/InputWithHead";
-import { userPasswordUpdateAction } from "../../store/actions/userAction/userAction";
-import Loader from "../../customComponents/loader";
-import ValidationConstants from "../../themes/validationConstant";
+import AppConstants from "themes/appConstants";
+import ValidationConstants from "themes/validationConstant";
+import { userPasswordUpdateAction } from "store/actions/userAction/userAction";
+import InputWithHead from "customComponents/InputWithHead";
+import Loader from "customComponents/loader";
 
 function Password(props) {
-  const { getFieldDecorator } = props.form
-  const { userState, form, userPasswordUpdateAction } = props;
+  const { userState, userPasswordUpdateAction } = props;
 
-  const [security, setSecurity] = useState({});
+  const [form] = Form.useForm();
 
-  const onChangeField = useCallback((e) => {
-    setSecurity({
-      ...security,
-      [e.currentTarget.name]: e.currentTarget.value,
+  const handleSubmit = useCallback((values) => {
+    if (values[AppConstants.newPassword] !== values[AppConstants.confirmPassword]) {
+      message.error('Password does not match');
+      return;
+    }
+
+    userPasswordUpdateAction({
+      password: values[AppConstants.password],
+      newPassword: values[AppConstants.newPassword],
     });
-  }, [security, setSecurity]);
-
-  const handleSubmit = useCallback((e) => {
-    e.preventDefault();
-
-    form.validateFields((err) => {
-      if (!err) {
-        if (security.newPassword !== security.confirmPassword) {
-          message.error('Password does not match');
-          return;
-        }
-
-        userPasswordUpdateAction({
-          password: security.password,
-          newPassword: security.newPassword,
-        });
-      }
-    });
-  }, [security, form, userPasswordUpdateAction]);
+  }, [userPasswordUpdateAction]);
 
   return (
     <div className="inside-table-view">
-      <Form colon={false} onSubmit={handleSubmit}>
+      <Form form={form} colon={false} onFinish={handleSubmit}>
         <div className="fluid-width">
-          <Form.Item>
-            {getFieldDecorator(AppConstants.password, {
-              rules: [
-                {
-                  min: 8,
-                  message: ValidationConstants.passwordVerification
-                }
-              ]
-            })(
-              <InputWithHead
-                required="required-field"
-                heading={AppConstants.currentPassword}
-                type="password"
-                name="password"
-                min={8}
-                placeholder={AppConstants.enterCurrentPassword}
-                value={security.password}
-                onChange={onChangeField}
-              />
-            )}
+          <Form.Item
+            name={AppConstants.password}
+            rules={[{
+              min: 8,
+              message: ValidationConstants.passwordVerification
+            }]}
+          >
+            <InputWithHead
+              required="required-field"
+              heading={AppConstants.currentPassword}
+              type="password"
+              name="password"
+              min={8}
+              placeholder={AppConstants.enterCurrentPassword}
+            />
           </Form.Item>
 
-          <Form.Item>
-            {getFieldDecorator(AppConstants.newPassword, {
-              rules: [
-                {
-                  min: 8,
-                  message: ValidationConstants.passwordVerification
-                }
-              ]
-            })(
-              <InputWithHead
-                required="required-field"
-                heading={AppConstants.newPassword}
-                type="password"
-                name="newPassword"
-                min={8}
-                placeholder={AppConstants.enterNewPassword}
-                value={security.newPassword}
-                onChange={onChangeField}
-              />
-            )}
+          <Form.Item
+            name={AppConstants.newPassword}
+            rules={[{
+              min: 8,
+              message: ValidationConstants.passwordVerification
+            }]}
+          >
+            <InputWithHead
+              required="required-field"
+              heading={AppConstants.newPassword}
+              type="password"
+              name="newPassword"
+              min={8}
+              placeholder={AppConstants.enterNewPassword}
+            />
           </Form.Item>
 
-          <Form.Item>
-            {getFieldDecorator(AppConstants.confirmPassword, {
-              rules: [
-                {
-                  min: 8,
-                  message: ValidationConstants.passwordVerification
-                }
-              ]
-            })(
-              <InputWithHead
-                required="required-field"
-                heading={AppConstants.confirmPassword}
-                type="password"
-                name="confirmPassword"
-                min={8}
-                placeholder={AppConstants.enterConfirmPassword}
-                value={security.confirmPassword}
-                onChange={onChangeField}
-              />
-            )}
+          <Form.Item
+            name={AppConstants.confirmPassword}
+            rules={[{
+              min: 8,
+              message: ValidationConstants.passwordVerification
+            }]}
+          >
+            <InputWithHead
+              required="required-field"
+              heading={AppConstants.confirmPassword}
+              type="password"
+              name="confirmPassword"
+              min={8}
+              placeholder={AppConstants.enterConfirmPassword}
+            />
           </Form.Item>
 
           <div className="d-flex justify-content-end mt-4">
@@ -115,7 +86,6 @@ function Password(props) {
               className="publish-button"
               type="primary"
               htmlType="submit"
-              style={{ height: 48, width: 92.5 }}
             >
               {AppConstants.save}
             </Button>
@@ -141,4 +111,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Form.create()(Password));
+export default connect(mapStateToProps, mapDispatchToProps)(Password);

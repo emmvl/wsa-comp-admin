@@ -5,7 +5,7 @@ import ApiConstants from "../../../themes/apiConstants";
 function getLadderFormatAction(payload) {
     const action = {
         type: ApiConstants.API_GET_LADDER_FORMAT_LOAD,
-        payload: payload
+        payload
     };
     return action;
 }
@@ -14,7 +14,7 @@ function getLadderFormatAction(payload) {
 function saveLadderFormatAction(payload) {
     const action = {
         type: ApiConstants.API_SAVE_LADDER_FORMAT_LOAD,
-        payload: payload
+        payload
     };
     return action;
 }
@@ -23,8 +23,8 @@ function updateLadderFormatAction(data, key, index) {
     const action = {
       type: ApiConstants.UPDATE_LADDER_FORMAT,
       updatedData: data,
-      key: key,
-      index: index
+      key,
+      index
     };
     return action;
   }

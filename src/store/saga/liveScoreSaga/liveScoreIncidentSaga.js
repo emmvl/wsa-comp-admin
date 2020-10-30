@@ -71,6 +71,7 @@ export function* liveScoreAddEditIncidentSaga(action) {
                     type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS,
                     result: mediaResult.result.data,
                     status: mediaResult.status,
+                    umpireKey: action.data.umpireKey
                 });
                 history.push('/liveScoreIncidentList')
                 message.success('Add Incident - Added Successfully')

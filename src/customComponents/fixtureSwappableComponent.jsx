@@ -15,7 +15,6 @@ class FixtureSwappable extends Component {
 
     drag(ev, customFunc = null) {
         ev.dataTransfer.setData('src', ev.target.id);
-        // console.log(ev.target.parentNode, 'TARGET DRAGSTART');
 
         this.setState({
             initialParentNode: ev.target.parentNode
@@ -23,7 +22,6 @@ class FixtureSwappable extends Component {
     }
 
     dragEnd(ev, customFunc = null) {
-        // console.log(ev.target.parentNode, 'TARGET DRAGEND');
         if (customFunc && ev.target.parentNode != this.state.initialParentNode) {
             this.props.customFunc();
         }

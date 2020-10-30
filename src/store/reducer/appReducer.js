@@ -1,9 +1,8 @@
 import ApiConstants from "../../themes/apiConstants";
-import history from "../../util/history";
 import { getRegistrationSetting } from "../objectModel/getRegSettingObject";
-import { getUserId, getOrganisationData } from "../../util/sessionStorage"
+// import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import AppConstants from "../../themes/appConstants";
-
+import {reverseArray} from 'util/permissions'
 
 const initialState = {
   onLoad: false,
@@ -48,15 +47,14 @@ const initialState = {
   membershipProductFeeMsg: [AppConstants.firstComRegOnlyMsg, AppConstants.allCompRegMsg],
   allYearList: [],
   allCompetitionTypeList: [],
-
 };
+
 function arraymove(arr, fromIndex, toIndex) {
   var element = arr[fromIndex];
   arr.splice(fromIndex, 1);
   arr.splice(toIndex, 0, element);
   return arr
 }
-
 
 function sortfunction(a, b) {
   const bandA = a.competitionName;
@@ -79,7 +77,7 @@ function filteredSettingArray(result) {
   for (let i in result) {
     // if (result[i].id == 13 || result[i].id == 14 || result[i].id == 15 || result[i].id == 16) {
     //   demographic.push(result[i])
-    // } 
+    // }
     if (result[i].id >= 7 && result[i].id <= 14) {
       netballQuestions.push(result[i])
     }
@@ -89,7 +87,6 @@ function filteredSettingArray(result) {
     else if (result[i].id >= 1 && result[i].id <= 6) {
       advanceSettings.push(result[i])
     }
-
   }
   netballQuestions = arraymove(netballQuestions, 2, 1)
   otherQuestions = arraymove(otherQuestions, 3, 2)
@@ -99,7 +96,6 @@ function filteredSettingArray(result) {
     otherQuestions,
     advanceSettings
   }
-
 }
 
 function getCompetitionFormatTypeWithHelpMsg(data, helpMsg) {
@@ -122,8 +118,6 @@ function getMembershipProductFeesTypesWithHelpMsg(data, helpMsg) {
   }
   return data;
 }
-
-
 
 function appState(state = initialState, action) {
   switch (action.type) {
@@ -150,10 +144,11 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_YEAR_LIST_SUCCESS:
+      let yearListSorted = action.yearList ? reverseArray(action.yearList):[]
       return {
         ...state,
         onLoad: false,
-        yearList: action.result,
+        yearList: yearListSorted,
         competitionTypeList: action.competetionListResult,
         status: action.status
       };
@@ -164,10 +159,11 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_ONLY_YEAR_LIST_SUCCESS:
+      let yearSorted = action.result ? reverseArray(action.result):[]
       return {
         ...state,
         onLoad: false,
-        yearList: action.result,
+        yearList: yearSorted,
         status: action.status
       };
 
@@ -235,7 +231,7 @@ function appState(state = initialState, action) {
     //     status: action.status
     //   };
 
-    ////get commom reference discount type
+    ////get common reference discount type
     case ApiConstants.API_COMMON_DISCOUNT_TYPE_LOAD:
       return { ...state, onLoad: true };
 
@@ -300,9 +296,7 @@ function appState(state = initialState, action) {
       const invitees = getRegistrationSetting(action.inviteesResult)
       const regInviteesWithHelpMsg = getRegInviteesWithHelpMsg(invitees, state.regInviteesMsg)
       let notApplicableIndex = invitees.findIndex(
-        x =>
-          x.name ==
-          "not_applicable"
+        x => x.name === "not_applicable"
       );
       invitees.splice(notApplicableIndex, 1)
       const casualPayment = getRegistrationSetting(action.paymentOptionResult)
@@ -362,7 +356,7 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_COMPETITION_SUCCESS:
-      let yearResult = JSON.parse(JSON.stringify(action.yearList))
+      let yearResult = action.result ? reverseArray(action.result):[]
       let competitionResult = JSON.parse(JSON.stringify(action.competetionListResult))
       let yearobject = {
         description: "All",
@@ -377,7 +371,7 @@ function appState(state = initialState, action) {
         id: 0,
       }
       competitionResult.unshift(competitionobject)
-      if (action.data == "new") {
+      if (action.data === "new") {
         yearResult.unshift(yearobject)
       }
 
@@ -407,11 +401,12 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_Participate_COMPETITION_SUCCESS:
+      let participate_yearListSorted = action.yearList?reverseArray(action.yearList):[]
       return {
         ...state,
         onLoad: false,
         participate_CompetitionArr: action.competetionListResult,
-        participate_YearArr: action.yearList,
+        participate_YearArr: participate_yearListSorted,
         status: action.status,
       };
 
@@ -420,13 +415,14 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_OWN_COMPETITION_SUCCESS:
-      console.log(action.competetionListResult)
+      let own_yearListSorted = action.yearList?reverseArray(action.yearList):[]
+      console.log(own_yearListSorted)
       return {
         ...state,
         onLoad: false,
         own_CompetitionArr: action.competetionListResult.published,
         all_own_CompetitionArr: action.competetionListResult.all,
-        own_YearArr: action.yearList,
+        own_YearArr:own_yearListSorted,
         status: action.status,
       };
 
@@ -469,7 +465,7 @@ function appState(state = initialState, action) {
     //         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0
     //         // let userId = getUserId();
     //         let isCreatorEdit = creatorId == organisationUniqueKey ? false : true;
-    //         if (isCreatorEdit == true) {
+    //         if (isCreatorEdit) {
     //           state.own_CompetitionArr.push(manualObj2)
     //           state.own_CompetitionArr.sort(sortfunction)
     //         }
@@ -482,11 +478,10 @@ function appState(state = initialState, action) {
 
 
     case ApiConstants.CLEAR_OWN_COMPETITION_DATA:
-
-      if (action.key == "participate_CompetitionArr") {
+      if (action.key === "participate_CompetitionArr") {
         state.participate_CompetitionArr = []
       }
-      else if (action.key == "all") {
+      else if (action.key === "all") {
         state.participate_CompetitionArr = []
         state.own_CompetitionArr = []
         state.all_own_CompetitionArr = []
@@ -546,7 +541,7 @@ function appState(state = initialState, action) {
         onLoad: false,
         status: action.status
       };
-    //update status ref id 
+    //update status ref id
     case ApiConstants.API_DRAW_PUBLISH_SUCCESS:
       let publishCompetitionid = action.competitionId
       let publishedCompIndex = state.own_CompetitionArr.findIndex((x) => x.competitionId == publishCompetitionid)
@@ -556,7 +551,6 @@ function appState(state = initialState, action) {
         onLoad: false,
         status: action.status
       }
-
 
     ///clear reducer data
     case ApiConstants.API_COMPETITION_STATUS_UPDATE_SUCCESS:
@@ -568,7 +562,6 @@ function appState(state = initialState, action) {
         ...state
 
       }
-
 
     default:
       return state;

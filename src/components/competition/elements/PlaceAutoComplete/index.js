@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from 'use-places-autocomplete';
 import useOnclickOutside from 'react-cool-onclickoutside';
-import {Input} from 'antd';
+import { Input } from 'antd';
 
 import './style.css';
 import AppConstants from '../../../../themes/appConstants';
@@ -38,7 +38,7 @@ const mapAddressInfo = (addressComponents) => {
 };
 
 const PlacesAutocomplete = ({
-  defaultValue, heading, error, required, onSetData, ...otherProps
+  defaultValue, heading, error, required, onSetData, otherProps
 }) => {
   const [defaultAddress, setDefaultAddress] = useState(defaultValue);
   useEffect(() => {
@@ -48,12 +48,12 @@ const PlacesAutocomplete = ({
   const {
     ready,
     value,
-    suggestions: {status, data},
+    suggestions: { status, data },
     setValue,
     clearSuggestions,
   } = usePlacesAutocomplete({
     requestOptions: {
-      componentRestrictions: {country: ['au']},
+      componentRestrictions: { country: ['au'] },
     },
     debounce: 300,
   });
@@ -67,18 +67,18 @@ const PlacesAutocomplete = ({
     setDefaultAddress(null);
   };
 
-  const handleSelect = ({description}) => () => {
+  const handleSelect = ({ description }) => () => {
     setValue(description, false);
     clearSuggestions();
     let mapData = null;
 
     // Get latitude and longitude via utility functions
-    getGeocode({address: description})
+    getGeocode({ address: description })
       .then((results) => {
         mapData = mapAddressInfo(results[0].address_components);
         return getLatLng(results[0])
       })
-      .then(({lat, lng}) => {
+      .then(({ lat, lng }) => {
 
         const result = mapData ? {
           ...mapData,
@@ -96,7 +96,7 @@ const PlacesAutocomplete = ({
   const renderSuggestions = () => data.map((suggestion) => {
     const {
       place_id,
-      structured_formatting: {main_text: mainText, secondary_text: secondaryText},
+      structured_formatting: { main_text: mainText, secondary_text: secondaryText },
     } = suggestion;
 
     return (
@@ -111,7 +111,7 @@ const PlacesAutocomplete = ({
   return (
     <div className="place-auto-complete-container" ref={ref}>
       {heading && (
-        <div style={{display: 'flex', alignItems: 'center'}}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <span className={`input-heading ${required ? 'required-field' : ''}`}>{heading}</span>
         </div>
       )}
@@ -125,7 +125,7 @@ const PlacesAutocomplete = ({
         {...otherProps}
       />
       {status !== 'OK' && error && (
-        <div style={{display: 'flex', alignItems: 'center'}}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
           <span className="place-auto-complete-input-error-message">{error}</span>
         </div>
       )}

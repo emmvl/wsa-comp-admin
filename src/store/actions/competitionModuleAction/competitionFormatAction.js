@@ -5,7 +5,7 @@ import ApiConstants from "../../../themes/apiConstants";
 function getCompetitionFormatAction(payload) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_FORMAT_LOAD,
-        payload: payload
+        payload
     };
     return action;
 }
@@ -14,7 +14,7 @@ function getCompetitionFormatAction(payload) {
 function saveCompetitionFormatAction(payload) {
     const action = {
         type: ApiConstants.API_SAVE_COMPETITION_FORMAT_LOAD,
-        payload: payload
+        payload
     };
     return action;
 }
@@ -23,7 +23,7 @@ function updateCompetitionFormatAction(data, key) {
     const action = {
       type: ApiConstants.UPDATE_COMPETITION_FORMAT,
       updatedData: data,
-      key: key
+      key
     };
     return action;
   }

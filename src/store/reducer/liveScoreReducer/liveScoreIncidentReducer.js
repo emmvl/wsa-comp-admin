@@ -49,8 +49,8 @@ function getTeamObj(teamSelectId, teamArr) {
         for (let j in teamSelectId) {
             if (teamSelectId[j] == teamArr[i].id) {
                 obj = {
-                    "name": teamArr[i].name,
-                    "id": teamArr[i].id
+                    name: teamArr[i].name,
+                    id: teamArr[i].id
                 }
                 teamObj.push(obj)
                 break;
@@ -100,7 +100,7 @@ function removeMediaId(mediaArr, mediaType) {
     if (index > -1) {
         ids = mediaArr[index].id
     }
-    return { ids: ids, index: index }
+    return { ids: ids, index }
 }
 
 function getMediaUrl(mediaArray, mediaType) {
@@ -164,10 +164,10 @@ function liveScoreIncidentState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_UPDATE_INCIDENT_DATA:
 
-            if (action.key == "teamId") {
+            if (action.key === "teamId") {
                 state.incidentData['teamId'] = action.data
 
-            } else if (action.key == "playerId") {
+            } else if (action.key === "playerId") {
                 let playerObj = getPlayerObj(action.data, state.playerResult)
                 state.incidentData['player'] = playerObj
                 state.incidentData['playerIds'] = action.data
@@ -270,12 +270,14 @@ function liveScoreIncidentState(state = initialState, action) {
             return { ...state, loading: true }
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS:
+            console.log(action, 'API_LIVE_SCORE_ADD_EDIT_INCIDENT_SUCCESS')
             return {
                 ...state,
                 loading: false,
                 success: true,
                 successResult: action.result,
-                status: action.status
+                status: action.status,
+                umpireKey: action.umpireKey
             }
 
         case ApiConstants.API_LIVE_SCORE_INCIDENT_TYPE_LOAD:

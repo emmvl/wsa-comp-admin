@@ -899,7 +899,7 @@ function* getCoachSaga(action) {
 // Get the umpire Activity Data
 function* getUmpireActivityListSaga(action) {
   try {
-    const result = yield call(livescoreAxiosApi.getUmpireActivityList, action.payload, action.roleId, action.userId);
+    const result = yield call(livescoreAxiosApi.getUmpireActivityList, action.payload, action.roleId, action.userId, action.sortBy, action.sortOrder);
     if (result.status === 1) {
       yield put({
         type: ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_SUCCESS,

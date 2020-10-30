@@ -1,19 +1,26 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Button, Table, Input, Icon, Select, Menu, Pagination, Modal } from "antd";
-import "./product.scss";
 import { NavLink } from "react-router-dom";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import DashboardLayout from "../../pages/dashboardLayout";
-import AppConstants from "../../themes/appConstants";
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { regCompetitionListAction, clearCompReducerDataAction, regCompetitionListDeleteAction } from "../../store/actions/registrationAction/competitionFeeAction";
-import AppImages from "../../themes/appImages";
-import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "../../store/actions/appAction";
-import { checkUserRole } from "../../util/permissions";
-import { currencyFormat } from "../../util/currencyFormat";
-import { stringTONumber } from "../../util/helpers"
-import Tooltip from 'react-png-tooltip'
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { Layout, Breadcrumb, Button, Table, Input, Select, Menu, Pagination, Modal } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import Tooltip from "react-png-tooltip";
+
+import AppConstants from "themes/appConstants";
+import AppImages from "themes/appImages";
+import { checkUserRole, getCurrentYear } from "util/permissions";
+import { currencyFormat } from "util/currencyFormat";
+import { stringTONumber } from "util/helpers";
+import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "store/actions/appAction";
+import {
+    regCompetitionListAction,
+    clearCompReducerDataAction,
+    regCompetitionListDeleteAction,
+} from "store/actions/registrationAction/competitionFeeAction";
+import InnerHorizontalMenu from "pages/innerHorizontalMenu";
+import DashboardLayout from "pages/dashboardLayout";
+
+import "./product.scss";
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -21,82 +28,82 @@ const { Option } = Select;
 const { SubMenu } = Menu;
 let this_Obj = null;
 
-
-/////function to sort table column
 function tableSort(key) {
     let sortBy = key;
     let sortOrder = null;
     if (this_Obj.state.sortBy !== key) {
-        sortOrder = 'ASC';
-    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
-        sortOrder = 'DESC';
-    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+        sortOrder = "ASC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "ASC") {
+        sortOrder = "DESC";
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "DESC") {
         sortBy = sortOrder = null;
     }
+
     this_Obj.setState({ sortBy, sortOrder });
+
     this_Obj.props.regCompetitionListAction(this_Obj.state.offset, this_Obj.state.yearRefId, this_Obj.state.searchText, sortBy, sortOrder);
 }
 
 function totalSeasonalFees(seasonalFees1, record) {
-    let affiliateFeeStatus = false;
+    let affiliateFeeStatus;
     if (record.childSeasonalFee == null && record.childSeasonalGst == null && record.parentCreator === false) {
         affiliateFeeStatus = true;  ////need to verify to change
     } else {
         affiliateFeeStatus = false;
     }
 
-    let childSeasonalFee = stringTONumber(record.childSeasonalFee);
-    let childSeasonalGst = stringTONumber(record.childSeasonalGst);
-    let mSeasonalfee = stringTONumber(record.mSeasonalfee);
-    let mSeasonalgst = stringTONumber(record.mSeasonalgst);
-    let seasonalGST = stringTONumber(record.seasonalGST);
-    let seasonalFees = stringTONumber(record.seasonalFees);
-    let parentFees = (seasonalFees + seasonalGST + mSeasonalfee + mSeasonalgst);
-    let childFees = parentFees + (childSeasonalFee + childSeasonalGst)
-    let fee = record.parentCreator ? parentFees : childFees
+    const childSeasonalFee = stringTONumber(record.childSeasonalFee);
+    const childSeasonalGst = stringTONumber(record.childSeasonalGst);
+    const mSeasonalfee = stringTONumber(record.mSeasonalfee);
+    const mSeasonalgst = stringTONumber(record.mSeasonalgst);
+    const seasonalGST = stringTONumber(record.seasonalGST);
+    const seasonalFees = stringTONumber(record.seasonalFees);
+    const parentFees = (seasonalFees + seasonalGST + mSeasonalfee + mSeasonalgst);
+    const childFees = parentFees + (childSeasonalFee + childSeasonalGst);
+    const fee = record.parentCreator ? parentFees : childFees;
+
     return (
-        affiliateFeeStatus ?
-            <span>{record.feeOrgId == null ? "N/A" : (record.seasonalFees == null && record.seasonalGST == null) ? "N/A" : "Affiliate fee not set!"}</span>
-            :
+        affiliateFeeStatus ? (
             <span>
-                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+                {record.feeOrgId == null ? "N/A" : (record.seasonalFees == null && record.seasonalGST == null) ? "N/A" : "Affiliate fee not set!"}
             </span>
-        // <span>
-        //     {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "" : currencyFormat(fee)}
-        // </span>
-    )
+        ) : (
+                <span>
+                    {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+                </span>
+            )
+    );
 }
 
 function totalCasualFees(casualFees1, record) {
-    let affiliateFeeStatus = false;
+    let affiliateFeeStatus;
     if (record.childCasualFee == null && record.childCasualGst == null && record.parentCreator === false) {
         affiliateFeeStatus = true;/////need to verify to change
     } else {
         affiliateFeeStatus = false;
     }
-    let childCasualFee = stringTONumber(record.childCasualFee);
-    let childCasualGst = stringTONumber(record.childCasualGst);
-    let mCasualfee = stringTONumber(record.mCasualfee);
-    let mCasualgst = stringTONumber(record.mCasualgst);
-    let casualGST = stringTONumber(record.casualGST);
-    let casualFees = stringTONumber(record.casualFees);
 
-    let parentFees = (casualFees + casualGST + mCasualfee + mCasualgst);
-    let childFees = parentFees + (childCasualFee + childCasualGst)
-
-    let fee = record.parentCreator ? parentFees : childFees
+    const childCasualFee = stringTONumber(record.childCasualFee);
+    const childCasualGst = stringTONumber(record.childCasualGst);
+    const mCasualfee = stringTONumber(record.mCasualfee);
+    const mCasualgst = stringTONumber(record.mCasualgst);
+    const casualGST = stringTONumber(record.casualGST);
+    const casualFees = stringTONumber(record.casualFees);
+    const parentFees = (casualFees + casualGST + mCasualfee + mCasualgst);
+    const childFees = parentFees + (childCasualFee + childCasualGst);
+    const fee = record.parentCreator ? parentFees : childFees;
 
     return (
-        affiliateFeeStatus ?
-            <span>{record.feeOrgId == null ? "N/A" : (record.casualFees == null && record.casualGST == null) ? "N/A" : "Affiliate fee not set!"}</span>
-            :
+        affiliateFeeStatus ? (
             <span>
-                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+                {record.feeOrgId == null ? "N/A" : (record.casualFees == null && record.casualGST == null) ? "N/A" : "Affiliate fee not set!"}
             </span>
-        // <span>
-        //     {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "" : currencyFormat(fee)}
-        // </span>
-    )
+        ) : (
+                <span>
+                    {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+                </span>
+            )
+    );
 }
 
 const listeners = (key) => ({
@@ -120,43 +127,40 @@ const columns = [
         render: organiser => (
             <span>{organiser === null || organiser === "" ? "N/A" : organiser}</span>
         ),
-
     },
     {
         title: "Affiliate",
         dataIndex: "affiliateName",
         key: "affiliateName",
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("affiliate"),
+        onHeaderCell: () => listeners("affiliate"),
         render: affiliateName => (
             <span>{affiliateName === null || affiliateName === "" ? "N/A" : affiliateName}</span>
         ),
-
     },
     {
         title: "Membership Product",
         dataIndex: "membershipProductName",
         key: "membershipProductName",
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("membershipProduct"),
+        onHeaderCell: () => listeners("membershipProduct"),
     },
     {
         title: "Membership Type",
         dataIndex: "membershipProductTypeName",
         key: "membershipProductTypeName",
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("membershipType"),
+        onHeaderCell: () => listeners("membershipType"),
     },
     {
         title: "Registration Divisions",
         dataIndex: "divisionName",
         key: "divisionName",
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("registrationDivisions"),
+        onHeaderCell: () => listeners("registrationDivisions"),
         render: divisionName => (
             <span>{divisionName === null || divisionName === "" ? "N/A" : divisionName}</span>
         ),
-
     },
     {
         title: "Total Fee - Seasonal (inc GST)",
@@ -164,7 +168,7 @@ const columns = [
         key: "seasonalFees",
         render: (seasonalFees, record) => totalSeasonalFees(seasonalFees, record),
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("totalSeasonalFee"),
+        onHeaderCell: () => listeners("totalSeasonalFee"),
     },
     {
         title: "Total Fee - Single Game (inc GST)",
@@ -173,19 +177,22 @@ const columns = [
         render: (casualFees, record) => totalCasualFees(casualFees, record),
         sorter: true,
         filterDropdown: true,
-        filterIcon: () => {
-            return (
-
-                <div style={{ width: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
-                    <Tooltip placement="bottom" background='#ff8237'>
-                        <span>{AppConstants.totalFeeMsg}</span>
-                    </Tooltip>
-                </div>
-
-
-            );
-        },
-        onHeaderCell: ({ dataIndex }) => listeners("totalCasualFee"),
+        filterIcon: () => (
+            <div
+                style={{
+                    width: 20,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginRight: 10
+                }}
+            >
+                <Tooltip placement="bottom" background="#ff8237">
+                    <span>{AppConstants.totalFeeMsg}</span>
+                </Tooltip>
+            </div>
+        ),
+        onHeaderCell: () => listeners("totalCasualFee"),
     },
     {
         title: "Action",
@@ -212,16 +219,24 @@ const columns = [
                     }
                 >
                     <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/registrationCompetitionFee`, state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId } }} >
+                        <NavLink
+                            to={{
+                                pathname: `/registrationCompetitionFee`,
+                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId }
+                            }}
+                        >
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
-                    <Menu.Item key="2" disabled={record.statusRefId == 2 ? true : false} onClick={() => this_Obj.showDeleteConfirm(record.competitionUniqueKey)}>
+                    <Menu.Item
+                        key="2"
+                        disabled={record.statusRefId === 2}
+                        onClick={() => this_Obj.showDeleteConfirm(record.competitionUniqueKey)}
+                    >
                         <span>Delete</span>
                     </Menu.Item>
                 </SubMenu>
             </Menu>
-            //  : null
         )
     }
 ];
@@ -229,207 +244,210 @@ const columns = [
 class RegistrationCompetitionList extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             deleteLoading: false,
             userRole: "",
             searchText: '',
             offset: 0,
             sortBy: null,
-            sortOrder: null
-
+            sortOrder: null,
+            allyearload: false
         };
+
         this_Obj = this;
-        this.props.CLEAR_OWN_COMPETITION_DATA()
-        this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.props.CLEAR_OWN_COMPETITION_DATA();
+
     }
 
-
     async componentDidMount() {
-
-        const { competitionListAction } = this.props.competitionFeesState
-
+        this.props.getOnlyYearListAction(this.props.appState.yearList);
+        this.setState({
+            allyearload: true
+        })
         checkUserRole().then((value) => (
             this.setState({ userRole: value })
         ))
-        let page = 1
-        let sortBy = this.state.sortBy
-        let sortOrder = this.state.sortOrder
-        if (competitionListAction) {
-            let offset = competitionListAction.offset
-            sortBy = competitionListAction.sortBy
-            sortOrder = competitionListAction.sortOrder
-            let yearRefId = competitionListAction.yearRefId
-            let searchText = competitionListAction.searchText
-
-            await this.setState({ offset, sortBy, sortOrder, yearRefId, searchText })
-            page = Math.floor(offset / 10) + 1;
-
-            this.handleCompetitionTableList(page, yearRefId, searchText)
-        } else {
-
-            this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText)
-        }
     }
 
     componentDidUpdate(nextProps) {
+        const { competitionListAction } = this.props.competitionFeesState
         if (this.props.competitionFeesState.onLoad === false && this.state.deleteLoading === true) {
             this.setState({
                 deleteLoading: false,
-            })
-            this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText)
+            });
+            this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText);
+        }
+        if (this.state.allyearload === true && this.props.appState.onLoad == false) {
+            if (this.props.appState.yearList.length > 0) {
+                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                let page = 1
+                let sortBy = this.state.sortBy
+                let sortOrder = this.state.sortOrder
+                if (competitionListAction) {
+                    let offset = competitionListAction.offset
+                    sortBy = competitionListAction.sortBy
+                    sortOrder = competitionListAction.sortOrder
+                    let yearRefId = competitionListAction.yearRefId
+                    let searchText = competitionListAction.searchText
+
+                    this.setState({ offset, sortBy, sortOrder, yearRefId, searchText })
+                    page = Math.floor(offset / 10) + 1;
+
+                    this.handleCompetitionTableList(page, yearRefId, searchText)
+                    this.setState({ yearRefId: yearRefId, allyearload: false })
+                } else {
+                    this.handleCompetitionTableList(1, mainYearRefId, this.state.searchText)
+                    this.setState({ yearRefId: mainYearRefId, allyearload: false })
+                }
+
+            }
         }
     }
 
     deleteProduct = (competitionId) => {
-        this.props.regCompetitionListDeleteAction(competitionId)
-        this.setState({ deleteLoading: true })
-    }
-
-    showDeleteConfirm = (competitionId) => {
-        let this_ = this
-        confirm({
-            title: 'Are you sure delete this product?',
-            // content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'danger',
-            cancelText: 'No',
-            onOk() {
-                this_.deleteProduct(competitionId)
-            },
-            onCancel() {
-                console.log('Cancel');
-            },
-        });
-    }
-
-    ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <div className="comp-player-grades-header-view-design">
-                <div className="row">
-                    <div
-                        className="col-sm"
-                        style={{ display: "flex", alignContent: "center" }}
-                    >
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">
-                                Competition Fees
-              </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
-                </div>
-            </div>
-        );
+        this.props.regCompetitionListDeleteAction(competitionId);
+        this.setState({ deleteLoading: true });
     };
 
-    //////year change onchange
+    showDeleteConfirm = (competitionId) => {
+        let this_ = this;
+        confirm({
+            title: "Are you sure delete this product?",
+            // content: "Some descriptions",
+            okText: "Yes",
+            okType: "danger",
+            cancelText: "No",
+            onOk() {
+                this_.deleteProduct(competitionId);
+            },
+            onCancel() {
+                // console.log("Cancel");
+            },
+        });
+    };
+
+    headerView = () => (
+        <div className="comp-player-grades-header-view-design">
+            <div className="row">
+                <div
+                    className="col-sm"
+                    style={{ display: "flex", alignContent: "center" }}
+                >
+                    <Breadcrumb separator=" > ">
+                        <Breadcrumb.Item className="breadcrumb-add">
+                            Competition Fees
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                </div>
+            </div>
+        </div>
+    );
+
     yearChange = (yearRefId) => {
-        this.setState({ yearRefId })
-        this.handleCompetitionTableList(1, yearRefId, this.state.searchText)
-    }
-    // on change search text
+        this.setState({ yearRefId });
+        this.handleCompetitionTableList(1, yearRefId, this.state.searchText);
+    };
+
     onChangeSearchText = (e) => {
-        this.setState({ searchText: e.target.value })
-        if (e.target.value == null || e.target.value == "") {
+        this.setState({ searchText: e.target.value });
+
+        if (!e.target.value) {
             this.handleCompetitionTableList(1, this.state.yearRefId, e.target.value);
         }
-    }
+    };
 
-    // search key 
     onKeyEnterSearchText = (e) => {
-        var code = e.keyCode || e.which;
-        console.log(e.keyCode, "******", e.which)
+        const code = e.keyCode || e.which;
         if (code === 13) { //13 is the enter keycode
             this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText);
         }
-    }
-
-    // on click of search icon
-    onClickSearchIcon = () => {
-        if (this.state.searchText == null || this.state.searchText == "") {
-        }
-        else {
-            this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText);
-        }
-    }
-
-    ///dropdown view containing all the dropdown of header
-    dropdownView = () => {
-        return (
-            <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width">
-                    <div className="row" >
-                        <div className="col-sm-2">
-                            <div className="com-year-select-heading-view pb-3">
-                                <span className="year-select-heading" style={{ width: 50 }}>{AppConstants.year}:</span>
-                                <Select
-                                    style={{ width: 90 }}
-                                    className="year-select reg-filter-select-year ml-2"
-                                    value={this.state.yearRefId}
-                                    onChange={(e) => this.yearChange(e)}
-                                >
-                                    {this.props.appState.yearList.map(item => {
-                                        return (
-                                            <Option key={"yearRefId" + item.id} value={item.id}>
-                                                {item.description}
-                                            </Option>
-                                        );
-                                    })}
-                                </Select>
-                            </div>
-                        </div>
-                        <div className="col-sm"></div>
-                        <div style={{ marginRight: "25px", display: "flex", alignItems: 'center' }} >
-                            <div className="comp-product-search-inp-width pb-3" >
-                                <Input className="product-reg-search-input"
-                                    onChange={(e) => this.onChangeSearchText(e)}
-                                    placeholder="Search..."
-                                    onKeyPress={(e) => this.onKeyEnterSearchText(e)}
-                                    value={this.state.searchText}
-                                    prefix={<Icon type="search" style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                        onClick={() => this.onClickSearchIcon()}
-                                    />}
-                                    allowClear
-                                />
-                            </div>
-                        </div>
-
-                        {/* {this.state.userRole == AppConstants.admin && */}
-                        <div style={{ marginRight: '1%', display: "flex", alignItems: 'center' }}>
-                            <div className="d-flex flex-row-reverse button-with-search pb-3"
-                                // <div className="col-sm d-flex justify-content-end"
-                                onClick={() => this.props.clearCompReducerDataAction("all")}>
-                                <NavLink
-                                    to={{ pathname: `/registrationCompetitionFee`, state: { id: null } }}
-                                    className="text-decoration-none"
-                                >
-                                    <Button className="primary-add-product" type="primary">
-                                        + {AppConstants.addCompetition}
-                                    </Button>
-                                </NavLink>
-                            </div>
-                        </div>
-                        {/* } */}
-                    </div>
-                </div>
-            </div>
-        );
     };
 
+    onClickSearchIcon = () => {
+        if (this.state.searchText) {
+            this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText);
+        }
+    };
+
+    dropdownView = () => (
+        <div className="comp-player-grades-header-drop-down-view">
+            <div className="fluid-width">
+                <div className="row">
+                    <div className="col-sm-2">
+                        <div className="com-year-select-heading-view pb-3">
+                            <span className="year-select-heading" style={{ width: 50 }}>{AppConstants.year}:</span>
+                            <Select
+                                style={{ width: 90 }}
+                                className="year-select reg-filter-select-year ml-2"
+                                value={this.state.yearRefId}
+                                onChange={this.yearChange}
+                            >
+                                {this.props.appState.yearList.map(item => (
+                                    <Option key={'year_' + item.id} value={item.id}>
+                                        {item.description}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </div>
+                    </div>
+
+                    <div className="col-sm" />
+
+                    <div style={{ marginRight: "25px", display: "flex", alignItems: "center" }}>
+                        <div className="comp-product-search-inp-width pb-3">
+                            <Input
+                                className="product-reg-search-input"
+                                onChange={this.onChangeSearchText}
+                                placeholder="Search..."
+                                onKeyPress={this.onKeyEnterSearchText}
+                                value={this.state.searchText}
+                                prefix={
+                                    <SearchOutlined
+                                        style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                        onClick={this.onClickSearchIcon}
+                                    />
+                                }
+                                allowClear
+                            />
+                        </div>
+                    </div>
+
+                    {/* {this.state.userRole == AppConstants.admin && ( */}
+                    <div style={{ marginRight: "1%", display: "flex", alignItems: "center" }}>
+                        <div
+                            className="d-flex flex-row-reverse button-with-search pb-3"
+                            // className="col-sm d-flex justify-content-end"
+                            onClick={() => this.props.clearCompReducerDataAction("all")}
+                        >
+                            <NavLink
+                                to={{ pathname: "/registrationCompetitionFee", state: { id: null } }}
+                                className="text-decoration-none"
+                            >
+                                <Button className="primary-add-product" type="primary">
+                                    + {AppConstants.addCompetition}
+                                </Button>
+                            </NavLink>
+                        </div>
+                    </div>
+                    {/* )} */}
+                </div>
+            </div>
+        </div>
+    );
+
     handleCompetitionTableList = (page, yearRefId, searchText) => {
-        let { sortBy, sortOrder } = this.state
-        let offset = page ? 10 * (page - 1) : 0;
-        this.setState({
-            offset,
-        })
+        console.log("called")
+        const { sortBy, sortOrder } = this.state;
+        const offset = page ? 10 * (page - 1) : 0;
+        this.setState({ offset });
         this.props.regCompetitionListAction(offset, yearRefId, searchText, sortBy, sortOrder);
     };
 
-    ////////form content view
     contentView = () => {
         const { competitionFeesState } = this.props;
-        let total = competitionFeesState.regCompetitonFeeListTotalCount;
+        const total = competitionFeesState.regCompetitonFeeListTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view table-competition">
@@ -438,7 +456,7 @@ class RegistrationCompetitionList extends Component {
                         columns={columns}
                         dataSource={competitionFeesState.regCompetitionFeeListData}
                         pagination={false}
-                        loading={this.props.competitionFeesState.onLoad == true && true}
+                        loading={this.props.competitionFeesState.onLoad === true && true}
                     />
                 </div>
                 <div className="d-flex justify-content-end">
@@ -460,9 +478,12 @@ class RegistrationCompetitionList extends Component {
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}
                 />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"7"} />
+
+                <InnerHorizontalMenu menu="registration" regSelectedKey="7" />
+
                 <Layout>
                     {this.headerView()}
+
                     <Content>
                         {this.dropdownView()}
                         {this.contentView()}
@@ -472,18 +493,22 @@ class RegistrationCompetitionList extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        regCompetitionListAction, getOnlyYearListAction,
-        clearCompReducerDataAction, regCompetitionListDeleteAction,
-        CLEAR_OWN_COMPETITION_DATA
-    }, dispatch)
+        regCompetitionListAction,
+        getOnlyYearListAction,
+        clearCompReducerDataAction,
+        regCompetitionListDeleteAction,
+        CLEAR_OWN_COMPETITION_DATA,
+    }, dispatch);
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         competitionFeesState: state.CompetitionFeesState,
         appState: state.AppState,
-    }
+    };
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((RegistrationCompetitionList));
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationCompetitionList);

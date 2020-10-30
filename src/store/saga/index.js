@@ -138,7 +138,7 @@ import {
 
 import { regDashboardListSaga, getCompetitionSaga, registrationMainDashboardListSaga } from "./registrationSaga/registrationDashboardSaga"
 ////Competition Dashboard Saga
-import { competitionDashboardSaga, updateCompetitionStatusSaga, competitionDashboardDeleteSaga,saveReplicateSaga,getOldMembershipProductsByCompId,getNewMembershipProductsByYear } from './competitionManagementSaga/competitionDashboardSaga';
+import { competitionDashboardSaga, updateCompetitionStatusSaga, competitionDashboardDeleteSaga, saveReplicateSaga, getOldMembershipProductsByCompId, getNewMembershipProductsByYear } from './competitionManagementSaga/competitionDashboardSaga';
 
 // EndUserRegistrationSaga
 import * as endUserRegSaga from '../saga/registrationSaga/endUserRegistrationSaga';
@@ -164,6 +164,7 @@ import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizo
 
 import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga'
 import rootCompetitionMultiDrawSaga from "./competitionManagementSaga/competitionMultiDrawsSaga";
+import umpirePaymentSaga from "./umpireSaga/umpirePaymentSaga";
 
 export default function* rootSaga() {
   yield all([
@@ -205,6 +206,9 @@ export default function* rootSaga() {
 
     ///Multi draw in Competition
     fork(rootCompetitionMultiDrawSaga),
+
+    //Umpire Payment Saga
+    fork(umpirePaymentSaga)
   ]);
 
 
@@ -566,4 +570,9 @@ export default function* rootSaga() {
   yield takeEvery(ApiConstants.API_GET_PAYMENT_METHOD_REF_LOAD, getPaymentMethodsDefaultSaga);
   yield takeEvery(ApiConstants.API_OLD_MEMBERSHIP_PRODUCTS_BY_COMP_ID_LOAD, getOldMembershipProductsByCompId);
   yield takeEvery(ApiConstants.API_NEW_MEMBERSHIP_PRODUCTS_BY_YEAR_LOAD, getNewMembershipProductsByYear);
+
+  yield takeEvery(ApiConstants.API_REG_TRANSACTION_UPDATE_LOAD, endUserRegSaga.updateRegTransactionSaga)
+  yield takeEvery(ApiConstants.API_UPDATE_STATUS_TIMESLOT_LOAD, competitionQuickSaga.UpdateGrid_TimeSlotSaga)
+  yield takeEvery(ApiConstants.API_UPDATE_STATUS_DIVISION_LOAD, competitionQuickSaga.updateGrid_DivisionSaga)
+  yield takeEvery(ApiConstants.API_UPDATE_STATUS_VENUE_LOAD, competitionQuickSaga.updateGrid_VenueSaga)
 }

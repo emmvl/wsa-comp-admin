@@ -37,7 +37,7 @@ export function* liveScoreCompetitionDelete({ payload, key }) {
 
         if (result.status == 1) {
 
-            yield put({ type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_SUCCESS, payload: { id: payload }, key: key })
+            yield put({ type: ApiConstants.API_LIVESCORE_COMPETION_DELETE_SUCCESS, payload: { id: payload }, key })
             message.success('Deleted Sucessfully')
         } else {
 
@@ -64,7 +64,7 @@ export function* liveScoreOwnPartCompetitionListSaga({ payload, orgKey, sortBy, 
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreOwnPartCompetitionList, payload, orgKey, sortBy, sortOrder, yearRefId)
         if (result.status === 1) {
-            yield put({ type: ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_SUCCESS, payload: result.result.data, key: key })
+            yield put({ type: ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_SUCCESS, payload: result.result.data, key })
         } else {
             let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong
             message.config({

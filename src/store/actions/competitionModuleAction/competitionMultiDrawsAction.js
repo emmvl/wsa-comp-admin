@@ -5,7 +5,7 @@ import ApiConstants from "../../../themes/apiConstants";
 function getCompetitionVenue(competitionId) {
     const action = {
         type: ApiConstants.API_GET_COMPETITION_VENUES_MULTI_LOAD,
-        competitionId: competitionId
+        competitionId
     }
     return action
 }
@@ -35,7 +35,7 @@ function getDrawsRoundsAction(yearRefId, competitionId, key, dateRangeCheck, sta
 function updateCompetitionDraws(data, source, target, actionType, drawData) {
     const action = {
         type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_LOAD,
-        data: data,
+        data,
         sourceArray: source,
         targetArray: target,
         actionType: actionType,
@@ -49,7 +49,7 @@ function saveDraws(yearId, competitionId, drawsMasterId) {
     const action = {
         type: ApiConstants.API_UPDATE_COMPETITION_SAVE_MULTI_DRAWS_LOAD,
         yearId: yearId,
-        competitionId: competitionId,
+        competitionId,
         drawsMasterId: drawsMasterId
     }
     return action
@@ -59,7 +59,7 @@ function saveDraws(yearId, competitionId, drawsMasterId) {
 function updateCourtTimingsDrawsAction(data, source, target, actionType, drawData, apiData) {
     const action = {
         type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_LOAD,
-        data: data,
+        data,
         sourceArray: source,
         targetArray: target,
         actionType: actionType,
@@ -97,7 +97,7 @@ function clearFixtureData(key) {
 function getDivisionGradeNameLisAction(competitionId) {
     const action = {
         type: ApiConstants.API_MULTI_DRAWS_DIVISION_GRADE_NAME_LIST_LOAD,
-        competitionId: competitionId
+        competitionId
     }
     return action
 }
@@ -105,9 +105,9 @@ function getDivisionGradeNameLisAction(competitionId) {
 function publishDraws(competitionId, key, payload) {
     const action = {
         type: ApiConstants.API_MULTI_DRAW_PUBLISH_LOAD,
-        competitionId: competitionId,
-        key: key,
-        payload: payload
+        competitionId,
+        key,
+        payload
     }
     return action
 }
@@ -115,7 +115,7 @@ function publishDraws(competitionId, key, payload) {
 function matchesListDrawsAction(competitionId) {
     const action = {
         type: ApiConstants.API_MULTI_DRAW_MATCHES_LIST_LOAD,
-        competitionId: competitionId
+        competitionId
     }
     return action
 }
@@ -124,7 +124,7 @@ function matchesListDrawsAction(competitionId) {
 function getDivisionAction(competitionId) {
     const action = {
         type: ApiConstants.API_GET_DIVISION_MULTI_LOAD,
-        competitionId: competitionId
+        competitionId
     }
     return action
 }

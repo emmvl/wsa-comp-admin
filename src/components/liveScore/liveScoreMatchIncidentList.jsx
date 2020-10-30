@@ -239,7 +239,7 @@ class LiveScoreIncidentList extends Component {
             <div className="comp-dash-table-view mt-4">
                 <div className="table-responsive home-dash-table-view">
                     <Table
-                        loading={this.props.liveScoreIncidentState.onLoad == true && true} className="home-dashboard-table"
+                        loading={this.props.liveScoreIncidentState.onLoad && true} className="home-dashboard-table"
                         className="home-dashboard-table"
                         columns={columns}
                         dataSource={DATA}
@@ -255,7 +255,7 @@ class LiveScoreIncidentList extends Component {
                             flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "flex-end"
-                        }} >
+                        }}>
                     </div>
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -275,7 +275,7 @@ class LiveScoreIncidentList extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"17"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"17"} />
                 <Layout>
                     {this.headerView()}
                     <Content>

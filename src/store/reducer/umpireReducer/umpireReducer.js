@@ -104,8 +104,8 @@ function getAffiliateData(selectedAffiliateId, affiliateArray) {
         for (let j in selectedAffiliateId) {
             if (selectedAffiliateId[j] === affiliateArray[i].id) {
                 obj = {
-                    "name": affiliateArray[i].name,
-                    "id": affiliateArray[i].id
+                    name: affiliateArray[i].name,
+                    id: affiliateArray[i].id
                 }
                 affiliateObj.push(obj)
                 break;
@@ -154,7 +154,7 @@ function umpireState(state = initialState, action) {
 
         case ApiConstants.API_UMPIRE_LIST_SUCCESS:
             let user_Data = action.result.userData ? action.result.userData : action.result
-            if (action.key == "data") {
+            if (action.key === "data") {
                 let coachData = createCoachArray(JSON.parse(JSON.stringify(user_Data)))
                 state.coachList = coachData
             }
@@ -175,7 +175,7 @@ function umpireState(state = initialState, action) {
 
         case ApiConstants.API_UMPIRE_MAIN_LIST_SUCCESS:
             let userMain_Data = action.result.userData ? action.result.userData : action.result
-            if (action.key == "data") {
+            if (action.key === "data") {
                 let coachData = createCoachArray(JSON.parse(JSON.stringify(userMain_Data)))
                 state.coachList_Data = coachData
             }

@@ -15,7 +15,6 @@ class SwappableComponentEdit extends Component {
 
     drag(ev, customFunc = null) {
         ev.dataTransfer.setData('src', ev.target.id);
-        // console.log(ev.target.parentNode, 'TARGET DRAGSTART');
 
         this.setState({
             initialParentNode: ev.target.parentNode
@@ -23,9 +22,7 @@ class SwappableComponentEdit extends Component {
     }
 
     dragEnd(ev, customFunc = null) {
-        // console.log(ev.target.parentNode, 'TARGET DRAGEND');
         if (customFunc && ev.target.parentNode != this.state.initialParentNode) {
-            console.log('custom func');
             this.props.customFunc();
         }
     }
@@ -44,17 +41,12 @@ class SwappableComponentEdit extends Component {
         let target = document.getElementById(dragableId);
         let targetParent = target.parentNode;
 
-        // console.log(src.parentNode.id, 'dragged element');
-        // console.log(srcParent, 'parent of dragged');
-        // console.log(target.parentNode.id, 'element to be swapped');
-
         swappable
             ? this.swapElements(src, target, srcParent, targetParent)
             : this.transferElement(src, dropzoneId);
     }
 
     swapElements(src, target, srcParent, targetParent) {
-        console.log(src, target)
         let sourceIndexArray = src.id.split(':');
         let targetIndexArray = target.id.split(':');
         if (sourceIndexArray[1] === targetIndexArray[1] && sourceIndexArray[0] === targetIndexArray[0]) {
@@ -62,17 +54,10 @@ class SwappableComponentEdit extends Component {
             srcParent.appendChild(target);
             this.props.onSwap(src.id, target.id);
         }
-
-        // console.log(src.id, 'source');
-        // console.log(target.id, 'target');
-
-        // console.log(src.id, 'source');
-        // console.log(target.id, 'target');
     }
 
     transferElement(src, dropzoneId) {
         let dropzone = document.getElementById(dropzoneId);
-        console.log(dropzone)
         dropzone.appendChild(src);
     }
 

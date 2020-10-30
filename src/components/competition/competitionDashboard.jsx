@@ -10,7 +10,7 @@ import AppImages from "themes/appImages";
 import AppUniqueId from "themes/appUniqueId";
 import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
-import { checkRegistrationType } from "util/permissions";
+import { checkRegistrationType, getCurrentYear } from "util/permissions";
 import { getPrevUrl } from "util/sessionStorage";
 import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "store/actions/appAction";
 import {
@@ -220,7 +220,7 @@ class CompetitionDashboard extends Component {
         super(props);
 
         this.state = {
-            year: "2019",
+            year: null,
             loading: false,
             modalVisible: false,
             competitionId: "",
@@ -249,9 +249,9 @@ class CompetitionDashboard extends Component {
         const { yearList } = this.props.appState;
         if (this.state.loading === true && this.props.appState.onLoad === false) {
             if (yearList.length > 0) {
-                let yearRefId = this.getYearRefId();
+                let yearRefId = this.getYearRefId(yearList);
                 this.props.competitionDashboardAction(yearRefId);
-                this.setState({ loading: false });
+                this.setState({ loading: false, year: yearRefId });
             }
         }
 
@@ -266,12 +266,12 @@ class CompetitionDashboard extends Component {
         }
     }
 
-    getYearRefId = () => {
-        const { yearList } = this.props.appState;
+    getYearRefId = (yearList) => {
         let storedYearID = localStorage.getItem("yearId");
         let yearRefId;
         if (storedYearID == null || storedYearID == "null") {
-            yearRefId = yearList[0].id;
+            yearRefId = getCurrentYear(yearList)
+            localStorage.setItem("yearId", yearRefId)
         } else {
             yearRefId = storedYearID;
         }
@@ -318,6 +318,7 @@ class CompetitionDashboard extends Component {
 
     onYearClick = (yearId) => {
         localStorage.setItem("yearId", yearId);
+        this.setState({ year: yearId })
         this.props.competitionDashboardAction(yearId);
     };
 
@@ -334,15 +335,14 @@ class CompetitionDashboard extends Component {
                     <div className="col-sm-8">
                         <div className="year-select-heading-view pb-3">
                             <span className="year-select-heading">{AppConstants.year}:</span>
-
                             <Select
                                 className="year-select reg-filter-select-year ml-2"
                                 style={{ width: 90 }}
                                 onChange={this.onYearClick}
-                                value={selectedYearId}
+                                value={JSON.parse(this.state.year)}
                             >
-                                {yearList.length > 0 && yearList.map((item, yearIndex) => (
-                                    <Option key={"yearlist" + yearIndex} value={item.id}>
+                                {yearList.map((item) => (
+                                    <Option key={'year_' + item.id} value={item.id}>
                                         {item.name}
                                     </Option>
                                 ))}
@@ -463,7 +463,7 @@ class CompetitionDashboard extends Component {
             cancelText: 'No',
             onOk() {
                 // [
-                // <NavLink 
+                // <NavLink
                 //     // onClick={() => this.props.clearCompReducerDataAction("all")}
                 //     to={{ pathname: `/registrationCompetitionForm`, state: { id: null } }}
                 // />
@@ -519,7 +519,7 @@ class CompetitionDashboard extends Component {
     compScreenDeciderCheck = (record, key) => {
         let storedYearID = localStorage.getItem("yearId");
         let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
-        if (key == "own") {
+        if (key === "own") {
             history.push("/competitionOpenRegForm", { id: record.competitionId, screenKey: "compDashboard" });
             setOwn_competition(record.competitionId)
             setOwnCompetitionYear(selectedYearId)
@@ -582,7 +582,8 @@ class CompetitionDashboard extends Component {
                 ) : (
                         <div>
                             <p>
-                                {AppConstants.deletePublishToLsMsg.replace("(COMP_NAME)", this.state.competitionName)
+                                {AppConstants.deletePublishToLsMsg
+                                    .replace("(COMP_NAME)", this.state.competitionName)
                                     .replace("(COMP_NAME)", this.state.competitionName)}
                             </p>
                             <Radio.Group

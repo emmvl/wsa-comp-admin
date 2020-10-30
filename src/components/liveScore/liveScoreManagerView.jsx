@@ -70,7 +70,6 @@ class LiveScoreManagerView extends Component {
         this.state = {
             data: props.location.state ? props.location.state.tableRecord : null
         }
-        console.log(this.state.data, 'dataManager')
     }
 
     ////view for profile image
@@ -78,12 +77,12 @@ class LiveScoreManagerView extends Component {
         let data = this.state.data
 
         return (
-            <div className="fluid-width mt-2" >
+            <div className="fluid-width mt-2">
                 {/* <span className="live-score-profile-user-name">{AppConstants.managerProfile}</span>
                 <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
                 <span className="live-score-profile-user-name">{this.myDada}</span> */}
 
-                <div className='profile-image-view mr-5' >
+                <div className='profile-image-view mr-5'>
                     <span className="user-contact-heading">{AppConstants.managerProfile}</span>
                     <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
                     <span className="user-contact-heading">{data.firstName + " " + data.lastName}</span>
@@ -92,13 +91,12 @@ class LiveScoreManagerView extends Component {
                 <span className="desc-text-style side-bar-profile-data pt-0">{AppConstants.aboutManager}</span>
 
                 <div className="profile-img-view-style">
-
                     <div className="live-score-side-desc-view">
                         <div className="live-score-title-icon-view">
                             <div className="live-score-icon-view">
                                 <img src={AppImages.group} height="16" width="16" alt="" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.emailAddress}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.emailAddress}</span>
                         </div>
                         <span className="desc-text-style side-bar-profile-data">{data.email}</span>
                     </div>
@@ -108,7 +106,7 @@ class LiveScoreManagerView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.callAnswer} alt="" height="16" width="16" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.contactNumber}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.contactNumber}</span>
                         </div>
                         <span className="desc-text-style side-bar-profile-data">{data.mobileNumber}</span>
                     </div>
@@ -118,15 +116,13 @@ class LiveScoreManagerView extends Component {
                             <div className="live-score-icon-view">
                                 <img src={AppImages.group} height="16" width="16" alt="" />
                             </div>
-                            <span className='year-select-heading ml-3'>{AppConstants.team}</span>
+                            <span className="year-select-heading ml-3">{AppConstants.team}</span>
                         </div>
 
-                        {data.linkedEntity.length > 0 && data.linkedEntity.map((item) => (
+                        {data.linkedEntity.map((item) => (
                             <span className="desc-text-style side-bar-profile-data">{item.name}</span>
-                        ))
-                        }
+                        ))}
                     </div>
-
                 </div>
             </div>
         )
@@ -137,7 +133,7 @@ class LiveScoreManagerView extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.activity}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -210,14 +206,14 @@ class LiveScoreManagerView extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"4"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
-                        <div className="fluid-width" >
-                            <div className="row" >
-                                <div className="col-sm-3" style={{ marginBottom: "7%" }} >
+                        <div className="fluid-width">
+                            <div className="row">
+                                <div className="col-sm-3" style={{ marginBottom: "7%" }}>
                                     {this.profileImageView()}
                                 </div>
                                 <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }}>
@@ -228,7 +224,7 @@ class LiveScoreManagerView extends Component {
                         </div>
                     </Content>
                 </Layout>
-            </div >
+            </div>
         );
     }
 }

@@ -153,7 +153,6 @@ class ProductRegistrationClub extends Component {
 
 
     onChange = e => {
-        console.log('radio checked', e.target.value);
         this.setState({
             value: e.target.value,
         });
@@ -164,30 +163,29 @@ class ProductRegistrationClub extends Component {
         return (
             <div className="product-reg-club-header-view">
                 <div className="year-select-view">
-                    <span className='year-select-heading'>{AppConstants.year}:</span>
+                    <span className="year-select-heading">{AppConstants.year}:</span>
                     <Select
                         className="year-select"
                         style={{ width: 75 }}
                         onChange={(year) => this.setState({ year })}
                         value={this.state.year}
                     >
-                        <Option value={"2019"}>{AppConstants.year2019}</Option>
+                        <Option value="2019">{AppConstants.year2019}</Option>
                     </Select>
                 </div>
-            </div >
+            </div>
         )
     }
-
 
     ////////form content view
     contentView = () => {
         let tableData = this.state.value === "playingMember" ? playingMemberData : nonPlayingMemberData
         return (
             <div className="fees-view pt-0">
-                <div >
-                    <Radio.Group onChange={this.onChange} value={this.state.value} defaultValue={"playingMember"}>
-                        <Radio value={"playingMember"}>{AppConstants.playingMember}</Radio>
-                        <Radio value={"nonPlayingMember"}>{AppConstants.nonPlayingMember}</Radio>
+                <div>
+                    <Radio.Group onChange={this.onChange} value={this.state.value} defaultValue="playingMember">
+                        <Radio value="playingMember">{AppConstants.playingMember}</Radio>
+                        <Radio value="nonPlayingMember">{AppConstants.nonPlayingMember}</Radio>
                     </Radio.Group>
                 </div>
                 <div className="table-responsive home-dash-table-view mt-5">
@@ -198,18 +196,16 @@ class ProductRegistrationClub extends Component {
         )
     }
 
-
-
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
-            <div className="fluid-width" >
+            <div className="fluid-width">
                 <div className="footer-view">
-                    {/* <div className="row" >
+                    {/* <div className="row">
                         <div className="col-sm" style={{ display: 'flex', alignItems: "flex-start" }}>
                             <Button type="cancel-button">Cancel</Button>
                         </div>
-                        <div className="col-sm" >
+                        <div className="col-sm">
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 <Button className="save-draft-text" type="save-draft-text">Save as Draft</Button>
                                 <Button className="publish-button" type="primary">Publish</Button>
@@ -221,12 +217,11 @@ class ProductRegistrationClub extends Component {
         )
     }
 
-
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} />
+                <InnerHorizontalMenu menu="registration" />
                 <Layout>
                     {this.headerView()}
 

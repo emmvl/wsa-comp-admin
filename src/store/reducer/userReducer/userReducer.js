@@ -144,7 +144,9 @@ const initialState = {
   affiliateDirListAction: null,
   userAffiliateListAction: null,
   userFriendListAction: null,
-  userReferFriendListAction: null
+  userReferFriendListAction: null,
+  onSaveOrgPhotoLoad: false,
+  onDeleteOrgPhotoLoad: false
 };
 
 function userReducer(state = initialState, action) {
@@ -158,7 +160,8 @@ function userReducer(state = initialState, action) {
         userPhotoUpdate: false,
         userPasswordUpdate: false,
         error: action.error,
-        status: action.status
+        status: action.status,
+        umpireActivityOnLoad: false,
       };
 
     case ApiConstants.API_USER_ERROR:
@@ -170,7 +173,8 @@ function userReducer(state = initialState, action) {
         userPhotoUpdate: false,
         userPasswordUpdate: false,
         error: action.error,
-        status: action.status
+        status: action.status,
+        umpireActivityOnLoad: false,
       };
 
     // get Role Entity List for current user
@@ -284,10 +288,10 @@ function userReducer(state = initialState, action) {
         state.affiliateOurOrg.charityRoundUp[action.index].isSelected = action.value
       }
 
-      if (action.key == "name") {
+      if (action.key === "name") {
         state.affiliateOurOrg["charity"][action.index][action.key] = action.value
       }
-      if (action.key == "description") {
+      if (action.key === "description") {
         state.affiliateOurOrg["charity"][action.index][action.key] = action.value
       }
 
@@ -531,23 +535,25 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.API_SAVE_ORG_PHOTO_LOAD:
-      return { ...state, onLoad: true };
+      return { ...state, onSaveOrgPhotoLoad: true };
 
     case ApiConstants.API_SAVE_ORG_PHOTO_SUCCESS:
+      console.log("$$$$$$$$$$$$$$")
       return {
         ...state,
-        onLoad: false,
+        onSaveOrgPhotoLoad: false,
         status: action.status,
         error: null
       };
 
     case ApiConstants.API_DELETE_ORG_PHOTO_LOAD:
-      return { ...state, onLoad: true };
+      return { ...state, onDeleteOrgPhotoLoad: true };
 
     case ApiConstants.API_DELETE_ORG_PHOTO_SUCCESS:
+      console.log("&&&&&&&&&&&&&")
       return {
         ...state,
-        onLoad: false,
+        onDeleteOrgPhotoLoad: false,
         status: action.status,
         error: null
       };
@@ -804,7 +810,7 @@ function userReducer(state = initialState, action) {
         coachTotalCount: action.result.page.totalCount,
       };
 
-    ////Scorer
+    ////umpire activity list
     case ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_LOAD:
       return { ...state, umpireActivityOnLoad: true };
 

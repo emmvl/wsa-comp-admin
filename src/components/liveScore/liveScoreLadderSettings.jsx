@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import {
-    Layout,Breadcrumb,Select,Checkbox,Button,Radio,Tabs,Table,Input,Form, Modal
+    Layout, Breadcrumb, Select, Checkbox, Button, Form, Modal
 } from "antd";
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
-import ValidationConstants from "../../themes/validationConstant";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
@@ -51,7 +50,7 @@ class LiveScoreLadderSettings extends Component {
     componentDidUpdate(nextProps) {
         let ladderSettingState = this.props.ladderSettingState;
         if (nextProps.ladderSettingState != ladderSettingState) {
-            if (ladderSettingState.loader == false && this.state.saveLoad == true) {
+            if (ladderSettingState.loader == false && this.state.saveLoad) {
                 this.setState({ saveLoad: false })
                 this.props.ladderSettingGetDATA();
             }
@@ -59,16 +58,14 @@ class LiveScoreLadderSettings extends Component {
     }
 
     onChangeLadderSetting = (value, index, key, subIndex, subKey) => {
-        if (key == "isAllDivision" && value == true) {
+        if (key === "isAllDivision" && value) {
             // let ladders = this.props.ladderSettingState.ladders;
-            // if(ladders.length > 1 ){
+            // if (ladders.length > 1) {
             this.setState({ allDivisionVisible: true, ladderIndex: index });
-            //}
-            // else{
+            //} else {
             //     this.props.updateLadderSetting(value, index, key, subIndex, subKey);
             // }
-        }
-        else {
+        } else {
             this.props.updateLadderSetting(value, index, key, subIndex, subKey);
         }
     }
@@ -78,14 +75,14 @@ class LiveScoreLadderSettings extends Component {
     }
 
     handleDeleteModal = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             this.props.updateLadderSetting(null, this.state.ladderIndex, "deleteLadder");
         }
         this.setState({ deleteModalVisible: false, ladderIndex: null });
     }
 
     handleAllDivisionModal = (key) => {
-        if (key == "ok") {
+        if (key === "ok") {
             this.props.updateLadderSetting(true, this.state.ladderIndex, "isAllDivision");
         }
         this.setState({ allDivisionVisible: false, ladderIndex: null });
@@ -97,20 +94,18 @@ class LiveScoreLadderSettings extends Component {
             if (item.ladderFormatId < 0) {
                 item.ladderFormatId = 0;
             }
-            item.isAllDivision = item.isAllDivision == true ? 1 : 0;
+            item.isAllDivision = item.isAllDivision ? 1 : 0;
             delete item.divisions;
         });
-        console.log("ladders::" + JSON.stringify(ladders))
         this.props.ladderSettingPostDATA(ladders)
         this.setState({ saveLoad: true });
     }
 
-
     contentView = () => {
         const { ladders, divisions } = this.props.ladderSettingState
         let ladderData = isArrayNotEmpty(ladders) ? ladders : [];
-        let isAllDivision = ladderData.find(x => x.isAllDivision == true);
-        let isAllDivisionChecked = isAllDivision != null ? true : false;
+        let isAllDivision = ladderData.find(x => x.isAllDivision);
+        let isAllDivisionChecked = isAllDivision != null;
         let allDivision = divisions.find(x => x.isDisabled == false);
         let allDivAdded = allDivision != null ? false : true;
 
@@ -118,29 +113,41 @@ class LiveScoreLadderSettings extends Component {
             <div className="content-view pt-4">
                 {(ladderData || []).map((ladder, index) => (
                     <div className="inside-container-view" style={{ paddingTop: "25px" }}>
-                        {ladderData.length > 1 &&
+                        {ladderData.length > 1 && (
                             <div style={{ display: "flex", float: "right" }}>
-                                <div className="transfer-image-view pt-0 pointer" style={{ marginLeft: 'auto' }} onClick={() => this.deleteModal(index)}>
-                                    <span className="user-remove-btn" ><i className="fa fa-trash-o" aria-hidden="true"></i></span>
-                                    <span className="user-remove-text">
-                                        {AppConstants.remove}
-                                    </span>
+                                <div
+                                    className="transfer-image-view pt-0 pointer"
+                                    style={{ marginLeft: 'auto' }}
+                                    onClick={() => this.deleteModal(index)}
+                                >
+                                    <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
+                                    <span className="user-remove-text">{AppConstants.remove}</span>
                                 </div>
-                            </div>}
-                        <Checkbox className="single-checkbox pt-2" style={{ marginTop: 0 }} checked={ladder.isAllDivision}
-                            onChange={(e) => this.onChangeLadderSetting(e.target.checked, index, "isAllDivision")}>
-                            {AppConstants.allDivisions}</Checkbox>
-                        <div className="fluid-width" >
+                            </div>
+                        )}
+                        <Checkbox
+                            className="single-checkbox pt-2"
+                            style={{ marginTop: 0 }}
+                            checked={ladder.isAllDivision}
+                            onChange={(e) => this.onChangeLadderSetting(e.target.checked, index, "isAllDivision")}
+                        >
+                            {AppConstants.allDivisions}
+                        </Checkbox>
+                        <div className="fluid-width">
                             <div className="row" style={{ display: 'block', marginLeft: 0 }}>
                                 <div className="col-sm" style={{ paddingLeft: 0, paddingTop: 5 }}>
                                     <Select
                                         mode="multiple"
                                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                         onChange={(e) => this.onChangeLadderSetting(e, index, "selectedDivisions")}
-                                        value={ladder.selectedDivisions}>
-                                        {(ladder.divisions || []).map((division, divIndex) => (
-                                            <Option key={division.divisionId} value={division.divisionId}
-                                                disabled={division.isDisabled}>
+                                        value={ladder.selectedDivisions}
+                                    >
+                                        {(ladder.divisions || []).map((division) => (
+                                            <Option
+                                                key={'division_' + division.divisionId}
+                                                value={division.divisionId}
+                                                disabled={division.isDisabled}
+                                            >
                                                 {division.divisionName}
                                             </Option>
                                         ))}
@@ -148,20 +155,24 @@ class LiveScoreLadderSettings extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div className="inside-container-view" >
+                        <div className="inside-container-view">
                             <div className="table-responsive">
                                 <div style={{ display: 'flex', paddingLeft: '10px' }}>
-                                    <div style={{ width: '89%' }} className="ladder-points-heading"><InputWithHead heading={"Result type/Byes"} /></div>
+                                    <div style={{ width: '89%' }} className="ladder-points-heading">
+                                        <InputWithHead heading="Result type/Byes" />
+                                    </div>
                                     <div className="ladder-points-heading"><InputWithHead heading={"Points"} /></div>
                                 </div>
                                 {(ladder.settings || []).map((res, resIndex) => (
                                     <div style={{ display: 'flex', paddingLeft: '10px' }}>
                                         <div style={{ width: '89%' }}><InputWithHead heading={res.name} /></div>
                                         <div style={{ marginTop: 5 }}>
-                                            <InputWithHead className="input-inside-table-fees" value={res.points}
-                                                placeholder={"Points"}
-                                                onChange={(e) => this.onChangeLadderSetting(e.target.value, index, "resultTypes", resIndex, "points")}>
-                                            </InputWithHead>
+                                            <InputWithHead
+                                                className="input-inside-table-fees"
+                                                value={res.points}
+                                                placeholder="Points"
+                                                onChange={(e) => this.onChangeLadderSetting(e.target.value, index, "resultTypes", resIndex, "points")}
+                                            />
                                         </div>
                                     </div>
                                 ))}
@@ -169,17 +180,17 @@ class LiveScoreLadderSettings extends Component {
                         </div>
                     </div>
                 ))}
-                { (isAllDivisionChecked == false && allDivAdded == false) ?
-                    <div className="row" >
+                {(isAllDivisionChecked == false && allDivAdded == false) && (
+                    <div className="row">
                         <div className="col-sm" onClick={(e) => this.onChangeLadderSetting(null, null, "addLadder")}>
-                            <span className='input-heading-add-another pointer'>+ {AppConstants.addNewLadderScheme}</span>
+                            <span className="input-heading-add-another pointer">+ {AppConstants.addNewLadderScheme}</span>
                         </div>
-                    </div> : null}
+                    </div>
+                )}
                 {this.deleteConfirmModalView()}
                 {this.allDivisionModalView()}
             </div>
         )
-
     }
 
     deleteConfirmModalView = () => {
@@ -190,7 +201,8 @@ class LiveScoreLadderSettings extends Component {
                     title={AppConstants.ladderFormat}
                     visible={this.state.deleteModalVisible}
                     onOk={() => this.handleDeleteModal("ok")}
-                    onCancel={() => this.handleDeleteModal("cancel")}>
+                    onCancel={() => this.handleDeleteModal("cancel")}
+                >
                     <p>{AppConstants.ladderRemoveMsg}</p>
                 </Modal>
             </div>
@@ -205,13 +217,13 @@ class LiveScoreLadderSettings extends Component {
                     title={AppConstants.ladderFormat}
                     visible={this.state.allDivisionVisible}
                     onOk={() => this.handleAllDivisionModal("ok")}
-                    onCancel={() => this.handleAllDivisionModal("cancel")}>
+                    onCancel={() => this.handleAllDivisionModal("cancel")}
+                >
                     <p>{AppConstants.ladderAllDivisionRmvMsg}</p>
                 </Modal>
             </div>
         );
     }
-
 
     ///////view for breadcrumb
     headerView = () => {
@@ -225,7 +237,7 @@ class LiveScoreLadderSettings extends Component {
                         alignItems: "center"
                     }}
                 >
-                    <Breadcrumb separator=">">
+                    <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
                             {AppConstants.ladderSettings}
                         </Breadcrumb.Item>
@@ -234,6 +246,7 @@ class LiveScoreLadderSettings extends Component {
             </div>
         );
     };
+
     //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         const { postData } = this.props.ladderSettingState
@@ -248,7 +261,9 @@ class LiveScoreLadderSettings extends Component {
                             <div className="comp-buttons-view">
                                 <Button
                                     onClick={() => this.onSaveClick()}
-                                    className="publish-button" type="primary">
+                                    className="publish-button"
+                                    type="primary"
+                                >
                                     {AppConstants.save}
                                 </Button>
                             </div>
@@ -257,50 +272,51 @@ class LiveScoreLadderSettings extends Component {
                 </div>
             </div>
         );
-
     };
-
 
     publicLadderLink = () => {
         let { organisationUniqueKey } = JSON.parse(localStorage.getItem('setOrganisationData'))
 
         return (
-
-            <div className="content-view mt-5 pt-3" >
+            <div className="content-view mt-5 pt-3">
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.ladderLink} />
                         <div>
-                            <a className="user-reg-link" href={process.env.REACT_APP_USER_REGISTRATION_URL + `/liveScorePublicLadder?organisationKey=${organisationUniqueKey}`} target='_blank' >
+                            <a
+                                className="user-reg-link"
+                                href={process.env.REACT_APP_USER_REGISTRATION_URL + `/liveScorePublicLadder?organisationKey=${organisationUniqueKey}`}
+                                target='_blank'
+                            >
                                 {process.env.REACT_APP_USER_REGISTRATION_URL + `/liveScorePublicLadder?organisationKey=${organisationUniqueKey}`}
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-
         )
     }
-
 
     publiDrawsLink = () => {
         let { organisationUniqueKey } = JSON.parse(localStorage.getItem('setOrganisationData'))
 
         return (
-
-            <div className="content-view mt-5 pt-3" >
+            <div className="content-view mt-5 pt-3">
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.drawsLink} />
                         <div>
-                            <a className="user-reg-link" href={process.env.REACT_APP_USER_REGISTRATION_URL + `/livescoreSeasonFixture?organisationKey=${organisationUniqueKey}`} target='_blank' >
+                            <a
+                                className="user-reg-link"
+                                href={process.env.REACT_APP_USER_REGISTRATION_URL + `/livescoreSeasonFixture?organisationKey=${organisationUniqueKey}`}
+                                target='_blank'
+                            >
                                 {process.env.REACT_APP_USER_REGISTRATION_URL + `/livescoreSeasonFixture?organisationKey=${organisationUniqueKey}`}
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-
         )
     }
 
@@ -308,14 +324,17 @@ class LiveScoreLadderSettings extends Component {
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={"19"} />
-                <Loader visible={this.props.ladderSettingState.loader ||
-                    this.props.ladderSettingState.onLoad} />
+                <DashboardLayout
+                    menuHeading={AppConstants.liveScores}
+                    menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"19"} />
+                <Loader visible={this.props.ladderSettingState.loader || this.props.ladderSettingState.onLoad} />
                 <Layout>
                     {this.headerView()}
                     {/* <Content> */}
-                    <Form onSubmit={this.handleSubmit} className="login-form">
+                    <Form onFinish={this.handleSubmit} className="login-form">
                         <div className="formView">{this.contentView()}</div>
                         <div className="formView">{this.publicLadderLink()}</div>
                         <div className="formView">{this.publiDrawsLink()}</div>
@@ -324,24 +343,23 @@ class LiveScoreLadderSettings extends Component {
                     <Footer>{this.footerView()}</Footer>
                 </Layout>
             </div>
-
         )
     }
 }
 
-function mapDispatchtoprops(dispatch) {
+function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         ladderSettingGetMatchResultAction,
         ladderSettingGetDATA,
         updateLadderSetting,
         ladderSettingPostDATA
     }, dispatch)
-
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         ladderSettingState: state.LadderSettingState
     }
 }
-export default connect(mapStatetoProps, mapDispatchtoprops)((LiveScoreLadderSettings));
+
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreLadderSettings);

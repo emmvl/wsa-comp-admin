@@ -37,11 +37,11 @@ const initialState = {
         isAdmin:1,
         regChangeTypeRefId: 0,         // DeRegister/ Transfer
         deRegistrationOptionId: 0,   /// Yes/No
-        reasonTypeRefId: 0,      
+        reasonTypeRefId: 0,
         deRegisterOther: null,
         transfer: {
             transferOther: null,
-            reasonTypeRefId: 0, 
+            reasonTypeRefId: 0,
             organisationId: null,
             competitionId: null
         }
@@ -63,7 +63,8 @@ const initialState = {
         startDate: null,
         userName: null,
         userRegisteredTo: null,
-        isShowButton: null
+        isShowButton: null,
+        deRegistrationOptionId: null,
     },
     reviewSaveData: {
         refundTypeRefId:null,
@@ -81,14 +82,14 @@ function regChangeReducer(state = initialState, action) {
         case ApiConstants.API_UPDATE_REG_REVIEW:
             let key = action.key
             let data = action.value
-            if(key == "declineReasonRefId"){
+            if(key === "declineReasonRefId"){
                 state.reviewSaveData["refundAmount"] = null;
                 state.reviewSaveData["refundTypeRefId"] = null;
                 if(data != 3){
                     state.reviewSaveData["otherInfo"] = null;
                 }
             }
-            else if(key == "refundTypeRefId"){
+            else if(key === "refundTypeRefId"){
                 state.reviewSaveData["declineReasonRefId"] = null;
                 state.reviewSaveData["otherInfo"] = null;
                 if(data == 1){
@@ -112,8 +113,8 @@ function regChangeReducer(state = initialState, action) {
             }
 
         case ApiConstants.API_UPDATE_DE_REGISTRATION:
-            if(action.subKey == "deRegister"){
-                if(action.key == "regChangeTypeRefId"){
+            if(action.subKey === "deRegister"){
+                if(action.key === "regChangeTypeRefId"){
                     state.saveData[action.key] = action.value;
                     state.saveData["deRegistrationOptionId"] = 1;
                 }
@@ -121,8 +122,8 @@ function regChangeReducer(state = initialState, action) {
                     state.saveData[action.key] = action.value;
                 }
             }
-            else if(action.subKey == "transfer"){
-                if(action.key == "organisationId"){
+            else if(action.subKey === "transfer"){
+                if(action.key === "organisationId"){
                     state.saveData.transfer.competitionId = null;
                     let competitions = setCompetitions(action.value, state.transferOrganisations);
                     state.transferCompetitions = competitions;
@@ -133,12 +134,12 @@ function regChangeReducer(state = initialState, action) {
             else{
                 state.reloadFormData = 0;
             }
-            
+
             return {
                 ...state,
                 onLoad: false,
             }
-        
+
         case ApiConstants.API_GET_REGISTRATION_CHANGE_DASHBOARD_LOAD:
             return {...state, onLoad: true}
 
@@ -161,6 +162,12 @@ function regChangeReducer(state = initialState, action) {
 
         case ApiConstants.API_GET_REGISTRATION_CHANGE_REVIEW_SUCCESS:
             let regChangeReviewData = action.result;
+            state.reviewSaveData = {
+                refundTypeRefId:null,
+                declineReasonRefId:null,
+                otherInfo:null,
+                invoices: null
+            }
             return {
                 ...state,
                 onChangeReviewLoad: false,
@@ -190,7 +197,7 @@ function regChangeReducer(state = initialState, action) {
                 transferOrganisations: transferOrgData,
                 status: action.status,
             }
-    
+
 
         default:
             return state;

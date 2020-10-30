@@ -42,8 +42,8 @@ function liveScoreRemoveBanner(bannerId) {
 function liveScoreAddBannerUpdate(data, key) {
     const action = {
         type: ApiConstants.API_LIVE_SCORE_ADD_BANNER_UPDATE,
-        data: data,
-        key: key,
+        data,
+        key,
     };
 
     return action;

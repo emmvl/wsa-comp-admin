@@ -38,10 +38,9 @@ import { getOnlyYearListAction } from "../../store/actions/appAction";
 import { getOrganisationData } from "../../util/sessionStorage";
 import moment from "moment";
 import history from "../../util/history";
-import { liveScore_formateDate } from "../../themes/dateformate";
+import { liveScore_MatchFormate, liveScore_formateDate, getTime } from "../../themes/dateformate";
 import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
-import { liveScore_MatchFormate } from '../../themes/dateformate'
 import StripeKeys from "../stripe/stripeKeys";
 import { getStripeLoginLinkAction } from "../../store/actions/stripeAction/stripeAction";
 
@@ -51,6 +50,28 @@ function tableSort(a, b, key) {
   let stringB = JSON.stringify(b[key]);
   return stringA.localeCompare(stringB);
 }
+
+function umpireActivityTableSort(key) {
+  let sortBy = key;
+  let sortOrder = null;
+  if (this_Obj.state.sortBy !== key) {
+    sortOrder = 'ASC';
+  } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+    sortOrder = 'DESC';
+  } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+    sortBy = sortOrder = null;
+  }
+  const payload = {
+    paging: {
+      limit: 10,
+      offset: this_Obj.state.umpireActivityOffset
+    }
+  }
+  this_Obj.setState({ UmpireActivityListSortBy: sortBy, UmpireActivityListSortOrder: sortOrder });
+
+  this_Obj.props.getUmpireActivityListAction(payload, JSON.stringify([15]), this_Obj.state.userId, sortBy, sortOrder);
+}
+
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -205,6 +226,19 @@ const columnsPlayer = [
     dataIndex: "away",
     key: "away",
     sorter: (a, b) => tableSort(a, b, "away"),
+  },
+  {
+    title: "Borrowed Player",
+    dataIndex: "borrowedPlayerStatus",
+    key: "borrowedPlayerStatus",
+    sorter: (a, b) => tableSort(a, b, "borrowedPlayerStatus"),
+    render: (borrowedPlayerStatus, record, index) => {
+      return (
+        <div>
+          {borrowedPlayerStatus === "Borrowed" ? "Yes" : "No"}
+        </div>
+      );
+    },
   },
   {
     title: "Result",
@@ -826,29 +860,31 @@ const columnsIncident = [
         <>
           {
             record.teamDeletedAt ?
-              <span className="desc-text-style side-bar-profile-data" >{teamName}</span>
+              <span className="desc-text-style side-bar-profile-data">{teamName}</span>
               :
               <NavLink to={{
                 pathname: '/liveScoreTeamView',
-                state: { tableRecord: record, screenName: 'userPersonal' }
+                state: { tableRecord: record, screenName: 'userPersonal', screenKey: this_Obj.state.screenKey }
               }}>
-                <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data" >{teamName}</span>
+                <span style={{ color: '#ff8237', cursor: 'pointer' }} className="desc-text-style side-bar-profile-data">{teamName}</span>
               </NavLink>
-
           }
         </>
       )
     }
-
   },
   {
     title: 'Type',
     dataIndex: 'incidentTypeName',
     key: 'incidentTypeName',
     sorter: (a, b) => a.incidentTypeName.localeCompare(b.incidentTypeName),
-
   },
 ];
+
+//listeners for sorting
+const listeners = (key) => ({
+  onClick: () => umpireActivityTableSort(key),
+});
 
 const umpireActivityColumn = [
   {
@@ -856,58 +892,83 @@ const umpireActivityColumn = [
     dataIndex: 'matchId',
     key: 'matchId',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
   },
   {
     title: 'Date',
     dataIndex: 'date',
     key: 'date',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (date, record) => <span>{record?.match?.startTime ? liveScore_formateDate(record.match.startTime) : ""}</span>
   },
   {
     title: 'Time',
     dataIndex: 'time',
     key: 'time',
-    sorter: true,
+    // sorter: true,
+    render: (time, record) => <span>{record?.match?.startTime ? getTime(record.match.startTime) : ""}</span>
   },
   {
     title: 'Competition',
     dataIndex: 'competition',
     key: 'competition',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (date, record) => <span>{record?.match?.competition ? record.match.competition.longName : ""}</span>
   },
   {
     title: 'Affiliate',
     dataIndex: 'affiliate',
     key: 'affiliate',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (affiliate, record) => {
+      let organisationArray = record.user.userRoleEntities.length > 0 && this_Obj.getOrganisationArray(record.user.userRoleEntities, record.roleId)
+      return (
+        <div>
+          {organisationArray.map((item, index) => (
+            <span key={`organisationName` + index} className='multi-column-text-aligned'>
+              {item.competitionOrganisation && item.competitionOrganisation.name}
+            </span>
+          ))}
+        </div>
+      )
+    },
   },
   {
     title: 'Home',
     dataIndex: 'home',
     key: 'home',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (home, record) => <span>{record?.match?.team1 ? record.match.team1.name : ""}</span>
   },
   {
     title: 'Away',
     dataIndex: 'away',
     key: 'away',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (away, record) => <span>{record?.match?.team2 ? record.match.team2.name : ""}</span>
   },
   {
     title: 'Amount',
     dataIndex: 'amount',
     key: 'amount',
-    sorter: true,
+    // sorter: true,
+    // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (amount, record) => <span>{"N/A"}</span>
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
-    sorter: true,
+    // sorter: true,
+    // onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+    render: (status, record) => <span>{"N/A"}</span>
   },
 ]
-
-const umpireActivityData = []
 
 const coachColumn = [
   {
@@ -953,8 +1014,6 @@ const coachColumn = [
   },
 ]
 
-const coachList = []
-
 const umpireColumn = [
   {
     title: 'Match ID',
@@ -999,7 +1058,58 @@ const umpireColumn = [
   },
 ]
 
-const umpireList = []
+const purchaseActivityColumn = [
+  {
+    title: 'Order ID',
+    dataIndex: 'orderId',
+    key: 'orderId',
+    sorter: true,
+  },
+  {
+    title: 'Date',
+    dataIndex: 'date',
+    key: 'date',
+    sorter: true,
+  },
+  {
+    title: 'Transaction ID',
+    dataIndex: 'transactionId',
+    key: 'transactionId',
+    sorter: true,
+  },
+  {
+    title: 'Products',
+    dataIndex: 'products',
+    key: 'products',
+    sorter: true,
+  },
+  {
+    title: 'Affiliate',
+    dataIndex: 'affiliate',
+    key: 'affiliate',
+    sorter: true,
+  },
+  {
+    title: 'Payment Status',
+    dataIndex: 'paymentStatus',
+    key: 'paymentStatus',
+    sorter: true,
+  },
+  {
+    title: 'Payment Method',
+    dataIndex: 'paymentMethod',
+    key: 'paymentMethod',
+    sorter: true,
+  },
+  {
+    title: 'Fulfillment Status',
+    dataIndex: 'fulfillmentStatus',
+    key: 'fulfillmentStatus',
+    sorter: true,
+  },
+]
+
+const purchaseActivityList = []
 
 class UserModulePersonalDetail extends Component {
   constructor(props) {
@@ -1018,19 +1128,20 @@ class UserModulePersonalDetail extends Component {
       competitions: [],
       teams: [],
       divisions: [],
-      stripeDashBoardLoad: false
+      stripeDashBoardLoad: false,
+      umpireActivityOffset: 0,
+      UmpireActivityListSortBy: null,
+      UmpireActivityListSortOrder: null
     };
   }
 
   componentWillMount() {
-    //  console.log("componentWillMount")
     let competition = this.getEmptyCompObj();
     this.setState({ competition: competition });
     this.props.getOnlyYearListAction();
   }
 
   async componentDidMount() {
-    //console.log("componentDidMount")
     if (
       this.props.location.state != null &&
       this.props.location.state != undefined
@@ -1038,7 +1149,6 @@ class UserModulePersonalDetail extends Component {
       let userId = this.props.location.state.userId;
       let screenKey = this.props.location.state.screenKey;
       let screen = this.props.location.state.screen;
-      // console.log("****((((((" + this.props.location.state.tabKey);
       let tabKey =
         this.props.location.state.tabKey != undefined
           ? this.props.location.state.tabKey
@@ -1062,8 +1172,6 @@ class UserModulePersonalDetail extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    // console.log("Component componentDidUpdate");
-
     let userState = this.props.userState;
     let personal = userState.personalData;
     if (userState.onLoad === false && this.state.loading === true) {
@@ -1075,21 +1183,19 @@ class UserModulePersonalDetail extends Component {
     }
 
     if (
-      (this.state.competition.competitionUniqueKey == null ||
-        this.state.competition.competitionUniqueKey == "-1") &&
+      (this.state.competition.competitionUniqueKey == null || this.state.competition.competitionUniqueKey == "-1") &&
       personal.competitions != undefined &&
       personal.competitions.length > 0 &&
       this.props.userState.personalData != nextProps.userState.personalData
     ) {
-      //let years = [];
-      //let competitions = [];
+      // let years = [];
+      // let competitions = [];
       // (personal.competitions || []).map((item, index) => {
       //     let obj = {
       //         id: item.yearRefId
       //     }
       //     years.push(obj);
       // });
-      // console.log("personal.competitions::" + JSON.stringify(personal.competitions));
       let yearRefId = -1;
       this.setState({ yearRefId: -1 });
       if (
@@ -1115,7 +1221,6 @@ class UserModulePersonalDetail extends Component {
   }
 
   apiCalls = (userId) => {
-    console.log("apiCalls::" + userId);
     let payload = {
       userId: userId,
       organisationId: getOrganisationData().organisationUniqueKey,
@@ -1124,6 +1229,20 @@ class UserModulePersonalDetail extends Component {
     this.props.getUserModulePersonalDetailsAction(payload);
     this.props.getUserModulePersonalByCompetitionAction(payload);
   };
+
+  getOrganisationArray(data, roleId) {
+    let orgArray = []
+    if (data.length > 0) {
+      for (let i in data) {
+        if (data[i].roleId == roleId == 19 ? 15 : roleId) {
+          orgArray.push(data[i])
+          return orgArray
+        }
+      }
+    }
+    return orgArray
+
+  }
 
   onChangeYear = (value) => {
     let userState = this.props.userState;
@@ -1142,7 +1261,6 @@ class UserModulePersonalDetail extends Component {
   generateCompInfo = (competitions, yearRefId) => {
     let teams = [];
     let divisions = [];
-    //  console.log("competitions::" + JSON.stringify(competitions));
     (competitions || []).map((item, index) => {
       if (item.teams != null && item.teams.length > 0) {
         (item.teams || []).map((i, ind) => {
@@ -1175,7 +1293,7 @@ class UserModulePersonalDetail extends Component {
     this.setState({
       competitions: competitions,
       competition: competition,
-      yearRefId: yearRefId,
+      yearRefId,
       teams: teams,
       divisions: divisions,
     });
@@ -1250,7 +1368,6 @@ class UserModulePersonalDetail extends Component {
   };
 
   onChangeTab = (key) => {
-    console.log("onChangeTab::" + key);
     this.setState({ tabKey: key, isRegistrationForm: false });
     this.tabApiCalls(
       key,
@@ -1264,7 +1381,7 @@ class UserModulePersonalDetail extends Component {
     let payload = {
       userId: userId,
       competitionId: competition.competitionUniqueKey,
-      yearRefId: yearRefId,
+      yearRefId,
     };
     if (tabKey == "1") {
       this.hanleActivityTableList(1, userId, competition, "player", yearRefId);
@@ -1286,12 +1403,12 @@ class UserModulePersonalDetail extends Component {
       this.handleIncidentableList(1, userId, competition, yearRefId);
     } else if (tabKey === "8") {
       let payload = {
-        "paging": {
-          "limit": 10,
-          "offset": 0
+        paging: {
+          limit: 10,
+          offset: 0
         }
       }
-      // this.props.getUmpireActivityListAction(payload, JSON.stringify([15]), userId);
+      this.props.getUmpireActivityListAction(payload, JSON.stringify([15]), userId, this.state.UmpireActivityListSortBy, this.state.UmpireActivityListSortOrder);
     }
   };
 
@@ -1311,18 +1428,18 @@ class UserModulePersonalDetail extends Component {
       competitionId: competition.competitionUniqueKey,
       organisationId: getOrganisationData().organisationUniqueKey,
       userId: this.state.userId,
-      yearRefId: yearRefId,
+      yearRefId,
       paging: {
         limit: 10,
         offset: page ? 10 * (page - 1) : 0,
       },
     };
-    if (key == "player") this.props.getUserModuleActivityPlayerAction(filter);
-    if (key == "parent") this.props.getUserModuleActivityParentAction(filter);
-    if (key == "manager") this.props.getUserModuleActivityManagerAction(filter);
-    if (key == "scorer") this.props.getScorerData(filter, 4, "ENDED");
-    if (key == "umpire") this.props.getUmpireData(filter, 15, "ENDED");
-    if (key == "umpireCoach") this.props.getCoachData(filter, 20, "ENDED");
+    if (key === "player") this.props.getUserModuleActivityPlayerAction(filter);
+    if (key === "parent") this.props.getUserModuleActivityParentAction(filter);
+    if (key === "manager") this.props.getUserModuleActivityManagerAction(filter);
+    if (key === "scorer") this.props.getScorerData(filter, 4, "ENDED");
+    if (key === "umpire") this.props.getUmpireData(filter, 15, "ENDED");
+    if (key === "umpireCoach") this.props.getCoachData(filter, 20, "ENDED");
   };
 
   handleRegistrationTableList = (page, userId, competition, yearRefId) => {
@@ -1330,7 +1447,7 @@ class UserModulePersonalDetail extends Component {
       competitionId: competition.competitionUniqueKey,
       userId: userId,
       organisationId: getOrganisationData().organisationUniqueKey,
-      yearRefId: yearRefId,
+      yearRefId,
       paging: {
         limit: 10,
         offset: page ? 10 * (page - 1) : 0,
@@ -1348,6 +1465,19 @@ class UserModulePersonalDetail extends Component {
       },
     };
     this.props.getUserHistoryAction(filter);
+  };
+
+  ////pagination handling for umpire activity table list
+  handleUmpireActivityTableList = (page, userId) => {
+    let offset = page ? 10 * (page - 1) : 0
+    this.setState({ umpireActivityOffset: offset })
+    let payload = {
+      paging: {
+        limit: 10,
+        offset: offset,
+      }
+    }
+    this.props.getUmpireActivityListAction(payload, JSON.stringify([15]), userId, this.state.UmpireActivityListSortBy, this.state.UmpireActivityListSortOrder);
   };
 
   viewRegForm = async (item) => {
@@ -1450,22 +1580,18 @@ class UserModulePersonalDetail extends Component {
               </span>
             </div>
             <Select
-              name={"yearRefId"}
+              name="yearRefId"
               className="user-prof-filter-select"
               style={{ width: "100%", paddingRight: 1, paddingTop: "15px" }}
               onChange={(yearRefId) => this.onChangeYear(yearRefId)}
               value={this.state.yearRefId}
             >
-              <Option key={-1} value={-1}>
-                {AppConstants.all}
-              </Option>
-              {this.props.appState.yearList.map((item) => {
-                return (
-                  <Option key={"yearRefId" + item.id} value={item.id}>
-                    {item.description}
-                  </Option>
-                );
-              })}
+              <Option key={-1} value={-1}>{AppConstants.all}</Option>
+              {this.props.appState.yearList.map((item) => (
+                <Option key={'year_' + item.id} value={item.id}>
+                  {item.description}
+                </Option>
+              ))}
             </Select>
             <Select
               className="user-prof-filter-select"
@@ -1473,12 +1599,10 @@ class UserModulePersonalDetail extends Component {
               onChange={(e) => this.onChangeSetValue(e)}
               value={compititionId}
             >
-              <Option key={-1} value={"-1"}>
-                {AppConstants.all}
-              </Option>
-              {(this.state.competitions || []).map((comp, index) => (
+              <Option key="-1" value="-1">{AppConstants.all}</Option>
+              {(this.state.competitions || []).map((comp) => (
                 <Option
-                  key={comp.competitionUniqueKey}
+                  key={'competition_' + comp.competitionUniqueKey}
                   value={comp.competitionUniqueKey}
                 >
                   {comp.competitionName}
@@ -1555,7 +1679,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsPlayer}
             dataSource={activityPlayerList}
             pagination={false}
-            loading={userState.activityPlayerOnLoad == true && true}
+            loading={userState.activityPlayerOnLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end ">
@@ -1596,7 +1720,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsParent}
             dataSource={activityParentList}
             pagination={false}
-            loading={userState.activityParentOnLoad == true && true}
+            loading={userState.activityParentOnLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -1636,7 +1760,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsScorer}
             dataSource={activityScorerList}
             pagination={false}
-            loading={userState.activityScorerOnLoad == true && true}
+            loading={userState.activityScorerOnLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -1677,7 +1801,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsManager}
             dataSource={activityManagerList}
             pagination={false}
-            loading={userState.activityManagerOnLoad == true && true}
+            loading={userState.activityManagerOnLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -1743,7 +1867,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsPersonalAddress}
             dataSource={personalByCompData}
             pagination={false}
-            loading={userState.onPersonLoad == true && true}
+            loading={userState.onPersonLoad && true}
           />
         </div>
         {primaryContacts != null && primaryContacts.length > 0 && (
@@ -1760,7 +1884,7 @@ class UserModulePersonalDetail extends Component {
                 columns={columnsPersonalPrimaryContacts}
                 dataSource={primaryContacts}
                 pagination={false}
-                loading={userState.onPersonLoad == true && true}
+                loading={userState.onPersonLoad && true}
               />
             </div>
           </div>
@@ -1779,7 +1903,7 @@ class UserModulePersonalDetail extends Component {
                 columns={columnsPersonalChildContacts}
                 dataSource={childContacts}
                 pagination={false}
-                loading={userState.onPersonLoad == true && true}
+                loading={userState.onPersonLoad && true}
               />
             </div>
           </div>
@@ -1793,10 +1917,10 @@ class UserModulePersonalDetail extends Component {
             columns={columnsPersonalEmergency}
             dataSource={userState.personalEmergency}
             pagination={false}
-            loading={userState.onPersonLoad == true && true}
+            loading={userState.onPersonLoad && true}
           />
         </div>
-        <div className="row ">
+        <div className="row">
           <div
             className="col-sm user-module-row-heading"
             style={{ marginTop: "30px" }}
@@ -1965,7 +2089,7 @@ class UserModulePersonalDetail extends Component {
                 {item.isDisability}
               </div>
             </div>
-            {item.isDisability == "Yes" ? (
+            {item.isDisability === "Yes" ? (
               <div
                 className="comp-dash-table-view mt-2"
                 style={{ paddingLeft: "0px" }}
@@ -1999,7 +2123,7 @@ class UserModulePersonalDetail extends Component {
             dataSource={userRegistrationList}
             pagination={false}
             loading={
-              this.props.userState.userRegistrationOnLoad == true && true
+              this.props.userState.userRegistrationOnLoad && true
             }
           />
         </div>
@@ -2044,7 +2168,7 @@ class UserModulePersonalDetail extends Component {
               ) : null}
             {item.registrationSettingsRefId == 7 ? (
               <div>
-                {item.contentValue == "No" ? (
+                {item.contentValue === "No" ? (
                   <div className="applicable-to-text">{item.contentValue}</div>
                 ) : (
                     <div className="table-responsive home-dash-table-view">
@@ -2100,7 +2224,7 @@ class UserModulePersonalDetail extends Component {
             ) : null}
           </div>
         ))}
-        {registrationForm.length == 0 ? (
+        {registrationForm.length === 0 ? (
           <div>{AppConstants.noInformationProvided}</div>
         ) : null}
         <div className="row" style={{ marginTop: "50px" }}>
@@ -2143,9 +2267,9 @@ class UserModulePersonalDetail extends Component {
             }}
           >
             <Breadcrumb separator=" > ">
-              {/* <NavLink to="/userGraphicalDashboard" >
-                            <Breadcrumb.Item separator=">" className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item>
-                        </NavLink> */}
+              {/* <NavLink to="/userGraphicalDashboard">
+                <Breadcrumb.Item separator=" > " className="breadcrumb-product">{AppConstants.user}</Breadcrumb.Item>
+              </NavLink> */}
               <NavLink to="/userTextualDashboard">
                 <div className="breadcrumb-add">{AppConstants.userProfile}</div>
               </NavLink>
@@ -2193,7 +2317,7 @@ class UserModulePersonalDetail extends Component {
             columns={columnsHistory}
             dataSource={userHistoryList}
             pagination={false}
-            loading={userHistoryLoad == true && true}
+            loading={userHistoryLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -2279,7 +2403,7 @@ class UserModulePersonalDetail extends Component {
             columns={coachColumn}
             dataSource={activityCoachList}
             pagination={false}
-            loading={userState.coachDataLoad == true && true}
+            loading={userState.coachDataLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -2320,7 +2444,7 @@ class UserModulePersonalDetail extends Component {
             columns={umpireColumn}
             dataSource={activityUmpireList}
             pagination={false}
-            loading={userState.umpireDataLoad == true && true}
+            loading={userState.umpireDataLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end">
@@ -2404,7 +2528,7 @@ class UserModulePersonalDetail extends Component {
               type="primary"
               className="open-reg-button"
             >
-              <a href={stripeConnectURL} class="stripe-connect">
+              <a href={stripeConnectURL} className="stripe-connect">
                 <span>
                   {AppConstants.uploadBankAccnt}
                 </span>
@@ -2422,7 +2546,7 @@ class UserModulePersonalDetail extends Component {
             columns={umpireActivityColumn}
             dataSource={umpireActivityList}
             pagination={false}
-            loading={umpireActivityOnLoad == true && true}
+            loading={umpireActivityOnLoad && true}
           />
         </div>
         <div className="d-flex justify-content-end ">
@@ -2430,16 +2554,48 @@ class UserModulePersonalDetail extends Component {
             className="antd-pagination pb-3"
             current={umpireActivityCurrentPage}
             total={umpireActivityTotalCount}
-          // onChange={(page) =>
-          //   this.hanleIncidentTableList(
-          //     page,
-          //     this.state.userId,
-          //     this.state.competition,
-          //     this.state.yearRefId
-          //   )
-          // }
+            onChange={(page) =>
+              this.handleUmpireActivityTableList(
+                page,
+                this.state.userId
+              )
+            }
           />
         </div>
+      </div>
+    );
+  };
+
+  purchaseActivityView = () => {
+
+    return (
+      <div
+        className="comp-dash-table-view mt-2"
+        style={{ backgroundColor: "#f7fafc" }}
+      >
+
+        <div className="table-responsive home-dash-table-view">
+          <Table
+            className="home-dashboard-table"
+            columns={purchaseActivityColumn}
+            dataSource={purchaseActivityList}
+            pagination={false}
+          // loading={umpireActivityOnLoad && true}
+          />
+        </div>
+        {/* <div className="d-flex justify-content-end ">
+          <Pagination
+            className="antd-pagination pb-3"
+            current={umpireActivityCurrentPage}
+            total={umpireActivityTotalCount}
+            onChange={(page) =>
+              this.handleUmpireActivityTableList(
+                page,
+                this.state.userId
+              )
+            }
+          />
+        </div> */}
       </div>
     );
   };
@@ -2468,7 +2624,7 @@ class UserModulePersonalDetail extends Component {
           menuHeading={AppConstants.user}
           menuName={AppConstants.user}
         />
-        <InnerHorizontalMenu menu={"user"} userSelectedKey={"1"} />
+        <InnerHorizontalMenu menu="user" userSelectedKey="1" />
         <Layout className="live-score-player-profile-layout">
           <Content className="live-score-player-profile-content">
             <div className="fluid-width">
@@ -2488,31 +2644,20 @@ class UserModulePersonalDetail extends Component {
                       onChange={(e) => this.onChangeTab(e)}
                     >
                       <TabPane tab={AppConstants.activity} key="1">
-                        {activityPlayerList != null &&
-                          activityPlayerList.length > 0 &&
-                          this.playerActivityView()}
-                        {activityManagerList != null &&
-                          activityManagerList.length > 0 &&
-                          this.managerActivityView()}
+                        {activityPlayerList != null && activityPlayerList.length > 0 && this.playerActivityView()}
+                        {activityManagerList != null && activityManagerList.length > 0 && this.managerActivityView()}
 
-                        {coachActivityRoster != null &&
-                          coachActivityRoster.length > 0 &&
-                          this.coachActivityView()}
+                        {coachActivityRoster != null && coachActivityRoster.length > 0 && this.coachActivityView()}
 
-                        {umpireActivityRoster != null &&
-                          umpireActivityRoster.length > 0 &&
-                          this.umpireActivityTable()}
+                        {umpireActivityRoster != null && umpireActivityRoster.length > 0 && this.umpireActivityTable()}
 
-
-                        {scorerActivityRoster != null &&
-                          scorerActivityRoster.length > 0 &&
-                          this.scorerActivityView()}
+                        {scorerActivityRoster != null && scorerActivityRoster.length > 0 && this.scorerActivityView()}
                         {/* {activityParentList != null && activityParentList.length > 0 && this.parentActivityView()} */}
-                        {activityPlayerList.length == 0 &&
-                          activityManagerList.length == 0 &&
-                          scorerActivityRoster.length == 0 &&
-                          coachActivityRoster.length == 0 &&
-                          umpireActivityRoster.length == 0 &&
+                        {activityPlayerList.length === 0 &&
+                          activityManagerList.length === 0 &&
+                          scorerActivityRoster.length === 0 &&
+                          coachActivityRoster.length === 0 &&
+                          umpireActivityRoster.length === 0 &&
                           this.noDataAvailable()}
                       </TabPane>
                       <TabPane tab={AppConstants.statistics} key="2">
@@ -2527,9 +2672,7 @@ class UserModulePersonalDetail extends Component {
                         </TabPane>
                       )}
                       <TabPane tab={AppConstants.registration} key="5">
-                        {!this.state.isRegistrationForm
-                          ? this.registrationView()
-                          : this.registrationFormView()}
+                        {!this.state.isRegistrationForm ? this.registrationView() : this.registrationFormView()}
                       </TabPane>
                       <TabPane tab={AppConstants.history} key="6">
                         {this.historyView()}
@@ -2537,12 +2680,15 @@ class UserModulePersonalDetail extends Component {
                       <TabPane tab={AppConstants.incident} key="7">
                         {this.incidentView()}
                       </TabPane>
-                      {
-                        userRole &&
+                      {userRole && (
                         <TabPane tab={AppConstants.umpireActivity} key="8">
                           {this.umpireActivityView()}
                         </TabPane>
-                      }
+                      )}
+
+                      <TabPane tab={AppConstants.purchase} key="9">
+                        {this.purchaseActivityView()}
+                      </TabPane>
                     </Tabs>
                   </div>
                 </div>
@@ -2581,7 +2727,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
   return {
     userState: state.UserState,
     appState: state.AppState,
@@ -2590,6 +2736,6 @@ function mapStatetoProps(state) {
 }
 
 export default connect(
-  mapStatetoProps,
+  mapStateToProps,
   mapDispatchToProps
 )(UserModulePersonalDetail);

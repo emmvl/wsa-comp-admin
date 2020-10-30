@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Input, Layout, Button, Table, Select, Menu, Icon, Pagination, message } from "antd";
+import { Input, Layout, Button, Table, Select, Menu, Pagination, message } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
@@ -10,7 +11,6 @@ import ValidationConstants from "themes/validationConstant";
 import { entityTypes } from "util/entityTypes";
 import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
-import { refRoleTypes } from "util/refRoles";
 import { getUmpireCompetiton, setUmpireCompition, setUmpireCompitionData } from "util/sessionStorage";
 import { userExportFilesAction } from "store/actions/appAction";
 import { umpireMainListAction } from "store/actions/umpireAction/umpireAction";
@@ -34,7 +34,7 @@ function checkUserRoll(rolesArr, index) {
     if (isArrayNotEmpty(rolesArr)) {
         for (let i in rolesArr) {
             let roles = rolesArr[i].role
-            if (roles.name == "umpire_coach") {
+            if (roles.name === "umpire_coach") {
                 isClub = "YES"
             }
         }
@@ -53,10 +53,7 @@ function checkUmpireUserRoll(rolesArr, key) {
         }
     }
     return isUmpire
-
 }
-
-
 
 function tableSort(key) {
     let sortBy = key;
@@ -146,7 +143,7 @@ const columns = [
         onHeaderCell: () => listeners("linkedEntityName"),
         render: (linkedEntity) => (
             <div>
-                {linkedEntity.length > 0 && linkedEntity.map((item, index) => (
+                {linkedEntity.map((item, index) => (
                     <span key={`entityName ${index}`} className="multi-column-text-aligned">{item.name}</span>
                 ))}
             </div>
@@ -158,7 +155,7 @@ const columns = [
         key: "umpire",
         sorter: true,
         onHeaderCell: () => listeners("umpire"),
-        render: (umpireCoach, record, index) => <span>{checkUmpireUserRoll(record.userRoleEntities, 15)}</span>,
+        render: (umpireCoach, record) => <span>{checkUmpireUserRoll(record.userRoleEntities, 15)}</span>,
     },
     {
         title: "Umpire Coach",
@@ -206,7 +203,7 @@ const columns = [
                         <NavLink
                             to={{
                                 pathname: "./assignUmpire",
-                                state: { record: record },
+                                state: { record },
                             }}
                         >
                             <span>Assign to match</span>
@@ -599,8 +596,8 @@ class Umpire extends Component {
                                 onChange={(comp) => this.onChangeComp({ comp })}
                                 value={this.state.selectedComp}
                             >
-                                {competition.map((item, index) => (
-                                    <Option key={`competition` + index} value={item.id}>{item.longName}</Option>
+                                {competition.map((item) => (
+                                    <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
                                 ))}
                             </Select>
                         </div>
@@ -613,8 +610,7 @@ class Umpire extends Component {
                                 onKeyPress={this.onKeyEnterSearchText}
                                 value={this.state.searchText}
                                 prefix={
-                                    <Icon
-                                        type="search"
+                                    <SearchOutlined
                                         style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
                                         onClick={this.onClickSearchIcon}
                                     />

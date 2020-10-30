@@ -201,7 +201,7 @@ function* updateCourtTimingsDrawsAction(action) {
     try {
         const result = yield call(CompetitionAxiosApi.updateCourtTimingsDrawsAction, action.data);
         if (result.status === 1) {
-            const getResult = yield call(CompetitionAxiosApi.getCompetitionDraws, action.apiData.yearRefId, action.apiData.competitionId, action.apiData.venueId, action.apiData.roundId, action.apiData.orgId, action.apiData.startDate, action.apiData.endDate);
+            const getResult = yield call(CompetitionAxiosApi.getCompetitionDraws, action.apiData.yearRefId, action.apiData.competitionId, 0, action.apiData.roundId, action.apiData.orgId, action.apiData.startDate, action.apiData.endDate);
             if (getResult.status === 1) {
                 yield put({
                     type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_SUCCESS,
@@ -255,7 +255,7 @@ function* publishDraws(action) {
                 competitionId: action.competitionId,
                 status: result.status,
             });
-            if (action.key == "edit") {
+            if (action.key === "edit") {
                 history.push('/competitionDraws')
             }
         } else {

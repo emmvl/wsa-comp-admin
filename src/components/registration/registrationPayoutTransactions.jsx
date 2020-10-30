@@ -99,15 +99,15 @@ class RegistrationPayoutTransaction extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
-                <div className="row" >
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }} >
+            <div className="comp-player-grades-header-view-design">
+                <div className="row">
+                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.transactions}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                 </div>
-            </div >
+            </div>
         )
     }
 
@@ -116,21 +116,17 @@ class RegistrationPayoutTransaction extends Component {
         let stripeTransactionPayoutList = this.props.stripeState.stripeTransactionPayoutList
         let starting_after = null
         let ending_before = null
-        if (key == "next") {
+        if (key === "next") {
             ///move forward
-            console.log("move forward")
             page = parseInt(page) + 1
             let id = (stripeTransactionPayoutList[stripeTransactionPayoutList.length - 1]['id']);
-            console.log("id", id)
             starting_after = id
             ending_before = null
         }
-        if (key == "Previous") {
+        if (key === "Previous") {
             //////move backward
-            console.log("move backward")
             page = parseInt(page) - 1
             let id = (stripeTransactionPayoutList[0]['id']);
-            console.log("id", id)
             starting_after = null
             ending_before = id
         }
@@ -144,15 +140,12 @@ class RegistrationPayoutTransaction extends Component {
         let lastPage = Math.ceil(parseInt(totalCount) / 10)
         if (lastPage == currentPage) {
             return false
-        }
-        else {
+        } else {
             return true
         }
     }
 
-
     transactionPayoutListView = () => {
-        console.log("stripeState", this.props.stripeState)
         let stripeTransactionPayoutList = this.props.stripeState.stripeTransactionPayoutList
         let previousEnabled = this.props.stripeState.stripeTransactionPayoutListPage == 1 ? false : true
         let nextEnabled = this.checkNextEnabled()
@@ -167,7 +160,7 @@ class RegistrationPayoutTransaction extends Component {
                         columns={columns}
                         dataSource={stripeTransactionPayoutList}
                         pagination={false}
-                        loading={this.props.stripeState.onLoad == true && true}
+                        loading={this.props.stripeState.onLoad && true}
                     />
                 </div>
                 <div className="reg-payment-pages-div mb-5">
@@ -188,7 +181,6 @@ class RegistrationPayoutTransaction extends Component {
         )
     }
 
-
     ////////form content view
     contentView = () => {
         return (
@@ -198,12 +190,11 @@ class RegistrationPayoutTransaction extends Component {
         )
     }
 
-
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-                <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
-                <InnerHorizontalMenu menu={"registration"} regSelectedKey={"5"} />
+            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+                <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
+                <InnerHorizontalMenu menu="finance" finSelectedKey="3" />
                 <Layout >
                     {this.headerView()}
                     <Content>
@@ -221,10 +212,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch)
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         stripeState: state.StripeState,
     }
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)((RegistrationPayoutTransaction));
+export default connect(mapStateToProps, mapDispatchToProps)((RegistrationPayoutTransaction));

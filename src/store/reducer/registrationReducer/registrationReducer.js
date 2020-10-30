@@ -21,7 +21,7 @@ const newObjvalue = {
   registerMethods: [],
   registrationSettings: [],
   registrationDisclaimer: [],
-  hardShipCodes:[],				   
+  hardShipCodes:[],
 };
 const regFormChecked = {
   replyName: false,
@@ -53,7 +53,7 @@ const initialState = {
     "membershipProductTypeDiscountId": 0,
     "membershipPrdTypeDiscountTypeRefId": 0,
     "amount": "",
-    "description": "",
+    description: "",
     "availableFrom": null,
     "availableTo": null,
     "discountTypeRefId": 1,
@@ -126,7 +126,7 @@ function checkSlectedMethod(array) {
   return selectedMethodArr
 }
 
-//get selected invitees 
+//get selected invitees
 function checkSlectedInvitees(result, reg_demoSetting, reg_NetballSetting, reg_QuestionsSetting, reg_settings) {
   let selectedAdvanceSettings = []
   let selectedDemographic = []
@@ -140,7 +140,7 @@ function checkSlectedInvitees(result, reg_demoSetting, reg_NetballSetting, reg_Q
       //   selectedDemographic.push(result[i].registrationSettingsRefId)
       //   reg_demoSetting.push(result[i])
 
-      // } 
+      // }
       if (result[i].registrationSettingsRefId >= 7 && result[i].registrationSettingsRefId <= 14) {
         selectedNetballQuestions.push(result[i].registrationSettingsRefId)
         reg_NetballSetting.push(result[i])
@@ -164,7 +164,7 @@ function checkSlectedInvitees(result, reg_demoSetting, reg_NetballSetting, reg_Q
     SelectedOtherQuestions,
   }
 }
-//update registration form method 
+//update registration form method
 function getRegistrationFormMethod(selectedMethod, reg_method) {
   let postMethodArr = []
   for (let i in selectedMethod) {
@@ -240,7 +240,7 @@ function checkExistingSettings(settingArr, settingID) {
 }
 
 
-//get registration form setting 
+//get registration form setting
 function getResitrationFormSettings(selectedSettings, reg_settings) {
   let postArr = []
   for (let i in selectedSettings) {
@@ -420,9 +420,9 @@ function makeFinalProductArr(arr, defaultMembershipProduct) {
   for (let i in arr) {
     let typesArray = arr[i].membershipProductTypes;
     for (let j in typesArray) {
-      if (typesArray[j].isSelected == true) {
+      if (typesArray[j].isSelected) {
         let matchDefaultProduct = checkDefaultProduct(typesArray[j].id, defaultMembershipProduct)
-        if (matchDefaultProduct.status == true) {
+        if (matchDefaultProduct.status) {
           selectedObj = {
             orgRegMemProTypeId: matchDefaultProduct.result.orgRegMemProTypeId,
             divisionId: typesArray[j].divisionId,
@@ -583,7 +583,7 @@ function getDefaultMembershipType(data) {
           getMembershipType[i]["isMemebershipType"] = false;
         }
 
-        if(getMembershipType[i].allowTeamRegistrationTypeRefId!= null && 
+        if(getMembershipType[i].allowTeamRegistrationTypeRefId!= null &&
           getMembershipType[i].allowTeamRegistrationTypeRefId != 0){
             getMembershipType[i]["isAllow"] = true;
           }
@@ -685,7 +685,7 @@ function registration(state = initialState, action) {
       state.membershipProductId = action.result.membershipproduct.membershipProductId;
       let feesDeafultobj1 = {
         membershipProductId: state.membershipProductId,
-        paymentOptionRefId: action.result.membershipproduct.paymentOptionRefId ? action.result.membershipproduct.paymentOptionRefId : 1, 
+        paymentOptionRefId: action.result.membershipproduct.paymentOptionRefId ? action.result.membershipproduct.paymentOptionRefId : 1,
         membershipFees: feesDataObject(action.result, action.result.membershipproduct.membershipProductName)
       };
       state.membershipProductFeesTableData = feesDeafultobj1;
@@ -765,11 +765,11 @@ function registration(state = initialState, action) {
         data => data.editableIndex == recordId
       );
       data[onChangeIndex][key] = action.value;
-      if (key == "casualFee") {
+      if (key === "casualFee") {
         let casualGst = Number((action.value) / 10).toFixed(2)
         data[onChangeIndex]["casualGst"] = casualGst
       }
-      if (key == "seasonalFee") {
+      if (key === "seasonalFee") {
         let seasonalGst = Number((action.value) / 10).toFixed(2)
         data[onChangeIndex]["seasonalGst"] = seasonalGst
       }
@@ -850,45 +850,45 @@ function registration(state = initialState, action) {
       if (state.registrationFormData == 0) {
         state.registrationFormData = JSON.parse(JSON.stringify([newObjvalue]));
       }
-      if (action.key == "registrationSettings") {
+      if (action.key === "registrationSettings") {
         state.selectedInvitees = action.updatedData
         let updatedObjData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
         state.reg_settings = updatedObjData
       }
-      else if (action.key == "demographicSettings") {
+      else if (action.key === "demographicSettings") {
         state.selectedDemographic = action.updatedData
         let updatedDemoData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
         state.reg_demoSetting = updatedDemoData
       }
-      else if (action.key == "NetballQuestions") {
+      else if (action.key === "NetballQuestions") {
         state.selectedNetballQuestions = action.updatedData
         let NetballQuestionsData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
         state.reg_NetballSetting = NetballQuestionsData
 
       }
-      else if (action.key == "OtherQuestions") {
+      else if (action.key === "OtherQuestions") {
         state.SelectedOtherQuestions = action.updatedData
         let updatedQuestionsData = getResitrationFormSettings(action.updatedData, state.defaultRegistrationSettings)
         state.reg_QuestionsSetting = updatedQuestionsData
       }
 
-      else if (action.key == "registerMethods") {
+      else if (action.key === "registerMethods") {
         state.selectedMethod = action.updatedData
         let updateRegistrationMethod = getRegistrationFormMethod(action.updatedData, JSON.parse(JSON.stringify(state.defaultRegistrationMethod)))
         state.registrationFormData[0]["registerMethods"] = updateRegistrationMethod
       }
-	  else if (action.key == "addHardshipCode") {
+	  else if (action.key === "addHardshipCode") {
         if(isArrayNotEmpty(state.registrationFormData[0].hardShipCodes)){
           state.registrationFormData[0].hardShipCodes.push(action.updatedData);
         }
         else{
           state.registrationFormData[0].hardShipCodes = [];
           state.registrationFormData[0].hardShipCodes.push(action.updatedData);
-        }  
+        }
       }
-      else if (action.key == "addHardshipCodeValueChange") {
+      else if (action.key === "addHardshipCodeValueChange") {
         let {value,index} = action.updatedData;
-        state.registrationFormData[0].hardShipCodes[index].code = value;        
+        state.registrationFormData[0].hardShipCodes[index].code = value;
       }
       else {
         let oldData = state.registrationFormData;
@@ -918,14 +918,14 @@ function registration(state = initialState, action) {
     /******** */
     ///clearing particular reducer data
     case ApiConstants.REG_CLEARING_PARTICULAR_REDUCER_DATA:
-      if (action.dataName == "getMembershipProductDetails") {
+      if (action.dataName === "getMembershipProductDetails") {
         state.getMembershipProductDetails = null;
         state.getDefaultMembershipProductTypes = [];
         state.membershipProductId = "";
         state.membershipProductFeesTableData = null;
         state.membershipProductDiscountData.membershipProductDiscounts[0].discounts = [];
       }
-      if (action.dataName == "getRegistrationFormDetails") {
+      if (action.dataName === "getRegistrationFormDetails") {
         state.selectedMemberShipType = [];
         state.selectedMemberShipType = [];
         state.membershipProductTypes = [];
@@ -951,7 +951,7 @@ function registration(state = initialState, action) {
         state.defaultRegistrationSettings = []
 
       }
-      if (action.dataName == "allDivisionsData") {
+      if (action.dataName === "allDivisionsData") {
         state.allDivisionsData = []
       }
       return {
@@ -997,13 +997,13 @@ function registration(state = initialState, action) {
 
     ////add another discount in the membership fees
     case ApiConstants.ADD_ANOTHER_DISCOUNT_MEMBERSHIP_FEES:
-      if (action.keyAction == "add") {
+      if (action.keyAction === "add") {
         const newObj = {
           "membershipProductTypeMappingId": "Select",
           "membershipProductTypeDiscountId": 0,
           "membershipPrdTypeDiscountTypeRefId": 0,
           "amount": "",
-          "description": "",
+          description: "",
           "availableFrom": null,
           "availableTo": null,
           "discountTypeRefId": 1,
@@ -1014,7 +1014,7 @@ function registration(state = initialState, action) {
         }
         state.membershipProductDiscountData.membershipProductDiscounts[0].discounts.push(newObj)
       }
-      else if (action.keyAction == "remove") {
+      else if (action.keyAction === "remove") {
         state.membershipProductDiscountData.membershipProductDiscounts[0].discounts.splice(action.index, 1)
       }
       return {
@@ -1049,31 +1049,31 @@ function registration(state = initialState, action) {
 
     ////age mandate and membershipTypes onchange selection checkbox
     case ApiConstants.ON_CHANGE_SELECTION_MEM_TYPE_AGE_MANDATE_CHECKBOX:
-      if (action.keyword == "isMandate") {
+      if (action.keyword === "isMandate") {
         state.getDefaultMembershipProductTypes[action.index].isMandate = action.checkedValue
 
       }
-	  if (action.keyword == "isAllow") {
+	  if (action.keyword === "isAllow") {
         state.getDefaultMembershipProductTypes[action.index]["isAllow"] = action.checkedValue
-        if(action.checkedValue == true){
+        if(action.checkedValue){
           state.getDefaultMembershipProductTypes[action.index]["allowTeamRegistrationTypeRefId"] = 1
         }
         else{
           state.getDefaultMembershipProductTypes[action.index]["allowTeamRegistrationTypeRefId"] = null;
         }
       }
-      if (action.keyword == "isMemebershipType") {
+      if (action.keyword === "isMemebershipType") {
         state.getDefaultMembershipProductTypes[action.index].isMemebershipType = action.checkedValue
       }
-      if (action.keyword == "isPlaying") {
-        if (action.checkedValue == true) {
+      if (action.keyword === "isPlaying") {
+        if (action.checkedValue) {
           state.getDefaultMembershipProductTypes[action.index][action.keyword] = 1
         }
         else {
           state.getDefaultMembershipProductTypes[action.index][action.keyword] = 0
         }
       }
-      if (action.keyword == "isChildrenCheckNumber") {
+      if (action.keyword === "isChildrenCheckNumber") {
         state.getDefaultMembershipProductTypes[action.index].isChildrenCheckNumber = action.checkedValue
 
       }
@@ -1144,7 +1144,7 @@ function registration(state = initialState, action) {
 
     case ApiConstants.REG_FORM_CHECKED_VISIBLE:
       let visibleKey = action.key
-      if (visibleKey == "trainingVisible") {
+      if (visibleKey === "trainingVisible") {
         state.defaultChecked[visibleKey] = action.checked
         state.defaultChecked["venueVisible"] = false
         state.defaultChecked['daysVisible'] = false
@@ -1153,7 +1153,7 @@ function registration(state = initialState, action) {
       }
       else {
         state.defaultChecked[visibleKey] = action.checked
-        if (visibleKey == "daysVisible") {
+        if (visibleKey === "daysVisible") {
           state.registrationFormData[0]["trainingDaysAndTimes"] = ''
         }
         else {
@@ -1164,7 +1164,7 @@ function registration(state = initialState, action) {
 
     case ApiConstants.REG_FORM_REPLY_CHECKED_VISIBLE:
       let replyVisibleKey = action.key
-      if (replyVisibleKey == "replyContactVisible") {
+      if (replyVisibleKey === "replyContactVisible") {
         state.defaultChecked[replyVisibleKey] = action.checked
         state.defaultChecked['replyName'] = false
         state.defaultChecked['replyRole'] = false

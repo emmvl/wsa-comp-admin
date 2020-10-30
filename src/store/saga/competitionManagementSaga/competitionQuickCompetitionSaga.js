@@ -5,9 +5,11 @@ import CommonAxiosApi from "../../http/commonHttp/commonAxiosApi";
 import history from "../../../util/history";
 import { message } from "antd";
 import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../../util/helpers";
+import {getCurrentYear} from 'util/permissions'
 
 
 function* failSaga(result) {
+    console.log(result)
     yield put({
         type: ApiConstants.API_QUICK_COMPETITION_FAIL,
         error: result,
@@ -55,7 +57,8 @@ export function* saveQuickCompDivisionSaga(action) {
                             detailResult: detailResult.result.data,
                             status: result.status,
                             competitionId: action.competitionUniqueKey,
-                            competitionName: action.competitionName
+                            competitionName: action.competitionName,
+                            updateStatus: true
                         });
                     }
                 }
@@ -92,7 +95,7 @@ export function* saveQuickCompDivisionSaga(action) {
 }
 
 
-////////////Create quick competition 
+////////////Create quick competition
 export function* createQuickComptitionSaga(action) {
     try {
         const result = yield call(AxiosApi.createQuickComptition, action.year, action.comptitionName, action.competitionDate);
@@ -114,7 +117,7 @@ export function* getquickYearAndCompetitionListSaga(action) {
     try {
         const result = isArrayNotEmpty(action.yearData) ? { status: 1, result: { data: action.yearData } } : yield call(CommonAxiosApi.getYearList, action);
         if (result.status === 1) {
-            let yearId = action.yearId == null ? result.result.data[0].id : action.yearId
+            let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId
             const resultCompetition = yield call(AxiosApi.getQuickCompetitionList, yearId);
             if (resultCompetition.status === 1) {
                 yield put({
@@ -122,6 +125,7 @@ export function* getquickYearAndCompetitionListSaga(action) {
                     yearList: result.result.data,
                     competetionListResult: resultCompetition.result.data,
                     status: result.status,
+                    yearId:yearId
                 });
 
             }
@@ -170,7 +174,8 @@ export function* quickcompetitoTimeSlotsPostApi(action) {
                             detailResult: detailResult.result.data,
                             status: result.status,
                             competitionId: action.competitionUniqueKey,
-                            competitionName: action.competitionName
+                            competitionName: action.competitionName,
+                            updateStatus: true
                         });
                     }
                 }
@@ -217,7 +222,7 @@ export function* updateQuickCompetitionSaga(action) {
     try {
         const result = yield call(AxiosApi.updateQuickCompetition, action.payload);
         if (result.status === 1) {
-            if (action.buttonPressed == "AddTeam") {
+            if (action.buttonPressed === "AddTeam") {
                 const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.payload.competitionId);
                 if (detailResult.status === 1) {
                     yield put({
@@ -226,9 +231,10 @@ export function* updateQuickCompetitionSaga(action) {
                         detailResult: detailResult.result.data,
                         status: result.status,
                         competitionId: action.payload.competitionId,
-                        competitionName: action.payload.competitionName
+                        competitionName: action.payload.competitionName,
+                        updateStatus: true
                     });
-                    if (action.buttonPressed == "AddTeam") {
+                    if (action.buttonPressed === "AddTeam") {
                         history.push('/quickCompetitionInvitations', { competitionUniqueKey: action.payload.competitionId, year: action.year, importPlayer: JSON.stringify(detailResult.result.data.importPlayer) })
                     }
                 }
@@ -248,7 +254,8 @@ export function* updateQuickCompetitionSaga(action) {
                             detailResult: detailResult.result.data,
                             status: result.status,
                             competitionId: action.payload.competitionId,
-                            competitionName: action.payload.competitionName
+                            competitionName: action.payload.competitionName,
+                            updateStatus: true
                         });
                     }
                     else {
@@ -293,7 +300,6 @@ export function* quickCompetitionPlayer(action) {
 export function* quickCompetitionAddVenueSaga(action) {
     try {
         const result = yield call(AxiosApi.addVenueQuickCompetition, action.payload);
-        console.log(result)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_QUICK_COMPETITION_ADDVENUE_SUCCESS,
@@ -361,6 +367,149 @@ export function* mergeCompetitionProceedSaga(action) {
             });
         } else {
             yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* UpdateGrid_TimeSlotSaga(action) {
+    try {
+        const resultUpdate = yield call(AxiosApi.updateQuickCompetition, action.payload);
+        if (resultUpdate.status === 1) {
+            const result = yield call(AxiosApi.postTimeSlotData, action.body);
+            if (result.status === 1) {
+                const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.competitionUniqueKey)
+                if (drawResult.status === 1) {
+                    const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.competitionUniqueKey);
+                    if (detailResult.status === 1) {
+                        yield put({
+                            type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
+                            result: result.result.data,
+                            drawresult: drawResult.result.data,
+                            detailResult: detailResult.result.data,
+                            status: result.status,
+                            competitionId: action.competitionUniqueKey,
+                            competitionName: action.competitionName,
+                            updateStatus: true
+                        });
+                    }
+                    setTimeout(() => {
+                        message.success(result.result.data.message)
+                    }, 500);
+                }
+                else {
+                    yield put({
+                        type: ApiConstants.API_QUICK_COMPETITION_TIMESLOT_POST_SUCCESS,
+                        result: result.result.data,
+                        status: result.status,
+                    });
+                    setTimeout(() => {
+                        message.success(result.result.data.message)
+                    }, 500);
+                }
+            }
+            else {
+                yield call(failSaga, result)
+            }
+        } else {
+            yield call(failSaga, resultUpdate)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+
+}
+
+export function* updateGrid_DivisionSaga(action) {
+    try {
+        const resultUpdate = yield call(AxiosApi.updateQuickCompetition, action.payload);
+        if (resultUpdate.status === 1) {
+            const result = yield call(AxiosApi.saveQuickCompDivision, action.competitionUniqueKey, action.divisions);
+            if (result.status === 1) {
+                const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.competitionUniqueKey)
+                if (drawResult.status === 1) {
+                    const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.competitionUniqueKey);
+                    if (detailResult.status === 1) {
+                        yield put({
+                            type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
+                            result: result.result.data,
+                            drawresult: drawResult.result.data,
+                            detailResult: detailResult.result.data,
+                            status: result.status,
+                            competitionId: action.competitionUniqueKey,
+                            competitionName: action.competitionName,
+                            updateStatus: true
+                        });
+                    }
+                }
+                else {
+                    yield put({
+                        type: ApiConstants.API_SAVE_QUICK_COMPETITION_DIVISION_SUCCESS,
+                        result: result.result.data,
+                        status: result.status
+                    });
+                    if (drawResult.status != 1) {
+                        setTimeout(() => {
+                            message.config({
+                                duration: 1,
+                                maxCount: 1
+                            })
+                            message.error(drawResult.result.data.message);
+                        }, 800);
+                    }
+                }
+            }
+            else {
+                yield call(failSaga, result)
+            }
+        } else {
+            yield call(failSaga, resultUpdate)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
+export function* updateGrid_VenueSaga(action) {
+    try {
+        const resultUpdate = yield call(AxiosApi.updateQuickCompetition, action.payload);
+        if (resultUpdate.status === 1) {
+            const result = yield call(AxiosApi.addVenueQuickCompetition, action.body);
+            if (result.status === 1) {
+                const drawResult = yield call(AxiosApi.quickCompetitionGenerateDraw, action.year, action.competitionUniqueKey)
+                if (drawResult.status === 1) {
+                    const detailResult = yield call(AxiosApi.getQuickCompetiitonDetails, action.competitionUniqueKey);
+                    if (detailResult.status === 1) {
+                        yield put({
+                            type: ApiConstants.API_UPDATE_QUICK_COMPETITION_SUCCESS,
+                            result: result.result.data,
+                            drawresult: drawResult.result.data,
+                            detailResult: detailResult.result.data,
+                            status: result.status,
+                            competitionId: action.competitionUniqueKey,
+                            competitionName: action.competitionName,
+                            updateStatus: true
+                        });
+                    }
+                }
+                else {
+                    yield put({
+                        type: ApiConstants.API_QUICK_COMPETITION_ADDVENUE_SUCCESS,
+                        result: result.result.data,
+                        status: result.status,
+                    });
+                    setTimeout(() => {
+                        message.success(result.result.data.message)
+                    }, 500);
+                }
+            }
+            else {
+                yield call(failSaga, result)
+            }
+        }
+        else {
+            yield call(failSaga, resultUpdate)
         }
     } catch (error) {
         yield call(errorSaga, error)

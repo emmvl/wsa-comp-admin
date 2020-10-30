@@ -376,11 +376,11 @@ textarea {
 }
 
 .events-menu .icon {
-	background: url('../images/event.svg');
+	background: url('../images/chat.svg');
 }
 
 .events-menu:hover .icon, .active .events-menu .icon {
-	background: url('../images/active-event.svg');
+	background: url('../images/active-chat.svg');
 }
 
 .shop-menu .icon {

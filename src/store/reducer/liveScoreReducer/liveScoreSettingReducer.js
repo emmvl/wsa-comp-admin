@@ -26,7 +26,6 @@ const initialState = {
         lineupSelectionHours: null,
         lineupSelectionMins: null,
         gameTimeTrackingType: 0
-
     },
     buzzerEnabled: false,
     warningBuzzerEnabled: false,
@@ -69,9 +68,9 @@ const initialState = {
     isInvitorsChanged: false,
     radioSelectionArr: [],
     invitedAnyAssocArr: [],
-    invitedAnyClubArr: []
+    invitedAnyClubArr: [],
+    disabled: false,
 }
-
 
 //minutes to hour (and days) converter
 function recordingTimeDays(num) {
@@ -88,11 +87,9 @@ function recordingTimeDays(num) {
 function recordingTimeHours(num) {
     let d, h, m
     if (num != null) {
-
         d = Math.floor(num / 1440); // 60*24
         h = Math.floor((num - (d * 1440)) / 60);
         m = Math.round(num % 60);
-
     }
     return h
 }
@@ -101,11 +98,9 @@ function recordingTimeHours(num) {
 function recordingTimeMins(num) {
     let d, h, m
     if (num != null) {
-
         d = Math.floor(num / 1440); // 60*24
         h = Math.floor((num - (d * 1440)) / 60);
         m = Math.round(num % 60);
-
     }
     return m
 }
@@ -131,7 +126,6 @@ function getAffiliateValue(compInviteesArr, regInviteArr) {
         }
     }
     return affiliateSelectedValue
-
 }
 
 function getAnyOrgValue(compInviteesArr, regInviteArr) {
@@ -146,7 +140,6 @@ function getAnyOrgValue(compInviteesArr, regInviteArr) {
             }
             break;
         }
-
     }
     return anyOrgSelectedValue
 }
@@ -195,7 +188,6 @@ function getSelectedOrganization(data, compInviteesArr) {
 }
 
 export default function liveScoreSettingsViewReducer(state = initialState, { type, payload, }) {
-
     switch (type) {
         case ApiConstants.LiveScore_SETTING_VIEW_INITITAE:
             return {
@@ -347,7 +339,6 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.invitedAnyClub = clubArray
                     state.invitedAnyClubArr = clubArray
                 }
-
             } else {
                 state.invitedTo = []
                 state.radioSelectionArr = []
@@ -380,7 +371,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     record1,
                     record2,
                     attendanceRecordingType: payload.attendanceRecordingType,
-                    attendanceRecordingPeriod: payload.attendanceRecordingPeriod,
+                    attendanceRecordingPeriod: payload.gameTimeTracking ? "PERIOD" : payload.attendanceRecordingPeriod,
                     timerType: payload.timerType,
                     days: recordingTimeDays(payload.attendanceSelectionTime),
                     hours: recordingTimeHours(payload.attendanceSelectionTime),
@@ -398,6 +389,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 gamesBorrowedThreshold: payload.gamesBorrowedThreshold,
                 linkedCompetitionId: payload.linkedCompetitionId,
                 inputNumberValue: payload.gamesBorrowedThreshold,
+                disabled: payload.gameTimeTracking,
             }
         case ApiConstants.LiveScore_SETTING_VIEW_ERROR:
             return {
@@ -414,49 +406,45 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
             const keys = payload.key
             const Data = payload.data
 
-            if (keys == 'buzzerEnabled' || keys == 'warningBuzzerEnabled' || keys == "lineupSelection" || keys == 'premierCompLink') {
+            if (keys === 'buzzerEnabled' || keys === 'warningBuzzerEnabled' || keys === "lineupSelection" || keys === 'premierCompLink') {
                 state[keys] = Data
 
-                if (keys == 'premierCompLink') {
+                if (keys === 'premierCompLink') {
                     if (Data === false) {
                         state.linkedCompetitionId = null
                     }
                 }
-            } else if (keys == "borrowedPlayer") {
+            } else if (keys === "borrowedPlayer") {
                 state[keys] = Data
 
-                if (Data == 'MINUTES') {
+                if (Data === 'MINUTES') {
                     state.gamesBorrowedThreshold = state.inputNumberValue
                 }
-
-            } else if (keys == 'number') {
+            } else if (keys === 'number') {
                 state.gamesBorrowedThreshold = Data
-
-            } else if (keys == 'yearRefId') {
+            } else if (keys === 'yearRefId') {
                 state.yearRefId = Data
-
-            } else if (keys == 'linkedCompetitionId') {
+            } else if (keys === 'linkedCompetitionId') {
                 state.linkedCompetitionId = Data
-
-            } else if (keys == 'recordUmpire') {
+            } else if (keys === 'recordUmpire') {
                 state.recordUmpire = Data
-            } else if (keys == 'affiliateSelected' || keys == 'anyOrgSelected' || keys == 'otherSelected' || keys == 'affiliateNonSelected' || keys == 'anyOrgNonSelected') {
+            } else if (keys === 'affiliateSelected' || keys === 'anyOrgSelected' || keys === 'otherSelected' || keys === 'affiliateNonSelected' || keys === 'anyOrgNonSelected') {
                 state.invitedOrganisation = []
-                if (keys == 'affiliateSelected') {
+                if (keys === 'affiliateSelected') {
                     state.affiliateSelected = Data
                     state.otherSelected = null
                     state.affiliateNonSelected = null
                     state.affiliateArray.splice(0, 1, Data)
                     state.invitedTo = [...state.affiliateArray, ...state.anyOrgArray]
                 }
-                if (keys == 'anyOrgSelected') {
+                if (keys === 'anyOrgSelected') {
                     state.anyOrgSelected = Data
                     state.otherSelected = null
                     state.anyOrgNonSelected = null
                     state.affiliateArray.splice(0, 1, Data)
                     state.invitedTo = [...state.affiliateArray, ...state.anyOrgArray]
                 }
-                if (keys == 'otherSelected') {
+                if (keys === 'otherSelected') {
                     state.otherSelected = Data
                     state.affiliateSelected = null
                     state.anyOrgSelected = null
@@ -473,14 +461,14 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.affiliateArray = []
                     state.anyOrgArray = []
                 }
-                if (keys == 'affiliateNonSelected') {
+                if (keys === 'affiliateNonSelected') {
                     state.affiliateSelected = []
                     state.otherSelected = null
                     state.affiliateNonSelected = Data
                     state.affiliateArray = []
                     state.invitedTo = [...state.affiliateArray, ...state.anyOrgArray]
                 }
-                if (keys == 'anyOrgNonSelected') {
+                if (keys === 'anyOrgNonSelected') {
                     state.invitedTo = []
                     state.anyOrgSelected = []
                     state.otherSelected = null
@@ -493,9 +481,8 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.clubSchool = []
                     state.anyOrgArray = []
                 }
-
-            } else if (keys == 'associationAffilite' || keys == 'clubAffilite') {
-                if (keys == 'associationAffilite') {
+            } else if (keys === 'associationAffilite' || keys === 'clubAffilite') {
+                if (keys === 'associationAffilite') {
                     state.associationLeague = Data
                     let inviteeArray = []
                     for (let i in Data) {
@@ -506,7 +493,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     }
                     state.invitedAnyAssoc = inviteeArray
                 }
-                if (keys == 'clubAffilite') {
+                if (keys === 'clubAffilite') {
                     state.clubSchool = Data
                     let inviteeArray = []
                     for (let i in Data) {
@@ -517,15 +504,29 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     }
                     state.invitedAnyClub = inviteeArray
                 }
-
-            } else if (keys == 'record1') {
+            } else if (keys === 'record1') {
                 let posTracking = false
                 for (let i in Data) {
-                    if (Data[i] == "positionTracking") {
+                    if (Data[i] === "positionTracking") {
                         posTracking = true
                         break;
                     }
                 }
+
+                if (Data.length > 0) {
+                    for (let i in Data) {
+                        if (Data[i] === "gameTimeTracking") {
+                            state.disabled = true
+                            state.form.attendanceRecordingPeriod = 'PERIOD'
+                            break;
+                        } else {
+                            state.disabled = false
+                        }
+                    }
+                } else {
+                    state.disabled = false
+                }
+
                 if (posTracking) {
                 } else {
                     state.lineupSelection = false
@@ -533,8 +534,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.form.lineupSelectionHours = null
                     state.form.lineupSelectionMins = null
                 }
-            }
-            else if (keys == 'associationChecked') {
+            } else if (keys === 'associationChecked') {
                 state.anyOrgNonSelected = null
                 state[keys] = payload.data
                 state.otherSelected = null
@@ -548,7 +548,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     state.associationLeague = []
                     state.invitedTo = [...state.affiliateArray, ...state.anyOrgArray]
                 }
-            } else if (keys == 'clubChecked') {
+            } else if (keys === 'clubChecked') {
                 state.anyOrgNonSelected = null
                 state[keys] = payload.data
                 state.otherSelected = null
@@ -570,9 +570,9 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                     [keys]: Data
                 }
             }
-        case ApiConstants.LiveScore_SETTING_DATA_POST_INITATE:
 
-            if (payload.isEdit == 'edit') {
+        case ApiConstants.LiveScore_SETTING_DATA_POST_INITATE:
+            if (payload.isEdit === 'edit') {
                 return {
                     ...state,
                     editLoader: true
@@ -657,6 +657,7 @@ export default function liveScoreSettingsViewReducer(state = initialState, { typ
                 registrationInvitees: payload
             }
 
-        default: return state
+        default:
+            return state
     }
 }

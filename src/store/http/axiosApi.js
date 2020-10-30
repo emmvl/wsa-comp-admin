@@ -38,7 +38,7 @@ let AxiosApi = {
   registrationCompetitionFeeList(offset, yearRefId) {
     let body = {
       paging: {
-        offset: offset,
+        offset,
         limit: 10
       }
     };
@@ -50,7 +50,7 @@ let AxiosApi = {
   registrationMembershipFeeList(offset, yearRefId) {
     let body = {
       paging: {
-        offset: offset,
+        offset,
         limit: 10
       }
     };
@@ -200,7 +200,7 @@ let AxiosApi = {
     return Method.dataGet(url, token);
   },
 
-  ///////////save the competition fees deatils 
+  ///////////save the competition fees deatils
   async saveCompetitionFeesDetails(payload) {
     let orgItem = await getOrganisationData()
     let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
@@ -259,7 +259,7 @@ let AxiosApi = {
     var url = `/api/competitionfee/fees?competitionUniqueKey=${competitionId}&organisationUniqueKey=${organisationUniqueKey}`
     return Method.dataPost(url, token, payload)
   },
-  //post competition fee discount 
+  //post competition fee discount
   async postCompetitonFeeDiscount(payload, competitionId, organisationKey) {
     let orgItem = await getOrganisationData()
     let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;

@@ -1,5 +1,5 @@
 import ApiConstants from '../../../themes/apiConstants'
-
+import { getLiveScoreCompetiton } from '../../../util/sessionStorage';
 
 const initialState = {
   onLoad: false,
@@ -9,6 +9,26 @@ const initialState = {
   positionList: []
 };
 
+function getFilterPositionData(positionData) {
+  const competition = JSON.parse(getLiveScoreCompetiton());
+
+  let positionArray = []
+  if (competition.gameTimeTracking === false) {
+    for (let i in positionData) {
+      if (positionData[i].isPlaying === true && positionData[i].isVisible === true) {
+        positionArray.push(positionData[i])
+      }
+    }
+  } else {
+    for (let i in positionData) {
+      if (positionData[i].isVisible === true) {
+        positionArray.push(positionData[i])
+      }
+    }
+  }
+  return positionArray
+}
+
 function liveScoreGamePositionState(state = initialState, action) {
 
   switch (action.type) {
@@ -17,10 +37,12 @@ function liveScoreGamePositionState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_LIVE_SCORE_GET_GAME_POSITION_LIST_SUCCESS:
+
+      let filterPositionListData = getFilterPositionData(action.result)
       return {
         ...state,
         onLoad: false,
-        positionList:action.result
+        positionList: filterPositionListData
       };
 
     case ApiConstants.API_LIVE_SCORE_GET_GAME_POSITION_LIST_FAIL:

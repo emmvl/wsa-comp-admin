@@ -215,7 +215,7 @@ const MatchSheetTemplate = (props) => {
                     <Text style={styles.associationName}>{organisation.name || 'Association'}</Text>
                     <Text style={styles.templateType}>{templateType} Scoresheet</Text>
                 </View>
-                <Image style={styles.logo} src={organisation.logoUrl || "https://img.icons8.com/color/myspace"}/>
+                <Image style={styles.logo} src={organisation.logoUrl || "https://img.icons8.com/color/myspace"} />
             </View>
             <View style={styles.matchInfo}>
                 <View style={styles.infoContentLeft}>
@@ -242,15 +242,15 @@ const MatchSheetTemplate = (props) => {
                                 <Text style={styles.cell}>3</Text>
                                 <Text style={styles.cell}>4</Text>
                             </View>
-                            {team1players.length > 0 && team1players.map((player, index) => (
+                            {team1players.map((player, index) => (
                                 <View style={styles.row} key={`row_${index}`}>
                                     <Text style={styles.cell}>{player.playerId}</Text>
                                     <Text style={styles.largeCell}>{`${player.firstName} ${player.lastName}`}</Text>
-                                    <Text style={styles.largeCell}></Text>
-                                    <Text style={styles.cell}></Text>
-                                    <Text style={styles.cell}></Text>
-                                    <Text style={styles.cell}></Text>
-                                    <Text style={styles.cell}></Text>
+                                    <Text style={styles.largeCell} />
+                                    <Text style={styles.cell} />
+                                    <Text style={styles.cell} />
+                                    <Text style={styles.cell} />
+                                    <Text style={styles.cell} />
                                 </View>
                             ))}
                         </View>
@@ -266,15 +266,15 @@ const MatchSheetTemplate = (props) => {
                                 <Text style={styles.cell}>3</Text>
                                 <Text style={styles.cell}>4</Text>
                             </View>
-                            {team2players.length > 0 && team2players.map((player, index) => (
+                            {team2players.map((player, index) => (
                                 <View style={styles.row} key={`row_${index}`}>
                                     <Text style={styles.cell}>{player.playerId}</Text>
                                     <Text style={styles.largeCell}>{`${player.firstName} ${player.lastName}`}</Text>
-                                    <Text style={styles.largeCell}></Text>
-                                    <Text style={styles.cell}></Text>
-                                    <Text style={styles.cell}></Text>
-                                    <Text style={styles.cell}></Text>
-                                    <Text style={styles.cell}></Text>
+                                    <Text style={styles.largeCell} />
+                                    <Text style={styles.cell} />
+                                    <Text style={styles.cell} />
+                                    <Text style={styles.cell} />
+                                    <Text style={styles.cell} />
                                 </View>
                             ))}
                         </View>
@@ -288,7 +288,7 @@ const MatchSheetTemplate = (props) => {
                         {[...Array(4).keys()].map((rowIndex) => (
                             <View style={styles.passRow} key={`row_${rowIndex}`}>
                                 {[...Array(40).keys()].map((cellIndex) => (
-                                    <Text style={styles.passCell} key={`cell_${cellIndex}`}></Text>
+                                    <Text style={styles.passCell} key={`cell_${cellIndex}`} />
                                 ))}
                             </View>
                         ))}
@@ -328,34 +328,34 @@ const MatchSheetTemplate = (props) => {
                                     <View style={styles.goalRow} key={`row_${rowIndex}`}>
                                         <View style={styles.goalCell}>
                                             <Text style={styles.goalSubCell}>Q {rowIndex + 1}</Text>
-                                            <Text></Text>
+                                            <Text />
                                         </View>
                                         <View style={styles.goalCell}>
                                             <Text style={styles.goalSubCell}>GS</Text>
                                             <Text>GA</Text>
                                         </View>
                                         <View style={styles.goalCheckCell}>
-                                            <Text style={styles.goalSubCell}></Text>
-                                            <Text></Text>
+                                            <Text style={styles.goalSubCell} />
+                                            <Text />
                                         </View>
                                         <View style={styles.goalCell}>
-                                            <Text style={styles.goalSubCell}></Text>
-                                            <Text></Text>
+                                            <Text style={styles.goalSubCell} />
+                                            <Text />
                                         </View>
-                                        <Text style={styles.goalCell}></Text>
+                                        <Text style={styles.goalCell} />
                                         <View style={styles.goalCell}>
                                             <Text style={styles.goalSubCell}>GS</Text>
                                             <Text>GA</Text>
                                         </View>
                                         <View style={styles.goalCheckCell}>
-                                            <Text style={styles.goalSubCell}></Text>
-                                            <Text></Text>
+                                            <Text style={styles.goalSubCell} />
+                                            <Text />
                                         </View>
                                         <View style={styles.goalCell}>
-                                            <Text style={styles.goalSubCell}></Text>
-                                            <Text></Text>
+                                            <Text style={styles.goalSubCell} />
+                                            <Text />
                                         </View>
-                                        <Text style={styles.goalCell}></Text>
+                                        <Text style={styles.goalCell} />
                                     </View>
                                 ))}
                             </View>
@@ -394,7 +394,7 @@ const MatchSheetTemplate = (props) => {
                                 {/*Scorer 1 {matchDetail.scorer1 ? `${matchDetail.scorer1.firstName} ${matchDetail.scorer1.lastName}` : ''}*/}
                             </Text>
                             <Text style={styles.signatureCell}>Signature</Text>
-                            <Text style={styles.gapCell}></Text>
+                            <Text style={styles.gapCell} />
                             <Text style={styles.summaryCell}>
                                 Scorer 2
                             </Text>
@@ -403,14 +403,14 @@ const MatchSheetTemplate = (props) => {
                         <View style={styles.summaryRow}>
                             <Text style={styles.summaryCell}>Umpire</Text>
                             <Text style={styles.signatureCell}>Signature</Text>
-                            <Text style={styles.gapCell}></Text>
+                            <Text style={styles.gapCell} />
                             <Text style={styles.summaryCell}>Umpire</Text>
                             <Text style={styles.signatureCell}>Signature</Text>
                         </View>
                         <View style={styles.summaryRow}>
                             <Text style={styles.summaryCell}>Captain</Text>
                             <Text style={styles.signatureCell}>Signature</Text>
-                            <Text style={styles.gapCell}></Text>
+                            <Text style={styles.gapCell} />
                             <Text style={styles.summaryCell}>Captain</Text>
                             <Text style={styles.signatureCell}>Signature</Text>
                         </View>
