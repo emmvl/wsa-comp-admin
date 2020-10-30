@@ -52,7 +52,7 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "craco --max_old_space_size=8128 start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
