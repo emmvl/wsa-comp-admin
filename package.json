@@ -52,13 +52,13 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "start": "sudo rm -r node_modules",
-    "build": "sudo rm -r node_modules",
-    "test": "sudo rm -r node_modules",
-    "eject": "sudo rm -r node_modules"
+    "start": "rm -r node_modules",
+    "build": "rm -r node_modules",
+    "test": "rm -r node_modules",
+    "eject": "rm -r node_modules"
   },
   "eslintConfig": {
-    "extends": "sudo rm -r node_modules"
+    "extends": "rm -r node_modules"
   },
   "browserslist": {
     "production": [
