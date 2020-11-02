@@ -840,7 +840,8 @@ class CompetitionQuickCompetition extends Component {
 
                 <InnerHorizontalMenu menu="competition" compSelectedKey="2" />
 
-                <Loader visible={this.props.quickCompetitionState.onQuickCompLoad} />
+                {/* <Loader visible={this.props.quickCompetitionState.onQuickCompLoad} /> */}
+                <Loader visible={this.state.compModalLoad} />
 
                 <Layout className="comp-dash-table-view">
                     {/* <div className="comp-draw-head-content-view"> */}
