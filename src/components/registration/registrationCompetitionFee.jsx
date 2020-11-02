@@ -3100,10 +3100,10 @@ class RegistrationCompetitionFee extends Component {
                     regInviteesDisable: true,
                     membershipDisable: true,
                     divisionsDisable: true,
-                    feesTableDisable: true,
+                    feesTableDisable: false,
                     paymentsDisable: true,
                     discountsDisable: true,
-                    allDisable: true,
+                    allDisable: false,
                     isPublished: true,
                 };
                 this.setState({ permissionState: permissionObject });
@@ -3115,7 +3115,7 @@ class RegistrationCompetitionFee extends Component {
                     regInviteesDisable: true,
                     membershipDisable: true,
                     divisionsDisable: true,
-                    feesTableDisable: true,
+                    feesTableDisable: false,
                     paymentsDisable: true,
                     discountsDisable: false,
                     allDisable: false,
@@ -3128,7 +3128,7 @@ class RegistrationCompetitionFee extends Component {
                     regInviteesDisable: true,
                     membershipDisable: true,
                     divisionsDisable: true,
-                    feesTableDisable: true,
+                    feesTableDisable: false,
                     paymentsDisable: false,
                     discountsDisable: false,
                     allDisable: false,
@@ -5022,7 +5022,8 @@ class RegistrationCompetitionFee extends Component {
                         name={'registrationCloseDate'}
                         format="DD-MM-YYYY"
                         showTime={false}
-                        disabled={compDetailDisable}
+                        //disabled={compDetailDisable}
+                        disabled={false}
                     />
                 </Form.Item>
 
