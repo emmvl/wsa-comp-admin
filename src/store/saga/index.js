@@ -186,7 +186,6 @@ export default function* rootSaga() {
     fork(liveScorePlayerMinuteTrackingSaga),
 
     // Shop
-    fork(shopOrderStatusSaga),
     fork(shopOrderSummarySaga),
     fork(shopProductSaga),
     fork(shopSettingSaga),

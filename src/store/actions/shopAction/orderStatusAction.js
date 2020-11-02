@@ -36,11 +36,21 @@ function clearOrderStatusReducer(dataName) {
     return action;
 }
 
+///purchases listing get API 
+function getPurchasesListingAction(params) {
+    const action = {
+        type: ApiConstants.API_GET_PURCHASES_LISTING_LOAD,
+        params
+    };
+    return action;
+}
+
 export {
     getOrderStatusListingAction,
     updateOrderStatusAction,
     getOrderDetailsAction,
     clearOrderStatusReducer,
+    getPurchasesListingAction,
 }
 
 
