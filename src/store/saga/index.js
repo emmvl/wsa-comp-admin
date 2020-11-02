@@ -358,7 +358,7 @@ export default function* rootSaga() {
 
     // delete news
 
-    yield takeEvery(ApiConstants.API_LIVESCORE_DELETE_NEWS_LOAD, liveScoreNewsDeleteSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_NEWS_LOAD, liveScoreNewsDeleteSaga);
 
     // liveScoreGameTimeStatisticsSaga
     yield takeEvery(ApiConstants.API_LIVE_SCORE_GAME_TIME_STATISTICS_LIST_LOAD, liveScoreGameTimeStatisticsSaga);

@@ -18,6 +18,14 @@ function ImageLoader(props) {
         removeImage,
     } = props;
 
+    if (!src) {
+        return (
+            <div className="image-viewport">
+                <div className="banner-image" />
+            </div>
+        );
+    }
+
     return (
         <div className="image-viewport">
             {closeable && (

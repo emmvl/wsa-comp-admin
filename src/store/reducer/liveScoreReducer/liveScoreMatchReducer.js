@@ -740,7 +740,7 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.CHANGE_PLAYER_LINEUP_LOAD:
             return { ...state, onLoad: true };
 
-        case ApiConstants.API_CHNAGE_LINEUP_STATUS_SUCCESS:
+        case ApiConstants.API_CHANGE_LINEUP_STATUS_SUCCESS:
             if (action.key === "team1Players") {
                 state[action.key][action.index]["lineup"] = action.result[0];
             } else if (action.key === "team2Players") {

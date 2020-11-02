@@ -727,7 +727,7 @@ class LiveScoreSettingsView extends Component {
                 />
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name='recordumpire' rules={[{ required: true, message: ValidationConstants.recordumpireField }]}>
+                        <Form.Item name='recordumpire' rules={[{ required: true, message: ValidationConstants.recordUmpireField }]}>
                             <Select
                                 placeholder={'Select Record Umpire'}
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182, }}

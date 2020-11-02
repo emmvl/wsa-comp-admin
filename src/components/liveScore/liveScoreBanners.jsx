@@ -257,7 +257,7 @@ class LiveScoreBanners extends Component {
                     }}
                 >
                     <Button onClick={() => this.setState({ bannerImg: null })} className="primary-add-comp-form ml-5" type="primary">
-                        {`+${AppConstants.editBanner}`}
+                        {AppConstants.editBanner}
                     </Button>
                 </NavLink>
                 <Button onClick={() => this.removeBanner(record)} className="primary-add-comp-form ml-5" type="primary">

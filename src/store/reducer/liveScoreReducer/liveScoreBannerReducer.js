@@ -13,7 +13,10 @@ const initialState = {
     showOnNews: false,
     showOnChat: false,
     bannerLink: 'https://',
+    squareBannerLink: 'https://',
+    horizontalBannerLink: 'https://',
     format: '',
+    sponsorName: '',
 };
 
 function LiveScoreBannerState(state = initialState, action) {
@@ -35,6 +38,17 @@ function LiveScoreBannerState(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_ADD_BANNER_SUCCESS:
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
+            };
+
+        // Add Communication Case
+        case ApiConstants.API_LIVE_SCORE_ADD_COMMUNICATION_BANNER_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_LIVE_SCORE_ADD_COMMUNICATION_BANNER_SUCCESS:
             return {
                 ...state,
                 onLoad: false,
@@ -80,21 +94,37 @@ function LiveScoreBannerState(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_ADD_BANNER_UPDATE:
             if (action.key === 'isEditBanner') {
-                state.showOnHome = action.data.showOnHome === 1;
-                state.showOnDraws = action.data.showOnDraws === 1;
-                state.showOnLadder = action.data.showOnLadder === 1;
-                state.showOnNews = action.data.showOnNews === 1;
-                state.showOnChat = action.data.showOnChat === 1;
+                // state.showOnHome = action.data.showOnHome === 1;
+                // state.showOnDraws = action.data.showOnDraws === 1;
+                // state.showOnLadder = action.data.showOnLadder === 1;
+                // state.showOnNews = action.data.showOnNews === 1;
+                // state.showOnChat = action.data.showOnChat === 1;
                 state.format = action.data.format;
                 state.bannerLink = action.data.bannerLink;
             } else if (action.key === 'isAddBanner') {
-                state.showOnHome = false;
-                state.showOnDraws = false;
-                state.showOnLadder = false;
-                state.showOnNews = false;
-                state.showOnChat = false;
+                // state.showOnHome = false;
+                // state.showOnDraws = false;
+                // state.showOnLadder = false;
+                // state.showOnNews = false;
+                // state.showOnChat = false;
                 state.format = '';
                 state.bannerLink = 'https://';
+            } else {
+                state[action.key] = action.data;
+            }
+            return {
+                ...state,
+            };
+
+        case ApiConstants.API_LIVE_SCORE_ADD_COMMUNICATION_BANNER_UPDATE:
+            if (action.key === 'isEditBanner') {
+                state.horizontalBannerLink = action.data.horizontalBannerLink || 'https://';
+                state.squareBannerLink = action.data.squareBannerLink || 'https://';
+                state.sponsorName = action.data.sponsorName;
+            } else if (action.key === 'isAddBanner') {
+                state.sponsorName = '';
+                state.horizontalBannerLink = 'https://';
+                state.squareBannerLink = 'https://';
             } else {
                 state[action.key] = action.data;
             }

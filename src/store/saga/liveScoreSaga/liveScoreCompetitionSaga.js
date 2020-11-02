@@ -16,7 +16,7 @@ function* liveScoreCompetitionSaga({
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreCompetition, payload, year, orgKey, recordUmpires, sortBy, sortOrder);
         if (result.status === 1) {
-            yield put({ type: ApiConstants.API_LIVESCORE_COMPETITION_SUCCESS, payload: result.result.data });
+            yield put({ type: ApiConstants.API_LIVE_SCORE_COMPETITION_SUCCESS, payload: result.result.data });
         } else {
             const msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
             message.config({
@@ -26,7 +26,7 @@ function* liveScoreCompetitionSaga({
             message.error(msg);
         }
     } catch (error) {
-        yield put({ type: ApiConstants.API_LIVESCORE_COMPETITION_ERROR, payload: error });
+        yield put({ type: ApiConstants.API_LIVE_SCORE_COMPETITION_ERROR, payload: error });
         message.config({
             duration: 1.5,
             maxCount: 1,
@@ -40,16 +40,16 @@ function* liveScoreCompetitionDeleteSaga({ payload, key }) {
         const result = yield call(LiveScoreAxiosApi.liveScoreCompetitionDelete, payload);
 
         if (result.status === 1) {
-            yield put({ type: ApiConstants.API_LIVESCORE_COMPETITION_DELETE_SUCCESS, payload: { id: payload }, key });
+            yield put({ type: ApiConstants.API_LIVE_SCORE_COMPETITION_DELETE_SUCCESS, payload: { id: payload }, key });
             message.success('Deleted Successfully');
         } else {
             setTimeout(() => {
                 message.error(result.result.message || 'Something Went Wrong ');
             }, 800);
-            yield put({ type: ApiConstants.API_LIVESCORE_COMPETITION_DELETE_ERROR });
+            yield put({ type: ApiConstants.API_LIVE_SCORE_COMPETITION_DELETE_ERROR });
         }
     } catch (e) {
-        yield put({ type: ApiConstants.API_LIVESCORE_COMPETITION_DELETE_ERROR, payload: e });
+        yield put({ type: ApiConstants.API_LIVE_SCORE_COMPETITION_DELETE_ERROR, payload: e });
         setTimeout(() => {
             message.error('Something Went Wrong');
         }, 800);
@@ -87,7 +87,7 @@ function* liveScoreOwnPartCompetitionListSaga({
 }
 
 export default function* rootLiveScoreCompetitionSaga() {
-    yield takeEvery(ApiConstants.API_LIVESCORE_COMPETITION_INITATE, liveScoreCompetitionSaga);
-    yield takeEvery(ApiConstants.API_LIVESCORE_COMPETITION_DELETE_INITIATE, liveScoreCompetitionDeleteSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_COMPETITION_INITIATE, liveScoreCompetitionSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_COMPETITION_DELETE_INITIATE, liveScoreCompetitionDeleteSaga);
     yield takeEvery(ApiConstants.API_LIVESCORE_OWN_PART_COMPETITION_LIST_LOAD, liveScoreOwnPartCompetitionListSaga);
 }

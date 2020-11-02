@@ -18,29 +18,29 @@ const initialState = {
 }
 export default function liveScoreCompetition(state = initialState, payload) {
     switch (payload.type) {
-        case ApiConstants.API_LIVESCORE_COMPETITION_INITATE:
+        case ApiConstants.API_LIVE_SCORE_COMPETITION_INITIATE:
             return {
                 ...state,
                 loader: true
             }
-        case ApiConstants.API_LIVESCORE_COMPETITION_SUCCESS:
+        case ApiConstants.API_LIVE_SCORE_COMPETITION_SUCCESS:
             return {
                 ...state,
                 loader: false,
                 List: payload.payload
             }
-        case ApiConstants.API_LIVESCORE_COMPETITION_ERROR:
+        case ApiConstants.API_LIVE_SCORE_COMPETITION_ERROR:
             return {
                 ...state,
                 loader: false,
                 errorMessage: payload.payload
             }
-        case ApiConstants.API_LIVESCORE_COMPETITION_DELETE_INITIATE:
+        case ApiConstants.API_LIVE_SCORE_COMPETITION_DELETE_INITIATE:
             return {
                 ...state,
                 loader: true
             }
-        case ApiConstants.API_LIVESCORE_COMPETITION_DELETE_SUCCESS:
+        case ApiConstants.API_LIVE_SCORE_COMPETITION_DELETE_SUCCESS:
             if (payload.key === "own") {
                 let ownIndex = state.ownedCompetitions.findIndex(data => data.id === payload.payload.id)
                 state.ownedCompetitions.splice(ownIndex, 1)
@@ -53,7 +53,7 @@ export default function liveScoreCompetition(state = initialState, payload) {
                 ...state,
                 loader: false,
             }
-        case ApiConstants.API_LIVESCORE_COMPETITION_DELETE_ERROR:
+        case ApiConstants.API_LIVE_SCORE_COMPETITION_DELETE_ERROR:
 
             return {
                 ...state,

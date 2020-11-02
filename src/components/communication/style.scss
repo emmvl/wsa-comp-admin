@@ -22,5 +22,18 @@
 
 .image-viewport {
     position: relative;
+    width: fit-content;
     margin-right: 50px;
+    align-self: center;
+
+    .closable-icon {
+        top: -12px;
+        right: -12px;
+    }
+
+    .banner-image {
+        margin: 0;
+        font-size: 3em;
+        text-align: center;
+    }
 }

@@ -670,7 +670,7 @@ const AppConstants = {
     uploadImage: 'Upload Image',
     selectImage: 'Select Image',
     bannerLink: 'Banner Link',
-    horizBannerLink: 'Horizontal Banner Link',
+    horizontalBannerLink: 'Horizontal Banner Link',
     squareBannerLink: 'Square Banner Link',
     sponsorName: 'Sponsor Name',
     numberOfAdvertisingBanners: 'Number of Advertising Banners',

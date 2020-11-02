@@ -1039,7 +1039,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 <InputWithHead heading={AppConstants.venue} required="required-field" />
                                 <Form.Item
                                     name={`mpVenueId${index}`}
-                                    rules={[{ required: true, message: ValidationConstant.pleaseSelectvenue }]}
+                                    rules={[{ required: true, message: ValidationConstant.pleaseSelectVenue }]}
                                 >
                                     <Select
                                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -1233,7 +1233,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         <InputWithHead heading={AppConstants.venue} required="required-field" />
                                         <Form.Item
                                             name={`ldVenueId${index}`}
-                                            rules={[{ required: true, message: ValidationConstant.pleaseSelectvenue }]}
+                                            rules={[{ required: true, message: ValidationConstant.pleaseSelectVenue }]}
                                         >
                                             <Select
                                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}

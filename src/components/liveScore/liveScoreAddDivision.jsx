@@ -137,7 +137,7 @@ class LiveScoreAddDivision extends Component {
 
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name="divisionName" rules={[{ required: true, message: ValidationConstants.divisionNameisrequired }]}>
+                        <Form.Item name="divisionName" rules={[{ required: true, message: ValidationConstants.divisionNameIsRequired }]}>
                             <InputWithHead
                                 auto_complete="off"
                                 type="text"
@@ -156,7 +156,7 @@ class LiveScoreAddDivision extends Component {
 
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name="gradeName" rules={[{ required: true, message: ValidationConstants.gradeisrequired }]}>
+                        <Form.Item name="gradeName" rules={[{ required: true, message: ValidationConstants.gradeIsRequired }]}>
                             <InputWithHead
                                 auto_complete="off"
                                 type="text"

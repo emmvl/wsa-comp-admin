@@ -1,4 +1,4 @@
-/* eslint-disable no-use-before-define, max-len, no-unused-vars */
+/* eslint-disable no-use-before-define, no-unused-vars */
 import { message } from 'antd';
 
 import ValidationConstants from 'themes/validationConstant';
@@ -517,8 +517,19 @@ const LiveScoreAxiosApi = {
         return Method.dataGet(url, token);
     },
 
-    // eslint-disable-next-line max-len
-    liveScoreAddBanner(organisationID, competitionID, bannerImage, showOnHome, showOnDraws, showOnLadder, showOnNews, showOnChat, format, bannerLink, bannerId) {
+    liveScoreAddBanner(
+        organisationID,
+        competitionID,
+        bannerImage,
+        // showOnHome,
+        // showOnDraws,
+        // showOnLadder,
+        // showOnNews,
+        // showOnChat,
+        format,
+        bannerLink,
+        bannerId,
+    ) {
         const body = new FormData();
         if (bannerImage !== null) {
             body.append('bannerImage', bannerImage);
@@ -526,21 +537,46 @@ const LiveScoreAxiosApi = {
         body.append('organisationId', organisationID);
         body.append('competitionId', competitionID);
         body.append('id', bannerId);
-        body.append('showOnHome', showOnHome);
-        body.append('showOnDraws', showOnDraws);
-        body.append('showOnLadder', showOnLadder);
-        body.append('showOnNews', showOnNews);
-        body.append('showOnChat', showOnChat);
+        // body.append('showOnHome', showOnHome);
+        // body.append('showOnDraws', showOnDraws);
+        // body.append('showOnLadder', showOnLadder);
+        // body.append('showOnNews', showOnNews);
+        // body.append('showOnChat', showOnChat);
         body.append('format', format);
         body.append('bannerLink', bannerLink);
-        let url = '';
         const { organisationId } = getOrganisationData();
+        const url = `/banners?competitionId=${competitionID}&organisationId=${organisationId}`;
+        return Method.dataPost(url, token, body);
+    },
 
-        if (!isNaN(competitionID)) {
-            url = `/banners?competitionIds=${competitionID}&organisationId=${organisationId}`;
-        } else if (organisationID) {
-            url = `/banners?organisationId=${organisationID}`;
+    liveScoreAddCommunicationBanner(
+        organisationID,
+        sponsorName,
+        horizontalBannerImage,
+        horizontalBannerLink,
+        squareBannerImage,
+        squareBannerLink,
+        bannerId,
+    ) {
+        const body = new FormData();
+        const types = [];
+        if (horizontalBannerImage !== null) {
+            body.append('images', horizontalBannerImage);
+            types.push('horizontalBannerUrl');
         }
+        if (squareBannerImage !== null) {
+            body.append('images', squareBannerImage);
+            types.push('squareBannerUrl');
+        }
+        body.append('imageTypes', types.toString());
+        body.append('organisationId', organisationID);
+        body.append('sponsorName', sponsorName);
+        body.append('id', bannerId);
+        body.append('horizontalBannerLink', horizontalBannerLink);
+        body.append('squareBannerLink', squareBannerLink);
+        // const { organisationId } = getOrganisationData();
+        const url = `/banners/communication?organisationId=${organisationID}`;
+
         return Method.dataPost(url, token, body);
     },
 
@@ -571,7 +607,7 @@ const LiveScoreAxiosApi = {
         body.append('title', data.editData.title);
         body.append('body', data.editData.body);
         body.append('entityId', data.compId);
-        body.append('author', data.editData.author ? data.editData.author : authorData ? authorData.longName : 'World sport actioa');
+        body.append('author', data.editData.author ? data.editData.author : authorData ? authorData.longName : 'World sport action');
         body.append('recipients', data.editData.recipients);
         body.append('news_expire_date', data.editData.news_expire_date);
         body.append('recipientRefId', 12);
@@ -596,11 +632,11 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, body);
     },
 
-    liveScoreGoalList(compId, goaltype, search, offset, sortBy, sortOrder) {
+    liveScoreGoalList(compId, goalType, search, offset, sortBy, sortOrder) {
         let url = null;
-        if (goaltype === 'By Match') {
+        if (goalType === 'By Match') {
             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=MATCH&search=${search}&offset=${offset}&limit=${10}`;
-        } else if (goaltype === 'Total') {
+        } else if (goalType === 'Total') {
             url = `/stats/scoringByPlayer?competitionId=${compId}&aggregate=ALL&search=${search}&offset=${offset}&limit=${10}`;
         }
 
@@ -636,15 +672,15 @@ const LiveScoreAxiosApi = {
 
         const extendParam = checkVenueCourtId(data);
 
+        url = `/matches/bulk/time?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&type=backward`;
         if (bulkRadioBtn === 'specificTime') {
+            url = `${url}&newDate=${formatedNewDate}`;
             if (extendParam) {
-                url = `/matches/bulk/time?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&type=${'backward'}&newDate=${formatedNewDate}${extendParam}`;
-            } else {
-                url = `/matches/bulk/time?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&type=${'backward'}&newDate=${formatedNewDate}`;
+                url = `${url}${extendParam}`;
             }
         } else {
             const HMS = checlfixedDurationForBulkMatch(data);
-            url = `/matches/bulk/time?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&type=backward${HMS}`;
+            url = `${url}${HMS}`;
             if (extendParam) {
                 url = `${url}${extendParam}`;
             }
@@ -653,19 +689,20 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token);
     },
 
-    liveScoreBringForward(competitionID, data, startDate, endDate, bulkRadioBtn, formatedNewDate) {
+    liveScoreBringForward(competitionID, data, startDate, endDate, bulkRadioBtn, formattedNewDate) {
         let url = '';
         const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
         const extendParam = checkVenueCourtId(data);
 
+        url = `/matches/bulk/time?startTimeStart=${startDate}&startTimeEnd=${endDate}&competitionId=${id}&type=forward`;
         if (bulkRadioBtn === 'specificTime') {
-            url = `/matches/bulk/time?startTimeStart=${startDate}&startTimeEnd=${endDate}&competitionId=${id}&type=forward&newDate=${formatedNewDate}`;
+            url = `${url}&newDate=${formattedNewDate}`;
             if (extendParam) {
                 url = `${url}${extendParam}`;
             }
         } else {
             const HMS = checlfixedDurationForBulkMatch(data);
-            url = `/matches/bulk/time?startTimeStart=${startDate}&startTimeEnd=${endDate}&competitionId=${id}&type=forward${HMS}`;
+            url = `${url}${HMS}`;
             if (extendParam) {
                 url = `${url}${extendParam}`;
             }
@@ -843,11 +880,9 @@ const LiveScoreAxiosApi = {
     liveScoreAbandonMatch(data, startTime, endTime) {
         const extendParam = checkVenueCourtId(data);
         const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-        let url;
+        let url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&resultTypeId=${data.resultType}`;
         if (extendParam) {
-            url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&resultTypeId=${data.resultType}${extendParam}`;
-        } else {
-            url = `/matches/bulk/end?startTimeStart=${startTime}&startTimeEnd=${endTime}&competitionId=${id}&resultTypeId=${data.resultType}`;
+            url = `${url}${extendParam}`;
         }
         return Method.dataPost(url, token);
     },
@@ -889,15 +924,15 @@ const LiveScoreAxiosApi = {
     },
 
     liveScoreAttendanceList(competitionId, payload, selectStatus, divisionId, roundId) {
-        let url;
         const body = {
             paging: payload.paging,
             search: payload.search,
         };
+        let url = `/players/activity?competitionId=${competitionId}`;
         if (selectStatus === 'All') {
-            url = `/players/activity?competitionId=${competitionId}&status=${''}`;
+            // url = `/players/activity?competitionId=${competitionId}&status=${''}`;
         } else {
-            url = `/players/activity?competitionId=${competitionId}&status=${selectStatus}`;
+            url = `${url}&status=${selectStatus}`;
         }
         if (payload.sortBy && payload.sortOrder) {
             url += `&sortBy=${payload.sortBy}&sortOrder=${payload.sortOrder}`;

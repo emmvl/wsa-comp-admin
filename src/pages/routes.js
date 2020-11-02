@@ -95,6 +95,7 @@ import UserTextualDashboard from 'components/user/userTextualDashboard';
 import VenuesList from 'components/user/venuesList';
 
 import CommunicationBanner from 'components/communication/CommunicationBanner';
+import CommunicationEditBanners from 'components/communication/CommunicationEditBanners';
 
 import LiveScoreAddDivision from 'components/liveScore/liveScoreAddDivision';
 import LiveScoreAddEditCoach from 'components/liveScore/liveScoreAddEditCoach';
@@ -931,6 +932,11 @@ class Routes extends React.Component {
                 />
 
                 <PrivateRoute path="/communication" component={lazyLoad(CommunicationBanner)} />
+
+                <PrivateRoute
+                    path="/communicationEditBanners"
+                    component={lazyLoad(CommunicationEditBanners)}
+                />
 
                 <Route path="/" component={lazyLoad(NotFound)} />
 

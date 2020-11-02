@@ -519,7 +519,7 @@ class CompetitionFinals extends Component {
                 {(finalsList != null && finalsList.length > 0) &&
                     <div className="compitition-finals-venue">
                         <InputWithHead required="required-field pb-0" heading={AppConstants.venue} />
-                        <Form.Item name='selectedVenues' rules={[{ required: true, message: ValidationConstants.pleaseSelectvenue }]}>
+                        <Form.Item name='selectedVenues' rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}>
                             <Select
                                 mode="multiple"
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}

@@ -300,7 +300,7 @@ class CompetitionOpenRegForm extends Component {
             }
         }
         if (nextProps.competitionFeesState !== competitionFeesState) {
-        
+
             if (competitionFeesState.getCompAllDataOnLoad === false && this.state.getDataLoading) {
                 let isPublished = competitionFeesState.competitionDetailData.statusRefId == 2
 
@@ -340,7 +340,7 @@ class CompetitionOpenRegForm extends Component {
                     let competitionId = null
                     let statusRefId = null
                     let competitionStatus = null
-            
+
                     if (screenKey === "compDashboard" || fromReplicate == 1) {
                         competitionId = getOwn_competition()
                         let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
@@ -1031,7 +1031,7 @@ class CompetitionOpenRegForm extends Component {
                     <InputWithHead required="required-field pb-1" heading={AppConstants.venue} />
                     <Form.Item
                         name="selectedVenues"
-                        rules={[{ required: true, message: ValidationConstants.pleaseSelectvenue }]}
+                        rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}
                     >
                         <Select
                             id={AppUniqueId.select_Venues}

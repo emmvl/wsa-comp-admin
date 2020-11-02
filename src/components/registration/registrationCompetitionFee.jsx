@@ -3228,7 +3228,7 @@ class RegistrationCompetitionFee extends Component {
         // selectedSeasonalFeeKey
 
         if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)) {
-            message.error(ValidationConstants.pleaseSelectePaymentMethods);
+            message.error(ValidationConstants.pleaseSelectPaymentMethods);
             return;
         }
 
@@ -4744,7 +4744,7 @@ class RegistrationCompetitionFee extends Component {
                         name="selectedVenues"
                         rules={[{
                             required: true,
-                            message: ValidationConstants.pleaseSelectvenue,
+                            message: ValidationConstants.pleaseSelectVenue,
                         }]}
                     >
                         <Select

@@ -68,11 +68,11 @@ function* liveScoreAddBannerSaga(action) {
             action.organisationID,
             action.competitionID,
             action.bannerImage,
-            action.showOnHome,
-            action.showOnDraws,
-            action.showOnLadder,
-            action.showOnNews,
-            action.showOnChat,
+            // action.showOnHome,
+            // action.showOnDraws,
+            // action.showOnLadder,
+            // action.showOnNews,
+            // action.showOnChat,
             action.format,
             action.bannerLink,
             action.bannerId,
@@ -85,7 +85,36 @@ function* liveScoreAddBannerSaga(action) {
                 status: result.status,
                 navigation: action.navigation,
             });
-            message.success('Banner Added Successfully.');
+            message.success('Banner added successfully.');
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
+function* liveScoreAddCommunicationBannerSaga(action) {
+    try {
+        const result = yield call(
+            LiveScoreAxiosApi.liveScoreAddCommunicationBanner,
+            action.organisationID,
+            action.sponsorName,
+            action.horizontalBannerImage,
+            action.horizontalBannerLink,
+            action.squareBannerImage,
+            action.squareBannerLink,
+            action.bannerId,
+        );
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_ADD_COMMUNICATION_BANNER_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                navigation: action.navigation,
+            });
+            message.success('Communication Banner Added Successfully.');
         } else {
             yield call(failSaga, result);
         }
@@ -98,7 +127,8 @@ function* liveScoreRemoveBannerSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreRemoveBanner, action.bannerId);
         if (result.status === 1) {
-            const res = yield call(LiveScoreAxiosApi.liveScoreBannerList, action.competitionID);
+            const res = yield call(LiveScoreAxiosApi.liveScoreBannerList, null, action.organisationId);
+
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_BANNERS_SUCCESS,
                 result: res.result.data,
@@ -136,6 +166,7 @@ function* liveScoreRemoveBannerImageSaga(action) {
 export default function* rootLiveScoreBannerSaga() {
     yield takeEvery(ApiConstants.API_LIVE_SCORE_BANNERS_LOAD, liveScoreBannerSaga);
     yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_BANNER_LOAD, liveScoreAddBannerSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_COMMUNICATION_BANNER_LOAD, liveScoreAddCommunicationBannerSaga);
     yield takeEvery(ApiConstants.API_LIVE_SCORE_REMOVE_BANNER_LOAD, liveScoreRemoveBannerSaga);
     yield takeEvery(ApiConstants.API_LIVE_SCORE_REMOVE_BANNER_IMAGE_LOAD, liveScoreRemoveBannerImageSaga);
 }

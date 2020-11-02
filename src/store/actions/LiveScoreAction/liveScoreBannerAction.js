@@ -14,11 +14,11 @@ function liveScoreAddBanner(
     organisationID,
     competitionID,
     bannerImage,
-    showOnHome,
-    showOnDraws,
-    showOnLadder,
-    showOnNews,
-    showOnChat,
+    // showOnHome,
+    // showOnDraws,
+    // showOnLadder,
+    // showOnNews,
+    // showOnChat,
     format,
     bannerLink,
     bannerId,
@@ -28,13 +28,34 @@ function liveScoreAddBanner(
         organisationID,
         competitionID,
         bannerImage,
-        showOnHome,
-        showOnDraws,
-        showOnLadder,
-        showOnNews,
-        showOnChat,
+        // showOnHome,
+        // showOnDraws,
+        // showOnLadder,
+        // showOnNews,
+        // showOnChat,
         format,
         bannerLink,
+        bannerId,
+    };
+}
+
+function liveScoreAddCommunicationBanner(
+    organisationID,
+    sponsorName,
+    horizontalBannerImage,
+    horizontalBannerLink,
+    squareBannerImage,
+    squareBannerLink,
+    bannerId,
+) {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_ADD_COMMUNICATION_BANNER_LOAD,
+        organisationID,
+        sponsorName,
+        horizontalBannerImage,
+        horizontalBannerLink,
+        squareBannerImage,
+        squareBannerLink,
         bannerId,
     };
 }
@@ -48,16 +69,25 @@ function liveScoreRemoveBannerImage(bannerId, ratioType) {
 }
 
 // Banners Add
-function liveScoreRemoveBanner(bannerId) {
+function liveScoreRemoveBanner(bannerId, organisationId) {
     return {
         type: ApiConstants.API_LIVE_SCORE_REMOVE_BANNER_LOAD,
         bannerId,
+        organisationId,
     };
 }
 
 function liveScoreAddBannerUpdate(data, key) {
     return {
         type: ApiConstants.API_LIVE_SCORE_ADD_BANNER_UPDATE,
+        data,
+        key,
+    };
+}
+
+function liveScoreAddCommunicationBannerUpdate(data, key) {
+    return {
+        type: ApiConstants.API_LIVE_SCORE_ADD_COMMUNICATION_BANNER_UPDATE,
         data,
         key,
     };
@@ -76,4 +106,6 @@ export {
     liveScoreAddBannerUpdate,
     clearEditBannerAction,
     liveScoreRemoveBannerImage,
+    liveScoreAddCommunicationBanner,
+    liveScoreAddCommunicationBannerUpdate,
 };

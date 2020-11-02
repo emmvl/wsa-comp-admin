@@ -45,47 +45,29 @@ class LiveScoreEditBanners extends Component {
             tableRecord: props.location.state ? props.location.state.tableRecord : null,
             isEdit: props.location.state ? props.location.state.isEdit : null,
             load: false,
-            compBannerCnt: -1,
-            stateBannerCnt: -1,
+            numCompBanner: -1,
         };
 
         props.clearEditBannerAction();
 
-        this.backUrl = '/';
         this.formRef = React.createRef();
     }
 
     componentDidMount() {
-        this.backUrl = localStorage.getItem('communication') ? 'communication' : 'liveScoreBanners';
-
         const { organisationId } = getOrganisationData();
         this.props.getBannerCnt(organisationId);
 
         if (this.state.isEdit === true) {
             this.props.liveScoreAddBannerUpdate(this.state.tableRecord, 'isEditBanner');
         } else {
-            if (this.backUrl === 'communication') {
-                this.props.getLiveScoreBanners(null, organisationId);
-            } else {
-                const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
-                this.props.getLiveScoreBanners(id, organisationId);
-            }
+            const { id } = JSON.parse(localStorage.getItem('LiveScoreCompetition'));
+            this.props.getLiveScoreBanners(id, organisationId);
             this.props.liveScoreAddBannerUpdate('', 'isAddBanner');
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate() {
         const { bannerResult } = this.props.liveScoreBannerState;
-
-        if (!this.state.isEdit) {
-            if (this.backUrl === 'communication' && this.state.stateBannerCnt >= 0 && bannerResult.length > this.state.stateBannerCnt) {
-                this.goBack();
-                message.warning('You are going to have more state banners than you can have.');
-            } else if (this.backUrl !== 'communication' && this.state.compBannerCnt >= 0 && bannerResult.length > this.state.compBannerCnt) {
-                this.goBack();
-                message.warning('You are going to have more competition banners than you can have.');
-            }
-        }
 
         if (this.state.load === true && this.props.liveScoreBannerState.onLoad === false) {
             this.goBack();
@@ -93,25 +75,27 @@ class LiveScoreEditBanners extends Component {
         }
 
         if (!this.props.userState.onLoad && this.props.userState.status) {
-            const { bannerCount: prevBannerCount } = prevProps.userState;
             const { bannerCount } = this.props.userState;
-            if (prevBannerCount) {
-                if (
-                    bannerCount && (prevBannerCount.stateBannerCnt !== bannerCount.stateBannerCnt
-                    || prevBannerCount.compBannerCnt !== bannerCount.compBannerCnt)
-                ) {
-                    this.setState({ ...bannerCount });
+            if (bannerCount) {
+                if (this.state.numCompBanner !== bannerCount.numCompBanner) {
+                    this.setState({ numCompBanner: bannerCount.numCompBanner });
                 }
-            } else if (!prevBannerCount && bannerCount) {
-                this.setState({ ...bannerCount });
+                if (!this.state.isEdit) {
+                    if (
+                        this.props.userState.bannerCount.numCompBanner >= 0
+                        && bannerResult.length >= this.props.userState.bannerCount.numCompBanner
+                    ) {
+                        this.goBack();
+                        message.warning('You are going to have more competition banners than you can have.');
+                    }
+                }
             }
         }
     }
 
     goBack = () => {
-        localStorage.setItem('communication', '');
-        history.push(`/${this.backUrl}`);
-    }
+        history.push('/liveScoreBanners');
+    };
 
     // Image picker
     selectImage = () => {
@@ -121,7 +105,7 @@ class LiveScoreEditBanners extends Component {
         if (fileInput) {
             fileInput.click();
         }
-    }
+    };
 
     onSelectBanner = (/* data */) => {
         const fileInput = document.getElementById('user-pic');
@@ -165,11 +149,11 @@ class LiveScoreEditBanners extends Component {
 
     onUploadButton = () => {
         const {
-            showOnHome,
-            showOnDraws,
-            showOnLadder,
-            showOnNews,
-            showOnChat,
+            // showOnHome,
+            // showOnDraws,
+            // showOnLadder,
+            // showOnNews,
+            // showOnChat,
             format,
             bannerLink,
         } = this.props.liveScoreBannerState;
@@ -181,22 +165,22 @@ class LiveScoreEditBanners extends Component {
         }
         const { organisationId } = getOrganisationData();
 
-        const showOnhome = showOnHome === true ? 1 : 0;
-        const showOndraws = showOnDraws === true ? 1 : 0;
-        const showOnladder = showOnLadder === true ? 1 : 0;
-        const showOnnews = showOnNews === true ? 1 : 0;
-        const showOnchat = showOnChat === true ? 1 : 0;
-        if (id !== null || this.backUrl === 'communication') {
+        // const showOnhome = showOnHome === true ? 1 : 0;
+        // const showOndraws = showOnDraws === true ? 1 : 0;
+        // const showOnladder = showOnLadder === true ? 1 : 0;
+        // const showOnnews = showOnNews === true ? 1 : 0;
+        // const showOnchat = showOnChat === true ? 1 : 0;
+        if (id !== null) {
             const bannerId = this.state.isEdit === true ? editBannerId : 0;
             this.props.liveScoreAddBanner(
                 organisationId,
-                this.backUrl === 'communication' ? null : id,
+                id,
                 this.state.bannerImgSend,
-                showOnhome,
-                showOndraws,
-                showOnladder,
-                showOnnews,
-                showOnchat,
+                // showOnhome,
+                // showOndraws,
+                // showOnladder,
+                // showOnnews,
+                // showOnchat,
                 format,
                 bannerLink,
                 bannerId,
@@ -240,7 +224,7 @@ class LiveScoreEditBanners extends Component {
                                 {/* <label></label> */ }
                             </div>
                             <Form.Item
-                                name="bnnerImage"
+                                name="bannerImage"
                                 rules={[{
                                     required: !bannerImage,
                                     message: ValidationConstants.bannerImage,
@@ -400,7 +384,7 @@ class LiveScoreEditBanners extends Component {
 
     onRemoveBtn = () => {
         this.setState({ bannerImgSend: null, bannerImg: null });
-    }
+    };
 
     // view for breadcrumb
     removeBtn = () => (
@@ -433,10 +417,7 @@ class LiveScoreEditBanners extends Component {
                         <div className="reg-add-save-button">
                             <Button
                                 className="cancelBtnWidth"
-                                onClick={() => {
-                                    this.goBack();
-                                    localStorage.setItem('communication', '');
-                                }}
+                                onClick={this.goBack}
                                 type="cancel-button"
                             >
                                 {AppConstants.cancel}

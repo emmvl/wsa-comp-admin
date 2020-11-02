@@ -244,7 +244,7 @@ function* playerLineUpStatusChangeSaga(action) {
 
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_CHNAGE_LINEUP_STATUS_SUCCESS,
+                type: ApiConstants.API_CHANGE_LINEUP_STATUS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
                 index: action.data.index,

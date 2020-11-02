@@ -34,8 +34,8 @@ class CommunicationBanner extends Component {
         super(props);
 
         this.state = {
-            numCompBanner: 0,
-            numStateBanner: 0,
+            numCompBanner: -1,
+            numStateBanner: -1,
         };
 
         this.formRef = React.createRef();
@@ -53,7 +53,7 @@ class CommunicationBanner extends Component {
                                     placeholder={AppConstants.sponsorName}
                                     name={AppConstants.sponsorName}
                                     disabled
-                                    value={AppConstants.sponsorName ? record.sponsorName : 'http://'}
+                                    value={record.sponsorName}
                                 />
                             </div>
                             {this.removeBtn(record)}
@@ -76,21 +76,14 @@ class CommunicationBanner extends Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate() {
         if (!this.props.userState.onLoad && this.props.userState.status) {
-            const { bannerCount: prevBannerCount } = prevProps.userState;
             const { bannerCount } = this.props.userState;
-            if (prevBannerCount) {
-                if (
-                    bannerCount
-                    && (prevBannerCount.numStateBanner !== bannerCount.numStateBanner
-                    || prevBannerCount.numCompBanner !== bannerCount.numCompBanner
-                    || this.state.numStateBanner + this.state.numCompBanner < 0)
-                ) {
-                    // this.setState({ ...bannerCount });
-                }
-            } else if (!prevBannerCount && bannerCount) {
-                // this.setState({ ...bannerCount });
+            if (bannerCount && (this.state.numStateBanner < 0 || this.state.numCompBanner < 0)) {
+                this.setState({
+                    numStateBanner: bannerCount.numStateBanner,
+                    numCompBanner: bannerCount.numCompBanner,
+                });
             }
         }
     }
@@ -111,23 +104,18 @@ class CommunicationBanner extends Component {
         this.props.liveScoreRemoveBannerImage(bannerId, type);
     };
 
-    bannerAddEdit = () => {
-        localStorage.setItem('communication', 'true');
-    };
-
     headerView = () => (
         <div className="row">
             <div
                 className="col-sm live-form-view-button-container"
                 style={{ display: 'flex', justifyContent: 'flex-end' }}
             >
-                <NavLink to="/liveScoreEditBanners">
+                <NavLink to="/communicationEditBanners">
                     <Button
                         type="primary"
                         className="primary-add-comp-form"
-                        onClick={this.bannerAddEdit}
                     >
-                        {AppConstants.addBanners}
+                        {`+ ${AppConstants.addBanners}`}
                     </Button>
                 </NavLink>
             </div>
@@ -135,7 +123,8 @@ class CommunicationBanner extends Component {
     );
 
     removeBanner = (record) => {
-        this.props.liveScoreRemoveBanner(record.id);
+        const { organisationId } = getOrganisationData();
+        this.props.liveScoreRemoveBanner(record.id, organisationId);
     };
 
     removeBtn = (record) => (
@@ -152,14 +141,13 @@ class CommunicationBanner extends Component {
             >
                 <NavLink
                     to={{
-                        pathname: '/liveScoreEditBanners',
+                        pathname: '/communicationEditBanners',
                         state: { isEdit: true, tableRecord: record },
                     }}
                 >
                     <Button
                         type="primary"
                         className="primary-add-comp-form ml-5"
-                        onClick={this.bannerAddEdit}
                     >
                         {AppConstants.editBanner}
                     </Button>
@@ -176,17 +164,18 @@ class CommunicationBanner extends Component {
     );
 
     imageView = (bannerUrl, record, type) => (
-        <div className="flex-row" style={{ display: 'flex' }}>
+        <div className="flex-row" style={{ marginTop: '1em', display: 'flex' }}>
             <ImageLoader
-                closeable
-                removeImage={() => this.removeImage(record.id, type)}
+                // closeable
+                // removeImage={() => this.removeImage(record.id, type)}
                 className="banner-image"
-                src={bannerUrl}
+                src={record[type === 0 ? 'horizontalBannerUrl' : 'squareBannerUrl']}
                 width
                 height
                 borderRadius
                 timeout={this.state.timeout}
             />
+
             {this.footerBannerView(record, type)}
         </div>
     );
@@ -210,25 +199,23 @@ class CommunicationBanner extends Component {
         </div>
     );
 
-    footerBannerView = (record, type) => (
-        <div>
+    footerBannerView = (record, type) => {
+        const link = type === 0 ? 'horizontalBannerLink' : 'squareBannerLink';
+        return (
             <div className="row">
-                <div className="col-sm pt-1">
+                <div className="col-sm">
                     <InputWithHead
-                        heading={AppConstants[type === 0 ? 'horizBannerLink' : 'squareBannerLink']}
-                        placeholder={AppConstants[type === 0 ? 'horizBannerLink' : 'squareBannerLink']}
-                        name={`${type === 0 ? 'horizontal-' : 'square-'}bannerLink`}
+                        required="pt-0 pb-2"
+                        heading={AppConstants[link]}
+                        placeholder={AppConstants[link]}
+                        name={link}
                         disabled
-                        value={
-                            record[type === 0 ? 'horizontalBannerLink' : 'squareBannerLink']
-                                ? record[type === 0 ? 'horizontalBannerLink' : 'squareBannerLink']
-                                : 'http://'
-                        }
+                        value={record[link] ? record[link] : 'http://'}
                     />
                 </div>
             </div>
-        </div>
-    );
+        );
+    }
 
     contentView = () => {
         const { bannerResult, onLoad } = this.props.liveScoreBannerState;
@@ -253,9 +240,10 @@ class CommunicationBanner extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
                 <DashboardLayout menuHeading={AppConstants.Communication} menuName={AppConstants.Communication} />
+
                 <InnerHorizontalMenu menu="communication" userSelectedKey="1" />
+
                 <Layout>
-                    {/* {this.headerView()} */}
                     <Form
                         ref={this.formRef}
                         autoComplete="off"
@@ -271,7 +259,7 @@ class CommunicationBanner extends Component {
                                 <Tabs activeKey={this.state.organisationTabKey} onChange={this.tabCallBack}>
                                     <TabPane tab={AppConstants.banners} key="1">
                                         {this.headerView()}
-                                        <div className="tab-formView mt-5" style={{ padding: '1em' }}>
+                                        <div className="tab-formView my-5" style={{ padding: '1em' }}>
                                             {this.contentView()}
                                         </div>
                                     </TabPane>
