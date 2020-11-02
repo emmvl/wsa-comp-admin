@@ -118,11 +118,11 @@ class LiveScoreAddDivision extends Component {
             <div className="content-view pt-4">
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name="name" rules={[{ required: true, message: ValidationConstants.nameisrequired }]}>
+                        <Form.Item className="formMargin" name="name" rules={[{ required: true, message: ValidationConstants.nameisrequired }]}>
                             <InputWithHead
                                 auto_complete="off"
                                 type="text"
-                                required="required-field pb-0 pt-0"
+                                required="required-field pb-0 pt-0 pb-3"
                                 heading={AppConstants.name}
                                 placeholder={AppConstants.name}
                                 onChange={(name) => this.props.liveScoreUpdateDivisionAction(captializedString(name.target.value), 'name')}
@@ -137,11 +137,11 @@ class LiveScoreAddDivision extends Component {
 
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name="divisionName" rules={[{ required: true, message: ValidationConstants.divisionNameisrequired }]}>
+                        <Form.Item className="formMargin" name="divisionName" rules={[{ required: true, message: ValidationConstants.divisionNameisrequired }]}>
                             <InputWithHead
                                 auto_complete="off"
                                 type="text"
-                                required="required-field pb-0 pt-0"
+                                required="required-field pb-0 pt-0 pb-3"
                                 heading={AppConstants.divisionName}
                                 placeholder={AppConstants.divisionName}
                                 onChange={(divisionName) => this.props.liveScoreUpdateDivisionAction(captializedString(divisionName.target.value), 'divisionName')}
@@ -156,11 +156,11 @@ class LiveScoreAddDivision extends Component {
 
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name="gradeName" rules={[{ required: true, message: ValidationConstants.gradeisrequired }]}>
+                        <Form.Item className="formMargin" name="gradeName" rules={[{ required: true, message: ValidationConstants.gradeisrequired }]}>
                             <InputWithHead
                                 auto_complete="off"
                                 type="text"
-                                required="required-field pb-0 pt-0"
+                                required="required-field pb-0 pt-0 pb-3"
                                 heading={AppConstants.gradeName}
                                 placeholder={AppConstants.gradeName}
                                 onChange={(gradeName) => this.props.liveScoreUpdateDivisionAction(captializedString(gradeName.target.value), 'gradeName')}
@@ -175,7 +175,7 @@ class LiveScoreAddDivision extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.positionTracking} required="pb-3 pt-3" />
-                        <Form.Item name="positionTracking">
+                        <Form.Item className="formMargin pt-0" name="positionTracking">
                             <Select
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(value) => this.props.liveScoreUpdateDivisionAction(value, "positionTracking")}
@@ -199,7 +199,7 @@ class LiveScoreAddDivision extends Component {
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead heading={AppConstants.recordGoalAttempt} required="pb-3 pt-3" />
-                        <Form.Item name="recordGoalAttempts">
+                        <Form.Item className="formMargin pt-0" name="recordGoalAttempts">
                             <Select
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
                                 onChange={(value) => this.props.liveScoreUpdateDivisionAction(value, "recordGoalAttempts")}
