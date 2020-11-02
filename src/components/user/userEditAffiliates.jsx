@@ -32,6 +32,7 @@ import ValidationConstants from "../../themes/validationConstant";
 import { getCommonRefData } from "../../store/actions/commonAction/commonAction";
 import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import Loader from "../../customComponents/loader";
+import PlacesAutocomplete from "../competition/elements/PlaceAutoComplete";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -54,6 +55,8 @@ class UserEditAffiliates extends Component {
             isSameUserEmailChanged: false,
             termsAndCondititionFile: null,
             termAndConditionTemp: null,
+            affiliateAddress: null,
+            affiliateAddressError: '',
         };
         this.props.getCommonRefData();
         //this.props.getUreAction();
@@ -75,6 +78,7 @@ class UserEditAffiliates extends Component {
     componentDidUpdate(nextProps) {
         let userState = this.props.userState;
         let affiliateTo = this.props.userState.affiliateTo;
+        let affiliateEdit = this.props.userState.affiliateEdit;
         if (userState.onLoad === false && this.state.loading === true) {
             if (!userState.error) {
                 this.setState({
@@ -117,6 +121,16 @@ class UserEditAffiliates extends Component {
                 });
                 this.setFormFieldValue();
             }
+        }
+        if (nextProps.userState.affiliateEdit !== this.props.userState.affiliateEdit) {
+            this.setState({
+                affiliateAddress: {
+                    addressOne: affiliateEdit.street1,
+                    suburb: affiliateEdit.suburb,
+                    stateRefId: affiliateEdit.stateRefId,
+                    postcode: affiliateEdit.postalCode,
+                }
+            });
         }
     }
 
@@ -290,9 +304,17 @@ class UserEditAffiliates extends Component {
 
     saveAffiliate = (values) => {
         let affiliate = this.props.userState.affiliateEdit;
+
+        if (this.state.affiliateAddress === null) {
+            this.setState({ affiliateAddressError: ValidationConstants.affiliateAddressRequiredError });
+            message.error(AppConstants.affiliateAddressAddressSelect);
+
+            return;
+        }
+
         if (
-            affiliate.contacts == null ||
-            affiliate.contacts == undefined ||
+            affiliate.contacts === null ||
+            affiliate.contacts === undefined ||
             affiliate.contacts.length === 0
         ) {
             message.error(ValidationConstants.affiliateContactRequired[0]);
@@ -366,6 +388,55 @@ class UserEditAffiliates extends Component {
         }
     };
 
+    // Handle address autocomplete
+    handlePlacesAutocomplete = (data) => {
+        const { stateList } = this.props.commonReducerState;
+        const address = data;
+
+        this.setState({
+            affiliateAddress: null,
+        });
+
+        if (!address.addressOne && !address.suburb) {
+            this.setState({
+                affiliateAddressError: ValidationConstants.affiliateAddressRequiredError,
+                affiliateAddress: null,
+            })
+        } else {
+            this.setState({
+                affiliateAddressError: ''
+            })
+        }
+
+        this.setState({
+            affiliateAddress: address,
+        });
+
+        const stateRefId = stateList.length > 0 && address.state
+          ? stateList.find((state) => state.name === address.state).id
+          : null;
+
+        const newAddress = {
+            stateRefId,
+            addressOne: address.addressOne || null,
+            suburb: address.suburb || null,
+            postcode: address.postcode || null,
+        };
+
+        this.formRef.current.setFieldsValue(newAddress);
+
+        if (address.addressOne && address.suburb) {
+            this.setState({
+                affiliateAddress: newAddress,
+            });
+
+            this.onChangeSetValue(newAddress.stateRefId, "stateRefId");
+            this.onChangeSetValue(newAddress.addressOne, "street1");
+            this.onChangeSetValue(newAddress.suburb, "suburb");
+            this.onChangeSetValue(newAddress.postcode, "postalCode");
+        }
+    };
+
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -408,6 +479,20 @@ class UserEditAffiliates extends Component {
             }
         }
         let organisationTypeRefId = affiliate.organisationTypeRefId;
+
+        const state = stateList.length > 0 && affiliate.stateRefId
+          ? stateList.find((state) => state.id === affiliate.stateRefId).name
+          : null;
+
+        let defaultAffiliateAddress = `${
+          affiliate.street1 ? `${affiliate.street1},` : ''
+        } ${
+          affiliate.suburb ? `${affiliate.suburb},` : ''
+        } ${
+          state ? `${state},` : ''
+        } Australia`;
+
+
         return (
             <div className="content-view pt-4">
                 <InputWithHead heading={AppConstants.organisationType} />
@@ -497,76 +582,18 @@ class UserEditAffiliates extends Component {
                         value={affiliate.name}
                     />
                 </Form.Item>
-                <Form.Item
-                    name='addressOne'
-                    rules={[{ required: true, message: ValidationConstants.addressField[2] }]}
-                >
-                    <InputWithHead
-                        required="required-field pt-0 pb-0"
-                        heading={AppConstants.addressOne}
-                        placeholder={AppConstants.addressOne}
-                        name={AppConstants.addressOne}
-                        onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-                        // value={affiliate.street1}
-                        value={affiliate.street1}
-                        auto_complete="new-addressOne"
-                    />
-                </Form.Item>
-
-                <InputWithHead
-                    auto_complete="new-addressTwo"
-                    heading={AppConstants.addressTwo}
-                    placeholder={AppConstants.addressTwo}
-                    onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
-                    value={affiliate.street2}
-                />
-
-                <Form.Item
-                    name='suburb'
-                    rules={[{ required: true, message: ValidationConstants.suburbField[0] }]}
-                >
-                    <InputWithHead
-                        auto_complete="new-suburb"
-                        required="required-field pt-3 pb-0"
-                        heading={AppConstants.suburb}
-                        placeholder={AppConstants.suburb}
-                        onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
-                        // value={affiliate.suburb}
-                        value={affiliate.suburb}
-                    />
-                </Form.Item>
-
-                <InputWithHead
-                    required="required-field"
-                    heading={AppConstants.stateHeading}
-                />
-
-                <Form.Item name='stateRefId' rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
-                    <Select
-                        style={{ width: "100%" }}
-                        placeholder={AppConstants.select}
-                        onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-                        // value={affiliate.stateRefId}
-                        value={affiliate.stateRefId}
-                    >
-                        {stateList.map((item) => (
-                            <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-
-                <Form.Item name='postcode' rules={[{ required: true, message: ValidationConstants.postCodeField[0] }]}>
-                    <InputWithHead
-                        auto_complete="new-postCode"
-                        required="required-field"
-                        heading={AppConstants.postcode}
-                        placeholder={AppConstants.postcode}
-                        onChange={(e) =>
-                            this.onChangeSetValue(e.target.value, "postalCode")
-                        }
-                        // value={affiliate.postalCode}
-                        value={affiliate.postalCode}
-                        maxLength={4}
+                <Form.Item name="affiliateAddress">
+                    <PlacesAutocomplete
+                      defaultValue={defaultAffiliateAddress}
+                      heading={AppConstants.address}
+                      required
+                      error={this.state.affiliateAddressError}
+                      onBlur={() => {
+                          this.setState({
+                              affiliateAddressError: ''
+                          })
+                      }}
+                      onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
 
@@ -864,7 +891,9 @@ class UserEditAffiliates extends Component {
                                     type="primary"
                                     htmlType="submit"
                                     disabled={isSubmitting}
-                                    onClick={() => this.setState({ buttonPressed: "save" })}
+                                    onClick={() => {
+                                        this.setState({ buttonPressed: "save" })
+                                    }}
                                 >
                                     {AppConstants.updateAffiliates}
                                 </Button>

@@ -38,7 +38,8 @@ export default function liveScoreCompetition(state = initialState, payload) {
         case ApiConstants.API_LIVE_SCORE_COMPETITION_DELETE_INITIATE:
             return {
                 ...state,
-                loader: true
+                loader: true,
+                ownedLoad: true
             }
         case ApiConstants.API_LIVE_SCORE_COMPETITION_DELETE_SUCCESS:
             if (payload.key === "own") {
@@ -52,6 +53,7 @@ export default function liveScoreCompetition(state = initialState, payload) {
             return {
                 ...state,
                 loader: false,
+                ownedLoad: false
             }
         case ApiConstants.API_LIVE_SCORE_COMPETITION_DELETE_ERROR:
 

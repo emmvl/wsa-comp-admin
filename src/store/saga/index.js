@@ -178,6 +178,7 @@ import { getInnerHorizontalCompSaga } from './liveScoreSaga/liveScoreInnerHorizo
 
 import { liveScorePositionTrackSaga } from './liveScoreSaga/liveScorePositionTrackSaga';
 import rootCompetitionMultiDrawSaga from './competitionManagementSaga/competitionMultiDrawsSaga';
+import umpirePaymentSaga from './umpireSaga/umpirePaymentSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -224,6 +225,9 @@ export default function* rootSaga() {
 
         /// Multi draw in Competition
         fork(rootCompetitionMultiDrawSaga),
+
+        // Umpire Payment Saga
+        fork(umpirePaymentSaga),
     ]);
 
     yield takeEvery(ApiConstants.API_REG_MEMBERSHIP_LIST_LOAD, regMembershipFeeListSaga);

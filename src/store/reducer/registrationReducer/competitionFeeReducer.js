@@ -25,7 +25,7 @@ const competitionDetailObject = {
     invitees: [],
     selectedVenuesIds: [],
     logoIsDefault: false,
-    yearRefId: 1,
+    yearRefId: null,
     statusRefId: 1,
     hasRegistration: 0
 }

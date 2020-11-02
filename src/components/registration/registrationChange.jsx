@@ -89,7 +89,7 @@ const columns = [
                 render: (transferCompOrgName, record) => (
                     <div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
-                            <div>{transferCompOrgName}</div>
+                            {record.tCompOrgApproved!= "-1" && <div>{transferCompOrgName}</div> }
                             {transferCompOrgName && (
                                 <div className="transfer-status">
                                     {record.tCompOrgStatus == 0 ? "(" + record.tCompOrgApproved + ")" : (
@@ -116,7 +116,9 @@ const columns = [
                 render: (transferAffOrgName, record) => (
                     <div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
-                            <div>{transferAffOrgName}</div>
+                            {transferAffOrgName!= "-1" && 
+                                <div> {transferAffOrgName} </div>
+                            }
                             {transferAffOrgName && (
                                 <div className="transfer-status">
                                     {record.tAffStatus == 0 ? "(" + record.tAffApproved + ")" : (

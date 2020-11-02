@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Tooltip, Popover, Menu, Select, DatePicker, Checkbox, Form, message, Spin, Modal,Radio } from "antd";
+import { Layout, Button, Tooltip, Popover, Menu, Select, DatePicker, Checkbox, Form, message, Spin, Modal, Radio } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -51,7 +51,8 @@ import {
     getDraws_division_grade,
     getOrganisationData,
     getOwn_competitionStatus,
-    setOwn_competitionStatus
+    setOwn_competitionStatus,
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
 } from '../../util/sessionStorage';
 import ValidationConstants from '../../themes/validationConstant';
 import './draws.scss';
@@ -95,7 +96,7 @@ class MultifieldDrawsNew extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: '',
             venueId: '',
             roundId: '',
@@ -140,7 +141,7 @@ class MultifieldDrawsNew extends Component {
             singleCompDivisionCheked: true,
             filterDates: false,
             regenerateDrawExceptionModalVisible: false,
-            regenerateExceptionRefId: null
+            regenerateExceptionRefId: 1
         };
         this.props.clearMultiDraws();
     }
@@ -264,14 +265,19 @@ class MultifieldDrawsNew extends Component {
             let competitionList = this.props.appState.own_CompetitionArr;
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
-                    let competitionId = competitionList[0].competitionId;
+                    let storedCompetitionId = getOwn_competition();
+                    let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
                     let statusRefId = competitionList[0].statusRefId
+                    let finalTypeRefId = competitionList[0].finalTypeRefId
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
                     setOwn_competitionStatus(statusRefId)
-                    this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
+                    this.props.getDrawsRoundsAction(yearId, competitionId);
                     setOwn_competition(competitionId);
-                    this.setState({ firstTimeCompId: competitionId, venueLoad: true, competitionStatus: statusRefId });
+                    setOwn_CompetitionFinalRefId(finalTypeRefId)
+                    this.setState({ firstTimeCompId: competitionId, venueLoad: true, competitionStatus: statusRefId, yearRefId: yearId });
                 }
             }
+
         }
 
         if (nextProps.competitionModuleState != competitionModuleState) {
@@ -339,6 +345,7 @@ class MultifieldDrawsNew extends Component {
         let yearId = getOwnCompetitionYear();
         let storedCompetitionId = getOwn_competition();
         let storedCompetitionStatus = getOwn_competitionStatus()
+        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0
             ? this.props.appState.own_YearArr
             : undefined;
@@ -397,7 +404,7 @@ class MultifieldDrawsNew extends Component {
                 null,
                 'own_competition'
             );
-            setOwnCompetitionYear(1);
+            // setOwnCompetitionYear(1);
         }
     }
 
@@ -442,6 +449,7 @@ class MultifieldDrawsNew extends Component {
         setOwnCompetitionYear(yearId);
         setOwn_competition(undefined);
         setOwn_competitionStatus(undefined)
+        setOwn_CompetitionFinalRefId(undefined)
         this.setState({
             firstTimeCompId: null,
             yearRefId: yearId,
@@ -643,8 +651,10 @@ class MultifieldDrawsNew extends Component {
         } else {
             let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
             let statusRefId = own_CompetitionArr[statusIndex].statusRefId
+            let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
             setOwn_competition(competitionId);
             setOwn_competitionStatus(statusRefId)
+            setOwn_CompetitionFinalRefId(finalTypeRefId)
             this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId);
         }
 
@@ -819,7 +829,7 @@ class MultifieldDrawsNew extends Component {
                                 className="year-select reg-filter-select1"
                                 style={{ maxWidth: 100, minWidth: 100 }}
                                 onChange={(yearRefId) => this.onYearChange(yearRefId)}
-                                value={this.state.yearRefId}
+                                value={JSON.parse(this.state.yearRefId)}
                             >
                                 {this.props.appState.own_YearArr.map((item) => (
                                     <Option key={'year_' + item.id} value={item.id}>
@@ -1532,13 +1542,14 @@ class MultifieldDrawsNew extends Component {
                                                         top: topMargin + 50,
                                                         overflow: 'hidden',
                                                         whiteSpace: 'nowrap',
+                                                        marginLeft: slotObject.isLocked == 1 && -10
                                                     }}
                                                 >
                                                     <Menu
                                                         className="action-triple-dot-draws"
                                                         theme="light"
                                                         mode="horizontal"
-                                                        style={{ lineHeight: '16px', borderBottom: 0, cursor: disabledStatus && "no-drop" }}
+                                                        style={{ lineHeight: '16px', borderBottom: 0, cursor: disabledStatus && "no-drop", display: slotObject.isLocked !== 1 && "flex", justifyContent: slotObject.isLocked !== 1 && "center" }}
                                                     >
                                                         <SubMenu
                                                             disabled={disabledStatus}
@@ -1643,17 +1654,17 @@ class MultifieldDrawsNew extends Component {
     }
 
     handleRegenerateDrawException = (key) => {
-        try{
-          if(key === "ok") {
-            this.callGenerateDraw(this.state.regenerateExceptionRefId);
-            this.setState({ regenerateDrawExceptionModalVisible: false,regenerateExceptionRefId: null });
-          }else {
-            this.setState({ regenerateDrawExceptionModalVisible: false });
-          }
-        }catch(ex){
-          console.log("Error in handleRegenerateDrawException::"+ex);
+        try {
+            if (key === "ok") {
+                this.callGenerateDraw(this.state.regenerateExceptionRefId);
+                this.setState({ regenerateDrawExceptionModalVisible: false, regenerateExceptionRefId: 1 });
+            } else {
+                this.setState({ regenerateDrawExceptionModalVisible: false });
+            }
+        } catch (ex) {
+            console.log("Error in handleRegenerateDrawException::" + ex);
         }
-      }
+    }
 
     callGenerateDraw = (regenerateExceptionRefId) => {
         let payload = {
@@ -1662,22 +1673,22 @@ class MultifieldDrawsNew extends Component {
             organisationId: getOrganisationData().organisationUniqueKey,
             roundId: this.state.generateRoundId
         };
-        if(regenerateExceptionRefId){
+        if (regenerateExceptionRefId) {
             payload["exceptionTypeRefId"] = regenerateExceptionRefId;
-          }
+        }
         this.props.generateDrawAction(payload);
         this.setState({ venueLoad: true });
     }
 
     reGenerateDraw = () => {
-        let competitionStatus = getOwn_competitionStatus();
-        if (competitionStatus == 2) {
-            this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
-            this.setState({ roundLoad: true });
-        } else {
-            this.setState({regenerateDrawExceptionModalVisible: true});
-            //this.callGenerateDraw();
-        }
+        // let competitionStatus = getOwn_competitionStatus();
+        // if (competitionStatus == 2) {
+        //     this.props.getActiveRoundsAction(this.state.yearRefId, this.state.firstTimeCompId);
+        //     this.setState({ roundLoad: true });
+        // } else {
+        this.setState({ regenerateDrawExceptionModalVisible: true });
+        //this.callGenerateDraw();
+        //}
     };
 
     check = () => {
@@ -1715,29 +1726,46 @@ class MultifieldDrawsNew extends Component {
     };
 
     regenerateDrawExceptionModal = () => {
-        try{
-          return(
-            <Modal
-              className="add-membership-type-modal"
-              title="Draws Regeneration"
-              visible={this.state.regenerateDrawExceptionModalVisible}
-              onOk={() => this.handleRegenerateDrawException("ok")}
-              onCancel={() => this.handleRegenerateDrawException("cancel")}
-            >
-              <div style={{fontWeight: "600"}}>{AppConstants.wantYouRegenerateDraw}</div>  
-              <Radio.Group
-                  className="reg-competition-radio"
-                  onChange={(e) => this.setState({regenerateExceptionRefId: e.target.value})}
-              >
-                  <Radio style={{fontSize: '14px'}} value={1}>{AppConstants.retainException}</Radio>
-                  <Radio style={{fontSize: '14px'}} value={2}>{AppConstants.removeException}</Radio>
-              </Radio.Group>
-            </Modal>
-          )
-        }catch(ex){
-          console.log("Error in regenerateDrayExceptionModal::"+ex);
+        try {
+            return (
+                <Modal
+                    className="add-membership-type-modal"
+                    title="Draws Regeneration"
+                    visible={this.state.regenerateDrawExceptionModalVisible}
+                    onOk={() => this.handleRegenerateDrawException("ok")}
+                    onCancel={() => this.handleRegenerateDrawException("cancel")}
+                >
+                    <div style={{ fontWeight: "600" }}>{AppConstants.wantYouRegenerateDraw}</div>
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        value={this.state.regenerateExceptionRefId}
+                        onChange={(e) => this.setState({ regenerateExceptionRefId: e.target.value })}
+                    >
+                        <Radio style={{ fontSize: '14px' }} value={1}>{AppConstants.retainException}</Radio>
+                        <Radio style={{ fontSize: '14px' }} value={2}>{AppConstants.removeException}</Radio>
+                        <Radio style={{ fontSize: '14px' }} value={3}>{AppConstants.useRound1Template}</Radio>
+                    </Radio.Group>
+                </Modal>
+            )
+        } catch (ex) {
+            console.log("Error in regenerateDrayExceptionModal::" + ex);
         }
-      }
+    }
+
+    handleGenerateDrawModal = (key) => {
+        if (key === "ok") {
+            if (this.state.generateRoundId != null) {
+                this.callGenerateDraw();
+                this.setState({ drawGenerateModalVisible: false });
+            }
+            else {
+                message.error("Please select round");
+            }
+        }
+        else {
+            this.setState({ drawGenerateModalVisible: false });
+        }
+    }
 
     //////footer view containing all the buttons like publish and regenerate draws
     footerView = () => {

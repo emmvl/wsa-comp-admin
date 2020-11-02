@@ -2,6 +2,7 @@ import ApiConstants from "../../themes/apiConstants";
 import { getRegistrationSetting } from "../objectModel/getRegSettingObject";
 // import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import AppConstants from "../../themes/appConstants";
+import {reverseArray} from 'util/permissions'
 
 const initialState = {
   onLoad: false,
@@ -143,10 +144,11 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_YEAR_LIST_SUCCESS:
+      let yearListSorted = action.yearList ? reverseArray(action.yearList):[]
       return {
         ...state,
         onLoad: false,
-        yearList: action.result,
+        yearList: yearListSorted,
         competitionTypeList: action.competetionListResult,
         status: action.status
       };
@@ -157,10 +159,11 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_ONLY_YEAR_LIST_SUCCESS:
+      let yearSorted = action.result ? reverseArray(action.result):[]
       return {
         ...state,
         onLoad: false,
-        yearList: action.result,
+        yearList: yearSorted,
         status: action.status
       };
 
@@ -353,7 +356,7 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_COMPETITION_SUCCESS:
-      let yearResult = JSON.parse(JSON.stringify(action.yearList))
+      let yearResult = action.result ? reverseArray(action.result):[]
       let competitionResult = JSON.parse(JSON.stringify(action.competetionListResult))
       let yearobject = {
         description: "All",
@@ -398,11 +401,12 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_Participate_COMPETITION_SUCCESS:
+      let participate_yearListSorted = action.yearList?reverseArray(action.yearList):[]
       return {
         ...state,
         onLoad: false,
         participate_CompetitionArr: action.competetionListResult,
-        participate_YearArr: action.yearList,
+        participate_YearArr: participate_yearListSorted,
         status: action.status,
       };
 
@@ -411,12 +415,14 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_OWN_COMPETITION_SUCCESS:
+      let own_yearListSorted = action.yearList?reverseArray(action.yearList):[]
+      console.log(own_yearListSorted)
       return {
         ...state,
         onLoad: false,
         own_CompetitionArr: action.competetionListResult.published,
         all_own_CompetitionArr: action.competetionListResult.all,
-        own_YearArr: action.yearList,
+        own_YearArr:own_yearListSorted,
         status: action.status,
       };
 

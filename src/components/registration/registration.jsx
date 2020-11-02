@@ -825,7 +825,7 @@ class Registration extends Component {
                             <div className="registration-count">
                                 <div className="reg-payment-paid-reg-text">Value of Registrations</div>
                                 {feesPaid != null
-                                    ? <div className="reg-payment-price-text">${feesPaid}</div>
+                                    ? <div className="reg-payment-price-text">{currencyFormat(feesPaid)}</div>
                                     : <div className="reg-payment-price-text">0</div>}
                             </div>
                         </div>

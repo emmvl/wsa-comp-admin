@@ -17,7 +17,7 @@ import moment from 'moment';
 
 import history from 'util/history';
 import { getOrganisationData } from 'util/sessionStorage';
-import { getUserRoleId } from 'util/permissions';
+import { getUserRoleId, getCurrentYear } from 'util/permissions';
 import AppConstants from 'themes/appConstants';
 import AppImages from 'themes/appImages';
 import { getOnlyYearListAction } from 'store/actions/appAction';
@@ -290,7 +290,7 @@ class HomeDashboard extends Component {
 
         if (this.state.userCountLoading && !this.props.appState.onLoad) {
             if (yearList.length > 0) {
-                const yearRefId = yearList[0].id;
+                const yearRefId = getCurrentYear(yearList);
 
                 if (this.props.homeDashboardState.userCount == null) {
                     this.props.getUserCount(yearRefId);
@@ -308,7 +308,7 @@ class HomeDashboard extends Component {
                         this.props.getOnlyYearListAction(this.props.appState.yearList);
                         this.setState({ userCountLoading: true, loading: false });
                     } else {
-                        const yearRefId = yearList[0].id;
+                        const yearRefId = getCurrentYear(yearList);
                         if (this.props.homeDashboardState.userCount == null) {
                             this.props.getUserCount(yearRefId);
                             this.setState({ loading: false });

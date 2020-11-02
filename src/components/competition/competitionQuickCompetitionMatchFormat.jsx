@@ -26,7 +26,7 @@ import {
 import { getYearAndQuickCompetitionAction } from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction"
 import { generateDrawAction } from "../../store/actions/competitionModuleAction/competitionModuleAction";
 import Loader from '../../customComponents/loader';
-import { getOrganisationData } from "../../util/sessionStorage";
+import { getOrganisationData, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -40,7 +40,7 @@ class QuickCompetitionMatchFormat extends Component {
             currentIndex: 0,
             competitionId: '',
             organisationId: getOrganisationData().organisationUniqueKey,
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: '',
             getDataLoading: false,
             buttonPressed: "",
@@ -81,14 +81,16 @@ class QuickCompetitionMatchFormat extends Component {
                     })
                     this.setFormFieldValue();
                 }
+                this.setFormFieldValue()
             }
             if (nextProps.quickCompetitionState !== this.props.quickCompetitionState) {
                 let competitionList = this.props.quickCompetitionState.quick_CompetitionArr;
                 if (nextProps.quickCompetitionState.quick_CompetitionArr !== competitionList) {
                     if (competitionList.length > 0) {
                         let competitionId = competitionList[0].competitionId;
-                        this.setState({ firstTimeCompId: competitionId, getDataLoading: true });
-                        this.apiCalls(competitionId, this.state.yearRefId);
+                        let yearId = this.state.yearRefId ? this.state.yearRefId : this.props.quickCompetitionState.yearId
+                        this.setState({ firstTimeCompId: competitionId, getDataLoading: true, yearRefId: yearId });
+                        this.apiCalls(competitionId, yearId);
                     }
                 }
             }
@@ -404,6 +406,8 @@ class QuickCompetitionMatchFormat extends Component {
 
         this.props.saveCompetitionFormatAction(formatList);
         this.setState({ loading: true });
+        setOwnCompetitionYear(this.state.yearRefId);
+        setOwn_competition(this.state.firstTimeCompId);
     }
 
     ///////view for breadcrumb
@@ -553,7 +557,7 @@ class QuickCompetitionMatchFormat extends Component {
                         {(appState.matchTypes || []).map((item) => {
                             if (item.name !== "SINGLE") {
                                 return (
-                                  <Option key={'matchType_' + item.id} value={item.id}>{item.description}</Option>
+                                    <Option key={'matchType_' + item.id} value={item.id}>{item.description}</Option>
                                 );
                             }
                             return <></>;

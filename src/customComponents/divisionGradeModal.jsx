@@ -18,7 +18,7 @@ class DivisionGradeModal extends React.Component {
     componentDidUpdate() {
         if (this.props.visible === true && this.state.divisionState === true) {
             this.setState({ divisionState: false })
-            this.setFieldValues()
+            this.valueupdate()
         }
         if (this.props.visible === false && this.state.divisionState === false) {
             this.setState({ divisionState: true })
@@ -61,7 +61,7 @@ class DivisionGradeModal extends React.Component {
     }
 
     render() {
-        const {checkvalue, changeDivision, changeTeam, division, modalTitle, onDivisionBack, onCancel, addDivision, addGrade, removegrade, changegrade, removeDivision } = this.props
+        const { checkvalue, changeDivision, changeTeam, division, modalTitle, onDivisionBack, onCancel, addDivision, addGrade, removegrade, changegrade, removeDivision } = this.props
         return (
             <div style={{ backgroundColor: "red" }}>
                 <Modal
@@ -80,7 +80,7 @@ class DivisionGradeModal extends React.Component {
                         ref={this.formRef}
                         autoComplete="off"
                         onFinish={this.onOKsubmit}
-                        onFinishFailed={({errorFields}) => this.formRef.current.scrollToField(errorFields[0].name)}
+                        onFinishFailed={({ errorFields }) => this.formRef.current.scrollToField(errorFields[0].name)}
                         noValidate="noValidate"
                     >
                         <div>
@@ -157,7 +157,7 @@ class DivisionGradeModal extends React.Component {
                                         )}
                                     </div>
                                 ))}
-                                <span className="input-heading-add-another pointer" onClick={addDivision}> + {AppConstants.addDivisions}</span>
+                                <span className="input-heading-add-another pointer" onClick={() => { addDivision(); this.valueupdate() }}> + {AppConstants.addDivisions}</span>
                             </div>
 
                             <div className="row">

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import AppConstants from '../themes/appConstants';
 import history from './history';
 import { getOrganisationData, getLiveScoreCompetiton } from './sessionStorage';
@@ -137,6 +139,34 @@ function getUserRoleId() {
     return orgItem ? orgItem.userRoleId : 2;
 }
 
+function getCurrentYear(yearArr) {
+    const currentYear = moment().year();
+    const currentYearIndex = yearArr.findIndex((x) => x.name == currentYear);
+    if (currentYearIndex === -1) {
+        return yearArr[0].id;
+    } else {
+        return yearArr[currentYearIndex].id;
+    }
+}
+
+function compare(a, b) {
+    const bandA = a.sortOrder;
+    const bandB = b.sortOrder;
+    let comparison = 0;
+    if (bandA < bandB) {
+        comparison = 1;
+    } else if (bandA > bandB) {
+        comparison = -1;
+    }
+    return comparison;
+}
+
+function reverseArray(array) {
+    let isSortedArray = [];
+    isSortedArray = array.sort(compare);
+    return isSortedArray;
+}
+
 export {
     checkOrganisationLevel,
     checkUserRole,
@@ -146,4 +176,6 @@ export {
     checkUserAccess,
     showRoleLevelPermission,
     getUserRoleId,
+    getCurrentYear,
+    reverseArray,
 };

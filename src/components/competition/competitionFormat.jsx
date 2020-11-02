@@ -29,9 +29,11 @@ import {
     getOwn_competition,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
 } from "../../util/sessionStorage";
 import AppUniqueId from "../../themes/appUniqueId";
 import moment from "moment";
+import { getCurrentYear } from 'util/permissions'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -45,7 +47,7 @@ class CompetitionFormat extends Component {
             currentIndex: 0,
             competitionId: '',
             organisationId: getOrganisationData().organisationUniqueKey,
-            yearRefId: 1,
+            yearRefId: null,
             firstTimeCompId: '',
             getDataLoading: false,
             buttonPressed: "",
@@ -69,6 +71,7 @@ class CompetitionFormat extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
+        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
 
@@ -87,7 +90,7 @@ class CompetitionFormat extends Component {
             })
         } else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
+            // setOwnCompetitionYear(1)
         }
     }
 
@@ -102,6 +105,7 @@ class CompetitionFormat extends Component {
                     })
                     this.setFormFieldValue();
                 }
+                this.setFormFieldValue()
             }
             if (nextProps.appState !== this.props.appState) {
                 let competitionList = this.props.appState.own_CompetitionArr;
@@ -109,10 +113,20 @@ class CompetitionFormat extends Component {
                     if (competitionList.length > 0) {
                         let competitionId = competitionList[0].competitionId
                         let statusRefId = competitionList[0].statusRefId
+                        let finalTypeRefId = competitionList[0].finalTypeRefId
                         setOwn_competition(competitionId);
                         setOwn_competitionStatus(statusRefId)
-                        this.apiCalls(competitionId, this.state.yearRefId);
+                        setOwn_CompetitionFinalRefId(finalTypeRefId)
+                        let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                        this.apiCalls(competitionId, yearId);
                         this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
+                    }
+                }
+                if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                    if (this.props.appState.own_YearArr.length > 0) {
+                        let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                        setOwnCompetitionYear(yearRefId)
+                        this.setState({ yearRefId: yearRefId })
                     }
                 }
             }
@@ -222,6 +236,7 @@ class CompetitionFormat extends Component {
         setOwnCompetitionYear(yearId)
         setOwn_competition(undefined)
         setOwn_competitionStatus(undefined)
+        setOwn_CompetitionFinalRefId(undefined)
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition')
         this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0 })
     }
@@ -231,8 +246,10 @@ class CompetitionFormat extends Component {
         let own_CompetitionArr = this.props.appState.own_CompetitionArr
         let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
         let statusRefId = own_CompetitionArr[statusIndex].statusRefId
+        let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
         setOwn_competition(competitionId)
         setOwn_competitionStatus(statusRefId)
+        setOwn_CompetitionFinalRefId(finalTypeRefId)
         let payload = {
             yearRefId: this.state.yearRefId,
             competitionUniqueKey: competitionId,
@@ -277,7 +294,7 @@ class CompetitionFormat extends Component {
 
         let competitionFormatTemplateId = competitionFormatDivisions[index].competitionFormatTemplateId;
         let remainingFormatDiv = competitionFormatDivisions.
-        filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
+            filter(x => x.competitionFormatTemplateId != competitionFormatTemplateId);
 
         for (let remDiv in remainingFormatDiv) {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
@@ -1115,59 +1132,59 @@ class CompetitionFormat extends Component {
                                     </Button>
                                 </div>
                             ) : (
-                                <div className="comp-buttons-view">
-                                    <Tooltip
-                                        style={{ height: '100%' }}
-                                        onMouseEnter={() =>
-                                            this.setState({
-                                                tooltipVisibleSave: isPublished,
-                                            })
-                                        }
-                                        onMouseLeave={() =>
-                                            this.setState({ tooltipVisibleSave: false })
-                                        }
-                                        visible={this.state.tooltipVisibleSave}
-                                        title={AppConstants.statusPublishHover}
-                                    >
-                                        <Button
-                                            id={AppUniqueId.compformat_save_btn}
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
-                                            className="publish-button save-draft-text"
-                                            type="primary"
-                                            htmlType="submit"
-                                            onClick={() => this.setState({ buttonClicked: "save" })}
-                                            disabled={isPublished}
+                                    <div className="comp-buttons-view">
+                                        <Tooltip
+                                            style={{ height: '100%' }}
+                                            onMouseEnter={() =>
+                                                this.setState({
+                                                    tooltipVisibleSave: isPublished,
+                                                })
+                                            }
+                                            onMouseLeave={() =>
+                                                this.setState({ tooltipVisibleSave: false })
+                                            }
+                                            visible={this.state.tooltipVisibleSave}
+                                            title={AppConstants.statusPublishHover}
                                         >
-                                            {AppConstants.save}
-                                        </Button>
-                                    </Tooltip>
-                                    <Tooltip
-                                        style={{ height: '100%' }}
-                                        onMouseEnter={() =>
-                                            this.setState({
-                                                tooltipVisibleDelete: isPublished,
-                                            })
-                                        }
-                                        onMouseLeave={() =>
-                                            this.setState({ tooltipVisibleDelete: false })
-                                        }
-                                        visible={this.state.tooltipVisibleDelete}
-                                        title={AppConstants.statusPublishHover}
-                                    >
-                                        <Button
-                                            id={AppUniqueId.create_Draft_Draw_Btn}
-                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
-                                            className="open-reg-button"
-                                            type="primary"
-                                            htmlType="submit"
-                                            onClick={() => this.setState({ buttonClicked: "createDraw" })}
-                                            disabled={isPublished}
+                                            <Button
+                                                id={AppUniqueId.compformat_save_btn}
+                                                style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
+                                                className="publish-button save-draft-text"
+                                                type="primary"
+                                                htmlType="submit"
+                                                onClick={() => this.setState({ buttonClicked: "save" })}
+                                                disabled={isPublished}
+                                            >
+                                                {AppConstants.save}
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip
+                                            style={{ height: '100%' }}
+                                            onMouseEnter={() =>
+                                                this.setState({
+                                                    tooltipVisibleDelete: isPublished,
+                                                })
+                                            }
+                                            onMouseLeave={() =>
+                                                this.setState({ tooltipVisibleDelete: false })
+                                            }
+                                            visible={this.state.tooltipVisibleDelete}
+                                            title={AppConstants.statusPublishHover}
                                         >
-                                            {AppConstants.createDraftDraw}
-                                        </Button>
-                                    </Tooltip>
-                                </div>
-                            )}
+                                            <Button
+                                                id={AppUniqueId.create_Draft_Draw_Btn}
+                                                style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
+                                                className="open-reg-button"
+                                                type="primary"
+                                                htmlType="submit"
+                                                onClick={() => this.setState({ buttonClicked: "createDraw" })}
+                                                disabled={isPublished}
+                                            >
+                                                {AppConstants.createDraftDraw}
+                                            </Button>
+                                        </Tooltip>
+                                    </div>
+                                )}
                         </div>
                     </div>
                 </div>

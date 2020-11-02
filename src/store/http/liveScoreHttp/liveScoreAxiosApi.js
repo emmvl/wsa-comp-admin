@@ -1448,6 +1448,23 @@ const LiveScoreAxiosApi = {
         return Method.dataPost(url, token, payload);
     },
 
+    umpirePaymentList(data) {
+        const { compId, pagingBody, search, sortBy, sortOrder } = data;
+        let url = null
+
+        if (search) {
+            url = `/matchUmpire/payments?competitionId=${compId}&search=${search}`;
+        } else {
+            url = `/matchUmpire/payments?competitionId=${compId}`;
+        }
+
+        if (sortBy && sortOrder) {
+            url += `&sortBy=${sortBy}&sortOrder=${sortOrder}`;
+        }
+
+        return Method.dataPost(url, token, pagingBody);
+    },
+
 };
 
 const Method = {

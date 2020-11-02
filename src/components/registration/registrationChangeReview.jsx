@@ -244,9 +244,9 @@ class RegistrationChangeReview extends Component {
     getOrgRefName = (orgRefTypeId) => {
         let orgTypeRefName;
         if (orgRefTypeId == 1) {
-            orgTypeRefName = "Competition";
+            orgTypeRefName = "Affiliate";
         } else if (orgRefTypeId == 2) {
-            orgTypeRefName = "Affliate";
+            orgTypeRefName = "Competition";
         } else if (orgRefTypeId == 3) {
             orgTypeRefName = "Membership";
         }
@@ -282,6 +282,7 @@ class RegistrationChangeReview extends Component {
         let isFromOrg = 1;
         if (regChangeReviewData.regChangeTypeRefId == 2) {
             if (regChangeReviewData.isShowButton == 2) {
+                reviewSaveData["refundTypeRefId"] = 1;
                 isFromOrg = 2;
             }
         }
@@ -457,7 +458,7 @@ class RegistrationChangeReview extends Component {
                             <Radio.Group
                                 disabled
                                 className="reg-competition-radio"
-                                value={regChangeReviewData ? ((regChangeReviewData.reasonTypeRefId!= null && regChangeReviewData.reasonTypeRefId!= 0) ? 2 : 1) : null}
+                                value={regChangeReviewData ? regChangeReviewData.deRegistrationOptionId : null}
                             >
                                 <Radio value={1}>Yes</Radio>
                                 <Radio value={2}>No</Radio>

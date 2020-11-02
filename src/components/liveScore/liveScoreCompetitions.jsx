@@ -11,13 +11,12 @@ import {
     Pagination,
 } from "antd";
 import Tooltip from "react-png-tooltip";
-
 import AppConstants from "themes/appConstants";
 import AppImages from "themes/appImages";
 import ColorsArray from "util/colorsArray";
 // import { isArrayNotEmpty } from "util/helpers";
 import history from "util/history";
-import { checkOrganisationLevel } from "util/permissions";
+import { checkOrganisationLevel, getCurrentYear } from "util/permissions";
 import { getOrganisationData, getPrevUrl, setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData, setKeyForStateWideMessage } from "util/sessionStorage";
 import { getOnlyYearListAction } from "store/actions/appAction";
 import { liveScoreOwnPartCompetitionList, liveScoreCompetitionActionInitiate, liveScoreCompetitionDeleteInitiate } from "store/actions/LiveScoreAction/liveScoreCompetitionAction";
@@ -339,7 +338,7 @@ class LiveScoreCompetitions extends Component {
         super(props);
 
         this.state = {
-            year: 1,
+            year: null,
             onLoad: false,
             orgKey: getOrganisationData() ? getOrganisationData().organisationId : null,
             orgLevel: AppConstants.state,
@@ -349,6 +348,7 @@ class LiveScoreCompetitions extends Component {
             allCompListLoad: false,
             sortBy: null,
             sortOrder: null,
+            allyearload: false
 
         };
 
@@ -358,16 +358,24 @@ class LiveScoreCompetitions extends Component {
     componentDidMount() {
         this.props.updateInnerHorizontalData()
         localStorage.setItem("yearValue", "false")
-        this.props.getOnlyYearListAction(this.props.appState.yearList)
-        localStorage.setItem("yearId", this.state.year)
+
+        // localStorage.setItem("yearId", this.state.year)
 
         const prevUrl = getPrevUrl();
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
-            this.competitionListApi();
+            if (this.state.year) {
+                this.competitionListApi();
 
-            checkOrganisationLevel().then((value) => {
-                this.setState({ orgLevel: value });
-            });
+                checkOrganisationLevel().then((value) => {
+                    this.setState({ orgLevel: value });
+                });
+            }
+            else {
+                this.props.getOnlyYearListAction(this.props.appState.yearList)
+                this.setState({
+                    allyearload: true
+                })
+            }
         } else {
             history.push("/");
         }
@@ -379,9 +387,17 @@ class LiveScoreCompetitions extends Component {
             this.setState({ allCompListLoad: false });
             localStorage.setItem("defaultYearId", this.state.year)
         }
+        if (this.state.allyearload === true && this.props.appState.onLoad == false) {
+            if (this.props.appState.yearList.length > 0) {
+                let yearRefId = getCurrentYear(this.props.appState.yearList)
+                localStorage.setItem("yearId", yearRefId)
+                this.setState({ year: yearRefId, allyearload: false })
+                this.competitionListApi(yearRefId);
+            }
+        }
     }
 
-    competitionListApi = () => {
+    competitionListApi = (yearRefId) => {
         let { competitionListActionObject } = this.props.liveScoreCompetition
         if (competitionListActionObject) {
             let body = competitionListActionObject.payload
@@ -401,7 +417,7 @@ class LiveScoreCompetitions extends Component {
                     limitParticipating: 10,
                 },
             };
-            this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, "all", this.state.year);
+            this.props.liveScoreOwnPartCompetitionList(body, this.state.orgKey, null, null, "all", yearRefId);
             this.setState({ allCompListLoad: true })
         }
     };

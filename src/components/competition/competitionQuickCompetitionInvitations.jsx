@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import Loader from "../../customComponents/loader";
 import { updateSelectedTeamPlayer, getMergeCompetitionAction, quickCompImportDataCleanUpAction, validateMergeCompetitionaction, mergeCompetitionProceed } from "../../store/actions/competitionModuleAction/competitionQuickCompetitionAction"
 import ImportTeamPlayerModal from "../../customComponents/importTeamPlayerModal"
-import { getYearAndCompetitionOwnAction } from '../../store/actions/appAction'
+import { getYearAndCompetitionOwnAction, CLEAR_OWN_COMPETITION_DATA } from '../../store/actions/appAction'
 import ValidationConstants from "../../themes/validationConstant";
 const { Option } = Select;
 const { Header, Footer, Content } = Layout;
@@ -22,19 +22,19 @@ class QuickCompetitionInvitations extends Component {
         this.state = {
             competition: "2019winter",
             importModalVisible: false,
-            yearRefId: 1,
+            yearRefId: null,
             competitionId: null,
             importPlayer: 0,
             selectedMergeComptition: null,
             invitationLoad: false,
             mergeValidateVisible: false,
             onProcessMergeCompetition: false,
-            modalVisible:false,
+            modalVisible: false,
             teamOptionId: 1,
             playerOptionId: 1,
             divisionGradeOptionId: 1,
             venueOptionId: 1,
-            compNameOptionId:1,
+            compNameOptionId: 1,
         }
     }
 
@@ -62,7 +62,7 @@ class QuickCompetitionInvitations extends Component {
                 this.setState({
                     mergeValidateVisible: mergeValidateState
                 })
-                 this.showPropsConfirm(null)
+                this.showPropsConfirm(null)
             }
             this.setState({
                 invitationLoad: false
@@ -85,23 +85,23 @@ class QuickCompetitionInvitations extends Component {
     }
 
     ValidateProceed = () => {
-        const {mergeCompetitionTypeSelection} = this.props.quickCompetitionState
-        const typeSelection = mergeCompetitionTypeSelection == null ? " " :mergeCompetitionTypeSelection;
+        const { mergeCompetitionTypeSelection } = this.props.quickCompetitionState
+        const typeSelection = mergeCompetitionTypeSelection == null ? " " : mergeCompetitionTypeSelection;
 
         let payload = {
             "registrationCompetitionId": this.state.selectedMergeComptition,
             "quickCompetitionId": this.state.competitionId,
-            "teamOptionId": typeSelection.teamMismatch == 0 ? null :this.state.teamOptionId,
-            "playerOptionId": typeSelection.playerMismatch == 0 ? null :this.state.playerOptionId,
+            "teamOptionId": typeSelection.teamMismatch == 0 ? null : this.state.teamOptionId,
+            "playerOptionId": typeSelection.playerMismatch == 0 ? null : this.state.playerOptionId,
             "divisionGradeOptionId": typeSelection.divisionGradesMismatch == 0 ? null : this.state.divisionGradeOptionId,
-            "venueOptionId": typeSelection.venueMismatch == 0 ? null :this.state.venueOptionId,
-			"compNameOptionId":this.state.compNameOptionId,
+            "venueOptionId": typeSelection.venueMismatch == 0 ? null : this.state.venueOptionId,
+            "compNameOptionId": this.state.compNameOptionId,
         }
 
         this.props.mergeCompetitionProceed(payload)
         this.setState({
             onProcessMergeCompetition: true,
-            modalVisible:false
+            modalVisible: false
         })
     }
 
@@ -136,7 +136,7 @@ class QuickCompetitionInvitations extends Component {
 
     //merge with existing competition
     mergeExistingCompetition = (subItem, selectedOption) => {
-        const { mergeCompetitionList,mergeCompetitionTypeSelection } = this.props.quickCompetitionState
+        const { mergeCompetitionList, mergeCompetitionTypeSelection } = this.props.quickCompetitionState
         const mergeCompetitionSelection = mergeCompetitionTypeSelection == null ? "" : mergeCompetitionTypeSelection
 
         if (subItem.id == 2 && selectedOption == 2) {
@@ -161,14 +161,14 @@ class QuickCompetitionInvitations extends Component {
                         width={672}
                         title={AppConstants.mergeCompetition}
                         visible={this.state.modalVisible}
-                        okText = 'Proceed'
-                        onOk={(e)=>this.ValidateProceed()}
-                        onCancel={(e)=>this.showPropsConfirm("cancel")}
+                        okText='Proceed'
+                        onOk={(e) => this.ValidateProceed()}
+                        onCancel={(e) => this.showPropsConfirm("cancel")}
                     >
                         <div>
-                            <div style={{fontWeight: 500}}>
+                            <div style={{ fontWeight: 500 }}>
                                 <div>
-                                    {AppConstants.differencesBetween +" "}
+                                    {AppConstants.differencesBetween + " "}
                                     {mergeCompetitionSelection.quickCompetition + " " + "and" + " "}
                                     {mergeCompetitionSelection.registrationCompetition + '.'} {AppConstants.oneHasPreference}
                                 </div>
@@ -342,6 +342,7 @@ class QuickCompetitionInvitations extends Component {
             })
             message.warn(ValidationConstants.pleaseSelectOneOption)
         }
+        this.props.CLEAR_OWN_COMPETITION_DATA("all")
     }
 
     render() {
@@ -371,7 +372,8 @@ function mapDispatchToProps(dispatch) {
         getMergeCompetitionAction,
         quickCompImportDataCleanUpAction,
         validateMergeCompetitionaction,
-        mergeCompetitionProceed
+        mergeCompetitionProceed,
+        CLEAR_OWN_COMPETITION_DATA
     }, dispatch)
 }
 

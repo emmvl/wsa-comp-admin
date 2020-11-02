@@ -14,7 +14,8 @@ import {
     getOwnCompetitionYear,
     setOwn_competition,
     getOwn_competition,
-    getOwn_competitionStatus, setOwn_competitionStatus
+    getOwn_competitionStatus, setOwn_competitionStatus,
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
 } from 'util/sessionStorage';
 import { getYearAndCompetitionOwnAction, clearYearCompetitionAction } from 'store/actions/appAction';
 import {
@@ -29,7 +30,7 @@ import {
 import InputWithHead from 'customComponents/InputWithHead';
 import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 import DashboardLayout from 'pages/dashboardLayout';
-
+import { getCurrentYear } from 'util/permissions'
 import './competition.css';
 
 const { Footer, Content } = Layout;
@@ -67,7 +68,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
         super(props);
 
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             count: 1,
             firstTimeCompId: "",
             getDataLoading: false,
@@ -77,7 +78,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
             updateGradeOnLoad: false,
             competitionStatus: 0,
             tooltipVisibleDelete: false,
-            showPublishToLivescore : false,
+            showPublishToLivescore: false,
             showButton: null,
             columns: [
                 {
@@ -107,14 +108,24 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 if (competitionList.length > 0) {
                     let competitionId = competitionList[0].competitionId
                     let statusRefId = competitionList[0].statusRefId
+                    let finalTypeRefId = competitionList[0].finalTypeRefId
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
-                    this.props.getTeamGradingSummaryAction(this.state.yearRefId, competitionId)
+                    setOwn_CompetitionFinalRefId(finalTypeRefId)
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    this.props.getTeamGradingSummaryAction(yearId, competitionId)
                     this.setState({
                         getDataLoading: true,
                         firstTimeCompId: competitionId,
                         competitionStatus: statusRefId
                     })
+                }
+            }
+            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+                if (this.props.appState.own_YearArr.length > 0) {
+                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+                    setOwnCompetitionYear(yearRefId)
+                    this.setState({ yearRefId: yearRefId })
                 }
             }
         }
@@ -145,6 +156,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let storedCompetitionStatus = getOwn_competitionStatus()
+        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
         let compData = this.props.appState.own_CompetitionArr.length > 0 ? this.props.appState.own_CompetitionArr : undefined
         if (storedCompetitionId && yearId && propsData && compData) {
@@ -163,7 +175,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                 })
             } else {
                 this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-                setOwnCompetitionYear(1)
+                // setOwnCompetitionYear(1)
             }
         }
     }
@@ -222,12 +234,12 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 )}
                             </NavLink>
                         ) : (
-                            grades.teamCount !== null && (
-                                <Tag className="comp-dashboard-table-tag  text-center tag-col" key={grades}>
-                                    {grades.teamCount}
-                                </Tag>
-                            )
-                        )}
+                                grades.teamCount !== null && (
+                                    <Tag className="comp-dashboard-table-tag  text-center tag-col" key={grades}>
+                                        {grades.teamCount}
+                                    </Tag>
+                                )
+                            )}
                     </div>
                 )
             };
@@ -331,6 +343,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
         setOwnCompetitionYear(yearId);
         setOwn_competition(undefined);
         setOwn_competitionStatus(undefined);
+        setOwn_CompetitionFinalRefId(undefined)
         this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, yearId, 'own_competition');
         this.setState({ firstTimeCompId: null, yearRefId: yearId, competitionStatus: 0 });
         // this.setDetailsFieldValue();
@@ -342,8 +355,10 @@ class CompetitionPartTeamGradeCalculate extends Component {
         let own_CompetitionArr = this.props.appState.own_CompetitionArr
         let statusIndex = own_CompetitionArr.findIndex((x) => x.competitionId == competitionId)
         let statusRefId = own_CompetitionArr[statusIndex].statusRefId
+        let finalTypeRefId = own_CompetitionArr[statusIndex].finalTypeRefId
         setOwn_competition(competitionId);
         setOwn_competitionStatus(statusRefId);
+        setOwn_CompetitionFinalRefId(finalTypeRefId)
         this.props.getTeamGradingSummaryAction(this.state.yearRefId, competitionId);
         this.setState({
             getDataLoading: true,
@@ -452,7 +467,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
     ////////form content view
     contentView = () => {
-        const { columns, data, addGradeVisible, updateGradeName,getDataLoading } = this.state;
+        const { columns, data, addGradeVisible, updateGradeName, getDataLoading } = this.state;
         const { ownTeamGradingSummaryGetData, onLoad } = this.props.ownTeamGradingState;
         return (
             <div className="comp-dash-table-view mt-2">

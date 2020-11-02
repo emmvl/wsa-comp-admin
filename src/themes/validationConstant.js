@@ -233,6 +233,9 @@ const ValidationConstants = {
     newMembershipDuplicateError: 'Membership product is not same as another product you have selected',
     yearIsRequired: 'Year is required',
     membershipProductIsRequired1: 'Membership Product is required',
+
+    // Affiliate Add/Edit
+    affiliateAddressRequiredError: 'Please input affiliate address in details',
 };
 
 export default ValidationConstants;

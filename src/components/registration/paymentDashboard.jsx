@@ -379,7 +379,7 @@ class PaymentDashboard extends Component {
     };
 
 
-    dropdownView = () => {
+    dropdownView_1 = () => {
         let affiliateToData = this.props.userState.affiliateTo;
         let uniqueValues = [];
         let paymentStatus = [
@@ -523,6 +523,160 @@ class PaymentDashboard extends Component {
                         </Select>
                     </div>
                 </div>
+            </div>
+        )
+    }
+
+    ///dropdown view containing all the dropdown of header
+    dropdownView = () => {
+        let affiliateToData = this.props.userState.affiliateTo;
+        let uniqueValues = [];
+        let paymentStatus = [
+            { id: 1, description: "Pending Membership" },
+            { id: 2, description: "Pending Registration Fee" },
+            { id: 3, description: "Registered" },
+        ];
+
+        if (affiliateToData.affiliatedTo !== undefined) {
+            let obj = {
+                organisationId: getOrganisationData().organisationUniqueKey,
+                name: getOrganisationData().name,
+            };
+            uniqueValues.push(obj);
+            let arr = [...new Map(affiliateToData.affiliatedTo.map(obj => [obj["organisationId"], obj])).values()];
+            if (isEmptyArray) {
+                uniqueValues = [...uniqueValues, ...arr];
+            }
+        }
+        const { paymentCompetitionList } = this.props.paymentState;
+        return (
+            <div>
+                <div className="row">
+                    <div className="col-sm-3">
+                        <InputWithHead required="pt-0" heading={AppConstants.year} />
+                        <Select
+                            className="reg-payment-select"
+                            style={{ width: "100%", paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
+                            onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
+                            value={this.state.yearRefId}
+                        >
+                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            {this.props.appState.yearList.map(item => (
+                                <Option key={'year_' + item.id} value={item.id}>
+                                    {item.description}
+                                </Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="col-sm-3">
+                        <InputWithHead required="pt-0" heading={AppConstants.competition} />
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            className="reg-payment-select"
+                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
+                            value={this.state.competitionUniqueKey}
+                        >
+                            <Option key={-1} value={"-1"}>{AppConstants.all}</Option>
+                            {(paymentCompetitionList || []).map(item => (
+                                <Option
+                                    // key={'competition_' + item.competitionUniquekey}
+                                    key={item.competitionUniquekey}
+                                    value={item.competitionUniqueKey}
+                                >
+                                    {item.competitionName}
+                                </Option>
+                            ))}
+                        </Select>
+                    </div>
+                    <div className="col-sm-3">
+                        <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            className="reg-payment-select"
+                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            onChange={(e) => this.onChangeDropDownValue(e, "filterOrganisation")}
+                            value={this.state.filterOrganisation}
+                        >
+                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            {(uniqueValues || []).map((org) => (
+                                <Option key={'organisation_' + org.organisationId} value={org.organisationId}>
+                                    {org.name}
+                                </Option>
+                            ))}
+                        </Select>
+                    </div>
+
+                    <div className="col-sm-3">
+                        <InputWithHead required="pt-0" heading={AppConstants.type} />
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            className="reg-payment-select"
+                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            onChange={(type) => this.setState({ type })}
+                            value={this.state.type}
+                        >
+                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            <Option key={"playerRegistration"} value={"playerRegistration"}>{"Player Registration"}</Option>
+                            <Option key={"coachRegistration"} value={"coachRegistration"}>{"Coach Registration"}</Option>
+                            <Option key={"teamRegistration"} value={"teamRegistration"}>{"Team Registration"}</Option>
+                            <Option key={"shop"} value={"shop"}>{"Shop"}</Option>
+                            <Option key={"umpire"} value={"umpire"}>{"Umpire"}</Option>
+                        </Select>
+                    </div>
+
+                </div>
+
+                <div className='row pb-5'>
+                    <div className="col-sm-3 pt-2">
+                        <InputWithHead required="pt-0" heading={AppConstants.status} />
+                        <Select
+                            showSearch
+                            optionFilterProp="children"
+                            className="reg-payment-select"
+                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            onChange={(status) => this.setState({ status })}
+                            value={this.state.status}
+                        >
+                            <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                            <Option key={"paid"} value={"paid"}>{"Paid"}</Option>
+                            <Option key={"pending"} value={"pending"}>{"Pending"}</Option>
+                            <Option key={"declined"} value={"declined"}>{"Declined"}</Option>
+                        </Select>
+                    </div>
+
+                    <div className="col-sm-3 pt-2">
+                        <InputWithHead required="pt-0" heading={AppConstants.dateFrom} />
+                        <DatePicker
+                            className="reg-payment-datepicker"
+                            size="default"
+                            style={{ width: "100%", minWidth: 160 }}
+                            format="DD-MM-YYYY"
+                            showTime={false}
+                            placeholder="dd-mm-yyyy"
+                            onChange={e => this.onChangeDropDownValue(e, "dateFrom")}
+                            value={this.state.dateFrom !== null && moment(this.state.dateFrom, "YYYY-MM-DD")}
+                        />
+                    </div>
+
+                    <div className="col-sm-3 pt-2">
+                        <InputWithHead required="pt-0" heading={AppConstants.dateTo} />
+                        <DatePicker
+                            className="reg-payment-datepicker"
+                            size="default"
+                            style={{ width: "100%", minWidth: 160 }}
+                            format="DD-MM-YYYY"
+                            showTime={false}
+                            placeholder="dd-mm-yyyy"
+                            onChange={e => this.onChangeDropDownValue(e, "dateTo")}
+                            value={this.state.dateTo !== null && moment(this.state.dateTo, "YYYY-MM-DD")}
+                        />
+                    </div>
+                </div>
+
             </div>
         )
     }

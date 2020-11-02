@@ -80,11 +80,12 @@ const columns = [
         dataIndex: 'attendance',
         key: 'attendance',
         sorter: (a, b) => tableSort(a, b, "attendance"),
-        render: attendance => (
+        render: (attendance, record) => (
             <span style={{ display: 'flex', justifyContent: 'center', width: '50%' }}>
                 <img
                     className="dot-image"
-                    src={attendance && attendance.isPlaying === true ? AppImages.greenDot : AppImages.greyDot}
+                    // src={attendance && attendance.isPlaying === true ? AppImages.greenDot : AppImages.greyDot}
+                    src={record.played === "1" ? AppImages.greenDot : AppImages.greyDot}
                     alt=""
                     width="12"
                     height="12"
@@ -123,13 +124,17 @@ const columnsTeam1 = [
         dataIndex: 'attended',
         key: 'attended',
         sorter: (a, b) => tableSort(a, b, "attended"),
-        render: (team, record, index) => (
-            <Checkbox
-                className={record.lineup && record.lineup.playing ? 'checkbox-green-color-outline mt-1' : 'single-checkbox mt-1'}
-                checked={record.attendance && record.attendance.isPlaying}
-                onChange={(e) => this_.playingView(record, e.target.checked, index, 'team1Players')}
-            />
-        ),
+        render: (team, record, index) => {
+            return (
+                <Checkbox
+                    // className={record.lineup && record.lineup.playing ? 'checkbox-green-color-outline mt-1' : 'single-checkbox mt-1'}
+                    className={record.lineup && record.lineup[0].playing ? 'checkbox-green-color-outline mt-1' : 'single-checkbox mt-1'}
+                    // checked={record.attendance && record.attendance.isPlaying}
+                    checked={record.played == "1" ? true : false}
+                    onChange={(e) => this_.playingView(record, e.target.checked, index, 'team1Players')}
+                />
+            )
+        }
     },
 ];
 
@@ -163,9 +168,15 @@ const columnsTeam2 = [
         key: 'attended',
         sorter: (a, b) => tableSort(a, b, "attended"),
         render: (attended, record, index) => (
+            // <Checkbox
+            //     className={record.lineup && record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1'}
+            //     checked={record.attendance && record.attendance.isPlaying}
+            //     onChange={(e) => this_.playingView(record, e.target.checked, index, 'team2Players')}
+            // />
+
             <Checkbox
-                className={record.lineup && record.lineup.playing ? "checkbox-green-color-outline mt-1" : 'single-checkbox mt-1'}
-                checked={record.attendance && record.attendance.isPlaying}
+                className={record.lineup && record.lineup[0].playing ? 'checkbox-green-color-outline mt-1' : 'single-checkbox mt-1'}
+                checked={record.played == "1" ? true : false}
                 onChange={(e) => this_.playingView(record, e.target.checked, index, 'team2Players')}
             />
         ),
@@ -211,13 +222,13 @@ class LiveScoreMatchDetails extends Component {
         let isLineUpEnable = null;
         this.props.getLiveScoreGamePositionsList();
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
-
+        let periodDuration = null
         if (isArrayNotEmpty(match)) {
             if (match.type === 'FOUR_QUARTERS') {
-                let periodDuration = (match.matchDuration * 60) / 4
+                periodDuration = (match.matchDuration * 60) / 4
                 this.setState({ periodDuration })
             } else {
-                let periodDuration = (match.matchDuration * 60) / 2
+                periodDuration = (match.matchDuration * 60) / 2
                 this.setState({ periodDuration })
             }
         }
@@ -245,7 +256,7 @@ class LiveScoreMatchDetails extends Component {
         }
 
         if (this.props.location.state) {
-            if (isLineUpEnable === 1) {
+            if (isLineUpEnable === 1 || isLineUpEnable === true) {
                 this.setState({ isLineUp: 1 });
                 this.props.liveScoreGetMatchDetailInitiate(this.props.location.state.matchId, 1)
             } else {
@@ -801,6 +812,8 @@ class LiveScoreMatchDetails extends Component {
             periodDuration = (match.matchDuration * 60) / 2
             positionDuration = periodDuration / noOfPosition
         }
+
+        console.log(match, 'noOfPosition', periodDuration)
         if (match.type === 'TWO_HALVES') {
             if (pt && gtt && art !== 'MINUTE') {
                 const columns = [
@@ -819,7 +832,6 @@ class LiveScoreMatchDetails extends Component {
                                 width: 150,
                                 render: (p, row, index) => {
                                     let positionArray = this.getPositionIndex(row.playerId, 1)
-
                                     return (
                                         <>
                                             {positionArray.length > 0 ?
@@ -1386,7 +1398,6 @@ class LiveScoreMatchDetails extends Component {
                                 width: 150,
                                 render: (p, row, index) => {
                                     let positionArray = this.getPositionIndex(row.playerId, 1)
-
                                     return (
                                         <>
                                             {positionArray.length > 0 ?
@@ -2455,6 +2466,7 @@ class LiveScoreMatchDetails extends Component {
         const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
         const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
         const length = match ? match.length : 0;
+        console.log(team1PlayersData, 'team1PlayersData')
 
         return (
             <div className="row mt-5 ml-0 mr-0 mb-5">

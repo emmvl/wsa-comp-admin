@@ -8,6 +8,8 @@ import LiveScoreApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
 import RegistrationAxiosApi from "store/http/registrationHttp/registrationAxiosApi";
 import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
 import UserAxiosApi from "store/http/userHttp/userAxiosApi.js";
+import { getCurrentYear } from "util/permissions";
+import { setOwnCompetitionYear, setParticipatingYear } from "util/sessionStorage";
 
 // Get the common year list reference
 function* getOnlyYearListSaga(action) {
@@ -44,9 +46,10 @@ function* getYearListSaga(action) {
   try {
     const result = yield call(AxiosApi.getYearList, action);
     if (result.status === 1) {
+      let getCurrentYearId = getCurrentYear(result.result.data)
       const resultCompetition = yield call(
         RegistrationAxiosApi.getCompetitionTypeList,
-        result.result.data[0].id
+        getCurrentYearId
       );
 
       if (resultCompetition.status === 1) {
@@ -64,9 +67,10 @@ function* getYearListSaga(action) {
           );
 
           if (resultMembershipProduct.status === 1) {
+            let yearId = getCurrentYear(result.result.data)
             const getRegistrationFormData = yield call(
               RegistrationAxiosApi.getRegistrationForm,
-              result.result.data[0].id,
+              yearId,
               resultCompetition.result.data[0].competitionId
             );
 
@@ -464,7 +468,8 @@ function* getOwnYearAndCompetitionListSaga(action) {
     } : yield call(CommonAxiosApi.getYearList, action);
 
     if (result.status === 1) {
-      let yearId = action.yearId == null ? result.result.data[0].id : action.yearId
+      let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId
+      setOwnCompetitionYear(yearId)
       const resultCompetition = yield call(RegistrationAxiosApi.getOwnCompetitionList, yearId);
 
       if (resultCompetition.status === 1) {
@@ -500,7 +505,8 @@ function* getParticipateYearAndCompetitionListSaga(action) {
     } : yield call(CommonAxiosApi.getYearList, action);
 
     if (result.status === 1) {
-      let yearId = action.yearId == null ? result.result.data[0].id : action.yearId
+      let yearId = action.yearId == null ? getCurrentYear(result.result.data) : action.yearId
+      setParticipatingYear(yearId)
       const resultCompetition = yield call(RegistrationAxiosApi.getParticipateCompetitionList, yearId);
 
       if (resultCompetition.status === 1) {

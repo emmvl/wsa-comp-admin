@@ -17,6 +17,7 @@ import {
     from "../../store/actions/registrationAction/registrationDashboardAction"
 import moment from "moment"
 import Tooltip from 'react-png-tooltip'
+import { getCurrentYear } from "util/permissions"
 
 const { Footer, Content } = Layout;
 const { Option } = Select;
@@ -138,36 +139,69 @@ class RegistrationFormList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            yearRefId: 1,
+            yearRefId: null,
             offset: 0,
             sortBy: null,
-            sortOrder: null
+            sortOrder: null,
+            allyearload: false
 
         }
         this_Obj = this
-        this.props.getOnlyYearListAction(this.props.appState.yearList)
+
     }
 
+    async componentDidUpdate(nextProps) {
+        if (this.state.allyearload === true && this.props.appState.onLoad == false) {
+            if (this.props.appState.yearList.length > 0) {
+                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
+                const { regFormListAction } = this.props.dashboardState
+                let page = 1
+                let sortBy = this.state.sortBy
+                let sortOrder = this.state.sortOrder
+                if (regFormListAction) {
+                    let offset = regFormListAction.offset
+                    sortBy = regFormListAction.sortBy
+                    sortOrder = regFormListAction.sortOrder
+                    let yearRefId = regFormListAction.yearRefId
+                    await this.setState({ offset, sortBy, sortOrder, yearRefId })
+                    page = Math.floor(offset / 10) + 1;
+                    this.handleMembershipTableList(page, yearRefId)
+                    this.setState({
+                        yearRefId: yearRefId, allyearload: false
+                    })
+                } else {
+                    this.handleMembershipTableList(1, mainYearRefId)
+                    this.setState({
+                        yearRefId: mainYearRefId, allyearload: false
+                    })
+                }
+
+            }
+        }
+    }
 
     async componentDidMount() {
+        this.props.getOnlyYearListAction(this.props.appState.yearList)
+        this.setState({
+            allyearload: true
+        })
+        // const { regFormListAction } = this.props.dashboardState
+        // let page = 1
+        // let sortBy = this.state.sortBy
+        // let sortOrder = this.state.sortOrder
+        // if (regFormListAction) {
+        //     let offset = regFormListAction.offset
+        //     sortBy = regFormListAction.sortBy
+        //     sortOrder = regFormListAction.sortOrder
+        //     let yearRefId = regFormListAction.yearRefId
 
-        const { regFormListAction } = this.props.dashboardState
-        let page = 1
-        let sortBy = this.state.sortBy
-        let sortOrder = this.state.sortOrder
-        if (regFormListAction) {
-            let offset = regFormListAction.offset
-            sortBy = regFormListAction.sortBy
-            sortOrder = regFormListAction.sortOrder
-            let yearRefId = regFormListAction.yearRefId
+        //     await this.setState({ offset, sortBy, sortOrder, yearRefId })
+        //     page = Math.floor(offset / 10) + 1;
 
-            await this.setState({ offset, sortBy, sortOrder, yearRefId })
-            page = Math.floor(offset / 10) + 1;
-
-            this.handleMembershipTableList(page, yearRefId)
-        } else {
-            this.handleMembershipTableList(1, this.state.yearRefId)
-        }
+        //     this.handleMembershipTableList(page, yearRefId)
+        // } else {
+        //     this.handleMembershipTableList(1, this.state.yearRefId)
+        // }
 
 
     }

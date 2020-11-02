@@ -970,8 +970,6 @@ const umpireActivityColumn = [
   },
 ]
 
-const umpireActivityData = []
-
 const coachColumn = [
   {
     title: 'Match ID',
@@ -1015,8 +1013,6 @@ const coachColumn = [
 
   },
 ]
-
-const coachList = []
 
 const umpireColumn = [
   {
@@ -1062,7 +1058,58 @@ const umpireColumn = [
   },
 ]
 
-const umpireList = []
+const purchaseActivityColumn = [
+  {
+    title: 'Order ID',
+    dataIndex: 'orderId',
+    key: 'orderId',
+    sorter: true,
+  },
+  {
+    title: 'Date',
+    dataIndex: 'date',
+    key: 'date',
+    sorter: true,
+  },
+  {
+    title: 'Transaction ID',
+    dataIndex: 'transactionId',
+    key: 'transactionId',
+    sorter: true,
+  },
+  {
+    title: 'Products',
+    dataIndex: 'products',
+    key: 'products',
+    sorter: true,
+  },
+  {
+    title: 'Affiliate',
+    dataIndex: 'affiliate',
+    key: 'affiliate',
+    sorter: true,
+  },
+  {
+    title: 'Payment Status',
+    dataIndex: 'paymentStatus',
+    key: 'paymentStatus',
+    sorter: true,
+  },
+  {
+    title: 'Payment Method',
+    dataIndex: 'paymentMethod',
+    key: 'paymentMethod',
+    sorter: true,
+  },
+  {
+    title: 'Fulfillment Status',
+    dataIndex: 'fulfillmentStatus',
+    key: 'fulfillmentStatus',
+    sorter: true,
+  },
+]
+
+const purchaseActivityList = []
 
 class UserModulePersonalDetail extends Component {
   constructor(props) {
@@ -2519,6 +2566,40 @@ class UserModulePersonalDetail extends Component {
     );
   };
 
+  purchaseActivityView = () => {
+
+    return (
+      <div
+        className="comp-dash-table-view mt-2"
+        style={{ backgroundColor: "#f7fafc" }}
+      >
+
+        <div className="table-responsive home-dash-table-view">
+          <Table
+            className="home-dashboard-table"
+            columns={purchaseActivityColumn}
+            dataSource={purchaseActivityList}
+            pagination={false}
+          // loading={umpireActivityOnLoad && true}
+          />
+        </div>
+        {/* <div className="d-flex justify-content-end ">
+          <Pagination
+            className="antd-pagination pb-3"
+            current={umpireActivityCurrentPage}
+            total={umpireActivityTotalCount}
+            onChange={(page) =>
+              this.handleUmpireActivityTableList(
+                page,
+                this.state.userId
+              )
+            }
+          />
+        </div> */}
+      </div>
+    );
+  };
+
   render() {
     let {
       activityPlayerList,
@@ -2604,6 +2685,10 @@ class UserModulePersonalDetail extends Component {
                           {this.umpireActivityView()}
                         </TabPane>
                       )}
+
+                      <TabPane tab={AppConstants.purchase} key="9">
+                        {this.purchaseActivityView()}
+                      </TabPane>
                     </Tabs>
                   </div>
                 </div>

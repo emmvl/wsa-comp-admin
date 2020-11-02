@@ -1,22 +1,24 @@
 import React, { Component } from "react";
-import { Layout, Breadcrumb, Input, Select, Checkbox, Button, Table,Form,Modal } from 'antd';
+import { Layout, Breadcrumb, Input, Select, Checkbox, Button, Table, Form, Modal } from 'antd';
 import './competition.css';
 import InputWithHead from "../../customComponents/InputWithHead";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
-import {getLadderFormatAction, saveLadderFormatAction, updateLadderFormatAction} from
-        "../../store/actions/competitionModuleAction/ladderFormatAction";
+import { getLadderFormatAction, saveLadderFormatAction, updateLadderFormatAction } from
+    "../../store/actions/competitionModuleAction/ladderFormatAction";
 import { bindActionCreators } from "redux";
 import { connect } from 'react-redux';
 import history from "../../util/history";
-import {getYearAndCompetitionOwnAction,clearYearCompetitionAction,} from "../../store/actions/appAction";
+import { getYearAndCompetitionOwnAction, clearYearCompetitionAction, } from "../../store/actions/appAction";
 import Loader from '../../customComponents/loader';
-import {getOrganisationData,  setOwnCompetitionYear,
+import {
+    getOrganisationData, setOwnCompetitionYear,
     getOwnCompetitionYear,
     setOwn_competition,
-    getOwn_competition } from "../../util/sessionStorage";
+    getOwn_competition
+} from "../../util/sessionStorage";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -41,7 +43,7 @@ class CompetitionLadder extends Component {
         this.referenceApiCalls();
     }
 
-    componentDidMount(){
+    componentDidMount() {
         let yearId = getOwnCompetitionYear()
         let storedCompetitionId = getOwn_competition()
         let propsData = this.props.appState.own_YearArr.length > 0 ? this.props.appState.own_YearArr : undefined
@@ -63,15 +65,14 @@ class CompetitionLadder extends Component {
         }
         else {
             this.props.getYearAndCompetitionOwnAction(this.props.appState.own_YearArr, null, 'own_competition')
-            setOwnCompetitionYear(1)
+            // setOwnCompetitionYear(1)
         }
     }
 
-    componentDidUpdate(nextProps){
+    componentDidUpdate(nextProps) {
         let ladderFormatState = this.props.ladderFormatState;
 
-        if(nextProps.ladderFormatState != ladderFormatState)
-        {
+        if (nextProps.ladderFormatState != ladderFormatState) {
             if (ladderFormatState.onLoad == false && this.state.getDataLoading) {
                 this.setState({
                     getDataLoading: false,
@@ -90,12 +91,10 @@ class CompetitionLadder extends Component {
             }
         }
 
-        if(ladderFormatState.onLoad == false && this.state.loading === true)
-        {
+        if (ladderFormatState.onLoad == false && this.state.loading === true) {
             this.setState({ loading: false });
-            if(!ladderFormatState.error)
-            {
-                if (this.state.buttonPressed === "save" ) {
+            if (!ladderFormatState.error) {
+                if (this.state.buttonPressed === "save") {
                     history.push('/competitionFormat');
                 }
             }
@@ -138,13 +137,12 @@ class CompetitionLadder extends Component {
         this.setState({
             editModalVisible: flag,
         });
-        if(key === "show")
-        {
+        if (key === "show") {
             this.setState({
                 currentIndex: index
             })
         }
-        if(key === "ok"){
+        if (key === "ok") {
             this.setState({
                 schemeModalVisible: true
             })
@@ -156,7 +154,7 @@ class CompetitionLadder extends Component {
         this.setState({
             schemeModalVisible: flag,
         });
-        if(key === "ok"){
+        if (key === "ok") {
             ladderFormat[index].isEditted = true;
             ladderFormat[index].ladderSchemeId = 0;
             this.props.updateLadderFormatAction(ladderFormat, "ladderFormat", index);
@@ -169,16 +167,16 @@ class CompetitionLadder extends Component {
 
         });
 
-        if(key === "ok"){
-            this.performAllDivisionOperation(true,ladderFormat,index);
+        if (key === "ok") {
+            this.performAllDivisionOperation(true, ladderFormat, index);
         }
     }
 
     onChange(e, ladderFormat, ladder, index) {
         let removedDivisions = [];
         let selectDivs = ladderFormat[index].selectedDivisions;
-        for(let k in selectDivs){
-            if(e.indexOf(selectDivs[k]) == -1){
+        for (let k in selectDivs) {
+            if (e.indexOf(selectDivs[k]) == -1) {
                 {
                     removedDivisions.push(selectDivs[k]);
                     break;
@@ -186,32 +184,29 @@ class CompetitionLadder extends Component {
             }
         }
 
-        let a = ladderFormat[index].selectedDivisions.filter(x=>false);
+        let a = ladderFormat[index].selectedDivisions.filter(x => false);
         ladderFormat[index].selectedDivisions = a;
 
         ladderFormat[index].selectedDivisions = e;
 
-        let schemeName =  ladder.schemeName;
-        let remainingFormatDiv =  ladderFormat.
-        filter(x=>x.schemeName!= schemeName);
+        let schemeName = ladder.schemeName;
+        let remainingFormatDiv = ladderFormat.
+            filter(x => x.schemeName != schemeName);
 
-        for(let remDiv in remainingFormatDiv)
-        {
+        for (let remDiv in remainingFormatDiv) {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
             // disable true
-            for(let i in e){
-                for(let j in itemDivisions){
-                    if(itemDivisions[j].competitionMembershipProductDivisionId === e[i])
-                    {
+            for (let i in e) {
+                for (let j in itemDivisions) {
+                    if (itemDivisions[j].competitionMembershipProductDivisionId === e[i]) {
                         itemDivisions[j].isDisabled = true;
                     }
                 }
             }
 
-            for(let i in removedDivisions){
-                for(let j in itemDivisions){
-                    if(itemDivisions[j].competitionMembershipProductDivisionId === removedDivisions[i])
-                    {
+            for (let i in removedDivisions) {
+                for (let j in itemDivisions) {
+                    if (itemDivisions[j].competitionMembershipProductDivisionId === removedDivisions[i]) {
                         itemDivisions[j].isDisabled = false;
                     }
                 }
@@ -229,7 +224,7 @@ class CompetitionLadder extends Component {
     };
 
     onChangeSchemeName = (e, actionKey, index, ladderFormat, schemeData) => {
-        let schemaDefault = schemeData.find(x=> x.schemeName === e);
+        let schemaDefault = schemeData.find(x => x.schemeName === e);
         let resultTypes = schemaDefault.resultTypes;
         ladderFormat[index].resultTypes = resultTypes;
         ladderFormat[index].schemeName = e;
@@ -241,22 +236,21 @@ class CompetitionLadder extends Component {
         this.props.updateLadderFormatAction(ladderFormat, "ladderFormat", index);
     }
 
-    onClickAddLadder = (e,ladderFormat) => {
+    onClickAddLadder = (e, ladderFormat) => {
         this.props.updateLadderFormatAction(ladderFormat, "ladderFormatAdd", 0);
     }
 
-    onChangeResultType = (e,  index, ladderFormat, resIndex) =>{
+    onChangeResultType = (e, index, ladderFormat, resIndex) => {
         ladderFormat[index].resultTypes[resIndex].points = e.target.value;
         this.props.updateLadderFormatAction(ladderFormat, "ladderFormat", index);
     }
 
-    handleDeleteModal(flag, key, index, ladderFormat)
-    {
+    handleDeleteModal(flag, key, index, ladderFormat) {
         this.setState({
             deleteModalVisible: flag
         });
-        if(key === "ok"){
-            this.deleteLadderFormat(ladderFormat,index);
+        if (key === "ok") {
+            this.deleteLadderFormat(ladderFormat, index);
         }
     }
 
@@ -269,7 +263,7 @@ class CompetitionLadder extends Component {
 
     deleteLadderFormat = (ladderFormat, index) => {
         let removedLadder = ladderFormat[index];
-        let remainingFormatDiv =  ladderFormat.filter(x => x.schemeName != removedLadder.schemeName);
+        let remainingFormatDiv = ladderFormat.filter(x => x.schemeName != removedLadder.schemeName);
 
         for (let remDiv in remainingFormatDiv) {
             let itemDivisions = remainingFormatDiv[remDiv].divisions;
@@ -322,21 +316,18 @@ class CompetitionLadder extends Component {
     }
 
     saveLadderFormats = () => {
-        this.setState({buttonPressed: "save"});
+        this.setState({ buttonPressed: "save" });
         let ladderFormat = [...this.props.ladderFormatState.ladderFormats];
 
-        for(let item in ladderFormat)
-        {
+        for (let item in ladderFormat) {
             const selectedDivisions = ladderFormat[item].selectedDivisions;
             let divisions = ladderFormat[item].divisions;
             let divArr = [];
 
-            for(let j in selectedDivisions)
-            {
+            for (let j in selectedDivisions) {
                 let matchDivisions = divisions.
-                find(x=>x.competitionMembershipProductDivisionId === selectedDivisions[j]);
-                if(matchDivisions!= "")
-                {
+                    find(x => x.competitionMembershipProductDivisionId === selectedDivisions[j]);
+                if (matchDivisions != "") {
                     let obj = {
                         competitionFormatDivisionId: 0,
                         competitionMembershipProductDivisionId: 0
@@ -437,17 +428,17 @@ class CompetitionLadder extends Component {
         let ladderFormat = this.props.ladderFormatState.ladderFormats;
         let isAllDivisionChecked = this.props.ladderFormatState.isAllDivisionChecked;
         return (
-            <div className="content-view pt-4" style={{paddingBottom: '0px'}}>
+            <div className="content-view pt-4" style={{ paddingBottom: '0px' }}>
 
                 {(ladderFormat || []).map((ladder, index) => (
-                    <div className="inside-container-view" style={{paddingTop:"14px"}}>
-                        <div style={{display:"flex"}}>
+                    <div className="inside-container-view" style={{ paddingTop: "14px" }}>
+                        <div style={{ display: "flex" }}>
                             <InputWithHead heading={AppConstants.ladderFormatScheme} />
-                            <div className="transfer-image-view pt-0 pointer" style = {{marginLeft:'auto'}} onClick ={ () => this.deleteModal(index)}>
+                            <div className="transfer-image-view pt-0 pointer" style={{ marginLeft: 'auto' }} onClick={() => this.deleteModal(index)}>
                                 <span className="user-remove-btn"><i className="fa fa-trash-o" aria-hidden="true" /></span>
                                 <span className="user-remove-text">
-                                {AppConstants.remove}
-                            </span>
+                                    {AppConstants.remove}
+                                </span>
                             </div>
                             {this.deleteConfirmModalView(ladderFormat)}
                         </div>
@@ -455,7 +446,7 @@ class CompetitionLadder extends Component {
                             <div>
                                 <Select
                                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                    onChange={(e) => this.onChangeSchemeName(e, "ladderFormat",index, ladderFormat, schemeData )}
+                                    onChange={(e) => this.onChangeSchemeName(e, "ladderFormat", index, ladderFormat, schemeData)}
                                     value={ladder.schemeName}
                                 >
                                     {(schemeData || []).map((item) => (
@@ -466,14 +457,14 @@ class CompetitionLadder extends Component {
                                 </Select>
                             </div>
                         ) : (
-                            <InputWithHead
-                                placeholder={AppConstants.ladderFormatScheme}
-                                value={ladder.schemeName}
-                                onChange={(e)=> this.onUpdateSchemeName(e, ladderFormat, index)}
-                            />
-                        )}
+                                <InputWithHead
+                                    placeholder={AppConstants.ladderFormatScheme}
+                                    value={ladder.schemeName}
+                                    onChange={(e) => this.onUpdateSchemeName(e, ladderFormat, index)}
+                                />
+                            )}
 
-                        <Checkbox className="single-checkbox pt-2" defaultChecked={isAllDivisionChecked}  onChange={(e) => this.onChangeAllDivision(e, ladderFormat,index)}>{AppConstants.allDivisions}</Checkbox>
+                        <Checkbox className="single-checkbox pt-2" defaultChecked={isAllDivisionChecked} onChange={(e) => this.onChangeAllDivision(e, ladderFormat, index)}>{AppConstants.allDivisions}</Checkbox>
                         {!isAllDivisionChecked && (
                             <div className="fluid-width">
                                 <div className="row">
@@ -481,10 +472,10 @@ class CompetitionLadder extends Component {
                                         <Select
                                             mode="multiple"
                                             style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                                            onChange={(e) =>this.onChange(e, ladderFormat, ladder, index)}
+                                            onChange={(e) => this.onChange(e, ladderFormat, ladder, index)}
                                             value={ladder.selectedDivisions}
                                         >
-                                            {(ladder.divisions || []).map((division)  => (
+                                            {(ladder.divisions || []).map((division) => (
                                                 <Option
                                                     key={'compMemProdDiv_' + division.competitionMembershipProductDivisionId}
                                                     disabled={division.isDisabled}
@@ -501,25 +492,25 @@ class CompetitionLadder extends Component {
                         )}
                         <div className="inside-container-view">
                             <div className="table-responsive">
-                                <div style={{display: 'flex', paddingLeft: '10px'}}>
-                                    <div style={{width: '89%'}}><InputWithHead heading="Result type/Byes" /></div>
+                                <div style={{ display: 'flex', paddingLeft: '10px' }}>
+                                    <div style={{ width: '89%' }}><InputWithHead heading="Result type/Byes" /></div>
                                     <div><InputWithHead heading={"Points"} /></div>
                                 </div>
                                 {(ladder.resultTypes || []).map((res, resIndex) => (
-                                    <div style={{display: 'flex', paddingLeft: '10px'}}>
-                                        <div style={{width: '89%'}}><InputWithHead heading={res.description} /></div>
+                                    <div style={{ display: 'flex', paddingLeft: '10px' }}>
+                                        <div style={{ width: '89%' }}><InputWithHead heading={res.description} /></div>
                                         <div>
                                             <InputWithHead className="input-inside-table-fees" value={res.points}
-                                                           placeholder={"Points"} disabled = {!ladder.isEditted}
-                                                           onChange={(e) => this.onChangeResultType(e, index, ladderFormat, resIndex)}>
+                                                placeholder={"Points"} disabled={!ladder.isEditted}
+                                                onChange={(e) => this.onChangeResultType(e, index, ladderFormat, resIndex)}>
                                             </InputWithHead>
                                         </div>
                                     </div>
                                 ))}
                                 {!ladder.isEditted ?
-                                    <div style={{ display: 'flex', justifyContent: "flex-end", paddingTop: '10px', paddingRight:'6px' }}>
-                                        <Button className="open-reg-button" type="primary" style={{height: '34px'}}
-                                                onClick={()=> this.handleEditModal(true, "show", index, ladderFormat)}>{AppConstants.edit}</Button>
+                                    <div style={{ display: 'flex', justifyContent: "flex-end", paddingTop: '10px', paddingRight: '6px' }}>
+                                        <Button className="open-reg-button" type="primary" style={{ height: '34px' }}
+                                            onClick={() => this.handleEditModal(true, "show", index, ladderFormat)}>{AppConstants.edit}</Button>
                                         {this.editModalView(ladderFormat)}
                                     </div>
                                     : null}
@@ -557,7 +548,7 @@ class CompetitionLadder extends Component {
 
     schemeModalView = (ladderFormat) => {
         let scheme = ladderFormat[this.state.currentIndex];
-        let schemeName = (scheme!= null && scheme!= undefined) ? scheme.schemeName : null;
+        let schemeName = (scheme != null && scheme != undefined) ? scheme.schemeName : null;
         return (
             <div>
                 <Modal
@@ -570,7 +561,7 @@ class CompetitionLadder extends Component {
                         heading={AppConstants.ladderFormatScheme}
                         placeholder={AppConstants.ladderFormatScheme}
                         value={schemeName}
-                        onChange={(e)=> this.onUpdateSchemeName(e, ladderFormat, this.state.currentIndex)}
+                        onChange={(e) => this.onUpdateSchemeName(e, ladderFormat, this.state.currentIndex)}
                     />
                 </Modal>
             </div>
@@ -580,35 +571,35 @@ class CompetitionLadder extends Component {
     allDivisionModalView = (ladderFormat) => {
         return (
             <div>
-              <Modal
-                title="Ladder Format"
-                visible={this.state.allDivisionVisible}
-                onOk={() => this.handleAllDivisionModal(false, "ok", this.state.currentIndex, ladderFormat)}
-                onCancel={() => this.handleAllDivisionModal(false, "cancel", this.state.currentIndex, ladderFormat)}>
-                  <p>This will remove the other ladder formats.</p>
-              </Modal>
+                <Modal
+                    title="Ladder Format"
+                    visible={this.state.allDivisionVisible}
+                    onOk={() => this.handleAllDivisionModal(false, "ok", this.state.currentIndex, ladderFormat)}
+                    onCancel={() => this.handleAllDivisionModal(false, "cancel", this.state.currentIndex, ladderFormat)}>
+                    <p>This will remove the other ladder formats.</p>
+                </Modal>
             </div>
-          );
+        );
     }
 
     deleteConfirmModalView = (ladderFormat) => {
         return (
-           <div>
-             <Modal
-               title="Ladder Format"
-               visible={this.state.deleteModalVisible}
-               onOk={() => this.handleDeleteModal(false, "ok", this.state.currentIndex, ladderFormat)}
-               onCancel={() => this.handleDeleteModal(false, "cancel", this.state.currentIndex, ladderFormat)}>
-                 <p>Are you sure you want to remove?.</p>
-             </Modal>
-           </div>
-         );
-   }
+            <div>
+                <Modal
+                    title="Ladder Format"
+                    visible={this.state.deleteModalVisible}
+                    onOk={() => this.handleDeleteModal(false, "ok", this.state.currentIndex, ladderFormat)}
+                    onCancel={() => this.handleDeleteModal(false, "cancel", this.state.currentIndex, ladderFormat)}>
+                    <p>Are you sure you want to remove?.</p>
+                </Modal>
+            </div>
+        );
+    }
 
     /////ladderAdjustmentView
     ladderAdjustmentView = () => {
         return (
-            <div className="fees-view pt-5" style={{marginTop: '0px'}}>
+            <div className="fees-view pt-5" style={{ marginTop: '0px' }}>
                 <span className="form-heading">{AppConstants.ladderAdjustment}</span>
                 <span className="input-heading-add-another">+ {AppConstants.addNewAdjustment}</span>
 
@@ -633,9 +624,9 @@ class CompetitionLadder extends Component {
                         <div className="col-sm">
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 <Button className="save-draft-text" type="save-draft-text"
-                                onClick={()=> this.saveLadderFormats()}>{AppConstants.saveDraft}</Button>
+                                    onClick={() => this.saveLadderFormats()}>{AppConstants.saveDraft}</Button>
                                 <Button className="open-reg-button" type="primary"
-                                onClick={()=> this.saveLadderFormats()}>{AppConstants.finalise}</Button>
+                                    onClick={() => this.saveLadderFormats()}>{AppConstants.finalise}</Button>
                             </div>
                         </div>
                     </div>
@@ -681,11 +672,11 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
         ladderFormatState: state.LadderFormatState,
         appState: state.AppState
     }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(CompetitionLadder);
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionLadder);

@@ -12,7 +12,11 @@ const initialState = {
   playedCheckBox: false,
   noOfPosition: null,
   finalPostData: null,
-  positionList: []
+  positionList: [],
+  positionData: [],
+  positionDuration: null,
+  updateDurationData: [],
+  tickBox: false
 };
 
 function getFilterTrackData(trackData) {
@@ -69,6 +73,14 @@ function getFilterPositionData(positionData) {
       }
     }
   }
+
+  let obj = {
+    "id": null,
+    "isPlaying": false,
+    "isVisible": false,
+    "name": null,
+  }
+  positionArray.push(obj)
   return positionArray
 }
 
@@ -90,6 +102,30 @@ function getPositionArry(mainArr, positionArray) {
     break;
   }
   return position
+}
+
+function getSelectedPosition(playerId, postArray, positionArray) {
+  console.log(playerId, 'postArray**', postArray, 'postArray!!', positionArray)
+  let selectedPosArr = []
+
+  for (let i in postArray) {
+    if (postArray[i].playerId == playerId && postArray[i].positionId > 0) {
+      selectedPosArr.push(postArray[i])
+    }
+  }
+
+  let countPosition = []
+
+  for (let i in positionArray) {
+    for (let j in selectedPosArr) {
+      if (positionArray[i].id == selectedPosArr[j].positionId && positionArray[i].isPlaying == true) {
+        countPosition.push(positionArray[i])
+      }
+    }
+  }
+
+  return countPosition
+
 }
 
 
@@ -116,14 +152,14 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
         ...state,
         onLoad: true,
         status: action.status,
-        recordLoad: false
+        recordLoad: false,
       };
 
     case ApiConstants.API_LIVE_SCORE_PLAYER_MINUTE_TRACKING_LIST_SUCCESS:
       let trackResult = getFilterTrackData(action.result.data)
       state.trackResultData = trackResult
-      let postionArr = getPositionArry(action.result.data, state.positionList)
-      state.positionList = postionArr
+      // let postionArr = getPositionArry(action.result.data, state.positionList)
+      // state.positionList = postionArr
       return {
         ...state,
         onLoad: false,
@@ -144,13 +180,16 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
       let team = action.data.team
       let playerdata = action.data.playerdata
       let trackDataRes = state.trackResultData
-      let positionDuration = action.data.positionDuration
+      // let positionDuration = action.data.positionDuration
+      let positionDuration = null
       let periodDuration = action.data.periodDuration
       let id = action.data.id
 
       let positionTrack = action.data.positionTrack
       let gameTimeTrack = action.data.gameTimeTrack
       let attndceRecrd = action.data.attndceRecrd
+      let noOfSelectedPosition = null
+      let obj = {}
 
 
       let userId = localStorage.getItem("userId");
@@ -163,7 +202,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
 
 
       if (positionTrack && gameTimeTrack && attndceRecrd != "MINUTE") {
-
+        let noOfSelectedPosition = getSelectedPosition(playerId, state.trackResultData, state.positionData)
         if (extraKey == 'positionId') {
           if (findData === -1) {
             let trackObj = {
@@ -173,7 +212,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
               "playerId": playerdata.playerId,
               "period": period,
               "positionId": selectedData,
-              "duration": positionDuration,
+              "duration": state.playedCheckBox ? positionDuration : positionDuration / 2,
               "playedInPeriod": state.playedCheckBox,
               "playedEndPeriod": state.playedCheckBox,
               "playedFullPeriod": state.playedCheckBox,
@@ -183,12 +222,34 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
               "updatedBy": null
             }
             trackDataRes.push(trackObj)
+            noOfSelectedPosition = getSelectedPosition(playerId, trackDataRes, state.positionData)
+            positionDuration = noOfSelectedPosition.length > 0 ? periodDuration / noOfSelectedPosition.length : 0
+
+            for (let i in trackDataRes) {
+              if (trackDataRes[i].playerId == playerId && trackDataRes[i].playedFullPeriod == true) {
+                trackDataRes[i]['duration'] = Math.round(positionDuration)
+              } else if (trackDataRes[i].playerId == playerId && trackDataRes[i].playedFullPeriod == false) {
+                trackDataRes[i]['duration'] = Math.round(positionDuration) / 2
+              }
+            }
+
           } else {
             state.trackResultData[findData][key] = selectedData
+            noOfSelectedPosition = getSelectedPosition(playerId, state.trackResultData, state.positionData)
+            positionDuration = noOfSelectedPosition.length > 0 ? periodDuration / noOfSelectedPosition.length : 0
+            for (let i in state.trackResultData) {
+              if (state.trackResultData[i].playerId == playerId && state.trackResultData[i].playedFullPeriod == true) {
+                state.trackResultData[i]['duration'] = Math.round(positionDuration)
+              } else if (state.trackResultData[i].playerId == playerId && state.trackResultData[i].playedFullPeriod == false) {
+                state.trackResultData[i]['duration'] = Math.round(positionDuration) / 2
+              }
+            }
             state.trackResultData[findData]['updatedBy'] = userId
             state.trackResultData[findData]['createdBy'] = null
           }
         } else if (extraKey === 'checkBox') {
+          state.playedCheckBox = selectedData
+          state.tickBox = selectedData
           if (findData === -1) {
             let trackObj = {
               "id": null,
@@ -197,7 +258,7 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
               "playerId": playerdata.playerId,
               "period": period,
               "positionId": playerdata.attendance ? playerdata.attendance.positionId ? playerdata.attendance.positionId : 0 : 0,
-              "duration": positionDuration,
+              "duration": selectedData ? positionDuration : positionDuration / 2,
               "playedInPeriod": selectedData,
               "playedEndPeriod": selectedData,
               "playedFullPeriod": selectedData,
@@ -207,8 +268,25 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
               "updatedBy": null
             }
             trackDataRes.push(trackObj)
-          } else {
 
+            noOfSelectedPosition = getSelectedPosition(playerId, trackDataRes, state.positionData)
+            positionDuration = noOfSelectedPosition.length > 0 ? periodDuration / noOfSelectedPosition.length : 0
+
+            for (let i in trackDataRes) {
+              if (trackDataRes[i].playerId == playerId) {
+                trackDataRes[i]['duration'] = selectedData ? Math.round(positionDuration) : Math.round(positionDuration) / 2
+              }
+            }
+
+          } else {
+            noOfSelectedPosition = getSelectedPosition(playerId, trackDataRes, state.positionData)
+            positionDuration = noOfSelectedPosition.length > 0 ? periodDuration / noOfSelectedPosition.length : 0
+
+            for (let i in state.trackResultData) {
+              if (state.trackResultData[i].playerId == playerId) {
+                state.trackResultData[i]['duration'] = selectedData ? Math.round(positionDuration) : Math.round(positionDuration) / 2
+              }
+            }
 
             state.trackResultData[findData]['playedInPeriod'] = selectedData
             state.trackResultData[findData]['playedEndPeriod'] = selectedData
@@ -411,8 +489,23 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
               "updatedBy": null
             }
             trackDataRes.push(trackObj)
+            noOfSelectedPosition = getSelectedPosition(playerId, trackDataRes, state.positionData)
+            positionDuration = noOfSelectedPosition.length > 0 ? periodDuration / noOfSelectedPosition.length : 0
+
+            for (let i in trackDataRes) {
+              if (trackDataRes[i].playerId == playerId) {
+                trackDataRes[i]['duration'] = Math.round(positionDuration)
+              }
+            }
           } else {
             state.trackResultData[findData][key] = selectedData
+            noOfSelectedPosition = getSelectedPosition(playerId, state.trackResultData, state.positionData)
+            positionDuration = noOfSelectedPosition.length > 0 ? periodDuration / noOfSelectedPosition.length : 0
+            for (let i in state.trackResultData) {
+              if (state.trackResultData[i].playerId == playerId) {
+                state.trackResultData[i]['duration'] = Math.round(positionDuration)
+              }
+            }
             state.trackResultData[findData]["playedInPeriod"] = false
             state.trackResultData[findData]["playedFullPeriod"] = positionDuration === periodDuration ? true : false
             state.trackResultData[findData]['updatedBy'] = parseInt(userId)
@@ -421,20 +514,22 @@ function liveScorePlayerMinuteTrackingState(state = initialState, action) {
         }
       }
 
-      console.log(action, 'API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD', state.trackResultData)
+      // console.log(action, 'API_LIVE_SCORE_UPDATE_PLAYER_MINUTE_RECORD', state.trackResultData)
       return {
         ...state,
       };
 
     case ApiConstants.API_LIVE_SCORE_GET_GAME_POSITION_LIST_SUCCESS:
-
+      state.positionData = action.result
       let countIsPlayingValue = getcountIsPlayingValue(action.result)
       state.noOfPosition = countIsPlayingValue.length
+      let filteredData = getFilterPositionData(action.result)
+
       return {
         ...state,
         onLoad: false,
         recordLoad: false,
-        positionList: action.result
+        positionList: filteredData
       };
 
 
