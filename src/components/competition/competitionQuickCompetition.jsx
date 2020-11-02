@@ -612,7 +612,7 @@ class CompetitionQuickCompetition extends Component {
             <div className="comp-draw-content-view mt-0">
                 <div className="row comp-draw-list-top-head">
                     <div className="col-sm-3">
-                        {quickCompetitionData.competitionName &&
+                        {/* {quickCompetitionData.competitionName &&
                             <Form.Item
                                 name="competition_name"
                                 rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}
@@ -627,7 +627,7 @@ class CompetitionQuickCompetition extends Component {
                                     })}
                                 />
                             </Form.Item>
-                        }
+                        } */}
                     </div>
                     <div className="col-sm mt-2 quick-comp-btn-view button-space">
                         <Button className="open-reg-button save-draft-text" onClick={() => this.setState({ venueModalVisible: true })} type="primary">+ {AppConstants.addVenue}</Button>

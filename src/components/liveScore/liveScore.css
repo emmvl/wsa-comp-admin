@@ -3,7 +3,9 @@
 .live-score-player-profile-layout.ant-layout {
   background-color: var(--app-white);
 }
-
+.ant-row.ant-form-item.formMargin {
+  padding: 10px 0;
+}
 .live-score-player-profile-layout .ant-layout-footer {
   background-color: var(--app-white);
 }
