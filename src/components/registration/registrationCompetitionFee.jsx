@@ -323,22 +323,22 @@ const playerCasualTable = [
             />
         ),
     },
-    // {
-    //     title: 'Nomination Fees (excl. GST)',
-    //     dataIndex: 'nominationFees',
-    //     key: 'nominationFees',
-    //     render: (fee, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'GST',
-    //     dataIndex: 'nominationGST',
-    //     key: 'nominationGST',
-    //     render: (gst, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
+    {
+        title: 'Nomination Fees (excl. GST)',
+        dataIndex: 'nominationFees',
+        key: 'nominationFees',
+        render: (fee, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'GST',
+        dataIndex: 'nominationGST',
+        key: 'nominationGST',
+        render: (gst, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
     {
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
@@ -727,38 +727,38 @@ const playerCasualTableAssociation = [
             />
         ),
     },
-    // {
-    //     title: 'Nomination Fees (excl. GST)',
-    //     dataIndex: 'nominationFees',
-    //     key: 'nominationFees',
-    //     render: (fee, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'GST',
-    //     dataIndex: 'nominationGST',
-    //     key: 'nominationGST',
-    //     render: (gst, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'Association Nomination Fees (excl. GST)',
-    //     dataIndex: 'affNominationFees',
-    //     key: 'affNominationFees',
-    //     render: (fee, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'GST',
-    //     dataIndex: 'affNominationGST',
-    //     key: 'affNominationGST',
-    //     render: (gst, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
+    {
+        title: 'Nomination Fees (excl. GST)',
+        dataIndex: 'nominationFees',
+        key: 'nominationFees',
+        render: (fee, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'GST',
+        dataIndex: 'nominationGST',
+        key: 'nominationGST',
+        render: (gst, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'Association Nomination Fees (excl. GST)',
+        dataIndex: 'affNominationFees',
+        key: 'affNominationFees',
+        render: (fee, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'GST',
+        dataIndex: 'affNominationGST',
+        key: 'affNominationGST',
+        render: (gst, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
     {
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
@@ -1192,38 +1192,38 @@ const playerCasualTableClub = [
             />
         ),
     },
-    // {
-    //     title: 'Nomination Fees (excl. GST)',
-    //     dataIndex: 'nominationFees',
-    //     key: 'nominationFees',
-    //     render: (fee, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'GST',
-    //     dataIndex: 'nominationGST',
-    //     key: 'nominationGST',
-    //     render: (gst, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'Club Nomination Fees (excl. GST)',
-    //     dataIndex: 'affNominationFees',
-    //     key: 'affNominationFees',
-    //     render: (fee, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'GST',
-    //     dataIndex: 'affNominationGST',
-    //     key: 'affNominationGST',
-    //     render: (gst, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
+    {
+        title: 'Nomination Fees (excl. GST)',
+        dataIndex: 'nominationFees',
+        key: 'nominationFees',
+        render: (fee, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'GST',
+        dataIndex: 'nominationGST',
+        key: 'nominationGST',
+        render: (gst, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'Club Nomination Fees (excl. GST)',
+        dataIndex: 'affNominationFees',
+        key: 'affNominationFees',
+        render: (fee, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'GST',
+        dataIndex: 'affNominationGST',
+        key: 'affNominationGST',
+        render: (gst, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
     {
         title: 'Competition fees (excl. GST)',
         dataIndex: 'fee',
@@ -2156,38 +2156,38 @@ const playerCasualTableTeamAssociation = [
             />
         ),
     },
-    // {
-    //     title: 'Nomination Fees (excl. GST)',
-    //     dataIndex: 'nominationFees',
-    //     key: 'nominationFees',
-    //     render: (fee, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'GST',
-    //     dataIndex: 'nominationGST',
-    //     key: 'nominationGST',
-    //     render: (gst, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'Association Nomination Fees (excl. GST)',
-    //     dataIndex: 'affNominationFees',
-    //     key: 'affNominationFees',
-    //     render: (fee, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'GST',
-    //     dataIndex: 'affNominationGST',
-    //     key: 'affNominationGST',
-    //     render: (gst, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
+    {
+        title: 'Nomination Fees (excl. GST)',
+        dataIndex: 'nominationFees',
+        key: 'nominationFees',
+        render: (fee, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'GST',
+        dataIndex: 'nominationGST',
+        key: 'nominationGST',
+        render: (gst, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'Association Nomination Fees (excl. GST)',
+        dataIndex: 'affNominationFees',
+        key: 'affNominationFees',
+        render: (fee, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'GST',
+        dataIndex: 'affNominationGST',
+        key: 'affNominationGST',
+        render: (gst, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
     {
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
@@ -2372,30 +2372,30 @@ const playerCasualTableTeamClub = [
             <Input disabled className="input-inside-table-fees" value="N/A" />
         ),
     },
-    // {
-    //     title: 'GST',
-    //     dataIndex: 'nominationGST',
-    //     key: 'nominationGST',
-    //     render: (gst, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'Club Nomination Fees (excl. GST)',
-    //     dataIndex: 'affNominationFees',
-    //     key: 'affNominationFees',
-    //     render: (fee, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'GST',
-    //     dataIndex: 'affNominationGST',
-    //     key: 'affNominationGST',
-    //     render: (gst, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
+    {
+        title: 'GST',
+        dataIndex: 'nominationGST',
+        key: 'nominationGST',
+        render: (gst, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'Club Nomination Fees (excl. GST)',
+        dataIndex: 'affNominationFees',
+        key: 'affNominationFees',
+        render: (fee, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'GST',
+        dataIndex: 'affNominationGST',
+        key: 'affNominationGST',
+        render: (gst, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
     {
         title: 'Competition fees (excl. GST)',
         dataIndex: 'fee',
@@ -2573,26 +2573,26 @@ const playerCasualTeamTable = [
             />
         ),
     },
-    // {
-    //     title: 'Nomination Fees (excl. GST)',
-    //     dataIndex: 'nominationFees',
-    //     key: 'nominationFees',
-    //     render: (fee, record, index) => (
-    //         <Input disabled className="input-inside-table-fees" value="N/A" />
-    //     ),
-    // },
-    // {
-    //     title: 'GST',
-    //     dataIndex: 'nominationGST',
-    //     key: 'nominationGST',
-    //     render: (gst, record, index) => (
-    //         <Input
-    //             disabled
-    //             className="input-inside-table-fees"
-    //             value="N/A"
-    //         />
-    //     ),
-    // },
+    {
+        title: 'Nomination Fees (excl. GST)',
+        dataIndex: 'nominationFees',
+        key: 'nominationFees',
+        render: (fee, record, index) => (
+            <Input disabled className="input-inside-table-fees" value="N/A" />
+        ),
+    },
+    {
+        title: 'GST',
+        dataIndex: 'nominationGST',
+        key: 'nominationGST',
+        render: (gst, record, index) => (
+            <Input
+                disabled
+                className="input-inside-table-fees"
+                value="N/A"
+            />
+        ),
+    },
     {
         title: 'Competition Fees (excl. GST)',
         dataIndex: 'fee',
