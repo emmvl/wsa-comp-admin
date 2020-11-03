@@ -686,6 +686,7 @@ function registration(state = initialState, action) {
       state.membershipProductDiscountData.membershipProductDiscounts[0].discounts = finalDiscountData
       state.membershipProductId = action.result.membershipproduct.membershipProductId;
       let feesDeafultobj1 = {
+        isAlreadyRegistered: action.result.membershipproductfee.isAlreadyRegistered ? action.result.membershipproductfee.isAlreadyRegistered : 0,
         membershipProductId: state.membershipProductId,
         paymentOptionRefId: action.result.membershipproduct.paymentOptionRefId ? action.result.membershipproduct.paymentOptionRefId : 1,
         membershipFees: feesDataObject(action.result, action.result.membershipproduct.membershipProductName)

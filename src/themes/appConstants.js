@@ -1659,7 +1659,8 @@ const AppConstants = {
   reasonRegisterTitle: "Why would you like to de-register?",
   useRound1Template: "Use Round 1 template",
 
-  purchase:"Purchases"
+  purchase:"Purchases",
+  membereshipFeesRepayConfirmMsg: "Users have already registered to this membership fee. Do you want to proceed?"
 };
 
 export default AppConstants;
