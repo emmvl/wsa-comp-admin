@@ -196,9 +196,12 @@ class RegistrationChangeReview extends Component {
             const { regChangeReviewData, reviewSaveData } = this.props.registrationChangeState;
             if (reviewSaveData.declineReasonRefId != 0 && reviewSaveData.declineReasonRefId != null) {
                 this.setState({ declineVisible: false });
-                let invoicesTemp = regChangeReviewData.invoices.map(e => ({ ...e }));
-                for (let invoice of invoicesTemp) {
-                    invoice.refundAmount = 0;
+                let invoicesTemp = null;
+                if(regChangeReviewData.invoices){
+                    invoicesTemp = regChangeReviewData.invoices.map(e => ({ ...e }));
+                    for (let invoice of invoicesTemp) {
+                        invoice.refundAmount = 0;
+                    }
                 }
                 this.saveReview(invoicesTemp);
             } else {

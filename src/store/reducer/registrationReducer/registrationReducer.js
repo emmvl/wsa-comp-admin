@@ -35,6 +35,7 @@ const regFormChecked = {
 }
 const initialState = {
   onLoad: false,
+  onRegistrationSaveLoad: false,
   error: null,
   result: null,
   status: 0,
@@ -142,7 +143,7 @@ function checkSlectedInvitees(result, reg_demoSetting, reg_NetballSetting, reg_Q
 
       // }
       if (result[i].registrationSettingsRefId >= 7 && result[i].registrationSettingsRefId <= 14) {
-        selectedNetballQuestions.push(result[i].registrationSettingsRefId)
+        selectedNetballQuestions.push(result[i].registrationSettingsRefId.toString())
         reg_NetballSetting.push(result[i])
       }
       // else if (result[i].registrationSettingsRefId == 8 || result[i].registrationSettingsRefId == 9 ||
@@ -152,7 +153,7 @@ function checkSlectedInvitees(result, reg_demoSetting, reg_NetballSetting, reg_Q
       // }
       else if (result[i].registrationSettingsRefId == 1 || result[i].registrationSettingsRefId == 5 ||
         result[i].registrationSettingsRefId == 7 || result[i].registrationSettingsRefId == 2 || result[i].registrationSettingsRefId == 3 || result[i].registrationSettingsRefId == 4) {
-        selectedAdvanceSettings.push(result[i].registrationSettingsRefId)
+        selectedAdvanceSettings.push(result[i].registrationSettingsRefId.toString())
         reg_settings.push(result[i])
       }
     }
@@ -626,13 +627,14 @@ function registration(state = initialState, action) {
 
     //////save the Registration Form
     case ApiConstants.API_REG_FORM_LOAD:
-      return { ...state, onLoad: true, error: null };
+      return { ...state, onRegistrationSaveLoad: true, error: null };
 
     case ApiConstants.API_REG_FORM_SUCCESS:
       state.registrationFormData = [action.payload]
+      console.log("%%%%%%%%%%%%%%");
       return {
         ...state,
-        onLoad: false,
+        onRegistrationSaveLoad: false,
         status: action.status,
         error: null
       };
@@ -684,6 +686,7 @@ function registration(state = initialState, action) {
       state.membershipProductDiscountData.membershipProductDiscounts[0].discounts = finalDiscountData
       state.membershipProductId = action.result.membershipproduct.membershipProductId;
       let feesDeafultobj1 = {
+        isAlreadyRegistered: action.result.membershipproductfee.isAlreadyRegistered ? action.result.membershipproductfee.isAlreadyRegistered : 0,
         membershipProductId: state.membershipProductId,
         paymentOptionRefId: action.result.membershipproduct.paymentOptionRefId ? action.result.membershipproduct.paymentOptionRefId : 1,
         membershipFees: feesDataObject(action.result, action.result.membershipproduct.membershipProductName)
