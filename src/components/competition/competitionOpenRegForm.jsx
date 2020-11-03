@@ -364,21 +364,15 @@ class CompetitionOpenRegForm extends Component {
                         setOwn_competition(competitionId)
                         setOwn_CompetitionFinalRefId(finalTypeRefId)
                     }
+                    let yearRefId = getOwnCompetitionYear() ? getOwnCompetitionYear() : this.props.appState.own_YearArr.length > 0 && getCurrentYear(this.props.appState.own_YearArr)
                     this.setState({
                         getDataLoading: true,
                         firstTimeCompId: competitionId,
-                        competitionStatus: statusRefId
+                        competitionStatus: statusRefId,
+                        yearRefId: JSON.parse(yearRefId)
                     })
                 }
             }
-            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
-                if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
-                    this.setState({ yearRefId: yearRefId })
-                }
-            }
-
         }
         if (competitionFeesState.onLoad === false && this.state.divisionState === true) {
             setTimeout(() => {

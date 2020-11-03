@@ -211,17 +211,9 @@ class CompetitionPartProposedTeamGrading extends Component {
                     setParticipating_competitionStatus(statusRefId)
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getParticipatingYear()
                     this.props.getDivisionsListAction(yearId, competitionId)
-                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId })
+                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, yearRefId: yearId })
                 }
             }
-            if (nextProps.appState.participate_YearArr !== this.props.appState.participate_YearArr) {
-                if (this.props.appState.participate_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.participate_YearArr)
-                    setParticipatingYear(yearRefId)
-                    this.setState({ yearRefId: yearRefId })
-                }
-            }
-
         }
         if (nextProps.registrationState.allDivisionsData !== allDivisionsData) {
             if (allDivisionsData.length > 0) {

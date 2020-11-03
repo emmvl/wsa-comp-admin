@@ -123,17 +123,18 @@ class CompetitionCourtAndTimesAssign extends Component {
                     this.setState({
                         getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId,
                         finalTypeRefId: finalTypeRefId,
-                        isQuickCompetition: quickComp != undefined
+                        isQuickCompetition: quickComp != undefined,
+                        yearRefId: JSON.parse(yearId)
                     })
                 }
             }
-            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
-                if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
-                    this.setState({ yearRefId: yearRefId })
-                }
-            }
+            // if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
+            //     if (this.props.appState.own_YearArr.length > 0) {
+            //         let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
+            //         setOwnCompetitionYear(yearRefId)
+            //         this.setState({ yearRefId: yearRefId })
+            //     }
+            // }
         }
         if (competitionTimeSlots.onLoad === false && this.state.onNextLoad === true) {
             if (!competitionTimeSlots.error) {

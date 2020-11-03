@@ -42,6 +42,7 @@ class LiveScoreAddScorer extends Component {
             loader: false,
             competition_id: null
         }
+        this.formRef = React.createRef();
     }
 
     competition_formate = e => {
@@ -147,12 +148,12 @@ class LiveScoreAddScorer extends Component {
             <div className="content-view pt-4">
                 <div className="row">
                     <div className="col-sm">
+                        <InputWithHead
+                            required="required-field pb-3 pt-0"
+                            heading={AppConstants.scorerSearch}
+                            onChange
+                        />
                         <Form.Item name='addScorer' rules={[{ required: true, message: ValidationConstants.searchScorer }]}>
-                            <InputWithHead
-                                required="required-field pb-0 pt-0"
-                                heading={AppConstants.scorerSearch}
-                                onChange
-                            />
                             <AutoComplete
                                 loading
                                 style={{ width: "100%", height: '56px' }}
@@ -238,7 +239,7 @@ class LiveScoreAddScorer extends Component {
                             <InputWithHead
                                 auto_complete='new-password'
                                 type='text'
-                                required="required-field pb-0 pt-0"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.firstName}
                                 onChange={(firstName) => this.props.liveScoreScorerUpdate(captializedString(firstName.target.value), "firstName")}
                                 placeholder={AppConstants.firstName}
@@ -252,7 +253,7 @@ class LiveScoreAddScorer extends Component {
                         <Form.Item name={AppConstants.lastName} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
                             <InputWithHead
                                 auto_complete="off"
-                                required="required-field pb-0 pt-0"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
                                 onChange={(lastName) => this.props.liveScoreScorerUpdate(captializedString(lastName.target.value), "lastName")}
@@ -282,7 +283,7 @@ class LiveScoreAddScorer extends Component {
                             <InputWithHead
                                 auto_complete='new-email'
                                 type='email'
-                                required="required-field pb-0 pt-0"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.emailAdd}
                                 placeholder={AppConstants.enterEmail}
                                 onChange={(emailAddress) => this.props.liveScoreScorerUpdate(emailAddress.target.value, "emailAddress")}
@@ -300,7 +301,7 @@ class LiveScoreAddScorer extends Component {
                             <InputWithHead
                                 auto_complete="new-contact"
                                 // type="number"
-                                required="required-field pb-0 pt-0"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.contact_No}
                                 placeholder={AppConstants.enterContactNo}
                                 onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
