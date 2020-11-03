@@ -501,11 +501,11 @@ class LiveScoreMatchSheet extends Component {
                 <Loader
                     visible={
                          this.props.liveScoreMatchSheetState.onDivisionLoad
-                         || this.props.liveScoreMatchSheetState.onTeamLoad
-                         || this.props.liveScoreMatchSheetState.printLoad
-                         || this.props.liveScoreMatchSheetState.onLoad
-                         || this.props.liveScoreMatchState.onLoad
-                         || this.props.liveScoreMatchState.isFetchingMatchList
+                        //   || this.props.liveScoreMatchSheetState.onTeamLoad
+                        //  || this.props.liveScoreMatchSheetState.printLoad
+                          || this.props.liveScoreMatchSheetState.onLoad
+                         // this.props.liveScoreMatchState.onLoad
+                         // || this.props.liveScoreMatchState.isFetchingMatchList
                     }
                 />
                 <Layout>
