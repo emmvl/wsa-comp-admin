@@ -90,10 +90,11 @@ class CompetitionQuickCompetition extends Component {
             let selectedCompetition = this.props.quickCompetitionState.selectedCompetition
             if (nextProps.selectedCompetition != selectedCompetition) {
                 if (selectedCompetition.length > 0) {
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : this.props.quickCompetitionState.yearId
                     this.props.updateCompetition("", "allData")
                     let competitionId = selectedCompetition;
                     this.props.getQuickCompetitionAction(competitionId)
-                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true });
+                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true,yearRefId: this.state.yearRefId ? this.state.yearRefId : yearId  });
                 }
             }
         }
@@ -311,8 +312,8 @@ class CompetitionQuickCompetition extends Component {
 
     //close competition modal and call create competition
     closeCompModal = () => {
-        const { competitionName, competitionDate } = this.props.quickCompetitionState
-        this.props.createQuickCompetitionAction(this.state.yearRefId, competitionName, competitionDate)
+        const { competitionName, competitionDate,yearId } = this.props.quickCompetitionState
+        this.props.createQuickCompetitionAction(this.state.yearRefId ? this.state.yearRefId : yearId, competitionName, competitionDate)
         this.setState({
             compModalLoad: true,
             modalButtonPressed: "save"
@@ -322,8 +323,8 @@ class CompetitionQuickCompetition extends Component {
 
     //nextCompModal
     nextCompModal = () => {
-        const { competitionName, competitionDate } = this.props.quickCompetitionState
-        this.props.createQuickCompetitionAction(this.state.yearRefId, competitionName, competitionDate)
+        const { competitionName, competitionDate,yearId  } = this.props.quickCompetitionState
+        this.props.createQuickCompetitionAction(this.state.yearRefId ? this.state.yearRefId : yearId, competitionName, competitionDate)
         this.setState({
             compModalLoad: true,
             modalButtonPressed: "next"
