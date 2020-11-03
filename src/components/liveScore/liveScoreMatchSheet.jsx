@@ -493,18 +493,19 @@ class LiveScoreMatchSheet extends Component {
     );
 
     render() {
+       
         return (
             <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="22" />
                 <Loader
                     visible={
-                        this.props.liveScoreMatchSheetState.onDivisionLoad
-                        || this.props.liveScoreMatchSheetState.onTeamLoad
-                        || this.props.liveScoreMatchSheetState.printLoad
-                        || this.props.liveScoreMatchSheetState.onLoad
-                        || this.props.liveScoreMatchState.onLoad
-                        || this.props.liveScoreMatchState.isFetchingMatchList
+                         this.props.liveScoreMatchSheetState.onDivisionLoad
+                         || this.props.liveScoreMatchSheetState.onTeamLoad
+                         || this.props.liveScoreMatchSheetState.printLoad
+                         || this.props.liveScoreMatchSheetState.onLoad
+                         || this.props.liveScoreMatchState.onLoad
+                         || this.props.liveScoreMatchState.isFetchingMatchList
                     }
                 />
                 <Layout>
