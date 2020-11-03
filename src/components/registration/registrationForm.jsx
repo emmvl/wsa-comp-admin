@@ -140,6 +140,7 @@ class RegistrationForm extends Component {
             disclaimerText: "",
             disclaimerLink: "",
             onRegistrationLoad: false,
+            onRegistrationSaveLoad: false,
             selectedInvitees: [],
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
@@ -190,9 +191,14 @@ class RegistrationForm extends Component {
                 this.setFieldDecoratorValues()
                 this.setState({
                     onRegistrationLoad: false,
-                    isPublished: registrationState.registrationFormData[0].statusRefId == 2
+                   // isPublished: registrationState.registrationFormData[0].statusRefId == 2  
                 })
             }
+        }
+        if (this.state.onRegistrationSaveLoad === true && registrationState.onRegistrationSaveLoad === false) {
+            this.setState({onRegistrationSaveLoad: false});
+            console.log("#####################")
+            history.push("/registrationFormList")
         }
         if (nextProps.appState !== this.props.appState) {
             if (nextProps.appState.allCompetitionTypeList !== allCompetitionTypeList) {
@@ -332,7 +338,8 @@ class RegistrationForm extends Component {
                 SelectedProduct['registrationSettings'] = registration_settings
                 SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
 
-                this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId)
+                this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId);
+                this.setState({onRegistrationSaveLoad: true});
             } else {
                 message.error(ValidationConstants.pleaseSelectMembershipProduct)
             }
@@ -518,7 +525,8 @@ class RegistrationForm extends Component {
         let closeDate = moment(this.state.compCloseDate).format("YYYY-MM-DD")
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
-        let isPublished = this.state.isPublished
+        let isPublished = false; // this.state.isPublished // CM-1513
+    
         return (
             <div className="content-view pt-4">
                 <div className="row" style={{ paddingLeft: 10, paddingBottom: 15 }}>
@@ -962,7 +970,7 @@ class RegistrationForm extends Component {
     UserRegisterView = () => {
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
         let registrationMethod = this.props.appState.regMethod.length !== 0 ? this.props.appState.regMethod : []
-        let isPublished = this.state.isPublished
+        let isPublished = false; // this.state.isPublished // CM-1513
         return (
             <div className="discount-view pt-5">
                 <div className='row ml-1'>
@@ -1097,7 +1105,7 @@ class RegistrationForm extends Component {
         let netballQuestionsSetting = this.props.appState.netballQuestionsSetting !== 0 ? this.props.appState.netballQuestionsSetting : []
         let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
         const { selectedInvitees, selectedDemographic, SelectedOtherQuestions, selectedNetballQuestions } = this.props.registrationState
-        let isPublished = this.state.isPublished
+        let isPublished = false; // this.state.isPublished // CM-1513
         let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4") || selectedInvitees.includes(2) || selectedInvitees.includes(3) || selectedInvitees.includes(4)) ? "1" : null
         let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
 
@@ -1133,10 +1141,10 @@ class RegistrationForm extends Component {
                         className="tree-government-rebate tree-selection-icon"
                         style={{ flexDirection: 'column' }}
                         checkable
-                        expandedKeys={[netballExpend]}
-                        defaultExpandParent
+                        // expandedKeys={[netballExpend]}
+                        // defaultExpandParent
                         disabled={isPublished}
-                        defaultCheckedKeys={[]}
+                        // defaultCheckedKeys={[]}
                         checkedKeys={[...selectedNetballQuestions]}
                         onCheck={(e) => this.onNetballTreeSelected(e, selectedNetballQuestions)}
                     >
@@ -1218,7 +1226,7 @@ class RegistrationForm extends Component {
     disclaimerView = () => {
         let registrationData = this.props.registrationState.registrationFormData.length > 0 ? this.props.registrationState.registrationFormData[0] : [];
         let disclaimerData = registrationData.registrationDisclaimer !== null ? isArrayNotEmpty(registrationData.registrationDisclaimer) ? registrationData.registrationDisclaimer : [] : []
-        let isPublished = this.state.isPublished
+        let isPublished = false; //this.state.isPublished; // CM-1513
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.disclaimers}</span>
@@ -1277,7 +1285,7 @@ class RegistrationForm extends Component {
     sendInviteToView = () => {
         const registrationFormData = this.props.registrationState.registrationFormData[0]
         let { inviteTypeData } = this.props.commonReducerState;
-        let isPublished = this.state.isPublished;
+        let isPublished = false; //this.state.isPublished; // CM-1513
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading pb-2">{AppConstants.sendInvitesTo}</span>
@@ -1595,7 +1603,8 @@ class RegistrationForm extends Component {
                             )}
                             {/* <div className="formView">{this.disclaimerView()}</div> */}
 
-                            <Loader visible={this.state.onRegistrationLoad || this.props.appState.onLoad || this.props.registrationState.onLoad} />
+                            <Loader visible={this.state.onRegistrationLoad || this.props.appState.onLoad || this.props.registrationState.onLoad ||
+                                this.props.registrationState.onRegistrationSaveLoad} />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>

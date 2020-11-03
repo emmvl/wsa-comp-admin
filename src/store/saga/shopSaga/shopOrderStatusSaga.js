@@ -94,9 +94,28 @@ function* getOrderDetailsSaga(action) {
   }
 }
 
+// ////// ///purchases listing get API 
+function* getPurchasesListingSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getPurchasesListing, action.params);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_PURCHASES_LISTING_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
 
 export default function* rootShopOrderStatusSaga() {
   yield takeEvery(ApiConstants.API_GET_ORDER_STATUS_LISTING_LOAD, getOrderStatusListingSaga);
   yield takeEvery(ApiConstants.API_UPDATE_ORDER_STATUS_LOAD, updateOrderStatusSaga);
   yield takeEvery(ApiConstants.API_GET_ORDER_DETAILS_LOAD, getOrderDetailsSaga);
+  yield takeEvery(ApiConstants.API_GET_PURCHASES_LISTING_LOAD, getPurchasesListingSaga);
 }

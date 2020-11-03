@@ -23,6 +23,9 @@ const initialState = {
     orderStatusCurrentPage: 1,
     orderDetails: defaultOrderObject,
     orderStatusListActionObject: null,
+    purchasesListingData: [],
+    purchasesTotalCount: 1,
+    purchasesCurrentPage: 1,
 };
 
 ////making the object data for order detail 
@@ -35,6 +38,7 @@ function makeOrderDetailObject(data, orderDetailObject) {
     objectDetailData["suburb"] = data.suburb
     objectDetailData["state"] = data.state
     objectDetailData["postcode"] = data.postcode
+    objectDetailData["orderGroup"] = data.orderGroup
     return objectDetailData
 }
 
@@ -132,6 +136,22 @@ function shopOrderStatusState(state = initialState, action) {
             state.orderStatusListActionObject = null
             return { ...state, onLoad: false };
 
+
+        //// ///purchases listing get API  
+        case ApiConstants.API_GET_PURCHASES_LISTING_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_PURCHASES_LISTING_SUCCESS:
+            let purchasesData = action.result
+            return {
+                ...state,
+                purchasesListingData: isArrayNotEmpty(purchasesData.orders) ? purchasesData.orders : [],
+                purchasesTotalCount: purchasesData.page ? purchasesData.page.totalCount : 1,
+                purchasesCurrentPage: purchasesData.page ? purchasesData.page.currentPage : 1,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
         default:
             return state;
     }

@@ -120,6 +120,14 @@ let AxiosApi = {
         var url = `/order?id=${id}`;
         return Method.dataGet(url, token);
     },
+
+    /////// ///order status status listing get API 
+    getPurchasesListing(params) {
+        let { limit, offset, userId, order, sorterBy } = params
+        var url = `order/statusList?limit=${limit}&offset=${offset}&search=&year=-1&paymentStatus=-1&fulfilmentStatus=-1&product=All&order=${order}&sorterBy=${sorterBy}&userId=${userId}`;;
+        return Method.dataGet(url, token);
+    },
+
 };
 
 const Method = {
