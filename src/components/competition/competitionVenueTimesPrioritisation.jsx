@@ -147,17 +147,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         competitionStatus: statusRefId,
                         isQuickCompetition: quickComp != undefined,
                         finalTypeRefId: finalTypeRefId,
+                        yearRefId: JSON.parse(yearId)
                     });
                 }
             }
-            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
-                if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
-                    this.setState({ yearRefId: yearRefId })
-                }
-            }
-
         }
 
         if (this.state.loading && this.props.appState.onLoad == false) {

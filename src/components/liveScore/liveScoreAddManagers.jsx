@@ -163,14 +163,14 @@ class LiveScoreAddManager extends Component {
             <div className="content-view pt-4">
                 <div className="row">
                     <div className="col-sm">
+                        <InputWithHead required="required-field pb-3 pt-3" heading={AppConstants.managerSearch} />
                         <Form.Item name={AppConstants.team} rules={[{ required: true, message: ValidationConstants.searchManager }]}>
-                            <InputWithHead required="required-field pb-0 pt-0" heading={AppConstants.managerSearch} />
                             <AutoComplete
                                 loading
-                                style={{ width: "100%", height: '56px' }}
+                                style={{ width: "100%", height: '44px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
-                                    const ManagerId = JSON.parse(option.key)
+                                    const ManagerId = option.key
                                     this.props.liveScoreClear()
                                     this.props.liveScoreUpdateManagerDataAction(ManagerId, 'managerSearch')
                                     this.setState({ teamLoad: true })
@@ -193,12 +193,13 @@ class LiveScoreAddManager extends Component {
                 </div>
                 <div className="row">
                     <div className="col-sm">
+                        <InputWithHead required="required-field pb-3 pt-3" heading={AppConstants.team} />
                         <Form.Item
                             name='managerTeamName'
                             rules={[{ required: true, message: ValidationConstants.teamName }]}
                             className="slct-in-add-manager-livescore"
                         >
-                            <InputWithHead required="required-field pb-1" heading={AppConstants.team} />
+
                             <Select
                                 mode="multiple"
                                 showSearch
@@ -231,7 +232,7 @@ class LiveScoreAddManager extends Component {
                             <InputWithHead
                                 auto_complete="new-password"
                                 type="text"
-                                required="required-field pb-0 pt-1"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
                                 onChange={(firstName) => this.props.liveScoreUpdateManagerDataAction(captializedString(firstName.target.value), 'firstName')}
@@ -247,7 +248,7 @@ class LiveScoreAddManager extends Component {
                             <InputWithHead
                                 auto_complete="off"
                                 // type="text"
-                                required="required-field pb-0 pt-1"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
                                 onChange={(lastName) => this.props.liveScoreUpdateManagerDataAction(captializedString(lastName.target.value), 'lastName')}
@@ -279,7 +280,7 @@ class LiveScoreAddManager extends Component {
                             <InputWithHead
                                 auto_complete="new-email"
                                 type="email"
-                                required="required-field pb-0 pt-1"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.emailAdd}
                                 placeholder={AppConstants.enterEmail}
                                 onChange={(email) => this.props.liveScoreUpdateManagerDataAction(email.target.value, 'email')}
@@ -290,6 +291,7 @@ class LiveScoreAddManager extends Component {
                     </div>
                     <div className="col-sm">
                         <Form.Item
+
                             name={AppConstants.contactNO}
                             rules={[{ required: true, message: ValidationConstants.contactField }]}
                             help={hasError && ValidationConstants.mobileLength}
@@ -298,19 +300,19 @@ class LiveScoreAddManager extends Component {
                             <InputWithHead
                                 auto_complete="new-contact"
                                 // type="number"
-                                required="required-field pb-0 pt-1"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.contact_No}
                                 placeholder={AppConstants.enterContactNo}
                                 maxLength={10}
                                 onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
-                                // value={managerData.mobileNumber}
+                            // value={managerData.mobileNumber}
                             />
                         </Form.Item>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.team} required="required-field pb-0 pt-4" />
+                        <InputWithHead heading={AppConstants.team} required="required-field pb-3 pt-3" />
                         <Form.Item
                             name={AppConstants.selectTeam}
                             rules={[{ required: true, message: ValidationConstants.teamName }]}

@@ -40,11 +40,11 @@ function umpireSettingState(state = initialState, action) {
             }
             else if (key === 'compOrganiser') {
                 state[key] = data
-                state['affiliateOrg'] = false
+                // state['affiliateOrg'] = false
 
             } else if (key === 'affiliateOrg') {
                 state[key] = data
-                state['compOrganiser'] = false
+                // state['compOrganiser'] = false
             }
             else if (key === 'selectAllDiv') {
                 state[key] = data
