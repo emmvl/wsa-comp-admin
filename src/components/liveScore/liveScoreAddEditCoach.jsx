@@ -192,7 +192,7 @@ class LiveScoreAddEditCoach extends Component {
                             <InputWithHead
                                 auto_complete="new-password"
                                 type="text"
-                                required="required-field pb-0 pt-0"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.firstName}
                                 placeholder={AppConstants.firstName}
                                 onChange={(firstName) => this.props.liveScoreUpdateCoach(captializedString(firstName.target.value), 'firstName')}
@@ -207,7 +207,7 @@ class LiveScoreAddEditCoach extends Component {
                         <Form.Item name={AppConstants.lastName} rules={[{ required: true, message: ValidationConstants.nameField[1] }]}>
                             <InputWithHead
                                 auto_complete="off"
-                                required="required-field pb-0 pt-0"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.lastName}
                                 placeholder={AppConstants.lastName}
                                 onChange={(lastName) => this.props.liveScoreUpdateCoach(captializedString(lastName.target.value), 'lastName')}
@@ -239,7 +239,7 @@ class LiveScoreAddEditCoach extends Component {
                             <InputWithHead
                                 auto_complete="new-email"
                                 type="email"
-                                required="required-field pb-0 pt-0"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.emailAdd}
                                 placeholder={AppConstants.enterEmail}
                                 onChange={(email) => this.props.liveScoreUpdateCoach(email.target.value, 'email')}
@@ -260,7 +260,7 @@ class LiveScoreAddEditCoach extends Component {
                         >
                             <InputWithHead
                                 auto_complete="new-contact"
-                                required="required-field pb-0 pt-0"
+                                required="required-field pb-3 pt-3"
                                 heading={AppConstants.contact_No}
                                 placeholder={AppConstants.enterContactNo}
                                 value={AppConstants.contactNO}
@@ -273,7 +273,7 @@ class LiveScoreAddEditCoach extends Component {
 
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.team} required="required-field pb-0 pt-3" />
+                        <InputWithHead heading={AppConstants.team} required="required-field pb-3 pt-3" />
                         <Form.Item
                             name={AppConstants.selectTeam}
                             rules={[{ required: true, message: ValidationConstants.teamName }]}
@@ -308,17 +308,18 @@ class LiveScoreAddEditCoach extends Component {
             <div className="content-view pt-4">
                 <div className="row">
                     <div className="col-sm">
+                        <InputWithHead
+                            required="required-field pb-3 pt-3"
+                            heading={AppConstants.coachSearch}
+                        />
                         <Form.Item name={AppConstants.team} rules={[{ required: true, message: ValidationConstants.searchCoach }]}>
-                            <InputWithHead
-                                required="required-field pb-0 pt-0"
-                                heading={AppConstants.coachSearch}
-                            />
+
                             <AutoComplete
                                 loading
-                                style={{ width: "100%", height: '56px' }}
+                                style={{ width: "100%", height: '44px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
-                                    const ManagerId = JSON.parse(option.key)
+                                    const ManagerId = option.key
                                     // this.props.liveScoreClear()
                                     this.props.liveScoreUpdateCoach(ManagerId, 'coachSearch')
                                     this.setState({ teamLoad: true })
@@ -342,15 +343,16 @@ class LiveScoreAddEditCoach extends Component {
                 </div>
                 <div className="row">
                     <div className="col-sm">
+                        <InputWithHead
+                            required="required-field pb-3 pt-3"
+                            heading={AppConstants.team}
+                        />
                         <Form.Item
                             name="coachTeamName"
                             rules={[{ required: true, message: ValidationConstants.teamName }]}
                             className="slct-in-add-manager-livescore"
                         >
-                            <InputWithHead
-                                required="required-field pb-1"
-                                heading={AppConstants.team}
-                            />
+
                             <Select
                                 // loading={this.props.liveScoreState.onLoad && true}
                                 mode="multiple"

@@ -1094,6 +1094,13 @@ const purchaseActivityColumn = [
     key: 'orderId',
     sorter: true,
     onHeaderCell: ({ dataIndex }) => purchaseListeners("id"),
+    render: (orderId) =>
+    // <NavLink to={{
+    //     pathname: `/orderDetails`,
+    //     state: { orderId: orderId }
+    // }}>
+        <span className="input-heading-add-another pt-0">{orderId}</span>
+    // </NavLink>
   },
   {
     title: 'Date',
@@ -1103,13 +1110,15 @@ const purchaseActivityColumn = [
     onHeaderCell: ({ dataIndex }) => purchaseListeners("createdOn"),
     render: (date) => <span>{date ? liveScore_formateDate(date) : ""}</span>
   },
-  {
-    title: 'Transaction ID',
-    dataIndex: 'transactionId',
-    key: 'transactionId',
-    sorter: true,
-    onHeaderCell: ({ dataIndex }) => purchaseListeners("id"),
-  },
+  // {
+  //   title: 'Transaction ID',
+  //   dataIndex: 'transactionId',
+  //   key: 'transactionId',
+  //   sorter: true,
+  //   onHeaderCell: ({ dataIndex }) => purchaseListeners("id"),
+  //   render: (transactionId) =>
+  //       <span className="input-heading-add-another pt-0">{transactionId}</span>
+  // },
   {
     title: 'Products',
     dataIndex: 'products',
