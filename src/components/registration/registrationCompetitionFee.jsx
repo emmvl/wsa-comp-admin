@@ -3100,11 +3100,12 @@ class RegistrationCompetitionFee extends Component {
                     regInviteesDisable: true,
                     membershipDisable: true,
                     divisionsDisable: true,
-                    feesTableDisable: false,
+                    feesTableDisable: !isCreatorEdit ? false : true,
                     paymentsDisable: true,
                     discountsDisable: true,
                     allDisable: false,
                     isPublished: true,
+                    compDatesDisable: !isCreatorEdit ? false : true
                 };
                 this.setState({ permissionState: permissionObject });
                 return;
@@ -3115,11 +3116,12 @@ class RegistrationCompetitionFee extends Component {
                     regInviteesDisable: true,
                     membershipDisable: true,
                     divisionsDisable: true,
-                    feesTableDisable: false,
+                    feesTableDisable: true,
                     paymentsDisable: true,
                     discountsDisable: false,
                     allDisable: false,
                     isPublished: true,
+                    compDatesDisable: true
                 };
                 this.setState({ permissionState: permissionObject });
             } else {
@@ -3133,6 +3135,7 @@ class RegistrationCompetitionFee extends Component {
                     discountsDisable: false,
                     allDisable: false,
                     isPublished: true,
+                    compDatesDisable: false
                 };
                 this.setState({ permissionState: permissionObject });
             }
@@ -3147,6 +3150,7 @@ class RegistrationCompetitionFee extends Component {
                 discountsDisable: false,
                 allDisable: false,
                 isPublished: false,
+                compDatesDisable: false
             };
             this.setState({ permissionState: permissionObject });
         }
@@ -4580,6 +4584,7 @@ class RegistrationCompetitionFee extends Component {
         let detailsData = this.props.competitionFeesState;
         let defaultCompFeesOrgLogo = detailsData.defaultCompFeesOrgLogo;
         let compDetailDisable = this.state.permissionState.compDetailDisable;
+        let compDatesDisable = this.state.permissionState.compDatesDisable;
         return (
             <div className="content-view pt-4">
                 <Form.Item
@@ -4891,7 +4896,7 @@ class RegistrationCompetitionFee extends Component {
                                     format="DD-MM-YYYY"
                                     showTime={false}
                                     // value={detailsData.competitionDetailData.startDate && moment(detailsData.competitionDetailData.startDate, "YYYY-MM-DD")}
-                                    disabled={compDetailDisable}
+                                    disabled={compDatesDisable}
                                 />
                             </Form.Item>
                         </div>
@@ -4915,7 +4920,7 @@ class RegistrationCompetitionFee extends Component {
                                     format="DD-MM-YYYY"
                                     showTime={false}
                                     disabledDate={(d) => !d || d.isBefore(detailsData.competitionDetailData.startDate)}
-                                    disabled={compDetailDisable}
+                                    disabled={compDatesDisable}
                                 />
                             </Form.Item>
                         </div>
@@ -5022,8 +5027,8 @@ class RegistrationCompetitionFee extends Component {
                         name={'registrationCloseDate'}
                         format="DD-MM-YYYY"
                         showTime={false}
-                        //disabled={compDetailDisable}
-                        disabled={false}
+                        disabled={compDatesDisable}
+                       
                     />
                 </Form.Item>
 
