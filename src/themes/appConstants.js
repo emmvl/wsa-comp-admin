@@ -1660,7 +1660,9 @@ const AppConstants = {
   useRound1Template: "Use Round 1 template",
 
   purchase:"Purchases",
-  membereshipFeesRepayConfirmMsg: "Users have already registered to this membership fee. Do you want to proceed?"
+  membereshipFeesRepayConfirmMsg: "Users have already registered to this membership fee. Do you want to proceed?",
+  regoFormConfirmMsg: "Some users may received this email a second time. Are you sure you want to proceed?",
+  emailNotificationUpdate: "Email Notification Update"
 };
 
 export default AppConstants;

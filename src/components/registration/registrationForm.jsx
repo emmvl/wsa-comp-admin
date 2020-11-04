@@ -14,7 +14,8 @@ import {
     Table,
     message,
     Radio,
-    Tooltip
+    Tooltip,
+    Modal
 } from "antd";
 import CustomTooltip from 'react-png-tooltip'
 import moment from "moment";
@@ -150,6 +151,7 @@ class RegistrationForm extends Component {
             compName: "",
             allYearRefId: -1,
             allCompetition: null,
+            isVisible: false
         };
         this_Obj = this;
         this.props.clearReducerDataAction("getRegistrationFormDetails")
@@ -197,7 +199,6 @@ class RegistrationForm extends Component {
         }
         if (this.state.onRegistrationSaveLoad === true && registrationState.onRegistrationSaveLoad === false) {
             this.setState({onRegistrationSaveLoad: false});
-            console.log("#####################")
             history.push("/registrationFormList")
         }
         if (nextProps.appState !== this.props.appState) {
@@ -310,41 +311,60 @@ class RegistrationForm extends Component {
     /// post api
     registrationSubmit = values => {
         let SelectedProduct = JSON.parse(JSON.stringify(this.props.registrationState.registrationFormData.length !== 0 ? this.props.registrationState.registrationFormData[0] : []));
-        const { reg_settings, reg_demoSetting, reg_NetballSetting, reg_QuestionsSetting } = JSON.parse(JSON.stringify(this.props.registrationState))
-        let registration_settings = []
+        let canInviteSend = this.props.registrationState.canInviteSend;
+
         if (SelectedProduct.replyPhone.length > 0 && SelectedProduct.replyPhone.length !== 10) {
             this.setState({
                 hasError: true
             })
         } else {
-            if (SelectedProduct.membershipProductTypes.length > 0) {
-                let phone_number = SelectedProduct["replyPhone"].length > 0 ? regexNumberExpression(SelectedProduct["replyPhone"]) : ""
-                SelectedProduct['competitionUniqueKeyId'] = this.state.firstTimeCompId
-                SelectedProduct['yearRefId'] = this.state.yearRefId
-                SelectedProduct["statusRefId"] = this.state.statusRefId
-                SelectedProduct["replyPhone"] = phone_number
-                for (let i in reg_settings) {
-                    registration_settings.push(reg_settings[i])
+            if(canInviteSend == 1 && SelectedProduct.canInviteSend == 1){
+                this.setState({visible: true});
+            }
+            else{
+                if( SelectedProduct.canInviteSend == 1){
+                    this.registrationSend(1);
                 }
-                for (let i in reg_demoSetting) {
-                    registration_settings.push(reg_demoSetting[i])
+                else{
+                    this.registrationSend(0);
                 }
-                for (let i in reg_NetballSetting) {
-                    registration_settings.push(reg_NetballSetting[i])
-                }
-                for (let i in reg_QuestionsSetting) {
-                    registration_settings.push(reg_QuestionsSetting[i])
-                }
-                SelectedProduct['registrationSettings'] = registration_settings
-                SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
-
-                this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId);
-                this.setState({onRegistrationSaveLoad: true});
-            } else {
-                message.error(ValidationConstants.pleaseSelectMembershipProduct)
             }
         }
     };
+
+    registrationSend = (isResend) =>{
+        let SelectedProduct = JSON.parse(JSON.stringify(this.props.registrationState.registrationFormData.length !== 0 ? this.props.registrationState.registrationFormData[0] : []));
+        const { reg_settings, reg_demoSetting, reg_NetballSetting, reg_QuestionsSetting } = JSON.parse(JSON.stringify(this.props.registrationState))
+        let registration_settings = []
+        if (SelectedProduct.membershipProductTypes.length > 0) {
+            let phone_number = SelectedProduct["replyPhone"].length > 0 ? regexNumberExpression(SelectedProduct["replyPhone"]) : ""
+            SelectedProduct['competitionUniqueKeyId'] = this.state.firstTimeCompId
+            SelectedProduct['yearRefId'] = this.state.yearRefId
+            SelectedProduct["statusRefId"] = this.state.statusRefId
+            SelectedProduct["replyPhone"] = phone_number;
+            SelectedProduct["isResend"] = isResend;
+
+            for (let i in reg_settings) {
+                registration_settings.push(reg_settings[i])
+            }
+            for (let i in reg_demoSetting) {
+                registration_settings.push(reg_demoSetting[i])
+            }
+            for (let i in reg_NetballSetting) {
+                registration_settings.push(reg_NetballSetting[i])
+            }
+            for (let i in reg_QuestionsSetting) {
+                registration_settings.push(reg_QuestionsSetting[i])
+            }
+            SelectedProduct['registrationSettings'] = registration_settings
+            SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
+
+            this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId);
+            this.setState({onRegistrationSaveLoad: true});
+        } else {
+            message.error(ValidationConstants.pleaseSelectMembershipProduct)
+        }
+    }
 
     ///for change table productType and Division selection
     getSelectionofProduct(value, record, key) {
@@ -362,6 +382,31 @@ class RegistrationForm extends Component {
         if (matchIndexValue > -1) {
             this.props.updateRegistrationLock(matchIndexValue, key, record.isSelected, record.registrationLock)
         }
+    }
+
+    handleModal = (key) => {
+        if(key == "ok"){
+            this.registrationSend(1);
+        }
+        else if(key == "cancel"){
+            this.registrationSend(0);
+        }
+    }
+
+    confirmationModalView() {
+        return (
+            <Modal
+                title={AppConstants.emailNotificationUpdate}
+                visible={this.state.visible}
+                onCancel={() => this.handleModal("cancel")}
+                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
+                okText="Proceed"
+                onOk={() => this.handleModal("ok")}
+                centered
+            >
+                {AppConstants.regoFormConfirmMsg}
+            </Modal>
+        )
     }
 
     ///////view for breadcrumb
@@ -1286,6 +1331,8 @@ class RegistrationForm extends Component {
         const registrationFormData = this.props.registrationState.registrationFormData[0]
         let { inviteTypeData } = this.props.commonReducerState;
         let isPublished = false; //this.state.isPublished; // CM-1513
+        console.log("CanSendInvite", this.props.registrationState.canInviteSend);
+       
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading pb-2">{AppConstants.sendInvitesTo}</span>
@@ -1607,6 +1654,7 @@ class RegistrationForm extends Component {
                                 this.props.registrationState.onRegistrationSaveLoad} />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
+                        {this.confirmationModalView()}
                     </Form>
                 </Layout>
             </div>

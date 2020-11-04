@@ -98,7 +98,8 @@ const initialState = {
     teamRegistrations: []
   },
   teamRegListAction: null,
-  regMembershipListAction: null
+  regMembershipListAction: null,
+  canInviteSend: 0
 };
 
 
@@ -630,8 +631,8 @@ function registration(state = initialState, action) {
       return { ...state, onRegistrationSaveLoad: true, error: null };
 
     case ApiConstants.API_REG_FORM_SUCCESS:
-      state.registrationFormData = [action.payload]
-      console.log("%%%%%%%%%%%%%%");
+      state.registrationFormData = [action.payload];
+
       return {
         ...state,
         onRegistrationSaveLoad: false,
@@ -817,8 +818,8 @@ function registration(state = initialState, action) {
       state.selectedDemographic = selectedInvitees.selectedDemographic
       state.SelectedOtherQuestions = selectedInvitees.SelectedOtherQuestions
       state.selectedNetballQuestions = selectedInvitees.selectedNetballQuestions
-	  state.hardShipCodes = formData[0].hardShipCodes !== null ? formData[0].hardShipCodes :[] ;
-
+      state.hardShipCodes = formData[0].hardShipCodes !== null ? formData[0].hardShipCodes :[] ;
+      state.canInviteSend = formData[0].canInviteSend;
 
       let productListValue = getProductArr(
         productList,
@@ -835,6 +836,9 @@ function registration(state = initialState, action) {
       state.defaultChecked = trainingSelection
       newObjvalue.competitionUniqueKeyId = state.defaultCompetitionID
       state.sendRegistrationFormData = JSON.parse(JSON.stringify([newObjvalue]))
+
+     
+
       return {
         ...state,
         onLoad: false,
@@ -952,6 +956,7 @@ function registration(state = initialState, action) {
         state.SelectedOtherQuestions = []
         state.defaultRegistrationMethod = []
         state.defaultRegistrationSettings = []
+        state.canInviteSend = 0
 
       }
       if (action.dataName === "allDivisionsData") {
