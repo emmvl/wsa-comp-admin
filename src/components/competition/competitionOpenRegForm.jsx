@@ -348,7 +348,7 @@ class CompetitionOpenRegForm extends Component {
                         let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
                         statusRefId = compIndex > -1 ? competitionTypeList[compIndex].statusRefId : competitionTypeList[0].statusRefId
                         competitionId = compIndex > -1 ? competitionId : competitionTypeList[0].competitionId
-                        competitionStatus = competitionTypeList[compIndex].competitionStatus
+                        competitionStatus = competitionTypeList[compIndex] ? competitionTypeList[compIndex].competitionStatus : 0
                         setOwn_competitionStatus('')
                         setOwn_competition('')
                         setOwn_CompetitionFinalRefId('')

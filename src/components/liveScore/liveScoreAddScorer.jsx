@@ -156,7 +156,7 @@ class LiveScoreAddScorer extends Component {
                         <Form.Item name='addScorer' rules={[{ required: true, message: ValidationConstants.searchScorer }]}>
                             <AutoComplete
                                 loading
-                                style={{ width: "100%", height: '56px' }}
+                                style={{ width: "100%", height: '39.93px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
                                     const ScorerId = JSON.parse(option.key)

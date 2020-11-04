@@ -268,9 +268,11 @@ class MultifieldDrawsNew extends Component {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let storedCompetitionId = getOwn_competition();
+                    let storedCompetitionStatus = getOwn_competitionStatus();
+                    let storedFinalTypeRefId = getOwn_CompetitionFinalRefId()
                     let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
-                    let statusRefId = competitionList[0].statusRefId
-                    let finalTypeRefId = competitionList[0].finalTypeRefId
+                    let statusRefId = (storedCompetitionStatus != undefined && storedCompetitionStatus !== "undefined") ? storedCompetitionStatus : competitionList[0].statusRefId;
+                    let finalTypeRefId = (storedFinalTypeRefId != undefined && storedFinalTypeRefId !== "undefined") ? storedFinalTypeRefId : competitionList[0].finalTypeRefId
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
                     setOwn_competitionStatus(statusRefId)
                     this.props.getDrawsRoundsAction(yearId, competitionId);
