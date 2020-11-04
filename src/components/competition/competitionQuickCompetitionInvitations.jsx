@@ -35,6 +35,7 @@ class QuickCompetitionInvitations extends Component {
             divisionGradeOptionId: 1,
             venueOptionId: 1,
             compNameOptionId: 1,
+            competitionMismatchModalVisible: false
         }
     }
 
@@ -87,22 +88,52 @@ class QuickCompetitionInvitations extends Component {
     ValidateProceed = () => {
         const { mergeCompetitionTypeSelection } = this.props.quickCompetitionState
         const typeSelection = mergeCompetitionTypeSelection == null ? " " : mergeCompetitionTypeSelection;
-
-        let payload = {
-            "registrationCompetitionId": this.state.selectedMergeComptition,
-            "quickCompetitionId": this.state.competitionId,
-            "teamOptionId": typeSelection.teamMismatch == 0 ? null : this.state.teamOptionId,
-            "playerOptionId": typeSelection.playerMismatch == 0 ? null : this.state.playerOptionId,
-            "divisionGradeOptionId": typeSelection.divisionGradesMismatch == 0 ? null : this.state.divisionGradeOptionId,
-            "venueOptionId": typeSelection.venueMismatch == 0 ? null : this.state.venueOptionId,
-            "compNameOptionId": this.state.compNameOptionId,
+        if(mergeCompetitionTypeSelection.venueMismatch != 1){
+            let payload = {
+                "registrationCompetitionId": this.state.selectedMergeComptition,
+                "quickCompetitionId": this.state.competitionId,
+                "teamOptionId": typeSelection.teamMismatch == 0 ? null : this.state.teamOptionId,
+                "playerOptionId": typeSelection.playerMismatch == 0 ? null : this.state.playerOptionId,
+                "divisionGradeOptionId": typeSelection.divisionGradesMismatch == 0 ? null : this.state.divisionGradeOptionId,
+                //"venueOptionId": typeSelection.venueMismatch == 0 ? null : this.state.venueOptionId,
+                "venueOptionId": 1,
+                "compNameOptionId": this.state.compNameOptionId,
+            }
+    
+            this.props.mergeCompetitionProceed(payload)
+            this.setState({
+                onProcessMergeCompetition: true,
+                modalVisible: false
+            })
+        }else{
+            this.setState({competitionMismatchModalVisible: true})
         }
+    }
 
-        this.props.mergeCompetitionProceed(payload)
-        this.setState({
-            onProcessMergeCompetition: true,
-            modalVisible: false
-        })
+    mismatchModalOk = (key) => {
+        if(key == "ok"){
+            const { mergeCompetitionTypeSelection } = this.props.quickCompetitionState
+            const typeSelection = mergeCompetitionTypeSelection == null ? " " : mergeCompetitionTypeSelection;
+            let payload = {
+                "registrationCompetitionId": this.state.selectedMergeComptition,
+                "quickCompetitionId": this.state.competitionId,
+                "teamOptionId": typeSelection.teamMismatch == 0 ? null : this.state.teamOptionId,
+                "playerOptionId": typeSelection.playerMismatch == 0 ? null : this.state.playerOptionId,
+                "divisionGradeOptionId": typeSelection.divisionGradesMismatch == 0 ? null : this.state.divisionGradeOptionId,
+                //"venueOptionId": typeSelection.venueMismatch == 0 ? null : this.state.venueOptionId,
+                "venueOptionId": 1,
+                "compNameOptionId": this.state.compNameOptionId,
+            }
+    
+            this.props.mergeCompetitionProceed(payload)
+            this.setState({
+                onProcessMergeCompetition: true,
+                modalVisible: false
+            })
+            this.setState({competitionMismatchModalVisible: false})
+        }else if(key == "cancel"){
+            this.setState({competitionMismatchModalVisible: false})
+        }
     }
 
     competitionTypeSelection = (value, key) => {
@@ -168,9 +199,10 @@ class QuickCompetitionInvitations extends Component {
                         <div>
                             <div style={{ fontWeight: 500 }}>
                                 <div>
-                                    {AppConstants.differencesBetween + " "}
+                                    {/* {AppConstants.differencesBetween + " "}
                                     {mergeCompetitionSelection.quickCompetition + " " + "and" + " "}
-                                    {mergeCompetitionSelection.registrationCompetition + '.'} {AppConstants.oneHasPreference}
+                                    {mergeCompetitionSelection.registrationCompetition + '.'} {AppConstants.oneHasPreference} */}
+                                    {AppConstants.whichCompetitionSettingPrecedence}
                                 </div>
                             </div>
                             {mergeCompetitionSelection.divisionGradesMismatch == 1 && (
@@ -217,7 +249,7 @@ class QuickCompetitionInvitations extends Component {
                                     </Radio.Group>
                                 </div>
                             )}
-                            {mergeCompetitionSelection.venueMismatch == 1 && (
+                            {/* {mergeCompetitionSelection.venueMismatch == 1 && (
                                 <div>
                                     <div className="popup-text-color">
                                         {AppConstants.venues}
@@ -231,7 +263,7 @@ class QuickCompetitionInvitations extends Component {
                                         <Radio value={2}>{mergeCompetitionSelection.registrationCompetition}</Radio>
                                     </Radio.Group>
                                 </div>
-                            )}
+                            )} */}
                             <div>
                                 <div className="popup-text-color">
                                     {AppConstants.competitionName}
@@ -244,6 +276,22 @@ class QuickCompetitionInvitations extends Component {
                                     <Radio value={1}>{mergeCompetitionSelection.quickCompetition}</Radio>
                                     <Radio value={2}>{mergeCompetitionSelection.registrationCompetition}</Radio>
                                 </Radio.Group>
+                            </div>
+                        </div>
+                    </Modal>
+
+                    <Modal
+                        className="add-membership-type-modal"
+                        width={672}
+                        title={AppConstants.mergeCompetition}
+                        visible={this.state.competitionMismatchModalVisible}
+                        okText='Proceed'
+                        onOk={(e) => this.mismatchModalOk("ok")}
+                        onCancel={(e) => this.mismatchModalOk("cancel")}
+                    >
+                        <div>
+                            <div style={{ fontWeight: 500 }}>
+                                {AppConstants.quickCompetitionMismatchMsg}
                             </div>
                         </div>
                     </Modal>
