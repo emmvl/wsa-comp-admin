@@ -391,6 +391,8 @@ class RegistrationForm extends Component {
         else if(key == "cancel"){
             this.registrationSend(0);
         }
+
+        this.setState({visible: false});
     }
 
     confirmationModalView() {
