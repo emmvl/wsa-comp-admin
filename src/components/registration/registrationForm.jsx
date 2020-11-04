@@ -385,6 +385,7 @@ class RegistrationForm extends Component {
     }
 
     handleModal = (key) => {
+        console.log("key"+ key);
         if(key == "ok"){
             this.registrationSend(1);
         }
@@ -400,12 +401,18 @@ class RegistrationForm extends Component {
             <Modal
                 title={AppConstants.emailNotificationUpdate}
                 visible={this.state.visible}
-                onCancel={() => this.handleModal("cancel")}
-                okButtonProps={{ style: { backgroundColor: '#ff8237', borderColor: '#ff8237' } }}
-                okText="Proceed"
-                onOk={() => this.handleModal("ok")}
+                onCancel={() => this.handleModal("close")}
                 centered
+                footer={[
+                    <Button key="Cancel"  className="save-draft-text" type="save-draft-text" onClick={() => this.handleModal("cancel")}>
+                      {AppConstants.cancel}
+                    </Button>,
+                     <Button key="Proceed" onClick={() => this.handleModal("ok")}  type="primary"  className="open-reg-button" >
+                        Proceed
+                   </Button>
+                  ]}
             >
+                
                 {AppConstants.regoFormConfirmMsg}
             </Modal>
         )
