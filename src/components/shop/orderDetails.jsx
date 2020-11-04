@@ -231,7 +231,7 @@ class OrderDetails extends Component {
                             {this.headerView()}
                             <div className="formView">{this.contentView()}</div>
                             <div className="formView">{this.addressView()}</div>
-                            <div className="formView">{this.fulfilmentView()}</div>
+                            {/* <div className="formView">{this.fulfilmentView()}</div> */}
                         </Content>
 
                         <Loader visible={this.props.shopOrderStatusState.onLoad} />

@@ -258,6 +258,14 @@ let AxiosApi = {
 
         return Method.dataPost(url, token, body);
     },
+    getRefOrderStatus(){
+        let body = {
+            ShopFulfilmentStatus: "ShopFulfilmentStatus",
+            ShopPaymentStatus: "ShopPaymentStatus",
+        }
+        const url = '/common/references';
+        return Method.dataPost(url, token, body);
+    }
 };
 const Method = {
     async dataPost(newurl, authorization, body) {

@@ -18,6 +18,7 @@ function updateOrderStatusAction(payload) {
     return action;
 }
 
+
 ///order details get API 
 function getOrderDetailsAction(id) {
     const action = {
@@ -45,12 +46,27 @@ function getPurchasesListingAction(params) {
     return action;
 }
 
+function getReferenceOrderStatus(){
+    return{
+        type:ApiConstants.API_GET_REFERENCE_ORDER_STATUS_LOAD
+    }
+}
+
+function updateOrderFullfilmentStatus(key,value){
+    return {
+        type:ApiConstants.API_UPDATE_FULLFILMENT_STATUS,
+        key,value
+    }
+}
+
 export {
     getOrderStatusListingAction,
     updateOrderStatusAction,
     getOrderDetailsAction,
     clearOrderStatusReducer,
     getPurchasesListingAction,
+    getReferenceOrderStatus,
+    updateOrderFullfilmentStatus
 }
 
 

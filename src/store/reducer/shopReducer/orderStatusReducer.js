@@ -10,6 +10,7 @@ const defaultOrderObject = {
     suburb: "",
     state: "",
     postcode: "",
+    fulfilmentStatus:null
 
 }
 
@@ -26,6 +27,8 @@ const initialState = {
     purchasesListingData: [],
     purchasesTotalCount: 1,
     purchasesCurrentPage: 1,
+    ShopPaymentStatus:[],
+    ShopFulfilmentStatusArr:[],
 };
 
 ////making the object data for order detail 
@@ -39,6 +42,7 @@ function makeOrderDetailObject(data, orderDetailObject) {
     objectDetailData["state"] = data.state
     objectDetailData["postcode"] = data.postcode
     objectDetailData["orderGroup"] = data.orderGroup
+    objectDetailData['fulfilmentStatus']= data.fulfilmentStatus
     return objectDetailData
 }
 
@@ -152,6 +156,28 @@ function shopOrderStatusState(state = initialState, action) {
                 status: action.status,
                 error: null
             };
+
+            case ApiConstants.API_GET_REFERENCE_ORDER_STATUS_LOAD:
+                return {
+                    ...state,
+                    onLoad: true, error: null
+                }
+
+                case ApiConstants.API_GET_REFERENCE_ORDER_STATUS_SUCCESS:
+                    return {
+                        ...state,
+                        onLoad:false,
+                        ShopFulfilmentStatusArr:action.result.ShopFulfilmentStatus,
+                        ShopPaymentStatus:action.result.ShopPaymentStatus,
+                        status: action.status,
+                        error: null
+                    }
+                    case ApiConstants.API_UPDATE_FULLFILMENT_STATUS:
+                        state.orderDetails[action.key] = action.value
+                        return{...state,
+                            onLoad:false,
+                            error: null
+                        }
         default:
             return state;
     }

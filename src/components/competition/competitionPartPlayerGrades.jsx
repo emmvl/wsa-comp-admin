@@ -89,7 +89,7 @@ class CompetitionPartPlayerGrades extends Component {
                     setParticipating_competitionStatus(statusRefId)
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getParticipatingYear()
                     this.props.getDivisionsListAction(yearId, competitionId)
-                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, yearRefId: yearId })
+                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, yearRefId: JSON.parse(yearId) })
                 }
             }
         }

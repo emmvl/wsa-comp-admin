@@ -11,7 +11,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { getOnlyYearListAction } from '../../store/actions/appAction';
-import { getOrderStatusListingAction, updateOrderStatusAction } from '../../store/actions/shopAction/orderStatusAction';
+import { getOrderStatusListingAction, updateOrderStatusAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
 import { currencyFormat } from "../../util/currencyFormat";
 
 const { Content } = Layout
@@ -105,6 +105,11 @@ const columns = [
         key: 'paymentStatus',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (paymentStatus) => {
+            return (
+                <span>{this_obj.getOrderStatus(paymentStatus, "ShopPaymentStatus")}</span>
+            )
+        }
     },
     {
         title: 'Fulfilment Status',
@@ -112,6 +117,11 @@ const columns = [
         key: 'fulfilmentStatus',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (fulfilmentStatus) => {
+            return (
+                <span>{this_obj.getOrderStatus(fulfilmentStatus, "ShopFulfilmentStatusArr")}</span>
+            )
+        }
     },
     {
         title: 'Total',
@@ -140,23 +150,23 @@ const columns = [
                         <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
                     }
                 >
-                    <Menu.Item key="1" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.paid)}>
+                    <Menu.Item key="1" onClick={() => this_obj.updateOrderStatusApi(record, 2)}>
                         <span>{AppConstants.paid}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="2" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.refundFullAmount)}>
+                    <Menu.Item key="2" onClick={() => this_obj.updateOrderStatusApi(record, 3)}>
                         <span>{AppConstants.refundFullAmount}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="3" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.refundPartialAmount)}>
+                    <Menu.Item key="3" onClick={() => this_obj.updateOrderStatusApi(record, 4)}>
                         <span>{AppConstants.refundPartialAmount}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="4" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.pickedUp)}>
+                    <Menu.Item key="4" onClick={() => this_obj.updateOrderStatusApi(record, 6)}>
                         <span>{AppConstants.pickedUp}</span>
                     </Menu.Item>
 
-                    <Menu.Item key="5" onClick={() => this_obj.updateOrderStatusApi(record, AppConstants.shipped)}>
+                    <Menu.Item key="5" onClick={() => this_obj.updateOrderStatusApi(record, 5)}>
                         <span>{AppConstants.shipped}</span>
                     </Menu.Item>
                 </SubMenu>
@@ -224,6 +234,7 @@ class ShopOrderStatus extends Component {
 
     referenceCalls = () => {
         this.props.getOnlyYearListAction();
+        this.props.getReferenceOrderStatus()
     }
 
     handleTableList = (page) => {
@@ -271,10 +282,22 @@ class ShopOrderStatus extends Component {
     // on change search text
     onChangeSearchText = async (e) => {
         let value = e.target.value;
-        await this.setState({ searchText: e.target.value,offset: 0 })
+        await this.setState({ searchText: e.target.value, offset: 0 })
         if (value == null || value == "") {
             this.handleTableList(1);
         }
+    }
+
+    //getOrderStatus
+    getOrderStatus = (value, state) => {
+        let statusValue = ''
+        let statusArr = this.props.shopOrderStatusState[state]
+        let getIndexValue = statusArr.findIndex((x) => x.id == value)
+        if (getIndexValue > -1) {
+            statusValue = statusArr[getIndexValue].description
+            return statusValue
+        }
+        return statusValue
     }
 
     // search key
@@ -485,6 +508,7 @@ class ShopOrderStatus extends Component {
     }
 
     render() {
+        console.log(this.props.shopOrderStatusState)
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
@@ -506,6 +530,7 @@ function mapDispatchToProps(dispatch) {
         getOnlyYearListAction,
         getOrderStatusListingAction,
         updateOrderStatusAction,
+        getReferenceOrderStatus
     }, dispatch)
 }
 
