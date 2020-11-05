@@ -1,67 +1,70 @@
-import React , { useEffect } from "react";
+import React, { useEffect } from 'react';
 import {
-  // MemoryRouter,
-  Router,
-  Route,
-  Redirect,
-  Switch,
-} from "react-router-dom";
-// import FullStory from "react-fullstory';
+    // MemoryRouter,
+    Router,
+    Route,
+    Redirect,
+    Switch,
+} from 'react-router-dom';
+// import FullStory from 'react-fullstory';
+import TagManager from 'react-gtm-module';
 
-import Routes from "./pages/routes";
-import history from "./util/history";
-import PrivateRoute from "./util/protectedRoute";
-import Login from "./components/login";
-import ForgotPassword from "./components/ForgotPassword";
-import lazyLoad from "./components/lazyLoad";
+import Routes from './pages/routes';
+import history from './util/history';
+import PrivateRoute from './util/protectedRoute';
+import Login from './components/login';
+import ForgotPassword from './components/ForgotPassword';
+import lazyLoad from './components/lazyLoad';
+import ErrorBoundary from './components/emptyComponent/errorBoundary';
 
-import "./customStyles/customStyles.css";
-import "./customStyles/antdStyles.css";
-import TagManager from 'react-gtm-module'
-import ErrorBoundary from "./components/emptyComponent/errorBoundary";
+import './customStyles/customStyles.css';
+import './customStyles/antdStyles.css';
+
 // const ORG_ID = 'Netball';
 const tagManagerArgs = {
-  gtmId: process.env.REACT_APP_GTM_ID
-}
+    gtmId: process.env.REACT_APP_GTM_ID,
+};
 
-const tawkTo = require("tawkto-react");
+const tawkTo = require('tawkto-react');
 
-const tawkToPropertyId = '5ef6f3ca4a7c6258179b6f5c'
+const tawkToPropertyId = '5ef6f3ca4a7c6258179b6f5c';
 
-TagManager.initialize(tagManagerArgs)
+TagManager.initialize(tagManagerArgs);
+
 function App() {
-  useEffect(() => {
-    localStorage.token && tawkTo(tawkToPropertyId) 
-  }, [])
-  return (
-    <div className="App">
-      <ErrorBoundary>
-      {/* <FullStory org={ORG_ID} /> */}
-      {/* <MemoryRouter> */}
-      <Router history={history} >
-        <Switch>
-          <Route
-            exact
-            path="/"
-            render={() =>
-              localStorage.token ? (
-                <Redirect to="/homeDashboard" />
-              ) : (
-                <Redirect to="/login" />
-              )
-            }
-          />
+    useEffect(() => {
+        if (localStorage.token) {
+            tawkTo(tawkToPropertyId);
+        }
+    }, []);
 
-          <Route path="/login" component={lazyLoad(Login)} />
-          <Route path="/forgotPassword" component={lazyLoad(ForgotPassword)} />
+    return (
+        <div className="App">
+            <ErrorBoundary>
+                {/* <FullStory org={ORG_ID} /> */}
+                {/* <MemoryRouter> */}
+                <Router history={history}>
+                    <Switch>
+                        <Route
+                            exact
+                            path="/"
+                            render={() => (localStorage.token ? (
+                                <Redirect to="/homeDashboard" />
+                            ) : (
+                                <Redirect to="/login" />
+                            ))}
+                        />
 
-          <PrivateRoute path="/" component={lazyLoad(Routes)} />
-        </Switch>
-      </Router>
-      {/* </MemoryRouter> */}
-      </ErrorBoundary>
-    </div>
-  );
+                        <Route path="/login" component={lazyLoad(Login)} />
+                        <Route path="/forgotPassword" component={lazyLoad(ForgotPassword)} />
+
+                        <PrivateRoute path="/" component={lazyLoad(Routes)} />
+                    </Switch>
+                </Router>
+                {/* </MemoryRouter> */}
+            </ErrorBoundary>
+        </div>
+    );
 }
 
 export default App;

@@ -46,7 +46,7 @@ function liveScoreGetDivision(payload) {
 
 function liveScoreGetAffiliate(payload) {
     return {
-        type: ApiConstants.GET_AFFILATE_TEAM,
+        type: ApiConstants.GET_AFFILIATE_TEAM,
         payload,
     };
 }
@@ -84,7 +84,7 @@ function liveScoreGetTeamDataAction(teamId) {
 // Team list with pagination
 function getTeamsWithPagination(competitionID, offset, limit, search, sortBy, sortOrder) {
     return {
-        type: ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGGING_LOAD,
+        type: ApiConstants.API_LIVE_SCORE_TEAM_WITH_PAGING_LOAD,
         competitionID,
         offset,
         limit,

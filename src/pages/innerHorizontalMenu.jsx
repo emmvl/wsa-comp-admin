@@ -889,6 +889,23 @@ class InnerHorizontalMenu extends React.Component {
                         </Menu.Item>
                     </Menu>
                 )}
+
+                {menu === "communication" && (
+                  <Menu
+                    theme="light"
+                    mode="horizontal"
+                    defaultSelectedKeys={['1']}
+                    style={{ lineHeight: '64px' }}
+                    selectedKeys={[this.props.userSelectedKey]}
+                    onClick={() => this.props.clearDataOnCompChangeAction()}
+                  >
+                      <Menu.Item key="1">
+                          <NavLink to="/communication">
+                              <span>{AppConstants.dashboard}</span>
+                          </NavLink>
+                      </Menu.Item>
+                  </Menu>)
+                }
             </div>
         );
     }

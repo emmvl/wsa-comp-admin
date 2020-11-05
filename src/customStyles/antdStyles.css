@@ -355,3 +355,7 @@ textarea.ant-input {
 .ant-tree li .ant-tree-node-content-wrapper:hover {
   background-color: transparent !important;
 }
+
+.ant-menu-item-selected a, .ant-menu-item-selected a:hover {
+    color: white;
+}

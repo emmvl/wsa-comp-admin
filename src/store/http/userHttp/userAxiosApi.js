@@ -57,20 +57,20 @@ let userHttpApi = {
   },
 
   async saveAffiliate(payload) {
-    let userId = await getUserId()
+    let userId = await getUserId();
     const url = `api/affiliates/save?userId=${userId}`;
     return Method.dataPost(url, token, payload);
   },
 
   async affiliateByOrganisationId(organisationId) {
-    let userId = await getUserId()
+    let userId = await getUserId();
     const url = `api/affiliate/${organisationId}?userId=${userId}`;
     return Method.dataGet(url, token);
   },
 
   async affiliatesListing(payload, sortBy, sortOrder) {
-    let userId = await getUserId()
-    let url
+    let userId = await getUserId();
+    let url;
     if (sortBy && sortOrder) {
       url = `api/affiliateslisting?userId=${userId}&sortBy=${sortBy}&sortOrder=${sortOrder}`;
     }
@@ -81,25 +81,25 @@ let userHttpApi = {
   },
 
   async affiliateToOrganisation(organisationId) {
-    let userId = await getUserId()
+    let userId = await getUserId();
     const url = `api/affiliatedtoorganisation/${organisationId}?userId=${userId}`;
     return Method.dataGet(url, token);
   },
 
   async getVenueOrganisation(key) {
-    console.log(key)
-    let userId = await getUserId()
-    let organisationUniqueKey = await getOrganisationData().organisationUniqueKey
+    console.log(key);
+    let userId = await getUserId();
+    let organisationUniqueKey = await getOrganisationData().organisationUniqueKey;
     let url = `api/organisation?userId=${userId}`;
     if (key) {
       url += `&organisationUniqueKey=${organisationUniqueKey}`
     }
-    console.log(url)
+    console.log(url);
     return Method.dataGet(url, token)
   },
 
   liveScoreManagerList(roleId, entityTypeId, entityId, searchText, offset, sortBy, sortOrder) {
-    let url = ''
+    let url = '';
     // let offsetValue = offset ? offset : null
     if (searchText) {
       if (offset != null) {
@@ -131,14 +131,14 @@ let userHttpApi = {
 
   //// get particular user organisation
   async getUserOrganisation() {
-    const user_Id = await getUserId()
-    const Auth_token = await getAuthToken()
+    const user_Id = await getUserId();
+    const Auth_token = await getAuthToken();
     const url = `api/userorganisation?userId=${user_Id}`;
     return Method.dataGet(url, Auth_token)
   },
 
   getUserDashboardTextualListing(payload, sortBy, sortOrder) {
-    let url
+    let url;
     if (sortBy && sortOrder) {
       url = `api/user/dashboard/textual?sortBy=${sortBy}&sortOrder=${sortOrder}`
     }
@@ -199,17 +199,17 @@ let userHttpApi = {
 
   // Search scorer
   scorerSearchApi(functionId, entityTypeId, competitionId, searchText) {
-    console.log(searchText, 'searchText')
+    console.log(searchText, 'searchText');
     // if (searchText && searchText.length > 0) {
     //   const url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
     //   return Method.dataGet(url, token)
     // }
-    const url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`
+    const url = `users/byFunction?functionId=${functionId}&entityTypeId=${entityTypeId}&entityId=${competitionId}&userName=${searchText}`;
     return Method.dataGet(url, token)
   },
 
   getUserFriendList(payload, sortBy, sortOrder) {
-    let url
+    let url;
     if (sortBy && sortOrder) {
       url = `users/dashboard/friend?sortBy=${sortBy}&sortOrder=${sortOrder}`
     }
@@ -220,7 +220,7 @@ let userHttpApi = {
   },
 
   getUserReferFriendList(payload, sortBy, sortOrder) {
-    let url
+    let url;
     if (sortBy && sortOrder) {
       url = `users/dashboard/referfriend?sortBy=${sortBy}&sortOrder=${sortOrder}`
     }
@@ -258,7 +258,7 @@ let userHttpApi = {
   //liveScore coaches list
   liveScoreCoachesList(roleId, entityTypeId, entityId, search, offset, sortBy, sortOrder) {
     // let { id } = JSON.parse(localStorage.getItem('LiveScoreCompetiton'))
-    let url
+    let url;
     if (offset != null) {
       url = `/users/byRole?roleId=${roleId}&entityTypeId=1&entityId=${entityId}&userName=${search}&offset=${offset}&limit=${10}`
     } else {
@@ -283,7 +283,7 @@ let userHttpApi = {
   },
 
   async affiliateDirectory(payload, sortBy, sortOrder) {
-    let url
+    let url;
 
     if (sortBy && sortOrder) {
       url = `api/affiliatedirectory?sortBy=${sortBy}&sortOrder=${sortOrder}`;
@@ -300,7 +300,7 @@ let userHttpApi = {
   },
 
   umpireList(data) {
-    let url = null
+    let url = null;
     if (data.userName) {
       url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
     } else if (data.offset != null) {
@@ -320,6 +320,20 @@ let userHttpApi = {
   updateUserProfile(payload) {
     const url = `api/userprofile/update?section=${payload.section}&organisationId=${payload.organisationId}`;
     return Method.dataPost(url, token, payload);
+  },
+
+  updateBannerCount(payload) {
+    console.log(payload);
+    const { organisationId } = getOrganisationData();
+    const url = `api/bannerCount?organisationId=${organisationId}`;
+    return Method.dataPost(url, token, payload);
+  },
+
+  async getBannerCount(orgId) {
+    const { organisationId } = getOrganisationData();
+    const url = `api/bannerCount?organisationId=${organisationId}`;
+    console.log(url);
+    return Method.dataGet(url, token)
   },
 
   userExportFiles(url) {
@@ -392,7 +406,7 @@ let userHttpApi = {
   },
 
   umpireList_Data(data) {
-    let url = null
+    let url = null;
     if (data.userName) {
       url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
     } else if (data.offset != null) {
@@ -408,7 +422,7 @@ let userHttpApi = {
 
     return Method.dataGet(url, localStorage.token);
   },
-}
+};
 
 let Method = {
   async dataPost(newUrl, authorization, body) {
@@ -452,7 +466,7 @@ let Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
                   logout();
                   message.error(ValidationConstants.messageStatus401);
@@ -523,9 +537,9 @@ let Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
-                  logout()
+                  logout();
                   message.error(ValidationConstants.messageStatus401)
                 }
               } else {
@@ -586,9 +600,9 @@ let Method = {
           if (err.response) {
             if (err.response.status !== null || err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
-                  logout()
+                  logout();
                   message.error(ValidationConstants.messageStatus401)
                 }
               } else if (err.response.status === 400) {
@@ -596,7 +610,7 @@ let Method = {
                   duration: 1.5,
                   maxCount: 1,
                 });
-                message.error(err.response.data.message)
+                message.error(err.response.data.message);
                 return reject({
                   status: 5,
                   error: err.response.data.message
@@ -661,9 +675,9 @@ let Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
-                  logout()
+                  logout();
                   message.error(ValidationConstants.messageStatus401)
                 }
               } else if (err.response.status === 404) {
@@ -731,7 +745,7 @@ let Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
                   logout();
                   message.error(ValidationConstants.messageStatus401);
@@ -802,9 +816,9 @@ let Method = {
           if (err.response) {
             if (err.response.status !== null && err.response.status !== undefined) {
               if (err.response.status === 401) {
-                let unauthorizedStatus = err.response.status
+                let unauthorizedStatus = err.response.status;
                 if (unauthorizedStatus === 401) {
-                  logout()
+                  logout();
                   message.error(ValidationConstants.messageStatus401)
                 }
               } else {

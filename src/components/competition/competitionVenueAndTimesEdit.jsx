@@ -17,7 +17,6 @@ import CSVReader from 'react-csv-reader';
 import moment from "moment";
 
 import "./competition.css";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import InputWithHead from "../../customComponents/InputWithHead";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -414,7 +413,7 @@ class CompetitionVenueAndTimesEdit extends Component {
             venueId: venuData?.venueId,
         });
 
-        if (!address.addressOne && !address.suburb) {
+        if (!address || !address.addressOne || !address.suburb) {
             this.setState({
                 venueAddressError: ValidationConstants.venueAddressDetailsError,
             })
@@ -507,11 +506,6 @@ class CompetitionVenueAndTimesEdit extends Component {
                         required
                         error={this.state.venueAddressError}
                         disabled={this.state.isUsed || !this.state.isCreator}
-                        onBlur={() => {
-                            this.setState({
-                                venueAddressError: ''
-                            })
-                        }}
                         onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
@@ -876,17 +870,15 @@ class CompetitionVenueAndTimesEdit extends Component {
 
     onAddVenue = (values) => {
         let hasError = false;
-        let venueAddressError = false;
 
         if (this.props.commonReducerState.venueAddressDuplication) {
             message.error(ValidationConstants.duplicatedVenueAddressError);
             return;
         }
 
-        if (!this.state.venueAddress) {
-            this.setState({ venueAddressError: ValidationConstants.venueAddressRequiredError });
-            message.error(AppConstants.venueAddressSelect);
-            venueAddressError = true;
+        if (this.state.venueAddressError) {
+            message.error(this.state.venueAddressError);
+            return;
         }
 
         const { venuData } = this.props.venueTimeState
@@ -926,11 +918,6 @@ class CompetitionVenueAndTimesEdit extends Component {
 
             if (hasError) {
                 message.error(ValidationConstants.gameDayEndTimeValidation);
-                return;
-            }
-
-            if (venueAddressError) {
-                message.error(AppConstants.venueAddressSelect);
                 return;
             }
 

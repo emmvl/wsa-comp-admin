@@ -137,7 +137,11 @@ class LiveScoreAddDivision extends Component {
 
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item className="formMargin" name="divisionName" rules={[{ required: true, message: ValidationConstants.divisionNameisrequired }]}>
+                        <Form.Item
+                            className="formMargin"
+                            name="divisionName"
+                            rules={[{ required: true, message: ValidationConstants.divisionNameIsRequired }]}
+                        >
                             <InputWithHead
                                 auto_complete="off"
                                 type="text"
@@ -156,7 +160,11 @@ class LiveScoreAddDivision extends Component {
 
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item className="formMargin" name="gradeName" rules={[{ required: true, message: ValidationConstants.gradeisrequired }]}>
+                        <Form.Item
+                            className="formMargin"
+                            name="gradeName"
+                            rules={[{ required: true, message: ValidationConstants.gradeIsRequired }]}
+                        >
                             <InputWithHead
                                 auto_complete="off"
                                 type="text"
@@ -190,7 +198,7 @@ class LiveScoreAddDivision extends Component {
                         {
                             ((competition.lineupSelectionEnabled == 1 || competition.lineupSelectionEnabled == true) && positionTracking === false) &&
                             < span className="text-with-red-color pt-2">
-                                {AppConstants.sqadSelectionEabled}
+                                {AppConstants.squadSelectionEnabled}
                             </span>
                         }
                     </div>

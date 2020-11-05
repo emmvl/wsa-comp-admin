@@ -1,15 +1,16 @@
-const JWT = require("jsonwebtoken");
+const JWT = require('jsonwebtoken');
 
-const jwtSecertKey = "9sec_key_Value9";
+const jwtSecretKey = '9sec_key_Value9';
 
 function jwtEncrypt(data) {
-  let mykey = JWT.sign(data, jwtSecertKey);
-  return mykey;
+    return JWT.sign(data, jwtSecretKey);
 }
 
 function jwtDecrypt(token) {
-  let mykey = JWT.verify(token, jwtSecertKey);
-  return mykey;
+    return JWT.verify(token, jwtSecretKey);
 }
 
-module.exports = { JwtEncrypt: jwtEncrypt, JwtDecrypt: jwtDecrypt };
+module.exports = {
+    JwtEncrypt: jwtEncrypt,
+    JwtDecrypt: jwtDecrypt,
+};

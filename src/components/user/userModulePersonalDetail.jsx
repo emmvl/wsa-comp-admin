@@ -2132,7 +2132,7 @@ class UserModulePersonalDetail extends Component {
             </div>
             <div style={{ marginBottom: "3%", display: "flex" }}>
               <div className="year-select-heading other-info-label col-sm-2">
-                {AppConstants.redularMedicalConditions}
+                {AppConstants.regularMedicalConditions}
               </div>
               <div
                 className="desc-text-style side-bar-profile-data other-info-font"
@@ -2593,7 +2593,7 @@ class UserModulePersonalDetail extends Component {
             >
               <a href={stripeConnectURL} className="stripe-connect">
                 <span>
-                  {AppConstants.uploadBankAccnt}
+                  {AppConstants.uploadBankAccount}
                 </span>
               </a>
 

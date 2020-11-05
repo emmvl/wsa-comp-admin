@@ -460,7 +460,7 @@ class LiveScoreTeamAttendance extends Component {
                 <div className="row">
                     <div className="col-sm" style={{ alignSelf: 'center' }}>
                         <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.teamAttendane}</Breadcrumb.Item>
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.teamAttendance}</Breadcrumb.Item>
                         </Breadcrumb>
                     </div>
                     <div className="col-sm" style={{

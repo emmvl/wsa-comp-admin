@@ -40,7 +40,7 @@ export function* getCompPartPlayerGradingSummarySaga(action) {
         const result = yield call(CompetitionAxiosApi.getCompPartPlayerGradingSummary, action.yearRefId, action.competitionId);
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_SUCCESS,
+                type: ApiConstants.API_GET_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMARY_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
@@ -59,7 +59,7 @@ export function* saveCompPartPlayerGradingSummarySaga(action) {
         const result = yield call(CompetitionAxiosApi.saveCompPartPlayerGradingSummary, action.payload);
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_SAVE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMMARY_LIST_SUCCESS,
+                type: ApiConstants.API_SAVE_COMPETITION_PART_PLAYER_GRADE_CALCULATE_SUMMARY_LIST_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
@@ -72,7 +72,7 @@ export function* saveCompPartPlayerGradingSummarySaga(action) {
     }
 }
 
-///competition part player grading get API 
+///competition part player grading get API
 export function* getCompPartPlayerGradingSaga(action) {
     try {
         const result = yield call(CompetitionAxiosApi.getCompPartPlayerGrading, action.yearRefId, action.competitionId, action.divisionId);
@@ -179,7 +179,7 @@ export function* partPlayerSummaryCommentSaga(action) {
     }
 }
 
-// 
+//
 export function* importCompetitionPlayer(action) {
     try {
         const result = yield call(CompetitionAxiosApi.importCompetitionPlayer, action.payload);

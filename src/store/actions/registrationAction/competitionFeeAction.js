@@ -45,7 +45,7 @@ function saveCompetitionFeesDetailsAction(payload, logoOrgId, sourceModule, affi
 ////save the competition membership tab details
 function saveCompetitionFeesMembershipTabAction(payload, competitionId, affiliateOrgId) {
     return {
-        type: ApiConstants.API_SAVE_COMPETITION_FEES_MEMBERHSIP_TAB_LOAD,
+        type: ApiConstants.API_SAVE_COMPETITION_FEES_MEMBERSHIP_TAB_LOAD,
         payload,
         competitionId,
         affiliateOrgId
@@ -55,7 +55,7 @@ function saveCompetitionFeesMembershipTabAction(payload, competitionId, affiliat
 ////get default competition membershipproduct tab details
 function getDefaultCompFeesMembershipProductTabAction(hasRegistration) {
     return {
-        type: ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERHSIP_PRODUCT_LOAD,
+        type: ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERSHIP_PRODUCT_LOAD,
         hasRegistration
     };
 }

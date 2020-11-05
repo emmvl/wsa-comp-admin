@@ -1920,10 +1920,10 @@ function competitionFees(state = initialState, action) {
             };
 
         ////get default competition membershipproduct tab details
-        case ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERHSIP_PRODUCT_LOAD:
+        case ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERSHIP_PRODUCT_LOAD:
             return { ...state, onLoad: true, error: null };
 
-        case ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERHSIP_PRODUCT_SUCCESS:
+        case ApiConstants.API_GET_DEFAULT_COMPETITION_FEES_MEMBERSHIP_PRODUCT_SUCCESS:
             return {
                 ...state,
                 status: action.status,
@@ -2081,11 +2081,11 @@ function competitionFees(state = initialState, action) {
             }
 
         ////save the competition membership tab details
-        case ApiConstants.API_SAVE_COMPETITION_FEES_MEMBERHSIP_TAB_LOAD:
+        case ApiConstants.API_SAVE_COMPETITION_FEES_MEMBERSHIP_TAB_LOAD:
             //s state.defaultCompFeesMembershipProduct = null
             return { ...state, onLoad: true, error: null };
 
-        case ApiConstants.API_SAVE_COMPETITION_FEES_MEMBERHSIP_TAB_SUCCESS:
+        case ApiConstants.API_SAVE_COMPETITION_FEES_MEMBERSHIP_TAB_SUCCESS:
             let savemembershipAllData = action.result.data
             let divisionGetMembershipSuccesData = getDivisionTableData(savemembershipAllData)
             state.competitionDivisionsData = divisionGetMembershipSuccesData

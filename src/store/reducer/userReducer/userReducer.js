@@ -146,7 +146,8 @@ const initialState = {
   userFriendListAction: null,
   userReferFriendListAction: null,
   onSaveOrgPhotoLoad: false,
-  onDeleteOrgPhotoLoad: false
+  onDeleteOrgPhotoLoad: false,
+  bannerCount: null,
 };
 
 function userReducer(state = initialState, action) {
@@ -242,9 +243,9 @@ function userReducer(state = initialState, action) {
       return { ...state, onLoad: true, affiliateOurOrgOnLoad: true };
 
     case ApiConstants.API_AFFILIATE_OUR_ORGANISATION_SUCCESS:
-      let affiliateOurOrgData = action.result
+      let affiliateOurOrgData = action.result;
       let charityData = getCharityResult(action.charityResult);
-      let selectedCharity = checkSelectedCharity(affiliateOurOrgData.charityRoundUp, charityData)
+      let selectedCharity = checkSelectedCharity(affiliateOurOrgData.charityRoundUp, charityData);
       affiliateOurOrgData["charityRoundUp"] = selectedCharity;
 
       return {
@@ -295,7 +296,7 @@ function userReducer(state = initialState, action) {
         state.affiliateOurOrg["charity"][action.index][action.key] = action.value
       }
 
-      return { ...state }
+      return { ...state };
 
     case ApiConstants.UPDATE_NEW_AFFILIATE:
       let oldAffiliateData = state.affiliate.affiliate;
@@ -306,7 +307,7 @@ function userReducer(state = initialState, action) {
 
     //Get organisation for add venue
     case ApiConstants.API_ORGANISATION_LOAD:
-      return { ...state, onLoad: true, error: null }
+      return { ...state, onLoad: true, error: null };
 
     case ApiConstants.API_ORGANISATION_SUCCESS:
       return {
@@ -315,7 +316,31 @@ function userReducer(state = initialState, action) {
         onLoad: false,
         error: null,
         status: action.status
-      }
+      };
+
+    case ApiConstants.API_BANNER_COUNT_LOAD:
+      return { ...state, onLoad: true, error: null };
+
+      case ApiConstants.API_BANNER_COUNT_SUCCESS:
+      return {
+        ...state,
+        bannerCount: action.result,
+        onLoad: false,
+        error: null,
+        status: action.status
+      };
+
+    case ApiConstants.API_UPDATE_BANNER_COUNT_LOAD:
+      return { ...state, onLoad: true, error: null };
+
+      case ApiConstants.API_UPDATE_BANNER_COUNT_SUCCESS:
+      return {
+        ...state,
+        bannerCount: action.result,
+        onLoad: false,
+        error: null,
+        status: action.status
+      };
 
     //////delete the Affiliate
     case ApiConstants.API_AFFILIATE_DELETE_LOAD:
@@ -331,7 +356,7 @@ function userReducer(state = initialState, action) {
 
     /////get particular user organisation
     case ApiConstants.API_GET_USER_ORGANISATION_LOAD:
-      return { ...state, onLoad: true, error: null, onOrgLoad: true }
+      return { ...state, onLoad: true, error: null, onOrgLoad: true };
 
     case ApiConstants.API_GET_USER_ORGANISATION_SUCCESS:
       state.allUserOrganisationData = isArrayNotEmpty(action.result) ? action.result : [];
@@ -342,11 +367,11 @@ function userReducer(state = initialState, action) {
         onLoad: false,
         error: null,
         status: action.status
-      }
+      };
 
     ////onchange user organisation data
     case ApiConstants.ONCHANGE_USER_ORGANISATION:
-      let allOrgData = JSON.parse(JSON.stringify(state.allUserOrganisationData))
+      let allOrgData = JSON.parse(JSON.stringify(state.allUserOrganisationData));
       let organisationIndex = allOrgData.findIndex(
         x => x.organisationUniqueKey === action.organisationData.organisationUniqueKey
       );
@@ -538,7 +563,7 @@ function userReducer(state = initialState, action) {
       return { ...state, onSaveOrgPhotoLoad: true };
 
     case ApiConstants.API_SAVE_ORG_PHOTO_SUCCESS:
-      console.log("$$$$$$$$$$$$$$")
+      console.log("$$$$$$$$$$$$$$");
       return {
         ...state,
         onSaveOrgPhotoLoad: false,
@@ -550,7 +575,7 @@ function userReducer(state = initialState, action) {
       return { ...state, onDeleteOrgPhotoLoad: true };
 
     case ApiConstants.API_DELETE_ORG_PHOTO_SUCCESS:
-      console.log("&&&&&&&&&&&&&")
+      console.log("&&&&&&&&&&&&&");
       return {
         ...state,
         onDeleteOrgPhotoLoad: false,
@@ -696,7 +721,7 @@ function userReducer(state = initialState, action) {
       let charityResponse = action.result.charity;
       let ourOrgData = state.affiliateOurOrg;
       let updatedCharityData = getCharityResult(state.defaultCharityRoundUp);
-      let updatedCharity = checkSelectedCharity(charityRoundUpResponse, updatedCharityData)
+      let updatedCharity = checkSelectedCharity(charityRoundUpResponse, updatedCharityData);
       ourOrgData["charityRoundUp"] = updatedCharity;
       ourOrgData.charity = charityResponse;
       return {
@@ -765,8 +790,8 @@ function userReducer(state = initialState, action) {
       return { ...state, };
 
     case ApiConstants.API_GET_USER_ROLE_SUCCESS:
-      let userRole = getUserRole(action.result)
-      state.userRole = userRole
+      let userRole = getUserRole(action.result);
+      state.userRole = userRole;
       return {
         ...state,
       };
@@ -815,8 +840,8 @@ function userReducer(state = initialState, action) {
       return { ...state, umpireActivityOnLoad: true };
 
     case ApiConstants.API_GET_UMPIRE_ACTIVITY_LIST_SUCCESS:
-      console.log("action***", action.result)
-      let umpireActivityData = action.result
+      console.log("action***", action.result);
+      let umpireActivityData = action.result;
       return {
         ...state,
         umpireActivityOnLoad: false,
@@ -826,11 +851,11 @@ function userReducer(state = initialState, action) {
       };
 
     case ApiConstants.ONCHANGE_COMPETITION_CLEAR_DATA_FROM_LIVESCORE:
-      state.userTextualDasboardListAction = null
-      state.affiliateDirListAction = null
-      state.userAffiliateListAction = null
-      state.userFriendListAction = null
-      state.userReferFriendListAction = null
+      state.userTextualDasboardListAction = null;
+      state.affiliateDirListAction = null;
+      state.userAffiliateListAction = null;
+      state.userFriendListAction = null;
+      state.userReferFriendListAction = null;
       return { ...state, onLoad: false };
 
     default:
@@ -841,12 +866,12 @@ function userReducer(state = initialState, action) {
 //get User Role
 function getUserRole(userRoleData) {
 
-  let userRole = false
+  let userRole = false;
 
   for (let i in userRoleData) {
     if (userRoleData[i].roleId == 15 || userRoleData[i].roleId == 20) {
 
-      userRole = true
+      userRole = true;
       break;
     }
   }
@@ -855,7 +880,7 @@ function getUserRole(userRoleData) {
 
 //get charity result
 function getCharityResult(data) {
-  let newCharityResult = []
+  let newCharityResult = [];
   if (isArrayNotEmpty(data)) {
     for (let i in data) {
       data[i]["isSelected"] = false
@@ -877,7 +902,7 @@ function checkSelectedCharity(selected, data) {
       description: data[i].description,
       charityRoundUpRefId: data[i].id,
       isSelected: false
-    }
+    };
     if (selected) {
       let filteredRes = selected.find(x => x.charityRoundUpRefId == data[i].id);
       if (filteredRes != null && filteredRes != undefined) {

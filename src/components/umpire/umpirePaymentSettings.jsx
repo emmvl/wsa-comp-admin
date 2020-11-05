@@ -380,7 +380,7 @@ class UmpirePaymentSetting extends Component {
                             auto_complete="off"
                             prefix="$"
                             type="number"
-                            heading={AppConstants.umpireCoachrate}
+                            heading={AppConstants.umpireCoachRate}
                             placeholder={"Umpire Coach Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
@@ -511,7 +511,7 @@ class UmpirePaymentSetting extends Component {
                             auto_complete="off"
                             prefix="$"
                             type="number"
-                            heading={AppConstants.umpireCoachrate}
+                            heading={AppConstants.umpireCoachRate}
                             placeholder={"Umpire Coach Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
@@ -757,7 +757,7 @@ class UmpirePaymentSetting extends Component {
                             auto_complete="off"
                             prefix="$"
                             type="number"
-                            heading={AppConstants.umpireCoachrate}
+                            heading={AppConstants.umpireCoachRate}
                             placeholder={"Umpire Coach Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
@@ -834,7 +834,7 @@ class UmpirePaymentSetting extends Component {
                             auto_complete="off"
                             prefix="$"
                             type="number"
-                            heading={AppConstants.umpireCoachrate}
+                            heading={AppConstants.umpireCoachRate}
                             placeholder={"Umpire Coach Rate"}
                             onChange={(e) => this.props.umpirePaymentSettingUpdate({
                                 value: e.target.value,
