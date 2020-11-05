@@ -50,7 +50,19 @@ const columns = [
         key: "First Name",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (firstName, recod) => <span className="input-heading-add-another pt-0">{recod.user && recod.user.firstName}</span>
+        render: (umpireName, recod) => {
+            // let res = recod.umpireName ? recod.umpireName.split(" ", 1) : ""
+            return (
+                <>
+                    {
+                        recod.user &&
+                        <span className="input-heading-add-another pt-0">{recod.user.firstName}</span>
+                        // :
+                        // <span className="input-heading-add-another pt-0">{res}</span>
+                    }
+                </>
+            )
+        }
     },
     {
         title: "Last Name",
@@ -58,7 +70,19 @@ const columns = [
         key: "Last Name",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (lastName, recod) => <span className="input-heading-add-another pt-0">{recod.user && recod.user.lastName}</span>
+        render: (umpireName, recod) => {
+            // let res = recod.umpireName ? recod.umpireName.split(" ", 2) : ""
+            return (
+                <>
+                    {
+                        recod.user &&
+                        <span className="input-heading-add-another pt-0">{recod.user.lastName}</span>
+                        // :
+                        // <span className="input-heading-add-another pt-0">{res}</span>
+                    }
+                </>
+            )
+        }
     },
     {
         title: "Match ID",
@@ -89,14 +113,13 @@ const columns = [
         key: "paymentStatus",
         render: (paymentStatus, record, index) => <Checkbox
             className="single-checkbox"
-            checked={paymentStatus ? paymentStatus : false}
+            checked={paymentStatus == "unpaid" ? false : true}
+            // checked={paymentStatus}
             onChange={(e) => this_obj.props.updateUmpirePaymentData({ data: e.target.checked, key: "paymentStatus", index: index })}
         >
         </Checkbox>
     }
 ]
-
-const data = []
 
 class UmpirePayments extends Component {
     constructor(props) {

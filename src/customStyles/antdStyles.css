@@ -310,12 +310,20 @@ textarea.ant-input {
   width: 100%;
   height: 56px;
 }
+.quick_comp_ant_number.ant-input-number {
+  display: flex;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  width: 100%;
+  height: 39.93px;
+}
 
 /* antd form item */
 
 .ant-form-item {
   margin: 0 !important;
 }
+
 
 .add-membership-type-modal .ant-btn-primary {
   background-color: var(--app-color);

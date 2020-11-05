@@ -10,6 +10,7 @@ const defaultOrderObject = {
     suburb: "",
     state: "",
     postcode: "",
+    fulfilmentStatus:null
 
 }
 
@@ -23,9 +24,14 @@ const initialState = {
     orderStatusCurrentPage: 1,
     orderDetails: defaultOrderObject,
     orderStatusListActionObject: null,
+    purchasesListingData: [],
+    purchasesTotalCount: 1,
+    purchasesCurrentPage: 1,
+    ShopPaymentStatus:[],
+    ShopFulfilmentStatusArr:[],
 };
 
-////making the object data for order detail 
+////making the object data for order detail
 function makeOrderDetailObject(data, orderDetailObject) {
     let objectDetailData = orderDetailObject
     objectDetailData['id'] = data.id
@@ -35,6 +41,8 @@ function makeOrderDetailObject(data, orderDetailObject) {
     objectDetailData["suburb"] = data.suburb
     objectDetailData["state"] = data.state
     objectDetailData["postcode"] = data.postcode
+    objectDetailData["orderGroup"] = data.orderGroup
+    objectDetailData['fulfilmentStatus']= data.fulfilmentStatus
     return objectDetailData
 }
 
@@ -58,7 +66,7 @@ function shopOrderStatusState(state = initialState, action) {
             };
 
 
-        //// /////order status listing  get API 
+        //// /////order status listing  get API
         case ApiConstants.API_GET_ORDER_STATUS_LISTING_LOAD:
             return { ...state, onLoad: true, error: null, orderStatusListActionObject: action };
 
@@ -74,7 +82,7 @@ function shopOrderStatusState(state = initialState, action) {
                 error: null
             };
 
-        //// //////update order status API 
+        //// //////update order status API
         case ApiConstants.API_UPDATE_ORDER_STATUS_LOAD:
             return { ...state, onLoad: true, error: null };
 
@@ -132,6 +140,44 @@ function shopOrderStatusState(state = initialState, action) {
             state.orderStatusListActionObject = null
             return { ...state, onLoad: false };
 
+
+        //// ///purchases listing get API
+        case ApiConstants.API_GET_PURCHASES_LISTING_LOAD:
+            return { ...state, onLoad: true, error: null };
+
+        case ApiConstants.API_GET_PURCHASES_LISTING_SUCCESS:
+            let purchasesData = action.result
+            return {
+                ...state,
+                purchasesListingData: isArrayNotEmpty(purchasesData.orders) ? purchasesData.orders : [],
+                purchasesTotalCount: purchasesData.page ? purchasesData.page.totalCount : 1,
+                purchasesCurrentPage: purchasesData.page ? purchasesData.page.currentPage : 1,
+                onLoad: false,
+                status: action.status,
+                error: null
+            };
+
+            case ApiConstants.API_GET_REFERENCE_ORDER_STATUS_LOAD:
+                return {
+                    ...state,
+                    onLoad: true, error: null
+                }
+
+                case ApiConstants.API_GET_REFERENCE_ORDER_STATUS_SUCCESS:
+                    return {
+                        ...state,
+                        onLoad:false,
+                        ShopFulfilmentStatusArr:action.result.ShopFulfilmentStatus,
+                        ShopPaymentStatus:action.result.ShopPaymentStatus,
+                        status: action.status,
+                        error: null
+                    }
+                    case ApiConstants.API_UPDATE_FULFILLMENT_STATUS:
+                        state.orderDetails[action.key] = action.value
+                        return{...state,
+                            onLoad:false,
+                            error: null
+                        }
         default:
             return state;
     }

@@ -196,12 +196,12 @@ class UmpireSetting extends Component {
             <div className="content-view pt-4 mt-5">
                 <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoAssignsUmpires}</span>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                    <Radio
+                    <Checkbox
                         onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "compOrganiser" })}
                         checked={compOrganiser}
                     >
                         {AppConstants.competitionOrganiser}
-                    </Radio>
+                    </Checkbox>
                     {compOrganiser && (
                         <div className="inside-container-view mb-4 mt-4">
                             <Checkbox
@@ -232,13 +232,13 @@ class UmpireSetting extends Component {
                             {this.contentView()}
                         </div>
                     )}
-                    <Radio
-                        className="pt-1"
+                    <Checkbox
+                        className="pt-3 ml-0"
                         onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "affiliateOrg" })}
                         checked={affiliateOrg}
                     >
                         {AppConstants.affiliateOrganisations}
-                    </Radio>
+                    </Checkbox>
                 </div>
             </div>
         );

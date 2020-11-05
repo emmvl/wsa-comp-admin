@@ -72,7 +72,6 @@ class InnerHorizontalMenu extends React.Component {
     }
 
     async componentDidUpdate(nextProps) {
-
         if (this.props.userState.onLoad == false && this.state.orgState) {
             if (JSON.parse(localStorage.getItem('setOrganisationData'))) {
                 let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
@@ -84,10 +83,15 @@ class InnerHorizontalMenu extends React.Component {
                             let yearId = this.props.appState.yearList.length > 0 && this.props.appState.yearList[0].id
                             let yearRefId = localStorage.getItem("yearId")
                             if (yearRefId) {
-                                this.props.innerHorizontalCompetitionListAction(organisationId, yearRefId, this.props.innerHorizontalState.competitionList)
+                                if (!this.props.innerHorizontalState.error) {
+                                    this.props.innerHorizontalCompetitionListAction(organisationId, yearRefId, this.props.innerHorizontalState.competitionList)
+                                }
+
                                 this.setState({ yearLoading: false, loading: true, orgId: organisationId, orgState: false, yearId: yearRefId })
                             } else {
-                                this.props.innerHorizontalCompetitionListAction(organisationId, yearId, this.props.innerHorizontalState.competitionList)
+                                if (!this.props.innerHorizontalState.error) {
+                                    this.props.innerHorizontalCompetitionListAction(organisationId, yearId, this.props.innerHorizontalState.competitionList)
+                                }
                                 this.setState({ yearLoading: false, loading: true, orgId: organisationId, orgState: false, yearId })
                             }
                         }
@@ -110,7 +114,9 @@ class InnerHorizontalMenu extends React.Component {
                     let defaultYear = localStorage.getItem("defaultYearId")
                     this.setState({ yearId: defaultYear, loading: true })
                     localStorage.setItem("yearId", defaultYear)
-                    this.props.innerHorizontalCompetitionListAction(organisationId, defaultYear, this.props.innerHorizontalState.competitionList)
+                    if (!this.props.innerHorizontalState.error) {
+                        this.props.innerHorizontalCompetitionListAction(organisationId, defaultYear, this.props.innerHorizontalState.competitionList)
+                    }
                     return
                 }
 

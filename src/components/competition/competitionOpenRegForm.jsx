@@ -349,7 +349,7 @@ class CompetitionOpenRegForm extends Component {
                         let compIndex = competitionTypeList.findIndex(x => x.competitionId == competitionId)
                         statusRefId = compIndex > -1 ? competitionTypeList[compIndex].statusRefId : competitionTypeList[0].statusRefId
                         competitionId = compIndex > -1 ? competitionId : competitionTypeList[0].competitionId
-                        competitionStatus = competitionTypeList[compIndex].competitionStatus
+                        competitionStatus = competitionTypeList[compIndex] ? competitionTypeList[compIndex].competitionStatus : 0
                         setOwn_competitionStatus('')
                         setOwn_competition('')
                         setOwn_CompetitionFinalRefId('')
@@ -365,27 +365,24 @@ class CompetitionOpenRegForm extends Component {
                         setOwn_competition(competitionId)
                         setOwn_CompetitionFinalRefId(finalTypeRefId)
                     }
+                    let yearRefId = getOwnCompetitionYear() ? getOwnCompetitionYear() : this.props.appState.own_YearArr.length > 0 && getCurrentYear(this.props.appState.own_YearArr)
                     this.setState({
                         getDataLoading: true,
                         firstTimeCompId: competitionId,
-                        competitionStatus: statusRefId
+                        competitionStatus: statusRefId,
+                        yearRefId: JSON.parse(yearRefId)
                     })
                 }
             }
-            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
-                if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
-                    this.setState({ yearRefId: yearRefId })
-                }
-            }
         }
+
         if (competitionFeesState.onLoad === false && this.state.divisionState === true) {
             setTimeout(() => {
                 this.setDetailsFieldValue();
             }, 100);
             this.setState({ divisionState: false });
         }
+
         if (competitionFeesState.onLoad === false && this.state.loading === true) {
             if (!competitionFeesState.error) {
                 if (this.state.nextButtonClicked === true) {

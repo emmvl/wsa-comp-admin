@@ -14,7 +14,8 @@ import {
     Table,
     message,
     Radio,
-    Tooltip
+    Tooltip,
+    Modal
 } from "antd";
 import CustomTooltip from 'react-png-tooltip'
 import moment from "moment";
@@ -140,6 +141,7 @@ class RegistrationForm extends Component {
             disclaimerText: "",
             disclaimerLink: "",
             onRegistrationLoad: false,
+            onRegistrationSaveLoad: false,
             selectedInvitees: [],
             tooltipVisibleDraft: false,
             tooltipVisiblePublish: false,
@@ -149,6 +151,7 @@ class RegistrationForm extends Component {
             compName: "",
             allYearRefId: -1,
             allCompetition: null,
+            isVisible: false
         };
         this_Obj = this;
         this.props.clearReducerDataAction("getRegistrationFormDetails")
@@ -190,9 +193,13 @@ class RegistrationForm extends Component {
                 this.setFieldDecoratorValues()
                 this.setState({
                     onRegistrationLoad: false,
-                    isPublished: registrationState.registrationFormData[0].statusRefId == 2
+                   // isPublished: registrationState.registrationFormData[0].statusRefId == 2  
                 })
             }
+        }
+        if (this.state.onRegistrationSaveLoad === true && registrationState.onRegistrationSaveLoad === false) {
+            this.setState({onRegistrationSaveLoad: false});
+            history.push("/registrationFormList")
         }
         if (nextProps.appState !== this.props.appState) {
             if (nextProps.appState.allCompetitionTypeList !== allCompetitionTypeList) {
@@ -304,40 +311,60 @@ class RegistrationForm extends Component {
     /// post api
     registrationSubmit = values => {
         let SelectedProduct = JSON.parse(JSON.stringify(this.props.registrationState.registrationFormData.length !== 0 ? this.props.registrationState.registrationFormData[0] : []));
-        const { reg_settings, reg_demoSetting, reg_NetballSetting, reg_QuestionsSetting } = JSON.parse(JSON.stringify(this.props.registrationState))
-        let registration_settings = []
+        let canInviteSend = this.props.registrationState.canInviteSend;
+
         if (SelectedProduct.replyPhone.length > 0 && SelectedProduct.replyPhone.length !== 10) {
             this.setState({
                 hasError: true
             })
         } else {
-            if (SelectedProduct.membershipProductTypes.length > 0) {
-                let phone_number = SelectedProduct["replyPhone"].length > 0 ? regexNumberExpression(SelectedProduct["replyPhone"]) : ""
-                SelectedProduct['competitionUniqueKeyId'] = this.state.firstTimeCompId
-                SelectedProduct['yearRefId'] = this.state.yearRefId
-                SelectedProduct["statusRefId"] = this.state.statusRefId
-                SelectedProduct["replyPhone"] = phone_number
-                for (let i in reg_settings) {
-                    registration_settings.push(reg_settings[i])
+            if(canInviteSend == 1 && SelectedProduct.canInviteSend == 1){
+                this.setState({visible: true});
+            }
+            else{
+                if( SelectedProduct.canInviteSend == 1){
+                    this.registrationSend(1);
                 }
-                for (let i in reg_demoSetting) {
-                    registration_settings.push(reg_demoSetting[i])
+                else{
+                    this.registrationSend(0);
                 }
-                for (let i in reg_NetballSetting) {
-                    registration_settings.push(reg_NetballSetting[i])
-                }
-                for (let i in reg_QuestionsSetting) {
-                    registration_settings.push(reg_QuestionsSetting[i])
-                }
-                SelectedProduct['registrationSettings'] = registration_settings
-                SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
-
-                this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId)
-            } else {
-                message.error(ValidationConstants.pleaseSelectMembershipProduct)
             }
         }
     };
+
+    registrationSend = (isResend) =>{
+        let SelectedProduct = JSON.parse(JSON.stringify(this.props.registrationState.registrationFormData.length !== 0 ? this.props.registrationState.registrationFormData[0] : []));
+        const { reg_settings, reg_demoSetting, reg_NetballSetting, reg_QuestionsSetting } = JSON.parse(JSON.stringify(this.props.registrationState))
+        let registration_settings = []
+        if (SelectedProduct.membershipProductTypes.length > 0) {
+            let phone_number = SelectedProduct["replyPhone"].length > 0 ? regexNumberExpression(SelectedProduct["replyPhone"]) : ""
+            SelectedProduct['competitionUniqueKeyId'] = this.state.firstTimeCompId
+            SelectedProduct['yearRefId'] = this.state.yearRefId
+            SelectedProduct["statusRefId"] = this.state.statusRefId
+            SelectedProduct["replyPhone"] = phone_number;
+            SelectedProduct["isResend"] = isResend;
+
+            for (let i in reg_settings) {
+                registration_settings.push(reg_settings[i])
+            }
+            for (let i in reg_demoSetting) {
+                registration_settings.push(reg_demoSetting[i])
+            }
+            for (let i in reg_NetballSetting) {
+                registration_settings.push(reg_NetballSetting[i])
+            }
+            for (let i in reg_QuestionsSetting) {
+                registration_settings.push(reg_QuestionsSetting[i])
+            }
+            SelectedProduct['registrationSettings'] = registration_settings
+            SelectedProduct["orgRegistrationId"] = SelectedProduct.orgRegistrationId == 0 || SelectedProduct.orgRegistrationId == null ? this.state.orgRegId : SelectedProduct.orgRegistrationId;
+
+            this.props.regSaveRegistrationForm(SelectedProduct, this.state.statusRefId);
+            this.setState({onRegistrationSaveLoad: true});
+        } else {
+            message.error(ValidationConstants.pleaseSelectMembershipProduct)
+        }
+    }
 
     ///for change table productType and Division selection
     getSelectionofProduct(value, record, key) {
@@ -355,6 +382,40 @@ class RegistrationForm extends Component {
         if (matchIndexValue > -1) {
             this.props.updateRegistrationLock(matchIndexValue, key, record.isSelected, record.registrationLock)
         }
+    }
+
+    handleModal = (key) => {
+        console.log("key"+ key);
+        if(key == "ok"){
+            this.registrationSend(1);
+        }
+        else if(key == "cancel"){
+            this.registrationSend(0);
+        }
+
+        this.setState({visible: false});
+    }
+
+    confirmationModalView() {
+        return (
+            <Modal
+                title={AppConstants.emailNotificationUpdate}
+                visible={this.state.visible}
+                onCancel={() => this.handleModal("close")}
+                centered
+                footer={[
+                    <Button key="Cancel"  className="save-draft-text" type="save-draft-text" onClick={() => this.handleModal("cancel")}>
+                      {AppConstants.cancel}
+                    </Button>,
+                     <Button key="Proceed" onClick={() => this.handleModal("ok")}  type="primary"  className="open-reg-button" >
+                        Proceed
+                   </Button>
+                  ]}
+            >
+                
+                {AppConstants.regoFormConfirmMsg}
+            </Modal>
+        )
     }
 
     ///////view for breadcrumb
@@ -518,7 +579,8 @@ class RegistrationForm extends Component {
         let closeDate = moment(this.state.compCloseDate).format("YYYY-MM-DD")
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
-        let isPublished = this.state.isPublished
+        let isPublished = false; // this.state.isPublished // CM-1513
+    
         return (
             <div className="content-view pt-4">
                 <div className="row" style={{ paddingLeft: 10, paddingBottom: 15 }}>
@@ -962,7 +1024,7 @@ class RegistrationForm extends Component {
     UserRegisterView = () => {
         let formDataValue = this.props.registrationState.registrationFormData !== 0 ? this.props.registrationState.registrationFormData[0] : [];
         let registrationMethod = this.props.appState.regMethod.length !== 0 ? this.props.appState.regMethod : []
-        let isPublished = this.state.isPublished
+        let isPublished = false; // this.state.isPublished // CM-1513
         return (
             <div className="discount-view pt-5">
                 <div className='row ml-1'>
@@ -1097,7 +1159,7 @@ class RegistrationForm extends Component {
         let netballQuestionsSetting = this.props.appState.netballQuestionsSetting !== 0 ? this.props.appState.netballQuestionsSetting : []
         let otherQuestionsSetting = this.props.appState.otherQuestionsSetting !== 0 ? this.props.appState.otherQuestionsSetting : []
         const { selectedInvitees, selectedDemographic, SelectedOtherQuestions, selectedNetballQuestions } = this.props.registrationState
-        let isPublished = this.state.isPublished
+        let isPublished = false; // this.state.isPublished // CM-1513
         let inviteesExpend = (selectedInvitees.includes("2") || selectedInvitees.includes("3") || selectedInvitees.includes("4") || selectedInvitees.includes(2) || selectedInvitees.includes(3) || selectedInvitees.includes(4)) ? "1" : null
         let netballExpend = (selectedNetballQuestions.includes("7") || selectedNetballQuestions.includes(7)) ? "5" : null
 
@@ -1133,10 +1195,10 @@ class RegistrationForm extends Component {
                         className="tree-government-rebate tree-selection-icon"
                         style={{ flexDirection: 'column' }}
                         checkable
-                        expandedKeys={[netballExpend]}
-                        defaultExpandParent
+                        // expandedKeys={[netballExpend]}
+                        // defaultExpandParent
                         disabled={isPublished}
-                        defaultCheckedKeys={[]}
+                        // defaultCheckedKeys={[]}
                         checkedKeys={[...selectedNetballQuestions]}
                         onCheck={(e) => this.onNetballTreeSelected(e, selectedNetballQuestions)}
                     >
@@ -1218,7 +1280,7 @@ class RegistrationForm extends Component {
     disclaimerView = () => {
         let registrationData = this.props.registrationState.registrationFormData.length > 0 ? this.props.registrationState.registrationFormData[0] : [];
         let disclaimerData = registrationData.registrationDisclaimer !== null ? isArrayNotEmpty(registrationData.registrationDisclaimer) ? registrationData.registrationDisclaimer : [] : []
-        let isPublished = this.state.isPublished
+        let isPublished = false; //this.state.isPublished; // CM-1513
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.disclaimers}</span>
@@ -1277,7 +1339,9 @@ class RegistrationForm extends Component {
     sendInviteToView = () => {
         const registrationFormData = this.props.registrationState.registrationFormData[0]
         let { inviteTypeData } = this.props.commonReducerState;
-        let isPublished = this.state.isPublished;
+        let isPublished = false; //this.state.isPublished; // CM-1513
+        console.log("CanSendInvite", this.props.registrationState.canInviteSend);
+       
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading pb-2">{AppConstants.sendInvitesTo}</span>
@@ -1595,9 +1659,11 @@ class RegistrationForm extends Component {
                             )}
                             {/* <div className="formView">{this.disclaimerView()}</div> */}
 
-                            <Loader visible={this.state.onRegistrationLoad || this.props.appState.onLoad || this.props.registrationState.onLoad} />
+                            <Loader visible={this.state.onRegistrationLoad || this.props.appState.onLoad || this.props.registrationState.onLoad ||
+                                this.props.registrationState.onRegistrationSaveLoad} />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
+                        {this.confirmationModalView()}
                     </Form>
                 </Layout>
             </div>

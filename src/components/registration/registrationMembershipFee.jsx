@@ -92,7 +92,7 @@ const columns = [
                 className="input-inside-table-fees"
                 value={casualFee}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "casualFee")}
-                disabled={this_Obj.state.membershipIsUsed}
+                //disabled={this_Obj.state.membershipIsUsed}
             />
         )
     },
@@ -107,7 +107,7 @@ const columns = [
                 className="input-inside-table-fees"
                 value={casualFeeGst}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "casualGst")}
-                disabled={this_Obj.state.membershipIsUsed}
+                //disabled={this_Obj.state.membershipIsUsed}
             />
         )
     },
@@ -130,7 +130,7 @@ const columns = [
                 className="input-inside-table-fees"
                 value={seasonalFee}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "seasonalFee")}
-                disabled={this_Obj.state.membershipIsUsed}
+                //disabled={this_Obj.state.membershipIsUsed}
             />
         )
     },
@@ -145,7 +145,7 @@ const columns = [
                 className="input-inside-table-fees"
                 value={seasonalFeeGst}
                 onChange={e => this_Obj.props.membershipFeesTableInputChangeAction(e.target.value, record, "seasonalGst")}
-                disabled={this_Obj.state.membershipIsUsed}
+                //disabled={this_Obj.state.membershipIsUsed}
             />
         )
     }
@@ -170,6 +170,7 @@ class RegistrationMembershipFee extends Component {
             loading: false,
             buttonPressed: "next",
             membershipIsUsed: false,
+            confirmRePayFeesModalVisible: false
         };
         this_Obj = this;
         this.formRef = React.createRef();
@@ -268,14 +269,17 @@ class RegistrationMembershipFee extends Component {
             }
         } else if (this.state.membershipTabKey == "2") {
             let finalMembershipFeesData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductFeesTableData));
-            finalMembershipFeesData.membershipFees.map((item) => {
-                delete item['membershipProductName']
-                delete item['membershipProductTypeRefName']
-                return item
+            if(finalMembershipFeesData.isAlreadyRegistered == 1 && this.state.membershipIsUsed == true){
+                this.setState({confirmRePayFeesModalVisible: true})
+            }else{
+                finalMembershipFeesData.membershipFees.map((item) => {
+                    delete item['membershipProductName']
+                    delete item['membershipProductTypeRefName']
+                    return item
+                });
+                this.props.regSaveMembershipProductFeesAction(finalMembershipFeesData)
+                this.setState({ loading: true })
             }
-            )
-            this.props.regSaveMembershipProductFeesAction(finalMembershipFeesData)
-            this.setState({ loading: true })
         } else if (this.state.membershipTabKey == "3") {
             let errMsg = null;
             let discountData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductDiscountData.membershipProductDiscounts[0].discounts))
@@ -790,7 +794,7 @@ class RegistrationMembershipFee extends Component {
                                 className="reg-competition-radio"
                                 onChange={e => this.membershipFeeApplyRadio(e.target.value, index)}
                                 defaultValue={item.membershipProductFeesTypeRefId}
-                                disabled={this.state.membershipIsUsed}
+                                //disabled={this.state.membershipIsUsed}
                             >
                                 {this.props.appState.membershipProductFeesTypes.map((item) => (
                                     <div className="row" key={'membershipProductFeesType_' + item.id}>
@@ -823,7 +827,7 @@ class RegistrationMembershipFee extends Component {
                         className="reg-competition-radio"
                         //onChange={e => this.membershipFeeApplyRadio(e.target.value)}
                         defaultValue={data?.paymentOptionRefId}
-                        disabled={this.state.membershipIsUsed}
+                        //disabled={this.state.membershipIsUsed}
                     >
                         {this.props.commonReducerState.membershipPaymentOptions.map((item) => (
                             <div className="row pl-2" key={'membershipPaymentOption_' + item.id}>
@@ -1365,7 +1369,7 @@ class RegistrationMembershipFee extends Component {
         let membershipProductId = this.props.registrationState.membershipProductId
         return (
             <div className="fluid-width">
-                {!this.state.membershipIsUsed && (
+                {/* {!this.state.membershipIsUsed && ( */}
                     <div className="footer-view">
                         <div className="row">
                             <div className="col-sm">
@@ -1402,7 +1406,7 @@ class RegistrationMembershipFee extends Component {
                             </div>
                         </div>
                     </div>
-                )}
+                {/* )} */}
             </div>
         );
     };
@@ -1414,6 +1418,40 @@ class RegistrationMembershipFee extends Component {
         }
         this.setFieldDecoratorValues()
     };
+
+    handleConfirmRepayFeesModal = (key) => {
+        if(key == "ok"){
+            let finalMembershipFeesData = JSON.parse(JSON.stringify(this.props.registrationState.membershipProductFeesTableData));
+            finalMembershipFeesData.membershipFees.map((item) => {
+                delete item['membershipProductName']
+                delete item['membershipProductTypeRefName']
+                return item
+            });
+            this.props.regSaveMembershipProductFeesAction(finalMembershipFeesData)
+            this.setState({ loading: true })
+            this.setState({confirmRePayFeesModalVisible: false});
+        }else{
+            this.setState({confirmRePayFeesModalVisible: false});
+        }
+    }
+
+    repayFeesModal = () => {
+        try{
+            return(
+                <Modal
+                    className="add-membership-type-modal"
+                    title="Confirm"
+                    visible={this.state.confirmRePayFeesModalVisible}
+                    onOk={() => this.handleConfirmRepayFeesModal("ok")}
+                    onCancel={() => this.handleConfirmRepayFeesModal("cancel")}
+                >
+                    <InputWithHead heading={AppConstants.membershipFeesRepayConfirmMsg} required="pt-0"/>
+                </Modal>
+            )
+        }catch(ex){
+            console.log("Error in repayFeesModal::"+ex)
+        }
+    }
 
     render() {
         return (
@@ -1453,6 +1491,7 @@ class RegistrationMembershipFee extends Component {
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                     </Form>
+                    {this.repayFeesModal()}
                 </Layout>
             </div>
         );

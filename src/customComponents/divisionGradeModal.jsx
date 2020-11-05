@@ -131,6 +131,7 @@ class DivisionGradeModal extends React.Component {
                                                         />
                                                         <Form.Item name={`team${index}${gradeIndex}`} rules={[{ required: true, message: ValidationConstants.SelectNumberTeam }]}>
                                                             <InputNumber
+                                                                className="quick_comp_ant_number"
                                                                 type="number"
                                                                 style={{ width: 100 }}
                                                                 // value={gradeItem.team}

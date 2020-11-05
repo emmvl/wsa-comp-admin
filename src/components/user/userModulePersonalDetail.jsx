@@ -43,6 +43,7 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 import StripeKeys from "../stripe/stripeKeys";
 import { getStripeLoginLinkAction } from "../../store/actions/stripeAction/stripeAction";
+import { getPurchasesListingAction } from '../../store/actions/shopAction/orderStatusAction';
 
 
 function tableSort(a, b, key) {
@@ -54,11 +55,11 @@ function tableSort(a, b, key) {
 function umpireActivityTableSort(key) {
   let sortBy = key;
   let sortOrder = null;
-  if (this_Obj.state.sortBy !== key) {
+  if (this_Obj.state.UmpireActivityListSortBy !== key) {
     sortOrder = 'ASC';
-  } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+  } else if (this_Obj.state.UmpireActivityListSortBy === key && this_Obj.state.UmpireActivityListSortOrder === 'ASC') {
     sortOrder = 'DESC';
-  } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
+  } else if (this_Obj.state.UmpireActivityListSortBy === key && this_Obj.state.UmpireActivityListSortOrder === 'DESC') {
     sortBy = sortOrder = null;
   }
   const payload = {
@@ -71,6 +72,7 @@ function umpireActivityTableSort(key) {
 
   this_Obj.props.getUmpireActivityListAction(payload, JSON.stringify([15]), this_Obj.state.userId, sortBy, sortOrder);
 }
+
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -1058,58 +1060,102 @@ const umpireColumn = [
   },
 ]
 
+function purchasesTableSort(key) {
+  let sortBy = key;
+  let sortOrder = null;
+  if (this_Obj.state.purchasesListSortBy !== key) {
+    sortOrder = 'asc';
+  } else if (this_Obj.state.purchasesListSortBy === key && this_Obj.state.purchasesListSortOrder === 'asc') {
+    sortOrder = 'desc';
+  } else if (this_Obj.state.purchasesListSortBy === key && this_Obj.state.purchasesListSortOrder === 'desc') {
+    sortBy = sortOrder = null;
+  }
+  let params = {
+    limit: 10,
+    offset: this_Obj.state.purchasesOffset,
+    order: sortOrder ? sortOrder : "",
+    sorterBy: sortBy ? sortBy : "",
+    userId: this_Obj.state.userId
+  }
+  this_Obj.props.getPurchasesListingAction(params)
+  this_Obj.setState({ purchasesListSortBy: sortBy, purchasesListSortOrder: sortOrder });
+}
+
+//listeners for sorting
+const purchaseListeners = (key) => ({
+  onClick: () => purchasesTableSort(key),
+});
+
+
 const purchaseActivityColumn = [
   {
     title: 'Order ID',
     dataIndex: 'orderId',
     key: 'orderId',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => purchaseListeners("id"),
+    render: (orderId) =>
+    // <NavLink to={{
+    //     pathname: `/orderDetails`,
+    //     state: { orderId: orderId }
+    // }}>
+        <span className="input-heading-add-another pt-0">{orderId}</span>
+    // </NavLink>
   },
   {
     title: 'Date',
     dataIndex: 'date',
     key: 'date',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => purchaseListeners("createdOn"),
+    render: (date) => <span>{date ? liveScore_formateDate(date) : ""}</span>
   },
-  {
-    title: 'Transaction ID',
-    dataIndex: 'transactionId',
-    key: 'transactionId',
-    sorter: true,
-  },
+  // {
+  //   title: 'Transaction ID',
+  //   dataIndex: 'transactionId',
+  //   key: 'transactionId',
+  //   sorter: true,
+  //   onHeaderCell: ({ dataIndex }) => purchaseListeners("id"),
+  //   render: (transactionId) =>
+  //       <span className="input-heading-add-another pt-0">{transactionId}</span>
+  // },
   {
     title: 'Products',
     dataIndex: 'products',
     key: 'products',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
   },
   {
-    title: 'Affiliate',
-    dataIndex: 'affiliate',
-    key: 'affiliate',
+    title: 'Organisation',
+    dataIndex: 'affiliateName',
+    key: 'affiliateName',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => purchaseListeners("organisationId"),
   },
   {
     title: 'Payment Status',
     dataIndex: 'paymentStatus',
     key: 'paymentStatus',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
   },
   {
     title: 'Payment Method',
     dataIndex: 'paymentMethod',
     key: 'paymentMethod',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
   },
   {
     title: 'Fulfillment Status',
-    dataIndex: 'fulfillmentStatus',
-    key: 'fulfillmentStatus',
+    dataIndex: 'fulfilmentStatus',
+    key: 'fulfilmentStatus',
     sorter: true,
+    onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
   },
 ]
 
-const purchaseActivityList = []
 
 class UserModulePersonalDetail extends Component {
   constructor(props) {
@@ -1131,7 +1177,10 @@ class UserModulePersonalDetail extends Component {
       stripeDashBoardLoad: false,
       umpireActivityOffset: 0,
       UmpireActivityListSortBy: null,
-      UmpireActivityListSortOrder: null
+      UmpireActivityListSortOrder: null,
+      purchasesOffset: 0,
+      purchasesListSortBy: null,
+      purchasesListSortOrder: null
     };
   }
 
@@ -1410,7 +1459,21 @@ class UserModulePersonalDetail extends Component {
       }
       this.props.getUmpireActivityListAction(payload, JSON.stringify([15]), userId, this.state.UmpireActivityListSortBy, this.state.UmpireActivityListSortOrder);
     }
+    else if (tabKey === "9") {
+      this.handlePurchasetableList(1, userId, competition, yearRefId);
+    }
   };
+
+  handlePurchasetableList = (page, userId) => {
+    let params = {
+      limit: 10,
+      offset: (page ? (10 * (page - 1)) : 0),
+      order: "",
+      sorterBy: "",
+      userId: userId
+    }
+    this.props.getPurchasesListingAction(params)
+  }
 
   handleIncidentableList = (page, userId, competition, yearRefId) => {
     let filter = {
@@ -2566,8 +2629,10 @@ class UserModulePersonalDetail extends Component {
     );
   };
 
-  purchaseActivityView = () => {
 
+  purchaseActivityView = () => {
+    let { onLoad, purchasesListingData, purchasesTotalCount, purchasesCurrentPage } = this.props.shopOrderStatusState
+    console.log("111", purchasesListingData, purchasesTotalCount, purchasesCurrentPage)
     return (
       <div
         className="comp-dash-table-view mt-2"
@@ -2578,24 +2643,24 @@ class UserModulePersonalDetail extends Component {
           <Table
             className="home-dashboard-table"
             columns={purchaseActivityColumn}
-            dataSource={purchaseActivityList}
+            dataSource={purchasesListingData}
             pagination={false}
-          // loading={umpireActivityOnLoad && true}
+            loading={onLoad}
           />
         </div>
-        {/* <div className="d-flex justify-content-end ">
+        <div className="d-flex justify-content-end ">
           <Pagination
             className="antd-pagination pb-3"
-            current={umpireActivityCurrentPage}
-            total={umpireActivityTotalCount}
+            current={purchasesCurrentPage}
+            total={purchasesTotalCount}
             onChange={(page) =>
-              this.handleUmpireActivityTableList(
+              this.handlePurchasetableList(
                 page,
                 this.state.userId
               )
             }
           />
-        </div> */}
+        </div>
       </div>
     );
   };
@@ -2722,6 +2787,7 @@ function mapDispatchToProps(dispatch) {
       getCoachData,
       getStripeLoginLinkAction,
       getUmpireActivityListAction,
+      getPurchasesListingAction,
     },
     dispatch
   );
@@ -2732,6 +2798,7 @@ function mapStateToProps(state) {
     userState: state.UserState,
     appState: state.AppState,
     stripeState: state.StripeState,
+    shopOrderStatusState: state.ShopOrderStatusState,
   };
 }
 

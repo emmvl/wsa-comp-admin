@@ -27,22 +27,26 @@ function innerHorizontalState(state = initialState, action) {
                 success: true
             };
 
+        case ApiConstants.API_YEAR_LIST_LOAD:
+            return { ...state, error: null };
+
+        case ApiConstants.API_ONLY_YEAR_LIST_LOAD:
+            return { ...state, error: null };
+
         case ApiConstants.API_INNER_HORIZONTAL_FAIL:
-
-
             return { ...state, onLoad: false, success: false };
 
         case ApiConstants.API_INNER_HORIZONTAL_ERROR:
             return {
                 ...state,
                 onLoad: false,
-                success: false
+                success: false,
+                error: action.error
             };
 
         case ApiConstants.API_UPDATE_INNER_HORIZONTAL:
             // const livescoreSavedCompObject_2 = JSON.parse(getLiveScoreCompetiton())
             state.competitionList = []
-            console.log(state.competitionList, 'livescoreSavedCompObject_@@@2')
             return {
                 ...state,
             };

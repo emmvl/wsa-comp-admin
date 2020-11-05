@@ -356,13 +356,14 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_COMPETITION_SUCCESS:
-      let yearResult = action.result ? reverseArray(action.result):[]
+      let yearResult = action.yearList ? reverseArray(action.yearList):[]
+     // console.log("yearResult" + JSON.stringify(yearResult));
       let competitionResult = JSON.parse(JSON.stringify(action.competetionListResult))
       let yearobject = {
         description: "All",
         id: -1,
         name: "All",
-        sortOrder: 1,
+        sortOrder: 10,
         subReferences: null,
       }
       let competitionobject = {
@@ -371,8 +372,24 @@ function appState(state = initialState, action) {
         id: 0,
       }
       competitionResult.unshift(competitionobject)
+
+      let arr = [];
+      if(!yearResult.find(x=>x.id == -1)){
+        arr.push(yearobject);
+      }
+     
+      arr.push(...yearResult);
+
+      yearResult = arr;
+
       if (action.data === "new") {
-        yearResult.unshift(yearobject)
+        // let arr = [];
+        // arr.push(yearobject);
+        // arr.push(...yearResult);
+        // // if(!yearResult.find(x=>x.id == -1)){
+        // //   yearResult.unshift(yearobject)
+        // // }
+        // yearResult = arr;
       }
 
       return {

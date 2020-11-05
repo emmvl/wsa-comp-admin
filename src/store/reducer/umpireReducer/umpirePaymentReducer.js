@@ -39,7 +39,7 @@ function umpirePaymentState(state = initialState, action) {
             let array = []
             if (key === 'allCheckBox') {
                 for (let i in umpirePaymentArr) {
-                    umpirePaymentArr[i]["paymentStatus"] = data
+                    umpirePaymentArr[i]["paymentStatus"] = data ? data : 'unpaid'
                 }
                 state.paymentStatus = data
                 state.umpirePaymentList = umpirePaymentArr
@@ -48,7 +48,7 @@ function umpirePaymentState(state = initialState, action) {
 
                 for (let i in umpirePaymentArr) {
                     if (i == index) {
-                        umpirePaymentArr[i][key] = data
+                        umpirePaymentArr[i][key] = data ? data : 'unpaid'
                     }
                 }
 
@@ -66,7 +66,6 @@ function umpirePaymentState(state = initialState, action) {
 
                 state.umpirePaymentList = umpirePaymentArr
 
-                console.log(state.umpirePaymentList, 'umpirePaymentArr', array)
             }
             return {
                 ...state,
