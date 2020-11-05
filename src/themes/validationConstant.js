@@ -196,7 +196,7 @@ const ValidationConstants = {
 
     // Venue Add/Edit
     venueAddressRequiredError: "Venue address is required",
-    venueAddressDetailsError: "Please input venue address in details",
+    venueAddressDetailsError: "Please select a venue which has a street address",
     duplicatedVenueAddressError: "Venue address is duplicated, please select other address",
     duplicateDiscountError: "Please remove the duplicate entry of Discount Code.",
     mnbMatchId: 'mnbMatchId is required',
