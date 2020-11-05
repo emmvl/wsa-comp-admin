@@ -404,7 +404,7 @@ class RegistrationForm extends Component {
                 onCancel={() => this.handleModal("close")}
                 centered
                 footer={[
-                    <Button key="Cancel"  className="save-draft-text" type="save-draft-text" onClick={() => this.handleModal("cancel")}>
+                    <Button key="Cancel"  className="save-draft-text" type="save-draft-text" style={{width: '100px'}} onClick={() => this.handleModal("cancel")}>
                       {AppConstants.cancel}
                     </Button>,
                      <Button key="Proceed" onClick={() => this.handleModal("ok")}  type="primary"  className="open-reg-button" >
