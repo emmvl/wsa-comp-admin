@@ -357,5 +357,5 @@ textarea.ant-input {
 }
 
 .ant-menu-item-selected a, .ant-menu-item-selected a:hover {
-    color: white;
+    color: var(--app-color);
 }
