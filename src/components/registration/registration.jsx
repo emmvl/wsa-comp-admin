@@ -198,19 +198,19 @@ const columns = [
                         </NavLink>
                     </Menu.Item>
                     {
-                        record.actionView == 1 && 
+                        record.actionView == 1 &&
                         <Menu.Item key="2" onClick = {() => this_Obj.setCashPayment(record)}>
                             <span>Receive Cash Payment</span>
-                        </Menu.Item> 
+                        </Menu.Item>
 
                     }
                     {
-                        record.actionView == 2 && 
+                        record.actionView == 2 &&
                         <Menu.Item key="2">
                             <span>Refund</span>
-                        </Menu.Item> 
+                        </Menu.Item>
                     }
-                    
+
                 </SubMenu>
             </Menu>
         ),
@@ -315,7 +315,7 @@ class Registration extends Component {
             this.setState({loading: false});
             this.handleRegTableList(1);
         }
-    }   
+    }
 
     handleRegTableList = (page) => {
         const {
@@ -473,7 +473,7 @@ class Registration extends Component {
                 message.config({ duration: 0.9, maxCount: 1 })
                 message.error("Amount exceeded");
             }
-            
+
         }
     }
 
@@ -772,7 +772,7 @@ class Registration extends Component {
 
                         <div className="reg-col col-lg-3 col-md-5">
                             <div className="reg-filter-col-cont" style={{ marginRight: "30px" }}>
-                                <div className="year-select-heading">{AppConstants.Regfrom}</div>
+                                <div className="year-select-heading">{AppConstants.RegFrom}</div>
                                 <DatePicker
                                     size="default"
                                     className="year-select reg-filter-select"
@@ -788,7 +788,7 @@ class Registration extends Component {
 
                         <div className="reg-col col-lg-3 col-md-7">
                             <div className="reg-filter-col-cont">
-                                <div className="year-select-heading">{AppConstants.Regto}</div>
+                                <div className="year-select-heading">{AppConstants.RegTo}</div>
                                 <DatePicker
                                     size="default"
                                     className="year-select reg-filter-select"
@@ -864,7 +864,7 @@ class Registration extends Component {
 
     transferModalView() {
         let selectedRow = this.state.selectedRow;
- 
+
         return (
             <Modal
                 title="Cash"
@@ -883,14 +883,14 @@ class Registration extends Component {
                 >
                     <Radio value={1}>{AppConstants.fullCashAmount}</Radio>
                     <Radio value={2}>{AppConstants.partialCashAmount}</Radio>
-                    
+
                     {this.state.cashTranferType == 2 && (
                         <InputWithHead
                             placeholder={AppConstants.amount}
                             value={this.state.amount}
                             onChange={(e) => this.setState({amount: e.target.value})}
                         />
-                    )} 
+                    )}
                 </Radio.Group>
             </Modal>
         )

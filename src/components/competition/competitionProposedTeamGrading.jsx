@@ -715,7 +715,7 @@ class CompetitionProposedTeamGrading extends Component {
                             <Button className="primary-add-comp-form" type="primary"
                             // onClick={this.addNewGrade}
                             >
-                                + {AppConstants.addgrade}
+                                + {AppConstants.addGrade}
                             </Button>
                         </div> */}
                     </div>

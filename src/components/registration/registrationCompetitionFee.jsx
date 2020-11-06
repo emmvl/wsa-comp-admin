@@ -782,7 +782,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Competition GST',
+        title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
         render: (gst, record, index) => (
@@ -828,7 +828,7 @@ const playerCasualTableAssociation = [
         ),
     },
     {
-        title: 'Affiliate GST',
+        title: 'GST',
         dataIndex: 'affiliateGst',
         key: 'affiliateGst',
         render: (affiliateGst, record, index) => (
@@ -1961,7 +1961,7 @@ const playerSeasonalTeamTable = [
         ),
     },
     {
-        title: 'Membership GST',
+        title: 'GST',
         dataIndex: 'membershipGst',
         key: 'membershipGst',
         render: (membershipGst) => (
@@ -2621,7 +2621,7 @@ const playerCasualTeamTable = [
         ),
     },
     {
-        title: 'Competition GST',
+        title: 'GST',
         dataIndex: 'gst',
         key: 'gst',
         render: (gst, record, index) => (
@@ -3244,7 +3244,7 @@ class RegistrationCompetitionFee extends Component {
         // selectedSeasonalFeeKey
 
         if (!selectedPaymentMethods.find(x => x.paymentMethodRefId == 1 || x.paymentMethodRefId == 2)) {
-            message.error(ValidationConstants.pleaseSelectePaymentMethods);
+            message.error(ValidationConstants.pleaseSelectPaymentMethods);
             return;
         }
 
@@ -4762,7 +4762,7 @@ class RegistrationCompetitionFee extends Component {
                         name="selectedVenues"
                         rules={[{
                             required: true,
-                            message: ValidationConstants.pleaseSelectvenue,
+                            message: ValidationConstants.pleaseSelectVenue,
                         }]}
                     >
                         <Select
@@ -7211,6 +7211,7 @@ class RegistrationCompetitionFee extends Component {
         let allDisable = this.state.permissionState.allDisable;
         let invitees = this.props.competitionFeesState.competitionDetailData.invitees
         let directComp = isArrayNotEmpty(invitees) ? (invitees[0].registrationInviteesRefId == 5) : false
+        console.log("")
         return (
             <div className="fluid-width">
                 <div className="footer-view">
@@ -7303,7 +7304,7 @@ class RegistrationCompetitionFee extends Component {
                                                 })
                                             }
                                         >
-                                            {tabKey === '6' && isPublished
+                                            {tabKey === '6' && !isPublished
                                                 ? AppConstants.publish
                                                 : tabKey === '6' && isPublished
                                                     ? AppConstants.save
@@ -7377,7 +7378,7 @@ class RegistrationCompetitionFee extends Component {
                         {this.dropdownView()}
 
                         <Content>
-                            <div className="tab-view">
+                            <div className="tab-view" style={{width: '75%'}}>
                                 <Tabs
                                     activeKey={this.state.competitionTabKey}
                                     onChange={this.tabCallBack}

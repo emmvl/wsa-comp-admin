@@ -495,7 +495,7 @@ class LiveScoreSettingsView extends Component {
                         style={{ width: '100%', paddingRight: 1, minWidth: 182, maxWidth: 300 }}
                         onChange={trackFullPeriod => this.setState({ trackFullPeriod })}
                         value={this.state.trackFullPeriod}
-                        placeholder={AppConstants.selectComptition}
+                        placeholder={AppConstants.selectCompetition}
                     >
                         {trackFullPeriod.map((item) => (
                             <Option key={'trackFullPeriod_' + item.value} value={item.value}>
@@ -729,7 +729,7 @@ class LiveScoreSettingsView extends Component {
                 />
                 <div className="row">
                     <div className="col-sm">
-                        <Form.Item name='recordumpire' rules={[{ required: true, message: ValidationConstants.recordumpireField }]}>
+                        <Form.Item name='recordumpire' rules={[{ required: true, message: ValidationConstants.recordUmpireField }]}>
                             <Select
                                 placeholder={'Select Record Umpire'}
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
@@ -748,8 +748,8 @@ class LiveScoreSettingsView extends Component {
                 </div>
 
                 {/* dropdown view */}
-                {/* <InputWithHead heading={AppConstants.attendence_reord_report} /> */}
-                <span className="text-heading-large pt-5">{AppConstants.attendence_reord_report}</span>
+                {/* <InputWithHead heading={AppConstants.attendance_record_report} /> */}
+                <span className="text-heading-large pt-5">{AppConstants.attendance_record_report}</span>
                 <div className="row">
                     <div className="col-sm">
                         <InputWithHead
@@ -861,7 +861,7 @@ class LiveScoreSettingsView extends Component {
                     // onChange={(e) => this.props.onChangeSettingForm({ key: "lineupSelection", data: e.target.checked })}
                     checked={lineupSelection}
                 >
-                    {AppConstants.sqadSelection}
+                    {AppConstants.squadSelection}
                 </Checkbox>
 
                 {lineupSelection && (

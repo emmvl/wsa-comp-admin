@@ -56,7 +56,7 @@ const initialState = {
     timeSlotEntityManualkey: [],
     allResult: [],
     competitionVenues: [],
-    timeSlotRotationHelpMessage: [AppConstants.timeSloteNoPrefMsg, AppConstants.timeSloteEvenRotationMsg, AppConstants.allocateToSametimeslotMsg],
+    timeSlotRotationHelpMessage: [AppConstants.timeSloteNoPrefMsg, AppConstants.timeSloteEvenRotationMsg, AppConstants.allocateToSameTimeslotMsg],
     timeSlotGenerationHelpMessage: [AppConstants.timeSlote_BasedOnMatchDurationMsg, AppConstants.manuallyAddTimeSloteMsg]
 };
 

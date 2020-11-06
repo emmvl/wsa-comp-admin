@@ -1346,7 +1346,7 @@ class AppRegistrationForm extends Component {
                     className="input-heading-add-another pointer"
                     onClick={() => this.addFriend(index, "friend", participantOrProduct, productIndex)}
                 >
-                    + {AppConstants.addfriend}
+                    + {AppConstants.addFriend}
                 </span>
             </div>
         )
@@ -1356,8 +1356,8 @@ class AppRegistrationForm extends Component {
         // const styles = { marginTop: '30px', width: '100%' };
         return (
             <div className="formView content-view pt-5">
-                <span className="form-heading">{AppConstants.referfriend}</span>
-                <span className="form-heading" style={{ fontSize: "10px" }}>{AppConstants.friendLiketoPlay}</span>
+                <span className="form-heading">{AppConstants.referFriend}</span>
+                <span className="form-heading" style={{ fontSize: "10px" }}>{AppConstants.friendLikeToPlay}</span>
 
                 {(item.referFriends || []).map((friend, friendIndex) => (
                     <div key={"referFriend" + friendIndex} className="inside-container-view pt-0">
@@ -1407,7 +1407,7 @@ class AppRegistrationForm extends Component {
                     className="input-heading-add-another pointer"
                     onClick={() => this.addFriend(index, "referFriend", participantOrProduct, productIndex)}
                 >
-                    + {AppConstants.addfriend}
+                    + {AppConstants.addFriend}
                 </span>
             </div>
         )
@@ -1431,17 +1431,17 @@ class AppRegistrationForm extends Component {
                     />
                 </Form.Item>
 
-                <InputWithHead heading={AppConstants.redularMedicalConditions} required="required-field" />
+                <InputWithHead heading={AppConstants.regularMedicalConditions} required="required-field" />
                 <Form.Item name={`regularMedication${index}`}
                            rules={[{ required: true, message: ValidationConstants.regularMedication[0] }]}>
                     <TextArea
-                        placeholder={AppConstants.redularMedicalConditions}
+                        placeholder={AppConstants.regularMedicalConditions}
                         onChange={(e) => this.onChangeSetParticipantValue(e.target.value, "regularMedication", index)}
                         value={item.regularMedication}
                         allowClear
                     />
                 </Form.Item>
-                <InputWithHead heading={AppConstants.hearAbouttheCompition} required="required-field" />
+                <InputWithHead heading={AppConstants.hearAboutTheCompetition} required="required-field" />
                 <Form.Item name={`heardByRefId${index}`}
                            rules={[{ required: true, message: ValidationConstants.heardBy[0] }]}>
                     <Radio.Group
@@ -1675,7 +1675,7 @@ class AppRegistrationForm extends Component {
                             </div>
                         ))}
                         <span className="input-heading-add-another pointer" onClick={() => this.addVoucher()}>
-                            + {AppConstants.addvoucher}
+                            + {AppConstants.addVoucher}
                         </span>
                     </div>
                 )}

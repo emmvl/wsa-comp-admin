@@ -199,7 +199,7 @@ class DeRegistration extends Component {
                 <div className="ml-5">
                     <InputWithHead
                         required="pt-0"
-                        heading={AppConstants.takenCourtforTraining}
+                        heading={AppConstants.takenCourtForTraining}
                     />
                     <Radio.Group
                         className="reg-competition-radio"

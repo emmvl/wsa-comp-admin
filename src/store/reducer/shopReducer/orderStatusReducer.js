@@ -31,7 +31,7 @@ const initialState = {
     ShopFulfilmentStatusArr:[],
 };
 
-////making the object data for order detail 
+////making the object data for order detail
 function makeOrderDetailObject(data, orderDetailObject) {
     let objectDetailData = orderDetailObject
     objectDetailData['id'] = data.id
@@ -66,7 +66,7 @@ function shopOrderStatusState(state = initialState, action) {
             };
 
 
-        //// /////order status listing  get API 
+        //// /////order status listing  get API
         case ApiConstants.API_GET_ORDER_STATUS_LISTING_LOAD:
             return { ...state, onLoad: true, error: null, orderStatusListActionObject: action };
 
@@ -82,7 +82,7 @@ function shopOrderStatusState(state = initialState, action) {
                 error: null
             };
 
-        //// //////update order status API 
+        //// //////update order status API
         case ApiConstants.API_UPDATE_ORDER_STATUS_LOAD:
             return { ...state, onLoad: true, error: null };
 
@@ -141,7 +141,7 @@ function shopOrderStatusState(state = initialState, action) {
             return { ...state, onLoad: false };
 
 
-        //// ///purchases listing get API  
+        //// ///purchases listing get API
         case ApiConstants.API_GET_PURCHASES_LISTING_LOAD:
             return { ...state, onLoad: true, error: null };
 
@@ -172,7 +172,7 @@ function shopOrderStatusState(state = initialState, action) {
                         status: action.status,
                         error: null
                     }
-                    case ApiConstants.API_UPDATE_FULLFILMENT_STATUS:
+                    case ApiConstants.API_UPDATE_FULFILLMENT_STATUS:
                         state.orderDetails[action.key] = action.value
                         return{...state,
                             onLoad:false,

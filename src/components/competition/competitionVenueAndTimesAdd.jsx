@@ -12,7 +12,6 @@ import {
     TimePicker,
     message,
     Form,
-
 } from 'antd';
 import moment from 'moment';
 import CSVReader from 'react-csv-reader'
@@ -397,7 +396,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         const address = data;
         this.props.checkVenueDuplication(address);
 
-        if (!address.addressOne && !address.suburb) {
+        if (!address || !address.addressOne || !address.suburb) {
             this.setState({
                 venueAddressError: ValidationConstants.venueAddressDetailsError,
             })
@@ -487,11 +486,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                         heading={AppConstants.venueSearch}
                         required
                         error={this.state.venueAddressError}
-                        onBlur={() => {
-                            this.setState({
-                                venueAddressError: ''
-                            })
-                        }}
                         onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
@@ -846,17 +840,15 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     onAddVenue = (e) => {
         let hasError = false;
-        let venueAddressError = false;
 
         if (this.props.commonReducerState.venueAddressDuplication) {
             message.error(ValidationConstants.duplicatedVenueAddressError);
             return;
         }
 
-        if (!this.state.venueAddress) {
-            this.setState({ venueAddressError: ValidationConstants.venueAddressRequiredError });
-            message.error(AppConstants.venueAddressSelect);
-            venueAddressError = true;
+        if (this.state.venueAddressError) {
+            message.error(this.state.venueAddressError);
+            return;
         }
 
         const { venuData } = this.props.venueTimeState
@@ -897,11 +889,6 @@ class CompetitionVenueAndTimesAdd extends Component {
 
             if (hasError) {
                 message.error(ValidationConstants.gameDayEndTimeValidation);
-                return;
-            }
-
-            if (venueAddressError) {
-                message.error(AppConstants.venueAddressSelect);
                 return;
             }
 

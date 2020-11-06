@@ -899,7 +899,7 @@ class RegistrationCompetitionForm extends Component {
                     <InputWithHead required="required-field pb-0" heading={AppConstants.venue} />
                     <Form.Item
                         name='selectedVenues'
-                        rules={[{ required: true, message: ValidationConstants.pleaseSelectvenue }]}
+                        rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}
                     >
                         <Select
                             id={AppUniqueId.select_Venues}

@@ -206,7 +206,7 @@ function getAllowTeamRegistrationTypeAction() {
 
 function registrationRestrictionTypeAction() {
     const action = {
-        type: ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD,
+        type: ApiConstants.API_REGISTRATION_RESTRICTION_TYPE_LOAD,
 
     };
 

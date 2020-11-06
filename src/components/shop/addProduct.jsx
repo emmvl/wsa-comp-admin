@@ -23,7 +23,6 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid } from "../../util/helpers";
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
-import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import SortableImage from '../../customComponents/sortableImageComponent';
 import ValidationConstants from '../../themes/validationConstant';
 import { checkOrganisationLevel } from "../../util/permissions";

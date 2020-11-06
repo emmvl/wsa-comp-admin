@@ -352,7 +352,7 @@ class UserAddAffiliates extends Component {
         ) ? (
           <div className="row mt-3">
             <div className="col-sm">
-              <InputWithHead heading={AppConstants.affilatedTo} />
+              <InputWithHead heading={AppConstants.affiliatedTo} />
             </div>
             <div
               className="col-sm"
@@ -370,7 +370,7 @@ class UserAddAffiliates extends Component {
         ) : (
           <div>
             <InputWithHead
-              heading={AppConstants.affilatedTo}
+              heading={AppConstants.affiliatedTo}
               required="required-field"
             />
 

@@ -145,7 +145,7 @@ class DivisionGradeModal extends React.Component {
                                                     </div>
                                                 </div>
                                             ))}
-                                            <span className="input-heading-add-another pointer" onClick={() => { item.grades[0].gradeName.length > 0 && addGrade(index); this.valueupdate() }}> + {AppConstants.addgrade}</span>
+                                            <span className="input-heading-add-another pointer" onClick={() => { item.grades[0].gradeName.length > 0 && addGrade(index); this.valueupdate() }}> + {AppConstants.addGrade}</span>
                                         </div>
                                         {division.length > 1 && (
                                             <div className="col-sm-1 delete-image-timeSlot-view" onClick={() => { removeDivision(index); this.valueupdate() }}>

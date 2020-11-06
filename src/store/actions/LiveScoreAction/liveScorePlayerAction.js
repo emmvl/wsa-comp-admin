@@ -63,7 +63,7 @@ function liveScorePlayerResetImportResultAction() {
 // Player list with pagination
 function playerListWithPaginationAction(competitionID, offset, limit, search, sortBy, sortOrder) {
     return {
-        type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD,
+        type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGINATION_LOAD,
         competitionID,
         offset,
         limit,

@@ -19,7 +19,7 @@ import {
     getAffiliateToOrganisationAction, saveAffiliateAction, updateOrgAffiliateAction,
     getUreAction, getRoleAction, getAffiliateOurOrganisationIdAction,
     getOrganisationPhotoAction, saveOrganisationPhotoAction, deleteOrganisationPhotoAction,
-    deleteOrgContact, updateCharityValue, updateCharityAction, updateTermsAndCondtionAction
+    deleteOrgContact, updateCharityValue, updateCharityAction, updateTermsAndConditionAction
 } from "../../store/actions/userAction/userAction";
 import ValidationConstants from "../../themes/validationConstant";
 import { getCommonRefData, getPhotoTypeAction } from '../../store/actions/commonAction/commonAction';
@@ -126,7 +126,7 @@ class UserOurOrganization extends Component {
             if (userState.onSaveOrgPhotoLoad == false && this.state.photoLoading == true) {
                 this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null, buttonPressed: "",
                 photoLoading: false });
-    
+
                 this.props.getOrganisationPhotoAction(obj);
             }
             if (userState.onDeleteOrgPhotoLoad == false && this.state.photoDeleteLoading == true) {
@@ -134,7 +134,7 @@ class UserOurOrganization extends Component {
                 this.props.getOrganisationPhotoAction(obj);
             }
         }
-        
+
         if (this.state.buttonPressed === "cancel") {
             if (this.state.sourcePage == "DIR") {
                 history.push('/affiliateDirectory');
@@ -526,7 +526,7 @@ class UserOurOrganization extends Component {
         formData.append("termsAndCondition", this.state.termsAndCondititionFile? this.state.termsAndCondititionFile : "");
 
         this.setState({ loading: true });
-        this.props.updateTermsAndCondtionAction(formData);
+        this.props.updateTermsAndConditionAction(formData);
         this.setState({ termsAndCondititionFile: null });
     }
 
@@ -660,7 +660,7 @@ class UserOurOrganization extends Component {
                 </div>
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.affilatedTo} />
+                        <InputWithHead heading={AppConstants.affiliatedTo} />
                     </div>
                     <div className="col-sm" style={{ display: "flex", alignItems: "center" }}>
                         <InputWithHead heading={affiliate.affiliatedToOrgName} />
@@ -1434,7 +1434,7 @@ function mapDispatchToProps(dispatch) {
         deleteOrgContact,
         updateCharityValue,
         updateCharityAction,
-        updateTermsAndCondtionAction,
+        updateTermsAndConditionAction,
     }, dispatch);
 }
 

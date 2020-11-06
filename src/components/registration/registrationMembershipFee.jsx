@@ -1445,7 +1445,7 @@ class RegistrationMembershipFee extends Component {
                     onOk={() => this.handleConfirmRepayFeesModal("ok")}
                     onCancel={() => this.handleConfirmRepayFeesModal("cancel")}
                 >
-                    <InputWithHead heading={AppConstants.membereshipFeesRepayConfirmMsg} required="pt-0"/>
+                    <InputWithHead heading={AppConstants.membershipFeesRepayConfirmMsg} required="pt-0"/>
                 </Modal>
             )
         }catch(ex){

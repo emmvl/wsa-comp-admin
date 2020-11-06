@@ -1,210 +1,227 @@
-import { put, call, takeEvery } from "redux-saga/effects";
-import { message } from "antd";
+import { put, call, takeEvery } from 'redux-saga/effects';
+import { message } from 'antd';
 
-import AppConstants from "themes/appConstants";
-import ApiConstants from "themes/apiConstants";
-import history from "util/history";
-import { receiptImportResult } from "util/showImportResult";
-import LiveScoreAxiosApi from "store/http/liveScoreHttp/liveScoreAxiosApi";
+import AppConstants from 'themes/appConstants';
+import ApiConstants from 'themes/apiConstants';
+import history from 'util/history';
+import { receiptImportResult } from 'util/showImportResult';
+import LiveScoreAxiosApi from 'store/http/liveScoreHttp/liveScoreAxiosApi';
 
 function* failSaga(result) {
-  yield put({
-    type: ApiConstants.API_LIVE_SCORE_PLAYER_FAIL,
-    error: result,
-    status: result.status,
-  });
+    yield put({
+        type: ApiConstants.API_LIVE_SCORE_PLAYER_FAIL,
+        error: result,
+        status: result.status,
+    });
 
-  let msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
-  message.config({
-    duration: 1.5,
-    maxCount: 1,
-  });
-  message.error(msg);
+    const msg = result.result.data ? result.result.data.message : AppConstants.somethingWentWrong;
+    message.config({
+        duration: 1.5,
+        maxCount: 1,
+    });
+    message.error(msg);
 }
 
 function* errorSaga(error) {
-  yield put({
-    type: ApiConstants.API_LIVE_SCORE_PLAYER_ERROR,
-    error: error,
-    status: error.status,
-  });
+    yield put({
+        type: ApiConstants.API_LIVE_SCORE_PLAYER_ERROR,
+        error,
+        status: error.status,
+    });
 
-  if (error.status === 400) {
-    message.config({
-      duration: 1.5,
-      maxCount: 1,
-    });
-    message.error((error && error.error) ? error.error : AppConstants.somethingWentWrong);
-  } else {
-    message.config({
-      duration: 1.5,
-      maxCount: 1,
-    });
-    message.error(AppConstants.somethingWentWrong);
-  }
+    if (error.status === 400) {
+        message.config({
+            duration: 1.5,
+            maxCount: 1,
+        });
+        message.error((error && error.error) ? error.error : AppConstants.somethingWentWrong);
+    } else {
+        message.config({
+            duration: 1.5,
+            maxCount: 1,
+        });
+        message.error(AppConstants.somethingWentWrong);
+    }
 }
 
 // Player list saga
 function* liveScorePlayerSaga(action) {
-  try {
-    const result = yield call(LiveScoreAxiosApi.liveScorePlayerList, action.competitionID, action.teamId);
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScorePlayerList, action.competitionID, action.teamId);
 
-    if (result.status === 1) {
-      yield put({
-        type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SUCCESS,
-        result: result.result.data,
-        status: result.status,
-      });
-    } else {
-      yield call(failSaga, result);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
     }
-  } catch (error) {
-    yield call(errorSaga, error);
-  }
 }
 
 // Add/Edit player saga
 function* liveScoreAddEditPlayerSaga(action) {
-  try {
-    const result = yield call(LiveScoreAxiosApi.liveScoreAddEditPlayer, action.data);
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScoreAddEditPlayer, action.data);
 
-    if (result.status === 1) {
-      yield put({
-        type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_PLAYER_SUCCESS,
-        result: result.result.data,
-        status: result.status,
-      });
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_ADD_EDIT_PLAYER_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
 
-      message.config({
-        duration: 1.5,
-        maxCount: 1,
-      });
-      message.success(action.playerId ? "Player Edited Successfully." : "Player Added Successfully.");
+            message.config({
+                duration: 1.5,
+                maxCount: 1,
+            });
+            message.success(action.playerId ? 'Player Edited Successfully.' : 'Player Added Successfully.');
 
-      // history.push(action.temaViewPlayer ? "/liveScoreTeamView" : "/liveScorePlayerList", { tableRecord: action.data.teamId });
-      history.push(action.propsData.screenName === "fromMatchList" || action.propsData.screenName === "fromTeamList" ? "/liveScoreTeamView" : "/liveScorePlayerList", { ...action.propsData });
-    } else {
-      yield call(failSaga, result);
+            // history.push(action.temaViewPlayer ? "/liveScoreTeamView" : "/liveScorePlayerList", { tableRecord: action.data.teamId });
+            history.push(
+                action.propsData.screenName === 'fromMatchList' || action.propsData.screenName === 'fromTeamList'
+                    ? '/liveScoreTeamView'
+                    : '/liveScorePlayerList',
+                { ...action.propsData },
+            );
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
     }
-  } catch (error) {
-    yield call(errorSaga, error);
-  }
 }
 
 // Match Import
 function* liveScorePlayerImportSaga(action) {
-  try {
-    const result = yield call(LiveScoreAxiosApi.liveScorePlayerImport, action.competitionId, action.csvFile);
+    try {
+        const result = yield call(LiveScoreAxiosApi.liveScorePlayerImport, action.competitionId, action.csvFile);
 
-    if (result.status === 1) {
-      yield put({
-        type: ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_SUCCESS,
-        result: result.result.data,
-      });
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_SUCCESS,
+                result: result.result.data,
+            });
 
-      if (Object.keys(result.result.data.error).length === 0) {
-        history.push("/liveScorePlayerList");
-        message.success("Player Imported Successfully.");
-      } else {
-        receiptImportResult(result.result);
-      }
-    } else {
-      yield call(failSaga, result);
+            if (Object.keys(result.result.data.error).length === 0) {
+                history.push('/liveScorePlayerList');
+                message.success('Player Imported Successfully.');
+            } else {
+                receiptImportResult(result.result);
+            }
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
     }
-  } catch (error) {
-    yield call(errorSaga, error);
-  }
 }
-
 
 // Delete Player Saga
-
 function* liveScoreDeletePlayerSaga(action) {
-  try {
-    const deleteResult = yield call(LiveScoreAxiosApi.liveScoreDeletePlayer, action.playerId)
-    if (deleteResult.status == 1) {
-      if (action.key) {
-        yield put({
-          type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS,
-          status: deleteResult.status,
-        });
-        message.success("Player Deleted Successfully.");
-        history.push("/liveScorePlayerList")
-      } else {
-        const result = yield call(LiveScoreAxiosApi.getPlayerWithPaggination, action.competitionId, action.offset, 10, action.search, action.sortBy, action.sortOrder);
-        if (result.status === 1) {
-          yield put({
-            type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_SUCCESS,
-            result: result.result.data,
-            status: result.status,
-          });
-          message.success("Player Deleted Successfully.");
+    try {
+        const deleteResult = yield call(LiveScoreAxiosApi.liveScoreDeletePlayer, action.playerId);
+        if (deleteResult.status === 1) {
+            if (action.key) {
+                yield put({
+                    type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS,
+                    status: deleteResult.status,
+                });
+                message.success('Player Deleted Successfully.');
+                history.push('/liveScorePlayerList');
+            } else {
+                const result = yield call(
+                    LiveScoreAxiosApi.getPlayerWithPagination,
+                    action.competitionId,
+                    action.offset,
+                    10,
+                    action.search,
+                    action.sortBy,
+                    action.sortOrder,
+                );
+                if (result.status === 1) {
+                    yield put({
+                        type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGINATION_SUCCESS,
+                        result: result.result.data,
+                        status: result.status,
+                    });
+                    message.success('Player Deleted Successfully.');
+                } else {
+                    yield put({
+                        type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS,
+                        status: result.status,
+                    });
+                    message.success('Player Deleted Successfully.');
+                }
+            }
+        } else {
+            yield call(failSaga, deleteResult);
         }
-        else {
-          yield put({
-            type: ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_SUCCESS,
-            status: result.status,
-          });
-          message.success("Player Deleted Successfully.");
-        }
-      }
-    } else {
-      yield call(failSaga, deleteResult);
+    } catch (error) {
+        yield call(errorSaga, error);
     }
-  } catch (error) {
-    yield call(errorSaga, error);
-  }
 }
-
 
 // Player list pagination
 function* getPlayerListPaginationSaga(action) {
-  try {
-    const result = yield call(LiveScoreAxiosApi.getPlayerWithPaggination, action.competitionID, action.offset, action.limit, action.search, action.sortBy, action.sortOrder);
+    try {
+        const result = yield call(
+            LiveScoreAxiosApi.getPlayerWithPagination,
+            action.competitionID,
+            action.offset,
+            action.limit,
+            action.search,
+            action.sortBy,
+            action.sortOrder,
+        );
 
-    if (result.status === 1) {
-      yield put({
-        type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_SUCCESS,
-        result: result.result.data,
-        status: result.status,
-      });
-    } else {
-      yield call(failSaga, result);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGINATION_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
     }
-  } catch (error) {
-    yield call(errorSaga, error);
-  }
 }
 
 // Player list search
 function* getPlayerListSearchSaga(action) {
-  try {
-    const result = yield call(
-      LiveScoreAxiosApi.liveScorePlayerSearchList,
-      action.competitionId,
-      action.organisationId,
-      action.name
-    );
+    try {
+        const result = yield call(
+            LiveScoreAxiosApi.liveScorePlayerSearchList,
+            action.competitionId,
+            action.organisationId,
+            action.name,
+        );
 
-    if (result.status === 1) {
-      yield put({
-        type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SEARCH_SUCCESS,
-        result: result.result.data,
-        status: result.status,
-      });
-    } else {
-      yield call(failSaga, result);
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SEARCH_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
     }
-  } catch (error) {
-    yield call(errorSaga, error);
-  }
 }
 
 export default function* rootLiveScorePlayerSaga() {
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD, liveScorePlayerSaga);
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_PLAYER_LOAD, liveScoreAddEditPlayerSaga);
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD, liveScorePlayerImportSaga);
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGGINATION_LOAD, getPlayerListPaginationSaga);
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SEARCH_LOAD, getPlayerListSearchSaga);
-  yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD, liveScoreDeletePlayerSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_LOAD, liveScorePlayerSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_ADD_EDIT_PLAYER_LOAD, liveScoreAddEditPlayerSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_IMPORT_LOAD, liveScorePlayerImportSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_PAGINATION_LOAD, getPlayerListPaginationSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_PLAYER_LIST_SEARCH_LOAD, getPlayerListSearchSaga);
+    yield takeEvery(ApiConstants.API_LIVE_SCORE_DELETE_PLAYER_LOAD, liveScoreDeletePlayerSaga);
 }

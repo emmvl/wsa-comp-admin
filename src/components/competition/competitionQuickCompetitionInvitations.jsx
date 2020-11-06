@@ -178,7 +178,7 @@ class QuickCompetitionInvitations extends Component {
                             style={{ width: '100%', paddingRight: 1, minWidth: 182, maxWidth: 300 }}
                             onChange={selectedMergeComptition => this.setState({ selectedMergeComptition })}
                             value={this.state.selectedMergeComptition}
-                            placeholder={AppConstants.selectComptition}
+                            placeholder={AppConstants.selectCompetition}
                         >
                             {mergeCompetitionList.map((item) => (
                                 <Option key={'competition_' + item.competitionId} value={item.competitionId}>
@@ -208,7 +208,7 @@ class QuickCompetitionInvitations extends Component {
                             {mergeCompetitionSelection.divisionGradesMismatch == 1 && (
                                 <div>
                                     <div className="popup-text-color">
-                                        {AppConstants.divisioAndGrades}
+                                        {AppConstants.divisionAndGrades}
                                     </div>
                                     <Radio.Group
                                         className="reg-competition-radio"

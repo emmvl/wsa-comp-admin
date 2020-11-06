@@ -171,7 +171,7 @@ class CompetitionQuickCompetition extends Component {
                     message.config({
                         maxCount: 1, duration: 1
                     })
-                    message.warning(ValidationConstants.pleaseSelectvenue)
+                    message.warning(ValidationConstants.pleaseSelectVenue)
                 }
             } else {
                 message.config({
@@ -643,7 +643,7 @@ class CompetitionQuickCompetition extends Component {
                         <InputWithHead required="required-field pb-0 pt-0" heading={AppConstants.venue} />
                         <Form.Item
                             name="selectedVenues"
-                            rules={[{ required: true, message: ValidationConstants.pleaseSelectvenue }]}
+                            rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}
                         >
                             <Select
                                 mode="multiple"

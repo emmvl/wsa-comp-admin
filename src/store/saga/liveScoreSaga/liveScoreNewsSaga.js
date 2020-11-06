@@ -107,7 +107,7 @@ export function* liveScoreNewsDeleteSaga(action) {
         const result = yield call(LiveScoreAxiosApi.liveScoreDeleteNews, action.id);
         if (result.status === 1) {
             yield put({
-                type: ApiConstants.API_LIVESCORE_DELETE_NEWS_SUCCESS,
+                type: ApiConstants.API_LIVE_SCORE_DELETE_NEWS_SUCCESS,
                 result: result.result.data,
                 status: result.status,
             });
