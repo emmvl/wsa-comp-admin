@@ -187,21 +187,6 @@ const getKeyForStateWideMessage = () => {
   return localStorage.stateWideMessage
 }
 
-const setImpersonationAffiliate = (impersonationOrgData) => {
-  const data = JSON.stringify(impersonationOrgData)
-  localStorage.setItem('impersonation', data);
-};
-
-const getImpersonationAffiliate = () => {
-  const dataStr = localStorage.getItem('impersonation');
-
-  if (dataStr !== 'undefined') {
-    return JSON.parse(dataStr);
-  }
-
-  return null;
-};
-
 const setPrevUrl = (url) => {
   let data = JSON.stringify(url);
   localStorage.setItem("prevUrl", data);
@@ -263,8 +248,6 @@ export {
   getOwn_competitionStatus,
   getParticipating_competitionStatus,
   setParticipating_competitionStatus,
-  setImpersonationAffiliate,
-  getImpersonationAffiliate,
   setPrevUrl,
   getPrevUrl,
 }

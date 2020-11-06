@@ -11,8 +11,6 @@ import {
   setOrganisationData,
   getOrganisationData,
   clearUmpireStorage,
-  setImpersonationAffiliate,
-  getImpersonationAffiliate,
   setPrevUrl,
 } from "util/sessionStorage";
 import { clearHomeDashboardData } from "store/actions/homeAction/homeAction";
@@ -54,7 +52,14 @@ class DashboardLayout extends React.Component {
         let organisationData = this.props.userState.getUserOrganisation;
 
         if (organisationData.length > 0) {
-          let presetOrganisation = await this.getPresetOrganisation();
+          const impersonationRole =  this.props.userState.userRoleEntity
+            .find((role) => role.roleId === 10);
+          const isImpersonation = !!impersonationRole;
+
+          const entityId = impersonationRole?.entityId;
+
+          let presetOrganisation = organisationData
+            .find((org) => org.organisationId === entityId);
 
           let orgData = presetOrganisation ? presetOrganisation : getOrganisationData();
           let organisationItem = orgData ? orgData : organisationData[0];
@@ -62,24 +67,28 @@ class DashboardLayout extends React.Component {
           await setOrganisationData(organisationItem);
           this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
 
-          const isImpersonation = this.props.userState.userRoleEntity
-            .findIndex((role) => role.roleId === 10) > -1;
-
           this.setState({
             dataOnload: false,
             impersonationOrgData: isImpersonation ? orgData : null,
+            impersonationAffiliateOrgId: isImpersonation ? entityId : null,
           });
         }
 
-        if (this.props.userState.impersonation && !this.state.impersonationLoad) {
-          const impersonationAffiliate = this.state.impersonationAffiliateOrgId
-            ? this.props.userState.affiliateList.find(
-              (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
-            )
-            : null;
-          await setImpersonationAffiliate(impersonationAffiliate);
+        if (!this.state.impersonationLoad) {
+          if (this.props.userState.impersonation) {
+            const impersonationAffiliate = this.state.impersonationAffiliateOrgId
+              ? this.props.userState.affiliateList.find(
+                (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
+              )
+              : null;
+            this.setState({
+              impersonationOrgData: impersonationAffiliate,
+              impersonationAffiliateOrgId: this.state.impersonationAffiliateOrgId,
+            });
+          }
+
           window.location.reload();
-          if (this.props.userState.impersonation && !this.state.impersonationLoad && this.state.impersonationAffiliateOrgId) {
+          if (this.props.userState.impersonation !== nextProps.userState.impersonation) {
             history.push("/")
           }
         }
@@ -93,7 +102,6 @@ class DashboardLayout extends React.Component {
         if (this.state.logout) {
           localStorage.clear();
           history.push("/login");
-          // window.location.reload();
         } else if (!this.state.dataOnload) {
           this.props.getUserOrganisationAction();
           this.setState({
@@ -121,22 +129,6 @@ class DashboardLayout extends React.Component {
     this.props.getUreAction();
   }
 
-  getPresetOrganisation = () => {
-    const userOrganisationData = this.props.userState.getUserOrganisation;
-    const impersonationAffiliate = getImpersonationAffiliate();
-
-    if (!impersonationAffiliate) {
-      if (this.state.impersonationAffiliateOrgId) {
-        return userOrganisationData.find((org) => org.organisationUniqueKey === this.state.impersonationAffiliateOrgId);
-      }
-
-      return null;
-    }
-
-    return userOrganisationData
-      .find((org) => org.organisationUniqueKey === impersonationAffiliate.affiliateOrgId);
-  }
-
   setOrganisationKey = () => {
     let organisationData = getOrganisationData();
     if (!organisationData) {
@@ -149,26 +141,26 @@ class DashboardLayout extends React.Component {
   }
 
   endImpersonation = async () => {
-    const impersonationAffiliate = getImpersonationAffiliate();
-
-    if (impersonationAffiliate) {
+    if (this.state.impersonationOrgData) {
       this.props.impersonationAction({
-        orgId: impersonationAffiliate.affiliateOrgId,
+        orgId: this.state.impersonationOrgData.organisationUniqueKey,
         access: false,
       });
 
-      await setImpersonationAffiliate(null);
-      await setOrganisationData(null);
+      this.setState({
+        impersonationOrgData: null,
+        impersonationAffiliateOrgId: null,
+        impersonationLoad: true,
+      });
 
-      this.setState({ impersonationLoad: true, endImpersonation: true });
+      await setOrganisationData(null);
     }
   };
 
   logout = async () => {
-    const impersonationOrg = getImpersonationAffiliate();
-    if (impersonationOrg) {
+    if (this.state.impersonationOrgData) {
       this.props.impersonationAction({
-        orgId: impersonationOrg.affiliateOrgId,
+        orgId: this.state.impersonationOrgData.organisationUniqueKey,
         access: false,
       });
 
@@ -176,7 +168,6 @@ class DashboardLayout extends React.Component {
     } else {
       localStorage.clear();
       history.push("/login");
-      // window.location.reload();
     }
   };
 
