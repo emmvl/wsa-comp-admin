@@ -202,6 +202,9 @@ class CompetitionVenueAndTimesEdit extends Component {
 
     removeTableObj(clear, record, index) {
         this.props.updateVenuAndTimeDataAction("", index, "remove")
+        setTimeout(() => {
+            this.setVenuCourtFormFields()
+        }, 300);
     }
 
     overideVenueslotOnchange(e, index) {
@@ -814,6 +817,13 @@ class CompetitionVenueAndTimesEdit extends Component {
         )
     }
 
+    addCourt = () => {
+        this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'venueCourts')
+        setTimeout(() => {
+            this.setVenuCourtFormFields()
+        }, 300);
+    }
+
     //////court day view
     courtView = () => {
         let venueTimestate = this.props.venueTimeState;
@@ -849,11 +859,15 @@ class CompetitionVenueAndTimesEdit extends Component {
                         <Table
                             className="fees-table"
                             columns={this.state.courtColumns}
-                            dataSource={venueCourts}
+                            dataSource={[...venueCourts]}
                             pagination={false}
                             Divider=" false"
-                            expandedRowKeys={this.props.venueTimeState.venuData.expandedRowKeys}
-                            expandedRowRender={(record, index) => this.expandedRowView(record, index)}
+                            expandedRowKeys={JSON.stringify(this.props.venueTimeState.venuData.expandedRowKeys)}
+                            // expandedRowRender={(record, index) => this.expandedRowView(record, index)}
+                            expandable={{
+                                expandedRowRender: (record, index) => this.expandedRowView(record, index),
+                                rowExpandable: (record) => record.overideSlot,
+                            }}
                             expandIconAsCell={false}
                             expandIconColumnIndex={-1}
                             loading={this.state.loading && true}
@@ -862,7 +876,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     {/* {!this.state.isUsed ? */}
                     <span
                         className="input-heading-add-another"
-                        onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'venueCourts')}
+                        onClick={() => this.addCourt()}
                         style={{ cursor: 'pointer' }}
                     >
                         + {AppConstants.addCourt}

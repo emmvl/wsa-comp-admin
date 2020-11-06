@@ -1095,12 +1095,12 @@ const purchaseActivityColumn = [
     sorter: true,
     onHeaderCell: ({ dataIndex }) => purchaseListeners("id"),
     render: (orderId) =>
-    // <NavLink to={{
-    //     pathname: `/orderDetails`,
-    //     state: { orderId: orderId }
-    // }}>
+      <NavLink to={{
+        pathname: `/orderDetails`,
+        state: { orderId: orderId }
+      }}>
         <span className="input-heading-add-another pt-0">{orderId}</span>
-    // </NavLink>
+      </NavLink>
   },
   {
     title: 'Date',
