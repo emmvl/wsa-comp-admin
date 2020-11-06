@@ -546,7 +546,7 @@ function mapDispatchtoprops(dispatch) {
 
 function mapStatetoProps(state) {
     return {
-        liveScoreFixturCompState: state.LiveScoreFixturCompState,
+        liveScoreFixturCompState: state.LiveScoreFixtureCompState,
         liveScoreMatchSheetState: state.LiveScoreMatchSheetState,
         commonReducerState: state.CommonReducerState,
         liveScoreMatchState: state.LiveScoreMatchState,

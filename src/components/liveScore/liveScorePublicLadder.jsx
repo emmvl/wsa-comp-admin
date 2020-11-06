@@ -306,7 +306,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         liveScoreLadderState: state.LiveScoreLadderState,
-        liveScoreFixturCompState: state.LiveScoreFixturCompState,
+        liveScoreFixturCompState: state.LiveScoreFixtureCompState,
     }
 }
 
