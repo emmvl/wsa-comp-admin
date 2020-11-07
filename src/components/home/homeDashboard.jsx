@@ -285,51 +285,56 @@ class HomeDashboard extends Component {
     }
 
     async componentDidUpdate(nextProps) {
-        const { yearList } = this.props.appState;
-        const userOrganisation = this.props.userState.getUserOrganisation;
-
-        if (this.state.userCountLoading && !this.props.appState.onLoad) {
-            if (yearList.length > 0) {
-                const yearRefId = getCurrentYear(yearList);
-
-                if (this.props.homeDashboardState.userCount == null) {
-                    this.props.getUserCount(yearRefId);
-                    this.props.setHomeDashboardYear(yearRefId);
+        try{
+            const { yearList } = this.props.appState;
+            const userOrganisation = this.props.userState.getUserOrganisation;
+            if (this.state.userCountLoading && !this.props.appState.onLoad) {
+                if (yearList.length > 0) {
+                    const yearRefId = getCurrentYear(yearList);
+    
+                    if (this.props.homeDashboardState.userCount == null) {
+                        this.props.getUserCount(yearRefId);
+                        this.props.setHomeDashboardYear(yearRefId);
+                    }
+    
+                    this.setState({ userCountLoading: false });
                 }
-
-                this.setState({ userCountLoading: false });
             }
-        }
-
-        if (this.state.loading && !this.props.userState.onOrgLoad) {
-            if (nextProps.userState.getUserOrganisation !== userOrganisation) {
-                if (userOrganisation.length > 0) {
-                    if (this.props.appState.yearList == 0) {
-                        this.props.getOnlyYearListAction(this.props.appState.yearList);
-                        this.setState({ userCountLoading: true, loading: false });
-                    } else {
-                        const yearRefId = getCurrentYear(yearList);
-                        if (this.props.homeDashboardState.userCount == null) {
-                            this.props.getUserCount(yearRefId);
-                            this.setState({ loading: false });
+    
+            if (this.state.loading && !this.props.userState.onOrgLoad) {
+                //if (nextProps.userState.getUserOrganisation !== userOrganisation) {
+                    if (userOrganisation.length > 0) {
+                        if (this.props.appState.yearList.length == 0) {
+                            this.props.getOnlyYearListAction(this.props.appState.yearList);
+                            this.setState({ userCountLoading: true, loading: false });
+                        } else {
+                            const yearRefId = getCurrentYear(yearList);
+                            if (this.props.homeDashboardState.userCount == null) {
+                                this.props.getUserCount(yearRefId);
+                                this.setState({ loading: false });
+                            }
+                        }
+    
+                        if (this.props.homeDashboardState.actionBoxList == null || this.state.organisationId == null) {
+                            const organisationUniqueKey = getOrganisationData() == null
+                                ? userOrganisation[0].organisationUniqueKey
+                                : getOrganisationData().organisationUniqueKey;
+                            await this.setState({ organisationId: organisationUniqueKey });
+                            this.handleActionBoxList(1);
                         }
                     }
-
-                    if (this.props.homeDashboardState.actionBoxList == null || this.state.organisationId == null) {
-                        const organisationUniqueKey = getOrganisationData() == null
-                            ? userOrganisation[0].organisationUniqueKey
-                            : getOrganisationData().organisationUniqueKey;
-                        await this.setState({ organisationId: organisationUniqueKey });
-                        this.handleActionBoxList(1);
-                    }
-                }
+                //}
+            }
+    
+            if (this.state.updateActionBoxLoad && !this.props.homeDashboardState.onActionBoxLoad) {
+                this.setState({ updateActionBoxLoad: false });
+                this.handleActionBoxList(1);
             }
         }
-
-        if (this.state.updateActionBoxLoad && !this.props.homeDashboardState.onActionBoxLoad) {
-            this.setState({ updateActionBoxLoad: false });
-            this.handleActionBoxList(1);
+        catch(error){
+            console.log("error", error);
         }
+        
     }
 
     onYearChange = (yearRefId) => {
