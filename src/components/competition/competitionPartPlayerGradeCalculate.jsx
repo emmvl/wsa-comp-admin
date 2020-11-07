@@ -129,14 +129,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                     setParticipating_competitionStatus(statusRefId)
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getParticipatingYear()
                     this.props.getCompPartPlayerGradingSummaryAction(yearId, competitionId)
-                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
-                }
-            }
-            if (nextProps.appState.participate_YearArr !== this.props.appState.participate_YearArr) {
-                if (this.props.appState.participate_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.participate_YearArr)
-                    setParticipatingYear(yearRefId)
-                    this.setState({ yearRefId: yearRefId })
+                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId, yearRefId: JSON.parse(yearId) })
                 }
             }
         }
@@ -148,7 +141,6 @@ class CompetitionPartPlayerGradeCalculate extends Component {
 
     componentDidMount() {
         this.apiCalls()
-
     }
 
     apiCalls = () => {
@@ -194,7 +186,6 @@ class CompetitionPartPlayerGradeCalculate extends Component {
         this.setState({ saveLoad: true })
     }
 
-
     ///////view for breadcrumb
     headerView = () => {
         return (
@@ -209,7 +200,6 @@ class CompetitionPartPlayerGradeCalculate extends Component {
             </div>
         )
     }
-
     //////year change onchange
     onYearChange = (yearId) => {
         setParticipatingYear(yearId)

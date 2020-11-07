@@ -97,14 +97,7 @@ class CompetitionPlayerGrades extends Component {
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
 
                     this.props.getDivisionsListAction(yearId, competitionId)
-                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, compLoad: false })
-                }
-            }
-            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
-                if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
-                    this.setState({ yearRefId: yearRefId })
+                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, compLoad: false, yearRefId: JSON.parse(yearId) })
                 }
             }
         }
@@ -979,7 +972,7 @@ class CompetitionPlayerGrades extends Component {
                             id={AppUniqueId.PlayerGrading_addTeamName}
                             required="pt-0 mt-0"
                             heading={AppConstants.addTeam}
-                            placeholder={AppConstants.pleaseEnterteamName}
+                            placeholder={AppConstants.pleaseEnterTeamName}
                             onChange={(e) => this.setState({ newTeam: e.target.value })}
                             value={this.state.newTeam}
                         />

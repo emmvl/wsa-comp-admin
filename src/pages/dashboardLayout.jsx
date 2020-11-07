@@ -11,8 +11,6 @@ import {
   setOrganisationData,
   getOrganisationData,
   clearUmpireStorage,
-  setImpersonationAffiliate,
-  getImpersonationAffiliate,
   setPrevUrl,
 } from "util/sessionStorage";
 import { clearHomeDashboardData } from "store/actions/homeAction/homeAction";
@@ -27,7 +25,7 @@ import {
 import Loader from "customComponents/loader";
 import { clearDataOnCompChangeAction } from "../store/actions/LiveScoreAction/liveScoreMatchAction";
 import "./layout.css";
-import { showRoleLevelPermision, getUserRoleId } from 'util/permissions';
+import { showRoleLevelPermission, getUserRoleId } from 'util/permissions';
 
 const { Option } = Select;
 
@@ -54,7 +52,14 @@ class DashboardLayout extends React.Component {
         let organisationData = this.props.userState.getUserOrganisation;
 
         if (organisationData.length > 0) {
-          let presetOrganisation = await this.getPresetOrganisation();
+          const impersonationRole =  this.props.userState.userRoleEntity
+            .find((role) => role.roleId === 10);
+          const isImpersonation = !!impersonationRole;
+
+          const entityId = impersonationRole?.entityId;
+
+          let presetOrganisation = organisationData
+            .find((org) => org.organisationId === entityId);
 
           let orgData = presetOrganisation ? presetOrganisation : getOrganisationData();
           let organisationItem = orgData ? orgData : organisationData[0];
@@ -62,24 +67,28 @@ class DashboardLayout extends React.Component {
           await setOrganisationData(organisationItem);
           this.props.onOrganisationChangeAction(organisationItem, "organisationChange");
 
-          const isImpersonation = this.props.userState.userRoleEntity
-            .findIndex((role) => role.roleId === 10) > -1;
-
           this.setState({
             dataOnload: false,
             impersonationOrgData: isImpersonation ? orgData : null,
+            impersonationAffiliateOrgId: isImpersonation ? entityId : null,
           });
         }
 
-        if (this.props.userState.impersonation && !this.state.impersonationLoad) {
-          const impersonationAffiliate = this.state.impersonationAffiliateOrgId
-            ? this.props.userState.affiliateList.find(
-              (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
-            )
-            : null;
-          await setImpersonationAffiliate(impersonationAffiliate);
+        if (!this.state.impersonationLoad) {
+          if (this.props.userState.impersonation) {
+            const impersonationAffiliate = this.state.impersonationAffiliateOrgId
+              ? this.props.userState.affiliateList.find(
+                (affiliate) => affiliate.affiliateOrgId === this.state.impersonationAffiliateOrgId,
+              )
+              : null;
+            this.setState({
+              impersonationOrgData: impersonationAffiliate,
+              impersonationAffiliateOrgId: this.state.impersonationAffiliateOrgId,
+            });
+          }
+
           window.location.reload();
-          if (this.props.userState.impersonation && !this.state.impersonationLoad && this.state.impersonationAffiliateOrgId) {
+          if (this.props.userState.impersonation !== nextProps.userState.impersonation) {
             history.push("/")
           }
         }
@@ -93,7 +102,6 @@ class DashboardLayout extends React.Component {
         if (this.state.logout) {
           localStorage.clear();
           history.push("/login");
-          // window.location.reload();
         } else if (!this.state.dataOnload) {
           this.props.getUserOrganisationAction();
           this.setState({
@@ -121,22 +129,6 @@ class DashboardLayout extends React.Component {
     this.props.getUreAction();
   }
 
-  getPresetOrganisation = () => {
-    const userOrganisationData = this.props.userState.getUserOrganisation;
-    const impersonationAffiliate = getImpersonationAffiliate();
-
-    if (!impersonationAffiliate) {
-      if (this.state.impersonationAffiliateOrgId) {
-        return userOrganisationData.find((org) => org.organisationUniqueKey === this.state.impersonationAffiliateOrgId);
-      }
-
-      return null;
-    }
-
-    return userOrganisationData
-      .find((org) => org.organisationUniqueKey === impersonationAffiliate.affiliateOrgId);
-  }
-
   setOrganisationKey = () => {
     let organisationData = getOrganisationData();
     if (!organisationData) {
@@ -149,26 +141,26 @@ class DashboardLayout extends React.Component {
   }
 
   endImpersonation = async () => {
-    const impersonationAffiliate = getImpersonationAffiliate();
-
-    if (impersonationAffiliate) {
+    if (this.state.impersonationOrgData) {
       this.props.impersonationAction({
-        orgId: impersonationAffiliate.affiliateOrgId,
+        orgId: this.state.impersonationOrgData.organisationUniqueKey,
         access: false,
       });
 
-      await setImpersonationAffiliate(null);
-      await setOrganisationData(null);
+      this.setState({
+        impersonationOrgData: null,
+        impersonationAffiliateOrgId: null,
+        impersonationLoad: true,
+      });
 
-      this.setState({ impersonationLoad: true, endImpersonation: true });
+      await setOrganisationData(null);
     }
   };
 
   logout = async () => {
-    const impersonationOrg = getImpersonationAffiliate();
-    if (impersonationOrg) {
+    if (this.state.impersonationOrgData) {
       this.props.impersonationAction({
-        orgId: impersonationOrg.affiliateOrgId,
+        orgId: this.state.impersonationOrgData.organisationUniqueKey,
         access: false,
       });
 
@@ -176,7 +168,6 @@ class DashboardLayout extends React.Component {
     } else {
       localStorage.clear();
       history.push("/login");
-      // window.location.reload();
     }
   };
 
@@ -428,7 +419,7 @@ class DashboardLayout extends React.Component {
                               </div>
                             </li>
 
-                            <li className={menuName === AppConstants.user ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'user') ? 'visible' : 'none' }}>
+                            <li className={menuName === AppConstants.user ? "active" : ""} style={{ display: showRoleLevelPermission(userRoleId, 'user') ? 'visible' : 'none' }}>
                               <div className="user-menu menu-wrap">
                                 <NavLink to="/userTextualDashboard">
                                   <span className="icon" />
@@ -436,7 +427,7 @@ class DashboardLayout extends React.Component {
                                 </NavLink>
                               </div>
                             </li>
-                            <li className={menuName === AppConstants.registration ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'registration') ? 'visible' : 'none' }}>
+                            <li className={menuName === AppConstants.registration ? "active" : ""} style={{ display: showRoleLevelPermission(userRoleId, 'registration') ? 'visible' : 'none' }}>
                               <div id={AppConstants.registration_icon} className="registration-menu menu-wrap">
                                 <NavLink to={"/registrationDashboard"}>
                                   <span id={AppConstants.registrations_label} className="icon" />
@@ -445,7 +436,7 @@ class DashboardLayout extends React.Component {
                               </div>
                             </li>
 
-                            <li className={menuName === AppConstants.competitions ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'competitions') ? 'visible' : 'none' }}>
+                            <li className={menuName === AppConstants.competitions ? "active" : ""} style={{ display: showRoleLevelPermission(userRoleId, 'competitions') ? 'visible' : 'none' }}>
                               <div id={AppConstants.competition_icon} className="competitions-menu menu-wrap">
                                 <NavLink to="/competitionDashboard">
                                   <span id={AppConstants.competitions_label} className="icon" />
@@ -454,7 +445,7 @@ class DashboardLayout extends React.Component {
                               </div>
                             </li>
 
-                            <li className={menuName === AppConstants.liveScores ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'liveScores') ? 'visible' : 'none' }}>
+                            <li className={menuName === AppConstants.liveScores ? "active" : ""} style={{ display: showRoleLevelPermission(userRoleId, 'liveScores') ? 'visible' : 'none' }}>
                               <div className="lives-cores menu-wrap" onClick={() => this.props.clearDataOnCompChangeAction()}>
                                 <NavLink to="/liveScoreCompetitions">
                                   <span className="icon" />
@@ -462,16 +453,16 @@ class DashboardLayout extends React.Component {
                                 </NavLink>
                               </div>
                             </li>
-                            <li className={menuName === AppConstants.Communication ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'events') ? 'visible' : 'none' }}>
+                            <li className={menuName === AppConstants.Communication ? "active" : ""} style={{ display: showRoleLevelPermission(userRoleId, 'events') ? 'visible' : 'none' }}>
                               <div className="events-menu menu-wrap">
-                                <a href="#">
+                                <NavLink to="/communication">
                                   <span className="icon" />
                                   {AppConstants.Communication}
-                                </a>
+                                </NavLink>
                               </div>
                             </li>
 
-                            <li className={menuName === AppConstants.shop ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'shop') ? 'visible' : 'none' }}>
+                            <li className={menuName === AppConstants.shop ? "active" : ""} style={{ display: showRoleLevelPermission(userRoleId, 'shop') ? 'visible' : 'none' }}>
                               <div className="shop-menu menu-wrap">
                                 <NavLink to="/orderSummary">
                                   <span className="icon" />
@@ -480,7 +471,7 @@ class DashboardLayout extends React.Component {
                               </div>
                             </li>
 
-                            <li className={menuName === AppConstants.umpires ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'umpires') ? 'visible' : 'none' }}>
+                            <li className={menuName === AppConstants.umpires ? "active" : ""} style={{ display: showRoleLevelPermission(userRoleId, 'umpires') ? 'visible' : 'none' }}>
                               <div className="umpires-menu menu-wrap">
                                 <NavLink to="/umpireDashboard">
                                   <span className="icon" />
@@ -489,7 +480,7 @@ class DashboardLayout extends React.Component {
                               </div>
                             </li>
 
-                            <li className={menuName === AppConstants.finance ? "active" : ""} style={{ display: showRoleLevelPermision(userRoleId, 'finance') ? 'visible' : 'none' }}>
+                            <li className={menuName === AppConstants.finance ? "active" : ""} style={{ display: showRoleLevelPermission(userRoleId, 'finance') ? 'visible' : 'none' }}>
                               <div className="finance-menu menu-wrap" onClick={() => this.props.clearDataOnCompChangeAction()}>
                                 <NavLink to="/paymentDashboard">
                                   <span className="icon" />
@@ -503,9 +494,11 @@ class DashboardLayout extends React.Component {
                     </li>
 
                     <li>
-                      {this.props.isManuNotVisible !== true && <div className="user-profile-box">
-                        {this.userProfileDropdown()}
-                      </div>}
+                      {this.props.isManuNotVisible !== true && (
+                          <div className="user-profile-box">
+                            {this.userProfileDropdown()}
+                          </div>
+                      )}
                     </li>
                   </ul>
                 </div>

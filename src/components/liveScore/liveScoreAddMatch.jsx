@@ -336,7 +336,7 @@ class LiveScoreAddMatch extends Component {
                 centered
             >
                 <div className="col-sm">
-                    <InputWithHead required="required-field" heading={AppConstants.whichTeamForfieted} />
+                    <InputWithHead required="required-field" heading={AppConstants.whichTeamForfeited} />
 
                     <Select
                         showSearch
@@ -1481,7 +1481,7 @@ class LiveScoreAddMatch extends Component {
                                             onClick={() => this.setState({ forfeitVisible: true })}
                                             type="cancel-button"
                                         >
-                                            {AppConstants.forfiet}
+                                            {AppConstants.forfeit}
                                         </Button>
                                     )}
                                     {this.state.isEdit && (

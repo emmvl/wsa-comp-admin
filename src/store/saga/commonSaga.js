@@ -601,7 +601,7 @@ function* RegistrationRestrictionTypeSaga() {
 
     if (result.status === 1) {
       yield put({
-        type: ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_SUCCESS,
+        type: ApiConstants.API_REGISTRATION_RESTRICTION_TYPE_SUCCESS,
         result: result.result.data,
         status: result.result.status
       });
@@ -800,7 +800,7 @@ export default function* rootCommonSaga() {
   yield takeEvery(ApiConstants.API_GET_INVITE_TYPE_LOAD, getSendInvitesSaga);
   yield takeEvery(ApiConstants.API_COURT_LIST_LOAD, courtListSaga);
   yield takeEvery(ApiConstants.API_ALLOW_TEAM_REGISTRATION_TYPE_LOAD, getAllowTeamRegistrationTypeSaga);
-  yield takeEvery(ApiConstants.API_REGISTRATION_RESTRICTIONTYPE_LOAD, RegistrationRestrictionTypeSaga);
+  yield takeEvery(ApiConstants.API_REGISTRATION_RESTRICTION_TYPE_LOAD, RegistrationRestrictionTypeSaga);
   yield takeEvery(ApiConstants.API_DISABILITY_REFERENCE_LOAD, disabilityReferenceSaga);
   yield takeEvery(ApiConstants.API_GET_COMMON_INIT_LOAD, getCommonInitSaga);
   yield takeEvery(ApiConstants.API_GET_STATE_REFERENCE_DATA_LOAD, getStateReferenceSaga);

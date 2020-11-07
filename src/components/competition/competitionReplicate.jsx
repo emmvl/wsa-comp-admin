@@ -169,7 +169,7 @@ class CompetitionReplicate extends Component {
             if (this.state.hasRegistration == 1) {
                 let checkDuplicate = this.checkDuplicateNewMembershipProduct(replicateSave);
                 if (checkDuplicate) {
-                    message.error(ValidationConstants.newMembershipDuplicteError);
+                    message.error(ValidationConstants.newMembershipDuplicateError);
                     return;
                 }
             }

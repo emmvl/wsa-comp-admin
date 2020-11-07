@@ -103,22 +103,17 @@ class CompetitionFinals extends Component {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let storedCompetitionId = getOwn_competition();
-                    let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined")? storedCompetitionId : competitionList[0].competitionId;
-                    let statusRefId = competitionList[0].statusRefId;
-                    let finalTypeRefId = competitionList[0].finalTypeRefId
+                    let storedCompetitionStatus = getOwn_competitionStatus();
+                    let storedFinalTypeRefId = getOwn_CompetitionFinalRefId()
+                    let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
+                    let statusRefId = (storedCompetitionStatus != undefined && storedCompetitionStatus !== "undefined") ? storedCompetitionStatus : competitionList[0].statusRefId;
+                    let finalTypeRefId = (storedFinalTypeRefId != undefined && storedFinalTypeRefId !== "undefined") ? storedFinalTypeRefId : competitionList[0].finalTypeRefId
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
                     this.apiCalls(competitionId, yearId);
-                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId })
-                }
-            }
-            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
-                if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
-                    this.setState({ yearRefId: yearRefId })
+                    this.setState({ getDataLoading: true, firstTimeCompId: competitionId, competitionStatus: statusRefId, yearRefId: JSON.parse(yearId) })
                 }
             }
         }
@@ -529,13 +524,12 @@ class CompetitionFinals extends Component {
         let appState = this.props.appState;
         let { applyToData, extraTimeDrawData, finalFixtureTemplateData } = this.props.commonReducerState;
         let disabledStatus = this.state.competitionStatus == 1
-        let detailsData = this.props.competitionFeesState
         return (
             <div>
                 {(finalsList != null && finalsList.length > 0) &&
                     <div className="compitition-finals-venue">
                         <InputWithHead required="required-field pb-0" heading={AppConstants.venue} />
-                        <Form.Item name='selectedVenues' rules={[{ required: true, message: ValidationConstants.pleaseSelectvenue }]}>
+                        <Form.Item name='selectedVenues' rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}>
                             <Select
                                 mode="multiple"
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -545,7 +539,7 @@ class CompetitionFinals extends Component {
                                 placeholder={AppConstants.selectVenue}
                                 filterOption={false}
                                 onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}
-                            // disabled={compDetailDisable}
+                                // disabled={compDetailDisable}
                             >
                                 {appState.venueList.map((item) => (
                                     <Option key={'venue_' + item.id} value={item.id}>{item.name}</Option>
@@ -570,8 +564,8 @@ class CompetitionFinals extends Component {
                                             ))}
                                         </div>
                                     ) : (
-                                            <span>{AppConstants.allDivisions}</span>
-                                        )}
+                                        <span>{AppConstants.allDivisions}</span>
+                                    )}
                                     <div className="row">
                                         <div className="col-sm-6">
                                             <InputWithHead heading={AppConstants.finalsStartDate} required="required-field" />
@@ -613,23 +607,23 @@ class CompetitionFinals extends Component {
                                             </Select>
                                         </Form.Item>
                                     ) : (
-                                            <Form.Item
-                                                name={`poolTopRefId${index}`}
-                                                rules={[{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]}
+                                        <Form.Item
+                                            name={`poolTopRefId${index}`}
+                                            rules={[{ required: true, message: ValidationConstants.finalFixtureTemplateRequired }]}
+                                        >
+                                            <Select
+                                                disabled={disabledStatus}
+                                                value={data.poolTopRefId}
+                                                onChange={(e) => this.onChangeSetValue(e, 'poolTopRefId', index)}
                                             >
-                                                <Select
-                                                    disabled={disabledStatus}
-                                                    value={data.poolTopRefId}
-                                                    onChange={(e) => this.onChangeSetValue(e, 'poolTopRefId', index)}
-                                                >
-                                                    {(this.getFinalFixtureTemplateData(data.hasTop4) || []).map((fix) => (
-                                                        <Option key={'poolTop_' + fix.id} value={fix.id}>
-                                                            {fix.description}
-                                                        </Option>
-                                                    ))}
-                                                </Select>
-                                            </Form.Item>
-                                        )}
+                                                {(this.getFinalFixtureTemplateData(data.hasTop4) || []).map((fix) => (
+                                                    <Option key={'poolTop_' + fix.id} value={fix.id}>
+                                                        {fix.description}
+                                                    </Option>
+                                                ))}
+                                            </Select>
+                                        </Form.Item>
+                                    )}
 
                                     {this.isShowPlayOff3rdPosition(data) && (
                                         <Checkbox
@@ -638,7 +632,7 @@ class CompetitionFinals extends Component {
                                             checked={data.playOff3rdposition == 1}
                                             onChange={e => this.onChangeSetValue(e.target.checked ? 1 : 0, "playOff3rdposition", index)}
                                         >
-                                            {AppConstants.playOff3rdposition}
+                                            {AppConstants.playOff3rdPosition}
                                         </Checkbox>
                                     )}
 
@@ -905,136 +899,142 @@ class CompetitionFinals extends Component {
                             {(applyToData || []).map((app) => (
                                 <Radio key={'applyTo_' + app.id} value={app.id}>{app.description}</Radio>
                             ))}
+                            <Radio key={'applyTo_' + "-1"} value={"-1"}>{AppConstants.none}</Radio>
                         </Radio.Group>
                     </Form.Item>
-
-                    <InputWithHead heading={AppConstants.extraTimeMatchType} required="required-field" />
-                    <Form.Item
-                        name={`extraTimeMatchTypeRefId${index}`}
-                        rules={[{ required: true, message: ValidationConstants.extraTimeMatchTypeRequired }]}
-                    >
-                        <Select
-                            disabled={disabledStatus}
-                            id={AppUniqueId.finals_extratimetype_dpdn}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            onChange={(matchType) => this.onChangeSetValue(matchType, 'extraTimeMatchTypeRefId', index)}
-                            value={data.extraTimeMatchTypeRefId}
-                        >
-                            {(appState.matchTypes || []).map((item) => (
-                                <Option key={'extraTimeMatchType_' + item.id} value={item.id}>
-                                    {item.description}
-                                </Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
-
-                    <div className="fluid-width">
-                        <div className="row">
-                            <div id={AppUniqueId.finals_extratime_duration} className="col-sm-3">
-                                <Form.Item
-                                    name={`extraTimeDuration${index}`}
-                                    rules={[{
-                                        required: true, pattern: new RegExp("^[1-9][0-9]*$"),
-                                        message: ValidationConstants.extraTimeDurationRequired
-                                    }]}
+                    {data.applyToRefId !== '-1' && (
+                        <>
+                            <InputWithHead heading={AppConstants.extraTimeMatchType} required="required-field" />
+                            <Form.Item
+                                name={`extraTimeMatchTypeRefId${index}`}
+                                rules={[{ required: true, message: ValidationConstants.extraTimeMatchTypeRequired }]}
+                            >
+                                <Select
+                                    disabled={disabledStatus}
+                                    id={AppUniqueId.finals_extratimetype_dpdn}
+                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                    onChange={(matchType) => this.onChangeSetValue(matchType, 'extraTimeMatchTypeRefId', index)}
+                                    value={data.extraTimeMatchTypeRefId}
                                 >
-                                    <InputWithHead
-                                        auto_complete='new-extraTimeDuration'
+                                    {(appState.matchTypes || []).map((item) => (
+                                        <Option key={'extraTimeMatchType_' + item.id} value={item.id}>
+                                            {item.description}
+                                        </Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+
+                            <div className="fluid-width">
+                                <div className="row">
+                                    <div id={AppUniqueId.finals_extratime_duration} className="col-sm-3">
+                                        <Form.Item
+                                            name={`extraTimeDuration${index}`}
+                                            rules={[{
+                                                required: true,
+                                                pattern: new RegExp("^[1-9][0-9]*$"),
+                                                message: ValidationConstants.extraTimeDurationRequired,
+                                            }]}
+                                        >
+                                            <InputWithHead
+                                                auto_complete="new-extraTimeDuration"
+                                                disabled={disabledStatus}
+                                                heading={AppConstants.extraTimeDuration}
+                                                required="required-field"
+                                                placeholder={AppConstants.mins}
+                                                value={data.extraTimeDuration}
+                                                onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDuration', index)}
+                                            />
+                                        </Form.Item>
+                                    </div>
+                                    {(data.extraTimeMatchTypeRefId == 2 || data.extraTimeMatchTypeRefId == 3) && (
+                                        <div id={AppUniqueId.finals_extratime_mainbreak} className="col-sm-3">
+                                            <Form.Item
+                                                name={`extraTimeMainBreak${index}`}
+                                                rules={[{ required: true, message: ValidationConstants.extraTimeMainBreakRequired }]}
+                                            >
+                                                <InputWithHead
+                                                    auto_complete="new-extraTimeMainBreak"
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.extraTimeMainBreak}
+                                                    required="required-field"
+                                                    placeholder={AppConstants.mins}
+                                                    value={data.extraTimeMainBreak}
+                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeMainBreak', index)}
+                                                />
+                                            </Form.Item>
+                                        </div>
+                                    )}
+                                    {data.extraTimeMatchTypeRefId == 3 && (
+                                        <div id={AppUniqueId.finals_extratime_break} className="col-sm-3">
+                                            <Form.Item
+                                                name={`extraTimeBreak${index}`}
+                                                rules={[{ required: true, message: ValidationConstants.extraTimeBreakRequired }]}
+                                            >
+                                                <InputWithHead
+                                                    auto_complete="new-extraTimeBreak"
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.extraTimeBreak}
+                                                    placeholder={AppConstants.mins}
+                                                    value={data.extraTimeBreak}
+                                                    required="required-field"
+                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeBreak', index)}
+                                                />
+                                            </Form.Item>
+                                        </div>
+                                    )}
+                                    {data.timeslotGenerationRefId != 2 && (
+                                        <div className="col-sm-3">
+                                            <Form.Item
+                                                name={`beforeExtraTime${index}`}
+                                                rules={[{ required: true, message: ValidationConstants.beforeExtraTimeRequired }]}
+                                            >
+                                                <InputWithHead
+                                                    auto_complete="new-beforeExtraTime"
+                                                    disabled={disabledStatus}
+                                                    heading={AppConstants.beforeExtraTime}
+                                                    placeholder={AppConstants.mins}
+                                                    value={data.beforeExtraTime}
+                                                    required="required-field"
+                                                    onChange={(e) => this.onChangeSetValue(e.target.value, 'beforeExtraTime', index)}
+                                                />
+                                            </Form.Item>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            <div className="mt-4">
+                                <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }}>
+                                    {AppConstants.extraTime}
+                                </span>
+                                <InputWithHead heading={AppConstants.extraTimeIfDraw2} required="required-field pt-0" />
+                                <Form.Item
+                                    name={`extraTimeDrawRefId${index}`}
+                                    rules={[{ required: true, message: ValidationConstants.extraTimeDrawRequired }]}
+                                >
+                                    <Radio.Group
                                         disabled={disabledStatus}
-                                        heading={AppConstants.extraTimeDuration}
-                                        required="required-field"
-                                        placeholder={AppConstants.mins}
-                                        value={data.extraTimeDuration}
-                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDuration', index)}
-                                    />
+                                        id={AppUniqueId.extratime_ifDraw_radiobtn}
+                                        className="reg-competition-radio"
+                                        onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
+                                        value={data.extraTimeDrawRefId}
+                                    >
+                                        {(extraTimeDrawData || []).map((ex) => (
+                                            <Radio key={'extraTimeDraw_' + ex.id} value={ex.id}>{ex.description}</Radio>
+                                        ))}
+                                        <Radio key="extraTimeDraw_-1" value="-1">{AppConstants.none}</Radio>
+                                    </Radio.Group>
                                 </Form.Item>
                             </div>
-                            {(data.extraTimeMatchTypeRefId == 2 || data.extraTimeMatchTypeRefId == 3) && (
-                                <div id={AppUniqueId.finals_extratime_mainbreak} className="col-sm-3">
-                                    <Form.Item
-                                        name={`extraTimeMainBreak${index}`}
-                                        rules={[{ required: true, message: ValidationConstants.extraTimeMainBreakRequired }]}
-                                    >
-                                        <InputWithHead
-                                            auto_complete="new-extraTimeMainBreak"
-                                            disabled={disabledStatus}
-                                            heading={AppConstants.extraTimeMainBreak}
-                                            required="required-field"
-                                            placeholder={AppConstants.mins}
-                                            value={data.extraTimeMainBreak}
-                                            onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeMainBreak', index)}
-                                        />
-                                    </Form.Item>
-                                </div>
-                            )}
-                            {data.extraTimeMatchTypeRefId == 3 && (
-                                <div id={AppUniqueId.finals_extratime_break} className="col-sm-3">
-                                    <Form.Item
-                                        name={`extraTimeBreak${index}`}
-                                        rules={[{ required: true, message: ValidationConstants.extraTimeBreakRequired }]}
-                                    >
-                                        <InputWithHead
-                                            auto_complete="new-extraTimeBreak"
-                                            disabled={disabledStatus}
-                                            heading={AppConstants.extraTimeBreak}
-                                            placeholder={AppConstants.mins}
-                                            value={data.extraTimeBreak}
-                                            required="required-field"
-                                            onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeBreak', index)}
-                                        />
-                                    </Form.Item>
-                                </div>
-                            )}
-                            {data.timeslotGenerationRefId != 2 && (
-                                <div className="col-sm-3">
-                                    <Form.Item
-                                        name={`beforeExtraTime${index}`}
-                                        rules={[{ required: true, message: ValidationConstants.beforeExtraTimeRequired }]}
-                                    >
-                                        <InputWithHead
-                                            auto_complete="new-beforeExtraTime"
-                                            disabled={disabledStatus}
-                                            heading={AppConstants.beaforeExtraTime}
-                                            placeholder={AppConstants.mins}
-                                            value={data.beforeExtraTime}
-                                            required="required-field"
-                                            onChange={(e) => this.onChangeSetValue(e.target.value, 'beforeExtraTime', index)}
-                                        />
-                                    </Form.Item>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="mt-4">
-                        <span className="input-heading" style={{ fontSize: 18, paddingBottom: 15 }}>
-                            {AppConstants.extraTime}
-                        </span>
-                        <InputWithHead heading={AppConstants.extraTimeIfDraw2} required="required-field pt-0" />
-                        <Form.Item
-                            name={`extraTimeDrawRefId${index}`}
-                            rules={[{ required: true, message: ValidationConstants.extraTimeDrawRequired }]}
-                        >
-                            <Radio.Group
-                                disabled={disabledStatus}
-                                id={AppUniqueId.extratime_ifDraw_radiobtn}
-                                className="reg-competition-radio"
-                                onChange={(e) => this.onChangeSetValue(e.target.value, 'extraTimeDrawRefId', index)}
-                                value={data.extraTimeDrawRefId}
-                            >
-                                {(extraTimeDrawData || []).map((ex) => (
-                                    <Radio key={'extraTimeDraw_' + ex.id} value={ex.id}>{ex.description}</Radio>
-                                ))}
-                            </Radio.Group>
-                        </Form.Item>
-                    </div>
+                        </>
+                    )}
                 </div>
                 {/* ))} */}
             </div>
-        )
+        );
     }
 
-    //////footer view containing all the buttons like submit and cancel
+    // footer view containing all the buttons like submit and cancel
     footerView = () => {
         let finalsList = this.props.competitionFinalsState.competitionFinalsList;
         let activeDrawsRoundsData = this.props.drawsState.activeDrawsRoundsData;

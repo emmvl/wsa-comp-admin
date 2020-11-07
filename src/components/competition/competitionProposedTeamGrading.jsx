@@ -465,14 +465,7 @@ class CompetitionProposedTeamGrading extends Component {
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
                     this.props.getDivisionsListAction(yearId, competitionId, this.state.sourceModule)
-                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId, compLoad: false })
-                }
-            }
-            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
-                if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
-                    this.setState({ yearRefId: yearRefId, })
+                    this.setState({ firstTimeCompId: competitionId, competitionStatus: statusRefId, finalTypeRefId: finalTypeRefId, compLoad: false, yearRefId: JSON.parse(yearId) })
                 }
             }
         }
@@ -722,7 +715,7 @@ class CompetitionProposedTeamGrading extends Component {
                             <Button className="primary-add-comp-form" type="primary"
                             // onClick={this.addNewGrade}
                             >
-                                + {AppConstants.addgrade}
+                                + {AppConstants.addGrade}
                             </Button>
                         </div> */}
                     </div>

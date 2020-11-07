@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-//product listing get API 
+//product listing get API
 function getProductListingAction(sorterBy, order, offset, filter, limit) {
     const action = {
         type: ApiConstants.API_GET_SHOP_PRODUCT_LISTING_LOAD,
@@ -10,7 +10,7 @@ function getProductListingAction(sorterBy, order, offset, filter, limit) {
 }
 
 
-////Add product 
+////Add product
 function addProductAction(payload) {
     const action = {
         type: ApiConstants.API_ADD_SHOP_PRODUCT_LOAD,
@@ -34,7 +34,7 @@ function onChangeProductDetails(data, key, index) {
 ////get reference type in the add product screen
 function getTypesOfProductAction() {
     const action = {
-        type: ApiConstants.API_GET_TYPES_LIST_IN_ADD_PROUCT_LOAD,
+        type: ApiConstants.API_GET_TYPES_LIST_IN_ADD_PRODUCT_LOAD,
     };
     return action;
 }
@@ -75,7 +75,7 @@ function deleteProductVariantAction(optionId, index, subIndex) {
     return action;
 }
 
-//product details on id API 
+//product details on id API
 function getProductDetailsByIdAction(productId) {
     const action = {
         type: ApiConstants.API_SHOP_GET_PRODUCT_DETAILS_BY_ID_LOAD,

@@ -218,10 +218,10 @@ function liveScoreNewsState(state = initialState, action) {
             }
 
 
-        case ApiConstants.API_LIVESCORE_DELETE_NEWS_LOAD:
+        case ApiConstants.API_LIVE_SCORE_DELETE_NEWS_LOAD:
             return { ...state, onLoad_2: true, notifyLoad: true }
 
-        case ApiConstants.API_LIVESCORE_DELETE_NEWS_SUCCESS:
+        case ApiConstants.API_LIVE_SCORE_DELETE_NEWS_SUCCESS:
             return {
                 ...state,
                 onLoad_2: false,

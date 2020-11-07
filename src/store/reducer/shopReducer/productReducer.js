@@ -201,10 +201,10 @@ function shopProductState(state = initialState, action) {
             };
 
         //////////get reference type in the add product screen
-        case ApiConstants.API_GET_TYPES_LIST_IN_ADD_PROUCT_LOAD:
+        case ApiConstants.API_GET_TYPES_LIST_IN_ADD_PRODUCT_LOAD:
             return { ...state, onLoad: true, error: null };
 
-        case ApiConstants.API_GET_TYPES_LIST_IN_ADD_PROUCT_SUCCESS:
+        case ApiConstants.API_GET_TYPES_LIST_IN_ADD_PRODUCT_SUCCESS:
             return {
                 ...state,
                 typesProductList: isArrayNotEmpty(action.result) ? action.result : [],

@@ -117,15 +117,9 @@ class CompetitionPartTeamGradeCalculate extends Component {
                     this.setState({
                         getDataLoading: true,
                         firstTimeCompId: competitionId,
-                        competitionStatus: statusRefId
+                        competitionStatus: statusRefId,
+                        yearRefId: JSON.parse(yearId)
                     })
-                }
-            }
-            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
-                if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
-                    this.setState({ yearRefId: yearRefId })
                 }
             }
         }
@@ -423,7 +417,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
                         </div>
                         {/* <div className="col-sm-5" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                             <Button className="primary-add-comp-form" type="primary" onClick={this.addNewGrade}>
-                                + {AppConstants.addgrade}
+                                + {AppConstants.addGrade}
                             </Button>
                         </div> */}
                     </div>

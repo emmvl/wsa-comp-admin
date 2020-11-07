@@ -19,6 +19,7 @@
 }
 
 .place-auto-complete-container .place-auto-complete-input-error-message {
+  margin-top: 8px;
   color: var(--app-red);
 }
 

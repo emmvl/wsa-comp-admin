@@ -126,7 +126,7 @@ function quickCompetitionPlayerImportAction(payload) {
 }
 function quickCompetitionAddVenue(payload) {
     const action = {
-        type: ApiConstants.API_QUICK_COMPETITION_ADDVENUE_LOAD,
+        type: ApiConstants.API_QUICK_COMPETITION_ADD_VENUE_LOAD,
         payload
     }
     return action

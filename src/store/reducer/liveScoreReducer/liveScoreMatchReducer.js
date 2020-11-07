@@ -297,7 +297,7 @@ function checkUmpireRole(roasterArray, key) {
     }
     return roasterkey
 }
-// Remove duplicate rounds names 
+// Remove duplicate rounds names
 function removeDuplicateValues(array) {
     return array.filter((obj, index, self) =>
         index === self.findIndex((el) => el["name"] === obj["name"]),
@@ -548,7 +548,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             state.highestSequence = action.result.sequence;
             return { ...state, roundLoad: false };
 
-        case ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_INITAITE:
+        case ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_INITIATE:
             return { ...state, onLoad: true };
 
         case ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_SUCCESS:
@@ -741,7 +741,7 @@ function liveScoreMatchReducer(state = initialState, action) {
         case ApiConstants.CHANGE_PLAYER_LINEUP_LOAD:
             return { ...state, onLoad: true };
 
-        case ApiConstants.API_CHNAGE_LINEUP_STATUS_SUCCESS:
+        case ApiConstants.API_CHANGE_LINEUP_STATUS_SUCCESS:
             if (action.key === "team1Players") {
                 state[action.key][action.index]["lineup"][0] = action.result[action.index];
             } else if (action.key === "team2Players") {
@@ -781,10 +781,10 @@ function liveScoreMatchReducer(state = initialState, action) {
             state.liveScoreMatchListData = state.liveScoreBulkScoreList
             return { ...state, onLoad: false };
 
-        case ApiConstants.API_ADD_LIVE_STREM_LOAD:
+        case ApiConstants.API_ADD_LIVE_STREAM_LOAD:
             return { ...state, onLoad: true };
 
-        case ApiConstants.API_ADD_LIVE_STREM_SUCCESS:
+        case ApiConstants.API_ADD_LIVE_STREAM_SUCCESS:
             state.matchDetails.match[0].livestreamURL = action.result.livestreamURL
             return { ...state, onLoad: false };
 

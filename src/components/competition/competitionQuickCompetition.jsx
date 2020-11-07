@@ -90,10 +90,11 @@ class CompetitionQuickCompetition extends Component {
             let selectedCompetition = this.props.quickCompetitionState.selectedCompetition
             if (nextProps.selectedCompetition != selectedCompetition) {
                 if (selectedCompetition.length > 0) {
+                    let yearId = this.state.yearRefId ? this.state.yearRefId : this.props.quickCompetitionState.yearId
                     this.props.updateCompetition("", "allData")
                     let competitionId = selectedCompetition;
                     this.props.getQuickCompetitionAction(competitionId)
-                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true });
+                    this.setState({ firstTimeCompId: competitionId, quickCompetitionLoad: true,yearRefId: this.state.yearRefId ? this.state.yearRefId : yearId  });
                 }
             }
         }
@@ -170,7 +171,7 @@ class CompetitionQuickCompetition extends Component {
                     message.config({
                         maxCount: 1, duration: 1
                     })
-                    message.warning(ValidationConstants.pleaseSelectvenue)
+                    message.warning(ValidationConstants.pleaseSelectVenue)
                 }
             } else {
                 message.config({
@@ -311,8 +312,8 @@ class CompetitionQuickCompetition extends Component {
 
     //close competition modal and call create competition
     closeCompModal = () => {
-        const { competitionName, competitionDate } = this.props.quickCompetitionState
-        this.props.createQuickCompetitionAction(this.state.yearRefId, competitionName, competitionDate)
+        const { competitionName, competitionDate,yearId } = this.props.quickCompetitionState
+        this.props.createQuickCompetitionAction(this.state.yearRefId ? this.state.yearRefId : yearId, competitionName, competitionDate)
         this.setState({
             compModalLoad: true,
             modalButtonPressed: "save"
@@ -322,8 +323,8 @@ class CompetitionQuickCompetition extends Component {
 
     //nextCompModal
     nextCompModal = () => {
-        const { competitionName, competitionDate } = this.props.quickCompetitionState
-        this.props.createQuickCompetitionAction(this.state.yearRefId, competitionName, competitionDate)
+        const { competitionName, competitionDate,yearId  } = this.props.quickCompetitionState
+        this.props.createQuickCompetitionAction(this.state.yearRefId ? this.state.yearRefId : yearId, competitionName, competitionDate)
         this.setState({
             compModalLoad: true,
             modalButtonPressed: "next"
@@ -612,7 +613,7 @@ class CompetitionQuickCompetition extends Component {
             <div className="comp-draw-content-view mt-0">
                 <div className="row comp-draw-list-top-head">
                     <div className="col-sm-3">
-                        {quickCompetitionData.competitionName &&
+                        {/* {quickCompetitionData.competitionName &&
                             <Form.Item
                                 name="competition_name"
                                 rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}
@@ -627,7 +628,7 @@ class CompetitionQuickCompetition extends Component {
                                     })}
                                 />
                             </Form.Item>
-                        }
+                        } */}
                     </div>
                     <div className="col-sm mt-2 quick-comp-btn-view button-space">
                         <Button className="open-reg-button save-draft-text" onClick={() => this.setState({ venueModalVisible: true })} type="primary">+ {AppConstants.addVenue}</Button>
@@ -642,7 +643,7 @@ class CompetitionQuickCompetition extends Component {
                         <InputWithHead required="required-field pb-0 pt-0" heading={AppConstants.venue} />
                         <Form.Item
                             name="selectedVenues"
-                            rules={[{ required: true, message: ValidationConstants.pleaseSelectvenue }]}
+                            rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}
                         >
                             <Select
                                 mode="multiple"

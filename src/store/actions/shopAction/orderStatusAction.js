@@ -1,6 +1,6 @@
 import ApiConstants from "../../../themes/apiConstants";
 
-///order status listing get API 
+///order status listing get API
 function getOrderStatusListingAction(params) {
     const action = {
         type: ApiConstants.API_GET_ORDER_STATUS_LISTING_LOAD,
@@ -9,7 +9,7 @@ function getOrderStatusListingAction(params) {
     return action;
 }
 
-///update order status API 
+///update order status API
 function updateOrderStatusAction(payload) {
     const action = {
         type: ApiConstants.API_UPDATE_ORDER_STATUS_LOAD,
@@ -18,7 +18,8 @@ function updateOrderStatusAction(payload) {
     return action;
 }
 
-///order details get API 
+
+///order details get API
 function getOrderDetailsAction(id) {
     const action = {
         type: ApiConstants.API_GET_ORDER_DETAILS_LOAD,
@@ -36,11 +37,36 @@ function clearOrderStatusReducer(dataName) {
     return action;
 }
 
+///purchases listing get API
+function getPurchasesListingAction(params) {
+    const action = {
+        type: ApiConstants.API_GET_PURCHASES_LISTING_LOAD,
+        params
+    };
+    return action;
+}
+
+function getReferenceOrderStatus(){
+    return{
+        type:ApiConstants.API_GET_REFERENCE_ORDER_STATUS_LOAD
+    }
+}
+
+function updateOrderFullfilmentStatus(key,value){
+    return {
+        type:ApiConstants.API_UPDATE_FULFILLMENT_STATUS,
+        key,value
+    }
+}
+
 export {
     getOrderStatusListingAction,
     updateOrderStatusAction,
     getOrderDetailsAction,
     clearOrderStatusReducer,
+    getPurchasesListingAction,
+    getReferenceOrderStatus,
+    updateOrderFullfilmentStatus
 }
 
 

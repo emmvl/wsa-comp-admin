@@ -147,17 +147,10 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         competitionStatus: statusRefId,
                         isQuickCompetition: quickComp != undefined,
                         finalTypeRefId: finalTypeRefId,
+                        yearRefId: JSON.parse(yearId)
                     });
                 }
             }
-            if (nextProps.appState.own_YearArr !== this.props.appState.own_YearArr) {
-                if (this.props.appState.own_YearArr.length > 0) {
-                    let yearRefId = getCurrentYear(this.props.appState.own_YearArr)
-                    setOwnCompetitionYear(yearRefId)
-                    this.setState({ yearRefId: yearRefId })
-                }
-            }
-
         }
 
         if (this.state.loading && this.props.appState.onLoad == false) {
@@ -1074,7 +1067,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 <InputWithHead heading={AppConstants.venue} required="required-field" />
                                 <Form.Item
                                     name={`mpVenueId${index}`}
-                                    rules={[{ required: true, message: ValidationConstant.pleaseSelectvenue }]}
+                                    rules={[{ required: true, message: ValidationConstant.pleaseSelectVenue }]}
                                 >
                                     <Select
                                         style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -1268,7 +1261,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         <InputWithHead heading={AppConstants.venue} required="required-field" />
                                         <Form.Item
                                             name={`ldVenueId${index}`}
-                                            rules={[{ required: true, message: ValidationConstant.pleaseSelectvenue }]}
+                                            rules={[{ required: true, message: ValidationConstant.pleaseSelectVenue }]}
                                         >
                                             <Select
                                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}

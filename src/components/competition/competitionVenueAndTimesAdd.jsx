@@ -12,7 +12,6 @@ import {
     TimePicker,
     message,
     Form,
-
 } from 'antd';
 import moment from 'moment';
 import CSVReader from 'react-csv-reader'
@@ -213,6 +212,9 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     removeTableObj(clear, record, index) {
         this.props.updateVenuAndTimeDataAction("", index, "remove")
+        setTimeout(() => {
+            this.setFormFieldValue();
+        }, 300);
     }
 
     overrideVenueSlotOnchange(e, index) {
@@ -232,9 +234,9 @@ class CompetitionVenueAndTimesAdd extends Component {
         if (screenNavigationKey === AppConstants.venues) {
             this.setState({ screenHeader: AppConstants.competitions });
         } else if (
-          (screenNavigationKey === AppConstants.competitionFees) ||
-          (screenNavigationKey === AppConstants.competitionDetails) ||
-          (screenNavigationKey === AppConstants.dashboard)
+            (screenNavigationKey === AppConstants.competitionFees) ||
+            (screenNavigationKey === AppConstants.competitionDetails) ||
+            (screenNavigationKey === AppConstants.dashboard)
         ) {
             this.setState({ screenHeader: AppConstants.registration });
         } else if (screenNavigationKey === AppConstants.venuesList) {
@@ -394,7 +396,7 @@ class CompetitionVenueAndTimesAdd extends Component {
         const address = data;
         this.props.checkVenueDuplication(address);
 
-        if (!address.addressOne && !address.suburb) {
+        if (!address || !address.addressOne || !address.suburb) {
             this.setState({
                 venueAddressError: ValidationConstants.venueAddressDetailsError,
             })
@@ -484,11 +486,6 @@ class CompetitionVenueAndTimesAdd extends Component {
                         heading={AppConstants.venueSearch}
                         required
                         error={this.state.venueAddressError}
-                        onBlur={() => {
-                            this.setState({
-                                venueAddressError: ''
-                            })
-                        }}
                         onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
@@ -726,7 +723,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     <TimePicker
                         className="comp-venue-time-timepicker"
                         style={{ width: "100%" }}
-                        onChange={(time) => this.onAddTimeChange(time, index, tableIndex,'startTime')}
+                        onChange={(time) => this.onAddTimeChange(time, index, tableIndex, 'startTime')}
                         onBlur={(e) => this.onAddTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, tableIndex, 'startTime')}
                         value={moment(item.startTime, "HH:mm")}
                         format="HH:mm"
@@ -741,7 +738,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                         style={{ width: "100%" }}
                         disabledHours={() => this.getDisabledHours(item.startTime)}
                         disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
-                        onChange={(time) => this.onAddTimeChange(time, index, tableIndex,'startTime')}
+                        onChange={(time) => this.onAddTimeChange(time, index, tableIndex, 'startTime')}
                         onBlur={(e) => this.onAddTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, tableIndex, 'endTime')}
                         value={moment(item.endTime, "HH:mm")}
                         format="HH:mm"
@@ -771,6 +768,13 @@ class CompetitionVenueAndTimesAdd extends Component {
                 </span>
             </div>
         )
+    }
+
+    addCourt = () => {
+        this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'venueCourts')
+        setTimeout(() => {
+            this.setFormFieldValue();
+        }, 300);
     }
 
     //////court day view
@@ -812,17 +816,21 @@ class CompetitionVenueAndTimesAdd extends Component {
                         <Table
                             className="fees-table"
                             columns={this.state.courtColumns}
-                            dataSource={venueCourts}
+                            dataSource={[...venueCourts]}
                             pagination={false}
                             Divider=" false"
-                            expandedRowKeys={this.props.venueTimeState.venuData.expandedRowKeys}
-                            expandedRowRender={(record, index) => this.expandedRowView(record, index)}
+                            expandedRowKeys={JSON.stringify(this.props.venueTimeState.venuData.expandedRowKeys)}
+                            // expandedRowRender={(record, index) => this.expandedRowView(record, index)}
+                            expandable={{
+                                expandedRowRender: (record, index) => this.expandedRowView(record, index),
+                                rowExpandable: (record) => record.overideSlot,
+                            }}
                             expandIconAsCell={false}
                             expandIconColumnIndex={-1}
                             loading={this.state.loading && true}
                         />
                     </div>
-                    <span style={{ cursor: 'pointer' }} onClick={() => this.props.updateVenuAndTimeDataAction(null, "addGameAndCourt", 'venueCourts')} className="input-heading-add-another">
+                    <span style={{ cursor: 'pointer' }} onClick={() => this.addCourt()} className="input-heading-add-another">
                         + {AppConstants.addCourt}
                     </span>
                 </div>
@@ -832,17 +840,15 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     onAddVenue = (e) => {
         let hasError = false;
-        let venueAddressError = false;
 
         if (this.props.commonReducerState.venueAddressDuplication) {
             message.error(ValidationConstants.duplicatedVenueAddressError);
             return;
         }
 
-        if (!this.state.venueAddress) {
-            this.setState({ venueAddressError: ValidationConstants.venueAddressRequiredError });
-            message.error(AppConstants.venueAddressSelect);
-            venueAddressError = true;
+        if (this.state.venueAddressError) {
+            message.error(this.state.venueAddressError);
+            return;
         }
 
         const { venuData } = this.props.venueTimeState
@@ -883,11 +889,6 @@ class CompetitionVenueAndTimesAdd extends Component {
 
             if (hasError) {
                 message.error(ValidationConstants.gameDayEndTimeValidation);
-                return;
-            }
-
-            if (venueAddressError) {
-                message.error(AppConstants.venueAddressSelect);
                 return;
             }
 

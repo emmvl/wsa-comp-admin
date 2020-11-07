@@ -4,6 +4,7 @@ import { message } from "antd";
 import AppConstants from "../../../themes/appConstants";
 import ApiConstants from "../../../themes/apiConstants";
 import AxiosApi from "../../http/shopHttp/shopAxios";
+import commonAxiosApi from "../../http/commonHttp/commonAxiosApi"
 
 function* failSaga(result) {
   yield put({
@@ -94,9 +95,48 @@ function* getOrderDetailsSaga(action) {
   }
 }
 
+// ////// ///purchases listing get API 
+function* getPurchasesListingSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getPurchasesListing, action.params);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_PURCHASES_LISTING_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
+
+// ////// ///purchases listing get API 
+function* getOrderStatusReferenceSaga(action) {
+  try {
+    const result = yield call(commonAxiosApi.getRefOrderStatus, action.keys);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_REFERENCE_ORDER_STATUS_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield call(failSaga, result)
+    }
+  } catch (error) {
+    yield call(errorSaga, error)
+  }
+}
 
 export default function* rootShopOrderStatusSaga() {
   yield takeEvery(ApiConstants.API_GET_ORDER_STATUS_LISTING_LOAD, getOrderStatusListingSaga);
   yield takeEvery(ApiConstants.API_UPDATE_ORDER_STATUS_LOAD, updateOrderStatusSaga);
   yield takeEvery(ApiConstants.API_GET_ORDER_DETAILS_LOAD, getOrderDetailsSaga);
+  yield takeEvery(ApiConstants.API_GET_PURCHASES_LISTING_LOAD, getPurchasesListingSaga);
+  yield takeEvery(ApiConstants.API_GET_REFERENCE_ORDER_STATUS_LOAD,getOrderStatusReferenceSaga)
 }

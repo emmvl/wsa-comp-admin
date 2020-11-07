@@ -59,7 +59,7 @@ function newsNotificationAction(data, value, screenKey) {
 // delete news data
 function liveScoreDeleteNewsAction(id) {
     const action = {
-        type: ApiConstants.API_LIVESCORE_DELETE_NEWS_LOAD,
+        type: ApiConstants.API_LIVE_SCORE_DELETE_NEWS_LOAD,
         id: id
     }
     return action

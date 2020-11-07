@@ -50,7 +50,7 @@ class LiveScoreAddTeam extends Component {
             selectedFile: null,
             profileImage: AppImages.circleImage,
             //add
-            competitionSelection: AppConstants.selectComptition,
+            competitionSelection: AppConstants.selectCompetition,
             divisionSelection: AppConstants.selectDivision,
             affiliateSelection: AppConstants.selectAffiliate,
             teamName: '',
@@ -350,7 +350,7 @@ class LiveScoreAddTeam extends Component {
                                 </Radio>
                                 <div style={{ marginLeft: -10 }}>
                                     <Tooltip background="#ff8237">
-                                        <span>{AppConstants.teamExsitingMsg}</span>
+                                        <span>{AppConstants.teamExistingMsg}</span>
                                     </Tooltip>
                                 </div>
                             </div>

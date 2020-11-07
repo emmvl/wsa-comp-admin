@@ -10,7 +10,7 @@ import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { isArrayNotEmpty } from "../../util/helpers";
 import { currencyFormat } from "../../util/currencyFormat";
-import { getOrderDetailsAction, clearOrderStatusReducer } from '../../store/actions/shopAction/orderStatusAction';
+import { getOrderDetailsAction, clearOrderStatusReducer, updateOrderStatusAction } from '../../store/actions/shopAction/orderStatusAction';
 import Loader from '../../customComponents/loader';
 import DashboardLayout from "../../pages/dashboardLayout";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
@@ -118,7 +118,7 @@ class OrderDetails extends Component {
                         <span className="form-heading">{AppConstants.shippingAndBillingAddress}</span>
                     </div>
                     <div className="col-sm d-flex justify-content-end">
-                        <Button className="open-reg-button" type="primary" style={{ height: 30, borderRadius: 5 }}>
+                        <Button className="primary-add-comp-form" type="primary">
                             {AppConstants.edit}
                         </Button>
                     </div>
@@ -161,6 +161,16 @@ class OrderDetails extends Component {
         );
     };
 
+    fulfilmentOnChange = (value) => {
+        let { orderDetails } = this.props.shopOrderStatusState
+        let payload = {
+            orderId: orderDetails.id,
+            action: value,
+            amount: orderDetails.orderGroup ? orderDetails.orderGroup.total : 0
+        }
+        // this.props.updateOrderStatusAction(payload)
+    }
+
     ////////order fulfilment view view
     fulfilmentView = () => {
         return (
@@ -168,7 +178,7 @@ class OrderDetails extends Component {
                 <span className="form-heading">{AppConstants.orderFulfilment}</span>
                 <Select
                     className="shop-type-select mt-2"
-                    onChange={(value) => console.log("value", value)}
+                    onChange={(value) => this.fulfilmentOnChange(value)}
                     placeholder="Select"
                 >
                     {orderFulfilmentData.map((item) => (
@@ -196,9 +206,9 @@ class OrderDetails extends Component {
                     </div>
                     <div className="col-sm">
                         <div className="comp-buttons-view">
-                            <Button className="open-reg-button" type="primary" htmlType="submit">
+                            {/* <Button className="open-reg-button" type="primary" htmlType="submit">
                                 {AppConstants.capturePayment}
-                            </Button>
+                            </Button> */}
                         </div>
                     </div>
                 </div>
@@ -221,7 +231,7 @@ class OrderDetails extends Component {
                             {this.headerView()}
                             <div className="formView">{this.contentView()}</div>
                             <div className="formView">{this.addressView()}</div>
-                            <div className="formView">{this.fulfilmentView()}</div>
+                            {/* <div className="formView">{this.fulfilmentView()}</div> */}
                         </Content>
 
                         <Loader visible={this.props.shopOrderStatusState.onLoad} />
@@ -238,6 +248,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOrderDetailsAction,
         clearOrderStatusReducer,
+        updateOrderStatusAction,
     }, dispatch)
 }
 
