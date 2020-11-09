@@ -967,6 +967,9 @@ a.view-more-btn.collapsed i.fa.fa-angle-up {
   max-height: 645px;
   height: fit-content;
 }
+.duplicate-slotView{
+    border: 1px dotted red;
+}
 
 @media (max-width: 1200px) {
   .table-responsive.table-competition {

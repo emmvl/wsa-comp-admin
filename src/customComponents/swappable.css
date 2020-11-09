@@ -13,6 +13,19 @@
     /* background-color: red; */
 }
 
+.duplicateDropzoneId{
+    display: flex;
+    width: 96px;
+    height: 46px;
+    justify-content: center !important;
+}
+
+.duplicateDragableId{
+    display: flex;
+    width: 96px;
+    height: 43px;
+}
+
 .draws-swappable-text {
     text-overflow: ellipsis;
     white-space: nowrap;

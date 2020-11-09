@@ -90,14 +90,14 @@ class Swappable extends Component {
           this.drop(event, dragableId, dropzoneId, customFunc, swappable)
         }
         onDragOver={event => this.allowDrop(event)}
-        className="dropzoneId"
+        className={`dropzoneId ${this.props.duplicateDropzoneId}`}
       >
         <div
           id={dragableId}
           draggable={swappable}
           onDragStart={event => this.drag(event)}
           onDragEnd={event => this.dragEnd(event, customFunc)}
-          className="dragableId"
+          className={`dragableId ${this.props.duplicateDragableId}`}
         >
           {this.props.children}
         </div>

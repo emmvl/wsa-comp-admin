@@ -133,7 +133,24 @@ function* getDrawsRoundsSaga(action) {
 function* updateCompetitionDraws(action) {
     try {
         const result = yield call(CompetitionAxiosApi.updateDraws, action.data);
+        console.log(action)
         if (result.status === 1) {
+            if(action.sourceDuplicate || action.targetDuplicate){
+                const getResult = yield call(CompetitionAxiosApi.getCompetitionDraws, action.apiData.yearRefId, action.apiData.competitionId, 0, action.apiData.roundId, action.apiData.orgId, action.apiData.startDate, action.apiData.endDate);
+                if (getResult.status === 1) {
+                    yield put({
+                        type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_SUCCESS,
+                        result: getResult.result.data,
+                        status: getResult.status,
+                        competitionId: action.apiData.competitionId,
+                        dateRangeCheck: action.dateRangeCheck
+                    });
+            }
+            else {
+                yield call(failSaga, getResult)
+            }
+        }
+            else{
             yield put({
                 type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_SUCCESS,
                 result: result.result.data,
@@ -143,6 +160,7 @@ function* updateCompetitionDraws(action) {
                 actionType: action.actionType,
                 drawData: action.drawData
             });
+        }
             message.success(result.result.data.message)
         } else {
             yield call(failSaga, result)

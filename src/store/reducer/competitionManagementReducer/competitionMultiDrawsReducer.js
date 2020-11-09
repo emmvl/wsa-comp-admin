@@ -262,6 +262,12 @@ function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, key) {
           teamId: drawsArray[i].awayTeamId,
         },
       ];
+      let checkDuplicate=getDrawsDuplicate(drawsArray,drawsArray[i])
+if(checkDuplicate ){
+  drawsArray[i]['duplicate'] = true
+}else{
+  drawsArray[i]['duplicate'] = false
+}
 
       return drawsArray[i];
     }
@@ -327,6 +333,15 @@ function getFixtureColor(team) {
     }
   }
   return color;
+}
+
+function getDrawsDuplicate(drawsArray,drawsObject){
+  for(let i in drawsArray){
+    if(drawsArray[i].drawsId!== drawsObject.drawsId && drawsArray[i].venueCourtId === drawsObject.venueCourtId &&
+      isDateSame(drawsArray[i].matchDate, drawsObject.matchDate)){
+     return true
+      }
+  }
 }
 
 function pushColorDivision(division, drawsResultData) {
@@ -892,12 +907,14 @@ function CompetitionMultiDraws(state = initialState, action) {
         let resultData;
         let singleCompetitionDivision
         if (action.competitionId == "-1" || action.dateRangeCheck) {
-          let allCompetiitonDraws = action.result;
+          let allCompetiitonDraws = action.result
+          
           resultData = allcompetitionDrawsData(allCompetiitonDraws)
           state.drawDivisions = resultData.data.legendsArray
         }
         else {
-          let drawsResultData = action.result;
+          let drawsResultData = action.result
+        
           resultData = roundstructureData(drawsResultData)
           singleCompetitionDivision = pushColorDivision(JSON.parse(JSON.stringify(state.maindivisionGradeNameList)), JSON.parse(JSON.stringify(resultData.roundsdata)))
         }
@@ -916,7 +933,8 @@ function CompetitionMultiDraws(state = initialState, action) {
           drawOrganisations: orgData,
           onLoad: false,
           error: null,
-          spinLoad: false
+          spinLoad: false,
+          updateLoad: false,
         };
       } catch (ex) {
         console.log("exception:", ex)

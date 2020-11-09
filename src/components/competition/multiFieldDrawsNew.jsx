@@ -517,7 +517,8 @@ class MultifieldDrawsNew extends Component {
                 sourceIndexArray,
                 targetIndexArray,
                 drawData,
-                round_Id
+                round_Id,
+                sourceObejct.duplicate, targetObject.duplicate
             );
         } else if (sourceObejct.drawsId == null && targetObject.drawsId == null) {
         } else {
@@ -553,7 +554,7 @@ class MultifieldDrawsNew extends Component {
         sourceIndexArray,
         targetIndexArray,
         drawsData,
-        round_Id
+        round_Id, sourceDuplicate, targetDuplicate
     ) => {
         let key = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add"
         let customSourceObject = {
@@ -577,13 +578,24 @@ class MultifieldDrawsNew extends Component {
         let postObject = {
             draws: [customSourceObject, customTargetObject],
         };
+        let apiData = {
+            yearRefId: this.state.yearRefId,
+            competitionId: this.state.firstTimeCompId,
+            venueId: 0,
+            roundId: this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : this.state.roundId,
+            orgId: null,
+            startDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.startDate : null,
+            endDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.endDate : null
+
+        }
 
         this.props.updateCompetitionDraws(
             postObject,
             sourceIndexArray,
             targetIndexArray,
             key,
-            round_Id
+            round_Id,
+            sourceDuplicate, targetDuplicate, apiData, this.state.filterDates
         );
 
         this.setState({ updateLoad: true });
@@ -1380,6 +1392,7 @@ class MultifieldDrawsNew extends Component {
     }
 
     draggableView = (dateItem) => {
+        console.log(dateItem)
         let disabledStatus = this.state.competitionStatus == 1
         var dateMargin = 25;
         var dayMargin = 25;
@@ -1457,24 +1470,28 @@ class MultifieldDrawsNew extends Component {
                                         leftMargin = 70;
                                     }
                                     return (
-                                        <div key={"slot" + slotIndex}>
+                                        <div key={"slot" + slotIndex} >
                                             <span
                                                 style={{ left: leftMargin, top: topMargin }}
-                                                className={'border'}
+                                                className={slotObject.duplicate ? 'borderDuplicate' : 'border'}
                                             />
                                             <div
-                                                className={'box purple-bg'}
+                                                className={slotObject.duplicate ? slotObject.colorCode == "#EA0628" ? 'box purple-bg boxPink' : 'box purple-bg boxDuplicate' : 'box purple-bg'}
                                                 style={{
                                                     backgroundColor: this.checkColor(slotObject),
                                                     left: leftMargin,
                                                     top: topMargin,
                                                     overflow: 'hidden',
                                                     whiteSpace: 'nowrap',
-                                                    cursor: disabledStatus && "no-drop"
+                                                    cursor: disabledStatus && "no-drop",
+
                                                 }}
                                             >
                                                 {this.state.firstTimeCompId == "-1" || this.state.filterDates ? (
                                                     <Swappable
+                                                        // duplicateDropzoneId={slotObject.duplicate && "duplicateDropzoneId"}
+                                                        // duplicateDragableId={slotObject.duplicate && "duplicateDragableId"}
+                                                        // duplicateDropzoneId={"boxDuplicate"}
                                                         id={
                                                             index.toString() +
                                                             ':' +
@@ -1505,6 +1522,8 @@ class MultifieldDrawsNew extends Component {
                                                     </Swappable>
                                                 ) : (
                                                         <Swappable
+                                                            duplicateDropzoneId={slotObject.duplicate && "duplicateDropzoneId"}
+                                                            duplicateDragableId={slotObject.duplicate && "duplicateDragableId"}
                                                             id={
                                                                 index.toString() +
                                                                 ':' +
