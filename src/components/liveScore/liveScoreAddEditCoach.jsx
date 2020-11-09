@@ -20,7 +20,7 @@ import {
     liveScoreCoachListAction,
     liveScoreClear
 } from '../../store/actions/LiveScoreAction/liveScoreCoachAction'
-import { liveScoreManagerSearch } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
+import { liveScoreManagerSearch, clearListAction } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 
 const { Footer, Content, Header } = Layout;
 const { Option } = Select;
@@ -35,6 +35,7 @@ class LiveScoreAddEditCoach extends Component {
             tableRecord: this.props.location.state ? this.props.location.state.tableRecord : null,
             isEdit: this.props.location.state ? this.props.location.state.isEdit : null,
             teamLoad: false,
+            exsitingValue: '',
         }
         this.formRef = createRef();
     }
@@ -301,7 +302,9 @@ class LiveScoreAddEditCoach extends Component {
     }
 
     coachExistingRadioButton() {
-        const { coachdata, teamId, teamResult, coachesResult, onLoadSearch } = this.props.liveScoreCoachState
+        const { coachdata, teamId, teamResult, coachesResult } = this.props.liveScoreCoachState
+        const { managerListResult, onLoadSearch } = this.props.liveScoreMangerState
+        let managerList = isArrayNotEmpty(managerListResult) ? managerListResult : []
         let teamData = isArrayNotEmpty(teamResult) ? teamResult : []
         let coachList = isArrayNotEmpty(coachesResult) ? coachesResult : []
         return (
@@ -321,22 +324,35 @@ class LiveScoreAddEditCoach extends Component {
                                 onSelect={(item, option) => {
                                     const ManagerId = option.key
                                     // this.props.liveScoreClear()
+                                    this.props.clearListAction()
                                     this.props.liveScoreUpdateCoach(ManagerId, 'coachSearch')
                                     this.setState({ teamLoad: true })
                                 }}
                                 notFoundContent={onLoadSearch ? <Spin size="small" /> : null}
                                 onSearch={(value) => {
+                                    this.setState({ exsitingValue: value })
                                     // value
                                     //     ? this.props.liveScoreManagerSearch(value, this.state.conpetitionId)
                                     //     : this.props.liveScoreCoachListAction(3, 1, this.state.conpetitionId)
-                                    this.props.liveScoreCoachListAction(3, 1, this.state.conpetitionId, value)
+                                    // this.props.liveScoreCoachListAction(3, 1, this.state.conpetitionId, value)
+                                    value && value.length > 2
+                                        ? this.props.liveScoreManagerSearch(value, this.state.conpetitionId)
+                                        : this.props.clearListAction()
                                 }}
                             >
-                                {coachList.map((item) => (
+                                {/* {coachList.map((item) => (
                                     <Option key={'coach_' + item.id} value={item.firstName + " " + item.lastName}>
                                         {item.firstName + " " + item.lastName}
                                     </Option>
-                                ))}
+                                ))} */}
+                                {
+                                    this.state.exsitingValue &&
+                                    managerList.map((item) => (
+                                        <Option key={'manager_' + item.id} value={item.firstName + " " + item.lastName}>
+                                            {item.NameWithNumber}
+                                        </Option>
+                                    ))
+                                }
                             </AutoComplete>
                         </Form.Item>
                     </div>
@@ -522,14 +538,16 @@ function mapDispatchToProps(dispatch) {
         liveScoreAddEditCoach,
         liveScoreCoachListAction,
         liveScoreManagerSearch,
-        liveScoreClear
+        liveScoreClear,
+        clearListAction
     }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
         liveScoreTeamState: state.LiveScoreTeamState,
-        liveScoreCoachState: state.LiveScoreCoachState
+        liveScoreCoachState: state.LiveScoreCoachState,
+        liveScoreMangerState: state.LiveScoreMangerState
     }
 }
 

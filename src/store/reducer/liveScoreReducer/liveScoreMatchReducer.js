@@ -248,14 +248,6 @@ function generateCourtsArray(venuesData) {
     return courtsArray;
 }
 
-// function getOrganisation(data) {
-//     let arr = [];
-//     for (let i in data) {
-//         arr.push(data[i].id);
-//     }
-//     return arr;
-// }
-
 function getHighestSequence(roundArr) {
     let sequence = [];
     for (let i in roundArr) {
@@ -263,18 +255,6 @@ function getHighestSequence(roundArr) {
     }
     return Math.max.apply(null, sequence);
 }
-
-// function createBulkScoreMatchArray(list) {
-//     let bulkScoreList = [];
-//     for (let i in list) {
-//         bulkScoreList.push({
-//             id: 1,
-//             team1Score: 1,
-//             team2Score: 3,
-//         });
-//     }
-//     return bulkScoreList;
-// }
 
 function checkUmpireType(umpireArray, key) {
 

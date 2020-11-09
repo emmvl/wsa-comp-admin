@@ -18,7 +18,8 @@ import {
     liveScoreManagerListAction,
     liveScoreClear,
     liveScoreManagerFilter,
-    liveScoreManagerSearch
+    liveScoreManagerSearch,
+    clearListAction
 } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../../util/helpers";
 
@@ -42,7 +43,8 @@ class LiveScoreAddManager extends Component {
             loader: false,
             showOption: false,
             competition_id: null,
-            teamLoad: false
+            teamLoad: false,
+            exsitingValue: ''
         }
         this.formRef = createRef();
     }
@@ -171,22 +173,30 @@ class LiveScoreAddManager extends Component {
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
                                     const ManagerId = option.key
-                                    this.props.liveScoreClear()
+                                    // this.props.liveScoreClear()
+                                    this.props.clearListAction()
                                     this.props.liveScoreUpdateManagerDataAction(ManagerId, 'managerSearch')
                                     this.setState({ teamLoad: true })
                                 }}
                                 notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
                                 onSearch={(value) => {
-                                    value
+                                    this.setState({ exsitingValue: value })
+                                    // value
+                                    //     ? this.props.liveScoreManagerSearch(value, this.state.competition_id)
+                                    //     : this.props.liveScoreManagerListAction(5, 1, this.state.competition_id)
+                                    value && value.length > 2
                                         ? this.props.liveScoreManagerSearch(value, this.state.competition_id)
-                                        : this.props.liveScoreManagerListAction(5, 1, this.state.competition_id)
+                                        : this.props.clearListAction()
                                 }}
                             >
-                                {managerList.map((item) => (
-                                    <Option key={'manager_' + item.id} value={item.firstName + " " + item.lastName}>
-                                        {item.NameWithNumber}
-                                    </Option>
-                                ))}
+                                {
+                                    this.state.exsitingValue &&
+                                    managerList.map((item) => (
+                                        <Option key={'manager_' + item.id} value={item.firstName + " " + item.lastName}>
+                                            {item.NameWithNumber}
+                                        </Option>
+                                    ))
+                                }
                             </AutoComplete>
                         </Form.Item>
                     </div>
@@ -501,7 +511,7 @@ class LiveScoreAddManager extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores}
-                                 onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <Loader visible={this.props.liveScoreMangerState.loading} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout>
@@ -537,7 +547,8 @@ function mapDispatchToProps(dispatch) {
         liveScoreClear,
         liveScoreManagerFilter,
         liveScoreManagerSearch,
-        getliveScoreTeams
+        getliveScoreTeams,
+        clearListAction
     }, dispatch)
 }
 

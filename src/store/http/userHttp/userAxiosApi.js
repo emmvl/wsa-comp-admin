@@ -422,6 +422,19 @@ let userHttpApi = {
 
     return Method.dataGet(url, localStorage.token);
   },
+  umpireSearch(data) {
+    console.log(data, 'umpireSearch')
+    let url = null
+    if (data.userName) {
+      url = `users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}`;
+
+    } else {
+
+      url = `users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}`;
+    }
+    return Method.dataGet(url, token);
+  }
+
 };
 
 let Method = {

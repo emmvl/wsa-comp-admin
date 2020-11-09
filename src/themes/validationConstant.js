@@ -171,7 +171,7 @@ const ValidationConstants = {
     SelectNumberTeam: 'Please add number of Teams',
     email_validation: 'Please enter valid email address!',
     matchDeleteMsg: 'This match cannot be deleted as it has already ended.',
-    userNotFound: 'Please select an existing user for this competition.',
+    userNotFound: 'No matching user was found.',
 
     incidentName: 'Incident name is required.',
     divisionAndTimeslot: 'Please select Division and Timeslot',

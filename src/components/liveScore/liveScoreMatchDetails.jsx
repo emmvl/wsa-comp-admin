@@ -34,6 +34,7 @@ import Loader from '../../customComponents/loader'
 import history from "../../util/history";
 import ValidationConstants from '../../themes/validationConstant';
 import InputWithHead from "../../customComponents/InputWithHead";
+import { showRoleLevelPermission, getUserRoleId } from 'util/permissions';
 
 import './liveScore.css';
 
@@ -211,7 +212,8 @@ class LiveScoreMatchDetails extends Component {
             minutesTrackingData: [],
             periodDuration: null,
             positionDuration: null,
-            playedCheckBox: false
+            playedCheckBox: false,
+            userRoleId: getUserRoleId()
         };
         this.umpireScore_View = this.umpireScore_View.bind(this);
         this.team_View = this.team_View.bind(this);
@@ -513,6 +515,7 @@ class LiveScoreMatchDetails extends Component {
                                     <Switch
                                         className="mr-3"
                                         onChange={(checked) => this.handleAttendanceView(checked)}
+                                        disabled={this.state.userRoleId === 11 ? true : false}
                                     />
                                     {AppConstants.attendance}
                                 </div>
@@ -537,7 +540,9 @@ class LiveScoreMatchDetails extends Component {
                                             screenName: this.state.screenName
                                         }
                                     }}>
-                                        <Button className="primary-add-comp-form" type="primary">
+                                        <Button
+                                            disabled={this.state.userRoleId === 11 ? true : false}
+                                            className="primary-add-comp-form" type="primary">
                                             + {AppConstants.addIncident}
                                         </Button>
                                     </NavLink>
@@ -558,6 +563,7 @@ class LiveScoreMatchDetails extends Component {
                                         onClick={() => this.showModal(match[0].livestreamURL)}
                                         className="primary-add-comp-form"
                                         type="primary"
+                                        disabled={this.state.userRoleId === 11 ? true : false}
                                     >
                                         + {AppConstants.addLiveStream}
                                     </Button>
@@ -584,7 +590,9 @@ class LiveScoreMatchDetails extends Component {
                                             screenName: this.state.screenName
                                         }
                                     }}>
-                                        <Button className="primary-add-comp-form" type="primary">
+                                        <Button
+                                            disabled={this.state.userRoleId === 11 ? true : false}
+                                            className="primary-add-comp-form" type="primary">
                                             + {AppConstants.edit}
                                         </Button>
                                     </NavLink>
@@ -616,7 +624,7 @@ class LiveScoreMatchDetails extends Component {
                                         <Button
                                             className={isMatchStatus ? "disable-button-style" : "primary-add-comp-form"}
                                             type="primary"
-                                            disabled={isMatchStatus}
+                                            disabled={(isMatchStatus || this.state.userRoleId === 11 ? true : false)}
                                             htmlType="submit"
                                             onClick={() => this.showDeleteConfirm(this.state.matchId)}
                                         >
@@ -718,9 +726,6 @@ class LiveScoreMatchDetails extends Component {
     };
 
     teamPlayersStatus = (data, team, teamId) => {
-        const competition = JSON.parse(getLiveScoreCompetiton());
-        const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
-        const { trackingList } = this.props.liveScorePlayerMinuteTrackingState
         return (
             <Table
                 className="home-dashboard-table attendance-table"
@@ -736,11 +741,26 @@ class LiveScoreMatchDetails extends Component {
     }
 
     setAttendanceValue = (playerId, period, field, key) => {
-        const competition = JSON.parse(getLiveScoreCompetiton());
+
+
+        let competition = null
+        if (this.state.umpireKey === 'umpire') {
+            if (getUmpireCompetitonData()) {
+                competition = JSON.parse(getUmpireCompetitonData());
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
+        } else {
+            if (getLiveScoreCompetiton()) {
+                competition = JSON.parse(getLiveScoreCompetiton());
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
+        }
+
         let { trackResultData } = this.props.liveScorePlayerMinuteTrackingState
         let gtt = (competition.gameTimeTracking || competition.gameTimeTracking == 1) ? true : false //// Game Time Tracking
         let attendance = trackResultData.find((att) => att.playerId === playerId && att.period === period);
-        // console.log(attendance, 'attendance')
         if (key === 'flow1') {
             if (field === "positionId") {
 
@@ -795,7 +815,20 @@ class LiveScoreMatchDetails extends Component {
     }
 
     getTeamPlayerStatusColumn = (data, team, teamId) => {
-        const competition = JSON.parse(getLiveScoreCompetiton());
+        let competition = null
+        if (this.state.umpireKey === 'umpire') {
+            if (getUmpireCompetitonData()) {
+                competition = JSON.parse(getUmpireCompetitonData());
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
+        } else {
+            if (getLiveScoreCompetiton()) {
+                competition = JSON.parse(getLiveScoreCompetiton());
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
+        }
         const match = this.props.liveScoreMatchState.matchDetails ? this.props.liveScoreMatchState.matchDetails.match[0] : [];
         const { noOfPosition, trackResultData } = this.props.liveScorePlayerMinuteTrackingState
 
@@ -813,7 +846,6 @@ class LiveScoreMatchDetails extends Component {
             positionDuration = periodDuration / noOfPosition
         }
 
-        console.log(match, 'noOfPosition', periodDuration)
         if (match.type === 'TWO_HALVES') {
             if (pt && gtt && art !== 'MINUTE') {
                 const columns = [
@@ -2466,7 +2498,6 @@ class LiveScoreMatchDetails extends Component {
         const team1PlayersData = team1Players.concat(this.state.borrowedTeam1Players);
         const team2PlayersData = team2Players.concat(this.state.borrowedTeam2Players);
         const length = match ? match.length : 0;
-        console.log(team1PlayersData, 'team1PlayersData')
 
         return (
             <div className="row mt-5 ml-0 mr-0 mb-5">
@@ -2807,7 +2838,20 @@ class LiveScoreMatchDetails extends Component {
     }
 
     onSavePlayerTrack(trackResultData) {
-        const competition = JSON.parse(getLiveScoreCompetiton());
+        let competition = null
+        if (this.state.umpireKey === 'umpire') {
+            if (getUmpireCompetitonData()) {
+                competition = JSON.parse(getUmpireCompetitonData());
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
+        } else {
+            if (getLiveScoreCompetiton()) {
+                competition = JSON.parse(getLiveScoreCompetiton());
+            } else {
+                history.push('/liveScoreCompetitions')
+            }
+        }
         let pt = (competition.positionTracking || competition.positionTracking == 1) ? true : false //// Position Tracking
         let gtt = (competition.gameTimeTracking || competition.gameTimeTracking == 1) ? true : false //// Game Time Tracking
         let art = competition.attendanceRecordingPeriod //// Attendance Recording Period

@@ -183,9 +183,11 @@ class AddUmpire extends Component {
     }
 
     umpireExistingRadioButton = () => {
-        const { umpireListResult, onLoadSearch, affilateList, onAffiliateLoad } = this.props.umpireState
+        const { umpireListResult, onLoadSearch, affilateList, onAffiliateLoad, umpireListData } = this.props.umpireState
         let umpireList = isArrayNotEmpty(umpireListResult) ? umpireListResult : []
         let affilateData = isArrayNotEmpty(affilateList) ? affilateList : []
+
+        console.log(umpireListResult, 'umpireListResult')
 
         return (
             <div className="content-view pt-4">
@@ -197,11 +199,11 @@ class AddUmpire extends Component {
                         />
                         <Form.Item name={AppConstants.team} rules={[{ required: true, message: ValidationConstants.umpireSearch }]}>
                             <AutoComplete
-                                loading
+                                // loading
                                 style={{ width: "100%", height: '44px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
-                                    const umpireId = JSON.parse(option.key)
+                                    const umpireId = option.key
                                     this.props.umpireClear()
                                     this.props.updateAddUmpireData(umpireId, 'umnpireSearch')
                                     this.setState({ affiliateLoader: true, isUserNotFound: false })
@@ -209,20 +211,29 @@ class AddUmpire extends Component {
                                 notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
                                 onSearch={(value) => {
                                     this.setState({ isUserNotFound: false, exsitingValue: value })
-                                    value
-                                        ? this.props.umpireSearchAction({ refRoleId: JSON.stringify([refRoleTypes('member')]), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value, offset: 0 })
-                                        : this.props.umpireListAction({ refRoleId: JSON.stringify([refRoleTypes('member')]), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, offset: 0 })
+                                    // value
+                                    //     ? this.props.umpireSearchAction({ refRoleId: JSON.stringify([refRoleTypes('member')]), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value, offset: 0 })
+                                    //     : this.props.umpireListAction({ refRoleId: JSON.stringify([refRoleTypes('member')]), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, offset: 0 })
+
+                                    value && value.length > 2
+                                        ? this.props.umpireSearchAction({ refRoleId: JSON.stringify(refRoleTypes('member')), entityTypes: entityTypes('COMPETITION'), compId: this.state.competition_id, userName: value })
+                                        : this.props.umpireClear()
+
                                 }}
                             >
-                                {umpireList.map((item) => (
-                                    <Option key={'umpire_' + item.id} value={item.firstName + " " + item.lastName}>
-                                        {item.firstName + " " + item.lastName}
-                                    </Option>
-                                ))}
+                                {
+                                    this.state.exsitingValue &&
+                                    umpireList.map((item) => (
+                                        <Option key={'umpire_' + item.id} value={item.firstName + " " + item.lastName}>
+                                            {item.firstName + " " + item.lastName}
+                                        </Option>
+                                    ))
+                                }
+
                             </AutoComplete>
                         </Form.Item>
                         <span style={{ color: 'red' }}>
-                            {(this.state.exsitingValue.length > 0 && (this.state.isUserNotFound || umpireList.length === 0)) && ValidationConstants.userNotFound}
+                            {(this.state.exsitingValue.length > 2 && (this.state.isUserNotFound || umpireListData.length === 0)) && ValidationConstants.userNotFound}
                         </span>
                     </div>
                 </div>

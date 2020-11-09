@@ -678,7 +678,7 @@ class LiveScoreCompetitions extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={columnsOwned}
-                        dataSource={ownedCompetitions}
+                        dataSource={[...ownedCompetitions]}
                         pagination={false}
                         loading={ownedLoad}
                         rowKey={(record, index) => "ownedCompetitions" + record.id + index}

@@ -100,7 +100,8 @@ export function* getAffiliateSaga(action) {
 
 export function* umpireSearchSaga(action) {
     try {
-        const result = yield call(UserAxiosApi.umpireList, action.data);
+        // const result = yield call(UserAxiosApi.umpireList, action.data);
+        const result = yield call(UserAxiosApi.umpireSearch, action.data);
         if (result.status === 1) {
 
             yield put({

@@ -35,7 +35,8 @@ const initialState = {
     umpireListResult_Data: [],
     currentPage_Data: null,
     totalCount_Data: null,
-    umpireListActionObject: null
+    umpireListActionObject: null,
+    umpireListData: []
 };
 
 function isUmpireCoachCheck(data, key) {
@@ -263,12 +264,16 @@ function umpireState(state = initialState, action) {
                 ...state,
                 onLoadSearch: false,
                 umpireListResult: action.result,
+                umpireListData: action.result,
                 status: action.status,
             }
         case ApiConstants.CLEAR_UMPIRE_SEARCH:
+            console.log("CLEAR_UMPIRE_SEARCH")
+            state.umpireListResult = []
             return {
                 ...state,
-                umpireListResult: state.umpireListResult
+                // umpireListResult: state.umpireListResult
+                // umpireListResult: []
             }
         //// Fail and Error case
         case ApiConstants.API_UMPIRE_FAIL:
