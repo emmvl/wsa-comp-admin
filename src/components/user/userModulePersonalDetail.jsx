@@ -43,7 +43,7 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 import StripeKeys from "../stripe/stripeKeys";
 import { getStripeLoginLinkAction } from "../../store/actions/stripeAction/stripeAction";
-import { getPurchasesListingAction } from '../../store/actions/shopAction/orderStatusAction';
+import { getPurchasesListingAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
 
 
 function tableSort(a, b, key) {
@@ -1139,6 +1139,11 @@ const purchaseActivityColumn = [
     key: 'paymentStatus',
     sorter: true,
     onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
+    render: (paymentStatus) => {
+      return (
+        <span>{this_Obj.getOrderStatus(paymentStatus, "ShopPaymentStatus")}</span>
+      )
+    }
   },
   {
     title: 'Payment Method',
@@ -1153,6 +1158,11 @@ const purchaseActivityColumn = [
     key: 'fulfilmentStatus',
     sorter: true,
     onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
+    render: (fulfilmentStatus) => {
+      return (
+        <span>{this_Obj.getOrderStatus(fulfilmentStatus, "ShopFulfilmentStatusArr")}</span>
+      )
+    }
   },
 ]
 
@@ -1191,6 +1201,7 @@ class UserModulePersonalDetail extends Component {
   }
 
   async componentDidMount() {
+    this.props.getReferenceOrderStatus()
     if (
       this.props.location.state != null &&
       this.props.location.state != undefined
@@ -1291,6 +1302,18 @@ class UserModulePersonalDetail extends Component {
     }
     return orgArray
 
+  }
+
+  //getOrderStatus
+  getOrderStatus = (value, state) => {
+    let statusValue = ''
+    let statusArr = this.props.shopOrderStatusState[state]
+    let getIndexValue = statusArr.findIndex((x) => x.id == value)
+    if (getIndexValue > -1) {
+      statusValue = statusArr[getIndexValue].description
+      return statusValue
+    }
+    return statusValue
   }
 
   onChangeYear = (value) => {
@@ -2788,6 +2811,7 @@ function mapDispatchToProps(dispatch) {
       getStripeLoginLinkAction,
       getUmpireActivityListAction,
       getPurchasesListingAction,
+      getReferenceOrderStatus,
     },
     dispatch
   );

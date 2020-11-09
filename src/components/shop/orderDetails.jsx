@@ -135,12 +135,12 @@ class OrderDetails extends Component {
                         <span className="order-details-desc-text">{orderDetails.address}</span>
                         <span className="order-details-desc-text">{orderDetails.suburb + " " + orderDetails.postcode}</span>
                         <span className="order-details-desc-text">{orderDetails.state}</span>
-                        <div className="live-score-title-icon-view">
+                        {/* <div className="live-score-title-icon-view">
                             <div className="order-details-desc-text">
                                 <span>{AppConstants.receiptUrl + ":"}</span>
                             </div>
                             <span className="order-details-desc-text ml-3">{"www.receipt.com"}</span>
-                        </div>
+                        </div> */}
                     </div>
                     <div className="col-sm">
                         <div className="live-score-title-icon-view">
