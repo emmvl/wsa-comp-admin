@@ -2132,14 +2132,14 @@ const playerCasualTableTeamAssociation = [
     },
     {
         title: 'Membership Fees (excl. GST)',
-        dataIndex: 'membershipCasual',
-        key: 'membershipCasual',
-        render: (membershipCasual) => (
+        dataIndex: 'membershipSeasonal',
+        key: 'membershipSeasonal',
+        render: (membershipSeasonal) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={membershipCasual}
+                value={membershipSeasonal}
             />
         ),
     },
@@ -2340,14 +2340,14 @@ const playerCasualTableTeamClub = [
     },
     {
         title: 'Membership Fees (excl. GST)',
-        dataIndex: 'membershipCasual',
-        key: 'membershipCasual',
-        render: (membershipCasual) => (
+        dataIndex: 'membershipSeasonal',
+        key: 'membershipSeasonal',
+        render: (membershipSeasonal) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={membershipCasual}
+                value={membershipSeasonal}
             />
         ),
     },
@@ -2549,14 +2549,14 @@ const playerCasualTeamTable = [
     },
     {
         title: 'Membership Fees (excl. GST)',
-        dataIndex: 'membershipCasual',
-        key: 'membershipCasual',
-        render: (membershipCasual) => (
+        dataIndex: 'membershipSeasonal',
+        key: 'membershipSeasonal',
+        render: (membershipSeasonal) => (
             <Input
                 prefix="$"
                 className="input-inside-table-fees"
                 disabled
-                value={membershipCasual}
+                value={membershipSeasonal}
             />
         ),
     },
@@ -3512,17 +3512,20 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[k].gst;
                                     feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[k].affiliateFee;
                                     feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[k].affiliateGst;
-                                    feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
-                                    feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[k].affNominationGST;
+                                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                        feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
+                                        feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
+                                        feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
+                                        feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[k].affNominationGST;
+                                    }
+                                    
                                     break;
                                 }
                             }
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual) {
+                   /* if (fee_data[i].isTeamCasual) {
                         feeCasualTeamData = fee_data[i].casualTeam.allType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeCasualTeamData) {
@@ -3538,7 +3541,7 @@ class RegistrationCompetitionFee extends Component {
                                 }
                             }
                         }
-                    }
+                    } */
 
                     finalPostData = [...feeSeasonalData];
                 } else {
@@ -3582,17 +3585,19 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j]?.gst;
                                     feeSeasonalData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j]?.affiliateFee;
                                     feeSeasonalData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j]?.affiliateGst;
-                                    feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.nominationFees;
-                                    feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.nominationGST;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.affNominationFees;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.affNominationGST;
+                                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                        feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.nominationFees;
+                                        feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.nominationGST;
+                                        feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j]?.affNominationFees;
+                                        feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j]?.affNominationGST;
+                                    }
                                     break;
                                 }
                             }
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual) {
+                   /* if (fee_data[i].isTeamCasual) {
                         feeCasualTeamData = fee_data[i].casualTeam.perType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeCasualTeamData) {
@@ -3609,7 +3614,7 @@ class RegistrationCompetitionFee extends Component {
                                 }
                             }
                         }
-                    }
+                    } */
 
                     finalPostData = [...feeSeasonalData];
                 }
@@ -3637,10 +3642,12 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
                                     feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
                                     feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
-                                    feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
-                                    feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[k].affNominationGST;
+                                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                        feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
+                                        feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
+                                        feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
+                                        feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[k].affNominationGST;
+                                    }
 
                                     break;
                                 }
@@ -3648,7 +3655,7 @@ class RegistrationCompetitionFee extends Component {
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual == true) {
+                    /*if (fee_data[i].isTeamCasual == true) {
                         feeCasualTeamData = fee_data[i].casualTeam.allType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeCasualTeamData) {
@@ -3665,7 +3672,7 @@ class RegistrationCompetitionFee extends Component {
                                 }
                             }
                         }
-                    }
+                    } */
 
                     if (fee_data[i].isTeamSeasonal == false) {
                         finalPostData = [...feeSeasonalData];
@@ -3705,17 +3712,19 @@ class RegistrationCompetitionFee extends Component {
                                     feeSeasonalData[j]['nominationSeasonalGST'] = feeSeasonalData[j].nominationGST;
                                     feeSeasonalData[j]['affNominationSeasonalFee'] = feeSeasonalData[j].affNominationFees;
                                     feeSeasonalData[j]['affNominationSeasonalGST'] = feeSeasonalData[j].affNominationGST;
-                                    feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
-                                    feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
-                                    feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
+                                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                        feeSeasonalData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
+                                        feeSeasonalData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
+                                        feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
+                                        feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
+                                    }
                                     break;
                                 }
                             }
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual) {
+                    /*if (fee_data[i].isTeamCasual) {
                         feeCasualTeamData = fee_data[i].casualTeam.perType;
                         for (let j in feeSeasonalData) {
                             for (let k in feeCasualTeamData) {
@@ -3732,7 +3741,7 @@ class RegistrationCompetitionFee extends Component {
                                 }
                             }
                         }
-                    }
+                    } */
 
                     if (fee_data[i].isTeamSeasonal == false) {
                         finalPostData = [...feeSeasonalData];
@@ -3770,17 +3779,20 @@ class RegistrationCompetitionFee extends Component {
                                     feeCasualData[j]['teamSeasonalGST'] = feeSeasonalTeamData[k].gst;
                                     feeCasualData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[k].affiliateFee;
                                     feeCasualData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[k].affiliateGst;
-                                    feeCasualData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
-                                    feeCasualData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
-                                    feeCasualData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
-                                    feeCasualData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[k].affNominationGST;
+                                    if(fee_data[i].teamRegChargeTypeRefId != 3)
+                                    {
+                                        feeCasualData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[k].nominationFees;
+                                        feeCasualData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[k].nominationGST;
+                                        feeCasualData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
+                                        feeCasualData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[k].affNominationGST;
+                                    }
                                     break;
                                 }
                             }
                         }
                     }
 
-                    if (fee_data[i].isTeamCasual) {
+                   /* if (fee_data[i].isTeamCasual) {
                         feeCasualTeamData = fee_data[i].casualTeam.allType;
                         for (let j in feeCasualData) {
                             for (let k in feeCasualTeamData) {
@@ -3797,7 +3809,7 @@ class RegistrationCompetitionFee extends Component {
                             }
                         }
                     }
-
+                    */
                     if (fee_data[i].isTeamSeasonal == false) {
                         finalPostData = [...feeCasualData];
                         finalPostData.map((item) => {
@@ -3828,10 +3840,12 @@ class RegistrationCompetitionFee extends Component {
                                     feeCasualData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
                                     feeCasualData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
                                     feeCasualData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
-                                    feeCasualData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
-                                    feeCasualData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
-                                    feeCasualData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
-                                    feeCasualData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
+                                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                        feeCasualData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
+                                        feeCasualData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
+                                        feeCasualData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
+                                        feeCasualData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
+                                    }
                                     break;
                                 }
                             }
@@ -3885,10 +3899,12 @@ class RegistrationCompetitionFee extends Component {
                     item['teamSeasonalGST'] = item.gst;
                     item['affiliateTeamSeasonalFees'] = item.affiliateFee;
                     item['affiliateTeamSeasonalGST'] = item.affiliateGst;
-                    item['nominationTeamSeasonalFee'] = item.nominationFees;
-                    item['nominationTeamSeasonalGST'] = item.nominationGST;
-                    item['affNominationTeamSeasonalFee'] = item.affNominationFees;
-                    item['affNominationTeamSeasonalGST'] = item.affNominationGST;
+                    if(fee_data[i].teamRegChargeTypeRefId != 3){
+                        item['nominationTeamSeasonalFee'] = item.nominationFees;
+                        item['nominationTeamSeasonalGST'] = item.nominationGST;
+                        item['affNominationTeamSeasonalFee'] = item.affNominationFees;
+                        item['affNominationTeamSeasonalGST'] = item.affNominationGST;
+                    }
                 });
             } else if (
                 fee_data[i].isSeasonal == false &&
@@ -3930,10 +3946,12 @@ class RegistrationCompetitionFee extends Component {
                                 feeSeasonalTeamData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
-                                feeSeasonalTeamData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
-                                feeSeasonalTeamData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
-                                feeSeasonalTeamData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
-                                feeSeasonalTeamData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
+                                if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                    feeSeasonalTeamData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
+                                    feeSeasonalTeamData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
+                                    feeSeasonalTeamData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
+                                    feeSeasonalTeamData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
+                                }
                                 break;
                             }
                         }
@@ -3955,10 +3973,12 @@ class RegistrationCompetitionFee extends Component {
                                 feeSeasonalTeamData[j]['teamSeasonalGST'] = feeSeasonalTeamData[j].gst;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalFees'] = feeSeasonalTeamData[j].affiliateFee;
                                 feeSeasonalTeamData[j]['affiliateTeamSeasonalGST'] = feeSeasonalTeamData[j].affiliateGst;
-                                feeSeasonalTeamData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
-                                feeSeasonalTeamData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
-                                feeSeasonalTeamData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
-                                feeSeasonalTeamData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
+                                if(fee_data[i].teamRegChargeTypeRefId != 3){
+                                    feeSeasonalTeamData[j]['nominationTeamSeasonalFee'] = feeSeasonalTeamData[j].nominationFees;
+                                    feeSeasonalTeamData[j]['nominationTeamSeasonalGST'] = feeSeasonalTeamData[j].nominationGST;
+                                    feeSeasonalTeamData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[j].affNominationFees;
+                                    feeSeasonalTeamData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[j].affNominationGST;
+                                }
                                 break;
                             }
                         }
@@ -5513,7 +5533,7 @@ class RegistrationCompetitionFee extends Component {
                                         )
                                     }
                                 >
-                                    {AppConstants.casualFee}
+                                    {AppConstants.singleGameFee}
                                 </Checkbox>
                             </div>
 
@@ -5537,7 +5557,7 @@ class RegistrationCompetitionFee extends Component {
                                 : item.seasonalTeam.allType
                             ).length > 0 && (
                                     <div style={{ marginTop: 25 }}>
-                                        <div style={{ marginTop: 15 }}>
+                                        {/* <div style={{ marginTop: 15 }}>
                                             <Checkbox
                                                 checked={item.isTeamReg}
                                                 className="single-checkbox"
@@ -5553,8 +5573,8 @@ class RegistrationCompetitionFee extends Component {
                                             >
                                                 {AppConstants.teamRegistration}
                                             </Checkbox>
-                                        </div>
-                                        <div style={{ marginTop: 5 }}>
+                                        </div> */}
+                                        <div>
                                             <Checkbox
                                                 checked={item.isTeamSeasonal}
                                                 className="single-checkbox"
@@ -5568,7 +5588,7 @@ class RegistrationCompetitionFee extends Component {
                                                     );
                                                 }}
                                             >
-                                                {AppConstants.teamSeasonalFee}
+                                                {AppConstants.teamRegistration}
                                             </Checkbox>
                                         </div>
                                         {item.isTeamSeasonal == 1 && (
@@ -5587,8 +5607,8 @@ class RegistrationCompetitionFee extends Component {
                                                 >
                                                     <div className="fluid-width">
                                                         <div className="row">
-                                                            <div className="col-sm-3">
-                                                                <div className="contextualHelp-RowDirection">
+                                                            <div className="col-sm-4">
+                                                                <div className="contextualHelp-RowDirection" style={{'flexDirection': 'column'}}>
                                                                     <Radio value={1}>
                                                                         {AppConstants.chargedForFullSeason}
                                                                     </Radio>
@@ -5598,13 +5618,47 @@ class RegistrationCompetitionFee extends Component {
                                                                 className="col-sm-2"
                                                                 style={{ display: 'flex', alignItems: 'center' }}
                                                             >
-                                                                <div className="contextualHelp-RowDirection">
-                                                                    <Radio value={2}>
+                                                                <div className="contextualHelp-RowDirection" style={{'flexDirection': 'column'}}>
+                                                                    <Radio value={item.teamRegChargeTypeRefId == 3 ? 3 : 2 }>
                                                                         {AppConstants.chargedPerMatch}
                                                                     </Radio>
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        <div className="row">
+                                                            <div
+                                                                className="col-sm-4"
+                                                                style={{ display: 'flex', alignItems: 'center' }}
+                                                            ></div>
+                                                            <div
+                                                                className="col-sm-8"
+                                                                style={{ display: 'flex', alignItems: 'center', paddingLeft: '40px' }}
+                                                            >
+                                                            {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) &&
+                                                                    <div className="row">
+                                                                        <div className="col-sm">
+                                                                            <div className="contextualHelp-RowDirection">
+                                                                                <Radio value={2}>
+                                                                                    {AppConstants.feesPaidAtEachMatchByUser}
+                                                                                </Radio>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div
+                                                                            className="col-sm"
+                                                                            style={{ display: 'flex', alignItems: 'center' }}
+                                                                        >
+                                                                            <div className="contextualHelp-RowDirection">
+                                                                                <Radio value={3}>
+                                                                                    {AppConstants.feesPaidAtEachMatchByPlayer}
+                                                                                </Radio>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div> 
+                                                                    }
+                                                                    </div>
+                                                        </div>
+                                                        
                                                     </div>
                                                 </Radio.Group>
                                             </div>
@@ -5613,7 +5667,7 @@ class RegistrationCompetitionFee extends Component {
                                             <div className="table-responsive mt-2">
                                                 <Table
                                                     className="fees-table"
-                                                    columns={this.seasonalFeesTeamOnOrgTLevel()}
+                                                    columns={item.teamRegChargeTypeRefId == 3 ? this.casualFeesTeamOnOrgTLevel() : this.seasonalFeesTeamOnOrgTLevel()   }
                                                     dataSource={
                                                         item.isAllType != 'allDivisions'
                                                             ? item.seasonalTeam.perType
@@ -5625,7 +5679,7 @@ class RegistrationCompetitionFee extends Component {
                                             </div>
                                         )}
 
-                                        <div style={{ marginTop: 10 }}>
+                                        {/* <div style={{ marginTop: 10 }}>
                                             <Checkbox
                                                 checked={item.isTeamCasual}
                                                 className="single-checkbox"
@@ -5655,7 +5709,7 @@ class RegistrationCompetitionFee extends Component {
                                                     Divider="false"
                                                 />
                                             </div>
-                                        )}
+                                        )} */}
                                     </div>
                                 )}
                         </div>
@@ -6163,7 +6217,7 @@ class RegistrationCompetitionFee extends Component {
     checkIsTeamCasual = (feeDetails) => {
         let isCasualValue = false;
         for (let i in feeDetails) {
-            if (feeDetails[i].isTeamCasual) {
+            if (feeDetails[i].teamRegChargeTypeRefId == 3) {
                 isCasualValue = true;
                 break;
             }
