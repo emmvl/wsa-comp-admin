@@ -542,6 +542,11 @@ let AxiosApi = {
         var url = `/api/registration/transaction/update`;
         return Method.dataPost(url, token, payload);
     },
+    umpirePaymentTransfer(data) {
+        let postData = data.postData
+        var url = `/api/payments/umpireTransfer`;
+        return Method.dataPost(url, token, postData);
+    }
 };
 
 const Method = {

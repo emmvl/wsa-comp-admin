@@ -107,7 +107,7 @@ const columns = [
             return (
                 <NavLink to={{
                     pathname: '/liveScoreMatchDetails',
-                    state: { matchId: matchId, umpireKey: 'umpire' }
+                    state: { matchId: matchId, umpireKey: 'umpire', screenName: "umpireRoster" }
                 }}>
                     <span className="input-heading-add-another pt-0">{matchId}</span>
                 </NavLink>

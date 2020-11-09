@@ -14,7 +14,15 @@ function updateUmpirePaymentData(data) {
     };
 }
 
+function umpirePaymentTransferData(data) {
+    return {
+        type: ApiConstants.API_UMPIRE_PAYMENT_TRANSFER_DATA_LOAD,
+        data,
+    };
+}
+
 export {
     getUmpirePaymentData,
-    updateUmpirePaymentData
+    updateUmpirePaymentData,
+    umpirePaymentTransferData
 }
