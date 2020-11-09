@@ -52,7 +52,7 @@ import {
     getOrganisationData,
     getOwn_competitionStatus,
     setOwn_competitionStatus,
-    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId
+    getOwn_CompetitionFinalRefId, setOwn_CompetitionFinalRefId, setLiveScoreUmpireCompition, setLiveScoreUmpireCompitionData
 } from '../../util/sessionStorage';
 import ValidationConstants from '../../themes/validationConstant';
 import './draws.scss';
@@ -1766,6 +1766,23 @@ class MultifieldDrawsNew extends Component {
         }
         else {
             this.setState({ drawGenerateModalVisible: false });
+        }
+    }
+
+    handlePublishModal = (key) => {
+        try{
+            if(key == "ok"){
+                let competitiondata = this.props.drawsState.liveScoreCompetiton
+                localStorage.setItem("LiveScoreCompetition", JSON.stringify(competitiondata))
+                localStorage.removeItem('stateWideMessage')
+                setLiveScoreUmpireCompition(competitiondata.id)
+                setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
+                history.push('/liveScoreLadderList')
+            }else{
+                this.setState({publishModalVisible: false})
+            }
+        }catch(ex){
+            console.log("Error in handlePublishModal::"+ex)
         }
     }
 
