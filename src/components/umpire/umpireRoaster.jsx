@@ -676,7 +676,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStatetoProps(state) {
     return {
-        umpireRoasterdState: state.UmpireRoasterdState,
+        umpireRoasterdState: state.UmpireRoasterState,
         umpireCompetitionState: state.UmpireCompetitionState
     }
 }
