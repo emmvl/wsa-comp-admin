@@ -11,23 +11,25 @@ function getAssignUmpireListAction(competitionId, body) {
 }
 
 //////////assign umpire to a match
-function assignUmpireAction(payload, index, umpireKey) {
+function assignUmpireAction(payload, index, umpireKey, rosterLocked) {
     const action = {
         type: ApiConstants.API_ASSIGN_UMPIRE_FROM_LIST_LOAD,
         payload,
         index,
-        umpireKey
+        umpireKey,
+        rosterLocked
     };
     return action;
 }
 
 ////unassign umpire from the match(delete)
-function unassignUmpireAction(rosterId, index, umpireKey) {
+function unassignUmpireAction(rosterId, index, umpireKey, rosterLocked) {
     const action = {
         type: ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_LOAD,
         rosterId,
         index,
-        umpireKey
+        umpireKey,
+        rosterLocked
     };
     return action;
 }

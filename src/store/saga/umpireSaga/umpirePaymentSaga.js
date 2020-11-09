@@ -6,6 +6,7 @@ import ApiConstants from "themes/apiConstants";
 import history from "util/history";
 import { receiptImportResult } from "util/showImportResult";
 import LiveScoreAxiosApi from "../../http/liveScoreHttp/liveScoreAxiosApi";
+import RegistrationAxiosApi from "../../http/registrationHttp/registrationAxiosApi";
 import CommonAxiosApi from "store/http/commonHttp/commonAxiosApi";
 
 function* failSaga(result) {
@@ -59,7 +60,26 @@ function* umpirePaymentListSaga(action) {
     }
 }
 
+function* umpirePaymentTransferSaga(action) {
+    try {
+        const result = yield call(RegistrationAxiosApi.umpirePaymentTransfer, action.data);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UMPIRE_PAYMENT_TRANSFER_DATA_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+            });
+        } else {
+            yield call(failSaga, result);
+        }
+    } catch (error) {
+        yield call(errorSaga, error);
+    }
+}
+
 
 export default function* rootUmpirePaymentSaga() {
     yield takeEvery(ApiConstants.API_GET_UMPIRE_PAYMENT_DATA_LOAD, umpirePaymentListSaga);
+    yield takeEvery(ApiConstants.API_UMPIRE_PAYMENT_TRANSFER_DATA_LOAD, umpirePaymentTransferSaga);
 }

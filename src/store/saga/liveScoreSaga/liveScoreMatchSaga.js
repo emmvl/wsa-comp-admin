@@ -96,6 +96,7 @@ function* liveScoreAddMatchSaga(action) {
 
 // Add Match
 function* liveScoreCreateMatchSaga(action) {
+    console.log(action, 'liveScoreCreateMatchSaga')
     try {
         const result = yield call(
             LiveScoreAxiosApi.liveScoreCreateMatch,
@@ -120,18 +121,18 @@ function* liveScoreCreateMatchSaga(action) {
             });
 
             if (action.umpireKey) {
-                history.push({ pathname: action.screenName === 'umpireList' ? 'umpire' : '/umpireDashboard' });
+                // history.push({ pathname: action.screenName == 'umpireList' ? "umpire" : "/umpireDashboard" });
+                history.push({ pathname: "/" + action.screenName });
             } else {
-                history.push(action.key === 'dashboard' ? 'liveScoreDashboard' : action.key === 'umpireRoaster'
-                    ? 'umpireRoaster'
-                    : '/liveScoreMatches');
+                history.push(action.key === "dashboard" ? "liveScoreDashboard" : action.key === "umpireRoaster" ? "umpireRoaster" : "/liveScoreMatches");
             }
 
-            message.success(action.data.id === 0 ? 'Match has been created successfully.' : 'Match has been updated successfully.');
+            message.success(action.data.id === 0 ? "Match has been created successfully." : "Match has been updated successfully.");
         } else {
             yield call(failSaga, result);
         }
-    } catch (error) {
+    }
+    catch (error) {
         yield call(errorSaga, error);
     }
 }
