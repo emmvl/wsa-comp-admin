@@ -44,7 +44,11 @@ function liveScoreMatchSheetState(state = initialState, action) {
             };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_LOAD:
-            return { ...state, onTeamLoad: true };
+            state.allTeamData = [ {
+                name: "All Teams",
+                id: null
+            }]
+       return { ...state, onTeamLoad: true };
 
         case ApiConstants.API_LIVE_SCORE_TEAM_SUCCESS:
             let teamsArray = JSON.parse(JSON.stringify(action.result))

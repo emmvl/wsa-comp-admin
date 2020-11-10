@@ -317,7 +317,7 @@ class DashboardLayout extends React.Component {
                 <span className="user-name-btm pt-3">
                   {selectedOrgData && (
                     <span style={{ textTransform: "capitalize" }}>
-                      {selectedOrgData.name + "(" + selectedOrgData.userRole + ")"}
+                      {selectedOrgData.name + " " + "(" + selectedOrgData.userRole + ")"}
                     </span>
                   )}
                 </span>
@@ -330,7 +330,7 @@ class DashboardLayout extends React.Component {
               {userData.map((item, index) => (
                 <li key={"user" + index}>
                   <a onClick={() => this.onOrganisationChange(item)}>
-                    <span style={{ textTransform: "capitalize" }}>{item.name + "(" + item.userRole + ")"}</span>
+                    <span style={{ textTransform: "capitalize" }}>{item.name + " " + "(" + item.userRole + ")"}</span>
                   </a>
                 </li>
               ))}
