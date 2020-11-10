@@ -203,6 +203,15 @@ const setOwn_CompetitionFinalRefId=(own_FinalRefId)=>{
   localStorage.setItem("own_FinalRefId", own_FinalRefId)
 }
 
+const clearCompetitionStorage = () => {
+  let keysToRemove = ["own_competition", 'Participating_competition',
+   "Participate_year", 'own_year',"own_FinalRefId",
+   "Participating_competitionStatus","own_competitionStatus"];
+  for (let key of keysToRemove) {
+    localStorage.removeItem(key);
+  }
+}
+
 export {
   getOwn_CompetitionFinalRefId,
   setOwn_CompetitionFinalRefId,
@@ -250,4 +259,5 @@ export {
   setParticipating_competitionStatus,
   setPrevUrl,
   getPrevUrl,
+  clearCompetitionStorage
 }

@@ -25,6 +25,7 @@ import DashboardLayout from "pages/dashboardLayout";
 import {
     setOwnCompetitionYear,
     setOwn_competition,
+    clearCompetitionStorage
 } from "../../util/sessionStorage";
 
 const { Content } = Layout;
@@ -279,6 +280,7 @@ class CompetitionDashboard extends Component {
     };
 
     updateCompetitionStatus = (record) => {
+        clearCompetitionStorage()
         let storedYearID = localStorage.getItem("yearId");
         let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
         let payload = {
