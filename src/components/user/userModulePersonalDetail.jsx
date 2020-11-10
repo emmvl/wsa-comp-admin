@@ -1121,10 +1121,17 @@ const purchaseActivityColumn = [
   // },
   {
     title: 'Products',
-    dataIndex: 'products',
-    key: 'products',
-    sorter: true,
-    onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
+    dataIndex: 'orderDetails',
+    key: 'orderDetails',
+    // sorter: true,
+    // onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
+    render: (orderDetails) => (
+      <div>
+        {orderDetails.length > 0 && orderDetails.map((item, i) => (
+          <span key={"orderDetails" + i} className="desc-text-style side-bar-profile-data">{item}</span>
+        ))}
+      </div>
+    ),
   },
   {
     title: 'Organisation',
