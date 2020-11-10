@@ -44,6 +44,19 @@ function updateCompetitionDraws(data, source, target, actionType, drawData,sourc
     }
     return action
 }
+////update competition draws timeline
+function updateCompetitionDrawsTimeline(data, source, target, actionType, drawData, yearRefId, competitionId, venueId, roundId, orgId, startDate, endDate, dateRangeCheck) {
+    const action = {
+        type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_TIMELINE_LOAD,
+        data,
+        sourceArray: source,
+        targetArray: target,
+        actionType: actionType,
+        drawData: drawData,
+        yearRefId, competitionId, venueId, roundId, orgId, startDate, endDate, dateRangeCheck,
+    }
+    return action
+}
 
 /// Save Draws
 function saveDraws(yearId, competitionId, drawsMasterId) {
@@ -172,6 +185,7 @@ export {
     getCompetitionDrawsAction,
     getDrawsRoundsAction,
     updateCompetitionDraws,
+    updateCompetitionDrawsTimeline,
     saveDraws,
     getCompetitionVenue,
     updateCourtTimingsDrawsAction,

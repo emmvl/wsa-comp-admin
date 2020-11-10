@@ -1594,6 +1594,8 @@ const AppConstants = {
     quickCompetitionMismatchMsg: 'The venue you have selected for this quick competition will override the competition you are merging to',
     regoFormConfirmMsg: 'Some users may receive this email a second time. Are you sure you want to proceed?',
     emailNotificationUpdate: 'Email Notification Update',
+
+    unavailable: "Unavailable",
 };
 
 export default AppConstants;

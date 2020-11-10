@@ -1320,7 +1320,7 @@ class CompetitionOpenRegForm extends Component {
                                         <Table
                                             className="fees-table"
                                             columns={divisionTableColumns}
-                                            dataSource={item.divisions}
+                                            dataSource={[...item.divisions]}
                                             pagination={false}
                                             rowKey="competitionDivisionId"
                                         />

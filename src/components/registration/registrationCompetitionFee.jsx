@@ -5246,7 +5246,7 @@ class RegistrationCompetitionFee extends Component {
                                         <Table
                                             className="fees-table"
                                             columns={this.state.divisionTable}
-                                            dataSource={item.divisions}
+                                            dataSource={[...item.divisions]}
                                             pagination={false}
                                             Divider="false"
                                             key={index}

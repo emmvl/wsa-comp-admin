@@ -40,6 +40,7 @@ import CompetitionVenueAndTimesEdit from 'components/competition/competitionVenu
 import CompetitionVenueTimesPrioritisation from 'components/competition/competitionVenueTimesPrioritisation';
 import MultiFieldDraws from 'components/competition/multiFieldDraws';
 import MultiFieldDrawsNew from 'components/competition/multiFieldDrawsNew';
+import MultiFieldDrawsNewTimeline from 'components/competition/multiFieldDrawsNewTimeline';
 import RegistrationCompetitionForm from 'components/competition/registrationCompetitionForm';
 
 import AppRegistrationForm from 'components/registration/appRegistrationForm';
@@ -335,6 +336,10 @@ class Routes extends React.Component {
                 <PrivateRoute
                     path="/competitionDraws"
                     component={this.haveAccess(userRoleId, '/competitionDraws') ? lazyLoad(MultiFieldDrawsNew) : lazyLoad(NotFound)}
+                />
+                <PrivateRoute
+                    path="/competitionDrawsTimeline"
+                    component={this.haveAccess(userRoleId, '/competitionDraws') ? lazyLoad(MultiFieldDrawsNewTimeline) : lazyLoad(NotFound)}
                 />
                 <PrivateRoute
                     path="/competitionDrawEdit"
