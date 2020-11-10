@@ -5217,6 +5217,7 @@ class RegistrationCompetitionFee extends Component {
     //////add or remove another division in the division tab
     addRemoveDivision = (index, item, keyword) => {
         this.props.addRemoveDivisionAction(index, item, keyword);
+        this.setDetailsFieldValue();
     };
 
     divisionsView = () => {
