@@ -143,6 +143,7 @@ const routeAdminRole = [
     "/umpirePayout",
     "/orderDetails",
     "/multifieldDrawsNew",
+    "/multifieldDrawsNewTimeline",
     "/support",
     "/registrationChangeReview",
     "/deregistration",

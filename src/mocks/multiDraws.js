@@ -351,6 +351,7 @@ const lagendsArray = [
         gradeName: 'A'
     }
 ]
+
 module.exports = {
     drawsArray,
     locationArr,

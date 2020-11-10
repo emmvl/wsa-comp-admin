@@ -136,10 +136,11 @@ function setFixtureColor(data) {
 
 function roundstructureData(data) {
   let roundsdata = data.rounds
-  let newStructureDrawsData
+  let newStructureDrawsData;
+  const venuesData = data.venues;
   if (roundsdata.length > 0) {
     for (let i in roundsdata) {
-      newStructureDrawsData = structureDrawsData(roundsdata[i].draws, "single")
+      newStructureDrawsData = structureDrawsData(roundsdata[i].draws, "single", venuesData)
       roundsdata[i].draws = newStructureDrawsData.mainCourtNumberArray
       roundsdata[i].dateNewArray = newStructureDrawsData.sortedDateArray
       roundsdata[i].legendsArray = newStructureDrawsData.legendsArray
@@ -152,13 +153,32 @@ function roundstructureData(data) {
 
 
 
-function structureDrawsData(data, key) {
+function structureDrawsData(data, key, venuesData) {
   let mainCourtNumberArray = [];
   let dateArray = [];
   let gradeArray = [];
   let sortedDateArray = [];
   let legendArray = [];
   let sortMainCourtNumberArray = [];
+
+  venuesData.forEach(venue => {
+    venue.courts.forEach(court => {
+      const isCourtNotEmpty = data.some(dataSlot => dataSlot.venueCourtId === court.courtId);
+      if(!isCourtNotEmpty) {
+        mainCourtNumberArray.push({
+          venueCourtNumber: court.courtName,
+          venueCourtName: court.courtName + '',
+          venueShortName: venue.shortName,
+          venueNameCourtName: (JSON.stringify(venue.shortName) + JSON.stringify(court.courtName)),
+          venueCourtId: court.courtId,
+          roundId: venue.roundId ? venue.roundId : 0,
+          venueId: venue.id,
+          slotsArray: [],
+        });
+      }
+    })
+  })
+
   if (data) {
     if (isArrayNotEmpty(data)) {
       data.map((object) => {
@@ -190,8 +210,6 @@ function structureDrawsData(data, key) {
       sortedDateArray = sortDateArray(dateArray);
       sortMainCourtNumberArray = sortCourtArray(JSON.parse(JSON.stringify(mainCourtNumberArray)))
 
-      // sortedDateArray = sortArrayByDate(dateArray);
-      // sortedDateArray = dateArray;
       mainCourtNumberArray = mapSlotObjectsWithTimeSlots(
         data,
         sortMainCourtNumberArray,
@@ -218,7 +236,8 @@ function mapSlotObjectsWithTimeSlots(
           drawsArray,
           mainCourtNumberArray[i].venueCourtId,
           sortedDateArray[j].date,
-          gradeArray, key
+          gradeArray, key,
+          mainCourtNumberArray[i].venueId
         )
       );
     }
@@ -227,7 +246,7 @@ function mapSlotObjectsWithTimeSlots(
   return mainCourtNumberArray;
 }
 
-function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, key) {
+function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, key, venueId) {
   let startTime;
   let endTime;
   for (let i in drawsArray) {
@@ -301,6 +320,7 @@ if(checkDuplicate ){
     isLocked: 0,
     colorCode: '#999999',
     teamArray: teamArray,
+    venueId,
   };
 }
 function getRandomColor() {
@@ -1020,6 +1040,61 @@ function CompetitionMultiDraws(state = initialState, action) {
           targetXIndex,
           sourceYIndex,
           targetYIndex,
+        );
+        state.getRoundsDrawsdata[0].draws = allSwapedDrawsArray;
+      }
+      return {
+        ...state,
+        onLoad: false,
+        error: null,
+        updateLoad: false,
+      };
+
+    /// Update draws timeline reducer ceses
+    case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_TIMELINE_LOAD:
+      return {
+        ...state,
+        updateLoad: true,
+      };
+
+    case ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_TIMELINE_SUCCESS:
+      let sourceXIndexT = action.sourceArray[0];
+      let sourceYIndexT = action.sourceArray[1];
+      let targetXIndexT = action.targetArray[0];
+      let targetYIndexT = action.targetArray[1];
+      if (action.actionType !== 'all') {
+        let drawDataIndex = state.getRoundsDrawsdata.findIndex((x) => x.roundId === action.drawData)
+        let drawDataCase = state.getRoundsDrawsdata[drawDataIndex].draws;
+        let swapedDrawsArray = state.getRoundsDrawsdata[drawDataIndex].draws;
+        if (action.actionType === 'add') {
+          swapedDrawsArray = swapedDrawsArrayFunc(
+            drawDataCase,
+            sourceXIndexT,
+            targetXIndexT,
+            sourceYIndexT,
+            targetYIndexT
+          );
+        } else {
+          swapedDrawsArray = swapedDrawsEditArrayFunc(
+            drawDataCase,
+            sourceXIndexT,
+            targetXIndexT,
+            sourceYIndexT,
+            targetYIndexT,
+            action.sourceArray[2],
+            action.targetArray[2]
+          );
+        }
+        state.getRoundsDrawsdata[drawDataIndex].draws = swapedDrawsArray;
+      } else {
+        let allDrawDataCase = state.getRoundsDrawsdata[0].draws;
+        let allSwapedDrawsArray = state.getRoundsDrawsdata[0].draws;
+        allSwapedDrawsArray = swapedDrawsArrayFunc(
+          allDrawDataCase,
+          sourceXIndexT,
+          targetXIndexT,
+          sourceYIndexT,
+          targetYIndexT,
         );
         state.getRoundsDrawsdata[0].draws = allSwapedDrawsArray;
       }
