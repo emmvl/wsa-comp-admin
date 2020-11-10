@@ -1168,7 +1168,7 @@ function checkTeamChargeType(feeArray) {
         if (feeArray[i].teamRegChargeTypeRefId == null || feeArray[i].teamRegChargeTypeRefId == 1) {
             return 1;
         } else {
-            return 2;
+            return feeArray[i].teamRegChargeTypeRefId;
         }
     }
 }
@@ -2579,6 +2579,17 @@ function competitionFees(state = initialState, action) {
                     state.competitionFeesData[action.parentIndex]["teamRegChargeTypeRefId"] = null;
                 } else if (isSeasonal) {
                     state.competitionFeesData[action.parentIndex]["teamRegChargeTypeRefId"] = 1;
+                }
+            }
+
+            if(action.key == "teamRegChargeTypeRefId"){
+                state.competitionFeesData[action.parentIndex]["teamRegChargeTypeRefId"] = action.data;
+                let seasonalTeamTemp = state.competitionFeesData[action.parentIndex].seasonalTeam;
+                for(let allType of seasonalTeamTemp.allType){
+                    allType.teamRegChargeTypeRefId = action.data
+                }
+                for(let perType of seasonalTeamTemp.perType){
+                    perType.teamRegChargeTypeRefId = action.data
                 }
             }
 
