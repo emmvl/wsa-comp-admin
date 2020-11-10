@@ -515,7 +515,7 @@ const playerSeasonalTableAssociation = [
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         render: (fee, record, index) => (
-            fee != null ? (
+            (fee != null || record.teamRegChargeTypeRefId != 3) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -542,7 +542,7 @@ const playerSeasonalTableAssociation = [
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
         render: (gst, record, index) => (
-            gst != null ? (
+            (gst != null || record.teamRegChargeTypeRefId != 3) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -1392,7 +1392,7 @@ const playerSeasonalTableTeamAssociation = [
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         render: (fee, record, index) => (
-            fee != null ? (
+            (fee != null || record.teamRegChargeTypeRefId != 3) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1419,7 +1419,7 @@ const playerSeasonalTableTeamAssociation = [
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         render: (gst, record, index) => (
-            gst != null ? (
+            (gst != null || record.teamRegChargeTypeRefId != 3) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1685,7 +1685,7 @@ const playerSeasonalTableTeamClub = [
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         render: (fee, record, index) => (
-            fee != null ? (
+            (fee != null || record.teamRegChargeTypeRefId != 3) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1712,7 +1712,7 @@ const playerSeasonalTableTeamClub = [
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         render: (gst, record, index) => (
-            gst != null ? (
+            (gst != null || record.teamRegChargeTypeRefId != 3) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1977,35 +1977,38 @@ const playerSeasonalTeamTable = [
         title: 'Nomination Fees (excl. GST)',
         dataIndex: 'nominationFees',
         key: 'nominationFees',
-        render: (fee, record, index) => (
-            fee != null ? (
-                <Input
-                    prefix="$"
-                    disabled={this_Obj.state.permissionState.allDisable}
-                    type="number"
-                    className="input-inside-table-fees"
-                    value={fee}
-                    onChange={(e) =>
-                        this_Obj.onChangeDetails(
-                            e.target.value,
-                            index,
-                            record,
-                            'nominationFees',
-                            'seasonalTeam'
+        render: (fee, record, index) => {
+            return(
+                (fee != null || record.teamRegChargeTypeRefId != 3) ? 
+                    (
+                        <Input
+                            prefix="$"
+                            disabled={this_Obj.state.permissionState.allDisable}
+                            type="number"
+                            className="input-inside-table-fees"
+                            value={fee}
+                            onChange={(e) =>
+                                this_Obj.onChangeDetails(
+                                    e.target.value,
+                                    index,
+                                    record,
+                                    'nominationFees',
+                                    'seasonalTeam'
+                                )
+                            }
+                        />
+                    ) : (
+                            <Input disabled className="input-inside-table-fees" value="N/A" />
                         )
-                    }
-                />
-            ) : (
-                    <Input disabled className="input-inside-table-fees" value="N/A" />
-                )
-        ),
+            )
+        },
     },
     {
         title: 'GST',
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         render: (gst, record, index) => (
-            gst != null ? (
+            (gst != null || record.teamRegChargeTypeRefId != 3) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -5421,300 +5424,302 @@ class RegistrationCompetitionFee extends Component {
                     </span>
                 ))}
 
-                {feeDetails && feeDetails.map((item, index) => (
-                    <div className="inside-container-view">
-                        <span className="form-heading pt-2 pl-2">
-                            {item.membershipProductName}
-                        </span>
-                        <Radio.Group
-                            className="reg-competition-radio"
-                            onChange={(e) =>
-                                this.props.checkUncheckcompetitionFeeSction(
-                                    e.target.value,
-                                    index,
-                                    'isAllType'
-                                )
-                            }
-                            value={item.isAllType}
-                            disabled={feesTableDisable}
-                        >
-                            <div className="fluid-width">
-                                <div className="row">
-                                    <div className="col-sm-2">
-                                        <div className="contextualHelp-RowDirection">
-                                            <Radio value="allDivisions">
-                                                {AppConstants.allDivisions}
-                                            </Radio>
-                                            <div style={{ marginLeft: -10 }}>
-                                                <CustomToolTip background="#ff8237">
-                                                    <span>{AppConstants.allDivisionsMsg}</span>
-                                                </CustomToolTip>
+                {feeDetails && feeDetails.map((item, index) => {
+                    return(
+                        <div className="inside-container-view">
+                            <span className="form-heading pt-2 pl-2">
+                                {item.membershipProductName}
+                            </span>
+                            <Radio.Group
+                                className="reg-competition-radio"
+                                onChange={(e) =>
+                                    this.props.checkUncheckcompetitionFeeSction(
+                                        e.target.value,
+                                        index,
+                                        'isAllType'
+                                    )
+                                }
+                                value={item.isAllType}
+                                disabled={feesTableDisable}
+                            >
+                                <div className="fluid-width">
+                                    <div className="row">
+                                        <div className="col-sm-2">
+                                            <div className="contextualHelp-RowDirection">
+                                                <Radio value="allDivisions">
+                                                    {AppConstants.allDivisions}
+                                                </Radio>
+                                                <div style={{ marginLeft: -10 }}>
+                                                    <CustomToolTip background="#ff8237">
+                                                        <span>{AppConstants.allDivisionsMsg}</span>
+                                                    </CustomToolTip>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            className="col-sm-2"
+                                            style={{ display: 'flex', alignItems: 'center' }}
+                                        >
+                                            <div className="contextualHelp-RowDirection">
+                                                <Radio value="perDivision">
+                                                    {AppConstants.perDivision}
+                                                </Radio>
+                                                <div style={{ marginLeft: -20 }}>
+                                                    <CustomToolTip background="#ff8237">
+                                                        <span>{AppConstants.perDivisionMsg}</span>
+                                                    </CustomToolTip>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div
-                                        className="col-sm-2"
-                                        style={{ display: 'flex', alignItems: 'center' }}
+                                </div>
+                            </Radio.Group>
+                            <div style={{ marginTop: 5 }}>
+                                <div style={{ marginTop: 15 }}>
+                                    <Checkbox
+                                        checked={item.isIndividualReg}
+                                        className="single-checkbox"
+                                        style={{ fontSize: '16px' }}
+                                        disabled={feesTableDisable}
+                                        onChange={(e) => {
+                                            this.props.checkUncheckcompetitionFeeSction(
+                                                e.target.checked,
+                                                index,
+                                                'isIndividualReg'
+                                            );
+                                        }}
                                     >
-                                        <div className="contextualHelp-RowDirection">
-                                            <Radio value="perDivision">
-                                                {AppConstants.perDivision}
-                                            </Radio>
-                                            <div style={{ marginLeft: -20 }}>
-                                                <CustomToolTip background="#ff8237">
-                                                    <span>{AppConstants.perDivisionMsg}</span>
-                                                </CustomToolTip>
-                                            </div>
-                                        </div>
-                                    </div>
+                                        {AppConstants.individualRegistrations}
+                                    </Checkbox>
                                 </div>
-                            </div>
-                        </Radio.Group>
-                        <div style={{ marginTop: 5 }}>
-                            <div style={{ marginTop: 15 }}>
-                                <Checkbox
-                                    checked={item.isIndividualReg}
-                                    className="single-checkbox"
-                                    style={{ fontSize: '16px' }}
-                                    disabled={feesTableDisable}
-                                    onChange={(e) => {
-                                        this.props.checkUncheckcompetitionFeeSction(
-                                            e.target.checked,
-                                            index,
-                                            'isIndividualReg'
-                                        );
-                                    }}
-                                >
-                                    {AppConstants.individualRegistrations}
-                                </Checkbox>
-                            </div>
-                            <div style={{ marginTop: 15 }}>
-                                <Checkbox
-                                    checked={item.isSeasonal}
-                                    className="single-checkbox"
-                                    disabled={feesTableDisable}
-                                    onChange={(e) => {
-                                        this.props.checkUncheckcompetitionFeeSction(
-                                            e.target.checked,
-                                            index,
-                                            'isSeasonal'
-                                        );
-                                    }}
-                                >
-                                    {AppConstants.seasonalFee}
-                                </Checkbox>
-                            </div>
-                            {item.isSeasonal && (
-                                <div className="table-responsive mt-2">
-                                    <Table
-                                        className="fees-table"
-                                        columns={this.seasonalFeesOnOrgLevel()}
-                                        dataSource={
-                                            item.isAllType != 'allDivisions'
-                                                ? item.seasonal.perType
-                                                : item.seasonal.allType
-                                        }
-                                        pagination={false}
-                                        Divider="false"
-                                    />
+                                <div style={{ marginTop: 15 }}>
+                                    <Checkbox
+                                        checked={item.isSeasonal}
+                                        className="single-checkbox"
+                                        disabled={feesTableDisable}
+                                        onChange={(e) => {
+                                            this.props.checkUncheckcompetitionFeeSction(
+                                                e.target.checked,
+                                                index,
+                                                'isSeasonal'
+                                            );
+                                        }}
+                                    >
+                                        {AppConstants.seasonalFee}
+                                    </Checkbox>
                                 </div>
-                            )}
-
-                            <div style={{ marginTop: 10 }}>
-                                <Checkbox
-                                    checked={item.isCasual}
-                                    className="single-checkbox"
-                                    disabled={feesTableDisable}
-                                    onChange={(e) =>
-                                        this.props.checkUncheckcompetitionFeeSction(
-                                            e.target.checked,
-                                            index,
-                                            'isCasual'
-                                        )
-                                    }
-                                >
-                                    {AppConstants.singleGameFee}
-                                </Checkbox>
-                            </div>
-
-                            {item.isCasual && (
-                                <div className="table-responsive mt-2">
-                                    <Table
-                                        className="fees-table"
-                                        columns={this.casualFeesOnOrgLevel()}
-                                        dataSource={
-                                            item.isAllType != 'allDivisions'
-                                                ? item.casual.perType
-                                                : item.casual.allType
-                                        }
-                                        pagination={false}
-                                        Divider="false"
-                                    />
-                                </div>
-                            )}
-                            {(item.isAllType != 'allDivisions'
-                                ? item.seasonalTeam.perType
-                                : item.seasonalTeam.allType
-                            ).length > 0 && (
-                                    <div style={{ marginTop: 25 }}>
-                                        {/* <div style={{ marginTop: 15 }}>
-                                            <Checkbox
-                                                checked={item.isTeamReg}
-                                                className="single-checkbox"
-                                                style={{ fontSize: '16px' }}
-                                                disabled={feesTableDisable}
-                                                onChange={(e) => {
-                                                    this.props.checkUncheckcompetitionFeeSction(
-                                                        e.target.checked,
-                                                        index,
-                                                        'isTeamReg'
-                                                    );
-                                                }}
-                                            >
-                                                {AppConstants.teamRegistration}
-                                            </Checkbox>
-                                        </div> */}
-                                        <div>
-                                            <Checkbox
-                                                checked={item.isTeamSeasonal}
-                                                className="single-checkbox"
-                                                style={{ fontSize: '16px' }}
-                                                disabled={feesTableDisable}
-                                                onChange={(e) => {
-                                                    this.props.checkUncheckcompetitionFeeSction(
-                                                        e.target.checked,
-                                                        index,
-                                                        'isTeamSeasonal'
-                                                    );
-                                                }}
-                                            >
-                                                {AppConstants.teamRegistration}
-                                            </Checkbox>
-                                        </div>
-                                        {item.isTeamSeasonal == 1 && (
-                                            <div style={{ marginTop: 5 }}>
-                                                <Radio.Group
-                                                    className="reg-competition-radio"
-                                                    onChange={(e) =>
-                                                        this.props.checkUncheckcompetitionFeeSction(
-                                                            e.target.value,
-                                                            index,
-                                                            'teamRegChargeTypeRefId'
-                                                        )
-                                                    }
-                                                    value={item.teamRegChargeTypeRefId}
-                                                    disabled={feesTableDisable}
-                                                >
-                                                    <div className="fluid-width">
-                                                        <div className="row">
-                                                            <div className="col-sm-4">
-                                                                <div className="contextualHelp-RowDirection" style={{'flexDirection': 'column'}}>
-                                                                    <Radio value={1}>
-                                                                        {AppConstants.chargedForFullSeason}
-                                                                    </Radio>
-                                                                </div>
-                                                            </div>
-                                                            <div
-                                                                className="col-sm-2"
-                                                                style={{ display: 'flex', alignItems: 'center' }}
-                                                            >
-                                                                <div className="contextualHelp-RowDirection" style={{'flexDirection': 'column'}}>
-                                                                    <Radio value={item.teamRegChargeTypeRefId ? (item.teamRegChargeTypeRefId == 3 ? 3 : 2) : 2 }>
-                                                                        {AppConstants.chargedPerMatch}
-                                                                    </Radio>
-                                                                    
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div className="row">
-                                                            <div
-                                                                className="col-sm-4"
-                                                                style={{ display: 'flex', alignItems: 'center' }}
-                                                            ></div>
-                                                            <div
-                                                                className="col-sm-8"
-                                                                style={{ display: 'flex', alignItems: 'center', paddingLeft: '40px' }}
-                                                            >
-                                                            {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) &&
-                                                                    <div className="row">
-                                                                        <div className="col-sm">
-                                                                            <div className="contextualHelp-RowDirection">
-                                                                                <Radio value={2}>
-                                                                                    {AppConstants.feesPaidAtEachMatchByUser}
-                                                                                </Radio>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div
-                                                                            className="col-sm"
-                                                                            style={{ display: 'flex', alignItems: 'center' }}
-                                                                        >
-                                                                            <div className="contextualHelp-RowDirection">
-                                                                                <Radio value={3}>
-                                                                                    {AppConstants.feesPaidAtEachMatchByPlayer}
-                                                                                </Radio>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div> 
-                                                                    }
-                                                                    </div>
-                                                        </div>
-                                                        
-                                                    </div>
-                                                </Radio.Group>
-                                            </div>
-                                        )}
-                                        {item.isTeamSeasonal && (
-                                            <div className="table-responsive mt-2">
-                                                <Table
-                                                    className="fees-table"
-                                                    columns={item.teamRegChargeTypeRefId == 3 ? this.casualFeesTeamOnOrgTLevel() : this.seasonalFeesTeamOnOrgTLevel()   }
-                                                    dataSource={
-                                                        item.isAllType != 'allDivisions'
-                                                            ? item.seasonalTeam.perType
-                                                            : item.seasonalTeam.allType
-                                                    }
-                                                    pagination={false}
-                                                    Divider="false"
-                                                />
-                                            </div>
-                                        )}
-
-                                        {/* <div style={{ marginTop: 10 }}>
-                                            <Checkbox
-                                                checked={item.isTeamCasual}
-                                                className="single-checkbox"
-                                                disabled={feesTableDisable}
-                                                onChange={(e) =>
-                                                    this.props.checkUncheckcompetitionFeeSction(
-                                                        e.target.checked,
-                                                        index,
-                                                        'isTeamCasual'
-                                                    )
-                                                }
-                                            >
-                                                {AppConstants.singleGamePerTeamMember}
-                                            </Checkbox>
-                                        </div>
-                                        {item.isTeamCasual && (
-                                            <div className="table-responsive mt-2">
-                                                <Table
-                                                    className="fees-table"
-                                                    columns={this.casualFeesTeamOnOrgTLevel()}
-                                                    dataSource={
-                                                        item.isAllType != 'allDivisions'
-                                                            ? item.casualTeam.perType
-                                                            : item.casualTeam.allType
-                                                    }
-                                                    pagination={false}
-                                                    Divider="false"
-                                                />
-                                            </div>
-                                        )} */}
+                                {item.isSeasonal && (
+                                    <div className="table-responsive mt-2">
+                                        <Table
+                                            className="fees-table"
+                                            columns={this.seasonalFeesOnOrgLevel()}
+                                            dataSource={
+                                                item.isAllType != 'allDivisions'
+                                                    ? item.seasonal.perType
+                                                    : item.seasonal.allType
+                                            }
+                                            pagination={false}
+                                            Divider="false"
+                                        />
                                     </div>
                                 )}
+
+                                <div style={{ marginTop: 10 }}>
+                                    <Checkbox
+                                        checked={item.isCasual}
+                                        className="single-checkbox"
+                                        disabled={feesTableDisable}
+                                        onChange={(e) =>
+                                            this.props.checkUncheckcompetitionFeeSction(
+                                                e.target.checked,
+                                                index,
+                                                'isCasual'
+                                            )
+                                        }
+                                    >
+                                        {AppConstants.singleGameFee}
+                                    </Checkbox>
+                                </div>
+
+                                {item.isCasual && (
+                                    <div className="table-responsive mt-2">
+                                        <Table
+                                            className="fees-table"
+                                            columns={this.casualFeesOnOrgLevel()}
+                                            dataSource={
+                                                item.isAllType != 'allDivisions'
+                                                    ? item.casual.perType
+                                                    : item.casual.allType
+                                            }
+                                            pagination={false}
+                                            Divider="false"
+                                        />
+                                    </div>
+                                )}
+                                {(item.isAllType != 'allDivisions'
+                                    ? item.seasonalTeam.perType
+                                    : item.seasonalTeam.allType
+                                ).length > 0 && (
+                                        <div style={{ marginTop: 25 }}>
+                                            {/* <div style={{ marginTop: 15 }}>
+                                                <Checkbox
+                                                    checked={item.isTeamReg}
+                                                    className="single-checkbox"
+                                                    style={{ fontSize: '16px' }}
+                                                    disabled={feesTableDisable}
+                                                    onChange={(e) => {
+                                                        this.props.checkUncheckcompetitionFeeSction(
+                                                            e.target.checked,
+                                                            index,
+                                                            'isTeamReg'
+                                                        );
+                                                    }}
+                                                >
+                                                    {AppConstants.teamRegistration}
+                                                </Checkbox>
+                                            </div> */}
+                                            <div>
+                                                <Checkbox
+                                                    checked={item.isTeamSeasonal}
+                                                    className="single-checkbox"
+                                                    style={{ fontSize: '16px' }}
+                                                    disabled={feesTableDisable}
+                                                    onChange={(e) => {
+                                                        this.props.checkUncheckcompetitionFeeSction(
+                                                            e.target.checked,
+                                                            index,
+                                                            'isTeamSeasonal'
+                                                        );
+                                                    }}
+                                                >
+                                                    {AppConstants.teamRegistration}
+                                                </Checkbox>
+                                            </div>
+                                            {item.isTeamSeasonal == 1 && (
+                                                <div style={{ marginTop: 5 }}>
+                                                    <Radio.Group
+                                                        className="reg-competition-radio"
+                                                        onChange={(e) =>
+                                                            this.props.checkUncheckcompetitionFeeSction(
+                                                                e.target.value,
+                                                                index,
+                                                                'teamRegChargeTypeRefId'
+                                                            )
+                                                        }
+                                                        value={item.teamRegChargeTypeRefId}
+                                                        disabled={feesTableDisable}
+                                                    >
+                                                        <div className="fluid-width">
+                                                            <div className="row">
+                                                                <div className="col-sm-4">
+                                                                    <div className="contextualHelp-RowDirection" style={{'flexDirection': 'column'}}>
+                                                                        <Radio value={1}>
+                                                                            {AppConstants.chargedForFullSeason}
+                                                                        </Radio>
+                                                                    </div>
+                                                                </div>
+                                                                <div
+                                                                    className="col-sm-2"
+                                                                    style={{ display: 'flex', alignItems: 'center' }}
+                                                                >
+                                                                    <div className="contextualHelp-RowDirection" style={{'flexDirection': 'column'}}>
+                                                                        <Radio value={item.teamRegChargeTypeRefId ? (item.teamRegChargeTypeRefId == 3 ? 3 : 2) : 2 }>
+                                                                            {AppConstants.chargedPerMatch}
+                                                                        </Radio>
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="row">
+                                                                <div
+                                                                    className="col-sm-4"
+                                                                    style={{ display: 'flex', alignItems: 'center' }}
+                                                                ></div>
+                                                                <div
+                                                                    className="col-sm-8"
+                                                                    style={{ display: 'flex', alignItems: 'center', paddingLeft: '40px' }}
+                                                                >
+                                                                {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) &&
+                                                                        <div className="row">
+                                                                            <div className="col-sm">
+                                                                                <div className="contextualHelp-RowDirection">
+                                                                                    <Radio value={2}>
+                                                                                        {AppConstants.feesPaidAtEachMatchByUser}
+                                                                                    </Radio>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div
+                                                                                className="col-sm"
+                                                                                style={{ display: 'flex', alignItems: 'center' }}
+                                                                            >
+                                                                                <div className="contextualHelp-RowDirection">
+                                                                                    <Radio value={3}>
+                                                                                        {AppConstants.feesPaidAtEachMatchByPlayer}
+                                                                                    </Radio>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div> 
+                                                                        }
+                                                                        </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </Radio.Group>
+                                                </div>
+                                            )}
+                                            {item.isTeamSeasonal && (
+                                                <div className="table-responsive mt-2">
+                                                    <Table
+                                                        className="fees-table"
+                                                        columns={item.teamRegChargeTypeRefId == 3 ? this.casualFeesTeamOnOrgTLevel() : this.seasonalFeesTeamOnOrgTLevel()}
+                                                        dataSource={
+                                                            item.isAllType != 'allDivisions'
+                                                                ? item.seasonalTeam.perType
+                                                                : item.seasonalTeam.allType
+                                                        }
+                                                        pagination={false}
+                                                        Divider="false"
+                                                    />
+                                                </div>
+                                            )}
+
+                                            {/* <div style={{ marginTop: 10 }}>
+                                                <Checkbox
+                                                    checked={item.isTeamCasual}
+                                                    className="single-checkbox"
+                                                    disabled={feesTableDisable}
+                                                    onChange={(e) =>
+                                                        this.props.checkUncheckcompetitionFeeSction(
+                                                            e.target.checked,
+                                                            index,
+                                                            'isTeamCasual'
+                                                        )
+                                                    }
+                                                >
+                                                    {AppConstants.singleGamePerTeamMember}
+                                                </Checkbox>
+                                            </div>
+                                            {item.isTeamCasual && (
+                                                <div className="table-responsive mt-2">
+                                                    <Table
+                                                        className="fees-table"
+                                                        columns={this.casualFeesTeamOnOrgTLevel()}
+                                                        dataSource={
+                                                            item.isAllType != 'allDivisions'
+                                                                ? item.casualTeam.perType
+                                                                : item.casualTeam.allType
+                                                        }
+                                                        pagination={false}
+                                                        Divider="false"
+                                                    />
+                                                </div>
+                                            )} */}
+                                        </div>
+                                    )}
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    )
+                })}
             </div>
         );
     };
