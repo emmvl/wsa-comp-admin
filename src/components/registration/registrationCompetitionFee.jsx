@@ -5620,7 +5620,7 @@ class RegistrationCompetitionFee extends Component {
                                                                 style={{ display: 'flex', alignItems: 'center' }}
                                                             >
                                                                 <div className="contextualHelp-RowDirection" style={{'flexDirection': 'column'}}>
-                                                                    <Radio value={item.teamRegChargeTypeRefId == 3 ? 3 : 2 }>
+                                                                    <Radio value={item.teamRegChargeTypeRefId ? (item.teamRegChargeTypeRefId == 3 ? 3 : 2) : 2 }>
                                                                         {AppConstants.chargedPerMatch}
                                                                     </Radio>
                                                                     

@@ -171,6 +171,47 @@ function* updateCompetitionDraws(action) {
     }
 }
 
+//// Update Competition Draws Timeline
+
+function* updateCompetitionDrawsTimeline(action) {
+    try {
+        const result = yield call(CompetitionAxiosApi.updateDraws,
+            action.data, action.source, action.target, action.actionType, action.drawData);
+        
+        yield call(CompetitionAxiosApi.updateCourtTimingsDrawsAction, action.data.draws[0]);
+        yield call(CompetitionAxiosApi.updateCourtTimingsDrawsAction, action.data.draws[1]);
+
+        const getDataResult = yield call(CompetitionAxiosApi.getCompetitionDraws,
+            action.yearRefId, action.competitionId, 0, action.roundId, action.orgId, action.startDate, action.endDate);
+
+        if (result.status === 1) {
+            yield put({
+                type: ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_TIMELINE_SUCCESS,
+                result: result.result.data,
+                status: result.status,
+                sourceArray: action.sourceArray,
+                targetArray: action.targetArray,
+                actionType: action.actionType,
+                drawData: action.drawData
+            });
+
+            yield put({
+                type: ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_SUCCESS,
+                result: getDataResult.result.data,
+                status: getDataResult.status,
+                competitionId: action.competitionId,
+                dateRangeCheck: action.dateRangeCheck
+            });
+
+            message.success(result.result.data.message)
+        } else {
+            yield call(failSaga, result)
+        }
+    } catch (error) {
+        yield call(errorSaga, error)
+    }
+}
+
 ///// Save Draws saga
 function* saveDrawsSaga(action) {
     try {
@@ -398,6 +439,7 @@ export default function* rootCompetitionMultiDrawSaga() {
     yield takeEvery(ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_LOAD, getCompetitionDrawsSaga);
     yield takeEvery(ApiConstants.API_GET_COMPETITION_MULTI_DRAWS_ROUNDS_LOAD, getDrawsRoundsSaga);
     yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_LOAD, updateCompetitionDraws);
+    yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_TIMELINE_LOAD, updateCompetitionDrawsTimeline);
     yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_SAVE_MULTI_DRAWS_LOAD, saveDrawsSaga);
     yield takeEvery(ApiConstants.API_GET_COMPETITION_VENUES_MULTI_LOAD, getCompetitionVenues);
     yield takeEvery(ApiConstants.API_UPDATE_COMPETITION_MULTI_DRAWS_COURT_TIMINGS_LOAD, updateCourtTimingsDrawsAction);
