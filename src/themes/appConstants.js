@@ -1569,7 +1569,7 @@ const AppConstants = {
     setMembershipProducts: 'Set Membership Product(s)',
     chargedForFullSeason: 'Charged at Fees at Registration',
     chargedPerMatch: 'Charged at Match (Competition Fees only. Membership and Nomination Fees are charged at Registration)',
-    feesPaidAtEachMatchByUser: "Fees paid at each match by user who registerted team",
+    feesPaidAtEachMatchByUser: "Fees paid at each match by user who registered team",
     feesPaidAtEachMatchByPlayer: "Fees Paid at each Match by each Player",
     membershipPaymentOptions: 'MembershipPaymentOption',
     membershipFeesPaymentOptions: 'Membership Fee Payment Options',
