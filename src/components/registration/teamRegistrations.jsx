@@ -146,6 +146,7 @@ class TeamRegistrations extends Component {
             searchText: '',
             sortBy: null,
             sortOrder: null,
+            roleId: -1
         }
 
         this_Obj = this;
@@ -171,7 +172,8 @@ class TeamRegistrations extends Component {
             let searchText = teamRegListAction.payload.searchText
             let statusRefId = teamRegListAction.payload.statusRefId
             let yearRefId = teamRegListAction.payload.yearRefId
-            await this.setState({ sortBy, sortOrder, competitionUniqueKey, filterOrganisation, searchText, statusRefId, yearRefId })
+            let roleId = teamRegListAction.payload.roleId
+            await this.setState({ sortBy, sortOrder, competitionUniqueKey, filterOrganisation, searchText, statusRefId, yearRefId, roleId })
             page = Math.floor(offset / 10) + 1;
 
             this.handleRegTableList(page);
@@ -189,7 +191,8 @@ class TeamRegistrations extends Component {
             searchText,
             statusRefId,
             sortBy,
-            sortOrder
+            sortOrder,
+            roleId
         } = this.state;
 
         const filter = {
@@ -199,6 +202,7 @@ class TeamRegistrations extends Component {
             filterOrganisation,
             searchText,
             statusRefId,
+            roleId,
             paging: {
                 limit: 10,
                 offset: (page ? (10 * (page - 1)) : 0),
@@ -218,6 +222,7 @@ class TeamRegistrations extends Component {
             filterOrganisation: this.state.filterOrganisation,
             searchText: this.state.searchText,
             statusRefId: this.state.statusRefId,
+            roleId: this.state.roleId
         };
         this.props.exportTeamRegistrationAction(obj);
 
@@ -245,6 +250,9 @@ class TeamRegistrations extends Component {
             this.handleRegTableList(1);
         } else if (key === "statusRefId") {
             await this.setState({ statusRefId: value });
+            this.handleRegTableList(1);
+        } else if (key === "roleId") {
+            await this.setState({ roleId: value });
             this.handleRegTableList(1);
         }
     };
@@ -392,6 +400,7 @@ class TeamRegistrations extends Component {
         }
 
         const competitions = this.props.registrationState.teamRegistrationTableData.competitionList;
+        const roles = this.props.registrationState.teamRegistrationTableData.roles;
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="fluid-width" style={{ marginRight: 55 }}>
@@ -465,6 +474,21 @@ class TeamRegistrations extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(paymentStatus || []).map((g) => (
+                                        <Option key={'status_' + g.id} value={g.id}>{g.description}</Option>
+                                    ))}
+                                </Select>
+                            </div>
+                        </div>
+                        <div className="reg-col col-lg-3 col-md-7">
+                            <div className="reg-filter-col-cont" style={{ marginRight: "30px" }}>
+                                <div className="year-select-heading">{AppConstants.role}</div>
+                                <Select
+                                    className="year-select reg-filter-select"
+                                    onChange={(e) => this.onChangeDropDownValue(e, "roleId")}
+                                    value={this.state.roleId}
+                                >
+                                    <Option key={-1} value={-1}>{AppConstants.all}</Option>
+                                    {(roles || []).map((g) => (
                                         <Option key={'status_' + g.id} value={g.id}>{g.description}</Option>
                                     ))}
                                 </Select>
