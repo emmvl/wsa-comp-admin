@@ -57,7 +57,7 @@ function login(state = initialState, action) {
                 onLoad: false,
                 result: {
                     ...action.result,
-                    tfaEnabled: 1,
+                    tfaEnabled: state.result.tfaEnabled,
                 },
                 status: action.status,
             };

@@ -240,7 +240,7 @@ class CompetitionCourtAndTimesAssign extends Component {
         }
     }
 
-    // get the title 
+    // get the title
     getTitle(pool, grade) {
         if (this.state.finalTypeRefId == 2) {
             return pool
@@ -697,7 +697,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                     <Radio id={this.getCourtRotationId(item.id, 'timeSlotPref')} value={item.id}>
                                         {item.description}
                                     </Radio>
-                                    <div style={{ marginLeft: -22, marginTop: -5 }}>
+                                    <div style={{ marginLeft: -22, marginTop: 5 }}>
                                         <CustomTooltip background="#ff8237">
                                             <span>{item.helpMsg}</span>
                                         </CustomTooltip>
