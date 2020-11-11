@@ -524,7 +524,7 @@ class LiveScoreMatchDetails extends Component {
                             <div className="col-sm pt-2">
                                 <div
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -552,7 +552,7 @@ class LiveScoreMatchDetails extends Component {
                             <div className="col-sm pt-2">
                                 <div
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -573,7 +573,7 @@ class LiveScoreMatchDetails extends Component {
                             <div className="col-sm pt-2">
                                 <div
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -601,7 +601,7 @@ class LiveScoreMatchDetails extends Component {
                             <div className="col-sm pt-2">
                                 <div
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -2522,7 +2522,7 @@ class LiveScoreMatchDetails extends Component {
                     <div className="mt-2">
                         <div className="row text-view pl-4 pr-4">
                             <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
-                                <span className='home-dash-left-text'>{AppConstants.players}</span>
+                                <span className="home-dash-left-text">{AppConstants.players}</span>
                             </div>
                             <div className="col-sm text-right align-items-center">
                                 {this.state.teamAttendance && (
@@ -2585,7 +2585,7 @@ class LiveScoreMatchDetails extends Component {
                     <div className="mt-2">
                         <div className="row text-view pl-4 pr-4">
                             <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
-                                <span className='home-dash-left-text'>{AppConstants.players}</span>
+                                <span className="home-dash-left-text">{AppConstants.players}</span>
                             </div>
                             <div className="col-sm text-right align-items-center">
                                 {this.state.teamAttendance && (
@@ -2783,7 +2783,7 @@ class LiveScoreMatchDetails extends Component {
                 >
                     <AutoComplete
                         loading
-                        style={{ width: "100%", height: '56px' }}
+                        style={{ width: '100%', height: '56px' }}
                         placeholder="Add Player"
                         onSelect={(item, option) => {
                             playerId = JSON.parse(option.key);

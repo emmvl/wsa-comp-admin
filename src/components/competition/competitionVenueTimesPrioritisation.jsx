@@ -419,7 +419,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             <DatePicker
                                 className="comp-dashboard-botton-view-mobile"
                                 size="large"
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 format="DD/MM/YYYY"
                                 placeholder="dd-mm-yyyy"
                                 showTime={false}
@@ -488,7 +488,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         >
                             <Select
                                 disabled={disabledStatus}
-                                style={{ width: "100%", minWidth: 182 }}
+                                style={{ width: '100%', minWidth: 182 }}
                                 placeholder="Select Court"
                                 onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "venueCourtId", "courtPreferences")}
                             // value={item.venueCourtId}
@@ -514,7 +514,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 <Select
                                     disabled={disabledStatus}
                                     mode="multiple"
-                                    style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
+                                    style={{ width: '100%', minWidth: 182, display: "grid", alignItems: 'center' }}
                                     placeholder="Select Division"
                                     onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesDivision", "courtPreferences")}
                                 // value={item.entitiesDivisionId}
@@ -540,7 +540,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     <Select
                                         disabled={disabledStatus}
                                         mode="multiple"
-                                        style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
+                                        style={{ width: '100%', minWidth: 182, display: "grid", alignItems: 'center' }}
                                         placeholder="Select Grade"
                                         // value={item.entitiesGradeId}
                                         onChange={venueCourtId => this.props.updateVenueConstraintsData(venueCourtId, index, "entitiesGrade", "courtPreferences")}
@@ -581,7 +581,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                 <div className="col-sm">
                     <InputWithHead heading="Court" />
                     <Select
-                        style={{ width: "100%", minWidth: 182 }}
+                        style={{ width: '100%', minWidth: 182 }}
                         placeholder="Select Court"
                     >
                         {courtArray.map((item) => (
@@ -593,7 +593,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                     <InputWithHead heading="Grade" />
                     <Select
                         mode="tags"
-                        style={{ width: "100%", minWidth: 182, display: "grid", alignItems: 'center' }}
+                        style={{ width: '100%', minWidth: 182, display: "grid", alignItems: 'center' }}
                         placeholder="Select Grade"
                     >
                         {gradesList.map((item) => (
@@ -675,7 +675,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                             </Radio>
 
                             {item.helpMsg && (
-                                <div style={{ marginLeft: -20, marginTop: 3 }}>
+                                <div style={{ marginLeft: -22, marginTop: 5 }}>
                                     <CustomTooltip background="#ff8237">
                                         <span>{item.helpMsg}</span>
                                     </CustomTooltip>
@@ -769,7 +769,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     {item.description}
                                 </Radio>
                                 {item.helpMsg && (
-                                    <div style={{ marginLeft: -20, marginTop: 3 }}>
+                                    <div style={{ marginLeft: -22, marginTop: 5 }}>
                                         <CustomTooltip background="#ff8237">
                                             <span>{item.helpMsg}</span>
                                         </CustomTooltip>
@@ -860,7 +860,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                         <Select
                             mode="multiple"
                             disabled={disabledStatus}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={venueId => {
                                 this.onSelectValues(venueId)
                             }}
@@ -993,7 +993,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.divisionName }]}
                                 >
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'competitionMembershipProductDivisionId', index)}
                                         value={item.competitionMembershipProductDivisionId}
                                     >
@@ -1015,7 +1015,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.gradeNameRequired }]}
                                 >
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'competitionDivisionGradeId', index)}
                                         value={item.competitionDivisionGradeId}
                                     >
@@ -1034,7 +1034,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.teamName }]}
                                 >
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'team1Id', index)}
                                         value={item.team1Id}
                                     >
@@ -1051,7 +1051,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.teamName }]}
                                 >
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'team2Id', index)}
                                         value={item.team2Id}
                                     >
@@ -1070,7 +1070,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.pleaseSelectVenue }]}
                                 >
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'venueId', index)}
                                         value={item.venueId}
                                     >
@@ -1087,7 +1087,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     rules={[{ required: true, message: ValidationConstant.court }]}
                                 >
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                         onChange={(div) => this.onChangeSetMPValue(div, 'courtId', index)}
                                         value={item.courtId}
                                     >
@@ -1108,7 +1108,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                     <DatePicker
                                         size="large"
                                         placeholder="dd-mm-yyyy"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         onChange={(e) => this.onChangeSetMPValue(e, 'matchDate', index)}
                                         name="matchDate"
                                         format="DD-MM-YYYY"
@@ -1124,7 +1124,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                 >
                                     <TimePicker
                                         className="comp-venue-time-timepicker"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         onChange={(time) => this.onTimeChange(time, index, 'startTime')}
                                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'startTime')}
                                         // value={moment(item.endTime, "HH:mm")}
@@ -1183,7 +1183,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.divisionName }]}
                                         >
                                             <Select
-                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'competitionMembershipProductDivisionId', index)}
                                                 value={item.competitionMembershipProductDivisionId}
                                             >
@@ -1205,7 +1205,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.gradeNameRequired }]}
                                         >
                                             <Select
-                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'competitionDivisionGradeId', index)}
                                                 value={item.competitionDivisionGradeId}
                                             >
@@ -1224,7 +1224,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.teamName }]}
                                         >
                                             <Select
-                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'team1Id', index)}
                                                 value={item.team1Id}
                                             >
@@ -1243,7 +1243,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.teamName }]}
                                         >
                                             <Select
-                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'team2Id', index)}
                                                 value={item.team2Id}
                                             >
@@ -1264,7 +1264,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.pleaseSelectVenue }]}
                                         >
                                             <Select
-                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'venueId', index)}
                                                 value={item.venueId}
                                             >
@@ -1283,7 +1283,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             rules={[{ required: true, message: ValidationConstant.court }]}
                                         >
                                             <Select
-                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                                 onChange={(div) => this.onChangeSetLDValue(div, 'courtId', index)}
                                                 value={item.courtId}
                                             >
@@ -1304,7 +1304,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                             <DatePicker
                                                 size="large"
                                                 placeholder="dd-mm-yyyy"
-                                                style={{ width: "100%" }}
+                                                style={{ width: '100%' }}
                                                 onChange={(e) => this.onChangeSetLDValue(e, 'matchDate', index)}
                                                 name="matchDate"
                                                 format="DD-MM-YYYY"
@@ -1320,7 +1320,7 @@ class CompetitionVenueTimesPrioritisation extends Component {
                                         >
                                             <TimePicker
                                                 className="comp-venue-time-timepicker"
-                                                style={{ width: "100%" }}
+                                                style={{ width: '100%' }}
                                                 onChange={(time) => this.onDLTimeChange(time, index, 'startTime')}
                                                 onBlur={(e) => this.onDLTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'startTime')}
                                                 // value={moment(item.endTime, "HH:mm")}

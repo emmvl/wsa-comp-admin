@@ -181,10 +181,11 @@ const columns = [
             <div
                 style={{
                     width: 20,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: 10
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 10,
+                    marginRight: 10,
                 }}
             >
                 <Tooltip background="#ff8237">
@@ -192,7 +193,7 @@ const columns = [
                 </Tooltip>
             </div>
         ),
-        onHeaderCell: () => listeners("totalCasualFee"),
+        onHeaderCell: () => listeners('totalCasualFee'),
     },
     {
         title: "Action",

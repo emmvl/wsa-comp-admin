@@ -222,7 +222,7 @@ class UmpirePaymentSetting extends Component {
                     <Select
                         mode='multiple'
                         placeholder="Select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                         onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
                             value: divisionId,
                             key: 'paidByCompOrgDivision'
@@ -258,7 +258,7 @@ class UmpirePaymentSetting extends Component {
                     <Select
                         mode='multiple'
                         placeholder="Select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                         onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
                             value: divisionId,
                             key: 'paidByAffiliateDivision'
@@ -546,7 +546,7 @@ class UmpirePaymentSetting extends Component {
                         <Select
                             mode='multiple'
                             placeholder="Select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                             onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
                                 value: divisionId,
                                 key: 'byBadgeDivision'
@@ -594,7 +594,7 @@ class UmpirePaymentSetting extends Component {
                         <Select
                             mode='multiple'
                             placeholder="Select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                             onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
                                 value: divisionId,
                                 key: 'byBadgeDivisionAffiliate'
@@ -866,7 +866,7 @@ class UmpirePaymentSetting extends Component {
                         <InputWithHead required="pt-0" heading={AppConstants.noOfMatches + 'Umpire/day'} />
                         <Select
                             placeholder="Select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         >
                             <Option value="11111">1</Option>
                             <Option value="22222">2</Option>
@@ -877,7 +877,7 @@ class UmpirePaymentSetting extends Component {
                         <InputWithHead required="pt-0" heading={AppConstants.timeBetweenUmpireMatch} />
                         <TimePicker
                             className="comp-venue-time-timepicker"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             defaultOpenValue={moment("00:00", "HH:mm")}
                             defaultValue={moment()}
                             format="HH:mm"
@@ -898,7 +898,7 @@ class UmpirePaymentSetting extends Component {
                             <InputWithHead required={"pt-5"} heading={AppConstants.noOfMatches + 'Reserve/day'} />
                             <Select
                                 placeholder="Select"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             >
                                 <Option value="11">1</Option>
                                 <Option value="22">2</Option>
@@ -910,7 +910,7 @@ class UmpirePaymentSetting extends Component {
                             <InputWithHead required={"pt-5"} heading={AppConstants.reserveAllocationTiming} />
                             <Select
                                 placeholder="Select"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             >
                                 <Option value="before">Before</Option>
                                 <Option value="inBetween">In-between</Option>
@@ -934,14 +934,14 @@ class UmpirePaymentSetting extends Component {
                             <InputWithHead required={"pt-5"} heading={AppConstants.noOfMatches + 'Coach/day'} />
                             <Select
                                 placeholder="Select"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             />
                         </div>
                         <div className="col-sm">
                             <InputWithHead required={"pt-5"} heading={'Number of Matches an Umpire coach can perform in a row'} />
                             <Select
                                 placeholder="Select"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             >
                                 <Option value="111">1</Option>
                                 <Option value="222">2</Option>

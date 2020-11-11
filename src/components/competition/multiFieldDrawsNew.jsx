@@ -905,7 +905,7 @@ class MultifieldDrawsNew extends Component {
                                     disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
                                     onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
                                     format="DD-MM-YYYY"
-                                    style={{ width: "100%", minWidth: 180 }}
+                                    style={{ width: '100%', minWidth: 180 }}
                                     value={[moment(this.state.startDate), moment(this.state.endDate)]}
                                 />
                             </div>

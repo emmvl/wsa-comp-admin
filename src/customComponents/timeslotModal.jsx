@@ -117,7 +117,7 @@ class TimeSlotModal extends React.Component {
                         <span className="input-heading-add-another pointer" onClick={addTimeSlot}> + {AppConstants.addAnotherDay}</span>
                     </div>
                     <div className="row">
-                        <div className="col-sm" style={{ display: "flex", width: "100%", paddingTop: 10 }}>
+                        <div className="col-sm" style={{ display: "flex", width: '100%', paddingTop: 10 }}>
                             <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
                                 <Button
                                     className="cancelBtnWidth"

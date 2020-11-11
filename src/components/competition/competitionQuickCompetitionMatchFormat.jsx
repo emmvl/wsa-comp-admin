@@ -534,7 +534,7 @@ class QuickCompetitionMatchFormat extends Component {
                 </Checkbox> */}
                 {/* <InputWithHead heading={AppConstants.fixture_template} />
                 <Select
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                     onChange={(fixTemplate) => this.onChangeSetValue(fixTemplate, 'fixtureTemplateId')}
                     value={data.fixtureTemplateId}
                 >
@@ -550,7 +550,7 @@ class QuickCompetitionMatchFormat extends Component {
                     rules={[{ required: true, message: ValidationConstants.matchTypeRequired }]}
                 >
                     <Select
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
                         value={data.matchTypeRefId}
                     >
@@ -568,7 +568,7 @@ class QuickCompetitionMatchFormat extends Component {
                     <div>
                         <InputWithHead heading={AppConstants.numberOfRounds} />
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={(x) => this.onChangeSetValue(x, 'noOfRounds')}
                             value={data.noOfRounds}
                         >
@@ -581,7 +581,7 @@ class QuickCompetitionMatchFormat extends Component {
                         </Select>
                         <InputWithHead heading={AppConstants.enhancedRoundRobinType} />
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={(x) => this.onChangeSetValue(x, 'enhancedRoundRobinTypeRefId')}
                             value={data.enhancedRoundRobinTypeRefId}
                         >
@@ -673,7 +673,7 @@ class QuickCompetitionMatchFormat extends Component {
                                     <div className="col-sm">
                                         <Select
                                             mode="multiple"
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                             onChange={(e) => this.onChange(e, data.competionFormatDivisions, index)}
                                             value={item.selectedDivisions}
                                         >

@@ -161,11 +161,11 @@ const columns = [
                     :
                     <Tooltip
                         className="comp-player-table-tag2"
-                        style={{ height: "100%" }}
+                        style={{ height: '100%' }}
                         onMouseEnter={() => this_obj.changeHover(record, index, true)}
                         onMouseLeave={() => this_obj.changeHover(record, index, false)}
                         visible={record.hoverVisible}
-                        title={"Please ask the user to set up their bank details"}
+                        title="Please ask the user to set up their bank details"
                     >
                         <Checkbox
                             className="single-checkbox"
@@ -363,7 +363,7 @@ class UmpirePayments extends Component {
                     <div
                         className="comp-dashboard-botton-view-mobile"
                         style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
@@ -499,7 +499,7 @@ class UmpirePayments extends Component {
                             flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "flex-end",
-                            width: "100%"
+                            width: '100%'
                         }}
                     >
                         <div className="row">

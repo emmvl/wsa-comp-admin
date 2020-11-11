@@ -90,7 +90,7 @@ class CompetitionModal extends React.Component {
                                 <Form.Item name='date' rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                     <DatePicker
                                         size="large"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         onChange={date => updateDate(date)}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
@@ -100,7 +100,7 @@ class CompetitionModal extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-sm" style={{ display: "flex", width: "100%", paddingTop: 10 }}>
+                            <div className="col-sm" style={{ display: "flex", width: '100%', paddingTop: 10 }}>
                                 <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
                                     {/* <Button onClick={() => this.props.addVenueAction(venuData)} className="open-reg-button" type="primary"> */}
                                     <Button className="cancelBtnWidth" type="cancel-button" onClick={onCancel} style={{ marginRight: '20px' }}>

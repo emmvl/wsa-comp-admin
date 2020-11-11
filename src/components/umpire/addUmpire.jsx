@@ -200,7 +200,7 @@ class AddUmpire extends Component {
                         <Form.Item name={AppConstants.team} rules={[{ required: true, message: ValidationConstants.umpireSearch }]}>
                             <AutoComplete
                                 // loading
-                                style={{ width: "100%", height: '44px' }}
+                                style={{ width: '100%', height: '44px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
                                     let umpire = option.key.split('_')
@@ -253,7 +253,7 @@ class AddUmpire extends Component {
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectOrganisation}
-                                style={{ width: "100%", }}
+                                style={{ width: '100%', }}
                                 onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
                                 notFoundContent={onAffiliateLoad === true ? <Spin size="small" /> : null}
                                 optionFilterProp="children"
@@ -383,7 +383,7 @@ class AddUmpire extends Component {
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectOrganisation}
-                                style={{ width: "100%", }}
+                                style={{ width: '100%', }}
                                 onChange={(affiliateId) => this.props.updateAddUmpireData(affiliateId, 'affiliateId')}
                                 // value={affiliateId}
                                 optionFilterProp="children"
@@ -550,7 +550,7 @@ class AddUmpire extends Component {
 
                             // body = {
                             //     id: exsitingUmpireId,
-                            //     
+                            //
                             // }
                             this.setState({ isUserNotFound: false })
                             this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName }, this.state.existingUmpireCheckBox, this.state.existingUmpireCoach_CheckBox)
@@ -615,7 +615,7 @@ class AddUmpire extends Component {
 
                         // body = {
                         //     id: exsitingUmpireId,
-                        //     
+                        //
                         // }
                         this.setState({ isUserNotFound: false })
                         this.props.addUmpireAction(body, affiliateId, exsitingUmpireId, { screenName: this.state.screenName }, this.state.existingUmpireCheckBox, this.state.existingUmpireCoach_CheckBox)

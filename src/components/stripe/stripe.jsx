@@ -115,7 +115,7 @@ const CheckoutForm = (props) => {
     return (
         <div className="content-view">
             <form id='my-form' className="form" onSubmit={handleSubmit}>
-                <label className='home-dash-left-text' for="card-element">
+                <label className="home-dash-left-text" for="card-element">
                     Credit or debit card
                  </label>
                 <div className="pt-5">

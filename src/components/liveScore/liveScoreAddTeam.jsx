@@ -216,14 +216,14 @@ class LiveScoreAddTeam extends Component {
                         }}
                         // value={captializedString(name)}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
-                            'teamName': captializedString(i.target.value)
+                            teamName: captializedString(i.target.value)
                         })}
                     />
                 </Form.Item>
                 <InputWithHead
                     auto_complete="off"
-                    heading={"Team Alias"}
-                    placeholder={"Team Alias"}
+                    heading="Team Alias"
+                    placeholder="Team Alias"
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.teamAliasMsg}
                     onChange={(event) => {
@@ -284,7 +284,7 @@ class LiveScoreAddTeam extends Component {
                             <Select
                                 showSearch
                                 optionFilterProp="children"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 onChange={divisionSelection => {
                                     this.props.liveScoreAddTeamform({ key: 'divisionId', data: divisionSelection })
                                 }}
@@ -303,7 +303,7 @@ class LiveScoreAddTeam extends Component {
                 <div>
                     <Form.Item name='affiliate' rules={[{ required: true, message: ValidationConstants.affiliateField }]}>
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={affiliateId => {
                                 this.props.liveScoreAddTeamform({ key: 'organisationId', data: affiliateId })
                             }}
@@ -337,7 +337,7 @@ class LiveScoreAddTeam extends Component {
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">
                                     {AppConstants.new}
                                 </Radio>
-                                <div style={{ marginLeft: -10, width: 50 }}>
+                                <div style={{ marginLeft: -10, marginTop: -10, width: 50 }}>
                                     <Tooltip background="#ff8237">
                                         <span>{AppConstants.teamNewMsg}</span>
                                     </Tooltip>
@@ -348,7 +348,7 @@ class LiveScoreAddTeam extends Component {
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                     {AppConstants.existing}
                                 </Radio>
-                                <div style={{ marginLeft: -10 }}>
+                                <div style={{ marginLeft: -10, marginTop: -10 }}>
                                     <Tooltip background="#ff8237">
                                         <span>{AppConstants.teamExistingMsg}</span>
                                     </Tooltip>
@@ -376,7 +376,7 @@ class LiveScoreAddTeam extends Component {
                             showSearch
                             mode="multiple"
                             placeholder={AppConstants.searchManager}
-                            style={{ width: "100%", }}
+                            style={{ width: '100%', }}
                             onChange={(e) => {
                                 this.props.liveScoreAddTeamform({ key: 'userIds', data: e })
                                 this.props.liveScoreClear()

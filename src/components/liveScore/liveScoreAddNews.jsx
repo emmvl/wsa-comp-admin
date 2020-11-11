@@ -132,7 +132,7 @@ class LiveScoreAddNews extends Component {
         const { liveScoreNewsState } = this.props;
         const { editorState } = this.state;
         return (
-            <div className="fluid-width mt-3" style={{ border: "1px solid rgb(212, 212, 212)", }}>
+            <div className="fluid-width mt-2" style={{ border: "1px solid rgb(212, 212, 212)", }}>
                 <div className="livescore-editor-news col-sm">
                     <Editor
                         editorState={editorState}
@@ -384,11 +384,11 @@ class LiveScoreAddNews extends Component {
         return (
             <div className="row">
                 <div className="col-sm">
-                    <InputWithHead required={'pb-0'} heading={AppConstants.scorerHeading} />
+                    <InputWithHead required="pb-0" heading={AppConstants.scorerHeading} />
                     <Select
                         mode="tags"
                         placeholder={AppConstants.searchScorer}
-                        style={{ width: "100%", }}
+                        style={{ width: '100%' }}
                         // onChange={(scorerId) => this.props.liveScoreUpdateNewsAction(scorerId, "title")}
                         // value={editData.title}
                     >
@@ -411,11 +411,11 @@ class LiveScoreAddNews extends Component {
         return (
             <div className="row">
                 <div className="col-sm">
-                    <InputWithHead required={'pb-0'} heading={AppConstants.managerHeading} />
+                    <InputWithHead required="pb-0" heading={AppConstants.managerHeading} />
                     <Select
                         mode="tags"
-                        placeholder={'Select Manager'}
-                        style={{ width: "100%", }}
+                        placeholder="Select Manager"
+                        style={{ width: '100%' }}
                         // onChange={e => this.venueChange(e)}
                         // value={this.state.venue === [] ? AppConstants.selectVenue : this.state.venue}
                     >
@@ -463,7 +463,7 @@ class LiveScoreAddNews extends Component {
             <div className="content-view pt-4">
                 <Form.Item name="news_Title" rules={[{ required: true, message: ValidationConstants.newsValidation[0] }]}>
                     <InputWithHead
-                        required="required-field pt-0 pb-0"
+                        required="required-field pt-0 pb-1"
                         heading={AppConstants.newsTitle}
                         placeholder={AppConstants.enterNewsTitle}
                         name="newsTitle"
@@ -484,7 +484,7 @@ class LiveScoreAddNews extends Component {
 
                 <Form.Item name="author" rules={[{ required: true, message: ValidationConstants.newsValidation[1] }]}>
                     <InputWithHead
-                        required="required-field pb-0 pt-3"
+                        required="required-field pb-1 pt-4"
                         heading={AppConstants.author}
                         placeholder={AppConstants.enterAuthor}
                         name="authorName"
@@ -495,11 +495,11 @@ class LiveScoreAddNews extends Component {
                     />
                 </Form.Item>
 
-                <InputWithHead heading={AppConstants.recipients} />
+                <InputWithHead required="pb-1" heading={AppConstants.recipients} />
                 <div>
                     <Select
                         placeholder={AppConstants.recipientSelection}
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         onChange={recipientSelection => this.setRecipientData(recipientSelection, 'recipients')}
                         value={editData.recipients}
                     >
@@ -601,10 +601,10 @@ class LiveScoreAddNews extends Component {
                 {/* News expiry date and time  row */}
                 <div className="row">
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.newsExpiryDate} />
+                        <InputWithHead required="pb-1" heading={AppConstants.newsExpiryDate} />
                         <DatePicker
-                            size="large"
-                            style={{ width: "100%" }}
+                            // size="large"
+                            style={{ width: '100%' }}
                             onChange={(date) => this.props.liveScoreUpdateNewsAction(date, "expire_date")}
                             format="DD-MM-YYYY"
                             value={expiryDate ? moment(expiryDate) : ''}
@@ -614,15 +614,15 @@ class LiveScoreAddNews extends Component {
                         />
                     </div>
                     <div className="col-sm">
-                        <InputWithHead heading={AppConstants.newsExpiryTime} />
+                        <InputWithHead required="pb-1" heading={AppConstants.newsExpiryTime} />
                         <TimePicker
                             className="comp-venue-time-timepicker"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             format="HH:mm"
                             value={expiryTime_formate !== null && moment(expiryTime_formate, "HH:mm")}
                             onChange={(time) => this.props.liveScoreUpdateNewsAction(time, "expire_time")}
                             onBlur={(e) => this.props.liveScoreUpdateNewsAction(e.target.value && moment(e.target.value, "HH:mm"), 'expire_time')}
-                            placeholder='Select Time'
+                            placeholder="Select Time"
                         />
                     </div>
                 </div>
@@ -679,7 +679,7 @@ class LiveScoreAddNews extends Component {
                         <Select
                             mode='multiple'
                             placeholder={AppConstants.selectOrganisation}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         >
                         </Select>
                     </div>

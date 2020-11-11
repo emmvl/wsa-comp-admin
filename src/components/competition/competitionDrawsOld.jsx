@@ -69,7 +69,7 @@ class CompetitionDraws extends Component {
                 </div>
                 <div className="col-sm-3">
                     <div style={{
-                        width: "100%",
+                        width: '100%',
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
@@ -102,7 +102,7 @@ class CompetitionDraws extends Component {
                         <div className="row">
                             <div className="col-sm-5 mr-0">
                                 <div style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
@@ -121,7 +121,7 @@ class CompetitionDraws extends Component {
                             <div className="col-sm-7 pl-0">
                                 <div className="col-sm-4">
                                     <div style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -143,7 +143,7 @@ class CompetitionDraws extends Component {
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
-                                        width: "100%",
+                                        width: '100%',
                                     }}>
                                         <span className='year-select-heading pt-2'>{AppConstants.startingSaturday}</span>
                                     </div>

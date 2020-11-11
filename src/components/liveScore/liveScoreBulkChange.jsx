@@ -121,7 +121,7 @@ class LiveScoreBulkChange extends Component {
                     <Form.Item name="changeMatchDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                         <DatePicker
                             size="large"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             onChange={date => this.setState(date)}
                             format="DD-MM-YYYY"
                             placeholder="dd-mm-yyyy"
@@ -138,7 +138,7 @@ class LiveScoreBulkChange extends Component {
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <TimePicker
                                 className="comp-venue-time-timepicker"
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 defaultOpenValue={moment("00:00", "hh:mm A")}
                                 defaultValue={moment()}
                                 format="hh:mm A"
@@ -149,7 +149,7 @@ class LiveScoreBulkChange extends Component {
                         <div className="col-sm" style={{ marginTop: 5 }}>
                             <TimePicker
                                 className="comp-venue-time-timepicker"
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 defaultOpenValue={moment("00:00", "hh:mm A")}
                                 defaultValue={moment()}
                                 format="hh:mm A"
@@ -166,7 +166,7 @@ class LiveScoreBulkChange extends Component {
                     <InputWithHead heading={AppConstants.matchOnDate} required="required-field" />
                     <Form.Item name="changeMatchVenue" rules={[{ required: true, message: ValidationConstants.venueField }]}>
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             // onChange={venueSelection => this.setState({ venueSelection })}
                             placeholder={AppConstants.selectVenue}
                             className="reg-form-multiple-select"
@@ -192,7 +192,7 @@ class LiveScoreBulkChange extends Component {
             <div>
                 <Form.Item name='optionData' rules={[{ required: true, message: ValidationConstants.pleaseSelect }]}>
                     <Select
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         onChange={(selectedOption) => this.props.liveScoreUpdateBulkAction(selectedOption, "selectedOption")}
                         // value={selectedOption}
                         placeholder={AppConstants.selectOption}
@@ -214,8 +214,8 @@ class LiveScoreBulkChange extends Component {
         return (
             <div className="content-view pt-5">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span className='text-heading-large'>{AppConstants.whatDoWantDO}</span>
-                    <div style={{ marginTop: -14 }}>
+                    <span className="text-heading-large">{AppConstants.whatDoWantDO}</span>
+                    <div style={{ marginTop: -24 }}>
                         <Tooltip placement="top" background="#ff8237">
                             <span>{AppConstants.bulkMatchMsg}</span>
                             {/* {AppConstants.LatitudeMsg} */}
@@ -302,7 +302,7 @@ class LiveScoreBulkChange extends Component {
                     <div className="col-sm" style={{ marginTop: 5 }}>
                         <DatePicker
                             size="large"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             format="DD-MM-YYYY"
                             placeholder="dd-mm-yyyy"
                             showTime={false}
@@ -313,7 +313,7 @@ class LiveScoreBulkChange extends Component {
                     <div className="col-sm" style={{ marginTop: 5 }}>
                         <TimePicker
                             className="comp-venue-time-timepicker"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             defaultOpenValue={moment("00:00", "HH:mm")}
                             defaultValue={moment()}
                             onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "optionalTime")}
@@ -358,7 +358,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="startDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -372,7 +372,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="startTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     // minuteStep={15}
@@ -395,7 +395,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="endDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -409,7 +409,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="endTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     // minuteStep={15}
@@ -432,7 +432,7 @@ class LiveScoreBulkChange extends Component {
                 <div>
                     <Select
                         showSearch
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         className="reg-form-multiple-select"
                         onChange={(venue) => this.onVenueSelection(venue, 'venueId')}
                         value={pushBackData.venueId ? pushBackData.venueId : []}
@@ -453,7 +453,7 @@ class LiveScoreBulkChange extends Component {
                 <div>
                     <Select
                         mode='multiple'
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         onChange={(court) => {
                             this.props.liveScoreUpdateBulkAction(court, "venueCourtId")
                             this.props.clearFilter()
@@ -502,7 +502,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name='forwardDate' rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "startDate")}
                                     // value={bringForwardData.startDate}
                                     format="DD-MM-YYYY"
@@ -515,7 +515,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="forwardTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, 'startTime')}
                                     onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'startTime')}
@@ -538,7 +538,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name='forwardEndDate' rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={(date) => this.props.liveScoreUpdateBulkAction(date, "endDate")}
                                     // value={bringForwardData.endDate}
                                     format="DD-MM-YYYY"
@@ -552,7 +552,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name='forwardEndTime' rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     onChange={(time) => this.props.liveScoreUpdateBulkAction(time, "endTime")}
                                     onBlur={(e) => this.props.liveScoreUpdateBulkAction(e.target.value && moment(e.target.value, "HH:mm"), 'endTime')}
@@ -575,7 +575,7 @@ class LiveScoreBulkChange extends Component {
                 <div>
                     <Select
                         showSearch
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         className="reg-form-multiple-select"
                         onChange={(venue) => this.onVenueSelection(venue, 'venueId')}
                         value={bringForwardData.venueId ? bringForwardData.venueId : []}
@@ -596,7 +596,7 @@ class LiveScoreBulkChange extends Component {
                 <div>
                     <Select
                         mode='multiple'
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         onChange={(courtId) => {
                             this.props.liveScoreUpdateBulkAction(courtId, "courtId")
                             this.props.clearFilter()
@@ -643,7 +643,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name='endMatchDate' rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -656,7 +656,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name='endMatchTime' rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     defaultOpenValue={moment("00:00", "hh:mm")}
                                     format="hh:mm"
                                     // minuteStep={15}
@@ -679,7 +679,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="endDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -693,7 +693,7 @@ class LiveScoreBulkChange extends Component {
                             <Form.Item name="endTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     placeholder="Select Time"
@@ -716,7 +716,7 @@ class LiveScoreBulkChange extends Component {
                 <div>
                     <Select
                         showSearch
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         onChange={(venueId) => this.onVenueSelection(venueId, "venueId")}
                         value={endMatchData.venueId ? endMatchData.venueId : []}
                         placeholder={AppConstants.selectVenue}
@@ -736,7 +736,7 @@ class LiveScoreBulkChange extends Component {
                 <div>
                     <Select
                         mode='multiple'
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         onChange={(courtId) => {
                             this.props.liveScoreUpdateBulkAction(courtId, "courtId")
                             this.props.clearFilter()
@@ -761,7 +761,7 @@ class LiveScoreBulkChange extends Component {
                     <InputWithHead heading={AppConstants.round} />
                     <div>
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={(round_1) => this.props.liveScoreUpdateBulkAction(round_1, "resultType")}
                             value={endMatchData.resultType ? endMatchData.resultType : []}
                             placeholder={AppConstants.selectRound}
@@ -795,7 +795,7 @@ class LiveScoreBulkChange extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={(round_1) => this.props.liveScoreUpdateBulkAction(round_1, "round_1")}
                             // value={doubleHeaderResult.round_1}
                             placeholder={AppConstants.selectRoundOne}
@@ -814,7 +814,7 @@ class LiveScoreBulkChange extends Component {
                 <div>
                     <Form.Item name='round2' rules={[{ required: true, message: ValidationConstants.roundField }]}>
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={(round_2) => this.props.liveScoreUpdateBulkAction(round_2, "round_2")}
                             // value={doubleHeaderResult.round_2}
                             placeholder={AppConstants.selectRoundOne}
@@ -851,7 +851,7 @@ class LiveScoreBulkChange extends Component {
                                 <Form.Item name='startMatchDate' rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                     <DatePicker
                                         size="large"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
                                         showTime={false}
@@ -864,7 +864,7 @@ class LiveScoreBulkChange extends Component {
                             <div className="col-sm" style={{ marginTop: 5 }}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     // minuteStep={15}
@@ -886,7 +886,7 @@ class LiveScoreBulkChange extends Component {
                                 <Form.Item name="endDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                     <DatePicker
                                         size="large"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
                                         showTime={false}
@@ -899,7 +899,7 @@ class LiveScoreBulkChange extends Component {
                             <div className="col-sm" style={{ marginTop: 5 }}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     // minuteStep={15}
@@ -921,7 +921,7 @@ class LiveScoreBulkChange extends Component {
                     <div>
                         <Select
                             showSearch
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             className="reg-form-multiple-select"
                             onChange={(venueId) => this.onVenueSelection(venueId, "venueId")}
                             placeholder={AppConstants.selectVenue}
@@ -942,7 +942,7 @@ class LiveScoreBulkChange extends Component {
                     <div>
                         <Select
                             mode='multiple'
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={(courtId) => {
                                 this.props.liveScoreUpdateBulkAction(courtId, "courtId")
                                 this.props.clearFilter()
@@ -970,7 +970,7 @@ class LiveScoreBulkChange extends Component {
                         />
                         <div>
                             <Select
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 onChange={(roundId) => this.props.liveScoreUpdateBulkAction(roundId, "roundId")}
                                 placeholder={AppConstants.selectRoundOne}
                                 value={abandonData.roundId ? abandonData.roundId : []}
@@ -992,7 +992,7 @@ class LiveScoreBulkChange extends Component {
                 <div>
                     <Form.Item name="reason" rules={[{ required: true, message: ValidationConstants.selectReason }]}>
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={selectReason => this.setState({ selectReason })}
                             placeholder={AppConstants.selectReason}
                             onChange={(resultType) => this.props.liveScoreUpdateBulkAction(resultType, "resultType")}

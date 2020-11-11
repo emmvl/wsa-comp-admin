@@ -284,7 +284,7 @@ class LiveScoreAddEditCoach extends Component {
                                 // loading={this.props.liveScoreState.onLoad && true}
                                 mode="multiple"
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 onChange={(teamId) => this.props.liveScoreUpdateCoach(teamId, 'teamId')}
                                 // value={[741, 738]}
                                 showSearch
@@ -319,7 +319,7 @@ class LiveScoreAddEditCoach extends Component {
 
                             <AutoComplete
                                 loading
-                                style={{ width: "100%", height: '44px' }}
+                                style={{ width: '100%', height: '44px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
                                     const ManagerId = option.key
@@ -374,7 +374,7 @@ class LiveScoreAddEditCoach extends Component {
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: "100%", }}
+                                style={{ width: '100%', }}
                                 onChange={(teamId) => this.props.liveScoreUpdateCoach(teamId, 'teamId')}
                                 // value={teamId}
                                 optionFilterProp="children"

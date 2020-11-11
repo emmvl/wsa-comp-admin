@@ -169,7 +169,7 @@ class LiveScoreAddManager extends Component {
                         <Form.Item name={AppConstants.team} rules={[{ required: true, message: ValidationConstants.searchManager }]}>
                             <AutoComplete
                                 loading
-                                style={{ width: "100%", height: '44px' }}
+                                style={{ width: '100%', height: '44px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
                                     const ManagerId = option.key
@@ -214,7 +214,7 @@ class LiveScoreAddManager extends Component {
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: "100%", }}
+                                style={{ width: '100%', }}
                                 onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                 // value={teamId}
                                 optionFilterProp="children"
@@ -331,7 +331,7 @@ class LiveScoreAddManager extends Component {
                             <Select
                                 mode="multiple"
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                 // value={teamId}
                                 showSearch
@@ -370,7 +370,7 @@ class LiveScoreAddManager extends Component {
                     <div className="row ml-2" style={{ marginTop: 18 }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
-                            <div style={{ marginLeft: -10, width: 50 }}>
+                            <div style={{ marginLeft: -10, marginTop: -10, width: 50 }}>
                                 <Tooltip background="#ff8237">
                                     <span>{AppConstants.newMsgForScorerManager}</span>
                                 </Tooltip>
@@ -380,7 +380,7 @@ class LiveScoreAddManager extends Component {
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                 {AppConstants.existing}
                             </Radio>
-                            <div style={{ marginLeft: -10 }}>
+                            <div style={{ marginLeft: -10, marginTop: -10 }}>
                                 <Tooltip background="#ff8237">
                                     <span>{AppConstants.existingMsgForScorerManager}</span>
                                 </Tooltip>

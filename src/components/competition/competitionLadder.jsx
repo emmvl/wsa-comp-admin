@@ -391,7 +391,7 @@ class CompetitionLadder extends Component {
                         </div>
                         <div className="col-sm-3">
                             <div style={{
-                                width: "100%",
+                                width: '100%',
                                 display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
@@ -445,7 +445,7 @@ class CompetitionLadder extends Component {
                         {!ladder.isEditted ? (
                             <div>
                                 <Select
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                     onChange={(e) => this.onChangeSchemeName(e, "ladderFormat", index, ladderFormat, schemeData)}
                                     value={ladder.schemeName}
                                 >
@@ -471,7 +471,7 @@ class CompetitionLadder extends Component {
                                     <div className="col-sm">
                                         <Select
                                             mode="multiple"
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                             onChange={(e) => this.onChange(e, ladderFormat, ladder, index)}
                                             value={ladder.selectedDivisions}
                                         >

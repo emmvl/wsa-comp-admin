@@ -185,7 +185,7 @@ class LiveScoreAddDivision extends Component {
                         <InputWithHead heading={AppConstants.positionTracking} required="pb-3 pt-3" />
                         <Form.Item className="formMargin pt-0" name="positionTracking">
                             <Select
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 onChange={(value) => this.props.liveScoreUpdateDivisionAction(value, "positionTracking")}
                                 placeholder={AppConstants.positionTracking}
                             >
@@ -209,7 +209,7 @@ class LiveScoreAddDivision extends Component {
                         <InputWithHead heading={AppConstants.recordGoalAttempt} required="pb-3 pt-3" />
                         <Form.Item className="formMargin pt-0" name="recordGoalAttempts">
                             <Select
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 onChange={(value) => this.props.liveScoreUpdateDivisionAction(value, "recordGoalAttempts")}
                                 placeholder={AppConstants.recordGoalAttempt}
                             >

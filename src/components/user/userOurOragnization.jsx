@@ -710,7 +710,7 @@ class UserOurOrganization extends Component {
 
                 <Form.Item name='stateRefId' rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
                     <Select
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         placeholder={AppConstants.select}
                         onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                         // value={affiliate.stateRefId}
@@ -881,7 +881,7 @@ class UserOurOrganization extends Component {
                                 />
                                 <Form.Item name={`permissions${index}`} rules={[{ required: true, message: ValidationConstants.rolesField[0] }]}>
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1 }}
+                                        style={{ width: '100%', paddingRight: 1 }}
                                         onChange={(e) => this.onChangeContactSetValue(e, "roles", index)}
                                         value={item.roleId}
                                     >
@@ -1039,7 +1039,7 @@ class UserOurOrganization extends Component {
                 <div
                     className="comp-dashboard-botton-view-mobile"
                     style={{
-                        width: "100%",
+                        width: '100%',
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
@@ -1121,7 +1121,7 @@ class UserOurOrganization extends Component {
                                 <InputWithHead heading={AppConstants.category} required="required-field" />
                                 <Form.Item name='photoTypeRefId' rules={[{ required: true, message: ValidationConstants.photoTypeRequired }]}>
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1 }}
+                                        style={{ width: '100%', paddingRight: 1 }}
                                         onChange={(e) => this.setOrgPhotoValue(e)}
                                         value={this.state.tableRecord.photoTypeRefId}
                                     >
@@ -1149,7 +1149,7 @@ class UserOurOrganization extends Component {
                     <div
                         className="comp-dashboard-botton-view-mobile"
                         style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",

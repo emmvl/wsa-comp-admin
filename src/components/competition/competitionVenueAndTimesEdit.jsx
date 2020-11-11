@@ -167,7 +167,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     dataIndex: "clear",
                     key: "clear",
                     render: (clear, record, index) => (
-                        <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: 'pointer', }}>
+                        <span style={{ display: "flex", justifyContent: "center", width: '100%', cursor: 'pointer', }}>
                             {/* {!record.isDisabled && ( */}
                             <img
                                 className="dot-image"
@@ -553,7 +553,7 @@ class CompetitionVenueAndTimesEdit extends Component {
 
                 <Form.Item name="stateRefId">
                     <Select
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         placeholder={AppConstants.select}
                         onChange={(stateRefId) => this.props.updateVenuAndTimeDataAction(stateRefId, 'Venue', 'stateRefId')}
                         value={venuData.stateRefId}
@@ -604,7 +604,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                                 <Select
                                     // disabled={this.state.isUsed}
                                     mode="multiple"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     value={venuData.affiliateData}
                                     onChange={(affiliateData) => this.props.updateVenuAndTimeDataAction(affiliateData, 'editOrganisations', "editOrganisations")}
                                     placeholder="Select"
@@ -642,7 +642,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <Select
                         // disabled={item.isDisabled}
                         // className="year-select"
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         onChange={(dayOfTheWeek) => this.props.updateVenuAndTimeDataAction(dayOfTheWeek, index, 'dayRefId', 'gameTimeslot')}
                         value={item.dayRefId}
                         placeholder="Select Week Day"
@@ -658,7 +658,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         // disabled={item.isDisabled}
                         key="startTime"
                         className="comp-venue-time-timepicker"
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         onChange={(time) => this.onTimeChange(time, index, 'startTime')}
                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'startTime')}
                         value={moment(item.startTime, "HH:mm")}
@@ -675,7 +675,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         disabledHours={() => this.getDisabledHours(item.startTime)}
                         disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
                         className="comp-venue-time-timepicker"
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         onChange={(time) => this.onTimeChange(time, index, 'endTime')}
                         onBlur={(e) => this.onTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, 'endTime')}
                         value={moment(item.endTime, "HH:mm")}
@@ -738,7 +738,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <InputWithHead required="pt-1" heading={AppConstants.dayOfTheWeek} />
                     <Select
                         disabled={item.isDisabled}
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         onChange={(dayOfTheWeek) => this.props.updateVenuAndTimeDataAction(dayOfTheWeek, index, 'dayRefId', 'addTimeSlotField', tableIndex)}
                         value={item.dayRefId}
                         placeholder="Select Week Day"
@@ -753,7 +753,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                     <TimePicker
                         disabled={item.isDisabled}
                         className="comp-venue-time-timepicker"
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         onChange={(time) => this.onAddTimeChange(time, index, tableIndex, 'startTime')}
                         onBlur={(e) => this.onAddTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, tableIndex, 'startTime')}
                         value={moment(item.startTime, "HH:mm")}
@@ -769,7 +769,7 @@ class CompetitionVenueAndTimesEdit extends Component {
                         className="comp-venue-time-timepicker"
                         disabledHours={() => this.getDisabledHours(item.startTime)}
                         disabledMinutes={(e) => this.getDisabledMinutes(e, item.startTime)}
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         onChange={(time) => this.onAddTimeChange(time, index, tableIndex, 'endTime')}
                         onBlur={(e) => this.onAddTimeChange(e.target.value && moment(e.target.value, "HH:mm"), index, tableIndex, 'endTime')}
                         value={moment(item.endTime, "HH:mm")}

@@ -755,7 +755,7 @@ class AppRegistrationForm extends Component {
             >
                 <DatePicker
                     size="large"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     onChange={e => this.onChangeSetParticipantValue(e, "dateOfBirth", index)}
                     format="DD-MM-YYYY"
                     placeholder="dd-mm-yyyy"
@@ -813,7 +813,7 @@ class AppRegistrationForm extends Component {
                     rules={[{ required: true, message: ValidationConstants.membershipProductRequired }]}
                 >
                     <Select
-                        style={{ width: "100%", paddingRight: 1 }}
+                        style={{ width: '100%', paddingRight: 1 }}
                         onChange={(e) => this.onChangeSetParticipantValue(e, "competitionMembershipProductTypeId", index )}
                         value={item.competitionMembershipProductTypeId}
                     >
@@ -831,7 +831,7 @@ class AppRegistrationForm extends Component {
                 <InputWithHead heading={AppConstants.divisions} />
                 <div className="applicable-to-text">{item.divisionName}</div>
                 {/* <Select
-                    style={{ width: "100%", paddingRight: 1 }}
+                    style={{ width: '100%', paddingRight: 1 }}
                     onChange={(e) => this.onChangeSetValue(e, "" )}
                 >
                     {(divisions || []).map((division) => (
@@ -991,7 +991,7 @@ class AppRegistrationForm extends Component {
                     rules={[{ required: true, message: ValidationConstants.stateField[0] }]}
                 >
                     <Select
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         placeholder={AppConstants.select}
                         onChange={(e) => this.onChangeSetParticipantValue(e, "stateRefId", index )}
                         value={item.stateRefId}
@@ -1161,7 +1161,7 @@ class AppRegistrationForm extends Component {
                             rules={[{ required: true, message: ValidationConstants.stateField[0] }]}
                         >
                             <Select
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 placeholder={AppConstants.select}
                                 onChange={(e) => this.onChangeSetParentValue(e, "stateRefId", index)}
                                 value={item.parentOrGuardian.stateRefId}
@@ -1268,7 +1268,7 @@ class AppRegistrationForm extends Component {
 
                 <InputWithHead heading={AppConstants.position1} />
                 <Select
-                    style={{ width: "100%", paddingRight: 1 }}
+                    style={{ width: '100%', paddingRight: 1 }}
                     onChange={(e) => this.onChangeSetValue(e, index, participantOrProduct, productIndex, "positions", subIndex, "position1")}
                     value={item.position1}
                 >
@@ -1279,7 +1279,7 @@ class AppRegistrationForm extends Component {
 
                 <InputWithHead heading={AppConstants.position2} />
                 <Select
-                    style={{ width: "100%", paddingRight: 1 }}
+                    style={{ width: '100%', paddingRight: 1 }}
                     onChange={(e) => this.onChangeSetValue(e, index, participantOrProduct, productIndex, "positions", subIndex, "position2")}
                     value={item.position2}
                 >
@@ -1470,7 +1470,7 @@ class AppRegistrationForm extends Component {
                     rules={[{ required: true, message: ValidationConstants.favoriteTeamField[0] }]}
                 >
                     <Select
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         onChange={(e) => this.onChangeSetParticipantValue(e, "favouriteTeamRefId", index)}
                         value={item.favouriteTeamRefId}
                     >
@@ -1488,7 +1488,7 @@ class AppRegistrationForm extends Component {
                             message: ValidationConstants.firebirdField[0]
                         }]}>
                             <Select
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 onChange={(e) => this.onChangeSetParticipantValue(e, "favouriteFireBird", index)}
                                 value={item.favouriteFireBird}
                             >
@@ -1577,7 +1577,7 @@ class AppRegistrationForm extends Component {
                     <div>
                         <InputWithHead heading={AppConstants.childCountry} />
                         <Select
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             placeholder={AppConstants.select}
                             onChange={(e) => this.onChangeSetRegistrationValue(e, "countryRefId")}
                             value={registrationDetail.countryRefId}
@@ -1593,7 +1593,7 @@ class AppRegistrationForm extends Component {
                     <div>
                         <InputWithHead heading={AppConstants.childNationality} />
                         <Select
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             placeholder={AppConstants.select}
                             onChange={(e) => this.onChangeSetRegistrationValue(e, "nationalityRefId")}
                             value={registrationDetail.nationalityRefId}
@@ -1658,7 +1658,7 @@ class AppRegistrationForm extends Component {
                                 />
                                 <InputWithHead heading={AppConstants.participant} />
                                 <Select
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                     onChange={(e) => this.onChangeSetVoucherValue(e, "tempParticipantId", index)}
                                     value={voc.tempParticipantId}
                                 >
@@ -1695,7 +1695,7 @@ class AppRegistrationForm extends Component {
 
                 <InputWithHead heading={AppConstants.membershipProduct} />
                 <Select
-                    style={{ width: "100%", paddingRight: 1 }}
+                    style={{ width: '100%', paddingRight: 1 }}
                     onChange={(e) => this.onChangeSetProdMemberTypeValue(e, index, prodIndex)}
                     value={prod.competitionMembershipProductTypeId}
                 >

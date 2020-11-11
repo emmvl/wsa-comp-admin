@@ -79,7 +79,7 @@ const columns = [
                     (item.divisionGrade != null && item.divisionGrade != "") && (
                         <Tooltip
                             className="comp-player-table-tag2"
-                            style={{ height: "100%" }}
+                            style={{ height: '100%' }}
                             onMouseEnter={() => this_obj.changeHover(item, key, index, true)}
                             onMouseLeave={() => this_obj.changeHover(item, key, index, false)}
                             visible={item.hoverVisible}
@@ -87,11 +87,11 @@ const columns = [
                         >
                             {this_obj.state.competitionStatus != 1 ? (
                                 <NavLink to={{
-                                    pathname: `/userPersonal`,
+                                    pathname: '/userPersonal',
                                     state: {
                                         userId: item.userId,
                                         screenKey: 'competitionPartProposedTeamGrading',
-                                        screen: "/competitionPartProposedTeamGrading"
+                                        screen: '/competitionPartProposedTeamGrading'
                                     }
                                 }}>
                                     <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
@@ -383,7 +383,7 @@ class CompetitionPartProposedTeamGrading extends Component {
     headerView = () => {
         let disabledStatus = this.state.competitionStatus == 1
         return (
-            <div className="comp-player-grades-header-view-design" >
+            <div className="comp-player-grades-header-view-design">
                 <div className="row">
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
@@ -392,7 +392,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                     </div>
                     <div className="col-sm" style={{
                         display: "flex", flexDirection: 'row', alignItems: "center",
-                        justifyContent: "flex-end", width: "100%", marginRight: '2.8%'
+                        justifyContent: "flex-end", width: '100%', marginRight: '2.8%'
                     }}>
                         <div className="row">
                             <div className="col-sm">
@@ -470,8 +470,8 @@ class CompetitionPartProposedTeamGrading extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="fluid-width">
                     <div className="row">
-                        <div className="col-sm-3" >
-                            <div className="com-year-select-heading-view pb-3" >
+                        <div className="col-sm-3">
+                            <div className="com-year-select-heading-view pb-3">
                                 <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     name="yearRefId"
@@ -488,7 +488,7 @@ class CompetitionPartProposedTeamGrading extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" >
+                        <div className="col-sm pb-3">
                             <div style={{
                                 width: "fit-content",
                                 display: "flex",
@@ -617,17 +617,17 @@ class CompetitionPartProposedTeamGrading extends Component {
     footerView = () => {
         let isPublished = this.state.competitionStatus == 1
         return (
-            <div className="fluid-width paddingBottom56px" >
+            <div className="fluid-width paddingBottom56px">
                 {/* <div className="comp-player-grades-footer-view"> */}
                 <div className="row">
-                    <div className="col-sm-3 mt-3" >
+                    <div className="col-sm-3 mt-3">
                         <div className="reg-add-save-button">
                             <NavLink to="/competitionPartPlayerGrades">
                                 <Button disabled={isPublished} className="cancelBtnWidth" type="cancel-button">{AppConstants.back}</Button>
                             </NavLink>
                         </div>
                     </div>
-                    <div className="col-sm mt-3" >
+                    <div className="col-sm mt-3">
                         {this.state.divisionId != null &&
                             <div style={{ display: 'flex', justifyContent: "flex-end" }}>
                                 <Tooltip

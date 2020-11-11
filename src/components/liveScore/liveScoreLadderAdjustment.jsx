@@ -237,7 +237,7 @@ class LiveScoreLadderAdjustment extends Component {
                                 <Form.Item name={`teamId${index}`} rules={[{ required: true, message: ValidationConstants.teamName }]}>
                                     <Select
                                         placeholder={AppConstants.selectTeam}
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         onChange={(teamId) => this.props.updateLadderSetting({
                                             data: teamId,
                                             index,

@@ -370,7 +370,7 @@ class UmpireRoaster extends Component {
                     <div
                         className="comp-dashboard-botton-view-mobile"
                         style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
@@ -474,14 +474,14 @@ class UmpireRoaster extends Component {
                             </span>
                         </div>
 
-                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
                             <div className="row">
 
                                 <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
-                                            width: "100%",
+                                            width: '100%',
                                             display: "flex",
                                             flexDirection: "row",
                                             alignItems: "center",
@@ -506,7 +506,7 @@ class UmpireRoaster extends Component {
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
-                                            width: "100%",
+                                            width: '100%',
                                             display: "flex",
                                             flexDirection: "row",
                                             alignItems: "center",
@@ -537,7 +537,7 @@ class UmpireRoaster extends Component {
                     </div>
                     {/* <div className="mt-5" style={{ display: "flex", width: 'fit-content' }}>
                         <div style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
@@ -557,7 +557,7 @@ class UmpireRoaster extends Component {
                         </div>
 
                         <div style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",

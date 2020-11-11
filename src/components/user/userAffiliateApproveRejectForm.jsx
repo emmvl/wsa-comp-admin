@@ -62,7 +62,7 @@ class UserAffiliateApproveRejectForm extends Component {
         return (
             <div className="user-affiliate-dropdown-view">
                 <div style={{
-                    width: "100%",
+                    width: '100%',
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
@@ -80,7 +80,7 @@ class UserAffiliateApproveRejectForm extends Component {
                 </div>
 
                 <div style={{
-                    width: "100%",
+                    width: '100%',
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",

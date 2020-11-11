@@ -154,13 +154,13 @@ class RegistrationSettlements extends Component {
                                 {AppConstants.payouts}
                             </span>
                         </div>
-                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
                             <div className="row">
                                 <div className="col-sm pt-1">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
-                                            width: "100%",
+                                            width: '100%',
                                             display: "flex",
                                             flexDirection: "row",
                                             alignItems: "center",
@@ -268,7 +268,7 @@ class RegistrationSettlements extends Component {
                     <InputWithHead required="pt-0" heading={AppConstants.year} />
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
                         onChange={(year) => this.setState({ year })}
                         value={this.state.year}
                     >
@@ -284,7 +284,7 @@ class RegistrationSettlements extends Component {
 
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
                         onChange={(competition) => this.setState({ competition })}
                         value={this.state.competition}
                     >
@@ -300,7 +300,7 @@ class RegistrationSettlements extends Component {
                     <InputWithHead required="pt-0" heading={AppConstants.paymentFor} />
                     <Select
                         className="reg-payment-select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
                         onChange={(paymentFor) => this.setState({ paymentFor })}
                         value={this.state.paymentFor}
                     >
@@ -317,7 +317,7 @@ class RegistrationSettlements extends Component {
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
-                        style={{ width: "100%", minWidth: 160 }}
+                        style={{ width: '100%', minWidth: 160 }}
                         onChange={date => this.dateOnChangeFrom(date)}
                         format="DD-MM-YYYY"
                         showTime={false}
@@ -329,7 +329,7 @@ class RegistrationSettlements extends Component {
                     <DatePicker
                         className="reg-payment-datepicker"
                         size="large"
-                        style={{ width: "100%", minWidth: 160 }}
+                        style={{ width: '100%', minWidth: 160 }}
                         onChange={date => this.dateOnChangeTo(date)}
                         format="DD-MM-YYYY"
                         showTime={false}

@@ -532,7 +532,7 @@ class CompetitionFinals extends Component {
                         <Form.Item name='selectedVenues' rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}>
                             <Select
                                 mode="multiple"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 onChange={venueSelection => {
                                     this.onChangeSetValue(venueSelection, venueList, "venueList")
                                 }}
@@ -575,7 +575,7 @@ class CompetitionFinals extends Component {
                                                     disabled={disabledStatus}
                                                     size="large"
                                                     placeholder="dd-mm-yyyy"
-                                                    style={{ width: "100%" }}
+                                                    style={{ width: '100%' }}
                                                     onChange={(e) => this.onChangeSetValue(e, 'finalsStartDate', index)}
                                                     name="finalsStartDate"
                                                     format="DD-MM-YYYY"
@@ -644,7 +644,7 @@ class CompetitionFinals extends Component {
                                         <Select
                                             disabled={disabledStatus}
                                             id={AppUniqueId.final_Match_Type_dpdn}
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                             onChange={(matchType) => this.onChangeSetValue(matchType, 'finalsMatchTypeRefId', index)}
                                             value={data.finalsMatchTypeRefId}
                                         >
@@ -912,7 +912,7 @@ class CompetitionFinals extends Component {
                                 <Select
                                     disabled={disabledStatus}
                                     id={AppUniqueId.finals_extratimetype_dpdn}
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                     onChange={(matchType) => this.onChangeSetValue(matchType, 'extraTimeMatchTypeRefId', index)}
                                     value={data.extraTimeMatchTypeRefId}
                                 >

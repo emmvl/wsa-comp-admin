@@ -394,13 +394,13 @@ class LiveScoreTeamView extends Component {
         return (
             <div className="row mt-5">
 
-                <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
                     <div className="row">
                         <div className="col-sm">
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
@@ -421,7 +421,7 @@ class LiveScoreTeamView extends Component {
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
@@ -448,7 +448,7 @@ class LiveScoreTeamView extends Component {
         const { playerList } = this.props.liveScoreTeamState
         return (
             <div>
-                <div className="inside-table-view mt-4" >
+                <div className="inside-table-view mt-4">
                     {this.addPlayerView()}
 
                     <div className="table-responsive home-dash-table-view mt-3">

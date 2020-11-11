@@ -532,7 +532,7 @@ class LiveScoreSettingsView extends Component {
                 <Form.Item name='competition_name' rules={[{ required: true, message: ValidationConstants.competitionField }]}>
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-0"
+                        required="required-field pb-1"
                         heading={AppConstants.competition_name}
                         placeholder={AppConstants.competition_name}
                         onChange={(e) => {
@@ -545,23 +545,23 @@ class LiveScoreSettingsView extends Component {
                 </Form.Item>
 
                 {/* <div className="contextualHelp-RowDirection">
-                    <span className='text-heading-large pt-5' >{AppConstants.short_Name}<span style={{ color: 'red' }}>{'*'}</span></span>
+                    <span className='text-heading-large pt-5'>{AppConstants.short_Name}<span style={{ color: 'red' }}>{'*'}</span></span>
                     <div style={{ marginTop: 28 }}>
                         <Tooltip background="#ff8237">
                             <span>{AppConstants.shortNameMsg}</span>
                         </Tooltip>
                     </div>
                 </div> */}
-                <Form.Item name='short_name' rules={[{ required: true, message: ValidationConstants.shortField }]}>
+                <Form.Item name="short_name" rules={[{ required: true, message: ValidationConstants.shortField }]}>
                     <InputWithHead
                         auto_complete="off"
-                        required="required-field pb-0"
+                        required="required-field pb-1"
                         heading={AppConstants.short_Name}
                         placeholder={AppConstants.short_Name}
-                        name='shortName'
+                        name="shortName"
                         conceptulHelp
                         conceptulHelpMsg={AppConstants.shortNameMsg}
-                        marginTop={15}
+                        marginTop={5}
                         onChange={(e) => {
                             this.props.onChangeSettingForm({ key: e.target.name, data: e.target.value })
                         }}
@@ -601,7 +601,7 @@ class LiveScoreSettingsView extends Component {
                                 type="file"
                                 id="user-pic"
                                 style={{ display: 'none' }}
-                                name={"imageFile"}
+                                name="imageFile"
                                 onChange={(evt) => {
                                     this.setImage(evt.target)
                                     this.setState({ timeout: 2000 })
@@ -637,7 +637,7 @@ class LiveScoreSettingsView extends Component {
                             <Select
                                 mode="multiple"
                                 placeholder={AppConstants.selectVenue}
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 onChange={value => {
                                     this.onSelectValues(value)
                                 }}
@@ -666,7 +666,7 @@ class LiveScoreSettingsView extends Component {
                 {this.state.isEdit != "add" && (
                     <NavLink
                         to={{
-                            pathname: `/liveScoreDivisionList`,
+                            pathname: '/liveScoreDivisionList',
                         }}
                     >
                         <span className="input-heading-add-another pt-3 pb-3">
@@ -732,7 +732,7 @@ class LiveScoreSettingsView extends Component {
                         <Form.Item name='recordumpire' rules={[{ required: true, message: ValidationConstants.recordUmpireField }]}>
                             <Select
                                 placeholder={'Select Record Umpire'}
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182, }}
                                 onChange={recordUmpire => this.props.onChangeSettingForm({
                                     key: "recordUmpire",
                                     data: recordUmpire
@@ -754,15 +754,15 @@ class LiveScoreSettingsView extends Component {
                     <div className="col-sm">
                         <InputWithHead
                             required="required-field pb-1"
-                            marginTop={0}
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.recordMsg}
+                            marginTop={5}
                             heading={AppConstants.record}
                         />
                         <Form.Item name="attendanceRecord" rules={[{ required: true, message: ValidationConstants.attendanceRecordField }]}>
                             <Select
                                 placeholder="Select Record"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182, }}
                                 onChange={recordSelection => this.props.onChangeSettingForm({
                                     key: "attendanceRecordingType",
                                     data: recordSelection
@@ -779,7 +779,7 @@ class LiveScoreSettingsView extends Component {
                     <div className="col-sm">
                         <InputWithHead
                             required="required-field pb-1"
-                            marginTop={0}
+                            marginTop={5}
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.reportMsg}
                             heading={AppConstants.report}
@@ -787,7 +787,7 @@ class LiveScoreSettingsView extends Component {
                         <Form.Item name='attendanceReport' rules={[{ required: true, message: ValidationConstants.attendanceReportField }]}>
                             <Select
                                 placeholder={'Select Report'}
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 onChange={reportSelection => this.props.onChangeSettingForm({
                                     key: "attendanceRecordingPeriod",
                                     data: reportSelection
@@ -1002,12 +1002,12 @@ class LiveScoreSettingsView extends Component {
                         <Radio.Group
                             className="reg-competition-radio"
                             onChange={e => this.competition_format(e)}
-                        // value={this.props.liveScoreSetting.form.scoring}
+                            // value={this.props.liveScoreSetting.form.scoring}
                         >
                             <div className="row ml-2" style={{ marginTop: 0 }}>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Radio style={{ marginRight: 0, paddingRight: 0 }} value="SINGLE">{AppConstants.single}</Radio>
-                                    <div style={{ marginLeft: -10 }}>
+                                    <div style={{ marginLeft: -10, marginTop: -10 }}>
                                         <Tooltip background="#ff8237">
                                             <span>{AppConstants.singleScoringMsg}</span>
                                         </Tooltip>
@@ -1016,7 +1016,7 @@ class LiveScoreSettingsView extends Component {
 
                                 <div style={{ display: 'flex', alignItems: 'center', marginLeft: 10 }}>
                                     <Radio style={{ marginRight: 0, paddingRight: 0 }} value="50_50">50/50</Radio>
-                                    <div style={{ marginLeft: -10 }}>
+                                    <div style={{ marginLeft: -10, marginTop: -10 }}>
                                         <Tooltip background="#ff8237">
                                             <span>{AppConstants.fiftyScoringMsg}</span>
                                         </Tooltip>
@@ -1031,6 +1031,7 @@ class LiveScoreSettingsView extends Component {
                 <InputWithHead
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.timerMsg}
+                    marginTop={5}
                     required="required-field pb-1"
                     heading={AppConstants.timer}
                 />
@@ -1046,11 +1047,11 @@ class LiveScoreSettingsView extends Component {
                     <Form.Item name='time' rules={[{ required: true, message: ValidationConstants.timerField }]}>
                         <Select
                             placeholder={'Select Time'}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={timer => this.props.onChangeSettingForm({ key: "timerType", data: timer })}
-                        // value="CENTRAL"
-                        // value={this.props.liveScoreSetting.form.timerType}
-                        // defaultValue={this.props.liveScoreSetting.form.timerType}
+                            // value="CENTRAL"
+                            // value={this.props.liveScoreSetting.form.timerType}
+                            // defaultValue={this.props.liveScoreSetting.form.timerType}
                         >
                             <Option value="CENTRAL">Central</Option>
                             <Option value="PER_MATCH">Per Match</Option>
@@ -1060,7 +1061,7 @@ class LiveScoreSettingsView extends Component {
                 </div>
 
                 {/* Buzzer button view */}
-                <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.buzzerMsg} marginTop={5} heading={AppConstants.buzzer} />
+                <InputWithHead conceptulHelp conceptulHelpMsg={AppConstants.buzzerMsg} marginTop={0} heading={AppConstants.buzzer} />
                 <div className="row mt-0 ml-1">
                     <Checkbox
                         style={{
@@ -1118,7 +1119,7 @@ class LiveScoreSettingsView extends Component {
             <div className="col-sm ml-3">
                 <Select
                     mode="multiple"
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                     onChange={associationAffiliate => {
                         this.props.onChangeSettingForm({ key: "associationAffilite", data: associationAffiliate })
                     }}
@@ -1150,7 +1151,7 @@ class LiveScoreSettingsView extends Component {
             <div className="col-sm ml-3">
                 <Select
                     mode="multiple"
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                     onChange={clubAffiliate => {
                         this.props.onChangeSettingForm({ key: "clubAffilite", data: clubAffiliate })
                     }}

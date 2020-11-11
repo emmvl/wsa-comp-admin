@@ -156,7 +156,7 @@ class LiveScoreAddScorer extends Component {
                         <Form.Item name='addScorer' rules={[{ required: true, message: ValidationConstants.searchScorer }]}>
                             <AutoComplete
                                 loading
-                                style={{ width: "100%", height: '39.93px' }}
+                                style={{ width: '100%', height: '39.93px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
                                     const ScorerId = JSON.parse(option.key)
@@ -192,7 +192,7 @@ class LiveScoreAddScorer extends Component {
                                     mode="multiple"
                                     showSearch
                                     placeholder={AppConstants.selectTeam}
-                                    style={{ width: "100%", }}
+                                    style={{ width: '100%', }}
                                     onChange={(teamId) => this.props.liveScoreScorerUpdate(teamId, "teamId")}
                                     // value={teamId}
                                 >
@@ -319,7 +319,7 @@ class LiveScoreAddScorer extends Component {
                                 loading={this.props.liveScoreTeamState.onLoad && true}
                                 mode="multiple"
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: "100%", }}
+                                style={{ width: '100%', }}
                                 onChange={(teamId) => this.props.liveScoreScorerUpdate(teamId, "teamId")}
                                 value={teamId}
                             >
@@ -355,7 +355,7 @@ class LiveScoreAddScorer extends Component {
 
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
-                            <div style={{ marginLeft: -10, width: 50 }}>
+                            <div style={{ marginLeft: -10, marginTop: -10, width: 50 }}>
                                 <Tooltip background="#ff8237">
                                     <span>{AppConstants.newMsgForScorerManager}</span>
                                 </Tooltip>
@@ -366,7 +366,7 @@ class LiveScoreAddScorer extends Component {
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                 {AppConstants.existing}
                             </Radio>
-                            <div style={{ marginLeft: -10 }}>
+                            <div style={{ marginLeft: -10, marginTop: -10 }}>
                                 <Tooltip background="#ff8237">
                                     <span>{AppConstants.existingMsgForScorerManager}</span>
                                 </Tooltip>

@@ -400,7 +400,7 @@ class CompetitionDrawEdit extends Component {
                             <div className="col-sm">
                                 <div
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -558,12 +558,12 @@ class CompetitionDrawEdit extends Component {
                                 style={{ height: '100%' }}
                                 onMouseEnter={() => this.setState({ tooltipVisibleDelete: isPublish })}
                                 onMouseLeave={() => this.setState({ tooltipVisibleDelete: false })}
-                                visible={this.state.tooltipVisibleDelete}
-                                title={AppConstants.statusPublishHover}
                             >
                                 <Button
-                                    className="publish-button" type="primary"
-                                    disabled={isPublish} onClick={() => isPublish == false && this.reGenerateDraw()}
+                                    className="publish-button"
+                                    type="primary"
+                                    disabled={isPublish}
+                                    onClick={() => isPublish == false && this.reGenerateDraw()}
                                     style={{
                                         height: isPublish && "100%",
                                         borderRadius: isPublish && 6,

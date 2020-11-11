@@ -158,15 +158,13 @@ class CompetitionPartPlayerGrades extends Component {
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGrading}</Breadcrumb.Item>
                         </Breadcrumb>
-                        <div style={{ marginTop: 10 }}>
-                            <Tooltip placement="top" background="#ff8237">
-                                <span>{AppConstants.playerGradingMsg}</span>
-                            </Tooltip>
-                        </div>
+                        <Tooltip placement="top" background="#ff8237">
+                            <span>{AppConstants.playerGradingMsg}</span>
+                        </Tooltip>
                     </div>
                     <div className="col-sm" style={{
                         display: "flex", flexDirection: 'row', alignItems: "center",
-                        justifyContent: "flex-end", width: "100%", marginRight: '2.8%'
+                        justifyContent: "flex-end", width: '100%', marginRight: '2.8%'
                     }}>
                         <div className="row">
                             <div className="col-sm">
@@ -459,7 +457,7 @@ class CompetitionPartPlayerGrades extends Component {
                         <div className="row">
                             <div className="col-sm pb-3">
                                 <div className="col-sm" style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center"
@@ -489,9 +487,9 @@ class CompetitionPartPlayerGrades extends Component {
                         </div>
                         <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignSelf: "center" }}>
                             <NavLink to="/competitionPartPlayerGradeCalculate">
-                                <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
+                                <span className="input-heading-add-another pt-0">{AppConstants.playerGradingToggle}</span>
                             </NavLink>
-                            <div style={{ marginTop: 4 }}>
+                            <div style={{ marginTop: -5 }}>
                                 <Tooltip placement="top" background="#ff8237">
                                     <span>{AppConstants.playerGradingToggleMsg}</span>
                                 </Tooltip>
@@ -500,9 +498,8 @@ class CompetitionPartPlayerGrades extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
-
 
     onDragEnd = result => {
         const { source, destination } = result;

@@ -647,7 +647,7 @@ class CompetitionQuickCompetition extends Component {
                         >
                             <Select
                                 mode="multiple"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 onChange={venueSelection => {
                                     this.onSelectValues(venueSelection, quickCompetitionState.selectedVenues)
                                 }}

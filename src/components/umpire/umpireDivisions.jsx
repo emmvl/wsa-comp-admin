@@ -157,7 +157,7 @@ class UmpireDivisions extends Component {
                         <Select
                             placeholder="Select"
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182, }}
                         >
                             <Option value="a">A Grade</Option>
                             <Option value="b">B Grade</Option>
@@ -173,7 +173,7 @@ class UmpireDivisions extends Component {
                         <Select
                             placeholder="Select"
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182, }}
                             // onChange={umpirePool => this.onChangeUmpirePools({ key: "recordUmpire", data: umpirePool })}
                             // value={this.state.umpPool}
                         >
@@ -192,7 +192,7 @@ class UmpireDivisions extends Component {
                         <Select
                             placeholder="Select"
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182, }}
                             // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                             // value={this.state.umpPool}
                         >
@@ -211,7 +211,7 @@ class UmpireDivisions extends Component {
                         <Select
                             placeholder="Select"
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182, }}
                             // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                             // value={this.state.umpPool}
                         >
@@ -230,7 +230,7 @@ class UmpireDivisions extends Component {
                         <Select
                             placeholder="Select"
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182, }}
                             // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
                             // value={this.state.umpPool}
                         >

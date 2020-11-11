@@ -214,7 +214,7 @@ class UmpireSetting extends Component {
                                 <Select
                                     mode='multiple'
                                     placeholder="Select"
-                                    style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                                    style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                                     onChange={(divisionId) => this.props.updateUmpireDataAction({ data: divisionId, key: 'compOrgDivisionSelected' })}
                                     value={compOrgDivisionSelected}
                                 >

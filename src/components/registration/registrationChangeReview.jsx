@@ -422,7 +422,7 @@ class RegistrationChangeReview extends Component {
                         <DatePicker
                             disabled
                             size="large"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             format="DD-MM-YYYY"
                             showTime={false}
                             name={'createdOn'}
@@ -436,7 +436,7 @@ class RegistrationChangeReview extends Component {
                         <DatePicker
                             disabled
                             size="large"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             format="DD-MM-YYYY"
                             showTime={false}
                             name={'startDate'}

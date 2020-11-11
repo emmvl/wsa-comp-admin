@@ -159,7 +159,7 @@ class ProductAdd extends Component {
 
                 <span className="input-heading">Type</span>
                 <Select
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                     onChange={(productType) => this.setState({ productType })}
                     value={this.state.productType}
                 >
@@ -295,7 +295,7 @@ class ProductAdd extends Component {
                 <span className="form-heading">Fees</span>
                 <span className="input-heading">Type</span>
                 <Select
-                    style={{ minWidth: 182, width: "100%", paddingRight: 1 }}
+                    style={{ minWidth: 182, width: '100%', paddingRight: 1 }}
                     onChange={(feesType) => this.setState({ feesType })}
                     value={this.state.feesType}
                 >
@@ -329,7 +329,7 @@ class ProductAdd extends Component {
                 <span className="form-heading">Discounts</span>
                 <span className="input-heading">Type</span>
                 <Select
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                     onChange={(discountType) => this.setState({ discountType })}
                     value={this.state.discountType}
                 >
@@ -356,7 +356,7 @@ class ProductAdd extends Component {
                                 <span className="input-heading">Available From</span>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -367,7 +367,7 @@ class ProductAdd extends Component {
                                 <span className="input-heading">Available To</span>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     placeholder="dd-mm-yyyy"
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
@@ -399,7 +399,7 @@ class ProductAdd extends Component {
                                 <span className="input-heading">Available From</span>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -411,7 +411,7 @@ class ProductAdd extends Component {
                                 <DatePicker
                                     size="large"
                                     placeholder="dd-mm-yyyy"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.dateOnChangeTo(date)}

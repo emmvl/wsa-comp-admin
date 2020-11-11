@@ -200,7 +200,7 @@ class ShopSettings extends Component {
                     },
                 ]}>
                     <Select
-                        style={{ width: "100%" }}
+                        style={{ width: '100%' }}
                         placeholder={AppConstants.select}
                         onChange={(value) => this.props.onChangeSettingsData(
                             value,

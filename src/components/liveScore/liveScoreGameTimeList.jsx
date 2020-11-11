@@ -346,7 +346,7 @@ class LiveScoreGameTimeList extends Component {
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignSelf: 'center',
@@ -420,7 +420,7 @@ class LiveScoreGameTimeList extends Component {
                     <div
                         className="comp-dashboard-botton-view-mobile"
                         style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",

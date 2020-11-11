@@ -272,7 +272,7 @@ class PaymentDashboard extends Component {
                                 {AppConstants.dashboard}
                             </span>
                         </div>
-                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                        <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
                             <div className="row">
                                 {this.state.userInfo &&
                                     <div className="col-sm pt-1" style={{ alignSelf: "center" }}>
@@ -308,7 +308,7 @@ class PaymentDashboard extends Component {
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
-                                            width: "100%",
+                                            width: '100%',
                                             display: "flex",
                                             flexDirection: "row",
                                             alignItems: "center",
@@ -407,7 +407,7 @@ class PaymentDashboard extends Component {
                         <InputWithHead required="pt-0" heading={AppConstants.year} />
                         <Select
                             className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
                             onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                             value={this.state.yearRefId}
                         >
@@ -425,7 +425,7 @@ class PaymentDashboard extends Component {
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
                             onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
                             value={this.state.competitionUniqueKey}
                         >
@@ -447,7 +447,7 @@ class PaymentDashboard extends Component {
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
                             onChange={(e) => this.onChangeDropDownValue(e, "filterOrganisation")}
                             value={this.state.filterOrganisation}
                         >
@@ -464,7 +464,7 @@ class PaymentDashboard extends Component {
                         <DatePicker
                             className="reg-payment-datepicker"
                             size="default"
-                            style={{ width: "100%", minWidth: 160 }}
+                            style={{ width: '100%', minWidth: 160 }}
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"
@@ -477,7 +477,7 @@ class PaymentDashboard extends Component {
                         <DatePicker
                             className="reg-payment-datepicker"
                             size="default"
-                            style={{ width: "100%", minWidth: 160 }}
+                            style={{ width: '100%', minWidth: 160 }}
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"
@@ -494,7 +494,7 @@ class PaymentDashboard extends Component {
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
                             onChange={(type) => this.setState({ type })}
                             value={this.state.type}
                         >
@@ -512,7 +512,7 @@ class PaymentDashboard extends Component {
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
                             onChange={(status) => this.setState({ status })}
                             value={this.state.status}
                         >
@@ -556,7 +556,7 @@ class PaymentDashboard extends Component {
                         <InputWithHead required="pt-0" heading={AppConstants.year} />
                         <Select
                             className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 160, maxHeight: 60, minHeight: 44 }}
                             onChange={yearRefId => this.onChangeDropDownValue(yearRefId, "yearRefId")}
                             value={this.state.yearRefId}
                         >
@@ -574,7 +574,7 @@ class PaymentDashboard extends Component {
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
                             onChange={competitionId => this.onChangeDropDownValue(competitionId, "competitionId")}
                             value={this.state.competitionUniqueKey}
                         >
@@ -596,7 +596,7 @@ class PaymentDashboard extends Component {
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
                             onChange={(e) => this.onChangeDropDownValue(e, "filterOrganisation")}
                             value={this.state.filterOrganisation}
                         >
@@ -615,7 +615,7 @@ class PaymentDashboard extends Component {
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
                             onChange={(type) => this.setState({ type })}
                             value={this.state.type}
                         >
@@ -637,7 +637,7 @@ class PaymentDashboard extends Component {
                             showSearch
                             optionFilterProp="children"
                             className="reg-payment-select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
                             onChange={(status) => this.setState({ status })}
                             value={this.state.status}
                         >
@@ -653,7 +653,7 @@ class PaymentDashboard extends Component {
                         <DatePicker
                             className="reg-payment-datepicker"
                             size="default"
-                            style={{ width: "100%", minWidth: 160 }}
+                            style={{ width: '100%', minWidth: 160 }}
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"
@@ -667,7 +667,7 @@ class PaymentDashboard extends Component {
                         <DatePicker
                             className="reg-payment-datepicker"
                             size="default"
-                            style={{ width: "100%", minWidth: 160 }}
+                            style={{ width: '100%', minWidth: 160 }}
                             format="DD-MM-YYYY"
                             showTime={false}
                             placeholder="dd-mm-yyyy"

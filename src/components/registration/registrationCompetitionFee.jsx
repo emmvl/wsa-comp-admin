@@ -1979,7 +1979,7 @@ const playerSeasonalTeamTable = [
         key: 'nominationFees',
         render: (fee, record, index) => {
             return(
-                (fee != null || record.teamRegChargeTypeRefId != 3) ? 
+                (fee != null || record.teamRegChargeTypeRefId != 3) ?
                     (
                         <Input
                             prefix="$"
@@ -3521,7 +3521,7 @@ class RegistrationCompetitionFee extends Component {
                                         feeSeasonalData[j]['affNominationTeamSeasonalFee'] = feeSeasonalTeamData[k].affNominationFees;
                                         feeSeasonalData[j]['affNominationTeamSeasonalGST'] = feeSeasonalTeamData[k].affNominationGST;
                                     }
-                                    
+
                                     break;
                                 }
                             }
@@ -4337,7 +4337,7 @@ class RegistrationCompetitionFee extends Component {
                     // required="pt-0 mt-0"
                     heading={AppConstants.enterCode}
                     placeholder={AppConstants.enterCode}
-                    style={{ width: "100%", background: "white", height: 48 }}
+                    style={{ width: '100%', background: "white", height: 48 }}
                     onChange={(e) => this.regCodeChange(e.target.value, "teamSeasonalSchoolRegCode")}
                     value={teamSeasonalSchoolRegCode}
                 />
@@ -4371,7 +4371,7 @@ class RegistrationCompetitionFee extends Component {
 
     dropdownView = () => {
         return (
-            <div className="comp-venue-courts-dropdown-view mt-0" >
+            <div className="comp-venue-courts-dropdown-view mt-0">
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -4732,7 +4732,7 @@ class RegistrationCompetitionFee extends Component {
                                         height: "120px",
                                         width: "120px"
                                     }
-                                    : { width: "100%" }
+                                    : { width: '100%' }
                             }
                             onError={(ev) => {
                                 ev.target.src = AppImages.circleImage;
@@ -5051,7 +5051,7 @@ class RegistrationCompetitionFee extends Component {
                         format="DD-MM-YYYY"
                         showTime={false}
                         disabled={compDatesDisable}
-                       
+
                     />
                 </Form.Item>
 
@@ -5627,7 +5627,7 @@ class RegistrationCompetitionFee extends Component {
                                                                         <Radio value={item.teamRegChargeTypeRefId ? (item.teamRegChargeTypeRefId == 3 ? 3 : 2) : 2 }>
                                                                             {AppConstants.chargedPerMatch}
                                                                         </Radio>
-                                                                        
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -5659,11 +5659,11 @@ class RegistrationCompetitionFee extends Component {
                                                                                     </Radio>
                                                                                 </div>
                                                                             </div>
-                                                                        </div> 
+                                                                        </div>
                                                                         }
                                                                         </div>
                                                             </div>
-                                                            
+
                                                         </div>
                                                     </Radio.Group>
                                                 </div>
@@ -5771,7 +5771,7 @@ class RegistrationCompetitionFee extends Component {
     //             <div>
     //                 <Select
     //                     mode="multiple"
-    //                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+    //                     style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
     //                     onChange={associationAffilite => {
     //                         this.affiliateSearchOnchange(associationAffilite)
     //                     }}
@@ -5799,7 +5799,7 @@ class RegistrationCompetitionFee extends Component {
     //             <div>
     //                 <Select
     //                     mode="multiple"
-    //                     style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+    //                     style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
     //                     onChange={clubAffilite => {
     //                         // this.onSelectValues(venueSelection, detailsData)
     //                         this.affiliateSearchOnchange(clubAffilite)

@@ -75,7 +75,7 @@ const column = [
             pathname: '/liveScoreMatchDetails',
             state: { matchId: id, umpireKey: 'umpire', screenName: 'umpireList' }
         }} >
-            <span className="input-heading-add-another pt-0" >{id}</span>
+            <span className="input-heading-add-another pt-0">{id}</span>
         </NavLink>
     },
     {
@@ -243,7 +243,7 @@ class AssignUmpire extends Component {
                     <div style={{ display: "flex", justifyContent: 'space-between', }}>
                         {/* <div className="mt-5"> */}
                         {/* <div style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
@@ -307,7 +307,7 @@ class AssignUmpire extends Component {
                     <div
                         className="comp-dashboard-botton-view-mobile"
                         style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "flex-end"

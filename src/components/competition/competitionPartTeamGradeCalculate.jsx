@@ -271,11 +271,9 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 {AppConstants.teamGradingSummary}
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <div style={{ marginTop: 10 }}>
-                            <CustomTooltip placement="top" background="#ff8237">
-                                <span>{AppConstants.teamGradingSummaryMsg}</span>
-                            </CustomTooltip>
-                        </div>
+                        <CustomTooltip placement="top" background="#ff8237">
+                            <span>{AppConstants.teamGradingSummaryMsg}</span>
+                        </CustomTooltip>
                     </div>
                     <div
                         className="col-sm"

@@ -356,13 +356,13 @@ class LiveScoreMatchesList extends Component {
                         </Breadcrumb>
                     </div>
 
-                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
                         <div className="row">
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -388,7 +388,7 @@ class LiveScoreMatchesList extends Component {
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -407,7 +407,7 @@ class LiveScoreMatchesList extends Component {
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -432,7 +432,7 @@ class LiveScoreMatchesList extends Component {
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",

@@ -220,13 +220,13 @@ class LiveScoreTeam extends Component {
                         <Breadcrumb.Item className="breadcrumb-add">{AppConstants.teamList}</Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
-                <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
                     <div className="row">
                         <div className="col-sm pt-1">
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
@@ -245,7 +245,7 @@ class LiveScoreTeam extends Component {
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
@@ -270,7 +270,7 @@ class LiveScoreTeam extends Component {
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",

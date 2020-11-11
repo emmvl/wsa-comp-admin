@@ -535,7 +535,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     />
                 </div>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-view pb-4" >
+                    <div className="col-sm-2 delete-image-view pb-4">
                         <a className="transfer-image-view">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionVenueTimeslotsDayTimedelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
@@ -738,7 +738,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             className="reg-competition-radio"
                             disabled={disabledStatus}
                             onChange={(e) => this.changeTimeSlotGeneration(e)}
-                        // value={timeSlotData.timeslotGenerationRefId}
+                            // value={timeSlotData.timeslotGenerationRefId}
                         >
                             {commonState.timeSlotGeneration.map((item, index) => (
                                 <div key={'timeslotGeneration_' + item.id}>
@@ -749,7 +749,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                                         >
                                             {item.description}
                                         </Radio>
-                                        <div style={{ marginLeft: -22, marginTop: -5 }}>
+                                        <div style={{ marginLeft: -22, marginTop: 5 }}>
                                             <CustomTooltip background="#ff8237">
                                                 <span>{item.helpMsg}</span>
                                             </CustomTooltip>
@@ -1009,7 +1009,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         <span id={AppUniqueId.manuallyAddTimeslot_ApplySettingsIndividualVenues_AddTimeSlotBtn} className="input-heading-add-another" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, null, "addTimeSlotManualperVenue", venueIndex)}> + {AppConstants.add_TimeSlot}</span>
                     </div>
                     {data.length > 1 &&
-                        <div className="col-sm-2 delete-image-timeSlot-view" >
+                        <div className="col-sm-2 delete-image-timeSlot-view">
                             <a className="transfer-image-view">
                                 <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, venueIndex, "competitionTimeslotManualAllVenuedelete")}>
                                     <i className="fa fa-trash-o" aria-hidden="true" />
@@ -1088,7 +1088,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         disabled={disabledStatus}
                         id={AppUniqueId.timeRotation_matchDuration_AdddivisionTimeslotOrderTextField}
                         placeholder="Select"
-                        style={{ width: "100%", minWidth: 120, maxWidth: 180 }}
+                        style={{ width: '100%', minWidth: 120, maxWidth: 180 }}
                         filterOption={false}
                         onBlur={() => this.props.ClearDivisionArr('divisions')}
                         onSearch={(value) => { this.handleSearch(value, mainDivisionList) }}
@@ -1105,7 +1105,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </Select>
                 </Form.Item>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-timeSlot-view pt-3" >
+                    <div className="col-sm-2 delete-image-timeSlot-view pt-3">
                         <a className="transfer-image-view">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
@@ -1155,7 +1155,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                         mode='multiple'
                         placeholder="Select"
                         disabled={disabledStatus}
-                        style={{ width: "100%", minWidth: 120, maxWidth: 180 }}
+                        style={{ width: '100%', minWidth: 120, maxWidth: 180 }}
                         filterOption={false}
                         onBlur={() => this.props.ClearDivisionArr('grades')}
                         onChange={(grades) => this.onSelectGrades(grades, 'venuePreferenceEntityId', 'competitionTimeslotsEntity', index, mainId, id)}
@@ -1172,7 +1172,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </Select>
                 </Form.Item>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-timeSlot-view pt-2" >
+                    <div className="col-sm-2 delete-image-timeSlot-view pt-2">
                         <a className="transfer-image-view">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotsEntitydelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
@@ -1329,7 +1329,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                     <span className="input-heading-add-another" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, null, "addTimeSlotManual")}> + {AppConstants.add_TimeSlot}</span>
                 </div>
                 {data.length > 1 && (
-                    <div className="col-sm-2 delete-image-timeSlot-view" >
+                    <div className="col-sm-2 delete-image-timeSlot-view">
                         <a className="transfer-image-view">
                             <span className="user-remove-btn" onClick={() => disabledStatus == false && this.addTimeManualPerVenue(index, item, "competitionTimeslotManualdelete")}>
                                 <i className="fa fa-trash-o" aria-hidden="true" />
@@ -1339,22 +1339,20 @@ class CompetitionCourtAndTimesAssign extends Component {
                     </div>
                 )}
             </div>
-        )
+        );
     }
 
-    qcWarningView = () => {
-        return (
-            <div className="content-view pt-3">
-                <div className="comp-warning-info">
-                    {AppConstants.qcTimeslotNotApplicable}
-                </div>
+    qcWarningView = () => (
+        <div className="content-view pt-3">
+            <div className="comp-warning-info">
+                {AppConstants.qcTimeslotNotApplicable}
             </div>
-        )
-    }
+        </div>
+    );
 
-    //////footer view containing all the buttons like submit and cancel
+    // footer view containing all the buttons like submit and cancel
     footerView = () => {
-        let isPublished = this.state.competitionStatus == 1
+        const isPublished = this.state.competitionStatus == 1;
         return (
             <div className="footer-view">
                 <div className="row">
@@ -1369,23 +1367,38 @@ class CompetitionCourtAndTimesAssign extends Component {
                         <div className="comp-buttons-view">
                             <Tooltip
                                 style={{ height: '100%' }}
-                                onMouseEnter={() =>
+                                onMouseEnter={() => {
                                     this.setState({
                                         tooltipVisibleDelete: isPublished,
-                                    })
-                                }
-                                onMouseLeave={() =>
-                                    this.setState({ tooltipVisibleDelete: false })
-                                }
+                                    });
+                                }}
+                                onMouseLeave={() => {
+                                    this.setState({ tooltipVisibleDelete: false });
+                                }}
                                 visible={this.state.tooltipVisibleDelete}
                                 title={AppConstants.statusPublishHover}
                             >
-                                <Button id={AppUniqueId.timeSlotSaveBtn} disabled={isPublished} style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text" htmlType="submit" type="primary">{AppConstants.save}</Button>
+                                <Button
+                                    id={AppUniqueId.timeSlotSaveBtn}
+                                    disabled={isPublished}
+                                    style={{ height: isPublished && '100%', borderRadius: isPublished && 6, width: isPublished && 'inherit' }}
+                                    className="publish-button save-draft-text"
+                                    htmlType="submit"
+                                    type="primary"
+                                >
+                                    {AppConstants.save}
+                                </Button>
                             </Tooltip>
                             {/* <NavLink to="/competitionVenueTimesPrioritisation"> */}
                             <Button
                                 onClick={() => this.setState({ nextButtonClicked: true })}
-                                htmlType="submit" disabled={isPublished} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>
+                                htmlType="submit"
+                                disabled={isPublished}
+                                className="publish-button margin-top-disabled-button"
+                                type="primary"
+                            >
+                                {AppConstants.next}
+                            </Button>
                             {/* </NavLink> */}
                         </div>
                     </div>
@@ -1396,7 +1409,7 @@ class CompetitionCourtAndTimesAssign extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu="competition" compSelectedKey="6" />
                 <Layout>
@@ -1416,7 +1429,7 @@ class CompetitionCourtAndTimesAssign extends Component {
                             </div>
                         </Content>
                         <Footer>
-                            {!this.state.isQuickCompetition ? this.footerView() : null}
+                            {!this.state.isQuickCompetition && this.footerView()}
                         </Footer>
                     </Form>
                 </Layout>
@@ -1437,16 +1450,16 @@ function mapDispatchToProps(dispatch) {
         addTimeSlotDataPost,
         clearYearCompetitionAction,
         searchDivisionList,
-        ClearDivisionArr
-    }, dispatch)
+        ClearDivisionArr,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         appState: state.AppState,
         competitionTimeSlots: state.CompetitionTimeSlots,
-        commonReducerState: state.CommonReducerState
-    }
+        commonReducerState: state.CommonReducerState,
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CompetitionCourtAndTimesAssign);

@@ -266,7 +266,7 @@ class LiveScoreMatchSheet extends Component {
         return (
             <div className="pt-4 pb-4 d-flex align-items-center">
                 <div className="col-sm d-flex align-items-center">
-                    <span className='home-dash-left-text'>{AppConstants.previews}</span>
+                    <span className="home-dash-left-text">{AppConstants.previews}</span>
                 </div>
             </div>
         )
@@ -336,7 +336,7 @@ class LiveScoreMatchSheet extends Component {
         return (
             <div className="pt-4 pb-4 d-flex align-items-center">
                 <div className="col-sm d-flex align-items-center">
-                    <span className='home-dash-left-text'>{AppConstants.downloads}</span>
+                    <span className="home-dash-left-text">{AppConstants.downloads}</span>
                 </div>
                 <div className="col-sm text-right">
                     <Button

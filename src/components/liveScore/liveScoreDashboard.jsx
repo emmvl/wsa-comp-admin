@@ -665,10 +665,10 @@ class LiveScoreDashboard extends Component {
     //     return (
     //         <div className="row text-view">
     //             <div className="col-sm">
-    //                 <span className='home-dash-left-text'>{AppConstants.todaysMatch}</span>
+    //                 <span className="home-dash-left-text">{AppConstants.todaysMatch}</span>
     //             </div>
 
-    //             <div className="col-sm text-right" >
+    //             <div className="col-sm text-right">
     //                 <NavLink to={{
     //                     pathname: '/liveScoreAddMatch',
     //                     state: { key: 'dashboard' }
@@ -680,29 +680,29 @@ class LiveScoreDashboard extends Component {
     //     )
     // }
 
-
     matchHeading = () => {
         return (
             <div className="row text-view">
-
                 <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
-                    <span className='home-dash-left-text'>{AppConstants.todaysMatch}</span>
-                    <Tooltip background="#ff8237">
-                        <span>{AppConstants.todayMatchMsg}</span>
-                    </Tooltip>
+                    <span className="home-dash-left-text">{AppConstants.todaysMatch}</span>
+                    <div style={{ marginTop: -10 }}>
+                        <Tooltip background="#ff8237">
+                            <span>{AppConstants.todayMatchMsg}</span>
+                        </Tooltip>
+                    </div>
                 </div>
 
-                <div className="col-sm text-right" >
+                <div className="col-sm text-right">
                     <div className="row">
                         <div className="col-sm">
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "100%",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end",
+                                    width: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-end',
                                 }}
                             >
                                 <NavLink to="/liveScoreBulkChange">
@@ -716,7 +716,7 @@ class LiveScoreDashboard extends Component {
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
@@ -739,7 +739,7 @@ class LiveScoreDashboard extends Component {
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
@@ -786,13 +786,15 @@ class LiveScoreDashboard extends Component {
         return (
             <div className="row text-view">
                 <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }}>
-                    <span className='home-dash-left-text'>{AppConstants.todaysIncidents}</span>
-                    <Tooltip background="#ff8237">
-                        <span>{AppConstants.todayIncidentMsg}</span>
-                    </Tooltip>
+                    <span className="home-dash-left-text">{AppConstants.todaysIncidents}</span>
+                    <div style={{ marginTop: -10 }}>
+                        <Tooltip background="#ff8237">
+                            <span>{AppConstants.todayIncidentMsg}</span>
+                        </Tooltip>
+                    </div>
                 </div>
 
-                {/* <div className="col-sm text-right" >
+                {/* <div className="col-sm text-right">
                     <NavLink to={{
                         pathname: './liveScoreAddIncident',
                         state: { key: 'dashboard' }
@@ -810,13 +812,14 @@ class LiveScoreDashboard extends Component {
         return (
             <div className="row text-view">
                 <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
-                    <span className='home-dash-left-text'>{AppConstants.activeNews}</span>
-                    <Tooltip background="#ff8237">
-                        <span>{AppConstants.activeNewsMsg}</span>
-                    </Tooltip>
-
+                    <span className="home-dash-left-text">{AppConstants.activeNews}</span>
+                    <div style={{ marginTop: -10 }}>
+                        <Tooltip background="#ff8237">
+                            <span>{AppConstants.activeNewsMsg}</span>
+                        </Tooltip>
+                    </div>
                 </div>
-                <div className="col-sm text-right" >
+                <div className="col-sm text-right">
                     <NavLink to={{
                         pathname: '/liveScoreAddNews',
                         state: { key: 'dashboard', item: null }
@@ -854,10 +857,12 @@ class LiveScoreDashboard extends Component {
         return (
             <div className="row text-view">
                 <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }}>
-                    <span className='home-dash-left-text'>{AppConstants.playersToPay}</span>
-                    <Tooltip background="#ff8237">
-                        <span>{AppConstants.playersToPayMsg}</span>
-                    </Tooltip>
+                    <span className="home-dash-left-text">{AppConstants.playersToPay}</span>
+                    <div style={{ marginTop: -10 }}>
+                        <Tooltip background="#ff8237">
+                            <span>{AppConstants.playersToPayMsg}</span>
+                        </Tooltip>
+                    </div>
                 </div>
             </div>
         )

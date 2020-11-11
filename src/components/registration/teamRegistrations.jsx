@@ -123,9 +123,11 @@ const columns = [
         key: "status",
         filterDropdown: true,
         filterIcon: () => (
-            <Tooltip background="#ff8237">
-                <span>{AppConstants.statusContextMsg}</span>
-            </Tooltip>
+            <div style={{ marginTop: 10 }}>
+                <Tooltip background="#ff8237">
+                    <span>{AppConstants.statusContextMsg}</span>
+                </Tooltip>
+            </div>
         ),
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),

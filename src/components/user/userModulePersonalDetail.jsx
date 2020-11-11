@@ -1675,7 +1675,7 @@ class UserModulePersonalDetail extends Component {
             <Select
               name="yearRefId"
               className="user-prof-filter-select"
-              style={{ width: "100%", paddingRight: 1, paddingTop: "15px" }}
+              style={{ width: '100%', paddingRight: 1, paddingTop: "15px" }}
               onChange={(yearRefId) => this.onChangeYear(yearRefId)}
               value={this.state.yearRefId}
             >
@@ -1688,7 +1688,7 @@ class UserModulePersonalDetail extends Component {
             </Select>
             <Select
               className="user-prof-filter-select"
-              style={{ width: "100%", paddingRight: 1, paddingTop: "15px" }}
+              style={{ width: '100%', paddingRight: 1, paddingTop: "15px" }}
               onChange={(e) => this.onChangeSetValue(e)}
               value={compititionId}
             >

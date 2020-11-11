@@ -1054,7 +1054,7 @@ class MultifieldDrawsNewTimeline extends Component {
             const bounds = e.currentTarget.getBoundingClientRect();
             const draggableElMouseX = e.pageX - bounds.left;
             this.setState({ draggableElMouseX });
-        } 
+        }
     }
 
     slotObjectDragMove = e => {
@@ -1067,7 +1067,7 @@ class MultifieldDrawsNewTimeline extends Component {
         const startTime = workingSchedule && workingSchedule.startTime;
         const endTime = workingSchedule && workingSchedule.endTime;
 
-        const newStartTime = startTime && startTime !== startDayTime 
+        const newStartTime = startTime && startTime !== startDayTime
             ? moment(date + startTime)
             : moment(date + startDayTime);
 
@@ -1088,7 +1088,7 @@ class MultifieldDrawsNewTimeline extends Component {
         const startDayDateFormat = startDayDate.format('HH:mm');;
         const endDayDateFormat = endDayDate.format('HH:mm');;
 
-        const unavailableStartWidth = startTimeFormat && startTimeFormat !== startDayDateFormat 
+        const unavailableStartWidth = startTimeFormat && startTimeFormat !== startDayDateFormat
             ? timeRestrictionsSchedule.startTime.diff(startDayDate, 'minutes') * ONE_MIN_WIDTH
             : null;
 
@@ -1174,7 +1174,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     disabled={this.state.firstTimeCompId == "-1" || this.state.filterDates ? false : true}
                                     onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
                                     format="DD-MM-YYYY"
-                                    style={{ width: "100%", minWidth: 180 }}
+                                    style={{ width: '100%', minWidth: 180 }}
                                     value={[moment(this.state.startDate), moment(this.state.endDate)]}
                                 />
                             </div>
@@ -1698,7 +1698,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         >
                             <div className="sr-no empty-bx" />
                             {date.map((itemDate, index) => {
-                                // for drawing days position                                                            
+                                // for drawing days position
                                 const schedule = this.getWeeklySchedule();
                                 const itemDateDayOfWeek = moment(itemDate).format('dddd').toLowerCase();
 
@@ -1708,14 +1708,14 @@ class MultifieldDrawsNewTimeline extends Component {
                                 const endDayTime = findSchedule.timeslot.endTime;
 
                                 const timeAllDayScheduleHours = [startDayTime];
-                                    
+
                                 while (timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1] !== endDayTime) {
-                                    const newTime = moment(itemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');  
+                                    const newTime = moment(itemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');
                                     timeAllDayScheduleHours.push(newTime)
                                 }
                                 const newTimeAllDayScheduleHours = [...timeAllDayScheduleHours];
                                 newTimeAllDayScheduleHours.pop();
-                            
+
                                 return newTimeAllDayScheduleHours.map((itemTime, indexTime) => {
                                     if (index !== 0 || indexTime !== 0) {
                                         dayMargin += ONE_HOUR_IN_MIN * ONE_MIN_WIDTH;
@@ -1723,7 +1723,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     if (index === 0 && indexTime === 0) {
                                         dayMargin = 0;
                                     }
-                                    
+
                                     return (
                                         <span
                                             key={"time" + index + indexTime}
@@ -1736,7 +1736,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                             {!indexTime ? moment(itemDate + itemTime).format('DD MMM, ddd') : moment(itemDate + itemTime).format('ddd')}
                                         </span>
                                     )
-                                        
+
                                 })
                             })}
                         </div>
@@ -1750,7 +1750,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         >
                             <div className="sr-no empty-bx" />
                             {date.map((itemDate, index) => {
-                                // for drawing time position                                                            
+                                // for drawing time position
                                 const schedule = this.getWeeklySchedule();
                                 const itemDateDayOfWeek = moment(itemDate).format('dddd').toLowerCase();
 
@@ -1760,9 +1760,9 @@ class MultifieldDrawsNewTimeline extends Component {
                                 const endDayTime = findSchedule.timeslot.endTime;
 
                                 const timeAllDayScheduleHours = [startDayTime];
-                                    
+
                                 while (timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1] !== endDayTime) {
-                                    const newTime = moment(itemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');  
+                                    const newTime = moment(itemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');
                                     timeAllDayScheduleHours.push(newTime)
                                 }
                                 const newTimeAllDayScheduleHours = [...timeAllDayScheduleHours];
@@ -1777,7 +1777,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                     if (index === 0 && indexTimeMock === 0) {
                                         dayMargin = 45;
                                     }
-                                    
+
                                     return (
                                         <span
                                             key={"time" + index + indexTimeMock}
@@ -1790,7 +1790,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                             {itemTimeMock.slice(-5)}
                                         </span>
                                     )
-                                        
+
                                 })
                             })}
                         </div>
@@ -1798,7 +1798,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 </div>
                 <div className="main-canvas Draws">
                     {dateItem.draws && dateItem.draws.map((courtData, index) => {
-                        
+
                         if (index !== 0) {
                             topMargin += 70;
                         }
@@ -1838,9 +1838,9 @@ class MultifieldDrawsNewTimeline extends Component {
                                     const endDayTime = findSchedule.timeslot.endTime;
 
                                     const timeAllDayScheduleHours = [startDayTime];
-                                    
+
                                     while (timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1] !== endDayTime) {
-                                        const newTime = moment(fieldItemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');  
+                                        const newTime = moment(fieldItemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');
                                         timeAllDayScheduleHours.push(newTime)
                                     }
 
@@ -1870,11 +1870,11 @@ class MultifieldDrawsNewTimeline extends Component {
                                     // TODO this.props.drawsState.competitionVenues could be an object with different properties, necessary to fix !!
 
                                     if (venueData[0]?.availableTimeslots) {
-                                        
+
                                         venueData.forEach(venue => {
-                                            const daySchedule = venue.availableTimeslots.find(venueDay => 
+                                            const daySchedule = venue.availableTimeslots.find(venueDay =>
                                                 venueDay?.venueId && venueDay.venueId === courtVenueId && venueDay.day === findSchedule.day);
-                
+
                                             if (daySchedule) {
                                                 venueDaySchedule = daySchedule.timeslot;
                                             }
@@ -1886,14 +1886,14 @@ class MultifieldDrawsNewTimeline extends Component {
 
                                         const workingDaysOfVenue = venueDataSlotForCheck.availableTimeslots.filter(venueDay => courtVenueId === venueDay.venueId)
                                         workingDayInTimeline = workingDaysOfVenue.find(workingDayVenue => workingDayVenue.day.toLowerCase() === itemDateDayOfWeek);
-                                        
+
                                         // check unavailable time during the working day for court based on court schedule
 
                                         const courtWeekSchedule = venueDataSlotForCheck.courts.find(court => court.courtId === courtId)?.availableTimeslots;
                                         if (courtWeekSchedule) {
                                             courtDaySchedule = courtWeekSchedule.find(court => court.day === itemDateDayOfWeek)?.timeslot;
                                         }
-                                        
+
                                     }
 
                                     const venueSchedule = this.checkUnavailableTime(venueDaySchedule, startDayTime, endDayTime, fieldItemDate);
@@ -1984,7 +1984,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     {courtData.slotsArray.map((slotObject, slotIndex) => {
 
                                                         if (slotObject.matchDate.slice(0, -5) === fieldItemDate && slotObject.drawsId) {
-                                                            
+
                                                             // for left margin the event start inside the day
                                                             const startWorkingDayTime = moment(fieldItemDate + startDayTime);
                                                             const startTimeEvent = moment(slotObject.matchDate);
@@ -2075,7 +2075,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                             target,
                                                                                             dateItem.draws,
                                                                                             dateItem.roundId,
-                                                                                        )  
+                                                                                        )
                                                                                     }
                                                                                     onMoveEnd={(source, target) =>
                                                                                         console.log('onMove Timeline comp')
@@ -2096,7 +2096,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                 </Swappable>
                                                                             )}
                                                                     </div>
-        
+
                                                                     {slotObject.drawsId !== null && (
                                                                         <div
                                                                             className="box-exception"
@@ -2116,7 +2116,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                             >
                                                                                 <SubMenu
                                                                                     disabled={disabledStatus}
-                                                                                    style={{ 
+                                                                                    style={{
                                                                                         margin: 0,
                                                                                         display: 'flex',
                                                                                         justifyContent: 'center'
@@ -2505,7 +2505,7 @@ class MultifieldDrawsNewTimeline extends Component {
         this.setState({ selectedRounds: e })
     }
 
-    
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>

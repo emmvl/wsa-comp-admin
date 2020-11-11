@@ -138,7 +138,7 @@ class LiveScoreLadderSettings extends Component {
                                 <div className="col-sm" style={{ paddingLeft: 0, paddingTop: 5 }}>
                                     <Select
                                         mode="multiple"
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                         onChange={(e) => this.onChangeLadderSetting(e, index, "selectedDivisions")}
                                         value={ladder.selectedDivisions}
                                     >
