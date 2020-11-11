@@ -2975,13 +2975,14 @@ class RegistrationCompetitionFee extends Component {
             affiliateOrgId: null,
             heroImage: null
         };
-
+       
         this_Obj = this;
         let competitionId = null;
         competitionId = this.props.location.state ? this.props.location.state.id : null;
         competitionId !== null && this.props.clearCompReducerDataAction('all');
 
         this.formRef = createRef();
+        // this.tableReference = React.createRef();
     }
 
     componentDidUpdate(nextProps) {
@@ -3169,7 +3170,9 @@ class RegistrationCompetitionFee extends Component {
         let checkVenueScreen = this.props.location.state && this.props.location.state.venueScreen
             ? this.props.location.state.venueScreen
             : null;
-        checkVenueScreen ? window.scrollTo(0, 500) : window.scrollTo(0, 0);
+        // setTimeout(() => {
+        //     window.scrollTo(this.tableReference.offsetBottom,0);
+        // },300)
     }
 
     ////all the api calls
@@ -5686,6 +5689,7 @@ class RegistrationCompetitionFee extends Component {
                                             {item.isTeamSeasonal && (
                                                 <div className="table-responsive mt-2">
                                                     <Table
+                                                        // ref= {(tableReference) => this.tableReference = tableReference}
                                                         className="fees-table"
                                                         columns={item.teamRegChargeTypeRefId == 3 ? this.casualFeesTeamOnOrgTLevel() : this.seasonalFeesTeamOnOrgTLevel()}
                                                         dataSource={
