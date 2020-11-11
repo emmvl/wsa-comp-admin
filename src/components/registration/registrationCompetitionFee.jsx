@@ -1392,7 +1392,7 @@ const playerSeasonalTableTeamAssociation = [
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         render: (fee, record, index) => (
-            (fee != null || record.teamRegChargeTypeRefId != 3) ? (
+            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1685,7 +1685,7 @@ const playerSeasonalTableTeamClub = [
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         render: (fee, record, index) => (
-            (fee != null || record.teamRegChargeTypeRefId != 3) ? (
+            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1979,7 +1979,7 @@ const playerSeasonalTeamTable = [
         key: 'nominationFees',
         render: (fee, record, index) => {
             return(
-                (fee != null || record.teamRegChargeTypeRefId != 3) ? 
+                ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? 
                     (
                         <Input
                             prefix="$"
