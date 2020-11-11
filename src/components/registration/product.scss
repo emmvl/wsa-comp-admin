@@ -1024,3 +1024,12 @@ input[type="number"] {
   padding-left: 10px;
   align-self: center;
 }
+
+.team-reg-radio-custom-style{
+  white-space: break-spaces;
+  display: flex;
+}
+
+.team-reg-radio-custom-style .ant-radio{
+  margin-top: 5px;
+}

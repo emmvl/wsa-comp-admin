@@ -5610,7 +5610,22 @@ class RegistrationCompetitionFee extends Component {
                                                         value={item.teamRegChargeTypeRefId}
                                                         disabled={feesTableDisable}
                                                     >
-                                                        <div className="fluid-width">
+                                                        <div style={{display: "flex"}}>
+                                                            <Radio value={1}>{AppConstants.chargedForFullSeason}</Radio> 
+                                                            <div >
+                                                                <Radio className="team-reg-radio-custom-style" value={item.teamRegChargeTypeRefId ? (item.teamRegChargeTypeRefId == 3 ? 3 : 2) : 2 }>
+                                                                    {AppConstants.chargedPerMatch}
+                                                                </Radio>
+                                                                {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) && (
+                                                                     <div style={{display: "flex"}}>
+                                                                          <Radio className="team-reg-radio-custom-style" style={{width: "50%"}} value={2}>{AppConstants.feesPaidAtEachMatchByUser}</Radio>
+                                                                          <Radio className="team-reg-radio-custom-style" style={{width: "50%"}} value={3}>{AppConstants.feesPaidAtEachMatchByPlayer}</Radio>
+                                                                     </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                       
+                                                        {/* <div className="fluid-width">
                                                             <div className="row">
                                                                 <div className="col-sm-4">
                                                                     <div className="contextualHelp-RowDirection" style={{'flexDirection': 'column'}}>
@@ -5664,7 +5679,7 @@ class RegistrationCompetitionFee extends Component {
                                                                         </div>
                                                             </div>
                                                             
-                                                        </div>
+                                                        </div> */}
                                                     </Radio.Group>
                                                 </div>
                                             )}
