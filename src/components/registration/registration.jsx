@@ -153,7 +153,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (fee) => (
             <div>
-                {fee != null ? currencyFormat(fee) : ""}
+                {fee != null ? currencyFormat(fee) : "$0.00"}
             </div>
         ),
     },
@@ -165,7 +165,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (pendingFee) => (
             <div>
-                {pendingFee != null ? currencyFormat(pendingFee) : ""}
+                {pendingFee != null ? currencyFormat(pendingFee) : "$0.00"}
             </div>
         ),
     },
