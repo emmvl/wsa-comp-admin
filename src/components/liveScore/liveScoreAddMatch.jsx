@@ -1303,7 +1303,7 @@ class LiveScoreAddMatch extends Component {
                     roleId: 15,
                     rosterId: null,
                     organisationId: umpire1NameOrgId,
-                    sequence: 2
+                    sequence: 1
                 }
             }
             if (umpireRosterId_2) {
@@ -1312,7 +1312,8 @@ class LiveScoreAddMatch extends Component {
                     userId: umpire2Name,
                     roleId: 15,
                     rosterId: umpireRosterId_2,
-                    organisationId: umpire2NameOrgId
+                    organisationId: umpire2NameOrgId,
+                    sequence: 2
                 }
             } else {
                 umpire_2_Obj = {
@@ -1321,6 +1322,7 @@ class LiveScoreAddMatch extends Component {
                     roleId: 15,
                     rosterId: null,
                     organisationId: umpire2NameOrgId,
+                    sequence: 2
                 }
             }
             if (scorerRosterId_1) {
