@@ -1187,9 +1187,10 @@ const LiveScoreAxiosApi = {
     },
 
     /// //////////assign umpire to a match
-    assignUmpire(payload) {
+    assignUmpire(payload, rosterLocked) {
         const body = payload;
-        const url = '/roster/admin/assign';
+        // const url = '/roster/admin/assign';
+        const url = `/matchUmpire?matchId=${payload[0].matchId}&rosterLocked=${rosterLocked}`;
         return Method.dataPost(url, token, body);
     },
 

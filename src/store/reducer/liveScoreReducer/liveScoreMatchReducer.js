@@ -213,7 +213,19 @@ const initialState = {
     umpireReserve: null,
     umpireCoach: null,
     matchListActionObject: null,
-
+    umpire1NameOrgId: null,
+    umpireList: [],
+    umpireListResult: [],
+    umpire1NameMainId: null,
+    umpire2NameOrgId: null,
+    umpire2NameMainId: null,
+    umpire1SelectedRosterId: null,
+    umpire2SelectedRosterId: null,
+    coachList: [],
+    roster1Umpire: null,
+    roster2Umpire: null,
+    orgId1UmpirName: null,
+    orgId2UmpirName: null,
 };
 
 function setMatchData(data) {
@@ -282,6 +294,72 @@ function removeDuplicateValues(array) {
     return array.filter((obj, index, self) =>
         index === self.findIndex((el) => el["name"] === obj["name"]),
     );
+}
+
+function createCoachArray(result) {
+    let coachArray = []
+    for (let i in result) {
+        let userRole = result[i].userRoleEntities
+        let linkedEntity = result[i].linkedEntity
+        for (let j in userRole) {
+            if (userRole[j].roleId == 20) {
+
+                for (let k in linkedEntity) {
+                    let obj = {
+                        name: (result[i].firstName + " " + result[i].lastName) + " - " + linkedEntity[k].name,
+                        id: parseInt(result[i].id + "" + linkedEntity[k].entityId),
+                        umpireId: result[i].id,
+                        entityId: linkedEntity[k].entityId
+                    }
+                    coachArray.push(obj)
+                }
+                break
+            }
+        }
+    }
+    return coachArray
+}
+
+function createUmpireArray(result) {
+    let umpireArray = []
+    for (let i in result) {
+        let userRoleCheck = result[i].userRoleEntities
+        let linkedEntity = result[i].linkedEntity
+        for (let j in userRoleCheck) {
+            if (userRoleCheck[j].roleId == 15 || userRoleCheck[j].roleId == 19) {
+
+                for (let k in linkedEntity) {
+                    let obj = {
+                        name: (result[i].firstName + " " + result[i].lastName) + " - " + linkedEntity[k].name,
+                        id: parseInt(result[i].id + "" + linkedEntity[k].entityId),
+                        umpireId: result[i].id,
+                        entityId: linkedEntity[k].entityId
+                    }
+                    umpireArray.push(obj)
+                }
+                break
+            }
+        }
+    }
+    return umpireArray
+}
+
+function getUmpureUserId(umpireList, umpireData) {
+    let userId = null
+    let orgId = null
+    for (let i in umpireList) {
+        if (umpireData.userId === umpireList[i].umpireId) {
+            for (let j in umpireData.competitionOrganisations) {
+                if (umpireList[i].entityId === umpireData.competitionOrganisations[j].id) {
+                    userId = umpireList[i].id
+                    orgId = umpireData.competitionOrganisations[j].id
+                }
+            }
+            break;
+        }
+    }
+    return { userId, orgId }
+
 }
 
 function liveScoreMatchReducer(state = initialState, action) {
@@ -383,6 +461,23 @@ function liveScoreMatchReducer(state = initialState, action) {
                 status: action.status,
             };
 
+        case ApiConstants.API_UMPIRE_LIST_SUCCESS:
+            let user_Data = action.result.userData ? action.result.userData : action.result
+            if (action.key === "data") {
+                let coachData = createCoachArray(JSON.parse(JSON.stringify(user_Data)))
+                state.coachList = coachData
+            }
+            let checkUserData = createUmpireArray(JSON.parse(JSON.stringify(user_Data)))
+            return {
+                ...state,
+                onLoad: false,
+                umpireList: [...checkUserData],
+                umpireListResult: checkUserData,
+                // umpireList: user_Data,
+                // umpireListResult: user_Data,
+                status: action.status
+            };
+
         case ApiConstants.API_LIVE_SCORE_UPDATE_MATCH:
             // let utcTimestamp = null;
             // let date = null;
@@ -404,9 +499,70 @@ function liveScoreMatchReducer(state = initialState, action) {
             } else if (action.key === "scorer2") {
                 state.scorer2 = action.data;
             } else if (action.key === "umpire1NameSelection") {
-                state.umpire1Name = action.data;
+                let umpireResList = state.umpireList
+
+                for (let i in umpireResList) {
+                    if (umpireResList[i].id === action.data) {
+                        state.umpire1NameOrgId = umpireResList[i].entityId
+                        state.umpire1Name = umpireResList[i].umpireId
+                    }
+                }
+
+                if (state.umpire1NameOrgId === state.orgId1UmpirName) {
+                    state.umpireRosterId_1 = state.roster1Umpire
+                } else {
+                    state.umpireRosterId_1 = null
+                }
+
+                if (action.data === state.umpire2NameMainId) {
+                    state.umpire2NameMainId = null
+                    state.umpire2Name = null
+                    state.umpireRosterId_2 = null
+                    state.umpire2NameOrgId = null
+                }
+
+                if (action.data === state.umpireReserve) {
+                    state.umpireReserve = null
+                }
+
+                if (action.data === state.umpireCoach) {
+                    state.umpireCoach = null
+                }
+                state.umpire1NameMainId = action.data;
             } else if (action.key === "umpire2NameSelection") {
-                state.umpire2Name = action.data;
+                let umpireResList = state.umpireList
+                // state.umpire1Name = null
+                // state.umpireRosterId_1 = null
+                // state.organisationId = null
+                for (let i in umpireResList) {
+                    if (umpireResList[i].id === action.data) {
+                        state.umpire2NameOrgId = umpireResList[i].entityId
+                        state.umpire2Name = umpireResList[i].umpireId
+                    }
+                }
+
+                if (state.umpire2NameOrgId === state.orgId2UmpirName) {
+                    state.umpireRosterId_2 = state.roster2Umpire
+                } else {
+                    state.umpireRosterId_2 = null
+                }
+
+                if (action.data === state.umpire1NameMainId) {
+                    console.log(action.data, 'umpire1NameMainId@@@@@@@@@@@@@@', state.umpire1NameMainId)
+                    state.umpire1NameMainId = null
+                    state.umpire1Name = null
+                    state.umpireRosterId_1 = null
+                    state.umpire1NameOrgId = null
+                }
+
+                if (action.data === state.umpireReserve) {
+                    state.umpireReserve = null
+                }
+
+                if (action.data === state.umpireCoach) {
+                    state.umpireCoach = null
+                }
+                state.umpire2NameMainId = action.data;
             } else if (action.key === "umpire1TextField") {
                 state.umpire1TextField = action.data;
             } else if (action.key === "umpire2TextField") {
@@ -414,7 +570,36 @@ function liveScoreMatchReducer(state = initialState, action) {
             } else if (action.key === "umpire1Orag") {
                 state.umpire1Orag = action.data;
             } else if (action.key === "umpireReserve") {
+
+                if (action.data === state.umpire1NameMainId) {
+                    state.umpire1NameMainId = null
+                }
+
+                if (action.data === state.umpire2NameMainId) {
+                    state.umpire2NameMainId = null
+                }
+
+                if (action.data === state.umpireCoach) {
+                    state.umpireCoach = null
+                }
+
                 state.umpireReserve = action.data;
+            }
+            else if (action.key === "umpireCoach") {
+
+                if (action.data === state.umpire1NameMainId) {
+                    state.umpire1NameMainId = null
+                }
+
+                if (action.data === state.umpire2NameMainId) {
+                    state.umpire2NameMainId = null
+                }
+
+                if (action.data === state.umpireReserve) {
+                    state.umpireReserve = null
+                }
+
+                state.umpireCoach = action.data
             }
             else if (action.key === "umpireCoach") {
                 state.umpireCoach = action.data
@@ -531,6 +716,8 @@ function liveScoreMatchReducer(state = initialState, action) {
             return { ...state, onLoad: true };
 
         case ApiConstants.API_GET_LIVESCOREMATCH_DETAIL_SUCCESS:
+            state.umpire1NameMainId = null
+            state.umpire2NameMainId = null
             let team1Player = liveScoreMatchModal.getMatchViewData(action.payload.team1players);
             let team2Player = liveScoreMatchModal.getMatchViewData(action.payload.team2players);
             let match = isArrayNotEmpty(action.payload.match) ? action.payload.match[0] : null;
@@ -540,31 +727,59 @@ function liveScoreMatchReducer(state = initialState, action) {
             let umpires_2 = isArrayNotEmpty(action.payload.umpires) ? checkUmpireType(action.payload.umpires, 2) : null;
             state.umpireReserve = umpireReserveData ? umpireReserveData : null
             state.umpireCoach = umpireCoachData ? umpireCoachData : null
+            console.log(umpires_2, 'check_umpires_2')
             if (umpires_1) {
+
+                let umpir1UserId = getUmpureUserId(state.umpireList, umpires_1)
+                // for (let i in state.umpireList) {
+                //     if (umpires_1.userId === state.umpireList[i].umpireId) {
+                //         for (let j in umpires_1.competitionOrganisations) {
+                //             if (state.umpireList[i].entityId === umpires_1.competitionOrganisations[j].id) {
+                //                 umpir1UserId = state.umpireList[i].id
+                //                 break;
+                //             }
+                //         }
+                //     }
+                // }
+                console.log(umpires_1, 'umpires_1', state.umpireList, umpir1UserId)
                 state.umpire1Orag = isArrayNotEmpty(umpires_1.competitionOrganisations) ? umpires_1.competitionOrganisations[0].id : [];
                 state.umpire1Name = umpires_1.userId;
+                state.umpire1NameMainId = umpir1UserId.userId;
+                state.umpire1NameOrgId = umpir1UserId.orgId
+                state.orgId1UmpirName = umpir1UserId.orgId
                 state.umpire1TextField = umpires_1.umpireName;
                 state.matchUmpireId_1 = umpires_1.matchUmpiresId;
                 state.umpireRosterId_1 = umpires_1.rosterId;
+                state.roster1Umpire = umpires_1.rosterId;
             } else {
                 state.umpire1Orag = null;
+                state.orgId1UmpirName = null;
                 state.umpire1Name = null;
                 state.umpire1TextField = null;
                 state.matchUmpireId_1 = null;
                 state.umpireRosterId_1 = null;
+                state.roster1Umpire = null;
             }
             if (umpires_2) {
+                let umpir2UserId = getUmpureUserId(state.umpireList, umpires_2)
+                console.log(umpires_2, 'umpires_2', state.umpireList, umpir2UserId)
                 state.umpire2Orag = isArrayNotEmpty(umpires_2.competitionOrganisations) ? umpires_2.competitionOrganisations[0].id : [];
                 state.umpire2Name = umpires_2.userId;
+                state.umpire2NameMainId = umpir2UserId.userId;
+                state.umpire2NameOrgId = umpir2UserId.orgId
+                state.orgId2UmpirName = umpir2UserId.orgId
                 state.umpire2TextField = umpires_2.umpireName;
                 state.matchUmpireId_2 = umpires_2.matchUmpiresId;
                 state.umpireRosterId_2 = umpires_2.rosterId;
+                state.roster2Umpire = umpires_2.rosterId;
             } else {
                 state.umpire2Orag = null;
+                state.orgId2UmpirName = null;
                 state.umpire2Name = null;
                 state.umpire2TextField = null;
                 state.matchUmpireId_2 = null;
                 state.umpireRosterId_2 = null;
+                state.roster2Umpire = null;
             }
             if (match) {
                 if (match.scorer1 !== null) {

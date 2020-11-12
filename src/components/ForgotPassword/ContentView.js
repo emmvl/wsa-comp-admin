@@ -40,8 +40,8 @@ function ContentView(props) {
       ) : (
         <div>
           <InputWithHead
-            heading={AppConstants.username}
-            placeholder={AppConstants.username}
+            heading={AppConstants.usernameEmail}
+            placeholder={AppConstants.usernameEmail}
             name="userName"
             onChange={handleChange}
             onBlur={handleBlur}
