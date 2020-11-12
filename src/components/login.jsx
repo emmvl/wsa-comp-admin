@@ -17,7 +17,7 @@ import InputWithHead from 'customComponents/InputWithHead';
 
 const { Content } = Layout;
 const loginFormSchema = Yup.object().shape({
-    userName: Yup.string().min(2, 'Username must be at least 2 characters').required('Username is required'),
+    userName: Yup.string().min(2, 'Username must be at least 2 characters').required('Username/Email is required'),
     password: Yup.string().min(8, 'Password must be 8 characters').required('Password is required'),
 });
 
@@ -49,8 +49,8 @@ class Login extends Component {
             </div>
 
             <InputWithHead
-                heading={AppConstants.username}
-                placeholder={AppConstants.username}
+                heading={AppConstants.usernameEmail}
+                placeholder={AppConstants.usernameEmail}
                 name="userName"
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -140,43 +140,43 @@ class Login extends Component {
                                     // isSubmitting,
                                     setFieldValue,
                                 }) => (
-                                    <Form onFinish={handleSubmit}>
-                                        <div className="auth-form" style={{ zIndex: 15 }}>
-                                            {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
-                                        </div>
-                                    </Form>
-                                )}
+                                        <Form onFinish={handleSubmit}>
+                                            <div className="auth-form" style={{ zIndex: 15 }}>
+                                                {this.contentView(values, errors, setFieldValue, touched, handleChange, handleBlur)}
+                                            </div>
+                                        </Form>
+                                    )}
                             </Formik>
                         ) : (
-                            <div className="auth-form" style={{ fontSize: 14, textAlign: 'center', zIndex: 15 }}>
-                                {!loginState.result.tfaEnabled && loginState.result.qrCode && (
-                                    <>
-                                        <img src={loginState.result.qrCode} alt="" />
+                                <div className="auth-form" style={{ fontSize: 14, textAlign: 'center', zIndex: 15 }}>
+                                    {!loginState.result.tfaEnabled && loginState.result.qrCode && (
+                                        <>
+                                            <img src={loginState.result.qrCode} alt="" />
 
-                                        <p>Scan QR code with your authenticator.</p>
-                                    </>
-                                )}
+                                            <p>Scan QR code with your authenticator.</p>
+                                        </>
+                                    )}
 
-                                <div className="qr-code-form">
-                                    <InputWithHead
-                                        type="number"
-                                        heading={AppConstants.qrCodeHeader}
-                                        placeholder={AppConstants.qrCodeHeader}
-                                        onChange={this.onChangeCode}
-                                        value={code}
-                                    />
+                                    <div className="qr-code-form">
+                                        <InputWithHead
+                                            type="number"
+                                            heading={AppConstants.qrCodeHeader}
+                                            placeholder={AppConstants.qrCodeHeader}
+                                            onChange={this.onChangeCode}
+                                            value={code}
+                                        />
 
-                                    <Button
-                                        className="open-reg-button"
-                                        type="primary"
-                                        disabled={code.length !== 6 || loginState.onLoad}
-                                        onClick={this.submitCode}
-                                    >
-                                        {AppConstants.submit}
-                                    </Button>
+                                        <Button
+                                            className="open-reg-button"
+                                            type="primary"
+                                            disabled={code.length !== 6 || loginState.onLoad}
+                                            onClick={this.submitCode}
+                                        >
+                                            {AppConstants.submit}
+                                        </Button>
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
                         <Loader visible={loginState.onLoad} />
                     </Content>

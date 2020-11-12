@@ -71,6 +71,7 @@ class LiveScoreAddTeam extends Component {
             key: props.location.state ? props.location.state.key ? props.location.state.key : null : null,
             screenName: this.props.location.state ? this.props.location.state.screenName : null,
             screenKey: this.props.location.state ? this.props.location.state.screenKey : null,
+            sourceIdAvailable: false,
         };
         this.formRef = React.createRef();
     }
@@ -87,8 +88,8 @@ class LiveScoreAddTeam extends Component {
                 else {
                     this.props.liveScoreAddTeamform({ key: 'addTeam' })
                 }
-                const { id } = JSON.parse(getUmpireCompetitonData())
-                this.setState({ loaclCompetitionID: id })
+                const { id, sourceId } = JSON.parse(getUmpireCompetitonData())
+                this.setState({ localCompetitionID: id, sourceIdAvailable: sourceId ? true : false })
                 this.props.liveScoreGetDivision(id)
                 this.props.liveScoreGetAffiliate({ id, name: '' })
                 this.props.liveScoreManagerListAction(5, 1, id)
@@ -97,16 +98,15 @@ class LiveScoreAddTeam extends Component {
             }
         } else {
             if (getLiveScoreCompetiton()) {
+                const { id, sourceId } = JSON.parse(getLiveScoreCompetiton())
                 if (this.state.isEdit) {
-
                     this.props.liveScoreGetTeamDataAction(this.state.teamId)
-                    this.setState({ load: true })
+                    this.setState({ load: true, localCompetitionID: id })
                 }
                 else {
                     this.props.liveScoreAddTeamform({ key: 'addTeam' })
                 }
-                const { id } = JSON.parse(getLiveScoreCompetiton())
-                this.setState({ loaclCompetitionID: id })
+                this.setState({ localCompetitionID: id, sourceIdAvailable: sourceId ? true : false })
                 this.props.liveScoreGetDivision(id)
                 this.props.liveScoreGetAffiliate({ id, name: '' })
                 this.props.liveScoreManagerListAction(5, 1, id)
@@ -282,6 +282,7 @@ class LiveScoreAddTeam extends Component {
                         <InputWithHead required="required-field" heading={AppConstants.division} />
                         <Form.Item name='division' rules={[{ required: true, message: ValidationConstants.divisionField }]}>
                             <Select
+                                disabled={this.state.sourceIdAvailable}
                                 showSearch
                                 optionFilterProp="children"
                                 style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
@@ -400,7 +401,7 @@ class LiveScoreAddTeam extends Component {
                         >
                             {/* {this.state.showOption ?  */}
                             {managerListResult.map((item) => (
-                                <Option key={'manager_' + item.id} value={item.id}>
+                                <Option key={'manager_' + item.id} value={JSON.stringify(item.id)}>
                                     {item.NameWithNumber}
                                 </Option>
                             ))}
@@ -553,7 +554,7 @@ class LiveScoreAddTeam extends Component {
                         </div>
                         <div className="col-sm">
                             <div className="comp-buttons-view">
-                                <Button onClick={this.handleSubmit} className="publish-button save-draft-text"
+                                <Button className="publish-button save-draft-text"
                                     type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
@@ -634,7 +635,8 @@ class LiveScoreAddTeam extends Component {
                 }
                 this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey)
 
-            } else if (this.props.liveScoreTeamState.managerType === 'new') {
+            }
+            else if (this.props.liveScoreTeamState.managerType === 'new') {
                 const formData = new FormData();
                 if (this.state.teamId) {
                     formData.append('id', this.state.teamId)
@@ -664,7 +666,8 @@ class LiveScoreAddTeam extends Component {
 
                 this.props.liveAddNewTeam(formData, this.state.teamId, this.state.key, this.state.screenKey)
 
-            } else {
+            }
+            else {
                 // message.config({ duration: 0.9, maxCount: 1 })
                 // message.error('Please select manager section.')
                 const formData = new FormData();
@@ -697,15 +700,12 @@ class LiveScoreAddTeam extends Component {
         const { screenName } = this.state
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
-
-
                 {
                     screenName == 'userPersonal' ?
                         <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                         :
                         <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 }
-
                 {
                     screenName == 'userPersonal' ?
                         <InnerHorizontalMenu menu={"user"} userSelectedKey={"1"} />
