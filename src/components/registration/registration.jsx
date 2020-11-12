@@ -174,12 +174,14 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record, index) => (
+            record.actionView  ? 
             <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
                 mode="horizontal"
                 style={{ lineHeight: "25px" }}
             >
+               
                 <SubMenu
                     key="sub1"
                     title={
@@ -212,7 +214,8 @@ const columns = [
                     }
 
                 </SubMenu>
-            </Menu>
+                
+            </Menu> : ""
         ),
     },
 ];

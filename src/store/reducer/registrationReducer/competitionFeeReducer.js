@@ -1254,7 +1254,8 @@ function createProductFeeArr(data) {
                     "mFees": mFeesCasual,
                     "membershipCasual": memberShipProductType[j].mCasualFee,
                     "membershipGst": memberShipProductType[j].mCasualGst,
-                    "checkBoxOption": statusCasual.result.isCasual
+                    "checkBoxOption": statusCasual.result.isCasual,
+                    "isPlayer": memberShipProductType[j].isPlaying
                 }
             } else {
                 type_Object_casual = {
@@ -1276,7 +1277,8 @@ function createProductFeeArr(data) {
                     "mFees": Number(memberShipProductType[j].mCasualFee) + Number(memberShipProductType[j].mCasualGst),
                     "membershipCasual": memberShipProductType[j].mCasualFee,
                     "membershipGst": memberShipProductType[j].mCasualGst,
-                    "checkBoxOption": 0 //statusRefId == 1 ? 1 : 0
+                    "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0,
+                    "isPlayer": memberShipProductType[j].isPlaying
                 }
             }
 
@@ -1303,7 +1305,8 @@ function createProductFeeArr(data) {
                     "mFees": mFeesSeasonal,
                     "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
                     "membershipGst": memberShipProductType[j].mSeasonalGst,
-                    "checkBoxOption": statusSeasonal.result.isSeasonal
+                    "checkBoxOption": statusSeasonal.result.isSeasonal,
+                    "isPlayer": memberShipProductType[j].isPlaying
                 }
             } else {
                 type_Object_seasonal = {
@@ -1325,7 +1328,8 @@ function createProductFeeArr(data) {
                     "mFees": Number(memberShipProductType[j].mSeasonalFee) + Number(memberShipProductType[j].mSeasonalGst),
                     "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
                     "membershipGst": memberShipProductType[j].mSeasonalGst,
-                    "checkBoxOption": 0 //statusRefId == 1 ? 1 : 0
+                    "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0
+                    "isPlayer": memberShipProductType[j].isPlaying
                 }
             }
 
@@ -1355,7 +1359,8 @@ function createProductFeeArr(data) {
                         "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
                         "membershipGst": memberShipProductType[j].mSeasonalGst,
                         "checkBoxOption": statusteamSeasonal.result.isTeamSeasonal,
-                        "teamRegChargeTypeRefId": statusteamSeasonal.result.teamRegChargeTypeRefId
+                        "teamRegChargeTypeRefId": statusteamSeasonal.result.teamRegChargeTypeRefId,
+                        "isPlayer": memberShipProductType[j].isPlaying
                     }
                 } else {
                     type_object_team_seasonal = {
@@ -1378,7 +1383,8 @@ function createProductFeeArr(data) {
                         "membershipSeasonal": memberShipProductType[j].mSeasonalFee,
                         "membershipGst": memberShipProductType[j].mSeasonalGst,
                         "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0,
-                        "teamRegChargeTypeRefId": 1
+                        "teamRegChargeTypeRefId": 1,
+                        "isPlayer": memberShipProductType[j].isPlaying
                     }
                 }
 
@@ -1404,7 +1410,8 @@ function createProductFeeArr(data) {
                         "mFees": mFeesCasual,
                         "membershipCasual": memberShipProductType[j].mCasualFee,
                         "membershipGst": memberShipProductType[j].mCasualGst,
-                        "checkBoxOption": statusTeamCasual.result.isTeamCasual
+                        "checkBoxOption": statusTeamCasual.result.isTeamCasual,
+                        "isPlayer": memberShipProductType[j].isPlaying
                     }
                 } else {
                     type_object_team_casual = {
@@ -1426,7 +1433,8 @@ function createProductFeeArr(data) {
                         "mFees": Number(memberShipProductType[j].mCasualFee) + Number(memberShipProductType[j].mCasualGst),
                         "membershipCasual": memberShipProductType[j].mCasualFee,
                         "membershipGst": memberShipProductType[j].mCasualGst,
-                        "checkBoxOption": 0 // statusRefId == 1 ? 1 : 0
+                        "checkBoxOption": 0, // statusRefId == 1 ? 1 : 0
+                        "isPlayer": memberShipProductType[j].isPlaying
                     }
                 }
 
@@ -1473,7 +1481,8 @@ function createProductFeeArr(data) {
                         "mFees": mFeesCasualPer,
                         "membershipCasual": memberShipProductType[k].mCasualFee,
                         "membershipGst": memberShipProductType[k].mCasualGst,
-                        "checkBoxOption": statusCasual.result.isCasual
+                        "checkBoxOption": statusCasual.result.isCasual,
+                        "isPlayer": memberShipProductType[k].isPlaying
                     }
                 } else {
                     type_Object_casual = {
@@ -1496,7 +1505,8 @@ function createProductFeeArr(data) {
                         "mFees": Number(memberShipProductType[k].mCasualFee) + Number(memberShipProductType[k].mCasualGst),
                         "membershipCasual": memberShipProductType[k].mCasualFee,
                         "membershipGst": memberShipProductType[k].mCasualGst,
-                        "checkBoxOption": 0 //statusRefId == 1 ? 1 : 0
+                        "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0
+                        "isPlayer": memberShipProductType[k].isPlaying
                     }
                 }
 
@@ -1522,7 +1532,8 @@ function createProductFeeArr(data) {
                         "mFees": mFeesCasualPer,
                         "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
                         "membershipGst": memberShipProductType[k].mSeasonalGst,
-                        "checkBoxOption": statusSeasonal.result.isSeasonal
+                        "checkBoxOption": statusSeasonal.result.isSeasonal,
+                        "isPlayer": memberShipProductType[k].isPlaying
                     }
                 } else {
                     type_Object_seasonal = {
@@ -1545,7 +1556,8 @@ function createProductFeeArr(data) {
                         "mFees": Number(memberShipProductType[k].mSeasonalFee) + Number(memberShipProductType[k].mSeasonalGst),
                         "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
                         "membershipGst": memberShipProductType[k].mSeasonalGst,
-                        "checkBoxOption": 0 //statusRefId == 1 ? 1 : 0
+                        "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0
+                        "isPlayer": memberShipProductType[k].isPlaying
                     }
                 }
 
@@ -1574,7 +1586,8 @@ function createProductFeeArr(data) {
                             "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
                             "membershipGst": memberShipProductType[k].mSeasonalGst,
                             "checkBoxOption": statusTeamSeasonal.result.isTeamSeasonal,
-                            "teamRegChargeTypeRefId": statusTeamSeasonal.result.teamRegChargeTypeRefId
+                            "teamRegChargeTypeRefId": statusTeamSeasonal.result.teamRegChargeTypeRefId,
+                            "isPlayer": memberShipProductType[k].isPlaying
                         }
                     } else {
                         type_object_team_seasonal = {
@@ -1598,7 +1611,8 @@ function createProductFeeArr(data) {
                             "membershipSeasonal": memberShipProductType[k].mSeasonalFee,
                             "membershipGst": memberShipProductType[k].mSeasonalGst,
                             "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0,
-                            "teamRegChargeTypeRefId": 1
+                            "teamRegChargeTypeRefId": 1,
+                            "isPlayer": memberShipProductType[k].isPlaying
                         }
                     }
 
@@ -1625,7 +1639,8 @@ function createProductFeeArr(data) {
                             "mFees": mFeesCasualPer,
                             "membershipCasual": memberShipProductType[k].mCasualFee,
                             "membershipGst": memberShipProductType[k].mCasualGst,
-                            "checkBoxOption": statusTeamCasual.result.isTeamCasual
+                            "checkBoxOption": statusTeamCasual.result.isTeamCasual,
+                            "isPlayer": memberShipProductType[k].isPlaying
                         }
                     } else {
                         type_object_team_casual = {
@@ -1648,7 +1663,8 @@ function createProductFeeArr(data) {
                             "mFees": Number(memberShipProductType[k].mCasualFee) + Number(memberShipProductType[k].mCasualGst),
                             "membershipCasual": memberShipProductType[k].mCasualFee,
                             "membershipGst": memberShipProductType[k].mCasualGst,
-                            "checkBoxOption": 0 //statusRefId == 1 ? 1 : 0
+                            "checkBoxOption": 0, //statusRefId == 1 ? 1 : 0
+                            "isPlayer": memberShipProductType[k].isPlaying
                         }
                     }
 

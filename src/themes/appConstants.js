@@ -1596,6 +1596,7 @@ const AppConstants = {
     emailNotificationUpdate: 'Email Notification Update',
 
     unavailable: "Unavailable",
+    proceedText: "Proceed"
 };
 
 export default AppConstants;

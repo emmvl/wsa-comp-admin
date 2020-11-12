@@ -1392,7 +1392,7 @@ const playerSeasonalTableTeamAssociation = [
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         render: (fee, record, index) => (
-            (fee != null || record.teamRegChargeTypeRefId != 3) ? (
+            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1685,7 +1685,7 @@ const playerSeasonalTableTeamClub = [
         dataIndex: 'nominationFees',
         key: 'nominationFees',
         render: (fee, record, index) => (
-            (fee != null || record.teamRegChargeTypeRefId != 3) ? (
+            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1979,7 +1979,7 @@ const playerSeasonalTeamTable = [
         key: 'nominationFees',
         render: (fee, record, index) => {
             return(
-                (fee != null || record.teamRegChargeTypeRefId != 3) ? 
+                ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? 
                     (
                         <Input
                             prefix="$"
@@ -2975,13 +2975,14 @@ class RegistrationCompetitionFee extends Component {
             affiliateOrgId: null,
             heroImage: null
         };
-
+       
         this_Obj = this;
         let competitionId = null;
         competitionId = this.props.location.state ? this.props.location.state.id : null;
         competitionId !== null && this.props.clearCompReducerDataAction('all');
 
         this.formRef = createRef();
+        // this.tableReference = React.createRef();
     }
 
     componentDidUpdate(nextProps) {
@@ -3169,7 +3170,9 @@ class RegistrationCompetitionFee extends Component {
         let checkVenueScreen = this.props.location.state && this.props.location.state.venueScreen
             ? this.props.location.state.venueScreen
             : null;
-        checkVenueScreen ? window.scrollTo(0, 500) : window.scrollTo(0, 0);
+        // setTimeout(() => {
+        //     window.scrollTo(this.tableReference.offsetBottom,0);
+        // },300)
     }
 
     ////all the api calls
@@ -5610,7 +5613,22 @@ class RegistrationCompetitionFee extends Component {
                                                         value={item.teamRegChargeTypeRefId}
                                                         disabled={feesTableDisable}
                                                     >
-                                                        <div className="fluid-width">
+                                                        <div style={{display: "flex"}}>
+                                                            <Radio value={1}>{AppConstants.chargedForFullSeason}</Radio> 
+                                                            <div >
+                                                                <Radio className="team-reg-radio-custom-style" value={item.teamRegChargeTypeRefId ? (item.teamRegChargeTypeRefId == 3 ? 3 : 2) : 2 }>
+                                                                    {AppConstants.chargedPerMatch}
+                                                                </Radio>
+                                                                {(item.teamRegChargeTypeRefId == 2 || item.teamRegChargeTypeRefId == 3) && (
+                                                                     <div style={{display: "flex"}}>
+                                                                          <Radio className="team-reg-radio-custom-style" style={{width: "50%"}} value={2}>{AppConstants.feesPaidAtEachMatchByUser}</Radio>
+                                                                          <Radio className="team-reg-radio-custom-style" style={{width: "50%"}} value={3}>{AppConstants.feesPaidAtEachMatchByPlayer}</Radio>
+                                                                     </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                       
+                                                        {/* <div className="fluid-width">
                                                             <div className="row">
                                                                 <div className="col-sm-4">
                                                                     <div className="contextualHelp-RowDirection" style={{'flexDirection': 'column'}}>
@@ -5664,13 +5682,14 @@ class RegistrationCompetitionFee extends Component {
                                                                         </div>
                                                             </div>
                                                             
-                                                        </div>
+                                                        </div> */}
                                                     </Radio.Group>
                                                 </div>
                                             )}
                                             {item.isTeamSeasonal && (
                                                 <div className="table-responsive mt-2">
                                                     <Table
+                                                        // ref= {(tableReference) => this.tableReference = tableReference}
                                                         className="fees-table"
                                                         columns={item.teamRegChargeTypeRefId == 3 ? this.casualFeesTeamOnOrgTLevel() : this.seasonalFeesTeamOnOrgTLevel()}
                                                         dataSource={

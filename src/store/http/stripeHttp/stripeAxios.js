@@ -156,7 +156,22 @@ let AxiosApi = {
             url = `/api/payments/gateway/export?organisationUniqueKey=${organisationUniqueKey}&type=transfer`
         }
         return Method.dataGetDownload(url, token, key);
-    }
+    },
+     async getStripeRefundList(page, startingAfter, endingBefore) {
+        let orgItem = await getOrganisationData()
+        let organisationUniqueKey = orgItem ? orgItem.organisationUniqueKey : 1;
+        let body = {
+            type: "refunds",
+            organisationUniqueKey: organisationUniqueKey,
+            paging: {
+                starting_after: startingAfter,
+                ending_before: endingBefore,
+                limit: 10
+            }
+        }
+        var url = `api/payments/list`;
+        return Method.dataPost(url, token, body);
+    },
 
 };
 
