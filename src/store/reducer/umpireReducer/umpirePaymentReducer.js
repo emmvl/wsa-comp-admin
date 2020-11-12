@@ -113,7 +113,7 @@ function umpirePaymentState(state = initialState, action) {
                     if (umpirePaymentArr[i].paymentStatus === "unpaid")
                         umpirePaymentArr[i]["selectedValue"] = data
 
-                    if (data && umpirePaymentArr[i].user.stripeAccountId) {
+                    if (data && umpirePaymentArr[i].user && umpirePaymentArr[i].user.stripeAccountId) {
                         let obj = {
                             userId: umpirePaymentArr[i].user.userId,
                             matchUmpireId: umpirePaymentArr[i].id,

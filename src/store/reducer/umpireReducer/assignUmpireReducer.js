@@ -50,7 +50,17 @@ function assignUmpireState(state = initialState, action) {
                 onLoad: true
             }
         case ApiConstants.API_ASSIGN_UMPIRE_FROM_LIST_SUCCESS:
-            state.assignUmpireList[action.index][action.umpireKey] = action.result
+            console.log(action, 'API_ASSIGN_UMPIRE_FROM_LIST_SUCCESS')
+            let responseData = action.result.umpires[0]
+            let name = responseData.umpireName.split(" ", 2)
+            let obj = {
+                firstName: name[0],
+                id: responseData.userId,
+                lastName: name[1],
+                rosterStatus: null,
+                rosterId: responseData.roster.id
+            }
+            state.assignUmpireList[action.index][action.umpireKey] = obj
             return {
                 ...state,
                 onLoad: false,
@@ -66,6 +76,8 @@ function assignUmpireState(state = initialState, action) {
             }
         case ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_SUCCESS:
             state.assignUmpireList[action.index][action.umpireKey] = null
+            console.log(action, 'API_UNASSIGN_UMPIRE_FROM_LIST_SUCCESS')
+            // state.assignUmpireList[action.index][action.umpireKey] = action.result.data
             return {
                 ...state,
                 onLoad: false,

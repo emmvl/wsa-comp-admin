@@ -613,6 +613,32 @@ function* userExportFilesSaga(action) {
   }
 }
 
+function* getRefBadgeSaga(action) {
+  try {
+    const result = yield call(AxiosApi.getRegBadgeData, action.URL);
+
+    if (result.status === 1) {
+      yield put({
+        type: ApiConstants.API_GET_REF_BADGE_SUCCESS,
+        result: result.result.data,
+        status: result.status
+      });
+    } else {
+      yield put({ type: ApiConstants.API_APP_FAIL });
+
+      setTimeout(() => {
+        alert(result.data.message);
+      }, 800);
+    }
+  } catch (error) {
+    yield put({
+      type: ApiConstants.API_APP_ERROR,
+      error: error,
+      status: error.status
+    });
+  }
+}
+
 export default function* rootAppSaga() {
   yield takeEvery(ApiConstants.API_YEAR_LIST_LOAD, getYearListSaga);
   yield takeEvery(ApiConstants.API_ONLY_YEAR_LIST_LOAD, getOnlyYearListSaga);
@@ -633,4 +659,5 @@ export default function* rootAppSaga() {
   yield takeEvery(ApiConstants.API_ENHANCED_ROUND_ROBIN_LOAD, getEnhancedRoundRobinTypesSaga);
   yield takeEvery(ApiConstants.API_EXPORT_FILES_LOAD, exportFilesSaga);
   yield takeEvery(ApiConstants.API_USER_EXPORT_FILES_LOAD, userExportFilesSaga);
+  yield takeEvery(ApiConstants.API_GET_REF_BADGE_LOAD, getRefBadgeSaga);
 }

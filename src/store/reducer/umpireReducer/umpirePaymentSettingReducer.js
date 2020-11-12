@@ -117,7 +117,9 @@ const initialState = {
     poolViewArrayAffiliate: [],
     allDivisionBadgeAffiliate: false,
     inputFieldForByPool: defaultInputFieldForByPoolArray,
-    inputFieldsAffiliateOrgByPool: defaulInputFieldsAffiliateOrgByPool
+    inputFieldsAffiliateOrgByPool: defaulInputFieldsAffiliateOrgByPool,
+    badgeDataCompOrg: [],
+    badgeDataByAffiliate: [],
 
 };
 
@@ -131,6 +133,26 @@ function getSelectedValue(divId, allArray) {
     }
 
     return allArray
+}
+
+
+function getFilterBadgeData(badgeData) {
+
+    let arr = []
+    for (let i in badgeData) {
+        let obj = {
+            description: badgeData[i].description,
+            id: badgeData[i].id,
+            name: badgeData[i].name,
+            sortOrder: badgeData[i].sortOrder,
+            subReferences: badgeData[i].subReferences,
+            umpireRate: 0,
+            umpReserveRate: 0,
+            umpCoachRate: 0
+        }
+        arr.push(obj)
+    }
+    return arr;
 }
 
 function umpirePaymentSetting(state = initialState, action) {
@@ -300,14 +322,28 @@ function umpirePaymentSetting(state = initialState, action) {
                 }
             }
             else if (key === "umpireRate" || key === "umpReserveRate" || key === "umpCoachRate") {
-                state.inputFieldArray[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
+                state.badgeDataCompOrg[action.data.index][key] = Number(Math.round(data + 'e2') + 'e-2');
             }
             else {
-                state.inputFieldArray[action.data.index][key] = data;
+                state.badgeDataCompOrg[action.data.index][key] = data;
             }
             return {
                 ...state,
 
+            };
+
+        ////Ref Badge 
+        case ApiConstants.API_GET_REF_BADGE_LOAD:
+            return { ...state, onLoad: true };
+
+        case ApiConstants.API_GET_REF_BADGE_SUCCESS:
+            let filterBadgeData = getFilterBadgeData(action.result)
+            state.badgeDataCompOrg = filterBadgeData
+            state.badgeDataByAffiliate = filterBadgeData
+            return {
+                ...state,
+                onLoad: false,
+                status: action.status,
             };
 
         default:
