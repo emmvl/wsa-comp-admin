@@ -154,13 +154,14 @@ function roundstructureData(data) {
 
 
 function structureDrawsData(data, key, venuesData) {
+  console.log(data)
   let mainCourtNumberArray = [];
   let dateArray = [];
   let gradeArray = [];
   let sortedDateArray = [];
   let legendArray = [];
   let sortMainCourtNumberArray = [];
-
+if(data.length >0){
   venuesData.forEach(venue => {
     venue.courts.forEach(court => {
       const isCourtNotEmpty = data.some(dataSlot => dataSlot.venueCourtId === court.courtId);
@@ -178,7 +179,7 @@ function structureDrawsData(data, key, venuesData) {
       }
     })
   })
-
+}
   if (data) {
     if (isArrayNotEmpty(data)) {
       data.map((object) => {
@@ -411,7 +412,7 @@ function getCompetitionArray(draws) {
 function allcompetitionDrawsData(data) {
   // let dateDrawsData = data.dates
   let newStructureDateDraws
-  newStructureDateDraws = structureDrawsData(data.draws, "all")
+  newStructureDateDraws = structureDrawsData(data.draws, "all",data.venues)
   data.draws = newStructureDateDraws.mainCourtNumberArray
   data.dateNewArray = newStructureDateDraws.sortedDateArray
   data.legendsArray = newStructureDateDraws.legendsArray

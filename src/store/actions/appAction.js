@@ -166,6 +166,13 @@ function userExportFilesAction(URL) {
   };
 }
 
+function getRefBadgeData() {
+  return {
+    type: ApiConstants.API_GET_REF_BADGE_LOAD,
+    URL
+  };
+}
+
 export {
   getYearListAction,
   getOnlyYearListAction,
@@ -190,4 +197,5 @@ export {
   exportFilesAction,
   CLEAR_OWN_COMPETITION_DATA,
   userExportFilesAction,
+  getRefBadgeData
 };

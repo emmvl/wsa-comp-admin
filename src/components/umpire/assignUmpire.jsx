@@ -5,7 +5,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
-import { getUmpireCompId, setUmpireCompId, getUmpireCompetiton } from '../../util/sessionStorage'
+import { getUmpireCompId, setUmpireCompId, getUmpireCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { connect } from 'react-redux';
@@ -73,7 +73,7 @@ const column = [
         sorter: (a, b) => tableSort(a, b, "id"),
         render: (id) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
-            state: { matchId: id, umpireKey: 'umpire', screenName: 'umpireList' }
+            state: { matchId: id, umpireKey: 'umpire', screenName: 'umpire' }
         }} >
             <span className="input-heading-add-another pt-0" >{id}</span>
         </NavLink>
@@ -202,17 +202,28 @@ class AssignUmpire extends Component {
     ///on status change assign/unassign
     onChangeStatus(index, record, umpireKey, statusText, userData) {
         let umpireUserId = this_obj.props.location.state ? this_obj.props.location.state.record.id : 0
-        let assignBody = {
+        let umpireName = this_obj.props.location.state ? this_obj.props.location.state.record.firstName + " " + this_obj.props.location.state.record.lastName : null
+        let userId = localStorage.getItem("userId");
+        const competition = JSON.parse(getUmpireCompetitonData());
+        let rosterLocked = competition.recordUmpireType === "USERS" ? true : false
+        let orgId = this.props.location.state ? this.props.location.state.record ? this.props.location.state.record.linkedEntity[0].entityId : null : null
+
+        let assignBody = [{
+            createdBy: parseInt(userId),
+            id: null,
             matchId: record.id,
-            roleId: 15,
+            organisationId: orgId,
+            sequence: umpireKey == 'user1' ? 1 : 2,
+            umpireName: umpireName,
+            umpireType: "USERS",
             userId: umpireUserId,
-            rosterId: userData ? userData.rosterId : null
-        }
+        }]
+
         if (statusText === "Assign") {
-            this.props.assignUmpireAction(assignBody, index, umpireKey)
+            this.props.assignUmpireAction(assignBody, index, umpireKey, rosterLocked)
         }
         if (statusText === "Unassign") {
-            this.props.unassignUmpireAction(userData.rosterId, index, umpireKey)
+            this.props.unassignUmpireAction(userData.rosterId, index, umpireKey, rosterLocked)
         }
 
     }

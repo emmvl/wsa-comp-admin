@@ -6,7 +6,6 @@ import {
     Layout, Breadcrumb, Button, Select, Form, Modal,
     Checkbox, message, Tabs, Table, Radio, Input
 } from 'antd';
-// import CustomToolTip from 'react-png-tooltip';
 
 import './user.css';
 import InputWithHead from "../../customComponents/InputWithHead";
@@ -27,6 +26,7 @@ import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import Loader from '../../customComponents/loader';
 import ImageLoader from '../../customComponents/ImageLoader'
 import { captializedString } from "../../util/helpers"
+import PlacesAutocomplete from '../competition/elements/PlaceAutoComplete';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -76,13 +76,12 @@ class UserOurOrganization extends Component {
             isEditable: true,
             sourcePage: "AFF",
             termsAndCondititionFile: null,
-            organisationTypeRefId: 0
+            organisationTypeRefId: 0,
+            affiliateAddressError: '',
         }
         _this = this;
         this.props.getCommonRefData();
         this.props.getRoleAction();
-        //this.props.getUreAction();
-        //this.addContact();
         this.formRef = React.createRef();
     }
 
@@ -203,19 +202,6 @@ class UserOurOrganization extends Component {
             this.updateContactFormFields(contacts);
         }
 
-        // (contacts || []).map((item, index) => {
-        //     this.formRef.current.setFieldsValue({
-        //         [`firstName${index}`]: item.firstName,
-        //         [`lastName${index}`]: item.lastName,
-        //         [`email${index}`]: item.email,
-        //     });
-        //     let permissions = item.permissions;
-        //     permissions.map((perm, permIndex) => {
-        //         this.formRef.current.setFieldsValue({
-        //             [`permissions${index}`]: perm.roleId,
-        //         });
-        //     })
-        // })
     }
 
     onChangeSetValue = (val, key) => {
@@ -442,6 +428,11 @@ class UserOurOrganization extends Component {
 
     saveAffiliate = (values) => {
         let tabKey = this.state.organisationTabKey;
+        if (this.state.affiliateAddressError) {
+            message.error(this.state.affiliateAddressError);
+            return;
+        }
+
         if (tabKey == "1") {
             let affiliate = this.props.userState.affiliateOurOrg;
 
@@ -571,6 +562,45 @@ class UserOurOrganization extends Component {
         </div>
     );
 
+    handlePlacesAutocomplete = (data) => {
+        const { stateList } = this.props.commonReducerState;
+        const address = data;
+
+        if (!address || !address.addressOne || !address.suburb) {
+            this.setState({
+                affiliateAddressError: ValidationConstants.affiliateAddressDetailError,
+            })
+        } else {
+            this.setState({
+                affiliateAddressError: ''
+            })
+        }
+
+        this.setState({
+            affiliateAddress: address,
+        });
+
+        const stateRefId = stateList.length > 0 && address.state
+            ? stateList.find((state) => state.name === address.state).id
+            : null;
+
+        this.formRef.current.setFieldsValue({
+            stateRefId,
+            addressOne: address.addressOne || null,
+            suburb: address.suburb || null,
+            postcode: address.postcode || null,
+        });
+
+        if (address.addressOne) {
+            this.props.updateOrgAffiliateAction(stateRefId, 'stateRefId');
+            this.props.updateOrgAffiliateAction(address.addressOne, 'street1');
+            this.props.updateOrgAffiliateAction(address.suburb, 'suburb');
+            this.props.updateOrgAffiliateAction(address.postcode, 'postalCode');
+            this.props.updateOrgAffiliateAction(address.lat, 'lat');
+            this.props.updateOrgAffiliateAction(address.lng, 'lng');
+        }
+    };
+
     ////////form content view
     contentView = () => {
         let affiliateToData = this.props.userState.affiliateTo;
@@ -580,6 +610,15 @@ class UserOurOrganization extends Component {
             if (affiliateToData.organisationTypes != undefined && affiliateToData.organisationTypes.length > 0)
                 affiliate.organisationTypeRefId = affiliateToData.organisationTypes[0].id;
         }
+
+        const state = stateList.length > 0 && affiliate.stateRefId
+            ? stateList.find((state) => state.id === affiliate.stateRefId).name
+            : null;
+
+        let defaultAffiliateAddress = `${affiliate.street1 ? `${affiliate.street1},` : ''
+        } ${affiliate.suburb ? `${affiliate.suburb},` : ''
+        } ${state ? `${state},` : ''
+        } Australia`;
 
         return (
             <div className="content-view pt-4">
@@ -667,73 +706,13 @@ class UserOurOrganization extends Component {
                     </div>
                 </div>
 
-                <Form.Item name='addressOne' rules={[{ required: true, message: ValidationConstants.addressField[2] }]}>
-                    <InputWithHead
-                        required="required-field pt-0 pb-0"
-                        auto_complete='new-addressOne'
-                        heading={AppConstants.addressOne}
-                        placeholder={AppConstants.addressOne}
-                        name={AppConstants.addressOne}
-                        onChange={(e) => this.onChangeSetValue(e.target.value, "street1")}
-                        // value={affiliate.street1}
-                        disabled={!this.state.isEditable}
-                        value={affiliate.street1}
-                    />
-                </Form.Item>
-
-                <InputWithHead
-                    auto_complete='new-addressTwo'
-                    heading={AppConstants.addressTwo}
-                    placeholder={AppConstants.addressTwo}
-                    onChange={(e) => this.onChangeSetValue(e.target.value, "street2")}
-                    value={affiliate.street2}
-                    disabled={!this.state.isEditable}
-                />
-
-                <Form.Item name='suburb' rules={[{ required: true, message: ValidationConstants.suburbField[0] }]}>
-                    <InputWithHead
-                        auto_complete='new-suburb'
-                        required="required-field pt-3 pb-0"
-                        heading={AppConstants.suburb}
-                        placeholder={AppConstants.suburb}
-                        onChange={(e) => this.onChangeSetValue(e.target.value, "suburb")}
-                        // value={affiliate.suburb}
-                        value={affiliate.suburb}
-                        disabled={!this.state.isEditable}
-                    />
-                </Form.Item>
-
-                <InputWithHead
-                    required="required-field"
-                    heading={AppConstants.stateHeading}
-                />
-
-                <Form.Item name='stateRefId' rules={[{ required: true, message: ValidationConstants.stateField[0] }]}>
-                    <Select
-                        style={{ width: "100%" }}
-                        placeholder={AppConstants.select}
-                        onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
-                        // value={affiliate.stateRefId}
-                        value={affiliate.stateRefId}
-                        disabled={!this.state.isEditable}
-                    >
-                        {stateList.map((item) => (
-                            <Option key={'state_' + item.id} value={item.id}>{item.name}</Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-
-                <Form.Item name='postcode' rules={[{ required: true, message: ValidationConstants.postCodeField[0] }]}>
-                    <InputWithHead
-                        auto_complete='new-postalCode'
-                        required="required-field"
-                        heading={AppConstants.postcode}
-                        placeholder={AppConstants.postcode}
-                        onChange={(e) => this.onChangeSetValue(e.target.value, "postalCode")}
-                        // value={affiliate.postalCode}
-                        value={affiliate.postalCode}
-                        maxLength={4}
-                        disabled={!this.state.isEditable}
+                <Form.Item className="formLineHeight" name="affiliateAddress">
+                    <PlacesAutocomplete
+                        defaultValue={defaultAffiliateAddress}
+                        heading={AppConstants.affiliateAddressAddressSelect}
+                        required
+                        error={this.state.affiliateAddressError}
+                        onSetData={this.handlePlacesAutocomplete}
                     />
                 </Form.Item>
 
@@ -746,25 +725,6 @@ class UserOurOrganization extends Component {
                     value={affiliate.phoneNo}
                     disabled={!this.state.isEditable}
                 />
-                {/*
-                <Form.Item
-                    name='orgEmail'
-                    rules={[{
-                        type: "email",
-                        pattern: new RegExp(AppConstants.emailExp),
-                        message: ValidationConstants.email_validation
-                    }]}
-                >
-                    <InputWithHead
-                        heading={AppConstants.email}
-                        placeholder={AppConstants.email}
-                        onChange={(e) => this.onChangeSetValue(e.target.value, "email")}
-                        value={affiliate.email}
-                        disabled={!this.state.isEditable}
-                        auto_complete='new-email'
-                    />
-                </Form.Item>
-                */}
 
                 <InputWithHead
                     heading={AppConstants.email}

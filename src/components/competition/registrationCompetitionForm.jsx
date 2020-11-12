@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import {
     Layout,
     Breadcrumb,
@@ -54,6 +54,7 @@ import { venueListAction } from '../../store/actions/commonAction/commonAction'
 import { getOrganisationData } from "../../util/sessionStorage"
 import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import AppUniqueId from "../../themes/appUniqueId";
+import { getCurrentYear } from "util/permissions";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -78,6 +79,7 @@ class RegistrationCompetitionForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            yearRefId: localStorage.year,
             value: "NETSETGO",
             division: "Division",
             sourceModule: "COMP",
@@ -286,7 +288,7 @@ class RegistrationCompetitionForm extends Component {
                 let isPublished = competitionFeesState.competitionDetailData.statusRefId == 2
 
                 let registrationCloseDate = competitionFeesState.competitionDetailData.registrationCloseDate
-                  && moment(competitionFeesState.competitionDetailData.registrationCloseDate)
+                    && moment(competitionFeesState.competitionDetailData.registrationCloseDate)
                 let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
 
                 let creatorId = competitionFeesState.competitionCreator
@@ -316,6 +318,13 @@ class RegistrationCompetitionForm extends Component {
                 this.setDetailsFieldValue();
             }, 100);
             this.setState({ divisionState: false });
+        }
+        if (nextProps.appState.yearList !== this.props.appState.yearList) {
+            if (this.props.appState.yearList.length > 0) {
+                let yearRefId = getCurrentYear(this.props.appState.yearList)
+                this.props.add_editcompetitionFeeDeatils(yearRefId, "yearRefId")
+                this.setDetailsFieldValue()
+            }
         }
     }
 
@@ -428,6 +437,7 @@ class RegistrationCompetitionForm extends Component {
             selectedVenues: compFeesState.selectedVenues,
             startDate: compFeesState.competitionDetailData.startDate && moment(compFeesState.competitionDetailData.startDate),
             endDate: compFeesState.competitionDetailData.endDate && moment(compFeesState.competitionDetailData.endDate),
+            finalTypeRefId: compFeesState.competitionDetailData.finalTypeRefId,
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
@@ -470,6 +480,7 @@ class RegistrationCompetitionForm extends Component {
     }
 
     saveAPIsActionCall = (values) => {
+        console.log(values)
         let tabKey = this.state.competitionTabKey
         let compFeesState = this.props.competitionFeesState
         let competitionId = compFeesState.competitionId
@@ -487,6 +498,7 @@ class RegistrationCompetitionForm extends Component {
                 formData.append("description", postData.description);
                 formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                 formData.append("competitionFormatRefId", postData.competitionFormatRefId);
+                formData.append("finalTypeRefId", postData.finalTypeRefId);
                 formData.append("startDate", postData.startDate);
                 formData.append("endDate", postData.endDate);
                 if (postData.competitionFormatRefId == 4) {
@@ -609,7 +621,6 @@ class RegistrationCompetitionForm extends Component {
                                 </span>
                                 <Form.Item
                                     name="yearRefId"
-                                    initialValue={1}
                                     rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}
                                 >
                                     <Select className="year-select reg-filter-select-year ml-2">
@@ -746,6 +757,9 @@ class RegistrationCompetitionForm extends Component {
         this.props.searchVenueList(filteredData)
     };
 
+    setGradesAndPools = (value) => {
+        this.props.add_editcompetitionFeeDeatils(value, "finalTypeRefId")
+    }
     regCompetitionFeeNavigationView = () => {
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
@@ -960,7 +974,10 @@ class RegistrationCompetitionForm extends Component {
                 </Form.Item>
 
                 <span className="applicable-to-heading required-field">{AppConstants.competitionFormat}</span>
-                <Form.Item name='competitionFormatRefId' rules={[{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }]}>
+                <Form.Item
+                    name='competitionFormatRefId'
+                    rules={[{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }]}
+                >
                     <Radio.Group
                         className="reg-competition-radio"
                         onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionFormatRefId")}
@@ -976,6 +993,22 @@ class RegistrationCompetitionForm extends Component {
                                 {item.description}
                             </Radio>
                         ))}
+                    </Radio.Group>
+                </Form.Item>
+
+                <span className="applicable-to-heading required-field">{AppConstants.gradesOrPools}</span>
+                <Form.Item
+                    name="finalTypeRefId"
+                    initialValue={detailsData.competitionDetailData.finalTypeRefId}
+                    rules={[{ required: true, message: ValidationConstants.pleaseSelectGradesOrPools }]}
+                >
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        onChange={e => this.setGradesAndPools(e.target.value)}
+                        value={detailsData.competitionDetailData.finalTypeRefId}
+                    >
+                        <Radio value={1}>{AppConstants.grades}</Radio>
+                        <Radio value={2}>{AppConstants.pools}</Radio>
                     </Radio.Group>
                 </Form.Item>
                 <div className="fluid-width">
@@ -1171,10 +1204,10 @@ class RegistrationCompetitionForm extends Component {
                                     </a>
                                 </div>
                             ) : (
-                                <span className="applicable-to-heading pt-0 pl-2">
-                                    {AppConstants.nonPlayerDivisionMessage}
-                                </span>
-                            )}
+                                    <span className="applicable-to-heading pt-0 pl-2">
+                                        {AppConstants.nonPlayerDivisionMessage}
+                                    </span>
+                                )}
                         </div>
                     </div>
                 ))}
@@ -1321,7 +1354,7 @@ class RegistrationCompetitionForm extends Component {
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name);
                         }}
-                        initialValues={{ yearRefId: 1, competitionTypeRefId: 1, competitionFormatId: 1 }}
+                        initialValues={{ yearRefId: this.state.yearRefId, competitionTypeRefId: 1, competitionFormatId: 1 }}
                         noValidate="noValidate"
                     >
                         {this.headerView()}
