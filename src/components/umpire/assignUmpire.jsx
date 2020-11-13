@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Breadcrumb, Pagination, Select } from "antd";
+import { Layout, Button, Table, Breadcrumb, Pagination, Select, Modal } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
@@ -23,6 +23,7 @@ import AppColor from "../../themes/appColor";
 
 const { Content } = Layout;
 const { Option } = Select;
+const { confirm } = Modal
 
 var this_obj = null
 
@@ -201,13 +202,15 @@ class AssignUmpire extends Component {
 
     ///on status change assign/unassign
     onChangeStatus(index, record, umpireKey, statusText, userData) {
+        let umpireRecord = this_obj.props.location.state && this_obj.props.location.state.record
+
         let umpireUserId = this_obj.props.location.state ? this_obj.props.location.state.record.id : 0
         let umpireName = this_obj.props.location.state ? this_obj.props.location.state.record.firstName + " " + this_obj.props.location.state.record.lastName : null
         let userId = localStorage.getItem("userId");
         const competition = JSON.parse(getUmpireCompetitonData());
         let rosterLocked = competition.recordUmpireType === "USERS" ? true : false
         let orgId = this.props.location.state ? this.props.location.state.record ? this.props.location.state.record.linkedEntity[0].entityId : null : null
-
+        console.log(umpireUserId, record, umpireRecord)
         let assignBody = [{
             createdBy: parseInt(userId),
             id: null,
@@ -220,13 +223,34 @@ class AssignUmpire extends Component {
         }]
 
         if (statusText === "Assign") {
-            this.props.assignUmpireAction(assignBody, index, umpireKey, rosterLocked)
+            if (umpireUserId == record?.user1?.id || umpireUserId == record?.user2?.id) {
+                this.openModel(assignBody, index, umpireKey, rosterLocked)
+            }
+            else {
+                this.props.assignUmpireAction(assignBody, index, umpireKey, rosterLocked)
+            }
         }
         if (statusText === "Unassign") {
             this.props.unassignUmpireAction(userData.rosterId, index, umpireKey, rosterLocked)
         }
 
     }
+
+    openModel = (assignBody, index, umpireKey, rosterLocked) => {
+        let this_ = this;
+        confirm({
+            title: 'Assigning this umpire will unassign them from their current match assignment. Proceed?',
+            okText: 'OK',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk() {
+                this_.props.assignUmpireAction(assignBody, index, umpireKey, rosterLocked, "sameUmpire")
+            },
+            onCancel() {
+                console.log("cancel")
+            },
+        });
+    };
     onChangeComp(compID) {
         const body = {
             paging: {

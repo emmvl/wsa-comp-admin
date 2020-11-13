@@ -67,6 +67,7 @@ export function* assignUmpireSaga(action) {
                 status: result.status,
                 index: action.index,
                 umpireKey: action.umpireKey,
+                sameUmpire:action.sameUmpire
             })
         } else {
             yield call(failSaga, result)
