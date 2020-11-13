@@ -1441,6 +1441,7 @@ class RegistrationMembershipFee extends Component {
                     className="add-membership-type-modal"
                     title="Confirm"
                     visible={this.state.confirmRePayFeesModalVisible}
+                    okText={AppConstants.proceedText}
                     onOk={() => this.handleConfirmRepayFeesModal("ok")}
                     onCancel={() => this.handleConfirmRepayFeesModal("cancel")}
                 >

@@ -12,7 +12,9 @@ const initialState = {
     paymentTransferPostData: [],
     onPaymentLoad: false,
     allSelectedData: [],
-    umpirePaymentObject: null
+    umpirePaymentObject: null,
+    umpireDataPayement: [],
+    paymentArr: []
 };
 
 function getFilterUmpirePayment(umpirePaymentArr) {
@@ -90,7 +92,8 @@ function umpirePaymentState(state = initialState, action) {
             } else {
                 state.paymentStatus = false
             }
-            state.paymentTransferPostData = payementTransferFilterData
+            state.paymentTransferPostData = JSON.parse(JSON.stringify(payementTransferFilterData))
+            state.paymentArr = JSON.parse(JSON.stringify(payementTransferFilterData))
             let pages = action.result.page
 
             return {
@@ -110,22 +113,52 @@ function umpirePaymentState(state = initialState, action) {
             let array = []
             if (key === 'allCheckBox') {
                 for (let i in umpirePaymentArr) {
-                    if (umpirePaymentArr[i].paymentStatus === "unpaid")
+                    if (umpirePaymentArr[i].paymentStatus === "unpaid") {
                         umpirePaymentArr[i]["selectedValue"] = data
-
-                    if (data && umpirePaymentArr[i].user.stripeAccountId) {
-                        let obj = {
-                            userId: umpirePaymentArr[i].user.userId,
-                            matchUmpireId: umpirePaymentArr[i].id,
-                            stripeId: umpirePaymentArr[i].user.stripeAccountId
-                        }
-
-                        state.paymentTransferPostData.push(obj)
-                    } else {
-                        state.paymentTransferPostData = []
                     }
 
+                    if (data) {
+                        if (umpirePaymentArr[i].paymentStatus == "unpaid") {
+                            state.umpireDataPayement.push(umpirePaymentArr[i])
+                        }
+                    } else {
+                        state.umpireDataPayement = []
+                    }
+
+
+                    // if (data && umpirePaymentArr[i].paymentStatus === 'unpaid' && umpirePaymentArr[i].user && umpirePaymentArr[i].user.stripeAccountId) {
+                    //     let obj = {
+                    //         userId: umpirePaymentArr[i].user.id,
+                    //         matchUmpireId: umpirePaymentArr[i].id,
+                    //         stripeId: umpirePaymentArr[i].user.stripeAccountId
+                    //     }
+
+                    //     state.paymentTransferPostData.push(obj)
+                    // } else {
+
+                    //     if (umpirePaymentArr[i].paymentStatus === 'unpaid') {
+                    //         state.paymentTransferPostData.splice(i, 1)
+                    //     }
+                    // }
+
                 }
+                let payData = state.umpireDataPayement
+                if (payData.length > 0) {
+                    for (let i in payData) {
+
+                        let obj = {
+                            userId: payData[i].user.id,
+                            matchUmpireId: payData[i].id,
+                            stripeId: payData[i].user.stripeAccountId
+                        }
+                        state.paymentTransferPostData.push(obj)
+                    }
+                } else {
+                    console.log(state.paymentArr, 'state.paymentArr')
+                    state.paymentTransferPostData = state.paymentArr
+                }
+
+
                 state.paymentStatus = data
                 state.umpirePaymentList = umpirePaymentArr
 
@@ -231,7 +264,6 @@ function umpirePaymentState(state = initialState, action) {
             return { ...state, onPaymentLoad: true };
 
         case ApiConstants.API_UMPIRE_PAYMENT_TRANSFER_DATA_SUCCESS:
-            console.log(action.result, 'API_UMPIRE_PAYMENT_TRANSFER_DATA_SUCCESS')
             return {
                 ...state,
                 onPaymentLoad: false,

@@ -1024,3 +1024,20 @@ input[type="number"] {
   padding-left: 10px;
   align-self: center;
 }
+
+.team-reg-radio-custom-style{
+  white-space: break-spaces;
+  display: flex;
+}
+
+.team-reg-radio-custom-style .ant-radio{
+  margin-top: 5px;
+}
+
+.fees-table .ant-table-thead{
+  background: white;
+}
+
+.fees-table .ant-table-tbody{
+  background: white;
+}

@@ -84,7 +84,6 @@ function createUmpireCoachArray(result) {
 
 
 function createCoachArray(result) {
-    console.log(result)
     let coachArray = []
     for (let i in result) {
         let userRole = result[i].userRoleEntities
@@ -268,12 +267,9 @@ function umpireState(state = initialState, action) {
                 status: action.status,
             }
         case ApiConstants.CLEAR_UMPIRE_SEARCH:
-            console.log("CLEAR_UMPIRE_SEARCH")
             state.umpireListResult = []
             return {
                 ...state,
-                // umpireListResult: state.umpireListResult
-                // umpireListResult: []
             }
         //// Fail and Error case
         case ApiConstants.API_UMPIRE_FAIL:

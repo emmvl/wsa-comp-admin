@@ -11,13 +11,14 @@ function getAssignUmpireListAction(competitionId, body) {
 }
 
 //////////assign umpire to a match
-function assignUmpireAction(payload, index, umpireKey, rosterLocked) {
+function assignUmpireAction(payload, index, umpireKey, rosterLocked,sameUmpire) {
     const action = {
         type: ApiConstants.API_ASSIGN_UMPIRE_FROM_LIST_LOAD,
         payload,
         index,
         umpireKey,
-        rosterLocked
+        rosterLocked,
+        sameUmpire
     };
     return action;
 }

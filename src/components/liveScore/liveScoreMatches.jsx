@@ -8,7 +8,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import "./liveScore.css";
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
 import history from "../../util/history";
-import { getLiveScoreCompetiton, getUmpireCompetitonData } from "../../util/sessionStorage";
+import { getLiveScoreCompetiton, getUmpireCompetitonData, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
 import { liveScore_MatchFormate } from "../../themes/dateformate";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
@@ -118,8 +118,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team1.name}</span>
             </NavLink>
         ) : (
-            <span>{team1.name}</span>
-        )
+                <span>{team1.name}</span>
+            )
     },
     {
         title: 'Away',
@@ -137,8 +137,8 @@ const columns = [
                 <span className="input-heading-add-another pt-0">{team2.name}</span>
             </NavLink>
         ) : (
-            <span>{team2.name}</span>
-        )
+                <span>{team2.name}</span>
+            )
     },
     {
         title: 'Venue',
@@ -214,6 +214,7 @@ class LiveScoreMatchesList extends Component {
             onScoreUpdate: false,
             sortBy: null,
             sortOrder: null,
+            sourceIdAvailable: false,
         }
         _this = this
     }
@@ -237,16 +238,16 @@ class LiveScoreMatchesList extends Component {
 
         if (this.state.umpireKey === 'umpire') {
             if (getUmpireCompetitonData()) {
-                const { id } = JSON.parse(getUmpireCompetitonData())
-                this.setState({ competitionId: id })
+                const { id, sourceId } = JSON.parse(getUmpireCompetitonData())
+                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
                 this.handleMatchTableList(page, id)
             } else {
                 history.push("/liveScoreCompetitions")
             }
         } else {
             if (getLiveScoreCompetiton()) {
-                const { id } = JSON.parse(getLiveScoreCompetiton())
-                this.setState({ competitionId: id })
+                const { id, sourceId } = JSON.parse(getLiveScoreCompetiton())
+                this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
                 this.handleMatchTableList(page, id, sortBy, sortOrder)
                 this.props.getLiveScoreDivisionList(id)
                 this.props.liveScoreRoundListAction(id, selectedDivision === 'All' ? '' : selectedDivision)
@@ -313,6 +314,20 @@ class LiveScoreMatchesList extends Component {
         }
     }
 
+    ///navigation to draws if sourceId is not null
+    drawsNavigation = () => {
+        let yearRefId = localStorage.yearId
+        let compKey = null
+        if (getLiveScoreCompetiton()) {
+            const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
+            compKey = uniqueKey
+        }
+        setOwnCompetitionYear(yearRefId);
+        setOwn_competition(compKey);
+        history.push('/competitionDraws');
+    }
+
+
     scoreView(score, records, index) {
         return (
             <div>
@@ -337,8 +352,8 @@ class LiveScoreMatchesList extends Component {
                         ) : setMatchResult(records)}
                     </div>
                 ) : (
-                    <span className="white-space-nowrap">{setMatchResult(records)}</span>
-                )}
+                        <span className="white-space-nowrap">{setMatchResult(records)}</span>
+                    )}
             </div>
         )
     }
@@ -347,6 +362,7 @@ class LiveScoreMatchesList extends Component {
     headerView = () => {
         const { liveScoreMatchListData } = this.props.liveScoreMatchListState;
         let matchData = isArrayNotEmpty(liveScoreMatchListData) ? liveScoreMatchListData : []
+        let { sourceIdAvailable } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
@@ -358,6 +374,28 @@ class LiveScoreMatchesList extends Component {
 
                     <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
                         <div className="row">
+
+                            {sourceIdAvailable && <div className="col-sm">
+                                <div
+                                    className="comp-dashboard-botton-view-mobile"
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "flex-end",
+                                    }}
+                                >
+                                    <Button
+                                        type="primary"
+                                        className="primary-add-comp-form"
+                                        onClick={() => this.drawsNavigation()}
+                                    >
+                                        {AppConstants.draws}
+                                    </Button>
+                                </div>
+                            </div>}
+
                             <div className="col-sm">
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
@@ -681,18 +719,18 @@ class LiveScoreMatchesList extends Component {
                 {this.state.umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (
-                    <DashboardLayout
-                        menuHeading={AppConstants.liveScores}
-                        menuName={AppConstants.liveScores}
-                        onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
-                    />
-                )}
+                        <DashboardLayout
+                            menuHeading={AppConstants.liveScores}
+                            menuName={AppConstants.liveScores}
+                            onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                        />
+                    )}
 
                 {this.state.umpireKey ? (
                     <InnerHorizontalMenu menu="umpire" umpireSelectedKey="1" />
                 ) : (
-                    <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="2" />
-                )}
+                        <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="2" />
+                    )}
 
                 <Layout>
                     {this.headerView()}

@@ -277,7 +277,10 @@ let AxiosApi = {
     var url = "/common/reference/PaymentMethod";
     return Method.dataGet(url, token)
   },
-
+  getRegBadgeData() {
+    var url = `/common/reference/AccreditationUmpire`;
+    return Method.dataGet(url, token);
+  },
 
 };
 

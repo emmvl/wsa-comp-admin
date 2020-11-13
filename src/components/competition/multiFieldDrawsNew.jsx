@@ -266,12 +266,15 @@ class MultifieldDrawsNew extends Component {
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
                     let storedCompetitionId = getOwn_competition();
-                    let storedCompetitionStatus = getOwn_competitionStatus();
-                    let storedFinalTypeRefId = getOwn_CompetitionFinalRefId()
                     let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
-                    let statusRefId = (storedCompetitionStatus != undefined && storedCompetitionStatus !== "undefined") ? storedCompetitionStatus : competitionList[0].statusRefId;
-                    let finalTypeRefId = (storedFinalTypeRefId != undefined && storedFinalTypeRefId !== "undefined") ? storedFinalTypeRefId : competitionList[0].finalTypeRefId
+                    let statusRefId = competitionList[0].statusRefId;
+                    let finalTypeRefId = competitionList[0].finalTypeRefId
                     let yearId = this.state.yearRefId ? this.state.yearRefId : getOwnCompetitionYear()
+                    if (storedCompetitionId != undefined && storedCompetitionId !== "undefined") {
+                        let compIndex = competitionList.findIndex(x => x.competitionId == competitionId)
+                        statusRefId = competitionList[compIndex].statusRefId;
+                        finalTypeRefId = competitionList[compIndex].finalTypeRefId
+                    }
                     setOwn_competitionStatus(statusRefId)
                     this.props.getDrawsRoundsAction(yearId, competitionId);
                     setOwn_competition(competitionId);
@@ -305,14 +308,12 @@ class MultifieldDrawsNew extends Component {
                 }
             }
         }
-
         if (nextProps.drawsState.changeStatus != changeStatus) {
             if (this.props.drawsState.changeStatus == false && this.state.changeStatus) {
                 let statusRefId = this.props.drawsState.publishStatus
                 setOwn_competitionStatus(statusRefId)
                 message.success("Draws published to live scores successfully");
                 this.setState({ changeStatus: false, competitionStatus: statusRefId })
-
                 if (this.props.drawsState.teamNames != null && this.props.drawsState.teamNames != "") {
                     this.setState({ publishModalVisible: true });
                 }
@@ -329,13 +330,6 @@ class MultifieldDrawsNew extends Component {
                 // message.info(AppConstants.roundsNotAvailable);
             }
         }
-
-        // if (nextProps.drawsState.drawOrganisations != drawOrganisations) {
-        //     if (drawOrganisations.length > 0) {
-        //         let organisation_Id = drawOrganisations[0].organisationUniqueKey;
-        //         this.setState({ organisation_Id })
-        //     }
-        // }
     }
 
     componentDidMount() {
@@ -1789,19 +1783,19 @@ class MultifieldDrawsNew extends Component {
     }
 
     handlePublishModal = (key) => {
-        try{
-            if(key == "ok"){
+        try {
+            if (key == "ok") {
                 let competitiondata = this.props.drawsState.liveScoreCompetiton
                 localStorage.setItem("LiveScoreCompetition", JSON.stringify(competitiondata))
                 localStorage.removeItem('stateWideMessage')
                 setLiveScoreUmpireCompition(competitiondata.id)
                 setLiveScoreUmpireCompitionData(JSON.stringify(competitiondata))
                 history.push('/liveScoreLadderList')
-            }else{
-                this.setState({publishModalVisible: false})
+            } else {
+                this.setState({ publishModalVisible: false })
             }
-        }catch(ex){
-            console.log("Error in handlePublishModal::"+ex)
+        } catch (ex) {
+            console.log("Error in handlePublishModal::" + ex)
         }
     }
 

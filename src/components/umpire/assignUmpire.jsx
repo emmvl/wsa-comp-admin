@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Layout, Button, Table, Breadcrumb, Pagination, Select } from "antd";
+import { Layout, Button, Table, Breadcrumb, Pagination, Select, Modal } from "antd";
 import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
 import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { NavLink } from "react-router-dom";
 import { liveScore_MatchFormate } from '../../themes/dateformate'
-import { getUmpireCompId, setUmpireCompId, getUmpireCompetiton } from '../../util/sessionStorage'
+import { getUmpireCompId, setUmpireCompId, getUmpireCompetiton, getUmpireCompetitonData } from '../../util/sessionStorage'
 import AppImages from "../../themes/appImages";
 import history from "../../util/history";
 import { connect } from 'react-redux';
@@ -19,10 +19,9 @@ import {
 } from "../../store/actions/umpireAction/assignUmpireAction";
 import AppColor from "../../themes/appColor";
 
-
-
 const { Content } = Layout;
 const { Option } = Select;
+const { confirm } = Modal
 
 var this_obj = null
 
@@ -39,12 +38,10 @@ function checkUmpireAssignStatus(data) {
     if (data) {
         if (data.id == umpireUserId) {
             return "Unassign"
-        }
-        else {
+        } else {
             return "Assign"
         }
-    }
-    else {
+    } else {
         return "Assign"
     }
 }
@@ -57,15 +54,12 @@ function checkUmpireRosterStatus(data) {
     }
     if (rosterStatus === "No") {
         return AppColor.umpireTextRed;
-    }
-    else {
+    } else {
         return AppColor.standardTxtColor
     }
 }
 
-
 const column = [
-
     {
         title: 'Match ID',
         dataIndex: 'id',
@@ -73,7 +67,7 @@ const column = [
         sorter: (a, b) => tableSort(a, b, "id"),
         render: (id) => <NavLink to={{
             pathname: '/liveScoreMatchDetails',
-            state: { matchId: id, umpireKey: 'umpire', screenName: 'umpireList' }
+            state: { matchId: id, umpireKey: 'umpire', screenName: 'umpire' }
         }} >
             <span className="input-heading-add-another pt-0">{id}</span>
         </NavLink>
@@ -201,21 +195,54 @@ class AssignUmpire extends Component {
 
     ///on status change assign/unassign
     onChangeStatus(index, record, umpireKey, statusText, userData) {
+        let umpireRecord = this_obj.props.location.state && this_obj.props.location.state.record
+
         let umpireUserId = this_obj.props.location.state ? this_obj.props.location.state.record.id : 0
-        let assignBody = {
+        let umpireName = this_obj.props.location.state ? this_obj.props.location.state.record.firstName + " " + this_obj.props.location.state.record.lastName : null
+        let userId = localStorage.getItem("userId");
+        const competition = JSON.parse(getUmpireCompetitonData());
+        let rosterLocked = competition.recordUmpireType === "USERS" ? true : false
+        let orgId = this.props.location.state ? this.props.location.state.record ? this.props.location.state.record.linkedEntity[0].entityId : null : null
+
+        let assignBody = [{
+            createdBy: parseInt(userId),
+            id: null,
             matchId: record.id,
-            roleId: 15,
+            organisationId: orgId,
+            sequence: umpireKey == 'user1' ? 1 : 2,
+            umpireName: umpireName,
+            umpireType: "USERS",
             userId: umpireUserId,
-            rosterId: userData ? userData.rosterId : null
-        }
+        }]
+
         if (statusText === "Assign") {
-            this.props.assignUmpireAction(assignBody, index, umpireKey)
+            if (umpireUserId == record?.user1?.id || umpireUserId == record?.user2?.id) {
+                this.openModel(assignBody, index, umpireKey, rosterLocked)
+            } else {
+                this.props.assignUmpireAction(assignBody, index, umpireKey, rosterLocked)
+            }
         }
         if (statusText === "Unassign") {
-            this.props.unassignUmpireAction(userData.rosterId, index, umpireKey)
+            this.props.unassignUmpireAction(userData.rosterId, index, umpireKey, rosterLocked)
         }
-
     }
+
+    openModel = (assignBody, index, umpireKey, rosterLocked) => {
+        let this_ = this;
+        confirm({
+            title: 'Assigning this umpire will unassign them from their current match assignment. Proceed?',
+            okText: 'OK',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk() {
+                this_.props.assignUmpireAction(assignBody, index, umpireKey, rosterLocked, "sameUmpire")
+            },
+            onCancel() {
+                console.log("cancel")
+            },
+        });
+    };
+
     onChangeComp(compID) {
         const body = {
             paging: {
@@ -353,7 +380,6 @@ class AssignUmpire extends Component {
     }
 }
 
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getAssignUmpireListAction,
@@ -369,5 +395,6 @@ function mapStateToProps(state) {
         umpireCompetitionState: state.UmpireCompetitionState
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)((AssignUmpire));
+
+export default connect(mapStateToProps, mapDispatchToProps)(AssignUmpire);
 
