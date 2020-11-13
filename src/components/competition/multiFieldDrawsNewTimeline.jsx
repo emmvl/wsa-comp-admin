@@ -119,22 +119,21 @@ class MultifieldDrawsNewTimeline extends Component {
             regenerateDrawExceptionModalVisible: false,
             regenerateExceptionRefId: 1,
             draggableEventObject: null,
-            // draggableDayId: null,
-            draggableElMouseX: null,
-            movableTooltipData: null,
+            draggableElMouse: null,
             dragDayTarget: null,
             dragDayTimeRestrictions: null,
-            dragDayStart: null
+            dragDayStart: null,
+            courtDataTarget: null,
+            tooltipSwappableTime: null,
         };
         this.props.clearMultiDraws();
-        this.dragTimeFef = React.createRef();
+        this.dragTimeRef = React.createRef();
+        this.dragTimeEndRef = React.createRef();
     }
 
     componentDidUpdate(nextProps) {
-        let userState = this.props.userState
         let competitionModuleState = this.props.competitionModuleState;
         let drawsRoundData = this.props.drawsState.getDrawsRoundsData;
-        let drawOrganisations = this.props.drawsState.drawOrganisations
         let venueData = this.props.drawsState.competitionVenues;
         let divisionGradeNameList = this.props.drawsState.divisionGradeNameList;
         let changeStatus = this.props.drawsState.changeStatus;
@@ -214,7 +213,6 @@ class MultifieldDrawsNewTimeline extends Component {
                             endDate,
                             this.state.filterDates
                         );
-                        // }
                     } else {
                         this.setState({
                             venueId, changeDateLoad: false
@@ -314,7 +312,6 @@ class MultifieldDrawsNewTimeline extends Component {
         let yearId = getOwnCompetitionYear();
         let storedCompetitionId = getOwn_competition();
         let storedCompetitionStatus = getOwn_competitionStatus()
-        let storedfinalTypeRefId = getOwn_CompetitionFinalRefId()
         let propsData = this.props.appState.own_YearArr.length > 0
             ? this.props.appState.own_YearArr
             : undefined;
@@ -330,7 +327,6 @@ class MultifieldDrawsNewTimeline extends Component {
         let venueData = this.props.drawsState.competitionVenues.length > 0
             ? this.props.drawsState.competitionVenues
             : undefined;
-        let competitionDivisionGradeId = getDraws_division_grade();
         if (storedCompetitionId && yearId && propsData && compData) {
             this.setState({
                 yearRefId: JSON.parse(yearId),
@@ -373,7 +369,6 @@ class MultifieldDrawsNewTimeline extends Component {
                 null,
                 'own_competition'
             );
-            // setOwnCompetitionYear(1);
         }
     }
 
@@ -491,22 +486,7 @@ class MultifieldDrawsNewTimeline extends Component {
                 newEndTimeSource,
                 newEndTimeTarget
             );
-        } else if (sourceObejct.drawsId == null && targetObject.drawsId == null) {
         }
-        // else {
-        //     this.updateCompetitionNullDraws(
-        //         sourceObejct,
-        //         targetObject,
-        //         sourceIndexArray,
-        //         targetIndexArray,
-        //         drawData,
-        //         round_Id
-        //     );
-        // }
-    }
-
-    onMoveEnd(source, target, drawData, round_Id) {
-        console.log('onMove');
     }
 
     checkCurrentSwapObjects(source, target, drawData) {
@@ -649,63 +629,9 @@ class MultifieldDrawsNewTimeline extends Component {
         this.setState({ updateLoad: true, isOnSwapUpdate : true });
     };
 
-    ///////update the competition draws on  swapping and hitting update Apis if one has N/A(null)
-    updateCompetitionNullDraws = (
-        sourceObejct,
-        targetObject,
-        sourceIndexArray,
-        targetIndexArray,
-        drawData,
-        round_Id
-    ) => {
-        let updatedKey = this.state.firstTimeCompId === "-1" || this.state.filterDates ? "all" : "add"
-        let postData = null;
-        if (sourceObejct.drawsId == null) {
-            let columnObject = this.getColumnData(sourceIndexArray, drawData);
-            postData = {
-                drawsId: targetObject.drawsId,
-                venueCourtId: sourceObejct.venueCourtId,
-                matchDate: moment(columnObject.matchDate).format('YYYY-MM-DD HH:mm'),
-                startTime: columnObject.startTime,
-                endTime: columnObject.endTime,
-            };
-        } else {
-            let columnObject = this.getColumnData(targetIndexArray, drawData);
-            postData = {
-                drawsId: sourceObejct.drawsId,
-                venueCourtId: targetObject.venueCourtId,
-                matchDate: moment(columnObject.matchDate).format('YYYY-MM-DD HH:mm'),
-                startTime: columnObject.startTime,
-                endTime: columnObject.endTime,
-            };
-        }
-        let apiData = {
-            yearRefId: this.state.yearRefId,
-            competitionId: this.state.firstTimeCompId,
-            venueId: this.state.venueId,
-            roundId: this.state.firstTimeCompId == "-1" || this.state.filterDates ? 0 : this.state.roundId,
-            orgId: null,
-            startDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.startDate : null,
-            endDate: this.state.firstTimeCompId == "-1" || this.state.filterDates ? this.state.endDate : null
-        }
-
-        this.props.updateCourtTimingsDrawsAction(
-            postData,
-            sourceIndexArray,
-            targetIndexArray,
-            updatedKey,
-            round_Id,
-            apiData,
-            this.state.filterDates
-        );
-
-        this.setState({ updateLoad: true });
-    };
-
     // on Competition change
     onCompetitionChange(competitionId, statusRefId) {
         let own_CompetitionArr = this.props.appState.own_CompetitionArr
-        let newDate = new Date()
         this.props.clearMultiDraws('rounds');
         if (competitionId == -1 || this.state.filterDates) {
             this.props.getDrawsRoundsAction(this.state.yearRefId, competitionId, "all", true, this.state.startDate, this.state.endDate);
@@ -730,8 +656,6 @@ class MultifieldDrawsNewTimeline extends Component {
             competitionStatus: statusRefId,
             organisation_Id: "-1",
             selectedDateRange: null,
-            // startDate: moment(newDate).format("YYYY-MM-DD"),
-            // endDate: moment(newDate).format("YYYY-MM-DD"),
             showAllDivision: false
         });
     }
@@ -742,7 +666,6 @@ class MultifieldDrawsNewTimeline extends Component {
         this.props.clearMultiDraws();
         let matchRoundData = roundData.findIndex((x) => x.roundId == roundId);
         let roundTime = roundData[matchRoundData].startDateTime;
-        // this.props.dateSelection(roundId)
         this.setState({ roundId, roundTime });
         setDraws_round(roundId);
         setDraws_roundTime(roundTime);
@@ -921,47 +844,121 @@ class MultifieldDrawsNewTimeline extends Component {
             });
         }
 
-        // console.log('schedule', weekSlotsTimeSchedule);
-
         return weekSlotsTimeSchedule;
     }
 
-    dayLineDragMove = (e, startDayDate, dragDayTimeRestrictions, courtData) => {
-        if(e.currentTarget !== this.state.dragDayTarget) {
+    addNoneDisplayTooltip = () => {
+        const tooltip = document.getElementById('draggableTooltip');
+
+        tooltip.setAttribute(
+            "style", 
+            "display: none"
+        ); 
+    }
+
+    drawsFieldDragMove = e => {
+        const { draggableElMouseX, draggableElMouseY } = this.state.draggableElMouse;
+        const { dragDayTimeRestrictions } = this.state;
+
+        const parent = e.currentTarget;
+        const boundsParent = parent.getBoundingClientRect();
+        const tooltipX = Math.trunc((e.pageX - boundsParent.left - draggableElMouseX));
+        const tooltipY = Math.trunc((e.pageY - boundsParent.top - draggableElMouseY)) - 70;
+
+        const tooltip = document.getElementById('draggableTooltip');
+        const isTooltipAllowTime = this.dragTimeRef.current?.isSameOrAfter(dragDayTimeRestrictions?.startTime)
+                                && this.dragTimeEndRef.current?.isSameOrBefore(dragDayTimeRestrictions?.endTime)
+                                && !!this.state.dragDayTarget;
+
+
+        if (isTooltipAllowTime || this.state.tooltipSwappableTime) {
+            tooltip.setAttribute(
+                "style", 
+                    `
+                    min-width: fit-content;
+                    padding: 5px;
+                    background: #fff;
+                    border: 1px solid #bbbbc6;
+                    border-radius: 5px;
+                    position: absolute; 
+                    left: ${tooltipX}px; 
+                    top: ${tooltipY}px;
+                    z-index: 100`
+            );
+        }
+
+        else {
+            tooltip.setAttribute(
+                "style", 
+                "display: none"
+            );
+        }
+    }
+    
+    dayLineDragMove = (e, startDayDate, courtDataSlotsTarget, timeRestrictionsSchedule) => {   
+        const { draggableEventObject, tooltipSwappableTime, dragDayTarget } = this.state;
+
+        if (dragDayTarget !== e.currentTarget) {
             this.setState({
                 dragDayTarget: e.currentTarget,
                 dragDayStart: startDayDate,
-                dragDayTimeRestrictions
+                dragDayTimeRestrictions: timeRestrictionsSchedule
             });
         }
 
-        const targetVenueId = e.currentTarget.id;
+        if (this.state.courtDataSlotsTarget !== courtDataSlotsTarget) {
+            this.setState({ courtDataSlotsTarget })
+        }
 
-        const mouseXInside = this.state.draggableElMouseX;
+        const targetCourtId = e.currentTarget.id.split(':')[0];
 
-        if (targetVenueId) {
+        const { draggableElMouseX } = this.state.draggableElMouse;
+
+        if (targetCourtId) {
             const bounds = e.currentTarget.getBoundingClientRect();
-            const draggableElXStart = Math.trunc(((e.pageX - bounds.left - mouseXInside) / ONE_MIN_WIDTH));
+            const draggableElXStart = Math.trunc(((e.pageX - bounds.left - draggableElMouseX) / ONE_MIN_WIDTH));
 
             const newTime = startDayDate.clone().add(draggableElXStart, 'minutes');
 
-            this.dragTimeFef.current = newTime;
+            const refTimeFormatted = newTime.format('YYYY-MM-DD HH:mm');
+            const startTimeNew = moment(refTimeFormatted);
+            const newTimeFormatted = startTimeNew.format('HH:mm');
+            const newTimeWithDateFormatted = startTimeNew.format('YYYY-MM-DD HH:mm');
 
-            // this.setState({
-            //     movableTooltipData: {
-            //         time: newTimeWithDateFormatted,
-            //         venueData: courtData.venueShortName + '-' + courtData.venueCourtNumber
-            //     }
-            // })
+            const startTimeOld = moment(draggableEventObject.matchDate);
+            const endTimeOld = moment(draggableEventObject.matchDate.slice(0, -5) + draggableEventObject.endTime);
+            const diffTime= endTimeOld.diff(startTimeOld, 'minutes');
+            const endTimeNew = moment(newTimeWithDateFormatted).add(diffTime, 'minutes');
 
+            this.dragTimeEndRef.current = endTimeNew;
+
+            this.dragTimeRef.current = startTimeNew;
+
+            const notEmptySlot = courtDataSlotsTarget.find(slot => slot.venueCourtId);
+
+            const tooltip = document.getElementById('draggableTooltip');
+            const tooltipSwappableTimeFormatted = moment(tooltipSwappableTime).format('HH:mm');
+
+            tooltip.innerHTML = `
+                <div>Starting at ${tooltipSwappableTime ? tooltipSwappableTimeFormatted : newTimeFormatted}</div>
+                <div>Court ${notEmptySlot?.venueShortName + '-' + notEmptySlot?.venueCourtNumber}</div>
+            `;
         }
     }
 
-    dayLineDragEnd = (e, courtDataSlotsArray) => {
-        const targetVenueId = e.currentTarget.id;
+    dayLineDragEnd = (e) => {
+        const targetCourtId = +e.currentTarget.id.split(':')[0];
+        const stateVenueId = this.state.dragDayTarget?.id.split(':')[0];
 
-        if (targetVenueId && this.state.dragDayTarget) {
-            const startTimeNew = this.dragTimeFef.current;
+        const tooltip = document.getElementById('draggableTooltip');
+        tooltip.setAttribute(
+            "style", 
+            "display: none"
+        );
+
+        if (targetCourtId && stateVenueId) {
+            const refTimeFormatted = this.dragTimeRef.current.format('YYYY-MM-DD HH:mm');
+            const startTimeNew = moment(refTimeFormatted);
 
             if (startTimeNew.isBefore(this.state.dragDayTimeRestrictions.startTime)) {
                 return
@@ -971,47 +968,68 @@ class MultifieldDrawsNewTimeline extends Component {
             const newTimeWithDateFormatted = startTimeNew.format('YYYY-MM-DD HH:mm');
 
             const draggableEvent = this.state.draggableEventObject;
-            const startTimeOld = moment(draggableEvent.matchDate);
-            const endTimeOld = moment(draggableEvent.matchDate.slice(0, -5) + draggableEvent.endTime);
-            const diffTime= endTimeOld.diff(startTimeOld, 'minutes');
-            const endTimeNew = moment(newTimeWithDateFormatted).add(diffTime, 'minutes');
 
+            const endTimeNew = this.dragTimeEndRef.current;
+            
             if (endTimeNew.isAfter(this.state.dragDayTimeRestrictions.endTime)) {
-                return
+                return;
+            }
+
+            if (draggableEvent.matchDate === newTimeWithDateFormatted && targetCourtId.toString() === stateVenueId) {
+                return;
             }
 
             const endTimeFormatted = endTimeNew.format('HH:mm');
 
-            if (endTimeOld === endTimeFormatted && targetVenueId === this.state.dragDayTarget.id) {
-                return;
-            }
+            const notEmptyTargetDayCourtSlots = this.state.courtDataSlotsTarget.filter(slot => 
+                slot.matchDate.slice(0, -5) === newTimeWithDateFormatted.slice(0, -5)
+                && slot.drawsId
+            );
 
-            // const sameEvent = courtDataSlotsArray.find
-
-            let isSameEvent;
-
-            const isCourtTheSame = this.state.draggableEventObject.venueCourtId === this.state.dragDayTarget.id;
-
-            const isCourtDataSlotBusy = courtDataSlotsArray
-                .filter(slot => slot.drawsId)
-                .some(slot => {
+            const isCourtDataSlotBusy = notEmptyTargetDayCourtSlots
+                .some((slot, slotIndex) => {
                     const slotStart = moment(slot.matchDate);
                     const slotEnd = moment(slot.matchDate.slice(0, -5) + slot.endTime);
 
-                    if (endTimeNew.isAfter(slotStart) && endTimeNew.isBefore(slotEnd)) {
+                    const isStartTimeCondition = startTimeNew.isBefore(slotEnd) && startTimeNew.isAfter(slotStart);
+                    const isEndTimeCondition = endTimeNew.isAfter(slotStart) && endTimeNew.isBefore(slotEnd);
+                    
+                    const isEventOverItself = slot.drawsId === draggableEvent.drawsId
+                        && (
+                            isStartTimeCondition
+                            ||
+                            isEndTimeCondition
+                        );
+
+                    if (isEventOverItself) {
+                        const nextEvent = notEmptyTargetDayCourtSlots[slotIndex + 1];
+                        const prevEvent = notEmptyTargetDayCourtSlots[slotIndex - 1];
+
+                        const prevEventEnd = prevEvent && moment(slot.matchDate.slice(0, -5) + prevEvent?.endTime);
+                        const nextEventStart = nextEvent && moment(nextEvent?.matchDate);
+
+                        const isPrevEventEndBeforeSlotStart = prevEventEnd && prevEventEnd.isAfter(startTimeNew);
+                        const isPrevEventStartAfterSlotEnd = nextEventStart && nextEventStart.isBefore(endTimeNew);
+
+                        if (isPrevEventEndBeforeSlotStart || isPrevEventStartAfterSlotEnd) {
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    if (isStartTimeCondition) {
                         return true;
                     }
 
-                    else if (startTimeNew.isBefore(slotEnd) && startTimeNew.isAfter(slotStart)) {
+                    else if (isEndTimeCondition) {
                         return true;
                     }
                 });
 
-            console.log('isCourtTheSame', isCourtTheSame);
-
-            // if (isCourtDataSlotBusy) {
-            //     return;
-            // }
+            if (isCourtDataSlotBusy) {
+                return;
+            }
 
             let roundId = getDraws_round();
             let yearId = getOwnCompetitionYear();
@@ -1029,11 +1047,13 @@ class MultifieldDrawsNewTimeline extends Component {
 
             const postData = {
                 drawsId: draggableEvent.drawsId,
-                venueCourtId: this.state.dragDayTarget.id,
+                venueCourtId: stateVenueId,
                 matchDate: newTimeWithDateFormatted,
                 startTime: newTimeFormatted,
                 endTime: endTimeFormatted,
             };
+
+            // console.log('draggableEvent.drawsId', draggableEvent.drawsId)
 
             this.props.updateCourtTimingsDrawsAction(
                 postData,
@@ -1053,14 +1073,15 @@ class MultifieldDrawsNewTimeline extends Component {
         if (draggableEventObject) {
             const bounds = e.currentTarget.getBoundingClientRect();
             const draggableElMouseX = e.pageX - bounds.left;
-            this.setState({ draggableElMouseX });
-        }
-    }
+            const draggableElMouseY = e.pageY - bounds.top;
 
-    slotObjectDragMove = e => {
-        // const offsetTop = e.currentTarget.offsetTop;
-        // const offsetLeft = e.currentTarget.offsetLeft;
-        // console.log('coor timeline element', offsetTop, offsetLeft);
+            this.setState({ 
+                draggableElMouse: {
+                    draggableElMouseX,
+                    draggableElMouseY
+                }
+            });
+        } 
     }
 
     checkUnavailableTime = (workingSchedule, startDayTime, endDayTime, date) => {
@@ -1632,18 +1653,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                         )}
                                         {this.draggableView(dateItem)}
                                     </div>
-
-                                    /* {dateItem.legendsArray.length > 0 ?
-                                         <div className="pt-4" key={"drawData" + dateIndex}>
-                                             {this.draggableView(dateItem)}
-                                         </div>
-                                         :
-                                         <div>
-                                             <div className="comp-warning-info" style={{ paddingBottom: "40px" }}>
-                                                {AppConstants.noFixturesMessage}
-                                             </div>
-                                         </div>
-                                     } */
                                 ))}
                             </div>
                         )}
@@ -1683,11 +1692,15 @@ class MultifieldDrawsNewTimeline extends Component {
             }
         })
 
-        // console.log('this.props.drawsState.getRoundsDrawsdata', this.props.drawsState.getRoundsDrawsdata)
-
         return (
             <>
-                <div className="scroll-bar pb-4" style={{ width: dateItem.dateNewArray.length > 0 && dateItem.dateNewArray.length * 140, minWidth: 1080 }}>
+                <div
+                    className="scroll-bar pb-4"
+                    // style={{ 
+                    //     width: dateItem.dateNewArray.length > 0 && dateItem.dateNewArray.length * 140,
+                    //     minWidth: 1080
+                    // }}
+                >
                     <div className="table-head-wrap">
 
                         {/* Day name list */}
@@ -1796,7 +1809,19 @@ class MultifieldDrawsNewTimeline extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="main-canvas Draws">
+                <div
+                    className="main-canvas Draws"
+                    id="draws-field"
+                    onDragOver={e => this.drawsFieldDragMove(e)}
+                    onDragLeave={() => this.addNoneDisplayTooltip()}
+                >
+                    <div 
+                        id="draggableTooltip"
+                        className="unavailable-draws"
+                        style={{
+                            display: 'none'
+                        }}
+                    />
                     {dateItem.draws && dateItem.draws.map((courtData, index) => {
 
                         if (index !== 0) {
@@ -1805,16 +1830,17 @@ class MultifieldDrawsNewTimeline extends Component {
 
                         let prevDaysWidth = 0;
                         let diffDayScheduleTime = 0;
-
                         // console.log('courtData', courtData)
 
                         return (
-                            <div key={"court" + index}>
+                            <div
+                                key={"court" + index}
+                            >
                                 <div className="sr-no" style={{ height: 62, boxSizing: 'border-box' }}>
                                     <div className="venueCourt-tex-div"
                                         style={{
                                             // position: 'fixed',
-                                            zIndex: 100,
+                                            zIndex: 99,
                                             background: 'white',
                                             width: 95,
                                             marginLeft: -20,
@@ -1857,8 +1883,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                     diffDayScheduleTime = endDayDate.diff(startDayDate, 'minutes') * ONE_MIN_WIDTH;
 
                                     // check unabailable time during the day
-
-                                    // debugger
 
                                     const courtVenueId = courtData.slotsArray.find(slot => slot.venueId).venueId;
                                     const courtId = courtData.venueCourtId;
@@ -1910,7 +1934,9 @@ class MultifieldDrawsNewTimeline extends Component {
                                     // render for the whole unavailable day for court based on venue schedule
                                     if (!workingDayInTimeline) {
                                         return (
-                                            <div key={"slot" + fieldItemDateIndex}>
+                                            <div
+                                                key={"slot" + fieldItemDateIndex}
+                                            >
                                                 <div
                                                     id={courtData.venueCourtId}
                                                     className={'box unavailable-draws'}
@@ -1941,7 +1967,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     className={'border'}
                                                 /> */}
                                                 <div
-                                                    id={courtData.venueCourtId}
+                                                    id={courtData.venueCourtId + ':' + fieldItemDateIndex}
                                                     className={'box purple-bg day-box'}
                                                     style={{
                                                         minWidth: 'unset',
@@ -1953,8 +1979,8 @@ class MultifieldDrawsNewTimeline extends Component {
                                                         width: diffDayScheduleTime,
                                                         background: `repeating-linear-gradient( to right, #f5f5f5, #f5f5f5 ${ONE_HOUR_IN_MIN}px, #d9d9d9 ${ONE_HOUR_IN_MIN}px, #d9d9d9 ${ONE_HOUR_IN_MIN * ONE_MIN_WIDTH}px )`
                                                     }}
-                                                    onDragOver={e => this.dayLineDragMove(e, startDayDate, timeRestrictionsSchedule, courtData)}
-                                                    onDragEnd={e => this.dayLineDragEnd(e, courtData.slotsArray)}
+                                                    onDragOver={e => this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)}
+                                                    onDragEnd={e => this.dayLineDragEnd(e)}
                                                 >
                                                     {unavailableWidth.map((width, widthIndex) => {
                                                         if (width)
@@ -1971,11 +1997,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                     height: '100%',
                                                                     background: `repeating-linear-gradient( -45deg, #ebf0f3, #ebf0f3 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5}px, #d9d9d9 ${ONE_HOUR_IN_MIN / 5 * ONE_MIN_WIDTH}px )`,
                                                                 }}
-                                                                // onDragOver={(e) => {
-                                                                //     e.nativeEvent.stopImmediatePropagation();
-                                                                //     console.log('onMouseEnter')
-                                                                //     this.setState({ dragDayTarget: null})
-                                                                // }}
                                                             >
                                                                 {AppConstants.unavailable}
                                                             </div>
@@ -1998,7 +2019,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                 return (
                                                                 <div
                                                                     key={"slot" + slotIndex}
-                                                                    onDragOver={e => this.slotObjectDragMove(e)}
                                                                 >
                                                                     {/* <span
                                                                         style={{ left: diffTimeStartEvent, top: topMargin }}
@@ -2007,11 +2027,20 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                     <div
                                                                         id={slotObject.drawsId}
                                                                         onMouseDown={e => this.slotObjectMouseDown(e, slotObject)}
+                                                                        onDragOver={() => {
+                                                                            if (
+                                                                                slotObject.matchDate !== this.state.tooltipSwappableTime
+                                                                                && slotObject !== this.state.draggableEventObject
+                                                                            )
+                                                                            this.setState({ tooltipSwappableTime: slotObject.matchDate })
+                                                                        }}
+                                                                        onDragLeave={() => {
+                                                                            this.setState({ tooltipSwappableTime: null })
+                                                                        }}
                                                                         className={'box purple-bg'}
                                                                         style={{
                                                                             backgroundColor: this.checkColor(slotObject),
                                                                             left: diffTimeStartEvent,
-                                                                            // top: topMargin,
                                                                             overflow: 'hidden',
                                                                             whiteSpace: 'nowrap',
                                                                             cursor: disabledStatus && "no-drop",
@@ -2040,10 +2069,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                         dateItem.roundId,
                                                                                     )
                                                                                 }
-                                                                                onMoveEnd={(source, target) =>
-                                                                                    console.log('onMove Timeline comp')
-                                                                                }
-                                                                                movableTooltipData={this.dragTimeFef.current?.format('DD MMM, HH mm')}
                                                                                 isCurrentSwappable={(source, target) =>
                                                                                     this.checkCurrentSwapObjects(
                                                                                         source,
@@ -2077,10 +2102,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                                                                             dateItem.roundId,
                                                                                         )
                                                                                     }
-                                                                                    onMoveEnd={(source, target) =>
-                                                                                        console.log('onMove Timeline comp')
-                                                                                    }
-                                                                                    movableTooltipData={this.dragTimeFef.current?.format('DD MMM, HH mm')}
                                                                                     isCurrentSwappable={(source, target) =>
                                                                                         this.checkCurrentSwapObjects(
                                                                                             source,

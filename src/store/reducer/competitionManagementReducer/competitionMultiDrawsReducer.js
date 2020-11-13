@@ -235,10 +235,9 @@ function mapSlotObjectsWithTimeSlots(
       tempSlotsArray.push(
         getSlotFromDate(
           drawsArray,
-          mainCourtNumberArray[i].venueCourtId,
           sortedDateArray[j].date,
           gradeArray, key,
-          mainCourtNumberArray[i].venueId
+          mainCourtNumberArray[i]
         )
       );
     }
@@ -247,9 +246,10 @@ function mapSlotObjectsWithTimeSlots(
   return mainCourtNumberArray;
 }
 
-function getSlotFromDate(drawsArray, venueCourtId, matchDate, gradeArray, key, venueId) {
+function getSlotFromDate(drawsArray, matchDate, gradeArray, key, mainCourtNumber) {
   let startTime;
   let endTime;
+  const { venueCourtId, venueCourtNumber, venueCourtName, venueShortName, venueId } = mainCourtNumber;
   for (let i in drawsArray) {
     startTime = drawsArray[i].startTime;
     endTime = drawsArray[i].endTime;
@@ -304,10 +304,10 @@ if(checkDuplicate ){
   ];
   return {
     drawsId: null,
-    venueCourtNumber: null,
-    venueCourtName: null,
-    venueCourtId: venueCourtId,
-    venueShortName: null,
+    venueCourtNumber,
+    venueCourtName,
+    venueCourtId,
+    venueShortName,
     matchDate,
     startTime,
     endTime,
@@ -321,7 +321,7 @@ if(checkDuplicate ){
     isLocked: 0,
     colorCode: '#999999',
     teamArray: teamArray,
-    venueId,
+    venueId
   };
 }
 function getRandomColor() {

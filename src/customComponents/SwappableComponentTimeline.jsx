@@ -6,19 +6,12 @@ class Swappable extends Component {
     super();
 
     this.state = {
-      customFunc: null,
-      isMoving: false
+      customFunc: null
     };
   }
 
   allowDrop(ev) {
     ev.preventDefault();
-  }
-
-  mouseDown() {
-    this.setState({
-      isMoving: true,
-    });
   }
 
   drag(ev, customFunc = null) {
@@ -30,16 +23,9 @@ class Swappable extends Component {
   }
 
   dragEnd(ev, customFunc = null) {
-    this.setState({
-      isMoving: false,
-    });
 
     if (customFunc && ev.target.parentNode != this.state.initialParentNode) {
       this.props.customFunc();
-    }
-
-    else if (this.state.isMoving) {
-      this.props.onMoveEnd()
     }
   }
 
@@ -58,10 +44,6 @@ class Swappable extends Component {
     let target = document.getElementById(dragableId);
     let targetParent = target.parentNode;
 
-    // swappable
-    //   ? this.swapElements(src, target, srcParent, targetParent)
-    //   : this.transferElement(src, dropzoneId);
-
     if (swappable)
       this.swapElements(src, target, srcParent, targetParent);
   }
@@ -71,7 +53,6 @@ class Swappable extends Component {
     let targetIndexArray = target.id.split(':');
 
     const isCurrentSwappable = this.props.isCurrentSwappable(target.id, src.id);
-    console.log('isCurrentSwappable', isCurrentSwappable)
 
     if (sourceIndexArray[2] === targetIndexArray[2] && isCurrentSwappable) {
       target.replaceWith(src);
@@ -108,7 +89,6 @@ class Swappable extends Component {
           this.drop(event, dragableId, dropzoneId, customFunc, swappable)
         }
         onDragOver={event => this.allowDrop(event)}
-        onMouseDown={() => this.mouseDown()}
         className="dropzoneId"
         style={{ width: '100%' }}
       >
@@ -121,7 +101,6 @@ class Swappable extends Component {
           style={{ width: '100%' }}
         >
           {this.props.children}
-          {/* {this.state.isMoving && this.props.movableTooltipData && <span>{this.props.movableTooltipData}</span>} */}
         </div>
       </div>
     );
