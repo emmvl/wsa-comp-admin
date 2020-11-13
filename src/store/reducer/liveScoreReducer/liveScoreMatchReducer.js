@@ -226,6 +226,9 @@ const initialState = {
     roster2Umpire: null,
     orgId1UmpirName: null,
     orgId2UmpirName: null,
+    staticMatchData: JSON.parse(JSON.stringify(object)),
+    umpireReserveId: null,
+    umpireCoachId: null
 };
 
 function setMatchData(data) {
@@ -361,6 +364,16 @@ function getUmpureUserId(umpireList, umpireData) {
     return { userId, orgId }
 
 }
+function getUmpureReserveId(umpireList, umpireReserveData) {
+    let userId = null
+    for (let i in umpireList) {
+        if (umpireReserveData === umpireList[i].umpireId) {
+            userId = umpireList[i].id
+            break;
+        }
+    }
+    return userId
+}
 
 function liveScoreMatchReducer(state = initialState, action) {
     switch (action.type) {
@@ -412,7 +425,8 @@ function liveScoreMatchReducer(state = initialState, action) {
 
         case ApiConstants.API_LIVE_SCORE_ADD_EDIT_MATCH_SUCCESS:
             let data = action.result;
-            state.addEditMatch = action.result;
+            state.addEditMatch = JSON.parse(JSON.stringify(action.result));
+            state.staticMatchData = JSON.parse(JSON.stringify(action.result));
             state.addEditMatch['extraTimeMainBreak'] = data.extraTimeType === "FOUR_QUARTERS" ? data.extraTimeMainBreak : data.extraTimeBreak
             state.addEditMatch['extraTimeqtrBreak'] = data.extraTimeType === "FOUR_QUARTERS" ? data.extraTimeBreak : null
             if (action.result) {
@@ -548,7 +562,7 @@ function liveScoreMatchReducer(state = initialState, action) {
                 }
 
                 if (action.data === state.umpire1NameMainId) {
-                    console.log(action.data, 'umpire1NameMainId@@@@@@@@@@@@@@', state.umpire1NameMainId)
+                    // console.log(action.data, 'umpire1NameMainId@@@@@@@@@@@@@@', state.umpire1NameMainId)
                     state.umpire1NameMainId = null
                     state.umpire1Name = null
                     state.umpireRosterId_1 = null
@@ -570,6 +584,8 @@ function liveScoreMatchReducer(state = initialState, action) {
             } else if (action.key === "umpire1Orag") {
                 state.umpire1Orag = action.data;
             } else if (action.key === "umpireReserve") {
+                state.umpireReserve = action.data
+                let umpireResList = state.umpireList
 
                 if (action.data === state.umpire1NameMainId) {
                     state.umpire1NameMainId = null
@@ -582,11 +598,15 @@ function liveScoreMatchReducer(state = initialState, action) {
                 if (action.data === state.umpireCoach) {
                     state.umpireCoach = null
                 }
-
-                state.umpireReserve = action.data;
+                for (let i in umpireResList) {
+                    if (umpireResList[i].id === action.data) {
+                        state.umpireReserveId = umpireResList[i].umpireId
+                    }
+                }
+                // state.umpireReserve = action.data;
             }
             else if (action.key === "umpireCoach") {
-
+                let umpireResList = state.umpireList
                 if (action.data === state.umpire1NameMainId) {
                     state.umpire1NameMainId = null
                 }
@@ -598,7 +618,11 @@ function liveScoreMatchReducer(state = initialState, action) {
                 if (action.data === state.umpireReserve) {
                     state.umpireReserve = null
                 }
-
+                for (let i in umpireResList) {
+                    if (umpireResList[i].id === action.data) {
+                        state.umpireCoachId = umpireResList[i].umpireId
+                    }
+                }
                 state.umpireCoach = action.data
             }
             else if (action.key === "umpireCoach") {
@@ -725,9 +749,10 @@ function liveScoreMatchReducer(state = initialState, action) {
             let umpireCoachData = isArrayNotEmpty(action.payload.rosters) ? checkUmpireRole(action.payload.rosters, 20) : null
             let umpires_1 = isArrayNotEmpty(action.payload.umpires) ? checkUmpireType(action.payload.umpires, 1) : null;
             let umpires_2 = isArrayNotEmpty(action.payload.umpires) ? checkUmpireType(action.payload.umpires, 2) : null;
-            state.umpireReserve = umpireReserveData ? umpireReserveData : null
-            state.umpireCoach = umpireCoachData ? umpireCoachData : null
-            console.log(umpires_2, 'check_umpires_2')
+            // state.umpireReserve = umpireReserveData ? umpireReserveData : null
+            state.umpireReserve = getUmpureReserveId(state.umpireList, umpireReserveData)
+            // state.umpireCoach = umpireCoachData ? umpireCoachData : null
+            state.umpireCoach = getUmpureReserveId(state.umpireList, umpireReserveData)
             if (umpires_1) {
 
                 let umpir1UserId = getUmpureUserId(state.umpireList, umpires_1)
@@ -741,7 +766,6 @@ function liveScoreMatchReducer(state = initialState, action) {
                 //         }
                 //     }
                 // }
-                console.log(umpires_1, 'umpires_1', state.umpireList, umpir1UserId)
                 state.umpire1Orag = isArrayNotEmpty(umpires_1.competitionOrganisations) ? umpires_1.competitionOrganisations[0].id : [];
                 state.umpire1Name = umpires_1.userId;
                 state.umpire1NameMainId = umpir1UserId.userId;
@@ -762,7 +786,7 @@ function liveScoreMatchReducer(state = initialState, action) {
             }
             if (umpires_2) {
                 let umpir2UserId = getUmpureUserId(state.umpireList, umpires_2)
-                console.log(umpires_2, 'umpires_2', state.umpireList, umpir2UserId)
+                // console.log(umpires_2, 'umpires_2', state.umpireList, umpir2UserId)
                 state.umpire2Orag = isArrayNotEmpty(umpires_2.competitionOrganisations) ? umpires_2.competitionOrganisations[0].id : [];
                 state.umpire2Name = umpires_2.userId;
                 state.umpire2NameMainId = umpir2UserId.userId;
