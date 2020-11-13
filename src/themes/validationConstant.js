@@ -236,6 +236,7 @@ const ValidationConstants = {
 
     // Affiliate Add/Edit
     affiliateAddressRequiredError: 'Please input affiliate address in details',
+    affiliateAddressDetailError: 'Please select a affiliate address which has a street address',
 };
 
 export default ValidationConstants;
