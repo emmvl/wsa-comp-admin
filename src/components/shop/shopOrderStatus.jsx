@@ -353,7 +353,7 @@ class ShopOrderStatus extends Component {
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -397,6 +397,7 @@ class ShopOrderStatus extends Component {
             { name: "In Transit", value: "in transit" },
             { name: "Completed", value: "completed" }
         ]
+        let { ShopFulfilmentStatusArr, ShopPaymentStatus } = this.props.shopOrderStatusState
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1 order-summ-drop-down-padding order-summary-dropdown-view">
                 <div className="fluid-width">
@@ -447,9 +448,9 @@ class ShopOrderStatus extends Component {
                                     className="year-select reg-filter-select mr-3"
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {paymentStatusData.map(item => (
-                                        <Option key={'paymentStatus_' + item.value} value={item.value}>
-                                            {item.name}
+                                    {ShopPaymentStatus.map(item => (
+                                        <Option key={'paymentStatus_' + item.id} value={item.id}>
+                                            {item.description}
                                         </Option>
                                     ))}
                                 </Select>
@@ -467,9 +468,9 @@ class ShopOrderStatus extends Component {
                                     value={this.state.fulfilmentStatus}
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
-                                    {fulfilmentStatusData.map(item => (
-                                        <Option key={'fulfilmentStatus_' + item.value} value={item.value}>
-                                            {item.name}
+                                    {ShopFulfilmentStatusArr.map(item => (
+                                        <Option key={'fulfilmentStatus_' + item.id} value={item.id}>
+                                            {item.description}
                                         </Option>
                                     ))}
                                 </Select>

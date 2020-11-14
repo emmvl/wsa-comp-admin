@@ -59,7 +59,7 @@ export function* getAssignUmpireListSaga(action) {
 //////////assign umpire to a match
 export function* assignUmpireSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.assignUmpire, action.payload)
+        const result = yield call(LiveScoreAxiosApi.assignUmpire, action.payload,action.rosterLocked)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_ASSIGN_UMPIRE_FROM_LIST_SUCCESS,
@@ -67,6 +67,7 @@ export function* assignUmpireSaga(action) {
                 status: result.status,
                 index: action.index,
                 umpireKey: action.umpireKey,
+                sameUmpire:action.sameUmpire
             })
         } else {
             yield call(failSaga, result)
@@ -79,7 +80,7 @@ export function* assignUmpireSaga(action) {
 /////unassign umpire from the match(delete)
 export function* unassignUmpireSaga(action) {
     try {
-        const result = yield call(LiveScoreAxiosApi.unassignUmpire, action.rosterId)
+        const result = yield call(LiveScoreAxiosApi.unassignUmpire, action.rosterId,action.rosterLocked)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_UNASSIGN_UMPIRE_FROM_LIST_SUCCESS,

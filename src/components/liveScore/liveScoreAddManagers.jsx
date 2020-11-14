@@ -18,7 +18,8 @@ import {
     liveScoreManagerListAction,
     liveScoreClear,
     liveScoreManagerFilter,
-    liveScoreManagerSearch
+    liveScoreManagerSearch,
+    clearListAction
 } from '../../store/actions/LiveScoreAction/liveScoreManagerAction'
 import { isArrayNotEmpty, captializedString, regexNumberExpression } from "../../util/helpers";
 
@@ -42,7 +43,8 @@ class LiveScoreAddManager extends Component {
             loader: false,
             showOption: false,
             competition_id: null,
-            teamLoad: false
+            teamLoad: false,
+            exsitingValue: ''
         }
         this.formRef = createRef();
     }
@@ -167,26 +169,34 @@ class LiveScoreAddManager extends Component {
                         <Form.Item name={AppConstants.team} rules={[{ required: true, message: ValidationConstants.searchManager }]}>
                             <AutoComplete
                                 loading
-                                style={{ width: "100%", height: '44px' }}
+                                style={{ width: '100%', height: '44px' }}
                                 placeholder="Select User"
                                 onSelect={(item, option) => {
                                     const ManagerId = option.key
-                                    this.props.liveScoreClear()
+                                    // this.props.liveScoreClear()
+                                    this.props.clearListAction()
                                     this.props.liveScoreUpdateManagerDataAction(ManagerId, 'managerSearch')
                                     this.setState({ teamLoad: true })
                                 }}
                                 notFoundContent={onLoadSearch === true ? <Spin size="small" /> : null}
                                 onSearch={(value) => {
-                                    value
+                                    this.setState({ exsitingValue: value })
+                                    // value
+                                    //     ? this.props.liveScoreManagerSearch(value, this.state.competition_id)
+                                    //     : this.props.liveScoreManagerListAction(5, 1, this.state.competition_id)
+                                    value && value.length > 2
                                         ? this.props.liveScoreManagerSearch(value, this.state.competition_id)
-                                        : this.props.liveScoreManagerListAction(5, 1, this.state.competition_id)
+                                        : this.props.clearListAction()
                                 }}
                             >
-                                {managerList.map((item) => (
-                                    <Option key={'manager_' + item.id} value={item.firstName + " " + item.lastName}>
-                                        {item.NameWithNumber}
-                                    </Option>
-                                ))}
+                                {
+                                    this.state.exsitingValue &&
+                                    managerList.map((item) => (
+                                        <Option key={'manager_' + item.id} value={item.firstName + " " + item.lastName}>
+                                            {item.NameWithNumber}
+                                        </Option>
+                                    ))
+                                }
                             </AutoComplete>
                         </Form.Item>
                     </div>
@@ -204,7 +214,7 @@ class LiveScoreAddManager extends Component {
                                 mode="multiple"
                                 showSearch
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: "100%", }}
+                                style={{ width: '100%', }}
                                 onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                 // value={teamId}
                                 optionFilterProp="children"
@@ -321,7 +331,7 @@ class LiveScoreAddManager extends Component {
                             <Select
                                 mode="multiple"
                                 placeholder={AppConstants.selectTeam}
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 onChange={(teamId) => this.props.liveScoreUpdateManagerDataAction(teamId, 'teamId')}
                                 // value={teamId}
                                 showSearch
@@ -360,7 +370,7 @@ class LiveScoreAddManager extends Component {
                     <div className="row ml-2" style={{ marginTop: 18 }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
-                            <div style={{ marginLeft: -10, width: 50 }}>
+                            <div style={{ marginLeft: -10, marginTop: -10, width: 50 }}>
                                 <Tooltip background="#ff8237">
                                     <span>{AppConstants.newMsgForScorerManager}</span>
                                 </Tooltip>
@@ -370,7 +380,7 @@ class LiveScoreAddManager extends Component {
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                 {AppConstants.existing}
                             </Radio>
-                            <div style={{ marginLeft: -10 }}>
+                            <div style={{ marginLeft: -10, marginTop: -10 }}>
                                 <Tooltip background="#ff8237">
                                     <span>{AppConstants.existingMsgForScorerManager}</span>
                                 </Tooltip>
@@ -501,7 +511,7 @@ class LiveScoreAddManager extends Component {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores}
-                                 onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <Loader visible={this.props.liveScoreMangerState.loading} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout>
@@ -537,7 +547,8 @@ function mapDispatchToProps(dispatch) {
         liveScoreClear,
         liveScoreManagerFilter,
         liveScoreManagerSearch,
-        getliveScoreTeams
+        getliveScoreTeams,
+        clearListAction
     }, dispatch)
 }
 

@@ -151,7 +151,7 @@ const columns = [
                     (item.divisionGrade != null && item.divisionGrade != "" && this_obj.state.competitionStatus != 1) && (
                         <Tooltip
                             className="comp-player-table-tag2"
-                            style={{ height: "100%" }}
+                            style={{ height: '100%' }}
                             onMouseEnter={() => this_obj.changeHover(item, key, index, true)}
                             onMouseLeave={() => this_obj.changeHover(item, key, index, false)}
                             visible={item.hoverVisible}
@@ -709,7 +709,7 @@ class CompetitionProposedTeamGrading extends Component {
                             </div>
                         </div>
                         {/* <div className="col-sm" style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
-                            <span className="comp-grading-final-text ml-1" >{AppConstants.final}</span>
+                            <span className="comp-grading-final-text ml-1">{AppConstants.final}</span>
                         </div> */}
                         {/* <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
                             <Button className="primary-add-comp-form" type="primary"

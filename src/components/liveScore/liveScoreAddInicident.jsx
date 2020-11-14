@@ -274,7 +274,7 @@ class LiveScoreAddIncident extends Component {
 
                         <DatePicker
                             size="large"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             onChange={(date) => {
                                 this.props.liveScoreUpdateIncidentData(moment(date).format('MM/DD/YYYY'), "date")
                             }}
@@ -290,7 +290,7 @@ class LiveScoreAddIncident extends Component {
 
                         <TimePicker
                             className="comp-venue-time-timepicker"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             onChange={(time) => this.props.liveScoreUpdateIncidentData(time, 'time')}
                             onBlur={(e) => this.props.liveScoreUpdateIncidentData(e.target.value && moment(e.target.value, "HH:mm"), 'time')}
                             format="HH:mm"
@@ -326,7 +326,7 @@ class LiveScoreAddIncident extends Component {
                                 <Select
                                     className="reg-form-multiple-select"
                                     placeholder='Select Home Team'
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={(teamId) => this.setTeamId(teamId)}
                                     // value={incidentData.teamId ? incidentData.teamId : ''}
                                     optionFilterProp="children"
@@ -341,7 +341,7 @@ class LiveScoreAddIncident extends Component {
                                 <Select
                                     className="reg-form-multiple-select"
                                     placeholder="Select Home Team"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={(teamId) => this.setTeamId(teamId)}
                                     // value={incidentData.teamId ? incidentData.teamId : ''}
                                     optionFilterProp="children"
@@ -368,7 +368,7 @@ class LiveScoreAddIncident extends Component {
                             mode="multiple"
                             showSearch
                             placeholder={AppConstants.selectPlayer}
-                            style={{ width: "100%", }}
+                            style={{ width: '100%', }}
                             onChange={(playerId) => this.props.liveScoreUpdateIncidentData(playerId, "playerId")}
                             value={playerIds}
                         >
@@ -393,7 +393,7 @@ class LiveScoreAddIncident extends Component {
                             <Select
                                 showSearch
                                 placeholder={AppConstants.selectIncident}
-                                style={{ width: "100%", }}
+                                style={{ width: '100%', }}
                                 onChange={(incident) => this.props.liveScoreUpdateIncidentData(incident, "injury")}
                                 // value={incidentData.injury ? incidentData.injury : undefined}
                             >

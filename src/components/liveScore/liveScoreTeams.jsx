@@ -10,7 +10,7 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import AppImages from "../../themes/appImages";
 import { getTeamsWithPagination } from '../../store/actions/LiveScoreAction/liveScoreTeamAction';
-import { getLiveScoreCompetiton } from '../../util/sessionStorage';
+import { getLiveScoreCompetiton, setOwnCompetitionYear, setOwn_competition } from '../../util/sessionStorage';
 import history from "../../util/history";
 import { exportFilesAction } from "../../store/actions/appAction";
 import { isArrayNotEmpty, teamListData } from "../../util/helpers";
@@ -144,6 +144,7 @@ class LiveScoreTeam extends Component {
             offset: 0,
             sortBy: null,
             sortOrder: null,
+            sourceIdAvailable: false,
         };
         this_Obj = this
     }
@@ -151,8 +152,8 @@ class LiveScoreTeam extends Component {
     componentDidMount() {
         let { livescoreTeamActionObject } = this.props.liveScoreTeamState
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id })
+            const { id, sourceId } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
             if (id !== null) {
                 if (livescoreTeamActionObject) {
                     let offset = livescoreTeamActionObject.offset
@@ -211,113 +212,157 @@ class LiveScoreTeam extends Component {
         this.props.exportFilesAction(url)
     }
 
-    ///////view for breadcrumb
-    headerView = () => (
-        <div className="comp-player-grades-header-drop-down-view mt-4">
-            <div className="row">
-                <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
-                    <Breadcrumb separator=" > ">
-                        <Breadcrumb.Item className="breadcrumb-add">{AppConstants.teamList}</Breadcrumb.Item>
-                    </Breadcrumb>
-                </div>
-                <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
-                    <div className="row">
-                        <div className="col-sm pt-1">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: "100%",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end",
-                                }}
-                            >
-                                <NavLink to="/liveScoreAddTeam">
-                                    <Button className="primary-add-comp-form" type="primary">
-                                        + {AppConstants.addTeam}
-                                    </Button>
-                                </NavLink>
-                            </div>
-                        </div>
+    ///navigation to team grading summary if sourceId is not null
+    teamGradingNavigation = () => {
+        let yearRefId = localStorage.yearId
+        let compKey = null
+        if (getLiveScoreCompetiton()) {
+            const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
+            compKey = uniqueKey
+        }
+        setOwnCompetitionYear(yearRefId);
+        setOwn_competition(compKey);
+        history.push('/competitionPartTeamGradeCalculate');
+    }
 
-                        <div className="col-sm pt-1">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: "100%",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end"
-                                }}
-                            >
-                                <Button onClick={this.onExport} className="primary-add-comp-form" type="primary">
-                                    <div className="row">
-                                        <div className="col-sm">
-                                            <img
-                                                src={AppImages.export}
-                                                alt=""
-                                                className="export-image"
-                                            />
-                                            {AppConstants.export}
-                                        </div>
+    ///////view for breadcrumb
+    headerView = () => {
+        let { sourceIdAvailable } = this.state
+        return (
+            <div className="comp-player-grades-header-drop-down-view mt-4">
+                <div className="row">
+                    <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                        <Breadcrumb separator=" > ">
+                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.teamList}</Breadcrumb.Item>
+                        </Breadcrumb>
+                    </div>
+                    <div className="col-sm-8" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: "100%" }}>
+                        <div className="row">
+                            {sourceIdAvailable && (
+                                <div className="col-sm pt-1">
+                                    <div
+                                        className="comp-dashboard-botton-view-mobile"
+                                        style={{
+                                            width: "100%",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "flex-end",
+                                        }}
+                                    >
+                                        <Button
+                                            type="primary"
+                                            className="primary-add-comp-form"
+                                            onClick={() => this.teamGradingNavigation()}
+                                        >
+                                            {AppConstants.teamGrading}
+                                        </Button>
                                     </div>
-                                </Button>
-                            </div>
-                        </div>
-                        <div className="col-sm pt-1">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: "100%",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end"
-                                }}
-                            >
-                                <NavLink to="/liveScoreTeamImport">
-                                    <Button className="primary-add-comp-form" type="primary">
+                                </div>
+                            )}
+
+                            {!sourceIdAvailable && (
+                                <div className="col-sm pt-1">
+                                    <div
+                                        className="comp-dashboard-botton-view-mobile"
+                                        style={{
+                                            width: "100%",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "flex-end",
+                                        }}
+                                    >
+                                        <NavLink to="/liveScoreAddTeam">
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                + {AppConstants.addTeam}
+                                            </Button>
+                                        </NavLink>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="col-sm pt-1">
+                                <div
+                                    className="comp-dashboard-botton-view-mobile"
+                                    style={{
+                                        width: "100%",
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        justifyContent: "flex-end"
+                                    }}
+                                >
+                                    <Button onClick={this.onExport} className="primary-add-comp-form" type="primary">
                                         <div className="row">
                                             <div className="col-sm">
                                                 <img
-                                                    src={AppImages.import}
+                                                    src={AppImages.export}
                                                     alt=""
                                                     className="export-image"
                                                 />
-                                                {AppConstants.import}
+                                                {AppConstants.export}
                                             </div>
                                         </div>
                                     </Button>
-                                </NavLink>
+                                </div>
                             </div>
+
+                            {!sourceIdAvailable && (
+                                <div className="col-sm pt-1">
+                                    <div
+                                        className="comp-dashboard-botton-view-mobile"
+                                        style={{
+                                            width: "100%",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "flex-end"
+                                        }}
+                                    >
+                                        <NavLink to="/liveScoreTeamImport">
+                                            <Button className="primary-add-comp-form" type="primary">
+                                                <div className="row">
+                                                    <div className="col-sm">
+                                                        <img
+                                                            src={AppImages.import}
+                                                            alt=""
+                                                            className="export-image"
+                                                        />
+                                                        {AppConstants.import}
+                                                    </div>
+                                                </div>
+                                            </Button>
+                                        </NavLink>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
-            </div>
-            {/* search box */}
+                {/* search box */}
 
-            <div className="col-sm pt-5 ml-3" style={{ display: "flex", justifyContent: 'flex-end' }}>
-                <div className="comp-product-search-inp-width">
-                    <Input
-                        className="product-reg-search-input"
-                        onChange={this.onChangeSearchText}
-                        placeholder="Search..."
-                        onKeyPress={this.onKeyEnterSearchText}
-                        value={this.state.searchText}
-                        prefix={
-                            <SearchOutlined
-                                style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
-                                onClick={this.onClickSearchIcon}
-                            />
-                        }
-                        allowClear
-                    />
+                <div className="col-sm pt-5 ml-3" style={{ display: "flex", justifyContent: 'flex-end' }}>
+                    <div className="comp-product-search-inp-width">
+                        <Input
+                            className="product-reg-search-input"
+                            onChange={this.onChangeSearchText}
+                            placeholder="Search..."
+                            onKeyPress={this.onKeyEnterSearchText}
+                            value={this.state.searchText}
+                            prefix={
+                                <SearchOutlined
+                                    style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                    onClick={this.onClickSearchIcon}
+                                />
+                            }
+                            allowClear
+                        />
+                    </div>
                 </div>
             </div>
-        </div>
-    );
+        )
+    };
 
     ////////tableView view for Team list
     tableView = () => {
@@ -351,7 +396,7 @@ class LiveScoreTeam extends Component {
 
     render() {
         const { screenKey } = this.props.liveScoreTeamState
-        console.log(this.props.liveScoreTeamState.screenKey, 'liveScoreTeamState')
+
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout

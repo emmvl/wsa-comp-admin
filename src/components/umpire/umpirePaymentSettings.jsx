@@ -21,6 +21,7 @@ import { isArrayNotEmpty } from "../../util/helpers";
 import { umpireCompetitionListAction } from "../../store/actions/umpireAction/umpireCompetetionAction"
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { umpirePaymentSettingUpdate } from '../../store/actions/umpireAction/umpirePaymentSettingAction'
+import { getRefBadgeData } from '../../store/actions/appAction'
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -40,6 +41,7 @@ class UmpirePaymentSetting extends Component {
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
         this.props.umpirePaymentSettingUpdate({ value: null, key: 'refreshPage' })
+        this.props.getRefBadgeData()
     }
 
     componentDidUpdate(nextProps) {
@@ -222,7 +224,7 @@ class UmpirePaymentSetting extends Component {
                     <Select
                         mode='multiple'
                         placeholder="Select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                         onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
                             value: divisionId,
                             key: 'paidByCompOrgDivision'
@@ -258,7 +260,7 @@ class UmpirePaymentSetting extends Component {
                     <Select
                         mode='multiple'
                         placeholder="Select"
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                         onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
                             value: divisionId,
                             key: 'paidByAffiliateDivision'
@@ -291,11 +293,11 @@ class UmpirePaymentSetting extends Component {
                         checked={byBadgeBtn}>
                         {'By Badge'}
                     </Checkbox>
-                    {byBadgeBtn &&
-                    <div>
-                        {this.byBadgeView()}
-                    </div>
-                    }
+                    {byBadgeBtn && (
+                        <div>
+                            {this.byBadgeView()}
+                        </div>
+                    )}
 
                     <Checkbox
                         className="single-checkbox ml-0"
@@ -303,8 +305,9 @@ class UmpirePaymentSetting extends Component {
                             value: e.target.checked,
                             key: 'byPool'
                         })}
-                        checked={byPoolBtn}>
-                        {'By Pool'}
+                        checked={byPoolBtn}
+                    >
+                        By Pool
                     </Checkbox>
                     {byPoolBtn && (
                         <div>
@@ -533,6 +536,8 @@ class UmpirePaymentSetting extends Component {
 
     byBadgeView = () => {
         const { inputFieldArray, byBadgeDivision, allDivisionBadge, compOrgDiv } = this.props.umpirePaymentSettingState
+        const { badgeDataCompOrg } = this.props.umpirePaymentSettingState
+        let badge = isArrayNotEmpty(badgeDataCompOrg) ? badgeDataCompOrg : []
         return (
             <div>
                 <div style={{ display: 'flex', flexDirection: 'column', marginTop: 20 }}>
@@ -546,7 +551,7 @@ class UmpirePaymentSetting extends Component {
                         <Select
                             mode='multiple'
                             placeholder="Select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                             onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
                                 value: divisionId,
                                 key: 'byBadgeDivision'
@@ -562,7 +567,7 @@ class UmpirePaymentSetting extends Component {
                     )}
                 </div>
                 {/* <div> */}
-                {inputFieldArray.map((item, index) => (
+                {badge.map((item, index) => (
                     <div key={"inputFieldArray" + index}>
                         {this.inputFields(item, index)}
                     </div>
@@ -578,6 +583,8 @@ class UmpirePaymentSetting extends Component {
 
     byBadgeViewAffiliate = () => {
         const { inputFieldArrayAffiliate, byBadgeDivisionAffiliate, allDivisionBadgeAffiliate, affiliateDiv } = this.props.umpirePaymentSettingState
+        const { badgeDataByAffiliate } = this.props.umpirePaymentSettingState
+        let badge = isArrayNotEmpty(badgeDataByAffiliate) ? badgeDataByAffiliate : []
         return (
             <div>
                 <div style={{ display: 'flex', flexDirection: 'column', marginTop: 20 }}>
@@ -594,7 +601,7 @@ class UmpirePaymentSetting extends Component {
                         <Select
                             mode='multiple'
                             placeholder="Select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182, marginTop: 20 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                             onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
                                 value: divisionId,
                                 key: 'byBadgeDivisionAffiliate'
@@ -610,7 +617,7 @@ class UmpirePaymentSetting extends Component {
                     )}
                 </div>
                 {/* <div> */}
-                {inputFieldArrayAffiliate.map((item, index) => (
+                {badge.map((item, index) => (
                     <div key={"inputFieldArrayAffiliate" + index}>
                         {this.inputFieldsAffiliate(item, index)}
                     </div>
@@ -655,7 +662,7 @@ class UmpirePaymentSetting extends Component {
                 ))}
                 <div>
                     <span onClick={() => this.props.umpirePaymentSettingUpdate({ value: null, key: 'addPoolFee' })}
-                          className={'input-heading-add-another pointer pt-0 mt-3'}>+ {AppConstants.addAnotherPool}</span>
+                        className={'input-heading-add-another pointer pt-0 mt-3'}>+ {AppConstants.addAnotherPool}</span>
                 </div>
             </div>
         )
@@ -701,7 +708,7 @@ class UmpirePaymentSetting extends Component {
         )
     }
 
-    inputFields = (item, index) => {
+    inputFields = (badgeData, index) => {
         const { inputFieldArray } = this.props.umpirePaymentSettingState
         return (
             <div>
@@ -716,7 +723,8 @@ class UmpirePaymentSetting extends Component {
                                 index,
                                 key: 'name'
                             })}
-                            value={inputFieldArray[index].name}
+                            value={badgeData.description}
+                            disabled
                         />
                     </div>
                     <div className='col-sm input-width'>
@@ -732,7 +740,8 @@ class UmpirePaymentSetting extends Component {
                                 index,
                                 key: 'umpireRate'
                             })}
-                            value={inputFieldArray[index].umpireRate}
+                            // value={inputFieldArray[index].umpireRate}
+                            value={badgeData.umpireRate}
                         />
                     </div>
 
@@ -748,7 +757,8 @@ class UmpirePaymentSetting extends Component {
                                 index,
                                 key: 'umpReserveRate'
                             })}
-                            value={inputFieldArray[index].umpReserveRate}
+                            // value={inputFieldArray[index].umpReserveRate}
+                            value={badgeData.umpReserveRate}
                         />
                     </div>
 
@@ -764,7 +774,8 @@ class UmpirePaymentSetting extends Component {
                                 index,
                                 key: 'umpCoachRate'
                             })}
-                            value={inputFieldArray[index].umpCoachRate}
+                            // value={inputFieldArray[index].umpCoachRate}
+                            value={badgeData.umpCoachRate}
                         />
                     </div>
 
@@ -776,7 +787,7 @@ class UmpirePaymentSetting extends Component {
         )
     }
 
-    inputFieldsAffiliate = (item, index) => {
+    inputFieldsAffiliate = (badgeData, index) => {
         const { inputFieldArrayAffiliate } = this.props.umpirePaymentSettingState
         return (
             <div>
@@ -792,7 +803,8 @@ class UmpirePaymentSetting extends Component {
                                 key: 'name',
                                 subkey: "inputFieldAffiliate"
                             })}
-                            value={inputFieldArrayAffiliate[index].name}
+                            value={badgeData.description}
+                            disabled
                         />
                     </div>
                     <div className='col-sm input-width'>
@@ -808,7 +820,8 @@ class UmpirePaymentSetting extends Component {
                                 key: 'umpireRate',
                                 subkey: "inputFieldAffiliate"
                             })}
-                            value={inputFieldArrayAffiliate[index].umpireRate}
+                            // value={inputFieldArrayAffiliate[index].umpireRate}
+                            value={0}
                         />
                     </div>
 
@@ -825,7 +838,8 @@ class UmpirePaymentSetting extends Component {
                                 key: 'umpReserveRate',
                                 subkey: "inputFieldAffiliate"
                             })}
-                            value={inputFieldArrayAffiliate[index].umpReserveRate}
+                            // value={inputFieldArrayAffiliate[index].umpReserveRate}
+                            value={0}
                         />
                     </div>
 
@@ -842,7 +856,8 @@ class UmpirePaymentSetting extends Component {
                                 key: 'umpCoachRate',
                                 subkey: "inputFieldAffiliate"
                             })}
-                            value={inputFieldArrayAffiliate[index].umpCoachRate}
+                            // value={inputFieldArrayAffiliate[index].umpCoachRate}
+                            value={0}
                         />
                     </div>
 
@@ -853,106 +868,6 @@ class UmpirePaymentSetting extends Component {
             </div>
         )
     }
-
-    ////////form content view
-    contentView_1 = () => {
-        let defaultChecked = this.props.umpireSettingState.defaultChecked
-        return (
-            <div className="content-view pt-4">
-                {this.umpireAllocationRadioView()}
-                <span className='text-heading-large pt-5'>{AppConstants.umpirePreferences}</span>
-                <div className="row">
-                    <div className="col-sm">
-                        <InputWithHead required="pt-0" heading={AppConstants.noOfMatches + 'Umpire/day'} />
-                        <Select
-                            placeholder="Select"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                        >
-                            <Option value="11111">1</Option>
-                            <Option value="22222">2</Option>
-                            <Option value="33333">3</Option>
-                        </Select>
-                    </div>
-                    <div className="col-sm">
-                        <InputWithHead required="pt-0" heading={AppConstants.timeBetweenUmpireMatch} />
-                        <TimePicker
-                            className="comp-venue-time-timepicker"
-                            style={{ width: "100%" }}
-                            defaultOpenValue={moment("00:00", "HH:mm")}
-                            defaultValue={moment()}
-                            format="HH:mm"
-                        />
-                    </div>
-                </div>
-                <span className='text-heading-large pt-5'>{AppConstants.umpireReservePref}</span>
-                <Checkbox
-                    className="single-checkbox pt-2"
-                    checked={defaultChecked.reserveChecked}
-                    onChange={(e) => this.props.updateUmpireDataAction(e.target.checked, "reserveChecked")}
-                >
-                    {AppConstants.activeUmpireReserves}
-                </Checkbox>
-                {defaultChecked.reserveChecked === true && (
-                    <div className="row">
-                        <div className="col-sm">
-                            <InputWithHead required={"pt-5"} heading={AppConstants.noOfMatches + 'Reserve/day'} />
-                            <Select
-                                placeholder="Select"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            >
-                                <Option value="11">1</Option>
-                                <Option value="22">2</Option>
-                                <Option value="33">3</Option>
-                            </Select>
-                        </div>
-
-                        <div className="col-sm">
-                            <InputWithHead required={"pt-5"} heading={AppConstants.reserveAllocationTiming} />
-                            <Select
-                                placeholder="Select"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            >
-                                <Option value="before">Before</Option>
-                                <Option value="inBetween">In-between</Option>
-                                <Option value="after">After</Option>
-                            </Select>
-                        </div>
-                    </div>
-                )}
-
-                <span className='text-heading-large pt-5'>{AppConstants.umpireCoach}</span>
-                <Checkbox
-                    className="single-checkbox pt-2"
-                    checked={defaultChecked.coachChecked}
-                    onChange={(e) => this.props.updateUmpireDataAction(e.target.checked, "coachChecked")}
-                >
-                    {AppConstants.activeUmpireCoach}
-                </Checkbox>
-                {defaultChecked.coachChecked === true && (
-                    <div className="row">
-                        <div className="col-sm">
-                            <InputWithHead required={"pt-5"} heading={AppConstants.noOfMatches + 'Coach/day'} />
-                            <Select
-                                placeholder="Select"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            />
-                        </div>
-                        <div className="col-sm">
-                            <InputWithHead required={"pt-5"} heading={'Number of Matches an Umpire coach can perform in a row'} />
-                            <Select
-                                placeholder="Select"
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
-                            >
-                                <Option value="111">1</Option>
-                                <Option value="222">2</Option>
-                                <Option value="333">3</Option>
-                            </Select>
-                        </div>
-                    </div>
-                )}
-            </div>
-        );
-    };
 
     render() {
         return (
@@ -980,14 +895,16 @@ class UmpirePaymentSetting extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
-        umpirePaymentSettingUpdate
+        umpirePaymentSettingUpdate,
+        getRefBadgeData
     }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
         umpireCompetitionState: state.UmpireCompetitionState,
-        umpirePaymentSettingState: state.UmpirePaymentSettingState
+        umpirePaymentSettingState: state.UmpirePaymentSettingState,
+        appState: state.AppState
     }
 }
 

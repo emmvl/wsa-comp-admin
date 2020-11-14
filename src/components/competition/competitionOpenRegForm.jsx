@@ -138,7 +138,7 @@ const divisionTableColumns = [
                 >
                     <Select
                         className="division-age-select"
-                        style={{ width: "100%", minWidth: 120, }}
+                        style={{ width: '100%', minWidth: 120, }}
                         onChange={genderRefId => this_Obj.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
                         value={genderRefId}
                         placeholder="Select"
@@ -188,7 +188,7 @@ const divisionTableColumns = [
                 <DatePicker
                     size="default"
                     className="comp-venue-time-datepicker"
-                    style={{ width: "100%", minWidth: 135 }}
+                    style={{ width: '100%', minWidth: 135 }}
                     onChange={date => this_Obj.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "fromDate")}
                     format="DD-MM-YYYY"
                     placeholder="dd-mm-yyyy"
@@ -213,7 +213,7 @@ const divisionTableColumns = [
                 <DatePicker
                     size="default"
                     className="comp-venue-time-datepicker"
-                    style={{ width: "100%", minWidth: 135 }}
+                    style={{ width: '100%', minWidth: 135 }}
                     onChange={date => this_Obj.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "toDate")}
                     format="DD-MM-YYYY"
                     placeholder="dd-mm-yyyy"
@@ -230,7 +230,7 @@ const divisionTableColumns = [
         dataIndex: "clear",
         key: "clear",
         render: (clear, record, index) => (
-            <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: "pointer" }}>
+            <span style={{ display: "flex", justifyContent: "center", width: '100%', cursor: "pointer" }}>
                 <img
                     className="dot-image"
                     src={AppImages.redCross}
@@ -709,9 +709,11 @@ class CompetitionOpenRegForm extends Component {
                             {AppConstants.competitionDetails}
                         </Breadcrumb.Item>
                     </Breadcrumb>
-                    <CustomToolTip placement="top" background="#ff8237">
-                        <span>{AppConstants.compDetailsMsg}</span>
-                    </CustomToolTip>
+                    <div style={{ marginTop: -20 }}>
+                        <CustomToolTip placement="top" background="#ff8237">
+                            <span>{AppConstants.compDetailsMsg}</span>
+                        </CustomToolTip>
+                    </div>
                 </Header>
             </div>
         );
@@ -875,7 +877,7 @@ class CompetitionOpenRegForm extends Component {
                             className="comp-dashboard-botton-view-mobile"
                             size="large"
                             placeholder="dd-mm-yyyy"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             onChange={date => this.updateNonPlayingNames(date, index, "date")}
                             format="DD-MM-YYYY"
                             showTime={false}
@@ -1056,7 +1058,7 @@ class CompetitionOpenRegForm extends Component {
                         <Select
                             id={AppUniqueId.select_Venues}
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={venueSelection => {
                                 this.onSelectValues(venueSelection, detailsData)
                             }}
@@ -1111,7 +1113,7 @@ class CompetitionOpenRegForm extends Component {
                         {appState.competitionFormatTypes.map(item => (
                             <div className="contextualHelp-RowDirection" key={item.id}>
                                 <Radio key={item.id} value={item.id}>{item.description}</Radio>
-                                <div style={{ marginLeft: -25, marginTop: 0 }}>
+                                <div style={{ marginLeft: -20, marginTop: 5 }}>
                                     <CustomToolTip background="#ff8237">
                                         <span>{item.helpMsg}</span>
                                     </CustomToolTip>
@@ -1143,7 +1145,7 @@ class CompetitionOpenRegForm extends Component {
                             <Form.Item name="startDate" rules={[{ required: true, message: ValidationConstants.startDateIsRequired }]}>
                                 <DatePicker
                                     size="default"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={date => this.dateOnChangeFrom(date, "startDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -1160,7 +1162,7 @@ class CompetitionOpenRegForm extends Component {
                             >
                                 <DatePicker
                                     size="default"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={date => this.dateOnChangeFrom(date, "endDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -1177,7 +1179,7 @@ class CompetitionOpenRegForm extends Component {
                         <InputWithHead heading={AppConstants.numberOfRounds} required="required-field pb-1" />
                         <Form.Item name="numberOfRounds" rules={[{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }]}>
                             <Select
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.selectRound}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
                                 value={detailsData.competitionDetailData.noOfRounds}
@@ -1294,7 +1296,7 @@ class CompetitionOpenRegForm extends Component {
         let divisionData = this.props.competitionFeesState.competitionDivisionsData
         let divisionArray = divisionData !== null ? divisionData : []
         let divisionsDisable = this.state.permissionState.divisionsDisable
-        // let disiabledStatus = this.state.competitionStatus == 1
+        // let disabledStatus = this.state.competitionStatus == 1
         return (
             <div className="fees-view pt-5">
                 <div className="contextualHelp-RowDirection">
@@ -1320,7 +1322,7 @@ class CompetitionOpenRegForm extends Component {
                                         <Table
                                             className="fees-table"
                                             columns={divisionTableColumns}
-                                            dataSource={item.divisions}
+                                            dataSource={[...item.divisions]}
                                             pagination={false}
                                             rowKey="competitionDivisionId"
                                         />
@@ -1340,10 +1342,10 @@ class CompetitionOpenRegForm extends Component {
                                     </a>
                                 </div>
                             ) : (
-                                    <span className="applicable-to-heading pt-0 pl-2">
-                                        {AppConstants.nonPlayerDivisionMessage}
-                                    </span>
-                                )}
+                                <span className="applicable-to-heading pt-0 pl-2">
+                                    {AppConstants.nonPlayerDivisionMessage}
+                                </span>
+                            )}
                         </div>
                     </div>
                 ))}
@@ -1405,7 +1407,7 @@ class CompetitionOpenRegForm extends Component {
                             {this.state.competitionStatus == 1 && tabKey == "2" ? (
                                 <div className="comp-buttons-view">
                                     <Tooltip
-                                        style={{ height: "100%" }}
+                                        style={{ height: '100%' }}
                                         onMouseEnter={() => this.setState({ tooltipVisiblePublish: true })}
                                         onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                         visible={this.state.tooltipVisiblePublish}
@@ -1441,7 +1443,7 @@ class CompetitionOpenRegForm extends Component {
                             ) : (
                                 <div className="comp-buttons-view">
                                     <Tooltip
-                                        style={{ height: "100%" }}
+                                        style={{ height: '100%' }}
                                         onMouseEnter={() => this.setState({ tooltipVisiblePublish: allDisable })}
                                         onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                         visible={this.state.tooltipVisiblePublish}

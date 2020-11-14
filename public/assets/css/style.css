@@ -787,6 +787,15 @@
   position: absolute;
   top: 0;
 }
+.borderDuplicate {
+  min-width: 64px;
+  height: 40px;
+  float: left;
+  border-radius: 6px;
+  z-index: 1;
+  position: absolute;
+  top: 0;
+}
 
 .top-50 {
   top: 50px;
@@ -1032,7 +1041,26 @@
   justify-content: center !important;
 }
 
+.main-canvas.Draws .boxDuplicate {
+  border: 3px solid #EA0628;
+  min-width: 96px;
+  height: 47px;
+ }
+.main-canvas.Draws .boxPink {
+  border: 3px solid #FF00EE;
+  min-width: 96px;
+  height: 47px;
+ 
+}
+
+
 .main-canvas.Draws .border {
+  min-width: 100px;
+  min-height: 48px;
+  line-height: 48px;
+}
+
+.main-canvas.Draws .borderDuplicate {
   min-width: 100px;
   min-height: 48px;
   line-height: 48px;

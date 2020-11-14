@@ -101,21 +101,19 @@ class DeRegistration extends Component {
     }
 
     ///////view for breadcrumb
-    headerView = () => {
-        return (
-            <Header className="comp-venue-courts-header-view">
-                <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">
-                                {AppConstants.registrationChange}
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
+    headerView = () => (
+        <Header className="comp-venue-courts-header-view">
+            <div className="row">
+                <div className="col-sm" style={{ display: 'flex', alignContent: 'center' }}>
+                    <Breadcrumb separator=" > ">
+                        <Breadcrumb.Item className="breadcrumb-add">
+                            {AppConstants.registrationChange}
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
                 </div>
-            </Header>
-        )
-    }
+            </div>
+        </Header>
+    );
 
     ///checkDeRegistrationOption
     checkDeRegistrationOption = (subItem, selectedOption) => {
@@ -130,14 +128,14 @@ class DeRegistration extends Component {
                         onChange={(e) => this.updateDeregistrationData(e.target.value, "deRegisterOther", 'deRegister')}
                     />
                 </div>
-            )
+            );
         }
     }
 
     ////checkMainRegistrationOption
     checkMainRegistrationOption = (subItem, selectedOption) => {
         const { saveData, deRegistionOption } = this.props.deRegistrationState
-  
+
         if ((subItem.id == 1 && selectedOption == 1) || (subItem.id == 2 && selectedOption == 2)) {
             return (
                 <div className="ml-5 pt-3">
@@ -232,7 +230,7 @@ class DeRegistration extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            style={{ width: "100%", paddingRight: 1 }}
+                            style={{ width: '100%', paddingRight: 1 }}
                             required="required-field pt-0 pb-0"
                             className="input-inside-table-venue-court team-mem_prod_type"
                             onChange={(e) => this.updateDeregistrationData(e, "organisationId", "transfer")}
@@ -255,7 +253,7 @@ class DeRegistration extends Component {
                         <Select
                             showSearch
                             optionFilterProp="children"
-                            style={{ width: "100%", paddingRight: 1 }}
+                            style={{ width: '100%', paddingRight: 1 }}
                             required="required-field pt-0 pb-0"
                             className="input-inside-table-venue-court team-mem_prod_type"
                             onChange={(e) => this.updateDeregistrationData(e, "competitionId", "transfer")}
@@ -304,7 +302,8 @@ class DeRegistration extends Component {
                 <InputWithHead
                     disabled
                     heading={AppConstants.username}
-                    style={{ width: "100%", paddingRight: 1 }}
+                    required="pb-1"
+                    style={{ width: '100%', paddingRight: 1 }}
                     className="input-inside-table-venue-court team-mem_prod_type"
                     value={personal ? (personal.firstName + ' ' + personal.lastName) : ""}
                     placeholder="User Name"
@@ -312,61 +311,68 @@ class DeRegistration extends Component {
 
                 <InputWithHead
                     disabled
-                    style={{ width: "100%", paddingRight: 1 }}
+                    style={{ width: '100%', paddingRight: 1 }}
                     heading={AppConstants.organisationName}
+                    required="pb-1"
                     className="input-inside-table-venue-court team-mem_prod_type"
-                    value={regData ? regData.affiliate : ""}
+                    value={regData ? regData.affiliate : ''}
                     placeholder="Organisation Name"
                 />
 
                 <InputWithHead
                     disabled
                     heading={AppConstants.competition_name}
-                    style={{ width: "100%", paddingRight: 1 }}
+                    required="pb-1"
+                    style={{ width: '100%', paddingRight: 1 }}
                     className="input-inside-table-venue-court team-mem_prod_type"
-                    value={regData ? regData.competitionName : ""}
+                    value={regData ? regData.competitionName : ''}
                     placeholder="Competition Name"
                 />
 
                 <InputWithHead
                     disabled
                     heading={AppConstants.membershipProduct}
-                    style={{ width: "100%", paddingRight: 1, marginBottom: 15 }}
+                    required="pb-1"
+                    style={{ width: '100%', paddingRight: 1 }}
                     className="input-inside-table-venue-court team-mem_prod_type"
-                    value={(regData ? regData.membershipProduct : "") + " - " + (regData ? regData.membershipType : "")}
+                    value={(regData ? regData.membershipProduct : '') + ' - ' + (regData ? regData.membershipType : '')}
                     placeholder={AppConstants.membershipProduct}
                 />
 
                 <InputWithHead
                     disabled
                     heading={AppConstants.division}
-                    style={{ width: "100%", paddingRight: 1, marginBottom: 15 }}
+                    required="pb-1"
+                    style={{ width: '100%', paddingRight: 1 }}
                     className="input-inside-table-venue-court team-mem_prod_type"
-                    value={regData ? regData.divisionName : ""}
+                    value={regData ? regData.divisionName : ''}
                     placeholder={AppConstants.division}
                 />
 
                 <InputWithHead
                     disabled
                     heading={AppConstants.teamName}
-                    style={{ width: "100%", paddingRight: 1, marginTop: 15 }}
+                    required="pb-1"
+                    style={{ width: '100%', paddingRight: 1 }}
                     className="input-inside-table-venue-court team-mem_prod_type"
-                    value={regData ? regData.teamName : ""}
+                    value={regData ? regData.teamName : ''}
                     placeholder={AppConstants.teamName}
                 />
 
                 <InputWithHead
                     disabled
                     heading={AppConstants.mobileNumber}
+                    required="pb-1"
                     placeholder={AppConstants.mobileNumber}
-                    value={personal ? (personal.mobileNumber) : ""}
+                    value={personal ? (personal.mobileNumber) : ''}
                 />
 
                 <InputWithHead
                     disabled
                     heading={AppConstants.emailAdd}
+                    required="pb-1"
                     placeholder={AppConstants.emailAdd}
-                    value={personal ? (personal.email) : ""}
+                    value={personal ? (personal.email) : ''}
                 />
 
                 <InputWithHead heading={AppConstants.whatRegistrationChange} />
@@ -384,11 +390,11 @@ class DeRegistration extends Component {
                         value={saveData.regChangeTypeRefId}
                     >
                         {(registrationSelection || []).map((item) => (
-                            <div key={'regChangeType_' + item.id}>
+                            <div key={`regChangeType_${item.id}`}>
                                 <div className="contextualHelp-RowDirection">
                                     <Radio value={item.id}>{item.value}</Radio>
-                                    <div style={{ marginLeft: -20 }}>
-                                        <Tooltip placement='bottom' background="#ff8237">
+                                    <div style={{ marginLeft: -20, marginTop: 5 }}>
+                                        <Tooltip placement="bottom" background="#ff8237">
                                             <span>{item.helpMsg}</span>
                                         </Tooltip>
                                     </div>

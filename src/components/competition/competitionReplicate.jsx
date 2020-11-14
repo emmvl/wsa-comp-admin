@@ -199,7 +199,7 @@ class CompetitionReplicate extends Component {
                                 <div className="col-sm">
                                     <Form.Item name="oldYearRefId" rules={[{ required: true, message: ValidationConstants.yearIsRequired }]}>
                                         <Select
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 160 }}
+                                            style={{ width: '100%', paddingRight: 1, minWidth: 160 }}
                                             onChange={(year) => this.onChangeReplicateValue(year, "details", "oldYearRefId")}
                                             value={replicateSave.details.oldYearRefId}
                                         >
@@ -225,7 +225,7 @@ class CompetitionReplicate extends Component {
                                         rules={[{ required: true, message: ValidationConstants.competitionNameIsRequired }]}
                                     >
                                         <Select
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                             onChange={(compName) => this.onChangeReplicateValue(compName, "details", "oldCompetitionId")}
                                             value={replicateSave.details.oldCompetitionId}
                                         >
@@ -262,7 +262,7 @@ class CompetitionReplicate extends Component {
                                     }]}
                                 >
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                         onChange={(year) => this.onChangeReplicateValue(year, "details", "newYearRefId")}
                                         value={replicateSave.details.newYearRefId}
                                     >
@@ -324,7 +324,7 @@ class CompetitionReplicate extends Component {
                                         }]}
                                     >
                                         <Select
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                             onChange={(membershipProductUniqueKey) => this.onChangeReplicateValue(membershipProductUniqueKey, "membershipProducts", null, oldProductIndex)}
                                             value={replicateSave.details.newYearRefId}
                                         >
@@ -362,7 +362,7 @@ class CompetitionReplicate extends Component {
                                         size="large"
                                         onChange={this.onChangeDates}
                                         format="DD-MM-YYYY"
-                                        style={{ width: "100%", minWidth: 180 }}
+                                        style={{ width: '100%', minWidth: 180 }}
                                     />
                                 </Form.Item>
                             </div>
@@ -387,7 +387,7 @@ class CompetitionReplicate extends Component {
                                     <DatePicker
                                         size="large"
                                         placeholder="dd-mm-yyyy"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         onChange={e => this.onChangeReplicateValue(e, "details", "registrationCloseDate")}
                                         format="DD-MM-YYYY"
                                         showTime={false}

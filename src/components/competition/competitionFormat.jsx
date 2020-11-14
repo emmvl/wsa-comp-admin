@@ -533,7 +533,7 @@ class CompetitionFormat extends Component {
                             className="comp-dashboard-botton-view-mobile"
                             size="large"
                             placeholder="dd-mm-yyyy"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             onChange={date => this.updateNonPlayingNames(date, index, "date")}
                             format="DD-MM-YYYY"
                             showTime={false}
@@ -721,7 +721,7 @@ class CompetitionFormat extends Component {
                 </Checkbox> */}
                 {/* <InputWithHead heading={AppConstants.fixture_template} />
                 <Select
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                     onChange={(fixTemplate) => this.onChangeSetValue(fixTemplate, 'fixtureTemplateId')}
                     value={data.fixtureTemplateId}
                 >
@@ -739,7 +739,7 @@ class CompetitionFormat extends Component {
                     <Select
                         disabled={disabledStatus}
                         id={AppUniqueId.matchType_Selection_dpdn}
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         onChange={(matchType) => this.onChangeSetValue(matchType, 'matchTypeRefId')}
                         value={data.matchTypeRefId}
                     >
@@ -760,7 +760,7 @@ class CompetitionFormat extends Component {
                         <InputWithHead heading={AppConstants.numberOfRounds} />
                         <Select
                             disabled={disabledStatus}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={(x) => this.onChangeSetValue(x, 'noOfRounds')}
                             value={data.noOfRounds}
                         >
@@ -774,7 +774,7 @@ class CompetitionFormat extends Component {
                         <InputWithHead heading={AppConstants.enhancedRoundRobinType} />
                         <Select
                             disabled={disabledStatus}
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={(x) => this.onChangeSetValue(x, 'enhancedRoundRobinTypeRefId')}
                             value={data.enhancedRoundRobinTypeRefId}
                         >
@@ -893,7 +893,7 @@ class CompetitionFormat extends Component {
                                             <Select
                                                 disabled={disabledStatus}
                                                 mode="multiple"
-                                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                                 onChange={(e) => this.onChange(e, data.competionFormatDivisions, index)}
                                                 value={item.selectedDivisions}
                                             >
@@ -1125,59 +1125,59 @@ class CompetitionFormat extends Component {
                                     </Button>
                                 </div>
                             ) : (
-                                    <div className="comp-buttons-view">
-                                        <Tooltip
-                                            style={{ height: '100%' }}
-                                            onMouseEnter={() =>
-                                                this.setState({
-                                                    tooltipVisibleSave: isPublished,
-                                                })
-                                            }
-                                            onMouseLeave={() =>
-                                                this.setState({ tooltipVisibleSave: false })
-                                            }
-                                            visible={this.state.tooltipVisibleSave}
-                                            title={AppConstants.statusPublishHover}
+                                <div className="comp-buttons-view">
+                                    <Tooltip
+                                        style={{ height: '100%' }}
+                                        onMouseEnter={() =>
+                                            this.setState({
+                                                tooltipVisibleSave: isPublished,
+                                            })
+                                        }
+                                        onMouseLeave={() =>
+                                            this.setState({ tooltipVisibleSave: false })
+                                        }
+                                        visible={this.state.tooltipVisibleSave}
+                                        title={AppConstants.statusPublishHover}
+                                    >
+                                        <Button
+                                            id={AppUniqueId.compformat_save_btn}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
+                                            className="publish-button save-draft-text"
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={() => this.setState({ buttonClicked: "save" })}
+                                            disabled={isPublished}
                                         >
-                                            <Button
-                                                id={AppUniqueId.compformat_save_btn}
-                                                style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
-                                                className="publish-button save-draft-text"
-                                                type="primary"
-                                                htmlType="submit"
-                                                onClick={() => this.setState({ buttonClicked: "save" })}
-                                                disabled={isPublished}
-                                            >
-                                                {AppConstants.save}
-                                            </Button>
-                                        </Tooltip>
-                                        <Tooltip
-                                            style={{ height: '100%' }}
-                                            onMouseEnter={() =>
-                                                this.setState({
-                                                    tooltipVisibleDelete: isPublished,
-                                                })
-                                            }
-                                            onMouseLeave={() =>
-                                                this.setState({ tooltipVisibleDelete: false })
-                                            }
-                                            visible={this.state.tooltipVisibleDelete}
-                                            title={AppConstants.statusPublishHover}
+                                            {AppConstants.save}
+                                        </Button>
+                                    </Tooltip>
+                                    <Tooltip
+                                        style={{ height: '100%' }}
+                                        onMouseEnter={() =>
+                                            this.setState({
+                                                tooltipVisibleDelete: isPublished,
+                                            })
+                                        }
+                                        onMouseLeave={() =>
+                                            this.setState({ tooltipVisibleDelete: false })
+                                        }
+                                        visible={this.state.tooltipVisibleDelete}
+                                        title={AppConstants.statusPublishHover}
+                                    >
+                                        <Button
+                                            id={AppUniqueId.create_Draft_Draw_Btn}
+                                            style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
+                                            className="open-reg-button"
+                                            type="primary"
+                                            htmlType="submit"
+                                            onClick={() => this.setState({ buttonClicked: "createDraw" })}
+                                            disabled={isPublished}
                                         >
-                                            <Button
-                                                id={AppUniqueId.create_Draft_Draw_Btn}
-                                                style={{ height: isPublished && "100%", width: isPublished && "inherit", borderRadius: isPublished && 6 }}
-                                                className="open-reg-button"
-                                                type="primary"
-                                                htmlType="submit"
-                                                onClick={() => this.setState({ buttonClicked: "createDraw" })}
-                                                disabled={isPublished}
-                                            >
-                                                {AppConstants.createDraftDraw}
-                                            </Button>
-                                        </Tooltip>
-                                    </div>
-                                )}
+                                            {AppConstants.createDraftDraw}
+                                        </Button>
+                                    </Tooltip>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -107,7 +107,7 @@ class LiveScorePlayerProfile extends Component {
     ////view for profile image
     profileImageView = () => {
         return (
-            <div className="fluid-width mt-2" >
+            <div className="fluid-width mt-2">
                 {/* <img className="live-score-user-image" src={AppImages.playerDp} alt="" height="80" width="80" />
                 <span className="live-score-profile-user-name">{AppConstants.josefineMartinez}</span> */}
                 <div className='profile-image-view mr-5' >
@@ -183,7 +183,7 @@ class LiveScorePlayerProfile extends Component {
                                 <span className="heading-text">{AppConstants.statistics}</span>
                             </div>
                             <div className="col-sm">
-                                <span className="heading-text" >{AppConstants.personalDetails}</span>
+                                <span className="heading-text">{AppConstants.personalDetails}</span>
                             </div>
                             <div className="col-sm">
                                 <span className="heading-text">{AppConstants.medical}</span>
@@ -195,12 +195,12 @@ class LiveScorePlayerProfile extends Component {
                     </div>
                 </div>
                 <div style={{ backgroundColor: "#ffffff", marginTop: "5%" }}>
-                    <div className="inside-table-view" >
+                    <div className="inside-table-view">
                         <div className="fluid-width">
                             <div className="row">
-                                <div className="col-sm-2" >
+                                <div className="col-sm-2">
                                     <div style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -255,7 +255,7 @@ class LiveScorePlayerProfile extends Component {
                             <Button type="cancel-button">{AppConstants.cancel}</Button>
                         </div>
                     </div>
-                    <div className="col-sm-9" >
+                    <div className="col-sm-9">
                         <div className="comp-buttons-view">
                             <Button className="live-score-edit" type="primary">{AppConstants.edit}</Button>
                             <Button className="open-reg-button" type="primary">{AppConstants.save}</Button>
@@ -278,7 +278,7 @@ class LiveScorePlayerProfile extends Component {
                     <Content className="live-score-player-profile-content">
                         <div className="fluid-width">
                             <div className="row">
-                                <div className="col-sm-3" >
+                                <div className="col-sm-3">
                                     {this.profileImageView()}
                                 </div>
                                 <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }}>

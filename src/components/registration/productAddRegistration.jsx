@@ -94,7 +94,7 @@ const columns = [
         render: frequency => (
             <Select
                 className="select-inside-table-fees"
-                style={{ width: "100%", paddingRight: 1 }}
+                style={{ width: '100%', paddingRight: 1 }}
                 onChange={frequency => this_Obj.setState({ frequency })}
                 // value={this_Obj.state.frequency}
                 defaultValue={frequency}
@@ -114,7 +114,7 @@ const columns = [
         dataIndex: "clear",
         key: "clear",
         render: clear => (
-            <span style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+            <span style={{ display: "flex", justifyContent: "center", width: '100%' }}>
                 <img
                     className="dot-image"
                     src={AppImages.redCross}
@@ -213,7 +213,7 @@ class ProductAddRegistration extends Component {
 
                 <InputWithHead heading={AppConstants.registration_type} />
                 <Select
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                     onChange={registrationType => this.setState({ registrationType })}
                     value={this.state.registrationType}
                 >
@@ -224,7 +224,7 @@ class ProductAddRegistration extends Component {
 
                 <InputWithHead heading={AppConstants.category} />
                 <Select
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                     onChange={category => this.setState({ category })}
                     value={this.state.category}
                 >
@@ -256,7 +256,7 @@ class ProductAddRegistration extends Component {
 
                 <InputWithHead heading={AppConstants.paymentFrequency} />
                 <Select
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                     onChange={paymentFrequency => this.setState({ paymentFrequency })}
                     value={this.state.paymentFrequency}
                 >
@@ -274,7 +274,7 @@ class ProductAddRegistration extends Component {
                             <InputWithHead heading={AppConstants.dob__From} />
                             <DatePicker
                                 size="large"
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 onChange={date => this.dateOnChangeFrom(date)}
                                 format="DD-MM-YYYY"
                                 placeholder="dd-mm-yyyy"
@@ -289,7 +289,7 @@ class ProductAddRegistration extends Component {
                             <InputWithHead heading={AppConstants.dob__To} />
                             <DatePicker
                                 size="large"
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 disabledDate={this.disabledDate}
                                 disabledTime={this.disabledTime}
                                 onChange={date => this.dateOnChangeTo(date)}
@@ -353,7 +353,7 @@ class ProductAddRegistration extends Component {
 
                 <InputWithHead heading={AppConstants.applyTo} />
                 <Select
-                    style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                    style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                     onChange={applyTo => this.setState({ applyTo })}
                     value={this.state.applyTo}
                 >
@@ -395,7 +395,7 @@ class ProductAddRegistration extends Component {
                                 <InputWithHead heading={AppConstants.availableFrom} />
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -406,7 +406,7 @@ class ProductAddRegistration extends Component {
                                 <InputWithHead heading={AppConstants.availableTo} />
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}
                                     onChange={date => this.dateOnChangeTo(date)}
@@ -447,7 +447,7 @@ class ProductAddRegistration extends Component {
                                 <InputWithHead heading={AppConstants.availableFrom} />
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={date => this.dateOnChangeFrom(date)}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -458,7 +458,7 @@ class ProductAddRegistration extends Component {
                                 <InputWithHead heading={AppConstants.availableTo} />
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     placeholder="dd-mm-yyyy"
                                     disabledDate={this.disabledDate}
                                     disabledTime={this.disabledTime}

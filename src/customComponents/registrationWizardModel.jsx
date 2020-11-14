@@ -68,7 +68,7 @@ class RegistrationWizardModel extends React.Component {
                         </div>
 
                         {!stripeConnected &&
-                            <div className="row" style={{ width: "100%" }}>
+                            <div className="row" style={{ width: '100%' }}>
 
                                 <div className="col-sm-1 serialView pb-2">
                                     <span className="comment-heading">
@@ -88,7 +88,7 @@ class RegistrationWizardModel extends React.Component {
 
                             </div>
                         }
-                        <div className="row" style={{ width: "100%" }}>
+                        <div className="row" style={{ width: '100%' }}>
                             <div className="col-sm-1 serialView pb-2 ">
                                 <span className="comment-heading">
                                     {!stripeConnected ? "2" : "1"}{" "}
@@ -113,7 +113,7 @@ class RegistrationWizardModel extends React.Component {
                                 }
                             </div>
                         </div>
-                        <div className="row" style={{ width: "100%" }}>
+                        <div className="row" style={{ width: '100%' }}>
                             <div className="col-sm-1 serialView pb-2">
                                 <span className="comment-heading">
                                     {!stripeConnected ? "3" : "2"} {" "}

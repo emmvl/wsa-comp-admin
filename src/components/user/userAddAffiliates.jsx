@@ -331,7 +331,7 @@ class UserAddAffiliates extends Component {
           marginTop={5}
         />
         <Select
-          style={{ width: "100%", paddingRight: 1 }}
+          style={{ width: '100%', paddingRight: 1 }}
           onChange={(e) =>
             this.onChangeSetValue(e, AppConstants.organisationTypeRefId)
           }
@@ -382,7 +382,7 @@ class UserAddAffiliates extends Component {
               }]}
             >
               <Select
-                style={{ width: "100%", paddingRight: 1 }}
+                style={{ width: '100%', paddingRight: 1 }}
                 onChange={(e) =>
                   this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)
                 }
@@ -579,7 +579,7 @@ class UserAddAffiliates extends Component {
               }]}
             >
               <Select
-                style={{ width: "100%", paddingRight: 1 }}
+                style={{ width: '100%', paddingRight: 1 }}
                 onChange={(e) =>
                   this.onChangeContactSetValue(e, "roles", index)
                 }

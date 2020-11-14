@@ -171,7 +171,7 @@ const ValidationConstants = {
     SelectNumberTeam: 'Please add number of Teams',
     email_validation: 'Please enter valid email address!',
     matchDeleteMsg: 'This match cannot be deleted as it has already ended.',
-    userNotFound: 'Please select an existing user for this competition.',
+    userNotFound: 'No matching user was found.',
 
     incidentName: 'Incident name is required.',
     divisionAndTimeslot: 'Please select Division and Timeslot',
@@ -236,6 +236,7 @@ const ValidationConstants = {
 
     // Affiliate Add/Edit
     affiliateAddressRequiredError: 'Please input affiliate address in details',
+    affiliateAddressDetailError: 'Please select a affiliate address which has a street address',
 };
 
 export default ValidationConstants;

@@ -35,7 +35,8 @@ const initialState = {
     umpireListResult_Data: [],
     currentPage_Data: null,
     totalCount_Data: null,
-    umpireListActionObject: null
+    umpireListActionObject: null,
+    umpireListData: []
 };
 
 function isUmpireCoachCheck(data, key) {
@@ -83,7 +84,6 @@ function createUmpireCoachArray(result) {
 
 
 function createCoachArray(result) {
-    console.log(result)
     let coachArray = []
     for (let i in result) {
         let userRole = result[i].userRoleEntities
@@ -263,12 +263,13 @@ function umpireState(state = initialState, action) {
                 ...state,
                 onLoadSearch: false,
                 umpireListResult: action.result,
+                umpireListData: action.result,
                 status: action.status,
             }
         case ApiConstants.CLEAR_UMPIRE_SEARCH:
+            state.umpireListResult = []
             return {
                 ...state,
-                umpireListResult: state.umpireListResult
             }
         //// Fail and Error case
         case ApiConstants.API_UMPIRE_FAIL:

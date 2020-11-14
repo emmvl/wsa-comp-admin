@@ -170,7 +170,7 @@ class RegistrationFormList extends Component {
                     page = Math.floor(offset / 10) + 1;
                     console.log("********************$$$$" + this.state.allyearload)
                     this.handleMembershipTableList(page, yearRefId)
-                   
+
                 } else {
                     console.log("********************%%%%%")
                     this.handleMembershipTableList(1, mainYearRefId)
@@ -227,21 +227,18 @@ class RegistrationFormList extends Component {
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.registrationForm}</Breadcrumb.Item>
                         </Breadcrumb>
-                        <div style={{ marginTop: 8 }}>
-                            <Tooltip background="#ff8237">
-                                <span>{AppConstants.regFormDashBoardMsg}</span>
-                            </Tooltip>
-                        </div>
+                        <Tooltip background="#ff8237">
+                            <span>{AppConstants.regFormDashBoardMsg}</span>
+                        </Tooltip>
                     </div>
                 </div>
-
             </div>
-
-        )
+        );
     }
+
     onYearChange = (yearRefId) => {
-        this.setState({ yearRefId, })
-        this.handleMembershipTableList(1, yearRefId)
+        this.setState({ yearRefId });
+        this.handleMembershipTableList(1, yearRefId);
     }
 
     ///dropdown view containing all the dropdown of header

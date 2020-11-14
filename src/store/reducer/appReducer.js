@@ -2,7 +2,7 @@ import ApiConstants from "../../themes/apiConstants";
 import { getRegistrationSetting } from "../objectModel/getRegSettingObject";
 // import { getUserId, getOrganisationData } from "../../util/sessionStorage";
 import AppConstants from "../../themes/appConstants";
-import {reverseArray} from 'util/permissions'
+import { reverseArray } from 'util/permissions'
 
 const initialState = {
   onLoad: false,
@@ -47,6 +47,8 @@ const initialState = {
   membershipProductFeeMsg: [AppConstants.firstComRegOnlyMsg, AppConstants.allCompRegMsg],
   allYearList: [],
   allCompetitionTypeList: [],
+  badgeData: [],
+  filterBadgeArr: []
 };
 
 function arraymove(arr, fromIndex, toIndex) {
@@ -119,6 +121,25 @@ function getMembershipProductFeesTypesWithHelpMsg(data, helpMsg) {
   return data;
 }
 
+function getFilterBadgeData(badgeData) {
+
+  let arr = []
+  for (let i in badgeData) {
+    let obj = {
+      description: badgeData[i].description,
+      id: badgeData[i].id,
+      name: badgeData[i].name,
+      sortOrder: badgeData[i].sortOrder,
+      subReferences: badgeData[i].subReferences,
+      umpireRate: 0,
+      umpReserveRate: 0,
+      umpCoachRate: 0
+    }
+    arr.push(obj)
+  }
+  return arr;
+}
+
 function appState(state = initialState, action) {
   switch (action.type) {
 
@@ -144,7 +165,7 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_YEAR_LIST_SUCCESS:
-      let yearListSorted = action.yearList ? reverseArray(action.yearList):[]
+      let yearListSorted = action.yearList ? reverseArray(action.yearList) : []
       return {
         ...state,
         onLoad: false,
@@ -159,7 +180,7 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_ONLY_YEAR_LIST_SUCCESS:
-      let yearSorted = action.result ? reverseArray(action.result):[]
+      let yearSorted = action.result ? reverseArray(action.result) : []
       return {
         ...state,
         onLoad: false,
@@ -356,8 +377,8 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_COMPETITION_SUCCESS:
-      let yearResult = action.yearList ? reverseArray(action.yearList):[]
-     // console.log("yearResult" + JSON.stringify(yearResult));
+      let yearResult = action.yearList ? reverseArray(action.yearList) : []
+      // console.log("yearResult" + JSON.stringify(yearResult));
       let competitionResult = JSON.parse(JSON.stringify(action.competetionListResult))
       let yearobject = {
         description: "All",
@@ -374,10 +395,10 @@ function appState(state = initialState, action) {
       competitionResult.unshift(competitionobject)
 
       let arr = [];
-      if(!yearResult.find(x=>x.id == -1)){
+      if (!yearResult.find(x => x.id == -1)) {
         arr.push(yearobject);
       }
-     
+
       arr.push(...yearResult);
 
       yearResult = arr;
@@ -418,7 +439,7 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_Participate_COMPETITION_SUCCESS:
-      let participate_yearListSorted = action.yearList?reverseArray(action.yearList):[]
+      let participate_yearListSorted = action.yearList ? reverseArray(action.yearList) : []
       return {
         ...state,
         onLoad: false,
@@ -432,14 +453,14 @@ function appState(state = initialState, action) {
       return { ...state, onLoad: true };
 
     case ApiConstants.API_GET_YEAR_OWN_COMPETITION_SUCCESS:
-      let own_yearListSorted = action.yearList?reverseArray(action.yearList):[]
+      let own_yearListSorted = action.yearList ? reverseArray(action.yearList) : []
       console.log(own_yearListSorted)
       return {
         ...state,
         onLoad: false,
         own_CompetitionArr: action.competetionListResult.published,
         all_own_CompetitionArr: action.competetionListResult.all,
-        own_YearArr:own_yearListSorted,
+        own_YearArr: own_yearListSorted,
         status: action.status,
       };
 
@@ -579,6 +600,20 @@ function appState(state = initialState, action) {
         ...state
 
       }
+
+    ////Ref Badge 
+    case ApiConstants.API_GET_REF_BADGE_LOAD:
+      return { ...state, onLoad: true };
+
+    case ApiConstants.API_GET_REF_BADGE_SUCCESS:
+      let filterBadgeData = getFilterBadgeData(action.result)
+      state.filterBadgeArr = filterBadgeData
+      return {
+        ...state,
+        onLoad: false,
+        badgeData: action.result,
+        status: action.status,
+      };
 
     default:
       return state;

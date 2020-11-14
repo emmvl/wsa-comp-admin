@@ -106,9 +106,15 @@ class CompetitionPartTeamGradeCalculate extends Component {
             let competitionList = this.props.appState.own_CompetitionArr
             if (nextProps.appState.own_CompetitionArr !== competitionList) {
                 if (competitionList.length > 0) {
-                    let competitionId = competitionList[0].competitionId
-                    let statusRefId = competitionList[0].statusRefId
+                    let storedCompetitionId = getOwn_competition();
+                    let competitionId = (storedCompetitionId != undefined && storedCompetitionId !== "undefined") ? storedCompetitionId : competitionList[0].competitionId;
+                    let statusRefId = competitionList[0].statusRefId;
                     let finalTypeRefId = competitionList[0].finalTypeRefId
+                    if (storedCompetitionId != undefined && storedCompetitionId !== "undefined") {
+                        let compIndex = competitionList.findIndex(x => x.competitionId == competitionId)
+                        statusRefId = competitionList[compIndex].statusRefId;
+                        finalTypeRefId = competitionList[compIndex].finalTypeRefId
+                    }
                     setOwn_competition(competitionId)
                     setOwn_competitionStatus(statusRefId)
                     setOwn_CompetitionFinalRefId(finalTypeRefId)
@@ -271,11 +277,9 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 {AppConstants.teamGradingSummary}
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <div style={{ marginTop: 10 }}>
-                            <CustomTooltip placement="top" background="#ff8237">
-                                <span>{AppConstants.teamGradingSummaryMsg}</span>
-                            </CustomTooltip>
-                        </div>
+                        <CustomTooltip placement="top" background="#ff8237">
+                            <span>{AppConstants.teamGradingSummaryMsg}</span>
+                        </CustomTooltip>
                     </div>
                     <div
                         className="col-sm"

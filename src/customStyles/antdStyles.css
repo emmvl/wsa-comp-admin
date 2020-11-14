@@ -305,15 +305,15 @@ textarea.ant-input {
 
 .ant-input-number {
   display: flex;
-  padding-top: 11px;
-  padding-bottom: 11px;
+  /*padding-top: 11px;*/
+  /*padding-bottom: 11px;*/
   width: 100%;
-  height: 56px;
+  height: 40px;
 }
 .quick_comp_ant_number.ant-input-number {
   display: flex;
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 0;
+  padding-bottom: 0;
   width: 100%;
   height: 39.93px;
 }

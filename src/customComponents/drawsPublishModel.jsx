@@ -51,7 +51,7 @@ class DrawsPublishModel extends React.Component {
                     <div className="col-sm-3 division">
                       <Select
                         mode="multiple"
-                        style={{ width: "100%", minWidth: 370, marginLeft: 25 }}
+                        style={{ width: '100%', minWidth: 370, marginLeft: 25 }}
                         onChange={modalDivisions}
                         filterOption={false}
                       >
@@ -71,7 +71,7 @@ class DrawsPublishModel extends React.Component {
                     <div className="col-sm-3 division">
                       <Select
                         mode="multiple"
-                        style={{ width: "100%", minWidth: 370, marginLeft: 25 }}
+                        style={{ width: '100%', minWidth: 370, marginLeft: 25 }}
                         onChange={modalRounds}
                         filterOption={false}
                         //onSearch={(value) => { this.handleSearch(value, appState.mainVenueList) }}

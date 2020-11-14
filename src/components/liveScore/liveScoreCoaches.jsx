@@ -230,7 +230,7 @@ class LiveScoreCoaches extends Component {
                     <div
                         className="comp-dashboard-botton-view-mobile"
                         style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
@@ -268,7 +268,7 @@ class LiveScoreCoaches extends Component {
                             flexDirection: 'row',
                             alignItems: "center",
                             justifyContent: "flex-end",
-                            width: "100%"
+                            width: '100%'
                         }}
                     >
                         <div className="row">
@@ -276,7 +276,7 @@ class LiveScoreCoaches extends Component {
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -294,7 +294,7 @@ class LiveScoreCoaches extends Component {
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -319,7 +319,7 @@ class LiveScoreCoaches extends Component {
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",

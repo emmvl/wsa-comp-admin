@@ -1,3 +1,4 @@
+import { ConsoleSqlOutlined } from '@ant-design/icons';
 import React, { Component } from 'react';
 import "./swappable.css"
 class Swappable extends Component {
@@ -22,6 +23,7 @@ class Swappable extends Component {
   }
 
   dragEnd(ev, customFunc = null) {
+
     if (customFunc && ev.target.parentNode != this.state.initialParentNode) {
       this.props.customFunc();
     }
@@ -42,24 +44,21 @@ class Swappable extends Component {
     let target = document.getElementById(dragableId);
     let targetParent = target.parentNode;
 
-    swappable
-      ? this.swapElements(src, target, srcParent, targetParent)
-      : this.transferElement(src, dropzoneId);
+    if (swappable)
+      this.swapElements(src, target, srcParent, targetParent);
   }
 
   swapElements(src, target, srcParent, targetParent) {
     let sourceIndexArray = src.id.split(':');
     let targetIndexArray = target.id.split(':');
-    if (sourceIndexArray[2] === targetIndexArray[2]) {
+
+    const isCurrentSwappable = this.props.isCurrentSwappable(target.id, src.id);
+
+    if (sourceIndexArray[2] === targetIndexArray[2] && isCurrentSwappable) {
       target.replaceWith(src);
       srcParent.appendChild(target);
       this.props.onSwap(src.id, target.id);
     }
-  }
-
-  transferElement(src, dropzoneId) {
-    let dropzone = document.getElementById(dropzoneId);
-    dropzone.appendChild(src);
   }
 
   render() {
@@ -90,14 +89,16 @@ class Swappable extends Component {
           this.drop(event, dragableId, dropzoneId, customFunc, swappable)
         }
         onDragOver={event => this.allowDrop(event)}
-        className={`dropzoneId ${this.props.duplicateDropzoneId}`}
+        className="dropzoneId"
+        style={{ width: '100%' }}
       >
         <div
           id={dragableId}
           draggable={swappable}
           onDragStart={event => this.drag(event)}
           onDragEnd={event => this.dragEnd(event, customFunc)}
-          className={`dragableId ${this.props.duplicateDragableId}`}
+          className="dragableId"
+          style={{ width: '100%' }}
         >
           {this.props.children}
         </div>

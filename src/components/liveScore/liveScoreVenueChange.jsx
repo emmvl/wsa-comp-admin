@@ -148,20 +148,22 @@ class LiveScoreVenueChange extends Component {
             <div>
                 {/* start time date and time picker row */}
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <span className='text-heading-large mt-0 mb-0'>{AppConstants.changeMatchCriteria}</span>
-                    <Tooltip background="#ff8237">
-                        <span>{AppConstants.courtChangeMsg}</span>
-                    </Tooltip>
+                    <span className="text-heading-large mt-0 mb-0">{AppConstants.changeMatchCriteria}</span>
+                    <div style={{ marginTop: -10 }}>
+                        <Tooltip background="#ff8237">
+                            <span>{AppConstants.courtChangeMsg}</span>
+                        </Tooltip>
+                    </div>
                 </div>
 
                 <div className="fluid-width CornerView">
                     <div className="row">
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead required="required-field" heading={AppConstants.startDate} />
+                            <InputWithHead required="required-field pb-1" heading={AppConstants.startDate} />
                             <Form.Item name="changeMatchDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
+                                    // size="large"
+                                    style={{ width: '100%' }}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -171,11 +173,11 @@ class LiveScoreVenueChange extends Component {
                             </Form.Item>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead required="required-field" heading={AppConstants.startTime} />
+                            <InputWithHead required="required-field pb-1" heading={AppConstants.startTime} />
                             <Form.Item name="startTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     defaultOpenValue={moment("00:00", "hh:mm")}
                                     format="hh:mm"
                                     use12Hours={false}
@@ -194,11 +196,11 @@ class LiveScoreVenueChange extends Component {
                 <div className="fluid-width CornerView">
                     <div className="row">
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead required="required-field" heading={AppConstants.endDate} />
+                            <InputWithHead required="required-field pb-1" heading={AppConstants.endDate} />
                             <Form.Item name="endDate" rules={[{ required: true, message: ValidationConstants.dateField }]}>
                                 <DatePicker
-                                    size="large"
-                                    style={{ width: "100%" }}
+                                    // size="large"
+                                    style={{ width: '100%' }}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
                                     showTime={false}
@@ -209,11 +211,11 @@ class LiveScoreVenueChange extends Component {
                             </Form.Item>
                         </div>
                         <div className="col-sm" style={{ marginTop: 5 }}>
-                            <InputWithHead required="required-field" heading={AppConstants.endTime} />
+                            <InputWithHead required="required-field pb-1" heading={AppConstants.endTime} />
                             <Form.Item name="endTime" rules={[{ required: true, message: ValidationConstants.timeField }]}>
                                 <TimePicker
                                     className="comp-venue-time-timepicker"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     defaultOpenValue={moment("00:00", "HH:mm")}
                                     format="HH:mm"
                                     placeholder="Select Time"
@@ -227,12 +229,12 @@ class LiveScoreVenueChange extends Component {
                 </div>
 
                 {/* venue drop down view */}
-                <InputWithHead required="required-field" heading={AppConstants.venue} />
+                <InputWithHead required="required-field pb-1" heading={AppConstants.venue} />
                 <div>
-                    <Form.Item name='venues' rules={[{ required: true, message: ValidationConstants.venueField }]}>
+                    <Form.Item name="venues" rules={[{ required: true, message: ValidationConstants.venueField }]}>
                         <Select
                             showSearch
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.selectVenue}
                             onChange={(venueId) => this.onChangeVenue(venueId)}
                             // value={venueChangeData.venueId}
@@ -249,11 +251,11 @@ class LiveScoreVenueChange extends Component {
                 </div>
 
                 {/* court drop down view */}
-                <InputWithHead required="required-field pb-0" heading={AppConstants.court} />
-                <Form.Item name='courts' rules={[{ required: true, message: ValidationConstants.court }]} className="form-conr space">
+                <InputWithHead required="required-field pb-1" heading={AppConstants.court} />
+                <Form.Item name="courts" rules={[{ required: true, message: ValidationConstants.court }]} className="form-conr space">
                     <Select
-                        mode='multiple'
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182, paddingTop: 0, marginTop: 0 }}
+                        mode="multiple"
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182, paddingTop: 0, marginTop: 0 }}
                         placeholder={AppConstants.selectCourt}
                         onChange={(courtId) => {
                             this.props.liveScoreUpdateVenueChange(courtId, "courtId")
@@ -284,13 +286,13 @@ class LiveScoreVenueChange extends Component {
         return (
             <div className="content-view mt-5">
                 {/* venue drop down view */}
-                <span className='text-heading-large'>{'Change To'}</span>
-                <InputWithHead required="required-field" heading={AppConstants.venue} />
+                <span className="text-heading-large">Change To</span>
+                <InputWithHead required="required-field pb-1" heading={AppConstants.venue} />
                 <div>
-                    <Form.Item name='venueTo' rules={[{ required: true, message: ValidationConstants.venueField }]}>
+                    <Form.Item name="venueTo" rules={[{ required: true, message: ValidationConstants.venueField }]}>
                         <Select
                             showSearch
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.selectVenue}
                             onChange={(venueId) => this.onChangeToVenue(venueId)}
                             // value={venueChangeData.changeToVenueId}
@@ -307,12 +309,12 @@ class LiveScoreVenueChange extends Component {
                 </div>
 
                 {/* court drop down view */}
-                <InputWithHead required="required-field" heading={AppConstants.court} />
+                <InputWithHead required="required-field pb-1" heading={AppConstants.court} />
                 <div>
-                    <Form.Item name='courtTo' rules={[{ required: true, message: ValidationConstants.court }]}>
+                    <Form.Item name="courtTo" rules={[{ required: true, message: ValidationConstants.court }]}>
                         <Select
                             // mode='multiple'
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.selectCourt}
                             onChange={(courtId) => {
                                 this.props.liveScoreUpdateVenueChange(courtId, "changeToCourtId")

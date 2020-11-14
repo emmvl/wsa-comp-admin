@@ -297,7 +297,7 @@ class LiveScoreSeasonFixture extends Component {
                     </div>
                     <div className="col-sm-2">
                         <div style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",

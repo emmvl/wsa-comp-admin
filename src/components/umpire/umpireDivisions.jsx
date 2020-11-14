@@ -13,6 +13,7 @@ import { umpireCompetitionListAction } from "../../store/actions/umpireAction/um
 import { getUmpireCompId, setUmpireCompId } from '../../util/sessionStorage'
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from "util/history";
+import { getRefBadgeData } from '../../store/actions/appAction'
 
 const { Header, Footer, } = Layout
 const { Option } = Select
@@ -37,6 +38,7 @@ class UmpireDivisions extends Component {
         let { organisationId } = JSON.parse(localStorage.getItem('setOrganisationData'))
         this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, 'USERS')
+        this.props.getRefBadgeData()
     }
 
     componentDidUpdate(nextProps) {
@@ -132,7 +134,76 @@ class UmpireDivisions extends Component {
         this.setState({ umpPool: data.umpirePool })
     }
 
+    badgeView(badgeDat) {
+        return (
+            <div className="row pt-3">
+                <div className='col-sm-3 division-table-field-view'>
+                    <InputWithHead heading={badgeDat.description} />
+                </div>
+                <div className="col-sm">
+                    <Select
+                        placeholder="Select"
+                        mode="multiple"
+                        style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                    >
+                        <Option value="a">A Grade</Option>
+                        <Option value="b">B Grade</Option>
+                        <Option value="c">C Grade</Option>
+                    </Select>
+                </div>
+            </div>
+        )
+    }
+
     contentView = () => {
+        const { badgeData } = this.props.appState
+        let badge = isArrayNotEmpty(badgeData) ? badgeData : []
+        return (
+            <div className="content-view pt-5">
+                <span className="text-heading-large">{AppConstants.allocatePools}</span>
+                <Radio.Group
+                    className="reg-competition-radio"
+                    // onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionTypeRefId")}
+                    // onChange={e => this.setPools(e.target.value)}
+                    // value={detailsData.competitionTypeRefId}
+                    // disabled={compDetailDisable}
+                >
+                    {allocatePools.map((item) => (
+                        <Radio key={'allocatePool_' + item.id} value={item.id}>{item.name}</Radio>
+                    ))}
+                </Radio.Group>
+
+                <span className='text-heading-large pt-3 mb-0' >{AppConstants.umpirePools}</span>
+
+                {badge.map((item) => (
+                    this.badgeView(item)
+                ))}
+
+                <div className="row pt-3">
+                    <div className='col-sm-3 division-table-field-view'>
+                        <InputWithHead heading={AppConstants.umpireCoach} />
+                    </div>
+                    <div className="col-sm">
+                        <Select
+                            placeholder="Select"
+                            mode="multiple"
+                            style={{ width: "100%", paddingRight: 1, minWidth: 182, }}
+                            // onChange={recordUmpire => this.props.onChangeUmpirePools({ key: "recordUmpire", data: recordUmpire })}
+                            // value={this.state.umpPool}
+                        >
+                            <Option value="Gradeaa">A Grade</Option>
+                            <Option value="Gradebb">B Grade</Option>
+                            <Option value="Gradecc">C Grade</Option>
+                        </Select>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    contentView_1 = () => {
+        const { badgeData } = this.props.appState
+
         return (
             <div className="content-view pt-5">
                 <span className="text-heading-large">{AppConstants.allocatePools}</span>
@@ -348,13 +419,15 @@ class UmpireDivisions extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        umpireCompetitionListAction
+        umpireCompetitionListAction,
+        getRefBadgeData
     }, dispatch)
 }
 
 function mapStateToProps(state) {
     return {
-        umpireCompetitionState: state.UmpireCompetitionState
+        umpireCompetitionState: state.UmpireCompetitionState,
+        appState: state.AppState
     }
 }
 

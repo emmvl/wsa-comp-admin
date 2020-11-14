@@ -47,7 +47,7 @@ function tableSort(key) {
 function totalSeasonalFees(seasonalFees1, record) {
     let affiliateFeeStatus;
     if (record.childSeasonalFee == null && record.childSeasonalGst == null && record.parentCreator === false) {
-        affiliateFeeStatus = true;  ////need to verify to change
+        affiliateFeeStatus = true; // need to verify to change
     } else {
         affiliateFeeStatus = false;
     }
@@ -68,17 +68,17 @@ function totalSeasonalFees(seasonalFees1, record) {
                 {record.feeOrgId == null ? "N/A" : (record.seasonalFees == null && record.seasonalGST == null) ? "N/A" : "Affiliate fee not set!"}
             </span>
         ) : (
-                <span>
-                    {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
-                </span>
-            )
+            <span>
+                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+            </span>
+        )
     );
 }
 
 function totalCasualFees(casualFees1, record) {
     let affiliateFeeStatus;
     if (record.childCasualFee == null && record.childCasualGst == null && record.parentCreator === false) {
-        affiliateFeeStatus = true;/////need to verify to change
+        affiliateFeeStatus = true; // need to verify to change
     } else {
         affiliateFeeStatus = false;
     }
@@ -99,10 +99,10 @@ function totalCasualFees(casualFees1, record) {
                 {record.feeOrgId == null ? "N/A" : (record.casualFees == null && record.casualGST == null) ? "N/A" : "Affiliate fee not set!"}
             </span>
         ) : (
-                <span>
-                    {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
-                </span>
-            )
+            <span>
+                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+            </span>
+        )
     );
 }
 
@@ -181,18 +181,19 @@ const columns = [
             <div
                 style={{
                     width: 20,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginRight: 10
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 10,
+                    marginRight: 10,
                 }}
             >
-                <Tooltip placement="bottom" background="#ff8237">
+                <Tooltip background="#ff8237">
                     <span>{AppConstants.totalFeeMsg}</span>
                 </Tooltip>
             </div>
         ),
-        onHeaderCell: () => listeners("totalCasualFee"),
+        onHeaderCell: () => listeners('totalCasualFee'),
     },
     {
         title: "Action",

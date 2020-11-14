@@ -303,7 +303,7 @@ class AffiliateDirectory extends Component {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "flex-end",
-              width: "100%",
+              width: '100%',
               marginRight: "3.0%",
             }}
           >

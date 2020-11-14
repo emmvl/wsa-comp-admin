@@ -437,7 +437,7 @@ class RegistrationMembershipFee extends Component {
                                 <span className="year-select-heading required-field">
                                     {AppConstants.year}:
                                 </span>
-                                <Form.Item name='yearRefId' rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}>
+                                <Form.Item name="yearRefId" rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}>
                                     <Select
                                         className="year-select reg-filter-select1 ml-2"
                                         style={{ maxWidth: 80 }}
@@ -589,7 +589,7 @@ class RegistrationMembershipFee extends Component {
                                                 >
                                                     <DatePicker
                                                         size="large"
-                                                        style={{ width: "100%" }}
+                                                        style={{ width: '100%' }}
                                                         onChange={date => this.dateOnChangeFrom(date, index)}
                                                         format="DD-MM-YYYY"
                                                         placeholder="dd-mm-yyyy"
@@ -611,7 +611,7 @@ class RegistrationMembershipFee extends Component {
                                                 >
                                                     <DatePicker
                                                         size="large"
-                                                        style={{ width: "100%" }}
+                                                        style={{ width: '100%' }}
                                                         onChange={date => this.dateOnChangeTo(date, index)}
                                                         format="DD-MM-YYYY"
                                                         placeholder="dd-mm-yyyy"
@@ -716,34 +716,35 @@ class RegistrationMembershipFee extends Component {
             <div className="content-view pt-5">
                 <span className="form-heading">{AppConstants.membershipProduct}</span>
                 <Form.Item
-                    name='membershipProductName'
+                    name="membershipProductName"
                     rules={[{ required: true, message: ValidationConstants.membershipProductIsRequired }]}
                 >
                     <InputWithHead
                         auto_complete="new-membershipProductName"
-                        required="required-field pb-0"
+                        required="required-field pb-2"
                         heading={AppConstants.membershipProductName}
                         placeholder={AppConstants.membershipProductName}
                         disabled={this.state.membershipIsUsed}
                         conceptulHelp
                         conceptulHelpMsg={AppConstants.membershipProductNameMsg}
-                        tooltiprequired={"mt-3"}
+                        marginTop={5}
                         onBlur={(i) => this.formRef.current.setFieldsValue({
-                            'membershipProductName': captializedString(i.target.value)
+                            membershipProductName: captializedString(i.target.value)
                         })}
                     />
                 </Form.Item>
 
                 <div className="contextualHelp-RowDirection">
-                    <span className="applicable-to-heading  required-field">
+                    <span className="applicable-to-heading required-field">
                         {AppConstants.validity}
                     </span>
-                    <div style={{ marginTop: 20 }}>
+                    <div style={{ marginTop: 15 }}>
                         <Tooltip placement="top" background="#ff8237">
                             <span>{AppConstants.validityMsg}</span>
                         </Tooltip>
                     </div>
                 </div>
+
                 <Form.Item name='validityRefId' rules={[{ required: true, message: ValidationConstants.pleaseSelectValidity }]}>
                     <Radio.Group
                         className="reg-competition-radio"
@@ -848,7 +849,7 @@ class RegistrationMembershipFee extends Component {
                     <div>
                         <InputWithHead heading="Discount Type" />
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                             placeholder="Select"
                             value={item.discountTypeRefId}
@@ -890,7 +891,7 @@ class RegistrationMembershipFee extends Component {
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
                                         size="large"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
@@ -903,7 +904,7 @@ class RegistrationMembershipFee extends Component {
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
                                         size="large"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         disabledDate={this.disabledDate}
                                         disabledTime={this.disabledTime}
                                         onChange={date => this.onChangeDiscountAvailableTo(date, index)}
@@ -924,7 +925,7 @@ class RegistrationMembershipFee extends Component {
                     <div>
                         <InputWithHead heading="Discount Type" />
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                             placeholder="Select"
                             value={item.discountTypeRefId}
@@ -974,7 +975,7 @@ class RegistrationMembershipFee extends Component {
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
                                         size="large"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
@@ -987,7 +988,7 @@ class RegistrationMembershipFee extends Component {
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
                                         size="large"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         disabledDate={this.disabledDate}
                                         disabledTime={this.disabledTime}
                                         onChange={date => this.onChangeDiscountAvailableTo(date, index)}
@@ -1046,7 +1047,7 @@ class RegistrationMembershipFee extends Component {
                     <div>
                         <InputWithHead heading="Discount Type" />
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={discountType => this.onChangeDiscountRefId(discountType, index)}
                             placeholder="Select"
                             value={item.discountTypeRefId}
@@ -1088,7 +1089,7 @@ class RegistrationMembershipFee extends Component {
                                     <InputWithHead heading={AppConstants.availableFrom} />
                                     <DatePicker
                                         size="large"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         onChange={date => this.onChangeDiscountAvailableFrom(date, index)}
                                         format="DD-MM-YYYY"
                                         placeholder="dd-mm-yyyy"
@@ -1101,7 +1102,7 @@ class RegistrationMembershipFee extends Component {
                                     <InputWithHead heading={AppConstants.availableTo} />
                                     <DatePicker
                                         size="large"
-                                        style={{ width: "100%" }}
+                                        style={{ width: '100%' }}
                                         placeholder="dd-mm-yyyy"
                                         disabledDate={this.disabledDate}
                                         disabledTime={this.disabledTime}
@@ -1281,11 +1282,9 @@ class RegistrationMembershipFee extends Component {
             <div className="discount-view pt-5">
                 <div className="row">
                     <span className="form-heading">{AppConstants.discounts}</span>
-                    <div style={{ marginTop: 5 }}>
-                        <Tooltip background="#ff8237">
-                            <span>{AppConstants.membershipDiscountMsg}</span>
-                        </Tooltip>
-                    </div>
+                    <Tooltip background="#ff8237">
+                        <span>{AppConstants.membershipDiscountMsg}</span>
+                    </Tooltip>
                 </div>
 
                 {discountData.map((item, index) => (
@@ -1307,7 +1306,7 @@ class RegistrationMembershipFee extends Component {
                                     rules={[{ required: true, message: ValidationConstants.pleaseSelectDiscountType }]}
                                 >
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                         onChange={discountType => this.onChangeMembershipProductDisType(discountType, index)}
                                         placeholder="Select"
                                         // value={item.membershipPrdTypeDiscountTypeRefId !== 0 && item.membershipPrdTypeDiscountTypeRefId}
@@ -1331,7 +1330,7 @@ class RegistrationMembershipFee extends Component {
                                     rules={[{ required: true, message: ValidationConstants.pleaseSelectMembershipTypes }]}
                                 >
                                     <Select
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                         onChange={discountMembershipType =>
                                             this.onChangeMembershipTypeDiscount(discountMembershipType, index)
                                         }
@@ -1413,9 +1412,9 @@ class RegistrationMembershipFee extends Component {
 
     tabCallBack = key => {
         let productId = this.props.registrationState.membershipProductId
-        if (productId !== null && productId.length > 0) {
+        // if (productId !== null && productId.length > 0) {
             this.setState({ membershipTabKey: key });
-        }
+        // }
         this.setFieldDecoratorValues()
     };
 
@@ -1436,20 +1435,21 @@ class RegistrationMembershipFee extends Component {
     }
 
     repayFeesModal = () => {
-        try{
-            return(
+        try {
+            return (
                 <Modal
                     className="add-membership-type-modal"
                     title="Confirm"
                     visible={this.state.confirmRePayFeesModalVisible}
+                    okText={AppConstants.proceedText}
                     onOk={() => this.handleConfirmRepayFeesModal("ok")}
                     onCancel={() => this.handleConfirmRepayFeesModal("cancel")}
                 >
                     <InputWithHead heading={AppConstants.membershipFeesRepayConfirmMsg} required="pt-0"/>
                 </Modal>
             )
-        }catch(ex){
-            console.log("Error in repayFeesModal::"+ex)
+        } catch (ex) {
+            console.log("Error in repayFeesModal::" + ex)
         }
     }
 

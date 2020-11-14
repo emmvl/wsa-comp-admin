@@ -319,7 +319,7 @@ class CompetitionFixtures extends Component {
                         <div className="row">
                             <div className="col-sm">
                                 <div style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",

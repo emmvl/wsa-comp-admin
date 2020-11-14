@@ -43,7 +43,7 @@ import InputWithHead from "../../customComponents/InputWithHead";
 import Loader from "../../customComponents/loader";
 import StripeKeys from "../stripe/stripeKeys";
 import { getStripeLoginLinkAction } from "../../store/actions/stripeAction/stripeAction";
-import { getPurchasesListingAction } from '../../store/actions/shopAction/orderStatusAction';
+import { getPurchasesListingAction, getReferenceOrderStatus } from '../../store/actions/shopAction/orderStatusAction';
 
 
 function tableSort(a, b, key) {
@@ -1121,10 +1121,17 @@ const purchaseActivityColumn = [
   // },
   {
     title: 'Products',
-    dataIndex: 'products',
-    key: 'products',
-    sorter: true,
-    onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
+    dataIndex: 'orderDetails',
+    key: 'orderDetails',
+    // sorter: true,
+    // onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
+    render: (orderDetails) => (
+      <div>
+        {orderDetails.length > 0 && orderDetails.map((item, i) => (
+          <span key={"orderDetails" + i} className="desc-text-style side-bar-profile-data">{item}</span>
+        ))}
+      </div>
+    ),
   },
   {
     title: 'Organisation',
@@ -1139,6 +1146,11 @@ const purchaseActivityColumn = [
     key: 'paymentStatus',
     sorter: true,
     onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
+    render: (paymentStatus) => {
+      return (
+        <span>{this_Obj.getOrderStatus(paymentStatus, "ShopPaymentStatus")}</span>
+      )
+    }
   },
   {
     title: 'Payment Method',
@@ -1153,6 +1165,11 @@ const purchaseActivityColumn = [
     key: 'fulfilmentStatus',
     sorter: true,
     onHeaderCell: ({ dataIndex }) => purchaseListeners(dataIndex),
+    render: (fulfilmentStatus) => {
+      return (
+        <span>{this_Obj.getOrderStatus(fulfilmentStatus, "ShopFulfilmentStatusArr")}</span>
+      )
+    }
   },
 ]
 
@@ -1191,6 +1208,7 @@ class UserModulePersonalDetail extends Component {
   }
 
   async componentDidMount() {
+    this.props.getReferenceOrderStatus()
     if (
       this.props.location.state != null &&
       this.props.location.state != undefined
@@ -1291,6 +1309,18 @@ class UserModulePersonalDetail extends Component {
     }
     return orgArray
 
+  }
+
+  //getOrderStatus
+  getOrderStatus = (value, state) => {
+    let statusValue = ''
+    let statusArr = this.props.shopOrderStatusState[state]
+    let getIndexValue = statusArr.findIndex((x) => x.id == value)
+    if (getIndexValue > -1) {
+      statusValue = statusArr[getIndexValue].description
+      return statusValue
+    }
+    return statusValue
   }
 
   onChangeYear = (value) => {
@@ -1645,7 +1675,7 @@ class UserModulePersonalDetail extends Component {
             <Select
               name="yearRefId"
               className="user-prof-filter-select"
-              style={{ width: "100%", paddingRight: 1, paddingTop: "15px" }}
+              style={{ width: '100%', paddingRight: 1, paddingTop: "15px" }}
               onChange={(yearRefId) => this.onChangeYear(yearRefId)}
               value={this.state.yearRefId}
             >
@@ -1658,7 +1688,7 @@ class UserModulePersonalDetail extends Component {
             </Select>
             <Select
               className="user-prof-filter-select"
-              style={{ width: "100%", paddingRight: 1, paddingTop: "15px" }}
+              style={{ width: '100%', paddingRight: 1, paddingTop: "15px" }}
               onChange={(e) => this.onChangeSetValue(e)}
               value={compititionId}
             >
@@ -2788,6 +2818,7 @@ function mapDispatchToProps(dispatch) {
       getStripeLoginLinkAction,
       getUmpireActivityListAction,
       getPurchasesListingAction,
+      getReferenceOrderStatus,
     },
     dispatch
   );

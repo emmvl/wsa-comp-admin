@@ -77,7 +77,7 @@ class CompetitionVenueModal extends React.Component {
                                 <Form.Item name='selectedVenues' rules={[{ required: true, message: ValidationConstants.pleaseSelectVenue }]}>
                                     <Select
                                         mode="multiple"
-                                        style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                        style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                         onChange={(venueSelection) => onSelectValues(venueSelection)}
                                         placeholder={AppConstants.selectVenue}
                                         filterOption={false}
@@ -92,7 +92,7 @@ class CompetitionVenueModal extends React.Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-sm" style={{ display: "flex", width: "100%", paddingTop: 10 }}>
+                            <div className="col-sm" style={{ display: "flex", width: '100%', paddingTop: 10 }}>
                                 <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
                                     <Button className="cancelBtnWidth" type="cancel-button" onClick={onVenueBack} style={{ marginRight: '20px' }}>
                                         {AppConstants.back}

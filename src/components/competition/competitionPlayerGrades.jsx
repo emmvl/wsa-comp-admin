@@ -163,21 +163,19 @@ class CompetitionPlayerGrades extends Component {
     ///////view for breadcrumb
     headerView = () => {
         return (
-            <div className="comp-player-grades-header-view-design" >
+            <div className="comp-player-grades-header-view-design">
                 <div className="row">
                     <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGrading}</Breadcrumb.Item>
                         </Breadcrumb>
-                        <div style={{ marginTop: 10 }}>
-                            <Tooltip placement="top" background="#ff8237">
-                                <span>{AppConstants.playerGradingMsg}</span>
-                            </Tooltip>
-                        </div>
+                        <Tooltip placement="top" background="#ff8237">
+                            <span>{AppConstants.playerGradingMsg}</span>
+                        </Tooltip>
                     </div>
                     <div className="col-sm" style={{
                         display: "flex", flexDirection: 'row', alignItems: "center",
-                        justifyContent: "flex-end", width: "100%", marginRight: '2.8%'
+                        justifyContent: "flex-end", width: '100%', marginRight: '2.8%'
                     }}>
                         <div className="row">
                             <div className="col-sm">
@@ -437,7 +435,7 @@ class CompetitionPlayerGrades extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div className="com-year-select-heading-view pb-3" >
+                            <div className="com-year-select-heading-view pb-3">
                                 <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     id={AppUniqueId.PlayerGradingYear_dpdn}
@@ -479,9 +477,9 @@ class CompetitionPlayerGrades extends Component {
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-sm pb-3" >
+                            <div className="col-sm pb-3">
                                 <div className="col-sm" style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center"
@@ -511,10 +509,10 @@ class CompetitionPlayerGrades extends Component {
                             </div>
                         </div>
                         <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignSelf: "center" }}>
-                            <NavLink to="/competitionPlayerGradeCalculate" >
-                                <span className='input-heading-add-another pt-0'>{AppConstants.playerGradingToggle}</span>
+                            <NavLink to="/competitionPlayerGradeCalculate">
+                                <span className="input-heading-add-another pt-0">{AppConstants.playerGradingToggle}</span>
                             </NavLink>
-                            <div style={{ marginTop: 4 }}>
+                            <div style={{ marginTop: -5 }}>
                                 <Tooltip placement="top" background="#ff8237">
                                     <span>{AppConstants.playerGradingToggleMsg}</span>
                                 </Tooltip>
@@ -619,7 +617,7 @@ class CompetitionPlayerGrades extends Component {
                                     ref={provided.innerRef}
                                     className="player-grading-droppable-view"
                                 >
-                                    <div className="player-grading-droppable-heading-view" >
+                                    <div className="player-grading-droppable-heading-view">
                                         <div className="row">
                                             <Checkbox
                                                 id={AppUniqueId.playgrad_newTeam_chkbx}
@@ -1053,7 +1051,7 @@ class CompetitionPlayerGrades extends Component {
                             </NavLink>
                         </div>
                     </div>
-                    <div className="col-sm mt-3" >
+                    <div className="col-sm mt-3">
                         <div className="comp-finals-button-view">
                             <NavLink to="/competitionPartTeamGradeCalculate">
                                 <Button id={AppUniqueId.playgrad_Next_bn} disabled={this.state.competitionStatus == 1} className="publish-button margin-top-disabled-button" type="primary">{AppConstants.next}</Button>

@@ -493,7 +493,7 @@ class LiveScoreCompetitions extends Component {
                         <span className="form-heading">
                             {AppConstants.ownedCompetitions}
                         </span>
-                        <div style={{ marginTop: -10 }}>
+                        <div style={{ marginTop: -20 }}>
                             <Tooltip placement="top" background="#ff8237">
                                 <span>{AppConstants.ownedCompetitionMsg}</span>
                             </Tooltip>
@@ -506,7 +506,7 @@ class LiveScoreCompetitions extends Component {
                                 <div
                                     className="comp-dashboard-botton-view-mobile"
                                     style={{
-                                        width: "100%",
+                                        width: '100%',
                                         display: "flex",
                                         flexDirection: "row",
                                         alignItems: "center",
@@ -534,7 +534,7 @@ class LiveScoreCompetitions extends Component {
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
@@ -558,7 +558,7 @@ class LiveScoreCompetitions extends Component {
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "100%",
+                                    width: '100%',
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
@@ -586,7 +586,7 @@ class LiveScoreCompetitions extends Component {
                             <span className="form-heading">
                                 {AppConstants.participateInComp}
                             </span>
-                            <div style={{ marginTop: -10 }}>
+                            <div style={{ marginTop: -20 }}>
                                 <Tooltip placement="top" background="#ff8237">
                                     <span>{AppConstants.participateCompMsg}</span>
                                 </Tooltip>
@@ -678,7 +678,7 @@ class LiveScoreCompetitions extends Component {
                     <Table
                         className="home-dashboard-table"
                         columns={columnsOwned}
-                        dataSource={ownedCompetitions}
+                        dataSource={[...ownedCompetitions]}
                         pagination={false}
                         loading={ownedLoad}
                         rowKey={(record, index) => "ownedCompetitions" + record.id + index}

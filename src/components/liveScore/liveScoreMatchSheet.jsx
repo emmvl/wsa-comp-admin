@@ -137,11 +137,11 @@ class LiveScoreMatchSheet extends Component {
     printAll = () => {
         let filteredMatches = this.props.liveScoreMatchState ? this.props.liveScoreMatchState.liveScoreMatchList : [];
         if (this.state.selectedTeam !== null) {
-            filteredMatches = filteredMatches.filter((match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
+            filteredMatches = filteredMatches.filter((match) => match?.team1Id === this.state.selectedTeam || match?.team2Id === this.state.selectedTeam)
         }
         if (this.state.selectedRound !== null) {
-            const selectedRound = this.state.rounds.find((round) => round.id === this.state.selectedRound);
-            filteredMatches = filteredMatches.filter((match) => match.round.name === selectedRound.name);
+            const selectedRound = this.state.rounds.find((round) => round?.id === this.state.selectedRound);
+            filteredMatches = filteredMatches.filter((match) => match?.round?.name === selectedRound?.name);
         }
 
         if (this.state.selectedTemplateId !== null && filteredMatches.length > 0) {
@@ -151,12 +151,13 @@ class LiveScoreMatchSheet extends Component {
                 this.state.selectedTeam === 'All' ? null : this.state.selectedTeam,
                 this.state.templateType,
                 this.state.selectedRound
-                    ? this.state.rounds.find((round) => round.id === this.state.selectedRound).name
+                    ? this.state.rounds.find((round) => round?.id === this.state.selectedRound)?.name
                     : null,
             );
         } else if (filteredMatches.length === 0) {
             message.error(AppConstants.matchSheetsNoPrintError);
         } else {
+            message.config({ maxCount: 1, duration: 0.9 })
             message.error(AppConstants.selectTemplateTypeError);
         }
     };
@@ -176,11 +177,12 @@ class LiveScoreMatchSheet extends Component {
         this.props.getliveScoreTeams(this.state.competitionId, division);
         this.setState({
             division,
-            teamLoad: true
+            teamLoad: true,
+            selectedTeam: null
         });
         this.fetchMatchList(
             division === 'All' ? null : division,
-            this.state.selectedTeam === 'All' ? null : this.state.selectedTeam
+            null
         );
     }
 
@@ -264,7 +266,7 @@ class LiveScoreMatchSheet extends Component {
         return (
             <div className="pt-4 pb-4 d-flex align-items-center">
                 <div className="col-sm d-flex align-items-center">
-                    <span className='home-dash-left-text'>{AppConstants.previews}</span>
+                    <span className="home-dash-left-text">{AppConstants.previews}</span>
                 </div>
             </div>
         )
@@ -275,11 +277,11 @@ class LiveScoreMatchSheet extends Component {
         const { liveScoreMatchState } = this.props;
         let filteredMatches = liveScoreMatchState ? liveScoreMatchState.liveScoreMatchList : [];
         if (this.state.selectedTeam !== null) {
-            filteredMatches = filteredMatches.filter((match) => match.team1Id === this.state.selectedTeam || match.team2Id === this.state.selectedTeam)
+            filteredMatches = filteredMatches.filter((match) => match?.team1Id === this.state.selectedTeam || match?.team2Id === this.state.selectedTeam)
         }
         if (this.state.selectedRound !== null) {
-            const selectedRound = this.state.rounds.find((round) => round.id === this.state.selectedRound);
-            filteredMatches = filteredMatches.filter((match) => match ?.round ?.name === selectedRound.name);
+            const selectedRound = this.state.rounds.find((round) => round?.id === this.state.selectedRound);
+            filteredMatches = filteredMatches.filter((match) => match?.round?.name === selectedRound?.name);
         }
 
         return (
@@ -334,7 +336,7 @@ class LiveScoreMatchSheet extends Component {
         return (
             <div className="pt-4 pb-4 d-flex align-items-center">
                 <div className="col-sm d-flex align-items-center">
-                    <span className='home-dash-left-text'>{AppConstants.downloads}</span>
+                    <span className="home-dash-left-text">{AppConstants.downloads}</span>
                 </div>
                 <div className="col-sm text-right">
                     <Button
@@ -499,13 +501,13 @@ class LiveScoreMatchSheet extends Component {
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="22" />
                 <Loader
-                    visible={
-                         this.props.liveScoreMatchSheetState.onDivisionLoad
-                        //   || this.props.liveScoreMatchSheetState.onTeamLoad
-                        //  || this.props.liveScoreMatchSheetState.printLoad
-                          || this.props.liveScoreMatchSheetState.onLoad
-                         // this.props.liveScoreMatchState.onLoad
-                         // || this.props.liveScoreMatchState.isFetchingMatchList
+                    visible={false
+                        // this.props.liveScoreMatchSheetState.onDivisionLoad
+                        // || this.props.liveScoreMatchSheetState.onTeamLoad
+                        // || this.props.liveScoreMatchSheetState.printLoad
+                        // || this.props.liveScoreMatchSheetState.onLoad
+                        // || this.props.liveScoreMatchState.onLoad
+                        // || this.props.liveScoreMatchState.isFetchingMatchList
                     }
                 />
                 <Layout>

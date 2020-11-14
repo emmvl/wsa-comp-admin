@@ -193,7 +193,7 @@ class CompetitionException extends Component {
                     <div>
                         <Select
                             showSearch
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.selectVenue}
                             onChange={(venueId) => this.onChangeVenue(venueId)}
                             value={this.state.venueId}
@@ -209,7 +209,7 @@ class CompetitionException extends Component {
                     {/* court drop down view */}
                     <InputWithHead required="required-field pb-0" heading={AppConstants.court} />
                     <Select
-                        style={{ width: "100%", paddingRight: 1, minWidth: 182, paddingTop: 0, marginTop: 0 }}
+                        style={{ width: '100%', paddingRight: 1, minWidth: 182, paddingTop: 0, marginTop: 0 }}
                         placeholder={AppConstants.selectCourt}
                         value={this.state.venueCourtId}
                         onChange={(venueCourtId) => this.changeVenueCourtId(venueCourtId)}
@@ -227,7 +227,7 @@ class CompetitionException extends Component {
 
                             <DatePicker
                                 size="large"
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 format="DD-MM-YYYY"
                                 placeholder="dd-mm-yyyy"
                                 onChange={(startDate) => this.onChangeDate(moment(startDate).format("YYYY-MM-DD"))}
@@ -246,7 +246,7 @@ class CompetitionException extends Component {
 
                             <TimePicker
                                 className="comp-venue-time-timepicker"
-                                style={{ width: "100%" }}
+                                style={{ width: '100%' }}
                                 format="HH:mm"
                                 onChange={(endTime) => this.onChangeTime(endTime)}
                                 onBlur={(e) => this.onChangeTime(e.target.value && moment(e.target.value, "HH:mm"))}

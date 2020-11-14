@@ -13,7 +13,7 @@ import {
     getMainDivisionListAction,
     liveScoreDeleteDivision
 } from "../../store/actions/LiveScoreAction/liveScoreDivisionAction";
-import { getLiveScoreCompetiton } from "../../util/sessionStorage";
+import { getLiveScoreCompetiton, setOwnCompetitionYear, setOwn_competition } from "../../util/sessionStorage";
 import { isArrayNotEmpty } from "../../util/helpers";
 import history from "../../util/history";
 import { checkLivScoreCompIsParent } from "../../util/permissions";
@@ -122,9 +122,9 @@ const columns = [
                             <span>Edit</span>
                         </NavLink>
                     </Menu.Item>
-                    <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(record.id)}>
+                    {!this_Obj.state.sourceIdAvailable && <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(record.id)}>
                         <span>Delete</span>
-                    </Menu.Item>
+                    </Menu.Item>}
                 </SubMenu>
             </Menu>
         )
@@ -192,14 +192,15 @@ class LiveScoreDivisionList extends Component {
             liveScoreCompIsParent: false,
             sortBy: null,
             sortOrder: null,
+            sourceIdAvailable: false,
         }
         this_Obj = this;
     }
 
     componentDidMount() {
         if (getLiveScoreCompetiton()) {
-            const { id } = JSON.parse(getLiveScoreCompetiton())
-            this.setState({ competitionId: id })
+            const { id, sourceId } = JSON.parse(getLiveScoreCompetiton())
+            this.setState({ competitionId: id, sourceIdAvailable: sourceId ? true : false })
             checkLivScoreCompIsParent().then((value) => (
                 this.setState({ liveScoreCompIsParent: value })
             ))
@@ -259,7 +260,7 @@ class LiveScoreDivisionList extends Component {
                     <div
                         className="comp-dashboard-botton-view-mobile"
                         style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
@@ -278,9 +279,22 @@ class LiveScoreDivisionList extends Component {
         )
     }
 
+    ///navigation to team grading summary if sourceId is not null
+    teamGradingNavigation = () => {
+        let yearRefId = localStorage.yearId
+        let compKey = null
+        if (getLiveScoreCompetiton()) {
+            const { uniqueKey } = JSON.parse(getLiveScoreCompetiton())
+            compKey = uniqueKey
+        }
+        setOwnCompetitionYear(yearRefId);
+        setOwn_competition(compKey);
+        history.push('/competitionPartTeamGradeCalculate');
+    }
+
     ///////view for breadcrumb
     headerView = () => {
-        let { liveScoreCompIsParent } = this.state
+        let { liveScoreCompIsParent, sourceIdAvailable } = this.state
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="fluid-width">
@@ -293,7 +307,7 @@ class LiveScoreDivisionList extends Component {
                         <div
                             className="col-sm"
                             style={{
-                                width: "100%",
+                                width: '100%',
                                 display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
@@ -301,11 +315,33 @@ class LiveScoreDivisionList extends Component {
                             }}
                         >
                             <div className="row">
-                                <div className="col-sm">
+
+                                {sourceIdAvailable && <div className="col-sm">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
                                             width: "100%",
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            alignItems: "center",
+                                            justifyContent: "flex-end",
+                                        }}
+                                    >
+                                        <Button
+                                            type="primary"
+                                            className="primary-add-comp-form"
+                                            onClick={() => this.teamGradingNavigation()}
+                                        >
+                                            {AppConstants.teamGrading}
+                                        </Button>
+                                    </div>
+                                </div>}
+
+                                {!sourceIdAvailable && <div className="col-sm">
+                                    <div
+                                        className="comp-dashboard-botton-view-mobile"
+                                        style={{
+                                            width: '100%',
                                             display: "flex",
                                             flexDirection: "row",
                                             alignItems: "center",
@@ -318,13 +354,13 @@ class LiveScoreDivisionList extends Component {
                                             </Button>
                                         </NavLink>}
                                     </div>
-                                </div>
+                                </div>}
 
-                                <div className="col-sm">
+                                {!sourceIdAvailable && <div className="col-sm">
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
-                                            width: "100%",
+                                            width: '100%',
                                             display: "flex",
                                             flexDirection: "row",
                                             alignItems: "center",
@@ -346,7 +382,7 @@ class LiveScoreDivisionList extends Component {
                                             </Button>
                                         </NavLink>
                                     </div>
-                                </div>
+                                </div>}
                             </div>
                         </div>
                     </div>

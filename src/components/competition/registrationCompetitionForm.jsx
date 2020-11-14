@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import {
     Layout,
     Breadcrumb,
@@ -54,6 +54,7 @@ import { venueListAction } from '../../store/actions/commonAction/commonAction'
 import { getOrganisationData } from "../../util/sessionStorage"
 import { fixtureTemplateRoundsAction } from '../../store/actions/competitionModuleAction/competitionDashboardAction';
 import AppUniqueId from "../../themes/appUniqueId";
+import { getCurrentYear } from "util/permissions";
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -78,6 +79,7 @@ class RegistrationCompetitionForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            yearRefId: localStorage.year,
             value: "NETSETGO",
             division: "Division",
             sourceModule: "COMP",
@@ -152,7 +154,7 @@ class RegistrationCompetitionForm extends Component {
                             >
                                 <Select
                                     className='division-age-select'
-                                    style={{ width: "100%", minWidth: 120, }}
+                                    style={{ width: '100%', minWidth: 120, }}
                                     onChange={genderRefId => this.divisionTableDataOnchange(genderRefId, record, index, "genderRefId")}
                                     value={genderRefId}
                                     placeholder="Select"
@@ -197,7 +199,7 @@ class RegistrationCompetitionForm extends Component {
                                 <DatePicker
                                     size="default"
                                     className="comp-venue-time-datepicker"
-                                    style={{ width: "100%", minWidth: 135 }}
+                                    style={{ width: '100%', minWidth: 135 }}
                                     onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "fromDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -224,7 +226,7 @@ class RegistrationCompetitionForm extends Component {
                                 <DatePicker
                                     size="default"
                                     className="comp-venue-time-datepicker"
-                                    style={{ width: "100%", minWidth: 135 }}
+                                    style={{ width: '100%', minWidth: 135 }}
                                     onChange={date => this.divisionTableDataOnchange(moment(date).format("YYYY-MM-DD"), record, index, "toDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -242,7 +244,7 @@ class RegistrationCompetitionForm extends Component {
                     dataIndex: "clear",
                     key: "clear",
                     render: (clear, record, index) => (
-                        <span style={{ display: "flex", justifyContent: "center", width: "100%", cursor: "pointer" }}>
+                        <span style={{ display: "flex", justifyContent: "center", width: '100%', cursor: "pointer" }}>
                             <img
                                 className="dot-image"
                                 src={AppImages.redCross}
@@ -286,7 +288,7 @@ class RegistrationCompetitionForm extends Component {
                 let isPublished = competitionFeesState.competitionDetailData.statusRefId == 2
 
                 let registrationCloseDate = competitionFeesState.competitionDetailData.registrationCloseDate
-                  && moment(competitionFeesState.competitionDetailData.registrationCloseDate)
+                    && moment(competitionFeesState.competitionDetailData.registrationCloseDate)
                 let isRegClosed = registrationCloseDate ? !registrationCloseDate.isSameOrAfter(moment()) : false;
 
                 let creatorId = competitionFeesState.competitionCreator
@@ -316,6 +318,13 @@ class RegistrationCompetitionForm extends Component {
                 this.setDetailsFieldValue();
             }, 100);
             this.setState({ divisionState: false });
+        }
+        if (nextProps.appState.yearList !== this.props.appState.yearList) {
+            if (this.props.appState.yearList.length > 0) {
+                let yearRefId = getCurrentYear(this.props.appState.yearList)
+                this.props.add_editcompetitionFeeDeatils(yearRefId, "yearRefId")
+                this.setDetailsFieldValue()
+            }
         }
     }
 
@@ -428,6 +437,7 @@ class RegistrationCompetitionForm extends Component {
             selectedVenues: compFeesState.selectedVenues,
             startDate: compFeesState.competitionDetailData.startDate && moment(compFeesState.competitionDetailData.startDate),
             endDate: compFeesState.competitionDetailData.endDate && moment(compFeesState.competitionDetailData.endDate),
+            finalTypeRefId: compFeesState.competitionDetailData.finalTypeRefId,
         })
         let data = this.props.competitionFeesState.competionDiscountValue
         let discountData = data && data.competitionDiscounts !== null ? data.competitionDiscounts[0].discounts : []
@@ -470,6 +480,7 @@ class RegistrationCompetitionForm extends Component {
     }
 
     saveAPIsActionCall = (values) => {
+        console.log(values)
         let tabKey = this.state.competitionTabKey
         let compFeesState = this.props.competitionFeesState
         let competitionId = compFeesState.competitionId
@@ -487,6 +498,7 @@ class RegistrationCompetitionForm extends Component {
                 formData.append("description", postData.description);
                 formData.append("competitionTypeRefId", postData.competitionTypeRefId);
                 formData.append("competitionFormatRefId", postData.competitionFormatRefId);
+                formData.append("finalTypeRefId", postData.finalTypeRefId);
                 formData.append("startDate", postData.startDate);
                 formData.append("endDate", postData.endDate);
                 if (postData.competitionFormatRefId == 4) {
@@ -609,7 +621,6 @@ class RegistrationCompetitionForm extends Component {
                                 </span>
                                 <Form.Item
                                     name="yearRefId"
-                                    initialValue={1}
                                     rules={[{ required: true, message: ValidationConstants.pleaseSelectYear }]}
                                 >
                                     <Select className="year-select reg-filter-select-year ml-2">
@@ -689,7 +700,7 @@ class RegistrationCompetitionForm extends Component {
                         <DatePicker
                             className="comp-dashboard-botton-view-mobile"
                             size="large"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             onChange={date => this.updateNonPlayingNames(date, index, "date")}
                             format="DD-MM-YYYY"
                             placeholder="dd-mm-yyyy"
@@ -746,6 +757,9 @@ class RegistrationCompetitionForm extends Component {
         this.props.searchVenueList(filteredData)
     };
 
+    setGradesAndPools = (value) => {
+        this.props.add_editcompetitionFeeDeatils(value, "finalTypeRefId")
+    }
     regCompetitionFeeNavigationView = () => {
         let competitionId = null
         competitionId = this.props.location.state ? this.props.location.state.id : null
@@ -904,7 +918,7 @@ class RegistrationCompetitionForm extends Component {
                         <Select
                             id={AppUniqueId.select_Venues}
                             mode="multiple"
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             onChange={venueSelection => {
                                 this.onSelectValues(venueSelection, detailsData)
                             }}
@@ -960,7 +974,10 @@ class RegistrationCompetitionForm extends Component {
                 </Form.Item>
 
                 <span className="applicable-to-heading required-field">{AppConstants.competitionFormat}</span>
-                <Form.Item name='competitionFormatRefId' rules={[{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }]}>
+                <Form.Item
+                    name='competitionFormatRefId'
+                    rules={[{ required: true, message: ValidationConstants.pleaseSelectCompetitionFormat }]}
+                >
                     <Radio.Group
                         className="reg-competition-radio"
                         onChange={e => this.props.add_editcompetitionFeeDeatils(e.target.value, "competitionFormatRefId")}
@@ -978,6 +995,22 @@ class RegistrationCompetitionForm extends Component {
                         ))}
                     </Radio.Group>
                 </Form.Item>
+
+                <span className="applicable-to-heading required-field">{AppConstants.gradesOrPools}</span>
+                <Form.Item
+                    name="finalTypeRefId"
+                    initialValue={detailsData.competitionDetailData.finalTypeRefId}
+                    rules={[{ required: true, message: ValidationConstants.pleaseSelectGradesOrPools }]}
+                >
+                    <Radio.Group
+                        className="reg-competition-radio"
+                        onChange={e => this.setGradesAndPools(e.target.value)}
+                        value={detailsData.competitionDetailData.finalTypeRefId}
+                    >
+                        <Radio value={1}>{AppConstants.grades}</Radio>
+                        <Radio value={2}>{AppConstants.pools}</Radio>
+                    </Radio.Group>
+                </Form.Item>
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
@@ -986,7 +1019,7 @@ class RegistrationCompetitionForm extends Component {
                             <Form.Item name="startDate" rules={[{ required: true, message: ValidationConstants.startDateIsRequired }]}>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={date => this.dateOnChangeFrom(date, "startDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -1000,7 +1033,7 @@ class RegistrationCompetitionForm extends Component {
                             <Form.Item name="endDate" rules={[{ required: true, message: ValidationConstants.endDateIsRequired }]}>
                                 <DatePicker
                                     size="large"
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     onChange={date => this.dateOnChangeFrom(date, "endDate")}
                                     format="DD-MM-YYYY"
                                     placeholder="dd-mm-yyyy"
@@ -1017,7 +1050,7 @@ class RegistrationCompetitionForm extends Component {
                         <InputWithHead heading={AppConstants.numberOfRounds} required="required-field" />
                         <Form.Item name='numberOfRounds' rules={[{ required: true, message: ValidationConstants.numberOfRoundsNameIsRequired }]}>
                             <Select
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 placeholder={AppConstants.selectRound}
                                 onChange={(e) => this.props.add_editcompetitionFeeDeatils(e, "noOfRounds")}
                                 // value={detailsData.competitionDetailData.noOfRounds}
@@ -1151,7 +1184,7 @@ class RegistrationCompetitionForm extends Component {
                                         <Table
                                             className="fees-table"
                                             columns={this.state.divisionTable}
-                                            dataSource={item.divisions}
+                                            dataSource={[...item.divisions]}
                                             pagination={false}
                                             Divider="false"
                                             key={index}
@@ -1171,10 +1204,10 @@ class RegistrationCompetitionForm extends Component {
                                     </a>
                                 </div>
                             ) : (
-                                <span className="applicable-to-heading pt-0 pl-2">
-                                    {AppConstants.nonPlayerDivisionMessage}
-                                </span>
-                            )}
+                                    <span className="applicable-to-heading pt-0 pl-2">
+                                        {AppConstants.nonPlayerDivisionMessage}
+                                    </span>
+                                )}
                         </div>
                     </div>
                 ))}
@@ -1232,7 +1265,7 @@ class RegistrationCompetitionForm extends Component {
                             <div className="reg-add-save-button">
                                 {competitionId && (
                                     <Tooltip
-                                        style={{ height: "100%" }}
+                                        style={{ height: '100%' }}
                                         onMouseEnter={() => this.setState({ tooltipVisibleDelete: isPublished })}
                                         onMouseLeave={() => this.setState({ tooltipVisibleDelete: false })}
                                         visible={this.state.tooltipVisibleDelete}
@@ -1252,7 +1285,7 @@ class RegistrationCompetitionForm extends Component {
                         <div className="col-sm">
                             <div className="comp-buttons-view">
                                 <Tooltip
-                                    style={{ height: "100%" }}
+                                    style={{ height: '100%' }}
                                     onMouseEnter={() => this.setState({ tooltipVisibleDraft: isPublished })}
                                     onMouseLeave={() => this.setState({ tooltipVisibleDraft: false })}
                                     visible={this.state.tooltipVisibleDraft}
@@ -1270,7 +1303,7 @@ class RegistrationCompetitionForm extends Component {
                                     </Button>
                                 </Tooltip>
                                 <Tooltip
-                                    style={{ height: "100%" }}
+                                    style={{ height: '100%' }}
                                     onMouseEnter={() => this.setState({ tooltipVisiblePublish: allDisable })}
                                     onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                     visible={this.state.tooltipVisiblePublish}
@@ -1321,7 +1354,7 @@ class RegistrationCompetitionForm extends Component {
                         onFinishFailed={(err) => {
                             this.formRef.current.scrollToField(err.errorFields[0].name);
                         }}
-                        initialValues={{ yearRefId: 1, competitionTypeRefId: 1, competitionFormatId: 1 }}
+                        initialValues={{ yearRefId: this.state.yearRefId, competitionTypeRefId: 1, competitionFormatId: 1 }}
                         noValidate="noValidate"
                     >
                         {this.headerView()}

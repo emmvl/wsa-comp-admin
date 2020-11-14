@@ -305,7 +305,7 @@ class UserProfileEdit extends Component {
                         <InputWithHead heading={AppConstants.dob} />
                         <DatePicker
                             size="large"
-                            style={{ width: "100%", marginTop: "9px" }}
+                            style={{ width: '100%', marginTop: "9px" }}
                             onChange={e => this.onChangeSetValue(e, "dateOfBirth")}
                             format="DD-MM-YYYY"
                             showTime={false}
@@ -400,7 +400,7 @@ class UserProfileEdit extends Component {
                             <InputWithHead heading={AppConstants.stateHeading} />
                         </div>
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182,}}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182,}}
                             placeholder={AppConstants.select}
                             value={userData.stateRefId}
                             name="stateRefId"
@@ -500,7 +500,7 @@ class UserProfileEdit extends Component {
                         </div>
 
                         <Select
-                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                             placeholder={AppConstants.select_state}
                             // onChange={(e) => this.onChangeSetValue(e, "stateRefId")}
                             value={userData.stateRefId}
@@ -632,7 +632,7 @@ class UserProfileEdit extends Component {
                                     <InputWithHead heading={AppConstants.childCountry} />
                                 </div>
                                 <Select
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     placeholder={AppConstants.childCountry}
                                     onChange={(e) => this.onChangeSetValue(e, "countryRefId")}
                                     value={userData.countryRefId}
@@ -653,7 +653,7 @@ class UserProfileEdit extends Component {
                                     <InputWithHead heading={AppConstants.nationalityReference} />
                                 </div>
                                 <Select
-                                    style={{ width: "100%" }}
+                                    style={{ width: '100%' }}
                                     placeholder={AppConstants.nationalityReference}
                                     onChange={(e) => {this.onChangeSetValue(e, "nationalityRefId")}}
                                     value={userData.nationalityRefId}
@@ -697,7 +697,7 @@ class UserProfileEdit extends Component {
                         <InputWithHead heading={AppConstants.checkExpiryDate} />
                         <DatePicker
                             size="large"
-                            style={{ width: "100%" , marginTop: "9px"}}
+                            style={{ width: '100%' , marginTop: "9px"}}
                             onChange={e => this.onChangeSetValue(e, "childrenCheckExpiryDate")}
                             format="DD-MM-YYYY"
                             showTime={false}

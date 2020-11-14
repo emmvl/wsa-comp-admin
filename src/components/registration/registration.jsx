@@ -153,7 +153,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (fee) => (
             <div>
-                {fee != null ? currencyFormat(fee) : ""}
+                {fee != null ? currencyFormat(fee) : "$0.00"}
             </div>
         ),
     },
@@ -165,7 +165,7 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (pendingFee) => (
             <div>
-                {pendingFee != null ? currencyFormat(pendingFee) : ""}
+                {pendingFee != null ? currencyFormat(pendingFee) : "$0.00"}
             </div>
         ),
     },
@@ -174,12 +174,14 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record, index) => (
+            record.actionView  ? 
             <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
                 mode="horizontal"
                 style={{ lineHeight: "25px" }}
             >
+               
                 <SubMenu
                     key="sub1"
                     title={
@@ -212,7 +214,8 @@ const columns = [
                     }
 
                 </SubMenu>
-            </Menu>
+                
+            </Menu> : ""
         ),
     },
 ];

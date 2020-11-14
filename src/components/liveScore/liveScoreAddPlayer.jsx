@@ -242,7 +242,7 @@ class LiveScoreAddPlayer extends Component {
                         <InputWithHead heading={AppConstants.dOB} />
                         <DatePicker
                             size="large"
-                            style={{ width: "100%" }}
+                            style={{ width: '100%' }}
                             onChange={(dateOfBirth) => dateOfBirth && this.props.liveScoreUpdatePlayerDataAction(moment(dateOfBirth).format('DD-MM-YYYY'), 'dateOfBirth')}
                             format="DD-MM-YYYY"
                             placeholder="dd-mm-yyyy"
@@ -280,7 +280,7 @@ class LiveScoreAddPlayer extends Component {
                         <Form.Item name='team' rules={[{ required: true, message: ValidationConstants.teamName }]}>
                             <Select
                                 loading={this.props.liveScoreState.onLoad && true}
-                                style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                 onChange={(teamId) => this.props.liveScoreUpdatePlayerDataAction(teamId, 'teamId')}
                                 value={playerData.teamId}
                                 placeholder={AppConstants.selectTeam}

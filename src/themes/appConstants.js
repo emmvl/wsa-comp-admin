@@ -1567,8 +1567,10 @@ const AppConstants = {
     paymentMethods: 'Payment Methods',
     singleGamePerTeamMember: 'Single Game Fee per Team Member(inc GST)',
     setMembershipProducts: 'Set Membership Product(s)',
-    chargedForFullSeason: 'Charged for Full Season',
-    chargedPerMatch: 'Charged per Match',
+    chargedForFullSeason: 'Charged at Fees at Registration',
+    chargedPerMatch: 'Charged at Match (Competition Fees only. Membership and Nomination Fees are charged at Registration)',
+    feesPaidAtEachMatchByUser: "Fees paid at each match by user who registered team",
+    feesPaidAtEachMatchByPlayer: "Fees Paid at each Match by each Player",
     membershipPaymentOptions: 'MembershipPaymentOption',
     membershipFeesPaymentOptions: 'Membership Fee Payment Options',
     whenPaymentsRequired: 'When Payments are Required',
@@ -1592,6 +1594,11 @@ const AppConstants = {
     quickCompetitionMismatchMsg: 'The venue you have selected for this quick competition will override the competition you are merging to',
     regoFormConfirmMsg: 'Some users may receive this email a second time. Are you sure you want to proceed?',
     emailNotificationUpdate: 'Email Notification Update',
+
+    unavailable: "Unavailable",
+    teamGrading: 'Team Grading',
+    usernameEmail:"Username/Email",
+    proceedText: "Proceed",
 };
 
 export default AppConstants;

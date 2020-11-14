@@ -125,7 +125,7 @@ class CompetitionReGrading extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-sm">
-                            <div className="com-year-select-heading-view" >
+                            <div className="com-year-select-heading-view">
                                 <span className="year-select-heading">{AppConstants.year}:</span>
                                 <Select
                                     className="year-select"
@@ -139,7 +139,7 @@ class CompetitionReGrading extends Component {
                         </div>
                         <div className="col-sm">
                             <div style={{
-                                width: "100%",
+                                width: '100%',
                                 display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center",
@@ -158,7 +158,7 @@ class CompetitionReGrading extends Component {
                         </div>
                         <div className="col-sm">
                             <div style={{
-                                width: "100%",
+                                width: '100%',
                                 display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center"
@@ -176,7 +176,7 @@ class CompetitionReGrading extends Component {
                         </div>
                         <div className="col-sm">
                             <div style={{
-                                width: "100%",
+                                width: '100%',
                                 display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center"

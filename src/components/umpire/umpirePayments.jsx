@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Layout, Button, Table, Select, Input, Modal, Checkbox, Pagination } from "antd";
+import { Layout, Button, Table, Select, Input, Modal, Checkbox, Pagination, Tooltip } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
 import AppConstants from "themes/appConstants";
@@ -10,9 +10,22 @@ import { isArrayNotEmpty } from "util/helpers";
 import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
 import InnerHorizontalMenu from "pages/innerHorizontalMenu";
 import DashboardLayout from "pages/dashboardLayout";
-import { getUmpirePaymentData, updateUmpirePaymentData } from '../../store/actions/umpireAction/umpirePaymentAction'
-
+import { getUmpirePaymentData, updateUmpirePaymentData, umpirePaymentTransferData } from '../../store/actions/umpireAction/umpirePaymentAction'
+import {
+    getUmpireCompetiton,
+    setUmpireCompition,
+    getOrganisationData,
+    setUmpireCompitionData,
+    getUmpireCompetitonData,
+    getLiveScoreUmpireCompition,
+    getLiveScoreUmpireCompitionData,
+    setLiveScoreUmpireCompition,
+    setLiveScoreUmpireCompitionData,
+    getPrevUrl,
+} from "util/sessionStorage";
 import "./umpire.css";
+import Loader from '../../customComponents/loader'
+import { message } from "antd";
 
 const { Content, Footer } = Layout;
 const { Option } = Select;
@@ -50,19 +63,23 @@ const columns = [
         key: "First Name",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (umpireName, recod) => {
-            // let res = recod.umpireName ? recod.umpireName.split(" ", 1) : ""
-            return (
-                <>
-                    {
-                        recod.user &&
-                        <span className="input-heading-add-another pt-0">{recod.user.firstName}</span>
-                        // :
-                        // <span className="input-heading-add-another pt-0">{res}</span>
-                    }
-                </>
-            )
-        }
+        render: (firstName, record) => (
+            <NavLink
+                to={{
+                    pathname: "/userPersonal",
+                    state: {
+                        userId: record.userId,
+                        screenKey: "umpire",
+                        screen: "/umpirePayment",
+                    },
+                }}
+            >
+                {
+                    record.user &&
+                    <span className="input-heading-add-another pt-0">{record.user.firstName}</span>
+                }
+            </NavLink>
+        ),
     },
     {
         title: "Last Name",
@@ -70,19 +87,23 @@ const columns = [
         key: "Last Name",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (umpireName, recod) => {
-            // let res = recod.umpireName ? recod.umpireName.split(" ", 2) : ""
-            return (
-                <>
-                    {
-                        recod.user &&
-                        <span className="input-heading-add-another pt-0">{recod.user.lastName}</span>
-                        // :
-                        // <span className="input-heading-add-another pt-0">{res}</span>
-                    }
-                </>
-            )
-        }
+        render: (lastName, record) => (
+            <NavLink
+                to={{
+                    pathname: "/userPersonal",
+                    state: {
+                        userId: record.userId,
+                        screenKey: "umpire",
+                        screen: "/umpirePayment",
+                    },
+                }}
+            >
+                {
+                    record.user &&
+                    <span className="input-heading-add-another pt-0">{record.user.lastName}</span>
+                }
+            </NavLink>
+        ),
     },
     {
         title: "Match ID",
@@ -90,7 +111,16 @@ const columns = [
         key: "matchId",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (matchId) => <span className="input-heading-add-another pt-0">{matchId}</span>
+        render: (matchId) => (
+            <NavLink
+                to={{
+                    pathname: "/liveScoreMatchDetails",
+                    state: { matchId: matchId, umpireKey: "umpire", screenName: "umpirePayment" },
+                }}
+            >
+                <span className="input-heading-add-another pt-0">{matchId}</span>
+            </NavLink>
+        ),
     },
     {
         title: "Verified By",
@@ -100,24 +130,51 @@ const columns = [
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: "Make Payment",
-        dataIndex: "status",
-        key: "status",
+        title: "Status",
+        dataIndex: "makePayment",
+        key: "paymentStatus",
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: (status) => <span>{status ? status : 'Unpaid'}</span>
+        render: (paymentStatus, record) => {
+            let status=record.paymentStatus
+            const capitalized = status.replace(/^./, status[0].toUpperCase());
+            return (
+                <span>{capitalized}</span>
+            )
+        }
     },
     {
         title: "Pay",
-        dataIndex: "paymentStatus",
-        key: "paymentStatus",
-        render: (paymentStatus, record, index) => <Checkbox
-            className="single-checkbox"
-            checked={paymentStatus == "unpaid" ? false : true}
-            // checked={paymentStatus}
-            onChange={(e) => this_obj.props.updateUmpirePaymentData({ data: e.target.checked, key: "paymentStatus", index: index })}
-        >
-        </Checkbox>
+        dataIndex: "selectedValue",
+        key: "selectedValue",
+        render: (selectedValue, record, index) => {
+            return (
+
+                (record.user && record.user.stripeAccountId || record.paymentStatus === "paid") ?
+                    <Checkbox
+                        className="single-checkbox"
+                        checked={selectedValue}
+                        disabled={record.paymentStatus === "paid" ? true : false}
+                        onChange={(e) => this_obj.props.updateUmpirePaymentData({ data: e.target.checked, key: "selectedValue", index: index, allData: record })}
+                    >
+                    </Checkbox>
+                    :
+                    <Tooltip
+                        className="comp-player-table-tag2"
+                        style={{ height: '100%' }}
+                        onMouseEnter={() => this_obj.changeHover(record, index, true)}
+                        onMouseLeave={() => this_obj.changeHover(record, index, false)}
+                        visible={record.hoverVisible}
+                        title="Please ask the user to set up their bank details"
+                    >
+                        <Checkbox
+                            className="single-checkbox"
+                            disabled={true}
+                        >
+                        </Checkbox>
+                    </Tooltip>
+            )
+        }
     }
 ]
 
@@ -135,15 +192,33 @@ class UmpirePayments extends Component {
             compArray: [],
             sortBy: null,
             sortOrder: null,
-            offsetData: 0
+            offsetData: 0,
+            paymentLoad: false
         }
         this_obj = this
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         let { organisationId, } = JSON.parse(localStorage.getItem("setOrganisationData"))
-        this.setState({ loading: true })
+        // this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, "USERS")
+        const { umpirePaymentObject } = this.props.umpirePaymentState
+        let page = 1
+        let sortBy = this.state.sortBy
+        let sortOrder = this.state.sortOrder
+        if (umpirePaymentObject) {
+            let selectedComp = umpirePaymentObject.data.compId
+            let offset = umpirePaymentObject.data.pagingBody.paging.offset
+            let searchText = umpirePaymentObject.data.search
+            sortBy = umpirePaymentObject.data.sortBy
+            sortOrder = umpirePaymentObject.data.sortOrder
+            await this.setState({ offset, searchText, sortBy, sortOrder, selectedComp })
+            page = Math.floor(offset / 10) + 1;
+
+            this.handlePageChange(page)
+        } else {
+            this.setState({ loading: true })
+        }
     }
 
     componentDidUpdate(nextProps) {
@@ -153,19 +228,104 @@ class UmpirePayments extends Component {
                 let firstComp = compList.length > 0 && compList[0].id
                 let compData = compList.length > 0 && compList[0]
 
-                let { sortBy, sortOrder, searchText } = this.state
-                const body =
-                {
-                    paging: {
-                        offset: 0,
-                        limit: 10,
-                    },
+                // setUmpireCompition(firstComp);
+                // setUmpireCompitionData(JSON.stringify(compData));
+
+                if (getUmpireCompetiton()) {
+                    if (this.state.liveScoreUmpire === "liveScoreUmpire") {
+                        firstComp = JSON.parse(getLiveScoreUmpireCompition());
+                        compData = JSON.parse(getLiveScoreUmpireCompitionData());
+                        setUmpireCompition(firstComp);
+                        setUmpireCompitionData(JSON.stringify(compData));
+                    } else {
+                        firstComp = JSON.parse(getUmpireCompetiton());
+                        compData = JSON.parse(getUmpireCompetitonData());
+                    }
+                } else {
+                    setUmpireCompition(firstComp);
+                    setUmpireCompitionData(JSON.stringify(compData));
                 }
 
-                this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
-                this.setState({ selectedComp: firstComp, loading: false, })
+                if (firstComp !== false) {
+                    if (this.state.liveScoreUmpire === "liveScoreUmpire") {
+                        let compId = JSON.parse(getLiveScoreUmpireCompition());
+
+                        const { uniqueKey } = JSON.parse(getLiveScoreUmpireCompitionData());
+                        let compObjData = JSON.parse(getLiveScoreUmpireCompitionData());
+
+                        let { sortBy, sortOrder, searchText } = this.state
+                        const body =
+                        {
+                            paging: {
+                                offset: 0,
+                                limit: 10,
+                            },
+                        }
+
+                        this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
+                        this.setState({ selectedComp: firstComp, loading: false, compArray: compList, })
+
+                        this.setState({
+                            selectedComp: compId,
+                            loading: false,
+                            competitionUniqueKey: uniqueKey,
+                            compArray: compList,
+                        });
+                    } else {
+                        let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
+
+                        let { sortBy, sortOrder, searchText } = this.state
+                        const body =
+                        {
+                            paging: {
+                                offset: 0,
+                                limit: 10,
+                            },
+                        }
+
+                        this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
+                        this.setState({ selectedComp: firstComp, loading: false, compArray: compList, })
+
+                        this.setState({
+                            selectedComp: firstComp,
+                            loading: false,
+                            competitionUniqueKey: compKey,
+                            compArray: compList,
+                            venueLoad: true,
+                        });
+                    }
+
+                    if (this.state.paymentLoad == true && this.props.umpirePaymentState.onPaymentLoad === false) {
+                        const body =
+                        {
+                            paging: {
+                                offset: 0,
+                                limit: 10,
+                            },
+                        }
+                        this.props.getUmpirePaymentData({ compId: this.state.selectedComp, pagingBody: body, search: this.state.searchText, sortBy: this.state.sortBy, sortOrder: this.state.sortOrder })
+                        this.setState({ paymentLoad: false })
+                    }
+
+                    // let { sortBy, sortOrder, searchText } = this.state
+                    // const body =
+                    // {
+                    //     paging: {
+                    //         offset: 0,
+                    //         limit: 10,
+                    //     },
+                    // }
+
+                    // this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
+                    // this.setState({ selectedComp: firstComp, loading: false, compArray: compList, })
+                }
             }
         }
+    }
+
+    changeHover(record, index, onHoverValue) {
+        this.props.updateUmpirePaymentData({ data: onHoverValue, key: "hoverVisible", index: index })
+
     }
 
     handlePageChange = (page) => {
@@ -203,7 +363,7 @@ class UmpirePayments extends Component {
                     <div
                         className="comp-dashboard-botton-view-mobile"
                         style={{
-                            width: "100%",
+                            width: '100%',
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
@@ -239,6 +399,21 @@ class UmpirePayments extends Component {
         this.props.getUmpirePaymentData({ compId: selectedComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
         this.setState({ selectedComp });
 
+        let compObj = null;
+        for (let i in this.state.compArray) {
+            if (compID.comp === this.state.compArray[i].id) {
+                compObj = this.state.compArray[i];
+                break;
+            }
+        }
+
+        setUmpireCompition(selectedComp);
+        setUmpireCompitionData(JSON.stringify(compObj));
+
+        setLiveScoreUmpireCompition(selectedComp);
+        setLiveScoreUmpireCompitionData(JSON.stringify(compObj));
+
+
     };
 
     showConfirm = () => {
@@ -250,7 +425,7 @@ class UmpirePayments extends Component {
             mask: true,
             maskClosable: true,
             onOk() {
-
+                this_obj.umpireTransferData(1)
             },
             onCancel() {
 
@@ -324,7 +499,7 @@ class UmpirePayments extends Component {
                             flexDirection: "row",
                             alignItems: "center",
                             justifyContent: "flex-end",
-                            width: "100%"
+                            width: '100%'
                         }}
                     >
                         <div className="row">
@@ -335,6 +510,7 @@ class UmpirePayments extends Component {
                                         onChange={(e) => this.onChangeSearchText(e)}
                                         placeholder="Search..."
                                         onKeyPress={(e) => this.onKeyEnterSearchText(e)}
+                                        value={this.state.searchText}
                                         prefix={
                                             <SearchOutlined
                                                 style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
@@ -355,7 +531,7 @@ class UmpirePayments extends Component {
     dropdownView = () => {
         const { paymentStatus } = this.props.umpirePaymentState
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-
+        console.log(paymentStatus, 'paymentStatus')
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width">
@@ -404,41 +580,68 @@ class UmpirePayments extends Component {
         )
     }
 
-    footerView = () => (
-        <div className="fluid-width paddingBottom56px">
-            <div className="row">
-                <div className="col-sm-3">
-                    <div className="reg-add-save-button">
-                        {/* <NavLink to="/competitionPlayerGrades"> */}
-                        <Button className="cancelBtnWidth" type="cancel-button">{AppConstants.cancel}</Button>
-                        {/* </NavLink> */}
+    umpireTransferData(statusId) {
+        const { paymentTransferPostData } = this.props.umpirePaymentState
+
+        let data = {
+            statusId: statusId,
+            organisationUniqueKey: getOrganisationData().organisationUniqueKey,
+            transfers: paymentTransferPostData
+        }
+
+        if (paymentTransferPostData.length > 0) {
+            this.props.umpirePaymentTransferData({ postData: data })
+            this.setState({ paymentLoad: true })
+        } else {
+            message.config({
+                duration: 1.5,
+                maxCount: 1,
+            });
+            message.error("Please select an Umpire for the payment.");
+        }
+
+    }
+
+    footerView = () => {
+        const { paymentTransferPostData } = this.props.umpirePaymentState
+        return (
+            <div className="fluid-width paddingBottom56px">
+                <div className="row">
+                    <div className="col-sm-3">
+                        <div className="reg-add-save-button">
+                            <Button
+                                onClick={() => this.props.updateUmpirePaymentData({ data: null, key: "clearData" })}
+                                className="cancelBtnWidth"
+                                type="cancel-button">{AppConstants.cancel}</Button>
+                        </div>
                     </div>
-                </div>
-                <div className="col-sm">
-                    <div className="comp-buttons-view">
-                        <Button className="publish-button save-draft-text" type="primary">
-                            {AppConstants.save}
-                        </Button>
-                        {/* <NavLink to="/competitionCourtAndTimesAssign"> */}
-                        <Button
-                            onClick={this.showConfirm}
-                            className="publish-button margin-top-disabled-button"
-                            type="primary"
-                        >
-                            {AppConstants.submit}
-                        </Button>
-                        {/* </NavLink> */}
+                    <div className="col-sm">
+                        <div className="comp-buttons-view">
+                            <Button onClick={() => this.umpireTransferData(0)} className="publish-button save-draft-text" type="primary">
+                                {AppConstants.save}
+                            </Button>
+                            <Button
+                                onClick={paymentTransferPostData.length > 0 ? this.showConfirm : () => this.umpireTransferData(1)}
+                                className="publish-button margin-top-disabled-button"
+                                type="primary"
+                            >
+                                {AppConstants.submit}
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        )
+    }
 
     render() {
+        const { umpirePaymentList, umpirePaymentObject } = this.props.umpirePaymentState
+        console.log(umpirePaymentObject, 'umpirePaymentObject')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="7" />
+                <Loader visible={this.props.umpirePaymentState.onPaymentLoad} />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -446,7 +649,7 @@ class UmpirePayments extends Component {
                         {this.contentView()}
                     </Content>
                     <Footer>
-                        {this.footerView()}
+                        {umpirePaymentList.length > 0 && this.footerView()}
                     </Footer>
                 </Layout>
             </div>
@@ -458,7 +661,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         umpireCompetitionListAction,
         getUmpirePaymentData,
-        updateUmpirePaymentData
+        updateUmpirePaymentData,
+        umpirePaymentTransferData
     }, dispatch);
 }
 

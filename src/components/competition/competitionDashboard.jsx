@@ -25,6 +25,7 @@ import DashboardLayout from "pages/dashboardLayout";
 import {
     setOwnCompetitionYear,
     setOwn_competition,
+    clearCompetitionStorage
 } from "../../util/sessionStorage";
 
 const { Content } = Layout;
@@ -279,6 +280,7 @@ class CompetitionDashboard extends Component {
     };
 
     updateCompetitionStatus = (record) => {
+        clearCompetitionStorage()
         let storedYearID = localStorage.getItem("yearId");
         let selectedYearId = (storedYearID == null || storedYearID == 'null') ? 1 : JSON.parse(storedYearID);
         let payload = {
@@ -363,7 +365,7 @@ class CompetitionDashboard extends Component {
                             <span className="form-heading">
                                 {AppConstants.ownedCompetitions}
                             </span>
-                            <div style={{ marginTop: -10 }}>
+                            <div style={{ marginTop: -20 }}>
                                 <Tooltip placement="top" background="#ff8237">
                                     <span>{AppConstants.ownedCompetitionMsg}</span>
                                 </Tooltip>
@@ -382,7 +384,7 @@ class CompetitionDashboard extends Component {
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
-                                            width: "100%",
+                                            width: '100%',
                                             display: "flex",
                                             flexDirection: "row",
                                             alignItems: "center",
@@ -404,7 +406,7 @@ class CompetitionDashboard extends Component {
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
-                                            width: "100%",
+                                            width: '100%',
                                             display: "flex",
                                             flexDirection: "row",
                                             alignItems: "center",
@@ -425,7 +427,7 @@ class CompetitionDashboard extends Component {
                                     <div
                                         className="comp-dashboard-botton-view-mobile"
                                         style={{
-                                            width: "100%",
+                                            width: '100%',
                                             display: "flex",
                                             flexDirection: "row",
                                             alignItems: "center",
@@ -503,7 +505,7 @@ class CompetitionDashboard extends Component {
                             <span id={AppUniqueId.ownedCompetition_column_headers_table} className="form-heading">
                                 {AppConstants.participateInComp}
                             </span>
-                            <div style={{ marginTop: -10 }}>
+                            <div style={{ marginTop: -20 }}>
                                 <Tooltip placement="top" background="#ff8237">
                                     <span>{AppConstants.participateCompMsg}</span>
                                 </Tooltip>

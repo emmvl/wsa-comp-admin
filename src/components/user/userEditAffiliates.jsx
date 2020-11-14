@@ -497,7 +497,7 @@ class UserEditAffiliates extends Component {
             <div className="content-view pt-4">
                 <InputWithHead heading={AppConstants.organisationType} />
                 <Select
-                    style={{ width: "100%", paddingRight: 1 }}
+                    style={{ width: '100%', paddingRight: 1 }}
                     onChange={(e) =>
                         this.onChangeSetValue(e, AppConstants.organisationTypeRefId)
                     }
@@ -547,7 +547,7 @@ class UserEditAffiliates extends Component {
                             }]}
                         >
                             <Select
-                                style={{ width: "100%", paddingRight: 1 }}
+                                style={{ width: '100%', paddingRight: 1 }}
                                 value={affiliate.affiliatedToOrgId}
                                 onChange={(e) =>
                                     this.onChangeSetValue(e, AppConstants.affiliatedToOrgId)
@@ -749,7 +749,7 @@ class UserEditAffiliates extends Component {
                             }]}
                         >
                             <Select
-                                style={{ width: "100%", paddingRight: 1 }}
+                                style={{ width: '100%', paddingRight: 1 }}
                                 onChange={(e) =>
                                     this.onChangeContactSetValue(e, "roles", index)
                                 }

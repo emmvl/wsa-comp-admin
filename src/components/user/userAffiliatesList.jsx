@@ -284,7 +284,7 @@ class UserAffiliatesList extends Component {
                     <div className="row">
                         <div className="col-lg-3 col-md-6">
                             <div style={{
-                                width: "100%",
+                                width: '100%',
                                 display: "flex",
                                 flexDirection: "row",
                                 alignItems: "center"

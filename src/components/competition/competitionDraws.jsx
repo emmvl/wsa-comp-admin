@@ -1147,7 +1147,7 @@ class CompetitionDraws extends Component {
                             size={'large'}
                             onChange={(date) => this.onChangeStartDate(moment(date[0]).format("YYYY-MM-DD"), moment(date[1]).format("YYYY-MM-DD"))}
                             format="DD-MM-YYYY"
-                            style={{ width: "100%", minWidth: 180, paddingLeft: 5 }}
+                            style={{ width: '100%', minWidth: 180, paddingLeft: 5 }}
                             value={[moment(this.state.startDate), moment(this.state.endDate)]}
                           />
                         </div>

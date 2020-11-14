@@ -302,12 +302,12 @@ let userHttpApi = {
   umpireList(data) {
     let url = null;
     if (data.userName) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     } else if (data.offset != null) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     }
     else {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     }
 
     if (data.sortBy && data.sortOrder) {
@@ -408,12 +408,12 @@ let userHttpApi = {
   umpireList_Data(data) {
     let url = null;
     if (data.userName) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     } else if (data.offset != null) {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&offset=${data.offset}&limit=${10}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     }
     else {
-      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}`
+      url = `/users/byRoles?roleIds=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&needUREs=${true}&individualLinkedEntityRequired=${true}`
     }
 
     if (data.sortBy && data.sortOrder) {
@@ -422,6 +422,19 @@ let userHttpApi = {
 
     return Method.dataGet(url, localStorage.token);
   },
+  umpireSearch(data) {
+    console.log(data, 'umpireSearch')
+    let url = null
+    if (data.userName) {
+      url = `users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}&userName=${data.userName}`;
+
+    } else {
+
+      url = `users/byRole?roleId=${data.refRoleId}&entityTypeId=${data.entityTypes}&entityId=${data.compId}`;
+    }
+    return Method.dataGet(url, token);
+  }
+
 };
 
 let Method = {

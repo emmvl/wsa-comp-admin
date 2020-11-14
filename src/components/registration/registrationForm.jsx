@@ -93,13 +93,13 @@ const columns = [
         width: "25%",
         key: "registrationLock",
         filterDropdown: true,
-        filterIcon: () => {
-            return (
+        filterIcon: () => (
+            <div style={{ marginTop: 5 }}>
                 <CustomTooltip placement="top" background="#ff8237">
                     <span>{AppConstants.regLockMsg}</span>
                 </CustomTooltip>
-            );
-        },
+            </div>
+        ),
         render: (registrationLock, record, index) => (
             <Checkbox
                 className="single-checkbox mt-1"
@@ -193,7 +193,7 @@ class RegistrationForm extends Component {
                 this.setFieldDecoratorValues()
                 this.setState({
                     onRegistrationLoad: false,
-                   // isPublished: registrationState.registrationFormData[0].statusRefId == 2  
+                   // isPublished: registrationState.registrationFormData[0].statusRefId == 2
                 })
             }
         }
@@ -318,14 +318,12 @@ class RegistrationForm extends Component {
                 hasError: true
             })
         } else {
-            if(canInviteSend == 1 && SelectedProduct.canInviteSend == 1){
-                this.setState({visible: true});
-            }
-            else{
-                if( SelectedProduct.canInviteSend == 1){
+            if (canInviteSend == 1 && SelectedProduct.canInviteSend == 1) {
+                this.setState({ visible: true });
+            } else {
+                if (SelectedProduct.canInviteSend == 1) {
                     this.registrationSend(1);
-                }
-                else{
+                } else {
                     this.registrationSend(0);
                 }
             }
@@ -385,11 +383,9 @@ class RegistrationForm extends Component {
     }
 
     handleModal = (key) => {
-        console.log("key"+ key);
-        if(key == "ok"){
+        if (key == "ok") {
             this.registrationSend(1);
-        }
-        else if(key == "cancel"){
+        } else if (key == "cancel") {
             this.registrationSend(0);
         }
 
@@ -404,15 +400,14 @@ class RegistrationForm extends Component {
                 onCancel={() => this.handleModal("close")}
                 centered
                 footer={[
-                    <Button key="Cancel"  className="save-draft-text" type="save-draft-text" style={{width: '100px'}} onClick={() => this.handleModal("cancel")}>
-                      {AppConstants.cancel}
+                    <Button key="Cancel" className="save-draft-text" type="save-draft-text" style={{width: '100px'}} onClick={() => this.handleModal("cancel")}>
+                        {AppConstants.cancel}
                     </Button>,
-                     <Button key="Proceed" onClick={() => this.handleModal("ok")}  type="primary"  className="open-reg-button" >
+                    <Button key="Proceed" onClick={() => this.handleModal("ok")} type="primary" className="open-reg-button">
                         Proceed
-                   </Button>
-                  ]}
+                    </Button>,
+                ]}
             >
-                
                 {AppConstants.regoFormConfirmMsg}
             </Modal>
         )
@@ -580,7 +575,7 @@ class RegistrationForm extends Component {
         let compCLoseDate = moment(this.state.compCloseDate).format("DD-MM-YYYY")
         let defaultChecked = this.props.registrationState.defaultChecked
         let isPublished = false; // this.state.isPublished // CM-1513
-    
+
         return (
             <div className="content-view pt-4">
                 <div className="row" style={{ paddingLeft: 10, paddingBottom: 15 }}>
@@ -593,7 +588,7 @@ class RegistrationForm extends Component {
                             heading={AppConstants.registrationOpen}
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.regFormOpenMsg}
-                            marginTop={5}
+                            marginTop={0}
                         />
                         <Form.Item
                             name='registrationOpenDate'
@@ -603,11 +598,10 @@ class RegistrationForm extends Component {
                             }]}
                         >
                             <DatePicker
-                                size="large"
+                                // size="large"
                                 placeholder="dd-mm-yyyy"
-                                style={{ width: "100%" }}
-                                onChange={(e) => this.dateChange(e, "registrationOpenDate")
-                                }
+                                style={{ width: '100%' }}
+                                onChange={(e) => this.dateChange(e, "registrationOpenDate")}
                                 name={"registrationOpenDate"}
                                 format="DD-MM-YYYY"
                                 showTime={false}
@@ -626,7 +620,7 @@ class RegistrationForm extends Component {
                             heading={AppConstants.registration_close}
                             conceptulHelp
                             conceptulHelpMsg={AppConstants.regFormCloseMsg}
-                            marginTop={5}
+                            marginTop={0}
                         />
                         <Form.Item
                             name='registrationCloseDate'
@@ -636,8 +630,8 @@ class RegistrationForm extends Component {
                             }]}
                         >
                             <DatePicker
-                                size="large"
-                                style={{ width: "100%" }}
+                                // size="large"
+                                style={{ width: '100%' }}
                                 disabledDate={this.disabledDate}
                                 placeholder="dd-mm-yyyy"
                                 onChange={(e) => this.dateChange(e, "registrationCloseDate")}
@@ -658,7 +652,7 @@ class RegistrationForm extends Component {
                 <Select
                     mode="multiple"
                     className="reg-form-multiple-select"
-                    style={{ width: "100%", padding: 1, minWidth: 182 }}
+                    style={{ width: '100%', padding: 1, minWidth: 182 }}
                     onChange={(e) => this.onSelectionMembershipCategory(e)}
                     value={fillteredProduct}
                     placeholder="Select"
@@ -689,7 +683,7 @@ class RegistrationForm extends Component {
                         </div>
                     </div>
                 ))}
-                <div className='row ml-1' style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="row ml-1" style={{ display: 'flex', alignItems: 'center' }}>
                     <Checkbox
                         className="single-checkbox pt-2"
                         checked={defaultChecked.trainingVisible}
@@ -697,7 +691,7 @@ class RegistrationForm extends Component {
                     >
                         {AppConstants.training}
                     </Checkbox>
-                    <div style={{ marginTop: 15, marginLeft: -8 }}>
+                    <div style={{ marginTop: 8, marginLeft: -8 }}>
                         <CustomTooltip background="#ff8237">
                             <span>{AppConstants.regFormTrainingMsg}</span>
                         </CustomTooltip>
@@ -724,7 +718,7 @@ class RegistrationForm extends Component {
                                             placeholder={AppConstants.trainingDaysAndTimes}
                                             value={formDataValue ? formDataValue.trainingDaysAndTimes : ""}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "trainingDaysAndTimes")}
-                                            name={"trainingDaysAndTimes"}
+                                            name="trainingDaysAndTimes"
                                         />
                                     </div>
                                 )}
@@ -745,7 +739,7 @@ class RegistrationForm extends Component {
                                     <div className="col-sm">
                                         <Select
                                             name="trainingVenueId"
-                                            style={{ width: "100%", paddingRight: 1, minWidth: 182 }}
+                                            style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                                             onChange={(trainingVenueId) => this.props.updateRegistrationForm(trainingVenueId, "trainingVenueId")}
                                             value={formDataValue ? formDataValue.trainingVenueId : null}
                                             placeholder="Select"
@@ -766,7 +760,7 @@ class RegistrationForm extends Component {
                     heading={AppConstants.specialNote}
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.regFormSpecialNoteMsg}
-                    marginTop={5}
+                    marginTop={0}
                 />
 
                 <TextArea
@@ -781,42 +775,40 @@ class RegistrationForm extends Component {
                     heading={AppConstants.photos}
                     conceptulHelp
                     conceptulHelpMsg={AppConstants.regFormPhotoMsg}
-                    marginTop={5}
+                    marginTop={0}
                 />
                 {((formDataValue.organisationPhotos == null || formDataValue.organisationPhotos.length === 0) &&
                     (getOrganisationData().orgLogoUrl == null)) ? <span>{AppConstants.noPhotosAvailable}</span> :
                     <div className="org-photos">
-                        {
-                            getOrganisationData().orgLogoUrl == null ? null :
+                        {getOrganisationData().orgLogoUrl != null && (
+                            <div>
                                 <div>
-                                    <div>
-                                        <img
-                                            src={getOrganisationData().orgLogoUrl}
-                                            alt=""
-                                            height={125}
-                                            width={125}
-                                            style={{ borderRadius: 0, marginLeft: 0 }}
-                                            name="image"
-                                            onError={ev => { ev.target.src = AppImages.circleImage; }}
-                                        />
-                                    </div>
-                                    <div className="photo-type">{AppConstants.logo}</div>
+                                    <img
+                                        src={getOrganisationData().orgLogoUrl}
+                                        alt=""
+                                        height={125}
+                                        width={125}
+                                        style={{ borderRadius: 0, marginLeft: 0 }}
+                                        name="image"
+                                        onError={ev => { ev.target.src = AppImages.circleImage; }}
+                                    />
                                 </div>
-                        }
-                        {((formDataValue.organisationPhotos) || [])
-                            .map((ph, phIndex) => (
-                                <div key={ph.organisationPhotoId}>
-                                    <div>
-                                        <img src={ph.photoUrl} alt="" height={125} width={125}
-                                             style={{ borderRadius: 0, marginLeft: 0 }} name="image"
-                                             onError={ev => {
-                                                 ev.target.src = AppImages.circleImage;
-                                             }}
-                                        />
-                                    </div>
-                                    <div className="photo-type">{ph.photoType}</div>
+                                <div className="photo-type">{AppConstants.logo}</div>
+                            </div>
+                        )}
+                        {((formDataValue.organisationPhotos) || []).map((ph) => (
+                            <div key={ph.organisationPhotoId}>
+                                <div>
+                                    <img src={ph.photoUrl} alt="" height={125} width={125}
+                                         style={{ borderRadius: 0, marginLeft: 0 }} name="image"
+                                         onError={ev => {
+                                             ev.target.src = AppImages.circleImage;
+                                         }}
+                                    />
                                 </div>
-                            ))}
+                                <div className="photo-type">{ph.photoType}</div>
+                            </div>
+                        ))}
                         {/* {(formDataValue.organisationPhotos == null ||
                         formDataValue.organisationPhotos == undefined ||
                         formDataValue.organisationPhotos.length === 0) ?
@@ -862,7 +854,7 @@ class RegistrationForm extends Component {
         let hasError = this.state.hasError
         return (
             <div className="fees-view">
-                <div className='row ml-1' style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="row ml-1" style={{ display: 'flex', alignItems: 'center' }}>
                     <Checkbox
                         className="single-checkbox mt-0"
                         checked={defaultChecked.replyContactVisible}
@@ -870,7 +862,7 @@ class RegistrationForm extends Component {
                     >
                         {AppConstants.replyToContactDetails}
                     </Checkbox>
-                    <div style={{ marginTop: -2, marginLeft: -8 }}>
+                    <div style={{ marginTop: -15, marginLeft: -8 }}>
                         <CustomTooltip background="#ff8237">
                             <span>{AppConstants.replyContactDetailMsg}</span>
                         </CustomTooltip>
@@ -895,7 +887,7 @@ class RegistrationForm extends Component {
                                     <div className="col-sm">
                                         <InputWithHead
                                             auto_complete="off"
-                                            placeholder={"Name"}
+                                            placeholder="Name"
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyName")}
                                             value={formDataValue ? formDataValue.replyName : ''}
                                         />
@@ -923,7 +915,6 @@ class RegistrationForm extends Component {
                                             placeholder={AppConstants.role}
                                             onChange={(e) => this.props.updateRegistrationForm(e.target.value, "replyRole")}
                                             value={formDataValue ? formDataValue.replyRole : ''}
-
                                         />
                                     </div>
                                 )}
@@ -1027,9 +1018,9 @@ class RegistrationForm extends Component {
         let isPublished = false; // this.state.isPublished // CM-1513
         return (
             <div className="discount-view pt-5">
-                <div className='row ml-1'>
+                <div className="row ml-1">
                     <span className="form-heading">{AppConstants.how_users_Register}</span>
-                    <div style={{ marginTop: 5, marginLeft: -2 }}>
+                    <div style={{ marginTop: 0, marginLeft: -2 }}>
                         <CustomTooltip background="#ff8237">
                             <span>{AppConstants.howUserRegisterMsg}</span>
                         </CustomTooltip>
@@ -1165,9 +1156,9 @@ class RegistrationForm extends Component {
 
         return (
             <div className="discount-view pt-5">
-                <div className='row ml-1'>
+                <div className="row ml-1">
                     <span className="form-heading">{AppConstants.additionalQuestions}</span>
-                    <div style={{ marginTop: 5, marginLeft: -2 }}>
+                    <div style={{ marginTop: 0, marginLeft: -2 }}>
                         <CustomTooltip background="#ff8237">
                             <span>{AppConstants.additionQuesMsg}</span>
                         </CustomTooltip>
@@ -1253,7 +1244,7 @@ class RegistrationForm extends Component {
     };
 
     advancedNode = item => {
-        return <span>{item.description}</span>;
+        return <span style={{ display: 'block', marginTop: 4 }}>{item.description}</span>;
     };
 
     showSubAdvancedNode(item) {
@@ -1341,7 +1332,7 @@ class RegistrationForm extends Component {
         let { inviteTypeData } = this.props.commonReducerState;
         let isPublished = false; //this.state.isPublished; // CM-1513
         console.log("CanSendInvite", this.props.registrationState.canInviteSend);
-       
+
         return (
             <div className="discount-view pt-5">
                 <span className="form-heading pb-2">{AppConstants.sendInvitesTo}</span>
@@ -1459,7 +1450,7 @@ class RegistrationForm extends Component {
                                         <DatePicker
                                             size="large"
                                             placeholder="dd-mm-yyyy"
-                                            style={{ width: "100%" }}
+                                            style={{ width: '100%' }}
                                             onChange={(e) => this.dateChange(e, "dobPreferenceMoreThan")}
                                             name="dobPreferenceMoreThan"
                                             format="DD-MM-YYYY"
@@ -1475,7 +1466,7 @@ class RegistrationForm extends Component {
                                     <div className="dob-pref-date-picker" style={{ marginLeft: 9 }}>
                                         <DatePicker
                                             size="large"
-                                            style={{ width: "100%" }}
+                                            style={{ width: '100%' }}
                                             placeholder="dd-mm-yyyy"
                                             onChange={(e) => this.dateChange(e, "dobPreferenceLessThan")}
                                             name="dobPreferenceLessThan"
@@ -1544,7 +1535,7 @@ class RegistrationForm extends Component {
                         <div className="col-sm-9">
                             <div className="comp-buttons-view">
                                 <Tooltip
-                                    style={{ height: "100%" }}
+                                    style={{ height: '100%' }}
                                     onMouseEnter={() => this.setState({ tooltipVisibleDraft: statusRefId == 2 })}
                                     onMouseLeave={() => this.setState({ tooltipVisibleDraft: false })}
                                     visible={this.state.tooltipVisibleDraft}
@@ -1567,7 +1558,7 @@ class RegistrationForm extends Component {
                                 >
                                     {AppConstants.preview}
                                 </Button>
-                                {/* <Tooltip style={{ height: "100%" }}
+                                {/* <Tooltip style={{ height: '100%' }}
                                     onMouseEnter={() => this.setState({ tooltipVisiblePublish: statusRefId == 2 })}
                                     onMouseLeave={() => this.setState({ tooltipVisiblePublish: false })}
                                     visible={this.state.tooltipVisiblePublish}
@@ -1654,13 +1645,15 @@ class RegistrationForm extends Component {
                             {/* <div className="formView">{this.UserRegisterView()}</div> */}
                             <div className="formView">{this.advancedSettingView()}</div>
                             <div className="formView">{this.sendInviteToView()}</div>
-							              {isHardshipEnabled == 1 && (
+                            {isHardshipEnabled == 1 && (
                                 <div className="formView">{this.hardshipCodeView()}</div>
                             )}
                             {/* <div className="formView">{this.disclaimerView()}</div> */}
 
-                            <Loader visible={this.state.onRegistrationLoad || this.props.appState.onLoad || this.props.registrationState.onLoad ||
-                                this.props.registrationState.onRegistrationSaveLoad} />
+                            <Loader
+                                visible={this.state.onRegistrationLoad || this.props.appState.onLoad || this.props.registrationState.onLoad ||
+                                    this.props.registrationState.onRegistrationSaveLoad}
+                            />
                         </Content>
                         <Footer>{this.footerView()}</Footer>
                         {this.confirmationModalView()}
@@ -1690,9 +1683,9 @@ function mapDispatchToProps(dispatch) {
             updateDisclamerText,
             isCheckedVisible,
             isReplyCheckVisible,
-            inviteTypeAction
+            inviteTypeAction,
         },
-        dispatch
+        dispatch,
     );
 }
 
@@ -1700,7 +1693,7 @@ function mapStateToProps(state) {
     return {
         appState: state.AppState,
         registrationState: state.RegistrationState,
-        commonReducerState: state.CommonReducerState
+        commonReducerState: state.CommonReducerState,
     };
 }
 

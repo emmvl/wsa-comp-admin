@@ -162,7 +162,7 @@ class DivisionGradeModal extends React.Component {
                             </div>
 
                             <div className="row">
-                                <div className="col-sm" style={{ display: "flex", width: "100%", paddingTop: 10 }}>
+                                <div className="col-sm" style={{ display: "flex", width: '100%', paddingTop: 10 }}>
                                     <div className="col-sm-6" style={{ display: "flex", width: "50%", justifyContent: "flex-start" }}>
                                         <Button className="cancelBtnWidth" type="cancel-button" onClick={onDivisionBack} style={{ marginRight: '20px' }}>
                                             {AppConstants.back}
