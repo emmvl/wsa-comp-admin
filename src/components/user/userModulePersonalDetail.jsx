@@ -658,10 +658,14 @@ const columnsPersonalChildContacts = [
 
 const columnsPersonalEmergency = [
   {
-    title: "Name",
-    dataIndex: "emergencyContactName",
-    key: "emergencyContactName",
-    width: 300,
+    title: "First Name",
+    dataIndex: "emergencyFirstName",
+    key: "emergencyFirstName",
+  },
+  {
+    title: "Last Name",
+    dataIndex: "emergencyLastName",
+    key: "emergencyLastName",
   },
   {
     title: "Phone Number",
