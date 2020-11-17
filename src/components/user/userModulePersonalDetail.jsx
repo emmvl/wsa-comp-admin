@@ -890,7 +890,7 @@ const columnsIncident = [
   },
 ];
 
-// listeners for sorting
+//listeners for sorting
 const listeners = (key) => ({
   onClick: () => umpireActivityTableSort(key),
 });
@@ -1088,7 +1088,7 @@ function purchasesTableSort(key) {
   this_Obj.setState({ purchasesListSortBy: sortBy, purchasesListSortOrder: sortOrder });
 }
 
-// listeners for sorting
+//listeners for sorting
 const purchaseListeners = (key) => ({
   onClick: () => purchasesTableSort(key),
 });
@@ -2669,7 +2669,7 @@ class UserModulePersonalDetail extends Component {
 
   purchaseActivityView = () => {
     let { onLoad, purchasesListingData, purchasesTotalCount, purchasesCurrentPage } = this.props.shopOrderStatusState
-    console.log("111", purchasesListingData, purchasesTotalCount, purchasesCurrentPage)
+   // console.log("111", purchasesListingData, purchasesTotalCount, purchasesCurrentPage)
     return (
       <div
         className="comp-dash-table-view mt-2"
