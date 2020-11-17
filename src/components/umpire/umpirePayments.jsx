@@ -26,6 +26,7 @@ import {
 import "./umpire.css";
 import Loader from '../../customComponents/loader'
 import { message } from "antd";
+import AppImages from "themes/appImages";
 
 const { Content, Footer } = Layout;
 const { Option } = Select;
@@ -136,12 +137,24 @@ const columns = [
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (paymentStatus, record) => {
-            let status=record.paymentStatus
+            let status = record.paymentStatus
             const capitalized = status.replace(/^./, status[0].toUpperCase());
             return (
                 <span>{capitalized}</span>
             )
         }
+    },
+    {
+        title: "Time",
+        dataIndex: "time",
+        key: "time",
+        sorter: true,
+    },
+    {
+        title: "Date Paid",
+        dataIndex: "datePaid",
+        key: "datePaid",
+        sorter: true,
     },
     {
         title: "Pay",
@@ -200,7 +213,6 @@ class UmpirePayments extends Component {
 
     async componentDidMount() {
         let { organisationId, } = JSON.parse(localStorage.getItem("setOrganisationData"))
-        // this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, "USERS")
         const { umpirePaymentObject } = this.props.umpirePaymentState
         let page = 1
@@ -227,9 +239,6 @@ class UmpirePayments extends Component {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
                 let compData = compList.length > 0 && compList[0]
-
-                // setUmpireCompition(firstComp);
-                // setUmpireCompitionData(JSON.stringify(compData));
 
                 if (getUmpireCompetiton()) {
                     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
@@ -295,31 +304,20 @@ class UmpirePayments extends Component {
                         });
                     }
 
-                    if (this.state.paymentLoad == true && this.props.umpirePaymentState.onPaymentLoad === false) {
-                        const body =
-                        {
-                            paging: {
-                                offset: 0,
-                                limit: 10,
-                            },
-                        }
-                        this.props.getUmpirePaymentData({ compId: this.state.selectedComp, pagingBody: body, search: this.state.searchText, sortBy: this.state.sortBy, sortOrder: this.state.sortOrder })
-                        this.setState({ paymentLoad: false })
-                    }
-
-                    // let { sortBy, sortOrder, searchText } = this.state
-                    // const body =
-                    // {
-                    //     paging: {
-                    //         offset: 0,
-                    //         limit: 10,
-                    //     },
-                    // }
-
-                    // this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
-                    // this.setState({ selectedComp: firstComp, loading: false, compArray: compList, })
                 }
             }
+        }
+
+        if (this.state.paymentLoad == true && this.props.umpirePaymentState.onPaymentLoad === false) {
+            const body =
+            {
+                paging: {
+                    offset: 0,
+                    limit: 10,
+                },
+            }
+            this.props.getUmpirePaymentData({ compId: this.state.selectedComp, pagingBody: body, search: this.state.searchText, sortBy: this.state.sortBy, sortOrder: this.state.sortOrder })
+            this.setState({ paymentLoad: false })
         }
     }
 
@@ -485,6 +483,7 @@ class UmpirePayments extends Component {
     headerView = () => (
         <div className="comp-player-grades-header-drop-down-view mt-4">
             <div className="fluid-width">
+
                 <div className="row">
                     <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
                         <span className="form-heading">
@@ -523,6 +522,7 @@ class UmpirePayments extends Component {
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -531,7 +531,6 @@ class UmpirePayments extends Component {
     dropdownView = () => {
         const { paymentStatus } = this.props.umpirePaymentState
         let competition = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
-        console.log(paymentStatus, 'paymentStatus')
         return (
             <div className="comp-player-grades-header-drop-down-view mt-1">
                 <div className="fluid-width">
@@ -553,16 +552,47 @@ class UmpirePayments extends Component {
                             </div>
                         </div>
 
+                        <div className="col-sm-8">
+                            <div
+                                className="comp-dashboard-botton-view-mobile"
+                                style={{
+                                    width: '100%',
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "flex-end",
+                                }}
+                            >
+                                <Button
+                                    type="primary"
+                                    className="primary-add-comp-form"
+                                // onClick={this.onExport}
+                                >
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <img
+                                                className="export-image"
+                                                src={AppImages.export}
+                                                alt=""
+                                            />
+                                            {AppConstants.export}
+                                        </div>
+                                    </div>
+                                </Button>
+                            </div>
+                        </div>
+
                         <div className="col-sm">
                             <div
                                 className="comp-dashboard-botton-view-mobile"
                                 style={{
-                                    width: "96.5%",
+                                    // width: "96.5%",
                                     display: "flex",
                                     flexDirection: "column",
                                     alignItems: "flex-end",
                                     justifyContent: "flex-end",
-                                    alignContent: "center"
+                                    alignContent: "center",
+                                    paddingRight: "35px"
                                 }}
                             >
                                 <Checkbox
@@ -636,7 +666,6 @@ class UmpirePayments extends Component {
 
     render() {
         const { umpirePaymentList, umpirePaymentObject } = this.props.umpirePaymentState
-        console.log(umpirePaymentObject, 'umpirePaymentObject')
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
