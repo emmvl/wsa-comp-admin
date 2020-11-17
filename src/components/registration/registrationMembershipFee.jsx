@@ -511,200 +511,206 @@ class RegistrationMembershipFee extends Component {
 
     //////dynamic membership type view
     membershipTypesView = () => {
-        let registrationState = this.props.registrationState
-        const defaultTypes = registrationState.getDefaultMembershipProductTypes !== null ? registrationState.getDefaultMembershipProductTypes : []
-        let allData = this.props.registrationState.getMembershipProductDetails
-        let { allowTeamRegistration } = this.props.commonReducerState;
-        return (
-            <div>
-                <span className="applicable-to-heading">
-                    {AppConstants.membershipTypes}
-                </span>
+        try{
+            let registrationState = this.props.registrationState
+            const defaultTypes = registrationState.getDefaultMembershipProductTypes !== null ? registrationState.getDefaultMembershipProductTypes : []
+            let allData = this.props.registrationState.getMembershipProductDetails
+            let { allowTeamRegistration } = this.props.commonReducerState;
+            return (
+                <div>
+                    <span className="applicable-to-heading">
+                        {AppConstants.membershipTypes}
+                    </span>
 
-                {defaultTypes.map((item, index) => (
-                    <div key={index} className="prod-reg-inside-container-view">
-                        <div className="row">
-                            <div className="col-sm">
-                                <Checkbox
-                                    className="single-checkbox pt-3"
-                                    checked={item.isMemebershipType}
-                                    onChange={e => this.membershipTypesAndAgeSelected(e.target.checked, index, "isMemebershipType")}
-                                    key={index}
-                                    disabled={this.state.membershipIsUsed}
-                                >
-                                    {item.membershipProductTypeRefName}
-                                </Checkbox>
-                            </div>
-                            {(item.membershipProductTypeRefId > 4 || item.membershipProductTypeRefId == 0) && (
-                                <div
-                                    className="col-sm transfer-image-view pt-4"
-                                    onClick={() => !this.state.membershipIsUsed ? this.props.removeCustomMembershipTypeAction(index) : null}
-                                >
-                                    <span className="user-remove-btn">
-                                        <i className="fa fa-trash-o" aria-hidden="true" />
-                                    </span>
-                                    <span className="user-remove-text mr-0">{AppConstants.remove}</span>
+                    {defaultTypes.map((item, index) => {
+                        return(
+                            <div key={index} className="prod-reg-inside-container-view">
+                                <div className="row">
+                                    <div className="col-sm">
+                                        <Checkbox
+                                            className="single-checkbox pt-3"
+                                            checked={item.isMemebershipType}
+                                            onChange={e => this.membershipTypesAndAgeSelected(e.target.checked, index, "isMemebershipType")}
+                                            key={index}
+                                            disabled={this.state.membershipIsUsed}
+                                        >
+                                            {item.membershipProductTypeRefName}
+                                        </Checkbox>
+                                    </div>
+                                    {(item.membershipProductTypeRefId > 4 || item.membershipProductTypeRefId == 0) && (
+                                        <div
+                                            className="col-sm transfer-image-view pt-4"
+                                            onClick={() => !this.state.membershipIsUsed ? this.props.removeCustomMembershipTypeAction(index) : null}
+                                        >
+                                            <span className="user-remove-btn">
+                                                <i className="fa fa-trash-o" aria-hidden="true" />
+                                            </span>
+                                            <span className="user-remove-text mr-0">{AppConstants.remove}</span>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
-                        </div>
-                        {item.isMemebershipType && (
-                            <div className="reg-membership-fee-mandate-check-view">
-                                <div className="colsm-">
-                                    {item.isDefault == 0 && (
+                                {item.isMemebershipType && (
+                                    <div className="reg-membership-fee-mandate-check-view">
+                                        <div className="colsm-">
+                                            {item.isDefault == 0 && (
+                                                <Checkbox
+                                                    className="single-checkbox"
+                                                    checked={item.isPlaying}
+                                                    onChange={e =>
+                                                        this.membershipTypesAndAgeSelected(e.target.checked, index, "isPlaying")
+                                                    }
+                                                    disabled={this.state.membershipIsUsed}
+                                                >
+                                                    {AppConstants.playerConst}
+                                                </Checkbox>
+                                            )}
+                                        </div>
                                         <Checkbox
                                             className="single-checkbox"
-                                            checked={item.isPlaying}
+                                            style={{ width: '100%' }}
+                                            checked={item.isMandate}
                                             onChange={e =>
-                                                this.membershipTypesAndAgeSelected(e.target.checked, index, "isPlaying")
+                                                this.membershipTypesAndAgeSelected(e.target.checked, index, "isMandate")
                                             }
                                             disabled={this.state.membershipIsUsed}
                                         >
-                                            {AppConstants.playerConst}
+                                            {`Mandate ${item.membershipProductTypeRefName} Age Restrictions`}
                                         </Checkbox>
-                                    )}
-                                </div>
-                                <Checkbox
-                                    className="single-checkbox"
-                                    style={{ width: '100%' }}
-                                    checked={item.isMandate}
-                                    onChange={e =>
-                                        this.membershipTypesAndAgeSelected(e.target.checked, index, "isMandate")
-                                    }
-                                    disabled={this.state.membershipIsUsed}
-                                >
-                                    {`Mandate ${item.membershipProductTypeRefName} Age Restrictions`}
-                                </Checkbox>
 
-                                {item.isMandate && (
-                                    <div className="fluid-width">
-                                        <div className="row">
-                                            <div className="col-sm">
-                                                <InputWithHead heading={AppConstants.dobFrom} />
-                                                <Form.Item
-                                                    name={`dobFrom${index}`}
-                                                    rules={[{
-                                                        required: true,
-                                                        message: ValidationConstants.pleaseSelectDOBFrom
-                                                    }]}
-                                                >
-                                                    <DatePicker
-                                                        size="large"
-                                                        style={{ width: '100%' }}
-                                                        onChange={date => this.dateOnChangeFrom(date, index)}
-                                                        format="DD-MM-YYYY"
-                                                        placeholder="dd-mm-yyyy"
-                                                        showTime={false}
-                                                        // defaultValue={item.dobFrom !== null ? moment(item.dobFrom) : null}
-                                                        disabled={this.state.membershipIsUsed}
-                                                        disabledDate={d => d.isSameOrAfter(item.dobTo)}
-                                                    />
-                                                </Form.Item>
+                                        {item.isMandate && (
+                                            <div className="fluid-width">
+                                                <div className="row">
+                                                    <div className="col-sm">
+                                                        <InputWithHead heading={AppConstants.dobFrom} />
+                                                        <Form.Item
+                                                            name={`dobFrom${index}`}
+                                                            rules={[{
+                                                                required: true,
+                                                                message: ValidationConstants.pleaseSelectDOBFrom
+                                                            }]}
+                                                        >
+                                                            <DatePicker
+                                                                size="large"
+                                                                style={{ width: '100%' }}
+                                                                onChange={date => this.dateOnChangeFrom(date, index)}
+                                                                format="DD-MM-YYYY"
+                                                                placeholder="dd-mm-yyyy"
+                                                                showTime={false}
+                                                                // defaultValue={item.dobFrom !== null ? moment(item.dobFrom) : null}
+                                                                disabled={this.state.membershipIsUsed}
+                                                                disabledDate={d => d.isSameOrAfter(item.dobTo)}
+                                                            />
+                                                        </Form.Item>
+                                                    </div>
+                                                    <div className="col-sm">
+                                                        <InputWithHead heading={AppConstants.dobTo} />
+                                                        <Form.Item
+                                                            name={`dobTo${index}`}
+                                                            rules={[{
+                                                                required: true,
+                                                                message: ValidationConstants.PleaseSelectDOBTo
+                                                            }]}
+                                                        >
+                                                            <DatePicker
+                                                                size="large"
+                                                                style={{ width: '100%' }}
+                                                                onChange={date => this.dateOnChangeTo(date, index)}
+                                                                format="DD-MM-YYYY"
+                                                                placeholder="dd-mm-yyyy"
+                                                                showTime={false}
+                                                                // defaultValue={item.dobTo !== null ? moment(item.dobTo) : null}
+                                                                disabled={this.state.membershipIsUsed}
+                                                                // disabledDate={d => d.isSameOrBefore(item.dobFrom)}
+                                                                disabledDate={d => moment(item.dobFrom).isSameOrAfter(d, 'day')}
+                                                            />
+                                                        </Form.Item>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div className="col-sm">
-                                                <InputWithHead heading={AppConstants.dobTo} />
-                                                <Form.Item
-                                                    name={`dobTo${index}`}
-                                                    rules={[{
-                                                        required: true,
-                                                        message: ValidationConstants.PleaseSelectDOBTo
-                                                    }]}
-                                                >
-                                                    <DatePicker
-                                                        size="large"
-                                                        style={{ width: '100%' }}
-                                                        onChange={date => this.dateOnChangeTo(date, index)}
-                                                        format="DD-MM-YYYY"
-                                                        placeholder="dd-mm-yyyy"
-                                                        showTime={false}
-                                                        // defaultValue={item.dobTo !== null ? moment(item.dobTo) : null}
-                                                        disabled={this.state.membershipIsUsed}
-                                                        // disabledDate={d => d.isSameOrBefore(item.dobFrom)}
-                                                        disabledDate={d => moment(item.dobFrom).isSameOrAfter(d, 'day')}
-                                                    />
-                                                </Form.Item>
-                                            </div>
+                                        )}
+                                        <div className="fluid-width">
+                                            <Checkbox
+                                                className="single-checkbox"
+                                                style={{ marginLeft: "0px" }}
+                                                checked={item.isAllow}
+                                                onChange={e =>
+                                                    this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
+                                                }
+                                                disabled={this.state.membershipIsUsed}
+                                            >
+                                                {AppConstants.allowTeamRegistration}
+                                            </Checkbox>
                                         </div>
-                                    </div>
-                                )}
-                                <div className="fluid-width">
-                                    <Checkbox
-                                        className="single-checkbox"
-                                        style={{ marginLeft: "0px" }}
-                                        checked={item.isAllow}
-                                        onChange={e =>
-                                            this.membershipTypesAndAgeSelected(e.target.checked, index, "isAllow")
-                                        }
-                                        disabled={this.state.membershipIsUsed}
-                                    >
-                                        {AppConstants.allowTeamRegistration}
-                                    </Checkbox>
-                                </div>
-                                {item.isPlaying != 1 && (
-                                    <Checkbox
-                                        className="single-checkbox"
-                                        style={{ marginLeft: "0px" }}
-                                        checked={item.isChildrenCheckNumber}
-                                        onChange={e =>
-                                            this.membershipTypesAndAgeSelected(e.target.checked, index, "isChildrenCheckNumber")
-                                        }
-                                        disabled={this.state.membershipIsUsed}
-                                    >
-                                        {AppConstants.childrenCheckNumber}
-                                    </Checkbox>
-                                )}
-                                {item.isAllow && item.isPlaying == 1 && (
-                                    <div className="fluid-width" style={{ marginTop: "10px" }}>
-                                        <div className="row">
-                                            <div className="col-sm" style={{ marginLeft: 25 }}>
-                                                <Form.Item
-                                                    name={`allowTeamRegistrationTypeRefId${index}`}
-                                                    rules={[{ required: true, message: ValidationConstants.playerTypeRequired }]}
-                                                >
-                                                    <Radio.Group
-                                                        className="reg-competition-radio"
-                                                        onChange={(e) => this.allowTeamRegistrationPlayer(e.target.value, index, 'allowTeamRegistrationTypeRefId')}
-                                                        value={item.allowTeamRegistrationTypeRefId}
-                                                        disabled={this.state.membershipIsUsed}
-                                                    >
-                                                        {(allowTeamRegistration || []).map((fix) => (
-                                                            <Radio
-                                                                key={'allowTeamRegistrationType_' + fix.id}
-                                                                value={fix.id}
+                                        {item.isPlaying != 1 && (
+                                            <Checkbox
+                                                className="single-checkbox"
+                                                style={{ marginLeft: "0px" }}
+                                                checked={item.isChildrenCheckNumber}
+                                                onChange={e =>
+                                                    this.membershipTypesAndAgeSelected(e.target.checked, index, "isChildrenCheckNumber")
+                                                }
+                                                disabled={this.state.membershipIsUsed}
+                                            >
+                                                {AppConstants.childrenCheckNumber}
+                                            </Checkbox>
+                                        )}
+                                        {item.isAllow && item.isPlaying == 1 && (
+                                            <div className="fluid-width" style={{ marginTop: "10px" }}>
+                                                <div className="row">
+                                                    <div className="col-sm" style={{ marginLeft: 25 }}>
+                                                        <Form.Item
+                                                            name={`allowTeamRegistrationTypeRefId${index}`}
+                                                            rules={[{ required: true, message: ValidationConstants.playerTypeRequired }]}
+                                                        >
+                                                            <Radio.Group
+                                                                className="reg-competition-radio"
+                                                                onChange={(e) => this.allowTeamRegistrationPlayer(e.target.value, index, 'allowTeamRegistrationTypeRefId')}
+                                                                value={item.allowTeamRegistrationTypeRefId}
+                                                                disabled={this.state.membershipIsUsed}
                                                             >
-                                                                {fix.description}
-                                                            </Radio>
-                                                        ))}
-                                                    </Radio.Group>
-                                                </Form.Item>
+                                                                {(allowTeamRegistration || []).map((fix) => (
+                                                                    <Radio
+                                                                        key={'allowTeamRegistrationType_' + fix.id}
+                                                                        value={fix.id}
+                                                                    >
+                                                                        {fix.description}
+                                                                    </Radio>
+                                                                ))}
+                                                            </Radio.Group>
+                                                        </Form.Item>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
                                 )}
                             </div>
-                        )}
-                    </div>
-                ))}
-                <span className="input-heading-add-another" onClick={!this.state.membershipIsUsed ? this.addAnothermembershipType : null}>
-                    + {AppConstants.addMembershipType}
-                </span>
-                <Modal
-                    className="add-membership-type-modal"
-                    title={AppConstants.addMembershipType}
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                >
-                    <InputWithHead
-                        auto_complete="new-membershipTypeName"
-                        required="pt-0 mt-0"
-                        heading={AppConstants.membershipTypeName}
-                        placeholder={AppConstants.pleaseEnterMembershipTypeName}
-                        onChange={(e) => this.setState({ newNameMembershipType: e.target.value })}
-                        value={this.state.newNameMembershipType}
-                    />
-                </Modal>
-            </div>
-        )
+                        )
+                    })}
+                    <span className="input-heading-add-another" onClick={!this.state.membershipIsUsed ? this.addAnothermembershipType : null}>
+                        + {AppConstants.addMembershipType}
+                    </span>
+                    <Modal
+                        className="add-membership-type-modal"
+                        title={AppConstants.addMembershipType}
+                        visible={this.state.visible}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                    >
+                        <InputWithHead
+                            auto_complete="new-membershipTypeName"
+                            required="pt-0 mt-0"
+                            heading={AppConstants.membershipTypeName}
+                            placeholder={AppConstants.pleaseEnterMembershipTypeName}
+                            onChange={(e) => this.setState({ newNameMembershipType: e.target.value })}
+                            value={this.state.newNameMembershipType}
+                        />
+                    </Modal>
+                </div>
+            )
+        }catch(ex){
+            console.log("Error in membershipTypesView::"+ex)
+        }
     }
 
     contentView = () => {
