@@ -25,7 +25,6 @@ import {
 } from 'util/sessionStorage';
 import './umpire.css';
 import Loader from '../../customComponents/loader';
-import { message } from "antd";
 import AppImages from "themes/appImages";
 
 const { Content, Footer } = Layout;
