@@ -809,8 +809,6 @@ class MultifieldDrawsNewTimeline extends Component {
     getWeeklySchedule = () => {
         let venueData = this.props.drawsState.competitionVenues;
 
-        // console.log('venueData', venueData);
-
         const weekSlotsTimeSchedule = [];
 
         if (venueData.length) {
@@ -874,8 +872,7 @@ class MultifieldDrawsNewTimeline extends Component {
         if (isTooltipAllowTime || this.state.tooltipSwappableTime) {
             tooltip.setAttribute(
                 "style",
-                    `
-                    min-width: fit-content;
+                    `min-width: fit-content;
                     padding: 5px;
                     background: #fff;
                     border: 1px solid #bbbbc6;
@@ -993,6 +990,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
                     const isStartTimeCondition = startTimeNew.isBefore(slotEnd) && startTimeNew.isAfter(slotStart);
                     const isEndTimeCondition = endTimeNew.isAfter(slotStart) && endTimeNew.isBefore(slotEnd);
+                    const isSlotEventInside = startTimeNew.isBefore(slotStart) && endTimeNew.isAfter(slotEnd);
 
                     const isEventOverItself = slot.drawsId === draggableEvent.drawsId
                         && (
@@ -1018,11 +1016,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         return false;
                     }
 
-                    if (isStartTimeCondition) {
-                        return true;
-                    }
-
-                    else if (isEndTimeCondition) {
+                    if (isStartTimeCondition || isEndTimeCondition || isSlotEventInside) {
                         return true;
                     }
                 });
@@ -1052,8 +1046,6 @@ class MultifieldDrawsNewTimeline extends Component {
                 startTime: newTimeFormatted,
                 endTime: endTimeFormatted,
             };
-
-            // console.log('draggableEvent.drawsId', draggableEvent.drawsId)
 
             this.props.updateCourtTimingsDrawsAction(
                 postData,
@@ -1693,6 +1685,28 @@ class MultifieldDrawsNewTimeline extends Component {
             }
         })
 
+        // for days vertical dashed lines style
+
+        let backgroundSize = '';
+        let backgroundImage = '';
+        let backgroundPosition = '';
+        
+        let backgroundPositionCounter = -30;
+        
+        for (let i = 0; i <= 10; i++) {
+            backgroundSize += `${ONE_MIN_WIDTH * 30}px ${ONE_MIN_WIDTH * 30}px`;
+            backgroundImage += 'radial-gradient(1px 1px at left center, rgb(170, 170, 170) 1px, transparent 1px)';
+            backgroundPosition += `0px ${backgroundPositionCounter}px`;
+        
+            backgroundPositionCounter += 5;
+        
+            if (i < 10) {
+                backgroundSize += ', ';
+                backgroundImage += ', ';
+                backgroundPosition += ', ';
+            }
+        }
+
         return (
             <>
                 <div
@@ -1825,11 +1839,8 @@ class MultifieldDrawsNewTimeline extends Component {
                             <div key={"court" + index}>
                                 <div className="sr-no" style={{ height: 62, boxSizing: 'border-box' }}>
                                     <div
-   className="venueCourt-tex-div"
+                                        className="venueCourt-tex-div"
                                         style={{
-                                            // position: 'fixed',
-                                            zIndex: 99,
-                                            background: 'white',
                                             width: 95,
                                             marginLeft: -20,
                                             textAlign: 'center',
@@ -1915,7 +1926,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                         endTime: venueSchedule.endTime.isBefore(courtSchedule.endTime) ? venueSchedule.endTime : courtSchedule.endTime
                                     }
 
-                                    const unavailableWidth = this.checkUnavailableTimeWidth(timeRestrictionsSchedule, startDayDate, endDayDate)
+                                    const unavailableWidth = this.checkUnavailableTimeWidth(timeRestrictionsSchedule, startDayDate, endDayDate);
 
                                     // render for the whole unavailable day for court based on venue schedule
                                     if (!workingDayInTimeline) {
@@ -1952,7 +1963,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                             /> */}
                                             <div
                                                 id={courtData.venueCourtId + ':' + fieldItemDateIndex}
-                                                className={'box purple-bg day-box'}
+                                                className={'box white-bg-timeline day-box'}
                                                 style={{
                                                     minWidth: 'unset',
                                                     left: prevDaysWidth,
@@ -1961,7 +1972,10 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     whiteSpace: 'nowrap',
                                                     cursor: disabledStatus && "no-drop",
                                                     width: diffDayScheduleTime,
-                                                    background: `repeating-linear-gradient( to right, #f5f5f5, #f5f5f5 ${ONE_HOUR_IN_MIN}px, #d9d9d9 ${ONE_HOUR_IN_MIN}px, #d9d9d9 ${ONE_HOUR_IN_MIN * ONE_MIN_WIDTH}px )`
+                                                    borderRadius: '0px',
+                                                    backgroundSize,
+                                                    backgroundImage,
+                                                    backgroundPosition,
                                                 }}
                                                 onDragOver={e => this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)}
                                                 onDragEnd={e => this.dayLineDragEnd(e)}
