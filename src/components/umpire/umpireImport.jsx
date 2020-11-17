@@ -266,7 +266,7 @@ class UmpireImport extends Component {
         const { umpireDashboardState: { importResult, onLoad } } = this.props;
 
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
 
                 <InnerHorizontalMenu

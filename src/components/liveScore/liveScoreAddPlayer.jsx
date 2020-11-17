@@ -195,7 +195,6 @@ class LiveScoreAddPlayer extends Component {
         );
     };
 
-    ////////form content view
     contentView = () => {
         // let teamData = this.props.liveScoreState.teamResult ? this.props.liveScoreState.teamResult : []
         const { playerData, teamResult } = this.props.liveScorePlayerState
@@ -422,11 +421,10 @@ class LiveScoreAddPlayer extends Component {
         );
     };
 
-    /////main render method
     render() {
         const { screenKey } = this.state
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 {
                     screenKey == 'umpire' ?
                         <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />

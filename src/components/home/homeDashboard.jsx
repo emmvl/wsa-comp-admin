@@ -291,16 +291,16 @@ class HomeDashboard extends Component {
             if (this.state.userCountLoading && !this.props.appState.onLoad) {
                 if (yearList.length > 0) {
                     const yearRefId = getCurrentYear(yearList);
-    
+
                     if (this.props.homeDashboardState.userCount == null) {
                         this.props.getUserCount(yearRefId);
                         this.props.setHomeDashboardYear(yearRefId);
                     }
-    
+
                     this.setState({ userCountLoading: false });
                 }
             }
-    
+
             if (this.state.loading && !this.props.userState.onOrgLoad) {
                 //if (nextProps.userState.getUserOrganisation !== userOrganisation) {
                     if (userOrganisation.length > 0) {
@@ -314,7 +314,7 @@ class HomeDashboard extends Component {
                                 this.setState({ loading: false });
                             }
                         }
-    
+
                         if (this.props.homeDashboardState.actionBoxList == null || this.state.organisationId == null) {
                             const organisationUniqueKey = getOrganisationData() == null
                                 ? userOrganisation[0].organisationUniqueKey
@@ -325,7 +325,7 @@ class HomeDashboard extends Component {
                     }
                 //}
             }
-    
+
             if (this.state.updateActionBoxLoad && !this.props.homeDashboardState.onActionBoxLoad) {
                 this.setState({ updateActionBoxLoad: false });
                 this.handleActionBoxList(1);
@@ -334,7 +334,7 @@ class HomeDashboard extends Component {
         catch(error){
             console.log("error", error);
         }
-        
+
     }
 
     onYearChange = (yearRefId) => {
@@ -673,7 +673,7 @@ class HomeDashboard extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuId={AppConstants.home_page_heading}
                     menuHeading={AppConstants.home}

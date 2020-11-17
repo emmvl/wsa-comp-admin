@@ -24,7 +24,7 @@ const { Option } = Select;
 const { SubMenu } = Menu;
 let this_Obj = null;
 
-//listeners for sorting
+// listeners for sorting
 const listeners = (key) => ({
     onClick: () => tableSort(key),
 });
@@ -681,7 +681,6 @@ class PaymentDashboard extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         const { paymentState } = this.props;
         let total = paymentState.paymentListTotalCount;
@@ -714,7 +713,7 @@ class PaymentDashboard extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.finance}
                     menuName={AppConstants.finance}

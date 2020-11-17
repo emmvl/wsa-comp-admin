@@ -243,7 +243,7 @@ class RegistrationMembershipList extends Component {
             title: 'Are you sure delete this product?',
             // content: 'Some descriptions',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             onOk() {
                 this_.deleteProduct(membershipProductId)
@@ -270,7 +270,7 @@ class RegistrationMembershipList extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.membershipFees}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -309,11 +309,15 @@ class RegistrationMembershipList extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm d-flex justify-content-end pb-3" style={{ display: 'flex', alignItems: 'center' }}
-                            onClick={() => this.props.clearReducerDataAction("getMembershipProductDetails")}>
-                            <NavLink to={{ pathname: `/registrationMembershipFee`, state: { id: null } }}
-                                className="text-decoration-none">
-                                <Button className='primary-add-product' type='primary'>+ {AppConstants.addMembershipProduct}</Button>
+                        <div
+                            className="col-sm d-flex align-items-center justify-content-end pb-3"
+                            onClick={() => this.props.clearReducerDataAction("getMembershipProductDetails")}
+                        >
+                            <NavLink
+                                to={{ pathname: `/registrationMembershipFee`, state: { id: null } }}
+                                className="text-decoration-none"
+                            >
+                                <Button className="primary-add-product" type="primary">+ {AppConstants.addMembershipProduct}</Button>
                             </NavLink>
                         </div>
                     </div>
@@ -322,7 +326,6 @@ class RegistrationMembershipList extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         const { registrationState } = this.props;
         let total = registrationState.regMembershipFeeListTotalCount;
@@ -352,7 +355,7 @@ class RegistrationMembershipList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
                 <InnerHorizontalMenu menu="registration" regSelectedKey="6" />
                 <Layout>
@@ -366,6 +369,7 @@ class RegistrationMembershipList extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         regMembershipListAction,
@@ -382,4 +386,4 @@ function mapStatetoProps(state) {
     }
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)((RegistrationMembershipList));
+export default connect(mapStatetoProps, mapDispatchToProps)(RegistrationMembershipList);

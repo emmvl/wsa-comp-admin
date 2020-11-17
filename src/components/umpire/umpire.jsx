@@ -434,7 +434,7 @@ class Umpire extends Component {
         this.setState({ offsetData: 0 });
         const { sortBy, sortOrder } = this.state;
         const code = e.keyCode || e.which;
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             this.props.umpireMainListAction({
                 refRoleId: JSON.stringify([15, 20]),
                 entityTypes: entityTypes("COMPETITION"),
@@ -626,7 +626,7 @@ class Umpire extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
 
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="2" />

@@ -141,7 +141,7 @@ class LiveScoreAddManager extends Component {
                     alignItems: "center",
                 }}>
                     <div className="row">
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
                                 <Breadcrumb.Item className="breadcrumb-add">
                                     {isEdit === true ? AppConstants.editManager : AppConstants.addManager}
@@ -315,7 +315,7 @@ class LiveScoreAddManager extends Component {
                                 placeholder={AppConstants.enterContactNo}
                                 maxLength={10}
                                 onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
-                            // value={managerData.mobileNumber}
+                                // value={managerData.mobileNumber}
                             />
                         </Form.Item>
                     </div>
@@ -370,8 +370,8 @@ class LiveScoreAddManager extends Component {
                     <div className="row ml-2" style={{ marginTop: 18 }}>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">{AppConstants.new}</Radio>
-                            <div style={{ marginLeft: -10, marginTop: -10, width: 50 }}>
-                                <Tooltip background="#ff8237">
+                            <div className="mt-n10 ml-n10 width-50">
+                                <Tooltip>
                                     <span>{AppConstants.newMsgForScorerManager}</span>
                                 </Tooltip>
                             </div>
@@ -380,8 +380,8 @@ class LiveScoreAddManager extends Component {
                             <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                 {AppConstants.existing}
                             </Radio>
-                            <div style={{ marginLeft: -10, marginTop: -10 }}>
-                                <Tooltip background="#ff8237">
+                            <div className="mt-n10 mt-n10">
+                                <Tooltip>
                                     <span>{AppConstants.existingMsgForScorerManager}</span>
                                 </Tooltip>
                             </div>
@@ -509,9 +509,9 @@ class LiveScoreAddManager extends Component {
     /////// render function
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores}
-                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                                 onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <Loader visible={this.props.liveScoreMangerState.loading} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="4" />
                 <Layout>

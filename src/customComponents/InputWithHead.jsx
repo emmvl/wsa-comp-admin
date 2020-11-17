@@ -25,14 +25,14 @@ function InputWithHead(props) {
     return (
         <div>
             {heading && (
-                <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="d-flex align-items-center">
                     <span id={headingId} className={`input-heading ${required}`}>{heading}</span>
                     {conceptulHelp && (
                         <div
                             className={`Content_Cancel__VinjW_withCrossBtn ${tooltiprequired}`}
                             style={{ marginTop }}
                         >
-                            <Tooltip background="#ff8237">
+                            <Tooltip>
                                 <span>{conceptulHelpMsg}</span>
                             </Tooltip>
                         </div>

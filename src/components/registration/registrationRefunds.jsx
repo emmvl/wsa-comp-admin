@@ -139,7 +139,7 @@ class RegistrationRefunds extends Component {
         return (
             // <div className="comp-player-grades-header-view-design">
             //     <div className="row">
-            //         <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+            //         <div className="col-sm d-flex align-content-center">
             //             <Breadcrumb separator=" > ">
             //                 <Breadcrumb.Item className="breadcrumb-add">{AppConstants.payouts}</Breadcrumb.Item>
             //             </Breadcrumb>
@@ -340,7 +340,6 @@ class RegistrationRefunds extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         return (
             <div className="comp-dash-table-view mt-2">
@@ -352,7 +351,7 @@ class RegistrationRefunds extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
                 <InnerHorizontalMenu menu="finance" finSelectedKey="3" />
                 <Layout >

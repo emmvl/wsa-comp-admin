@@ -887,7 +887,7 @@ const columnsIncident = [
   },
 ];
 
-//listeners for sorting
+// listeners for sorting
 const listeners = (key) => ({
   onClick: () => umpireActivityTableSort(key),
 });
@@ -1085,7 +1085,7 @@ function purchasesTableSort(key) {
   this_Obj.setState({ purchasesListSortBy: sortBy, purchasesListSortOrder: sortOrder });
 }
 
-//listeners for sorting
+// listeners for sorting
 const purchaseListeners = (key) => ({
   onClick: () => purchasesTableSort(key),
 });
@@ -2718,7 +2718,7 @@ class UserModulePersonalDetail extends Component {
     }
 
     return (
-      <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+      <div className="fluid-width default-bg">
         <DashboardLayout
           menuHeading={AppConstants.user}
           menuName={AppConstants.user}

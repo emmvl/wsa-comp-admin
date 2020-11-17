@@ -7,10 +7,8 @@ import DashboardLayout from "../../pages/dashboardLayout";
 import AppConstants from "../../themes/appConstants";
 import { connect } from 'react-redux';
 import {
-    getAffiliatesListingAction, getUreAction, getAffiliateToOrganisationAction,
-    affiliateDeleteAction
-} from
-    "../../store/actions/userAction/userAction";
+    getAffiliatesListingAction, getUreAction, getAffiliateToOrganisationAction, affiliateDeleteAction,
+} from "../../store/actions/userAction/userAction";
 import { bindActionCreators } from "redux";
 import AppImages from "../../themes/appImages";
 import { getOrganisationData } from "../../util/sessionStorage";
@@ -32,8 +30,7 @@ function tableSort(key) {
         sortBy = sortOrder = null;
     }
 
-    let filterData =
-    {
+    let filterData = {
         organisationId: this_Obj.state.organisationId,
         affiliatedToOrgId: this_Obj.state.affiliatedToOrgId,
         organisationTypeRefId: this_Obj.state.organisationTypeRefId,
@@ -51,13 +48,12 @@ const listeners = (key) => ({
     onClick: () => tableSort(key),
 });
 const columns = [
-
     {
         title: 'Name',
         dataIndex: 'affiliateName',
         key: 'affiliateName',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("name"),
+        onHeaderCell: () => listeners('name'),
 
     },
     {
@@ -65,71 +61,73 @@ const columns = [
         dataIndex: 'affiliatedToName',
         key: 'affiliatedToName',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("affiliatedTo"),
+        onHeaderCell: () => listeners('affiliatedTo'),
     },
     {
         title: 'Organisation Type',
         dataIndex: 'organisationTypeRefName',
         key: 'organisationTypeRefName',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("organisationType"),
+        onHeaderCell: () => listeners('organisationType'),
     },
     {
         title: 'Contact 1',
         dataIndex: 'contact1Name',
         key: 'contact1Name',
         sorter: false,
-        // onHeaderCell: ({ dataIndex }) => listeners("contact1"),
+        // onHeaderCell: () => listeners('contact1'),
     },
     {
         title: 'Contact 2',
         dataIndex: 'contact2Name',
         key: 'contact2Name',
         sorter: false,
-        // onHeaderCell: ({ dataIndex }) => listeners("contact2"),
+        // onHeaderCell: () => listeners('contact2'),
     },
     {
         title: 'Status',
         dataIndex: 'statusRefName',
         key: 'statusRefName',
         sorter: true,
-        onHeaderCell: ({ dataIndex }) => listeners("status"),
+        onHeaderCell: () => listeners('status'),
     },
     {
-        title: "Action",
-        dataIndex: "isUsed",
-        key: "isUsed",
+        title: 'Action',
+        dataIndex: 'isUsed',
+        key: 'isUsed',
         render: (isUsed, e) => (
-            isUsed === false ? <Menu
-                className="action-triple-dot-submenu"
-                theme="light"
-                mode="horizontal"
-                style={{ lineHeight: "25px" }}
-            >
-                <SubMenu
-                    key="sub1"
-                    title={
-                        <img
-                            className="dot-image"
-                            src={AppImages.moreTripleDot}
-                            alt=""
-                            width="16"
-                            height="16"
-                        />
-                    }
+            isUsed === false && (
+                <Menu
+                    className="action-triple-dot-submenu"
+                    theme="light"
+                    mode="horizontal"
+                    style={{ lineHeight: '25px' }}
                 >
-                    <Menu.Item key="1">
-                        <NavLink to={{ pathname: `/userEditAffiliates`, state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId } }}>
-                            <span>Edit</span>
-                        </NavLink>
-                    </Menu.Item>
-                    {/* <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e.affiliateId)}>
-                        <span>Delete</span>
-                    </Menu.Item> */}
-                </SubMenu>
-            </Menu> : null
-        )
-    }
+                    <SubMenu
+                        key="sub1"
+                        title={
+                            <img
+                                className="dot-image"
+                                src={AppImages.moreTripleDot}
+                                alt=""
+                                width="16"
+                                height="16"
+                            />
+                        }
+                    >
+                        <Menu.Item key="1">
+                            <NavLink to={{ pathname: '/userEditAffiliates', state: { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId } }}>
+                                <span>Edit</span>
+                            </NavLink>
+                        </Menu.Item>
+                        {/* <Menu.Item key="2" onClick={() => this_Obj.showDeleteConfirm(e.affiliateId)}>
+                            <span>Delete</span>
+                        </Menu.Item> */}
+                    </SubMenu>
+                </Menu>
+            )
+        ),
+    },
 ];
 
 class UserAffiliatesList extends Component {
@@ -144,9 +142,8 @@ class UserAffiliatesList extends Component {
             pageNo: 1,
             sortBy: null,
             sortOrder: null,
-            offsetData: 0
-
-        }
+            offsetData: 0,
+        };
         this_Obj = this;
         // this.props.getUreAction();
         this.referenceCalls(this.state.organisationId);
@@ -199,8 +196,7 @@ class UserAffiliatesList extends Component {
         this.setState({
             pageNo: page
         })
-        let filter =
-        {
+        let filter = {
             organisationId: organisationId,
             affiliatedToOrgId: affiliatedToOrgId,
             organisationTypeRefId: organisationTypeRefId,
@@ -214,7 +210,7 @@ class UserAffiliatesList extends Component {
         this.props.getAffiliatesListingAction(filter, this.state.sortBy, this.state.sortOrder);
     };
 
-    naviageToAffiliate = (e) => {
+    navigateToAffiliate = (e) => {
         this.props.history.push("/userEditAffiliates", { affiliateOrgId: e.affiliateOrgId, orgTypeRefId: e.organisationTypeRefId })
     }
 
@@ -239,7 +235,7 @@ class UserAffiliatesList extends Component {
             title: 'Are you sure you want to delete this affiliate?',
             // content: 'Some descriptions',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             onOk() {
                 this_.deleteAffiliate(affiliateId)
@@ -259,7 +255,7 @@ class UserAffiliatesList extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-items-center">
                         <Breadcrumb separator=" > ">
                             {/* <Breadcrumb.Item className="breadcrumb-product">User</Breadcrumb.Item> */}
                             <Breadcrumb.Item className="breadcrumb-add">Affiliates</Breadcrumb.Item>
@@ -283,12 +279,7 @@ class UserAffiliatesList extends Component {
                 <div className="fluid-width">
                     <div className="row">
                         <div className="col-lg-3 col-md-6">
-                            <div style={{
-                                width: '100%',
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center"
-                            }}>
+                            <div className="d-flex align-items-center" style={{ width: '100%' }}>
                                 <span className="year-select-heading" style={{ width: 120 }}>{AppConstants.affiliatedTo}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
@@ -309,7 +300,7 @@ class UserAffiliatesList extends Component {
                             </div>
                         </div>
                         <div className="col-lg-4 col-md-6">
-                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                            <div className="d-flex align-items-center">
                                 <span className="year-select-heading" style={{ width: 240 }}>{AppConstants.organisationType}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
@@ -319,13 +310,13 @@ class UserAffiliatesList extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(affiliateToData.organisationTypes || []).map((org) => (
-                                        <Option key={'organizationTyp_' + org.id} value={org.id}>{org.name}</Option>
+                                        <Option key={`organizationTyp_${org.id}`} value={org.id}>{org.name}</Option>
                                     ))}
                                 </Select>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6">
-                            <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+                            <div className="d-flex align-items-center">
                                 <span className="year-select-heading" style={{ width: 120 }}>{AppConstants.status}</span>
                                 <Select
                                     className="year-select reg-filter-select1 ml-2"
@@ -335,21 +326,19 @@ class UserAffiliatesList extends Component {
                                 >
                                     <Option key={-1} value={-1}>{AppConstants.all}</Option>
                                     {(affiliateToData.status || []).map((st) => (
-                                        <Option key={'status_' + st.id} value={st.id}>{st.description}</Option>
+                                        <Option key={`status_${st.id}`} value={st.id}>{st.description}</Option>
                                     ))}
                                 </Select>
                             </div>
                         </div>
                         <div className="col-lg-2 col-md-6 add-affiliate-btn">
-                            {
-                                affiliateToData.isEligibleToAddAffiliate ?
-                                    <div className="d-flex flex-row-reverse">
-                                        <NavLink to={"/userAddAffiliates"}>
-                                            <Button className='primary-add-product' type='primary'>+ {AppConstants.addAffiliate}</Button>
-                                        </NavLink>
-                                    </div>
-                                    : null
-                            }
+                            {affiliateToData.isEligibleToAddAffiliate && (
+                                <div className="d-flex flex-row-reverse">
+                                    <NavLink to="/userAddAffiliates">
+                                        <Button className="primary-add-product" type="primary">+ {AppConstants.addAffiliate}</Button>
+                                    </NavLink>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -357,7 +346,6 @@ class UserAffiliatesList extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         let userState = this.props.userState;
         let affiliates = userState.affiliateList;
@@ -366,9 +354,10 @@ class UserAffiliatesList extends Component {
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
                     {/* <Table className="home-dashboard-table" columns={columns} dataSource={affiliates} pagination={false}
-                        onRow={(r) => ({onClick: () => this.naviageToAffiliate(r, this.state.organisationId)})}
+                        onRow={(r) => ({onClick: () => this.navigateToAffiliate(r, this.state.organisationId)})}
                     /> */}
-                    <Table className="home-dashboard-table"
+                    <Table
+                        className="home-dashboard-table"
                         columns={columns}
                         dataSource={affiliates}
                         pagination={false}
@@ -384,30 +373,28 @@ class UserAffiliatesList extends Component {
                     />
                 </div>
             </div>
-        )
+        );
     }
 
-    //////footer view containing all the buttons like submit and cancel
+    // footer view containing all the buttons like submit and cancel
     footerView = () => {
-        let affiliateToData = this.props.userState.affiliateTo;
+        const affiliateToData = this.props.userState.affiliateTo;
         return (
             <div>
-                {
-                    affiliateToData.isEligibleToAddAffiliate ?
-                        <div className="d-flex flex-row-reverse">
-                            <NavLink to={"/userAddAffiliates"}>
-                                <Button className='primary-add-product' type='primary'>+ {AppConstants.addAffiliate}</Button>
-                            </NavLink>
-                        </div>
-                        : null
-                }
+                {affiliateToData.isEligibleToAddAffiliate && (
+                    <div className="d-flex flex-row-reverse">
+                        <NavLink to="/userAddAffiliates">
+                            <Button className="primary-add-product" type="primary">+ {AppConstants.addAffiliate}</Button>
+                        </NavLink>
+                    </div>
+                )}
             </div>
-        )
+        );
     }
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                 <InnerHorizontalMenu menu="user" userSelectedKey="2" />
                 <Layout>
@@ -421,26 +408,23 @@ class UserAffiliatesList extends Component {
                     </Footer> */}
                 </Layout>
             </div>
-
         );
     }
 }
-
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getAffiliatesListingAction,
         getUreAction,
         getAffiliateToOrganisationAction,
-        affiliateDeleteAction
+        affiliateDeleteAction,
     }, dispatch);
-
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
-        userState: state.UserState
-    }
+        userState: state.UserState,
+    };
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)((UserAffiliatesList));
+export default connect(mapStateToProps, mapDispatchToProps)(UserAffiliatesList);

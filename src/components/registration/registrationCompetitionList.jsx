@@ -1,26 +1,28 @@
-import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Layout, Breadcrumb, Button, Table, Input, Select, Menu, Pagination, Modal } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import Tooltip from "react-png-tooltip";
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+    Layout, Breadcrumb, Button, Table, Input, Select, Menu, Pagination, Modal,
+} from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import Tooltip from 'react-png-tooltip';
 
-import AppConstants from "themes/appConstants";
-import AppImages from "themes/appImages";
-import { checkUserRole, getCurrentYear } from "util/permissions";
-import { currencyFormat } from "util/currencyFormat";
-import { stringTONumber } from "util/helpers";
-import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from "store/actions/appAction";
+import AppConstants from 'themes/appConstants';
+import AppImages from 'themes/appImages';
+import { checkUserRole, getCurrentYear } from 'util/permissions';
+import { currencyFormat } from 'util/currencyFormat';
+import { stringTONumber } from 'util/helpers';
+import { getOnlyYearListAction, CLEAR_OWN_COMPETITION_DATA } from 'store/actions/appAction';
 import {
     regCompetitionListAction,
     clearCompReducerDataAction,
     regCompetitionListDeleteAction,
-} from "store/actions/registrationAction/competitionFeeAction";
-import InnerHorizontalMenu from "pages/innerHorizontalMenu";
-import DashboardLayout from "pages/dashboardLayout";
+} from 'store/actions/registrationAction/competitionFeeAction';
+import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
+import DashboardLayout from 'pages/dashboardLayout';
 
-import "./product.scss";
+import './product.scss';
 
 const { confirm } = Modal;
 const { Content } = Layout;
@@ -32,10 +34,10 @@ function tableSort(key) {
     let sortBy = key;
     let sortOrder = null;
     if (this_Obj.state.sortBy !== key) {
-        sortOrder = "ASC";
-    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "ASC") {
-        sortOrder = "DESC";
-    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === "DESC") {
+        sortOrder = 'ASC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_Obj.state.sortBy === key && this_Obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
 
@@ -65,11 +67,11 @@ function totalSeasonalFees(seasonalFees1, record) {
     return (
         affiliateFeeStatus ? (
             <span>
-                {record.feeOrgId == null ? "N/A" : (record.seasonalFees == null && record.seasonalGST == null) ? "N/A" : "Affiliate fee not set!"}
+                {record.feeOrgId == null ? 'N/A' : (record.seasonalFees == null && record.seasonalGST == null) ? 'N/A' : 'Affiliate fee not set!'}
             </span>
         ) : (
             <span>
-                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+                {(record.seasonalFees == null && record.seasonalGST == null) && record.parentCreator === true ? 'N/A' : currencyFormat(fee)}
             </span>
         )
     );
@@ -96,11 +98,11 @@ function totalCasualFees(casualFees1, record) {
     return (
         affiliateFeeStatus ? (
             <span>
-                {record.feeOrgId == null ? "N/A" : (record.casualFees == null && record.casualGST == null) ? "N/A" : "Affiliate fee not set!"}
+                {record.feeOrgId == null ? 'N/A' : (record.casualFees == null && record.casualGST == null) ? 'N/A' : 'Affiliate fee not set!'}
             </span>
         ) : (
             <span>
-                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? "N/A" : currencyFormat(fee)}
+                {(record.casualFees == null && record.casualGST == null) && record.parentCreator === true ? 'N/A' : currencyFormat(fee)}
             </span>
         )
     );
@@ -112,83 +114,74 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: "Competition Name",
-        dataIndex: "competitionName",
-        key: "competitionName",
+        title: 'Competition Name',
+        dataIndex: 'competitionName',
+        key: 'competitionName',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: "Organiser",
-        dataIndex: "organiser",
-        key: "organiser",
+        title: 'Organiser',
+        dataIndex: 'organiser',
+        key: 'organiser',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
-        render: organiser => (
-            <span>{organiser === null || organiser === "" ? "N/A" : organiser}</span>
+        render: (organiser) => (
+            <span>{organiser === null || organiser === '' ? 'N/A' : organiser}</span>
         ),
     },
     {
-        title: "Affiliate",
-        dataIndex: "affiliateName",
-        key: "affiliateName",
+        title: 'Affiliate',
+        dataIndex: 'affiliateName',
+        key: 'affiliateName',
         sorter: true,
-        onHeaderCell: () => listeners("affiliate"),
-        render: affiliateName => (
-            <span>{affiliateName === null || affiliateName === "" ? "N/A" : affiliateName}</span>
+        onHeaderCell: () => listeners('affiliate'),
+        render: (affiliateName) => (
+            <span>{affiliateName === null || affiliateName === '' ? 'N/A' : affiliateName}</span>
         ),
     },
     {
-        title: "Membership Product",
-        dataIndex: "membershipProductName",
-        key: "membershipProductName",
+        title: 'Membership Product',
+        dataIndex: 'membershipProductName',
+        key: 'membershipProductName',
         sorter: true,
-        onHeaderCell: () => listeners("membershipProduct"),
+        onHeaderCell: () => listeners('membershipProduct'),
     },
     {
-        title: "Membership Type",
-        dataIndex: "membershipProductTypeName",
-        key: "membershipProductTypeName",
+        title: 'Membership Type',
+        dataIndex: 'membershipProductTypeName',
+        key: 'membershipProductTypeName',
         sorter: true,
-        onHeaderCell: () => listeners("membershipType"),
+        onHeaderCell: () => listeners('membershipType'),
     },
     {
-        title: "Registration Divisions",
-        dataIndex: "divisionName",
-        key: "divisionName",
+        title: 'Registration Divisions',
+        dataIndex: 'divisionName',
+        key: 'divisionName',
         sorter: true,
-        onHeaderCell: () => listeners("registrationDivisions"),
-        render: divisionName => (
-            <span>{divisionName === null || divisionName === "" ? "N/A" : divisionName}</span>
+        onHeaderCell: () => listeners('registrationDivisions'),
+        render: (divisionName) => (
+            <span>{divisionName === null || divisionName === '' ? 'N/A' : divisionName}</span>
         ),
     },
     {
-        title: "Total Fee - Seasonal (inc GST)",
-        dataIndex: "seasonalFees",
-        key: "seasonalFees",
+        title: 'Total Fee - Seasonal (inc GST)',
+        dataIndex: 'seasonalFees',
+        key: 'seasonalFees',
         render: (seasonalFees, record) => totalSeasonalFees(seasonalFees, record),
         sorter: true,
-        onHeaderCell: () => listeners("totalSeasonalFee"),
+        onHeaderCell: () => listeners('totalSeasonalFee'),
     },
     {
-        title: "Total Fee - Single Game (inc GST)",
-        dataIndex: "casualFees",
-        key: "casualFees",
+        title: 'Total Fee - Single Game (inc GST)',
+        dataIndex: 'casualFees',
+        key: 'casualFees',
         render: (casualFees, record) => totalCasualFees(casualFees, record),
         sorter: true,
         filterDropdown: true,
         filterIcon: () => (
-            <div
-                style={{
-                    width: 20,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginTop: 10,
-                    marginRight: 10,
-                }}
-            >
-                <Tooltip background="#ff8237">
+            <div className="d-flex justify-content-center align-items-center mt-10" style={{ width: 20, marginRight: 10 }}>
+                <Tooltip>
                     <span>{AppConstants.totalFeeMsg}</span>
                 </Tooltip>
             </div>
@@ -196,20 +189,20 @@ const columns = [
         onHeaderCell: () => listeners('totalCasualFee'),
     },
     {
-        title: "Action",
-        dataIndex: "isUsed",
-        key: "isUsed",
+        title: 'Action',
+        dataIndex: 'isUsed',
+        key: 'isUsed',
         render: (isUsed, record) => (
             // isUsed == false ? <Menu
             <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
                 mode="horizontal"
-                style={{ lineHeight: "25px" }}
+                style={{ lineHeight: '25px' }}
             >
                 <SubMenu
                     key="sub1"
-                    title={
+                    title={(
                         <img
                             className="dot-image"
                             src={AppImages.moreTripleDot}
@@ -217,13 +210,13 @@ const columns = [
                             width="16"
                             height="16"
                         />
-                    }
+                    )}
                 >
                     <Menu.Item key="1">
                         <NavLink
                             to={{
-                                pathname: `/registrationCompetitionFee`,
-                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId }
+                                pathname: '/registrationCompetitionFee',
+                                state: { id: record.competitionUniqueKey, affiliateOrgId: record.affiliateOrgId },
                             }}
                         >
                             <span>Edit</span>
@@ -238,8 +231,8 @@ const columns = [
                     </Menu.Item>
                 </SubMenu>
             </Menu>
-        )
-    }
+        ),
+    },
 ];
 
 class RegistrationCompetitionList extends Component {
@@ -249,31 +242,30 @@ class RegistrationCompetitionList extends Component {
         this.state = {
             yearRefId: null,
             deleteLoading: false,
-            userRole: "",
+            userRole: '',
             searchText: '',
             offset: 0,
             sortBy: null,
             sortOrder: null,
-            allyearload: false
+            allyearload: false,
         };
 
         this_Obj = this;
         this.props.CLEAR_OWN_COMPETITION_DATA();
-
     }
 
     async componentDidMount() {
         this.props.getOnlyYearListAction(this.props.appState.yearList);
         this.setState({
-            allyearload: true
-        })
+            allyearload: true,
+        });
         checkUserRole().then((value) => (
             this.setState({ userRole: value })
-        ))
+        ));
     }
 
     componentDidUpdate(nextProps) {
-        const { competitionListAction } = this.props.competitionFeesState
+        const { competitionListAction } = this.props.competitionFeesState;
         if (this.props.competitionFeesState.onLoad === false && this.state.deleteLoading === true) {
             this.setState({
                 deleteLoading: false,
@@ -282,27 +274,28 @@ class RegistrationCompetitionList extends Component {
         }
         if (this.state.allyearload === true && this.props.appState.onLoad == false) {
             if (this.props.appState.yearList.length > 0) {
-                let mainYearRefId = getCurrentYear(this.props.appState.yearList)
-                let page = 1
-                let sortBy = this.state.sortBy
-                let sortOrder = this.state.sortOrder
+                const mainYearRefId = getCurrentYear(this.props.appState.yearList);
+                let page = 1;
+                let { sortBy } = this.state;
+                let { sortOrder } = this.state;
                 if (competitionListAction) {
-                    let offset = competitionListAction.offset
-                    sortBy = competitionListAction.sortBy
-                    sortOrder = competitionListAction.sortOrder
-                    let yearRefId = competitionListAction.yearRefId
-                    let searchText = competitionListAction.searchText
+                    const { offset } = competitionListAction;
+                    sortBy = competitionListAction.sortBy;
+                    sortOrder = competitionListAction.sortOrder;
+                    const { yearRefId } = competitionListAction;
+                    const { searchText } = competitionListAction;
 
-                    this.setState({ offset, sortBy, sortOrder, yearRefId, searchText })
+                    this.setState({
+                        offset, sortBy, sortOrder, yearRefId, searchText,
+                    });
                     page = Math.floor(offset / 10) + 1;
 
-                    this.handleCompetitionTableList(page, yearRefId, searchText)
-                    this.setState({ yearRefId: yearRefId, allyearload: false })
+                    this.handleCompetitionTableList(page, yearRefId, searchText);
+                    this.setState({ yearRefId, allyearload: false });
                 } else {
-                    this.handleCompetitionTableList(1, mainYearRefId, this.state.searchText)
-                    this.setState({ yearRefId: mainYearRefId, allyearload: false })
+                    this.handleCompetitionTableList(1, mainYearRefId, this.state.searchText);
+                    this.setState({ yearRefId: mainYearRefId, allyearload: false });
                 }
-
             }
         }
     }
@@ -313,13 +306,13 @@ class RegistrationCompetitionList extends Component {
     };
 
     showDeleteConfirm = (competitionId) => {
-        let this_ = this;
+        const this_ = this;
         confirm({
-            title: "Are you sure delete this product?",
+            title: 'Are you sure delete this product?',
             // content: "Some descriptions",
-            okText: "Yes",
-            okType: "danger",
-            cancelText: "No",
+            okText: 'Yes',
+            okType: 'primary',
+            cancelText: 'No',
             onOk() {
                 this_.deleteProduct(competitionId);
             },
@@ -334,7 +327,7 @@ class RegistrationCompetitionList extends Component {
             <div className="row">
                 <div
                     className="col-sm"
-                    style={{ display: "flex", alignContent: "center" }}
+                    style={{ display: 'flex', alignContent: 'center' }}
                 >
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
@@ -361,7 +354,7 @@ class RegistrationCompetitionList extends Component {
 
     onKeyEnterSearchText = (e) => {
         const code = e.keyCode || e.which;
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             this.handleCompetitionTableList(1, this.state.yearRefId, this.state.searchText);
         }
     };
@@ -378,15 +371,18 @@ class RegistrationCompetitionList extends Component {
                 <div className="row">
                     <div className="col-sm-2">
                         <div className="com-year-select-heading-view pb-3">
-                            <span className="year-select-heading" style={{ width: 50 }}>{AppConstants.year}:</span>
+                            <span className="year-select-heading" style={{ width: 50 }}>
+                                {AppConstants.year}
+                                :
+                            </span>
                             <Select
                                 style={{ width: 90 }}
                                 className="year-select reg-filter-select-year ml-2"
                                 value={this.state.yearRefId}
                                 onChange={this.yearChange}
                             >
-                                {this.props.appState.yearList.map(item => (
-                                    <Option key={'year_' + item.id} value={item.id}>
+                                {this.props.appState.yearList.map((item) => (
+                                    <Option key={`year_${item.id}`} value={item.id}>
                                         {item.description}
                                     </Option>
                                 ))}
@@ -396,7 +392,7 @@ class RegistrationCompetitionList extends Component {
 
                     <div className="col-sm" />
 
-                    <div style={{ marginRight: "25px", display: "flex", alignItems: "center" }}>
+                    <div style={{ marginRight: '25px', display: 'flex', alignItems: 'center' }}>
                         <div className="comp-product-search-inp-width pb-3">
                             <Input
                                 className="product-reg-search-input"
@@ -404,30 +400,32 @@ class RegistrationCompetitionList extends Component {
                                 placeholder="Search..."
                                 onKeyPress={this.onKeyEnterSearchText}
                                 value={this.state.searchText}
-                                prefix={
+                                prefix={(
                                     <SearchOutlined
-                                        style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                        style={{ color: 'rgba(0,0,0,.25)', height: 16, width: 16 }}
                                         onClick={this.onClickSearchIcon}
                                     />
-                                }
+                                )}
                                 allowClear
                             />
                         </div>
                     </div>
 
                     {/* {this.state.userRole == AppConstants.admin && ( */}
-                    <div style={{ marginRight: "1%", display: "flex", alignItems: "center" }}>
+                    <div style={{ marginRight: '1%', display: 'flex', alignItems: 'center' }}>
                         <div
                             className="d-flex flex-row-reverse button-with-search pb-3"
                             // className="col-sm d-flex justify-content-end"
-                            onClick={() => this.props.clearCompReducerDataAction("all")}
+                            onClick={() => this.props.clearCompReducerDataAction('all')}
                         >
                             <NavLink
-                                to={{ pathname: "/registrationCompetitionFee", state: { id: null } }}
+                                to={{ pathname: '/registrationCompetitionFee', state: { id: null } }}
                                 className="text-decoration-none"
                             >
                                 <Button className="primary-add-product" type="primary">
-                                    + {AppConstants.addCompetition}
+                                    +
+                                    {' '}
+                                    {AppConstants.addCompetition}
                                 </Button>
                             </NavLink>
                         </div>
@@ -439,7 +437,7 @@ class RegistrationCompetitionList extends Component {
     );
 
     handleCompetitionTableList = (page, yearRefId, searchText) => {
-        console.log("called")
+        console.log('called');
         const { sortBy, sortOrder } = this.state;
         const offset = page ? 10 * (page - 1) : 0;
         this.setState({ offset });
@@ -474,7 +472,7 @@ class RegistrationCompetitionList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}

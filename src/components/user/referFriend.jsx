@@ -185,7 +185,7 @@ class ReferFriend extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.referaFriend}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -226,7 +226,6 @@ class ReferFriend extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         let userState = this.props.userState;
         let friendList = userState.referFriendList;
@@ -255,7 +254,7 @@ class ReferFriend extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                 <InnerHorizontalMenu menu="user" userSelectedKey="6" />
                 <Layout>

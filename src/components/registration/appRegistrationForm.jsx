@@ -1934,7 +1934,7 @@ class AppRegistrationForm extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={""}
                     menuName={AppConstants.home}

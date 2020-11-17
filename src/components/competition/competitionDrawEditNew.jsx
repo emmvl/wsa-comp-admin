@@ -388,7 +388,6 @@ class CompetitionDrawEdit extends Component {
         );
     };
 
-    ////////form content view
     contentView = () => {
         let disabledStatus = this.state.competitionStatus == 1
         return (
@@ -607,7 +606,7 @@ class CompetitionDrawEdit extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu="competition" compSelectedKey="18" />
                 <Layout className="comp-dash-table-view">

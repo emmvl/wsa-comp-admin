@@ -181,7 +181,6 @@ class CompetitionReplicate extends Component {
         }
     }
 
-    ////////form content view
     contentView = () => {
         const { own_YearArr, all_own_CompetitionArr } = this.props.appState;
         const { replicateSave, oldMembershipProducs, newMembershipProducs } = this.props.competitionDashboardState;
@@ -575,7 +574,7 @@ class CompetitionReplicate extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
 
                 <InnerHorizontalMenu menu="competition" compSelectedKey="1" />

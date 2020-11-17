@@ -1,15 +1,20 @@
-import React, { Component } from "react";
-import { Layout, Button, Checkbox, Select, Breadcrumb, InputNumber, Form, Modal, message } from 'antd';
-import './shop.css';
+import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import DashboardLayout from "../../pages/dashboardLayout";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Layout, Button, Checkbox, Select, Breadcrumb, InputNumber, Form, Modal, message } from 'antd';
+import { Editor } from 'react-draft-wysiwyg';
+import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
+import htmlToDraft from 'html-to-draftjs';
+import draftToHtml from 'draftjs-to-html';
+
+import './shop.css';
+import DashboardLayout from '../../pages/dashboardLayout';
+import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
+import AppConstants from '../../themes/appConstants';
+import AppImages from '../../themes/appImages';
 import Loader from '../../customComponents/loader';
-import history from "../../util/history";
+import history from '../../util/history';
 import {
     addProductAction,
     onChangeProductDetails,
@@ -18,17 +23,13 @@ import {
     deleteProductVariantAction,
     getProductDetailsByIdAction,
     clearProductReducer,
-} from "../../store/actions/shopAction/productAction"
-import InputWithHead from "../../customComponents/InputWithHead";
-import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid } from "../../util/helpers";
-import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, ContentState, convertFromHTML, convertToRaw } from 'draft-js';
+} from '../../store/actions/shopAction/productAction';
+import InputWithHead from '../../customComponents/InputWithHead';
+import { isArrayNotEmpty, isNotNullOrEmptyString, captializedString, isImageFormatValid } from '../../util/helpers';
 import SortableImage from '../../customComponents/sortableImageComponent';
 import ValidationConstants from '../../themes/validationConstant';
-import { checkOrganisationLevel } from "../../util/permissions";
-import { getOrganisationData } from "../../util/sessionStorage"
-import htmlToDraft from 'html-to-draftjs';
-import draftToHtml from 'draftjs-to-html';
+import { checkOrganisationLevel } from '../../util/permissions';
+import { getOrganisationData } from '../../util/sessionStorage';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -39,23 +40,22 @@ class AddProduct extends Component {
         super(props);
         this.state = {
             editorState: EditorState.createEmpty(),
-            value: "",
+            value: '',
             fileNames: [],
             isDrag: false,
             files: [],
             urls: [],
             isDragging: false,
-            newProductType: "",
+            newProductType: '',
             visible: false,
             loading: false,
             getLoad: false,
             orgLevel: AppConstants.state,
             allDisabled: false
         }
-        props.clearProductReducer("productDetailData");
+        props.clearProductReducer('productDetailData');
         this.formRef = React.createRef();
     }
-
 
     componentDidMount() {
         window.scrollTo(0, 0)
@@ -105,7 +105,7 @@ class AddProduct extends Component {
         let orgData = getOrganisationData();
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
         productDetailData.organisationUniqueKey = organisationUniqueKey
-        // let descriptionText = ""
+        // let descriptionText = ''
         // if (isArrayNotEmpty(description)) {
         //     let descriptionStringArr = []
         //     for (let i in description) {
@@ -139,7 +139,7 @@ class AddProduct extends Component {
         formData.append('params', JSON.stringify(productDetailData));
         if (isArrayNotEmpty(imagesFiles)) {
             for (let i in imagesFiles)
-                formData.append("productPhotos", imagesFiles[i])
+                formData.append('productPhotos', imagesFiles[i])
         }
         let affiliates = productDetailData.affiliates
         let affiliatesNotSelected = Object.keys(affiliates).every(k => affiliates[k] === 0);
@@ -156,7 +156,7 @@ class AddProduct extends Component {
         this.formRef.current.setFieldsValue({
             productName: productDetailData.productName,
         });
-        if (productDetailData.deliveryType === "shipping") {
+        if (productDetailData.deliveryType === 'shipping') {
             this.formRef.current.setFieldsValue({
                 width: productDetailData.width,
                 length: productDetailData.length,
@@ -185,8 +185,8 @@ class AddProduct extends Component {
     setEditorFieldValue() {
         let { productDetailData } = this.props.shopProductState;
         // let body = isNotNullOrEmptyString(productDetailData.description) ?
-        //  EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetailData.description))) : ""
-        let finalBody = isNotNullOrEmptyString(productDetailData.description) ? productDetailData.description : ""
+        //  EditorState.createWithContent(ContentState.createFromBlockArray(convertFromHTML(productDetailData.description))) : ''
+        let finalBody = isNotNullOrEmptyString(productDetailData.description) ? productDetailData.description : ''
         const html = finalBody;
         const contentBlock = htmlToDraft(html);
         if (contentBlock) {
@@ -197,7 +197,6 @@ class AddProduct extends Component {
             })
         }
     }
-
 
     onEditorStateChange = (editorState) => {
         this.setState({
@@ -211,14 +210,14 @@ class AddProduct extends Component {
         }
         this.setState({
             visible: false,
-            newProductType: "",
+            newProductType: '',
         });
     };
 
     handleCancel = e => {
         this.setState({
             visible: false,
-            newProductType: ""
+            newProductType: ''
         });
     };
 
@@ -267,14 +266,11 @@ class AddProduct extends Component {
     checkAffiliateDisable = (item) => {
         if (this.state.orgLevel == AppConstants.association && item.id == 2) {
             return true;
-        }
-        else if (this.state.orgLevel == AppConstants.club && item.id == 2) {
+        } else if (this.state.orgLevel == AppConstants.club && item.id == 2) {
             return true;
-        }
-        else if (this.state.orgLevel == AppConstants.club && item.id == 3) {
+        } else if (this.state.orgLevel == AppConstants.club && item.id == 3) {
             return true;
-        }
-        else {
+        } else {
             return this.state.allDisabled;
         }
     }
@@ -350,16 +346,18 @@ class AddProduct extends Component {
 
     getImage = () => (
         <>
-            <input type="file"
+            <input
+                type="file"
                 id="getImage"
                 style={{ display: 'none' }}
                 onChange={(e) => this.onChange(e)}
                 accept="image/*"
             />
             <Button
-                onClick={(e) => { document.getElementById('getImage').click(); e.stopPropagation() }}
+                onClick={(e) => { document.getElementById('getImage').click(); e.stopPropagation(); }}
                 className="primary-add-product mt-2"
-                type="primary">
+                type="primary"
+            >
                 {AppConstants.uploadImage}
             </Button>
         </>
@@ -385,22 +383,22 @@ class AddProduct extends Component {
         let varientOptions = productDetailData.variants[index].options
         let varientOptionObject = varientOptions[subIndex]
         switch (key) {
-            case "optionName":
+            case 'optionName':
                 varientOptionObject.optionName = value
                 break;
-            case "price":
+            case 'price':
                 varientOptionObject.properties.price = value
                 break;
-            case "cost":
+            case 'cost':
                 varientOptionObject.properties.cost = value
                 break;
-            case "skuCode":
+            case 'skuCode':
                 varientOptionObject.properties.skuCode = value
                 break;
-            case "barcode":
+            case 'barcode':
                 varientOptionObject.properties.barcode = value
                 break;
-            case "quantity":
+            case 'quantity':
                 varientOptionObject.properties.quantity = value
                 break;
             default:
@@ -410,7 +408,6 @@ class AddProduct extends Component {
         this.props.onChangeProductDetails(varientOptions, 'variantOption', index)
     }
 
-
     //////delete the product variant
     showDeleteConfirm = (optionId, index, subIndex) => {
         let this_ = this
@@ -418,7 +415,7 @@ class AddProduct extends Component {
             title: AppConstants.deleteVariantOption,
             content: AppConstants.deleteVariantOptionDescription,
             okText: 'Confirm',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'Cancel',
             onOk() {
                 if (optionId) {
@@ -441,31 +438,30 @@ class AddProduct extends Component {
     addVariantOption = (index, subIndex, key, optionId) => {
         let { productDetailData } = this.props.shopProductState
         let varientOptionObject = {
-            optionName: "",
+            optionName: '',
             properties: {
                 price: productDetailData.price,
                 cost: 0,
-                SKU: "",
-                barcode: "",
+                SKU: '',
+                barcode: '',
                 quantity: 0,
                 id: 0
             }
         }
         let varientOptions = productDetailData.variants[index].options
-        if (key === "add") {
+        if (key === 'add') {
             varientOptions.push(varientOptionObject)
         }
-        if (key === "remove") {
+        if (key === 'remove') {
             this.showDeleteConfirm(optionId, index, subIndex)
             // varientOptions.splice(subIndex, 1)
         }
         this.props.onChangeProductDetails(varientOptions, 'variantOption', index)
-
     }
 
     onChangeShippingCheckBox = async (e) => {
         await this.props.onChangeProductDetails(
-            e.target.checked ? "shipping" : "",
+            e.target.checked ? 'shipping' : '',
             'deliveryType'
         );
         this.setDetailsFieldValue();
@@ -492,8 +488,7 @@ class AddProduct extends Component {
         const { editorState, allDisabled } = this.state;
         return (
             <div className="fluid-width mt-3 shop-decription-editor-main-div">
-                <div className="livescore-editor-news col-sm"
-                    style={allDisabled ? { backgroundColor: "#f5f5f5" } : null}>
+                <div className="livescore-editor-news col-sm" style={allDisabled ? { backgroundColor: '#f5f5f5' } : null}>
                     <Editor
                         editorState={editorState}
                         editorClassName="newsDetailEditor"
@@ -520,7 +515,6 @@ class AddProduct extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         let { productDetailData, typesProductList } = this.props.shopProductState
         let affiliateArray = [
@@ -557,8 +551,7 @@ class AddProduct extends Component {
                     />
                 </Form.Item>
 
-                <InputWithHead required="pb-0" heading={AppConstants.description}
-                />
+                <InputWithHead required="pb-0" heading={AppConstants.description} />
                 {this.editorView()}
 
                 <InputWithHead required="pt-4" heading={AppConstants.type} />
@@ -582,7 +575,7 @@ class AddProduct extends Component {
                         </Option>
                     ))}
                 </Select>
-                {this.state.orgLevel === "state" && (
+                {this.state.orgLevel === 'state' && (
                     <span className="input-heading-add-another" onClick={this.addAnotherProductType}>
                         +{AppConstants.addType}
                     </span>
@@ -642,23 +635,23 @@ class AddProduct extends Component {
                         onClick={(e) => { urls.length === 0 && document.getElementById('getImage').click(); e.stopPropagation() }}
                     >
                         <>
-                            {
-                                urls.length > 0 ?
-                                    <SortableImage images={urls} reorderedUrls={(data) => this.setState({ urls: data })} allDisabled={allDisabled} /> :
-                                    <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: 180 }}>
-                                        <InputWithHead heading={AppConstants.dragImageToUpload} />
-                                        <div className="d-flex justify-content-center" style={{ width: '100%' }}>
-                                            {this.getImage()}
-                                        </div>
+                            {urls.length > 0 ? (
+                                <SortableImage images={urls} reorderedUrls={(data) => this.setState({ urls: data })} allDisabled={allDisabled} />
+                            ) : (
+                                <div className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: 180 }}>
+                                    <InputWithHead heading={AppConstants.dragImageToUpload} />
+                                    <div className="d-flex justify-content-center" style={{ width: '100%' }}>
+                                        {this.getImage()}
                                     </div>
-                            }
+                                </div>
+                            )}
                         </>
                     </div>
-                    {urls.length > 0 ?
+                    {urls.length > 0 && (
                         <div className="d-flex justify-content-end" style={{ width: '100%' }}>
                             {this.getImage()}
-                        </div> : ''
-                    }
+                        </div>
+                    )}
                 </div>
             </div>
         );
@@ -668,14 +661,14 @@ class AddProduct extends Component {
     ////////Image content view for non edit
     imageNonEditView = () => {
         const { urls, files, isDragging, allDisabled } = this.state;
-        const dropCss = urls.length > 0 ? "dragDropLeft" : "dragDropCenter";
+        const dropCss = urls.length > 0 ? 'dragDropLeft' : 'dragDropCenter';
         const dropClass = isDragging ? `${dropCss} dragging` : dropCss;
         return (
             <div>
                 <div className="fees-view pt-5">
                     <div
                         className={dropClass}
-                        style={{ backgroundColor: "#f5f5f5" }}
+                        style={{ backgroundColor: '#f5f5f5' }}
                     >
                         <SortableImage images={urls} reorderedUrls={(data) => this.setState({ urls: data })} allDisabled={allDisabled} /> :
                     </div>
@@ -697,7 +690,7 @@ class AddProduct extends Component {
                             <InputWithHead
                                 auto_complete="off"
                                 heading={AppConstants.price}
-                                required={'pt-3'}
+                                required="pt-3"
                                 placeholder={AppConstants.price}
                                 prefix="$"
                                 onChange={(e) =>
@@ -716,7 +709,7 @@ class AddProduct extends Component {
                                 auto_complete="off"
                                 heading={AppConstants.costPerItem}
                                 placeholder={AppConstants.costPerItem}
-                                required={'pt-3'}
+                                required="pt-3"
                                 prefix="$"
                                 onChange={(e) =>
                                     this.props.onChangeProductDetails(
@@ -745,7 +738,7 @@ class AddProduct extends Component {
                             {AppConstants.chargeTaxesOnProduct}
                         </Checkbox>
                     </div>
-                    {productDetailData.taxApplicable === true &&
+                    {productDetailData.taxApplicable === true && (
                         <InputWithHead
                             heading={AppConstants.tax}
                             placeholder={AppConstants.tax}
@@ -759,12 +752,12 @@ class AddProduct extends Component {
                             }
                             value={productDetailData.tax}
                             type="number"
-                        />}
+                        />
+                    )}
                 </div>
             </div>
         );
     };
-
 
     ////////Inventory content view
     inventoryView = () => {
@@ -888,124 +881,128 @@ class AddProduct extends Component {
                             {AppConstants.enableVariants}
                         </Checkbox>
                     </div>
-                    {productDetailData.variantsChecked === true && <>
-                        <div className="row">
-                            <div className="col-sm-5">
-                                <Form.Item
-                                    name={`variants${0}name`}
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message:
-                                            ValidationConstants.pleaseEnterVariantName,
-                                        },
-                                    ]}
-                                >
-                                    <InputWithHead
-                                        auto_complete="off"
-                                        required="required-field pb-0"
-                                        heading={AppConstants.variantName}
-                                        placeholder={AppConstants.variant_name}
-                                        onChange={(e) => this.onVariantNameChange(e.target.value)}
-                                        disabled={this.state.allDisabled}
-                                    />
-                                </Form.Item>
-                            </div>
-                        </div>
 
-                        {isArrayNotEmpty(varientOptionArray) && varientOptionArray.map((subItem, subIndex) => (
-                            <div className="prod-reg-inside-container-view" key={"varientOptionArray" + subIndex}>
-                                <div className="row"  >
-                                    <div className="col-sm">
+                    {productDetailData.variantsChecked === true && (
+                        <>
+                            <div className="row">
+                                <div className="col-sm-5">
+                                    <Form.Item
+                                        name={`variants${0}name`}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message:
+                                                ValidationConstants.pleaseEnterVariantName,
+                                            },
+                                        ]}
+                                    >
                                         <InputWithHead
                                             auto_complete="off"
-                                            heading={AppConstants.option}
-                                            placeholder={AppConstants.option}
-                                            onChange={(e) => this.onVariantOptionOnChange(e.target.value, "optionName", 0, subIndex)}
-                                            value={subItem.optionName}
+                                            required="required-field pb-0"
+                                            heading={AppConstants.variantName}
+                                            placeholder={AppConstants.variant_name}
+                                            onChange={(e) => this.onVariantNameChange(e.target.value)}
                                             disabled={this.state.allDisabled}
                                         />
-                                    </div>
-                                    <div className="col-sm">
-                                        <InputWithHead
-                                            auto_complete="off"
-                                            heading={AppConstants.price}
-                                            placeholder={AppConstants.price}
-                                            prefix="$"
-                                            onChange={(e) => this.onVariantOptionOnChange(e.target.value, "price", 0, subIndex)}
-                                            value={subItem.properties.price}
-                                            type="number"
-                                            disabled={this.state.allDisabled}
-                                        />
-                                    </div>
-                                    <div className="col-sm">
-                                        <InputWithHead
-                                            auto_complete="off"
-                                            heading={AppConstants.cost}
-                                            placeholder={AppConstants.cost}
-                                            prefix="$"
-                                            onChange={(e) => this.onVariantOptionOnChange(e.target.value, "cost", 0, subIndex)}
-                                            value={subItem.properties.cost}
-                                            type="number"
-                                            disabled={this.state.allDisabled}
-                                        />
-                                    </div>
-                                    <div className="col-sm">
-                                        <InputWithHead
-                                            auto_complete="off"
-                                            heading={AppConstants.sku}
-                                            placeholder={AppConstants.sku}
-                                            onChange={(e) => this.onVariantOptionOnChange(e.target.value, "skuCode", 0, subIndex)}
-                                            value={subItem.properties.skuCode}
-                                            disabled={this.state.allDisabled}
-                                        />
-                                    </div>
-                                    <div className="col-sm">
-                                        <InputWithHead
-                                            auto_complete="off"
-                                            heading={AppConstants.barcode}
-                                            placeholder={AppConstants.barcode}
-                                            onChange={(e) => this.onVariantOptionOnChange(e.target.value, "barcode", 0, subIndex)}
-                                            value={subItem.properties.barcode}
-                                            disabled={this.state.allDisabled}
-                                        />
-                                    </div>
-                                    <div className="col-sm">
-                                        <span className="input-heading">{AppConstants.quantity}</span>
-                                        <InputNumber
-                                            style={{ width: 90 }}
-                                            formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                                            placeholder={AppConstants.quantity}
-                                            min={0}
-                                            onChange={(value) => this.onVariantOptionOnChange(value, "quantity", 0, subIndex)}
-                                            value={subItem.properties.quantity}
-                                            type="number"
-                                            disabled={this.state.allDisabled}
-                                        />
-                                    </div>
-                                    <div className="col-sm red-remove-cross-img-div">
-                                        {/* {subIndex > 0 &&  */}
-                                        <div
-                                            style={{ cursor: 'pointer' }}>
-                                            <img
-                                                className="dot-image"
-                                                src={AppImages.redCross}
-                                                alt=""
-                                                width="16"
-                                                height="16"
-                                                onClick={() => this.state.allDisabled === false ? this.addVariantOption(0, subIndex, "remove", subItem.properties.id) : null}
+                                    </Form.Item>
+                                </div>
+                            </div>
+
+                            {isArrayNotEmpty(varientOptionArray) && varientOptionArray.map((subItem, subIndex) => (
+                                <div className="prod-reg-inside-container-view" key={`varientOptionArray${subIndex}`}>
+                                    <div className="row"  >
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                auto_complete="off"
+                                                heading={AppConstants.option}
+                                                placeholder={AppConstants.option}
+                                                onChange={(e) => this.onVariantOptionOnChange(e.target.value, 'optionName', 0, subIndex)}
+                                                value={subItem.optionName}
+                                                disabled={this.state.allDisabled}
                                             />
+                                        </div>
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                auto_complete="off"
+                                                heading={AppConstants.price}
+                                                placeholder={AppConstants.price}
+                                                prefix="$"
+                                                onChange={(e) => this.onVariantOptionOnChange(e.target.value, 'price', 0, subIndex)}
+                                                value={subItem.properties.price}
+                                                type="number"
+                                                disabled={this.state.allDisabled}
+                                            />
+                                        </div>
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                auto_complete="off"
+                                                heading={AppConstants.cost}
+                                                placeholder={AppConstants.cost}
+                                                prefix="$"
+                                                onChange={(e) => this.onVariantOptionOnChange(e.target.value, 'cost', 0, subIndex)}
+                                                value={subItem.properties.cost}
+                                                type="number"
+                                                disabled={this.state.allDisabled}
+                                            />
+                                        </div>
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                auto_complete="off"
+                                                heading={AppConstants.sku}
+                                                placeholder={AppConstants.sku}
+                                                onChange={(e) => this.onVariantOptionOnChange(e.target.value, 'skuCode', 0, subIndex)}
+                                                value={subItem.properties.skuCode}
+                                                disabled={this.state.allDisabled}
+                                            />
+                                        </div>
+                                        <div className="col-sm">
+                                            <InputWithHead
+                                                auto_complete="off"
+                                                heading={AppConstants.barcode}
+                                                placeholder={AppConstants.barcode}
+                                                onChange={(e) => this.onVariantOptionOnChange(e.target.value, 'barcode', 0, subIndex)}
+                                                value={subItem.properties.barcode}
+                                                disabled={this.state.allDisabled}
+                                            />
+                                        </div>
+                                        <div className="col-sm">
+                                            <span className="input-heading">{AppConstants.quantity}</span>
+                                            <InputNumber
+                                                style={{ width: 90 }}
+                                                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                                                placeholder={AppConstants.quantity}
+                                                min={0}
+                                                onChange={(value) => this.onVariantOptionOnChange(value, 'quantity', 0, subIndex)}
+                                                value={subItem.properties.quantity}
+                                                type="number"
+                                                disabled={this.state.allDisabled}
+                                            />
+                                        </div>
+                                        <div className="col-sm red-remove-cross-img-div">
+                                            {/* {subIndex > 0 &&  */}
+                                            <div style={{ cursor: 'pointer' }}>
+                                                <img
+                                                    className="dot-image"
+                                                    src={AppImages.redCross}
+                                                    alt=""
+                                                    width="16"
+                                                    height="16"
+                                                    onClick={() => this.state.allDisabled === false ? this.addVariantOption(0, subIndex, 'remove', subItem.properties.id) : null}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                        <span className="input-heading-add-another"
-                            onClick={() => this.state.allDisabled === false ? this.addVariantOption(0, -1, "add") : null}>
-                            +{AppConstants.addVariantOption}
-                        </span>
-                    </>}
+                            ))}
+                            <span
+                                className="input-heading-add-another"
+                                onClick={() => this.state.allDisabled === false ? this.addVariantOption(0, -1, 'add') : null}
+                            >
+                                + {AppConstants.addVariantOption}
+                            </span>
+                        </>
+                    )}
                 </div>
             </div>
         );
@@ -1044,8 +1041,9 @@ class AddProduct extends Component {
                         </Checkbox>
                     </div>
                 </div>
-                {
-                    productDetailData.deliveryType === "shipping" && <>
+
+                {productDetailData.deliveryType === 'shipping' && (
+                    <>
                         <span className="form-heading mt-5">{AppConstants.productDimensionsWeight}</span>
                         <InputWithHead
                             heading={AppConstants.dimensions}
@@ -1065,15 +1063,15 @@ class AddProduct extends Component {
                                 >
                                     <InputWithHead
                                         auto_complete="off"
-                                        required={"required-field "}
-                                        placeholder={"Length"}
+                                        required="required-field"
+                                        placeholder="Length"
                                         suffix="cm"
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                             this.props.onChangeProductDetails(
                                                 Number(e.target.value).toFixed(2),
-                                                'length'
-                                            )
-                                        }
+                                                'length',
+                                            );
+                                        }}
                                         type="number"
                                         step="1.00"
                                         disabled={this.state.allDisabled}
@@ -1103,14 +1101,14 @@ class AddProduct extends Component {
                                     <InputWithHead
                                         auto_complete="off"
                                         required="required-field"
-                                        placeholder={"Width"}
+                                        placeholder="Width"
                                         suffix="cm"
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                             this.props.onChangeProductDetails(
                                                 Number(e.target.value).toFixed(2),
-                                                'width'
-                                            )
-                                        }
+                                                'width',
+                                            );
+                                        }}
                                         type="number"
                                         step="1.00"
                                         disabled={this.state.allDisabled}
@@ -1139,15 +1137,15 @@ class AddProduct extends Component {
                                 >
                                     <InputWithHead
                                         auto_complete="off"
-                                        placeholder={"Height"}
-                                        required={"required-field "}
+                                        placeholder="Height"
+                                        required="required-field"
                                         suffix="cm"
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                             this.props.onChangeProductDetails(
                                                 Number(e.target.value).toFixed(2),
-                                                'height'
-                                            )
-                                        }
+                                                'height',
+                                            );
+                                        }}
                                         type="number"
                                         step="1.00"
                                         disabled={this.state.allDisabled}
@@ -1170,15 +1168,15 @@ class AddProduct extends Component {
                                     <InputWithHead
                                         auto_complete="off"
                                         heading={AppConstants.dimensions}
-                                        required={"required-field "}
-                                        placeholder={"Weight"}
+                                        required="required-field"
+                                        placeholder="Weight"
                                         suffix="kg"
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                             this.props.onChangeProductDetails(
                                                 Number(e.target.value).toFixed(2),
-                                                'weight'
-                                            )
-                                        }
+                                                'weight',
+                                            );
+                                        }}
                                         type="number"
                                         step="1.00"
                                         disabled={this.state.allDisabled}
@@ -1187,40 +1185,38 @@ class AddProduct extends Component {
                             </div>
                         </div>
                     </>
-                }
+                )}
             </div>
         );
     };
 
-
-
-    //////footer view containing all the buttons like submit and cancel
-    footerView = () => {
-        return (
-            <div className="footer-view">
-                <div className="row">
-                    <div className="col-sm">
-                        <div className="reg-add-save-button">
-                            <Button
-                                className="cancelBtnWidth"
-                                type="cancel-button"
-                                onClick={() => history.push('/listProducts')}>{AppConstants.cancel}</Button>
-                        </div>
+    // footer view containing all the buttons like submit and cancel
+    footerView = () => (
+        <div className="footer-view">
+            <div className="row">
+                <div className="col-sm">
+                    <div className="reg-add-save-button">
+                        <Button
+                            className="cancelBtnWidth"
+                            type="cancel-button"
+                            onClick={() => history.push('/listProducts')}
+                        >
+                            {AppConstants.cancel}
+                        </Button>
                     </div>
-                    <div className="col-sm">
-                        <div className="comp-buttons-view">
-                            {this.state.allDisabled === false &&
-                                <Button className="publish-button" type="primary"
-                                    htmlType="submit">
-                                    {AppConstants.save}
-                                </Button>
-                            }
-                        </div>
+                </div>
+                <div className="col-sm">
+                    <div className="comp-buttons-view">
+                        {this.state.allDisabled === false && (
+                            <Button className="publish-button" type="primary" htmlType="submit">
+                                {AppConstants.save}
+                            </Button>
+                        )}
                     </div>
                 </div>
             </div>
-        );
-    };
+        </div>
+    );
 
     render() {
         return (

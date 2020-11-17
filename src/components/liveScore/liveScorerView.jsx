@@ -91,7 +91,7 @@ class LiveScorerView extends Component {
                     {/* <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
                     <span className="live-score-profile-user-name">{this.scorerName}</span> */}
 
-                    <div className='profile-image-view mr-5' >
+                    <div className="profile-image-view mr-5">
                         <span className="user-contact-heading">{AppConstants.scorerProfile}</span>
                         <img className="user-image" src={'https://content.fortune.com/wp-content/uploads/2019/12/GettyImages-1187428380.jpg'} alt="" height="80" width="80" />
                         <span className="user-contact-heading">{data.firstName} {data.lastName}</span>
@@ -100,7 +100,6 @@ class LiveScorerView extends Component {
                     <span className="desc-text-style side-bar-profile-data pt-0">{AppConstants.aboutScorer}</span>
 
                     <div className="profile-img-view-style">
-
                         <div className="live-score-side-desc-view">
                             <div className="live-score-title-icon-view">
                                 <div className="live-score-icon-view">
@@ -130,22 +129,19 @@ class LiveScorerView extends Component {
                             </div>
                             <span className="desc-text-style side-bar-profile-data">{data.team}</span>
                         </div>
-
                     </div>
                 </div>
             )
         } else {
             history.push('/liveScoreCompetitions')
         }
-
     }
 
-    ///////view for breadcrumb
     headerView = () => {
         return (
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.activity}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -235,7 +231,7 @@ class LiveScorerView extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="5" />
                 <Layout className="live-score-player-profile-layout">

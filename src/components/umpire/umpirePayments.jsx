@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { Layout, Button, Table, Select, Input, Modal, Checkbox, Pagination, Tooltip } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Layout, Button, Table, Select, Input, Modal, Checkbox, Pagination, Tooltip, message } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 
-import AppConstants from "themes/appConstants";
-import { isArrayNotEmpty } from "util/helpers";
-import { umpireCompetitionListAction } from "store/actions/umpireAction/umpireCompetetionAction";
-import InnerHorizontalMenu from "pages/innerHorizontalMenu";
-import DashboardLayout from "pages/dashboardLayout";
+import AppConstants from 'themes/appConstants';
+import { isArrayNotEmpty } from 'util/helpers';
+import { umpireCompetitionListAction } from 'store/actions/umpireAction/umpireCompetetionAction';
+import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
+import DashboardLayout from 'pages/dashboardLayout';
 import { getUmpirePaymentData, updateUmpirePaymentData, umpirePaymentTransferData } from '../../store/actions/umpireAction/umpirePaymentAction'
 import {
     getUmpireCompetiton,
@@ -22,9 +22,9 @@ import {
     setLiveScoreUmpireCompition,
     setLiveScoreUmpireCompitionData,
     getPrevUrl,
-} from "util/sessionStorage";
-import "./umpire.css";
-import Loader from '../../customComponents/loader'
+} from 'util/sessionStorage';
+import './umpire.css';
+import Loader from '../../customComponents/loader';
 import { message } from "antd";
 import AppImages from "themes/appImages";
 
@@ -37,10 +37,10 @@ function tableSort(key) {
     let sortBy = key;
     let sortOrder = null;
     if (this_obj.state.sortBy !== key) {
-        sortOrder = "ASC";
-    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === "ASC") {
-        sortOrder = "DESC";
-    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === "DESC") {
+        sortOrder = 'ASC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'ASC') {
+        sortOrder = 'DESC';
+    } else if (this_obj.state.sortBy === key && this_obj.state.sortOrder === 'DESC') {
         sortBy = sortOrder = null;
     }
     const body = {
@@ -59,64 +59,62 @@ const listeners = (key) => ({
 
 const columns = [
     {
-        title: "First Name",
-        dataIndex: "firstName",
-        key: "First Name",
+        title: 'First Name',
+        dataIndex: 'firstName',
+        key: 'First Name',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (firstName, record) => (
             <NavLink
                 to={{
-                    pathname: "/userPersonal",
+                    pathname: '/userPersonal',
                     state: {
                         userId: record.userId,
-                        screenKey: "umpire",
-                        screen: "/umpirePayment",
+                        screenKey: 'umpire',
+                        screen: '/umpirePayment',
                     },
                 }}
             >
-                {
-                    record.user &&
+                {record.user && (
                     <span className="input-heading-add-another pt-0">{record.user.firstName}</span>
-                }
+                )}
             </NavLink>
         ),
     },
     {
-        title: "Last Name",
-        dataIndex: "lastName",
-        key: "Last Name",
+        title: 'Last Name',
+        dataIndex: 'lastName',
+        key: 'Last Name',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (lastName, record) => (
             <NavLink
                 to={{
-                    pathname: "/userPersonal",
+                    pathname: '/userPersonal',
                     state: {
                         userId: record.userId,
-                        screenKey: "umpire",
-                        screen: "/umpirePayment",
+                        screenKey: 'umpire',
+                        screen: '/umpirePayment',
                     },
                 }}
             >
-                {
-                    record.user &&
+                {record.user && (
                     <span className="input-heading-add-another pt-0">{record.user.lastName}</span>
-                }
+                )}
             </NavLink>
         ),
     },
     {
-        title: "Match ID",
-        dataIndex: "matchId",
-        key: "matchId",
+        title: 'Match ID',
+        dataIndex: 'matchId',
+        key: 'matchId',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (matchId) => (
             <NavLink
                 to={{
-                    pathname: "/liveScoreMatchDetails",
-                    state: { matchId: matchId, umpireKey: "umpire", screenName: "umpirePayment" },
+                    pathname: '/liveScoreMatchDetails',
+                    state: { matchId, umpireKey: 'umpire', screenName: 'umpirePayment' },
                 }}
             >
                 <span className="input-heading-add-another pt-0">{matchId}</span>
@@ -124,16 +122,16 @@ const columns = [
         ),
     },
     {
-        title: "Verified By",
-        dataIndex: "verifiedBy",
-        key: "verifiedBy",
+        title: 'Verified By',
+        dataIndex: 'verifiedBy',
+        key: 'verifiedBy',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
     },
     {
-        title: "Status",
-        dataIndex: "makePayment",
-        key: "paymentStatus",
+        title: 'Status',
+        dataIndex: 'makePayment',
+        key: 'paymentStatus',
         sorter: true,
         onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
         render: (paymentStatus, record) => {
@@ -145,8 +143,8 @@ const columns = [
         }
     },
     {
-        title: "Time",
-        dataIndex: "time",
+        title: 'Time',
+        dataIndex: 'time',
         key: "time",
         sorter: true,
     },
@@ -157,35 +155,30 @@ const columns = [
         sorter: true,
     },
     {
-        title: "Pay",
-        dataIndex: "selectedValue",
-        key: "selectedValue",
+        title: 'Pay',
+        dataIndex: 'selectedValue',
+        key: 'selectedValue',
         render: (selectedValue, record, index) => {
             return (
-
-                (record.user && record.user.stripeAccountId || record.paymentStatus === "paid") ?
+                (record.user && record.user.stripeAccountId || record.paymentStatus === 'paid') ? (
                     <Checkbox
                         className="single-checkbox"
                         checked={selectedValue}
-                        disabled={record.paymentStatus === "paid" ? true : false}
-                        onChange={(e) => this_obj.props.updateUmpirePaymentData({ data: e.target.checked, key: "selectedValue", index: index, allData: record })}
-                    >
-                    </Checkbox>
-                    :
-                    <Tooltip
-                        className="comp-player-table-tag2"
-                        style={{ height: '100%' }}
-                        onMouseEnter={() => this_obj.changeHover(record, index, true)}
-                        onMouseLeave={() => this_obj.changeHover(record, index, false)}
-                        visible={record.hoverVisible}
-                        title="Please ask the user to set up their bank details"
-                    >
-                        <Checkbox
-                            className="single-checkbox"
-                            disabled={true}
+                        disabled={record.paymentStatus === 'paid'}
+                        onChange={(e) => this_obj.props.updateUmpirePaymentData({ data: e.target.checked, key: 'selectedValue', index, allData: record })}
+                    />
+                ) : (
+                        <Tooltip
+                            className="comp-player-table-tag2"
+                            style={{ height: '100%' }}
+                            onMouseEnter={() => this_obj.changeHover(record, index, true)}
+                            onMouseLeave={() => this_obj.changeHover(record, index, false)}
+                            visible={record.hoverVisible}
+                            title="Please ask the user to set up their bank details"
                         >
-                        </Checkbox>
-                    </Tooltip>
+                            <Checkbox className="single-checkbox" disabled />
+                        </Tooltip>
+                    )
             )
         }
     }
@@ -256,15 +249,14 @@ class UmpirePayments extends Component {
                 }
 
                 if (firstComp !== false) {
-                    if (this.state.liveScoreUmpire === "liveScoreUmpire") {
+                    if (this.state.liveScoreUmpire === 'liveScoreUmpire') {
                         let compId = JSON.parse(getLiveScoreUmpireCompition());
 
                         const { uniqueKey } = JSON.parse(getLiveScoreUmpireCompitionData());
                         let compObjData = JSON.parse(getLiveScoreUmpireCompitionData());
 
                         let { sortBy, sortOrder, searchText } = this.state
-                        const body =
-                        {
+                        const body = {
                             paging: {
                                 offset: 0,
                                 limit: 10,
@@ -284,8 +276,7 @@ class UmpirePayments extends Component {
                         let compKey = compList.length > 0 && compList[0].competitionUniqueKey;
 
                         let { sortBy, sortOrder, searchText } = this.state
-                        const body =
-                        {
+                        const body = {
                             paging: {
                                 offset: 0,
                                 limit: 10,
@@ -323,7 +314,6 @@ class UmpirePayments extends Component {
 
     changeHover(record, index, onHoverValue) {
         this.props.updateUmpirePaymentData({ data: onHoverValue, key: "hoverVisible", index: index })
-
     }
 
     handlePageChange = (page) => {
@@ -340,8 +330,6 @@ class UmpirePayments extends Component {
         this.props.getUmpirePaymentData({ compId: this.state.selectedComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
     }
 
-
-
     contentView = () => {
         const { umpirePaymentList, onLoad, totalCount, currentPage } = this.props.umpirePaymentState
         return (
@@ -353,21 +341,15 @@ class UmpirePayments extends Component {
                         columns={columns}
                         dataSource={umpirePaymentList}
                         pagination={false}
-                        rowKey={(record, index) => "umpirePayments" + record.matchId + index}
+                        rowKey={(record, index) => `umpirePayments${record.matchId}${index}`}
                     />
                 </div>
 
                 <div className="comp-dashboard-botton-view-mobile">
                     <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: '100%',
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end",
-                        }}>
-                    </div>
+                        className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
+                        style={{ width: '100%' }}
+                    />
 
                     <div className="d-flex justify-content-end">
                         <Pagination
@@ -386,8 +368,7 @@ class UmpirePayments extends Component {
     onChangeComp = (compID) => {
         let selectedComp = compID.comp;
         const { searchText, sortBy, sortOrder } = this.state;
-        const body =
-        {
+        const body = {
             paging: {
                 offset: 0,
                 limit: 10,
@@ -410,16 +391,14 @@ class UmpirePayments extends Component {
 
         setLiveScoreUmpireCompition(selectedComp);
         setLiveScoreUmpireCompitionData(JSON.stringify(compObj));
-
-
     };
 
     showConfirm = () => {
         confirm({
-            title: "Are you sure you want to make payments?",
-            okText: "Yes",
-            okType: "danger",
-            cancelText: "No",
+            title: 'Are you sure you want to make payments?',
+            okText: 'Yes',
+            okType: 'primary',
+            cancelText: 'No',
             mask: true,
             maskClosable: true,
             onOk() {
@@ -436,7 +415,7 @@ class UmpirePayments extends Component {
         this.setState({ searchText: e.target.value, offsetData: 0 });
 
         const { selectedComp, sortBy, sortOrder, offsetData } = this.state;
-        if (e.target.value === null || e.target.value === "") {
+        if (e.target.value === null || e.target.value === '') {
 
             const body = {
                 paging: {
@@ -453,14 +432,14 @@ class UmpirePayments extends Component {
         this.setState({ offsetData: 0 });
         const { sortBy, sortOrder, searchText, offsetData, selectedComp } = this.state;
         const code = e.keyCode || e.which;
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             const body = {
                 paging: {
                     offset: offsetData,
                     limit: 10,
                 },
             };
-            this.props.getUmpirePaymentData({ compId: selectedComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
+            this.props.getUmpirePaymentData({ compId: selectedComp, pagingBody: body, search: searchText, sortBy, sortOrder })
         }
     };
 
@@ -468,7 +447,7 @@ class UmpirePayments extends Component {
     onClickSearchIcon = () => {
         this.setState({ offsetData: 0 });
         const { sortBy, sortOrder, searchText, offsetData, selectedComp } = this.state;
-        if (searchText === null || searchText === "") {
+        if (searchText === null || searchText === '') {
         } else {
             const body = {
                 paging: {
@@ -476,7 +455,7 @@ class UmpirePayments extends Component {
                     limit: 10,
                 },
             };
-            this.props.getUmpirePaymentData({ compId: selectedComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
+            this.props.getUmpirePaymentData({ compId: selectedComp, pagingBody: body, search: searchText, sortBy, sortOrder })
         }
     };
 
@@ -485,21 +464,15 @@ class UmpirePayments extends Component {
             <div className="fluid-width">
 
                 <div className="row">
-                    <div className="col-sm pt-1" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm pt-1 d-flex align-content-center">
                         <span className="form-heading">
                             {AppConstants.umpirePayments}
                         </span>
                     </div>
 
                     <div
-                        className="col-sm-8"
-                        style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end",
-                            width: '100%'
-                        }}
+                        className="col-sm-8 d-flex align-items-center justify-content-end"
+                        style={{ width: '100%' }}
                     >
                         <div className="row">
                             <div className="col-sm pt-1">
@@ -512,7 +485,7 @@ class UmpirePayments extends Component {
                                         value={this.state.searchText}
                                         prefix={
                                             <SearchOutlined
-                                                style={{ color: "rgba(0,0,0,.25)", height: 16, width: 16 }}
+                                                style={{ color: 'rgba(0,0,0,.25)', height: 16, width: 16 }}
                                                 onClick={this.onClickSearchIcon}
                                             />
                                         }
@@ -546,7 +519,7 @@ class UmpirePayments extends Component {
                                     value={this.state.selectedComp}
                                 >
                                     {competition.map((item) => (
-                                        <Option key={'competition_' + item.id} value={item.id}>{item.longName}</Option>
+                                        <Option key={`competition_${item.id}`} value={item.id}>{item.longName}</Option>
                                     ))}
                                 </Select>
                             </div>
@@ -598,9 +571,9 @@ class UmpirePayments extends Component {
                                 <Checkbox
                                     className="single-checkbox"
                                     checked={paymentStatus}
-                                    onChange={(e) => this.props.updateUmpirePaymentData({ data: e.target.checked, key: "allCheckBox" })}
+                                    onChange={(e) => this.props.updateUmpirePaymentData({ data: e.target.checked, key: 'allCheckBox' })}
                                 >
-                                    {"All"}
+                                    All
                                 </Checkbox>
                             </div>
                         </div>
@@ -611,13 +584,13 @@ class UmpirePayments extends Component {
     }
 
     umpireTransferData(statusId) {
-        const { paymentTransferPostData } = this.props.umpirePaymentState
+        const { paymentTransferPostData } = this.props.umpirePaymentState;
 
         let data = {
             statusId: statusId,
             organisationUniqueKey: getOrganisationData().organisationUniqueKey,
-            transfers: paymentTransferPostData
-        }
+            transfers: paymentTransferPostData,
+        };
 
         if (paymentTransferPostData.length > 0) {
             this.props.umpirePaymentTransferData({ postData: data })
@@ -627,9 +600,8 @@ class UmpirePayments extends Component {
                 duration: 1.5,
                 maxCount: 1,
             });
-            message.error("Please select an Umpire for the payment.");
+            message.error('Please select an Umpire for the payment.');
         }
-
     }
 
     footerView = () => {
@@ -640,9 +612,12 @@ class UmpirePayments extends Component {
                     <div className="col-sm-3">
                         <div className="reg-add-save-button">
                             <Button
-                                onClick={() => this.props.updateUmpirePaymentData({ data: null, key: "clearData" })}
+                                onClick={() => this.props.updateUmpirePaymentData({ data: null, key: 'clearData' })}
                                 className="cancelBtnWidth"
-                                type="cancel-button">{AppConstants.cancel}</Button>
+                                type="cancel-button"
+                            >
+                                {AppConstants.cancel}
+                            </Button>
                         </div>
                     </div>
                     <div className="col-sm">
@@ -661,13 +636,13 @@ class UmpirePayments extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
     render() {
         const { umpirePaymentList, umpirePaymentObject } = this.props.umpirePaymentState
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="7" />
                 <Loader visible={this.props.umpirePaymentState.onPaymentLoad} />
@@ -691,16 +666,15 @@ function mapDispatchToProps(dispatch) {
         umpireCompetitionListAction,
         getUmpirePaymentData,
         updateUmpirePaymentData,
-        umpirePaymentTransferData
+        umpirePaymentTransferData,
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         umpireCompetitionState: state.UmpireCompetitionState,
-        umpirePaymentState: state.UmpirePaymentState
+        umpirePaymentState: state.UmpirePaymentState,
     };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UmpirePayments);
-

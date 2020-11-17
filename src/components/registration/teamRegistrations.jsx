@@ -123,8 +123,8 @@ const columns = [
         key: "status",
         filterDropdown: true,
         filterIcon: () => (
-            <div style={{ marginTop: 10 }}>
-                <Tooltip background="#ff8237">
+            <div className="mt-10">
+                <Tooltip>
                     <span>{AppConstants.statusContextMsg}</span>
                 </Tooltip>
             </div>
@@ -530,7 +530,7 @@ class TeamRegistrations extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
 
                 <InnerHorizontalMenu menu="registration" regSelectedKey="10" />

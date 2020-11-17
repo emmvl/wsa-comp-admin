@@ -116,7 +116,7 @@ const columns = [
                 render: (transferAffOrgName, record) => (
                     <div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
-                            {transferAffOrgName!= "-1" && 
+                            {transferAffOrgName!= "-1" &&
                                 <div> {transferAffOrgName} </div>
                             }
                             {transferAffOrgName && (
@@ -465,7 +465,6 @@ class RegistrationChange extends Component {
         );
     }
 
-    ////////form content view
     contentView = () => {
         const { regChangeDashboardListData, regChangeDashboardListPage, regChangeDashboardListTotalCount } = this.props.regChangeState;
         return (
@@ -493,7 +492,7 @@ class RegistrationChange extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}

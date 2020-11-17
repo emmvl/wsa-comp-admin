@@ -117,7 +117,7 @@ class CompetitionReGradingStep2 extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-product">{AppConstants.finalisedDraw}</Breadcrumb.Item>
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.step2}</Breadcrumb.Item>
@@ -173,23 +173,16 @@ class CompetitionReGradingStep2 extends Component {
         )
     }
 
-
-    ////////form content view
     contentView = () => {
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false}
-                    />
+                    <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false} />
                 </div>
             </div>
-
         )
     }
 
-
-
-    //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
             <div className="fluid-width">
@@ -210,7 +203,7 @@ class CompetitionReGradingStep2 extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu="competition" compSelectedKey={"13"} />
                 <Layout>

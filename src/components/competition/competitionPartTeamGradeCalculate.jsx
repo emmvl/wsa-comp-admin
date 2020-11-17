@@ -234,12 +234,12 @@ class CompetitionPartTeamGradeCalculate extends Component {
                                 )}
                             </NavLink>
                         ) : (
-                                grades.teamCount !== null && (
-                                    <Tag className="comp-dashboard-table-tag  text-center tag-col" key={grades}>
-                                        {grades.teamCount}
-                                    </Tag>
-                                )
-                            )}
+                            grades.teamCount !== null && (
+                                <Tag className="comp-dashboard-table-tag  text-center tag-col" key={grades}>
+                                    {grades.teamCount}
+                                </Tag>
+                            )
+                        )}
                     </div>
                 )
             };
@@ -271,13 +271,13 @@ class CompetitionPartTeamGradeCalculate extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: 'flex', alignContent: 'center' }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">
                                 {AppConstants.teamGradingSummary}
                             </Breadcrumb.Item>
                         </Breadcrumb>
-                        <CustomTooltip placement="top" background="#ff8237">
+                        <CustomTooltip placement="top">
                             <span>{AppConstants.teamGradingSummaryMsg}</span>
                         </CustomTooltip>
                     </div>
@@ -463,7 +463,6 @@ class CompetitionPartTeamGradeCalculate extends Component {
         this.setState({ addGradeVisible: true, competitionDivisionGradeId, competitionMembershipProductDivisionId })
     };
 
-    ////////form content view
     contentView = () => {
         const { columns, data, addGradeVisible, updateGradeName, getDataLoading } = this.state;
         const { ownTeamGradingSummaryGetData, onLoad } = this.props.ownTeamGradingState;
@@ -604,7 +603,7 @@ class CompetitionPartTeamGradeCalculate extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu="competition" compSelectedKey="5" />
                 <Layout>

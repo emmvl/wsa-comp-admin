@@ -133,8 +133,8 @@ class UmpireSetting extends Component {
 
         return (
             <div>
-                <span className='text-heading-large pt-4 pb-2' >{AppConstants.howUmpiresAllocated}</span>
-                <div style={{ display: "flex", flexDirection: "column" }}>
+                <span className='text-heading-large pt-4 pb-2'>{AppConstants.howUmpiresAllocated}</span>
+                <div className="d-flex flex-column">
                     <Radio
                         onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "manuallyAllocate" })}
                         checked={manuallyAllocate}
@@ -161,7 +161,6 @@ class UmpireSetting extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         const { compOrganiser, defaultChecked } = this.props.umpireSettingState
         return (
@@ -195,7 +194,7 @@ class UmpireSetting extends Component {
         return (
             <div className="content-view pt-4 mt-5">
                 <span className='text-heading-large pt-2 pb-2'>{AppConstants.whoAssignsUmpires}</span>
-                <div style={{ display: "flex", flexDirection: "column" }}>
+                <div className="d-flex flex-column">
                     <Checkbox
                         onChange={(e) => this.props.updateUmpireDataAction({ data: e.target.checked, key: "compOrganiser" })}
                         checked={compOrganiser}
@@ -212,7 +211,7 @@ class UmpireSetting extends Component {
                             </Checkbox>
                             {selectAllDiv === false && (
                                 <Select
-                                    mode='multiple'
+                                    mode="multiple"
                                     placeholder="Select"
                                     style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                                     onChange={(divisionId) => this.props.updateUmpireDataAction({ data: divisionId, key: 'compOrgDivisionSelected' })}
@@ -295,7 +294,7 @@ class UmpireSetting extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="6" />
                 <Layout>

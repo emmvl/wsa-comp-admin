@@ -300,7 +300,7 @@ class LiveScoreMatchesList extends Component {
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
         this.setState({ offset: 0 })
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             this.props.liveScoreMatchListAction(this.state.competitionId, 1, 0, e.target.value, this.state.selectedDivision === 'All' ? null : this.state.selectedDivision, this.state.selectedRound === 'All' ? null : this.state.selectedRound, undefined, this.state.sortBy, this.state.sortOrder)
         }
     }
@@ -366,7 +366,7 @@ class LiveScoreMatchesList extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.matchList}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -715,7 +715,7 @@ class LiveScoreMatchesList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 {this.state.umpireKey ? (
                     <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 ) : (

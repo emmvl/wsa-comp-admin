@@ -23,10 +23,9 @@ const { Content } = Layout;
 const { confirm } = Modal;
 const { SubMenu } = Menu;
 
-////columns data
 var _this;
-const columns = [
 
+const columns = [
     {
         title: 'Profile Picture',
         dataIndex: 'photoUrl',
@@ -36,7 +35,7 @@ const columns = [
             photoUrl ?
                 <img className="user-image" src={photoUrl} alt="" height="70" width="70" />
                 :
-                <span>{'No Image'}</span>
+                <span>No Image</span>
     },
     {
         title: 'Name',
@@ -50,7 +49,7 @@ const columns = [
                 //     state: { tableRecord: record }
                 // }}>
                 <span style={{ color: '#ff8237', cursor: "pointer" }}
-                    onClick={() => _this.checkUserId(record)}
+                      onClick={() => _this.checkUserId(record)}
                 >{(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}</span>
                 // </NavLink>)
             )
@@ -72,38 +71,34 @@ const columns = [
     },
     {
         title: "Action",
-        render: (data, record, playerId) => <Menu
-            className="action-triple-dot-submenu"
-            theme="light"
-            mode="horizontal"
-            style={{ lineHeight: '25px' }}
-        >
-            <Menu.SubMenu
-                key="sub1"
-                title={
-                    <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
-                }
+        render: (data, record, playerId) => (
+            <Menu
+                className="action-triple-dot-submenu"
+                theme="light"
+                mode="horizontal"
+                style={{ lineHeight: '25px' }}
             >
-                <Menu.Item key="1">
-                    <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }}>
-                        <span>Edit</span>
-                    </NavLink>
-                </Menu.Item>
-                <Menu.Item key="2" onClick={() => {
-                    _this.showDeleteConfirmPlayer(record.id, record.competitionId);
-
-                }}>
-
-                    <span>Delete</span>
-                </Menu.Item>
-
-            </Menu.SubMenu>
-        </Menu>
+                <Menu.SubMenu
+                    key="sub1"
+                    title={
+                        <img className="dot-image" src={AppImages.moreTripleDot} alt="" width="16" height="16" />
+                    }
+                >
+                    <Menu.Item key="1">
+                        <NavLink to={{ pathname: "/liveScoreAddPlayer", state: { isEdit: true, playerData: record } }}>
+                            <span>Edit</span>
+                        </NavLink>
+                    </Menu.Item>
+                    <Menu.Item key="2" onClick={() => { _this.showDeleteConfirmPlayer(record.id, record.competitionId); }}>
+                        <span>Delete</span>
+                    </Menu.Item>
+                </Menu.SubMenu>
+            </Menu>
+        ),
     }
 ];
 
 const columns_2 = [
-
     {
         title: 'Profile Picture',
         dataIndex: 'photoUrl',
@@ -127,7 +122,7 @@ const columns_2 = [
                 //     state: { tableRecord: record }
                 // }}>
                 <span style={{ color: '#ff8237', cursor: "pointer" }}
-                    onClick={() => _this.checkUserId(record)}
+                      onClick={() => _this.checkUserId(record)}
                 >{(record.firstName && record.lastName) && record.firstName + ' ' + record.lastName}</span>
                 // </NavLink>)
             )
@@ -148,7 +143,6 @@ const columns_2 = [
         render: (dob, record) => <span>{record.phoneNumber ? record.phoneNumber : ''}</span>
     },
 ];
-
 
 class LiveScoreTeamView extends Component {
     constructor(props) {
@@ -171,11 +165,11 @@ class LiveScoreTeamView extends Component {
         if (record.userId == null) {
             message.config({ duration: 1.5, maxCount: 1 })
             message.warn(ValidationConstants.playerMessage)
-        }
-        else {
+        } else {
             history.push("/userPersonal", { userId: record.userId, screenKey: "livescore", screen: "/liveScorePlayerList" })
         }
     }
+
     async componentDidMount() {
         if (getLiveScoreCompetiton()) {
             const { sourceId } = JSON.parse(getLiveScoreCompetiton())
@@ -190,6 +184,7 @@ class LiveScoreTeamView extends Component {
             history.push("/liveScoreCompetitions")
         }
     }
+
     componentDidUpdate(nextProps) {
         if (nextProps.liveScoreTeamState != this.props.liveScoreTeamState) {
 
@@ -199,7 +194,6 @@ class LiveScoreTeamView extends Component {
     // Delete Player
     deletePlayer = (playerId, competitionId) => {
         this.props.liveScoreDeletePlayerAction(playerId, competitionId, 0, "team")
-
     }
 
     showDeleteConfirmPlayer = (playerId, competitionId) => {
@@ -207,7 +201,7 @@ class LiveScoreTeamView extends Component {
         confirm({
             title: 'Are you sure you want to delete this player?',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             onOk() {
                 this_.deletePlayer(playerId, competitionId)
@@ -217,7 +211,6 @@ class LiveScoreTeamView extends Component {
             },
         });
     }
-
 
     ////view for profile image
     profileImageView = () => {
@@ -231,16 +224,13 @@ class LiveScoreTeamView extends Component {
         let coachData = isArrayNotEmpty(data && data.coaches) ? data.coaches : []
         return (
             <div className="fluid-width mt-2">
-
-                <div className='profile-image-view mr-5' >
-
+                <div className="profile-image-view mr-5">
                     {
                         this.props.liveScoreTeamState && this.props.liveScoreTeamState.teamData && this.props.liveScoreTeamState.teamData.logoUrl ?
                             <img className="user-image" src={logoUrl ? logoUrl : ''} alt="" height="80" width="80" />
                             :
                             <span className="user-contact-heading">{' '}</span>
                     }
-
 
                     <span className="user-contact-heading">{name ? name : ''}</span>
                 </div>
@@ -256,9 +246,10 @@ class LiveScoreTeamView extends Component {
                         </div>
 
                         {managerDataList.map((item) => (
-                            <span className="desc-text-style side-bar-profile-data">{(item.firstName || item.lastName) && item.firstName + " " + item.lastName}</span>
-                        ))
-                        }
+                            <span className="desc-text-style side-bar-profile-data">
+                                {(item.firstName || item.lastName) && item.firstName + " " + item.lastName}
+                            </span>
+                        ))}
                     </div>
 
                     <div className="live-score-side-desc-view">
@@ -270,8 +261,7 @@ class LiveScoreTeamView extends Component {
                         </div>
                         {managerDataList.map((item) => (
                             <span className="desc-text-style side-bar-profile-data">{item.email}</span>
-                        ))
-                        }
+                        ))}
                     </div>
 
                     <div className="live-score-side-desc-view">
@@ -283,8 +273,7 @@ class LiveScoreTeamView extends Component {
                         </div>
                         {managerDataList.map((item) => (
                             <span className="desc-text-style side-bar-profile-data">{item.mobileNumber}</span>
-                        ))
-                        }
+                        ))}
                     </div>
 
                     {/* coaches View */}
@@ -301,8 +290,7 @@ class LiveScoreTeamView extends Component {
 
                             {coachData.map((item) => (
                                 <span className="desc-text-style side-bar-profile-data">{item.name && item.name}</span>
-                            ))
-                            }
+                            ))}
                         </div>
 
                         <div className="live-score-side-desc-view">
@@ -314,8 +302,7 @@ class LiveScoreTeamView extends Component {
                             </div>
                             {coachData.map((item) => (
                                 <span className="desc-text-style side-bar-profile-data">{item.email}</span>
-                            ))
-                            }
+                            ))}
                         </div>
 
                         <div className="live-score-side-desc-view">
@@ -327,10 +314,8 @@ class LiveScoreTeamView extends Component {
                             </div>
                             {coachData.map((item) => (
                                 <span className="desc-text-style side-bar-profile-data">{item.mobileNumber}</span>
-                            ))
-                            }
+                            ))}
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -351,10 +336,8 @@ class LiveScoreTeamView extends Component {
                     </Breadcrumb>
                 </div>
 
-                <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", }}>
-                    <div
-                        className="comp-dashboard-botton-view-mobile"
-                    >
+                <div className="col-sm d-flex justify-content-end">
+                    <div className="comp-dashboard-botton-view-mobile">
                         <NavLink to={{
                             pathname: '/liveScoreAddPlayer',
                             state: { ...this.props.location.state, screenName: this.state.screenName, screenKey: this.state.screenKey }
@@ -381,7 +364,7 @@ class LiveScoreTeamView extends Component {
         confirm({
             title: 'Are you sure you want to delete this team?',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             onOk() {
                 this_.deleteTeam(teamId)
@@ -397,19 +380,12 @@ class LiveScoreTeamView extends Component {
         let roleId = (userRoleId == 11 || userRoleId == 13)
         return (
             <div className="row mt-5">
-
-                <div className="col-sm" style={{ display: "flex", flexDirection: 'row', alignItems: "center", justifyContent: "flex-end", width: '100%' }}>
+                <div className="col-sm d-flex align-items-center justify-content-end" style={{ width: '100%' }}>
                     <div className="row">
                         <div className="col-sm">
                             <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: '100%',
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end",
-                                }}
+                                className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
+                                style={{ width: '100%' }}
                             >
                                 <NavLink to={{
                                     pathname: "/liveScoreAddTeam",
@@ -421,28 +397,26 @@ class LiveScoreTeamView extends Component {
                                 </NavLink>
                             </div>
                         </div>
-                        {!this.state.sourceIdAvailable && <div className="col-sm">
-                            <div
-                                className="comp-dashboard-botton-view-mobile"
-                                style={{
-                                    width: '100%',
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end"
-                                }}
-                            >
-
-                                <Button disabled={roleId} onClick={() => this.showDeleteConfirm(this.state.teamId)} className="primary-add-comp-form" type="primary">
-                                    {AppConstants.delete}
-                                </Button>
-
+                        {!this.state.sourceIdAvailable && (
+                            <div className="col-sm">
+                                <div
+                                    className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
+                                    style={{ width: '100%' }}
+                                >
+                                    <Button
+                                        disabled={roleId}
+                                        onClick={() => this.showDeleteConfirm(this.state.teamId)}
+                                        className="primary-add-comp-form"
+                                        type="primary"
+                                    >
+                                        {AppConstants.delete}
+                                    </Button>
+                                </div>
                             </div>
-                        </div>}
+                        )}
                     </div>
                 </div>
             </div>
-
             // </div>
         )
     }
@@ -457,11 +431,13 @@ class LiveScoreTeamView extends Component {
 
                     <div className="table-responsive home-dash-table-view mt-3">
                         <Table
-                            //  loading={this.props.liveScoreTeamState.onLoad}
-                            className="home-dashboard-table" columns={this.state.userRoleId == 2 ? columns : columns_2}
-                            dataSource={playerList} pagination={false} />
+                            // loading={this.props.liveScoreTeamState.onLoad}
+                            className="home-dashboard-table"
+                            columns={this.state.userRoleId == 2 ? columns : columns_2}
+                            dataSource={playerList}
+                            pagination={false}
+                        />
                     </div>
-
                 </div>
             </div>
         )
@@ -470,23 +446,21 @@ class LiveScoreTeamView extends Component {
     render() {
         const { screenName } = this.state
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }} >
+            <div className="fluid-width default-bg">
+                {screenName === 'userPersonal' ? (
+                    <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
+                ) : (
+                    <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+                )}
 
-
-                {
-                    screenName == 'userPersonal' ?
-                        <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
-                        :
-                        <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
-                }
-
-
-                {
-                    screenName == 'userPersonal' ?
-                        <InnerHorizontalMenu menu={"user"} userSelectedKey={"1"} />
-                        :
-                        <InnerHorizontalMenu menu={"liveScore"} liveScoreSelectedKey={screenName === 'fromMatchList' ? '2' : screenName === 'liveScoreDashboard' ? "1" : screenName === 'fromPlayerList' ? '7' : '3'} />
-                }
+                {screenName === 'userPersonal' ? (
+                    <InnerHorizontalMenu menu="user" userSelectedKey="1" />
+                ) : (
+                    <InnerHorizontalMenu
+                        menu="liveScore"
+                        liveScoreSelectedKey={screenName === 'fromMatchList' ? '2' : screenName === 'liveScoreDashboard' ? "1" : screenName === 'fromPlayerList' ? '7' : '3'}
+                    />
+                )}
                 <Loader visible={this.props.liveScoreTeamState.onLoad} />
                 <Layout className="live-score-player-profile-layout">
                     <Content className="live-score-player-profile-content">
@@ -495,7 +469,7 @@ class LiveScoreTeamView extends Component {
                                 <div className="col-sm-3" style={{ marginBottom: "6%" }}>
                                     {this.profileImageView()}
                                 </div>
-                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc", }}>
+                                <div className="col-sm-9" style={{ backgroundColor: "#f7fafc" }}>
                                     {this.headerView()}
                                     {this.tableView()}
                                 </div>
@@ -507,14 +481,15 @@ class LiveScoreTeamView extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ getTeamViewPlayerList, liveScoreDeleteTeam, liveScoreDeletePlayerAction }, dispatch)
+    return bindActionCreators({ getTeamViewPlayerList, liveScoreDeleteTeam, liveScoreDeletePlayerAction }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        liveScoreTeamState: state.LiveScoreTeamState
-    }
+        liveScoreTeamState: state.LiveScoreTeamState,
+    };
 }
-export default connect(mapStateToProps, mapDispatchToProps)((LiveScoreTeamView));
 
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreTeamView);

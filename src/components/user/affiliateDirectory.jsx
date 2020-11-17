@@ -261,7 +261,7 @@ class AffiliateDirectory extends Component {
   onKeyEnterSearchText = (e) => {
     var code = e.keyCode || e.which;
     if (code === 13) {
-      //13 is the enter keycode
+      // 13 is the enter keycode
       this.handleAffiliateTableList(1);
     }
   };
@@ -431,7 +431,6 @@ class AffiliateDirectory extends Component {
     );
   };
 
-  ////////form content view
   contentView = () => {
     let userState = this.props.userState;
     let affiliates = userState.affiliateDirectoryList;
@@ -461,7 +460,7 @@ class AffiliateDirectory extends Component {
 
   render() {
     return (
-      <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+      <div className="fluid-width default-bg">
         <DashboardLayout
           menuHeading={AppConstants.user}
           menuName={AppConstants.user}
