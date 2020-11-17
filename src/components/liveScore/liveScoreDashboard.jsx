@@ -257,7 +257,7 @@ const columnsTodaysMatch = [
             isArrayNotEmpty(umpires) && umpires.map((item) => (
                 <span style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)}
                     // className="desc-text-style side-bar-profile-data"
-                    className='multi-column-text-aligned'
+                      className='multi-column-text-aligned'
                 >{item.umpireName}</span>
             ))
     }, {
@@ -390,7 +390,7 @@ const columnsTodaysMatch_1 = [
             isArrayNotEmpty(umpires) && umpires.map((item, index) => (
                 <span key={record.id + index} style={{ color: '#ff8237', cursor: 'pointer' }} onClick={() => this_obj.umpireName(item)}
                     // className="desc-text-style side-bar-profile-data"
-                    className='multi-column-text-aligned'
+                      className='multi-column-text-aligned'
                 >{item.umpireName}</span>
             ))
     }, {
@@ -685,8 +685,8 @@ class LiveScoreDashboard extends Component {
             <div className="row text-view">
                 <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
                     <span className="home-dash-left-text">{AppConstants.todaysMatch}</span>
-                    <div style={{ marginTop: -10 }}>
-                        <Tooltip background="#ff8237">
+                    <div className="mt-n10">
+                        <Tooltip>
                             <span>{AppConstants.todayMatchMsg}</span>
                         </Tooltip>
                     </div>
@@ -772,11 +772,11 @@ class LiveScoreDashboard extends Component {
                 {this.matchHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table loading={this.props.liveScoreDashboardState.onLoad}
-                        className="home-dashboard-table"
-                        columns={scoringType === "SINGLE" ? columnsTodaysMatch_1 : columnsTodaysMatch}
-                        dataSource={dashboardMatchList}
-                        pagination={false}
-                        rowKey={(record, index) => "dashboardMatchList" + record.id + index} />
+                           className="home-dashboard-table"
+                           columns={scoringType === "SINGLE" ? columnsTodaysMatch_1 : columnsTodaysMatch}
+                           dataSource={dashboardMatchList}
+                           pagination={false}
+                           rowKey={(record, index) => "dashboardMatchList" + record.id + index} />
                 </div>
             </div>
         )
@@ -787,8 +787,8 @@ class LiveScoreDashboard extends Component {
             <div className="row text-view">
                 <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }}>
                     <span className="home-dash-left-text">{AppConstants.todaysIncidents}</span>
-                    <div style={{ marginTop: -10 }}>
-                        <Tooltip background="#ff8237">
+                    <div className="mt-n10">
+                        <Tooltip>
                             <span>{AppConstants.todayIncidentMsg}</span>
                         </Tooltip>
                     </div>
@@ -813,8 +813,8 @@ class LiveScoreDashboard extends Component {
             <div className="row text-view">
                 <div className="col-sm" style={{ display: 'flex', alignItems: 'center' }}>
                     <span className="home-dash-left-text">{AppConstants.activeNews}</span>
-                    <div style={{ marginTop: -10 }}>
-                        <Tooltip background="#ff8237">
+                    <div className="mt-n10">
+                        <Tooltip>
                             <span>{AppConstants.activeNewsMsg}</span>
                         </Tooltip>
                     </div>
@@ -858,8 +858,8 @@ class LiveScoreDashboard extends Component {
             <div className="row text-view">
                 <div className="col-sm mb-3" style={{ display: 'flex', alignItems: 'center' }}>
                     <span className="home-dash-left-text">{AppConstants.playersToPay}</span>
-                    <div style={{ marginTop: -10 }}>
-                        <Tooltip background="#ff8237">
+                    <div className="mt-n10">
+                        <Tooltip>
                             <span>{AppConstants.playersToPayMsg}</span>
                         </Tooltip>
                     </div>
@@ -876,11 +876,11 @@ class LiveScoreDashboard extends Component {
                 {this.playersToPayHeading()}
                 <div className="table-responsive home-dash-table-view">
                     <Table loading={this.props.liveScoreDashboardState.onLoad}
-                        className="home-dashboard-table"
-                        columns={columnsPlayersToPay}
-                        dataSource={playerTopay}
-                        pagination={false}
-                        rowKey={(record, index) => "playerTopay" + record.id + index}
+                           className="home-dashboard-table"
+                           columns={columnsPlayersToPay}
+                           dataSource={playerTopay}
+                           pagination={false}
+                           rowKey={(record, index) => "playerTopay" + record.id + index}
                     />
                 </div>
             </div>
@@ -908,20 +908,18 @@ class LiveScoreDashboard extends Component {
                         <Button className='primary-add-comp-form' type='primary'>{AppConstants.saveAsDraft}</Button>
                     </div>
                 </div>
-
             </div>
-
             // </div>
-
         )
     }
+
     render() {
         return (
             <div className="fluid-width" style={{ backgroundColor: "#f7fafc", paddingBottom: 10 }}>
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="1" />
                 <Layout>
-                    <Content >
+                    <Content>
                         {this.addNewsView()}
                         {this.matchView()}
                         {/* {this.playersToPayView()} */}
@@ -932,14 +930,15 @@ class LiveScoreDashboard extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData }, dispatch)
+    return bindActionCreators({ liveScoreDashboardListAction, initializeCompData }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        liveScoreDashboardState: state.LiveScoreDashboardState
-    }
+        liveScoreDashboardState: state.LiveScoreDashboardState,
+    };
 }
-export default connect(mapStateToProps, mapDispatchToProps)((LiveScoreDashboard));
 
+export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreDashboard);

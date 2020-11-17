@@ -124,7 +124,7 @@ class UserOurOrganization extends Component {
         if(nextProps.userState!= userState){
             if (userState.onSaveOrgPhotoLoad == false && this.state.photoLoading == true) {
                 this.setState({ isEditView: false, orgPhotosImg: null, orgPhotosImgSend: null, buttonPressed: "",
-                photoLoading: false });
+                    photoLoading: false });
 
                 this.props.getOrganisationPhotoAction(obj);
             }
@@ -600,7 +600,6 @@ class UserOurOrganization extends Component {
         }
     };
 
-    ////////form content view
     contentView = () => {
         let affiliateToData = this.props.userState.affiliateTo;
         let affiliate = this.props.userState.affiliateOurOrg;
@@ -925,47 +924,45 @@ class UserOurOrganization extends Component {
         )
     }
 
-    deleteConfirmModalView = () => {
-        return (
-            <div>
-                <Modal
-                    title="Affiliate"
-                    visible={this.state.deleteModalVisible}
-                    onOk={() => this.removeModalHandle("ok")}
-                    onCancel={() => this.removeModalHandle("cancel")}
-                >
-                    <p>Are you sure you want to remove the contact?.</p>
-                </Modal>
-            </div>
-        );
-    }
+    deleteConfirmModalView = () => (
+        <div>
+            <Modal
+                title="Affiliate"
+                visible={this.state.deleteModalVisible}
+                onOk={() => this.removeModalHandle('ok')}
+                onCancel={() => this.removeModalHandle('cancel')}
+            >
+                <p>Are you sure you want to remove the contact?.</p>
+            </Modal>
+        </div>
+    );
 
     ////// Photos//////
-    photosHeaderView = () => {
-        return (
-            <Header className="comp-venue-courts-header-view" style={{ paddingLeft: '4%', paddingRight: '4%', paddingTop: '3%' }}>
-                <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">{AppConstants.photos}</Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
-                    {this.state.isEditable && (
-                        <div className="col-sm live-form-view-button-container" style={{ display: "flex", justifyContent: "flex-end" }}>
-                            <Button className="primary-add-comp-form" type="primary" onClick={() => this.addPhoto()}>{"+" + AppConstants.addPhoto}</Button>
-                        </div>
-                    )}
+    photosHeaderView = () => (
+        <Header className="comp-venue-courts-header-view" style={{ paddingLeft: '4%', paddingRight: '4%', paddingTop: '3%' }}>
+            <div className="row">
+                <div className="col-sm d-flex align-content-center">
+                    <Breadcrumb separator=" > ">
+                        <Breadcrumb.Item className="breadcrumb-add">{AppConstants.photos}</Breadcrumb.Item>
+                    </Breadcrumb>
                 </div>
-            </Header>
-        )
-    }
+                {this.state.isEditable && (
+                    <div className="col-sm live-form-view-button-container d-flex justify-content-end">
+                        <Button className="primary-add-comp-form" type="primary" onClick={() => this.addPhoto()}>
+                            {`+ ${AppConstants.addPhoto}`}
+                        </Button>
+                    </div>
+                )}
+            </div>
+        </Header>
+    );
 
     photosEditHeaderView = () => {
         const id = this.state.tableRecord.id;
         return (
             <Header className="comp-venue-courts-header-view" style={{ paddingLeft: '4%', paddingRight: '4%', paddingTop: '3%' }}>
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{id != 0 ? AppConstants.editPhoto : AppConstants.addPhoto}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -996,14 +993,8 @@ class UserOurOrganization extends Component {
             <div className="mb-3">
                 {/* <div className="col-sm"> */}
                 <div
-                    className="comp-dashboard-botton-view-mobile"
-                    style={{
-                        width: "100%",
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "flex-end",
-                    }}
+                    className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
+                    style={{ width: '100%' }}
                 >
                     <Button onClick={() => this.editPhotos(record)} className="primary-add-comp-form ml-5" type="primary">
                         {AppConstants.edit}
@@ -1041,7 +1032,7 @@ class UserOurOrganization extends Component {
     };
 
     photosAddEditView = () => {
-        try{
+        try {
             const photoUrl = this.state.tableRecord != null ? this.state.tableRecord.photoUrl : null;
             const { photoTypeData } = this.props.commonReducerState;
             return (
@@ -1061,31 +1052,31 @@ class UserOurOrganization extends Component {
                                 <div onClick={this.onSelectPhotos}>
                                 </div>
                                 {/* <Form.Item name='photosImage' rules={[{ required: photoUrl ? false : true, message: ValidationConstants.organisationPhotoRequired }]}> */}
-                                    <input
-                                        required="pb-0"
-                                        type="file"
-                                        id="photos-pic"
-                                        onChange={(evt) => {
-                                            this.setPhotosImage(evt.target)
-                                            this.setState({ timeout: 1000 })
-                                            setTimeout(() => {
-                                                this.setState({ timeout: null })
-                                            }, 1000);
-                                        }}
-                                    />
+                                <input
+                                    required="pb-0"
+                                    type="file"
+                                    id="photos-pic"
+                                    onChange={(evt) => {
+                                        this.setPhotosImage(evt.target)
+                                        this.setState({ timeout: 1000 })
+                                        setTimeout(() => {
+                                            this.setState({ timeout: null })
+                                        }, 1000);
+                                    }}
+                                />
                                 {/* </Form.Item> */}
                                 <span className="form-err">{this.state.imageError}</span>
                             </div>
                             <div className="col-sm pt-1">
                                 <InputWithHead heading={AppConstants.category} required="required-field" />
-                                <Form.Item name='photoTypeRefId' rules={[{ required: true, message: ValidationConstants.photoTypeRequired }]}>
+                                <Form.Item name="photoTypeRefId" rules={[{ required: true, message: ValidationConstants.photoTypeRequired }]}>
                                     <Select
                                         style={{ width: '100%', paddingRight: 1 }}
                                         onChange={(e) => this.setOrgPhotoValue(e)}
                                         value={this.state.tableRecord.photoTypeRefId}
                                     >
                                         {(photoTypeData || []).map((photo) => (
-                                            <Option key={'photoType_' + photo.id} value={photo.id}>
+                                            <Option key={`photoType_${photo.id}`} value={photo.id}>
                                                 {photo.description}
                                             </Option>
                                         ))}
@@ -1095,9 +1086,9 @@ class UserOurOrganization extends Component {
                         </div>
                     </div>
                 </div>
-            )
-        }catch(ex){
-            console.log("Error in photosAddEditView::"+ex);
+            );
+        } catch (ex) {
+            console.log(`Error in photosAddEditView::${ex}`);
         }
     }
 
@@ -1106,14 +1097,8 @@ class UserOurOrganization extends Component {
             <div className="comp-player-grades-header-drop-down-view">
                 <div className="col-sm">
                     <div
-                        className="comp-dashboard-botton-view-mobile"
-                        style={{
-                            width: "100%",
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            justifyContent: "flex-end"
-                        }}
+                        className="comp-dashboard-botton-view-mobile d-flex align-items-center justify-content-end"
+                        style={{ width: '100%' }}
                     >
                         <Button onClick={() => this.removePhoto()} className="primary-add-comp-form ml-5" type="primary">
                             {AppConstants.remove}
@@ -1179,7 +1164,7 @@ class UserOurOrganization extends Component {
                 {/* <div className="contextualHelp-RowDirection">
                     <span className="form-heading">{AppConstants.charityRoundUp}</span>
                     <div style={{ marginTop: 4 }}>
-                        <CustomToolTip placement="top" background="#ff8237">
+                        <CustomToolTip placement="top">
                             <span>{AppConstants.charityRoundUpMsg}</span>
                         </CustomToolTip>
                     </div>
@@ -1303,7 +1288,7 @@ class UserOurOrganization extends Component {
         let userState = this.props.userState;
         const photoUrl = this.state.tableRecord != null ? this.state.tableRecord.photoUrl : null;
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                 <InnerHorizontalMenu menu="user" userSelectedKey="3" />
                 <Layout>

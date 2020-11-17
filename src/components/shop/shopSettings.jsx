@@ -1,24 +1,26 @@
-import React, { Component } from "react";
-import { Layout, Select, Breadcrumb, Button, Form, Modal } from 'antd';
-import './shop.css';
-import DashboardLayout from "../../pages/dashboardLayout";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import AppConstants from "../../themes/appConstants";
-import AppImages from "../../themes/appImages";
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import InputWithHead from "../../customComponents/InputWithHead";
-import { getStateReferenceAction } from "../../store/actions/commonAction/commonAction"
-import Loader from '../../customComponents/loader';
+import { Layout, Select, Breadcrumb, Button, Form, Modal } from 'antd';
+
+import './shop.css';
+
+import AppConstants from 'themes/appConstants';
+import AppImages from 'themes/appImages';
+import ValidationConstants from 'themes/validationConstant';
+import { isArrayNotEmpty, isNotNullOrEmptyString } from 'util/helpers';
+import { checkOrganisationLevel } from 'util/permissions';
+import { getOrganisationData } from 'util/sessionStorage';
+import { getStateReferenceAction } from 'store/actions/commonAction/commonAction';
 import {
     getShopSettingAction,
     createAddressAction,
     onChangeSettingsData,
-} from "../../store/actions/shopAction/shopSettingAction";
-import ValidationConstants from '../../themes/validationConstant';
-import { isArrayNotEmpty, isNotNullOrEmptyString } from "../../util/helpers";
-import { checkOrganisationLevel } from "../../util/permissions";
-import { getOrganisationData } from "../../util/sessionStorage"
+} from 'store/actions/shopAction/shopSettingAction';
+import Loader from 'customComponents/loader';
+import InputWithHead from 'customComponents/InputWithHead';
+import DashboardLayout from 'pages/dashboardLayout';
+import InnerHorizontalMenu from 'pages/innerHorizontalMenu';
 
 const { Header, Footer, Content } = Layout;
 const { Option } = Select;
@@ -30,16 +32,16 @@ class ShopSettings extends Component {
         this.state = {
             getLoad: false,
             orgLevel: AppConstants.state,
-        }
+        };
         this.formRef = React.createRef();
     }
 
     componentDidMount() {
-        this.apiCalls()
+        this.apiCalls();
         this.setDetailsFieldValue();
         checkOrganisationLevel().then((value) => (
             this.setState({ orgLevel: value })
-        ))
+        ));
     }
 
     componentDidUpdate(nextProps) {
@@ -52,15 +54,15 @@ class ShopSettings extends Component {
 
     apiCalls = () => {
         let body = {
-            State: "State"
-        }
-        this.props.getStateReferenceAction(body)
-        this.getSettingScreenData()
+            State: 'State',
+        };
+        this.props.getStateReferenceAction(body);
+        this.getSettingScreenData();
     }
 
     getSettingScreenData = () => {
-        this.props.getShopSettingAction()
-        this.setState({ getLoad: true })
+        this.props.getShopSettingAction();
+        this.setState({ getLoad: true });
     }
 
     setDetailsFieldValue() {
@@ -76,32 +78,32 @@ class ShopSettings extends Component {
     ///////post api
     saveSettings = (values) => {
         let { settingDetailsData } = JSON.parse(JSON.stringify(this.props.shopSettingState));
-        let payload = settingDetailsData
+        let payload = settingDetailsData;
         let orgData = getOrganisationData();
         let organisationUniqueKey = orgData ? orgData.organisationUniqueKey : 0;
-        payload.organisationUniqueKey = organisationUniqueKey
-        let key = "update"
+        payload.organisationUniqueKey = organisationUniqueKey;
+        let key = 'update';
         if (payload.id == 0) {
-            delete payload['id'];
-            key = "add"
+            delete payload.id;
+            key = 'add';
         }
-        this.props.createAddressAction(payload, key)
+        this.props.createAddressAction(payload, key);
     }
 
     //////delete the type
     showDeleteConfirm = (index) => {
-        let this_ = this
+        let this_ = this;
         confirm({
             title: AppConstants.deleteProductType,
             content: AppConstants.deleteProductTypeDescription,
             okText: 'Confirm',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'Cancel',
             onOk() {
                 let { settingDetailsData } = this_.props.shopSettingState;
-                let types = settingDetailsData.types
-                types.splice(index, 1)
-                this_.props.onChangeSettingsData(types, 'types')
+                let types = settingDetailsData.types;
+                types.splice(index, 1);
+                this_.props.onChangeSettingsData(types, 'types');
             },
             onCancel() {
             },
@@ -112,16 +114,16 @@ class ShopSettings extends Component {
     addRemoveTypeOption = (index, key) => {
         let { settingDetailsData } = this.props.shopSettingState;
         let defaultTypeObject = {
-            "typeName": ""
+            typeName: '',
+        };
+        let types = settingDetailsData.types;
+        if (key === 'add') {
+            types.push(defaultTypeObject);
         }
-        let types = settingDetailsData.types
-        if (key === "add") {
-            types.push(defaultTypeObject)
+        if (key === 'remove') {
+            this.showDeleteConfirm(index);
         }
-        if (key === "remove") {
-            this.showDeleteConfirm(index)
-        }
-        this.props.onChangeSettingsData(types, 'types')
+        this.props.onChangeSettingsData(types, 'types');
     }
 
     ///////view for breadcrumb
@@ -129,12 +131,8 @@ class ShopSettings extends Component {
         return (
             <div className="header-view">
                 <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
+                    className="form-header-view d-flex align-items-center"
+                    style={{ backgroundColor: 'transparent' }}
                 >
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
@@ -146,88 +144,87 @@ class ShopSettings extends Component {
         );
     };
 
-    ////////form content view
     contentView = () => {
-        let stateList = this.props.commonState.stateData
+        let stateList = this.props.commonState.stateData;
         return (
             <div className="content-view pt-4">
                 <span className="form-heading">{AppConstants.pickUpAddress}</span>
-                <Form.Item name='address' rules={[
-                    {
-                        required: true,
-                        message:
-                        ValidationConstants.enterAddress,
-                    },
-                ]}>
+                <Form.Item
+                    name="address"
+                    rules={[
+                        {
+                            required: true,
+                            message:
+                            ValidationConstants.enterAddress,
+                        },
+                    ]}
+                >
                     <InputWithHead
-                        auto_complete='new-address'
+                        auto_complete="new-address"
                         required="required-field pb-0"
                         heading={AppConstants.address}
                         placeholder={AppConstants.address}
-                        onChange={(e) => this.props.onChangeSettingsData(
-                            e.target.value,
-                            'address'
-                        )}
+                        onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'address')}
                     />
                 </Form.Item>
-                <Form.Item name='suburb' rules={[
-                    {
-                        required: true,
-                        message:
-                        ValidationConstants.enterSuburb,
-                    },
-                ]}>
+                <Form.Item
+                    name="suburb"
+                    rules={[
+                        {
+                            required: true,
+                            message:
+                            ValidationConstants.enterSuburb,
+                        },
+                    ]}
+                >
                     <InputWithHead
-                        auto_complete='new-suburb'
+                        auto_complete="new-suburb"
                         required="required-field pb-0"
                         heading={AppConstants.suburb}
                         placeholder={AppConstants.suburb}
-                        onChange={(e) => this.props.onChangeSettingsData(
-                            e.target.value,
-                            'suburb'
-                        )}
+                        onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'suburb')}
                     />
                 </Form.Item>
                 <InputWithHead
                     heading={AppConstants.stateHeading}
                     required="required-field"
                 />
-                <Form.Item name='state' rules={[
-                    {
-                        required: true,
-                        message:
-                        ValidationConstants.enterState,
-                    },
-                ]}>
+                <Form.Item
+                    name="state"
+                    rules={[
+                        {
+                            required: true,
+                            message:
+                            ValidationConstants.enterState,
+                        },
+                    ]}
+                >
                     <Select
                         style={{ width: '100%' }}
                         placeholder={AppConstants.select}
-                        onChange={(value) => this.props.onChangeSettingsData(
-                            value,
-                            'state'
-                        )}
+                        onChange={(value) => this.props.onChangeSettingsData(value, 'state')}
                     >
                         {stateList.map((item) => (
-                            <Option key={'state_' + item.name} value={item.name}>{item.name}</Option>
+                            <Option key={`state_${item.name}`} value={item.name}>{item.name}</Option>
                         ))}
                     </Select>
                 </Form.Item>
-                <Form.Item name='postcode' rules={[
-                    {
-                        required: true,
-                        message:
-                        ValidationConstants.enterPostcode,
-                    },
-                ]}>
+                <Form.Item
+                    name="postcode"
+                    rules={[
+                        {
+                            required: true,
+                            message:
+                            ValidationConstants.enterPostcode,
+                        },
+                    ]}
+                >
                     <InputWithHead
-                        auto_complete='new-postCode'
+                        auto_complete="new-postCode"
                         required="required-field pb-0"
                         heading={AppConstants.postCode}
                         placeholder={AppConstants.postcode}
-                        onChange={(e) => this.props.onChangeSettingsData(
-                            e.target.value,
-                            'postcode'
-                        )}
+                        onChange={(e) => this.props.onChangeSettingsData(e.target.value, 'postcode')}
                         type="number"
                         min={0}
                     />
@@ -242,15 +239,16 @@ class ShopSettings extends Component {
             <div className="discount-view pt-5">
                 <span className="form-heading">{AppConstants.productTypes}</span>
                 {isArrayNotEmpty(settingDetailsData.types) && settingDetailsData.types.map((item, index) => (
-                    <div className="row mt-4" key={"settingDetailsData" + index}>
+                    <div className="row mt-4" key={`settingDetailsData${index}`}>
                         <div className=" col-sm">
                             <InputWithHead
-                                auto_complete='new-productType'
-                                required={"required-field "}
+                                auto_complete="new-productType"
+                                required="required-field"
                                 placeholder={AppConstants.productTypes}
                                 onChange={(e) => this.props.onChangeSettingsData(
                                     e.target.value,
-                                    'typeName', index
+                                    'typeName',
+                                    index,
                                 )}
                                 value={item.typeName}
                             />
@@ -263,15 +261,17 @@ class ShopSettings extends Component {
                                     alt=""
                                     width="16"
                                     height="16"
-                                    onClick={() => this.addRemoveTypeOption(index, "remove")}
+                                    onClick={() => this.addRemoveTypeOption(index, 'remove')}
                                 />
                             </span>
                         </div>
                     </div>
                 ))}
-                <span style={{ cursor: 'pointer' }}
-                      className="input-heading-add-another"
-                      onClick={() => this.addRemoveTypeOption(-1, "add")}>
+                <span
+                    style={{ cursor: 'pointer' }}
+                    className="input-heading-add-another"
+                    onClick={() => this.addRemoveTypeOption(-1, 'add')}
+                >
                     + {AppConstants.addType}
                 </span>
             </div>
@@ -305,13 +305,13 @@ class ShopSettings extends Component {
     render() {
         let { orgLevel } = this.state
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
                 <InnerHorizontalMenu menu="shop" shopSelectedKey="4" />
                 <Layout>
                     <Form
                         ref={this.formRef}
-                        autoComplete='off'
+                        autoComplete="off"
                         onFinish={this.saveSettings}
                         noValidate="noValidate"
                     >
@@ -320,8 +320,7 @@ class ShopSettings extends Component {
                             <div className="formView">{this.contentView()}</div>
                             {orgLevel === AppConstants.state && <div className="formView">{this.productTypesView()}</div>}
                         </Content>
-                        <Loader
-                            visible={this.props.commonState.onLoad || this.props.shopSettingState.onLoad} />
+                        <Loader visible={this.props.commonState.onLoad || this.props.shopSettingState.onLoad} />
                         <Footer>{this.footerView()}</Footer>
                     </Form>
                 </Layout>
@@ -336,14 +335,14 @@ function mapDispatchToProps(dispatch) {
         getShopSettingAction,
         createAddressAction,
         onChangeSettingsData,
-    }, dispatch)
+    }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         commonState: state.CommonReducerState,
         shopSettingState: state.ShopSettingState,
-    }
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShopSettings);

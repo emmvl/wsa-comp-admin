@@ -60,7 +60,7 @@ class LiveScoreIncidentView extends Component {
         return (
             <Header className="comp-venue-courts-header-view live-form-view-button-header">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.incidentDetails}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -208,20 +208,16 @@ class LiveScoreIncidentView extends Component {
         )
     }
 
-    ////main render method
     render() {
         let screen = this.props.location.state ? this.props.location.state.screenName ? this.props.location.state.screenName : null : null
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-
+            <div className="fluid-width default-bg">
                 {
                     this.state.umpireKey ?
                         <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                         :
                         <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 }
-
-
 
                 {
                     this.state.umpireKey ?
@@ -241,4 +237,5 @@ class LiveScoreIncidentView extends Component {
         );
     }
 }
+
 export default LiveScoreIncidentView

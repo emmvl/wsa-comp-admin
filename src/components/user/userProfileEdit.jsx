@@ -820,7 +820,7 @@ class UserProfileEdit extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} onMenuHeadingClick={() => history.push("./userTextualDashboard")} />
                 <InnerHorizontalMenu menu="user" userSelectedKey="5" />
                 <Layout>

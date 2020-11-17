@@ -205,7 +205,6 @@ class LiveScoreLadderAdjustment extends Component {
         })
     }
 
-    ////////form content view
     contentView = () => {
         const { ladderData, teamResult } = this.props.liveScoreLadderState
         let addNewLadder = isArrayNotEmpty(ladderData) ? ladderData : [];
@@ -376,7 +375,7 @@ class LiveScoreLadderAdjustment extends Component {
 
     render = () => {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="11" />
                 <Loader visible={this.props.liveScoreLadderState.onLoading || this.props.liveScoreLadderState.onResetLoad} />

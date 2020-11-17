@@ -174,14 +174,14 @@ const columns = [
         dataIndex: "isUsed",
         key: "isUsed",
         render: (isUsed, record, index) => (
-            record.actionView  ? 
+            record.actionView  ?
             <Menu
                 className="action-triple-dot-submenu"
                 theme="light"
                 mode="horizontal"
                 style={{ lineHeight: "25px" }}
             >
-               
+
                 <SubMenu
                     key="sub1"
                     title={
@@ -214,7 +214,7 @@ const columns = [
                     }
 
                 </SubMenu>
-                
+
             </Menu> : ""
         ),
     },
@@ -901,7 +901,7 @@ class Registration extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
 
                 <InnerHorizontalMenu menu="registration" regSelectedKey="2" />

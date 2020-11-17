@@ -52,7 +52,7 @@ function tableSort(key) {
 //     return stringA.localeCompare(stringB)
 // }
 
-//listeners for sorting
+// listeners for sorting
 const listeners = (key) => ({
     onClick: () => tableSort(key),
 });
@@ -351,7 +351,6 @@ class UmpireRoaster extends Component {
         this.props.umpireRoasterListAction(this.state.selectedComp, roleIds, body, sortBy, sortOrder)
     }
 
-    ////////form content view
     contentView = () => {
         const { umpireRoasterList, umpireTotalCount } = this.props.umpireRoasterdState
         let umpireListResult = isArrayNotEmpty(umpireRoasterList) ? umpireRoasterList : []
@@ -651,7 +650,7 @@ class UmpireRoaster extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="3" />
                 <Layout>

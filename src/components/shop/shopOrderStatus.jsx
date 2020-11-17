@@ -19,7 +19,7 @@ const { SubMenu } = Menu
 const { Option } = Select
 let this_obj = null;
 
-//listeners for sorting
+// listeners for sorting
 const listeners = (key) => ({
     onClick: () => tableSort(key),
 });
@@ -304,7 +304,7 @@ class ShopOrderStatus extends Component {
     onKeyEnterSearchText = (e) => {
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             this.handleTableList(1);
         }
     }
@@ -511,7 +511,7 @@ class ShopOrderStatus extends Component {
     render() {
         console.log(this.props.shopOrderStatusState)
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.shop} menuName={AppConstants.shop} />
                 <InnerHorizontalMenu menu="shop" shopSelectedKey="5" />
                 <Layout>

@@ -93,7 +93,7 @@ class LiveScorePlayerProfile extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerProfile}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -110,7 +110,7 @@ class LiveScorePlayerProfile extends Component {
             <div className="fluid-width mt-2">
                 {/* <img className="live-score-user-image" src={AppImages.playerDp} alt="" height="80" width="80" />
                 <span className="live-score-profile-user-name">{AppConstants.josefineMartinez}</span> */}
-                <div className='profile-image-view mr-5' >
+                <div className="profile-image-view mr-5">
                     <span className="user-contact-heading">{AppConstants.playerProfile}</span>
                     <img className="live-score-user-image" src={AppImages.playerDp} alt="" height="80" width="80" />
                     <span className="user-contact-heading">{this.playerName}</span>
@@ -167,9 +167,6 @@ class LiveScorePlayerProfile extends Component {
         )
     }
 
-
-
-    //////// tableView
     tableView = () => {
         return (
             <div>
@@ -199,14 +196,14 @@ class LiveScorePlayerProfile extends Component {
                         <div className="fluid-width">
                             <div className="row">
                                 <div className="col-sm-2">
-                                    <div style={{
-                                        width: '100%',
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center",
-                                        marginLeft: 7,
-                                        paddingBottom: 10
-                                    }}>
+                                    <div
+                                        className="d-flex align-items-center"
+                                        style={{
+                                            width: '100%',
+                                            marginLeft: 7,
+                                            paddingBottom: 10,
+                                        }}
+                                    >
                                         <span className="year-select-heading">{AppConstants.year}:</span>
                                         <Select
                                             className="year-select"
@@ -221,17 +218,15 @@ class LiveScorePlayerProfile extends Component {
                             </div>
                         </div>
 
-
                         <div className="table-responsive home-dash-table-view">
-                            <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false}
-                            />
+                            <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false} />
                         </div>
                         <div className="fluid-width" style={{ marginTop: 10 }}>
                             <div className="row">
                                 <div className="col-sm">
                                     <span className="input-heading-add-another">+ {AppConstants.addAnotherDetail}</span>
                                 </div>
-                                <div className="col-sm" style={{ display: "flex", justifyContent: "flex-end", paddingTop: 8 }}>
+                                <div className="col-sm d-flex justify-content-end" style={{ paddingTop: 8 }}>
                                     <Button className='primary-reg-live-score' type='primary'>{AppConstants.register}</Button>
                                 </div>
                             </div>
@@ -243,36 +238,35 @@ class LiveScorePlayerProfile extends Component {
         )
     }
 
-
-
-    //////footer view containing all the buttons like submit and cancel
-    footerView = () => {
-        return (
-            <div className="fluid-width" style={{ marginTop: "5%", marginBottom: "5%" }}>
-                <div className="row">
-                    <div className="col-sm-3">
-                        <div className="reg-add-save-button">
-                            <Button type="cancel-button">{AppConstants.cancel}</Button>
-                        </div>
+    footerView = () => (
+        <div className="fluid-width" style={{ marginTop: "5%", marginBottom: "5%" }}>
+            <div className="row">
+                <div className="col-sm-3">
+                    <div className="reg-add-save-button">
+                        <Button type="cancel-button">{AppConstants.cancel}</Button>
                     </div>
-                    <div className="col-sm-9">
-                        <div className="comp-buttons-view">
-                            <Button className="live-score-edit" type="primary">{AppConstants.edit}</Button>
-                            <Button className="open-reg-button" type="primary">{AppConstants.save}</Button>
-                        </div>
+                </div>
+                <div className="col-sm-9">
+                    <div className="comp-buttons-view">
+                        <Button className="live-score-edit" type="primary">{AppConstants.edit}</Button>
+                        <Button className="open-reg-button" type="primary">{AppConstants.save}</Button>
                     </div>
                 </div>
             </div>
-        )
-    }
-
-
+        </div>
+    );
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
-                <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.liveScores} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
+            <div className="fluid-width default-bg">
+                <DashboardLayout
+                    menuHeading={AppConstants.liveScores}
+                    menuName={AppConstants.liveScores}
+                    onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
+                />
+
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="2" />
+
                 <Layout className="live-score-player-profile-layout">
                     {/* {this.headerView()} */}
                     <Content className="live-score-player-profile-content">
@@ -292,5 +286,5 @@ class LiveScorePlayerProfile extends Component {
         );
     }
 }
-export default LiveScorePlayerProfile;
 
+export default LiveScorePlayerProfile;

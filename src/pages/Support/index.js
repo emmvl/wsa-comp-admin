@@ -29,7 +29,7 @@ function Support(props) {
   });
 
   return (
-    <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+    <div className="fluid-width default-bg">
       <DashboardLayout menuHeading={AppConstants.support} menuName={AppConstants.support} />
 
       <div className="support-panel">

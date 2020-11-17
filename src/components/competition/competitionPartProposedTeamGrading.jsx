@@ -62,10 +62,10 @@ const columns = [
         dataIndex: 'teamName',
         key: 'teamName',
         render: (teamName, record, index) => <Input className="input-inside-team-grades-table"
-            disabled={this_obj.state.competitionStatus == 1}
-            onChange={e => this_obj.props.onchangeCompPartProposedTeamGradingData(e.target.value, index, "teamName")}
-            placeholder="Team Name"
-            value={teamName}
+                                                    disabled={this_obj.state.competitionStatus == 1}
+                                                    onChange={e => this_obj.props.onchangeCompPartProposedTeamGradingData(e.target.value, index, "teamName")}
+                                                    placeholder="Team Name"
+                                                    value={teamName}
         />,
         sorter: (a, b) => tableSort(a, b, "teamName")
     },
@@ -99,10 +99,10 @@ const columns = [
                                     </Tag>
                                 </NavLink>
                             ) : (
-                                    <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
-                                        {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
-                                    </Tag>
-                                )}
+                                <Tag className="comp-player-table-tag" style={{ cursor: "pointer" }} key={item.historyPlayerId + index}>
+                                    {item.divisionGrade != null && item.divisionGrade != "" ? (item.divisionGrade + '(' + item.ladderResult + ')') : ""}
+                                </Tag>
+                            )}
                         </Tooltip>
                     )
                 ))}
@@ -385,7 +385,7 @@ class CompetitionPartProposedTeamGrading extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add"> {AppConstants.proposedTeamGrading}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -545,7 +545,6 @@ class CompetitionPartProposedTeamGrading extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         let commentList = this.props.partPlayerGradingState.playerCommentList
         let commentLoad = this.props.partPlayerGradingState.commentLoad
@@ -571,14 +570,14 @@ class CompetitionPartProposedTeamGrading extends Component {
                     value={this.state.comment}
                     commentLoad={commentLoad}
                     commentList={commentList}
-                // owner={this.state.commentsCreatedBy}
-                // OwnCreatedComment={this.state.commentsCreatedOn}
-                // ownnerComment={this.state.comments}
-                // affilate={this.state.responseCommentsCreatedBy}
-                // affilateCreatedComment={this.state.responseCommentsCreatedOn}
-                // affilateComment={this.state.responseComments}
-                // finalGradeId={this.state.finalGradeId}
-                // proposedGradeID={this.state.proposedGradeID}
+                    // owner={this.state.commentsCreatedBy}
+                    // OwnCreatedComment={this.state.commentsCreatedOn}
+                    // ownnerComment={this.state.comments}
+                    // affilate={this.state.responseCommentsCreatedBy}
+                    // affilateCreatedComment={this.state.responseCommentsCreatedOn}
+                    // affilateComment={this.state.responseComments}
+                    // finalGradeId={this.state.finalGradeId}
+                    // proposedGradeID={this.state.proposedGradeID}
                 />
 
                 <Modal
@@ -629,50 +628,56 @@ class CompetitionPartProposedTeamGrading extends Component {
                     </div>
                     <div className="col-sm mt-3">
                         {this.state.divisionId != null &&
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
-                                <Tooltip
-                                    style={{ height: '100%' }}
-                                    onMouseEnter={() =>
-                                        this.setState({
-                                            tooltipVisibleSave: isPublished,
-                                        })
-                                    }
-                                    onMouseLeave={() =>
-                                        this.setState({ tooltipVisibleSave: false })
-                                    }
-                                    visible={this.state.tooltipVisibleSave}
-                                    title={AppConstants.statusPublishHover}
+                        <div className="d-flex justify-content-end">
+                            <Tooltip
+                                style={{ height: '100%' }}
+                                onMouseEnter={() =>
+                                    this.setState({
+                                        tooltipVisibleSave: isPublished,
+                                    })
+                                }
+                                onMouseLeave={() =>
+                                    this.setState({ tooltipVisibleSave: false })
+                                }
+                                visible={this.state.tooltipVisibleSave}
+                                title={AppConstants.statusPublishHover}
+                            >
+                                {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
+                                <Button
+                                    id={AppUniqueId.finalteamgrad_save_bn}
+                                    disabled={isPublished}
+                                    className="publish-button save-draft-text"
+                                    style={{ height: isPublished && '100%', borderRadius: isPublished && 6, width: isPublished && 'inherit' }}
+                                    onClick={() => this.submitApiCall('save')}
+                                    type="primary"
                                 >
-                                    {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
-                                    <Button id={AppUniqueId.finalteamgrad_save_bn} disabled={isPublished} className="publish-button save-draft-text"
-                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }}
-                                        onClick={() => this.submitApiCall("save")}
-                                        type="primary">{AppConstants.save}
-                                    </Button>
-                                </Tooltip>
-                                <Tooltip
-                                    style={{ height: '100%' }}
-                                    onMouseEnter={() =>
-                                        this.setState({
-                                            tooltipVisibleDelete: isPublished,
-                                        })
-                                    }
-                                    onMouseLeave={() =>
-                                        this.setState({ tooltipVisibleDelete: false })
-                                    }
-                                    visible={this.state.tooltipVisibleDelete}
-                                    title={AppConstants.statusPublishHover}
+                                    {AppConstants.save}
+                                </Button>
+                            </Tooltip>
+                            <Tooltip
+                                style={{ height: '100%' }}
+                                onMouseEnter={() =>
+                                    this.setState({
+                                        tooltipVisibleDelete: isPublished,
+                                    })
+                                }
+                                onMouseLeave={() =>
+                                    this.setState({ tooltipVisibleDelete: false })
+                                }
+                                visible={this.state.tooltipVisibleDelete}
+                                title={AppConstants.statusPublishHover}
+                            >
+                                <Button
+                                    id={AppUniqueId.finalteamgrad_submit_bn}
+                                    disabled={isPublished}
+                                    style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text"
+                                    type="primary"
+                                    onClick={() => this.submitApiCall("submit")}
                                 >
-                                    <Button
-                                        id={AppUniqueId.finalteamgrad_submit_bn}
-                                        disabled={isPublished}
-                                        style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }} className="publish-button save-draft-text"
-                                        type="primary"
-                                        onClick={() => this.submitApiCall("submit")}>
-                                        {AppConstants.submit}
-                                    </Button>
-                                </Tooltip>
-                            </div>}
+                                    {AppConstants.submit}
+                                </Button>
+                            </Tooltip>
+                        </div>}
                     </div>
                 </div>
             </div>
@@ -680,12 +685,11 @@ class CompetitionPartProposedTeamGrading extends Component {
         )
     }
 
-
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu="competition" compSelectedKey={"15"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="15" />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -719,7 +723,7 @@ function mapDispatchToProps(dispatch) {
         changeDivisionTeamAction,
         clearReducerCompPartPlayerGradingAction,
         commentListingAction,
-    }, dispatch)
+    }, dispatch);
 }
 
 function mapStateToProps(state) {
@@ -729,7 +733,7 @@ function mapStateToProps(state) {
         registrationState: state.RegistrationState,
         commonReducerState: state.CommonReducerState,
         partPlayerGradingState: state.CompetitionPartPlayerGradingState,
-    }
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CompetitionPartProposedTeamGrading);

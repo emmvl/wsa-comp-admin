@@ -370,7 +370,6 @@ class RegistrationChangeReview extends Component {
         );
     }
 
-    ////////form content view
     contentView = () => {
         const { regChangeReviewData, deRegistionOption, transferOption } = this.props.registrationChangeState
 
@@ -725,7 +724,7 @@ class RegistrationChangeReview extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}

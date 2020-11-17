@@ -208,7 +208,6 @@ class LiveScoreBulkChange extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         const { selectedOption } = this.props.liveScoreBulkMatchState
         return (
@@ -216,7 +215,7 @@ class LiveScoreBulkChange extends Component {
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <span className="text-heading-large">{AppConstants.whatDoWantDO}</span>
                     <div style={{ marginTop: -24 }}>
-                        <Tooltip placement="top" background="#ff8237">
+                        <Tooltip placement="top">
                             <span>{AppConstants.bulkMatchMsg}</span>
                             {/* {AppConstants.LatitudeMsg} */}
                         </Tooltip>
@@ -1157,7 +1156,6 @@ class LiveScoreBulkChange extends Component {
         );
     };
 
-    /////main render method
     render() {
         return (
             <div className="fluid-width">

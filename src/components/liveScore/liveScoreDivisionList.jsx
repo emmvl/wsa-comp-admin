@@ -239,7 +239,6 @@ class LiveScoreDivisionList extends Component {
         }
     }
 
-    ////////form content view
     contentView = () => {
         const { mainDivisionList, totalCount, currentPage } = this.props.liveScoreDivisionState;
         let divisionList = isArrayNotEmpty(mainDivisionList) ? mainDivisionList : [];
@@ -400,7 +399,7 @@ class LiveScoreDivisionList extends Component {
         confirm({
             title: 'Are you sure you want to delete this division?',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             onOk() {
                 this_.deleteTeam(divisionId)
@@ -413,7 +412,7 @@ class LiveScoreDivisionList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}
@@ -431,18 +430,17 @@ class LiveScoreDivisionList extends Component {
     }
 }
 
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getMainDivisionListAction,
-        liveScoreDeleteDivision
-    }, dispatch)
+        liveScoreDeleteDivision,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        liveScoreDivisionState: state.LiveScoreDivisionState
-    }
+        liveScoreDivisionState: state.LiveScoreDivisionState,
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreDivisionList);

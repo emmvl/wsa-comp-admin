@@ -68,12 +68,8 @@ class UmpirePaymentSetting extends Component {
         return (
             <div className="header-view">
                 <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center"
-                    }}
+                    className="form-header-view d-flex align-items-center"
+                    style={{ backgroundColor: "transparent" }}
                 >
                     <Breadcrumb separator=" > ">
                         <Breadcrumb.Item className="breadcrumb-add">
@@ -100,12 +96,8 @@ class UmpirePaymentSetting extends Component {
                     <div className="row">
                         <div className="col-sm">
                             <div
-                                style={{
-                                    width: "fit-content",
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}
+                                className="d-flex align-items-center"
+                                style={{ width: "fit-content" }}
                             >
                                 <span className="year-select-heading">
                                     {AppConstants.competition}:
@@ -167,7 +159,7 @@ class UmpirePaymentSetting extends Component {
             <div className='pt-4' style={{ padding: '3%', minWidth: 240 }}>
                 <span className='text-heading-large pt-2'>{AppConstants.whoPayUmpire}</span>
 
-                <div style={{ display: "flex", flexDirection: "column" }}>
+                <div className="d-flex flex-column">
                     <Checkbox
                         className="single-checkbox"
                         onChange={(e) => this.props.umpirePaymentSettingUpdate({
@@ -176,14 +168,14 @@ class UmpirePaymentSetting extends Component {
                         })}
                         checked={paidByCompOrg}
                     >
-                        {'Paid by Competition Organiser'}
+                        Paid by Competition Organiser
                     </Checkbox>
-                    {paidByCompOrg &&
+                    {paidByCompOrg && (
                         <div className="inside-container-view">
                             {this.paidByCompOrgView()}
                             {this.feesView()}
                         </div>
-                    }
+                    )}
 
                     <Checkbox
                         className="single-checkbox ml-0"
@@ -210,7 +202,7 @@ class UmpirePaymentSetting extends Component {
     paidByCompOrgView = () => {
         const { paidByCompOrgDivision, selectAllDiv, compOrgDiv } = this.props.umpirePaymentSettingState
         return (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="d-flex flex-column">
                 <Checkbox
                     onChange={(e) => this.props.umpirePaymentSettingUpdate({
                         value: e.target.checked,
@@ -222,7 +214,7 @@ class UmpirePaymentSetting extends Component {
                 </Checkbox>
                 {selectAllDiv === false && (
                     <Select
-                        mode='multiple'
+                        mode="multiple"
                         placeholder="Select"
                         style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                         onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
@@ -245,7 +237,7 @@ class UmpirePaymentSetting extends Component {
     paidByAffiliateView = () => {
         const { paidByAffiliateDivision, selectAllDiv, affiliateDiv } = this.props.umpirePaymentSettingState
         return (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="d-flex flex-column">
                 <Checkbox
                     onChange={(e) => this.props.umpirePaymentSettingUpdate({
                         value: e.target.checked,
@@ -258,7 +250,7 @@ class UmpirePaymentSetting extends Component {
                 {
                     selectAllDiv === false &&
                     <Select
-                        mode='multiple'
+                        mode="multiple"
                         placeholder="Select"
                         style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                         onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
@@ -283,7 +275,7 @@ class UmpirePaymentSetting extends Component {
         return (
             <div>
                 <span className='text-heading-large pt-3'>{AppConstants.fees}</span>
-                <div style={{ display: "flex", flexDirection: "column" }}>
+                <div className="d-flex flex-column">
                     <Checkbox
                         className="single-checkbox"
                         onChange={(e) => this.props.umpirePaymentSettingUpdate({
@@ -408,7 +400,7 @@ class UmpirePaymentSetting extends Component {
         return (
             <div>
                 <span className='text-heading-large pt-3'>{AppConstants.fees}</span>
-                <div style={{ display: "flex", flexDirection: "column" }}>
+                <div className="d-flex flex-column">
                     <Checkbox
                         className="single-checkbox"
                         onChange={(e) => this.props.umpirePaymentSettingUpdate({
@@ -549,7 +541,7 @@ class UmpirePaymentSetting extends Component {
                     </Checkbox>
                     {allDivisionBadge == false && (
                         <Select
-                            mode='multiple'
+                            mode="multiple"
                             placeholder="Select"
                             style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                             onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
@@ -599,7 +591,7 @@ class UmpirePaymentSetting extends Component {
                     </Checkbox>
                     {allDivisionBadgeAffiliate == false && (
                         <Select
-                            mode='multiple'
+                            mode="multiple"
                             placeholder="Select"
                             style={{ width: '100%', paddingRight: 1, minWidth: 182, marginTop: 20 }}
                             onChange={(divisionId) => this.props.umpirePaymentSettingUpdate({
@@ -871,7 +863,7 @@ class UmpirePaymentSetting extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="9" />
                 <Layout>

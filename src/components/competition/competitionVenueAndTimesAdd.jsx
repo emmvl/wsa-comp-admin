@@ -100,8 +100,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                     // Sorter: true,
                     filterDropdown: true,
                     filterIcon: () => (
-                        <div style={{ marginTop: 10 }}>
-                            <Tooltip placement="bottom" background="#ff8237">
+                        <div className="mt-10">
+                            <Tooltip placement="bottom">
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
                         </div>
@@ -129,8 +129,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                     key: "lng",
                     filterDropdown: true,
                     filterIcon: () => (
-                        <div style={{ marginTop: 10 }}>
-                            <Tooltip placement="bottom" background="#ff8237">
+                        <div className="mt-10">
+                            <Tooltip placement="bottom">
                                 <span>{AppConstants.LatitudeMsg}</span>
                             </Tooltip>
                         </div>
@@ -156,8 +156,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                     width: "22%",
                     filterDropdown: true,
                     filterIcon: () => (
-                        <div style={{ marginTop: 10 }}>
-                            <Tooltip placement="bottom" background="#ff8237">
+                        <div className="mt-10">
+                            <Tooltip placement="bottom">
                                 {AppConstants.overRideSlotMsg}
                             </Tooltip>
                         </div>
@@ -431,7 +431,6 @@ class CompetitionVenueAndTimesAdd extends Component {
         this.props.updateVenuAndTimeDataAction(affiliateData, 'organisations', 'organisations')
     }
 
-    ////////form content view
     contentView = () => {
         const { venuData } = this.props.venueTimeState
         const { stateList } = this.props.commonReducerState
@@ -671,7 +670,7 @@ class CompetitionVenueAndTimesAdd extends Component {
                     </span>
 
                     <div style={{ marginTop: -25 }}>
-                        <Tooltip background="#ff8237">
+                        <Tooltip>
                             {AppConstants.gameDayMsg}
                         </Tooltip>
                     </div>
@@ -783,8 +782,8 @@ class CompetitionVenueAndTimesAdd extends Component {
                         <span className="form-heading">
                             {AppConstants.courts} <span className="required-field" style={{ fontSize: "14px", paddingTop: '5px' }} />
                         </span>
-                        <div style={{ marginTop: -20 }}>
-                            <Tooltip background="#ff8237">
+                        <div className="mt-n20">
+                            <Tooltip>
                                 {AppConstants.courtsMsg}
                             </Tooltip>
                         </div>
@@ -926,7 +925,7 @@ class CompetitionVenueAndTimesAdd extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <Loader visible={this.props.commonReducerState.onLoad || this.props.venueTimeState.onLoad} />
 
                 <DashboardLayout

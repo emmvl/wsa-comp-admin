@@ -146,7 +146,7 @@ class RegistrationPayments extends Component {
         return (
             // <Header className="reg-payment-header-view mt-5">
             //     <div className="row">
-            //         <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+            //         <div className="col-sm d-flex align-content-center">
             //             <Breadcrumb separator=" > ">
             //                 {/* <Breadcrumb.Item className="breadcrumb-product">{AppConstants.registration}</Breadcrumb.Item> */}
             //                 <Breadcrumb.Item className="breadcrumb-add"> {AppConstants.registrationAccountSummary}</Breadcrumb.Item>
@@ -427,7 +427,6 @@ class RegistrationPayments extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         return (
             <div>
@@ -552,7 +551,7 @@ class RegistrationPayments extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.finance} menuName={AppConstants.finance} />
                 <InnerHorizontalMenu menu="finance" finSelectedKey="2" />
                 <Layout className="reg-payment-layout-view">

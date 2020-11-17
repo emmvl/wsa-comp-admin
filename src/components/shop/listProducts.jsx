@@ -1,19 +1,19 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Layout, Button, Breadcrumb, Input, Modal, Pagination } from 'antd';
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from '@ant-design/icons';
 
 import './shop.css';
-import DashboardLayout from "../../pages/dashboardLayout";
-import InnerHorizontalMenu from "../../pages/innerHorizontalMenu";
-import AppConstants from "../../themes/appConstants";
+import DashboardLayout from '../../pages/dashboardLayout';
+import InnerHorizontalMenu from '../../pages/innerHorizontalMenu';
+import AppConstants from '../../themes/appConstants';
 import Loader from '../../customComponents/loader';
-import history from "../../util/history";
-import ShopSingleProductComponent from "../../customComponents/shopSingleProductComponent";
-import { getProductListingAction, deleteProductAction, clearProductReducer } from "../../store/actions/shopAction/productAction"
-import { isArrayNotEmpty } from "../../util/helpers";
+import history from '../../util/history';
+import ShopSingleProductComponent from '../../customComponents/shopSingleProductComponent';
+import { getProductListingAction, deleteProductAction, clearProductReducer } from '../../store/actions/shopAction/productAction'
+import { isArrayNotEmpty } from '../../util/helpers';
 
 const { Footer, Content } = Layout;
 const { confirm } = Modal;
@@ -22,17 +22,17 @@ class ListProducts extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            sorterBy: "productName",
-            order: "",
+            sorterBy: 'productName',
+            order: '',
             offset: 0,
-            searchText: "",
+            searchText: '',
             limit: 8,
             deleteLoading: false,
         }
     }
 
     componentDidMount() {
-        this.props.clearProductReducer("productListingData")
+        this.props.clearProductReducer('productListingData')
         window.scrollTo(0, 0)
         const widthWindow = window.innerWidth;
         let windowLimit = Math.round(widthWindow / 270) * 2
@@ -60,7 +60,7 @@ class ListProducts extends Component {
             title: AppConstants.deleteProduct,
             content: AppConstants.deleteProductDescription,
             okText: 'Confirm',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'Cancel',
             onOk() {
                 if (id) {
@@ -78,7 +78,7 @@ class ListProducts extends Component {
     // on change search text
     onChangeSearchText = (e) => {
         this.setState({ searchText: e.target.value })
-        if (e.target.value === null || e.target.value === "") {
+        if (e.target.value === null || e.target.value === '') {
             let { sorterBy, order, limit } = this.state
             this.setState({ offset: 0 })
             this.props.getProductListingAction(sorterBy, order, 0, e.target.value, limit)
@@ -88,7 +88,7 @@ class ListProducts extends Component {
     // search key
     onKeyEnterSearchText = (e) => {
         var code = e.keyCode || e.which;
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             let { sorterBy, order, searchText, limit } = this.state
             this.setState({ offset: 0 })
             this.props.getProductListingAction(sorterBy, order, 0, searchText, limit)
@@ -97,7 +97,7 @@ class ListProducts extends Component {
 
     // on click of search icon
     onClickSearchIcon = () => {
-        if (this.state.searchText === null || this.state.searchText === "") {
+        if (this.state.searchText === null || this.state.searchText === '') {
         } else {
             let { sorterBy, order, searchText, limit } = this.state
             this.setState({ offset: 0 })
@@ -106,67 +106,63 @@ class ListProducts extends Component {
     }
 
     ///////view for screen heading
-    headerView = () => {
-        return (
-            <div className="comp-player-grades-header-view-design">
-                <div className="row">
-                    <div className="col-sm d-flex align-items-center">
-                        <Breadcrumb separator=" > ">
-                            <Breadcrumb.Item className="breadcrumb-add">
-                                {AppConstants.products}
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
-                    <div className="col-sm d-flex align-items-center justify-content-end mr-5">
-                        <div className="comp-product-search-inp-width">
-                            <Input
-                                className="product-reg-search-input"
-                                onChange={this.onChangeSearchText}
-                                placeholder="Search..."
-                                onKeyPress={this.onKeyEnterSearchText}
-                                prefix={
-                                    <SearchOutlined
-                                        className="search-prefix-icon-style"
-                                        onClick={this.onClickSearchIcon}
-                                    />
-                                }
-                                allowClear
-                            />
-                        </div>
+    headerView = () => (
+        <div className="comp-player-grades-header-view-design">
+            <div className="row">
+                <div className="col-sm d-flex align-items-center">
+                    <Breadcrumb separator=" > ">
+                        <Breadcrumb.Item className="breadcrumb-add">
+                            {AppConstants.products}
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                </div>
+                <div className="col-sm d-flex align-items-center justify-content-end mr-5">
+                    <div className="comp-product-search-inp-width">
+                        <Input
+                            className="product-reg-search-input"
+                            onChange={this.onChangeSearchText}
+                            placeholder="Search..."
+                            onKeyPress={this.onKeyEnterSearchText}
+                            prefix={
+                                <SearchOutlined
+                                    className="search-prefix-icon-style"
+                                    onClick={this.onClickSearchIcon}
+                                />
+                            }
+                            allowClear
+                        />
                     </div>
                 </div>
             </div>
-        );
-    };
+        </div>
+    );
 
     ///dropdown view containing the search view and button
-    dropdownView = () => {
-        return (
-            <div className="comp-player-grades-header-drop-down-view">
-                <div className="fluid-width">
-                    <div className="row">
-                        <div className="col-sm">
-                            <div className="com-year-select-heading-view">
-                            </div>
+    dropdownView = () => (
+        <div className="comp-player-grades-header-drop-down-view">
+            <div className="fluid-width">
+                <div className="row">
+                    <div className="col-sm">
+                        <div className="com-year-select-heading-view">
                         </div>
-                        <div
-                            className="col-sm d-flex align-items-center justify-content-end shop-add-product-btn-div"
-                            onClick={() => this.props.clearProductReducer("productDetailData")}
+                    </div>
+                    <div
+                        className="col-sm d-flex align-items-center justify-content-end shop-add-product-btn-div"
+                        onClick={() => this.props.clearProductReducer('productDetailData')}
+                    >
+                        <NavLink
+                            to={{ pathname: '/addProduct' }}
+                            className="text-decoration-none"
                         >
-                            <NavLink
-                                to={{ pathname: `/addProduct` }}
-                                className="text-decoration-none"
-                            >
-                                <Button className="primary-add-product" type="primary">
-                                    + {AppConstants.addAProduct}
-                                </Button>
-                            </NavLink>
-                        </div>
+                            <Button className="primary-add-product" type="primary">
+                                + {AppConstants.addAProduct}
+                            </Button>
+                        </NavLink>
                     </div>
                 </div>
             </div>
-        );
-    };
+        </div>
+    );
 
     handlePagination = (page) => {
         let offset = page ? (this.state.limit) * (page - 1) : 0;
@@ -180,22 +176,20 @@ class ListProducts extends Component {
         let { productListingData, productListingTotalCount, productListingCurrentPage } = this.props.shopProductState
         return (
             <div className="comp-dash-table-view mt-4">
-                <div className="shop-product-content-div" style={{ display: productListingData.length < 3 ? "flex" : "grid" }}>
-                    {isArrayNotEmpty(productListingData) && productListingData.map((item, index) => {
-                        return (
-                            <div key={"productListingData" + index}>
-                                <ShopSingleProductComponent
-                                    productItem={item}
-                                    deleteOnclick={() => this.showDeleteConfirm(item.id)}
-                                    editOnclick={() => history.push("/addProduct", { id: item.id })}
-                                    viewOnclick={() => history.push("/addProduct", { id: item.id })}
-                                />
-                            </div>
-                        )
-                    })}
+                <div className="shop-product-content-div" style={{ display: productListingData.length < 3 ? 'flex' : 'grid' }}>
+                    {isArrayNotEmpty(productListingData) && productListingData.map((item, index) => (
+                        <div key={`productListingData${index}`}>
+                            <ShopSingleProductComponent
+                                productItem={item}
+                                deleteOnclick={() => this.showDeleteConfirm(item.id)}
+                                editOnclick={() => history.push('/addProduct', { id: item.id })}
+                                viewOnclick={() => history.push('/addProduct', { id: item.id })}
+                            />
+                        </div>
+                    ))}
                 </div>
                 <div className="d-flex justify-content-end">
-                    {isArrayNotEmpty(productListingData) &&
+                    {isArrayNotEmpty(productListingData) && (
                         <Pagination
                             className="antd-pagination"
                             total={productListingTotalCount}
@@ -203,7 +197,7 @@ class ListProducts extends Component {
                             pageSize={this.state.limit}
                             current={productListingCurrentPage}
                         />
-                    }
+                    )}
                 </div>
             </div>
         );

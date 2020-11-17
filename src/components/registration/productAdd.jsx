@@ -126,8 +126,6 @@ class ProductAdd extends Component {
         )
     }
 
-
-    ////////form content view
     contentView = () => {
         const registrationVia = ['Application', 'Website', 'Other'];
         const registrationDetail1 = [
@@ -551,7 +549,7 @@ class ProductAdd extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
                 <Layout>
                     {this.headerView()}

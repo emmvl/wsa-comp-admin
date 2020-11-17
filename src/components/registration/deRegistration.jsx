@@ -292,7 +292,6 @@ class DeRegistration extends Component {
         }
     }
 
-    ////////form content view
     contentView = () => {
         const { saveData, registrationSelection } = this.props.deRegistrationState
         let regData = this.state.regData;
@@ -380,21 +379,17 @@ class DeRegistration extends Component {
                     <Radio.Group
                         className="reg-competition-radio"
                         style={{ overflow: "visible" }}
-                        onChange={(e) =>
-                            this.updateDeregistrationData(
-                                e.target.value,
-                                'regChangeTypeRefId',
-                                'deRegister'
-                            )
-                        }
+                        onChange={(e) => {
+                            this.updateDeregistrationData(e.target.value, 'regChangeTypeRefId', 'deRegister');
+                        }}
                         value={saveData.regChangeTypeRefId}
                     >
                         {(registrationSelection || []).map((item) => (
                             <div key={`regChangeType_${item.id}`}>
                                 <div className="contextualHelp-RowDirection">
                                     <Radio value={item.id}>{item.value}</Radio>
-                                    <div style={{ marginLeft: -20, marginTop: 5 }}>
-                                        <Tooltip placement="bottom" background="#ff8237">
+                                    <div className="mt-5 ml-n20">
+                                        <Tooltip placement="bottom">
                                             <span>{item.helpMsg}</span>
                                         </Tooltip>
                                     </div>
@@ -408,33 +403,30 @@ class DeRegistration extends Component {
         )
     }
 
-    //////footer view containing all the buttons like submit and cancel
-    footerView = () => {
-        return (
-            <div className="footer-view">
-                <div className="row">
-                    <div className="col-sm">
-                        <div className="reg-add-save-button">
-                            <Button type="cancel-button" onClick={() => this.goBack()}>
-                                {AppConstants.cancel}
-                            </Button>
-                        </div>
+    footerView = () => (
+        <div className="footer-view">
+            <div className="row">
+                <div className="col-sm">
+                    <div className="reg-add-save-button">
+                        <Button type="cancel-button" onClick={() => this.goBack()}>
+                            {AppConstants.cancel}
+                        </Button>
                     </div>
-                    <div className="col-sm">
-                        <div className="comp-buttons-view">
-                            <Button className="publish-button" type="primary" htmlType="submit">
-                                {AppConstants.confirm}
-                            </Button>
-                        </div>
+                </div>
+                <div className="col-sm">
+                    <div className="comp-buttons-view">
+                        <Button className="publish-button" type="primary" htmlType="submit">
+                            {AppConstants.confirm}
+                        </Button>
                     </div>
                 </div>
             </div>
-        );
-    };
+        </div>
+    );
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
                 <Layout>
                     <Form
@@ -462,14 +454,14 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         saveDeRegisterDataAction,
         updateDeregistrationData,
-        getTransferCompetitionsAction
+        getTransferCompetitionsAction,
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        deRegistrationState: state.RegistrationChangeState
-    }
+        deRegistrationState: state.RegistrationChangeState,
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DeRegistration);

@@ -120,7 +120,7 @@ const columns = [
                                     state: { tableRecord: record, userId: record.id }
                                 }}
                             >
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                <div className="d-flex flex-column">
                                     <span
                                         style={{ color: '#ff8237', cursor: 'pointer' }}
                                         className="desc-text-style side-bar-profile-data"
@@ -370,7 +370,7 @@ class LiveScorerList extends Component {
         let { sortBy, sortOrder } = this.state
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             const body = {
                 paging: {
                     limit: 10,
@@ -404,7 +404,6 @@ class LiveScorerList extends Component {
         }
     }
 
-    ////////form content view
     contentView = () => {
         let { liveScoreScorerState } = this.props;
         const { scorerListResult, scorerListCurrentPage, scorerListTotalCount } = this.props.liveScoreScorerState
@@ -437,7 +436,7 @@ class LiveScorerList extends Component {
     /////// render function
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}

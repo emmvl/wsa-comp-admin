@@ -45,7 +45,7 @@ class RegistrationInvoice extends Component {
         return (
             <Header className="comp-player-grades-header-view container mb-n3">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                     </div>
                 </div>
             </Header>
@@ -260,7 +260,6 @@ class RegistrationInvoice extends Component {
         )
     }
 
-    ////////form content view
     contentView = (result) => {
         let data = result.length > 0 ? result[0].fees : []
         return (
@@ -547,7 +546,7 @@ class RegistrationInvoice extends Component {
     render() {
         let result = this.props.stripeState.getInvoicedata
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={""}
                     menuName={AppConstants.home}

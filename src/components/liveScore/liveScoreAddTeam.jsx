@@ -195,7 +195,6 @@ class LiveScoreAddTeam extends Component {
         })
     }
 
-    ////////form content view
     contentView = () => {
         const { teamManagerData, affilateList, divisionList, managerType, logoUrl } = this.props.liveScoreTeamState
         // let name = teamManagerData.name
@@ -338,8 +337,8 @@ class LiveScoreAddTeam extends Component {
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value="new">
                                     {AppConstants.new}
                                 </Radio>
-                                <div style={{ marginLeft: -10, marginTop: -10, width: 50 }}>
-                                    <Tooltip background="#ff8237">
+                                <div className="mt-n10 ml-n10 width-50">
+                                    <Tooltip>
                                         <span>{AppConstants.teamNewMsg}</span>
                                     </Tooltip>
                                 </div>
@@ -349,8 +348,8 @@ class LiveScoreAddTeam extends Component {
                                 <Radio style={{ marginRight: 0, paddingRight: 0 }} value="existing">
                                     {AppConstants.existing}
                                 </Radio>
-                                <div style={{ marginLeft: -10, marginTop: -10 }}>
-                                    <Tooltip background="#ff8237">
+                                <div className="mt-n10 mt-n10">
+                                    <Tooltip>
                                         <span>{AppConstants.teamExistingMsg}</span>
                                     </Tooltip>
                                 </div>
@@ -390,14 +389,14 @@ class LiveScoreAddTeam extends Component {
                             }}
                             onBlur={() => this.props.liveScoreManagerListAction(5, 1, this.state.localCompetitionID)}
                             optionFilterProp="children"
-                        // onSearch={(value) => {
-                        //     this.setState({ showOption: true })
-                        //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
-                        //         return data.firstName.indexOf(value) > -1
-                        //     })
-                        //     this.props.liveScoreManagerFilter(filteredData)
-                        // }}
-                        // value={selectedManager}
+                            // onSearch={(value) => {
+                            //     this.setState({ showOption: true })
+                            //     const filteredData = this.props.liveScoreMangerState.MainManagerListResult.filter(data => {
+                            //         return data.firstName.indexOf(value) > -1
+                            //     })
+                            //     this.props.liveScoreManagerFilter(filteredData)
+                            // }}
+                            // value={selectedManager}
                         >
                             {/* {this.state.showOption ?  */}
                             {managerListResult.map((item) => (
@@ -508,7 +507,7 @@ class LiveScoreAddTeam extends Component {
                                 onChange={(event) => {
                                     this.props.liveScoreAddTeamform({ key: 'email', data: event.target.value })
                                 }}
-                            // value={teamManagerData.email}
+                                // value={teamManagerData.email}
                             />
                         </Form.Item>
 
@@ -528,7 +527,7 @@ class LiveScoreAddTeam extends Component {
                                 placeholder={AppConstants.enterContactNo}
                                 maxLength={10}
                                 onChange={(mobileNumber) => this.onChangeNumber(mobileNumber.target.value)}
-                            // value={teamManagerData.mobileNumber}
+                                // value={teamManagerData.mobileNumber}
                             />
                         </Form.Item>
 
@@ -555,7 +554,7 @@ class LiveScoreAddTeam extends Component {
                         <div className="col-sm">
                             <div className="comp-buttons-view">
                                 <Button className="publish-button save-draft-text"
-                                    type="primary" htmlType="submit" disabled={isSubmitting}>
+                                        type="primary" htmlType="submit" disabled={isSubmitting}>
                                     {AppConstants.save}
                                 </Button>
                             </div>

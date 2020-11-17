@@ -489,7 +489,6 @@ class UmpirePoolAllocation extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         return (
             <div className="comp-dash-table-view mt-2">
@@ -537,7 +536,7 @@ class UmpirePoolAllocation extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="5" />
                 <Layout>

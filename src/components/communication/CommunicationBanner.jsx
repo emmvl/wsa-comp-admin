@@ -238,7 +238,7 @@ class CommunicationBanner extends Component {
         const { numStateBanner, numCompBanner } = this.state;
 
         return (
-            <div className="fluid-width" style={{ backgroundColor: '#f7fafc' }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.Communication} menuName={AppConstants.Communication} />
 
                 <InnerHorizontalMenu menu="communication" userSelectedKey="1" />

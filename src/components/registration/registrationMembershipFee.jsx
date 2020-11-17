@@ -80,7 +80,7 @@ const columns = [
         filterDropdown: true,
         filterIcon: () => {
             return (
-                <Tooltip placement="top" background="#ff8237">
+                <Tooltip placement="top">
                     <span>{AppConstants.membershipCasualFeeMsg}</span>
                 </Tooltip>
             );
@@ -118,7 +118,7 @@ const columns = [
         filterDropdown: true,
         filterIcon: () => {
             return (
-                <Tooltip placement="top" background="#ff8237">
+                <Tooltip placement="top">
                     <span>{AppConstants.membershipSeasonalFeeMsg}</span>
                 </Tooltip>
             );
@@ -397,7 +397,7 @@ class RegistrationMembershipFee extends Component {
             title: 'Are you sure delete this product?',
             // content: 'Some descriptions',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             onOk() {
                 if (membershipProductId.length > 0) {
@@ -707,7 +707,6 @@ class RegistrationMembershipFee extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         let appState = this.props.appState
         let allData = this.props.registrationState.getMembershipProductDetails
@@ -739,7 +738,7 @@ class RegistrationMembershipFee extends Component {
                         {AppConstants.validity}
                     </span>
                     <div style={{ marginTop: 15 }}>
-                        <Tooltip placement="top" background="#ff8237">
+                        <Tooltip placement="top">
                             <span>{AppConstants.validityMsg}</span>
                         </Tooltip>
                     </div>
@@ -801,8 +800,8 @@ class RegistrationMembershipFee extends Component {
                                     <div className="row" key={'membershipProductFeesType_' + item.id}>
                                         <Radio key={'membershipFee_' + item.id} value={item.id}> {item.description}</Radio>
 
-                                        <div style={{ marginLeft: -18, }}>
-                                            <Tooltip background="#ff8237">
+                                        <div style={{ marginLeft: -18 }}>
+                                            <Tooltip>
                                                 <span>{item.helpMsg}</span>
                                             </Tooltip>
                                         </div>
@@ -1282,7 +1281,7 @@ class RegistrationMembershipFee extends Component {
             <div className="discount-view pt-5">
                 <div className="row">
                     <span className="form-heading">{AppConstants.discounts}</span>
-                    <Tooltip background="#ff8237">
+                    <Tooltip>
                         <span>{AppConstants.membershipDiscountMsg}</span>
                     </Tooltip>
                 </div>
@@ -1355,7 +1354,7 @@ class RegistrationMembershipFee extends Component {
                     </div>
                 ))}
                 <span className="input-heading-add-another"
-                    onClick={() => !this.state.membershipIsUsed ? this.addRemoveDiscount("add", -1) : null}>
+                      onClick={() => !this.state.membershipIsUsed ? this.addRemoveDiscount("add", -1) : null}>
                     + {AppConstants.addDiscount}
                 </span>
             </div>
@@ -1369,42 +1368,42 @@ class RegistrationMembershipFee extends Component {
         return (
             <div className="fluid-width">
                 {/* {!this.state.membershipIsUsed && ( */}
-                    <div className="footer-view">
-                        <div className="row">
-                            <div className="col-sm">
-                                <div className="reg-add-save-button">
-                                    {membershipProductId.length > 0 && (
-                                        <Button type="cancel-button" onClick={() => this.showDeleteConfirm()}>
-                                            {AppConstants.delete}
-                                        </Button>
-                                    )}
-                                </div>
+                <div className="footer-view">
+                    <div className="row">
+                        <div className="col-sm">
+                            <div className="reg-add-save-button">
+                                {membershipProductId.length > 0 && (
+                                    <Button type="cancel-button" onClick={() => this.showDeleteConfirm()}>
+                                        {AppConstants.delete}
+                                    </Button>
+                                )}
                             </div>
-                            <div className="col-sm">
-                                <div className="comp-buttons-view">
-                                    <Button
-                                        className="save-draft-text"
-                                        type="save-draft-text"
-                                        htmlType="submit"
-                                        onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}
-                                    >
-                                        {AppConstants.saveAsDraft}
-                                    </Button>
-                                    <Button
-                                        className="publish-button"
-                                        type="primary"
-                                        htmlType="submit"
-                                        onClick={() => this.setState({
-                                            statusRefId: tabKey === "3" ? 2 : 1,
-                                            buttonPressed: tabKey === "3" ? "publish" : "next"
-                                        })}
-                                    >
-                                        {tabKey === "3" ? AppConstants.publish : AppConstants.next}
-                                    </Button>
-                                </div>
+                        </div>
+                        <div className="col-sm">
+                            <div className="comp-buttons-view">
+                                <Button
+                                    className="save-draft-text"
+                                    type="save-draft-text"
+                                    htmlType="submit"
+                                    onClick={() => this.setState({ statusRefId: 1, buttonPressed: "save" })}
+                                >
+                                    {AppConstants.saveAsDraft}
+                                </Button>
+                                <Button
+                                    className="publish-button"
+                                    type="primary"
+                                    htmlType="submit"
+                                    onClick={() => this.setState({
+                                        statusRefId: tabKey === "3" ? 2 : 1,
+                                        buttonPressed: tabKey === "3" ? "publish" : "next"
+                                    })}
+                                >
+                                    {tabKey === "3" ? AppConstants.publish : AppConstants.next}
+                                </Button>
                             </div>
                         </div>
                     </div>
+                </div>
                 {/* )} */}
             </div>
         );
@@ -1413,7 +1412,7 @@ class RegistrationMembershipFee extends Component {
     tabCallBack = key => {
         let productId = this.props.registrationState.membershipProductId
         // if (productId !== null && productId.length > 0) {
-            this.setState({ membershipTabKey: key });
+        this.setState({ membershipTabKey: key });
         // }
         this.setFieldDecoratorValues()
     };
@@ -1455,7 +1454,7 @@ class RegistrationMembershipFee extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.registration}
                     menuName={AppConstants.registration}

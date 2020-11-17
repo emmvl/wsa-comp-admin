@@ -25,7 +25,7 @@ class UserAffiliateApproveRejectForm extends Component {
         return (
             <Header className="user-affiliate-header-view">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.affiliateApproveReject}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -35,7 +35,6 @@ class UserAffiliateApproveRejectForm extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         return (
             <div className="user-affilite-approve-reject-form-view mt-0">

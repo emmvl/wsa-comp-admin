@@ -159,7 +159,6 @@ class CompetitionException extends Component {
         );
     };
 
-    ////////form content view
     contentView = () => {
         return (
             <div className="content-view pt-4">

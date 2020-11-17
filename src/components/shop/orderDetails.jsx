@@ -66,7 +66,6 @@ class OrderDetails extends Component {
         );
     };
 
-    ////////form content view
     contentView = () => {
         let { orderDetails } = this.props.shopOrderStatusState
         return (

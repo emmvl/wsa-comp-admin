@@ -396,7 +396,7 @@ class UmpireDivisions extends Component {
 
     render = () => {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey="4" />
                 {/* <Loader visible={this.props.liveScoreSetting.loader} /> */}

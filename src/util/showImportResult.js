@@ -1,7 +1,7 @@
-import React from "react";
-import { Modal, Table } from "antd";
+import React from 'react';
+import { Modal, Table } from 'antd';
 
-import AppConstants from "themes/appConstants";
+import AppConstants from 'themes/appConstants';
 
 const { success } = Modal;
 
@@ -9,11 +9,11 @@ const errLine = (key, error) => (
     <div key={key}>
         <div
             style={{
-                minWidth: "max-content",
-                color: "red",
+                minWidth: 'max-content',
+                color: 'red',
             }}
         >
-            {key}:
+            {`${key}: `}
         </div>
         <div>{error.message.map((msg, index) => (<p key={index * index}>{msg}</p>))}</div>
     </div>
@@ -23,11 +23,11 @@ const showContent = (errors) => {
     const keys = Object.keys(errors);
 
     return (
-        <div style={{ maxHeight: "200px", overflow: "auto" }}>
+        <div style={{ maxHeight: '200px', overflow: 'auto' }}>
             {keys.length === 0 ? (
                 <h3>No issue is occurred.</h3>
             ) : (
-                keys.map(key => errLine(key, errors[key]))
+                keys.map((key) => errLine(key, errors[key]))
             )}
         </div>
     );
@@ -42,12 +42,12 @@ export const receiptImportResult = (result) => {
         title: resMsg,
         // content: showContent(resErr),
         type: Object.keys(resErr).length === 0
-            ? "success"
-            : (resData.length === 0 ? "error" : "warning"),
-        okText: "Ok",
-        okType: "danger",
-        okButtonProps: { className: "ant-btn primary-add-comp-form ant-btn-primary" },
-        cancelButtonProps: { className: "hide" },
+            ? 'success'
+            : (resData.length === 0 ? 'error' : 'warning'),
+        okText: 'Ok',
+        okType: 'primary',
+        okButtonProps: { className: 'ant-btn primary-add-comp-form ant-btn-primary' },
+        cancelButtonProps: { className: 'hide' },
         onOk() {
         },
     });
@@ -56,17 +56,17 @@ export const receiptImportResult = (result) => {
 export const showInvalidData = (cols, importResult) => {
     const columns = [
         {
-            title: "Line #",
-            dataIndex: "index",
-            key: "index",
+            title: 'Line #',
+            dataIndex: 'index',
+            key: 'index',
         },
         ...cols,
         {
-            title: "Error Message",
-            dataIndex: "message",
-            key: "message",
-            className: "error-message-column",
-            align: "center",
+            title: 'Error Message',
+            dataIndex: 'message',
+            key: 'message',
+            className: 'error-message-column',
+            align: 'center',
             render: (mes) => (
                 <>
                     {mes.map((m, index) => (
@@ -74,7 +74,7 @@ export const showInvalidData = (cols, importResult) => {
                             key={`message_${index}`}
                             style={{
                                 marginBottom: 0,
-                                color: "red",
+                                color: 'red',
                             }}
                         >
                             {m}
@@ -106,8 +106,8 @@ export const showInvalidData = (cols, importResult) => {
                     <Table
                         className="home-dashboard-table"
                         columns={columns}
-                        dataSource={Object.keys(errorMes).map(key => {
-                            const rowNum = key.split(" ")[1];
+                        dataSource={Object.keys(errorMes).map((key) => {
+                            const rowNum = key.split(' ')[1];
                             return {
                                 ...importRes[rowNum - 2],
                                 index: rowNum,
@@ -120,4 +120,4 @@ export const showInvalidData = (cols, importResult) => {
             </div>
         </div>
     );
-}
+};

@@ -223,11 +223,11 @@ class RegistrationFormList extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-items-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.registrationForm}</Breadcrumb.Item>
                         </Breadcrumb>
-                        <Tooltip background="#ff8237">
+                        <Tooltip>
                             <span>{AppConstants.regFormDashBoardMsg}</span>
                         </Tooltip>
                     </div>
@@ -272,17 +272,14 @@ class RegistrationFormList extends Component {
         )
     }
 
-
-
-
-    ////////form content view
     contentView = () => {
         const { dashboardState } = this.props;
         let total = dashboardState.regDashboardListTotalCount;
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table"
+                    <Table
+                        className="home-dashboard-table"
                         columns={columns}
                         dataSource={dashboardState.regDashboardListData}
                         pagination={false}
@@ -301,13 +298,11 @@ class RegistrationFormList extends Component {
         )
     }
 
-
-    //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
             <div className="d-flex flex-row-reverse">
-                <NavLink to={`/productAddRegistration`} className="text-decoration-none">
-                    <Button className='primary-add-product' type='primary'>+ {AppConstants.addAFee}</Button>
+                <NavLink to="/productAddRegistration" className="text-decoration-none">
+                    <Button className="primary-add-product" type="primary">+ {AppConstants.addAFee}</Button>
                 </NavLink>
             </div>
         )
@@ -315,7 +310,7 @@ class RegistrationFormList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
                 <InnerHorizontalMenu menu="registration" regSelectedKey="3" />
                 <Layout>
@@ -330,18 +325,18 @@ class RegistrationFormList extends Component {
     }
 }
 
-
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
-        regDashboardListAction
-    }, dispatch)
+        regDashboardListAction,
+    }, dispatch);
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
-        dashboardState: state.RegistrationDashboardState
-    }
+        dashboardState: state.RegistrationDashboardState,
+    };
 }
-export default connect(mapStatetoProps, mapDispatchToProps)(RegistrationFormList);
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationFormList);
