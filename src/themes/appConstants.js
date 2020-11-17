@@ -1543,7 +1543,7 @@ const AppConstants = {
     showFilter: 'Show Filter',
     hide: 'Hide',
 
-    heroImageForCompetition: 'Hero Image for Competition',
+    heroImageForCompetition: 'Hero Image for Registration Form',
     heroImageSizeText: 'Approximate Dimension: Width: 1200px  Height: 400px',
     poolSettingsWhoPlaysWho: 'Pool Settings - Who Plays Who',
     mailBodyText: 'Hi,\n \nPlease use the following discount Code when you register in order to have your fee waived.',
@@ -1567,8 +1567,8 @@ const AppConstants = {
     paymentMethods: 'Payment Methods',
     singleGamePerTeamMember: 'Single Game Fee per Team Member(inc GST)',
     setMembershipProducts: 'Set Membership Product(s)',
-    chargedForFullSeason: 'Charged at Fees at Registration',
-    chargedPerMatch: 'Charged at Match (Competition Fees only. Membership and Nomination Fees are charged at Registration)',
+    chargedForFullSeason: 'Charge All Fees at Registration',
+    chargedPerMatch: 'Charge at Match (Competition Fees only. Membership and Nomination Fees are charged at Registration)',
     feesPaidAtEachMatchByUser: "Fees paid at each match by user who registered team",
     feesPaidAtEachMatchByPlayer: "Fees Paid at each Match by each Player",
     membershipPaymentOptions: 'MembershipPaymentOption',
@@ -1599,6 +1599,8 @@ const AppConstants = {
     teamGrading: 'Team Grading',
     usernameEmail:"Username/Email",
     proceedText: "Proceed",
+    categories: "Categories",
+    comunityWideMsg:"Community Wide Messaging",
 };
 
 export default AppConstants;

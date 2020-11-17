@@ -165,11 +165,11 @@ class CompetitionPlayerGrades extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex justify-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGrading}</Breadcrumb.Item>
                         </Breadcrumb>
-                        <Tooltip placement="top" background="#ff8237">
+                        <Tooltip placement="top">
                             <span>{AppConstants.playerGradingMsg}</span>
                         </Tooltip>
                     </div>
@@ -193,51 +193,51 @@ class CompetitionPlayerGrades extends Component {
                                 </div>
                             </div>
                             {this.state.divisionId != null &&
-                                <div className="col-sm">
-                                    <div className="comp-dashboard-botton-view-mobile">
-                                        <NavLink to={{
-                                            pathname: `/competitionPlayerImport`,
-                                            state: { divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId, screenNavigationKey: 'PlayerGrading' }
-                                        }}>
-                                            <Button id={AppUniqueId.PlayerGrading_ImportBtn} disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
-                                                <div className="row">
-                                                    <div className="col-sm">
-                                                        <img
-                                                            src={AppImages.import}
-                                                            alt=""
-                                                            className="export-image"
-                                                        />
-                                                        {AppConstants.playerImport}
-                                                    </div>
+                            <div className="col-sm">
+                                <div className="comp-dashboard-botton-view-mobile">
+                                    <NavLink to={{
+                                        pathname: `/competitionPlayerImport`,
+                                        state: { divisionId: this.state.divisionId, competitionId: this.state.firstTimeCompId, screenNavigationKey: 'PlayerGrading' }
+                                    }}>
+                                        <Button id={AppUniqueId.PlayerGrading_ImportBtn} disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
+                                            <div className="row">
+                                                <div className="col-sm">
+                                                    <img
+                                                        src={AppImages.import}
+                                                        alt=""
+                                                        className="export-image"
+                                                    />
+                                                    {AppConstants.playerImport}
                                                 </div>
-                                            </Button>
-                                        </NavLink>
-                                    </div>
+                                            </div>
+                                        </Button>
+                                    </NavLink>
                                 </div>
+                            </div>
                             }
                             {this.state.divisionId != null &&
-                                <div className="col-sm">
-                                    <div className="comp-dashboard-botton-view-mobile">
-                                        <NavLink to={{
-                                            pathname: `/competitionTeamsImport`,
-                                            state: { competitionId: this.state.firstTimeCompId, screenNavigationKey: 'PlayerGrading' }
-                                        }}>
-                                            <Button disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
-                                                <div className="row">
-                                                    <div className="col-sm">
-                                                        <img
-                                                            id={AppUniqueId.PlayerGrading_ImportTeamBtn}
-                                                            src={AppImages.import}
-                                                            alt=""
-                                                            className="export-image"
-                                                        />
-                                                        {AppConstants.importTeams}
-                                                    </div>
+                            <div className="col-sm">
+                                <div className="comp-dashboard-botton-view-mobile">
+                                    <NavLink to={{
+                                        pathname: `/competitionTeamsImport`,
+                                        state: { competitionId: this.state.firstTimeCompId, screenNavigationKey: 'PlayerGrading' }
+                                    }}>
+                                        <Button disabled={this.state.competitionStatus == 1} className="primary-add-comp-form" type="primary">
+                                            <div className="row">
+                                                <div className="col-sm">
+                                                    <img
+                                                        id={AppUniqueId.PlayerGrading_ImportTeamBtn}
+                                                        src={AppImages.import}
+                                                        alt=""
+                                                        className="export-image"
+                                                    />
+                                                    {AppConstants.importTeams}
                                                 </div>
-                                            </Button>
-                                        </NavLink>
-                                    </div>
+                                            </div>
+                                        </Button>
+                                    </NavLink>
                                 </div>
+                            </div>
                             }
                         </div>
                     </div>
@@ -513,7 +513,7 @@ class CompetitionPlayerGrades extends Component {
                                 <span className="input-heading-add-another pt-0">{AppConstants.playerGradingToggle}</span>
                             </NavLink>
                             <div style={{ marginTop: -5 }}>
-                                <Tooltip placement="top" background="#ff8237">
+                                <Tooltip placement="top">
                                     <span>{AppConstants.playerGradingToggleMsg}</span>
                                 </Tooltip>
                             </div>
@@ -677,11 +677,11 @@ class CompetitionPlayerGrades extends Component {
                                                                     }}
                                                                     >
                                                                         <span style={{ cursor: "pointer" }}
-                                                                            className="player-grading-player-name-text">{playerItem.playerName}</span>
+                                                                              className="player-grading-player-name-text">{playerItem.playerName}</span>
                                                                     </NavLink>
                                                                     :
                                                                     <span style={{ cursor: "pointer" }}
-                                                                        className="player-grading-player-name-text">{playerItem.playerName}</span>
+                                                                          className="player-grading-player-name-text">{playerItem.playerName}</span>
                                                                 }
                                                             </div>
                                                             <div
@@ -852,11 +852,11 @@ class CompetitionPlayerGrades extends Component {
                                         </span>
                                     </div>
                                     {this.state.divisionId != null &&
-                                        <div className="col-sm d-flex justify-content-end">
-                                            <Button id={AppUniqueId.PlayerGrading_CreateTeam} disabled={disableStatus} className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
-                                                + {AppConstants.createTeam}
-                                            </Button>
-                                        </div>
+                                    <div className="col-sm d-flex justify-content-end">
+                                        <Button id={AppUniqueId.PlayerGrading_CreateTeam} disabled={disableStatus} className="primary-add-comp-form" type="primary" onClick={this.addNewTeam}  >
+                                            + {AppConstants.createTeam}
+                                        </Button>
+                                    </div>
                                     }
                                 </div>
                             </div>
@@ -889,11 +889,11 @@ class CompetitionPlayerGrades extends Component {
                                                         }}
                                                         >
                                                             <span style={{ cursor: "pointer" }}
-                                                                className="player-grading-player-name-text">{playerItem.playerName}</span>
+                                                                  className="player-grading-player-name-text">{playerItem.playerName}</span>
                                                         </NavLink>
                                                         :
                                                         <span style={{ cursor: "pointer" }}
-                                                            className="player-grading-player-name-text">{playerItem.playerName}</span>
+                                                              className="player-grading-player-name-text">{playerItem.playerName}</span>
 
                                                     }
                                                 </div>
@@ -912,14 +912,14 @@ class CompetitionPlayerGrades extends Component {
                                                     </div> */}
                                                     <div className="d-flex">
                                                         {playerItem.position1 &&
-                                                            <Tag className="comp-player-table-tag" style={{ background: playerItem.position1Color, color: "#ffffff" }} key={playerItem.position1}>
-                                                                {playerItem.position1}
-                                                            </Tag>
+                                                        <Tag className="comp-player-table-tag" style={{ background: playerItem.position1Color, color: "#ffffff" }} key={playerItem.position1}>
+                                                            {playerItem.position1}
+                                                        </Tag>
                                                         }
                                                         {playerItem.position2 &&
-                                                            <Tag className="comp-player-table-tag" style={{ background: playerItem.position2Color, color: "#ffffff" }} key={playerItem.position2}>
-                                                                {playerItem.position2}
-                                                            </Tag>
+                                                        <Tag className="comp-player-table-tag" style={{ background: playerItem.position2Color, color: "#ffffff" }} key={playerItem.position2}>
+                                                            {playerItem.position2}
+                                                        </Tag>
                                                         }
                                                         <div className="col-sm d-flex">
                                                             {playerItem.playerHistory.map((item, index) => {
@@ -1020,9 +1020,6 @@ class CompetitionPlayerGrades extends Component {
         )
     }
 
-
-
-    ////////form content view
     contentView = () => {
         return (
             <div className="comp-dash-table-view mt-2">
@@ -1037,9 +1034,6 @@ class CompetitionPlayerGrades extends Component {
         )
     }
 
-
-
-    //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
             <div className="fluid-width paddingBottom56px">
@@ -1065,7 +1059,7 @@ class CompetitionPlayerGrades extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu="competition" compSelectedKey="4" />
                 <Layout>

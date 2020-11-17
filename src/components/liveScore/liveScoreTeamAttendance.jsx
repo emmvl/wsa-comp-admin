@@ -392,7 +392,7 @@ class LiveScoreTeamAttendance extends Component {
         let { sortBy, sortOrder } = this.state
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             const body = {
                 paging: {
                     limit: 10,
@@ -610,7 +610,6 @@ class LiveScoreTeamAttendance extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         const { teamAttendanceResult, teamAttendancePage, teamAttendanceTotalCount } = this.props.liveScoreTeamAttendanceState
         let dataSource = isArrayNotEmpty(teamAttendanceResult) ? teamAttendanceResult : []
@@ -648,7 +647,7 @@ class LiveScoreTeamAttendance extends Component {
     /////// render function
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}

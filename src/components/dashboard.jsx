@@ -7,7 +7,7 @@ class Dashboard extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.dashboard} menuName={AppConstants.home} />
             </div>
         )

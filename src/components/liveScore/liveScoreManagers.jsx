@@ -233,7 +233,6 @@ class LiveScoreManagerList extends Component {
         this.props.liveScoreManagerListAction(3, 1, this.state.competitionId, this.state.searchText, offset, this.state.sortBy, this.state.sortOrder, 'managerList')
     }
 
-    ////////form content view
     contentView = () => {
         const { managerListResult, currentPage, totalCount } = this.props.liveScoreMangerState;
         return (
@@ -418,7 +417,7 @@ class LiveScoreManagerList extends Component {
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             // this.props.getTeamsWithPagination(this.state.conpetitionId, 0, 10, this.state.searchText)
             this.props.liveScoreManagerListAction(3, 1, id, this.state.searchText, 0, this.state.sortBy, this.state.sortOrder, 'managerList')
         }
@@ -437,7 +436,7 @@ class LiveScoreManagerList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}

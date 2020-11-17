@@ -85,7 +85,7 @@ const columns = [
     //     key: 'comments',
     //     width: 110,
     //     render: (comments, record) =>
-    //         <div style={{ display: "flex", justifyContent: "center", cursor: "pointer" }} onClick={() => this_Obj.onClickComment(record)}>
+    //         <div className="d-flex justify-content-center" style={{ cursor: "pointer" }} onClick={() => this_Obj.onClickComment(record)}>
     //             <img src={comments !== null && comments.length > 0 ? AppImages.commentFilled : AppImages.commentEmpty} alt="" height="25" width="25" />
     //         </div>
     // },
@@ -191,7 +191,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGradingToggle}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -281,13 +281,13 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                             </div>
                         </div>
                         <div className="col-sm pb-3">
-                            <div style={{
-                                width: "fit-content",
-                                display: "flex",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                marginRight: 50
-                            }}>
+                            <div
+                                className="d-flex align-items-center"
+                                style={{
+                                    width: "fit-content",
+                                    marginRight: 50,
+                                }}
+                            >
                                 <span className="year-select-heading">{AppConstants.competition}:</span>
                                 <Select
                                     name="competition"
@@ -304,7 +304,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                                 </Select>
                             </div>
                         </div>
-                        <div className="col-sm pb-3" style={{ display: "flex", justifyContent: "flex-end", alignItems: 'center ' }}>
+                        <div className="col-sm pb-3 d-flex align-items-center justify-content-end">
                             <NavLink to="/competitionPartPlayerGrades">
                                 <span className="input-heading-add-another pt-0">{AppConstants.playerGradingToggle}</span>
                             </NavLink>
@@ -315,14 +315,13 @@ class CompetitionPartPlayerGradeCalculate extends Component {
         )
     }
 
-
-    ////////form content view
     contentView = () => {
         let playerGradingTableData = this.props.partPlayerGradingState.getCompPartPlayerGradingSummaryData
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table"
+                    <Table
+                        className="home-dashboard-table"
                         columns={columns}
                         dataSource={playerGradingTableData}
                         pagination={false}
@@ -355,7 +354,7 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                 <div className="comp-player-grades-footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+                            <div className="d-flex justify-content-end">
                                 <Tooltip
                                     style={{ height: '100%' }}
                                     onMouseEnter={() =>
@@ -389,9 +388,9 @@ class CompetitionPartPlayerGradeCalculate extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
-                <InnerHorizontalMenu menu="competition" compSelectedKey={"14"} />
+                <InnerHorizontalMenu menu="competition" compSelectedKey="14" />
                 <Layout>
                     {this.headerView()}
                     <Content>
@@ -403,7 +402,6 @@ class CompetitionPartPlayerGradeCalculate extends Component {
                     </Footer>
                 </Layout>
             </div>
-
         );
     }
 }
@@ -414,15 +412,15 @@ function mapDispatchToProps(dispatch) {
         getCompPartPlayerGradingSummaryAction,
         onchangeCompPartPlayerGradingSummaryData,
         saveCompPartPlayerGradingSummaryAction,
-        playerSummaryCommentAction
-    }, dispatch)
+        playerSummaryCommentAction,
+    }, dispatch);
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
-        partPlayerGradingState: state.CompetitionPartPlayerGradingState
-    }
+        partPlayerGradingState: state.CompetitionPartPlayerGradingState,
+    };
 }
 
-export default connect(mapStatetoProps, mapDispatchToProps)(CompetitionPartPlayerGradeCalculate);
+export default connect(mapStateToProps, mapDispatchToProps)(CompetitionPartPlayerGradeCalculate);

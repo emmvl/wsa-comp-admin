@@ -112,7 +112,7 @@ const divisionTableColumns = [
         key: AppUniqueId.div_gender_chkbox,
         filterDropdown: true,
         filterIcon: () => (
-            <CustomToolTip placement="top" background="#ff8237">
+            <CustomToolTip placement="top">
                 <span>{AppConstants.genderRestrictionMsg}</span>
             </CustomToolTip>
         ),
@@ -160,7 +160,7 @@ const divisionTableColumns = [
         key: AppUniqueId.div_ageres_chkbox,
         filterDropdown: true,
         filterIcon: () => (
-            <CustomToolTip placement="top" background="#ff8237">
+            <CustomToolTip placement="top">
                 <span>{AppConstants.ageRestrictionMsg}</span>
             </CustomToolTip>
         ),
@@ -709,8 +709,8 @@ class CompetitionOpenRegForm extends Component {
                             {AppConstants.competitionDetails}
                         </Breadcrumb.Item>
                     </Breadcrumb>
-                    <div style={{ marginTop: -20 }}>
-                        <CustomToolTip placement="top" background="#ff8237">
+                    <div className="mt-n20">
+                        <CustomToolTip placement="top">
                             <span>{AppConstants.compDetailsMsg}</span>
                         </CustomToolTip>
                     </div>
@@ -1113,8 +1113,8 @@ class CompetitionOpenRegForm extends Component {
                         {appState.competitionFormatTypes.map(item => (
                             <div className="contextualHelp-RowDirection" key={item.id}>
                                 <Radio key={item.id} value={item.id}>{item.description}</Radio>
-                                <div style={{ marginLeft: -20, marginTop: 5 }}>
-                                    <CustomToolTip background="#ff8237">
+                                <div className="ml-5 mt-n20">
+                                    <CustomToolTip>
                                         <span>{item.helpMsg}</span>
                                     </CustomToolTip>
                                 </div>
@@ -1301,7 +1301,7 @@ class CompetitionOpenRegForm extends Component {
             <div className="fees-view pt-5">
                 <div className="contextualHelp-RowDirection">
                     <span className="form-heading required-field">{AppConstants.divisions}</span>
-                    <CustomToolTip placement="top" background="#ff8237">
+                    <CustomToolTip placement="top">
                         <span>{AppConstants.compDivisionMsg}</span>
                     </CustomToolTip>
                 </div>
@@ -1371,7 +1371,7 @@ class CompetitionOpenRegForm extends Component {
             title: 'Are you sure delete this product?',
             // content: 'Some descriptions',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             onOk() {
                 if (competitionId.length > 0) {
@@ -1493,7 +1493,7 @@ class CompetitionOpenRegForm extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu="competition" compSelectedKey="3" />
                 <Layout>

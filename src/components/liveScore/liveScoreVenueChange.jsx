@@ -102,7 +102,6 @@ class LiveScoreVenueChange extends Component {
         );
     };
 
-    ////////form content view
     contentView = () => {
         return (
             <div className="content-view pt-4">
@@ -149,8 +148,8 @@ class LiveScoreVenueChange extends Component {
                 {/* start time date and time picker row */}
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     <span className="text-heading-large mt-0 mb-0">{AppConstants.changeMatchCriteria}</span>
-                    <div style={{ marginTop: -10 }}>
-                        <Tooltip background="#ff8237">
+                    <div className="mt-n10">
+                        <Tooltip>
                             <span>{AppConstants.courtChangeMsg}</span>
                         </Tooltip>
                     </div>
@@ -380,7 +379,6 @@ class LiveScoreVenueChange extends Component {
         this.setState({ saveLoad: true })
     }
 
-    /////main render method
     render() {
         return (
             <div className="fluid-width">
@@ -389,14 +387,15 @@ class LiveScoreVenueChange extends Component {
                     menuName={AppConstants.liveScores}
                     onMenuHeadingClick={() => history.push("./liveScoreCompetitions")}
                 />
-                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"13"} />
+                <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey="13" />
                 <Layout>
                     <Loader visible={this.props.liveScoreVenueChangeState.onLoad} />
                     {this.headerView()}
                     <Form
                         ref={this.formRef}
                         onFinish={this.handleSubmit}
-                        noValidate="noValidate">
+                        noValidate="noValidate"
+                    >
                         <Content>
                             <div className="formView">{this.contentView()}</div>
                             <div className="formView">{this.changeToView()}</div>
@@ -422,14 +421,14 @@ function mapDispatchToProps(dispatch) {
         getCompetitionVenuesList,
         searchCourtList,
         clearFilter,
-        onChangeVenueSaveAction
-    }, dispatch)
+        onChangeVenueSaveAction,
+    }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         liveScoreVenueChangeState: state.LiveScoreVenueChangeState,
-    }
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(LiveScoreVenueChange);

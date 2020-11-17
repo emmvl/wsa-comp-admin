@@ -216,7 +216,7 @@ class UserDashboard extends Component {
         return (
             <Header className="comp-player-grades-header-view container mb-n3">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.users}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -269,7 +269,6 @@ class UserDashboard extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         return (
             <div>
@@ -343,7 +342,7 @@ class UserDashboard extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.user} menuName={AppConstants.user} />
                 <InnerHorizontalMenu menu="user" userSelectedKey="1" />
                 <Layout>

@@ -21,7 +21,7 @@ const { Option } = Select;
 
 var this_obj = null
 
-//listeners for sorting
+// listeners for sorting
 const listeners = (key) => ({
     onClick: () => tableSort(key),
 });
@@ -270,7 +270,7 @@ class LiveScoreGoalList extends Component {
         this.setState({ offset: 0 })
         var code = e.keyCode || e.which;
         let { sortBy, sortOrder } = this.state
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             let offset = 0
             this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, e.target.value, offset, sortBy, sortOrder)
         }
@@ -384,7 +384,6 @@ class LiveScoreGoalList extends Component {
         this.props.liveScoreGoalListAction(this.state.competitionId, this.state.filter, this.state.searchText, offset, sortBy, sortOrder)
     }
 
-    ////////form content view
     contentView = () => {
         const { result, totalCount, currentPage } = this.props.liveScoreGoalState;
         let goalList = isArrayNotEmpty(result) ? result : [];
@@ -426,7 +425,7 @@ class LiveScoreGoalList extends Component {
     /////// render function
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.liveScores} menuName={AppConstants.shootingStats} onMenuHeadingClick={() => history.push("./liveScoreCompetitions")} />
                 <InnerHorizontalMenu menu="liveScore" liveScoreSelectedKey={"16"} />
                 <Layout>

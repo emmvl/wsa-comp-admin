@@ -171,7 +171,7 @@ class AddUmpire extends Component {
                     alignItems: "center",
                 }}>
                     <div className="row">
-                        <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                        <div className="col-sm d-flex align-content-center">
                             <Breadcrumb separator=" > ">
                                 <Breadcrumb.Item className="breadcrumb-add">{isEdit === true ? AppConstants.editUmpire : AppConstants.addUmpire}</Breadcrumb.Item>
                             </Breadcrumb>
@@ -631,7 +631,7 @@ class AddUmpire extends Component {
     /////// render function
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <Loader visible={this.props.umpireState.onSaveLoad} />
                 <DashboardLayout menuHeading={AppConstants.umpires} menuName={AppConstants.umpires} />
                 <InnerHorizontalMenu menu="umpire" umpireSelectedKey={this.state.screenName === "umpireDashboard" ? "1" : "2"} />

@@ -154,7 +154,7 @@ class LiveScoreUmpireList extends Component {
     onKeyEnterSearchText = (e) => {
         const code = e.keyCode || e.which;
         const { id } = JSON.parse(getLiveScoreCompetiton())
-        if (code === 13) { //13 is the enter keycode
+        if (code === 13) { // 13 is the enter keycode
             const body = {
                 paging: {
                     limit: 10,
@@ -193,7 +193,7 @@ class LiveScoreUmpireList extends Component {
         return (
             <div className="comp-player-grades-header-drop-down-view mt-4">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.umpireList}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -328,10 +328,9 @@ class LiveScoreUmpireList extends Component {
         );
     };
 
-    ////main render method
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}

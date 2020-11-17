@@ -206,7 +206,7 @@ class CompetitionPlayerGradeCalculate extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.playerGradingToggle}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -337,8 +337,6 @@ class CompetitionPlayerGradeCalculate extends Component {
     //     });
     // };
 
-
-    ////////form content view
     contentView = () => {
         let playerGradingTableData = this.props.partPlayerGradingState.getCompPartPlayerGradingSummaryData
         return (
@@ -378,7 +376,7 @@ class CompetitionPlayerGradeCalculate extends Component {
                 <div className="comp-player-grades-footer-view">
                     <div className="row">
                         <div className="col-sm">
-                            <div style={{ display: 'flex', justifyContent: "flex-end" }}>
+                            <div className="d-flex justify-content-end">
                                 {/* <Button className="save-draft-text" type="save-draft-text">{AppConstants.saveDraft}</Button> */}
 
                                 <Tooltip
@@ -399,7 +397,8 @@ class CompetitionPlayerGradeCalculate extends Component {
                                         className="publish-button"
                                         style={{ height: isPublished && "100%", borderRadius: isPublished && 6, width: isPublished && "inherit" }}
                                         type="primary"
-                                        onClick={() => this.submitApiCall()}>
+                                        onClick={() => this.submitApiCall()}
+                                    >
                                         {AppConstants.save}
                                     </Button>
                                 </Tooltip>
@@ -411,10 +410,9 @@ class CompetitionPlayerGradeCalculate extends Component {
         )
     }
 
-
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu="competition" compSelectedKey="4" />
                 <Layout>

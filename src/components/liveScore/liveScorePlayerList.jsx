@@ -233,7 +233,7 @@ class LiveScorePlayerList extends Component {
         confirm({
             title: 'Are you sure you want to delete this player?',
             okText: 'Yes',
-            okType: 'danger',
+            okType: 'primary',
             cancelText: 'No',
             onOk() {
                 this_.deletePlayer(playerId)
@@ -253,7 +253,6 @@ class LiveScorePlayerList extends Component {
         this.props.playerListWithPaginationAction(this.state.competitionId, offset, 10, this.state.searchText, sortBy, sortOrder)
     }
 
-    ////////form content view
     contentView = () => {
         let { result, totalCount, currentPage } = this.props.liveScorePlayerState
 
@@ -475,7 +474,7 @@ class LiveScorePlayerList extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}

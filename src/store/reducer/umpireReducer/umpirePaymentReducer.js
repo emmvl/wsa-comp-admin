@@ -146,15 +146,16 @@ function umpirePaymentState(state = initialState, action) {
                 if (payData.length > 0) {
                     for (let i in payData) {
 
-                        let obj = {
-                            userId: payData[i].user.id,
-                            matchUmpireId: payData[i].id,
-                            stripeId: payData[i].user.stripeAccountId
+                        if (payData[i].user && payData[i].user.stripeAccountId) {
+                            let obj = {
+                                userId: payData[i].user.id,
+                                matchUmpireId: payData[i].id,
+                                stripeId: payData[i].user.stripeAccountId
+                            }
+                            state.paymentTransferPostData.push(obj)
                         }
-                        state.paymentTransferPostData.push(obj)
                     }
                 } else {
-                    console.log(state.paymentArr, 'state.paymentArr')
                     state.paymentTransferPostData = state.paymentArr
                 }
 

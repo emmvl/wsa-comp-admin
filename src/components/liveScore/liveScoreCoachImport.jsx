@@ -87,7 +87,7 @@ class LiveScoreCoachImport extends Component {
                 }}
             >
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             <Breadcrumb.Item className="breadcrumb-add">{AppConstants.importCoach}</Breadcrumb.Item>
                         </Breadcrumb>
@@ -171,7 +171,7 @@ class LiveScoreCoachImport extends Component {
     render() {
         const { liveScoreCoachState: { importResult, onLoad } } = this.props;
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.liveScores}

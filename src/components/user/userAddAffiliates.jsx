@@ -311,7 +311,6 @@ class UserAddAffiliates extends Component {
     }
   };
 
-  ////////form content view
   contentView = () => {
     let affiliateToData = this.props.userState.affiliateTo;
     let affiliate = this.props.userState.affiliate.affiliate;
@@ -668,7 +667,7 @@ class UserAddAffiliates extends Component {
   render() {
     let userState = this.props.userState;
     return (
-      <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+      <div className="fluid-width default-bg">
         <DashboardLayout
           menuHeading={AppConstants.user}
           menuName={AppConstants.user}

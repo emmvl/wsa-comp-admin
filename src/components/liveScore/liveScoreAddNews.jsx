@@ -451,7 +451,6 @@ class LiveScoreAddNews extends Component {
         this.props.liveScoreUpdateNewsAction(null, "newsVideo")
     }
 
-    ////////form content view
     contentView = () => {
         const { addEditNews, news_expire_date, expire_time, newsImage, newsVideo } = this.props.liveScoreNewsState;
         let editData = addEditNews;
@@ -677,7 +676,7 @@ class LiveScoreAddNews extends Component {
                 {indivisualOrg && (
                     <div>
                         <Select
-                            mode='multiple'
+                            mode="multiple"
                             placeholder={AppConstants.selectOrganisation}
                             style={{ width: '100%', paddingRight: 1, minWidth: 182 }}
                         >
@@ -825,11 +824,10 @@ class LiveScoreAddNews extends Component {
         );
     };
 
-    /////main render method
     render() {
         let stateWideMsg = getKeyForStateWideMessage()
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <Loader visible={this.props.liveScoreNewsState.onLoad_2} />
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}

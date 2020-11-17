@@ -103,7 +103,7 @@ class CompetitionReGrading extends Component {
         return (
             <div className="comp-player-grades-header-view-design">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb separator=" > ">
                             {/* <Breadcrumb.Item className="breadcrumb-product">Draw</Breadcrumb.Item> */}
                             <Breadcrumb.Item className="breadcrumb-product">{AppConstants.re_grading}</Breadcrumb.Item>
@@ -201,27 +201,20 @@ class CompetitionReGrading extends Component {
         )
     }
 
-
-    ////////form content view
     contentView = () => {
         return (
             <div className="comp-dash-table-view mt-2">
                 <div className="table-responsive home-dash-table-view">
-                    <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false}
-                    />
+                    <Table className="home-dashboard-table" columns={columns} dataSource={data} pagination={false} />
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: "flex-end", marginTop: 15, paddingRight: 5 }}>
                     <Button className="open-reg-button" type="primary">{AppConstants.save}</Button>
                 </div>
             </div>
-
         )
     }
 
-
-
-    //////footer view containing all the buttons like submit and cancel
     footerView = () => {
         return (
             <div className="fluid-width">
@@ -244,7 +237,7 @@ class CompetitionReGrading extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu="competition" compSelectedKey={"13"} />
                 <Layout>

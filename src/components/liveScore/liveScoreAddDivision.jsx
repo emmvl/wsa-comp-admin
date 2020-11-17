@@ -84,28 +84,20 @@ class LiveScoreAddDivision extends Component {
         return (
             <div className="header-view">
                 <Header
-                    className="form-header-view"
-                    style={{
-                        backgroundColor: "transparent",
-                        display: "flex",
-                        alignItems: "center",
-                    }}
+                    className="form-header-view d-flex align-items-center"
+                    style={{ backgroundColor: "transparent" }}
                 >
-                    <div className='row'>
-                        <div className="col-sm mt-5" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="row">
+                        <div className="col-sm mt-5 d-flex align-content-center">
                             <Breadcrumb separator=" > ">
                                 <Breadcrumb.Item className="breadcrumb-add">
                                     {isEdit ? AppConstants.editDivision : AppConstants.addDivision}
                                 </Breadcrumb.Item>
                             </Breadcrumb>
-
-
                         </div>
                     </div>
-
                 </Header>
-
-            </div >
+            </div>
         )
     }
 
@@ -259,7 +251,7 @@ class LiveScoreAddDivision extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout
                     menuHeading={AppConstants.liveScores}
                     menuName={AppConstants.addDivision}

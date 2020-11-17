@@ -271,16 +271,16 @@ class RegistrationMainDashboard extends Component {
             let compName = competitionData[0].competitionName
             let regStatus = competitionData[0].orgRegistrationStatusId
             this.setState
-                ({
-                    competitionId, publishStatus, orgRegistrationId,
-                    wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation, isDirect,
-                    visible: true, compFeeStatus, compName, regStatus
-                })
+            ({
+                competitionId, publishStatus, orgRegistrationId,
+                wizardYear, registrationCloseDate, inviteeStatus, competitionCreatorOrganisation, isDirect,
+                visible: true, compFeeStatus, compName, regStatus
+            })
         } else {
             this.setState
-                ({
-                    visible: true
-                })
+            ({
+                visible: true
+            })
         }
 
     }
@@ -478,8 +478,8 @@ class RegistrationMainDashboard extends Component {
                                 {AppConstants.participateInCompReg}
 
                             </span>
-                            {/* <div style={{ marginTop: -10 }}>
-                                <Tooltip placement="top" background="#ff8237">
+                            {/* <div className="mt-n10">
+                                <Tooltip placement="top">
                                     <span>{AppConstants.ownedCompetitionMsg}</span>
                                 </Tooltip>
                             </div> */}
@@ -524,7 +524,7 @@ class RegistrationMainDashboard extends Component {
                         columns={columnsOwned}
                         dataSource={this.props.registrationDashboardState.ownedRegistrations}
                         pagination={false}
-                        rowKey={record => "ownedRegistrations" + record.competitionId}
+                        rowKey={(record) => `ownedRegistrations${record.competitionId}`}
                         onRow={(record) => ({
                             onClick: () => history.push("/registrationCompetitionFee", { id: record.competitionId })
                         })}
@@ -536,7 +536,7 @@ class RegistrationMainDashboard extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.registration} menuName={AppConstants.registration} />
                 <InnerHorizontalMenu menu="registration" regSelectedKey="1" />
                 <Layout>
@@ -551,19 +551,21 @@ class RegistrationMainDashboard extends Component {
         );
     }
 }
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getOnlyYearListAction,
         registrationMainDashboardListAction,
         clearCompReducerDataAction,
-        getAllCompetitionAction
-    }, dispatch)
+        getAllCompetitionAction,
+    }, dispatch);
 }
 
-function mapStatetoProps(state) {
+function mapStateToProps(state) {
     return {
         appState: state.AppState,
         registrationDashboardState: state.RegistrationDashboardState,
-    }
+    };
 }
-export default connect(mapStatetoProps, mapDispatchToProps)((RegistrationMainDashboard));
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegistrationMainDashboard);

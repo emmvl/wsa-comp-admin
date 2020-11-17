@@ -35,7 +35,7 @@ class CompetitionDraws extends Component {
         return (
             <Header className="comp-draws-header-view mt-4">
                 <div className="row">
-                    <div className="col-sm" style={{ display: "flex", alignContent: "center" }}>
+                    <div className="col-sm d-flex align-content-center">
                         <Breadcrumb style={{
                             display: 'flex', lignItems: 'center', alignSelf: 'center'
                         }} separator=" > ">
@@ -92,7 +92,6 @@ class CompetitionDraws extends Component {
         )
     }
 
-    ////////form content view
     contentView = () => {
         return (
             <div className="comp-draw-content-view">
@@ -751,7 +750,7 @@ class CompetitionDraws extends Component {
 
     render() {
         return (
-            <div className="fluid-width" style={{ backgroundColor: "#f7fafc" }}>
+            <div className="fluid-width default-bg">
                 <DashboardLayout menuHeading={AppConstants.competitions} menuName={AppConstants.competitions} />
                 <InnerHorizontalMenu menu="competition" compSelectedKey="18" />
                 <Layout className="container">
