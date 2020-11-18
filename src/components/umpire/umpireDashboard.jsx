@@ -339,7 +339,7 @@ const columnsInvite = [
                                 <NavLink
                                     to={{
                                         pathname: "/liveScoreAddMatch",
-                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true },
+                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
                                     }}
                                 >
                                     <span>Edit</span>
@@ -351,7 +351,7 @@ const columnsInvite = [
                                 <NavLink
                                     to={{
                                         pathname: "/liveScoreAddMatch",
-                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true },
+                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" },
                                     }}
                                 >
                                     <span>Edit</span>
@@ -567,7 +567,7 @@ const columns = [
                             <Menu.Item key="1">
                                 <NavLink to={{
                                     pathname: "/liveScoreAddMatch",
-                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true }
+                                    state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" }
                                 }}>
                                     <span>Edit</span>
                                 </NavLink>
@@ -578,7 +578,7 @@ const columns = [
                                 <NavLink
                                     to={{
                                         pathname: "/liveScoreAddMatch",
-                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true }
+                                        state: { matchId: record.id, umpireKey: "umpire", isEdit: true,screenName: "umpireDashboard" }
                                     }}
                                 >
                                     <span>Edit</span>

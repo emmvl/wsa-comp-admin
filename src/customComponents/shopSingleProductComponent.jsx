@@ -88,7 +88,7 @@ class ShopSingleProductComponent extends React.Component {
                                 (item, index) => {
                                     return (
                                         <div className="carousel-div" key={item + index}>
-                                            <img src={item.url} className="carousel-img" />
+                                            <img src={item ? item.url : AppImages.squareImage} className="carousel-img" alt={""} />
                                         </div>
                                     );
                                 }

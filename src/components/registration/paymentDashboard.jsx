@@ -176,10 +176,10 @@ const columns = [
                     >
                         <span>Cash Payment received</span>
                     </Menu.Item>
-                    <Menu.Item key="3"
+                    {/* <Menu.Item key="3"
                     >
                         <span>Refund</span>
-                    </Menu.Item>
+                    </Menu.Item> */}
                 </SubMenu>
             </Menu>
         )

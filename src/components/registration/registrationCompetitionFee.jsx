@@ -4718,7 +4718,7 @@ class RegistrationCompetitionFee extends Component {
                     </div>
                 </div>
 
-                <InputWithHead required="required-field pb-1" heading={AppConstants.heroImageForCompetition} />
+                <InputWithHead required="pb-1" heading={AppConstants.heroImageForCompetition} />
                 <div className="reg-competition-hero-image-view" onClick={this.selectHeroImage}>
                     <div style={{ overflow: "hidden", minHeight: "150px", maxHeight: "287px" }}>
                         <img

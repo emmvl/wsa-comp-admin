@@ -121,23 +121,26 @@ const columns = [
   },
   {
     title: "Paid By",
-    dataIndex: "paidBy",
-    key: "paidBy",
-    render: (paidBy, record, index) => {
+    dataIndex: "paidByUsers",
+    key: "paidByUsers",
+    render: (paidByUsers, record, index) => {
       return (
         <div>
-          {this_Obj.state.userId == record.paidByUserId ? 'Self' :
+          { (record.paidByUsers || []).map((item, index) => (
+              this_Obj.state.userId == item.paidByUserId ? 'Self' :
             <NavLink
               to={{
                 pathname: `/userPersonal`,
                 state: {
-                  userId: record.paidByUserId,
+                  userId: item.paidByUserId,
                   tabKey: "registration"
                 },
               }}
             >
-              <span className="input-heading-add-another pt-0">{paidBy}</span>
-            </NavLink>}
+              <span className="input-heading-add-another pt-0">{item.paidBy}</span>
+            </NavLink>
+          ))
+          }
         </div>
       )
     },
@@ -887,7 +890,7 @@ const columnsIncident = [
   },
 ];
 
-// listeners for sorting
+//listeners for sorting
 const listeners = (key) => ({
   onClick: () => umpireActivityTableSort(key),
 });
@@ -1085,7 +1088,7 @@ function purchasesTableSort(key) {
   this_Obj.setState({ purchasesListSortBy: sortBy, purchasesListSortOrder: sortOrder });
 }
 
-// listeners for sorting
+//listeners for sorting
 const purchaseListeners = (key) => ({
   onClick: () => purchasesTableSort(key),
 });
@@ -2666,7 +2669,7 @@ class UserModulePersonalDetail extends Component {
 
   purchaseActivityView = () => {
     let { onLoad, purchasesListingData, purchasesTotalCount, purchasesCurrentPage } = this.props.shopOrderStatusState
-    console.log("111", purchasesListingData, purchasesTotalCount, purchasesCurrentPage)
+   // console.log("111", purchasesListingData, purchasesTotalCount, purchasesCurrentPage)
     return (
       <div
         className="comp-dash-table-view mt-2"

@@ -25,6 +25,7 @@ import {
 } from 'util/sessionStorage';
 import './umpire.css';
 import Loader from '../../customComponents/loader';
+import AppImages from "themes/appImages";
 
 const { Content, Footer } = Layout;
 const { Option } = Select;
@@ -141,6 +142,18 @@ const columns = [
         }
     },
     {
+        title: 'Time',
+        dataIndex: 'time',
+        key: "time",
+        sorter: true,
+    },
+    {
+        title: "Date Paid",
+        dataIndex: "datePaid",
+        key: "datePaid",
+        sorter: true,
+    },
+    {
         title: 'Pay',
         dataIndex: 'selectedValue',
         key: 'selectedValue',
@@ -154,17 +167,17 @@ const columns = [
                         onChange={(e) => this_obj.props.updateUmpirePaymentData({ data: e.target.checked, key: 'selectedValue', index, allData: record })}
                     />
                 ) : (
-                    <Tooltip
-                        className="comp-player-table-tag2"
-                        style={{ height: '100%' }}
-                        onMouseEnter={() => this_obj.changeHover(record, index, true)}
-                        onMouseLeave={() => this_obj.changeHover(record, index, false)}
-                        visible={record.hoverVisible}
-                        title="Please ask the user to set up their bank details"
-                    >
-                        <Checkbox className="single-checkbox" disabled />
-                    </Tooltip>
-                )
+                        <Tooltip
+                            className="comp-player-table-tag2"
+                            style={{ height: '100%' }}
+                            onMouseEnter={() => this_obj.changeHover(record, index, true)}
+                            onMouseLeave={() => this_obj.changeHover(record, index, false)}
+                            visible={record.hoverVisible}
+                            title="Please ask the user to set up their bank details"
+                        >
+                            <Checkbox className="single-checkbox" disabled />
+                        </Tooltip>
+                    )
             )
         }
     }
@@ -192,7 +205,6 @@ class UmpirePayments extends Component {
 
     async componentDidMount() {
         let { organisationId, } = JSON.parse(localStorage.getItem("setOrganisationData"))
-        // this.setState({ loading: true })
         this.props.umpireCompetitionListAction(null, null, organisationId, "USERS")
         const { umpirePaymentObject } = this.props.umpirePaymentState
         let page = 1
@@ -219,9 +231,6 @@ class UmpirePayments extends Component {
                 let compList = isArrayNotEmpty(this.props.umpireCompetitionState.umpireComptitionList) ? this.props.umpireCompetitionState.umpireComptitionList : []
                 let firstComp = compList.length > 0 && compList[0].id
                 let compData = compList.length > 0 && compList[0]
-
-                // setUmpireCompition(firstComp);
-                // setUmpireCompitionData(JSON.stringify(compData));
 
                 if (getUmpireCompetiton()) {
                     if (this.state.liveScoreUmpire === "liveScoreUmpire") {
@@ -285,29 +294,20 @@ class UmpirePayments extends Component {
                         });
                     }
 
-                    if (this.state.paymentLoad == true && this.props.umpirePaymentState.onPaymentLoad === false) {
-                        const body = {
-                            paging: {
-                                offset: 0,
-                                limit: 10,
-                            },
-                        }
-                        this.props.getUmpirePaymentData({ compId: this.state.selectedComp, pagingBody: body, search: this.state.searchText, sortBy: this.state.sortBy, sortOrder: this.state.sortOrder })
-                        this.setState({ paymentLoad: false })
-                    }
-
-                    // let { sortBy, sortOrder, searchText } = this.state
-                    // const body = {
-                    //     paging: {
-                    //         offset: 0,
-                    //         limit: 10,
-                    //     },
-                    // }
-
-                    // this.props.getUmpirePaymentData({ compId: firstComp, pagingBody: body, search: searchText, sortBy: sortBy, sortOrder: sortOrder })
-                    // this.setState({ selectedComp: firstComp, loading: false, compArray: compList, })
                 }
             }
+        }
+
+        if (this.state.paymentLoad == true && this.props.umpirePaymentState.onPaymentLoad === false) {
+            const body =
+            {
+                paging: {
+                    offset: 0,
+                    limit: 10,
+                },
+            }
+            this.props.getUmpirePaymentData({ compId: this.state.selectedComp, pagingBody: body, search: this.state.searchText, sortBy: this.state.sortBy, sortOrder: this.state.sortOrder })
+            this.setState({ paymentLoad: false })
         }
     }
 
@@ -461,6 +461,7 @@ class UmpirePayments extends Component {
     headerView = () => (
         <div className="comp-player-grades-header-drop-down-view mt-4">
             <div className="fluid-width">
+
                 <div className="row">
                     <div className="col-sm pt-1 d-flex align-content-center">
                         <span className="form-heading">
@@ -493,6 +494,7 @@ class UmpirePayments extends Component {
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -522,10 +524,48 @@ class UmpirePayments extends Component {
                             </div>
                         </div>
 
+                        <div className="col-sm-8">
+                            <div
+                                className="comp-dashboard-botton-view-mobile"
+                                style={{
+                                    width: '100%',
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    justifyContent: "flex-end",
+                                }}
+                            >
+                                <Button
+                                    type="primary"
+                                    className="primary-add-comp-form"
+                                // onClick={this.onExport}
+                                >
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <img
+                                                className="export-image"
+                                                src={AppImages.export}
+                                                alt=""
+                                            />
+                                            {AppConstants.export}
+                                        </div>
+                                    </div>
+                                </Button>
+                            </div>
+                        </div>
+
                         <div className="col-sm">
                             <div
-                                className="comp-dashboard-botton-view-mobile d-flex flex-column align-content-center align-items-end justify-content-end"
-                                style={{ width: '96.5%' }}
+                                className="comp-dashboard-botton-view-mobile"
+                                style={{
+                                    // width: "96.5%",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "flex-end",
+                                    justifyContent: "flex-end",
+                                    alignContent: "center",
+                                    paddingRight: "35px"
+                                }}
                             >
                                 <Checkbox
                                     className="single-checkbox"

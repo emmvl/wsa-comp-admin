@@ -214,20 +214,16 @@ class RegistrationMembershipList extends Component {
                     sortOrder = regMembershipListAction.sortOrder
                     let yearRefId = regMembershipListAction.yearRefId
 
-                    await this.setState({ offset, sortBy, sortOrder, yearRefId })
+                    await this.setState({ offset, sortBy, sortOrder, yearRefId, allyearload: false })
                     page = Math.floor(offset / 10) + 1;
 
                     this.handleMembershipTableList(page, yearRefId)
-                    this.setState({
-                        yearRefId: yearRefId, allyearload: false
-                    })
                 } else {
                     this.handleMembershipTableList(1, mainYearRefId)
                     this.setState({
                         yearRefId: mainYearRefId, allyearload: false
                     })
                 }
-
             }
         }
     }

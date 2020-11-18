@@ -527,7 +527,7 @@ class LiveScoreCompetitions extends Component {
                                             });
                                         }}
                                     >
-                                        {AppConstants.stateWideMsg}
+                                        {AppConstants.comunityWideMsg}
                                     </Button>
                                 </div>
                             </div>

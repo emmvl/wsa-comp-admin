@@ -336,6 +336,7 @@ class UmpireRoaster extends Component {
 
     /// Handle Page change
     handlePageChnage(page) {
+
         let { sortBy, sortOrder } = this.state
         let offset = page ? 10 * (page - 1) : 0;
         this.setState({
@@ -348,7 +349,7 @@ class UmpireRoaster extends Component {
             },
         }
         let roleIds = Array.isArray(this.state.umpireRole) ? JSON.stringify(this.state.umpireRole) : JSON.stringify([this.state.umpireRole])
-        this.props.umpireRoasterListAction(this.state.selectedComp, roleIds, body, sortBy, sortOrder)
+        this.props.umpireRoasterListAction(this.state.selectedComp, this.state.status, roleIds, body, sortBy, sortOrder)
     }
 
     contentView = () => {
