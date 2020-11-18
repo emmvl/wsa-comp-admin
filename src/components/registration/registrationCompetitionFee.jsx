@@ -3215,10 +3215,17 @@ class RegistrationCompetitionFee extends Component {
         let selectedCasualTeamPaymentArr = this.props.competitionFeesState.selectedCasualTeamFee;
         let selectedPaymentMethods = this.props.competitionFeesState.selectedPaymentMethods;
 
-        selectedCasualPaymentArr = selectedCasualPaymentArr.filter(x => x.isChecked);
-        SelectedSeasonalPaymentArr = SelectedSeasonalPaymentArr.filter(x => x.isChecked);
-        selectedSeasonalTeamPaymentArr = selectedSeasonalTeamPaymentArr.filter(x => x.isChecked);
-        selectedCasualTeamPaymentArr = selectedCasualTeamPaymentArr.filter(x => x.isChecked);
+        let feeDetails = this.props.competitionFeesState.competitionFeesData;
+
+        let isSeasonal = this.checkIsSeasonal(feeDetails);
+        let isCasual = this.checkIsCasual(feeDetails);
+        let isTeamSeasonal = this.checkIsTeamSeasonal(feeDetails);
+        let isTeamCasual = this.checkIsTeamCasual(feeDetails);
+
+        selectedCasualPaymentArr = selectedCasualPaymentArr.filter(x => x.isChecked && isCasual);
+        SelectedSeasonalPaymentArr = SelectedSeasonalPaymentArr.filter(x => x.isChecked && isSeasonal);
+        selectedSeasonalTeamPaymentArr = selectedSeasonalTeamPaymentArr.filter(x => x.isChecked && isTeamSeasonal);
+        selectedCasualTeamPaymentArr = selectedCasualTeamPaymentArr.filter(x => x.isChecked && isTeamCasual);
         selectedPaymentMethods = selectedPaymentMethods.filter(x => x.isChecked);
 
         let selectedSeasonalInstalmentDates = this.props.competitionFeesState.selectedSeasonalInstalmentDates;
@@ -5494,6 +5501,8 @@ class RegistrationCompetitionFee extends Component {
                                         {AppConstants.individualRegistrations}
                                     </Checkbox>
                                 </div>
+                            {item.isIndividualReg && (
+                                <div> 
                                 <div style={{ marginTop: 15 }}>
                                     <Checkbox
                                         checked={item.isSeasonal}
@@ -5557,6 +5566,8 @@ class RegistrationCompetitionFee extends Component {
                                             Divider="false"
                                         />
                                     </div>
+                                )}
+								  </div>
                                 )}
                                 {(item.isAllType != 'allDivisions'
                                         ? item.seasonalTeam.perType
