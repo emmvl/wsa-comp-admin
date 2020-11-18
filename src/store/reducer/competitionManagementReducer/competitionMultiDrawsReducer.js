@@ -154,7 +154,6 @@ function roundstructureData(data) {
 
 
 function structureDrawsData(data, key, venuesData) {
-  console.log(data)
   let mainCourtNumberArray = [];
   let dateArray = [];
   let gradeArray = [];

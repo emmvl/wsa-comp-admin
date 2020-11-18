@@ -490,59 +490,60 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     checkCurrentSwapObjects(source, target, drawData) {
-        let sourceIndexArray = source.split(':');
-        let targetIndexArray = target.split(':');
-        let sourceXIndex = sourceIndexArray[0];
-        let sourceYIndex = sourceIndexArray[1];
-        let targetXIndex = targetIndexArray[0];
-        let targetYIndex = targetIndexArray[1];
+        const sourceIndexArray = source.split(':');
+        const targetIndexArray = target.split(':');
+        const sourceXIndex = sourceIndexArray[0];
+        const sourceYIndex = sourceIndexArray[1];
+        const targetXIndex = targetIndexArray[0];
+        const targetYIndex = targetIndexArray[1];
 
-        let sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
-        let targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
+        const sourceObejct = drawData[sourceXIndex].slotsArray[sourceYIndex];
+        const targetObject = drawData[targetXIndex].slotsArray[targetYIndex];
+
+        const sourceDraws = drawData[sourceXIndex];
+        const targetDraws = drawData[targetXIndex];
 
         // for end time calculations
         const startTimeSource = moment(sourceObejct.matchDate);
-        const endTimeSource = moment(sourceObejct.matchDate.slice(0, -5) + sourceObejct.endTime);
+        const sourceObejctDate = sourceObejct.matchDate.slice(0, -5);
+        const endTimeSource = moment(sourceObejctDate + sourceObejct.endTime);
         const diffTimeSource = endTimeSource.diff(startTimeSource, 'minutes');
 
         const startTimeTarget = moment(targetObject.matchDate);
-        const endTimeTarget = moment(targetObject.matchDate.slice(0, -5) + targetObject.endTime);
+        const targetObjectDate = sourceObejct.matchDate.slice(0, -5);
+        const endTimeTarget = moment(targetObjectDate + targetObject.endTime);
         const diffTimeTarget = endTimeTarget.diff(startTimeTarget, 'minutes');
 
-        // define next slots with data
-        const nextSource = drawData[sourceXIndex].slotsArray.find((slot, index) => {
-            if(index > sourceYIndex && slot.drawsId) {
-                return slot;
+        // define next slots with data for the swappable objects days
+        const nextSource = drawData[sourceXIndex].slotsArray
+            .filter(slot => slot.matchDate.slice(0, -5) === sourceObejctDate)
+            .find((slot, index) => {
+                if(index > sourceYIndex && slot.drawsId) {
+                    return slot;
+                }
             }
-        })
+        )
 
-        const nextTarget = drawData[targetXIndex].slotsArray.find((slot, index) => {
-            if(index > targetYIndex && slot.drawsId) {
-                return slot;
+        const nextTarget = drawData[targetXIndex].slotsArray
+            .filter(slot => slot.matchDate.slice(0, -5) === targetObjectDate)
+            .find((slot, index) => {
+                if(index > targetYIndex && slot.drawsId) {
+                    return slot;
+                }
             }
-        })
-
-        // define if next events starts later
-
-        const schedule = this.getWeeklySchedule();
-
-        // define end time in day schedule
-        const targetDayOfWeek = moment(sourceObejct.matchDate).format('dddd').toLowerCase();
-        const targetSchedule = schedule.find(scheduleDay => scheduleDay.day.toLowerCase() === targetDayOfWeek);
-        const endWorkingDayTarget = targetObject.matchDate.slice(0, -5) + targetSchedule.timeslot.endTime;
-
-        const sourceDayOfWeek = moment(targetObject.matchDate).format('dddd').toLowerCase();
-        const sourceSchedule = schedule.find(scheduleDay => scheduleDay.day.toLowerCase() === sourceDayOfWeek);
-        const endWorkingDaySource = sourceObejct.matchDate.slice(0, -5) + sourceSchedule.timeslot.endTime;
+        )
 
         // define if the swappable event finishes before next event or end of the working day
 
+        const targetObjectRestrictionEnd = this.getDayTimeRestrictions(targetDraws, targetObjectDate).endTime;
+        const sourceObjectRestrictionEnd = this.getDayTimeRestrictions(sourceDraws, sourceObejctDate).endTime;
+
         const sourceEndNew = moment(targetObject.matchDate).add(diffTimeSource, 'minutes');
-        const startTimeNextTarget = nextTarget ? moment(nextTarget.matchDate) : moment(endWorkingDayTarget);
+        const startTimeNextTarget = nextTarget ? moment(nextTarget.matchDate) : targetObjectRestrictionEnd;
         const isStartNextSourceLater = startTimeNextTarget.isSameOrAfter(sourceEndNew);
 
         const targetEndNew = moment(sourceObejct.matchDate).add(diffTimeTarget, 'minutes');
-        const startTimeNextSource = nextSource ? moment(nextSource.matchDate) : moment(endWorkingDaySource);
+        const startTimeNextSource = nextSource ? moment(nextSource.matchDate) : sourceObjectRestrictionEnd;
         const isStartNextTargetLater = startTimeNextSource.isSameOrAfter(targetEndNew);
 
         // for case when next events starts before end of swappable ones
@@ -809,8 +810,6 @@ class MultifieldDrawsNewTimeline extends Component {
     getWeeklySchedule = () => {
         let venueData = this.props.drawsState.competitionVenues;
 
-        // console.log('venueData', venueData);
-
         const weekSlotsTimeSchedule = [];
 
         if (venueData.length) {
@@ -874,8 +873,7 @@ class MultifieldDrawsNewTimeline extends Component {
         if (isTooltipAllowTime || this.state.tooltipSwappableTime) {
             tooltip.setAttribute(
                 "style",
-                    `
-                    min-width: fit-content;
+                    `min-width: fit-content;
                     padding: 5px;
                     background: #fff;
                     border: 1px solid #bbbbc6;
@@ -993,6 +991,7 @@ class MultifieldDrawsNewTimeline extends Component {
 
                     const isStartTimeCondition = startTimeNew.isBefore(slotEnd) && startTimeNew.isAfter(slotStart);
                     const isEndTimeCondition = endTimeNew.isAfter(slotStart) && endTimeNew.isBefore(slotEnd);
+                    const isSlotEventInside = startTimeNew.isBefore(slotStart) && endTimeNew.isAfter(slotEnd);
 
                     const isEventOverItself = slot.drawsId === draggableEvent.drawsId
                         && (
@@ -1018,11 +1017,7 @@ class MultifieldDrawsNewTimeline extends Component {
                         return false;
                     }
 
-                    if (isStartTimeCondition) {
-                        return true;
-                    }
-
-                    else if (isEndTimeCondition) {
+                    if (isStartTimeCondition || isEndTimeCondition || isSlotEventInside) {
                         return true;
                     }
                 });
@@ -1052,8 +1047,6 @@ class MultifieldDrawsNewTimeline extends Component {
                 startTime: newTimeFormatted,
                 endTime: endTimeFormatted,
             };
-
-            // console.log('draggableEvent.drawsId', draggableEvent.drawsId)
 
             this.props.updateCourtTimingsDrawsAction(
                 postData,
@@ -1118,6 +1111,73 @@ class MultifieldDrawsNewTimeline extends Component {
             : null;
 
         return [unavailableStartWidth, unavailableEndWidth];
+    }
+
+    getDayTimeRestrictions = (courtData, fieldItemDate) => {
+        const venueData = this.props.drawsState.competitionVenues;
+
+        // for check the schedule of the day
+        const schedule = this.getWeeklySchedule();
+        const itemDateDayOfWeek = moment(fieldItemDate).format('dddd').toLowerCase();
+
+        const findSchedule = schedule.find(scheduleDay => scheduleDay.day.toLowerCase() === itemDateDayOfWeek);
+
+        const startDayTime = findSchedule.timeslot.startTime;
+        const endDayTime = findSchedule.timeslot.endTime;
+
+        const timeAllDayScheduleHours = [startDayTime];
+
+        while (timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1] !== endDayTime) {
+            const newTime = moment(fieldItemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');
+            timeAllDayScheduleHours.push(newTime)
+        }
+
+        // check unavailable time during the day
+
+        const courtVenueId = courtData.slotsArray.find(slot => slot.venueId).venueId;
+        const courtId = courtData.venueCourtId;
+
+        let venueDaySchedule;
+        let workingDayInTimeline;
+        let courtDaySchedule;
+
+        // TODO this.props.drawsState.competitionVenues could be an object with different properties, necessary to fix !!
+
+        if (venueData[0]?.availableTimeslots) {
+            venueData.forEach(venue => {
+                const daySchedule = venue.availableTimeslots.find(venueDay =>
+                    venueDay?.venueId && venueDay.venueId === courtVenueId && venueDay.day === findSchedule.day);
+
+                if (daySchedule) {
+                    venueDaySchedule = daySchedule.timeslot;
+                }
+            });
+
+            const venueDataSlotForCheck = venueData.find(venue => venue.id === courtVenueId);
+
+            // check unavailable days of week for court based on venue schedule
+
+            const workingDaysOfVenue = venueDataSlotForCheck.availableTimeslots.filter(venueDay => courtVenueId === venueDay.venueId)
+            workingDayInTimeline = workingDaysOfVenue.find(workingDayVenue => workingDayVenue.day.toLowerCase() === itemDateDayOfWeek);
+
+            // check unavailable time during the working day for court based on court schedule
+
+            const courtWeekSchedule = venueDataSlotForCheck.courts.find(court => court.courtId === courtId)?.availableTimeslots;
+            if (courtWeekSchedule) {
+                courtDaySchedule = courtWeekSchedule.find(court => court.day === itemDateDayOfWeek)?.timeslot;
+            }
+        }
+
+        const venueSchedule = this.checkUnavailableTime(venueDaySchedule, startDayTime, endDayTime, fieldItemDate);
+        const courtSchedule = this.checkUnavailableTime(courtDaySchedule, startDayTime, endDayTime, fieldItemDate);
+
+        // unavailable time during the whole day
+
+        return workingDayInTimeline ? {
+                startTime: venueSchedule.startTime.isAfter(courtSchedule.startTime) ? venueSchedule.startTime : courtSchedule.startTime,
+                endTime: venueSchedule.endTime.isBefore(courtSchedule.endTime) ? venueSchedule.endTime : courtSchedule.endTime
+            }
+            : null;
     }
 
     headerView = () => {
@@ -1675,15 +1735,10 @@ class MultifieldDrawsNewTimeline extends Component {
     }
 
     draggableView = (dateItem) => {
-        let disabledStatus = this.state.competitionStatus == 1
-        var dateMargin = 25;
+        let disabledStatus = this.state.competitionStatus == 1;
         var dayMargin = 25;
         let topMargin = 2;
-        let legendsData = isArrayNotEmpty(this.props.drawsState.legendsArray)
-            ? this.props.drawsState.legendsArray
-            : [];
         let date = [];
-        const venueData = this.props.drawsState.competitionVenues;
 
         dateItem.dateNewArray.map(item => {
             const dateNew = item.date.slice(0, -5);
@@ -1692,6 +1747,28 @@ class MultifieldDrawsNewTimeline extends Component {
                 date.push(dateNew);
             }
         })
+
+        // for days vertical dashed lines style
+
+        let backgroundSize = '';
+        let backgroundImage = '';
+        let backgroundPosition = '';
+        
+        let backgroundPositionCounter = -30;
+        
+        for (let i = 0; i <= 10; i++) {
+            backgroundSize += `${ONE_MIN_WIDTH * 30}px ${ONE_MIN_WIDTH * 30}px`;
+            backgroundImage += 'radial-gradient(1px 1px at left center, rgb(170, 170, 170) 1px, transparent 1px)';
+            backgroundPosition += `0px ${backgroundPositionCounter}px`;
+        
+            backgroundPositionCounter += 5;
+        
+            if (i < 10) {
+                backgroundSize += ', ';
+                backgroundImage += ', ';
+                backgroundPosition += ', ';
+            }
+        }
 
         return (
             <>
@@ -1825,11 +1902,8 @@ class MultifieldDrawsNewTimeline extends Component {
                             <div key={"court" + index}>
                                 <div className="sr-no" style={{ height: 62, boxSizing: 'border-box' }}>
                                     <div
-   className="venueCourt-tex-div"
+                                        className="venueCourt-tex-div"
                                         style={{
-                                            // position: 'fixed',
-                                            zIndex: 99,
-                                            background: 'white',
                                             width: 95,
                                             marginLeft: -20,
                                             textAlign: 'center',
@@ -1851,13 +1925,6 @@ class MultifieldDrawsNewTimeline extends Component {
                                     const startDayTime = findSchedule.timeslot.startTime;
                                     const endDayTime = findSchedule.timeslot.endTime;
 
-                                    const timeAllDayScheduleHours = [startDayTime];
-
-                                    while (timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1] !== endDayTime) {
-                                        const newTime = moment(fieldItemDate + timeAllDayScheduleHours[timeAllDayScheduleHours.length - 1]).add(ONE_HOUR_IN_MIN, 'minutes').format('HH:mm');
-                                        timeAllDayScheduleHours.push(newTime)
-                                    }
-
                                     if (fieldItemDateIndex !== 0 ) {
                                         prevDaysWidth += diffDayScheduleTime;
                                     }
@@ -1870,55 +1937,12 @@ class MultifieldDrawsNewTimeline extends Component {
 
                                     diffDayScheduleTime = endDayDate.diff(startDayDate, 'minutes') * ONE_MIN_WIDTH;
 
-                                    // check unavailable time during the day
+                                    const timeRestrictionsSchedule = this.getDayTimeRestrictions(courtData, fieldItemDate);
 
-                                    const courtVenueId = courtData.slotsArray.find(slot => slot.venueId).venueId;
-                                    const courtId = courtData.venueCourtId;
-
-                                    let venueDaySchedule;
-                                    let workingDayInTimeline;
-                                    let courtDaySchedule;
-
-                                    // TODO this.props.drawsState.competitionVenues could be an object with different properties, necessary to fix !!
-
-                                    if (venueData[0]?.availableTimeslots) {
-                                        venueData.forEach(venue => {
-                                            const daySchedule = venue.availableTimeslots.find(venueDay =>
-                                                venueDay?.venueId && venueDay.venueId === courtVenueId && venueDay.day === findSchedule.day);
-
-                                            if (daySchedule) {
-                                                venueDaySchedule = daySchedule.timeslot;
-                                            }
-                                        });
-
-                                        const venueDataSlotForCheck = venueData.find(venue => venue.id === courtVenueId);
-
-                                        // check unavailable days of week for court based on venue schedule
-
-                                        const workingDaysOfVenue = venueDataSlotForCheck.availableTimeslots.filter(venueDay => courtVenueId === venueDay.venueId)
-                                        workingDayInTimeline = workingDaysOfVenue.find(workingDayVenue => workingDayVenue.day.toLowerCase() === itemDateDayOfWeek);
-
-                                        // check unavailable time during the working day for court based on court schedule
-
-                                        const courtWeekSchedule = venueDataSlotForCheck.courts.find(court => court.courtId === courtId)?.availableTimeslots;
-                                        if (courtWeekSchedule) {
-                                            courtDaySchedule = courtWeekSchedule.find(court => court.day === itemDateDayOfWeek)?.timeslot;
-                                        }
-                                    }
-
-                                    const venueSchedule = this.checkUnavailableTime(venueDaySchedule, startDayTime, endDayTime, fieldItemDate);
-                                    const courtSchedule = this.checkUnavailableTime(courtDaySchedule, startDayTime, endDayTime, fieldItemDate);
-
-                                    // unavailable time during the whole day
-                                    const timeRestrictionsSchedule = {
-                                        startTime: venueSchedule.startTime.isAfter(courtSchedule.startTime) ? venueSchedule.startTime : courtSchedule.startTime,
-                                        endTime: venueSchedule.endTime.isBefore(courtSchedule.endTime) ? venueSchedule.endTime : courtSchedule.endTime
-                                    }
-
-                                    const unavailableWidth = this.checkUnavailableTimeWidth(timeRestrictionsSchedule, startDayDate, endDayDate)
+                                    const unavailableWidth = this.checkUnavailableTimeWidth(timeRestrictionsSchedule, startDayDate, endDayDate);
 
                                     // render for the whole unavailable day for court based on venue schedule
-                                    if (!workingDayInTimeline) {
+                                    if (!timeRestrictionsSchedule) {
                                         return (
                                             <div key={"slot" + fieldItemDateIndex}>
                                                 <div
@@ -1952,7 +1976,7 @@ class MultifieldDrawsNewTimeline extends Component {
                                             /> */}
                                             <div
                                                 id={courtData.venueCourtId + ':' + fieldItemDateIndex}
-                                                className={'box purple-bg day-box'}
+                                                className={'box white-bg-timeline day-box'}
                                                 style={{
                                                     minWidth: 'unset',
                                                     left: prevDaysWidth,
@@ -1961,7 +1985,10 @@ class MultifieldDrawsNewTimeline extends Component {
                                                     whiteSpace: 'nowrap',
                                                     cursor: disabledStatus && "no-drop",
                                                     width: diffDayScheduleTime,
-                                                    background: `repeating-linear-gradient( to right, #f5f5f5, #f5f5f5 ${ONE_HOUR_IN_MIN}px, #d9d9d9 ${ONE_HOUR_IN_MIN}px, #d9d9d9 ${ONE_HOUR_IN_MIN * ONE_MIN_WIDTH}px )`
+                                                    borderRadius: '0px',
+                                                    backgroundSize,
+                                                    backgroundImage,
+                                                    backgroundPosition,
                                                 }}
                                                 onDragOver={e => this.dayLineDragMove(e, startDayDate, courtData.slotsArray, timeRestrictionsSchedule)}
                                                 onDragEnd={e => this.dayLineDragEnd(e)}
