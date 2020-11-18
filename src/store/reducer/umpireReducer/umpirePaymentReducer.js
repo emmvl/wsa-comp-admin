@@ -23,6 +23,9 @@ function getFilterUmpirePayment(umpirePaymentArr) {
 
         if (umpirePaymentArr[i].umpireType === "USERS") {
             let obj = {
+                approvedByUser: umpirePaymentArr[i].approvedByUser,
+                approved_at: umpirePaymentArr[i].approved_at,
+                approvedByUserId: umpirePaymentArr[i].approvedByUserId,
                 id: umpirePaymentArr[i].id,
                 match: umpirePaymentArr[i].match,
                 matchId: umpirePaymentArr[i].matchId,

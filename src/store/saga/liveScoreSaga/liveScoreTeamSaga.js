@@ -6,6 +6,7 @@ import ApiConstants from 'themes/apiConstants';
 import history from 'util/history';
 import { receiptImportResult } from 'util/showImportResult';
 import LiveScoreAxiosApi from 'store/http/liveScoreHttp/liveScoreAxiosApi';
+import CompetitionAxiosApi from 'store/http/competitionHttp/competitionAxiosApi';
 
 function* failSaga(result) {
     yield put({
@@ -155,7 +156,7 @@ function* liveScoreAffiliateSaga(action) {
 function* addTeamLiveScoreSaga(action) {
     try {
         const result = yield call(LiveScoreAxiosApi.liveScoreAddNewTeam, action.payload);
-
+        console.log("result", result.result.data.name)
         if (result.status === 1) {
             yield put({
                 type: ApiConstants.API_LIVE_SCORE_ADD_TEAM_SUCCESS,
@@ -165,6 +166,22 @@ function* addTeamLiveScoreSaga(action) {
             message.success(action.teamId ? 'Team has been updated Successfully' : 'Team has been created Successfully.');
 
             history.push(action.key ? 'liveScoreDashboard' : action.screenKey === 'umpire' ? 'umpire' : '/liveScoreTeam');
+
+            console.log("*******", action.sourceIdAvailable, action.teamUniqueKey)
+            let updateCompData = {
+                teamUniqueKey: action.teamUniqueKey ? action.teamUniqueKey : "",
+                name: result.result.data.name
+            }
+            if (action.sourceIdAvailable === true && action.teamUniqueKey) {
+                const result1 = yield call(CompetitionAxiosApi.updateCompTeamName, updateCompData);
+                console.log("result1",result1)
+                if (result1.status === 1) {
+                yield put({
+                    type: ApiConstants.API_LIVE_SCORE_UPDATE_COMP_TEAM_NAME_SUCCESS,
+                    payload: result1.result.data
+                });
+            }
+            }
         } else {
             yield call(failSaga, result);
         }

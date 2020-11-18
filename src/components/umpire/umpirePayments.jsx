@@ -26,6 +26,7 @@ import {
 import './umpire.css';
 import Loader from '../../customComponents/loader';
 import AppImages from "themes/appImages";
+import moment from "moment";
 
 const { Content, Footer } = Layout;
 const { Option } = Select;
@@ -142,16 +143,30 @@ const columns = [
         }
     },
     {
-        title: 'Time',
-        dataIndex: 'time',
-        key: "time",
+        title: 'Time/Date Paid',
+        dataIndex: 'approved_at',
+        key: "approved_at",
         sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (approved_at, record) => {
+            return (
+                approved_at &&
+                <span>{moment(approved_at).format("DD/MM/YYYY HH:mm")}</span>
+            )
+        }
     },
     {
-        title: "Date Paid",
-        dataIndex: "datePaid",
-        key: "datePaid",
+        title: "Authoriser",
+        dataIndex: "approvedByUser",
+        key: "approvedByUser",
         sorter: true,
+        onHeaderCell: ({ dataIndex }) => listeners(dataIndex),
+        render: (approvedByUser, record) => {
+            return (
+                approvedByUser &&
+                <span>{approvedByUser.firstName + " " + approvedByUser.lastName}</span>
+            )
+        }
     },
     {
         title: 'Pay',
