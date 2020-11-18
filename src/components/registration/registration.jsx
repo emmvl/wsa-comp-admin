@@ -130,7 +130,9 @@ const columns = [
             return (
                 <div>
                     {(record.paidByUsers || []).map((item, index) => (
-                        record.userId == item.paidByUserId ? 'Self' :
+                   
+                        record.userId == item.paidByUserId ? <div>{'Self'}</div> :
+                        <div>
                         <NavLink
                             to={{
                                 pathname: `/userPersonal`,
@@ -142,7 +144,9 @@ const columns = [
                         >
                             <span className="input-heading-add-another pt-0">{item.paidBy}</span>
                         </NavLink>
+                        </div>
                         ))}
+                        
                 </div>
             )
         },
