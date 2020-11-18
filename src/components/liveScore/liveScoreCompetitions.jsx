@@ -102,14 +102,14 @@ const columnsOwned = [
                                         </Tag>
                                     )
                                 ) : (
-                                    <Tag
-                                        className="comp-dashboard-table-tag"
-                                        color="#c2c2c2"
-                                        key={data}
-                                    >
-                                        {data}
-                                    </Tag>
-                                )
+                                        <Tag
+                                            className="comp-dashboard-table-tag"
+                                            color="#c2c2c2"
+                                            key={data}
+                                        >
+                                            {data}
+                                        </Tag>
+                                    )
                             ))
                         )}
                     </span>
@@ -259,14 +259,14 @@ const columnsParticipate = [
                                         </Tag>
                                     )
                                 ) : (
-                                    <Tag
-                                        className="comp-dashboard-table-tag"
-                                        color="#c2c2c2"
-                                        key={data}
-                                    >
-                                        {data}
-                                    </Tag>
-                                )
+                                        <Tag
+                                            className="comp-dashboard-table-tag"
+                                            color="#c2c2c2"
+                                            key={data}
+                                        >
+                                            {data}
+                                        </Tag>
+                                    )
                             ))
                         )}
                     </span>
@@ -343,7 +343,7 @@ class LiveScoreCompetitions extends Component {
             year: null,
             onLoad: false,
             orgKey: getOrganisationData() ? getOrganisationData().organisationId : null,
-            orgLevel: AppConstants.state,
+            orgLevel: null,
             offsetData: 0,
             ownOffset: 0,
             partOffset: 0,
@@ -361,16 +361,18 @@ class LiveScoreCompetitions extends Component {
         this.props.updateInnerHorizontalData();
         localStorage.setItem('yearValue', 'false');
 
-        // localStorage.setItem("yearId", this.state.year)
+        checkOrganisationLevel().then((value) => {
+            this.setState({ orgLevel: value });
+        });
 
         const prevUrl = getPrevUrl();
         if (!prevUrl || !(history.location.pathname === prevUrl.pathname && history.location.key === prevUrl.key)) {
             if (this.state.year) {
                 this.competitionListApi();
 
-                checkOrganisationLevel().then((value) => {
-                    this.setState({ orgLevel: value });
-                });
+                // checkOrganisationLevel().then((value) => {
+                //     this.setState({ orgLevel: value });
+                // });
             } else {
                 this.props.getOnlyYearListAction(this.props.appState.yearList);
                 this.setState({
@@ -584,7 +586,7 @@ class LiveScoreCompetitions extends Component {
                 </div>
             </div>
         )
-    ;
+        ;
 
     partHeaderView = () => (
         <div className="comp-player-grades-header-drop-down-view">
