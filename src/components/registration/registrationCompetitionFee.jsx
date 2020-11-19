@@ -5505,7 +5505,7 @@ class RegistrationCompetitionFee extends Component {
                                 <div> 
                                 <div style={{ marginTop: 15 }}>
                                     <Checkbox
-                                        style={{ marginLeftT: '45ps' }}
+                                        style={{ marginLeft: '45px' }}
                                         checked={item.isSeasonal}
                                         className="single-checkbox"
                                         disabled={feesTableDisable}
@@ -5538,7 +5538,7 @@ class RegistrationCompetitionFee extends Component {
 
                                 <div style={{ marginTop: 10 }}>
                                     <Checkbox
-                                        style={{ marginLeftT: '45ps' }}
+                                        style={{ marginLeft: '45px' }}
                                         checked={item.isCasual}
                                         className="single-checkbox"
                                         disabled={feesTableDisable}
