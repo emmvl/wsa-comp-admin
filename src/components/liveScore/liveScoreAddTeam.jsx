@@ -77,7 +77,7 @@ class LiveScoreAddTeam extends Component {
     }
 
     componentDidMount() {
-
+        let sourceIdAvailable = false
         if (this.state.screenKey == 'umpire') {
             if (getUmpireCompetitonData()) {
                 if (this.state.isEdit) {
@@ -89,6 +89,7 @@ class LiveScoreAddTeam extends Component {
                     this.props.liveScoreAddTeamform({ key: 'addTeam' })
                 }
                 const { id, sourceId } = JSON.parse(getUmpireCompetitonData())
+                sourceIdAvailable = sourceId ? true : false
                 this.setState({ localCompetitionID: id, sourceIdAvailable: sourceId ? true : false })
                 this.props.liveScoreGetDivision(id)
                 this.props.liveScoreGetAffiliate({ id, name: '' })
@@ -106,6 +107,7 @@ class LiveScoreAddTeam extends Component {
                 else {
                     this.props.liveScoreAddTeamform({ key: 'addTeam' })
                 }
+                sourceIdAvailable = sourceId ? true : false
                 this.setState({ localCompetitionID: id, sourceIdAvailable: sourceId ? true : false })
                 this.props.liveScoreGetDivision(id)
                 this.props.liveScoreGetAffiliate({ id, name: '' })
@@ -113,6 +115,10 @@ class LiveScoreAddTeam extends Component {
             } else {
                 history.push('/liveScoreCompetitions')
             }
+        }
+        let isEditCheck = this.props.location.state ? this.props.location.state.isEdit : false
+        if (sourceIdAvailable && isEditCheck === false) {
+            history.push("/liveScoreTeam")
         }
     }
 

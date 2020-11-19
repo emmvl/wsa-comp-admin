@@ -48,6 +48,14 @@ class LiveScoreAddDivision extends Component {
         } else {
             this.props.liveScoreUpdateDivisionAction("", 'isAddDivision')
             this.setInitalValue()
+            if (getLiveScoreCompetiton()) {
+                const { sourceId } = JSON.parse(getLiveScoreCompetiton());
+                if (sourceId) {
+                    history.push("/liveScoreDivisionList")
+                }
+            } else {
+                history.push("/liveScoreCompetitions")
+            }
         }
     }
 
