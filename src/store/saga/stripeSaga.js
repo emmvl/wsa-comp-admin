@@ -196,7 +196,7 @@ function* getInvoiceSaga(action) {
 function* getPaymentListSaga(action) {
   try {
     const result = yield call(AxiosApi.getPaymentList, action.offset, action.sortBy, action.sortOrder, action.userId,
-      action.registrationId, action.yearId, action.competitionKey, action.paymentFor, action.dateFrom, action.dateTo);
+      action.registrationId, action.yearId, action.competitionKey, action.paymentFor, action.dateFrom, action.dateTo,action.searchValue);
 
     if (result.status === 1) {
       yield put({

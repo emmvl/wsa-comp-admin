@@ -901,7 +901,7 @@ class CompetitionFinals extends Component {
                             {(applyToData || []).map((app) => (
                                 <Radio key={'applyTo_' + app.id} value={app.id}>{app.description}</Radio>
                             ))}
-                            <Radio key={'applyTo_' + "-1"} value={"-1"}>{AppConstants.none}</Radio>
+                            <Radio key={'applyTo_' + "0"} value={0}>{AppConstants.none}</Radio>
                         </Radio.Group>
                     </Form.Item>
                     {data.applyToRefId !== '-1' && (
@@ -1024,7 +1024,7 @@ class CompetitionFinals extends Component {
                                         {(extraTimeDrawData || []).map((ex) => (
                                             <Radio key={'extraTimeDraw_' + ex.id} value={ex.id}>{ex.description}</Radio>
                                         ))}
-                                        <Radio key="extraTimeDraw_-1" value="-1">{AppConstants.none}</Radio>
+                                        <Radio key="extraTimeDraw_0" value={0} >{AppConstants.none}</Radio>
                                     </Radio.Group>
                                 </Form.Item>
                             </div>
