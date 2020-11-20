@@ -1419,7 +1419,7 @@ const playerSeasonalTableTeamAssociation = [
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         render: (gst, record, index) => (
-            (gst != null || record.teamRegChargeTypeRefId != 3) ? (
+            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1446,7 +1446,7 @@ const playerSeasonalTableTeamAssociation = [
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         render: (fee, record, index) => (
-            fee != null ? (
+            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -1473,7 +1473,7 @@ const playerSeasonalTableTeamAssociation = [
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
         render: (gst, record, index) => (
-            gst != null ? (
+            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -1712,7 +1712,7 @@ const playerSeasonalTableTeamClub = [
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         render: (gst, record, index) => (
-            (gst != null || record.teamRegChargeTypeRefId != 3) ? (
+            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled
@@ -1739,7 +1739,7 @@ const playerSeasonalTableTeamClub = [
         dataIndex: 'affNominationFees',
         key: 'affNominationFees',
         render: (fee, record, index) => (
-            fee != null ? (
+            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -1766,7 +1766,7 @@ const playerSeasonalTableTeamClub = [
         dataIndex: 'affNominationGST',
         key: 'affNominationGST',
         render: (gst, record, index) => (
-            gst != null ? (
+            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2008,7 +2008,7 @@ const playerSeasonalTeamTable = [
         dataIndex: 'nominationGST',
         key: 'nominationGST',
         render: (gst, record, index) => (
-            (gst != null || record.teamRegChargeTypeRefId != 3) ? (
+            ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2035,7 +2035,7 @@ const playerSeasonalTeamTable = [
         dataIndex: 'fee',
         key: 'fee',
         render: (fee, record, index) =>
-            fee != null ? (
+            ((fee != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
@@ -2065,7 +2065,7 @@ const playerSeasonalTeamTable = [
         dataIndex: 'gst',
         key: 'gst',
         render: (gst, record, index) =>
-            gst != null ? (
+        ((gst != null || record.teamRegChargeTypeRefId != 3) && record.isPlayer == 1) ? (
                 <Input
                     prefix="$"
                     disabled={this_Obj.state.permissionState.allDisable}
